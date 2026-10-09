@@ -56,7 +56,7 @@ S["07_kummerspeck"] = ("Germans have a word for stress-eating weight 🥓", [
  FOLLOW])
 
 quiz = [("Sonne", "die", "sun"), ("Mond", "der", "crescent-moon"), ("Mädchen", "das", "girl-default"), ("Butter", "die", "butter"), ("Auto", "das", "automobile")]
-qb = [{"say": "Der, die, or das? One second each. Go!", "top": "der, die or das?", "icons": ["thinking-face"], "punch": True, "sfx": "start"}]
+qb = [{"say": "Der, die, or das? Three seconds each. Go!", "top": "der, die or das?", "icons": ["thinking-face"], "punch": True, "sfx": "start"}]
 for i, (w, a, ic) in enumerate(quiz):
     qb.append({"say": f"{w}. || {a.capitalize()} {w}.", "top": f"{i + 1} / 5", "icons": [ic], "word": {"de": "___ " + w}, "sfx": "tick",
                "reveal": {"word": {"de": w, "article": a}, "mark": "right", "sfx": "ding"}})

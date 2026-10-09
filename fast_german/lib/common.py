@@ -13,7 +13,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE = os.environ.get("FG_CACHE", "/mnt/project-files/fast_german/cache")
 os.makedirs(CACHE, exist_ok=True)
 
-VOICE = "K75lPKuh15SyVhQC1LrE"  # Carola - Sharp and Clear (chosen 2026-10-09)
+VOICE = "rKiu7lQ4c5P3az3745s3"  # Carla Blum - Confident and Informative (sample 6-Carla, user's pick 2026-10-09)
 MODEL = "eleven_multilingual_v2"
 KEY = os.environ.get("ELEVENLABS_API_KEY", "")
 
@@ -78,16 +78,18 @@ def words_from_alignment(al):
 MIXKIT = os.path.join(ROOT, "assets", "sfx_mixkit")
 # Mixkit free sound effects (mixkit.co/license): fallback when the Drive copies are missing.
 MIXKIT_SFX = {"pop": "pop.mp3", "ding": "ding.mp3", "start": "attention.mp3", "buzz": "buzz.mp3", "snap": "snap.mp3",
-              "whoosh": "whoosh.mp3", "tick": "bubble.mp3", "swoosh_up": "sparkle.mp3"}
+              "whoosh": "whoosh.mp3", "tick": "bubble.mp3", "swoosh_up": "sparkle.mp3",
+              "clock": "bubble.mp3"}
 # The user's own SFX from Google Drive "효과음 ALL" (copied 2026-10-09). Preferred over Mixkit.
 DRIVE_SFX_DIR = "/mnt/project-files/sfx/drive"
 SFX = {
-    "start": "015_띠링.mp3",           # light ding to open (no sub hit, 2026-10-09 feedback)
-    "ding": "026_띠딩2.mp3",           # correct answer / reveal
-    "pop": "038_뿅.mp3",
-    "tick": "062_뾰옥 (물방울).mp3",     # quiz question appears
-    "swoosh_up": "032_뾰로롱 마법.WAV",  # follow ending
-    "whoosh": "070_휘익.mp3",
+    "start": "026_띠딩2.mp3",                  # very first sound of every short
+    "pop": "038_뿅.mp3",                       # word appears
+    "whoosh": "041_바람.mp3",                  # transition to the next beat
+    "ding": "049_띠룽 (슈퍼마리오 코인먹).mp3",  # correct answer / reveal
+    "tick": "056_띠동띠동(물음표).mp3",          # question / guess moment
+    "clock": "077_째깍째깍 (시계).mp3",          # quiz thinking time
+    "swoosh_up": "032_뾰로롱 마법.WAV",         # follow ending
     "buzz": "063_삐삑 (오답 -짧은).mp3",
     "snap": "078_찰칵 (카메라).mp3",
 }
@@ -95,12 +97,13 @@ SFX["hit"] = SFX["start"]
 
 
 def get_sfx(name, max_len=1.2, peak_db=-3.0):
-    """SFX as a cached wav: leading silence removed, cut to max_len with a fade, peak-normalized so every sound
-    starts at the same level and SFX_VOL alone sets the mix."""
+    """SFX as a cached wav: leading silence removed (so it plays on the cut), cut to max_len with a fade,
+    peak-normalized so every sound starts at the same level and SFX_VOL alone sets the mix."""
+    max_len = {"clock": 3.0}.get(name, max_len)
     src = os.path.join(DRIVE_SFX_DIR, SFX[name])
     if not os.path.exists(src):
         return os.path.join(MIXKIT, MIXKIT_SFX[name])
-    out = os.path.join(CACHE, "sfx", f"{name}_{hashlib.sha1(SFX[name].encode()).hexdigest()[:8]}.wav")
+    out = os.path.join(CACHE, "sfx", f"{name}_{hashlib.sha1((SFX[name] + str(max_len)).encode()).hexdigest()[:8]}.wav")
     if not os.path.exists(out):
         os.makedirs(os.path.dirname(out), exist_ok=True)
         cut = (f"silenceremove=start_periods=1:start_threshold=-45dB,atrim=0:{max_len},"

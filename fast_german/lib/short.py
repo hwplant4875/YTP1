@@ -20,8 +20,11 @@ import common as C
 W, H, FPS = 1080, 1920, 30
 GAP = 0.45  # between beats
 SENT_GAP = 0.3  # between sentences inside a beat
-SFX_VOL = {"pop": 0.8, "ding": 0.7, "start": 0.7, "buzz": 0.6, "snap": 0.8, "whoosh": 0.6, "tick": 0.7, "swoosh_up": 0.7}
-MUSIC = os.path.join(C.CACHE, "music", "kpop_bed.mp3")
+# 2026-10-09 feedback: all SFX quieter than the voice
+SFX_VOL = {"pop": 0.35, "ding": 0.35, "start": 0.35, "buzz": 0.3, "snap": 0.35, "whoosh": 0.3, "tick": 0.35,
+           "swoosh_up": 0.35, "clock": 0.25}
+THINK = 3.0  # quiz: seconds the viewer gets to guess, with a 3-2-1 countdown
+MUSIC = os.path.join(C.CACHE, "music", "kpop_bed_v2.mp3")
 MUSIC_VOL = 0.22
 
 
@@ -232,8 +235,8 @@ def render(spec_path, out_path):
     spec = json.load(open(spec_path))
     beats = spec["beats"]
     # 1. audio: each sentence is its own clip so the voice ends naturally and pauses between sentences.
-    #    "A || B" in a beat's say = one clip with a 2 s break; the beat's "reveal" visuals switch in at B.
-    speed = spec.get("speed", 1.0)  # same settings as the approved Carola sample
+    #    "A || B" in a beat's say = quiz: A, a THINK-second countdown, then B with the beat's "reveal" visuals.
+    speed = spec.get("speed", 1.0)  # same settings as the approved voice sample
     t = 0.35
     timeline, clips = [], []
     for b in beats:
@@ -241,12 +244,17 @@ def render(spec_path, out_path):
         words = []
         reveal_at = None
         if "||" in b["say"]:
+            # quiz: question clip, THINK seconds with a countdown, then the answer as its own clip
             pa, pb = [x.strip() for x in b["say"].split("||")]
-            mp3, al = C.tts(f'{pa} <break time="{b.get("gap", 2.0)}s" /> {pb}', speed=speed)
-            ws = [w for w in C.words_from_alignment(al) if not (w[0].startswith("<") or "time=" in w[0] or w[0] == "/>")]
-            n_a = len(pa.split())
-            reveal_at = t + ws[n_a][1] - 0.05 if len(ws) > n_a else None
-            words += [(w, s0 + t, e0 + t) for w, s0, e0 in ws]
+            mp3, al = C.tts(pa, speed=speed)
+            words += [(w, s0 + t, e0 + t) for w, s0, e0 in C.words_from_alignment(al)]
+            clips.append((mp3, t))
+            t += C.duration(mp3) + 0.2
+            think_from = t
+            t += b.get("think", THINK)
+            reveal_at = t
+            mp3, al = C.tts(pb, speed=speed)
+            words2 = [(w, s0 + t, e0 + t) for w, s0, e0 in C.words_from_alignment(al)]
             clips.append((mp3, t))
             t += C.duration(mp3)
         else:
@@ -259,11 +267,12 @@ def render(spec_path, out_path):
         t += b.get("pause", 0)
         if reveal_at:
             first = {k: v for k, v in b.items() if k not in ("reveal",)}
-            timeline.append({"beat": first, "start": start, "end": reveal_at, "words": words})
+            timeline.append({"beat": first, "start": start, "end": reveal_at, "words": words,
+                             "think": (think_from, reveal_at), "sfx_at": [("clock", think_from)]})
             second = dict(first)
             second.update(b["reveal"])
             second["sfx"] = b["reveal"].get("sfx")
-            timeline.append({"beat": second, "start": reveal_at, "end": t, "words": []})
+            timeline.append({"beat": second, "start": reveal_at, "end": t, "words": words2})
         else:
             timeline.append({"beat": b, "start": start, "end": t, "words": words})
         t += GAP
@@ -279,15 +288,23 @@ def render(spec_path, out_path):
                    f"atrim=0:{total},loudnorm=I=-15:TP=-2:LRA=11,asplit=2[voice][key]")
     k = nv
     fx = []
-    for tl in timeline:
+    events = []
+    for i, tl in enumerate(timeline):
         s = tl["beat"].get("sfx")
+        if not s and i > 0 and not tl.get("think") and timeline[i - 1].get("think") is None \
+                and tl["start"] != timeline[i - 1]["end"]:
+            s = "whoosh"  # 041 바람 as the transition into the next beat
         if s:
-            inputs += ["-i", C.get_sfx(s)]
-            vol = SFX_VOL.get(s, 0.8)
-            filters.append(f"[{k}:a]aformat=channel_layouts=stereo,atrim=0:1.1,afade=t=out:st=0.8:d=0.3,"
-                           f"volume={vol},adelay={int(max(0, tl['start'] - 0.08) * 1000)}:all=1[f{k}]")
-            fx.append(f"[f{k}]")
-            k += 1
+            events.append((s, max(0, tl["start"] - 0.05)))
+        events += [(n, at) for n, at in tl.get("sfx_at", [])]
+    for s, at in events:
+        path = C.get_sfx(s)
+        inputs += ["-i", path]
+        L = C.duration(path)
+        filters.append(f"[{k}:a]aformat=channel_layouts=stereo,afade=t=out:st={max(0, L - 0.25)}:d=0.25,"
+                       f"volume={SFX_VOL.get(s, 0.35)},adelay={int(at * 1000)}:all=1[f{k}]")
+        fx.append(f"[f{k}]")
+        k += 1
     music = spec.get("music", MUSIC)
     if music and os.path.exists(music):
         inputs += ["-stream_loop", "-1", "-i", music]
@@ -335,6 +352,8 @@ def render(spec_path, out_path):
         frame.alpha_composite(pill, ((W - pill.width) // 2, 70))
         # progress bar
         ImageDraw.Draw(frame).rectangle((0, 0, int(W * now / total), 14), fill=C.YELLOW + (255,))
+        if tl.get("think") and tl["think"][0] <= now < tl["think"][1]:
+            draw_countdown(frame, now - tl["think"][0], tl["think"][1] - tl["think"][0])
         # karaoke subtitle
         for ch in all_chunks:
             if ch[0][1] - 0.05 <= now <= ch[-1][2] + 0.25:
@@ -359,6 +378,20 @@ def render(spec_path, out_path):
     ff.stdin.close()
     ff.wait()
     return total
+
+
+def draw_countdown(frame, el, dur):
+    """3-2-1 ring where the answer check mark appears later."""
+    cx, cy, r = W / 2 + 230, 860 - 220, 95
+    left = dur - el
+    n = max(1, math.ceil(left))
+    pop = ease_pop((n - left) / 0.25)  # each new number pops in
+    d = ImageDraw.Draw(frame)
+    d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(255, 255, 255, 255), outline=C.INK + (255,), width=10)
+    d.arc((cx - r + 14, cy - r + 14, cx + r - 14, cy + r - 14), -90, -90 + 360 * (left / dur),
+          fill=C.YELLOW + (255,), width=18)
+    num = text_img(str(n), font(int(120 * (0.85 + 0.15 * pop)), "Bold"), C.INK + (255,))
+    frame.alpha_composite(num, (int(cx - num.width / 2), int(cy - num.height / 2)))
 
 
 def draw_sub(frame, chunk, now, f):
