@@ -101,8 +101,17 @@ def sfx(prompt, seconds=None):
 LOOK = "eq=saturation=0:contrast=1.08:brightness=-0.02"   # archive material goes black and white
 
 
+def scene_hash(scene):
+    h = hashlib.sha1()
+    for f in (f"scenes/{scene}.js", "scenes/lib.js", "scenes/look.js", "render.mjs"):
+        p = os.path.join(HERE, f)
+        if os.path.exists(p):
+            h.update(open(p, "rb").read())
+    return h.hexdigest()[:10]
+
+
 def render_3d(v, d):
-    k = key(v, round(d, 3))
+    k = key(v, round(d, 3), scene_hash(v["scene"]))
     def make(p):
         sh("node", os.path.join(HERE, "render.mjs"), f"scenes/{v['scene']}.js", p + ".mp4",
            "--dur", f"{d:.3f}", "--fps", FPS, "--shot", v.get("shot", ""), "--t0", v.get("t0", 0))
@@ -181,21 +190,81 @@ Style: LABEL,Pretendard SemiBold,46,&H00FFFFFF,&H00FFFFFF,&H00000000,&H96000000,
 Style: TITLE,Noto Serif KR Black,168,&H00FFFFFF,&H00FFFFFF,&H00000000,&H96000000,0,0,0,0,100,100,2,0,1,0,6,5,0,0,0,1
 Style: QUOTE,Noto Serif KR SemiBold,64,&H00F0F0F0,&H00FFFFFF,&H00000000,&H96000000,0,0,0,0,100,100,1,0,1,0,4,5,0,0,0,1
 Style: CREDIT,Pretendard Medium,22,&H99FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,3,0,30,22,1
+Style: SUB,Pretendard SemiBold,50,&H00F4F4F4,&H00FFFFFF,&H00000000,&H64000000,0,0,0,0,100,100,0.5,0,1,0,2.5,2,120,120,62,1
+Style: FX,Pretendard Black,10,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
 
 
+AMBER_ASS = "&H5CB2FF&"
+
+
+def accent(text):
+    return re.sub(r"\*(.+?)\*", lambda m: "{\\c" + AMBER_ASS + "}" + m.group(1) + "{\\c&HF4F4F4&}", text)
+
+
+def sub_chunks(text, limit=19):
+    words = re.findall(r"\S+", text)
+    out, cur = [], ""
+    for w in words:
+        plain = (cur + " " + w).replace("*", "").strip()
+        if cur and len(plain) > limit:
+            out.append(cur); cur = w
+        else:
+            cur = (cur + " " + w).strip()
+        if cur.endswith((",", "?", "!", ".")) and len(cur.replace("*", "")) >= limit * 0.55:
+            out.append(cur); cur = ""
+    if cur:
+        out.append(cur)
+    fixed, carry = [], False
+    for c in out:
+        if carry:
+            c = "*" + c
+        carry = c.count("*") % 2 == 1
+        fixed.append((c + ("*" if carry else "")).rstrip(".,"))
+    return fixed
+
+
+def sub_events(text, start, end):
+    parts = sub_chunks(text)
+    w = [max(len(p.replace("*", "")), 4) for p in parts]
+    ev, t = [], start
+    for p, k in zip(parts, w):
+        d = (end - start) * k / sum(w)
+        ev.append(f"Dialogue: 3,{ass_time(t)},{ass_time(t + d)},SUB,,0,0,0,,{{\\fad(60,40)}}{accent(p)}")
+        t += d
+    return ev
+
+
+def box(color, alpha_in, alpha_mid, t_in, t_out):
+    # full-frame rectangle drawn with ASS vector drawing, used for flash and dip transitions
+    return (f"{{\\pos(0,0)\\an7\\bord0\\shad0\\1c{color}\\alpha{alpha_in}"
+            f"\\t(0,{t_in},\\alpha{alpha_mid})\\t({t_in},{t_in + t_out},\\alpha&HFF&)\\p1}}m 0 0 l {W} 0 {W} {H} 0 {H}{{\\p0}}")
+
+
+def trans_events(kind, at):
+    if kind == "flash":       # light burst covering the cut
+        return [f"Dialogue: 5,{ass_time(at - 0.12)},{ass_time(at + 0.5)},FX,,0,0,0,,{box('&HE8F4FF&', '&HFF&', '&H10&', 120, 380)}"]
+    if kind == "dip":         # quick dip through black
+        return [f"Dialogue: 5,{ass_time(at - 0.35)},{ass_time(at + 0.45)},FX,,0,0,0,,{box('&H000000&', '&HFF&', '&H00&', 350, 450)}"]
+    return []
+
+
 def text_event(tx, start, end):
     kind = tx.get("kind", "label")
-    style = {"year": "YEAR", "label": "LABEL", "title": "TITLE", "quote": "QUOTE"}[kind]
+    style = {"year": "YEAR", "label": "LABEL", "title": "TITLE", "quote": "QUOTE", "flicker": "TITLE"}[kind]
     px, py = tx.get("pos", [0.5, 0.5])
     body = tx["content"].replace("\n", "\\N")
     if kind == "year":
         fx = "{\\fad(180,250)\\t(0,1200,\\fscx104\\fscy104)}"
     elif kind == "title":
         fx = "{\\fad(500,600)\\blur1}"
+    elif kind == "flicker":   # an old tube catching: off, stutter, on, with a warm bloom
+        seq = [(0, 255), (90, 0), (140, 255), (300, 0), (330, 200), (420, 0), (470, 160), (520, 0)]
+        tr = "".join(f"\\t({a},{a + 1},\\alpha&H{v:02X}&)" for a, v in seq)
+        fx = "{\\alpha&HFF&" + tr + "\\blur0.6\\3c&H2A6BB0&\\bord3\\fad(0,700)}"
     else:
         fx = "{\\fad(220,220)}"
     return f"Dialogue: 1,{ass_time(start)},{ass_time(end)},{style},,0,0,0,,{{\\pos({int(px * W)},{int(py * H)})}}{fx}{body}"
@@ -235,6 +304,7 @@ def main():
             lines.append((t + lead, wav, d, b["say"]))
         else:
             d = 0.0
+        b["_say_at"], b["_say_d"] = t + lead, d
         b["_start"], b["_end"] = t, t + lead + d + b.get("hold", 0.0) + gap
         t = b["_end"]
     total = t + 1.0
@@ -252,17 +322,22 @@ def main():
         filt.append(f"[{len(inputs) // 2 - 1}:a]adelay={int(at * 1000)}:all=1[n{k}]")
         vmix.append(f"[n{k}]")
     filt.append(f"{''.join(vmix)}amix=inputs={len(vmix)}:normalize=0:duration=longest,apad=whole_dur={total:.2f},asplit=2[voice][key]")
-    fx = []
-    for k, b in enumerate(spec["beats"]):
-        if not b.get("sfx"):
-            continue
-        sx = b["sfx"] if isinstance(b["sfx"], dict) else {"prompt": b["sfx"]}
-        inputs += ["-i", sfx(sx["prompt"], sx.get("len"))]
-        at = b["_start"] + sx.get("at", 0)
-        filt.append(f"[{len(inputs) // 2 - 1}:a]aresample=48000,adelay={int(at * 1000)}:all=1,volume={sx.get('vol', 0.45)}[f{k}]")
-        fx.append(f"[f{k}]")
-    mus = list(fx)
-    fx = []
+    fx, ducked = [], []
+    n = 0
+    for b in spec["beats"]:
+        items = b.get("sfx") or []
+        items = items if isinstance(items, list) else [items]
+        for sx in items:
+            sx = sx if isinstance(sx, dict) else {"prompt": sx}
+            src = os.path.join(base, sx["file"]) if sx.get("file") else sfx(sx["prompt"], sx.get("len"))
+            inputs += ["-i", src]
+            at = max(0.0, b["_start"] + sx.get("at", 0))
+            chain = sx.get("filter", "")
+            filt.append(f"[{len(inputs) // 2 - 1}:a]aresample=48000,{chain + ',' if chain else ''}adelay={int(at * 1000)}:all=1,volume={sx.get('vol', 0.45)}[f{n}]")
+            # dialogue-like layers (announcements) stay on top, everything else ducks under the narration
+            (fx if sx.get("duck") is False else ducked).append(f"[f{n}]")
+            n += 1
+    mus = list(ducked)
     for k, m in enumerate(spec.get("music", [])):
         a, z = anchors[m["from"]] + m.get("offset", 0), anchors[m["to"]]
         inputs += ["-stream_loop", "-1", "-i", os.path.join(base, m["file"])]
@@ -332,6 +407,13 @@ def main():
 
     # 4. overlays
     ev = []
+    if spec.get("subtitles", True):
+        for b in spec["beats"]:
+            if b.get("say") and not b.get("nosub"):
+                ev += sub_events(b.get("sub", b["say"]), b["_say_at"], b["_say_at"] + b["_say_d"])
+    for b in spec["beats"]:
+        if b.get("trans"):
+            ev += trans_events(b["trans"], b["_start"])
     for b in spec["beats"]:
         if b.get("text"):
             tx = b["text"]

@@ -2,6 +2,7 @@
 // a West Berlin train passing through it. Used for the thumbnail and the explainer shots.
 // shots: thumb | reveal (camera sinks from street level into the ground) | pass
 import { AMBER, tileTex, concreteTex, textTex, person, ease, lerp, rng } from './lib.js';
+import { makeComposer, glow, beam } from './look.js';
 
 export async function setup(THREE, renderer, W, H) {
   const shot = window.SHOT || new URLSearchParams(location.search).get('shot') || 'thumb';
@@ -96,7 +97,10 @@ export async function setup(THREE, renderer, W, H) {
   // soft cold fill on the cut face so the earth layers read
   const fill = new THREE.DirectionalLight(0xa9a59c, 1.8); fill.position.set(10, 2, 60); fill.target.position.set(0, -6, 0); scene.add(fill, fill.target);
 
-  return { scene, camera, train, lamp, shot };
+  const halo = glow(THREE, AMBER, 2.4, 0.9); halo.position.copy(bulb.position); scene.add(halo);
+  const bm = beam(THREE, AMBER, 5, 2.4, 0.06); bm.position.copy(bulb.position); scene.add(bm);
+  const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: 0.8, bloomRadius: 0.75, bloomThreshold: 0.6, exposure: 1.05 });
+  return { scene, camera, train, lamp, shot, ...post };
 }
 
 export function update(ctx, t) {

@@ -2,6 +2,7 @@
 // a West Berlin train rolling through without stopping.
 // params via ?shot=: "platform" (default), "guard", "thumb"
 import { AMBER, tileTex, concreteTex, textTex, person, ease, lerp, canvasTex, rng } from './lib.js';
+import { makeComposer, glow } from './look.js';
 
 function canvasTexP(THREE, seed) {
   const r = rng(seed);
@@ -145,7 +146,9 @@ export async function setup(THREE, renderer, W, H) {
   const key = new THREE.PointLight(AMBER, shot === 'poster' ? 14 : 0, 8, 1.6);
   key.position.set(-6.6, 3.5, -8.6); scene.add(key);
   if (shot === 'poster') { const kb = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 8), bulbMat); kb.position.copy(key.position); scene.add(kb); }
-  return { THREE, scene, camera, train, guards, lamps, shot, camLight };
+  scene.traverse(o => { if (o.isMesh && o.material === bulbMat) { const h = glow(THREE, AMBER, 1.4, 0.85); h.position.copy(o.position); scene.add(h); } });
+  const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: 0.85, bloomRadius: 0.75, bloomThreshold: 0.58, exposure: 1.1 });
+  return { THREE, scene, camera, train, guards, lamps, shot, camLight, ...post };
 }
 
 export function update(ctx, t) {
