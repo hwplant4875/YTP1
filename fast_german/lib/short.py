@@ -20,7 +20,7 @@ import common as C
 W, H, FPS = 1080, 1920, 30
 GAP = 0.45  # between beats
 SENT_GAP = 0.3  # between sentences inside a beat
-SFX_VOL = {"pop": 0.7, "ding": 0.55, "start": 0.6, "buzz": 0.45, "snap": 0.8, "whoosh": 0.5, "tick": 0.6, "swoosh_up": 0.5}
+SFX_VOL = {"pop": 0.8, "ding": 0.7, "start": 0.7, "buzz": 0.6, "snap": 0.8, "whoosh": 0.6, "tick": 0.7, "swoosh_up": 0.7}
 MUSIC = os.path.join(C.CACHE, "music", "kpop_bed.mp3")
 MUSIC_VOL = 0.22
 
