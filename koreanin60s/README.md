@@ -2,7 +2,7 @@
 
 Upload key: `YT_REFRESH_TOKEN_TT`. Plans and rendered assets live in the project shared folder `/mnt/project-files/plans/toptechs/`.
 
-- `mascot/bird.py` — Baepsae (흰머리오목눈이) mascot as SVG, 5 poses: default, happy, surprised, wrong, thinking.
+- `mascot/cat.py` — **Chizu**, Korean shorthair cheese cat (current mascot), poses: default, happy, surprised, wrong, thinking, sleepy. `bird.py`, `bird2.py`, `jindo.py` are rejected drafts.
 - `mascot/brand.py` — profile picture (800×800) and banner (2560×1440) HTML; render with `node shot.js <html> <w> <h> <png>`.
 - `shorts/NNN-*/` — one folder per short:
   1. `lines.json` script → ElevenLabs per-line VO in `vo/*.wav` (silence-trimmed)

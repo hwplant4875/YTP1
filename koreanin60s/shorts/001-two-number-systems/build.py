@@ -1,6 +1,6 @@
 import json, sys
 import os; sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../mascot"))
-from bird import bird
+from cat import cat as bird
 T = json.load(open("timeline.json"))
 poses = ["default","happy","surprised","wrong","thinking"]
 birds = "".join(f'<div class="pose" data-p="{p}">{bird(p, "s"+p)}</div>' for p in poses)
