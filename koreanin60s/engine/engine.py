@@ -10,7 +10,7 @@ CACHE = os.path.expanduser("~/.cache/k60_tts"); os.makedirs(CACHE, exist_ok=True
 SR = 48000
 
 def tts(text, lang):
-    h = hashlib.sha1(f"{VOICE}|{lang}|{text}".encode()).hexdigest()[:16]
+    h = hashlib.sha1((f"{VOICE}|{lang}|{text}" + ("|slow" if lang == "ko" else "")).encode()).hexdigest()[:16]
     mp3 = f"{CACHE}/{h}.mp3"; wav = f"{CACHE}/{h}.wav"
     if not os.path.exists(wav) and os.environ.get("K60_DRY"):
         # layout preview without spending TTS credits: estimate the spoken length
@@ -19,7 +19,7 @@ def tts(text, lang):
     if not os.path.exists(wav):
         body = {"text": text, "model_id": "eleven_multilingual_v2",
                 "voice_settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.4, "use_speaker_boost": True}}
-        if lang == "ko": body["language_code"] = "ko"
+        if lang == "ko": body["language_code"] = "ko"; body["voice_settings"]["speed"] = 0.8  # learners need to hear every syllable
         code = subprocess.run(["curl", "-s", "-X", "POST", f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE}?output_format=mp3_44100_192",
             "-H", "xi-api-key: " + os.environ["ELEVENLABS_API_KEY"], "-H", "Content-Type: application/json",
             "-d", json.dumps(body), "-o", mp3, "-w", "%{http_code}"], capture_output=True, text=True).stdout
@@ -27,7 +27,7 @@ def tts(text, lang):
             msg = open(mp3, errors="replace").read()[:300]; os.remove(mp3)
             raise SystemExit(f"ElevenLabs TTS failed ({code}): {msg}")
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", mp3, "-af",
-            "silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse",
+            "silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse",
             "-ar", str(SR), "-ac", "2", wav], check=True)
     d = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", wav]))
     return wav, d
@@ -43,10 +43,11 @@ def resolve(at, T):
 def build(spec_path, out):
     spec = json.load(open(spec_path)); os.makedirs(out, exist_ok=True)
     # 1. voice + timeline
-    T = {}; t = 0.0; wavs = []
+    T = {}; t = 0.0; wavs = []; prev = None
     for ln in spec["lines"]:
         wav, d = tts(ln["say"], ln.get("lang", "en"))
-        t += ln.get("gap", 0.25 if t > 0 else 0.3)
+        t += ln.get("gap", 0.25 if t > 0 else 0.3) + (0.2 if prev == "ko" else 0)
+        prev = ln.get("lang", "en")
         T[ln["k"]] = [round(t, 3), round(t + d, 3)]; wavs.append((wav, t)); t += d
     END = round(t + spec.get("tail", 1.8), 3); T["END"] = [END, END]
     # 2. scenes + elements absolute times
