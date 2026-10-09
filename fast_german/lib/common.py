@@ -118,9 +118,9 @@ def music(name, prompt, seconds=60):
     path = os.path.join(CACHE, "music", name + ".mp3")
     if not os.path.exists(path):
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        open(path, "wb").write(_post("https://api.elevenlabs.io/v1/music?output_format=mp3_44100_128",
-                                     {"prompt": prompt, "music_length_ms": int(seconds * 1000),
-                                      "force_instrumental": True}))
+        data = _post("https://api.elevenlabs.io/v1/music?output_format=mp3_44100_128",
+                     {"prompt": prompt, "music_length_ms": int(seconds * 1000), "force_instrumental": True})
+        open(path, "wb").write(data)
     return path
 
 

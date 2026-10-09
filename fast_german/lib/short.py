@@ -233,7 +233,7 @@ def render(spec_path, out_path):
     beats = spec["beats"]
     # 1. audio: each sentence is its own clip so the voice ends naturally and pauses between sentences.
     #    "A || B" in a beat's say = one clip with a 2 s break; the beat's "reveal" visuals switch in at B.
-    speed = spec.get("speed", 0.9)
+    speed = spec.get("speed", 1.0)  # same settings as the approved Carola sample
     t = 0.35
     timeline, clips = [], []
     for b in beats:
@@ -298,10 +298,10 @@ def render(spec_path, out_path):
         k += 1
     else:
         filters.append("[key]anullsink")
-    filters.append("[voice]" + "".join(fx) + f"amix=inputs={1 + len(fx)}:normalize=0,alimiter=limit=0.89[a]")
+    filters.append("[voice]" + "".join(fx) + f"amix=inputs={1 + len(fx)}:normalize=0,alimiter=limit=0.89,apad[a]")
     wav = os.path.join(tmp, "a.wav")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", *inputs, "-filter_complex", ";".join(filters),
-                    "-map", "[a]", "-ar", "48000", wav], check=True)
+                    "-map", "[a]", "-ar", "48000", "-t", f"{total:.3f}", wav], check=True)
     # 3. frames
     bg = background()
     pill = brand_pill()
@@ -311,9 +311,9 @@ def render(spec_path, out_path):
     for tl in timeline:
         for ch in sub_chunks(tl["words"]):
             all_chunks.append(ch)
-    ff = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
+    ff = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "warning", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
                            "-r", str(FPS), "-i", "-", "-i", wav, "-c:v", "libx264", "-preset", "medium", "-crf", "18",
-                           "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart",
+                           "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart",
                            out_path], stdin=subprocess.PIPE)
     nframes = int(total * FPS)
     for fi in range(nframes):
