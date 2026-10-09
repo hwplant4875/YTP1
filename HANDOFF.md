@@ -12,7 +12,7 @@
 - 남의 영상은 허락 없이 쓰지 않는다. 쓸 수 있는 소스는 퍼블릭 도메인(미국 정부, Universal Newsreel), CC 라이선스(Wikimedia, 출처 표기), Pexels/Pixabay, 그리고 직접 만든 3D다.
 - 팩트는 출처가 있는 것만 쓴다. 출처가 없는 유명한 이야기는 빼거나 "~라고 알려져 있다"로 쓴다.
 - 영상 안에 색 들어간 직선 같은 기본 그래픽은 쓰지 않는다(사용자 지시).
-- 음성은 필재(Typecast voice_id tc_68257f68bc6e3c161ab5078d), 1.3배속, 문장 사이 빈틈 없이.
+- 음성은 필재(Typecast voice_id tc_68257f68bc6e3c161ab5078d), 1.15배속(2026-10-09 사용자 결정, 1.3은 너무 빠름), 문장 사이 빈틈 없이.
 - 폰트: Pretendard(본문, 라벨, 연도), Noto Serif KR Black(제목, 썸네일). 모두 OFL.
 
 ## 3. 환경
@@ -31,9 +31,27 @@
 - PLAN.md: 시장 조사와 아이디어 뱅크.
 
 ## 5. 에피소드
-- 롱폼 1호 "베를린의 유령역" (longform/episodes/01_ghost_stations): 대본(make_script.py에서 script.json 생성), 리서치(research_ghost.md), 썸네일, 업로드 정보. 길이 7:54이고, 마지막 hold를 9초에서 16초로 늘려 8:01로 맞출 예정이다. 에셋(뉴스릴, Bundesarchiv 사진, 음악)은 git에 넣지 않았다. 다시 받는 방법은 research_ghost.md와 upload_meta.md에 있다.
+### 롱폼 1호 "베를린의 유령역" (longform/episodes/01_ghost_stations)
+- 상태 (2026-10-09): 새 인트로 v2(56초)를 사용자가 확인하고 "매우 훌륭하다"고 함. 참고 영상은 previews/intro_v2.mp4. 본편은 아직 새 룩으로 렌더하지 않았다(예전 룩으로 돌던 렌더는 중단함).
+- 폴더 구성: make_script.py가 script.json을 만든다. assets/에는 Bundesarchiv/Commons 사진 c01~c20(+commons.json 라이선스), Universal Newsreel 1961-08-31_Berlin.mp4, 1962-08-16_The_Wall.mp4(퍼블릭 도메인)이 있다. music/에는 ElevenLabs 음악 4곡, announce_pa.wav는 독일어 안내방송(ElevenLabs George 음성 + PA 필터), cache/에는 생성된 효과음(sfx_*.mp3, 재생성 비용 절약용)을 둔다. 그 밖에 research_ghost.md(출처), upload_meta.md(제목/설명/챕터/크레딧/태그), thumbnail.jpg.
+- 이어서 하는 법 (새 세션):
+  1. `pip install rapidocr_onnxruntime opencv-python-headless pillow fonttools yt-dlp` 후 `cd germany_shorts/longform && PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install`
+  2. `cd germany_shorts/longform/episodes/01_ghost_stations && python3 make_script.py`
+  3. 미리보기: `LONGFORM_CACHE=$PWD/cache python3 ../../assemble.py script.json out/intro.mp4 --until act1`
+  4. 전체: `LONGFORM_CACHE=$PWD/cache python3 ../../assemble.py script.json out/ghost.mp4` (3D 렌더 때문에 1~2시간 걸린다. 백그라운드로 돌린다. out/과 3D 캐시는 커밋하지 않는다.)
+  5. 공유용 인코딩은 30MB 이하로: `ffmpeg -i out/x.mp4 -c:v libx264 -preset slow -crf 25 -c:a aac -b:a 160k x_share.mp4`
+- 사용자 요청: 다음 세션에서 반영할 것 (2026-10-09, 아직 작업하지 않음):
+  1. 15초쯤 독일어 안내방송("Voltastraße. Letzter Bahnhof in Berlin-West.") 바로 뒤에, 지금 30초쯤 나오는 실제 사진 B-roll(c03, 1989년 로젠탈러 플라츠 내부)을 넣는다. 3D만 길게 이어져 집중력이 떨어지지 않게 하려는 것이다. 30초쯤의 기존 사진 컷은 다른 각도/크롭으로 바꾸거나 다른 실사(c01, c05 등)를 쓰는 것을 고려한다.
+  2. 필재 속도를 1.3배에서 1.15배로 바꾼다(spec의 "voice": {"tempo": 1.15}). 1.3은 너무 빠르다고 함. 바꾸면 전체가 약 13% 길어지므로(약 9분), 3D 샷 길이도 바뀌어 다시 렌더된다.
+- 이후 할 일: 본편 전체를 새 룩(look.js 후처리, intro.js 수준)으로 다시 렌더한다. 본편 3D는 ghost_station/cross_section 장면에 이미 makeComposer를 붙였다. 그다음 업로드한다(YT_REFRESH_TOKEN_CC 재발급 후).
 - 다음 롱폼 후보: 터널 29(NBC가 촬영비를 댄 땅굴 탈출), 베를린 공수와 사탕 폭격기, 샤보프스키의 말실수.
-- 쇼츠 파일럿: 크리스마스 마켓 컵(완성). 11월 중순부터 크리스마스 시리즈를 올린다.
+- 쇼츠 파일럿: 크리스마스 마켓 컵(specs/xmas_mug.json, 완성). 11월 중순부터 크리스마스 시리즈를 올린다.
+
+### 연출 원칙 (사용자 피드백 누적)
+- 인트로가 가장 중요하다. 첫 문장은 질문과 반전을 던지는 훅으로 쓴다("28년 동안 열차가 서지 않았다 → 그런데 늘 누군가 서 있었다").
+- 3D만 길게 이어지지 않게 실사 B-roll을 자주 섞는다. 전환은 섬광, 암전, 휘익 소리로 한다.
+- 효과음은 내레이션을 가리면 안 된다(덕킹 필수, 앰비언스는 낮게).
+- 자막은 화면에 새기고, 핵심어는 호박색으로 강조한다. 라벨은 화면 위쪽에 둔다.
 
 ## 6. 레퍼런스
 - neo(@neoexplains): 3D 지도와 모델, 기록 사진, 2인칭 몰입 인트로, 35초쯤 제목 공개, 실존 인물 장면, 해부식 설명, 다음 이야기 예고. 썸네일은 땅속 단면 + 빛나는 물체 + 1~3단어.

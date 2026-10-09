@@ -9,7 +9,8 @@
    "file": "music/m1_intro.mp3",
    "from": "intro",
    "to": "act1",
-   "vol": 0.2
+   "vol": 0.14,
+   "fade_in": 4
   },
   {
    "file": "music/m2_investigate.mp3",
@@ -39,129 +40,194 @@
  ],
  "beats": [
   {
+   "visual": {
+    "type": "3d",
+    "scene": "intro",
+    "shot": "lightsup",
+    "t0": 0
+   },
+   "hold": 1.3,
+   "id": "intro",
+   "sfx": [
+    {
+     "prompt": "deep low cinematic drone swelling slowly from silence",
+     "len": 6,
+     "vol": 0.35,
+     "at": 0
+    },
+    {
+     "prompt": "empty underground subway station ambience, faint electrical hum, distant water drips, low air rumble",
+     "len": 22,
+     "vol": 0.22,
+     "at": 0
+    },
+    {
+     "prompt": "old light bulbs clicking and buzzing on one by one, electrical relay clicks, echo",
+     "len": 6,
+     "vol": 0.35,
+     "at": 0.4
+    }
+   ]
+  },
+  {
+   "say": "28년 동안, 이 역에는 열차가 단 한 번도 서지 않았습니다.",
+   "visual": "same",
+   "sub": "28년 동안, 이 역에는 열차가 *단 한 번도* 서지 않았습니다"
+  },
+  {
+   "say": "그런데 그 승강장에는, 늘 누군가 서 있었습니다.",
+   "visual": {
+    "type": "3d",
+    "scene": "intro",
+    "shot": "guard",
+    "t0": 0
+   },
+   "sub": "그런데 그 승강장에는, *늘 누군가* 서 있었습니다",
+   "sfx": {
+    "prompt": "single bare light bulb flickering on with electric buzz and click",
+    "len": 2.5,
+    "vol": 0.45,
+    "at": 0.6
+   },
+   "hold": 1.0
+  },
+  {
+   "visual": "same",
+   "hold": 0.9,
+   "sfx": {
+    "prompt": "dark cinematic boom hit with metallic tail",
+    "len": 3,
+    "vol": 0.6
+   }
+  },
+  {
    "say": "1975년, 서베를린.",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
+    "scene": "intro",
     "shot": "cab",
     "t0": 0
    },
-   "id": "intro",
+   "trans": "flash",
    "text": {
     "kind": "label",
     "content": "WEST-BERLIN · 1975",
     "pos": [
      0.5,
-     0.86
+     0.12
     ]
    },
-   "sfx": {
-    "prompt": "subway train rumbling through a dark tunnel, steady rhythm of wheels on rails, interior perspective",
-    "len": 22,
-    "vol": 0.35
-   }
+   "sfx": [
+    {
+     "prompt": "fast cinematic whoosh transition",
+     "len": 1.2,
+     "vol": 0.5,
+     "at": -0.15
+    },
+    {
+     "prompt": "subway train running through a tunnel, rhythmic wheels on rail joints, inside the driver cab",
+     "len": 22,
+     "vol": 0.16
+    }
+   ]
   },
   {
    "say": "당신은 지하철 8호선에 타고 있습니다.",
    "visual": "same"
   },
   {
-   "say": "열차가 한 역에 멈추자, 안내 방송이 나옵니다.",
-   "visual": "same"
-  },
-  {
-   "say": "서베를린의 마지막 역입니다.",
    "visual": "same",
+   "hold": 3.6,
    "text": {
     "kind": "quote",
-    "content": "„Letzter Bahnhof in Berlin-West“",
+    "content": "„Voltastraße. Letzter Bahnhof in Berlin-West.“\\N{\\fs40}볼타 거리. 서베를린의 마지막 역입니다.",
     "pos": [
      0.5,
      0.8
     ]
+   },
+   "sfx": {
+    "file": "announce_pa.wav",
+    "vol": 1.0,
+    "duck": false,
+    "at": 0.1
    }
   },
   {
-   "say": "문이 닫히고, 열차는 다시 어두운 터널로 들어갑니다.",
-   "visual": "same"
+   "say": "서베를린의 마지막 역을 지나, 열차는 다시 어둠 속으로 들어갑니다.",
+   "visual": "same",
+   "sub": "서베를린의 *마지막 역*을 지나, 열차는 다시 어둠 속으로"
   },
   {
-   "say": "그런데 잠시 후, 열차가 속도를 줄이기 시작합니다.",
+   "say": "그런데 잠시 후, 열차가 속도를 줄입니다.",
    "visual": "same",
    "sfx": {
-    "prompt": "old subway train brakes squealing softly, slowing down",
+    "prompt": "old subway train brakes squealing, slowing down in a tunnel",
     "len": 3,
     "vol": 0.4
    }
   },
   {
-   "say": "창밖으로, 희미한 불빛이 보입니다.",
+   "say": "창밖으로 불빛이 보입니다. 역입니다.",
    "visual": "same"
   },
   {
-   "say": "역입니다.",
-   "visual": "same"
-  },
-  {
-   "say": "그런데 뭔가 이상합니다.",
-   "visual": {
-    "type": "3d",
-    "scene": "ghost_station",
-    "shot": "platform",
-    "t0": 2
-   }
-  },
-  {
-   "say": "승강장에, 아무도 없습니다.",
-   "visual": "same"
-  },
-  {
-   "say": "벽에는 낡은 포스터가 그대로 붙어 있고,",
-   "visual": "same"
-  },
-  {
-   "say": "전등은 반쯤 꺼져 있습니다.",
+   "say": "승강장은 텅 비어 있고, 벽에는 오래된 포스터가 그대로 붙어 있습니다.",
    "visual": "same"
   },
   {
    "say": "아니, 딱 한 사람이 있습니다.",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "guard",
+    "scene": "intro",
+    "shot": "guardclose",
     "t0": 0
    },
+   "trans": "dip",
+   "sub": "아니, *딱 한 사람*이 있습니다",
    "sfx": {
     "prompt": "low ominous cinematic hit, deep sub boom",
     "len": 2,
-    "vol": 0.5
+    "vol": 0.55
    }
   },
   {
-   "say": "총을 든 군인이, 열차 안의 당신을 똑바로 바라보고 있습니다.",
-   "visual": "same"
+   "say": "총을 든 군인이, 고개를 돌려 열차 안의 당신을 바라봅니다.",
+   "visual": "same",
+   "sub": "총을 든 군인이, 고개를 돌려 *당신을* 바라봅니다"
   },
   {
    "say": "열차는 멈추지 않습니다.",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "platform",
-    "t0": 6
+    "scene": "intro",
+    "shot": "passby",
+    "t0": 1.5
+   },
+   "sub": "열차는 *멈추지 않습니다*",
+   "sfx": {
+    "prompt": "subway train passing by fast at close range, whoosh and rumble, doppler",
+    "len": 5,
+    "vol": 0.45
    }
   },
   {
-   "say": "그대로 역을 지나, 다시 어둠 속으로 사라집니다.",
-   "visual": "same",
+   "say": "그대로 역을 지나, 어둠 속으로 사라집니다.",
+   "visual": {
+    "type": "3d",
+    "scene": "intro",
+    "shot": "leave",
+    "t0": 0
+   },
    "hold": 1.2
   },
   {
-   "say": "방금 지나친 역의 이름은, 로젠탈러 플라츠.",
+   "say": "이 역의 이름은, 로젠탈러 플라츠.",
    "visual": {
     "type": "image",
     "file": "assets/c03.jpg",
     "from": [
-     1.1,
+     1.12,
      0.5,
      0.45
     ],
@@ -172,31 +238,37 @@
     ],
     "credit": "Bundesarchiv, Bild 183-1989-1220-301 / Peer Grimm / CC BY-SA 3.0"
    },
+   "trans": "flash",
    "text": {
     "kind": "label",
-    "content": "U-Bahnhof Rosenthaler Platz",
+    "content": "U-Bahnhof Rosenthaler Platz · 1989",
     "pos": [
      0.5,
-     0.86
+     0.12
     ]
+   },
+   "sfx": {
+    "prompt": "camera flash pop with soft whoosh",
+    "len": 1,
+    "vol": 0.4,
+    "at": -0.1
    }
   },
   {
-   "say": "이 역에서는 무려 28년 동안, 단 한 명의 승객도 내리지 못했습니다.",
-   "visual": "same"
+   "say": "28년 동안, 단 한 명의 승객도 이곳에서 내리지 못했습니다.",
+   "visual": "same",
+   "sub": "28년 동안, *단 한 명의 승객도* 내리지 못했습니다"
   },
   {
-   "say": "베를린 지하에는, 이런 역이 16개나 있었습니다.",
+   "say": "그리고 베를린 지하에는, 이런 역이 16개나 있었습니다.",
    "visual": {
     "type": "3d",
     "scene": "cross_section",
     "shot": "reveal",
     "t0": 0
-   }
-  },
-  {
-   "say": "열차는 매일 그 앞을 지나갔지만, 절대 멈추지 않았죠.",
-   "visual": "same"
+   },
+   "trans": "dip",
+   "sub": "베를린 지하에는, 이런 역이 *16개*나 있었습니다"
   },
   {
    "say": "사람들은 이곳을, 이렇게 불렀습니다.",
@@ -204,40 +276,77 @@
   },
   {
    "visual": {
-    "type": "black"
+    "type": "3d",
+    "scene": "intro",
+    "shot": "drift",
+    "t0": 0
    },
-   "hold": 3.2,
+   "hold": 3.8,
    "text": {
-    "kind": "title",
+    "kind": "flicker",
     "content": "베를린의 유령역",
     "pos": [
      0.5,
      0.47
     ]
    },
+   "sfx": [
+    {
+     "prompt": "fluorescent tube flickering on, electric buzz and pings",
+     "len": 3,
+     "vol": 0.5
+    },
+    {
+     "prompt": "deep cinematic impact boom with long dark reverb tail",
+     "len": 4,
+     "vol": 0.55,
+     "at": 0.5
+    }
+   ]
+  },
+  {
+   "say": "이 역들은 왜 생겨났을까요?",
+   "visual": {
+    "type": "video",
+    "file": "assets/1961-08-31_Berlin.mp4",
+    "start": 63,
+    "credit": "Universal Newsreel, 31 Aug 1961 (public domain)"
+   },
+   "trans": "flash",
    "sfx": {
-    "prompt": "deep cinematic impact boom with long dark reverb tail",
-    "len": 4,
-    "vol": 0.6
+    "prompt": "short whoosh",
+    "len": 0.8,
+    "vol": 0.4,
+    "at": -0.1
    }
   },
   {
-   "say": "이 역들은 어떻게 만들어졌고, 그 안에서는 무슨 일이 있었을까요?",
+   "say": "경비병들은, 대체 무엇을 지키고 있었을까요?",
    "visual": {
     "type": "3d",
-    "scene": "cross_section",
-    "shot": "pass",
-    "t0": 0
+    "scene": "intro",
+    "shot": "guardclose",
+    "t0": 3.5
    }
   },
   {
-   "say": "그리고 이 유령역을 통해 탈출한 남자는, 어떻게 살아남았을까요?",
-   "visual": "same"
+   "say": "그리고 이 터널로 탈출한 남자는, 어떻게 살아남았을까요?",
+   "visual": {
+    "type": "3d",
+    "scene": "ghost_station",
+    "shot": "border",
+    "t0": 2
+   }
   },
   {
-   "say": "오늘은 베를린 지하에 숨겨져 있던, 28년의 비밀을 따라가 보겠습니다.",
-   "visual": "same",
-   "hold": 0.8
+   "say": "베를린 지하에 28년 동안 숨겨져 있던 이야기, 지금 시작합니다.",
+   "visual": {
+    "type": "3d",
+    "scene": "intro",
+    "shot": "drift",
+    "t0": 4
+   },
+   "hold": 0.6
   },
   {
    "say": "장벽이 생기기 전, 베를린은 참 이상한 도시였습니다.",
@@ -247,7 +356,8 @@
     "start": 9,
     "credit": "Universal Newsreel, 16 Aug 1962 (public domain)"
    },
-   "id": "act1"
+   "id": "act1",
+   "trans": "dip"
   },
   {
    "say": "전쟁에서 진 독일의 수도는, 승전국들이 나눠 가졌습니다.",
@@ -1387,7 +1497,7 @@
     "shot": "platform",
     "t0": 20
    },
-   "hold": 9.0
+   "hold": 16.0
   }
  ]
 }
