@@ -18,21 +18,21 @@ INTRO = "Welcome to Korean in sixty seconds. Get comfortable, close your eyes, a
 OUTRO = "That's all three hundred words. You did great today. Sleep well."
 # ---------- visuals
 html = f'''<!doctype html><html><head><meta charset="utf-8"><style>
-body{{margin:0;width:1920px;height:1080px;overflow:hidden;position:relative;font-family:Pretendard;color:#FFF6EA;
+body{{margin:0;width:1920px;height:1080px;overflow:hidden;position:relative;font-family:'YouTube Sans',Pretendard;color:#FFF6EA;
 background:radial-gradient(ellipse at 78% 18%,#3B3F72 0,transparent 50%),radial-gradient(ellipse at 10% 95%,#2E4A5E 0,transparent 50%),linear-gradient(180deg,#1B1F3B,#262A4F)}}
 .st{{position:absolute;border-radius:50%;background:#FFF6D8}}
 #moon{{position:absolute;right:150px;top:90px;width:130px;height:130px;border-radius:50%;box-shadow:-28px 18px 0 0 #F7E7B4;transform:rotate(-20deg)}}
 #card{{position:absolute;left:360px;top:220px;width:1200px;height:600px;border-radius:60px;background:rgba(255,255,255,.07);border:3px solid rgba(255,255,255,.12);display:flex;flex-direction:column;align-items:center;justify-content:center}}
-#ko{{font-family:Jua;font-size:230px;line-height:1.05;color:#FFE9B8;text-shadow:0 0 40px rgba(255,220,150,.25);white-space:nowrap}}
-#rom{{font-family:Fredoka;font-weight:500;font-size:60px;color:#B9B4D8;margin-top:6px}}
+#ko{{font-family:'YouTube Sans',Pretendard;font-weight:900;font-size:230px;line-height:1.05;color:#FFE9B8;text-shadow:0 0 40px rgba(255,220,150,.25);white-space:nowrap}}
+#rom{{font-family:'YouTube Sans',Pretendard;font-weight:500;font-size:60px;color:#B9B4D8;margin-top:6px}}
 #en{{font-size:64px;font-weight:700;margin-top:26px;padding:10px 40px;border-radius:50px;background:rgba(255,255,255,.1)}}
 #cat{{position:absolute;left:80px;top:70px;font-size:40px;font-weight:800;padding:12px 30px;border-radius:40px;background:rgba(255,255,255,.1);color:#E8E2FF}}
-#num{{position:absolute;left:84px;bottom:76px;font-family:Fredoka;font-size:40px;color:#8F8BB5}}
+#num{{position:absolute;left:84px;bottom:76px;font-family:'YouTube Sans',Pretendard;font-size:40px;color:#8F8BB5}}
 #bar{{position:absolute;left:84px;bottom:52px;width:500px;height:6px;border-radius:3px;background:rgba(255,255,255,.12)}}#bar i{{display:block;height:100%;border-radius:3px;background:#FFE9B8}}
-#brand{{position:absolute;right:300px;bottom:66px;font-family:Jua;font-size:42px;color:#8F8BB5}}
+#brand{{position:absolute;right:300px;bottom:66px;font-family:'YouTube Sans',Pretendard;font-weight:900;font-size:42px;color:#8F8BB5}}
 #bird{{position:absolute;right:50px;bottom:24px;width:230px;opacity:.95}}
 #big{{position:absolute;left:0;right:0;top:0;bottom:0;display:none;flex-direction:column;align-items:center;justify-content:center}}
-#big h1{{font-family:Jua;font-weight:400;font-size:120px;margin:0;color:#FFE9B8}}#big p{{font-size:48px;font-weight:700;color:#B9B4D8;margin:16px 0 0}}
+#big h1{{font-family:'YouTube Sans',Pretendard;font-weight:900;font-size:120px;margin:0;color:#FFE9B8}}#big p{{font-size:48px;font-weight:700;color:#B9B4D8;margin:16px 0 0}}
 #big img{{width:380px;margin-bottom:10px}}
 </style></head><body><div id="stars"></div><div id="moon"></div>
 <div id="card"><div id="ko"></div><div id="rom"></div><div id="en"></div></div><div id="cat"></div>

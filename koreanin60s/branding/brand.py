@@ -6,7 +6,7 @@ PAPER = '<svg style="position:absolute;inset:0;opacity:.3;mix-blend-mode:multipl
 prof = f'''<html><head><meta charset="utf-8"><style>body{{margin:0;width:800px;height:800px;overflow:hidden;position:relative;font-family:Pretendard;
 background:radial-gradient(circle at 50% 42%,#FFFBF4 0,#FCE6EA 52%,#F6C9D4 100%)}}
 .b{{position:absolute;left:115px;top:95px;width:570px;filter:drop-shadow(0 18px 20px rgba(120,90,80,.25))}}
-.badge{{position:absolute;left:50%;bottom:150px;margin-left:-105px;background:#F28BA8;color:#fff;font-family:Fredoka;font-weight:700;font-size:70px;padding:4px 26px;border-radius:44px;transform:rotate(-6deg);box-shadow:0 8px 0 #D86E8D;border:6px solid #fff}}
+.badge{{position:absolute;left:50%;bottom:150px;margin-left:-105px;background:#F28BA8;color:#fff;font-family:'YouTube Sans',Pretendard;font-weight:700;font-size:70px;padding:4px 26px;border-radius:44px;transform:rotate(-6deg);box-shadow:0 8px 0 #D86E8D;border:6px solid #fff}}
 </style></head><body>{PAPER}<img class="b" src="{img("hi_wave")}"><div class="badge">60s</div></body></html>'''
 open("profile.html", "w").write(prof)
 letters = [("한",120,140,160,"#F28BA8",-12),("ㄱ",420,1160,140,"#5CC4A8",10),("글",2300,180,170,"#A48AEB",14),("ㅎ",2150,1180,150,"#F2C14E",-8),("♥",640,240,90,"#F28BA8",-15),("안녕",1850,300,110,"#5CC4A8",6),("ㅋㅋ",300,1250,120,"#A48AEB",-6),("대박",2280,960,120,"#F28BA8",8),("ㄴ",1500,1250,130,"#7FA9E8",12),("★",1150,200,80,"#F2C14E",0)]
@@ -20,7 +20,7 @@ background:radial-gradient(ellipse at 15% 20%,#FCE1E6 0,transparent 45%),radial-
 .safe{{position:absolute;left:507px;top:508px;width:1546px;height:423px;display:flex;align-items:center}}
 .b{{width:400px;flex:none;filter:drop-shadow(0 16px 18px rgba(120,90,80,.25))}}
 .t{{margin-left:40px}}
-h1{{margin:0;font-family:Jua;font-weight:400;font-size:160px;letter-spacing:-3px;line-height:1;color:#3A3134}}
+h1{{margin:0;font-family:'YouTube Sans',Pretendard;font-weight:900;font-size:160px;letter-spacing:-3px;line-height:1;color:#3A3134}}
 h1 span{{color:#E8678A}}
 p{{margin:18px 0 0;font-size:46px;font-weight:700;color:#6b5b57;letter-spacing:-.5px}}
 .pills{{display:flex;gap:16px;margin-top:24px}}

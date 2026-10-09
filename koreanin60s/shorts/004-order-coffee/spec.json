@@ -164,7 +164,7 @@
      "size": 110,
      "y": 930,
      "at": "h1+0.5",
-     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.1"
     }
    ]
   },
@@ -296,7 +296,7 @@
     },
     {
      "type": "box",
-     "html": "<div class='txt' style='font-size:46px;line-height:1.35'><span class='c-b' style='font-family:Jua;font-size:64px'>얼</span>어 <span class='c-b' style='font-family:Jua;font-size:64px'>죽</span>어도 <span class='c-b' style='font-family:Jua;font-size:64px'>아</span>이스<br>freeze · die · still iced</div>",
+     "html": "<div class='txt' style='font-size:46px;line-height:1.35'><span class='c-b' style='font-family:YouTube Sans,Pretendard;font-weight:900;font-size:64px'>얼</span>어 <span class='c-b' style='font-family:YouTube Sans,Pretendard;font-weight:900;font-size:64px'>죽</span>어도 <span class='c-b' style='font-family:YouTube Sans,Pretendard;font-weight:900;font-size:64px'>아</span>이스<br>freeze · die · still iced</div>",
      "w": 820,
      "pad": 20,
      "y": 1080,
@@ -322,7 +322,7 @@
      "size": 110,
      "y": 900,
      "at": "e0+0.3",
-     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.1"
     },
     {
      "type": "box",

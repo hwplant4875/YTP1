@@ -110,11 +110,11 @@
      "size": 92,
      "y": 540,
      "at": "h1+0.2",
-     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.1"
     },
     {
      "type": "box",
-     "html": "<div style='display:flex;align-items:center;gap:28px;width:840px'><div class='chip bg-y' style='font-size:40px;padding:10px 24px'>A</div><div style='text-align:left;flex:1'><div class='c-y' style='font-family:Jua;font-size:80px;line-height:1.05'>어떻게 지내세요?</div><div style='font-family:Fredoka;font-weight:600;font-size:36px;color:#A8968F'>eo-tteo-ke ji-nae-se-yo</div></div><div style='font-size:72px'></div></div>",
+     "html": "<div style='display:flex;align-items:center;gap:28px;width:840px'><div class='chip bg-y' style='font-size:40px;padding:10px 24px'>A</div><div style='text-align:left;flex:1'><div class='c-y' style='font-family:YouTube Sans,Pretendard;font-weight:900;font-size:80px;line-height:1.05'>어떻게 지내세요?</div><div style='font-family:YouTube Sans,Pretendard;font-weight:600;font-size:36px;color:#A8968F'>eo-tteo-ke ji-nae-se-yo</div></div><div style='font-size:72px'></div></div>",
      "w": 960,
      "pad": 26,
      "y": 800,
@@ -123,7 +123,7 @@
     },
     {
      "type": "box",
-     "html": "<div style='display:flex;align-items:center;gap:28px;width:840px'><div class='chip bg-y' style='font-size:40px;padding:10px 24px'>B</div><div style='text-align:left;flex:1'><div class='c-y' style='font-family:Jua;font-size:80px;line-height:1.05'>밥 먹었어?</div><div style='font-family:Fredoka;font-weight:600;font-size:36px;color:#A8968F'>bap meo-geo-sseo</div></div><div style='font-size:72px'></div></div>",
+     "html": "<div style='display:flex;align-items:center;gap:28px;width:840px'><div class='chip bg-y' style='font-size:40px;padding:10px 24px'>B</div><div style='text-align:left;flex:1'><div class='c-y' style='font-family:YouTube Sans,Pretendard;font-weight:900;font-size:80px;line-height:1.05'>밥 먹었어?</div><div style='font-family:YouTube Sans,Pretendard;font-weight:600;font-size:36px;color:#A8968F'>bap meo-geo-sseo</div></div><div style='font-size:72px'></div></div>",
      "w": 960,
      "pad": 26,
      "y": 1040,
@@ -288,7 +288,7 @@
      "size": 110,
      "y": 900,
      "at": "e0+0.3",
-     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.1"
     },
     {
      "type": "box",
