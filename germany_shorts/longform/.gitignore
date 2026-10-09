@@ -2,3 +2,12 @@ _page_*.html
 node_modules/
 .cache/
 _page.html
+episodes/*/out/
+episodes/*/cache/3d_*
+episodes/*/cache/tight_*
+episodes/*/cache/img_*
+episodes/*/cache/vid_*
+episodes/*/cache/black_*
+episodes/*/cache/*.part*
+episodes/02_tunnel29/assets/1961_USAF_Berlin_Documentary_342-USAF-31891A.mp4
+episodes/02_tunnel29/assets/the_wall_1962_USIA.mp4

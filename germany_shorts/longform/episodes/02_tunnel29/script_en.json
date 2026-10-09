@@ -1,0 +1,1299 @@
+{
+ "voice": {
+  "engine": "elevenlabs",
+  "voice_id": "DrBEKFgWMDWUG6bjTSTk",
+  "model": "eleven_v4",
+  "stability": 0.5,
+  "speed": 1.0
+ },
+ "gap": 0.12,
+ "sub_limit": 44,
+ "music": [
+  {
+   "file": "music/t1_intro.mp3",
+   "from": "intro",
+   "to": "act1",
+   "vol": 0.15,
+   "fade_in": 3
+  },
+  {
+   "file": "music/t2_dig.mp3",
+   "from": "act1",
+   "to": "flood",
+   "vol": 0.14
+  },
+  {
+   "file": "music/t3_tension.mp3",
+   "from": "flood",
+   "to": "act3",
+   "vol": 0.15
+  },
+  {
+   "file": "music/t4_escape.mp3",
+   "from": "act3",
+   "to": "act4",
+   "vol": 0.16
+  },
+  {
+   "file": "music/t2_dig.mp3",
+   "from": "act4",
+   "to": "act5",
+   "vol": 0.13
+  },
+  {
+   "file": "music/t5_resolution.mp3",
+   "from": "act5",
+   "to": "end",
+   "vol": 0.18
+  }
+ ],
+ "beats": [
+  {
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "street",
+    "t0": 0
+   },
+   "hold": 1.2,
+   "id": "intro",
+   "sfx": [
+    {
+     "prompt": "deep low cinematic drone swelling slowly from silence",
+     "len": 6,
+     "vol": 0.35
+    },
+    {
+     "prompt": "quiet city street at night 1960s, distant dog barking, wind, faint electric hum of floodlights",
+     "len": 20,
+     "vol": 0.22
+    }
+   ]
+  },
+  {
+   "say": "Berlin. Bernauer Straße. Summer, 1962.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "BERNAUER STRASSE · 1962",
+    "pos": [
+     0.5,
+     0.12
+    ]
+   }
+  },
+  {
+   "say": "On one side of the street: the West.",
+   "visual": "same"
+  },
+  {
+   "say": "On the other: East Germany. Its windows bricked shut.",
+   "visual": {
+    "type": "video",
+    "file": "assets/1961_USAF_Berlin_Documentary_342-USAF-31891A.mp4",
+    "start": 1160,
+    "credit": "U.S. Air Force film, 1961 (public domain), National Archives"
+   },
+   "trans": "flash",
+   "sfx": {
+    "prompt": "camera flash pop with soft whoosh",
+    "len": 1,
+    "vol": 0.4,
+    "at": -0.1
+   },
+   "sub": "On the other: East Germany. Windows *bricked shut*"
+  },
+  {
+   "say": "But five meters under the pavement...",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "reveal",
+    "t0": 0
+   },
+   "trans": "dip",
+   "sfx": {
+    "prompt": "dark cinematic riser building tension, rising pitch, ends abruptly",
+    "len": 4,
+    "vol": 0.4
+   }
+  },
+  {
+   "say": "a group of students is lying on their backs in the dark, digging.",
+   "visual": "same",
+   "sub": "students lie on their backs in the dark, *digging*",
+   "sfx": {
+    "prompt": "spade scraping and chopping into wet clay in a cramped tunnel, close, muffled, rhythmic",
+    "len": 12,
+    "vol": 0.3
+   }
+  },
+  {
+   "say": "They're digging toward the East.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "crawl",
+    "t0": 2
+   },
+   "sfx": [
+    {
+     "prompt": "water dripping in a narrow underground tunnel, echo, quiet",
+     "len": 15,
+     "vol": 0.22
+    },
+    {
+     "prompt": "spade scraping and chopping into wet clay in a cramped tunnel, close, muffled, rhythmic",
+     "len": 12,
+     "vol": 0.3
+    }
+   ]
+  },
+  {
+   "say": "Toward a cellar, more than a hundred meters away, on the other side of the Wall.",
+   "visual": "same",
+   "sub": "Toward a cellar *on the other side* of the Wall"
+  },
+  {
+   "say": "And right behind them...",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "camera",
+    "t0": 0
+   },
+   "trans": "dip",
+   "sfx": {
+    "prompt": "low ominous cinematic hit, deep sub boom",
+    "len": 2,
+    "vol": 0.5
+   }
+  },
+  {
+   "say": "there's an American television camera.",
+   "visual": "same",
+   "sub": "there's an *American television camera*",
+   "sfx": {
+    "prompt": "1960s 16mm film camera running, mechanical whirr and clatter",
+    "len": 6,
+    "vol": 0.3
+   },
+   "hold": 0.6
+  },
+  {
+   "visual": "same",
+   "hold": 0.4,
+   "sfx": {
+    "prompt": "deep cinematic sub boom hit with short metallic tail",
+    "len": 2.5,
+    "vol": 0.55
+   }
+  },
+  {
+   "say": "NBC paid for this tunnel.",
+   "visual": {
+    "type": "black"
+   },
+   "sub": "NBC *paid* for this tunnel",
+   "text": {
+    "kind": "label",
+    "content": "NBC · 1962",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "The tunnel would flood. A rival tunnel would be betrayed to the Stasi. And Washington would try to stop the film.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "water",
+    "t0": 2
+   },
+   "sub": "It would flood. A rival tunnel would be *betrayed*. Washington would try to *stop the film*",
+   "sfx": {
+    "prompt": "water trickling and rising in a narrow tunnel, echo",
+    "len": 8,
+    "vol": 0.3
+   }
+  },
+  {
+   "say": "But on one night in September, twenty-nine people crawled through it, to freedom.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "cellar",
+    "t0": 0
+   },
+   "sub": "But one night in September, *29 people* crawled through it",
+   "sfx": {
+    "prompt": "dark cinematic riser building tension, rising pitch, ends abruptly",
+    "len": 4,
+    "vol": 0.4
+   }
+  },
+  {
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "section",
+    "t0": 3
+   },
+   "hold": 4.2,
+   "text": {
+    "kind": "flicker",
+    "content": "TUNNEL 29",
+    "pos": [
+     0.5,
+     0.45
+    ]
+   },
+   "sfx": [
+    {
+     "prompt": "old bare light bulbs buzzing on one by one in a tunnel, electric hum",
+     "len": 3,
+     "vol": 0.5
+    },
+    {
+     "prompt": "deep cinematic impact boom with long dark reverb tail",
+     "len": 4,
+     "vol": 0.6,
+     "at": 0.5
+    }
+   ]
+  },
+  {
+   "say": "This is how they did it.",
+   "visual": "same",
+   "hold": 0.6
+  },
+  {
+   "say": "To understand Tunnel 29, you need to understand this street.",
+   "visual": {
+    "type": "image",
+    "file": "assets/t01.jpg",
+    "from": [
+     1.05,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.18,
+     0.4,
+     0.55
+    ],
+    "credit": "Bundesarchiv, Bild 183-33809-0001 / Hans-Günter Quaschinsky / CC BY-SA 3.0"
+   },
+   "id": "act1",
+   "trans": "dip",
+   "text": {
+    "kind": "label",
+    "content": "Bernauer Straße · 1955",
+    "pos": [
+     0.5,
+     0.86
+    ]
+   }
+  },
+  {
+   "say": "Before 1961, Bernauer Straße was just a street. The sign on it said: you are entering the French sector.",
+   "visual": "same"
+  },
+  {
+   "say": "The pavement was West Berlin. The houses along it were East Berlin.",
+   "visual": {
+    "type": "image",
+    "file": "assets/t10.jpg",
+    "from": [
+     1.05,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.15,
+     0.45,
+     0.5
+    ],
+    "credit": "Sigurd Hilkenbach, CC BY-SA 3.0"
+   }
+  },
+  {
+   "say": "So when the Wall went up in August 1961, people simply jumped. Out of their windows, into the West.",
+   "visual": {
+    "type": "image",
+    "file": "assets/t09.jpg",
+    "from": [
+     1.05,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.18,
+     0.55,
+     0.5
+    ],
+    "credit": "Sigurd Hilkenbach, CC BY-SA 3.0"
+   },
+   "sub": "People *jumped* out of their windows, into the West"
+  },
+  {
+   "say": "Within weeks, the doors were nailed shut. Then the windows were bricked up.",
+   "visual": {
+    "type": "video",
+    "file": "assets/1962-08-16_The_Wall.mp4",
+    "start": 36,
+    "credit": "Universal Newsreel, 16 Aug 1962 (public domain)"
+   }
+  },
+  {
+   "say": "Whole buildings were emptied.",
+   "visual": {
+    "type": "image",
+    "file": "assets/t12.jpg",
+    "from": [
+     1.05,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.18,
+     0.5,
+     0.45
+    ],
+    "credit": "Roger Wollstadt (Roger W), CC BY-SA 2.0"
+   }
+  },
+  {
+   "say": "And the street became a border.",
+   "visual": {
+    "type": "image",
+    "file": "assets/t15.jpg",
+    "from": [
+     1.08,
+     0.5,
+     0.4
+    ],
+    "to": [
+     1.2,
+     0.5,
+     0.35
+    ],
+    "credit": "Landesarchiv Baden-Württemberg, Staatsarchiv Freiburg W 134 Nr. 081630a / Foto: Willy Pragher / CC BY 4.0"
+   },
+   "hold": 0.8
+  },
+  {
+   "say": "Now, meet the diggers.",
+   "visual": {
+    "type": "black"
+   },
+   "sfx": {
+    "prompt": "single old typewriter keystrokes and carriage bell, short",
+    "len": 2,
+    "vol": 0.3
+   }
+  },
+  {
+   "say": "Two Italian students in West Berlin, Luigi Spina and Domenico Sesta.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "LUIGI SPINA · DOMENICO SESTA",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "Their friend Peter Schmidt was stuck in the East, with his wife and a newborn baby.",
+   "visual": "same",
+   "sub": "Their friend was stuck in the East, with his wife and a *newborn baby*"
+  },
+  {
+   "say": "In early 1962, he asked them for help. They thought about a helicopter. Then they settled on a tunnel.",
+   "visual": "same",
+   "sub": "They thought about a *helicopter*. Then: a *tunnel*"
+  },
+  {
+   "say": "Then there was Hasso Herschel.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "HASSO HERSCHEL",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "single old typewriter keystrokes and carriage bell, short",
+    "len": 2,
+    "vol": 0.3
+   }
+  },
+  {
+   "say": "He'd spent years in an East German prison, and had only just escaped on a borrowed Swiss passport.",
+   "visual": "same"
+  },
+  {
+   "say": "His sister Anita was still in the East, with her husband and their little girl.",
+   "visual": "same"
+  },
+  {
+   "say": "And Joachim Rudolph, a twenty-three-year-old who had fled himself only months earlier, wading across a river.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "JOACHIM RUDOLPH",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "single old typewriter keystrokes and carriage bell, short",
+    "len": 2,
+    "vol": 0.3
+   },
+   "sub": "Joachim Rudolph, 23. He'd fled across a river *months earlier*"
+  },
+  {
+   "say": "He studied engineering. Now he was going back. Underground.",
+   "visual": "same",
+   "sub": "Now he was going back. *Underground*",
+   "hold": 0.8
+  },
+  {
+   "say": "The entrance was a small, war-damaged factory, right on Bernauer Straße.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "street",
+    "t0": 4
+   },
+   "id": "act2",
+   "trans": "dip",
+   "text": {
+    "kind": "label",
+    "content": "Bernauer Straße 78",
+    "pos": [
+     0.5,
+     0.86
+    ]
+   },
+   "sfx": {
+    "prompt": "quiet city street at night 1960s, distant dog barking, wind, faint electric hum of floodlights",
+    "len": 20,
+    "vol": 0.22
+   }
+  },
+  {
+   "say": "Its owner let them use the cellar for free.",
+   "visual": "same"
+  },
+  {
+   "say": "They dug a shaft straight down, about five meters.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "reveal",
+    "t0": 0
+   },
+   "sfx": {
+    "prompt": "spade scraping and chopping into wet clay in a cramped tunnel, close, muffled, rhythmic",
+    "len": 12,
+    "vol": 0.3
+   }
+  },
+  {
+   "say": "Then they turned east, and started digging under the street, under the death strip, and under the Wall.",
+   "visual": "same",
+   "sub": "Then east: under the street, the death strip, and *the Wall*"
+  },
+  {
+   "say": "The tunnel was barely wider than a man's shoulders.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "dig",
+    "t0": 0
+   },
+   "sfx": [
+    {
+     "prompt": "spade scraping and chopping into wet clay in a cramped tunnel, close, muffled, rhythmic",
+     "len": 12,
+     "vol": 0.3
+    },
+    {
+     "prompt": "water dripping in a narrow underground tunnel, echo, quiet",
+     "len": 15,
+     "vol": 0.22
+    }
+   ]
+  },
+  {
+   "say": "They lay on their backs and hacked at the clay in front of them, by the light of a single bulb.",
+   "visual": "same",
+   "sub": "They lay on their backs and hacked at the clay *by the light of a single bulb*"
+  },
+  {
+   "say": "The earth went back in a cart on rails, pulled by an electric winch.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "crawl",
+    "t0": 6
+   },
+   "sfx": {
+    "prompt": "small cart rolling on narrow rails in a tunnel, pulled by a rope winch",
+    "len": 6,
+    "vol": 0.3
+   }
+  },
+  {
+   "say": "Some two hundred and fifty tonnes of it. Seven cellar rooms filled to the ceiling.",
+   "visual": "same",
+   "sub": "Some *250 tonnes* of earth"
+  },
+  {
+   "say": "Twenty tonnes of timber held the roof up. A field telephone connected them to the surface.",
+   "visual": "same",
+   "sfx": {
+    "prompt": "old field telephone crank ring, muffled underground",
+    "len": 2,
+    "vol": 0.35
+   }
+  },
+  {
+   "say": "And then, they ran out of money.",
+   "visual": {
+    "type": "black"
+   },
+   "sfx": {
+    "prompt": "deep cinematic sub boom hit with short metallic tail",
+    "len": 2.5,
+    "vol": 0.55
+   },
+   "hold": 0.6
+  },
+  {
+   "say": "That's when the Americans came in.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "camera",
+    "t0": 3
+   },
+   "sfx": {
+    "prompt": "1960s 16mm film camera running, mechanical whirr and clatter",
+    "len": 6,
+    "vol": 0.3
+   }
+  },
+  {
+   "say": "NBC's Berlin correspondent, Piers Anderton, had been looking for exactly this story.",
+   "visual": "same"
+  },
+  {
+   "say": "The deal: seven and a half thousand dollars for exclusive rights to film. Five thousand more if the escape worked.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "$7,500  +  $5,000",
+    "pos": [
+     0.5,
+     0.86
+    ]
+   },
+   "sub": "$7,500 to film. *$5,000 more* if it worked"
+  },
+  {
+   "say": "In return, NBC's cameramen would crawl into the tunnel and film it, from the inside.",
+   "visual": "same",
+   "sub": "NBC would film it *from the inside*"
+  },
+  {
+   "say": "The producer back in New York? He never saw the tunnel. Not once.",
+   "visual": "same"
+  },
+  {
+   "say": "By early June, they were under the border line.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "section",
+    "t0": 2
+   },
+   "trans": "dip"
+  },
+  {
+   "say": "According to one of the diggers, they even hung a sign at that spot: 'You are leaving the American sector'.",
+   "visual": "same",
+   "text": {
+    "kind": "quote",
+    "content": "„YOU ARE LEAVING THE AMERICAN SECTOR“",
+    "pos": [
+     0.5,
+     0.8
+    ]
+   },
+   "sub": "They hung a sign: *'You are leaving the American sector'*"
+  },
+  {
+   "say": "Then, in early summer, the water came.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "water",
+    "t0": 0
+   },
+   "sfx": {
+    "prompt": "pipe bursting underground, water gushing and splashing into a tunnel",
+    "len": 5,
+    "vol": 0.45
+   },
+   "id": "flood"
+  },
+  {
+   "say": "A water main had burst somewhere above them. The tunnel began to flood.",
+   "visual": "same",
+   "sub": "A water main had burst. The tunnel *began to flood*"
+  },
+  {
+   "say": "They pumped day and night. It wasn't enough.",
+   "visual": "same",
+   "sfx": {
+    "prompt": "hand water pump squeaking and splashing in a tunnel, repetitive",
+    "len": 6,
+    "vol": 0.3
+   }
+  },
+  {
+   "say": "So they did something remarkable: they persuaded West Berlin officials to ask East Berlin to shut off its own water main,",
+   "visual": "same",
+   "sub": "They got *East Berlin* to shut off its own water main"
+  },
+  {
+   "say": "disguised as a routine repair.",
+   "visual": "same",
+   "hold": 0.6
+  },
+  {
+   "say": "It worked. But the tunnel took weeks to dry out.",
+   "visual": "same"
+  },
+  {
+   "say": "And while they waited, something went very wrong in another tunnel.",
+   "visual": {
+    "type": "3d",
+    "scene": "cross_section",
+    "shot": "pass",
+    "t0": 0
+   },
+   "trans": "dip",
+   "sfx": {
+    "prompt": "dark cinematic riser building tension, rising pitch, ends abruptly",
+    "len": 4,
+    "vol": 0.4
+   }
+  },
+  {
+   "say": "Across the city, another group was digging, at Kiefholzstraße.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "Kiefholzstraße · 1962",
+    "pos": [
+     0.5,
+     0.86
+    ]
+   }
+  },
+  {
+   "say": "They had a TV deal too. With CBS.",
+   "visual": "same",
+   "sub": "They had a TV deal too. With *CBS*"
+  },
+  {
+   "say": "Herschel, Rudolph and their friend Uli Pfeifer went to help.",
+   "visual": "same"
+  },
+  {
+   "say": "But the group had been infiltrated by a Stasi informer.",
+   "visual": {
+    "type": "black"
+   },
+   "sub": "But the group had a *Stasi informer*",
+   "sfx": {
+    "prompt": "deep cinematic sub boom hit with short metallic tail",
+    "len": 2.5,
+    "vol": 0.55
+   }
+  },
+  {
+   "say": "That summer, as refugees gathered at the eastern end, East German forces sprang the trap.",
+   "visual": {
+    "type": "video",
+    "file": "assets/1961-08-31_Berlin.mp4",
+    "start": 87,
+    "credit": "Universal Newsreel, 31 Aug 1961 (public domain)"
+   },
+   "sub": "East German forces *sprang the trap*"
+  },
+  {
+   "say": "Dozens of people waiting in the East were arrested.",
+   "visual": "same"
+  },
+  {
+   "say": "The three diggers escaped only by crawling back through the tunnel.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "crawl",
+    "t0": 12
+   },
+   "sub": "The diggers escaped by *crawling back*",
+   "sfx": {
+    "prompt": "frantic crawling and breathing in a narrow tunnel, close, dirt falling",
+    "len": 5,
+    "vol": 0.35
+   }
+  },
+  {
+   "say": "Then, on August 17th, an eighteen-year-old named Peter Fechter was shot at the Wall.",
+   "visual": {
+    "type": "black"
+   },
+   "text": {
+    "kind": "label",
+    "content": "PETER FECHTER · 1944–1962",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sub": "August 17th: Peter Fechter, 18, was shot at the Wall"
+  },
+  {
+   "say": "He bled to death at the foot of the Wall, in full view of the West, while nobody helped him.",
+   "visual": "same",
+   "sub": "He bled to death *in full view of the West*"
+  },
+  {
+   "say": "The diggers pinned his photo inside their tunnel. And kept digging.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "crawl",
+    "t0": 18
+   },
+   "sub": "They pinned his photo in the tunnel. *And kept digging*",
+   "hold": 1.0
+  },
+  {
+   "say": "By September, the water was back.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "water",
+    "t0": 4
+   },
+   "id": "act3",
+   "sfx": {
+    "prompt": "water dripping in a narrow underground tunnel, echo, quiet",
+    "len": 15,
+    "vol": 0.22
+   }
+  },
+  {
+   "say": "They couldn't reach their original target, so they aimed for a closer building instead.",
+   "visual": "same"
+  },
+  {
+   "say": "Schönholzer Straße, number seven.",
+   "visual": {
+    "type": "image",
+    "file": "assets/t17.jpg",
+    "from": [
+     1.05,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.15,
+     0.5,
+     0.6
+    ],
+    "credit": "Fridolin freudenfett (Peter Kuley), CC BY-SA 3.0"
+   },
+   "text": {
+    "kind": "label",
+    "content": "Schönholzer Straße 7",
+    "pos": [
+     0.5,
+     0.86
+    ]
+   }
+  },
+  {
+   "say": "On the morning of September 14th, Hasso Herschel dug upward, and broke through the floor of the cellar.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "cellar",
+    "t0": 0
+   },
+   "sub": "September 14th: they broke through the *cellar floor*",
+   "sfx": {
+    "prompt": "pickaxe breaking through a brick floor from below, rubble falling, air rushing",
+    "len": 4,
+    "vol": 0.45
+   }
+  },
+  {
+   "say": "He waited at the bottom of the cellar stairs. With a loaded pistol.",
+   "visual": "same",
+   "sub": "He waited at the stairs. *With a loaded pistol*",
+   "sfx": {
+    "prompt": "deep cinematic sub boom hit with short metallic tail",
+    "len": 2.5,
+    "vol": 0.55
+   }
+  },
+  {
+   "say": "Now someone had to tell the families. Without anyone noticing.",
+   "visual": {
+    "type": "black"
+   }
+  },
+  {
+   "say": "That job went to Ellen, the group's courier. It was her twenty-second birthday.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "THE COURIER",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "She crossed into East Berlin, and walked to a playground near a church.",
+   "visual": {
+    "type": "image",
+    "file": "assets/t14.jpg",
+    "from": [
+     1.05,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.18,
+     0.45,
+     0.5
+    ],
+    "credit": "Landesarchiv Baden-Württemberg, Staatsarchiv Freiburg W 134 Nr. 078740 / Foto: Willy Pragher / CC BY 4.0"
+   }
+  },
+  {
+   "say": "From there, she watched one window. A white sheet meant the tunnel was open. A red one meant run.",
+   "visual": "same",
+   "sub": "A *white* sheet: open. A *red* one: run"
+  },
+  {
+   "say": "The sheet was white.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "street",
+    "t0": 8
+   },
+   "sfx": {
+    "prompt": "cloth flapping in the wind, single",
+    "len": 2,
+    "vol": 0.35
+   },
+   "hold": 0.6
+  },
+  {
+   "say": "According to the participants, she then went from pub to pub, where the families were waiting.",
+   "visual": {
+    "type": "black"
+   },
+   "sfx": {
+    "prompt": "small 1960s pub interior, quiet murmur, glasses clinking, clock ticking",
+    "len": 12,
+    "vol": 0.2
+   }
+  },
+  {
+   "say": "The signals were tiny. Buying a box of matches. Carrying a certain newspaper.",
+   "visual": "same",
+   "sub": "The signals: a box of *matches*. A certain *newspaper*"
+  },
+  {
+   "say": "At the last pub, the code was to order a coffee. They didn't have coffee. So she ordered a cognac.",
+   "visual": "same",
+   "sub": "The code was to order *coffee*. They had none. *She ordered cognac*"
+  },
+  {
+   "say": "And every five minutes, another small group walked to Schönholzer Straße seven.",
+   "visual": {
+    "type": "image",
+    "file": "assets/t17.jpg",
+    "from": [
+     1.15,
+     0.5,
+     0.6
+    ],
+    "to": [
+     1.05,
+     0.5,
+     0.5
+    ],
+    "credit": "Fridolin freudenfett (Peter Kuley), CC BY-SA 3.0"
+   }
+  },
+  {
+   "say": "Into the cellar. Down the ladder. Into the dark.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "cellar",
+    "t0": 4
+   },
+   "sfx": {
+    "prompt": "footsteps on old wooden cellar stairs, then climbing down a wooden ladder",
+    "len": 4,
+    "vol": 0.35
+   }
+  },
+  {
+   "say": "A hundred and thirty-five meters of mud, on hands and knees.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "crawl",
+    "t0": 0
+   },
+   "sfx": [
+    {
+     "prompt": "water dripping in a narrow underground tunnel, echo, quiet",
+     "len": 15,
+     "vol": 0.22
+    },
+    {
+     "prompt": "people crawling through mud and shallow water in a tunnel, splashing, breathing",
+     "len": 8,
+     "vol": 0.35
+    }
+   ],
+   "sub": "*135 meters* of mud, on hands and knees"
+  },
+  {
+   "say": "Parents. A grandmother. Children. Babies, passed from arm to arm.",
+   "visual": "same",
+   "sub": "Parents. Children. *Babies, passed from arm to arm*"
+  },
+  {
+   "say": "And the water was rising again.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "water",
+    "t0": 3
+   },
+   "sub": "And the water was *rising again*"
+  },
+  {
+   "say": "At the other end, the NBC cameras were rolling.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "camera",
+    "t0": 6
+   },
+   "sfx": {
+    "prompt": "1960s 16mm film camera running, mechanical whirr and clatter",
+    "len": 6,
+    "vol": 0.3
+   }
+  },
+  {
+   "say": "They filmed a young mother climbing the ladder with her baby, her clothes soaked with mud.",
+   "visual": "same",
+   "sub": "A young mother climbing the ladder *with her baby*"
+  },
+  {
+   "say": "And they filmed one of the diggers, holding his son for the very first time.",
+   "visual": "same",
+   "sub": "A digger, holding his son *for the first time*",
+   "hold": 1.4
+  },
+  {
+   "say": "By the end, twenty-nine people had made it through.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "section",
+    "t0": 8
+   },
+   "trans": "dip",
+   "text": {
+    "kind": "year",
+    "content": "29"
+   },
+   "sfx": {
+    "prompt": "deep cinematic sub boom hit with short metallic tail",
+    "len": 2.5,
+    "vol": 0.55
+   }
+  },
+  {
+   "say": "No one was caught. No one was hurt.",
+   "visual": "same"
+  },
+  {
+   "say": "The next day, the water won, and the tunnel flooded for good.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "water",
+    "t0": 6
+   }
+  },
+  {
+   "say": "Eleven days later, the ground above it sank, and the Stasi finally found it.",
+   "visual": "same",
+   "sub": "*11 days later*, the Stasi finally found it",
+   "hold": 0.8
+  },
+  {
+   "say": "NBC had the story of the decade.",
+   "visual": {
+    "type": "black"
+   },
+   "id": "act4",
+   "sfx": {
+    "prompt": "1960s 16mm film camera running, mechanical whirr and clatter",
+    "len": 6,
+    "vol": 0.3
+   }
+  },
+  {
+   "say": "The broadcast was set for October 31st, 1962.",
+   "visual": "same"
+  },
+  {
+   "say": "But word got out that NBC had paid for an escape. Time magazine called it chicanery. The State Department was furious.",
+   "visual": "same",
+   "sub": "Critics called it *chicanery*. The State Department was *furious*"
+  },
+  {
+   "say": "Then, on October 22nd, President Kennedy went on television to announce the Cuban Missile Crisis.",
+   "visual": {
+    "type": "video",
+    "file": "assets/1961-08-31_Berlin.mp4",
+    "start": 63,
+    "credit": "Universal Newsreel, 31 Aug 1961 (public domain)"
+   },
+   "text": {
+    "kind": "label",
+    "content": "22 OCTOBER 1962",
+    "pos": [
+     0.5,
+     0.86
+    ]
+   },
+   "sub": "October 22nd: the *Cuban Missile Crisis*"
+  },
+  {
+   "say": "With the world on the edge of nuclear war, Washington leaned hard on NBC to hold the film.",
+   "visual": "same"
+  },
+  {
+   "say": "The next day, NBC pulled it.",
+   "visual": "same",
+   "sub": "The next day, NBC *pulled it*",
+   "sfx": {
+    "prompt": "deep cinematic sub boom hit with short metallic tail",
+    "len": 2.5,
+    "vol": 0.55
+   }
+  },
+  {
+   "say": "It finally aired on December 10th, 1962.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "camera",
+    "t0": 9
+   },
+   "text": {
+    "kind": "label",
+    "content": "10 DECEMBER 1962",
+    "pos": [
+     0.5,
+     0.86
+    ]
+   }
+  },
+  {
+   "say": "Ninety minutes. No interviews. Just the tunnel.",
+   "visual": "same"
+  },
+  {
+   "say": "It won three Emmys, including Program of the Year.",
+   "visual": "same",
+   "sub": "Three Emmys. Including *Program of the Year*"
+  },
+  {
+   "say": "It's still the only documentary ever to win it.",
+   "visual": "same"
+  },
+  {
+   "say": "And the U.S. government, the same one that had tried to stop it? Its own information agency reportedly bought a hundred copies, to show around the world.",
+   "visual": "same",
+   "sub": "Then a U.S. agency *bought 100 copies*"
+  },
+  {
+   "say": "Not everyone was celebrating.",
+   "visual": {
+    "type": "image",
+    "file": "assets/t11.jpg",
+    "from": [
+     1.05,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.15,
+     0.5,
+     0.45
+    ],
+    "credit": "Bundesarchiv, B 145 Bild-F014908-0006 / Ludwig Wegmann / CC BY-SA 3.0"
+   }
+  },
+  {
+   "say": "Seventeen of the helpers publicly distanced themselves from the deal. Escape, they said, should never be a business.",
+   "visual": "same",
+   "sub": "*17 helpers* said escape should never be a business"
+  },
+  {
+   "say": "Hasso Herschel didn't stop. Over the next decade, he helped around a thousand more people escape.",
+   "visual": "same",
+   "sub": "Herschel went on to help *around a thousand* more people escape"
+  },
+  {
+   "say": "Some hidden in secret compartments of cars. One of them, a converted Cadillac.",
+   "visual": "same",
+   "hold": 0.6
+  },
+  {
+   "say": "Today, Bernauer Straße is a memorial.",
+   "visual": {
+    "type": "image",
+    "file": "assets/t20.jpg",
+    "from": [
+     1.0,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.12,
+     0.6,
+     0.5
+    ],
+    "credit": "Dietmar Rabich, CC BY-SA 4.0"
+   },
+   "id": "act5",
+   "trans": "dip"
+  },
+  {
+   "say": "Lines of metal plates in the grass trace where escape tunnels once ran.",
+   "visual": {
+    "type": "image",
+    "file": "assets/t19.jpg",
+    "from": [
+     1.05,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.18,
+     0.5,
+     0.6
+    ],
+    "credit": "Tony Webster, CC BY 2.0"
+   }
+  },
+  {
+   "say": "And on the wall of Schönholzer Straße seven, there's a small plaque.",
+   "visual": {
+    "type": "image",
+    "file": "assets/t16.jpg",
+    "from": [
+     1.05,
+     0.5,
+     0.4
+    ],
+    "to": [
+     1.25,
+     0.5,
+     0.45
+    ],
+    "credit": "OTFW, Berlin, CC BY-SA 3.0"
+   }
+  },
+  {
+   "say": "It says: one hundred and thirty-five meters. Twenty-nine people. Dug by brave men,",
+   "visual": "same",
+   "sub": "135 meters. 29 people. *Dug by brave men*"
+  },
+  {
+   "say": "so they could hold their wives, children, relatives and friends in their arms again.",
+   "visual": "same",
+   "sub": "so they could hold their families *in their arms again*",
+   "hold": 1.0
+  },
+  {
+   "say": "A TV network bought a tunnel under the Iron Curtain.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "thumb",
+    "t0": 0
+   },
+   "trans": "dip"
+  },
+  {
+   "say": "But what came out the other end wasn't a story. It was twenty-nine people.",
+   "visual": "same",
+   "sub": "What came out the other end was *29 people*",
+   "hold": 1.5
+  },
+  {
+   "say": "If you want more stories from under Europe's surface, subscribe. There are plenty more.",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "crawl",
+    "t0": 22
+   },
+   "sub": "More stories from *under Europe's surface*: subscribe"
+  },
+  {
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "section",
+    "t0": 14
+   },
+   "hold": 16.0
+  }
+ ]
+}

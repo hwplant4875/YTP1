@@ -71,7 +71,34 @@ def http(url, data=None, headers=None, timeout=300):
 
 # ---------------------------------------------------------------- audio
 
-def tts(text, voice):
+def tts_elevenlabs(text, voice, ctx=None):
+    vid = voice["voice_id"]
+    body = {"text": text, "model_id": voice.get("model", "eleven_v4"),
+            "voice_settings": {"stability": voice.get("stability", 0.5), "similarity_boost": voice.get("similarity", 0.8),
+                               "speed": voice.get("speed", 1.0)}}
+    if ctx:   # neighbouring lines keep the prosody continuous across separately generated sentences
+        body.update({k: v for k, v in ctx.items() if v})
+    try:
+        raw = cached(f"el_{key(vid, body)}.mp3", lambda p: open(p, "wb").write(http(
+            f"https://api.elevenlabs.io/v1/text-to-speech/{vid}?output_format=mp3_44100_192", json.dumps(body).encode(),
+            {"xi-api-key": os.environ["ELEVENLABS_API_KEY"], "Content-Type": "application/json"})))
+    except urllib.error.HTTPError as e:
+        if not ctx:
+            raise
+        print("tts context rejected, retrying without it:", e.code, e.read()[:200])
+        return tts_elevenlabs(text, voice)
+    return raw
+
+
+def tts(text, voice, ctx=None):
+    if voice.get("engine") == "elevenlabs":
+        raw = tts_elevenlabs(text, voice, ctx)
+        sd, ss = voice.get("squeeze", [0.32, 0.22])
+        af = ("silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.02,"
+              "areverse,silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.05,areverse,"
+              f"silenceremove=stop_periods=-1:stop_duration={sd}:stop_threshold=-50dB:stop_silence={ss},"
+              "aresample=48000,aformat=channel_layouts=mono")
+        return cached(f"tight_{key(raw, af)}.wav", lambda p: sh("ffmpeg", "-y", "-i", raw, "-af", af, "-f", "wav", p))
     body = {"voice_id": voice.get("voice_id", PILJAE), "text": text, "model": voice.get("model", "ssfm-v21"),
             "language": "kor",
             "prompt": {"emotion_preset": voice.get("emotion", "normal"), "emotion_intensity": voice.get("intensity", 1.0)},
@@ -199,6 +226,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
 
 AMBER_ASS = "&H5CB2FF&"
+SUB_LIMIT = None
 
 
 def accent(text):
@@ -206,6 +234,7 @@ def accent(text):
 
 
 def sub_chunks(text, limit=19):
+    limit = SUB_LIMIT or limit
     words = re.findall(r"\S+", text)
     out, cur = [], ""
     for w in words:
@@ -288,6 +317,10 @@ def main():
             if m["to"] not in [b.get("id") for b in spec["beats"]]:
                 m["to"] = "end"
     voice = {"voice_id": PILJAE, **spec.get("voice", {})}
+    global SUB_LIMIT, ASS_HEAD
+    SUB_LIMIT = spec.get("sub_limit")
+    for name, font in spec.get("fonts", {}).items():   # e.g. {"TITLE": "Some Serif"} for Latin-script episodes
+        ASS_HEAD = re.sub(rf"^(Style: {name},)[^,]+", rf"\g<1>{font}", ASS_HEAD, flags=re.M)
     gap = spec.get("gap", 0.05)
     work = os.path.splitext(out)[0] + "_work"
     os.makedirs(work, exist_ok=True)
@@ -299,7 +332,11 @@ def main():
             anchors[b["id"]] = t
         lead = b.get("lead", 0.0)
         if b.get("say"):
-            wav = tts(b["say"], {**voice, **({"emotion": b["emotion"]} if b.get("emotion") else {})})
+            says = [x.get("say") for x in spec["beats"] if x.get("say")]
+            j = says.index(b["say"])
+            ctx = {"previous_text": " ".join(says[max(0, j - 2):j]), "next_text": says[j + 1] if j + 1 < len(says) else ""}
+            wav = tts(b["say"], {**voice, **({"emotion": b["emotion"]} if b.get("emotion") else {})},
+                      ctx if voice.get("engine") == "elevenlabs" and spec.get("context", True) else None)
             d = dur(wav)
             lines.append((t + lead, wav, d, b["say"]))
         else:
