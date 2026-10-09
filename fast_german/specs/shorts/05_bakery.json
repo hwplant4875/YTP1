@@ -1,0 +1,101 @@
+{
+ "id": "05_bakery",
+ "title": "5 words you need at a German bakery 🥨",
+ "beats": [
+  {
+   "say": "Five words you need at a German bakery.",
+   "top": "German bakery: 5 words",
+   "icons": [
+    "pretzel"
+   ],
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "Die Brezel. Pretzel.",
+   "top": "1 / 5",
+   "icons": [
+    "pretzel"
+   ],
+   "word": {
+    "de": "Brezel",
+    "article": "die"
+   },
+   "en": "the pretzel",
+   "sfx": "pop"
+  },
+  {
+   "say": "Das Brot. Bread.",
+   "top": "2 / 5",
+   "icons": [
+    "bread"
+   ],
+   "word": {
+    "de": "Brot",
+    "article": "das"
+   },
+   "en": "the bread",
+   "sfx": "pop"
+  },
+  {
+   "say": "Das Brötchen. Bread roll. Literally, little bread.",
+   "top": "3 / 5",
+   "icons": [
+    "baguette-bread"
+   ],
+   "word": {
+    "de": "Brötchen",
+    "article": "das"
+   },
+   "en": "the bread roll",
+   "sfx": "pop"
+  },
+  {
+   "say": "Der Kuchen. Cake.",
+   "top": "4 / 5",
+   "icons": [
+    "shortcake"
+   ],
+   "word": {
+    "de": "Kuchen",
+    "article": "der"
+   },
+   "en": "the cake",
+   "sfx": "pop"
+  },
+  {
+   "say": "Der Kaffee. Coffee.",
+   "top": "5 / 5",
+   "icons": [
+    "hot-beverage"
+   ],
+   "word": {
+    "de": "Kaffee",
+    "article": "der"
+   },
+   "en": "the coffee",
+   "sfx": "pop"
+  },
+  {
+   "say": "Now order like a local. Eine Brezel und einen Kaffee, bitte!",
+   "top": "Eine Brezel und einen Kaffee, bitte!",
+   "icons": [
+    "pretzel",
+    "hot-beverage"
+   ],
+   "ops": [
+    "+"
+   ],
+   "en": "A pretzel and a coffee, please!",
+   "sfx": "ding"
+  },
+  {
+   "say": "Save this for your trip to Germany.",
+   "top": "Save for your trip",
+   "icons": [
+    "pretzel"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

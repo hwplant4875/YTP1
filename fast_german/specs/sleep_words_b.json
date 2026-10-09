@@ -1,0 +1,2502 @@
+[
+ {
+  "cat": "common verbs",
+  "de": "sein",
+  "article": null,
+  "plural": null,
+  "en": "to be",
+  "ex_de": "Ich bin heute sehr ruhig.",
+  "ex_en": "I am very calm today.",
+  "icon": null
+ },
+ {
+  "cat": "common verbs",
+  "de": "haben",
+  "article": null,
+  "plural": null,
+  "en": "to have",
+  "ex_de": "Wir haben ein kleines Haus.",
+  "ex_en": "We have a small house.",
+  "icon": "house"
+ },
+ {
+  "cat": "common verbs",
+  "de": "machen",
+  "article": null,
+  "plural": null,
+  "en": "to do, to make",
+  "ex_de": "Was machst du am Abend?",
+  "ex_en": "What are you doing in the evening?",
+  "icon": null
+ },
+ {
+  "cat": "common verbs",
+  "de": "gehen",
+  "article": null,
+  "plural": null,
+  "en": "to go, to walk",
+  "ex_de": "Ich gehe langsam nach Hause.",
+  "ex_en": "I walk home slowly.",
+  "icon": null
+ },
+ {
+  "cat": "common verbs",
+  "de": "kommen",
+  "article": null,
+  "plural": null,
+  "en": "to come",
+  "ex_de": "Kommst du heute Abend?",
+  "ex_en": "Are you coming this evening?",
+  "icon": null
+ },
+ {
+  "cat": "common verbs",
+  "de": "sehen",
+  "article": null,
+  "plural": null,
+  "en": "to see",
+  "ex_de": "Ich sehe den Mond.",
+  "ex_en": "I see the moon.",
+  "icon": "eye"
+ },
+ {
+  "cat": "common verbs",
+  "de": "sagen",
+  "article": null,
+  "plural": null,
+  "en": "to say",
+  "ex_de": "Was sagst du?",
+  "ex_en": "What are you saying?",
+  "icon": "speech-balloon"
+ },
+ {
+  "cat": "common verbs",
+  "de": "geben",
+  "article": null,
+  "plural": null,
+  "en": "to give",
+  "ex_de": "Ich gebe dir ein Buch.",
+  "ex_en": "I give you a book.",
+  "icon": null
+ },
+ {
+  "cat": "common verbs",
+  "de": "nehmen",
+  "article": null,
+  "plural": null,
+  "en": "to take",
+  "ex_de": "Ich nehme eine Tasse Tee.",
+  "ex_en": "I'll take a cup of tea.",
+  "icon": null
+ },
+ {
+  "cat": "common verbs",
+  "de": "finden",
+  "article": null,
+  "plural": null,
+  "en": "to find",
+  "ex_de": "Ich finde das Buch schön.",
+  "ex_en": "I find the book beautiful.",
+  "icon": null
+ },
+ {
+  "cat": "common verbs",
+  "de": "wissen",
+  "article": null,
+  "plural": null,
+  "en": "to know",
+  "ex_de": "Ich weiß es nicht.",
+  "ex_en": "I don't know.",
+  "icon": null
+ },
+ {
+  "cat": "common verbs",
+  "de": "denken",
+  "article": null,
+  "plural": null,
+  "en": "to think",
+  "ex_de": "Ich denke an dich.",
+  "ex_en": "I am thinking of you.",
+  "icon": "thinking-face"
+ },
+ {
+  "cat": "common verbs",
+  "de": "sprechen",
+  "article": null,
+  "plural": null,
+  "en": "to speak",
+  "ex_de": "Sprichst du Deutsch?",
+  "ex_en": "Do you speak German?",
+  "icon": null
+ },
+ {
+  "cat": "common verbs",
+  "de": "verstehen",
+  "article": null,
+  "plural": null,
+  "en": "to understand",
+  "ex_de": "Ich verstehe dich gut.",
+  "ex_en": "I understand you well.",
+  "icon": null
+ },
+ {
+  "cat": "common verbs",
+  "de": "lesen",
+  "article": null,
+  "plural": null,
+  "en": "to read",
+  "ex_de": "Ich lese ein Buch im Bett.",
+  "ex_en": "I read a book in bed.",
+  "icon": "open-book"
+ },
+ {
+  "cat": "common verbs",
+  "de": "schreiben",
+  "article": null,
+  "plural": null,
+  "en": "to write",
+  "ex_de": "Sie schreibt einen Brief.",
+  "ex_en": "She writes a letter.",
+  "icon": "writing-hand-default"
+ },
+ {
+  "cat": "common verbs",
+  "de": "hören",
+  "article": null,
+  "plural": null,
+  "en": "to hear, to listen",
+  "ex_de": "Wir hören leise Musik.",
+  "ex_en": "We listen to quiet music.",
+  "icon": "headphone"
+ },
+ {
+  "cat": "common verbs",
+  "de": "essen",
+  "article": null,
+  "plural": null,
+  "en": "to eat",
+  "ex_de": "Wir essen um sieben Uhr.",
+  "ex_en": "We eat at seven o'clock.",
+  "icon": "fork-and-knife"
+ },
+ {
+  "cat": "common verbs",
+  "de": "trinken",
+  "article": null,
+  "plural": null,
+  "en": "to drink",
+  "ex_de": "Ich trinke ein Glas Wasser.",
+  "ex_en": "I drink a glass of water.",
+  "icon": "cup-with-straw"
+ },
+ {
+  "cat": "common verbs",
+  "de": "schlafen",
+  "article": null,
+  "plural": null,
+  "en": "to sleep",
+  "ex_de": "Das Baby schläft ruhig.",
+  "ex_en": "The baby sleeps peacefully.",
+  "icon": "sleeping-face"
+ },
+ {
+  "cat": "common verbs",
+  "de": "wohnen",
+  "article": null,
+  "plural": null,
+  "en": "to live (reside)",
+  "ex_de": "Ich wohne in Berlin.",
+  "ex_en": "I live in Berlin.",
+  "icon": "house-with-garden"
+ },
+ {
+  "cat": "common verbs",
+  "de": "lernen",
+  "article": null,
+  "plural": null,
+  "en": "to learn",
+  "ex_de": "Ich lerne jeden Tag Deutsch.",
+  "ex_en": "I learn German every day.",
+  "icon": "graduation-cap"
+ },
+ {
+  "cat": "common verbs",
+  "de": "spielen",
+  "article": null,
+  "plural": null,
+  "en": "to play",
+  "ex_de": "Die Kinder spielen im Garten.",
+  "ex_en": "The children play in the garden.",
+  "icon": "game-die"
+ },
+ {
+  "cat": "common verbs",
+  "de": "arbeiten",
+  "article": null,
+  "plural": null,
+  "en": "to work",
+  "ex_de": "Mein Vater arbeitet im Büro.",
+  "ex_en": "My father works in the office.",
+  "icon": "office-worker-default"
+ },
+ {
+  "cat": "common verbs",
+  "de": "kaufen",
+  "article": null,
+  "plural": null,
+  "en": "to buy",
+  "ex_de": "Ich kaufe heute Brot.",
+  "ex_en": "I am buying bread today.",
+  "icon": "shopping-bags"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "fahren",
+  "article": null,
+  "plural": null,
+  "en": "to drive, to go (by vehicle)",
+  "ex_de": "Wir fahren morgen ans Meer.",
+  "ex_en": "Tomorrow we are going to the sea.",
+  "icon": "automobile"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "laufen",
+  "article": null,
+  "plural": null,
+  "en": "to run, to walk",
+  "ex_de": "Er läuft jeden Morgen im Park.",
+  "ex_en": "He runs in the park every morning.",
+  "icon": "person-running-default"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "schwimmen",
+  "article": null,
+  "plural": null,
+  "en": "to swim",
+  "ex_de": "Im Sommer schwimme ich gern.",
+  "ex_en": "In summer I like to swim.",
+  "icon": "person-swimming-default"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "singen",
+  "article": null,
+  "plural": null,
+  "en": "to sing",
+  "ex_de": "Sie singt ein schönes Lied.",
+  "ex_en": "She sings a beautiful song.",
+  "icon": "microphone"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "tanzen",
+  "article": null,
+  "plural": null,
+  "en": "to dance",
+  "ex_de": "Wir tanzen zusammen.",
+  "ex_en": "We dance together.",
+  "icon": "woman-dancing-default"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "kochen",
+  "article": null,
+  "plural": null,
+  "en": "to cook",
+  "ex_de": "Ich koche gern Suppe.",
+  "ex_en": "I like to cook soup.",
+  "icon": "cooking"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "warten",
+  "article": null,
+  "plural": null,
+  "en": "to wait",
+  "ex_de": "Ich warte auf den Bus.",
+  "ex_en": "I am waiting for the bus.",
+  "icon": "hourglass-not-done"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "helfen",
+  "article": null,
+  "plural": null,
+  "en": "to help",
+  "ex_de": "Ich helfe dir gern.",
+  "ex_en": "I'm happy to help you.",
+  "icon": "handshake"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "brauchen",
+  "article": null,
+  "plural": null,
+  "en": "to need",
+  "ex_de": "Ich brauche mehr Zeit.",
+  "ex_en": "I need more time.",
+  "icon": null
+ },
+ {
+  "cat": "more common verbs",
+  "de": "mögen",
+  "article": null,
+  "plural": null,
+  "en": "to like",
+  "ex_de": "Ich mag Katzen.",
+  "ex_en": "I like cats.",
+  "icon": "thumbs-up-default"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "lieben",
+  "article": null,
+  "plural": null,
+  "en": "to love",
+  "ex_de": "Ich liebe dich.",
+  "ex_en": "I love you.",
+  "icon": "red-heart"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "fragen",
+  "article": null,
+  "plural": null,
+  "en": "to ask",
+  "ex_de": "Darf ich etwas fragen?",
+  "ex_en": "May I ask something?",
+  "icon": "person-raising-hand-default"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "antworten",
+  "article": null,
+  "plural": null,
+  "en": "to answer",
+  "ex_de": "Bitte antworte mir bald.",
+  "ex_en": "Please answer me soon.",
+  "icon": null
+ },
+ {
+  "cat": "more common verbs",
+  "de": "öffnen",
+  "article": null,
+  "plural": null,
+  "en": "to open",
+  "ex_de": "Bitte öffne das Fenster.",
+  "ex_en": "Please open the window.",
+  "icon": "window"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "schließen",
+  "article": null,
+  "plural": null,
+  "en": "to close",
+  "ex_de": "Ich schließe die Tür.",
+  "ex_en": "I close the door.",
+  "icon": "door"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "beginnen",
+  "article": null,
+  "plural": null,
+  "en": "to begin",
+  "ex_de": "Der Kurs beginnt um neun Uhr.",
+  "ex_en": "The course begins at nine o'clock.",
+  "icon": null
+ },
+ {
+  "cat": "more common verbs",
+  "de": "bleiben",
+  "article": null,
+  "plural": null,
+  "en": "to stay",
+  "ex_de": "Heute bleibe ich zu Hause.",
+  "ex_en": "Today I am staying at home.",
+  "icon": null
+ },
+ {
+  "cat": "more common verbs",
+  "de": "sitzen",
+  "article": null,
+  "plural": null,
+  "en": "to sit",
+  "ex_de": "Die Katze sitzt auf dem Sofa.",
+  "ex_en": "The cat is sitting on the sofa.",
+  "icon": "chair"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "stehen",
+  "article": null,
+  "plural": null,
+  "en": "to stand",
+  "ex_de": "Er steht am Fenster.",
+  "ex_en": "He is standing at the window.",
+  "icon": "person-standing-default"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "liegen",
+  "article": null,
+  "plural": null,
+  "en": "to lie (down)",
+  "ex_de": "Ich liege im Bett.",
+  "ex_en": "I am lying in bed.",
+  "icon": "bed"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "bringen",
+  "article": null,
+  "plural": null,
+  "en": "to bring",
+  "ex_de": "Ich bringe dir einen Tee.",
+  "ex_en": "I'll bring you a tea.",
+  "icon": "teacup-without-handle"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "suchen",
+  "article": null,
+  "plural": null,
+  "en": "to look for",
+  "ex_de": "Ich suche meine Brille.",
+  "ex_en": "I am looking for my glasses.",
+  "icon": "magnifying-glass-tilted-left"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "zeigen",
+  "article": null,
+  "plural": null,
+  "en": "to show",
+  "ex_de": "Ich zeige dir die Stadt.",
+  "ex_en": "I'll show you the city.",
+  "icon": "backhand-index-pointing-right-default"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "träumen",
+  "article": null,
+  "plural": null,
+  "en": "to dream",
+  "ex_de": "Ich träume vom Meer.",
+  "ex_en": "I dream of the sea.",
+  "icon": "thought-balloon"
+ },
+ {
+  "cat": "more common verbs",
+  "de": "reisen",
+  "article": null,
+  "plural": null,
+  "en": "to travel",
+  "ex_de": "Wir reisen gern nach Italien.",
+  "ex_en": "We like to travel to Italy.",
+  "icon": "world-map"
+ },
+ {
+  "cat": "adjectives",
+  "de": "groß",
+  "article": null,
+  "plural": null,
+  "en": "big, tall",
+  "ex_de": "Der Baum ist sehr groß.",
+  "ex_en": "The tree is very big.",
+  "icon": null
+ },
+ {
+  "cat": "adjectives",
+  "de": "klein",
+  "article": null,
+  "plural": null,
+  "en": "small",
+  "ex_de": "Mein Zimmer ist klein.",
+  "ex_en": "My room is small.",
+  "icon": null
+ },
+ {
+  "cat": "adjectives",
+  "de": "gut",
+  "article": null,
+  "plural": null,
+  "en": "good",
+  "ex_de": "Das Essen ist gut.",
+  "ex_en": "The food is good.",
+  "icon": "thumbs-up-default"
+ },
+ {
+  "cat": "adjectives",
+  "de": "schlecht",
+  "article": null,
+  "plural": null,
+  "en": "bad",
+  "ex_de": "Das Wetter ist heute schlecht.",
+  "ex_en": "The weather is bad today.",
+  "icon": "thumbs-down-default"
+ },
+ {
+  "cat": "adjectives",
+  "de": "neu",
+  "article": null,
+  "plural": null,
+  "en": "new",
+  "ex_de": "Ich habe ein neues Buch.",
+  "ex_en": "I have a new book.",
+  "icon": "new-button"
+ },
+ {
+  "cat": "adjectives",
+  "de": "alt",
+  "article": null,
+  "plural": null,
+  "en": "old",
+  "ex_de": "Das Haus ist sehr alt.",
+  "ex_en": "The house is very old.",
+  "icon": null
+ },
+ {
+  "cat": "adjectives",
+  "de": "jung",
+  "article": null,
+  "plural": null,
+  "en": "young",
+  "ex_de": "Meine Schwester ist noch jung.",
+  "ex_en": "My sister is still young.",
+  "icon": null
+ },
+ {
+  "cat": "adjectives",
+  "de": "schön",
+  "article": null,
+  "plural": null,
+  "en": "beautiful, nice",
+  "ex_de": "Der Abend ist schön.",
+  "ex_en": "The evening is beautiful.",
+  "icon": "sparkles"
+ },
+ {
+  "cat": "adjectives",
+  "de": "lang",
+  "article": null,
+  "plural": null,
+  "en": "long",
+  "ex_de": "Die Nacht ist lang.",
+  "ex_en": "The night is long.",
+  "icon": null
+ },
+ {
+  "cat": "adjectives",
+  "de": "kurz",
+  "article": null,
+  "plural": null,
+  "en": "short",
+  "ex_de": "Der Film ist kurz.",
+  "ex_en": "The film is short.",
+  "icon": null
+ },
+ {
+  "cat": "adjectives",
+  "de": "warm",
+  "article": null,
+  "plural": null,
+  "en": "warm",
+  "ex_de": "Der Tee ist warm.",
+  "ex_en": "The tea is warm.",
+  "icon": "hot-beverage"
+ },
+ {
+  "cat": "adjectives",
+  "de": "kalt",
+  "article": null,
+  "plural": null,
+  "en": "cold",
+  "ex_de": "Das Wasser ist kalt.",
+  "ex_en": "The water is cold.",
+  "icon": "snowflake"
+ },
+ {
+  "cat": "adjectives",
+  "de": "heiß",
+  "article": null,
+  "plural": null,
+  "en": "hot",
+  "ex_de": "Im Sommer ist es heiß.",
+  "ex_en": "In summer it is hot.",
+  "icon": "fire"
+ },
+ {
+  "cat": "adjectives",
+  "de": "schnell",
+  "article": null,
+  "plural": null,
+  "en": "fast",
+  "ex_de": "Das Auto ist schnell.",
+  "ex_en": "The car is fast.",
+  "icon": "racing-car"
+ },
+ {
+  "cat": "adjectives",
+  "de": "langsam",
+  "article": null,
+  "plural": null,
+  "en": "slow, slowly",
+  "ex_de": "Bitte sprich langsam.",
+  "ex_en": "Please speak slowly.",
+  "icon": "snail"
+ },
+ {
+  "cat": "adjectives",
+  "de": "leicht",
+  "article": null,
+  "plural": null,
+  "en": "light, easy",
+  "ex_de": "Die Übung ist leicht.",
+  "ex_en": "The exercise is easy.",
+  "icon": "feather"
+ },
+ {
+  "cat": "adjectives",
+  "de": "schwer",
+  "article": null,
+  "plural": null,
+  "en": "heavy, difficult",
+  "ex_de": "Die Tasche ist schwer.",
+  "ex_en": "The bag is heavy.",
+  "icon": null
+ },
+ {
+  "cat": "adjectives",
+  "de": "laut",
+  "article": null,
+  "plural": null,
+  "en": "loud",
+  "ex_de": "Die Musik ist zu laut.",
+  "ex_en": "The music is too loud.",
+  "icon": "speaker-high-volume"
+ },
+ {
+  "cat": "adjectives",
+  "de": "leise",
+  "article": null,
+  "plural": null,
+  "en": "quiet, softly",
+  "ex_de": "Wir sprechen leise.",
+  "ex_en": "We speak quietly.",
+  "icon": "speaker-low-volume"
+ },
+ {
+  "cat": "adjectives",
+  "de": "hell",
+  "article": null,
+  "plural": null,
+  "en": "bright, light",
+  "ex_de": "Das Zimmer ist hell.",
+  "ex_en": "The room is bright.",
+  "icon": "light-bulb"
+ },
+ {
+  "cat": "adjectives",
+  "de": "dunkel",
+  "article": null,
+  "plural": null,
+  "en": "dark",
+  "ex_de": "Es ist schon dunkel.",
+  "ex_en": "It is already dark.",
+  "icon": "new-moon"
+ },
+ {
+  "cat": "adjectives",
+  "de": "voll",
+  "article": null,
+  "plural": null,
+  "en": "full",
+  "ex_de": "Das Glas ist voll.",
+  "ex_en": "The glass is full.",
+  "icon": null
+ },
+ {
+  "cat": "adjectives",
+  "de": "leer",
+  "article": null,
+  "plural": null,
+  "en": "empty",
+  "ex_de": "Die Straße ist leer.",
+  "ex_en": "The street is empty.",
+  "icon": null
+ },
+ {
+  "cat": "adjectives",
+  "de": "ruhig",
+  "article": null,
+  "plural": null,
+  "en": "calm, quiet",
+  "ex_de": "Der See ist ruhig.",
+  "ex_en": "The lake is calm.",
+  "icon": null
+ },
+ {
+  "cat": "adjectives",
+  "de": "einfach",
+  "article": null,
+  "plural": null,
+  "en": "simple, easy",
+  "ex_de": "Deutsch ist einfach.",
+  "ex_en": "German is easy.",
+  "icon": null
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Wetter",
+  "article": "das",
+  "plural": null,
+  "en": "the weather",
+  "ex_de": "Das Wetter ist heute schön.",
+  "ex_en": "The weather is nice today.",
+  "icon": "sun-behind-cloud"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Sonne",
+  "article": "die",
+  "plural": "Sonnen",
+  "en": "the sun",
+  "ex_de": "Die Sonne scheint.",
+  "ex_en": "The sun is shining.",
+  "icon": "sun"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Regen",
+  "article": "der",
+  "plural": null,
+  "en": "the rain",
+  "ex_de": "Ich höre den Regen.",
+  "ex_en": "I hear the rain.",
+  "icon": "cloud-with-rain"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Schnee",
+  "article": "der",
+  "plural": null,
+  "en": "the snow",
+  "ex_de": "Der Schnee ist weiß.",
+  "ex_en": "The snow is white.",
+  "icon": "snowflake"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Wind",
+  "article": "der",
+  "plural": "Winde",
+  "en": "the wind",
+  "ex_de": "Der Wind ist warm.",
+  "ex_en": "The wind is warm.",
+  "icon": "wind-face"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Wolke",
+  "article": "die",
+  "plural": "Wolken",
+  "en": "the cloud",
+  "ex_de": "Am Himmel ist eine Wolke.",
+  "ex_en": "There is a cloud in the sky.",
+  "icon": "cloud"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Himmel",
+  "article": "der",
+  "plural": "Himmel",
+  "en": "the sky",
+  "ex_de": "Der Himmel ist heute klar.",
+  "ex_en": "The sky is clear today.",
+  "icon": "milky-way"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Stern",
+  "article": "der",
+  "plural": "Sterne",
+  "en": "the star",
+  "ex_de": "Ich sehe viele Sterne.",
+  "ex_en": "I see many stars.",
+  "icon": "star"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Mond",
+  "article": "der",
+  "plural": "Monde",
+  "en": "the moon",
+  "ex_de": "Der Mond ist hell.",
+  "ex_en": "The moon is bright.",
+  "icon": "crescent-moon"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Baum",
+  "article": "der",
+  "plural": "Bäume",
+  "en": "the tree",
+  "ex_de": "Der Baum ist sehr alt.",
+  "ex_en": "The tree is very old.",
+  "icon": "deciduous-tree"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Blume",
+  "article": "die",
+  "plural": "Blumen",
+  "en": "the flower",
+  "ex_de": "Die Blume ist rot.",
+  "ex_en": "The flower is red.",
+  "icon": "tulip"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Gras",
+  "article": "das",
+  "plural": "Gräser",
+  "en": "the grass",
+  "ex_de": "Das Gras ist grün.",
+  "ex_en": "The grass is green.",
+  "icon": "herb"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Wald",
+  "article": "der",
+  "plural": "Wälder",
+  "en": "the forest",
+  "ex_de": "Wir gehen in den Wald.",
+  "ex_en": "We are going into the forest.",
+  "icon": "evergreen-tree"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Berg",
+  "article": "der",
+  "plural": "Berge",
+  "en": "the mountain",
+  "ex_de": "Der Berg ist hoch.",
+  "ex_en": "The mountain is high.",
+  "icon": "mountain"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Meer",
+  "article": "das",
+  "plural": "Meere",
+  "en": "the sea",
+  "ex_de": "Das Meer ist ruhig.",
+  "ex_en": "The sea is calm.",
+  "icon": "water-wave"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "See",
+  "article": "der",
+  "plural": "Seen",
+  "en": "the lake",
+  "ex_de": "Wir schwimmen im See.",
+  "ex_en": "We swim in the lake.",
+  "icon": null
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Fluss",
+  "article": "der",
+  "plural": "Flüsse",
+  "en": "the river",
+  "ex_de": "Der Fluss ist lang.",
+  "ex_en": "The river is long.",
+  "icon": null
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Strand",
+  "article": "der",
+  "plural": "Strände",
+  "en": "the beach",
+  "ex_de": "Wir liegen am Strand.",
+  "ex_en": "We are lying on the beach.",
+  "icon": "beach-with-umbrella"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Insel",
+  "article": "die",
+  "plural": "Inseln",
+  "en": "the island",
+  "ex_de": "Die Insel ist klein.",
+  "ex_en": "The island is small.",
+  "icon": "desert-island"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Regenbogen",
+  "article": "der",
+  "plural": "Regenbogen",
+  "en": "the rainbow",
+  "ex_de": "Der Regenbogen ist bunt.",
+  "ex_en": "The rainbow is colorful.",
+  "icon": "rainbow"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Nebel",
+  "article": "der",
+  "plural": "Nebel",
+  "en": "the fog",
+  "ex_de": "Am Morgen gibt es Nebel.",
+  "ex_en": "In the morning there is fog.",
+  "icon": "fog"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Erde",
+  "article": "die",
+  "plural": null,
+  "en": "the earth",
+  "ex_de": "Die Erde ist rund.",
+  "ex_en": "The earth is round.",
+  "icon": "globe-showing-europe-africa"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Blatt",
+  "article": "das",
+  "plural": "Blätter",
+  "en": "the leaf",
+  "ex_de": "Das Blatt ist gelb.",
+  "ex_en": "The leaf is yellow.",
+  "icon": "fallen-leaf"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Feuer",
+  "article": "das",
+  "plural": "Feuer",
+  "en": "the fire",
+  "ex_de": "Das Feuer ist warm.",
+  "ex_en": "The fire is warm.",
+  "icon": "fire"
+ },
+ {
+  "cat": "weather & nature",
+  "de": "Stein",
+  "article": "der",
+  "plural": "Steine",
+  "en": "the stone",
+  "ex_de": "Der Stein ist grau.",
+  "ex_en": "The stone is grey.",
+  "icon": "rock"
+ },
+ {
+  "cat": "animals",
+  "de": "Hund",
+  "article": "der",
+  "plural": "Hunde",
+  "en": "the dog",
+  "ex_de": "Der Hund schläft.",
+  "ex_en": "The dog is sleeping.",
+  "icon": "dog"
+ },
+ {
+  "cat": "animals",
+  "de": "Katze",
+  "article": "die",
+  "plural": "Katzen",
+  "en": "the cat",
+  "ex_de": "Die Katze ist weich.",
+  "ex_en": "The cat is soft.",
+  "icon": "cat"
+ },
+ {
+  "cat": "animals",
+  "de": "Vogel",
+  "article": "der",
+  "plural": "Vögel",
+  "en": "the bird",
+  "ex_de": "Der Vogel singt.",
+  "ex_en": "The bird is singing.",
+  "icon": "bird"
+ },
+ {
+  "cat": "animals",
+  "de": "Fisch",
+  "article": "der",
+  "plural": "Fische",
+  "en": "the fish",
+  "ex_de": "Der Fisch schwimmt im Wasser.",
+  "ex_en": "The fish swims in the water.",
+  "icon": "fish"
+ },
+ {
+  "cat": "animals",
+  "de": "Pferd",
+  "article": "das",
+  "plural": "Pferde",
+  "en": "the horse",
+  "ex_de": "Das Pferd läuft schnell.",
+  "ex_en": "The horse runs fast.",
+  "icon": "horse"
+ },
+ {
+  "cat": "animals",
+  "de": "Kuh",
+  "article": "die",
+  "plural": "Kühe",
+  "en": "the cow",
+  "ex_de": "Die Kuh steht auf der Wiese.",
+  "ex_en": "The cow is standing in the meadow.",
+  "icon": "cow"
+ },
+ {
+  "cat": "animals",
+  "de": "Schwein",
+  "article": "das",
+  "plural": "Schweine",
+  "en": "the pig",
+  "ex_de": "Das Schwein ist rosa.",
+  "ex_en": "The pig is pink.",
+  "icon": "pig"
+ },
+ {
+  "cat": "animals",
+  "de": "Schaf",
+  "article": "das",
+  "plural": "Schafe",
+  "en": "the sheep",
+  "ex_de": "Das Schaf ist weiß.",
+  "ex_en": "The sheep is white.",
+  "icon": "ewe"
+ },
+ {
+  "cat": "animals",
+  "de": "Huhn",
+  "article": "das",
+  "plural": "Hühner",
+  "en": "the chicken",
+  "ex_de": "Das Huhn ist im Garten.",
+  "ex_en": "The chicken is in the garden.",
+  "icon": "chicken"
+ },
+ {
+  "cat": "animals",
+  "de": "Maus",
+  "article": "die",
+  "plural": "Mäuse",
+  "en": "the mouse",
+  "ex_de": "Die Maus ist klein.",
+  "ex_en": "The mouse is small.",
+  "icon": "mouse"
+ },
+ {
+  "cat": "animals",
+  "de": "Hase",
+  "article": "der",
+  "plural": "Hasen",
+  "en": "the hare, the rabbit",
+  "ex_de": "Der Hase hat lange Ohren.",
+  "ex_en": "The rabbit has long ears.",
+  "icon": "rabbit"
+ },
+ {
+  "cat": "animals",
+  "de": "Bär",
+  "article": "der",
+  "plural": "Bären",
+  "en": "the bear",
+  "ex_de": "Der Bär schläft im Winter.",
+  "ex_en": "The bear sleeps in winter.",
+  "icon": "bear"
+ },
+ {
+  "cat": "animals",
+  "de": "Löwe",
+  "article": "der",
+  "plural": "Löwen",
+  "en": "the lion",
+  "ex_de": "Der Löwe ist stark.",
+  "ex_en": "The lion is strong.",
+  "icon": "lion"
+ },
+ {
+  "cat": "animals",
+  "de": "Elefant",
+  "article": "der",
+  "plural": "Elefanten",
+  "en": "the elephant",
+  "ex_de": "Der Elefant ist groß.",
+  "ex_en": "The elephant is big.",
+  "icon": "elephant"
+ },
+ {
+  "cat": "animals",
+  "de": "Affe",
+  "article": "der",
+  "plural": "Affen",
+  "en": "the monkey",
+  "ex_de": "Der Affe spielt im Baum.",
+  "ex_en": "The monkey plays in the tree.",
+  "icon": "monkey"
+ },
+ {
+  "cat": "animals",
+  "de": "Ente",
+  "article": "die",
+  "plural": "Enten",
+  "en": "the duck",
+  "ex_de": "Die Ente schwimmt auf dem See.",
+  "ex_en": "The duck swims on the lake.",
+  "icon": "duck"
+ },
+ {
+  "cat": "animals",
+  "de": "Biene",
+  "article": "die",
+  "plural": "Bienen",
+  "en": "the bee",
+  "ex_de": "Die Biene fliegt zur Blume.",
+  "ex_en": "The bee flies to the flower.",
+  "icon": "honeybee"
+ },
+ {
+  "cat": "animals",
+  "de": "Schmetterling",
+  "article": "der",
+  "plural": "Schmetterlinge",
+  "en": "the butterfly",
+  "ex_de": "Der Schmetterling ist bunt.",
+  "ex_en": "The butterfly is colorful.",
+  "icon": "butterfly"
+ },
+ {
+  "cat": "animals",
+  "de": "Frosch",
+  "article": "der",
+  "plural": "Frösche",
+  "en": "the frog",
+  "ex_de": "Der Frosch ist grün.",
+  "ex_en": "The frog is green.",
+  "icon": "frog"
+ },
+ {
+  "cat": "animals",
+  "de": "Schildkröte",
+  "article": "die",
+  "plural": "Schildkröten",
+  "en": "the turtle",
+  "ex_de": "Die Schildkröte ist langsam.",
+  "ex_en": "The turtle is slow.",
+  "icon": "turtle"
+ },
+ {
+  "cat": "animals",
+  "de": "Eule",
+  "article": "die",
+  "plural": "Eulen",
+  "en": "the owl",
+  "ex_de": "Die Eule fliegt in der Nacht.",
+  "ex_en": "The owl flies at night.",
+  "icon": "owl"
+ },
+ {
+  "cat": "animals",
+  "de": "Fuchs",
+  "article": "der",
+  "plural": "Füchse",
+  "en": "the fox",
+  "ex_de": "Der Fuchs ist rot.",
+  "ex_en": "The fox is red.",
+  "icon": "fox"
+ },
+ {
+  "cat": "animals",
+  "de": "Wolf",
+  "article": "der",
+  "plural": "Wölfe",
+  "en": "the wolf",
+  "ex_de": "Der Wolf lebt im Wald.",
+  "ex_en": "The wolf lives in the forest.",
+  "icon": "wolf"
+ },
+ {
+  "cat": "animals",
+  "de": "Tier",
+  "article": "das",
+  "plural": "Tiere",
+  "en": "the animal",
+  "ex_de": "Welches Tier magst du?",
+  "ex_en": "Which animal do you like?",
+  "icon": "paw-prints"
+ },
+ {
+  "cat": "animals",
+  "de": "Ziege",
+  "article": "die",
+  "plural": "Ziegen",
+  "en": "the goat",
+  "ex_de": "Die Ziege frisst Gras.",
+  "ex_en": "The goat eats grass.",
+  "icon": "goat"
+ },
+ {
+  "cat": "work & school",
+  "de": "Arbeit",
+  "article": "die",
+  "plural": "Arbeiten",
+  "en": "the work, the job",
+  "ex_de": "Die Arbeit ist für heute fertig.",
+  "ex_en": "Work is done for today.",
+  "icon": "briefcase"
+ },
+ {
+  "cat": "work & school",
+  "de": "Schule",
+  "article": "die",
+  "plural": "Schulen",
+  "en": "the school",
+  "ex_de": "Die Schule beginnt um acht Uhr.",
+  "ex_en": "School starts at eight o'clock.",
+  "icon": "school"
+ },
+ {
+  "cat": "work & school",
+  "de": "Lehrer",
+  "article": "der",
+  "plural": "Lehrer",
+  "en": "the teacher",
+  "ex_de": "Der Lehrer ist sehr nett.",
+  "ex_en": "The teacher is very nice.",
+  "icon": "teacher-default"
+ },
+ {
+  "cat": "work & school",
+  "de": "Schüler",
+  "article": "der",
+  "plural": "Schüler",
+  "en": "the pupil, the student",
+  "ex_de": "Der Schüler lernt viel.",
+  "ex_en": "The pupil learns a lot.",
+  "icon": "student-default"
+ },
+ {
+  "cat": "work & school",
+  "de": "Buch",
+  "article": "das",
+  "plural": "Bücher",
+  "en": "the book",
+  "ex_de": "Das Buch ist interessant.",
+  "ex_en": "The book is interesting.",
+  "icon": "closed-book"
+ },
+ {
+  "cat": "work & school",
+  "de": "Heft",
+  "article": "das",
+  "plural": "Hefte",
+  "en": "the notebook",
+  "ex_de": "Ich schreibe in mein Heft.",
+  "ex_en": "I write in my notebook.",
+  "icon": "notebook"
+ },
+ {
+  "cat": "work & school",
+  "de": "Stift",
+  "article": "der",
+  "plural": "Stifte",
+  "en": "the pen",
+  "ex_de": "Hast du einen Stift?",
+  "ex_en": "Do you have a pen?",
+  "icon": "pen"
+ },
+ {
+  "cat": "work & school",
+  "de": "Papier",
+  "article": "das",
+  "plural": "Papiere",
+  "en": "the paper",
+  "ex_de": "Ich brauche ein Blatt Papier.",
+  "ex_en": "I need a sheet of paper.",
+  "icon": "page-facing-up"
+ },
+ {
+  "cat": "work & school",
+  "de": "Computer",
+  "article": "der",
+  "plural": "Computer",
+  "en": "the computer",
+  "ex_de": "Der Computer ist neu.",
+  "ex_en": "The computer is new.",
+  "icon": "laptop"
+ },
+ {
+  "cat": "work & school",
+  "de": "Büro",
+  "article": "das",
+  "plural": "Büros",
+  "en": "the office",
+  "ex_de": "Das Büro ist im ersten Stock.",
+  "ex_en": "The office is on the first floor.",
+  "icon": "office-building"
+ },
+ {
+  "cat": "work & school",
+  "de": "Chef",
+  "article": "der",
+  "plural": "Chefs",
+  "en": "the boss",
+  "ex_de": "Der Chef ist heute im Büro.",
+  "ex_en": "The boss is in the office today.",
+  "icon": null
+ },
+ {
+  "cat": "work & school",
+  "de": "Kollege",
+  "article": "der",
+  "plural": "Kollegen",
+  "en": "the colleague",
+  "ex_de": "Mein Kollege hilft mir.",
+  "ex_en": "My colleague helps me.",
+  "icon": null
+ },
+ {
+  "cat": "work & school",
+  "de": "Beruf",
+  "article": "der",
+  "plural": "Berufe",
+  "en": "the profession, the job",
+  "ex_de": "Was sind Sie von Beruf?",
+  "ex_en": "What do you do for a living?",
+  "icon": null
+ },
+ {
+  "cat": "work & school",
+  "de": "Klasse",
+  "article": "die",
+  "plural": "Klassen",
+  "en": "the class",
+  "ex_de": "Unsere Klasse ist klein.",
+  "ex_en": "Our class is small.",
+  "icon": null
+ },
+ {
+  "cat": "work & school",
+  "de": "Prüfung",
+  "article": "die",
+  "plural": "Prüfungen",
+  "en": "the exam",
+  "ex_de": "Die Prüfung war leicht.",
+  "ex_en": "The exam was easy.",
+  "icon": null
+ },
+ {
+  "cat": "work & school",
+  "de": "Hausaufgabe",
+  "article": "die",
+  "plural": "Hausaufgaben",
+  "en": "the homework",
+  "ex_de": "Ich mache meine Hausaufgaben.",
+  "ex_en": "I am doing my homework.",
+  "icon": "pencil"
+ },
+ {
+  "cat": "work & school",
+  "de": "Frage",
+  "article": "die",
+  "plural": "Fragen",
+  "en": "the question",
+  "ex_de": "Ich habe eine Frage.",
+  "ex_en": "I have a question.",
+  "icon": "red-question-mark"
+ },
+ {
+  "cat": "work & school",
+  "de": "Antwort",
+  "article": "die",
+  "plural": "Antworten",
+  "en": "the answer",
+  "ex_de": "Die Antwort ist richtig.",
+  "ex_en": "The answer is correct.",
+  "icon": "check-mark-button"
+ },
+ {
+  "cat": "work & school",
+  "de": "Wort",
+  "article": "das",
+  "plural": "Wörter",
+  "en": "the word",
+  "ex_de": "Dieses Wort ist neu.",
+  "ex_en": "This word is new.",
+  "icon": null
+ },
+ {
+  "cat": "work & school",
+  "de": "Sprache",
+  "article": "die",
+  "plural": "Sprachen",
+  "en": "the language",
+  "ex_de": "Deutsch ist eine schöne Sprache.",
+  "ex_en": "German is a beautiful language.",
+  "icon": null
+ },
+ {
+  "cat": "work & school",
+  "de": "Tafel",
+  "article": "die",
+  "plural": "Tafeln",
+  "en": "the board (blackboard)",
+  "ex_de": "Der Lehrer schreibt an die Tafel.",
+  "ex_en": "The teacher writes on the board.",
+  "icon": null
+ },
+ {
+  "cat": "work & school",
+  "de": "Brief",
+  "article": "der",
+  "plural": "Briefe",
+  "en": "the letter",
+  "ex_de": "Der Brief ist für dich.",
+  "ex_en": "The letter is for you.",
+  "icon": "envelope"
+ },
+ {
+  "cat": "work & school",
+  "de": "Telefon",
+  "article": "das",
+  "plural": "Telefone",
+  "en": "the telephone",
+  "ex_de": "Das Telefon klingelt.",
+  "ex_en": "The phone is ringing.",
+  "icon": "telephone"
+ },
+ {
+  "cat": "work & school",
+  "de": "Termin",
+  "article": "der",
+  "plural": "Termine",
+  "en": "the appointment",
+  "ex_de": "Ich habe morgen einen Termin.",
+  "ex_en": "I have an appointment tomorrow.",
+  "icon": "calendar"
+ },
+ {
+  "cat": "work & school",
+  "de": "Pause",
+  "article": "die",
+  "plural": "Pausen",
+  "en": "the break",
+  "ex_de": "Wir machen eine Pause.",
+  "ex_en": "We take a break.",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Geld",
+  "article": "das",
+  "plural": null,
+  "en": "the money",
+  "ex_de": "Ich habe kein Geld dabei.",
+  "ex_en": "I don't have any money with me.",
+  "icon": "money-bag"
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Euro",
+  "article": "der",
+  "plural": "Euro",
+  "en": "the euro",
+  "ex_de": "Das kostet zehn Euro.",
+  "ex_en": "That costs ten euros.",
+  "icon": "euro-banknote"
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Cent",
+  "article": "der",
+  "plural": "Cent",
+  "en": "the cent",
+  "ex_de": "Das kostet fünfzig Cent.",
+  "ex_en": "That costs fifty cents.",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Preis",
+  "article": "der",
+  "plural": "Preise",
+  "en": "the price",
+  "ex_de": "Der Preis ist gut.",
+  "ex_en": "The price is good.",
+  "icon": "label"
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Kasse",
+  "article": "die",
+  "plural": "Kassen",
+  "en": "the checkout, the till",
+  "ex_de": "Bitte zahlen Sie an der Kasse.",
+  "ex_en": "Please pay at the checkout.",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Rechnung",
+  "article": "die",
+  "plural": "Rechnungen",
+  "en": "the bill",
+  "ex_de": "Die Rechnung, bitte!",
+  "ex_en": "The bill, please!",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Kreditkarte",
+  "article": "die",
+  "plural": "Kreditkarten",
+  "en": "the credit card",
+  "ex_de": "Kann ich mit Kreditkarte zahlen?",
+  "ex_en": "Can I pay by credit card?",
+  "icon": "credit-card"
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Tasche",
+  "article": "die",
+  "plural": "Taschen",
+  "en": "the bag",
+  "ex_de": "Meine Tasche ist voll.",
+  "ex_en": "My bag is full.",
+  "icon": "handbag"
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Einkaufswagen",
+  "article": "der",
+  "plural": "Einkaufswagen",
+  "en": "the shopping cart",
+  "ex_de": "Der Einkaufswagen ist leer.",
+  "ex_en": "The shopping cart is empty.",
+  "icon": "shopping-cart"
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Angebot",
+  "article": "das",
+  "plural": "Angebote",
+  "en": "the offer",
+  "ex_de": "Das Angebot ist sehr gut.",
+  "ex_en": "The offer is very good.",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Quittung",
+  "article": "die",
+  "plural": "Quittungen",
+  "en": "the receipt",
+  "ex_de": "Brauchen Sie eine Quittung?",
+  "ex_en": "Do you need a receipt?",
+  "icon": "receipt"
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Münze",
+  "article": "die",
+  "plural": "Münzen",
+  "en": "the coin",
+  "ex_de": "Ich habe eine Münze.",
+  "ex_en": "I have a coin.",
+  "icon": "coin"
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Geldschein",
+  "article": "der",
+  "plural": "Geldscheine",
+  "en": "the banknote",
+  "ex_de": "Der Geldschein ist neu.",
+  "ex_en": "The banknote is new.",
+  "icon": "euro-banknote"
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Geldbeutel",
+  "article": "der",
+  "plural": "Geldbeutel",
+  "en": "the wallet",
+  "ex_de": "Mein Geldbeutel ist in der Tasche.",
+  "ex_en": "My wallet is in the bag.",
+  "icon": "purse"
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Kunde",
+  "article": "der",
+  "plural": "Kunden",
+  "en": "the customer",
+  "ex_de": "Der Kunde bezahlt.",
+  "ex_en": "The customer pays.",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Verkäufer",
+  "article": "der",
+  "plural": "Verkäufer",
+  "en": "the salesperson",
+  "ex_de": "Der Verkäufer ist freundlich.",
+  "ex_en": "The salesperson is friendly.",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "bezahlen",
+  "article": null,
+  "plural": null,
+  "en": "to pay",
+  "ex_de": "Ich bezahle mit Karte.",
+  "ex_en": "I pay by card.",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "kosten",
+  "article": null,
+  "plural": null,
+  "en": "to cost",
+  "ex_de": "Was kostet das?",
+  "ex_en": "How much does that cost?",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "teuer",
+  "article": null,
+  "plural": null,
+  "en": "expensive",
+  "ex_de": "Das Kleid ist zu teuer.",
+  "ex_en": "The dress is too expensive.",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "billig",
+  "article": null,
+  "plural": null,
+  "en": "cheap",
+  "ex_de": "Das Buch ist billig.",
+  "ex_en": "The book is cheap.",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "verkaufen",
+  "article": null,
+  "plural": null,
+  "en": "to sell",
+  "ex_de": "Er verkauft sein altes Fahrrad.",
+  "ex_en": "He is selling his old bike.",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Geschenk",
+  "article": "das",
+  "plural": "Geschenke",
+  "en": "the present, the gift",
+  "ex_de": "Danke für das schöne Geschenk!",
+  "ex_en": "Thank you for the lovely present!",
+  "icon": "wrapped-gift"
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Größe",
+  "article": "die",
+  "plural": "Größen",
+  "en": "the size",
+  "ex_de": "Welche Größe haben Sie?",
+  "ex_en": "What size do you take?",
+  "icon": null
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Einkaufsliste",
+  "article": "die",
+  "plural": "Einkaufslisten",
+  "en": "the shopping list",
+  "ex_de": "Ich schreibe eine Einkaufsliste.",
+  "ex_en": "I am writing a shopping list.",
+  "icon": "spiral-notepad"
+ },
+ {
+  "cat": "shopping & money",
+  "de": "Rabatt",
+  "article": "der",
+  "plural": "Rabatte",
+  "en": "the discount",
+  "ex_de": "Heute gibt es zehn Prozent Rabatt.",
+  "ex_en": "Today there is a ten percent discount.",
+  "icon": null
+ },
+ {
+  "cat": "health",
+  "de": "Gesundheit",
+  "article": "die",
+  "plural": null,
+  "en": "the health",
+  "ex_de": "Gesundheit ist sehr wichtig.",
+  "ex_en": "Health is very important.",
+  "icon": null
+ },
+ {
+  "cat": "health",
+  "de": "gesund",
+  "article": null,
+  "plural": null,
+  "en": "healthy",
+  "ex_de": "Ich bin wieder gesund.",
+  "ex_en": "I am healthy again.",
+  "icon": null
+ },
+ {
+  "cat": "health",
+  "de": "krank",
+  "article": null,
+  "plural": null,
+  "en": "sick, ill",
+  "ex_de": "Ich bin heute krank.",
+  "ex_en": "I am sick today.",
+  "icon": "face-with-thermometer"
+ },
+ {
+  "cat": "health",
+  "de": "Arzt",
+  "article": "der",
+  "plural": "Ärzte",
+  "en": "the doctor (male)",
+  "ex_de": "Ich gehe zum Arzt.",
+  "ex_en": "I am going to the doctor.",
+  "icon": "man-health-worker-default"
+ },
+ {
+  "cat": "health",
+  "de": "Ärztin",
+  "article": "die",
+  "plural": "Ärztinnen",
+  "en": "the doctor (female)",
+  "ex_de": "Die Ärztin hilft mir.",
+  "ex_en": "The doctor helps me.",
+  "icon": "woman-health-worker-default"
+ },
+ {
+  "cat": "health",
+  "de": "Medikament",
+  "article": "das",
+  "plural": "Medikamente",
+  "en": "the medicine",
+  "ex_de": "Nimm das Medikament nach dem Essen.",
+  "ex_en": "Take the medicine after the meal.",
+  "icon": "pill"
+ },
+ {
+  "cat": "health",
+  "de": "Tablette",
+  "article": "die",
+  "plural": "Tabletten",
+  "en": "the tablet, the pill",
+  "ex_de": "Ich nehme eine Tablette.",
+  "ex_en": "I take a tablet.",
+  "icon": "pill"
+ },
+ {
+  "cat": "health",
+  "de": "Schmerz",
+  "article": "der",
+  "plural": "Schmerzen",
+  "en": "the pain",
+  "ex_de": "Der Schmerz ist weg.",
+  "ex_en": "The pain is gone.",
+  "icon": null
+ },
+ {
+  "cat": "health",
+  "de": "Fieber",
+  "article": "das",
+  "plural": null,
+  "en": "the fever",
+  "ex_de": "Das Kind hat Fieber.",
+  "ex_en": "The child has a fever.",
+  "icon": "face-with-thermometer"
+ },
+ {
+  "cat": "health",
+  "de": "Erkältung",
+  "article": "die",
+  "plural": "Erkältungen",
+  "en": "the cold (illness)",
+  "ex_de": "Ich habe eine Erkältung.",
+  "ex_en": "I have a cold.",
+  "icon": "sneezing-face"
+ },
+ {
+  "cat": "health",
+  "de": "Husten",
+  "article": "der",
+  "plural": null,
+  "en": "the cough",
+  "ex_de": "Ich habe Husten.",
+  "ex_en": "I have a cough.",
+  "icon": null
+ },
+ {
+  "cat": "health",
+  "de": "Schnupfen",
+  "article": "der",
+  "plural": null,
+  "en": "the runny nose, the head cold",
+  "ex_de": "Mein Sohn hat Schnupfen.",
+  "ex_en": "My son has a runny nose.",
+  "icon": "sneezing-face"
+ },
+ {
+  "cat": "health",
+  "de": "Pflaster",
+  "article": "das",
+  "plural": "Pflaster",
+  "en": "the plaster, the band-aid",
+  "ex_de": "Hast du ein Pflaster?",
+  "ex_en": "Do you have a plaster?",
+  "icon": "adhesive-bandage"
+ },
+ {
+  "cat": "health",
+  "de": "Rezept",
+  "article": "das",
+  "plural": "Rezepte",
+  "en": "the prescription",
+  "ex_de": "Der Arzt schreibt ein Rezept.",
+  "ex_en": "The doctor writes a prescription.",
+  "icon": null
+ },
+ {
+  "cat": "health",
+  "de": "Ruhe",
+  "article": "die",
+  "plural": null,
+  "en": "the rest, the quiet",
+  "ex_de": "Ich brauche Ruhe.",
+  "ex_en": "I need rest.",
+  "icon": null
+ },
+ {
+  "cat": "health",
+  "de": "Schlaf",
+  "article": "der",
+  "plural": null,
+  "en": "the sleep",
+  "ex_de": "Schlaf ist gut für die Gesundheit.",
+  "ex_en": "Sleep is good for your health.",
+  "icon": "zzz"
+ },
+ {
+  "cat": "health",
+  "de": "Sport",
+  "article": "der",
+  "plural": null,
+  "en": "the sport, exercise",
+  "ex_de": "Ich mache gern Sport.",
+  "ex_en": "I like doing sports.",
+  "icon": "soccer-ball"
+ },
+ {
+  "cat": "health",
+  "de": "Thermometer",
+  "article": "das",
+  "plural": "Thermometer",
+  "en": "the thermometer",
+  "ex_de": "Wo ist das Thermometer?",
+  "ex_en": "Where is the thermometer?",
+  "icon": "thermometer"
+ },
+ {
+  "cat": "health",
+  "de": "Zahnarzt",
+  "article": "der",
+  "plural": "Zahnärzte",
+  "en": "the dentist",
+  "ex_de": "Morgen gehe ich zum Zahnarzt.",
+  "ex_en": "Tomorrow I am going to the dentist.",
+  "icon": "tooth"
+ },
+ {
+  "cat": "health",
+  "de": "Patient",
+  "article": "der",
+  "plural": "Patienten",
+  "en": "the patient",
+  "ex_de": "Der Patient schläft.",
+  "ex_en": "The patient is sleeping.",
+  "icon": null
+ },
+ {
+  "cat": "health",
+  "de": "Praxis",
+  "article": "die",
+  "plural": "Praxen",
+  "en": "the doctor's office",
+  "ex_de": "Die Praxis ist heute geschlossen.",
+  "ex_en": "The doctor's office is closed today.",
+  "icon": null
+ },
+ {
+  "cat": "health",
+  "de": "Brille",
+  "article": "die",
+  "plural": "Brillen",
+  "en": "the glasses",
+  "ex_de": "Ich brauche eine neue Brille.",
+  "ex_en": "I need new glasses.",
+  "icon": "glasses"
+ },
+ {
+  "cat": "health",
+  "de": "Seife",
+  "article": "die",
+  "plural": "Seifen",
+  "en": "the soap",
+  "ex_de": "Ich wasche meine Hände mit Seife.",
+  "ex_en": "I wash my hands with soap.",
+  "icon": "soap"
+ },
+ {
+  "cat": "health",
+  "de": "wehtun",
+  "article": null,
+  "plural": null,
+  "en": "to hurt",
+  "ex_de": "Mein Kopf tut weh.",
+  "ex_en": "My head hurts.",
+  "icon": null
+ },
+ {
+  "cat": "health",
+  "de": "Vitamin",
+  "article": "das",
+  "plural": "Vitamine",
+  "en": "the vitamin",
+  "ex_de": "Orangen haben viele Vitamine.",
+  "ex_en": "Oranges have lots of vitamins.",
+  "icon": null
+ },
+ {
+  "cat": "feelings",
+  "de": "glücklich",
+  "article": null,
+  "plural": null,
+  "en": "happy",
+  "ex_de": "Ich bin sehr glücklich.",
+  "ex_en": "I am very happy.",
+  "icon": "smiling-face-with-smiling-eyes"
+ },
+ {
+  "cat": "feelings",
+  "de": "traurig",
+  "article": null,
+  "plural": null,
+  "en": "sad",
+  "ex_de": "Warum bist du traurig?",
+  "ex_en": "Why are you sad?",
+  "icon": "pensive-face"
+ },
+ {
+  "cat": "feelings",
+  "de": "froh",
+  "article": null,
+  "plural": null,
+  "en": "glad",
+  "ex_de": "Ich bin froh, dass du hier bist.",
+  "ex_en": "I am glad that you are here.",
+  "icon": "grinning-face"
+ },
+ {
+  "cat": "feelings",
+  "de": "müde",
+  "article": null,
+  "plural": null,
+  "en": "tired",
+  "ex_de": "Ich bin müde und gehe ins Bett.",
+  "ex_en": "I am tired and going to bed.",
+  "icon": "sleepy-face"
+ },
+ {
+  "cat": "feelings",
+  "de": "entspannt",
+  "article": null,
+  "plural": null,
+  "en": "relaxed",
+  "ex_de": "Am Wochenende bin ich entspannt.",
+  "ex_en": "At the weekend I am relaxed.",
+  "icon": "relieved-face"
+ },
+ {
+  "cat": "feelings",
+  "de": "nervös",
+  "article": null,
+  "plural": null,
+  "en": "nervous",
+  "ex_de": "Vor der Prüfung bin ich nervös.",
+  "ex_en": "Before the exam I am nervous.",
+  "icon": "grimacing-face"
+ },
+ {
+  "cat": "feelings",
+  "de": "zufrieden",
+  "article": null,
+  "plural": null,
+  "en": "content, satisfied",
+  "ex_de": "Ich bin zufrieden mit meinem Tag.",
+  "ex_en": "I am content with my day.",
+  "icon": "smiling-face"
+ },
+ {
+  "cat": "feelings",
+  "de": "Liebe",
+  "article": "die",
+  "plural": null,
+  "en": "the love",
+  "ex_de": "Liebe ist schön.",
+  "ex_en": "Love is beautiful.",
+  "icon": "sparkling-heart"
+ },
+ {
+  "cat": "feelings",
+  "de": "Freude",
+  "article": "die",
+  "plural": "Freuden",
+  "en": "the joy",
+  "ex_de": "Die Freude ist groß.",
+  "ex_en": "The joy is great.",
+  "icon": "beaming-face-with-smiling-eyes"
+ },
+ {
+  "cat": "feelings",
+  "de": "Gefühl",
+  "article": "das",
+  "plural": "Gefühle",
+  "en": "the feeling",
+  "ex_de": "Das ist ein schönes Gefühl.",
+  "ex_en": "That is a nice feeling.",
+  "icon": null
+ },
+ {
+  "cat": "feelings",
+  "de": "lachen",
+  "article": null,
+  "plural": null,
+  "en": "to laugh",
+  "ex_de": "Wir lachen viel zusammen.",
+  "ex_en": "We laugh a lot together.",
+  "icon": "grinning-squinting-face"
+ },
+ {
+  "cat": "feelings",
+  "de": "lächeln",
+  "article": null,
+  "plural": null,
+  "en": "to smile",
+  "ex_de": "Sie lächelt immer.",
+  "ex_en": "She always smiles.",
+  "icon": "slightly-smiling-face"
+ },
+ {
+  "cat": "feelings",
+  "de": "fühlen",
+  "article": null,
+  "plural": null,
+  "en": "to feel",
+  "ex_de": "Wie fühlst du dich?",
+  "ex_en": "How do you feel?",
+  "icon": null
+ },
+ {
+  "cat": "feelings",
+  "de": "hoffen",
+  "article": null,
+  "plural": null,
+  "en": "to hope",
+  "ex_de": "Ich hoffe, du schläfst gut.",
+  "ex_en": "I hope you sleep well.",
+  "icon": "crossed-fingers-default"
+ },
+ {
+  "cat": "feelings",
+  "de": "Hoffnung",
+  "article": "die",
+  "plural": "Hoffnungen",
+  "en": "the hope",
+  "ex_de": "Ich habe Hoffnung.",
+  "ex_en": "I have hope.",
+  "icon": null
+ },
+ {
+  "cat": "feelings",
+  "de": "Glück",
+  "article": "das",
+  "plural": null,
+  "en": "the luck, the happiness",
+  "ex_de": "Viel Glück!",
+  "ex_en": "Good luck!",
+  "icon": "four-leaf-clover"
+ },
+ {
+  "cat": "feelings",
+  "de": "Spaß",
+  "article": "der",
+  "plural": "Späße",
+  "en": "the fun",
+  "ex_de": "Das macht mir Spaß.",
+  "ex_en": "I enjoy that.",
+  "icon": "party-popper"
+ },
+ {
+  "cat": "feelings",
+  "de": "Lust",
+  "article": "die",
+  "plural": "Lüste",
+  "en": "the desire, the mood (for something)",
+  "ex_de": "Hast du Lust auf einen Spaziergang?",
+  "ex_en": "Do you feel like going for a walk?",
+  "icon": null
+ },
+ {
+  "cat": "feelings",
+  "de": "Langeweile",
+  "article": "die",
+  "plural": null,
+  "en": "the boredom",
+  "ex_de": "Ich habe Langeweile.",
+  "ex_en": "I am bored.",
+  "icon": "yawning-face"
+ },
+ {
+  "cat": "feelings",
+  "de": "lustig",
+  "article": null,
+  "plural": null,
+  "en": "funny",
+  "ex_de": "Der Film ist sehr lustig.",
+  "ex_en": "The film is very funny.",
+  "icon": "face-with-tears-of-joy"
+ },
+ {
+  "cat": "feelings",
+  "de": "stolz",
+  "article": null,
+  "plural": null,
+  "en": "proud",
+  "ex_de": "Ich bin stolz auf dich.",
+  "ex_en": "I am proud of you.",
+  "icon": null
+ },
+ {
+  "cat": "feelings",
+  "de": "verliebt",
+  "article": null,
+  "plural": null,
+  "en": "in love",
+  "ex_de": "Sie ist verliebt.",
+  "ex_en": "She is in love.",
+  "icon": "smiling-face-with-heart-eyes"
+ },
+ {
+  "cat": "feelings",
+  "de": "überrascht",
+  "article": null,
+  "plural": null,
+  "en": "surprised",
+  "ex_de": "Ich bin sehr überrascht.",
+  "ex_en": "I am very surprised.",
+  "icon": "astonished-face"
+ },
+ {
+  "cat": "feelings",
+  "de": "neugierig",
+  "article": null,
+  "plural": null,
+  "en": "curious",
+  "ex_de": "Das Kind ist neugierig.",
+  "ex_en": "The child is curious.",
+  "icon": "face-with-monocle"
+ },
+ {
+  "cat": "feelings",
+  "de": "nett",
+  "article": null,
+  "plural": null,
+  "en": "nice, kind",
+  "ex_de": "Deine Freundin ist sehr nett.",
+  "ex_en": "Your friend is very nice.",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "rot",
+  "article": null,
+  "plural": null,
+  "en": "red",
+  "ex_de": "Die Rose ist rot.",
+  "ex_en": "The rose is red.",
+  "icon": "red-circle"
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "blau",
+  "article": null,
+  "plural": null,
+  "en": "blue",
+  "ex_de": "Das Meer ist blau.",
+  "ex_en": "The sea is blue.",
+  "icon": "blue-circle"
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "grün",
+  "article": null,
+  "plural": null,
+  "en": "green",
+  "ex_de": "Der Wald ist grün.",
+  "ex_en": "The forest is green.",
+  "icon": "green-circle"
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "gelb",
+  "article": null,
+  "plural": null,
+  "en": "yellow",
+  "ex_de": "Die Sonne ist gelb.",
+  "ex_en": "The sun is yellow.",
+  "icon": "yellow-circle"
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "schwarz",
+  "article": null,
+  "plural": null,
+  "en": "black",
+  "ex_de": "Die Nacht ist schwarz.",
+  "ex_en": "The night is black.",
+  "icon": "black-circle"
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "weiß",
+  "article": null,
+  "plural": null,
+  "en": "white",
+  "ex_de": "Mein Kissen ist weiß.",
+  "ex_en": "My pillow is white.",
+  "icon": "white-circle"
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "braun",
+  "article": null,
+  "plural": null,
+  "en": "brown",
+  "ex_de": "Der Bär ist braun.",
+  "ex_en": "The bear is brown.",
+  "icon": "brown-circle"
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "grau",
+  "article": null,
+  "plural": null,
+  "en": "grey",
+  "ex_de": "Die Maus ist grau.",
+  "ex_en": "The mouse is grey.",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "rosa",
+  "article": null,
+  "plural": null,
+  "en": "pink",
+  "ex_de": "Mein Pullover ist rosa.",
+  "ex_en": "My sweater is pink.",
+  "icon": "pink-heart"
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "orange",
+  "article": null,
+  "plural": null,
+  "en": "orange",
+  "ex_de": "Die Orange ist orange.",
+  "ex_en": "The orange is orange.",
+  "icon": "orange-circle"
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "wer",
+  "article": null,
+  "plural": null,
+  "en": "who",
+  "ex_de": "Wer ist das?",
+  "ex_en": "Who is that?",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "was",
+  "article": null,
+  "plural": null,
+  "en": "what",
+  "ex_de": "Was ist das?",
+  "ex_en": "What is that?",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "wo",
+  "article": null,
+  "plural": null,
+  "en": "where",
+  "ex_de": "Wo wohnst du?",
+  "ex_en": "Where do you live?",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "wann",
+  "article": null,
+  "plural": null,
+  "en": "when",
+  "ex_de": "Wann kommst du?",
+  "ex_en": "When are you coming?",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "wie",
+  "article": null,
+  "plural": null,
+  "en": "how",
+  "ex_de": "Wie heißt du?",
+  "ex_en": "What is your name?",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "warum",
+  "article": null,
+  "plural": null,
+  "en": "why",
+  "ex_de": "Warum lachst du?",
+  "ex_en": "Why are you laughing?",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "woher",
+  "article": null,
+  "plural": null,
+  "en": "where from",
+  "ex_de": "Woher kommst du?",
+  "ex_en": "Where do you come from?",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "wohin",
+  "article": null,
+  "plural": null,
+  "en": "where to",
+  "ex_de": "Wohin gehst du?",
+  "ex_en": "Where are you going?",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "und",
+  "article": null,
+  "plural": null,
+  "en": "and",
+  "ex_de": "Ich trinke Tee und lese.",
+  "ex_en": "I drink tea and read.",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "oder",
+  "article": null,
+  "plural": null,
+  "en": "or",
+  "ex_de": "Tee oder Kaffee?",
+  "ex_en": "Tea or coffee?",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "aber",
+  "article": null,
+  "plural": null,
+  "en": "but",
+  "ex_de": "Es ist kalt, aber schön.",
+  "ex_en": "It is cold but beautiful.",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "nicht",
+  "article": null,
+  "plural": null,
+  "en": "not",
+  "ex_de": "Ich bin nicht müde.",
+  "ex_en": "I am not tired.",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "sehr",
+  "article": null,
+  "plural": null,
+  "en": "very",
+  "ex_de": "Das ist sehr gut.",
+  "ex_en": "That is very good.",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "auch",
+  "article": null,
+  "plural": null,
+  "en": "also, too",
+  "ex_de": "Ich komme auch.",
+  "ex_en": "I am coming too.",
+  "icon": null
+ },
+ {
+  "cat": "colors & question words & small words",
+  "de": "hier",
+  "article": null,
+  "plural": null,
+  "en": "here",
+  "ex_de": "Ich bin hier.",
+  "ex_en": "I am here.",
+  "icon": null
+ }
+]

@@ -1,0 +1,89 @@
+{
+ "id": "07_kummerspeck",
+ "title": "Germans have a word for stress-eating weight 🥓",
+ "beats": [
+  {
+   "say": "Germans have a word for the weight you gain from stress eating.",
+   "top": "Stress eating has a German name",
+   "icons": [
+    "pizza",
+    "ice-cream"
+   ],
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "Kummer, grief. Speck, bacon.",
+   "icons": [
+    "broken-heart",
+    "bacon"
+   ],
+   "ops": [
+    "+"
+   ],
+   "words": [
+    {
+     "de": "Kummer",
+     "article": "der"
+    },
+    {
+     "de": "Speck",
+     "article": "der"
+    }
+   ],
+   "sfx": "snap"
+  },
+  {
+   "say": "Kummerspeck. Grief bacon.",
+   "icons": [
+    "broken-heart",
+    "bacon"
+   ],
+   "ops": [
+    "+"
+   ],
+   "word": {
+    "de": "Kummerspeck",
+    "article": "der"
+   },
+   "en": "grief bacon",
+   "sfx": "ding"
+  },
+  {
+   "say": "Breakup, plus two weeks of ice cream, equals Kummerspeck.",
+   "top": "Breakup + ice cream =",
+   "icons": [
+    "broken-heart",
+    "soft-ice-cream"
+   ],
+   "ops": [
+    "+"
+   ],
+   "word": {
+    "de": "Kummerspeck",
+    "article": "der"
+   },
+   "sfx": "pop"
+  },
+  {
+   "say": "It's blue, because of der Speck. The last word decides.",
+   "icons": [
+    "bacon"
+   ],
+   "word": {
+    "de": "Kummerspeck",
+    "article": "der"
+   },
+   "en": "blue = der",
+   "sfx": "pop"
+  },
+  {
+   "say": "Tag a friend who has Kummerspeck.",
+   "top": "Tag a friend",
+   "icons": [
+    "face-with-hand-over-mouth"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

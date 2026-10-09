@@ -1,0 +1,71 @@
+{
+ "id": "04_mir_ist_heiss",
+ "title": "Don't say 'Ich bin heiß' in Germany 🥵",
+ "beats": [
+  {
+   "say": "Hot day in Germany? Don't say: Ich bin heiß.",
+   "top": "Hot day in Germany?",
+   "icons": [
+    "hot-face"
+   ],
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "Ich bin heiß means: I'm hot. Like, sexy hot.",
+   "icons": [
+    "smiling-face-with-sunglasses"
+   ],
+   "word": {
+    "de": "Ich bin heiß"
+   },
+   "en": "I'm hot (sexy)",
+   "mark": "wrong",
+   "sfx": "buzz"
+  },
+  {
+   "say": "Say: Mir ist heiß. Literally, to me it is hot.",
+   "icons": [
+    "hot-face"
+   ],
+   "word": {
+    "de": "Mir ist heiß"
+   },
+   "en": "I feel hot",
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "Same for cold. Mir ist kalt.",
+   "icons": [
+    "cold-face"
+   ],
+   "word": {
+    "de": "Mir ist kalt"
+   },
+   "en": "I feel cold",
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "Ich bin kalt means you're a cold person. Not great.",
+   "icons": [
+    "cold-face"
+   ],
+   "word": {
+    "de": "Ich bin kalt"
+   },
+   "en": "I'm a cold person",
+   "mark": "wrong",
+   "sfx": "buzz"
+  },
+  {
+   "say": "Follow for German in seconds, not hours.",
+   "top": "Follow for more German",
+   "icons": [
+    "pretzel"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

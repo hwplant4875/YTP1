@@ -1,0 +1,85 @@
+{
+ "id": "06_order_coffee",
+ "title": "How to order coffee in Germany (real dialogue) ☕",
+ "beats": [
+  {
+   "say": "How to order coffee in Germany. Real dialogue.",
+   "top": "Ordering coffee in Germany",
+   "icons": [
+    "hot-beverage"
+   ],
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "You say: Einen Kaffee, bitte.",
+   "top": "YOU",
+   "icons": [
+    "hot-beverage"
+   ],
+   "word": {
+    "de": "Einen Kaffee, bitte."
+   },
+   "en": "A coffee, please.",
+   "sfx": "pop"
+  },
+  {
+   "say": "They ask: Für hier oder zum Mitnehmen?",
+   "top": "BARISTA",
+   "icons": [
+    "teacup-without-handle",
+    "takeout-box"
+   ],
+   "ops": [
+    "vs"
+   ],
+   "en": "For here or to go?",
+   "sfx": "pop"
+  },
+  {
+   "say": "To go? Zum Mitnehmen, bitte.",
+   "top": "YOU",
+   "icons": [
+    "takeout-box"
+   ],
+   "word": {
+    "de": "Zum Mitnehmen, bitte."
+   },
+   "en": "To go, please.",
+   "sfx": "pop"
+  },
+  {
+   "say": "Das macht drei Euro.",
+   "top": "BARISTA",
+   "icons": [
+    "euro-banknote"
+   ],
+   "word": {
+    "de": "Das macht 3 Euro."
+   },
+   "en": "That's 3 euros.",
+   "sfx": "pop"
+  },
+  {
+   "say": "Danke, schönen Tag noch!",
+   "top": "YOU",
+   "icons": [
+    "waving-hand-default"
+   ],
+   "word": {
+    "de": "Danke, schönen Tag noch!"
+   },
+   "en": "Thanks, have a nice day!",
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "Save it and order like a local.",
+   "top": "Save it!",
+   "icons": [
+    "pretzel"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

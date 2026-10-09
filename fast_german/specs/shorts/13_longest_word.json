@@ -1,0 +1,122 @@
+{
+ "id": "13_longest_word",
+ "title": "The longest German word, explained in 20 seconds 🤯",
+ "beats": [
+  {
+   "say": "This is a real German word.",
+   "top": "A REAL German word",
+   "icons": [
+    "face-screaming-in-fear"
+   ],
+   "word": {
+    "de": "Donaudampfschiff|fahrtsgesellschafts|kapitän",
+    "article": "der"
+   },
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "Let's break it down in twenty seconds.",
+   "top": "Let's break it down",
+   "icons": [
+    "stopwatch"
+   ],
+   "sfx": "whoosh"
+  },
+  {
+   "say": "Donau, the Danube.",
+   "icons": [
+    "water-wave"
+   ],
+   "word": {
+    "de": "Donau",
+    "article": "die"
+   },
+   "en": "the Danube",
+   "sfx": "snap"
+  },
+  {
+   "say": "Dampf, steam.",
+   "icons": [
+    "cloud"
+   ],
+   "word": {
+    "de": "Dampf",
+    "article": "der"
+   },
+   "en": "steam",
+   "sfx": "snap"
+  },
+  {
+   "say": "Schiff, ship.",
+   "icons": [
+    "ship"
+   ],
+   "word": {
+    "de": "Schiff",
+    "article": "das"
+   },
+   "en": "ship",
+   "sfx": "snap"
+  },
+  {
+   "say": "Fahrt, trip.",
+   "icons": [
+    "world-map"
+   ],
+   "word": {
+    "de": "Fahrt",
+    "article": "die"
+   },
+   "en": "trip",
+   "sfx": "snap"
+  },
+  {
+   "say": "Gesellschaft, company.",
+   "icons": [
+    "office-building"
+   ],
+   "word": {
+    "de": "Gesellschaft",
+    "article": "die"
+   },
+   "en": "company",
+   "sfx": "snap"
+  },
+  {
+   "say": "Kapitän, captain.",
+   "icons": [
+    "anchor"
+   ],
+   "word": {
+    "de": "Kapitän",
+    "article": "der"
+   },
+   "en": "captain",
+   "sfx": "snap"
+  },
+  {
+   "say": "Danube steamship company captain! And it's der, because of der Kapitän.",
+   "icons": [
+    "ship",
+    "anchor"
+   ],
+   "ops": [
+    "+"
+   ],
+   "word": {
+    "de": "Donaudampfschiff|fahrtsgesellschafts|kapitän",
+    "article": "der"
+   },
+   "sfx": "ding"
+  },
+  {
+   "say": "Can you say it in one breath? Comment!",
+   "top": "Say it in one breath!",
+   "icons": [
+    "face-with-hand-over-mouth"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

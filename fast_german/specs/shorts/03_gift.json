@@ -1,0 +1,78 @@
+{
+ "id": "03_gift",
+ "title": "Never give a German a GIFT 💀 #german",
+ "beats": [
+  {
+   "say": "Never give a German a Gift.",
+   "top": "Never give a German a 'Gift'",
+   "icons": [
+    "wrapped-gift"
+   ],
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "Because in German, das Gift means... poison.",
+   "icons": [
+    "skull-and-crossbones"
+   ],
+   "word": {
+    "de": "Gift",
+    "article": "das"
+   },
+   "en": "the poison",
+   "mark": "wrong",
+   "sfx": "buzz"
+  },
+  {
+   "say": "A present is das Geschenk.",
+   "icons": [
+    "wrapped-gift"
+   ],
+   "word": {
+    "de": "Geschenk",
+    "article": "das"
+   },
+   "en": "the present",
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "Gift, poison. Geschenk, present. Don't mix them up.",
+   "icons": [
+    "skull-and-crossbones",
+    "wrapped-gift"
+   ],
+   "ops": [
+    "vs"
+   ],
+   "words": [
+    {
+     "de": "Gift",
+     "article": "das"
+    },
+    {
+     "de": "Geschenk",
+     "article": "das"
+    }
+   ],
+   "sfx": "pop"
+  },
+  {
+   "say": "And giftig means poisonous. So please, don't call your present giftig.",
+   "top": "giftig = poisonous",
+   "icons": [
+    "face-vomiting"
+   ],
+   "sfx": "buzz"
+  },
+  {
+   "say": "Follow for German in seconds, not hours.",
+   "top": "Follow for more German",
+   "icons": [
+    "pretzel"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

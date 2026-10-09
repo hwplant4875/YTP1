@@ -1,0 +1,81 @@
+{
+ "id": "11_gluehbirne",
+ "title": "How to say LIGHT BULB in German 💡",
+ "beats": [
+  {
+   "say": "How do you say light bulb in German?",
+   "top": "Light bulb in German?",
+   "icons": [
+    "light-bulb"
+   ],
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "Glühbirne.",
+   "icons": [
+    "light-bulb"
+   ],
+   "word": {
+    "de": "Glühbirne",
+    "article": "die"
+   },
+   "en": "the light bulb",
+   "sfx": "ding",
+   "pause": 0.3
+  },
+  {
+   "say": "Glühen, to glow. Birne, pear.",
+   "icons": [
+    "sparkles",
+    "pear"
+   ],
+   "ops": [
+    "+"
+   ],
+   "words": [
+    {
+     "de": "glühen"
+    },
+    {
+     "de": "Birne",
+     "article": "die"
+    }
+   ],
+   "sfx": "snap"
+  },
+  {
+   "say": "A glowing pear! And honestly... they're not wrong.",
+   "top": "A glowing pear?!",
+   "icons": [
+    "light-bulb",
+    "pear"
+   ],
+   "ops": [
+    "="
+   ],
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "It's red, because of die Birne.",
+   "icons": [
+    "pear"
+   ],
+   "word": {
+    "de": "Glühbirne",
+    "article": "die"
+   },
+   "en": "red = die",
+   "sfx": "pop"
+  },
+  {
+   "say": "Follow for German in seconds, not hours.",
+   "top": "Follow for more German",
+   "icons": [
+    "pretzel"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

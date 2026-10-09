@@ -1,0 +1,160 @@
+{
+ "id": "08_der_die_das_quiz",
+ "title": "der, die or das? Only 1% get all 5 🧠",
+ "beats": [
+  {
+   "say": "Der, die, or das? One second each. Go!",
+   "top": "der, die or das?",
+   "icons": [
+    "thinking-face"
+   ],
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "Sonne?",
+   "top": "1 / 5",
+   "icons": [
+    "sun"
+   ],
+   "word": {
+    "de": "___ Sonne"
+   },
+   "sfx": "tick",
+   "pause": 1.0
+  },
+  {
+   "say": "Die Sonne!",
+   "top": "1 / 5",
+   "icons": [
+    "sun"
+   ],
+   "word": {
+    "de": "Sonne",
+    "article": "die"
+   },
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "Mond?",
+   "top": "2 / 5",
+   "icons": [
+    "crescent-moon"
+   ],
+   "word": {
+    "de": "___ Mond"
+   },
+   "sfx": "tick",
+   "pause": 1.0
+  },
+  {
+   "say": "Der Mond!",
+   "top": "2 / 5",
+   "icons": [
+    "crescent-moon"
+   ],
+   "word": {
+    "de": "Mond",
+    "article": "der"
+   },
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "Mädchen?",
+   "top": "3 / 5",
+   "icons": [
+    "girl-default"
+   ],
+   "word": {
+    "de": "___ Mädchen"
+   },
+   "sfx": "tick",
+   "pause": 1.0
+  },
+  {
+   "say": "Das Mädchen!",
+   "top": "3 / 5",
+   "icons": [
+    "girl-default"
+   ],
+   "word": {
+    "de": "Mädchen",
+    "article": "das"
+   },
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "Butter?",
+   "top": "4 / 5",
+   "icons": [
+    "butter"
+   ],
+   "word": {
+    "de": "___ Butter"
+   },
+   "sfx": "tick",
+   "pause": 1.0
+  },
+  {
+   "say": "Die Butter!",
+   "top": "4 / 5",
+   "icons": [
+    "butter"
+   ],
+   "word": {
+    "de": "Butter",
+    "article": "die"
+   },
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "Auto?",
+   "top": "5 / 5",
+   "icons": [
+    "automobile"
+   ],
+   "word": {
+    "de": "___ Auto"
+   },
+   "sfx": "tick",
+   "pause": 1.0
+  },
+  {
+   "say": "Das Auto!",
+   "top": "5 / 5",
+   "icons": [
+    "automobile"
+   ],
+   "word": {
+    "de": "Auto",
+    "article": "das"
+   },
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "Mädchen is das, because every word ending in chen is das.",
+   "icons": [
+    "girl-default"
+   ],
+   "word": {
+    "de": "Mädchen",
+    "article": "das"
+   },
+   "en": "-chen = always das",
+   "sfx": "pop"
+  },
+  {
+   "say": "How many did you get? Comment your score!",
+   "top": "Your score?",
+   "icons": [
+    "trophy"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

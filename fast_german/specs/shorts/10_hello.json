@@ -1,0 +1,83 @@
+{
+ "id": "10_hello",
+ "title": "How Germans ACTUALLY say hello 👋",
+ "beats": [
+  {
+   "say": "Stop saying Guten Tag. Here's how Germans really say hello.",
+   "top": "Stop saying 'Guten Tag'",
+   "icons": [
+    "waving-hand-default"
+   ],
+   "word": {
+    "de": "Guten Tag"
+   },
+   "en": "very formal",
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "Hallo. Works everywhere, with everyone.",
+   "icons": [
+    "waving-hand-default"
+   ],
+   "word": {
+    "de": "Hallo"
+   },
+   "en": "hello (everywhere)",
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "Moin! In the north. Even in the evening.",
+   "icons": [
+    "anchor"
+   ],
+   "word": {
+    "de": "Moin!"
+   },
+   "en": "hi (North Germany)",
+   "sfx": "pop"
+  },
+  {
+   "say": "Servus! In Bavaria and Austria. It means hi and bye.",
+   "icons": [
+    "snow-capped-mountain"
+   ],
+   "word": {
+    "de": "Servus!"
+   },
+   "en": "hi & bye (South)",
+   "sfx": "pop"
+  },
+  {
+   "say": "Grüß Gott! The polite hello in the south.",
+   "icons": [
+    "snow-capped-mountain"
+   ],
+   "word": {
+    "de": "Grüß Gott!"
+   },
+   "en": "hello (South, polite)",
+   "sfx": "pop"
+  },
+  {
+   "say": "And with friends? Na? Just na. It means: how's it going?",
+   "icons": [
+    "grinning-face-with-smiling-eyes"
+   ],
+   "word": {
+    "de": "Na?"
+   },
+   "en": "how's it going?",
+   "sfx": "ding"
+  },
+  {
+   "say": "Which one will you use? Comment!",
+   "top": "Your favorite?",
+   "icons": [
+    "thinking-face"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

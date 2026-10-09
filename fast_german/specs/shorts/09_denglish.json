@@ -1,0 +1,71 @@
+{
+ "id": "09_denglish",
+ "title": "English words Germans use WRONG 😂",
+ "beats": [
+  {
+   "say": "Germans use English words... but wrong.",
+   "top": "English words Germans use WRONG",
+   "icons": [
+    "face-with-hand-over-mouth"
+   ],
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "Handy. In Germany, that's your phone.",
+   "icons": [
+    "mobile-phone"
+   ],
+   "word": {
+    "de": "Handy",
+    "article": "das"
+   },
+   "en": "the mobile phone",
+   "sfx": "pop"
+  },
+  {
+   "say": "Beamer. Not a BMW. It's a projector.",
+   "icons": [
+    "film-projector"
+   ],
+   "word": {
+    "de": "Beamer",
+    "article": "der"
+   },
+   "en": "the projector",
+   "sfx": "pop"
+  },
+  {
+   "say": "Oldtimer. Not an old man. It's a classic car.",
+   "icons": [
+    "automobile"
+   ],
+   "word": {
+    "de": "Oldtimer",
+    "article": "der"
+   },
+   "en": "the classic car",
+   "sfx": "pop"
+  },
+  {
+   "say": "Public Viewing. Not a funeral. It's watching football outside with thousands of fans.",
+   "icons": [
+    "soccer-ball"
+   ],
+   "word": {
+    "de": "Public Viewing",
+    "article": "das"
+   },
+   "en": "watching a game outdoors",
+   "sfx": "pop"
+  },
+  {
+   "say": "Which one surprised you most? Comment!",
+   "top": "Which one got you?",
+   "icons": [
+    "thinking-face"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

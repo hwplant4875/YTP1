@@ -1,0 +1,94 @@
+{
+ "id": "12_schmetterling",
+ "title": "Butterfly in German is... SCHMETTERLING 🦋",
+ "beats": [
+  {
+   "say": "Butterfly in different languages.",
+   "top": "Butterfly in...",
+   "icons": [
+    "butterfly"
+   ],
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "French: papillon.",
+   "top": "French",
+   "icons": [
+    "butterfly"
+   ],
+   "word": {
+    "de": "papillon"
+   },
+   "sfx": "pop"
+  },
+  {
+   "say": "Spanish: mariposa.",
+   "top": "Spanish",
+   "icons": [
+    "butterfly"
+   ],
+   "word": {
+    "de": "mariposa"
+   },
+   "sfx": "pop"
+  },
+  {
+   "say": "Italian: farfalla.",
+   "top": "Italian",
+   "icons": [
+    "butterfly"
+   ],
+   "word": {
+    "de": "farfalla"
+   },
+   "sfx": "pop"
+  },
+  {
+   "say": "German: SCHMETTERLING!",
+   "top": "German",
+   "icons": [
+    "butterfly"
+   ],
+   "word": {
+    "de": "SCHMETTERLING",
+    "article": "der"
+   },
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "It comes from Schmetten, an old word for cream. Butterflies love to land on cream.",
+   "icons": [
+    "butterfly",
+    "glass-of-milk"
+   ],
+   "word": {
+    "de": "Schmetten"
+   },
+   "en": "old word for cream",
+   "sfx": "pop"
+  },
+  {
+   "say": "So the scary word is really a little cream lover. Cute, right?",
+   "icons": [
+    "butterfly"
+   ],
+   "word": {
+    "de": "Schmetterling",
+    "article": "der"
+   },
+   "en": "the butterfly",
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "Follow for German in seconds, not hours.",
+   "top": "Follow for more German",
+   "icons": [
+    "pretzel"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

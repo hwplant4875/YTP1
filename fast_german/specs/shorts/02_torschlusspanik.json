@@ -1,0 +1,85 @@
+{
+ "id": "02_torschlusspanik",
+ "title": "This German word means: panic before the gate closes 😱",
+ "beats": [
+  {
+   "say": "This German word means... panic before the gate closes.",
+   "top": "Gate-closing panic?!",
+   "icons": [
+    "door",
+    "alarm-clock"
+   ],
+   "punch": true,
+   "sfx": "hit"
+  },
+  {
+   "say": "Tor, gate. Schluss, closing. Panik, panic.",
+   "icons": [
+    "door",
+    "locked",
+    "face-screaming-in-fear"
+   ],
+   "ops": [
+    "+",
+    "+"
+   ],
+   "words": [
+    {
+     "de": "Tor",
+     "article": "das"
+    },
+    {
+     "de": "Schluss",
+     "article": "der"
+    },
+    {
+     "de": "Panik",
+     "article": "die"
+    }
+   ],
+   "sfx": "snap"
+  },
+  {
+   "say": "Torschlusspanik! The fear that time is running out for the big things in life.",
+   "icons": [
+    "hourglass-not-done"
+   ],
+   "word": {
+    "de": "Torschlusspanik",
+    "article": "die"
+   },
+   "en": "fear of running out of time",
+   "sfx": "ding"
+  },
+  {
+   "say": "Like turning thirty, and suddenly you want a ring, a house, and fluent German.",
+   "top": "Turning 30 be like",
+   "icons": [
+    "ring",
+    "house",
+    "pretzel"
+   ],
+   "sfx": "pop"
+  },
+  {
+   "say": "It's red, because of die Panik. In German, the last word decides the gender.",
+   "icons": [
+    "face-screaming-in-fear"
+   ],
+   "word": {
+    "de": "Torschlusspanik",
+    "article": "die"
+   },
+   "en": "red = die",
+   "sfx": "pop"
+  },
+  {
+   "say": "Comment if you have Torschlusspanik right now.",
+   "top": "Do you have it?",
+   "icons": [
+    "anxious-face-with-sweat"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

@@ -1,0 +1,1749 @@
+{
+  "title": "Learn German A1 in 25 Minutes (no boring grammar)",
+  "chapters": [
+    {
+      "title": "A1 in 25 Minutes",
+      "lines": [
+        {
+          "say": "Most German courses take an hour to teach you hello. Let's do A1 basics in 25 minutes."
+        },
+        {
+          "say": "Greetings, introducing yourself, numbers, ordering coffee, finding the train, and the mistakes that make Germans laugh.",
+          "card": {
+            "de": "Los geht's!",
+            "article": null,
+            "en": "Let's go!",
+            "icon": "rocket"
+          }
+        },
+        {
+          "say": "Here's how it works. When you see this, repeat after me. Out loud. Yes, really."
+        },
+        {
+          "say": "And every noun gets a color. Blue for der, red for die, green for das.",
+          "card": {
+            "de": "der · die · das",
+            "article": null,
+            "en": "blue · red · green",
+            "icon": "sparkles"
+          }
+        },
+        {
+          "say": "Stay for the speed quiz at the end."
+        },
+        {
+          "say": "Ready? I'm your German friend, and this is Fast German. German in seconds, not hours."
+        }
+      ]
+    },
+    {
+      "title": "Hello & Goodbye",
+      "lines": [
+        {
+          "say": "First word. The easiest one in the whole language.",
+          "card": {
+            "de": "Hallo",
+            "article": null,
+            "en": "Hello",
+            "icon": "waving-hand-default"
+          }
+        },
+        {
+          "say": "Same as English, just with a cleaner 'a'. Now the time-of-day greetings."
+        },
+        {
+          "say": "In the morning, you say Guten Morgen.",
+          "card": {
+            "de": "Guten Morgen",
+            "article": null,
+            "en": "Good morning",
+            "icon": "sunrise"
+          }
+        },
+        {
+          "repeat": "Guten Morgen",
+          "en": "Good morning",
+          "article": null,
+          "icon": "sunrise"
+        },
+        {
+          "say": "During the day, Guten Tag. Perfect for shops and offices.",
+          "card": {
+            "de": "Guten Tag",
+            "article": null,
+            "en": "Good day / Hello",
+            "icon": "sun"
+          }
+        },
+        {
+          "repeat": "Guten Tag",
+          "en": "Hello (formal)",
+          "article": null,
+          "icon": "sun"
+        },
+        {
+          "say": "In the evening, Guten Abend.",
+          "card": {
+            "de": "Guten Abend",
+            "article": null,
+            "en": "Good evening",
+            "icon": "sunset"
+          }
+        },
+        {
+          "repeat": "Guten Abend",
+          "en": "Good evening",
+          "article": null,
+          "icon": "sunset"
+        },
+        {
+          "say": "And before bed: Gute Nacht. Notice, it's gute, not guten. Little detail, big win.",
+          "card": {
+            "de": "Gute Nacht",
+            "article": null,
+            "en": "Good night",
+            "icon": "crescent-moon"
+          }
+        },
+        {
+          "say": "Bonus! In the north, people say Moin. In the south and Austria, Servus or Grüß Gott.",
+          "card": {
+            "de": "Moin · Servus · Grüß Gott",
+            "article": null,
+            "en": "regional hellos",
+            "icon": "world-map"
+          }
+        },
+        {
+          "say": "Now, how are you? With friends: Wie geht's?",
+          "card": {
+            "de": "Wie geht's?",
+            "article": null,
+            "en": "How's it going?",
+            "icon": "slightly-smiling-face"
+          }
+        },
+        {
+          "repeat": "Wie geht's?",
+          "en": "How's it going?",
+          "article": null,
+          "icon": "slightly-smiling-face"
+        },
+        {
+          "say": "The answer you'll use ninety percent of the time: Gut, danke. Und dir?",
+          "card": {
+            "de": "Gut, danke. Und dir?",
+            "article": null,
+            "en": "Good, thanks. And you?",
+            "icon": "thumbs-up-default"
+          }
+        },
+        {
+          "repeat": "Gut, danke. Und dir?",
+          "en": "Good, thanks. And you?",
+          "article": null,
+          "icon": "thumbs-up-default"
+        },
+        {
+          "say": "Having a so-so day? Es geht. It literally means 'it goes'. Very German. Very honest.",
+          "card": {
+            "de": "Es geht.",
+            "article": null,
+            "en": "It's okay / so-so",
+            "icon": "face-with-diagonal-mouth"
+          }
+        },
+        {
+          "say": "Time to leave. Casual goodbye: Tschüss.",
+          "card": {
+            "de": "Tschüss!",
+            "article": null,
+            "en": "Bye!",
+            "icon": "waving-hand-default"
+          }
+        },
+        {
+          "repeat": "Tschüss!",
+          "en": "Bye!",
+          "article": null,
+          "icon": "waving-hand-default"
+        },
+        {
+          "say": "Formal goodbye: Auf Wiedersehen. Literally, 'until we see again'.",
+          "card": {
+            "de": "Auf Wiedersehen",
+            "article": null,
+            "en": "Goodbye (formal)",
+            "icon": "handshake"
+          }
+        },
+        {
+          "repeat": "Auf Wiedersehen",
+          "en": "Goodbye",
+          "article": null,
+          "icon": "handshake"
+        },
+        {
+          "say": "And the handy ones: Bis später, bis morgen, bis bald.",
+          "card": {
+            "de": "Bis später · Bis morgen · Bis bald",
+            "article": null,
+            "en": "See you later · tomorrow · soon",
+            "icon": "alarm-clock"
+          }
+        },
+        {
+          "say": "Let's hear it in action. Two friends meet on the street."
+        },
+        {
+          "say": "Hallo! Wie geht's? Gut, danke. Und dir? Auch gut! Bis später! Tschüss!"
+        },
+        {
+          "say": "Auch gut means 'also good'. Six seconds, one full conversation. You're already doing it."
+        },
+        {
+          "say": "Quick check. No peeking."
+        },
+        {
+          "quiz": "How do you say: good evening?",
+          "answer": "Guten Abend",
+          "article": null
+        },
+        {
+          "say": "Nailed it? Great. Next, you're going to introduce yourself in three sentences."
+        }
+      ]
+    },
+    {
+      "title": "Introduce Yourself",
+      "lines": [
+        {
+          "say": "Germans don't really say 'my name is'. They say Ich heiße. I am called.",
+          "card": {
+            "de": "Ich heiße Anna.",
+            "article": null,
+            "en": "My name is Anna.",
+            "icon": "name-badge"
+          }
+        },
+        {
+          "repeat": "Ich heiße Anna.",
+          "en": "My name is Anna.",
+          "article": null,
+          "icon": "name-badge"
+        },
+        {
+          "say": "Swap in your own name. Say it out loud. Ich heiße... you!"
+        },
+        {
+          "say": "You can also say Ich bin Anna. I am Anna. Short, friendly, and totally normal."
+        },
+        {
+          "say": "To ask someone casually: Wie heißt du?",
+          "card": {
+            "de": "Wie heißt du?",
+            "article": null,
+            "en": "What's your name?",
+            "icon": "speech-balloon"
+          }
+        },
+        {
+          "say": "Sentence two. Where you're from: Ich komme aus.",
+          "card": {
+            "de": "Ich komme aus England.",
+            "article": null,
+            "en": "I'm from England.",
+            "icon": "globe-showing-europe-africa"
+          }
+        },
+        {
+          "repeat": "Ich komme aus England.",
+          "en": "I'm from England.",
+          "article": null,
+          "icon": "globe-showing-europe-africa"
+        },
+        {
+          "say": "Ich komme aus Kanada. Ich komme aus Indien. Easy. One trap: for the USA, it's aus den USA.",
+          "card": {
+            "de": "Ich komme aus den USA.",
+            "article": null,
+            "en": "I'm from the USA.",
+            "icon": "globe-showing-americas"
+          }
+        },
+        {
+          "repeat": "Ich komme aus den USA.",
+          "en": "I'm from the USA.",
+          "article": null,
+          "icon": "globe-showing-americas"
+        },
+        {
+          "say": "And the question: Woher kommst du? Where do you come from?",
+          "card": {
+            "de": "Woher kommst du?",
+            "article": null,
+            "en": "Where are you from?",
+            "icon": "world-map"
+          }
+        },
+        {
+          "repeat": "Woher kommst du?",
+          "en": "Where are you from?",
+          "article": null,
+          "icon": "world-map"
+        },
+        {
+          "say": "Sentence three. Where you live: Ich wohne in.",
+          "card": {
+            "de": "Ich wohne in Berlin.",
+            "article": null,
+            "en": "I live in Berlin.",
+            "icon": "cityscape"
+          }
+        },
+        {
+          "repeat": "Ich wohne in Berlin.",
+          "en": "I live in Berlin.",
+          "article": null,
+          "icon": "cityscape"
+        },
+        {
+          "say": "Question version: Wo wohnst du?",
+          "card": {
+            "de": "Wo wohnst du?",
+            "article": null,
+            "en": "Where do you live?",
+            "icon": "house"
+          }
+        },
+        {
+          "say": "Bonus line that makes Germans smile instantly:",
+          "card": {
+            "de": "Ich spreche ein bisschen Deutsch.",
+            "article": null,
+            "en": "I speak a little German.",
+            "icon": "speaking-head"
+          }
+        },
+        {
+          "repeat": "Ich spreche ein bisschen Deutsch.",
+          "en": "I speak a little German.",
+          "article": null,
+          "icon": "speaking-head"
+        },
+        {
+          "say": "And when you meet someone: Freut mich! Nice to meet you.",
+          "card": {
+            "de": "Freut mich!",
+            "article": null,
+            "en": "Nice to meet you!",
+            "icon": "handshake"
+          }
+        },
+        {
+          "say": "Let's put it all together. Listen to the rhythm."
+        },
+        {
+          "say": "Hallo! Ich heiße Anna. Ich komme aus England, und ich wohne in Berlin. Freut mich!"
+        },
+        {
+          "say": "Now pause the video and do yours. I'll wait. Okay, I won't. But you should."
+        },
+        {
+          "quiz": "How do you say: I live in Berlin?",
+          "answer": "Ich wohne in Berlin.",
+          "article": null
+        },
+        {
+          "say": "Next up: the trick that makes der, die, das finally make sense."
+        }
+      ]
+    },
+    {
+      "title": "The der/die/das Color Trick",
+      "lines": [
+        {
+          "say": "In German, every noun has a gender. Der, die, or das. And here's the secret: it's often not logical."
+        },
+        {
+          "say": "So don't learn 'table'. Learn 'der Tisch'. Article plus noun, always together. That's why we use colors."
+        },
+        {
+          "say": "Blue is der.",
+          "card": {
+            "de": "der Mann",
+            "article": "der",
+            "en": "the man",
+            "icon": "man-default"
+          }
+        },
+        {
+          "repeat": "der Mann",
+          "en": "the man",
+          "article": "der",
+          "icon": "man-default"
+        },
+        {
+          "say": "Red is die.",
+          "card": {
+            "de": "die Frau",
+            "article": "die",
+            "en": "the woman",
+            "icon": "woman-default"
+          }
+        },
+        {
+          "repeat": "die Frau",
+          "en": "the woman",
+          "article": "die",
+          "icon": "woman-default"
+        },
+        {
+          "say": "Green is das.",
+          "card": {
+            "de": "das Kind",
+            "article": "das",
+            "en": "the child",
+            "icon": "child-default"
+          }
+        },
+        {
+          "repeat": "das Kind",
+          "en": "the child",
+          "article": "das",
+          "icon": "child-default"
+        },
+        {
+          "say": "Picture the color when you hear the word. Your brain loves colors. Watch the screen and let the color stick."
+        },
+        {
+          "say": "Here's why this matters. Germans will understand you with the wrong article. But the right one makes you sound fluent, fast. Let's do more."
+        },
+        {
+          "repeat": "der Kaffee",
+          "en": "the coffee",
+          "article": "der",
+          "icon": "hot-beverage"
+        },
+        {
+          "repeat": "die Milch",
+          "en": "the milk",
+          "article": "die",
+          "icon": "glass-of-milk"
+        },
+        {
+          "say": "Now, the weird one. Girl is neuter. Das Mädchen.",
+          "card": {
+            "de": "das Mädchen",
+            "article": "das",
+            "en": "the girl",
+            "icon": "girl-default"
+          }
+        },
+        {
+          "repeat": "das Mädchen",
+          "en": "the girl",
+          "article": "das",
+          "icon": "girl-default"
+        },
+        {
+          "say": "Why? Every word ending in -chen is das. Grammar beats biology here."
+        },
+        {
+          "say": "Two more shortcuts. Words ending in -ung, -heit, or -keit are always die. Die Zeitung. Die Freiheit.",
+          "card": {
+            "de": "die Zeitung",
+            "article": "die",
+            "en": "the newspaper",
+            "icon": "newspaper"
+          }
+        },
+        {
+          "say": "And many words ending in -e are die too. Die Lampe. Die Tasche. Not all, but a lot."
+        },
+        {
+          "say": "Now, 'a' or 'an'. For der and das words, it's ein. For die words, it's eine.",
+          "card": {
+            "de": "ein · eine · ein",
+            "article": null,
+            "en": "a / an",
+            "icon": "light-bulb"
+          }
+        },
+        {
+          "repeat": "ein Hund",
+          "en": "a dog",
+          "article": "der",
+          "icon": "dog"
+        },
+        {
+          "repeat": "eine Katze",
+          "en": "a cat",
+          "article": "die",
+          "icon": "cat"
+        },
+        {
+          "say": "See? Red words get the extra 'e'. Eine. Quick quiz. Which color?"
+        },
+        {
+          "quiz": "Blue, red or green? ... Katze",
+          "answer": "die Katze",
+          "article": "die"
+        },
+        {
+          "say": "If you got both, you're already ahead of most beginners. Now, let's count. And there's a twist at twenty-one."
+        }
+      ]
+    },
+    {
+      "title": "Numbers 0–20 (and Beyond)",
+      "lines": [
+        {
+          "say": "Zero to five. Repeat after me.",
+          "card": {
+            "de": "null · eins · zwei · drei · vier · fünf",
+            "article": null,
+            "en": "0 · 1 · 2 · 3 · 4 · 5",
+            "icon": "input-numbers"
+          }
+        },
+        {
+          "repeat": "null, eins, zwei, drei, vier, fünf",
+          "en": "0, 1, 2, 3, 4, 5",
+          "article": null,
+          "icon": "keycap-0"
+        },
+        {
+          "say": "Six to ten.",
+          "card": {
+            "de": "sechs · sieben · acht · neun · zehn",
+            "article": null,
+            "en": "6 · 7 · 8 · 9 · 10",
+            "icon": "keycap-10"
+          }
+        },
+        {
+          "repeat": "sechs, sieben, acht, neun, zehn",
+          "en": "6, 7, 8, 9, 10",
+          "article": null,
+          "icon": "keycap-6"
+        },
+        {
+          "say": "Phone tip! On the phone, Germans often say zwo instead of zwei. Why? So it doesn't sound like drei.",
+          "card": {
+            "de": "zwo = zwei",
+            "article": null,
+            "en": "2 (on the phone)",
+            "icon": "telephone"
+          }
+        },
+        {
+          "say": "Eleven and twelve are special. Elf and zwölf. Yes, elf. Like the little fantasy guy.",
+          "card": {
+            "de": "elf · zwölf",
+            "article": null,
+            "en": "11 · 12",
+            "icon": "sparkles"
+          }
+        },
+        {
+          "repeat": "elf, zwölf",
+          "en": "11, 12",
+          "article": null,
+          "icon": null
+        },
+        {
+          "say": "Thirteen to nineteen are easy: number plus zehn. Drei plus zehn is dreizehn."
+        },
+        {
+          "repeat": "dreizehn, vierzehn, fünfzehn",
+          "en": "13, 14, 15",
+          "article": null,
+          "icon": null
+        },
+        {
+          "say": "Watch out for two. Sechzehn loses the s. Siebzehn loses the -en.",
+          "card": {
+            "de": "sechzehn · siebzehn",
+            "article": null,
+            "en": "16 · 17",
+            "icon": "warning"
+          }
+        },
+        {
+          "repeat": "sechzehn, siebzehn",
+          "en": "16, 17",
+          "article": null,
+          "icon": null
+        },
+        {
+          "repeat": "achtzehn, neunzehn, zwanzig",
+          "en": "18, 19, 20",
+          "article": null,
+          "icon": null
+        },
+        {
+          "say": "Now, the famous German twist. After twenty, you say the numbers backwards."
+        },
+        {
+          "say": "Twenty-one is 'one and twenty'. Einundzwanzig.",
+          "card": {
+            "de": "einundzwanzig",
+            "article": null,
+            "en": "21 = one-and-twenty",
+            "icon": "counterclockwise-arrows-button"
+          }
+        },
+        {
+          "repeat": "einundzwanzig",
+          "en": "21",
+          "article": null,
+          "icon": "counterclockwise-arrows-button"
+        },
+        {
+          "say": "Like the old English nursery rhyme. Four and twenty blackbirds. German just never stopped."
+        },
+        {
+          "say": "The tens: dreißig, vierzig, fünfzig. Then sechzig, siebzig, achtzig, neunzig. And hundert.",
+          "card": {
+            "de": "30 · 40 · 50 … 100",
+            "article": null,
+            "en": "dreißig · vierzig · fünfzig … hundert",
+            "icon": "hundred-points"
+          }
+        },
+        {
+          "say": "So forty-five? Five and forty. Fünfundvierzig.",
+          "card": {
+            "de": "fünfundvierzig",
+            "article": null,
+            "en": "45",
+            "icon": null
+          }
+        },
+        {
+          "repeat": "fünfundvierzig",
+          "en": "45",
+          "article": null,
+          "icon": null
+        },
+        {
+          "say": "Your turn."
+        },
+        {
+          "quiz": "How do you say: 23?",
+          "answer": "dreiundzwanzig",
+          "article": null
+        },
+        {
+          "say": "And now, how old are you? Ich bin plus your age, plus Jahre alt.",
+          "card": {
+            "de": "Ich bin 25 Jahre alt.",
+            "article": null,
+            "en": "I'm 25 years old.",
+            "icon": "birthday-cake"
+          }
+        },
+        {
+          "repeat": "Ich bin fünfundzwanzig Jahre alt.",
+          "en": "I'm 25 years old.",
+          "article": null,
+          "icon": "birthday-cake"
+        },
+        {
+          "say": "Notice that little word: bin. It's from the most important verb in German. Which brings us to the top ten."
+        }
+      ]
+    },
+    {
+      "title": "The 10 Most Useful Verbs",
+      "lines": [
+        {
+          "say": "Ten verbs. Just two forms each: ich, meaning I, and du, meaning you, casual."
+        },
+        {
+          "say": "Good news first. Most verbs follow one pattern. Ich ends in -e. Du ends in -st.",
+          "card": {
+            "de": "ich -e · du -st",
+            "article": null,
+            "en": "the golden pattern",
+            "icon": "light-bulb"
+          }
+        },
+        {
+          "say": "Number one, sein. To be. It's irregular, so just memorize it.",
+          "card": {
+            "de": "sein: ich bin · du bist",
+            "article": null,
+            "en": "to be: I am · you are",
+            "icon": null
+          }
+        },
+        {
+          "repeat": "ich bin, du bist",
+          "en": "I am, you are",
+          "article": null,
+          "icon": null
+        },
+        {
+          "say": "Number two, haben. To have.",
+          "card": {
+            "de": "haben: ich habe · du hast",
+            "article": null,
+            "en": "to have",
+            "icon": null
+          }
+        },
+        {
+          "repeat": "ich habe, du hast",
+          "en": "I have, you have",
+          "article": null,
+          "icon": null
+        },
+        {
+          "say": "Number three, gehen. To go, on foot.",
+          "card": {
+            "de": "gehen: ich gehe · du gehst",
+            "article": null,
+            "en": "to go",
+            "icon": "person-walking-default"
+          }
+        },
+        {
+          "repeat": "ich gehe, du gehst",
+          "en": "I go, you go",
+          "article": null,
+          "icon": "person-walking-default"
+        },
+        {
+          "say": "Four, kommen. To come. You already know it from Ich komme aus.",
+          "card": {
+            "de": "kommen: ich komme · du kommst",
+            "article": null,
+            "en": "to come",
+            "icon": null
+          }
+        },
+        {
+          "say": "Five, machen. To make or do. Was machst du? What are you doing?",
+          "card": {
+            "de": "machen: ich mache · du machst",
+            "article": null,
+            "en": "to make / do",
+            "icon": null
+          }
+        },
+        {
+          "repeat": "ich mache, du machst",
+          "en": "I do, you do",
+          "article": null,
+          "icon": null
+        },
+        {
+          "say": "Six, sprechen. To speak. Careful, the vowel changes for du: sprichst.",
+          "card": {
+            "de": "sprechen: ich spreche · du sprichst",
+            "article": null,
+            "en": "to speak",
+            "icon": "speaking-head"
+          }
+        },
+        {
+          "repeat": "ich spreche, du sprichst",
+          "en": "I speak, you speak",
+          "article": null,
+          "icon": "speaking-head"
+        },
+        {
+          "say": "Seven, essen. To eat. Du isst. Two s's, one sound.",
+          "card": {
+            "de": "essen: ich esse · du isst",
+            "article": null,
+            "en": "to eat",
+            "icon": "fork-and-knife-with-plate"
+          }
+        },
+        {
+          "repeat": "ich esse, du isst",
+          "en": "I eat, you eat",
+          "article": null,
+          "icon": "fork-and-knife-with-plate"
+        },
+        {
+          "say": "Eight, trinken. To drink. Totally regular.",
+          "card": {
+            "de": "trinken: ich trinke · du trinkst",
+            "article": null,
+            "en": "to drink",
+            "icon": "teacup-without-handle"
+          }
+        },
+        {
+          "say": "Nine, möchten. Would like. The most polite verb you'll ever need.",
+          "card": {
+            "de": "möchten: ich möchte · du möchtest",
+            "article": null,
+            "en": "would like",
+            "icon": "folded-hands-default"
+          }
+        },
+        {
+          "repeat": "ich möchte, du möchtest",
+          "en": "I would like, you would like",
+          "article": null,
+          "icon": "folded-hands-default"
+        },
+        {
+          "say": "Ten, können. Can. Ich kann, du kannst.",
+          "card": {
+            "de": "können: ich kann · du kannst",
+            "article": null,
+            "en": "can",
+            "icon": "flexed-biceps-default"
+          }
+        },
+        {
+          "repeat": "ich kann, du kannst",
+          "en": "I can, you can",
+          "article": null,
+          "icon": null
+        },
+        {
+          "say": "Now, real sentences. Ich habe Hunger.",
+          "card": {
+            "de": "Ich habe Hunger.",
+            "article": null,
+            "en": "I'm hungry. (I have hunger)",
+            "icon": "face-savoring-food"
+          }
+        },
+        {
+          "repeat": "Ich habe Hunger.",
+          "en": "I'm hungry.",
+          "article": null,
+          "icon": "face-savoring-food"
+        },
+        {
+          "say": "Germans don't 'are' hungry. They 'have' hunger. Same with thirst: Ich habe Durst."
+        },
+        {
+          "say": "Now listen to how far ten verbs get you. A tiny story."
+        },
+        {
+          "say": "Ich bin Tom. Ich komme aus Kanada. Ich habe einen Hund. Ich spreche ein bisschen Deutsch, und ich trinke gern Kaffee."
+        },
+        {
+          "say": "Gern after a verb means you like doing it. Ich trinke gern Kaffee. I like drinking coffee. Handy, right?",
+          "card": {
+            "de": "Ich trinke gern Kaffee.",
+            "article": null,
+            "en": "I like drinking coffee.",
+            "icon": "hot-beverage"
+          }
+        },
+        {
+          "quiz": "How do you say: you speak, casual?",
+          "answer": "du sprichst",
+          "article": null
+        },
+        {
+          "say": "Ten verbs, done. That's the engine of the language. Now let's ask questions."
+        }
+      ]
+    },
+    {
+      "title": "Asking Questions",
+      "lines": [
+        {
+          "say": "Most question words start with W. And the W sounds like an English V. Ready?"
+        },
+        {
+          "say": "Wer. Who.",
+          "card": {
+            "de": "Wer?",
+            "article": null,
+            "en": "Who?",
+            "icon": "bust-in-silhouette"
+          }
+        },
+        {
+          "say": "Was. What.",
+          "card": {
+            "de": "Was?",
+            "article": null,
+            "en": "What?",
+            "icon": "thinking-face"
+          }
+        },
+        {
+          "say": "Wo. Where.",
+          "card": {
+            "de": "Wo?",
+            "article": null,
+            "en": "Where?",
+            "icon": "round-pushpin"
+          }
+        },
+        {
+          "say": "Wann. When.",
+          "card": {
+            "de": "Wann?",
+            "article": null,
+            "en": "When?",
+            "icon": "alarm-clock"
+          }
+        },
+        {
+          "say": "Wie. How.",
+          "card": {
+            "de": "Wie?",
+            "article": null,
+            "en": "How?",
+            "icon": "face-with-monocle"
+          }
+        },
+        {
+          "say": "Warum. Why.",
+          "card": {
+            "de": "Warum?",
+            "article": null,
+            "en": "Why?",
+            "icon": "red-question-mark"
+          }
+        },
+        {
+          "say": "And two you already met. Woher, where from. And wie viel, how much. You'll use that one in every shop."
+        },
+        {
+          "say": "Careful! Wer is who, and wo is where. It feels backwards. Say it with me."
+        },
+        {
+          "repeat": "Wer? Was? Wo?",
+          "en": "Who? What? Where?",
+          "article": null,
+          "icon": "red-question-mark"
+        },
+        {
+          "repeat": "Wann? Wie? Warum?",
+          "en": "When? How? Why?",
+          "article": null,
+          "icon": "red-question-mark"
+        },
+        {
+          "say": "Here's the only rule you need. W-word first, verb second.",
+          "card": {
+            "de": "W-word + verb + …",
+            "article": null,
+            "en": "question pattern",
+            "icon": "light-bulb"
+          }
+        },
+        {
+          "repeat": "Was machst du?",
+          "en": "What are you doing?",
+          "article": null,
+          "icon": "thinking-face"
+        },
+        {
+          "repeat": "Wo ist die Toilette?",
+          "en": "Where is the toilet?",
+          "article": "die",
+          "icon": "restroom"
+        },
+        {
+          "repeat": "Wie viel kostet das?",
+          "en": "How much does that cost?",
+          "article": null,
+          "icon": "euro-banknote"
+        },
+        {
+          "say": "And for yes or no questions? Just put the verb first. That's it."
+        },
+        {
+          "say": "Du sprichst Englisch. You speak English. Sprichst du Englisch? Do you speak English?",
+          "card": {
+            "de": "Sprichst du Englisch?",
+            "article": null,
+            "en": "Do you speak English?",
+            "icon": "speech-balloon"
+          }
+        },
+        {
+          "repeat": "Sprichst du Englisch?",
+          "en": "Do you speak English?",
+          "article": null,
+          "icon": "speech-balloon"
+        },
+        {
+          "say": "Perfect. Now you can ask things. Let's use that where it matters most. Food."
+        }
+      ]
+    },
+    {
+      "title": "Café & Restaurant",
+      "lines": [
+        {
+          "say": "You walk in. The waiter looks at you. Here's your script."
+        },
+        {
+          "say": "First, a table for two: Einen Tisch für zwei, bitte.",
+          "card": {
+            "de": "Einen Tisch für zwei, bitte.",
+            "article": "der",
+            "en": "A table for two, please.",
+            "icon": "chair"
+          }
+        },
+        {
+          "say": "Ask for the menu: Die Speisekarte, bitte.",
+          "card": {
+            "de": "die Speisekarte",
+            "article": "die",
+            "en": "the menu",
+            "icon": "books"
+          }
+        },
+        {
+          "repeat": "Die Speisekarte, bitte.",
+          "en": "The menu, please.",
+          "article": "die",
+          "icon": "books"
+        },
+        {
+          "say": "Now the magic phrase. Ich hätte gern. I would like to have. Super polite, super natural.",
+          "card": {
+            "de": "Ich hätte gern …",
+            "article": null,
+            "en": "I'd like …",
+            "icon": "sparkles"
+          }
+        },
+        {
+          "say": "Tiny bonus rule. When you order, blue der-words switch from ein to einen. Red and green stay the same."
+        },
+        {
+          "repeat": "Ich hätte gern einen Kaffee.",
+          "en": "I'd like a coffee.",
+          "article": "der",
+          "icon": "hot-beverage"
+        },
+        {
+          "repeat": "Ich hätte gern eine Cola.",
+          "en": "I'd like a cola.",
+          "article": "die",
+          "icon": "cup-with-straw"
+        },
+        {
+          "repeat": "Ich hätte gern ein Wasser.",
+          "en": "I'd like a water.",
+          "article": "das",
+          "icon": "droplet"
+        },
+        {
+          "say": "Germany tip: water usually comes sparkling. Want still water? Ohne Kohlensäure.",
+          "card": {
+            "de": "ohne Kohlensäure",
+            "article": null,
+            "en": "still (no bubbles)",
+            "icon": "potable-water"
+          }
+        },
+        {
+          "repeat": "Ein Wasser ohne Kohlensäure, bitte.",
+          "en": "A still water, please.",
+          "article": "das",
+          "icon": "potable-water"
+        },
+        {
+          "say": "Feeling bold? Ein Bier, bitte. Das Bier, so it's green.",
+          "card": {
+            "de": "das Bier",
+            "article": "das",
+            "en": "the beer",
+            "icon": "beer-mug"
+          }
+        },
+        {
+          "repeat": "Ein Bier, bitte.",
+          "en": "A beer, please.",
+          "article": "das",
+          "icon": "beer-mug"
+        },
+        {
+          "say": "And when the food arrives, Germans say Guten Appetit. When glasses clink: Prost!",
+          "card": {
+            "de": "Guten Appetit! · Prost!",
+            "article": null,
+            "en": "Enjoy your meal! · Cheers!",
+            "icon": "clinking-beer-mugs"
+          }
+        },
+        {
+          "repeat": "Prost!",
+          "en": "Cheers!",
+          "article": null,
+          "icon": "clinking-beer-mugs"
+        },
+        {
+          "say": "Delicious? One word: Lecker!",
+          "card": {
+            "de": "Lecker!",
+            "article": null,
+            "en": "Delicious!",
+            "icon": "face-savoring-food"
+          }
+        },
+        {
+          "say": "Time to pay. In Germany, the waiter won't bring the bill until you ask. So ask."
+        },
+        {
+          "repeat": "Die Rechnung, bitte.",
+          "en": "The bill, please.",
+          "article": "die",
+          "icon": "receipt"
+        },
+        {
+          "say": "Or the very German shortcut: Zahlen, bitte. Literally, 'pay, please'."
+        },
+        {
+          "say": "The waiter will ask: Zusammen oder getrennt? Together or separate? Germans split bills all the time.",
+          "card": {
+            "de": "Zusammen oder getrennt?",
+            "article": null,
+            "en": "Together or separate?",
+            "icon": "busts-in-silhouette"
+          }
+        },
+        {
+          "repeat": "Getrennt, bitte.",
+          "en": "Separately, please.",
+          "article": null,
+          "icon": "busts-in-silhouette"
+        },
+        {
+          "say": "Some places are still cash only. So check first."
+        },
+        {
+          "repeat": "Kann ich mit Karte zahlen?",
+          "en": "Can I pay by card?",
+          "article": "die",
+          "icon": "credit-card"
+        },
+        {
+          "say": "Tipping? Round up and say Stimmt so. It means 'keep the change'.",
+          "card": {
+            "de": "Stimmt so.",
+            "article": null,
+            "en": "Keep the change.",
+            "icon": "coin"
+          }
+        },
+        {
+          "say": "Let's run the whole scene. Waiter first, then you."
+        },
+        {
+          "say": "Was möchten Sie? Ich hätte gern einen Kaffee und ein Wasser, bitte. Gern!"
+        },
+        {
+          "say": "Later. Die Rechnung, bitte. Zusammen oder getrennt? Zusammen. Mit Karte, bitte. Danke! Stimmt so."
+        },
+        {
+          "say": "That's a full restaurant visit. In German. You survived."
+        },
+        {
+          "quiz": "How do you say: The bill, please?",
+          "answer": "Die Rechnung, bitte.",
+          "article": "die"
+        },
+        {
+          "say": "Fed and happy. Now, let's get you to the train station without getting lost."
+        }
+      ]
+    },
+    {
+      "title": "Directions & Transport",
+      "lines": [
+        {
+          "say": "Every question to a stranger starts with one word: Entschuldigung. Excuse me.",
+          "card": {
+            "de": "Entschuldigung!",
+            "article": null,
+            "en": "Excuse me!",
+            "icon": "person-raising-hand-default"
+          }
+        },
+        {
+          "repeat": "Entschuldigung!",
+          "en": "Excuse me!",
+          "article": null,
+          "icon": "person-raising-hand-default"
+        },
+        {
+          "say": "Long word, I know. Break it up: Ent. Schul. Di. Gung. You've got this."
+        },
+        {
+          "say": "Then: Wo ist, plus the place.",
+          "card": {
+            "de": "Wo ist der Bahnhof?",
+            "article": "der",
+            "en": "Where is the train station?",
+            "icon": "station"
+          }
+        },
+        {
+          "repeat": "Wo ist der Bahnhof?",
+          "en": "Where is the train station?",
+          "article": "der",
+          "icon": "station"
+        },
+        {
+          "repeat": "Wo ist das Hotel?",
+          "en": "Where is the hotel?",
+          "article": "das",
+          "icon": "hotel"
+        },
+        {
+          "say": "Now the answers. Three words and you can follow any directions."
+        },
+        {
+          "say": "Links. Left.",
+          "card": {
+            "de": "links",
+            "article": null,
+            "en": "left",
+            "icon": "left-arrow"
+          }
+        },
+        {
+          "say": "Rechts. Right.",
+          "card": {
+            "de": "rechts",
+            "article": null,
+            "en": "right",
+            "icon": "right-arrow"
+          }
+        },
+        {
+          "say": "Geradeaus. Straight ahead.",
+          "card": {
+            "de": "geradeaus",
+            "article": null,
+            "en": "straight ahead",
+            "icon": "up-arrow"
+          }
+        },
+        {
+          "repeat": "links, rechts, geradeaus",
+          "en": "left, right, straight ahead",
+          "article": null,
+          "icon": "up-arrow"
+        },
+        {
+          "say": "Tip: links sounds like 'links' in English, but it's left. Think: l for left. Easy."
+        },
+        {
+          "say": "Now, the transport. Watch the colors."
+        },
+        {
+          "say": "Der Bus.",
+          "card": {
+            "de": "der Bus",
+            "article": "der",
+            "en": "the bus",
+            "icon": "bus"
+          }
+        },
+        {
+          "say": "Der Zug. The train.",
+          "card": {
+            "de": "der Zug",
+            "article": "der",
+            "en": "the train",
+            "icon": "train"
+          }
+        },
+        {
+          "say": "Die U-Bahn. The subway.",
+          "card": {
+            "de": "die U-Bahn",
+            "article": "die",
+            "en": "the subway",
+            "icon": "metro"
+          }
+        },
+        {
+          "say": "Die Straßenbahn. The tram.",
+          "card": {
+            "de": "die Straßenbahn",
+            "article": "die",
+            "en": "the tram",
+            "icon": "tram"
+          }
+        },
+        {
+          "say": "Das Taxi.",
+          "card": {
+            "de": "das Taxi",
+            "article": "das",
+            "en": "the taxi",
+            "icon": "taxi"
+          }
+        },
+        {
+          "repeat": "der Bus, der Zug",
+          "en": "the bus, the train",
+          "article": "der",
+          "icon": "bus"
+        },
+        {
+          "repeat": "die U-Bahn, die Straßenbahn",
+          "en": "the subway, the tram",
+          "article": "die",
+          "icon": "metro"
+        },
+        {
+          "say": "Buying a ticket? Die Fahrkarte. Red.",
+          "card": {
+            "de": "die Fahrkarte",
+            "article": "die",
+            "en": "the ticket",
+            "icon": "ticket"
+          }
+        },
+        {
+          "repeat": "Eine Fahrkarte nach München, bitte.",
+          "en": "A ticket to Munich, please.",
+          "article": "die",
+          "icon": "ticket"
+        },
+        {
+          "say": "Notice: going to a city is nach. Nach Berlin. Nach Hamburg. Nach München."
+        },
+        {
+          "say": "Mini scene. Entschuldigung, wo ist der Bahnhof? Geradeaus und dann links. Danke! Bitte!"
+        },
+        {
+          "say": "Und dann means 'and then'. Glue words like that make you sound natural instantly."
+        },
+        {
+          "quiz": "How do you say: straight ahead?",
+          "answer": "geradeaus",
+          "article": null
+        },
+        {
+          "say": "You made it to the station. But when does your train leave? Let's learn time."
+        }
+      ]
+    },
+    {
+      "title": "Time & Days",
+      "lines": [
+        {
+          "say": "The question: Wie spät ist es? Literally, how late is it?",
+          "card": {
+            "de": "Wie spät ist es?",
+            "article": null,
+            "en": "What time is it?",
+            "icon": "mantelpiece-clock"
+          }
+        },
+        {
+          "repeat": "Wie spät ist es?",
+          "en": "What time is it?",
+          "article": null,
+          "icon": "mantelpiece-clock"
+        },
+        {
+          "say": "The answer: Es ist, number, Uhr.",
+          "card": {
+            "de": "Es ist drei Uhr.",
+            "article": null,
+            "en": "It's three o'clock.",
+            "icon": "three-oclock"
+          }
+        },
+        {
+          "repeat": "Es ist drei Uhr.",
+          "en": "It's three o'clock.",
+          "article": null,
+          "icon": "three-oclock"
+        },
+        {
+          "say": "Now the one that confuses everyone. Halb vier. Half four. But it means three thirty!",
+          "card": {
+            "de": "halb vier = 3:30",
+            "article": null,
+            "en": "half to four",
+            "icon": "three-thirty"
+          }
+        },
+        {
+          "say": "Germans think: half of the way to four. So halb always looks forward to the next hour."
+        },
+        {
+          "repeat": "Es ist halb vier.",
+          "en": "It's half past three.",
+          "article": null,
+          "icon": "three-thirty"
+        },
+        {
+          "say": "Quarter past? Viertel nach. Quarter to? Viertel vor.",
+          "card": {
+            "de": "Viertel nach · Viertel vor",
+            "article": null,
+            "en": "quarter past · quarter to",
+            "icon": "stopwatch"
+          }
+        },
+        {
+          "repeat": "Viertel nach drei",
+          "en": "quarter past three",
+          "article": null,
+          "icon": null
+        },
+        {
+          "say": "One more thing. Trains, shops and offices use the 24-hour clock. So 2 p.m. is vierzehn Uhr. And 'at' a time is um.",
+          "card": {
+            "de": "um vierzehn Uhr",
+            "article": null,
+            "en": "at 2 p.m.",
+            "icon": "two-oclock"
+          }
+        },
+        {
+          "repeat": "Der Zug kommt um vierzehn Uhr.",
+          "en": "The train arrives at 2 p.m.",
+          "article": "der",
+          "icon": "train"
+        },
+        {
+          "say": "Now, the days. Good news: they're all blue. Der Montag, der Dienstag. All der."
+        },
+        {
+          "say": "Montag, Dienstag, Mittwoch.",
+          "card": {
+            "de": "Montag · Dienstag · Mittwoch",
+            "article": "der",
+            "en": "Mon · Tue · Wed",
+            "icon": "spiral-calendar"
+          }
+        },
+        {
+          "repeat": "Montag, Dienstag, Mittwoch",
+          "en": "Monday, Tuesday, Wednesday",
+          "article": "der",
+          "icon": "spiral-calendar"
+        },
+        {
+          "say": "Donnerstag, Freitag.",
+          "card": {
+            "de": "Donnerstag · Freitag",
+            "article": "der",
+            "en": "Thu · Fri",
+            "icon": "spiral-calendar"
+          }
+        },
+        {
+          "repeat": "Donnerstag, Freitag",
+          "en": "Thursday, Friday",
+          "article": "der",
+          "icon": "spiral-calendar"
+        },
+        {
+          "say": "And the best part of the week. Samstag, Sonntag. Das Wochenende! The weekend. That one's green.",
+          "card": {
+            "de": "das Wochenende",
+            "article": "das",
+            "en": "the weekend",
+            "icon": "party-popper"
+          }
+        },
+        {
+          "repeat": "Samstag, Sonntag",
+          "en": "Saturday, Sunday",
+          "article": "der",
+          "icon": "party-popper"
+        },
+        {
+          "say": "Fun fact. Mittwoch means 'mid-week'. And Donnerstag is 'Thunder day'. Thor's day, like Thursday."
+        },
+        {
+          "say": "To say 'on Monday', use am. Am Montag. Am Freitag."
+        },
+        {
+          "say": "Three last time words: heute, morgen, gestern.",
+          "card": {
+            "de": "heute · morgen · gestern",
+            "article": null,
+            "en": "today · tomorrow · yesterday",
+            "icon": "tear-off-calendar"
+          }
+        },
+        {
+          "repeat": "heute, morgen, gestern",
+          "en": "today, tomorrow, yesterday",
+          "article": null,
+          "icon": "tear-off-calendar"
+        },
+        {
+          "quiz": "How do you say: It's three thirty?",
+          "answer": "Es ist halb vier.",
+          "article": null
+        },
+        {
+          "say": "Halb vier! If you said halb drei, you're in good company. Now, the mistakes that make Germans laugh."
+        }
+      ]
+    },
+    {
+      "title": "Polite Must-Knows & Mistakes",
+      "lines": [
+        {
+          "say": "First, the magic words. Bitte means please. And also 'you're welcome'. Two jobs, one word.",
+          "card": {
+            "de": "Bitte",
+            "article": null,
+            "en": "Please / You're welcome",
+            "icon": "folded-hands-default"
+          }
+        },
+        {
+          "repeat": "Danke! Bitte!",
+          "en": "Thanks! You're welcome!",
+          "article": null,
+          "icon": "folded-hands-default"
+        },
+        {
+          "repeat": "Es tut mir leid.",
+          "en": "I'm sorry.",
+          "article": null,
+          "icon": "pensive-face"
+        },
+        {
+          "say": "When you're lost in a conversation, these three lines save you."
+        },
+        {
+          "repeat": "Ich verstehe nicht.",
+          "en": "I don't understand.",
+          "article": null,
+          "icon": "confused-face"
+        },
+        {
+          "repeat": "Können Sie das wiederholen?",
+          "en": "Can you repeat that?",
+          "article": null,
+          "icon": "repeat-button"
+        },
+        {
+          "say": "Wait. Why Sie there, and not du? Great question."
+        },
+        {
+          "say": "Du is the friendly you. For friends, family, kids, and people your age at a party.",
+          "card": {
+            "de": "du",
+            "article": null,
+            "en": "you (casual)",
+            "icon": "people-hugging"
+          }
+        },
+        {
+          "say": "Sie, with a capital S, is the polite you. For strangers, shop staff, your boss, the police.",
+          "card": {
+            "de": "Sie",
+            "article": null,
+            "en": "you (formal)",
+            "icon": "handshake"
+          }
+        },
+        {
+          "say": "With Sie, the verb looks just like the infinitive. Sprechen Sie? Kommen Sie? Easy."
+        },
+        {
+          "say": "When in doubt, start with Sie. If they want du, they'll tell you. And they might say: Wir können uns duzen. Let's use du."
+        },
+        {
+          "say": "Oh, and Germans can sound very direct. It's not rude. It's just efficient. Like this video."
+        },
+        {
+          "repeat": "Sprechen Sie Englisch?",
+          "en": "Do you speak English? (formal)",
+          "article": null,
+          "icon": "speech-balloon"
+        },
+        {
+          "say": "Now, the mistakes. Number one. It's summer, you're sweating. Do not say 'Ich bin heiß'."
+        },
+        {
+          "say": "That means 'I'm hot'. As in, attractive. Or, let's say, in the mood."
+        },
+        {
+          "say": "What you want is Mir ist heiß. Literally, 'to me, it is hot'.",
+          "card": {
+            "de": "Mir ist heiß.",
+            "article": null,
+            "en": "I'm hot (temperature)",
+            "icon": "hot-face"
+          }
+        },
+        {
+          "repeat": "Mir ist heiß.",
+          "en": "I'm hot.",
+          "article": null,
+          "icon": "hot-face"
+        },
+        {
+          "repeat": "Mir ist kalt.",
+          "en": "I'm cold.",
+          "article": null,
+          "icon": "cold-face"
+        },
+        {
+          "say": "Mistake number two. After a big dinner, never say 'Ich bin voll'. That means 'I'm drunk'."
+        },
+        {
+          "say": "Say Ich bin satt. I'm full.",
+          "card": {
+            "de": "Ich bin satt.",
+            "article": null,
+            "en": "I'm full (after eating)",
+            "icon": "face-savoring-food"
+          }
+        },
+        {
+          "repeat": "Ich bin satt.",
+          "en": "I'm full.",
+          "article": null,
+          "icon": "face-savoring-food"
+        },
+        {
+          "say": "Mistake three. Ich will does not mean 'I will'. It means 'I want'. And it's a bit pushy. Ich möchte is nicer."
+        },
+        {
+          "repeat": "Ich möchte das, bitte.",
+          "en": "I'd like that, please.",
+          "article": null,
+          "icon": "folded-hands-default"
+        },
+        {
+          "say": "Mistake four. Bekommen is not 'become'. It means 'to get'. So Ich bekomme ein Schnitzel just means you're getting a schnitzel. Nobody is turning into food."
+        },
+        {
+          "say": "And a classic: das Gift. In German, Gift means poison. So be careful what you wish for at birthdays.",
+          "card": {
+            "de": "das Gift",
+            "article": "das",
+            "en": "the poison (not a present!)",
+            "icon": "warning"
+          }
+        },
+        {
+          "say": "A present is das Geschenk.",
+          "card": {
+            "de": "das Geschenk",
+            "article": "das",
+            "en": "the present",
+            "icon": "wrapped-gift"
+          }
+        },
+        {
+          "quiz": "You're sweating in the sun. What do you say?",
+          "answer": "Mir ist heiß.",
+          "article": null
+        },
+        {
+          "say": "You just dodged the most embarrassing beginner mistakes. Now, final round. Speed quiz."
+        }
+      ]
+    },
+    {
+      "title": "Final Speed Quiz",
+      "lines": [
+        {
+          "say": "Eight questions. Three seconds each. Answer out loud before I do. Let's go!",
+          "card": {
+            "de": "Speed Quiz!",
+            "article": null,
+            "en": "8 questions · 3 seconds",
+            "icon": "stopwatch"
+          }
+        },
+        {
+          "quiz": "How do you say: good morning?",
+          "answer": "Guten Morgen",
+          "article": null
+        },
+        {
+          "quiz": "How do you say: My name is Tom?",
+          "answer": "Ich heiße Tom.",
+          "article": null
+        },
+        {
+          "quiz": "How do you say: the house? Watch the color!",
+          "answer": "das Haus",
+          "article": "das"
+        },
+        {
+          "quiz": "How do you say: 21?",
+          "answer": "einundzwanzig",
+          "article": null
+        },
+        {
+          "quiz": "How do you say: Where is the train station?",
+          "answer": "Wo ist der Bahnhof?",
+          "article": "der"
+        },
+        {
+          "quiz": "How do you say: I'd like a coffee?",
+          "answer": "Ich hätte gern einen Kaffee.",
+          "article": "der"
+        },
+        {
+          "quiz": "How do you say: I'm full, after a meal?",
+          "answer": "Ich bin satt.",
+          "article": null
+        },
+        {
+          "quiz": "How do you say: See you tomorrow?",
+          "answer": "Bis morgen!",
+          "article": null
+        },
+        {
+          "say": "How many did you get? Tell me your score in the comments. Eight out of eight? Write Sehr gut!",
+          "card": {
+            "de": "Sehr gut!",
+            "article": null,
+            "en": "Very good!",
+            "icon": "trophy"
+          }
+        },
+        {
+          "say": "Look at you. Greetings, introductions, colors, numbers, verbs, questions, food, directions, time, and the classic mistakes. That's your A1 foundation."
+        },
+        {
+          "say": "Twenty-five minutes ago, this was just noise. Now you can greet, order, count, ask, and find your train. That is real progress."
+        },
+        {
+          "say": "Comment one German sentence about yourself. Ich heiße, ich komme aus, ich wohne in. I read them."
+        },
+        {
+          "say": "If this helped, subscribe to Fast German. German in seconds, not hours.",
+          "card": {
+            "de": "Fast German",
+            "article": null,
+            "en": "German in seconds, not hours",
+            "icon": "bell"
+          }
+        },
+        {
+          "say": "Danke fürs Zuschauen, und bis bald! Tschüss!",
+          "card": {
+            "de": "Bis bald!",
+            "article": null,
+            "en": "See you soon!",
+            "icon": "waving-hand-default"
+          }
+        }
+      ]
+    }
+  ]
+}

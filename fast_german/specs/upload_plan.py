@@ -1,0 +1,46 @@
+"""Writes upload_plan.json: titles, descriptions, tags and publish times for the first batch."""
+import json, os
+HERE = os.path.dirname(__file__)
+TAIL = ("\n\nFast German: German in seconds, not hours.\nEvery noun has a color: der = blue, die = red, das = green.\n"
+        "New short every day. Subscribe and learn German without the boring hour-long lessons.")
+TAGS = ["learn german", "german", "german language", "german for beginners", "deutsch lernen", "german words", "fast german"]
+SHORTS = [  # (spec id, one-line hook for the description, extra tags) in publish order
+ ("11_gluehbirne", "In German, a light bulb is a 'glowing pear': die Glühbirne.", ["glühbirne", "funny german words"]),
+ ("13_longest_word", "Donaudampfschifffahrtsgesellschaftskapitän, broken down word by word.", ["longest german word", "german compound words"]),
+ ("01_handschuh", "Germans call gloves 'hand shoes': der Handschuh.", ["handschuh", "funny german words"]),
+ ("12_schmetterling", "Butterfly in French, Spanish, Italian... and German: der Schmetterling.", ["schmetterling", "butterfly in german"]),
+ ("03_gift", "Das Gift means poison. A present is das Geschenk.", ["false friends german", "gift in german"]),
+ ("08_der_die_das_quiz", "Der, die or das? Five nouns, one second each.", ["der die das", "german articles quiz"]),
+ ("07_kummerspeck", "Kummerspeck: the German word for weight from stress eating.", ["kummerspeck", "untranslatable words"]),
+ ("09_denglish", "Handy, Beamer, Oldtimer, Public Viewing: English words with German meanings.", ["denglisch", "german english words"]),
+ ("04_mir_ist_heiss", "Say 'Mir ist heiß', not 'Ich bin heiß'.", ["german mistakes", "mir ist heiß"]),
+ ("10_hello", "Hallo, Moin, Servus, Grüß Gott, Na? How Germans really say hello.", ["hello in german", "moin servus"]),
+ ("02_torschlusspanik", "Torschlusspanik: the fear that time is running out.", ["torschlusspanik", "untranslatable words"]),
+ ("05_bakery", "Five words for a German bakery, and how to order.", ["german bakery", "german food words"]),
+ ("06_order_coffee", "Order coffee in German: a real café dialogue.", ["order coffee in german", "german phrases"]),
+]
+plan = []
+day, slots = 10, ["13:00", "22:00"]  # two shorts a day for the first test week (UTC)
+for i, (sid, hook, tags) in enumerate(SHORTS):
+    spec = json.load(open(os.path.join(HERE, "shorts", sid + ".json")))
+    d = day + i // 2
+    plan.append({"file": f"out/{sid}.mp4", "title": spec["title"] + (" #shorts" if "#shorts" not in spec["title"] else ""),
+                 "description": hook + TAIL + "\n\n#learngerman #german #shorts", "tags": TAGS + tags,
+                 "publishAt": f"2026-10-{d:02d}T{slots[i % 2]}:00Z"})
+LONG = [
+ ("out/L2_a1_in_25_minutes.mp4", "Learn German A1 in 25 Minutes (No Boring Grammar)", "out/thumb_L2.jpg", "2026-10-11T15:00:00Z",
+  "All the A1 basics in 25 minutes: greetings, introducing yourself, the der/die/das color trick, numbers, the 10 most useful verbs, "
+  "questions, café and restaurant phrases, directions, time and days, and the mistakes that make Germans laugh. "
+  "Repeat out loud when you see REPEAT AFTER ME, and stay for the speed quiz at the end.", ["learn german a1", "german crash course", "german basics"]),
+ ("out/L1_sleep_500_words.mp4", "Learn 500 German Words While You Sleep 😴 (Beginner)", "out/thumb_L1.jpg", "2026-10-18T15:00:00Z",
+  "500 useful beginner German words with a calm voice, a picture and an example sentence, then a gentle review. "
+  "Soft rain in the background, dark screen. Just listen and relax.", ["learn german while you sleep", "german vocabulary", "sleep learning"]),
+ ("out/L3_kitchen_dictionary.mp4", "German Picture Dictionary: The Kitchen (der/die/das colors)", "out/thumb_L3.jpg", "2026-10-25T15:00:00Z",
+  "43 kitchen words with pictures, colors and example sentences, then a picture quiz. Blue = der, red = die, green = das.",
+  ["german picture dictionary", "kitchen in german", "german vocabulary"]),
+]
+for f, title, thumb, at, desc, tags in LONG:
+    plan.append({"file": f, "title": title, "thumb": thumb, "publishAt": at, "description": desc + TAIL + "\n\n#learngerman #german",
+                 "tags": TAGS + tags})
+json.dump(plan, open(os.path.join(HERE, "..", "upload_plan.json"), "w"), ensure_ascii=False, indent=1)
+print(len(plan))
