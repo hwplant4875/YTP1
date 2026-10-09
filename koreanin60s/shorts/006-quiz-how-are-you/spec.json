@@ -1,0 +1,305 @@
+{
+ "label": "WOULD A KOREAN SAY THIS? 🎯",
+ "labelColor": "#D99A00",
+ "pose0": "o_x_quiz",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Quiz! How do Koreans really say: how are you?",
+   "pose": "o_x_quiz",
+   "cap": "<b class='c-y'>Quiz!</b> How do Koreans <b>really</b> say \"how are you?\" 🤔"
+  },
+  {
+   "k": "qa",
+   "say": "어떻게 지내세요?",
+   "pose": "thinking",
+   "gap": 0.4,
+   "lang": "ko",
+   "rom": "eo-tteo-ke ji-nae-se-yo",
+   "c": "y",
+   "show": "A. 어떻게 지내세요?"
+  },
+  {
+   "k": "qb",
+   "say": "밥 먹었어?",
+   "pose": "thinking",
+   "gap": 0.4,
+   "lang": "ko",
+   "rom": "bap meo-geo-sseo",
+   "c": "y",
+   "show": "B. 밥 먹었어?"
+  },
+  {
+   "k": "q2",
+   "say": "Which one would a Korean actually say? Three, two, one.",
+   "pose": "clock",
+   "cap": "Which one would a Korean <b class='c-y'>actually</b> say? ⏳"
+  },
+  {
+   "k": "r1",
+   "say": "It's B!",
+   "pose": "correct_o",
+   "cap": "It's <b class='c-m'>B!</b> 🎉",
+   "gap": 0.5
+  },
+  {
+   "k": "r2",
+   "say": "밥 먹었어?",
+   "pose": "rice_bowl",
+   "lang": "ko",
+   "rom": "bap meo-geo-sseo",
+   "c": "m",
+   "show": "밥 먹었어?"
+  },
+  {
+   "k": "r3",
+   "say": "Literally: did you eat? It's how Koreans check on people they care about.",
+   "pose": "rice_bowl",
+   "cap": "Literally: <b class='c-m'>did you eat?</b> It's how Koreans show they <b class='c-p'>care</b> 💛"
+  },
+  {
+   "k": "r4",
+   "say": "A isn't wrong, but it sounds like a textbook.",
+   "pose": "smug",
+   "cap": "A isn't wrong... but it sounds like a <b class='c-k'>textbook</b> 📖",
+   "gap": 0.45
+  },
+  {
+   "k": "b0",
+   "say": "Haven't seen a friend in a while? Say",
+   "pose": "hi_wave",
+   "cap": "Haven't seen a friend in a while? Say",
+   "gap": 0.45
+  },
+  {
+   "k": "b1",
+   "say": "잘 지냈어?",
+   "pose": "love_heart",
+   "lang": "ko",
+   "rom": "jal ji-naen-sseo",
+   "c": "b",
+   "show": "잘 지냈어?"
+  },
+  {
+   "k": "b1e",
+   "say": "Have you been well?",
+   "pose": "love_heart",
+   "cap": "<b class='c-b'>Have you been well?</b> 🤗"
+  },
+  {
+   "k": "e0",
+   "say": "Now tell me, what did you eat today?",
+   "pose": "ramen",
+   "cap": "Now tell me... <b class='c-p'>what did you eat today?</b> 👇",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "chip",
+     "html": "QUIZ 🎯",
+     "c": "y",
+     "y": 340,
+     "at": "h1"
+    },
+    {
+     "type": "txt",
+     "html": "How do Koreans say<br>\"<span class='c-y'>How are you?</span>\"",
+     "size": 92,
+     "y": 540,
+     "at": "h1+0.2",
+     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+    },
+    {
+     "type": "box",
+     "html": "<div style='display:flex;align-items:center;gap:28px;width:840px'><div class='chip bg-y' style='font-size:40px;padding:10px 24px'>A</div><div style='text-align:left;flex:1'><div class='c-y' style='font-family:Jua;font-size:80px;line-height:1.05'>어떻게 지내세요?</div><div style='font-family:Fredoka;font-weight:600;font-size:36px;color:#A8968F'>eo-tteo-ke ji-nae-se-yo</div></div><div style='font-size:72px'></div></div>",
+     "w": 960,
+     "pad": 26,
+     "y": 800,
+     "at": "qa",
+     "anim": "left"
+    },
+    {
+     "type": "box",
+     "html": "<div style='display:flex;align-items:center;gap:28px;width:840px'><div class='chip bg-y' style='font-size:40px;padding:10px 24px'>B</div><div style='text-align:left;flex:1'><div class='c-y' style='font-family:Jua;font-size:80px;line-height:1.05'>밥 먹었어?</div><div style='font-family:Fredoka;font-weight:600;font-size:36px;color:#A8968F'>bap meo-geo-sseo</div></div><div style='font-size:72px'></div></div>",
+     "w": 960,
+     "pad": 26,
+     "y": 1040,
+     "at": "qb",
+     "anim": "right",
+     "hl": "r1"
+    },
+    {
+     "type": "stamp",
+     "html": "3",
+     "c": "p",
+     "size": 110,
+     "x": 930,
+     "y": 330,
+     "at": "q2@end-1.5",
+     "anim": "stamp",
+     "out": "q2@end-1.0",
+     "sfx": "none"
+    },
+    {
+     "type": "stamp",
+     "html": "2",
+     "c": "p",
+     "size": 110,
+     "x": 930,
+     "y": 330,
+     "at": "q2@end-1.0",
+     "anim": "stamp",
+     "out": "q2@end-0.5",
+     "sfx": "none"
+    },
+    {
+     "type": "stamp",
+     "html": "1",
+     "c": "p",
+     "size": 110,
+     "x": 930,
+     "y": 330,
+     "at": "q2@end-0.5",
+     "anim": "stamp",
+     "out": "q2@end",
+     "sfx": "none"
+    }
+   ]
+  },
+  {
+   "from": "r2",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🍚",
+     "size": 220,
+     "y": 440,
+     "at": "r2",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "밥 먹었어?",
+     "rom": "bap meo-geo-sseo",
+     "en": "did you eat?",
+     "c": "m",
+     "size": 150,
+     "w": 900,
+     "y": 780,
+     "at": "r2"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:54px'>= I <span class='c-p'>care</span> about you 💛</div>",
+     "w": 760,
+     "pad": 18,
+     "y": 1080,
+     "at": "r3+1.6",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "r4",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "📖🤓",
+     "size": 160,
+     "y": 420,
+     "at": "r4",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "어떻게 지내세요?",
+     "rom": "eo-tteo-ke ji-nae-se-yo",
+     "en": "correct, but... 📖",
+     "c": "k",
+     "size": 100,
+     "w": 940,
+     "y": 700,
+     "at": "r4"
+    },
+    {
+     "type": "stamp",
+     "html": "TEXTBOOK MODE 🤖",
+     "c": "k",
+     "size": 76,
+     "y": 1010,
+     "at": "r4+1.3",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "b0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "👋🤗",
+     "size": 170,
+     "y": 440,
+     "at": "b0",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "잘 지냈어?",
+     "rom": "jal ji-naen-sseo",
+     "en": "have you been well?",
+     "c": "b",
+     "size": 150,
+     "w": 860,
+     "y": 780,
+     "at": "b1"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:44px'>for a friend you haven't seen in a while</div>",
+     "w": 900,
+     "pad": 18,
+     "y": 1080,
+     "at": "b1e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "sticker",
+     "name": "ramen",
+     "w": 400,
+     "y": 560,
+     "at": "e0",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 900,
+     "at": "e0+0.3",
+     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px'>What did you eat today? 🍜👇</div>",
+     "w": 900,
+     "pad": 22,
+     "y": 1070,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

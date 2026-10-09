@@ -1,0 +1,339 @@
+{
+ "label": "ORDER LIKE A LOCAL ☕",
+ "labelColor": "#3BAF95",
+ "pose0": "iced_coffee",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Here's how to order coffee in Korea, like a local.",
+   "pose": "iced_coffee",
+   "cap": "How to order coffee in Korea, <b class='c-m'>like a local</b> ☕"
+  },
+  {
+   "k": "o0",
+   "say": "Step one: the order.",
+   "pose": "talk",
+   "cap": "<b class='c-m'>Step 1:</b> the order.",
+   "gap": 0.4
+  },
+  {
+   "k": "o1",
+   "say": "아이스 아메리카노 한 잔 주세요.",
+   "pose": "iced_coffee",
+   "lang": "ko",
+   "rom": "a-i-seu a-me-ri-ka-no han jan ju-se-yo",
+   "c": "m",
+   "show": "아이스 아메리카노<br>한 잔 주세요"
+  },
+  {
+   "k": "o1e",
+   "say": "One iced Americano, please.",
+   "pose": "correct_o",
+   "cap": "One <b class='c-m'>iced Americano</b>, please."
+  },
+  {
+   "k": "o2a",
+   "say": "한 잔.",
+   "pose": "teacher",
+   "gap": 0.35,
+   "lang": "ko",
+   "rom": "han jan",
+   "c": "b",
+   "show": "한 잔"
+  },
+  {
+   "k": "o2b",
+   "say": "One cup.",
+   "pose": "teacher",
+   "cap": "<b class='c-b'>One cup.</b>"
+  },
+  {
+   "k": "o2c",
+   "say": "주세요.",
+   "pose": "teacher",
+   "lang": "ko",
+   "rom": "ju-se-yo",
+   "c": "p",
+   "show": "주세요"
+  },
+  {
+   "k": "o2d",
+   "say": "Please give me. Works for anything you want.",
+   "pose": "excited",
+   "cap": "<b class='c-p'>Please give me.</b> Works for anything!"
+  },
+  {
+   "k": "s0",
+   "say": "Step two: they'll ask, for here or to go?",
+   "pose": "thinking",
+   "cap": "<b class='c-m'>Step 2:</b> for here, or to go?",
+   "gap": 0.45
+  },
+  {
+   "k": "s1",
+   "say": "For here:",
+   "pose": "talk"
+  },
+  {
+   "k": "s1k",
+   "say": "여기서 먹을게요.",
+   "pose": "rice_bowl",
+   "lang": "ko",
+   "rom": "yeo-gi-seo meo-geul-ge-yo",
+   "c": "b",
+   "show": "여기서 먹을게요"
+  },
+  {
+   "k": "s2",
+   "say": "To go:",
+   "pose": "talk"
+  },
+  {
+   "k": "s2k",
+   "say": "포장이요.",
+   "pose": "suitcase",
+   "lang": "ko",
+   "rom": "po-jang-i-yo",
+   "c": "p",
+   "show": "포장이요"
+  },
+  {
+   "k": "s3",
+   "say": "Or just say",
+   "pose": "smug"
+  },
+  {
+   "k": "s3k",
+   "say": "테이크아웃이요.",
+   "pose": "laugh_flap",
+   "lang": "ko",
+   "rom": "te-i-keu-a-ut-i-yo",
+   "c": "y",
+   "show": "테이크아웃이요"
+  },
+  {
+   "k": "s3e",
+   "say": "Yes, really. Takeout, in Korean.",
+   "pose": "laugh_tears",
+   "cap": "Yes, really. <b class='c-y'>Takeout</b>, in Korean 😂"
+  },
+  {
+   "k": "b0",
+   "say": "Bonus! Koreans drink iced coffee, even in winter. There's a word for it:",
+   "pose": "cold_scarf",
+   "cap": "<b class='c-b'>Bonus!</b> Iced coffee, even in winter 🥶",
+   "gap": 0.45
+  },
+  {
+   "k": "b1k",
+   "say": "얼죽아!",
+   "pose": "fired_up",
+   "lang": "ko",
+   "rom": "eol-juk-a",
+   "c": "b",
+   "show": "얼죽아!"
+  },
+  {
+   "k": "b1e",
+   "say": "Iced Americano, even if I freeze to death.",
+   "pose": "iced_coffee",
+   "cap": "<b class='c-b'>Iced Americano</b>, even if I freeze to death 🧊"
+  },
+  {
+   "k": "e0",
+   "say": "Are you team iced coffee too? Comment below!",
+   "pose": "love_heart",
+   "cap": "Are you team <b class='c-b'>얼죽아</b> too? 👇",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "sticker",
+     "name": "iced_coffee",
+     "w": 420,
+     "y": 560,
+     "at": "h1",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Order coffee<br>like a <span class='c-m'>local</span> ☕",
+     "size": 110,
+     "y": 930,
+     "at": "h1+0.5",
+     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+    }
+   ]
+  },
+  {
+   "from": "o0",
+   "els": [
+    {
+     "type": "chip",
+     "html": "STEP 1 · ORDER",
+     "c": "m",
+     "y": 340,
+     "at": "o0"
+    },
+    {
+     "type": "word",
+     "ko": "아이스 아메리카노<br>한 잔 주세요",
+     "rom": "a-i-seu a-me-ri-ka-no han jan ju-se-yo",
+     "en": "One iced Americano, please",
+     "c": "m",
+     "size": 96,
+     "w": 960,
+     "y": 620,
+     "at": "o1"
+    },
+    {
+     "type": "word",
+     "ko": "한 잔",
+     "en": "one cup",
+     "c": "b",
+     "size": 100,
+     "w": 440,
+     "x": 290,
+     "y": 1010,
+     "at": "o2a"
+    },
+    {
+     "type": "word",
+     "ko": "주세요",
+     "en": "please give me",
+     "c": "p",
+     "size": 100,
+     "w": 440,
+     "x": 790,
+     "y": 1010,
+     "at": "o2c"
+    }
+   ]
+  },
+  {
+   "from": "s0",
+   "els": [
+    {
+     "type": "chip",
+     "html": "STEP 2 · HERE OR TO GO?",
+     "c": "b",
+     "y": 340,
+     "at": "s0"
+    },
+    {
+     "type": "word",
+     "ko": "여기서 먹을게요",
+     "rom": "yeo-gi-seo meo-geul-ge-yo",
+     "en": "🪑 for here",
+     "c": "b",
+     "size": 100,
+     "w": 940,
+     "y": 580,
+     "at": "s1k"
+    },
+    {
+     "type": "word",
+     "ko": "포장이요",
+     "rom": "po-jang-i-yo",
+     "en": "🛍️ to go",
+     "c": "p",
+     "size": 90,
+     "w": 450,
+     "x": 290,
+     "y": 905,
+     "at": "s2k"
+    },
+    {
+     "type": "word",
+     "ko": "테이크<br>아웃이요",
+     "rom": "te-i-keu-a-ut-i-yo",
+     "en": "🛍️ takeout",
+     "c": "y",
+     "size": 70,
+     "w": 450,
+     "x": 790,
+     "y": 905,
+     "at": "s3k"
+    },
+    {
+     "type": "stamp",
+     "html": "YES, REALLY 😂",
+     "c": "y",
+     "size": 66,
+     "x": 760,
+     "y": 1150,
+     "at": "s3e",
+     "anim": "stamp",
+     "rot": -5
+    }
+   ]
+  },
+  {
+   "from": "b0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "❄️☃️🧊",
+     "size": 140,
+     "y": 430,
+     "at": "b0+0.3",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "얼죽아",
+     "rom": "eol-juk-a",
+     "en": "iced Americano or death",
+     "c": "b",
+     "size": 200,
+     "w": 760,
+     "y": 750,
+     "at": "b1k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;line-height:1.35'><span class='c-b' style='font-family:Jua;font-size:64px'>얼</span>어 <span class='c-b' style='font-family:Jua;font-size:64px'>죽</span>어도 <span class='c-b' style='font-family:Jua;font-size:64px'>아</span>이스<br>freeze · die · still iced</div>",
+     "w": 820,
+     "pad": 20,
+     "y": 1080,
+     "at": "b1e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "sticker",
+     "name": "cold_scarf",
+     "w": 400,
+     "y": 560,
+     "at": "e0",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 900,
+     "at": "e0+0.3",
+     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px'>Team 얼죽아? 🧊 Comment below 👇</div>",
+     "w": 900,
+     "pad": 22,
+     "y": 1070,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

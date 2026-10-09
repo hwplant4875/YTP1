@@ -1,0 +1,447 @@
+{
+ "label": "WORDS THAT MAKE NO SENSE 😂",
+ "labelColor": "#E8678A",
+ "pose0": "shocked",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "These Korean words make zero sense... if you translate them literally.",
+   "cap": "These Korean words make <b class='c-p'>zero sense</b>... if you translate them literally.",
+   "pose": "shocked"
+  },
+  {
+   "k": "w1",
+   "say": "Goosebumps? In Korean, that's",
+   "cap": "Goosebumps? In Korean, that's",
+   "pose": "talk",
+   "gap": 0.35
+  },
+  {
+   "k": "w1k",
+   "say": "닭살.",
+   "lang": "ko",
+   "show": "닭살",
+   "rom": "dak-sal",
+   "c": "y",
+   "pose": "excited"
+  },
+  {
+   "k": "w1e",
+   "say": "Literally: chicken skin.",
+   "cap": "Literally: <b class='c-y'>chicken skin</b> 🐔",
+   "pose": "laugh_flap"
+  },
+  {
+   "k": "w2",
+   "say": "Tears?",
+   "pose": "thinking",
+   "gap": 0.4
+  },
+  {
+   "k": "w2k",
+   "say": "눈물.",
+   "lang": "ko",
+   "show": "눈물",
+   "rom": "nun-mul",
+   "c": "b",
+   "pose": "crying"
+  },
+  {
+   "k": "w2e",
+   "say": "Eye water.",
+   "cap": "<b class='c-b'>Eye water</b> 💧",
+   "pose": "crying"
+  },
+  {
+   "k": "w3",
+   "say": "And a runny nose?",
+   "pose": "thinking"
+  },
+  {
+   "k": "w3k",
+   "say": "콧물.",
+   "lang": "ko",
+   "show": "콧물",
+   "rom": "kon-mul",
+   "c": "m",
+   "pose": "cold_scarf"
+  },
+  {
+   "k": "w3e",
+   "say": "Nose water. Very logical.",
+   "cap": "<b class='c-m'>Nose water.</b> Very logical.",
+   "pose": "smug"
+  },
+  {
+   "k": "w4",
+   "say": "Korea's famous barbecue?",
+   "pose": "thinking",
+   "gap": 0.4
+  },
+  {
+   "k": "w4k",
+   "say": "불고기.",
+   "lang": "ko",
+   "show": "불고기",
+   "rom": "bul-go-gi",
+   "c": "p",
+   "pose": "fired_up"
+  },
+  {
+   "k": "w4e",
+   "say": "Fire meat!",
+   "cap": "<b class='c-p'>Fire meat!</b> 🔥",
+   "pose": "fired_up"
+  },
+  {
+   "k": "t0",
+   "say": "But here's the best one.",
+   "cap": "But here's the <b class='c-k'>best one</b>.",
+   "pose": "excited",
+   "gap": 0.45
+  },
+  {
+   "k": "t1",
+   "say": "When something is super frustrating, Koreans call it",
+   "cap": "When something is <b class='c-k'>super frustrating</b>, Koreans call it",
+   "pose": "angry"
+  },
+  {
+   "k": "t1k",
+   "say": "고구마.",
+   "lang": "ko",
+   "show": "고구마",
+   "rom": "go-gu-ma",
+   "c": "k",
+   "pose": "angry"
+  },
+  {
+   "k": "t2",
+   "say": "Sweet potato! Like eating a dry sweet potato with no water.",
+   "cap": "<b class='c-k'>Sweet potato!</b> Like eating a dry one with no water 😵",
+   "pose": "shocked"
+  },
+  {
+   "k": "t3",
+   "say": "And when it finally gets solved?",
+   "pose": "thinking",
+   "gap": 0.35
+  },
+  {
+   "k": "t3k",
+   "say": "사이다!",
+   "lang": "ko",
+   "show": "사이다!",
+   "rom": "sa-i-da",
+   "c": "m",
+   "pose": "jump"
+  },
+  {
+   "k": "t4",
+   "say": "Cider! Like a cold soda after that sweet potato.",
+   "cap": "<b class='c-m'>Cider!</b> Like a cold soda after that sweet potato 🥤",
+   "pose": "laugh_flap"
+  },
+  {
+   "k": "e0",
+   "say": "What's the weirdest word in your language? Comment below!",
+   "cap": "What's the weirdest word in <b class='c-p'>YOUR</b> language? 👇",
+   "pose": "love_heart",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean words that<br>make <span class='c-p'>NO</span> sense",
+     "size": 104,
+     "y": 660,
+     "at": "h1",
+     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+    },
+    {
+     "type": "emoji",
+     "e": "🐔💧🔥🍠",
+     "size": 120,
+     "y": 430,
+     "at": "h1+0.6",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "stamp",
+     "html": "literally 🤯",
+     "c": "p",
+     "size": 86,
+     "y": 960,
+     "at": "h1@end-0.6",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "w1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🐔",
+     "size": 230,
+     "y": 420,
+     "at": "w1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "닭살",
+     "rom": "dak-sal",
+     "en": "goosebumps",
+     "c": "y",
+     "size": 200,
+     "w": 640,
+     "y": 760,
+     "at": "w1k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:58px'><span class='c-y' style='font-family:Jua;font-size:76px'>닭</span> chicken &nbsp;+&nbsp; <span class='c-y' style='font-family:Jua;font-size:76px'>살</span> skin</div>",
+     "w": 860,
+     "pad": 20,
+     "y": 1075,
+     "at": "w1e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "w2",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "👁️",
+     "size": 150,
+     "y": 395,
+     "x": 290,
+     "at": "w2",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "눈물",
+     "rom": "nun-mul",
+     "en": "tears",
+     "c": "b",
+     "size": 150,
+     "w": 450,
+     "x": 290,
+     "y": 660,
+     "at": "w2k"
+    },
+    {
+     "type": "txt",
+     "html": "<span class='c-b' style='font-family:Jua'>눈</span> eye + <span class='c-b' style='font-family:Jua'>물</span> water",
+     "size": 46,
+     "w": 480,
+     "x": 290,
+     "y": 930,
+     "at": "w2e",
+     "anim": "up"
+    },
+    {
+     "type": "emoji",
+     "e": "👃",
+     "size": 150,
+     "y": 395,
+     "x": 790,
+     "at": "w3",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "콧물",
+     "rom": "kon-mul",
+     "en": "runny nose",
+     "c": "m",
+     "size": 150,
+     "w": 450,
+     "x": 790,
+     "y": 660,
+     "at": "w3k"
+    },
+    {
+     "type": "txt",
+     "html": "<span class='c-m' style='font-family:Jua'>코</span> nose + <span class='c-m' style='font-family:Jua'>물</span> water",
+     "size": 46,
+     "w": 480,
+     "x": 790,
+     "y": 930,
+     "at": "w3e",
+     "anim": "up"
+    },
+    {
+     "type": "stamp",
+     "html": "VERY LOGICAL ✅",
+     "c": "m",
+     "size": 70,
+     "y": 1080,
+     "at": "w3e+0.7",
+     "anim": "stamp",
+     "rot": -4
+    }
+   ]
+  },
+  {
+   "from": "w4",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🔥🥩",
+     "size": 190,
+     "y": 410,
+     "at": "w4",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "불고기",
+     "rom": "bul-go-gi",
+     "en": "Korean BBQ",
+     "c": "p",
+     "size": 190,
+     "w": 760,
+     "y": 740,
+     "at": "w4k"
+    },
+    {
+     "type": "stamp",
+     "html": "FIRE + MEAT 🔥",
+     "c": "p",
+     "size": 84,
+     "y": 1060,
+     "at": "w4e",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "t0",
+   "els": [
+    {
+     "type": "chip",
+     "html": "⭐ THE BEST ONE ⭐",
+     "c": "k",
+     "y": 340,
+     "at": "t0"
+    },
+    {
+     "type": "emoji",
+     "e": "🍠",
+     "size": 200,
+     "y": 500,
+     "at": "t1",
+     "anim": "spin",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "고구마",
+     "rom": "go-gu-ma",
+     "en": "so frustrating 😤",
+     "c": "k",
+     "size": 180,
+     "w": 760,
+     "y": 790,
+     "at": "t1k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:48px'>dry sweet potato, <span class='c-p'>no water</span> 😵</div>",
+     "w": 820,
+     "pad": 20,
+     "y": 1110,
+     "at": "t2+0.9",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "t3",
+   "els": [
+    {
+     "type": "word",
+     "ko": "고구마",
+     "rom": "frustrating",
+     "c": "k",
+     "size": 120,
+     "w": 450,
+     "x": 290,
+     "y": 560,
+     "at": "t3",
+     "dim": "t3k"
+    },
+    {
+     "type": "word",
+     "ko": "사이다",
+     "rom": "satisfying",
+     "c": "m",
+     "size": 120,
+     "w": 450,
+     "x": 790,
+     "y": 560,
+     "at": "t3k",
+     "hl": "t4"
+    },
+    {
+     "type": "emoji",
+     "e": "🍠 ➜ 🥤",
+     "size": 150,
+     "y": 860,
+     "at": "t4",
+     "anim": "up"
+    },
+    {
+     "type": "stamp",
+     "html": "SO SATISFYING 🥤",
+     "c": "m",
+     "size": 76,
+     "y": 1060,
+     "at": "t4@end-0.9",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "sticker",
+     "name": "love_heart",
+     "w": 400,
+     "y": 560,
+     "at": "e0",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 900,
+     "at": "e0+0.3",
+     "style": "font-family:Jua;font-weight:400"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px'>Your language's weirdest word? 👇</div>",
+     "w": 900,
+     "pad": 22,
+     "y": 1070,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

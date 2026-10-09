@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+"""Korean in 60s short engine: spec.json -> voice (ElevenLabs Jennie) -> timeline -> audio mix -> short.html.
+Render with: NODE_PATH=/opt/node22/lib/node_modules node render.js <outdir>"""
+import json, os, sys, hashlib, subprocess, urllib.request, base64, re
+import numpy as np, wave
+HERE = os.path.dirname(os.path.abspath(__file__))
+STK = os.path.join(HERE, "..", "assets", "baepsae")
+VOICE = "z6Kj0hecH20CdetSElRT"  # Jennie
+CACHE = os.path.expanduser("~/.cache/k60_tts"); os.makedirs(CACHE, exist_ok=True)
+SR = 48000
+
+def tts(text, lang):
+    h = hashlib.sha1(f"{VOICE}|{lang}|{text}".encode()).hexdigest()[:16]
+    mp3 = f"{CACHE}/{h}.mp3"; wav = f"{CACHE}/{h}.wav"
+    if not os.path.exists(wav) and os.environ.get("K60_DRY"):
+        # layout preview without spending TTS credits: estimate the spoken length
+        n = len(re.sub(r"[^가-힣]", "", text))
+        return None, (0.32 * n + 0.25 if lang == "ko" else len(text) / 14.5 + 0.2)
+    if not os.path.exists(wav):
+        body = {"text": text, "model_id": "eleven_multilingual_v2",
+                "voice_settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.4, "use_speaker_boost": True}}
+        if lang == "ko": body["language_code"] = "ko"
+        subprocess.run(["curl", "-sSf", "-X", "POST", f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE}?output_format=mp3_44100_192",
+            "-H", "xi-api-key: " + os.environ["ELEVENLABS_API_KEY"], "-H", "Content-Type: application/json",
+            "-d", json.dumps(body), "-o", mp3], check=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", mp3, "-af",
+            "silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse",
+            "-ar", str(SR), "-ac", "2", wav], check=True)
+    d = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", wav]))
+    return wav, d
+
+def resolve(at, T):
+    # "key", "key@end", "key+0.3", "key@end-0.2", or number
+    if isinstance(at, (int, float)): return float(at)
+    m = re.match(r"^([\w]+)(@end)?([+-][\d.]+)?$", at)
+    k, end, off = m.group(1), m.group(2), m.group(3)
+    t = T[k][1] if end else T[k][0]
+    return t + (float(off) if off else 0.0)
+
+def build(spec_path, out):
+    spec = json.load(open(spec_path)); os.makedirs(out, exist_ok=True)
+    # 1. voice + timeline
+    T = {}; t = 0.0; wavs = []
+    for ln in spec["lines"]:
+        wav, d = tts(ln["say"], ln.get("lang", "en"))
+        t += ln.get("gap", 0.25 if t > 0 else 0.3)
+        T[ln["k"]] = [round(t, 3), round(t + d, 3)]; wavs.append((wav, t)); t += d
+    END = round(t + spec.get("tail", 1.8), 3); T["END"] = [END, END]
+    # 2. scenes + elements absolute times
+    scenes = []
+    for i, sc in enumerate(spec["scenes"]):
+        s0 = 0.0 if i == 0 else resolve(sc["from"], T) - 0.22
+        scenes.append({"id": f"sc{i}", "t0": s0, "els": sc["els"], "bg": sc.get("bg")})
+    for i, sc in enumerate(scenes):
+        sc["t1"] = scenes[i + 1]["t0"] if i + 1 < len(scenes) else END + 1
+        for j, e in enumerate(sc["els"]):
+            e["id"] = f"{sc['id']}e{j}"
+            e["t"] = max(sc["t0"] + 0.12, resolve(e.get("at", sc["els"][0].get("at", 0)), T) + e.get("lead", -0.04)) if "at" in e else sc["t0"] + 0.15 + 0.08 * j
+            for key in ("out", "hl", "dim"):
+                if key in e: e[key + "T"] = resolve(e[key], T)
+    # 3. captions + poses
+    caps, poses = [], []
+    for ln in spec["lines"]:
+        a, b = T[ln["k"]]
+        if ln.get("lang") == "ko":
+            html = f'<span class="kor {ln.get("c","k")}">{ln.get("show", ln["say"])}</span>' + (f'<span class="rom">{ln["rom"]}</span>' if ln.get("rom") else "")
+        else:
+            html = ln.get("cap", ln["say"])
+        caps.append({"t0": a - 0.05, "t1": b + 0.15, "html": html})
+        if "pose" in ln: poses.append([a - 0.05, ln["pose"]])
+    if not poses or poses[0][0] > 0.01: poses.insert(0, [0, spec.get("pose0", "hi_wave")])
+    stickers = sorted({p for _, p in poses} | {e["name"] for sc in scenes for e in sc["els"] if e["type"] == "sticker"})
+    imgs = {n: "data:image/png;base64," + base64.b64encode(open(f"{STK}/{n}.png", "rb").read()).decode() for n in stickers}
+    data = {"T": T, "END": END, "scenes": scenes, "caps": caps, "poses": poses, "label": spec.get("label", ""), "labelColor": spec.get("labelColor", "#1C1718")}
+    html = open(os.path.join(HERE, "template.html")).read().replace("/*DATA*/", "const D=" + json.dumps(data, ensure_ascii=False) + ";const IMG=" + json.dumps(imgs) + ";")
+    open(f"{out}/short.html", "w").write(html)
+    json.dump({"T": T, "END": END}, open(f"{out}/timeline.json", "w"))
+    # 4. audio
+    mix_audio(out, wavs, scenes, END)
+    print(out, "END", END)
+
+def mix_audio(out, wavs, scenes, END):
+    rng = np.random.default_rng(1); N = int((END + 0.4) * SR)
+    def env(n, a=.003, d=.2):
+        tt = np.arange(n) / SR; e = np.exp(-tt / d); k = max(1, int(a * SR)); e[:k] *= np.linspace(0, 1, k); return e
+    def sweep(f0, f1, dur, d, g):
+        n = int(dur * SR); f = np.linspace(f0, f1, n); return np.sin(2 * np.pi * np.cumsum(f) / SR) * env(n, .001, d) * g
+    pop = sweep(900, 300, .12, .035, .5)
+    thud = sweep(140, 45, .35, .12, .9)
+    def whoosh():
+        n = int(.45 * SR); x = rng.standard_normal(n); y = np.zeros(n); s = 0; a = np.linspace(.02, .35, n)
+        for i in range(n): s += a[i] * (x[i] - s); y[i] = s
+        y = y - np.convolve(y, np.ones(40) / 40, 'same'); return y * np.sin(np.linspace(0, np.pi, n)) ** 2 * 1.3
+    wh = whoosh()
+    n = int(1.0 * SR); tt = np.arange(n) / SR
+    ding = sum(np.sin(2 * np.pi * f * tt) * g for f, g in [(1568, 1), (2349, .45), (3136, .25)]) * env(n, .002, .28) * .26
+    n = int(.5 * SR); tt = np.arange(n) / SR
+    buzz = (np.sign(np.sin(2 * np.pi * 110 * tt)) * .5 + np.sin(2 * np.pi * 116 * tt) * .5) * env(n, .002, .25) * .18
+    sfx = np.zeros(N)
+    def put(x, t, g=1.0):
+        i = int(max(0, t) * SR); j = min(N, i + len(x))
+        if i < N: sfx[i:j] += x[:j - i] * g
+    for i, sc in enumerate(scenes):
+        if i: put(wh, sc["t0"] - .05, .8)
+        for e in sc["els"]:
+            if e["type"] == "stamp": put(thud, e["t"])
+            elif e.get("sfx") == "ding": put(ding, e["t"])
+            elif e.get("sfx") == "buzz": put(buzz, e["t"])
+            elif e.get("sfx") != "none": put(pop, e["t"], .75)
+            if "hlT" in e: put(ding, e["hlT"])
+            if "dimT" in e: put(buzz, e["dimT"])
+    # music: 100bpm C G Am F pluck + kick + hat
+    bpm = 100; beat = 60 / bpm; mus = np.zeros(N)
+    chords = [[261.6, 329.6, 392.0], [196.0, 246.9, 293.7], [220.0, 261.6, 329.6], [174.6, 220.0, 261.6]]
+    def pluck(f, dur=.5, g=.11):
+        n = int(dur * SR); tt = np.arange(n) / SR
+        return (np.sin(2 * np.pi * f * tt) + .3 * np.sin(2 * np.pi * 2 * f * tt) + .1 * np.sin(2 * np.pi * 3 * f * tt)) * env(n, .004, .18) * g
+    kick = sweep(110, 40, .25, .09, .45)
+    def add(x, t):
+        i = int(t * SR); j = min(N, i + len(x))
+        if i < N: mus[i:j] += x[:j - i]
+    b = 0; t = 0.0
+    while t < END:
+        c = chords[(b // 4) % 4]; arp = [c[0], c[1], c[2], c[1] * 2]
+        for k in range(2): add(pluck(arp[(b * 2 + k) % 4] * (2 if k else 1)), t + k * beat / 2)
+        if b % 2 == 0: add(kick, t)
+        n = int(.05 * SR); hx = np.diff(np.concatenate([[0], rng.standard_normal(n)])) * env(n, .0005, .012) * .1; add(hx, t + beat / 2)
+        b += 1; t += beat
+    k = int(1.2 * SR); mus[-k:] *= np.linspace(1, 0, k)
+    def w(name, x):
+        x = np.clip(x, -1, 1); s = (np.stack([x, x], 1) * 32767).astype(np.int16)
+        with wave.open(name, "wb") as f: f.setnchannels(2); f.setsampwidth(2); f.setframerate(SR); f.writeframes(s.tobytes())
+    w(f"{out}/sfx.wav", sfx * .7); w(f"{out}/music.wav", mus * .8)
+    wavs = [w for w in wavs if w[0]]
+    if not wavs: wavs = [(f"{out}/sfx.wav", 0.0)]  # dry preview: no voice yet
+    inp = []; flt = []
+    for i, (wav, t) in enumerate(wavs):
+        inp += ["-i", wav]; d = int(t * 1000); flt.append(f"[{i}]adelay={d}|{d}[v{i}]")
+    flt.append("".join(f"[v{i}]" for i in range(len(wavs))) + f"amix=inputs={len(wavs)}:normalize=0,apad=whole_dur={END + .4}[vo]")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", *inp, "-filter_complex", ";".join(flt), "-map", "[vo]", "-ar", str(SR), "-ac", "2", f"{out}/vo.wav"], check=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{out}/vo.wav", "-i", f"{out}/music.wav", "-i", f"{out}/sfx.wav", "-filter_complex",
+        "[0]asplit[vo][sc];[1]volume=0.5[m];[m][sc]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=300[md];[vo][md][2]amix=inputs=3:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9[out]",
+        "-map", "[out]", "-ar", str(SR), "-ac", "2", f"{out}/mix.wav"], check=True)
+
+if __name__ == "__main__":
+    build(sys.argv[1], sys.argv[2])

@@ -1,0 +1,389 @@
+{
+ "label": "K-POP KOREAN 🎤",
+ "labelColor": "#A48AEB",
+ "pose0": "sing_mic",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Every K-pop fan word you need, explained in sixty seconds.",
+   "pose": "sing_mic",
+   "cap": "Every <b class='c-k'>K-pop fan word</b> you need, in 60 seconds 🎤"
+  },
+  {
+   "k": "w1",
+   "say": "Your number one favorite member? That's your",
+   "pose": "love_heart",
+   "cap": "Your <b class='c-p'>#1 favorite</b> member? That's your",
+   "gap": 0.4
+  },
+  {
+   "k": "w1k",
+   "say": "최애.",
+   "pose": "love_heart",
+   "lang": "ko",
+   "rom": "choe-ae",
+   "c": "p",
+   "show": "최애"
+  },
+  {
+   "k": "w1e",
+   "say": "Literally, the most loved.",
+   "pose": "excited",
+   "cap": "Literally: <b class='c-p'>the most loved</b> 💖"
+  },
+  {
+   "k": "w2",
+   "say": "Your second favorite?",
+   "pose": "thinking",
+   "gap": 0.4
+  },
+  {
+   "k": "w2k",
+   "say": "차애.",
+   "pose": "thinking",
+   "lang": "ko",
+   "rom": "cha-ae",
+   "c": "b",
+   "show": "차애"
+  },
+  {
+   "k": "w2e",
+   "say": "The next loved.",
+   "pose": "smug",
+   "cap": "<b class='c-b'>The next loved</b> 🥈"
+  },
+  {
+   "k": "w3",
+   "say": "Spending all your money and time on your idols?",
+   "pose": "headphones",
+   "cap": "Spending all your <b class='c-k'>money and time</b> on idols?",
+   "gap": 0.4
+  },
+  {
+   "k": "w3k",
+   "say": "덕질.",
+   "pose": "headphones",
+   "lang": "ko",
+   "rom": "deok-jil",
+   "c": "k",
+   "show": "덕질"
+  },
+  {
+   "k": "w3e",
+   "say": "Fan life. 덕 comes from otaku.",
+   "pose": "laugh_flap",
+   "cap": "<b class='c-k'>Fan life.</b> 덕 comes from <b>otaku</b> 🤓"
+  },
+  {
+   "k": "w4",
+   "say": "The moment you fall into a fandom?",
+   "pose": "shocked",
+   "gap": 0.4
+  },
+  {
+   "k": "w4k",
+   "say": "입덕!",
+   "pose": "jump",
+   "lang": "ko",
+   "rom": "ip-deok",
+   "c": "m",
+   "show": "입덕!"
+  },
+  {
+   "k": "w4e",
+   "say": "Entering the fandom.",
+   "pose": "excited",
+   "cap": "<b class='c-m'>Entering</b> the fandom 🚪"
+  },
+  {
+   "k": "w5",
+   "say": "And when you quit?",
+   "pose": "crying"
+  },
+  {
+   "k": "w5k",
+   "say": "탈덕.",
+   "pose": "crying",
+   "lang": "ko",
+   "rom": "tal-deok",
+   "c": "y",
+   "show": "탈덕"
+  },
+  {
+   "k": "w5e",
+   "say": "Escaping the fandom. But let's be honest, nobody really escapes.",
+   "pose": "smug",
+   "cap": "<b class='c-y'>Escaping</b> the fandom. But nobody really escapes 😏"
+  },
+  {
+   "k": "e0",
+   "say": "Who's your number one? Tell me in the comments!",
+   "pose": "love_heart",
+   "cap": "Who's <b class='c-p'>YOUR</b> 최애? 👇",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "emoji",
+     "e": "💜🎤✨",
+     "size": 140,
+     "y": 440,
+     "at": "h1+0.2",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Every <span class='c-k'>K-pop</span><br>fan word",
+     "size": 120,
+     "y": 720,
+     "at": "h1",
+     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+    },
+    {
+     "type": "stamp",
+     "html": "in 60s ⏱️",
+     "c": "k",
+     "size": 84,
+     "y": 1000,
+     "at": "h1@end-0.9",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "w1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🥇",
+     "size": 210,
+     "y": 440,
+     "at": "w1+0.4",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "최애",
+     "rom": "choe-ae",
+     "en": "your #1 bias",
+     "c": "p",
+     "size": 200,
+     "w": 640,
+     "y": 780,
+     "at": "w1k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:56px'><span class='c-p' style='font-family:Jua;font-size:74px'>최</span> most &nbsp;+&nbsp; <span class='c-p' style='font-family:Jua;font-size:74px'>애</span> love</div>",
+     "w": 820,
+     "pad": 18,
+     "y": 1095,
+     "at": "w1e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "w2",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🥇",
+     "size": 130,
+     "x": 290,
+     "y": 420,
+     "at": "w2"
+    },
+    {
+     "type": "word",
+     "ko": "최애",
+     "rom": "choe-ae",
+     "en": "#1",
+     "c": "p",
+     "size": 150,
+     "w": 450,
+     "x": 290,
+     "y": 690,
+     "at": "w2"
+    },
+    {
+     "type": "emoji",
+     "e": "🥈",
+     "size": 130,
+     "x": 790,
+     "y": 420,
+     "at": "w2k",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "차애",
+     "rom": "cha-ae",
+     "en": "#2",
+     "c": "b",
+     "size": 150,
+     "w": 450,
+     "x": 790,
+     "y": 690,
+     "at": "w2k"
+    },
+    {
+     "type": "txt",
+     "html": "<span class='c-b' style='font-family:Jua'>차</span> next + <span class='c-b' style='font-family:Jua'>애</span> love",
+     "size": 48,
+     "w": 480,
+     "x": 790,
+     "y": 960,
+     "at": "w2e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "w3",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "💿📸🪧",
+     "size": 130,
+     "y": 430,
+     "at": "w3+0.3",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "덕질",
+     "rom": "deok-jil",
+     "en": "fan life",
+     "c": "k",
+     "size": 200,
+     "w": 640,
+     "y": 760,
+     "at": "w3k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:54px'><span class='c-k' style='font-family:Jua;font-size:72px'>덕</span> = otaku 🤓 &nbsp;+&nbsp; <span class='c-k' style='font-family:Jua;font-size:72px'>질</span> = doing</div>",
+     "w": 900,
+     "pad": 18,
+     "y": 1080,
+     "at": "w3e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "w4",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🚪💖",
+     "size": 120,
+     "x": 290,
+     "y": 420,
+     "at": "w4",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "입덕",
+     "rom": "ip-deok",
+     "en": "falling in",
+     "c": "m",
+     "size": 150,
+     "w": 450,
+     "x": 290,
+     "y": 690,
+     "at": "w4k"
+    },
+    {
+     "type": "txt",
+     "html": "<span class='c-m' style='font-family:Jua'>입</span> enter",
+     "size": 50,
+     "w": 460,
+     "x": 290,
+     "y": 950,
+     "at": "w4e",
+     "anim": "up"
+    },
+    {
+     "type": "emoji",
+     "e": "🏃💨",
+     "size": 120,
+     "x": 790,
+     "y": 420,
+     "at": "w5",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "탈덕",
+     "rom": "tal-deok",
+     "en": "quitting",
+     "c": "y",
+     "size": 150,
+     "w": 450,
+     "x": 790,
+     "y": 690,
+     "at": "w5k",
+     "dim": "w5e+1.2"
+    },
+    {
+     "type": "txt",
+     "html": "<span class='c-y' style='font-family:Jua'>탈</span> escape",
+     "size": 50,
+     "w": 460,
+     "x": 790,
+     "y": 950,
+     "at": "w5e",
+     "anim": "up"
+    },
+    {
+     "type": "stamp",
+     "html": "NOBODY ESCAPES 😏",
+     "c": "k",
+     "size": 70,
+     "y": 1090,
+     "at": "w5e+1.2",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "sticker",
+     "name": "headphones",
+     "w": 400,
+     "y": 560,
+     "at": "e0",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 900,
+     "at": "e0+0.3",
+     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px'>Who's your 최애? 👇</div>",
+     "w": 900,
+     "pad": 22,
+     "y": 1070,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

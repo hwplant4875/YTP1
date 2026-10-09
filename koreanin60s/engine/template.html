@@ -1,0 +1,108 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#FBF4EA;font-family:Pretendard,"Noto Color Emoji",sans-serif;color:#3A3134}
+#bg{position:absolute;inset:0;background:radial-gradient(ellipse at 85% 6%,#FCE1E6 0,transparent 42%),radial-gradient(ellipse at 6% 62%,#E3F2EC 0,transparent 45%),radial-gradient(ellipse at 90% 92%,#E6EEF9 0,transparent 40%),#FBF4EA}
+#paper{position:absolute;inset:0;opacity:.35;mix-blend-mode:multiply}
+#grid{position:absolute;inset:-80px;background-image:linear-gradient(#EADFD2 2px,transparent 2px),linear-gradient(90deg,#EADFD2 2px,transparent 2px);background-size:80px 80px;opacity:.35}
+.fl{position:absolute;font-family:Jua;opacity:.18}
+#cam{position:absolute;inset:0;transform-origin:540px 760px}
+.pill{position:absolute;left:50%;top:170px;transform:translateX(-50%);background:#3A3134;color:#FFF8EE;font-weight:900;font-size:40px;padding:16px 36px;border-radius:60px;white-space:nowrap;box-shadow:0 8px 0 rgba(58,49,52,.15)}
+.scene{position:absolute;left:0;top:0;width:1080px;height:1920px}
+.el{position:absolute;transform-origin:center;opacity:0}
+.card{background:#fff;border-radius:46px;box-shadow:0 16px 0 rgba(120,90,80,.08),0 26px 56px rgba(120,90,80,.16);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:5px solid #fff}
+.word .ko{font-family:Jua;line-height:1.02;letter-spacing:-2px}
+.word .rom{font-family:Fredoka;font-weight:600;font-size:44px;color:#A8968F;margin-top:4px}
+.word .en{font-weight:800;font-size:44px;margin-top:10px;padding:6px 24px;border-radius:30px;background:#F6EFE6}
+.chip{border-radius:60px;font-weight:900;font-size:46px;padding:16px 38px;white-space:nowrap;color:#fff;box-shadow:0 8px 0 rgba(0,0,0,.08)}
+.stamp{font-weight:900;border:10px solid currentColor;border-radius:28px;padding:8px 30px;white-space:nowrap;background:rgba(255,253,248,.92)}
+.txt{font-weight:800;line-height:1.2}
+.sticker img{width:100%;display:block;filter:drop-shadow(0 18px 22px rgba(120,90,80,.22))}
+.c-p{color:#E8678A}.c-m{color:#3BAF95}.c-b{color:#5A8FD8}.c-y{color:#E0A100}.c-k{color:#8C6CE0}.c-d{color:#3A3134}
+.bg-p{background:#F28BA8}.bg-m{background:#5CC4A8}.bg-b{background:#7FA9E8}.bg-y{background:#F2C14E}.bg-k{background:#A48AEB}.bg-d{background:#3A3134}
+.bd-p{border-color:#F7B8CA}.bd-m{border-color:#A6E0D0}.bd-b{border-color:#BBD2F3}.bd-y{border-color:#F7DD98}.bd-k{border-color:#D3C5F6}
+.mark{position:absolute;right:-26px;top:-30px;width:110px;height:110px;border-radius:60px;font-size:72px;font-weight:900;color:#fff;display:flex;align-items:center;justify-content:center;transform:scale(0);box-shadow:0 8px 0 rgba(0,0,0,.1)}
+.strike{position:absolute;left:6%;right:6%;top:50%;height:14px;border-radius:8px;background:#E25B5B;transform-origin:left;transform:scaleX(0) rotate(-8deg)}
+#bird{position:absolute;left:24px;top:1215px;width:360px;height:360px;transform-origin:180px 345px}
+#bird img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:none;filter:drop-shadow(0 14px 16px rgba(120,90,80,.25))}
+#bubble{position:absolute;left:372px;top:1262px;width:670px;min-height:200px;background:#fff;border-radius:46px;padding:30px 42px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 14px 0 rgba(120,90,80,.07),0 24px 50px rgba(120,90,80,.16);transform-origin:0 60%}
+#bubble:before{content:"";position:absolute;left:-30px;top:84px;border:22px solid transparent;border-right:34px solid #fff;border-left:0}
+#cap{font-size:50px;font-weight:800;line-height:1.22;letter-spacing:-.5px}
+#cap b{font-weight:900}
+#cap .kor{display:block;font-family:Jua;font-size:100px;line-height:1.08;letter-spacing:-2px;font-weight:400}
+#cap .rom{display:block;font-family:Fredoka;font-weight:600;font-size:42px;color:#A8968F;margin-top:4px}
+.flash{position:absolute;inset:0;background:#fff;opacity:0}
+</style></head><body>
+<div id="bg"></div>
+<svg id="paper" width="1080" height="1920"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .45  0 0 0 0 .4  0 0 0 .55 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+<div id="grid"></div><div id="floaters"></div>
+<div id="cam"><div class="pill" id="pill"></div><div id="scenes"></div>
+<div id="bird"></div><div id="bubble"><div id="cap"></div></div></div>
+<div class="flash" id="flash"></div>
+<script>
+/*DATA*/
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const eOutBack=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const eOutCubic=x=>1-Math.pow(1-x,3),eInCubic=x=>x*x*x;
+$('pill').innerHTML=D.label;$('pill').style.background=D.labelColor;
+// floaters
+const FL=['한','ㄱ','ㅎ','글','♥','ㅋ','ㄴ','★','안녕','ㅂ','대박','ㅇ'];const fc=['#F28BA8','#5CC4A8','#7FA9E8','#F2C14E'];
+$('floaters').innerHTML=FL.map((c,i)=>`<div class="fl" id="fl${i}" style="font-size:${70+((i*37)%70)}px;color:${fc[i%4]}">${c}</div>`).join('');
+// mascot
+$('bird').innerHTML=Object.keys(IMG).map(n=>`<img data-p="${n}" src="${IMG[n]}">`).join('');
+// build elements
+function elHTML(e){const c=e.c||'d';
+  switch(e.type){
+  case 'word':return `<div class="card word bd-${c}" style="width:${e.w||620}px;height:${e.h||'auto'}px;padding:${e.pad||36}px 30px"><div class="ko c-${c}" style="font-size:${e.size||170}px">${e.ko}</div>${e.rom?`<div class="rom">${e.rom}</div>`:''}${e.en?`<div class="en">${e.en}</div>`:''}<div class="mark bg-m">✓</div><div class="strike"></div></div>`;
+  case 'box':return `<div class="card bd-${c}" style="width:${e.w||900}px;min-height:${e.h||0}px;padding:${e.pad||34}px 40px;${e.style||''}">${e.html}<div class="mark bg-m">✓</div><div class="strike"></div></div>`;
+  case 'chip':return `<div class="chip bg-${c}" style="${e.size?`font-size:${e.size}px`:''}">${e.html}</div>`;
+  case 'stamp':return `<div class="stamp c-${c}" style="font-size:${e.size||80}px">${e.html}</div>`;
+  case 'txt':return `<div class="txt c-${c}" style="font-size:${e.size||52}px;width:${e.w||1000}px;text-align:${e.align||'center'};${e.style||''}">${e.html}</div>`;
+  case 'emoji':return `<div style="font-size:${e.size||200}px;line-height:1">${e.e}</div>`;
+  case 'sticker':return `<div class="sticker" style="width:${e.w||420}px"><img src="${IMG[e.name]}"></div>`;}}
+let sh='';D.scenes.forEach(sc=>{sh+=`<div class="scene" id="${sc.id}">`;sc.els.forEach(e=>{sh+=`<div class="el" id="${e.id}">${elHTML(e)}</div>`});sh+='</div>'});
+$('scenes').innerHTML=sh;
+// position: x center default
+window.layout=()=>D.scenes.forEach(sc=>sc.els.forEach(e=>{const n=$(e.id);const w=n.firstElementChild.offsetWidth,h=n.firstElementChild.offsetHeight;
+  e._x=(e.x!==undefined?e.x:540)-w/2;e._y=(e.y!==undefined?e.y:700)-h/2;n.style.left=e._x+'px';n.style.top=e._y+'px';n.style.width=w+'px';n.style.height=h+'px'}));
+layout();window.addEventListener('load',()=>{layout();window.render(0)});
+function animEl(e,t){const n=$(e.id);const t0=e.t;const a=e.anim||'pop';let p=cl((t-t0)/(e.d||.45));let s=p<=0?0:eOutBack(p),o=cl((t-t0)/.12),tx=0,ty=0,r=e.rot||0;
+  if(a==='up'){const q=eOutCubic(cl((t-t0)/.5));ty=140*(1-q);s=p<=0?0:.9+.1*eOutBack(p)}
+  if(a==='left'||a==='right'){const q=eOutCubic(cl((t-t0)/.5));tx=(a==='left'?-1:1)*260*(1-q);s=p<=0?0:.9+.1*eOutBack(p);r+=(a==='left'?-1:1)*8*(1-q)}
+  if(a==='drop'){const q=cl((t-t0)/.55);ty=-500*(1-eOutBack(q))*(q<1?1:0);s=p<=0?0:1}
+  if(a==='stamp'){const q=cl((t-t0)/.22);s=p<=0?0:(2.3-1.3*eOutCubic(q));o=cl((t-t0)/.07);r=(e.rot===undefined?-6:e.rot)}
+  if(a==='spin'){r+=(1-eOutCubic(cl((t-t0)/.6)))*-200}
+  if(e.float&&t>t0){ty+=Math.sin((t-t0)*2.4+e._x)*10}
+  if(e.outT!==undefined){const q=cl((t-e.outT)/.25);s*=1-eInCubic(q)*.6;o*=1-q}
+  // highlight
+  let glow='';if(e.hlT!==undefined&&t>=e.hlT){const q=cl((t-e.hlT)/.3);s*=1+.07*Math.sin(cl((t-e.hlT)/.4)*Math.PI);
+    const m=n.querySelector('.mark');if(m)m.style.transform=`scale(${eOutBack(cl((t-e.hlT)/.35))})`;glow=`drop-shadow(0 0 ${26*q}px rgba(92,196,168,.85))`}
+  if(e.dimT!==undefined&&t>=e.dimT){const q=cl((t-e.dimT)/.3);const st=n.querySelector('.strike');if(st)st.style.transform=`scaleX(${eOutCubic(q)}) rotate(-8deg)`;
+    o*=1-.45*q;tx+=(t<e.dimT+.4?Math.sin((t-e.dimT)*70)*10*(1-(t-e.dimT)/.4):0);s*=1-.06*q}
+  n.style.opacity=o;n.style.filter=glow;n.style.transform=`translate(${tx}px,${ty}px) rotate(${r*(a==='stamp'?1:(1-cl(p*1.3)))+(a==='stamp'?0:0)}deg) scale(${s})`;}
+let lastCap=null,lastPose=null;
+window.render=function(t){
+  $('grid').style.transform=`translate(${(t*12)%80}px,${(t*8)%80}px)`;
+  for(let i=0;i<FL.length;i++){const x=((i*263)%1000)+Math.sin(t*.5+i)*30-40;const y=((i*421+t*(18+i*3))%2100)-150;$('fl'+i).style.transform=`translate(${x}px,${1920-y}px) rotate(${Math.sin(t*.7+i)*14}deg)`}
+  let cur=D.scenes[0];for(const sc of D.scenes){if(t>=sc.t0)cur=sc}
+  $('cam').style.transform=`scale(${1+.022*Math.min((t-cur.t0)/4,1)}) rotate(${Math.sin(t*.8)*.25}deg)`;
+  for(const sc of D.scenes){const n=$(sc.id);if(t<sc.t0||t>=sc.t1+.4){n.style.visibility='hidden';continue}
+    const pin=sc.t0<=0?1:cl((t-sc.t0)/.4),pout=cl((t-sc.t1)/.36);
+    n.style.visibility='visible';n.style.transform=`translateX(${(1-eOutCubic(pin))*1080-eInCubic(pout)*1080}px) rotate(${(1-eOutCubic(pin))*3}deg)`;n.style.opacity=1-pout;
+    sc.els.forEach(e=>animEl(e,t))}
+  const pl=eOutBack(cl((t-.05)/.45));$('pill').style.transform=`translateX(-50%) scale(${pl})`;
+  // mascot
+  let pt=0,pose=D.poses[0][1];for(const [a,p] of D.poses){if(t>=a){pt=a;pose=p}}
+  if(pose!==lastPose){$('bird').querySelectorAll('img').forEach(i=>i.style.display=i.dataset.p===pose?'block':'none');lastPose=pose}
+  const b=$('bird');const sq=cl((t-pt)/.38);const k=Math.sin(sq*Math.PI)*(1-sq);const hop=-Math.abs(Math.sin(t*4.2))*12;
+  const ent=eOutBack(cl(t/.5));const ex=1-eInCubic(cl((t-D.END+.35)/.3));
+  b.style.transform=`translateY(${hop}px) rotate(${Math.sin(t*2.1)*2.5}deg) scale(${ent*ex*(1+.14*k)},${ent*ex*(1-.12*k)})`;
+  // bubble
+  let c=null;for(const x of D.caps){if(t>=x.t0)c=x}
+  if(c&&c!==lastCap){$('cap').innerHTML=c.html;lastCap=c}
+  const cs=c?cl((t-c.t0)/.22):0;$('bubble').style.opacity=c?ex:0;$('bubble').style.transform=`scale(${c?(.92+.08*eOutBack(cs))*ex:0})`;
+  // flash on stamps
+  let f=0;D.scenes.forEach(sc=>sc.els.forEach(e=>{if(e.anim==='stamp'&&t>=e.t+.1&&t<e.t+.28)f=Math.max(f,.3*(1-(t-e.t-.1)/.18))}));$('flash').style.opacity=f;
+};
+window.render(0);
+</script></body></html>

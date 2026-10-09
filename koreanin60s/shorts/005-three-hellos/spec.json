@@ -1,0 +1,239 @@
+{
+ "label": "SAY IT RIGHT 👋",
+ "labelColor": "#5A8FD8",
+ "pose0": "hi_wave",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Hello in Korean has three levels, and using the wrong one is awkward.",
+   "pose": "shocked",
+   "cap": "Hello in Korean has <b class='c-b'>3 levels</b>... and the wrong one is <b class='c-p'>awkward</b> 😬"
+  },
+  {
+   "k": "l1",
+   "say": "Level one: super formal.",
+   "pose": "teacher",
+   "cap": "<b class='c-b'>Level 1:</b> super formal 👔",
+   "gap": 0.45
+  },
+  {
+   "k": "l1k",
+   "say": "안녕하십니까.",
+   "pose": "teacher",
+   "lang": "ko",
+   "rom": "an-nyeong-ha-sim-ni-kka",
+   "c": "b",
+   "show": "안녕하십니까"
+  },
+  {
+   "k": "l1e",
+   "say": "For your boss, the army, or the news.",
+   "pose": "talk",
+   "cap": "For your <b class='c-b'>boss</b>, the army, or the news 📺"
+  },
+  {
+   "k": "l2",
+   "say": "Level two: polite. Your safe choice.",
+   "pose": "correct_o",
+   "cap": "<b class='c-m'>Level 2:</b> polite. Your <b class='c-m'>safe choice</b>.",
+   "gap": 0.45
+  },
+  {
+   "k": "l2k",
+   "say": "안녕하세요.",
+   "pose": "correct_o",
+   "lang": "ko",
+   "rom": "an-nyeong-ha-se-yo",
+   "c": "m",
+   "show": "안녕하세요"
+  },
+  {
+   "k": "l2e",
+   "say": "Strangers, shops, teachers. Use it ninety percent of the time.",
+   "pose": "excited",
+   "cap": "Strangers, shops, teachers. <b class='c-m'>90%</b> of the time ✅"
+  },
+  {
+   "k": "l3",
+   "say": "Level three: casual.",
+   "pose": "hi_wave",
+   "cap": "<b class='c-p'>Level 3:</b> casual 👯",
+   "gap": 0.45
+  },
+  {
+   "k": "l3k",
+   "say": "안녕!",
+   "pose": "hi_wave",
+   "lang": "ko",
+   "rom": "an-nyeong",
+   "c": "p",
+   "show": "안녕!"
+  },
+  {
+   "k": "l3e",
+   "say": "Only for close friends, or someone younger than you.",
+   "pose": "smug",
+   "cap": "Only <b class='c-p'>close friends</b>, or someone younger."
+  },
+  {
+   "k": "w0",
+   "say": "So if you say it to your boss...",
+   "pose": "shocked",
+   "cap": "So if you say <b class='c-p'>안녕!</b> to your boss...",
+   "gap": 0.45
+  },
+  {
+   "k": "w1",
+   "say": "Yeah. Don't.",
+   "pose": "wrong_x",
+   "cap": "Yeah. <b class='c-p'>Don't.</b> 🙅"
+  },
+  {
+   "k": "e0",
+   "say": "Follow for more Korean in sixty seconds!",
+   "pose": "hi_wave",
+   "cap": "Follow for more <b class='c-b'>Korean in 60s!</b>",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "emoji",
+     "e": "👋",
+     "size": 220,
+     "y": 440,
+     "at": "h1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "3 ways to say<br><span class='c-b'>HELLO</span>",
+     "size": 120,
+     "y": 740,
+     "at": "h1+0.3",
+     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+    },
+    {
+     "type": "stamp",
+     "html": "DON'T MIX THEM UP ⚠️",
+     "c": "p",
+     "size": 66,
+     "y": 1020,
+     "at": "h1@end-1.0",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "l1",
+   "els": [
+    {
+     "type": "box",
+     "html": "<div style='display:flex;align-items:center;gap:28px;width:840px'><div class='chip bg-b' style='font-size:40px;padding:10px 24px'>FORMAL</div><div style='text-align:left;flex:1'><div class='c-b' style='font-family:Jua;font-size:80px;line-height:1.05'>안녕하십니까</div><div style='font-family:Fredoka;font-weight:600;font-size:36px;color:#A8968F'>an-nyeong-ha-sim-ni-kka</div></div><div style='font-size:72px'>👔</div></div>",
+     "w": 960,
+     "pad": 26,
+     "y": 470,
+     "at": "l1k",
+     "anim": "left"
+    },
+    {
+     "type": "box",
+     "html": "<div style='display:flex;align-items:center;gap:28px;width:840px'><div class='chip bg-m' style='font-size:40px;padding:10px 24px'>POLITE</div><div style='text-align:left;flex:1'><div class='c-m' style='font-family:Jua;font-size:80px;line-height:1.05'>안녕하세요</div><div style='font-family:Fredoka;font-weight:600;font-size:36px;color:#A8968F'>an-nyeong-ha-se-yo</div></div><div style='font-size:72px'>🏪</div></div>",
+     "w": 960,
+     "pad": 26,
+     "y": 740,
+     "at": "l2k",
+     "anim": "right",
+     "hl": "l2e+1.0"
+    },
+    {
+     "type": "box",
+     "html": "<div style='display:flex;align-items:center;gap:28px;width:840px'><div class='chip bg-p' style='font-size:40px;padding:10px 24px'>CASUAL</div><div style='text-align:left;flex:1'><div class='c-p' style='font-family:Jua;font-size:80px;line-height:1.05'>안녕!</div><div style='font-family:Fredoka;font-weight:600;font-size:36px;color:#A8968F'>an-nyeong</div></div><div style='font-size:72px'>👯</div></div>",
+     "w": 960,
+     "pad": 26,
+     "y": 1010,
+     "at": "l3k",
+     "anim": "left"
+    },
+    {
+     "type": "stamp",
+     "html": "90% ✅",
+     "c": "m",
+     "size": 56,
+     "x": 880,
+     "y": 640,
+     "at": "l2e+1.0",
+     "anim": "stamp",
+     "rot": 8
+    }
+   ]
+  },
+  {
+   "from": "w0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🧑‍💼",
+     "size": 220,
+     "y": 440,
+     "at": "w0",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "안녕!",
+     "rom": "an-nyeong",
+     "en": "to your boss?",
+     "c": "p",
+     "size": 180,
+     "w": 640,
+     "y": 790,
+     "at": "w0+0.6",
+     "dim": "w1"
+    },
+    {
+     "type": "stamp",
+     "html": "DON'T 🙅",
+     "c": "p",
+     "size": 96,
+     "y": 1080,
+     "at": "w1+0.3",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "sticker",
+     "name": "hi_wave",
+     "w": 400,
+     "y": 560,
+     "at": "e0",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 900,
+     "at": "e0+0.3",
+     "style": "font-family:Jua;font-weight:400;line-height:1.1"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px'>Which hello will you use? 👇</div>",
+     "w": 900,
+     "pad": 22,
+     "y": 1070,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}
