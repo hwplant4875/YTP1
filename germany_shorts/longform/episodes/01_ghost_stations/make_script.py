@@ -29,7 +29,7 @@ def say(line, visual="same", **kw):
 
 # ---------------------------------------------------------------- cold open
 say("1975년, 서베를린.", g3("cab", t0=0), id="intro", text={"kind": "label", "content": "WEST-BERLIN · 1975", "pos": [0.5, 0.86]},
-    sfx={"prompt": "subway train rumbling through a dark tunnel, steady rhythm of wheels on rails, interior perspective", "len": 22, "vol": 0.35})
+    sfx={"prompt": "subway train rumbling through a dark tunnel, steady rhythm of wheels on rails, interior perspective", "len": 22, "vol": 0.12})
 say("당신은 지하철 8호선에 타고 있습니다.")
 say("열차가 한 역에 멈추자, 안내 방송이 나옵니다.")
 say("서베를린의 마지막 역입니다.", text={"kind": "quote", "content": "„Letzter Bahnhof in Berlin-West“", "pos": [0.5, 0.8]})

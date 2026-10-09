@@ -209,6 +209,15 @@ def main():
     only_audio = "--only-audio" in args
     base = os.path.dirname(os.path.abspath(spec_path))
     spec = json.load(open(spec_path, encoding="utf-8"))
+    if "--until" in args:
+        stop = args[args.index("--until") + 1]
+        cut = next(i for i, b in enumerate(spec["beats"]) if b.get("id") == stop)
+        spec["beats"] = spec["beats"][:cut]
+        spec["music"] = [m for m in spec.get("music", []) if m["to"] != "end" and
+                         [b.get("id") for b in spec["beats"]].count(m["from"])]
+        for m in spec["music"]:
+            if m["to"] not in [b.get("id") for b in spec["beats"]]:
+                m["to"] = "end"
     voice = {"voice_id": PILJAE, **spec.get("voice", {})}
     gap = spec.get("gap", 0.05)
     work = os.path.splitext(out)[0] + "_work"
@@ -252,7 +261,8 @@ def main():
         at = b["_start"] + sx.get("at", 0)
         filt.append(f"[{len(inputs) // 2 - 1}:a]aresample=48000,adelay={int(at * 1000)}:all=1,volume={sx.get('vol', 0.45)}[f{k}]")
         fx.append(f"[f{k}]")
-    mus = []
+    mus = list(fx)
+    fx = []
     for k, m in enumerate(spec.get("music", [])):
         a, z = anchors[m["from"]] + m.get("offset", 0), anchors[m["to"]]
         inputs += ["-stream_loop", "-1", "-i", os.path.join(base, m["file"])]
@@ -266,7 +276,7 @@ def main():
     graph = ";".join(filt)
     if mus:
         graph += f";{''.join(mus)}amix=inputs={len(mus)}:normalize=0:duration=longest[mraw];" \
-                 f"[mraw][key]sidechaincompress=threshold=0.04:ratio=5:attack=30:release=600:makeup=1[mduck]"
+                 f"[mraw][key]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=500:makeup=1[mduck]"
         bed = "[mduck]"
     else:
         graph += ";[key]anullsink"
