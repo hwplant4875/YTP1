@@ -29,8 +29,10 @@ const fontDir = '/engine/node_modules/@fontsource';
 const fonts = [['Anton', 'anton/files/anton-latin-400-normal.woff2', 400], ['Bebas', 'bebas-neue/files/bebas-neue-latin-400-normal.woff2', 400],
   ['Mont', 'montserrat/files/montserrat-latin-900-normal.woff2', 900], ['Mont', 'montserrat/files/montserrat-latin-800-normal.woff2', 800],
   ['Mont', 'montserrat/files/montserrat-latin-600-normal.woff2', 600], ['MontI', 'montserrat/files/montserrat-latin-900-italic.woff2', 900],
-  ['Oswald', 'oswald/files/oswald-latin-700-normal.woff2', 700], ['Archivo', 'archivo-black/files/archivo-black-latin-400-normal.woff2', 400]];
-const css = fonts.map(([f, file, w]) => `@font-face{font-family:'${f}';src:url(${fontDir}/${file});font-weight:${w}}`).join('\n');
+  ['Oswald', 'oswald/files/oswald-latin-700-normal.woff2', 700], ['Archivo', 'archivo-black/files/archivo-black-latin-400-normal.woff2', 400],
+  // YouTube Sans (user's default English font), from the project's Drive fonts folder
+  ['YTS', '/@work/fonts/YOUTUBESANSBLACK.OTF', 900], ['YTSD', '/@work/fonts/YOUTUBESANSDARKBLACK.OTF', 900]];
+const css = fonts.map(([f, file, w]) => `@font-face{font-family:'${f}';src:url(${file.startsWith('/') ? file : fontDir + '/' + file});font-weight:${w}}`).join('\n');
 
 const html = `<!doctype html><html><head><style>${css} body{margin:0;background:#000}</style></head><body>
 <canvas id=c width=${W} height=${H}></canvas>

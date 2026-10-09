@@ -167,7 +167,7 @@ export function makeCtx(cv) {
   // kinetic word-by-word caption. words: [{w:'LIGHT', t:1.2, hl:true}], shown in a line group until group end.
   // style: edit-caption (white, thick black stroke, highlight yellow, pop with overshoot)
   R.caption = (words, t, o = {}) => {
-    const { y = H * .62, size = 104, font = 'Mont', weight = 900, hl = '#FFD400', color = '#fff', end = Infinity, gap = 22, maxW = W * .88, out = .12 } = o;
+    const { y = H * .62, size = 104, font = 'YTS', weight = 900, hl = '#FFD400', color = '#fff', end = Infinity, gap = 22, maxW = W * .88, out = .12 } = o;
     const vis = words.filter(w => t >= w.t);
     if (!vis.length || t > end + out) return;
     const fade = 1 - clamp((t - end) / out);
