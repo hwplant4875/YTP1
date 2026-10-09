@@ -1,0 +1,22 @@
+[
+ ["h1","en","Koreans have two completely different ways to count..."],
+ ["h2","en","and they use BOTH in the same sentence."],
+ ["n0","en","Way one: native Korean."],
+ ["n1","ko","하나, 둘, 셋!"],
+ ["s0","en","Way two: Sino-Korean, borrowed from Chinese."],
+ ["s1","ko","일, 이, 삼!"],
+ ["c0","en","So, what time is it? Three thirty."],
+ ["c1","en","Hours use native Korean,"],
+ ["c2","ko","세 시."],
+ ["c3","en","but minutes use the Chinese ones."],
+ ["c4","ko","삼십 분."],
+ ["c5","ko","세 시 삼십 분!"],
+ ["c6","en","Two systems. One sentence."],
+ ["a0","en","Same with your age. With friends, you're"],
+ ["a1","ko","스물다섯 살."],
+ ["a2","en","But at the hospital?"],
+ ["a3","ko","이십오 세."],
+ ["r0","en","Easy rule: counting things, hours and age? Native."],
+ ["r1","en","Money, minutes, dates and phone numbers? Chinese."],
+ ["e0","en","Follow for more Korean in sixty seconds!"]
+]

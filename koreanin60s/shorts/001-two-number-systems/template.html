@@ -1,0 +1,207 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#FFF4E6;font-family:Pretendard,"Noto Color Emoji",sans-serif;color:#1C1718}
+#bg{position:absolute;inset:0;background:radial-gradient(circle at 80% 8%,#FFDDE8 0,transparent 38%),radial-gradient(circle at 10% 70%,#DDF7EF 0,transparent 40%),linear-gradient(180deg,#FFF6EC,#FFEFE3)}
+#dots{position:absolute;inset:-60px;background-image:radial-gradient(#E9D5CB 2.2px,transparent 2.6px);background-size:46px 46px;opacity:.55}
+.fl{position:absolute;font-family:Jua;opacity:.22;will-change:transform}
+#cam{position:absolute;inset:0;transform-origin:540px 700px}
+.pill{position:absolute;left:50%;top:178px;transform:translateX(-50%);background:#1C1718;color:#fff;font-weight:900;font-size:40px;letter-spacing:.5px;padding:16px 34px;border-radius:60px;white-space:nowrap;box-shadow:0 10px 0 rgba(0,0,0,.12)}
+.pill span{color:#FFD23F}
+.scene{position:absolute;left:0;top:110px;width:1080px;height:1920px;will-change:transform,opacity}
+.pop{position:absolute;transform-origin:center;will-change:transform,opacity}
+.card{border-radius:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 22px 0 rgba(0,0,0,.10),0 30px 60px rgba(120,80,70,.18)}
+.p{color:#FF4F81}.m{color:#16B894}.k{color:#7B6CFF}
+.bgp{background:#FF4F81;color:#fff}.bgm{background:#20C9A2;color:#fff}.bgk{background:#7B6CFF;color:#fff}
+.chip{position:absolute;left:50%;transform:translateX(-50%);font-weight:900;font-size:44px;padding:14px 34px;border-radius:50px;white-space:nowrap}
+.tile{width:290px;height:360px}
+.tile .d{font-family:Fredoka;font-weight:700;font-size:60px;opacity:.75;margin-bottom:-6px}
+.tile .kk{font-weight:900;font-size:150px;line-height:1.05}
+.tile .r{font-family:Fredoka;font-weight:600;font-size:46px;opacity:.9}
+.tile .hz{position:absolute;font-size:250px;font-weight:900;opacity:.13;font-family:"IPAGothic"}
+/* bird + bubble */
+#bird{position:absolute;left:40px;top:1235px;width:330px;height:352px;transform-origin:165px 330px}
+#bird .pose,#bigbird .pose{position:absolute;inset:0;display:none}
+#bird svg,#bigbird svg{width:100%;height:100%}
+#bubble{position:absolute;left:350px;top:1255px;width:680px;min-height:200px;background:#fff;border-radius:44px;padding:30px 40px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 16px 0 rgba(0,0,0,.07),0 24px 50px rgba(120,80,70,.16);transform-origin:0 60%}
+#bubble:before{content:"";position:absolute;left:-30px;top:84px;border:22px solid transparent;border-right:34px solid #fff;border-left:0}
+#cap{font-size:50px;font-weight:800;line-height:1.22;letter-spacing:-.5px}
+#cap .kor{display:block;font-size:96px;font-weight:900;line-height:1.1;letter-spacing:-2px}
+#cap .rom{display:block;font-family:Fredoka;font-weight:600;font-size:42px;color:#9a8a86;margin-top:6px}
+/* clock */
+#clock{position:absolute;left:290px;top:340px;width:500px;height:500px}
+.stamp{position:absolute;font-weight:900;border:10px solid currentColor;border-radius:26px;padding:6px 26px;white-space:nowrap;background:rgba(255,255,255,.85)}
+.rowi{position:absolute;left:44px;right:44px;height:104px;background:#fff;border-radius:30px;display:flex;align-items:center;gap:22px;padding:0 28px;font-size:46px;font-weight:800;box-shadow:0 8px 0 rgba(0,0,0,.06)}
+.rowi .e{font-size:54px}
+.col{position:absolute;top:330px;width:470px;height:760px;border-radius:48px;box-shadow:0 22px 0 rgba(0,0,0,.08),0 30px 60px rgba(120,80,70,.16)}
+.col h3{margin:30px 0 0;text-align:center;font-size:54px;font-weight:900;color:#fff;letter-spacing:.5px}
+.col h4{margin:0 0 18px;text-align:center;font-size:56px;font-weight:900;color:#fff;opacity:.9}
+#bigbird{position:absolute;left:265px;top:330px;width:550px;height:587px;transform-origin:275px 560px}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+</style></head><body>
+<div id="bg"></div><div id="dots"></div><div id="floaters"></div>
+<div id="cam">
+<div class="pill" id="pill">WHY IS KOREAN LIKE THIS?! <span>🤯</span></div>
+
+<!-- HOOK -->
+<div class="scene" id="sc_hook">
+  <div class="pop" id="h_one" style="left:0;top:300px;width:1080px;height:520px;font-family:Fredoka;font-weight:700;font-size:520px;line-height:520px;text-align:center;color:#1C1718">1</div>
+  <div class="pop card bgp tile" id="h_a" style="left:120px;top:380px;width:400px;height:440px"><div class="kk" style="font-size:170px">하나</div><div class="r">hana</div></div>
+  <div class="pop card bgm tile" id="h_b" style="left:560px;top:380px;width:400px;height:440px"><div class="kk" style="font-size:190px">일</div><div class="r">il</div></div>
+  <div class="pop" id="h_eq" style="left:490px;top:520px;width:100px;font-size:120px;font-weight:900;text-align:center;color:#1C1718">=</div>
+  <div class="pop stamp" id="h_st" style="left:250px;top:860px;font-size:84px;color:#7B6CFF">BOTH?! 😳</div>
+</div>
+<!-- NATIVE -->
+<div class="scene" id="sc_nat">
+  <div class="chip bgp pop" id="n_ch" style="top:330px">WAY 1 · NATIVE KOREAN</div>
+  <div class="pop card tile" id="n_t1" style="left:60px;top:470px;background:#fff"><div class="d p">1</div><div class="kk p">하나</div><div class="r">hana</div></div>
+  <div class="pop card tile" id="n_t2" style="left:395px;top:470px;background:#fff"><div class="d p">2</div><div class="kk p">둘</div><div class="r">dul</div></div>
+  <div class="pop card tile" id="n_t3" style="left:730px;top:470px;background:#fff"><div class="d p">3</div><div class="kk p">셋</div><div class="r">set</div></div>
+  <div class="pop" id="n_sub" style="left:0;width:1080px;top:880px;text-align:center;font-size:44px;font-weight:800;color:#9a7f78">pure Korean · since forever 🇰🇷</div>
+</div>
+<!-- SINO -->
+<div class="scene" id="sc_sino">
+  <div class="chip bgm pop" id="s_ch" style="top:330px">WAY 2 · SINO-KOREAN</div>
+  <div class="pop card tile" id="s_t1" style="left:60px;top:470px;background:#fff;overflow:hidden"><span class="hz m">一</span><div class="d m">1</div><div class="kk m">일</div><div class="r">il</div></div>
+  <div class="pop card tile" id="s_t2" style="left:395px;top:470px;background:#fff;overflow:hidden"><span class="hz m">二</span><div class="d m">2</div><div class="kk m">이</div><div class="r">i</div></div>
+  <div class="pop card tile" id="s_t3" style="left:730px;top:470px;background:#fff;overflow:hidden"><span class="hz m">三</span><div class="d m">3</div><div class="kk m">삼</div><div class="r">sam</div></div>
+  <div class="pop" id="s_sub" style="left:0;width:1080px;top:880px;text-align:center;font-size:44px;font-weight:800;color:#7f9a92">from Chinese characters 一 二 三</div>
+</div>
+<!-- CLOCK -->
+<div class="scene" id="sc_clock">
+  <svg id="clock" viewBox="-260 -260 520 520">
+    <defs><filter id="cs"><feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#7a5c55" flood-opacity=".25"/></filter>
+    <filter id="glow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+    <circle r="240" fill="#1C1718" filter="url(#cs)"/><circle r="214" fill="#fff"/>
+    <g id="ticks"></g>
+    <g id="hh"><rect x="-13" y="-120" width="26" height="140" rx="13" fill="#1C1718"/></g>
+    <g id="mh"><rect x="-9" y="-178" width="18" height="198" rx="9" fill="#1C1718"/></g>
+    <circle r="20" fill="#FFD23F" stroke="#1C1718" stroke-width="6"/>
+  </svg>
+  <div class="pop" id="c_dig" style="left:340px;top:860px;width:400px;text-align:center;font-family:Fredoka;font-weight:700;font-size:120px;color:#7B6CFF">3:30</div>
+  <div class="pop card bgp" id="c_l1" style="left:40px;top:860px;width:400px;height:170px;border-radius:36px"><div style="font-size:84px;font-weight:900;line-height:1">세 시</div><div style="font-size:36px;font-weight:700;opacity:.9">hour · native</div></div>
+  <div class="pop card bgm" id="c_l2" style="left:640px;top:860px;width:400px;height:170px;border-radius:36px"><div style="font-size:84px;font-weight:900;line-height:1">삼십 분</div><div style="font-size:36px;font-weight:700;opacity:.9">minutes · Sino</div></div>
+  <div class="pop" id="c_sent" style="left:0;width:1080px;top:420px;text-align:center">
+     <div style="font-size:150px;font-weight:900;letter-spacing:-4px;line-height:1.1"><span class="p" id="c_sp1">세 시</span> <span class="m" id="c_sp2">삼십 분</span></div>
+     <div style="display:flex;justify-content:center;gap:120px;margin-top:10px;font-size:40px;font-weight:800"><span class="p">▲ NATIVE</span><span class="m">▲ SINO</span></div>
+  </div>
+  <div class="pop stamp" id="c_st" style="left:130px;top:760px;font-size:62px;color:#FF4F81">2 SYSTEMS · 1 SENTENCE</div>
+</div>
+<!-- AGE -->
+<div class="scene" id="sc_age">
+  <div class="pop" id="a_badge" style="left:420px;top:310px;width:240px;height:150px;border-radius:40px;background:#FFD23F;font-family:Fredoka;font-weight:700;font-size:110px;line-height:150px;text-align:center;box-shadow:0 12px 0 #E0A800">25</div>
+  <div class="pop card" id="a_chat" style="left:60px;top:500px;width:960px;height:250px;background:#fff;align-items:flex-start;padding:0 44px;border-radius:44px">
+     <div style="font-size:36px;font-weight:800;color:#9a8a86">💬 with friends</div>
+     <div style="display:flex;align-items:baseline;gap:24px"><div style="font-size:110px;font-weight:900" class="p">스물다섯 살</div><div style="font-family:Fredoka;font-size:40px;color:#9a8a86">seumul-daseot sal</div></div></div>
+  <div class="pop card" id="a_form" style="left:60px;top:790px;width:960px;height:250px;background:#fff;align-items:flex-start;padding:0 44px;border-radius:44px;border:6px dashed #20C9A2">
+     <div style="font-size:36px;font-weight:800;color:#9a8a86">🏥 hospital form · 나이 (age)</div>
+     <div style="display:flex;align-items:baseline;gap:24px"><div style="font-size:110px;font-weight:900" class="m" id="a_formv">이십오 세</div><div style="font-family:Fredoka;font-size:40px;color:#9a8a86">isib-o se</div></div></div>
+</div>
+<!-- RULE -->
+<div class="scene" id="sc_rule">
+  <div class="pop col" id="r_c1" style="left:50px;background:#FF4F81"><h3>NATIVE</h3><h4>하나 둘 셋</h4>
+    <div class="rowi" id="r_i1" style="top:190px"><span class="e">🍎</span>things</div>
+    <div class="rowi" id="r_i2" style="top:316px"><span class="e">🕒</span>hours</div>
+    <div class="rowi" id="r_i3" style="top:442px"><span class="e">🎂</span>age</div></div>
+  <div class="pop col" id="r_c2" style="left:560px;background:#20C9A2"><h3>SINO</h3><h4>일 이 삼</h4>
+    <div class="rowi" id="r_j1" style="top:190px"><span class="e">💰</span>money</div>
+    <div class="rowi" id="r_j2" style="top:316px"><span class="e">⏱️</span>minutes</div>
+    <div class="rowi" id="r_j3" style="top:442px"><span class="e">📅</span>dates</div>
+    <div class="rowi" id="r_j4" style="top:568px"><span class="e">📞</span>phone #</div></div>
+</div>
+<!-- CTA -->
+<div class="scene" id="sc_cta">
+  <div id="bigbird"><!--BIRDSBIG--></div>
+  <div class="pop" id="e_t" style="left:0;width:1080px;top:920px;text-align:center;font-size:110px;font-weight:900;letter-spacing:-3px">Korean in <span class="p">60s</span></div>
+  <div class="pop" id="e_q" style="left:90px;width:900px;top:1080px;text-align:center;font-size:52px;font-weight:800;background:#fff;border-radius:40px;padding:26px 30px;box-shadow:0 12px 0 rgba(0,0,0,.06)">How old are YOU in Korean? 👇</div>
+</div>
+
+<div id="bird"><!--BIRDS--></div>
+<div id="bubble"><div id="cap"></div></div>
+</div>
+<div class="flash" id="flash"></div>
+<script>
+/*TL*/
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const eOutBack=(x)=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const eOutCubic=x=>1-Math.pow(1-x,3), eInCubic=x=>x*x*x, eInOut=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const eElastic=x=>x===0?0:x===1?1:Math.pow(2,-10*x)*Math.sin((x*10-.75)*(2*Math.PI)/3)+1;
+const S=k=>T[k][0], E=k=>T[k][1];
+// ticks
+let tk='';for(let i=0;i<60;i++){const a=i*6*Math.PI/180,big=i%5==0;const r1=big?178:192,r2=204;tk+=`<line x1="${Math.sin(a)*r1}" y1="${-Math.cos(a)*r1}" x2="${Math.sin(a)*r2}" y2="${-Math.cos(a)*r2}" stroke="#1C1718" stroke-width="${big?8:3}" stroke-linecap="round"/>`}
+$('ticks').innerHTML=tk;
+// floaters
+const FL=['한','ㄱ','ㅎ','글','♥','ㅋ','ㄴ','★','안녕','ㅂ','대박','ㅇ'];const cols=['#FF9DB0','#3DD6B5','#7B6CFF','#FFD23F'];
+let fh='';FL.forEach((c,i)=>{fh+=`<div class="fl" id="fl${i}" style="font-size:${70+((i*37)%70)}px;color:${cols[i%4]}">${c}</div>`});$('floaters').innerHTML=fh;
+const scenes=[['sc_hook',0,S('n0')-.2],['sc_nat',S('n0')-.2,S('s0')-.2],['sc_sino',S('s0')-.2,S('c0')-.2],['sc_clock',S('c0')-.2,S('a0')-.25],['sc_age',S('a0')-.25,S('r0')-.25],['sc_rule',S('r0')-.25,S('e0')-.25],['sc_cta',S('e0')-.25,T.END+1]];
+window.SCENES=scenes;
+function pop(id,t,t0,opts={}){const el=$(id);const d=opts.d||.42;let p=cl((t-t0)/d);let s=p<=0?0:eOutBack(p);let o=cl((t-t0)/.12);
+  let extra='';if(opts.out!==undefined){const q=cl((t-opts.out)/.25);s*=1-eInCubic(q);o*=1-q}
+  if(opts.rot){extra+=` rotate(${opts.rot*(1-cl(p*1.4))}deg)`}
+  if(opts.stamp){const q=cl((t-t0)/.22);s=p<=0?0:(2.2-1.2*eOutCubic(q));o=cl((t-t0)/.08);extra+=` rotate(-6deg)`}
+  if(opts.from){const q=eOutCubic(cl((t-t0)/.45));extra=` translate(${opts.from[0]*(1-q)}px,${opts.from[1]*(1-q)}px)`+extra;s=p<=0?0:1;}
+  const base=opts.base||'';el.style.opacity=o;el.style.transform=`${base}${extra} scale(${s})`;}
+function hl(id,t,t0,col){const el=$(id);const p=cl((t-t0)/.3);const j=(t>t0&&t<t0+.5)?Math.sin((t-t0)*40)*(1-(t-t0)/.5)*4:0;el.style.filter=p>0?`drop-shadow(0 0 ${18*p}px ${col})`:'';return j}
+function setPose(container,p){container.querySelectorAll('.pose').forEach(n=>n.style.display=n.dataset.p===p?'block':'none')}
+function poseAt(t){const L=[[0,'surprised'],[S('n0'),'happy'],[S('s0'),'default'],[S('s1a'),'happy'],[S('c0'),'thinking'],[S('c2'),'happy'],[S('c3'),'thinking'],[S('c4'),'happy'],[S('c5'),'surprised'],[S('c6'),'happy'],[S('a0'),'default'],[S('a1'),'happy'],[S('a2'),'thinking'],[S('a3'),'surprised'],[S('r0'),'default'],[S('r1'),'happy']];let cur=L[0];for(const x of L){if(t>=x[0]-.05)cur=x}return cur}
+let lastCap=null;
+window.render=function(t){
+  // bg
+  $('dots').style.transform=`translate(${(t*14)%46}px,${(t*9)%46}px)`;
+  for(let i=0;i<FL.length;i++){const el=$('fl'+i);const x=((i*263)%1000)+Math.sin(t*.5+i)*30-40;const y=((i*421+t*(18+i*3))%2100)-150;el.style.transform=`translate(${x}px,${1920-y}px) rotate(${Math.sin(t*.7+i)*14}deg)`}
+  // camera micro zoom per scene
+  let sc=scenes.find(s=>t>=s[1]&&t<s[2])||scenes[scenes.length-1];const ls=t-sc[1];
+  $('cam').style.transform=`scale(${1+0.025*Math.min(ls/4,1)}) rotate(${Math.sin(t*.8)*.25}deg)`;
+  // scenes slide
+  for(const [id,a,b] of scenes){const el=$(id);let x=0,o=1,sv='visible';
+    if(t<a-.0001||t>=b+.35){el.style.visibility='hidden';continue}
+    const pin=cl((t-a)/.38);const pout=cl((t-b)/.35);
+    x=(1-eOutCubic(pin))*1080*(a<=0?0:1) - eInCubic(pout)*1080; o=1-pout;
+    el.style.visibility='visible';el.style.transform=`translateX(${x}px) rotate(${(1-eOutCubic(pin))*(a<=0?0:3)}deg)`;el.style.opacity=o}
+  // pill: series label
+  pop('pill',t,.05,{base:'translateX(-50%) '});
+  // HOOK
+  {const t0=S('h1');const sp=t0+1.15;pop('h_one',t,0.05,{out:sp,d:.5});
+   pop('h_a',t,sp,{from:[220,0],rot:-10});pop('h_b',t,sp+.08,{from:[-220,0],rot:10});pop('h_eq',t,sp+.25);
+   const j1=hl('h_a',t,S('h2')+.75,'#FF4F81');pop('h_st',t,S('h2')+.75,{stamp:1});
+   const shake=(t>S('h2')+.75&&t<S('h2')+1.3)?Math.sin(t*90)*8*(1-(t-S('h2')-.75)/.55):0;
+   $('h_a').style.transform+=` translateX(${shake}px)`;$('h_b').style.transform+=` translateX(${-shake}px)`}
+  // NATIVE
+  pop('n_ch',t,S('n0')+.05,{base:'translateX(-50%) '});pop('n_t1',t,S('n1a')-.04,{from:[0,120]});pop('n_t2',t,S('n1b')-.04,{from:[0,120]});pop('n_t3',t,S('n1c')-.04,{from:[0,120]});pop('n_sub',t,E('n1c')+.1);
+  // SINO
+  pop('s_ch',t,S('s0')+.05,{base:'translateX(-50%) '});pop('s_t1',t,S('s1a')-.04,{from:[0,120]});pop('s_t2',t,S('s1b')-.04,{from:[0,120]});pop('s_t3',t,S('s1c')-.04,{from:[0,120]});pop('s_sub',t,S('s0')+1.2);
+  // CLOCK
+  {const t0=S('c0');const p=eInOut(cl((t-t0-.2)/1.6));const tot=3.5*p; // hours
+   const mA=tot*360, hA=tot*30;$('hh').setAttribute('transform',`rotate(${hA})`);$('mh').setAttribute('transform',`rotate(${mA})`);
+   const cS=S('c5');const shrink=eInOut(cl((t-cS+.1)/.45));
+   const ck=$('clock');ck.style.transform=`translateY(${-0*shrink}px) scale(${(t<t0?0:eOutBack(cl((t-t0)/.45)))*(1-shrink)})`;ck.style.opacity=1-shrink;
+   $('hh').querySelector('rect').setAttribute('fill',t>S('c1')+.1?'#FF4F81':'#1C1718');$('mh').querySelector('rect').setAttribute('fill',t>S('c3')+.1?'#20C9A2':'#1C1718');
+   $('hh').setAttribute('filter',t>S('c1')+.1&&t<cS?'url(#glow)':'');$('mh').setAttribute('filter',t>S('c3')+.1&&t<cS?'url(#glow)':'');
+   pop('c_dig',t,t0+1.7,{out:S('c1')});pop('c_l1',t,S('c2')-.05,{out:cS-.1,from:[-200,0]});pop('c_l2',t,S('c4')-.05,{out:cS-.1,from:[200,0]});
+   pop('c_sent',t,cS+.05,{d:.5});pop('c_st',t,S('c6')+.05,{stamp:1})}
+  // AGE
+  pop('a_badge',t,S('a0')+.1,{rot:-20});pop('a_chat',t,S('a1')-.12,{from:[-300,0]});pop('a_form',t,S('a3')-.12,{from:[300,0]});
+  // RULE
+  {pop('r_c1',t,S('r0')+.05,{from:[-200,0]});pop('r_c2',t,S('r1')-.15,{from:[200,0]});
+   const r0=S('r0'),d0=E('r0')-r0;['r_i1','r_i2','r_i3'].forEach((id,i)=>pop(id,t,r0+d0*(0.35+i*.16),{from:[-80,0]}));
+   const r1=S('r1'),d1=E('r1')-r1;['r_j1','r_j2','r_j3','r_j4'].forEach((id,i)=>pop(id,t,r1+d1*(0.02+i*.17),{from:[80,0]}))}
+  // CTA
+  {const t0=S('e0')-.1;const bb=$('bigbird');setPose(bb,'happy');const p=cl((t-t0)/.55);bb.style.transform=`translateY(${-Math.abs(Math.sin((t-t0)*5))*28*(p>=1?1:0)}px) scale(${p<=0?0:eOutBack(p)})`;
+   pop('e_t',t,t0+.35);pop('e_q',t,t0+.75)}
+  // small bird
+  {const inCta=t>=S('e0')-.25;const b=$('bird');const [pt,pose]=poseAt(t);setPose(b,pose);
+   const sq=cl((t-pt)/.35);const sY=1-.12*Math.sin(sq*Math.PI)*(1-sq);const hop=-Math.abs(Math.sin(t*4.2))*14;
+   const ent=eOutBack(cl((t-.0)/.5));const ex=inCta?1-eInCubic(cl((t-S('e0')+.25)/.3)):1;
+   b.style.transform=`translateY(${hop}px) scale(${ent*ex*(2-sY)*0.5+ent*ex*0.5}, ${ent*ex*sY})`;
+   const bl=((t%3.1)>2.98);b.querySelectorAll('.eyes').forEach(e=>e.style.transform=bl?'scaleY(0.12)':'');
+   // bubble
+   const bub=$('bubble');let c=null;for(const x of CAPS){if(t>=x.t0&&t<x.t1)c=x}
+   if(!c){for(const x of CAPS){if(t>=x.t0)c=x}}  // keep last caption between lines
+   if(c&&c!==lastCap){$('cap').innerHTML=c.html;lastCap=c}
+   const cs=c?cl((t-c.t0)/.22):0;const bs=c?(.92+.08*eOutBack(cs)):0;const bo=c?1:0;
+   bub.style.opacity=bo*ex*ent;bub.style.transform=`scale(${bs*ex})`}
+  // flash on stamps
+  let f=0;for(const k of [S('h2')+.75,S('c6')+.05,S('a3')]){if(t>=k&&t<k+.18)f=Math.max(f,.35*(1-(t-k)/.18))}$('flash').style.opacity=f;
+};
+window.render(0);
+</script></body></html>
