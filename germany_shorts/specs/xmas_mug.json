@@ -1,0 +1,24 @@
+{
+  "title": "독일 크리스마스 마켓\n*컵 가져가도 되는* 이유",
+  "ambience": "busy outdoor christmas market at night, crowd chatter, distant church bells, warm festive atmosphere, no music",
+  "ambience_vol": 0.16,
+  "voice": {"emotion": "happy", "tempo": 1.12},
+  "beats": [
+    {"say": "독일 크리스마스 마켓에선, 컵을 그냥 들고 가도 됩니다.", "sub": "독일 크리스마스 마켓에선 *컵을 그냥 들고 가도* 됩니다",
+     "clip": {"pexels": 35006787, "start": 0.5}, "sfx": "fast cinematic whoosh", "sfx_len": 1.0},
+    {"say": "따뜻한 와인, 글뤼바인을 한 잔 사면,", "sub": "따뜻한 와인 *글뤼바인*을 한 잔 사면",
+     "clip": {"pexels": 10641435, "start": 0}, "sfx": "liquid pouring into a ceramic mug", "sfx_len": 2.0, "sfx_vol": 0.4},
+    {"say": "컵 보증금, 판트를 2에서 5유로 더 내거든요.", "sub": "컵 보증금 *판트(Pfand)*를 *2~5유로* 더 내거든요",
+     "clip": {"pexels": 5722527, "start": 1}, "sfx": "single metal coin dropping on a wooden counter", "sfx_len": 1.0},
+    {"say": "컵을 반납하면, 그 돈을 돌려받고,", "sub": "컵을 반납하면 그 돈을 *돌려받고*",
+     "clip": {"pexels": 35316385, "start": 2}, "sfx": "cash register ka-ching", "sfx_len": 1.0, "sfx_vol": 0.45},
+    {"say": "안 돌려주면요? 그 컵은 그냥 내 거예요.", "sub": "안 돌려주면? 그 컵은 *그냥 내 거*",
+     "clip": {"pexels": 6111491, "start": 1}, "emotion": "normal", "sfx": "playful cartoon boing", "sfx_len": 0.8, "sfx_vol": 0.45},
+    {"say": "근데 이 컵, 마켓마다 디자인이 다르고, 매년 새로 나오는 곳도 많아요.", "sub": "근데 이 컵, *마켓마다 디자인이 다르고* 매년 새로 나오는 곳도 많아요",
+     "clip": {"pexels": 35405632, "start": 1}, "sfx": "magical sparkle chime", "sfx_len": 1.2, "sfx_vol": 0.4},
+    {"say": "그래서 독일 사람들 찬장엔, 겨울마다 컵이 하나씩 늘어납니다.", "sub": "그래서 독일 사람들 찬장엔 겨울마다 *컵이 하나씩* 늘어납니다",
+     "clip": {"pexels": 7279831, "start": 0}, "sfx": "ceramic mugs clinking together", "sfx_len": 1.0, "sfx_vol": 0.4},
+    {"say": "여러분이라면, 돌려받을래요? 가져갈래요?", "sub": "여러분이라면? *돌려받기* vs *가져가기*",
+     "clip": {"pexels": 29862137, "start": 3}, "sfx": "soft bright ding notification", "sfx_len": 0.8, "sfx_vol": 0.4}
+  ]
+}

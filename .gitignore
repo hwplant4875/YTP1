@@ -1,0 +1,5 @@
+germany_shorts/.cache/
+germany_shorts/longform/.cache/
+germany_shorts/longform/node_modules/
+germany_shorts/longform/_page*.html
+__pycache__/
