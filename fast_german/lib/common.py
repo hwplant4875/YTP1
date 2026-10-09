@@ -74,30 +74,23 @@ def words_from_alignment(al):
     return out
 
 
-def sfx(name, prompt, seconds=1.0):
-    path = os.path.join(CACHE, "sfx", name + ".mp3")
-    if not os.path.exists(path):
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        open(path, "wb").write(_post("https://api.elevenlabs.io/v1/sound-generation",
-                                     {"text": prompt, "duration_seconds": seconds, "prompt_influence": 0.6}))
-    return path
-
-
+MIXKIT = os.path.join(ROOT, "assets", "sfx_mixkit")
+# Mixkit free sound effects (mixkit.co/license, free for videos, no attribution). name -> file
 SFX = {
-    "pop": ("Short cute bubbly pop sound effect, clean, for a UI element appearing", 0.5),
-    "whoosh": ("Fast airy whoosh transition sound effect, short", 0.7),
-    "ding": ("Bright cheerful correct-answer ding chime, short", 0.8),
-    "buzz": ("Short funny wrong-answer buzzer sound, cartoon style", 0.7),
-    "snap": ("Crisp snap crack sound of something splitting apart, short", 0.5),
-    "hit": ("Deep punchy cinematic sub bass hit boom, short", 1.0),
-    "tick": ("Single clock tick sound, crisp", 0.5),
-    "swoosh_up": ("Rising swoosh riser sound effect, short, energetic", 1.0),
+    "pop": "pop.mp3",
+    "ding": "ding.mp3",
+    "start": "attention.mp3",
+    "buzz": "buzz.mp3",
+    "snap": "snap.mp3",
+    "whoosh": "whoosh.mp3",
+    "tick": "bubble.mp3",
+    "swoosh_up": "sparkle.mp3",
 }
+SFX["hit"] = SFX["start"]  # the heavy sub hit was dropped (2026-10-09 feedback)
 
 
 def get_sfx(name):
-    p, s = SFX[name]
-    return sfx(name, p, s)
+    return os.path.join(MIXKIT, SFX[name])
 
 
 def icon(name, size):
@@ -118,3 +111,19 @@ def icon(name, size):
 def duration(path):
     return float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration",
                                           "-of", "csv=p=0", path]).strip())
+
+
+def music(name, prompt, seconds=60):
+    """Instrumental bed from ElevenLabs Music, cached by name."""
+    path = os.path.join(CACHE, "music", name + ".mp3")
+    if not os.path.exists(path):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        open(path, "wb").write(_post("https://api.elevenlabs.io/v1/music?output_format=mp3_44100_128",
+                                     {"prompt": prompt, "music_length_ms": int(seconds * 1000),
+                                      "force_instrumental": True}))
+    return path
+
+
+KPOP_BED = ("Light, bright K-pop style instrumental background music for a cute language-learning video. "
+            "Bouncy synth plucks, soft claps, warm bass, catchy but simple, mid tempo around 105 bpm, no vocals, "
+            "no drops, steady energy, loop-friendly, sits quietly under a voice-over.")

@@ -9,7 +9,7 @@
     "hot-beverage"
    ],
    "punch": true,
-   "sfx": "hit"
+   "sfx": "start"
   },
   {
    "say": "You say: Einen Kaffee, bitte.",
@@ -74,8 +74,8 @@
    "sfx": "ding"
   },
   {
-   "say": "Save it and order like a local.",
-   "top": "Save it!",
+   "say": "Follow for more German.",
+   "top": "Follow for more German",
    "icons": [
     "pretzel"
    ],

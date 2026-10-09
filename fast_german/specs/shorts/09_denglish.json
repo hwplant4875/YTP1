@@ -9,7 +9,7 @@
     "face-with-hand-over-mouth"
    ],
    "punch": true,
-   "sfx": "hit"
+   "sfx": "start"
   },
   {
    "say": "Handy. In Germany, that's your phone.",
@@ -60,10 +60,10 @@
    "sfx": "pop"
   },
   {
-   "say": "Which one surprised you most? Comment!",
-   "top": "Which one got you?",
+   "say": "Follow for more German.",
+   "top": "Follow for more German",
    "icons": [
-    "thinking-face"
+    "pretzel"
    ],
    "sfx": "swoosh_up"
   }

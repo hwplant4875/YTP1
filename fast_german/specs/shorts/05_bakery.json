@@ -9,7 +9,7 @@
     "pretzel"
    ],
    "punch": true,
-   "sfx": "hit"
+   "sfx": "start"
   },
   {
    "say": "Die Brezel. Pretzel.",
@@ -90,8 +90,8 @@
    "sfx": "ding"
   },
   {
-   "say": "Save this for your trip to Germany.",
-   "top": "Save for your trip",
+   "say": "Follow for more German.",
+   "top": "Follow for more German",
    "icons": [
     "pretzel"
    ],

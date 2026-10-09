@@ -32,7 +32,7 @@
           "say": "Stay for the speed quiz at the end."
         },
         {
-          "say": "Ready? I'm your German friend, and this is Fast German. German in seconds, not hours."
+          "say": "Ready? I'm your German friend, and this is Fast German."
         }
       ]
     },
@@ -1726,11 +1726,11 @@
           "say": "Comment one German sentence about yourself. Ich heiße, ich komme aus, ich wohne in. I read them."
         },
         {
-          "say": "If this helped, subscribe to Fast German. German in seconds, not hours.",
+          "say": "If this helped, follow for more German.",
           "card": {
             "de": "Fast German",
             "article": null,
-            "en": "German in seconds, not hours",
+            "en": "Follow for more German",
             "icon": "bell"
           }
         },

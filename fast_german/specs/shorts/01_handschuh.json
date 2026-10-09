@@ -1,11 +1,95 @@
-{"id": "01_handschuh",
+{
+ "id": "01_handschuh",
  "title": "Germans call gloves HAND SHOES 🧤 #german #learngerman",
  "beats": [
-  {"say": "Germans call gloves... hand shoes.", "top": "Germans call gloves...", "icons": ["gloves"], "punch": true, "sfx": "hit"},
-  {"say": "Hand. Plus Schuh, shoe.", "top": "HAND SHOES?!", "icons": ["hand-with-fingers-splayed-default", "running-shoe"], "ops": ["+"], "words": [{"de": "Hand", "article": "die"}, {"de": "Schuh", "article": "der"}], "sfx": "snap"},
-  {"say": "Handschuh! A shoe for your hand.", "icons": ["gloves"], "word": {"de": "Handschuh", "article": "der"}, "en": "the glove", "sfx": "ding"},
-  {"say": "And it's blue, because it's der Handschuh. Blue means der.", "icons": ["gloves"], "word": {"de": "Handschuh", "article": "der"}, "en": "blue = der", "sfx": "pop"},
-  {"say": "Now guess. What's a Fingerhut? A finger hat?", "top": "Finger + Hut (hat) = ?", "icons": ["thinking-face"], "word": {"de": "Fingerhut", "article": "der"}, "sfx": "whoosh", "pause": 0.6},
-  {"say": "It's a thimble! German is just Lego with words.", "icons": ["sewing-needle"], "word": {"de": "Fingerhut", "article": "der"}, "en": "the thimble", "mark": "right", "sfx": "ding"},
-  {"say": "Follow for German in seconds, not hours.", "top": "Follow for more German", "icons": ["pretzel"], "sfx": "swoosh_up"}
- ]}
+  {
+   "say": "Germans call gloves... hand shoes.",
+   "top": "Germans call gloves...",
+   "icons": [
+    "gloves"
+   ],
+   "punch": true,
+   "sfx": "start"
+  },
+  {
+   "say": "Hand. Plus Schuh, shoe.",
+   "top": "HAND SHOES?!",
+   "icons": [
+    "hand-with-fingers-splayed-default",
+    "running-shoe"
+   ],
+   "ops": [
+    "+"
+   ],
+   "words": [
+    {
+     "de": "Hand",
+     "article": "die"
+    },
+    {
+     "de": "Schuh",
+     "article": "der"
+    }
+   ],
+   "sfx": "snap"
+  },
+  {
+   "say": "Handschuh! A shoe for your hand.",
+   "icons": [
+    "gloves"
+   ],
+   "word": {
+    "de": "Handschuh",
+    "article": "der"
+   },
+   "en": "the glove",
+   "sfx": "ding"
+  },
+  {
+   "say": "And it's blue, because it's der Handschuh. Blue means der.",
+   "icons": [
+    "gloves"
+   ],
+   "word": {
+    "de": "Handschuh",
+    "article": "der"
+   },
+   "en": "blue = der",
+   "sfx": "pop"
+  },
+  {
+   "say": "Now guess. What's a Fingerhut? A finger hat?",
+   "top": "Finger + Hut (hat) = ?",
+   "icons": [
+    "thinking-face"
+   ],
+   "word": {
+    "de": "Fingerhut",
+    "article": "der"
+   },
+   "sfx": "whoosh",
+   "pause": 0.6
+  },
+  {
+   "say": "It's a thimble! German is just Lego with words.",
+   "icons": [
+    "sewing-needle"
+   ],
+   "word": {
+    "de": "Fingerhut",
+    "article": "der"
+   },
+   "en": "the thimble",
+   "mark": "right",
+   "sfx": "ding"
+  },
+  {
+   "say": "Follow for more German.",
+   "top": "Follow for more German",
+   "icons": [
+    "pretzel"
+   ],
+   "sfx": "swoosh_up"
+  }
+ ]
+}

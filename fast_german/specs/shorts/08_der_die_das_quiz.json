@@ -9,10 +9,10 @@
     "thinking-face"
    ],
    "punch": true,
-   "sfx": "hit"
+   "sfx": "start"
   },
   {
-   "say": "Sonne?",
+   "say": "Sonne. || Die Sonne.",
    "top": "1 / 5",
    "icons": [
     "sun"
@@ -21,23 +21,17 @@
     "de": "___ Sonne"
    },
    "sfx": "tick",
-   "pause": 1.0
+   "reveal": {
+    "word": {
+     "de": "Sonne",
+     "article": "die"
+    },
+    "mark": "right",
+    "sfx": "ding"
+   }
   },
   {
-   "say": "Die Sonne!",
-   "top": "1 / 5",
-   "icons": [
-    "sun"
-   ],
-   "word": {
-    "de": "Sonne",
-    "article": "die"
-   },
-   "mark": "right",
-   "sfx": "ding"
-  },
-  {
-   "say": "Mond?",
+   "say": "Mond. || Der Mond.",
    "top": "2 / 5",
    "icons": [
     "crescent-moon"
@@ -46,23 +40,17 @@
     "de": "___ Mond"
    },
    "sfx": "tick",
-   "pause": 1.0
+   "reveal": {
+    "word": {
+     "de": "Mond",
+     "article": "der"
+    },
+    "mark": "right",
+    "sfx": "ding"
+   }
   },
   {
-   "say": "Der Mond!",
-   "top": "2 / 5",
-   "icons": [
-    "crescent-moon"
-   ],
-   "word": {
-    "de": "Mond",
-    "article": "der"
-   },
-   "mark": "right",
-   "sfx": "ding"
-  },
-  {
-   "say": "Mädchen?",
+   "say": "Mädchen. || Das Mädchen.",
    "top": "3 / 5",
    "icons": [
     "girl-default"
@@ -71,23 +59,17 @@
     "de": "___ Mädchen"
    },
    "sfx": "tick",
-   "pause": 1.0
+   "reveal": {
+    "word": {
+     "de": "Mädchen",
+     "article": "das"
+    },
+    "mark": "right",
+    "sfx": "ding"
+   }
   },
   {
-   "say": "Das Mädchen!",
-   "top": "3 / 5",
-   "icons": [
-    "girl-default"
-   ],
-   "word": {
-    "de": "Mädchen",
-    "article": "das"
-   },
-   "mark": "right",
-   "sfx": "ding"
-  },
-  {
-   "say": "Butter?",
+   "say": "Butter. || Die Butter.",
    "top": "4 / 5",
    "icons": [
     "butter"
@@ -96,23 +78,17 @@
     "de": "___ Butter"
    },
    "sfx": "tick",
-   "pause": 1.0
+   "reveal": {
+    "word": {
+     "de": "Butter",
+     "article": "die"
+    },
+    "mark": "right",
+    "sfx": "ding"
+   }
   },
   {
-   "say": "Die Butter!",
-   "top": "4 / 5",
-   "icons": [
-    "butter"
-   ],
-   "word": {
-    "de": "Butter",
-    "article": "die"
-   },
-   "mark": "right",
-   "sfx": "ding"
-  },
-  {
-   "say": "Auto?",
+   "say": "Auto. || Das Auto.",
    "top": "5 / 5",
    "icons": [
     "automobile"
@@ -121,20 +97,14 @@
     "de": "___ Auto"
    },
    "sfx": "tick",
-   "pause": 1.0
-  },
-  {
-   "say": "Das Auto!",
-   "top": "5 / 5",
-   "icons": [
-    "automobile"
-   ],
-   "word": {
-    "de": "Auto",
-    "article": "das"
-   },
-   "mark": "right",
-   "sfx": "ding"
+   "reveal": {
+    "word": {
+     "de": "Auto",
+     "article": "das"
+    },
+    "mark": "right",
+    "sfx": "ding"
+   }
   },
   {
    "say": "Mädchen is das, because every word ending in chen is das.",
@@ -153,6 +123,14 @@
    "top": "Your score?",
    "icons": [
     "trophy"
+   ],
+   "sfx": "pop"
+  },
+  {
+   "say": "Follow for more German.",
+   "top": "Follow for more German",
+   "icons": [
+    "pretzel"
    ],
    "sfx": "swoosh_up"
   }

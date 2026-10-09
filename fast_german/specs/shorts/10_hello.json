@@ -13,7 +13,7 @@
    },
    "en": "very formal",
    "punch": true,
-   "sfx": "hit"
+   "sfx": "start"
   },
   {
    "say": "Hallo. Works everywhere, with everyone.",
@@ -72,10 +72,10 @@
    "sfx": "ding"
   },
   {
-   "say": "Which one will you use? Comment!",
-   "top": "Your favorite?",
+   "say": "Follow for more German.",
+   "top": "Follow for more German",
    "icons": [
-    "thinking-face"
+    "pretzel"
    ],
    "sfx": "swoosh_up"
   }

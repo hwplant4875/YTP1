@@ -5,6 +5,7 @@ Spec: {"id", "beats": [{"say", "top"?, "icons"?: [..], "ops"?: [..], "word"?: {"
 """
 import json
 import math
+import re
 import os
 import subprocess
 import sys
@@ -17,7 +18,11 @@ sys.path.insert(0, os.path.dirname(__file__))
 import common as C
 
 W, H, FPS = 1080, 1920, 30
-GAP = 0.12
+GAP = 0.45  # between beats
+SENT_GAP = 0.3  # between sentences inside a beat
+SFX_VOL = {"pop": 0.7, "ding": 0.55, "start": 0.6, "buzz": 0.45, "snap": 0.8, "whoosh": 0.5, "tick": 0.6, "swoosh_up": 0.5}
+MUSIC = os.path.join(C.CACHE, "music", "kpop_bed.mp3")
+MUSIC_VOL = 0.22
 
 
 def font(size, weight="Bold"):
@@ -215,32 +220,74 @@ def sub_chunks(words, max_words=3):
 def render(spec_path, out_path):
     spec = json.load(open(spec_path))
     beats = spec["beats"]
-    # 1. audio per beat
-    t = 0.25
-    timeline = []
+    # 1. audio: each sentence is its own clip so the voice ends naturally and pauses between sentences.
+    #    "A || B" in a beat's say = one clip with a 2 s break; the beat's "reveal" visuals switch in at B.
+    speed = spec.get("speed", 0.9)
+    t = 0.35
+    timeline, clips = [], []
     for b in beats:
-        mp3, al = C.tts(b["say"], speed=spec.get("speed", 1.07))
-        d = C.duration(mp3)
-        words = [(w, s + t, e + t) for w, s, e in C.words_from_alignment(al)]
-        timeline.append({"beat": b, "start": t, "end": t + d + b.get("pause", 0), "mp3": mp3, "words": words})
-        t += d + b.get("pause", 0) + GAP
-    total = t + 0.6
-    # 2. audio mix
+        start = t
+        words = []
+        reveal_at = None
+        if "||" in b["say"]:
+            pa, pb = [x.strip() for x in b["say"].split("||")]
+            mp3, al = C.tts(f'{pa} <break time="{b.get("gap", 2.0)}s" /> {pb}', speed=speed)
+            ws = [w for w in C.words_from_alignment(al) if not (w[0].startswith("<") or "time=" in w[0] or w[0] == "/>")]
+            n_a = len(pa.split())
+            reveal_at = t + ws[n_a][1] - 0.05 if len(ws) > n_a else None
+            words += [(w, s0 + t, e0 + t) for w, s0, e0 in ws]
+            clips.append((mp3, t))
+            t += C.duration(mp3)
+        else:
+            for sent in [x for x in re.split(r"(?<=[.!?])\s+", b["say"].strip()) if x]:
+                mp3, al = C.tts(sent, speed=speed)
+                words += [(w, s0 + t, e0 + t) for w, s0, e0 in C.words_from_alignment(al)]
+                clips.append((mp3, t))
+                t += C.duration(mp3) + SENT_GAP
+            t -= SENT_GAP
+        t += b.get("pause", 0)
+        if reveal_at:
+            first = {k: v for k, v in b.items() if k not in ("reveal",)}
+            timeline.append({"beat": first, "start": start, "end": reveal_at, "words": words})
+            second = dict(first)
+            second.update(b["reveal"])
+            second["sfx"] = b["reveal"].get("sfx")
+            timeline.append({"beat": second, "start": reveal_at, "end": t, "words": []})
+        else:
+            timeline.append({"beat": b, "start": start, "end": t, "words": words})
+        t += GAP
+    total = t + 0.5
+    # 2. audio mix: voice clips, sound effects (trimmed, faded), music bed ducked under the voice
     tmp = tempfile.mkdtemp()
     inputs, filters = [], []
-    for i, tl in enumerate(timeline):
-        inputs += ["-i", tl["mp3"]]
-        filters.append(f"[{i}:a]adelay={int(tl['start'] * 1000)}:all=1,volume=1.0[v{i}]")
-    k = len(timeline)
-    for i, tl in enumerate(timeline):
+    for i, (mp3, st) in enumerate(clips):
+        inputs += ["-i", mp3]
+        filters.append(f"[{i}:a]aformat=channel_layouts=stereo,adelay={int(st * 1000)}:all=1[c{i}]")
+    nv = len(clips)
+    filters.append("".join(f"[c{i}]" for i in range(nv)) + f"amix=inputs={nv}:normalize=0,apad=whole_dur={total},"
+                   f"atrim=0:{total},loudnorm=I=-15:TP=-2:LRA=11,asplit=2[voice][key]")
+    k = nv
+    fx = []
+    for tl in timeline:
         s = tl["beat"].get("sfx")
         if s:
             inputs += ["-i", C.get_sfx(s)]
-            vol = {"hit": 0.55, "ding": 0.35, "buzz": 0.35, "swoosh_up": 0.3}.get(s, 0.3)
-            filters.append(f"[{k}:a]adelay={int(max(0, tl['start'] - 0.05) * 1000)}:all=1,volume={vol}[v{k}]")
+            vol = SFX_VOL.get(s, 0.8)
+            filters.append(f"[{k}:a]aformat=channel_layouts=stereo,atrim=0:1.1,afade=t=out:st=0.8:d=0.3,"
+                           f"volume={vol},adelay={int(max(0, tl['start'] - 0.08) * 1000)}:all=1[f{k}]")
+            fx.append(f"[f{k}]")
             k += 1
-    mix = "".join(f"[v{i}]" for i in range(k))
-    filters.append(f"{mix}amix=inputs={k}:normalize=0,apad=whole_dur={total},atrim=0:{total},loudnorm=I=-14:TP=-1.5:LRA=11[a]")
+    music = spec.get("music", MUSIC)
+    if music and os.path.exists(music):
+        inputs += ["-stream_loop", "-1", "-i", music]
+        filters.append(f"[{k}:a]aformat=channel_layouts=stereo,atrim=0:{total},afade=t=in:d=0.6,"
+                       f"afade=t=out:st={max(0, total - 1.2)}:d=1.2,volume={MUSIC_VOL}[m0]")
+        filters.append("[m0][key]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=350[music]")
+        fx.append("[music]")
+        k += 1
+    else:
+        filters.append("[key]anullsink")
+    filters.append("[voice]" + "".join(fx) + f"amix=inputs={1 + len(fx)}:normalize=0,alimiter=limit=0.89[a]")
     wav = os.path.join(tmp, "a.wav")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", *inputs, "-filter_complex", ";".join(filters),
                     "-map", "[a]", "-ar", "48000", wav], check=True)

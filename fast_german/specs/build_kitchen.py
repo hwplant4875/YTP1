@@ -48,8 +48,8 @@ ITEMS = [  # (section, article, word, english, icon, example, example_en)
  ("Fruit & Vegetables", "der", "Pilz", "the mushroom", "mushroom", "Der Pilz ist klein.", "The mushroom is small."),
  ("Fruit & Vegetables", "der", "Salat", "the salad / lettuce", "green-salad", "Der Salat ist frisch.", "The salad is fresh."),
 ]
-NAR = {"speed": 1.0}
-DE = {"speed": 0.92}
+NAR = {"speed": 0.92}
+DE = {"speed": 0.88}
 TL = "FAST GERMAN"
 S = []
 intro = ("Welcome to the Fast German picture dictionary. Today: the kitchen. Forty-three words, each with a picture "
@@ -78,6 +78,6 @@ for i, (s, a, w, en, ic, ex, exen) in enumerate(ITEMS):
               [("sfx", "tick"), ("sil", 0.9), ("sfx", "tick"), ("sil", 0.9), ("sfx", "tick"), ("sil", 0.6)]))
     S.append((lambda a=a, w=w, en=en, ic=ic, tr=tr: slide(LIGHT, top_left=TL, top_right=tr, label="QUIZ", icon=ic, word=f"{a} {w}", article=a, en=en, icon_size=440),
               [("sfx", "ding"), ("tts", f"{a} {w}", DE), ("sil", 1.0)]))
-outro = "How many did you get? Tell me in the comments, and subscribe to Fast German. German in seconds, not hours."
-S.append((lambda: slide(LIGHT, top_left=TL, word="German in seconds, not hours", icon="pretzel"), [("tts", outro, NAR), ("sil", 15.0)]))
+outro = "How many did you get? Tell me in the comments, and follow for more German."
+S.append((lambda: slide(LIGHT, top_left=TL, word="Follow for more German", icon="pretzel"), [("tts", outro, NAR), ("sil", 15.0)]))
 print(build(S, sys.argv[1], fps=10, workers=1, crf=22))

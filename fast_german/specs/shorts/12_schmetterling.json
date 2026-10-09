@@ -9,7 +9,7 @@
     "butterfly"
    ],
    "punch": true,
-   "sfx": "hit"
+   "sfx": "start"
   },
   {
    "say": "French: papillon.",
@@ -55,7 +55,7 @@
     "article": "der"
    },
    "punch": true,
-   "sfx": "hit"
+   "sfx": "start"
   },
   {
    "say": "It comes from Schmetten, an old word for cream. Butterflies love to land on cream.",
@@ -83,7 +83,7 @@
    "sfx": "ding"
   },
   {
-   "say": "Follow for German in seconds, not hours.",
+   "say": "Follow for more German.",
    "top": "Follow for more German",
    "icons": [
     "pretzel"

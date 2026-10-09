@@ -10,7 +10,7 @@
     "ice-cream"
    ],
    "punch": true,
-   "sfx": "hit"
+   "sfx": "start"
   },
   {
    "say": "Kummer, grief. Speck, bacon.",
@@ -78,10 +78,10 @@
    "sfx": "pop"
   },
   {
-   "say": "Tag a friend who has Kummerspeck.",
-   "top": "Tag a friend",
+   "say": "Follow for more German.",
+   "top": "Follow for more German",
    "icons": [
-    "face-with-hand-over-mouth"
+    "pretzel"
    ],
    "sfx": "swoosh_up"
   }

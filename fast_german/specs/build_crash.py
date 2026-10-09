@@ -4,8 +4,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "lib"))
 from longform import slide, build, LIGHT
 HERE = os.path.dirname(__file__)
 spec = json.load(open(os.path.join(HERE, "a1_crash_course.json")))
-NAR = {"speed": 1.05}
-DE = {"speed": 0.95}
+NAR = {"speed": 0.92}
+DE = {"speed": 0.88}
 CH_ICONS = ["rocket", "waving-hand-default", "bust-in-silhouette", "sparkles", "keycap-1", "running-shoe",
             "red-question-mark", "hot-beverage", "train", "alarm-clock", "folded-hands-default", "trophy"]
 S = []
@@ -37,5 +37,5 @@ for ci, ch in enumerate(spec["chapters"]):
             S.append((lambda l=l, tr=tr: slide(LIGHT, top_left="FAST GERMAN", top_right=tr, label="QUIZ", word=l["answer"],
                                                article=l.get("article"), en=l["quiz"]),
                       [("sfx", "ding"), ("tts", l["answer"], DE), ("sil", 1.2)]))
-S.append((lambda: slide(LIGHT, top_left="FAST GERMAN", word="German in seconds, not hours", icon="pretzel"), [("sil", 15.0)]))
+S.append((lambda: slide(LIGHT, top_left="FAST GERMAN", word="Follow for more German", icon="pretzel"), [("sil", 15.0)]))
 print(build(S, sys.argv[1], fps=10, workers=1, crf=22))

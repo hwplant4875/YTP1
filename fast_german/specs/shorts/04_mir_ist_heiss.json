@@ -9,7 +9,7 @@
     "hot-face"
    ],
    "punch": true,
-   "sfx": "hit"
+   "sfx": "start"
   },
   {
    "say": "Ich bin heiß means: I'm hot. Like, sexy hot.",
@@ -60,7 +60,7 @@
    "sfx": "buzz"
   },
   {
-   "say": "Follow for German in seconds, not hours.",
+   "say": "Follow for more German.",
    "top": "Follow for more German",
    "icons": [
     "pretzel"

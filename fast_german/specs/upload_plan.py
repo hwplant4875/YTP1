@@ -1,7 +1,7 @@
 """Writes upload_plan.json: titles, descriptions, tags and publish times for the first batch."""
 import json, os
 HERE = os.path.dirname(__file__)
-TAIL = ("\n\nFast German: German in seconds, not hours.\nEvery noun has a color: der = blue, die = red, das = green.\n"
+TAIL = ("\n\nFast German: learn German fast.\nEvery noun has a color: der = blue, die = red, das = green.\n"
         "New short every day. Subscribe and learn German without the boring hour-long lessons.")
 TAGS = ["learn german", "german", "german language", "german for beginners", "deutsch lernen", "german words", "fast german"]
 SHORTS = [  # (spec id, one-line hook for the description, extra tags) in publish order

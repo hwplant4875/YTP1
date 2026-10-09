@@ -9,7 +9,7 @@
     "wrapped-gift"
    ],
    "punch": true,
-   "sfx": "hit"
+   "sfx": "start"
   },
   {
    "say": "Because in German, das Gift means... poison.",
@@ -67,7 +67,7 @@
    "sfx": "buzz"
   },
   {
-   "say": "Follow for German in seconds, not hours.",
+   "say": "Follow for more German.",
    "top": "Follow for more German",
    "icons": [
     "pretzel"

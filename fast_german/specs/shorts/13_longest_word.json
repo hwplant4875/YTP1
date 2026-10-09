@@ -13,7 +13,7 @@
     "article": "der"
    },
    "punch": true,
-   "sfx": "hit"
+   "sfx": "start"
   },
   {
    "say": "Let's break it down in twenty seconds.",
@@ -115,6 +115,14 @@
    "top": "Say it in one breath!",
    "icons": [
     "face-with-hand-over-mouth"
+   ],
+   "sfx": "pop"
+  },
+  {
+   "say": "Follow for more German.",
+   "top": "Follow for more German",
+   "icons": [
+    "pretzel"
    ],
    "sfx": "swoosh_up"
   }

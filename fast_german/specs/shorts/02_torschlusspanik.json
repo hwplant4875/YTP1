@@ -10,7 +10,7 @@
     "alarm-clock"
    ],
    "punch": true,
-   "sfx": "hit"
+   "sfx": "start"
   },
   {
    "say": "Tor, gate. Schluss, closing. Panik, panic.",
@@ -74,10 +74,10 @@
    "sfx": "pop"
   },
   {
-   "say": "Comment if you have Torschlusspanik right now.",
-   "top": "Do you have it?",
+   "say": "Follow for more German.",
+   "top": "Follow for more German",
    "icons": [
-    "anxious-face-with-sweat"
+    "pretzel"
    ],
    "sfx": "swoosh_up"
   }
