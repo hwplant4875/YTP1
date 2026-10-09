@@ -139,7 +139,7 @@ async function shotLineup(R, t) {
     const small = wide > .5;
     if (!small && i !== idx && i !== idx - 1) return;
     if (!small && i === idx - 1) { R.text(p.stat, x, y - 40, { size: 60, font: 'Anton', color: '#bbb', stroke: '#000', sw: 9, alpha: 1 - wide }); return; }
-    const fade = a * (small ? 1 : 1);
+    const fade = a * (small ? 1 : clamp(1 - (t - 21.25) / .15));
     if (small) {
       R.text(p.stat, x, y - 30, { size: 46, font: 'Anton', color: i === 4 ? RED : '#fff', alpha: fade * wide, stroke: '#000', sw: 8 });
       R.text(String(i + 1), x, y - 90, { size: 40, font: 'Anton', color: YEL, alpha: fade * wide, stroke: '#000', sw: 8 });
@@ -157,6 +157,11 @@ async function shotLineup(R, t) {
     R.text(p.stat, x, py + (p.photo ? r + 110 : 72), { size: 84, font: 'Anton', color: i === 4 ? RED : YEL, alpha: fade, stroke: '#000', sw: 12, scale: 1 + .3 * impulse(t, p.t + .3, 9) });
     R.text(p.sub, x, py + (p.photo ? r + 170 : 132), { size: 32, font: 'Mont', weight: 800, color: '#ddd', alpha: fade, stroke: '#000', sw: 7, track: 3 });
   });
+  if (t < 6.75) {   // "let's line them up": empty stage + title slam
+    const a = clamp((t - 5.45) / .18) * (1 - clamp((t - 6.55) / .15));
+    R.text("LET'S LINE", W / 2, 520, { size: 130, font: 'Anton', color: '#fff', stroke: '#000', sw: 14, alpha: a, scale: 1 + 1.2 * Math.pow(1 - ease.outExpo(clamp((t - 5.45) / .3)), 2) });
+    R.text('THEM UP', W / 2, 670, { size: 170, font: 'Anton', color: YEL, stroke: '#000', sw: 16, glow: 40, alpha: a * clamp((t - 5.7) / .15), rot: -.03 });
+  }
   if (t > 21.3) {
     const a = clamp((t - 21.4) / .3);
     R.text('WHO ARE YOU', W / 2, 330, { size: 110, font: 'Anton', color: '#fff', alpha: a, stroke: '#000', sw: 14, scale: .8 + .2 * ease.outBack(a) });
@@ -164,7 +169,7 @@ async function shotLineup(R, t) {
     R.text('COMMENT 1–5', W / 2, 555, { size: 40, font: 'Mont', weight: 800, color: '#fff', alpha: clamp((t - 22.1) / .3), track: 6 });
   }
   R.vignette(.55);
-  if (t < 21.3) caption(R, t);
+  if (t < 21.3 && t > 6.6) caption(R, t);
 }
 
 export async function draw(R, t) {
