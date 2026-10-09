@@ -212,13 +212,13 @@ say("1962년, 한 미국 방송사가 몰래 돈을 대고, 땅굴을 파는 대
 say("그리고 그 땅굴로, 29명이 탈출하죠.")
 say("그 이야기는, 다음 영상에서 풀어보겠습니다.", {"type": "black"}, hold=2.5,
     text={"kind": "title", "content": "다음 이야기 · 터널 29", "pos": [0.5, 0.47]})
-B.append({"visual": g3("platform", t0=20), "hold": 9.0})   # end screen: subscribe + next video cards go here
+B.append({"visual": g3("platform", t0=20), "hold": 16.0})   # end screen: subscribe + next video cards go here
 
 spec = {
     "voice": {"tempo": 1.3, "emotion": "normal"},
     "gap": 0.05,
     "music": [
-        {"file": "music/m1_intro.mp3", "from": "intro", "to": "act1", "vol": 0.20},
+        {"file": "music/m1_intro.mp3", "from": "intro", "to": "act1", "vol": 0.16},
         {"file": "music/m2_investigate.mp3", "from": "act1", "to": "act3", "vol": 0.15},
         {"file": "music/m3_escape.mp3", "from": "act3", "to": "act4", "vol": 0.17},
         {"file": "music/m2_investigate.mp3", "from": "act4", "to": "act5", "vol": 0.14, "offset": 0},

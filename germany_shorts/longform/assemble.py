@@ -178,7 +178,7 @@ ScaledBorderAndShadow: yes
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: YEAR,Pretendard Black,250,&H00FFFFFF,&H00FFFFFF,&H00000000,&H96000000,0,0,0,0,100,100,6,0,1,0,8,5,0,0,0,1
 Style: LABEL,Pretendard SemiBold,46,&H00FFFFFF,&H00FFFFFF,&H00000000,&H96000000,0,0,0,0,100,100,4,0,1,0,3,5,0,0,0,1
-Style: TITLE,Noto Serif KR Black,118,&H00FFFFFF,&H00FFFFFF,&H00000000,&H96000000,0,0,0,0,100,100,2,0,1,0,6,5,0,0,0,1
+Style: TITLE,Noto Serif KR Black,168,&H00FFFFFF,&H00FFFFFF,&H00000000,&H96000000,0,0,0,0,100,100,2,0,1,0,6,5,0,0,0,1
 Style: QUOTE,Noto Serif KR SemiBold,64,&H00F0F0F0,&H00FFFFFF,&H00000000,&H96000000,0,0,0,0,100,100,1,0,1,0,4,5,0,0,0,1
 Style: CREDIT,Pretendard Medium,22,&H99FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,3,0,30,22,1
 
@@ -288,6 +288,13 @@ def main():
     r = subprocess.run(cmd, capture_output=True, text=True)
     if r.returncode:
         sys.exit(r.stderr[-3000:])
+    # second pass: single-pass loudnorm lands low on speech-heavy mixes, pin it to -14 LUFS
+    meas = subprocess.run(["ffmpeg", "-i", audio, "-af", "ebur128", "-f", "null", "-"], capture_output=True, text=True).stderr
+    lufs = float(re.findall(r"I:\s+(-?[\d.]+) LUFS", meas)[-1])
+    if abs(lufs + 14) > 0.4:
+        fixed = audio.replace(".wav", "_14.wav")
+        sh("ffmpeg", "-y", "-i", audio, "-af", f"volume={-14 - lufs:.2f}dB,alimiter=limit=0.84:level=false", fixed)
+        os.replace(fixed, audio)
 
     # subtitles file for upload (not burned in)
     with open(os.path.splitext(out)[0] + ".srt", "w", encoding="utf-8") as f:
