@@ -1,0 +1,13 @@
+{"voice": "bfGb7JTLUnZebZRiFYyq", "model": "eleven_multilingual_v2",
+ "settings": {"stability": 0.38, "similarity_boost": 0.82, "style": 0.5, "use_speaker_boost": true},
+ "lines": {
+  "l1": "This man makes Olympia bodybuilders look small.",
+  "l2": "A pro bodybuilder already dwarfs a normal guy...",
+  "l3": "so let's line them up.",
+  "l4": "Average guy. Five-nine.",
+  "l5": "Jay Cutler. Same height, two-seventy on stage.",
+  "l6": "Brian Shaw. Six-eight. Four hundred pounds.",
+  "l7": "Hafthor Bjornsson. Six-nine. Four-sixty at his heaviest.",
+  "l8": "And the Dutch Giant... seven-foot-two.",
+  "l9": "Which one are you NOT fighting?"
+ }}

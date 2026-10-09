@@ -1,0 +1,12 @@
+{"voice": "bfGb7JTLUnZebZRiFYyq", "model": "eleven_multilingual_v2",
+ "settings": {"stability": 0.42, "similarity_boost": 0.82, "style": 0.45, "use_speaker_boost": true},
+ "lines": {
+  "l1": "Eight Mr. Olympias. The biggest man to ever step on that stage.",
+  "l2": "The price? Thirteen surgeries. Eight on his back alone.",
+  "l3": "And he says he'd do it all again.",
+  "l4": "Jay Cutler. Four Olympias.",
+  "l5": "Years after retiring... still built like a tank.",
+  "l6": "Arnold. Seven Olympias. The original.",
+  "l7": "Today? Seventy-nine... with a pacemaker in his chest.",
+  "l8": "So be honest. Was it worth it?"
+ }}

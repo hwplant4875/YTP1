@@ -139,3 +139,38 @@ export function stands(span = 1.2, height = 1.45) {
   g.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
   return g;
 }
+
+// stylised artist's mannequin (feet at origin, facing +z). h = height in m, bulk = width multiplier (1 = average man)
+export function mannequin(h = 1.75, bulk = 1, material = null) {
+  const m = material || new THREE.MeshPhysicalMaterial({ color: 0xe9e6e1, roughness: .38, metalness: 0, clearcoat: .6, clearcoatRoughness: .25 });
+  const joint = new THREE.MeshStandardMaterial({ color: 0x1a1a1c, roughness: .4, metalness: .6 });
+  const g = new THREE.Group(); const s = h / 1.75, b = bulk;
+  const cap = (r, len, mat = m) => new THREE.Mesh(new THREE.CapsuleGeometry(r, len, 8, 24), mat);
+  const sph = (r, mat = joint) => new THREE.Mesh(new THREE.SphereGeometry(r, 24, 16), mat);
+  const add = (o, x, y, z, rz = 0, rx = 0) => { o.position.set(x, y, z); o.rotation.z = rz; o.rotation.x = rx; g.add(o); return o; };
+  // legs
+  for (const sx of [-1, 1]) {
+    add(cap(.065 * b * s, .36 * s), sx * .1 * b * s, .25 * s, 0);
+    add(sph(.055 * b * s), sx * .1 * b * s, .5 * s, 0);
+    add(cap(.08 * b * s, .34 * s), sx * .1 * b * s, .74 * s, 0);
+    const foot = add(new THREE.Mesh(new THREE.BoxGeometry(.09 * b * s, .05 * s, .22 * s), m), sx * .1 * b * s, .03 * s, .05 * s);
+  }
+  // pelvis, torso (V-taper grows with bulk), chest
+  add(new THREE.Mesh(new THREE.SphereGeometry(.15 * s, 24, 16), m), 0, .95 * s, 0).scale.set(1.25 * b, .7, .8 * Math.sqrt(b));
+  const torso = add(new THREE.Mesh(new THREE.CylinderGeometry(.19 * s * b ** 1.15, .13 * s * b, .42 * s, 32), m), 0, 1.2 * s, 0); torso.scale.z = .62 * Math.sqrt(b);
+  add(sph(.05 * s), 0, 1.0 * s, 0);
+  // shoulders + arms (slightly abducted)
+  for (const sx of [-1, 1]) {
+    const sxp = sx * (.2 * s * b ** 1.15 + .04 * s);
+    add(new THREE.Mesh(new THREE.SphereGeometry(.075 * s * b, 24, 16), m), sxp, 1.38 * s, 0);
+    add(cap(.055 * s * b, .24 * s), sxp + sx * .04 * s * b, 1.2 * s, 0, sx * .18);
+    add(sph(.045 * s * b), sxp + sx * .075 * s * b, 1.04 * s, 0);
+    add(cap(.045 * s * b, .22 * s), sxp + sx * .1 * s * b, .88 * s, 0, sx * .1);
+    add(new THREE.Mesh(new THREE.SphereGeometry(.05 * s * Math.sqrt(b), 16, 12), m), sxp + sx * .12 * s * b, .72 * s, 0);
+  }
+  // neck + head
+  add(cap(.05 * s * Math.sqrt(b), .06 * s), 0, 1.5 * s, 0);
+  add(new THREE.Mesh(new THREE.SphereGeometry(.105 * s, 32, 24), m), 0, 1.64 * s, 0).scale.set(.9, 1.1, 1);
+  g.traverse(o => { if (o.isMesh) { o.castShadow = o.receiveShadow = true; } });
+  return g;
+}

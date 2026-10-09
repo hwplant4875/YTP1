@@ -1,7 +1,8 @@
 // RageStyles #5 — "RONNIE'S LIGHT WEIGHT IN REAL LIFE"
 import { W, H, clamp, ease, prog, env, impulse, shake, lerp, noise1 } from '/engine/fx.js';
 import { loadVO, groups, drawGroups, srcTime, placeholder, fmt, cueList } from '/engine/kit.js';
-import { makeStage, fridge, barbell, stands, mat, THREE } from '/engine/stage3d.js';
+import { photoCard } from '/engine/cards.js';
+import { makeStage, fridge, barbell, stands, plate, mat, THREE } from '/engine/stage3d.js';
 
 // line starts (timeline seconds)
 const T = { l1: 2.05, l2: 5.25, l3: 9.0, l4: 11.25, l5: 14.5, l6: 19.35, l7: 20.9 };
@@ -10,9 +11,10 @@ const RED = '#ff2a2a', YEL = '#FFD400';
 
 let VO, caps = [], clips = {}, A, B, imgs = {};
 const fr = [];
-let bar, car, sled, carBox;
+let bar, car, sled, carBox; const lpPlates = [];
 
 export async function setup(R) {
+  imgs.ronnie = await R.image('/@work/photos/ronnie_2008.jpg');
   VO = await loadVO('s05/vo', ['l1', 'l2', 'l3', 'l4', 'l5', 'l6', 'l7']);
   const hl = { l1: ['EIGHT', 'HUNDRED', 'POUNDS'], l2: ['THREE', 'REFRIGERATORS', 'TWO'], l3: ['TWENTYTHREE', 'HUNDRED'], l4: ['CAR', 'EIGHT'],
     l5: ['MORBIDLY', 'OBESE', 'BMI'], l6: ['MUSCLE'], l7: ['EIGHT', 'OLYMPIAS'] };
@@ -44,8 +46,8 @@ export async function setup(R) {
   const seat = new THREE.Mesh(new THREE.BoxGeometry(.8, .12, .9), mat.rubber()); seat.position.set(0, .5, 1.25); seat.rotation.x = -.35; lp.add(seat);
   const back = new THREE.Mesh(new THREE.BoxGeometry(.8, .9, .12), mat.rubber()); back.position.set(0, .82, 1.75); back.rotation.x = -.5; lp.add(back);
   sled = new THREE.Group(); lp.add(sled);
-  const plateM = new THREE.Mesh(new THREE.BoxGeometry(1.9, .08, 2.4), frameM); sled.add(plateM);
-  const foot = new THREE.Mesh(new THREE.BoxGeometry(1.0, .7, .06), redM); foot.position.set(0, -.38, 1.15); sled.add(foot);
+  const plateM = new THREE.Mesh(new THREE.BoxGeometry(1.5, .08, 1.7), frameM); sled.add(plateM);
+  const foot = new THREE.Mesh(new THREE.BoxGeometry(1.0, .55, .06), mat.rubber()); foot.position.set(0, -.3, .82); sled.add(foot);
   sled.rotation.x = ang;
   sled.userData.base = new THREE.Vector3(0, 1.25, -.95);
   car = await B.load('covered_car');
@@ -56,6 +58,11 @@ export async function setup(R) {
   const c0 = carBox.getCenter(new THREE.Vector3()); car.position.set(-c0.x, -carBox.min.y, -c0.z);
   if (cs.x > cs.z) car.rotation.y = Math.PI / 2;   // nose up the slope
   sled.add(carWrap); carWrap.position.y = .04; sled.userData.car = carWrap;
+  // plate horns on both sides of the sled, 12 plates each (shown progressively while the counter runs)
+  for (const sx of [-1, 1]) {
+    const horn = new THREE.Mesh(new THREE.CylinderGeometry(.03, .03, .85, 24), mat.chrome()); horn.rotation.z = Math.PI / 2; horn.position.set(sx * 1.38, .1, .4); sled.add(horn);
+    for (let i = 0; i < 12; i++) { const pl = plate(.225, .058); pl.position.set(sx * (1.0 + .02 + i * .062 + .03), .1, .4); if (sx < 0) pl.rotation.y = Math.PI; pl.visible = false; sled.add(pl); lpPlates.push({ m: pl, i, sx }); }
+  }
   B.pool.position.set(1.5, 7, 1); B.pool.target.position.set(0, 1.6, -1.2); B.pool.intensity = 90; B.key.intensity = 3.4;
   for (const m of lp.children) if (m.geometry && m.geometry.parameters && m.geometry.parameters.depth === 4.2) m.material = redM;
   [A, B].forEach(S => S.scene.traverse(o => { if (o.isMesh) { o.castShadow = o.receiveShadow = true; } }));
@@ -73,7 +80,7 @@ export function cues() {
   a('sfx:whoosh_deep', 3.2, -6); a('sfx:braam', 3.55, -4); a('synth:sub', 3.58, -3);
   a('sfx:whoosh_fast', 5.1, -8);
   [5.64, 6.02, 6.4].forEach((t, i) => { a('sfx:thud_heavy', t, -2); a('sfx:impact_metal', t, -10 - i); a('synth:sub', t, -6); });
-  a('sfx:snap_zoom', 7.42, -8); a('sfx:sub_hit', 7.5, -6); a('sfx:impact_metal', 8.15, -9);
+  a('sfx:snap_zoom', 7.42, -8); a('sfx:sub_hit', 7.5, -6); a('sfx:chain_rattle', 7.62, -10); a('sfx:impact_metal', 8.02, -8); a('sfx:chain_rattle', 8.05, -10); a('sfx:impact_metal', 8.45, -6); a('sfx:ding', 8.45, -14);
   a('sfx:whoosh_fast', 8.85, -6); a('sfx:riser', 9.4, -14, { len: 1.5 });
   for (let i = 0; i < 12; i++) a('sfx:tick', 9.96 + i * .075, -16);
   a('sfx:sub_hit', 10.9, -4); a('sfx:whoosh_deep', 11.1, -7);
@@ -201,28 +208,45 @@ async function shotFridges(R, t) {   // 5.25 – 7.45: three fridges drop
   R.text('1 FRIDGE ≈ 270 LBS', W / 2, H * .15 + 335, { size: 40, font: 'Mont', weight: 600, color: 'rgba(255,255,255,.7)', alpha: clamp((t - 5.7) * 3), track: 6 });
   caption(R, t);
 }
-async function shotSquat(R, t) {   // 7.45 – 8.9: real squat, rep counter
-  const z = 1.25 - .15 * ease.outExpo(clamp((t - 7.45) / .3));
-  await footage(R, 'squat', t, 7.45, { zoom: z, shake: 3 + 10 * impulse(t, 7.5, 6), time: { speed: .85 } });
+async function shotSquat(R, t) {   // 7.45 – 8.9: the loaded bar does two "reps" (squat path), rep counter
+  const S = A; fr.forEach(f => f.visible = false);
+  const r1 = 7.62, r2 = 8.05, dur = .4;
+  const rep = (t0) => { const q = clamp((t - t0) / dur); return Math.sin(q * Math.PI); };
+  bar.position.y = 1.36 + .12 - .62 * Math.max(rep(r1), rep(r2));
+  const imp = impulse(t, 7.45, 9) + impulse(t, r1 + dur, 8) + impulse(t, r2 + dur, 8);
+  const sh = shake(t, .018 * imp + .002, 20);
+  const p = prog(t, 7.45, 1.45, ease.out);
+  S.camera.fov = 34; S.camera.updateProjectionMatrix();
+  S.camera.position.set(lerp(3.3, 2.7, p) + sh.x, lerp(.75, .9, p) + sh.y, lerp(4.3, 3.7, p));
+  S.camera.lookAt(-.1, 1.15, -1.6);
+  R.g.drawImage(S.render(), 0, 0);
+  bar.position.y = 1.36;
   R.flash(impulse(t, 7.45, 9) * .8);
   R.vignette(.6);
-  const reps = t >= 8.12 ? 2 : t >= 7.92 ? 1 : 0;
-  if (reps) {
-    R.box(W - 330, 380, 260, 150, { fill: 'rgba(0,0,0,.55)', r: 20, stroke: RED, sw: 4 });
-    R.text('REPS', W - 200, 418, { size: 34, font: 'Mont', weight: 800, color: '#bbb', track: 6 });
-    R.text(`${reps}`, W - 200, 485, { size: 90, font: 'Anton', color: '#fff', scale: 1 + .4 * impulse(t, reps === 1 ? 7.92 : 8.12, 10) });
-  }
-  kicker(R, '800 LBS SQUAT', t, 7.5, 8.9);
+  const reps = t >= r2 + dur ? 2 : t >= r1 + dur ? 1 : 0;
+  R.box(W / 2 - 150, 330, 300, 170, { fill: 'rgba(0,0,0,.55)', r: 24, stroke: RED, sw: 4, alpha: clamp((t - 7.5) * 5) });
+  R.text('REPS', W / 2, 362, { size: 34, font: 'Mont', weight: 800, color: '#bbb', track: 8, alpha: clamp((t - 7.5) * 5) });
+  R.text(`${reps} / 2`, W / 2, 452, { size: 96, font: 'Anton', color: reps === 2 ? YEL : '#fff', alpha: clamp((t - 7.5) * 5), scale: 1 + .35 * (impulse(t, r1 + dur, 10) + impulse(t, r2 + dur, 10)) });
+  R.text('800 LBS · ON HIS BACK', W / 2, 560, { size: 40, font: 'Mont', weight: 800, color: '#fff', track: 4, alpha: clamp((t - 7.6) * 4) });
   caption(R, t);
 }
-async function shotPress(R, t) {   // 8.9 – 11.2: leg press footage + 2,300 counter
-  const z = 1.1 + .08 * prog(t, 8.9, 2.3);
-  await footage(R, 'press', t, 8.9, { zoom: z, shake: 3 + 6 * impulse(t, 10.9, 6) });
+async function shotPress(R, t) {   // 8.9 – 11.2: 3D leg press loads up while the counter runs to 2,300
+  const S = B; const p = prog(t, 8.9, 2.3, ease.inOut);
+  const imp = impulse(t, 10.9, 6);
+  const sh = shake(t, .02 * imp + .002, 20);
+  S.camera.fov = 34; S.camera.updateProjectionMatrix();
+  S.camera.position.set(lerp(6.6, 7.6, p) + sh.x, lerp(1.6, 2.2, p) + sh.y, lerp(1.2, .3, p));
+  S.camera.lookAt(0, 1.55, -.7);
+  sled.position.copy(sled.userData.base); sled.userData.car.position.y = 12;
+  const k = clamp((t - 9.96) / .92);
+  const shown = Math.round(ease.out(k) * 12);
+  lpPlates.forEach(({ m, i }) => { m.visible = i < shown; const age = t - (9.96 + .92 * (i / 12)); m.scale.setScalar(1 + .25 * Math.exp(-Math.max(0, age) * 14)); });
+  R.g.drawImage(S.render(), 0, 0);
   R.motionBlur(-220 * impulse(t, 8.9, 10), 0, 8);
   R.vignette(.6);
-  const n = 2300 * ease.out(clamp((t - 9.96) / .92));
-  if (t >= 9.96) bigStat(R, fmt(n), 'LBS', W / 2, H * .24, t, 9.96, { size: 250, sub: 'LEG PRESS' });
-  R.flash(impulse(t, 10.9, 8) * .5);
+  const n = 2300 * ease.out(k);
+  if (t >= 9.96) bigStat(R, fmt(n), 'LBS', W / 2, H * .17, t, 9.96, { size: 250, sub: 'LEG PRESS' });
+  R.flash(imp * .5);
   caption(R, t);
 }
 async function shotCar(R, t) {   // 11.2 – 14.45: car lands on leg press sled, 8 reps
@@ -231,13 +255,14 @@ async function shotCar(R, t) {   // 11.2 – 14.45: car lands on leg press sled,
   const p = prog(t, 11.2, 3.25, ease.inOut);
   const sh = shake(t, .04 * imp, 20);
   S.camera.fov = 38; S.camera.updateProjectionMatrix();
-  S.camera.position.set(lerp(7.8, 7.0, p) + sh.x, lerp(3.0, 3.3, p) + sh.y, lerp(3.2, 2.0, p));
-  S.camera.lookAt(0, 2.3, -1.0);
+  S.camera.position.set(lerp(8.4, 7.8, p) + sh.x, lerp(2.4, 2.8, p) + sh.y, lerp(1.0, .2, p));
+  S.camera.lookAt(0, 2.0, -.8);
   // reps: sled travels 0.55 m along the rail, 8 reps from 12.46
   let travel = 0; const r0 = 12.46, per = .23;
   if (t > r0 && t < r0 + per * 8) { const q = ((t - r0) % per) / per; travel = .55 * Math.sin(q * Math.PI); }
   const base = sled.userData.base, dir = new THREE.Vector3(0, Math.SQRT1_2, -Math.SQRT1_2);
   sled.position.copy(base).addScaledVector(dir, travel);
+  lpPlates.forEach(({ m }) => { m.visible = true; m.scale.setScalar(1); });
   const cw = sled.userData.car;
   if (t < land - .4) cw.position.y = 12; else if (t < land) { const q = (t - (land - .4)) / .4; cw.position.y = .04 + 6 * (1 - q * q); }
   else { const q = t - land; cw.position.y = .04 + .08 * Math.exp(-q * 8) * Math.abs(Math.sin(q * 22)); }
@@ -271,6 +296,12 @@ async function shotBMI(R, t) {   // 14.45 – 19.35: BMI gauge graphic
   };
   card('HEIGHT', `5'11"`, W / 2 - 250, 470, t0 + .03);
   card('WEIGHT', '~300 LBS', W / 2 + 250, 470, t0 + 1.33);
+  // Ronnie photo card while the stats land, tossed away when the gauge arrives
+  const out = ease.inExpo(clamp((t - (t0 + 2.6)) / .3));
+  if (out < 1) { g.save(); g.globalAlpha = 1 - out; g.translate(out * 900, out * 200);
+    photoCard(R, imgs.ronnie, W / 2, 1120, 620, t, t0 + .25, { rot: -.035, h: 760 }); g.restore();
+    const ca = clamp((t - t0 - .5) / .3) * (1 - out);
+    if (ca > 0) R.text('PHOTO: Spanish from North Canton, OH / CC BY 2.0', W / 2, 1545, { size: 22, font: 'Mont', weight: 600, color: 'rgba(255,255,255,.5)', alpha: ca }); }
   // gauge
   const ga = clamp((t - (t0 + 2.85)) / .3); if (ga > 0) {
     const cx = W / 2, cy = 1130, r = 360, a0 = Math.PI * 1.0, a1 = Math.PI * 2.0;
@@ -304,11 +335,12 @@ async function shotBMI(R, t) {   // 14.45 – 19.35: BMI gauge graphic
   }
   R.rgbSplit(14 * impulse(t, t0 + 4.12, 7)); R.flash(impulse(t, t0 + 4.12, 10) * .4, RED);
   R.vignette(.6);
+  caption(R, t, { y: 250 });
 }
 async function shotMuscle(R, t) {   // 19.35 – 20.9: EXCEPT IT WAS ALL MUSCLE
   const hit = 20.17;
-  const z = 1.05 + .05 * prog(t, 19.35, .8) + .22 * (1 - Math.exp(-Math.max(0, t - hit) * 10)) - .1 * prog(t, hit + .2, .6, ease.out);
-  await footage(R, 'stage', t, 19.35, { zoom: z, shake: 2 + 16 * impulse(t, hit, 5), fy: .4, filter: `contrast(1.15) saturate(1.15) brightness(${1 + .4 * impulse(t, hit, 6)})` });
+  const z = .98 + .03 * prog(t, 19.35, .8) + .14 * (1 - Math.exp(-Math.max(0, t - hit) * 10)) - .06 * prog(t, hit + .2, .6, ease.out);
+  await footage(R, 'stage', t, 19.35, { zoom: z, shake: 2 + 16 * impulse(t, hit, 5), fx: .3, fy: .45, filter: `contrast(1.15) saturate(1.15) brightness(${1 + .4 * impulse(t, hit, 6)})` });
   R.zoomBlur(.1 * impulse(t, hit, 7));
   R.flash(impulse(t, hit, 8) * .85); R.flash(impulse(t, 19.35, 12) * .6);
   R.bloom(.25 + .4 * impulse(t, hit, 5));
