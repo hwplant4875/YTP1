@@ -1,0 +1,310 @@
+# Greetings & Basics
+hello|안녕하세요|annyeonghaseyo
+thank you|감사합니다|gamsahamnida
+I'm sorry|죄송합니다|joesonghamnida
+yes|네|ne
+no|아니요|aniyo
+goodbye (to someone leaving)|안녕히 가세요|annyeonghi gaseyo
+goodbye (to someone staying)|안녕히 계세요|annyeonghi gyeseyo
+please give me|주세요|juseyo
+excuse me|저기요|jeogiyo
+it's okay|괜찮아요|gwaenchanayo
+I don't know|몰라요|mollayo
+I understand|알겠어요|algesseoyo
+nice to meet you|반갑습니다|bangapseumnida
+welcome|어서 오세요|eoseo oseyo
+good night|잘 자요|jal jayo
+really?|진짜?|jinjja
+congratulations|축하해요|chukahaeyo
+cheers|건배|geonbae
+thanks for the meal|잘 먹겠습니다|jal meokgetseumnida
+please help me|도와주세요|dowajuseyo
+just a moment|잠깐만요|jamkkanmanyo
+again|다시|dasi
+name|이름|ireum
+friend|친구|chingu
+love|사랑|sarang
+person|사람|saram
+I, me|나|na
+you|너|neo
+what|뭐|mwo
+why|왜|wae
+# Food & Drink
+water|물|mul
+rice, meal|밥|bap
+coffee|커피|keopi
+tea|차|cha
+milk|우유|uyu
+beer|맥주|maekju
+meat|고기|gogi
+fried chicken|치킨|chikin
+beef|소고기|sogogi
+pork|돼지고기|dwaejigogi
+fish|생선|saengseon
+egg|계란|gyeran
+bread|빵|ppang
+noodles|국수|guksu
+ramen|라면|ramyeon
+soup|국|guk
+kimchi|김치|gimchi
+fruit|과일|gwail
+apple|사과|sagwa
+strawberry|딸기|ttalgi
+banana|바나나|banana
+watermelon|수박|subak
+salt|소금|sogeum
+sugar|설탕|seoltang
+it's spicy|매워요|maewoyo
+it's delicious|맛있어요|masisseoyo
+I'm hungry|배고파요|baegopayo
+I'm full|배불러요|baebulleoyo
+chopsticks|젓가락|jeotgarak
+spoon|숟가락|sutgarak
+# Family & People
+mom|엄마|eomma
+dad|아빠|appa
+older brother (said by a girl)|오빠|oppa
+older sister (said by a girl)|언니|eonni
+older brother (said by a guy)|형|hyeong
+older sister (said by a guy)|누나|nuna
+younger sibling|동생|dongsaeng
+grandma|할머니|halmeoni
+grandpa|할아버지|harabeoji
+family|가족|gajok
+baby|아기|agi
+child|아이|ai
+man|남자|namja
+woman|여자|yeoja
+boyfriend|남자친구|namjachingu
+girlfriend|여자친구|yeojachingu
+husband|남편|nampyeon
+wife|아내|anae
+teacher|선생님|seonsaengnim
+student|학생|haksaeng
+doctor|의사|uisa
+boss, shop owner|사장님|sajangnim
+coworker|동료|dongnyo
+neighbor|이웃|iut
+foreigner|외국인|oegugin
+Korean person|한국인|hangugin
+puppy|강아지|gangaji
+cat|고양이|goyangi
+bird|새|sae
+senior (at school or work)|선배|seonbae
+# Time
+today|오늘|oneul
+tomorrow|내일|naeil
+yesterday|어제|eoje
+now|지금|jigeum
+later|나중에|najunge
+morning, breakfast|아침|achim
+lunch|점심|jeomsim
+evening, dinner|저녁|jeonyeok
+night|밤|bam
+day|날|nal
+week|주|ju
+last year|작년|jangnyeon
+next year|내년|naenyeon
+weekend|주말|jumal
+Monday|월요일|woryoil
+Tuesday|화요일|hwayoil
+Wednesday|수요일|suyoil
+Thursday|목요일|mogyoil
+Friday|금요일|geumyoil
+Saturday|토요일|toyoil
+Sunday|일요일|iryoil
+spring|봄|bom
+summer|여름|yeoreum
+autumn|가을|gaeul
+winter|겨울|gyeoul
+time|시간|sigan
+always|항상|hangsang
+sometimes|가끔|gakkeum
+early|일찍|iljjik
+birthday|생일|saengil
+# Places & Travel
+house, home|집|jip
+school|학교|hakgyo
+company, office|회사|hoesa
+hospital|병원|byeongwon
+pharmacy|약국|yakguk
+bank|은행|eunhaeng
+shop|가게|gage
+convenience store|편의점|pyeonuijeom
+restaurant|식당|sikdang
+café|카페|kape
+bathroom|화장실|hwajangsil
+station|역|yeok
+subway|지하철|jihacheol
+bus|버스|beoseu
+taxi|택시|taeksi
+airport|공항|gonghang
+hotel|호텔|hotel
+road, way|길|gil
+left|왼쪽|oenjjok
+right|오른쪽|oreunjjok
+here|여기|yeogi
+over there|저기|jeogi
+sea|바다|bada
+mountain|산|san
+river|강|gang
+city|도시|dosi
+country|나라|nara
+map|지도|jido
+ticket|표|pyo
+passport|여권|yeogwon
+# Feelings & Describing
+I'm happy|행복해요|haengbokaeyo
+I'm sad|슬퍼요|seulpeoyo
+I'm angry|화나요|hwanayo
+I'm tired|피곤해요|pigonhaeyo
+I'm sleepy|졸려요|jollyeoyo
+it's scary|무서워요|museowoyo
+it's fun|재미있어요|jaemiisseoyo
+it's boring|재미없어요|jaemieopseoyo
+it's good|좋아요|joayo
+it's bad|나빠요|nappayo
+pretty|예뻐요|yeppeoyo
+cute|귀여워요|gwiyeowoyo
+cool|멋있어요|meosisseoyo
+it's big|커요|keoyo
+it's small|작아요|jagayo
+it's hot|더워요|deowoyo
+it's cold|추워요|chuwoyo
+I'm busy|바빠요|bappayo
+it's expensive|비싸요|bissayo
+it's cheap|싸요|ssayo
+it's fast|빨라요|ppallayo
+it's slow|느려요|neuryeoyo
+it's easy|쉬워요|swiwoyo
+it's difficult|어려워요|eoryeowoyo
+there are many|많아요|manayo
+there are few|적어요|jeogeoyo
+it hurts|아파요|apayo
+I'm excited|신나요|sinnayo
+I'm nervous|떨려요|tteollyeoyo
+I'm embarrassed|창피해요|changpihaeyo
+# Everyday Verbs
+to go|가요|gayo
+to come|와요|wayo
+to eat|먹어요|meogeoyo
+to drink|마셔요|masyeoyo
+to sleep|자요|jayo
+to see, to watch|봐요|bwayo
+to listen|들어요|deureoyo
+to speak|말해요|malhaeyo
+to read|읽어요|ilgeoyo
+to write|써요|sseoyo
+to buy|사요|sayo
+to sell|팔아요|parayo
+to give|줘요|jwoyo
+to do|해요|haeyo
+to know|알아요|arayo
+to like|좋아해요|joahaeyo
+to want|원해요|wonhaeyo
+to meet|만나요|mannayo
+to wait|기다려요|gidaryeoyo
+to learn|배워요|baewoyo
+to teach|가르쳐요|gareuchyeoyo
+to work|일해요|ilhaeyo
+to play, to hang out|놀아요|norayo
+to sing|노래해요|noraehaeyo
+to dance|춤춰요|chumchwoyo
+to walk|걸어요|georeoyo
+to run|뛰어요|ttwieoyo
+to sit|앉아요|anjayo
+to open|열어요|yeoreoyo
+to close|닫아요|dadayo
+# Things Around You
+phone|핸드폰|haendeupon
+computer|컴퓨터|keompyuteo
+book|책|chaek
+bag|가방|gabang
+clothes|옷|ot
+shoes|신발|sinbal
+money|돈|don
+card|카드|kadeu
+door|문|mun
+window|창문|changmun
+bed|침대|chimdae
+chair|의자|uija
+desk|책상|chaeksang
+umbrella|우산|usan
+glasses|안경|angyeong
+clock, watch|시계|sigye
+key|열쇠|yeolsoe
+car|자동차|jadongcha
+bicycle|자전거|jajeongeo
+photo|사진|sajin
+TV|티비|tibi
+gift|선물|seonmul
+letter|편지|pyeonji
+toothbrush|칫솔|chitsol
+cup|컵|keop
+room|방|bang
+kitchen|부엌|bueok
+towel|수건|sugeon
+mirror|거울|geoul
+pen|펜|pen
+# Body & Nature
+head|머리|meori
+eye|눈|nun
+nose|코|ko
+mouth|입|ip
+ear|귀|gwi
+hand|손|son
+foot|발|bal
+heart, mind|마음|maeum
+face|얼굴|eolgul
+hair|머리카락|meorikarak
+tooth|이|i
+stomach, belly|배|bae
+leg|다리|dari
+arm|팔|pal
+sky|하늘|haneul
+sun|해|hae
+moon|달|dal
+star|별|byeol
+rain|비|bi
+snow|눈|nun
+wind|바람|baram
+cloud|구름|gureum
+weather|날씨|nalssi
+flower|꽃|kkot
+tree|나무|namu
+fire|불|bul
+stone|돌|dol
+grass|풀|pul
+ground, land|땅|ttang
+air|공기|gonggi
+# Numbers & Fun Words
+one (native)|하나|hana
+two (native)|둘|dul
+three (native)|셋|set
+four (native)|넷|net
+five (native)|다섯|daseot
+six (native)|여섯|yeoseot
+seven (native)|일곱|ilgop
+eight (native)|여덟|yeodeol
+nine (native)|아홉|ahop
+ten (native)|열|yeol
+one (Sino)|일|il
+two (Sino)|이|i
+three (Sino)|삼|sam
+four (Sino)|사|sa
+five (Sino)|오|o
+six (Sino)|육|yuk
+seven (Sino)|칠|chil
+eight (Sino)|팔|pal
+nine (Sino)|구|gu
+ten (Sino)|십|sip
+hundred|백|baek
+thousand|천|cheon
+ten thousand|만|man
+awesome!|대박|daebak
+you can do it!|화이팅|hwaiting
+oh my gosh|헐|heol
+the best|짱|jjang
+oh dear|아이고|aigo
+reading the room|눈치|nunchi
+the youngest member|막내|maknae
