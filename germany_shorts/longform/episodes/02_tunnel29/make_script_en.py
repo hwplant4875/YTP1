@@ -141,7 +141,7 @@ say("Dozens of people waiting in the East were arrested.")
 say("The three diggers escaped only by crawling back through the tunnel.", t3("crawl", 12), sub="The diggers escaped by *crawling back*",
     sfx={"prompt": "frantic crawling and breathing in a narrow tunnel, close, dirt falling", "len": 5, "vol": 0.35})
 say("Then, on August 17th, an eighteen-year-old named Peter Fechter was shot at the Wall.",
-    {"type": "black"}, text={"kind": "label", "content": "PETER FECHTER · 1944–1962", "pos": [0.5, 0.5]}, sub="August 17th: Peter Fechter, 18, was shot at the Wall")
+    {"type": "black"}, text={"kind": "label", "content": "PETER FECHTER · 1944{\\fnPretendard Black}–{\\fnYouTube Sans}1962", "pos": [0.5, 0.5]}, sub="August 17th: Peter Fechter, 18, was shot at the Wall")
 say("He bled to death at the foot of the Wall, in full view of the West, while nobody helped him.", sub="He bled to death *in full view of the West*")
 say("The diggers pinned his photo inside their tunnel. And kept digging.", t3("crawl", 18), sub="They pinned his photo in the tunnel. *And kept digging*", hold=1.0)
 
@@ -224,6 +224,7 @@ spec = {
     "voice": {"engine": "elevenlabs", "voice_id": "DrBEKFgWMDWUG6bjTSTk", "model": "eleven_v4", "stability": 0.5, "speed": 1.0},
     "gap": 0.12,
     "sub_limit": 44,
+    "fonts": {"SUB": "YouTube Sans", "LABEL": "YouTube Sans", "YEAR": "YouTube Sans", "FX": "YouTube Sans", "CREDIT": "YouTube Sans"},
     "music": [
         {"file": "music/t1_intro.mp3", "from": "intro", "to": "act1", "vol": 0.15, "fade_in": 3},
         {"file": "music/t2_dig.mp3", "from": "act1", "to": "flood", "vol": 0.14},

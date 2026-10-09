@@ -227,7 +227,7 @@ say("In return for running its trains under East Berlin,")
 say("from 1963, West Berlin paid East Germany a fee. Every single month.", text={"kind": "year", "content": "1963"},
     sub="West Berlin paid East Germany. *Every month*")
 say("At first, around a hundred and eighty thousand marks a month.")
-say("By 1989, it was almost half a million.", text={"kind": "label", "content": "181,132 DM  →  495,756 DM / month", "pos": [0.5, 0.86]},
+say("By 1989, it was almost half a million.", text={"kind": "label", "content": "181,132 DM  {\\fnPretendard Black}→{\\fnYouTube Sans}  495,756 DM / month", "pos": [0.5, 0.86]},
     sub="By 1989: almost *half a million*")
 say("That's close to six million marks a year.")
 say("To run its own subway, the city was paying the country that built the Wall around it.",
@@ -238,7 +238,7 @@ say("West Berliners were furious, and they boycotted it.")
 say("The slogan: every S-Bahn ticket pays for the barbed wire.",
     text={"kind": "quote", "content": "„Der S-Bahn-Fahrer zahlt den Stacheldraht“", "pos": [0.5, 0.8]})
 say("Ridership collapsed, from half a million passengers a day to under fifty thousand.",
-    sub="Half a million a day → *under 50,000*")
+    sub="From half a million a day to *under 50,000*")
 say("And this wasn't even the first time that S-Bahn tunnel had died.", img(14, (1.05, 0.5, 0.5), (1.2, 0.5, 0.55)))
 say("On May 2nd, 1945, in the last days of the war, it was blown open and flooded.")
 say("Killed once by war, and once by the Wall.", sub="Killed once by *war*. Once by the *Wall*")
@@ -280,6 +280,7 @@ spec = {
     "voice": {"engine": "elevenlabs", "voice_id": "DrBEKFgWMDWUG6bjTSTk", "model": "eleven_v4", "stability": 0.5, "speed": 1.0},
     "gap": 0.12,
     "sub_limit": 44,
+    "fonts": {"SUB": "YouTube Sans", "LABEL": "YouTube Sans", "YEAR": "YouTube Sans", "FX": "YouTube Sans", "CREDIT": "YouTube Sans"},
     "music": [
         {"file": "music/m1_intro.mp3", "from": "intro", "to": "act1", "vol": 0.14, "fade_in": 4},
         {"file": "music/m2_investigate.mp3", "from": "act1", "to": "act3", "vol": 0.15},

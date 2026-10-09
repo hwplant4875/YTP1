@@ -8,6 +8,13 @@
  },
  "gap": 0.12,
  "sub_limit": 44,
+ "fonts": {
+  "SUB": "YouTube Sans",
+  "LABEL": "YouTube Sans",
+  "YEAR": "YouTube Sans",
+  "FX": "YouTube Sans",
+  "CREDIT": "YouTube Sans"
+ },
  "music": [
   {
    "file": "music/t1_intro.mp3",
@@ -769,7 +776,7 @@
    },
    "text": {
     "kind": "label",
-    "content": "PETER FECHTER · 1944–1962",
+    "content": "PETER FECHTER · 1944{\\fnPretendard Black}–{\\fnYouTube Sans}1962",
     "pos": [
      0.5,
      0.5

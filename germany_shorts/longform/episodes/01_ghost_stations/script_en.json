@@ -8,6 +8,13 @@
  },
  "gap": 0.12,
  "sub_limit": 44,
+ "fonts": {
+  "SUB": "YouTube Sans",
+  "LABEL": "YouTube Sans",
+  "YEAR": "YouTube Sans",
+  "FX": "YouTube Sans",
+  "CREDIT": "YouTube Sans"
+ },
  "music": [
   {
    "file": "music/m1_intro.mp3",
@@ -1359,7 +1366,7 @@
    "visual": "same",
    "text": {
     "kind": "label",
-    "content": "181,132 DM  →  495,756 DM / month",
+    "content": "181,132 DM  {\\fnPretendard Black}→{\\fnYouTube Sans}  495,756 DM / month",
     "pos": [
      0.5,
      0.86
@@ -1417,7 +1424,7 @@
   {
    "say": "Ridership collapsed, from half a million passengers a day to under fifty thousand.",
    "visual": "same",
-   "sub": "Half a million a day → *under 50,000*"
+   "sub": "From half a million a day to *under 50,000*"
   },
   {
    "say": "And this wasn't even the first time that S-Bahn tunnel had died.",
