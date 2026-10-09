@@ -15,7 +15,7 @@ from PIL import Image, ImageDraw, ImageFilter
 
 sys.path.insert(0, os.path.dirname(__file__))
 import common as C
-from short import font, fit_font, text_img, shadowed
+from short import font, ui_font, fit_font, text_img, shadowed
 
 W, H = 1920, 1080
 SR = 48000
@@ -49,7 +49,7 @@ def bg_image(theme):
 
 
 def pill(text, fill, ink, size=38, icon=None):
-    f = font(size, "SemiBold")
+    f = ui_font(size)
     t = text_img(text, f, ink + (255,), pad=0)
     ic = C.icon(icon, int(size * 1.5)) if icon else None
     w = t.width + 60 + (ic.width + 12 if ic else 0)
@@ -138,7 +138,7 @@ def slide(theme, top_left=None, top_right=None, icon=None, word=None, article=No
         f = font(46, "Regular")
         y = draw_lines(im, wrap(sub2, f, tw), f, muted, tx, y + 6)
     if caption:
-        f = font(46, "Medium")
+        f = ui_font(46)
         lines = wrap(caption, f, 1600)[:3]
         hh = len(lines) * 62 + 40
         box = Image.new("RGBA", (W, hh), (0, 0, 0, 0))

@@ -25,7 +25,18 @@ MUSIC = os.path.join(C.CACHE, "music", "kpop_bed.mp3")
 MUSIC_VOL = 0.22
 
 
+UI_FONT = os.path.join(C.ROOT, "assets", "fonts", "YouTubeSans-Black.otf")
+if not os.path.exists(UI_FONT):  # proprietary file, not in git; shared copy lives in the project folder
+    UI_FONT = "/mnt/project-files/fonts/YouTubeSans-Black.otf"
+
+
+def ui_font(size):
+    """YouTube Sans: default English UI font (titles, subtitles, labels)."""
+    return ImageFont.truetype(UI_FONT, size)
+
+
 def font(size, weight="Bold"):
+    """Fredoka: the rounded font for the big German words and meanings."""
     f = ImageFont.truetype(C.FONT, size)
     try:
         f.set_variation_by_name(weight)
@@ -112,7 +123,7 @@ def background():
 
 
 def brand_pill():
-    f = font(40, "SemiBold")
+    f = ui_font(40)
     t = text_img("FAST GERMAN", f, C.INK + (255,), pad=0)
     ic = C.icon("pretzel", 64)
     im = Image.new("RGBA", (t.width + ic.width + 70, 90), (0, 0, 0, 0))
@@ -123,7 +134,7 @@ def brand_pill():
 
 
 def top_text(text):
-    f = font(76, "Bold")
+    f = ui_font(76)
     lines, cur = [], ""
     for w in text.split():
         trial = (cur + " " + w).strip()
@@ -295,7 +306,7 @@ def render(spec_path, out_path):
     bg = background()
     pill = brand_pill()
     layer_cache = [build_layers(tl["beat"]) for tl in timeline]
-    sub_font = font(74, "Bold")
+    sub_font = ui_font(74)
     all_chunks = []
     for tl in timeline:
         for ch in sub_chunks(tl["words"]):
@@ -359,7 +370,7 @@ def draw_sub(frame, chunk, now, f):
     widths = [f.getlength(w) for w, _ in parts]
     total = sum(widths) + space * (len(parts) - 1)
     scale = min(1.0, 960 / total)
-    ff = f if scale >= 1 else font(int(f.size * scale), "Bold")
+    ff = f if scale >= 1 else ui_font(int(f.size * scale))
     widths = [ff.getlength(w) for w, _ in parts]
     total = sum(widths) + ff.getlength(" ") * (len(parts) - 1)
     x = (W - total) / 2
