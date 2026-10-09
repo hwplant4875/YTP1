@@ -20,9 +20,12 @@ def tts(text, lang):
         body = {"text": text, "model_id": "eleven_multilingual_v2",
                 "voice_settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.4, "use_speaker_boost": True}}
         if lang == "ko": body["language_code"] = "ko"
-        subprocess.run(["curl", "-sSf", "-X", "POST", f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE}?output_format=mp3_44100_192",
+        code = subprocess.run(["curl", "-s", "-X", "POST", f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE}?output_format=mp3_44100_192",
             "-H", "xi-api-key: " + os.environ["ELEVENLABS_API_KEY"], "-H", "Content-Type: application/json",
-            "-d", json.dumps(body), "-o", mp3], check=True)
+            "-d", json.dumps(body), "-o", mp3, "-w", "%{http_code}"], capture_output=True, text=True).stdout
+        if code != "200":
+            msg = open(mp3, errors="replace").read()[:300]; os.remove(mp3)
+            raise SystemExit(f"ElevenLabs TTS failed ({code}): {msg}")
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", mp3, "-af",
             "silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse",
             "-ar", str(SR), "-ac", "2", wav], check=True)
