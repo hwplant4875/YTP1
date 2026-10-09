@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
 NAVY, CREAM, AMBER = (11, 17, 30), (228, 220, 208), (238, 160, 70)
-LAT0, LAT1 = 80, -57
+LAT0, LAT1 = 84, -57
 BW, BH = 2560, 1440
 MAP_H = 360                                    # map height inside the 423px safe band
 MAP_W = round(MAP_H * 360 / (LAT0 - LAT1))
@@ -41,7 +41,14 @@ def base():
 def main(src, out):
     rings = json.load(open(src))
     SS = 4
-    m = land_mask(rings, MAP_W * SS, MAP_H * SS).resize((MAP_W, MAP_H), Image.LANCZOS)
+    big = land_mask(rings, MAP_W * SS, MAP_H * SS)
+    m = big.resize((MAP_W, MAP_H), Image.LANCZOS)
+    # outline only: land minus land shrunk by ~1.5px (blur + high threshold), drawn at 4x then downsampled
+    inner = big.filter(ImageFilter.BoxBlur(3)).point(lambda v: 255 if v > 250 else 0)
+    ring = Image.fromarray(np.clip(np.asarray(big).astype(int) - np.asarray(inner), 0, 255).astype("uint8"))
+    ring = ring.resize((MAP_W, MAP_H), Image.LANCZOS).point(lambda v: min(255, int(v * 1.6)))
+    img = base(); img.paste(CREAM, (X0, Y0), ring)
+    img.save(os.path.join(out, "banner_orbis_minimal_outline.jpg"), quality=95)
     # solid silhouette
     img = base(); img.paste(CREAM, (X0, Y0), m)
     img.save(os.path.join(out, "banner_orbis_minimal_solid.jpg"), quality=95)
