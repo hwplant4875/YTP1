@@ -33,10 +33,11 @@ def english(text, rate=0.9):
         r = urllib.request.Request("https://texttospeech.googleapis.com/v1/text:synthesize?key=" + os.environ["GOOGLE_TTS_API_KEY"],
                                    data=json.dumps(body).encode(), headers={"Content-Type": "application/json"})
         raw = wav + ".raw"
-        for attempt in range(6):
+        # Chirp 3 HD has a per-minute request quota, so 429s need waits of up to a minute
+        for attempt in range(12):
             try: open(raw, "wb").write(base64.b64decode(json.load(urllib.request.urlopen(r, timeout=60))["audioContent"])); break
             except Exception:
-                if attempt == 5: raise
-                time.sleep(2 ** attempt)
+                if attempt == 11: raise
+                time.sleep(min(60, 2 ** attempt))
         _finish(raw, wav)
     return wav, _dur(wav)
