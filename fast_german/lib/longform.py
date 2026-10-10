@@ -214,7 +214,7 @@ def build(slides, out_path, fps=10, bed=None, workers=4, crf=24, lufs=-14, music
         open(pl, "w").write("".join("file '%s'\n" % m.replace("'", "'\\''") for m in music))
         cmd += ["-stream_loop", "-1", "-f", "concat", "-safe", "0", "-i", pl]
         f.append(f"[{len(mix)}:a]aformat=channel_layouts=stereo:sample_rates={SR},atrim=0:{total:.3f},"
-                 f"afade=t=in:d=2,afade=t=out:st={max(0, total - 4):.3f}:d=4,volume={music_vol}[m0]")
+                 f"afade=t=in:d=1.5,afade=t=out:st={max(0, total - 4):.3f}:d=4,volume={music_vol}[m0]")
         f.append("[m0][key]sidechaincompress=threshold=0.03:ratio=5:attack=30:release=500[m]")
         mix.append("[m]")
     else:
