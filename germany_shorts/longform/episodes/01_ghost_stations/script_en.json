@@ -107,7 +107,7 @@
     "content": "„Voltastraße. Letzter Bahnhof in Berlin-West.“\\N{\\fs40}Voltastraße. Last station in West Berlin.",
     "pos": [
      0.5,
-     0.8
+     0.68
     ]
    },
    "sfx": [
@@ -658,7 +658,7 @@
     "content": "Bernauer Straße",
     "pos": [
      0.5,
-     0.86
+     0.72
     ]
    }
   },
@@ -759,7 +759,7 @@
     "content": "Potsdamer Platz",
     "pos": [
      0.5,
-     0.86
+     0.72
     ]
    }
   },
@@ -1024,7 +1024,7 @@
     "content": "Jannowitzbrücke",
     "pos": [
      0.5,
-     0.86
+     0.72
     ]
    }
   },
@@ -1143,7 +1143,7 @@
     "content": "Bahnhof Friedrichstraße",
     "pos": [
      0.5,
-     0.86
+     0.72
     ]
    },
    "sfx": {
@@ -1286,7 +1286,7 @@
     "content": "„Lumpensammler“",
     "pos": [
      0.5,
-     0.8
+     0.68
     ]
    },
    "sub": "*The rag collector*"
@@ -1377,7 +1377,7 @@
     "content": "181,132 DM  {\\fnPretendard Black}→{\\fnYouTube Sans}  495,756 DM / month",
     "pos": [
      0.5,
-     0.86
+     0.72
     ]
    },
    "sub": "By 1989: almost *half a million*"
@@ -1425,7 +1425,7 @@
     "content": "„Der S-Bahn-Fahrer zahlt den Stacheldraht“",
     "pos": [
      0.5,
-     0.8
+     0.68
     ]
    }
   },
