@@ -7,13 +7,13 @@
   "speed": 1.0
  },
  "gap": 0.12,
- "sub_limit": 34,
+ "sub_limit": 21,
  "style_fields": {
   "SUB": {
-   "Fontsize": 74,
-   "Outline": 3.2,
-   "Shadow": 2,
-   "MarginV": 120
+   "Fontsize": 120,
+   "Outline": 5.2,
+   "Shadow": 2.5,
+   "MarginV": 110
   }
  },
  "fonts": {

@@ -223,8 +223,8 @@ B.append({"visual": t3("section", 14), "hold": 16.0})   # end screen
 spec = {
     "voice": {"engine": "elevenlabs", "voice_id": "DrBEKFgWMDWUG6bjTSTk", "model": "eleven_v4", "stability": 0.5, "speed": 1.0},
     "gap": 0.12,
-    "sub_limit": 34,
-    "style_fields": {"SUB": {"Fontsize": 74, "Outline": 3.2, "Shadow": 2, "MarginV": 120}},
+    "sub_limit": 21,
+    "style_fields": {"SUB": {"Fontsize": 120, "Outline": 5.2, "Shadow": 2.5, "MarginV": 110}},
     "fonts": {"SUB": "YouTube Sans", "LABEL": "YouTube Sans", "YEAR": "YouTube Sans", "FX": "YouTube Sans", "CREDIT": "YouTube Sans"},
     "music": [
         {"file": "music/t1_intro.mp3", "from": "intro", "to": "act1", "vol": 0.15, "fade_in": 3},
