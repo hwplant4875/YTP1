@@ -103,7 +103,7 @@ def render(part, seq, fade_in, fade_out):
         "-vf", "fps=30,format=yuv420p", "-c:v", "libx264", "-preset", "medium", "-crf", "22", "-tune", "stillimage", "-g", "300",
         "-c:a", "aac", "-b:a", "160k", "-ar", "48000", "-ac", "2", "-shortest", f"{OUT}/{part}.mp4"], check=True)
     print("rendered", part, flush=True)
-render("intro", intro, 3, 0); render("body", body, 3, 0); render("outro", outro, 0, 6)
+render("intro", intro, 1.5, 1.5); render("body", body, 1.0, 1.0); render("outro", outro, 1.0, 6)
 with open(f"{OUT}/final8h.txt", "w") as fh: fh.write("file 'intro.mp4'\n" + "file 'body.mp4'\n" * 4 + "file 'outro.mp4'\n")
 with open(f"{OUT}/final2h.txt", "w") as fh: fh.write("file 'intro.mp4'\nfile 'body.mp4'\nfile 'outro.mp4'\n")
 for n in ("final2h", "final8h"):
