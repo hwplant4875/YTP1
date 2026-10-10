@@ -7,6 +7,7 @@
   "speed": 1.0
  },
  "gap": 0.12,
+ "subtitles": false,
  "sub_limit": 21,
  "style_fields": {
   "SUB": {
@@ -308,7 +309,7 @@
     "content": "Bernauer Straße · 1955",
     "pos": [
      0.5,
-     0.72
+     0.86
     ]
    }
   },
@@ -496,7 +497,7 @@
     "content": "Bernauer Straße 78",
     "pos": [
      0.5,
-     0.72
+     0.86
     ]
    },
    "sfx": {
@@ -620,7 +621,7 @@
     "content": "$7,500  +  $5,000",
     "pos": [
      0.5,
-     0.72
+     0.86
     ]
    },
    "sub": "$7,500 to film. *$5,000 more* if it worked"
@@ -652,7 +653,7 @@
     "content": "„YOU ARE LEAVING THE AMERICAN SECTOR“",
     "pos": [
      0.5,
-     0.68
+     0.8
     ]
    },
    "sub": "They hung a sign: *'You are leaving the American sector'*"
@@ -723,7 +724,7 @@
     "content": "Kiefholzstraße · 1962",
     "pos": [
      0.5,
-     0.72
+     0.86
     ]
    }
   },
@@ -849,7 +850,7 @@
     "content": "Schönholzer Straße 7",
     "pos": [
      0.5,
-     0.72
+     0.86
     ]
    }
   },
@@ -1121,7 +1122,7 @@
     "content": "22 OCTOBER 1962",
     "pos": [
      0.5,
-     0.72
+     0.86
     ]
    },
    "sub": "October 22nd: the *Cuban Missile Crisis*"
@@ -1153,7 +1154,7 @@
     "content": "10 DECEMBER 1962",
     "pos": [
      0.5,
-     0.72
+     0.86
     ]
    }
   },

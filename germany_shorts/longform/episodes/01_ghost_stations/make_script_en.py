@@ -53,7 +53,7 @@ B.append({"visual": gi("lightsup", 0), "hold": 1.3, "id": "intro",
 say("For twenty-eight years, no train ever stopped at this station.", sub="For 28 years, no train *ever stopped* at this station")
 # the hook: the real-sounding West Berlin PA, then silence and a hit
 B.append({"visual": gi("cab", 0), "hold": 4.0, "trans": "dip",
-          "text": {"kind": "quote", "content": "„Voltastraße. Letzter Bahnhof in Berlin-West.“\\N{\\fs40}Voltastraße. Last station in West Berlin.", "pos": [0.5, 0.68]},
+          "text": {"kind": "quote", "content": "„Voltastraße. Letzter Bahnhof in Berlin-West.“\\N{\\fs40}Voltastraße. Last station in West Berlin.", "pos": [0.5, 0.8]},
           "sfx": [{"file": "announce_pa.wav", "vol": 1.0, "duck": False, "at": 0.25},
                   {"prompt": "PA speaker feedback chime, old station loudspeaker ding dong", "len": 1.5, "vol": 0.3, "at": -0.2},
                   TRAIN]})
@@ -128,7 +128,7 @@ say("We'll get to the money. First, let's step inside a ghost station.")
 
 # ---------------------------------------------------------------- act 2: anatomy of a ghost station
 say("On August 13th, 1961, the stations died overnight.", news(N62, 18, C62), id="act2",
-    text={"kind": "label", "content": "Bernauer Straße", "pos": [0.5, 0.72]})
+    text={"kind": "label", "content": "Bernauer Straße", "pos": [0.5, 0.86]})
 say("On the U8: Bernauer Straße, Rosenthaler Platz, Weinmeisterstraße, Alexanderplatz, Jannowitzbrücke, Heinrich-Heine-Straße.",
     img(19, (1.25, 0.72, 0.5), (1.4, 0.72, 0.62), "png"), sub="U8: six stations, *all closed*")
 say("On the U6: Schwartzkopffstraße, Nordbahnhof, Oranienburger Tor, Französische Straße, and Stadtmitte.",
@@ -139,7 +139,7 @@ say("Add Bornholmer Straße above ground, and you get sixteen.", sub="Plus Bornh
 say("Street entrances were walled up. The subway signs came down.", img(2, (1.08, 0.5, 0.42), (1.2, 0.55, 0.45)))
 say("Some entrances were simply buried, until they vanished from the street entirely.")
 say("On East Berlin's maps, the stations, and even the lines, were erased.", news(N62, 30, C62),
-    text={"kind": "label", "content": "Potsdamer Platz", "pos": [0.5, 0.72]})
+    text={"kind": "label", "content": "Potsdamer Platz", "pos": [0.5, 0.86]})
 say("Most East Berliners probably forgot that Western trains were rumbling beneath their feet.")
 say("At Nordbahnhof, the border guards built six separate walls to seal off the station.")
 say("And then added wire fencing on top.")
@@ -185,7 +185,7 @@ say("Because he worked down there every day.")
 say("So he made a plan.")
 say("He would fake a signal fault.")
 say("When a signal breaks, a technician is allowed into the tunnel to fix it.")
-say("The spot: a tunnel near Jannowitzbrücke station.", text={"kind": "label", "content": "Jannowitzbrücke", "pos": [0.5, 0.72]})
+say("The spot: a tunnel near Jannowitzbrücke station.", text={"kind": "label", "content": "Jannowitzbrücke", "pos": [0.5, 0.86]})
 say("As a West Berlin train approached, he stood by the tracks and flagged it down.", sfx=RISER)
 B.append({"visual": "same", "hold": 0.6, "sfx": {"prompt": "subway train emergency braking, loud metal screech in a tunnel", "len": 3, "vol": 0.55}})
 say("The stunned driver opened the door and shouted:")
@@ -202,7 +202,7 @@ say("If you're enjoying this story, subscribing helps more than you think. There
 # ---------------------------------------------------------------- act 4: Friedrichstrasse and the money
 say("Now, of all the stations under East Berlin, trains stopped at exactly one.", img(13, (1.05, 0.5, 0.5), (1.2, 0.55, 0.5)), id="act4",
     sub="Trains stopped at *exactly one*")
-say("Friedrichstraße.", text={"kind": "label", "content": "Bahnhof Friedrichstraße", "pos": [0.5, 0.72]}, sfx=CROWD)
+say("Friedrichstraße.", text={"kind": "label", "content": "Bahnhof Friedrichstraße", "pos": [0.5, 0.86]}, sfx=CROWD)
 say("For West Berliners, it was a place to change trains without any checks.", img(11, (1.08, 0.5, 0.44), (1.2, 0.45, 0.42)))
 say("And at the same time, it was a border crossing into East Germany.", img(7, (1.05, 0.5, 0.5), (1.18, 0.5, 0.55)))
 say("Two countries inside one station, separated by a wall.", sub="Two countries in *one station*")
@@ -215,7 +215,7 @@ say("The Intershop, which only took Western money.")
 say("West Berliners rode the subway into East German territory just to buy cheap cigarettes and alcohol, then rode straight back.",
     sub="They rode into the East for *cheap cigarettes and booze*")
 say("The last train after one in the morning, full of tipsy shoppers, had its own nickname.")
-say("The rag collector.", text={"kind": "quote", "content": "„Lumpensammler“", "pos": [0.5, 0.68]}, sub="*The rag collector*")
+say("The rag collector.", text={"kind": "quote", "content": "„Lumpensammler“", "pos": [0.5, 0.8]}, sub="*The rag collector*")
 say("But Friedrichstraße wasn't always harmless.", img(6, (1.1, 0.5, 0.42), (1.22, 0.5, 0.4)), sfx=RISER)
 say("In March 1974, a Polish man threatened the embassy with a fake bomb, demanding to be let out to the West.")
 say("East Germany pretended to agree.")
@@ -227,7 +227,7 @@ say("In return for running its trains under East Berlin,")
 say("from 1963, West Berlin paid East Germany a fee. Every single month.", text={"kind": "year", "content": "1963"},
     sub="West Berlin paid East Germany. *Every month*")
 say("At first, around a hundred and eighty thousand marks a month.")
-say("By 1989, it was almost half a million.", text={"kind": "label", "content": "181,132 DM  {\\fnPretendard Black}→{\\fnYouTube Sans}  495,756 DM / month", "pos": [0.5, 0.72]},
+say("By 1989, it was almost half a million.", text={"kind": "label", "content": "181,132 DM  {\\fnPretendard Black}→{\\fnYouTube Sans}  495,756 DM / month", "pos": [0.5, 0.86]},
     sub="By 1989: almost *half a million*")
 say("That's close to six million marks a year.")
 say("To run its own subway, the city was paying the country that built the Wall around it.",
@@ -236,7 +236,7 @@ say("And the S-Bahn was even more absurd.", img(18, (1.05, 0.5, 0.5), (1.18, 0.6
 say("Even inside West Berlin, the S-Bahn was run by East Germany's state railway.")
 say("West Berliners were furious, and they boycotted it.")
 say("The slogan: every S-Bahn ticket pays for the barbed wire.",
-    text={"kind": "quote", "content": "„Der S-Bahn-Fahrer zahlt den Stacheldraht“", "pos": [0.5, 0.68]})
+    text={"kind": "quote", "content": "„Der S-Bahn-Fahrer zahlt den Stacheldraht“", "pos": [0.5, 0.8]})
 say("Ridership collapsed, from half a million passengers a day to under fifty thousand.",
     sub="From half a million a day to *under 50,000*")
 say("And this wasn't even the first time that S-Bahn tunnel had died.", img(14, (1.05, 0.5, 0.5), (1.2, 0.5, 0.55)))
@@ -279,6 +279,7 @@ B.append({"visual": g3("platform", t0=20), "hold": 16.0})   # end screen: subscr
 spec = {
     "voice": {"engine": "elevenlabs", "voice_id": "DrBEKFgWMDWUG6bjTSTk", "model": "eleven_v4", "stability": 0.5, "speed": 1.0},
     "gap": 0.12,
+    "subtitles": False,
     "sub_limit": 21,
     "style_fields": {"SUB": {"Fontsize": 120, "Outline": 5.2, "Shadow": 2.5, "MarginV": 110}},
     "fonts": {"SUB": "YouTube Sans", "LABEL": "YouTube Sans", "YEAR": "YouTube Sans", "FX": "YouTube Sans", "CREDIT": "YouTube Sans"},

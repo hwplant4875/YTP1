@@ -74,7 +74,7 @@ say("This is how they did it.", hold=0.6)
 
 # ---------------------------------------------------------------- act 1: Bernauer Strasse and the people
 say("To understand Tunnel 29, you need to understand this street.", img(1, (1.05, 0.5, 0.5), (1.18, 0.4, 0.55)), id="act1", trans="dip",
-    text={"kind": "label", "content": "Bernauer Straße · 1955", "pos": [0.5, 0.72]})
+    text={"kind": "label", "content": "Bernauer Straße · 1955", "pos": [0.5, 0.86]})
 say("Before 1961, Bernauer Straße was just a street. The sign on it said: you are entering the French sector.")
 say("The pavement was West Berlin. The houses along it were East Berlin.", img(10, (1.05, 0.5, 0.5), (1.15, 0.45, 0.5)))
 say("So when the Wall went up in August 1961, people simply jumped. Out of their windows, into the West.", img(9, (1.05, 0.5, 0.5), (1.18, 0.55, 0.5)),
@@ -98,7 +98,7 @@ say("He studied engineering. Now he was going back. Underground.", sub="Now he w
 
 # ---------------------------------------------------------------- act 2: the dig
 say("The entrance was a small, war-damaged factory, right on Bernauer Straße.", t3("street", 4), id="act2", trans="dip",
-    text={"kind": "label", "content": "Bernauer Straße 78", "pos": [0.5, 0.72]}, sfx=NIGHT)
+    text={"kind": "label", "content": "Bernauer Straße 78", "pos": [0.5, 0.86]}, sfx=NIGHT)
 say("Its owner let them use the cellar for free.")
 say("They dug a shaft straight down, about five meters.", t3("reveal", 0), sfx=DIG)
 say("Then they turned east, and started digging under the street, under the death strip, and under the Wall.",
@@ -114,13 +114,13 @@ say("And then, they ran out of money.", {"type": "black"}, sfx=HIT, hold=0.6)
 say("That's when the Americans came in.", t3("camera", 3), sfx=REEL)
 say("NBC's Berlin correspondent, Piers Anderton, had been looking for exactly this story.")
 say("The deal: seven and a half thousand dollars for exclusive rights to film. Five thousand more if the escape worked.",
-    text={"kind": "label", "content": "$7,500  +  $5,000", "pos": [0.5, 0.72]},
+    text={"kind": "label", "content": "$7,500  +  $5,000", "pos": [0.5, 0.86]},
     sub="$7,500 to film. *$5,000 more* if it worked")
 say("In return, NBC's cameramen would crawl into the tunnel and film it, from the inside.", sub="NBC would film it *from the inside*")
 say("The producer back in New York? He never saw the tunnel. Not once.")
 say("By early June, they were under the border line.", t3("section", 2), trans="dip")
 say("According to one of the diggers, they even hung a sign at that spot: 'You are leaving the American sector'.",
-    text={"kind": "quote", "content": "„YOU ARE LEAVING THE AMERICAN SECTOR“", "pos": [0.5, 0.68]},
+    text={"kind": "quote", "content": "„YOU ARE LEAVING THE AMERICAN SECTOR“", "pos": [0.5, 0.8]},
     sub="They hung a sign: *'You are leaving the American sector'*")
 say("Then, in early summer, the water came.", t3("water", 0), sfx=WATER, id="flood")
 say("A water main had burst somewhere above them. The tunnel began to flood.", sub="A water main had burst. The tunnel *began to flood*")
@@ -131,7 +131,7 @@ say("disguised as a routine repair.", hold=0.6)
 say("It worked. But the tunnel took weeks to dry out.")
 say("And while they waited, something went very wrong in another tunnel.", xs("pass"), trans="dip", sfx=RISER)
 say("Across the city, another group was digging, at Kiefholzstraße.",
-    text={"kind": "label", "content": "Kiefholzstraße · 1962", "pos": [0.5, 0.72]})
+    text={"kind": "label", "content": "Kiefholzstraße · 1962", "pos": [0.5, 0.86]})
 say("They had a TV deal too. With CBS.", sub="They had a TV deal too. With *CBS*")
 say("Herschel, Rudolph and their friend Uli Pfeifer went to help.")
 say("But the group had been infiltrated by a Stasi informer.", {"type": "black"}, sub="But the group had a *Stasi informer*", sfx=HIT)
@@ -149,7 +149,7 @@ say("The diggers pinned his photo inside their tunnel. And kept digging.", t3("c
 say("By September, the water was back.", t3("water", 4), id="act3", sfx=DRIP)
 say("They couldn't reach their original target, so they aimed for a closer building instead.")
 say("Schönholzer Straße, number seven.", img(17, (1.05, 0.5, 0.5), (1.15, 0.5, 0.6)),
-    text={"kind": "label", "content": "Schönholzer Straße 7", "pos": [0.5, 0.72]})
+    text={"kind": "label", "content": "Schönholzer Straße 7", "pos": [0.5, 0.86]})
 say("On the morning of September 14th, Hasso Herschel dug upward, and broke through the floor of the cellar.", t3("cellar", 0),
     sub="September 14th: they broke through the *cellar floor*",
     sfx={"prompt": "pickaxe breaking through a brick floor from below, rubble falling, air rushing", "len": 4, "vol": 0.45})
@@ -189,11 +189,11 @@ say("The broadcast was set for October 31st, 1962.")
 say("But word got out that NBC had paid for an escape. Time magazine called it chicanery. The State Department was furious.",
     sub="Critics called it *chicanery*. The State Department was *furious*")
 say("Then, on October 22nd, President Kennedy went on television to announce the Cuban Missile Crisis.",
-    film(N61, 63, C61), text={"kind": "label", "content": "22 OCTOBER 1962", "pos": [0.5, 0.72]},
+    film(N61, 63, C61), text={"kind": "label", "content": "22 OCTOBER 1962", "pos": [0.5, 0.86]},
     sub="October 22nd: the *Cuban Missile Crisis*")
 say("With the world on the edge of nuclear war, Washington leaned hard on NBC to hold the film.")
 say("The next day, NBC pulled it.", sub="The next day, NBC *pulled it*", sfx=HIT)
-say("It finally aired on December 10th, 1962.", t3("camera", 9), text={"kind": "label", "content": "10 DECEMBER 1962", "pos": [0.5, 0.72]})
+say("It finally aired on December 10th, 1962.", t3("camera", 9), text={"kind": "label", "content": "10 DECEMBER 1962", "pos": [0.5, 0.86]})
 say("Ninety minutes. No interviews. Just the tunnel.")
 say("It won three Emmys, including Program of the Year.", sub="Three Emmys. Including *Program of the Year*")
 say("It's still the only documentary ever to win it.")
@@ -223,6 +223,7 @@ B.append({"visual": t3("section", 14), "hold": 16.0})   # end screen
 spec = {
     "voice": {"engine": "elevenlabs", "voice_id": "DrBEKFgWMDWUG6bjTSTk", "model": "eleven_v4", "stability": 0.5, "speed": 1.0},
     "gap": 0.12,
+    "subtitles": False,
     "sub_limit": 21,
     "style_fields": {"SUB": {"Fontsize": 120, "Outline": 5.2, "Shadow": 2.5, "MarginV": 110}},
     "fonts": {"SUB": "YouTube Sans", "LABEL": "YouTube Sans", "YEAR": "YouTube Sans", "FX": "YouTube Sans", "CREDIT": "YouTube Sans"},
