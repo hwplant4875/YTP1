@@ -74,8 +74,14 @@ def build(spec, out, preview=False):
         tr = shots[i - 1].get('tr', 'fade')
         off = acc - td
         starts.append(off)
-        fc.append(f"[{vprev}][{2 * i}:v]xfade=transition={tr}:duration={td}:offset={off:.3f}[vx{i}]")
-        fc.append(f"[{aprev}][{2 * i + 1}:a]acrossfade=d={td}:c1=tri:c2=tri[ax{i}]")
+        if tr == 'cut':  # hard cut (the zoom-through move is rendered into the shots)
+            td, off = 0, acc
+            starts[-1] = off
+            fc.append(f"[{vprev}][{2 * i}:v]concat=n=2:v=1:a=0[vx{i}]")
+            fc.append(f"[{aprev}][{2 * i + 1}:a]concat=n=2:v=0:a=1[ax{i}]")
+        else:
+            fc.append(f"[{vprev}][{2 * i}:v]xfade=transition={tr}:duration={td}:offset={off:.3f}[vx{i}]")
+            fc.append(f"[{aprev}][{2 * i + 1}:a]acrossfade=d={td}:c1=tri:c2=tri[ax{i}]")
         vprev, aprev = f'vx{i}', f'ax{i}'
         acc = off + durs[i]
     total = acc
@@ -108,6 +114,15 @@ def build(spec, out, preview=False):
         for h in s.get('hits', []):
             if h.get('boom', 0) is not None and not (spec.get('mute') and 'boom' not in h):
                 sfx_events.append(('boom', starts[i] + h['t'], h.get('boom')))
+    for i, s in enumerate(shots):
+        if s.get('capParts'):
+            a = starts[i] + s.get('capIn', 0)
+            b = min(starts[i] + s.get('capOut', durs[i]), total - .1)
+            png = f"{work}/cap{i}.png"
+            title_png.caption(png, s['capParts'], font, s.get('capSize', 100))
+            ins += ['-loop', '1', '-framerate', '30', '-t', f'{total:.3f}', '-i', png]
+            fc.append(f"[{cur}][{k}:v]overlay=0:{wy + wh + s.get('capGap', 30)}:enable='between(t,{a:.3f},{b:.3f})'[c{k}]")
+            cur, k = f'c{k}', k + 1
     dt = []
     for i, s in enumerate(shots):
         if s.get('cap'):

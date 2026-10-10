@@ -56,6 +56,13 @@ def render_shot(src, t_in, dur, pre_filter, shot, out_w, out_h, out_path, bg=(0,
         z = shot.get('zoom', 1.0) * (1 + kb * float(ease(u)))
         for h in hits:
             z *= 1 + (h.get('zoom', 1.08) - 1) * float(ease((t - h['t']) / 0.18))
+        # zoom-through transition: the outgoing shot rushes in over its last `zt` s,
+        # the incoming shot starts at the same over-zoom and settles back to its framing
+        zt = shot.get('zt', 0.16)
+        if shot.get('zout'):
+            z *= 1 + (shot['zout'] - 1) * float(ease((t - (dur - zt)) / zt))
+        if shot.get('zin'):
+            z *= 1 + (shot['zin'] - 1) * (1 - float(ease(t / (zt * 1.4))))
         cx = lerp2(shot.get('cx', 0.5), u) * sw
         cy = lerp2(shot.get('cy', 0.5), u) * sh
         if wide:

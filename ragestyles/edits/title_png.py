@@ -89,5 +89,22 @@ def main(out, text, fontfile='/home/user/rs_work/fonts/TikTokSans-Black.ttf', ma
     print(out, img.size, size)
 
 
+def caption(out, parts, fontfile, size=100, stroke=9, maxw=1000):
+    """Name caption: parts = [(text, colour), ...] on one line, thick black outline, transparent 1080-wide strip."""
+    text = ''.join(t for t, _ in parts)
+    font = ImageFont.truetype(fontfile, size)
+    while font.getlength(text) > maxw - 2 * stroke:
+        size -= 2
+        font = ImageFont.truetype(fontfile, size)
+    img = Image.new('RGBA', (W, int(size * 1.3) + 2 * stroke), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    x = (W - font.getlength(text)) / 2
+    for t, c in parts:
+        d.text((x, stroke), t, font=font, fill=c, stroke_width=stroke, stroke_fill='#000000')
+        x += font.getlength(t)
+    img.save(out)
+    return img.size
+
+
 if __name__ == '__main__':
     main(*sys.argv[1:])
