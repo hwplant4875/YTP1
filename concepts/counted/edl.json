@@ -1,0 +1,396 @@
+{
+ "segs": [
+  {
+   "clip": "O44O4Dd-oT0",
+   "in": 46.3,
+   "out": 63.3,
+   "at": 3.2,
+   "scene": true,
+   "ep": [
+    "S1 \u00b7 E6",
+    "Crazy Handful of Nothin'"
+   ]
+  },
+  {
+   "clip": "O44O4Dd-oT0",
+   "in": 122.8,
+   "out": 141.8,
+   "at": 20.2,
+   "scene": false,
+   "ep": [
+    "S1 \u00b7 E6",
+    "Crazy Handful of Nothin'"
+   ]
+  },
+  {
+   "clip": "Esv08l1mxak",
+   "in": 69.8,
+   "out": 77.0,
+   "at": 39.2,
+   "scene": true,
+   "ep": [
+    "S2 \u00b7 E2",
+    "Bit by a Dead Bee"
+   ]
+  },
+  {
+   "clip": "Esv08l1mxak",
+   "in": 99.8,
+   "out": 111.5,
+   "at": 46.4,
+   "scene": false,
+   "ep": [
+    "S2 \u00b7 E2",
+    "Bit by a Dead Bee"
+   ]
+  },
+  {
+   "clip": "Esv08l1mxak",
+   "in": 118.4,
+   "out": 126.0,
+   "at": 58.1,
+   "scene": false,
+   "ep": [
+    "S2 \u00b7 E2",
+    "Bit by a Dead Bee"
+   ]
+  },
+  {
+   "clip": "jEK5pIfDfzI",
+   "in": 0.0,
+   "out": 19.2,
+   "at": 65.7,
+   "scene": true,
+   "ep": [
+    "S4 \u00b7 E12",
+    "End Times"
+   ]
+  },
+  {
+   "clip": "jEK5pIfDfzI",
+   "in": 104.5,
+   "out": 119.4,
+   "at": 84.9,
+   "scene": false,
+   "ep": [
+    "S4 \u00b7 E12",
+    "End Times"
+   ]
+  },
+  {
+   "clip": "9XR6GlaHLyI",
+   "in": 0.3,
+   "out": 33.4,
+   "at": 99.8,
+   "scene": true,
+   "ep": [
+    "S5 \u00b7 E11",
+    "Confessions"
+   ]
+  },
+  {
+   "clip": "9XR6GlaHLyI",
+   "in": 73.8,
+   "out": 84.9,
+   "at": 132.9,
+   "scene": false,
+   "ep": [
+    "S5 \u00b7 E11",
+    "Confessions"
+   ]
+  },
+  {
+   "clip": "_fZshzRh0KA",
+   "in": 3.6,
+   "out": 30.0,
+   "at": 144.0,
+   "scene": true,
+   "ep": [
+    "S5 \u00b7 E12",
+    "Rabid Dog"
+   ]
+  },
+  {
+   "clip": "_fZshzRh0KA",
+   "in": 85.5,
+   "out": 117.8,
+   "at": 170.4,
+   "scene": false,
+   "ep": [
+    "S5 \u00b7 E12",
+    "Rabid Dog"
+   ]
+  }
+ ],
+ "subs": [
+  {
+   "a": 3.5,
+   "b": 6.7,
+   "t": "And recently, these afternoons..."
+  },
+  {
+   "a": 6.7,
+   "b": 14.1,
+   "t": "when you're coming home so late, and we're just left wondering where you are."
+  },
+  {
+   "a": 15.8,
+   "b": 20.0,
+   "t": "Yeah, Dad. What's up with that?"
+  },
+  {
+   "a": 26.6,
+   "b": 32.3,
+   "t": "I like to go on walks. A couple of times a week, maybe more. After work."
+  },
+  {
+   "a": 35.0,
+   "b": 38.6,
+   "t": "I really enjoy the nature."
+  },
+  {
+   "a": 39.6,
+   "b": 40.8,
+   "t": "Do you have a second cell phone?"
+  },
+  {
+   "a": 44.8,
+   "b": 46.2,
+   "t": "A second cell phone?"
+  },
+  {
+   "a": 46.8,
+   "b": 50.8,
+   "t": "When Hank checked your phone records, there was no call."
+  },
+  {
+   "a": 52.3,
+   "b": 54.8,
+   "t": "No call on the phone I know about."
+  },
+  {
+   "a": 55.0,
+   "b": 57.4,
+   "t": "I..."
+  },
+  {
+   "a": 58.6,
+   "b": 60.0,
+   "t": "...don't remember any of that."
+  },
+  {
+   "a": 60.9,
+   "b": 65.3,
+   "t": "But one thing I am sure of is that I don't have a second cell phone."
+  },
+  {
+   "a": 66.1,
+   "b": 70.1,
+   "t": "Just put the gun down. Okay? Just put it down. We'll talk."
+  },
+  {
+   "a": 71.1,
+   "b": 74.1,
+   "t": "Tell me what it is you think I did."
+  },
+  {
+   "a": 74.1,
+   "b": 76.9,
+   "t": "Brock! Why'd you poison him?"
+  },
+  {
+   "a": 77.2,
+   "b": 78.1,
+   "t": "Who's Brock?"
+  },
+  {
+   "a": 78.3,
+   "b": 84.6,
+   "t": "You saw him in my living room last night. You looked right at him, so don't tell me you don't know!"
+  },
+  {
+   "a": 85.1,
+   "b": 88.7,
+   "t": "Just admit it! Admit what you did!"
+  },
+  {
+   "a": 90.2,
+   "b": 91.7,
+   "t": "I did not do this."
+  },
+  {
+   "a": 95.8,
+   "b": 99.6,
+   "t": "I'm not lying. I'm not lying. Just listen to me."
+  },
+  {
+   "a": 100.0,
+   "b": 104.0,
+   "t": "This is my confession. If you're watching this tape..."
+  },
+  {
+   "a": 105.2,
+   "b": 111.1,
+   "t": "I'm probably dead. Murdered by my brother-in-law, Hank Schrader."
+  },
+  {
+   "a": 112.2,
+   "b": 118.4,
+   "t": "Hank has been building a meth empire for over a year now, and using me as his chemist."
+  },
+  {
+   "a": 119.4,
+   "b": 125.9,
+   "t": "Shortly after my 50th birthday, he asked that I use my chemistry knowledge to cook methamphetamine,"
+  },
+  {
+   "a": 126.9,
+   "b": 132.6,
+   "t": "which he would then sell using connections he made through his career with the DEA."
+  },
+  {
+   "a": 133.1,
+   "b": 137.0,
+   "t": "Hank had a partner. A businessman named Gustavo Fring."
+  },
+  {
+   "a": 137.2,
+   "b": 143.7,
+   "t": "Hank sold me into servitude to this man. When I tried to quit, Fring threatened my family."
+  },
+  {
+   "a": 144.4,
+   "b": 151.2,
+   "t": "Pump malfunction. So I'm standing there filling up, like I've done a thousand times before, and I hear a 'chunk'."
+  },
+  {
+   "a": 151.3,
+   "b": 156.3,
+   "t": "You know, the pump's nozzle, the metal thing you squeeze... 'chunk'."
+  },
+  {
+   "a": 156.4,
+   "b": 163.9,
+   "t": "So I suppose, in my naivet\u00e9, I took it that gas is no longer coming out of the nozzle,"
+  },
+  {
+   "a": 164.0,
+   "b": 170.0,
+   "t": "so I pull out the hose to put it back, and whoosh! I'm suddenly soaked in gasoline."
+  },
+  {
+   "a": 170.8,
+   "b": 173.0,
+   "t": "You fainted, didn't you?"
+  },
+  {
+   "a": 174.1,
+   "b": 180.5,
+   "t": "'Cause you're sick again. You were pumping gas and the fumes made you pass out again."
+  },
+  {
+   "a": 181.2,
+   "b": 184.5,
+   "t": "Just admit it. / No, that... no."
+  },
+  {
+   "a": 185.5,
+   "b": 186.7,
+   "t": "It was the pump."
+  },
+  {
+   "a": 194.1,
+   "b": 202.4,
+   "t": "Maybe I did get a little swimmy at one point, but I did not faint. Okay? I'm fine, and that's the truth."
+  }
+ ],
+ "lies": [
+  {
+   "n": 1,
+   "at": 26.8,
+   "to": "his family",
+   "q": "I like to go on walks.",
+   "truth": "The 'walks' are meth cooks in Jesse's RV."
+  },
+  {
+   "n": 2,
+   "at": 44.9,
+   "to": "Skyler",
+   "q": "A second cell phone?",
+   "truth": "He has one. Only Jesse calls it."
+  },
+  {
+   "n": 3,
+   "at": 58.7,
+   "to": "Skyler",
+   "q": "I don't remember any of that.",
+   "truth": "He faked the fugue state. He remembers everything."
+  },
+  {
+   "n": 4,
+   "at": 62.8,
+   "to": "Skyler",
+   "q": "I don't have a second cell phone.",
+   "truth": "Still has it."
+  },
+  {
+   "n": 5,
+   "at": 77.3,
+   "to": "Jesse",
+   "q": "Who's Brock?",
+   "truth": "He knows exactly who Brock is."
+  },
+  {
+   "n": 6,
+   "at": 90.3,
+   "to": "Jesse",
+   "q": "I did not do this.",
+   "truth": "He did. Lily of the valley, from his own garden."
+  },
+  {
+   "n": 7,
+   "at": 95.9,
+   "to": "Jesse",
+   "q": "I'm not lying.",
+   "truth": "He is. It's the season's final shot."
+  },
+  {
+   "n": 8,
+   "at": 112.3,
+   "to": "the DEA",
+   "q": "Hank has been building a meth empire.",
+   "truth": "Walt built it. Hank spent a year hunting Heisenberg."
+  },
+  {
+   "n": 9,
+   "at": 133.2,
+   "to": "the DEA",
+   "q": "Hank had a partner... Gustavo Fring.",
+   "truth": "Gus was Walt's partner, not Hank's."
+  },
+  {
+   "n": 10,
+   "at": 137.3,
+   "to": "the DEA",
+   "q": "Hank sold me into servitude.",
+   "truth": "Walt took the deal himself. $3 million for 3 months."
+  },
+  {
+   "n": 11,
+   "at": 144.5,
+   "to": "his family",
+   "q": "Pump malfunction.",
+   "truth": "Jesse broke in and doused the house in gasoline."
+  },
+  {
+   "n": 12,
+   "at": 185.6,
+   "to": "Walt Jr.",
+   "q": "It was the pump.",
+   "truth": "Still not the pump."
+  }
+ ],
+ "intro": 3.2,
+ "end": 202.7,
+ "outro": 5.0
+}

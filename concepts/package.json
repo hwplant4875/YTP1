@@ -1,0 +1,1 @@
+{"name":"longform-render","private":true,"type":"module","dependencies":{"cannon-es":"^0.20.0","planck":"^1.0.6","playwright":"^1.56.1","three":"^0.170.0"}}

@@ -1,0 +1,13 @@
+node_modules/
+out/
+map/data/
+counted/src/
+counted/wav/
+counted/*.mov
+counted/*.mp4
+counted/transcripts.json
+counted/tr.log
+audio/*.mp3
+marble/race.json
+fonts/
+_page_*.html
