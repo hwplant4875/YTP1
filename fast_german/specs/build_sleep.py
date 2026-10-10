@@ -1,6 +1,6 @@
 """Learn German Words While You Sleep (8 h): one ~2 h block of unique words, played 4 times.
-Per word (user's order, 2026-10-10): German word, English meaning, German sentence, the same sentence slowly,
-English sentence. Voice: Google Chirp 3 HD Leda (free tier), soft sleep treatment; ElevenLabs sleep music bed.
+Per word (user's order, 2026-10-10): English word, German word, English sentence, German sentence, the German
+sentence slowly. Voice: Google Chirp 3 HD Leda (free tier), soft sleep treatment; ElevenLabs sleep music bed.
 Usage: build_sleep.py OUT.mp4 [n_words] [loops]"""
 import json, os, subprocess, sys, tempfile
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "lib"))
@@ -25,9 +25,9 @@ def word_slide(w, i):
     return (lambda: slide(DARK, top_left="FAST GERMAN", top_right=f"{w['cat'].title()} · {i + 1}/{len(words)}",
                           icon=w.get("icon"), word=say(w)[:-1], article=w["article"], en=w["en"],
                           sub=w["ex_de"], sub2=w["ex_en"], icon_size=380),
-            [("sil", 0.6), ("tts", say(w), DE), ("sil", 1.8), ("tts", w["en"] + ".", EN), ("sil", 1.8),
-             ("tts", w["ex_de"], DE), ("sil", 1.5), ("tts", w["ex_de"], SLOW), ("sil", 1.5),
-             ("tts", w["ex_en"], EN), ("sil", 2.4)])
+            [("sil", 0.6), ("tts", w["en"] + ".", EN), ("sil", 1.5), ("tts", say(w), DE), ("sil", 1.8),
+             ("tts", w["ex_en"], EN), ("sil", 1.5), ("tts", w["ex_de"], DE), ("sil", 1.5),
+             ("tts", w["ex_de"], SLOW), ("sil", 2.4)])
 
 
 CORE = [word_slide(w, i) for i, w in enumerate(words)]
