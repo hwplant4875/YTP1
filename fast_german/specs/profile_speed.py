@@ -78,3 +78,27 @@ if __name__ == "__main__":
         p.convert("RGB").save(os.path.join(OUT, f"profile_{k}.png"))
     round_preview(P, "profile_sizes.png")
     print("ok")
+
+
+def smear(layer, length=260, steps=40):
+    """Directional motion blur to the left: the letters leave a long smeared trail behind them."""
+    out = Image.new("RGBA", layer.size)
+    for i in range(steps, 0, -1):
+        k = i / steps
+        g = layer.copy(); g.putalpha(g.split()[3].point(lambda v: int(v * 0.10 * (1 - k) ** 1.2)))
+        out.alpha_composite(g, (-int(length * k), 0))
+    return out
+
+
+def final():
+    """Round 8: night Autobahn, forward-leaning paint with a long motion smear and light streaks."""
+    im = asphalt(S, S, base=(20, 22, 28), seed=8, night=True)
+    im.alpha_composite(streaks((S, S), [(255, 60, 50)], 30, 11, 0, S, (4, 9), (250, 800), 2))
+    im.alpha_composite(streaks((S, S), [(255, 236, 200)], 26, 12, 0, S, (4, 9), (250, 800), 2))
+    t1, t2 = words((250, 250, 240), w1=430, w2=500)
+    layer = Image.new("RGBA", (S, S))
+    place(layer, t1, t2, dx=40)
+    im.alpha_composite(smear(layer, 300))
+    im.alpha_composite(layer.filter(ImageFilter.GaussianBlur(10)))
+    im.alpha_composite(layer)
+    return im
