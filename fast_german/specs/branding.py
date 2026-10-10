@@ -44,20 +44,17 @@ def banner():
     for y in range(0, H, 48):
         for x in range((y // 48 % 2) * 24, W, 48):
             d.ellipse((x - 3, y - 3, x + 3, y + 3), fill=(236, 222, 196, 255))
-    # der/die/das stripe at the bottom of the safe area
+    # mobile safe area (1546x423): pretzel | "Fast German" | beer, nothing else (user, 2026-10-10)
     cx, cy = W // 2, H // 2
-    title = text_img("FAST GERMAN", font(190, "Bold"), C.YELLOW + (255,), stroke=16, stroke_fill=C.INK + (255,))
-    im.alpha_composite(shadowed(title, 10, 14, 80), (cx - title.width // 2, cy - 200))
-    x = cx - 390
-    for word, col in (("der", BLUE), ("die", RED), ("das", GREEN)):
-        t = text_img(word, font(96, "Bold"), col + (255,), stroke=8, stroke_fill=(255, 255, 255, 255))
-        im.alpha_composite(t, (x + (260 - t.width) // 2, cy - 5))
-        x += 260
-    tag = text_img("Learn German fast. New shorts every day.", ui_font(44), C.INK + (255,))
-    im.alpha_composite(tag, (cx - tag.width // 2, cy + 125))
+    title = text_img("Fast German", font(158, "Bold"), C.YELLOW + (255,), stroke=14, stroke_fill=C.INK + (255,))
+    im.alpha_composite(shadowed(title, 10, 14, 80), (cx - title.width // 2 + 0, cy - title.height // 2))
+    gap = title.width // 2 + 30
+    for name, x in (("pretzel", cx - gap - 125), ("beer-mug", cx + gap + 125)):
+        ic = shadowed(C.icon(name, 240), 8, 14, 60)
+        im.alpha_composite(ic, (x - ic.width // 2, cy - ic.height // 2))
     # icons outside the safe area (visible on desktop and TV)
-    for name, x, y, s in (("pretzel", 260, 380, 300), ("hot-beverage", 620, 1120, 240), ("crescent-moon", 2040, 330, 280),
-                          ("beer-mug", 2250, 880, 240), ("bread", 300, 1000, 220), ("light-bulb", 1960, 1130, 200)):
+    for name, x, y, s in (("hot-beverage", 620, 1120, 240), ("crescent-moon", 2040, 330, 280),
+                          ("bread", 300, 1000, 220), ("light-bulb", 1960, 1130, 200)):
         im.alpha_composite(shadowed(C.icon(name, s), 8, 14, 60), (x - s // 2, y - s // 2))
     im.convert("RGB").save(os.path.join(OUT, "banner_2560x1440.png"))
     # preview with the mobile safe area outlined
@@ -66,7 +63,6 @@ def banner():
     pv.convert("RGB").resize((1280, 720)).save(os.path.join(OUT, "banner_preview_safe_area.png"))
 
 
-profile_a()
-profile_b()
-banner()
+if __name__ == "__main__":
+    banner()
 print("ok")
