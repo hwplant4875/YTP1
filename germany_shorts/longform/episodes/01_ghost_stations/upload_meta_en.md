@@ -13,6 +13,13 @@ From 1961 to 1989, sixteen stations under Berlin were sealed off. West Berlin tr
 This is the story of Berlin's ghost stations: how they came to exist, what the guards were really guarding, the man who escaped through a ghost tunnel, and why West Berlin paid East Germany to keep its own trains running.
 
 CHAPTERS
+0:00 The station where no one got off
+1:19 Before the Wall
+3:11 The night the stations died
+5:48 Escape through the ghost tunnels
+6:54 Friedrichstraße: two countries in one station
+9:05 28 years in the dark
+10:24 The other tunnel
 
 Sources
 - Kulturprojekte Berlin, "Grenz- und Geisterbahnhöfe im geteilten Berlin" (exhibition at Nordbahnhof)

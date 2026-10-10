@@ -321,6 +321,16 @@ def main():
     SUB_LIMIT = spec.get("sub_limit")
     for name, font in spec.get("fonts", {}).items():   # e.g. {"TITLE": "Some Serif"} for Latin-script episodes
         ASS_HEAD = re.sub(rf"^(Style: {name},)[^,]+", rf"\g<1>{font}", ASS_HEAD, flags=re.M)
+    ASS_FIELDS = ["Name", "Fontname", "Fontsize", "PrimaryColour", "SecondaryColour", "OutlineColour", "BackColour", "Bold", "Italic",
+                  "Underline", "StrikeOut", "ScaleX", "ScaleY", "Spacing", "Angle", "BorderStyle", "Outline", "Shadow", "Alignment",
+                  "MarginL", "MarginR", "MarginV", "Encoding"]
+    for name, fields in spec.get("style_fields", {}).items():   # e.g. {"SUB": {"Outline": 2.4}} so subtitles read on light frames
+        def patch(m, fields=fields):
+            parts = m.group(0)[len("Style: "):].split(",")
+            for k, v in fields.items():
+                parts[ASS_FIELDS.index(k)] = str(v)
+            return "Style: " + ",".join(parts)
+        ASS_HEAD = re.sub(rf"^Style: {name},.*$", patch, ASS_HEAD, flags=re.M)
     gap = spec.get("gap", 0.05)
     work = os.path.splitext(out)[0] + "_work"
     os.makedirs(work, exist_ok=True)

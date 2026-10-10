@@ -280,6 +280,7 @@ spec = {
     "voice": {"engine": "elevenlabs", "voice_id": "DrBEKFgWMDWUG6bjTSTk", "model": "eleven_v4", "stability": 0.5, "speed": 1.0},
     "gap": 0.12,
     "sub_limit": 44,
+    "style_fields": {"SUB": {"Outline": 2.4, "Shadow": 1.5}},
     "fonts": {"SUB": "YouTube Sans", "LABEL": "YouTube Sans", "YEAR": "YouTube Sans", "FX": "YouTube Sans", "CREDIT": "YouTube Sans"},
     "music": [
         {"file": "music/m1_intro.mp3", "from": "intro", "to": "act1", "vol": 0.14, "fade_in": 4},

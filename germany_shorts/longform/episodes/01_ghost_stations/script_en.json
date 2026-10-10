@@ -8,6 +8,12 @@
  },
  "gap": 0.12,
  "sub_limit": 44,
+ "style_fields": {
+  "SUB": {
+   "Outline": 2.4,
+   "Shadow": 1.5
+  }
+ },
  "fonts": {
   "SUB": "YouTube Sans",
   "LABEL": "YouTube Sans",
