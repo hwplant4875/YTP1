@@ -3,7 +3,7 @@ sys.path.insert(0, "/home/user/YTP1/koreanin60s/engine")
 from sound import load, music
 SR=48000; T=json.load(open("timeline.json")); S=lambda k:T[k][0]; E=lambda k:T[k][1]
 N=int((T["END"]+0.3)*SR)
-pop=lambda: load("pop"); whoosh=lambda: load("whoosh"); ding=lambda: load("ding"); thud=lambda: load("stamp"); tick=lambda: load("tick", .3)
+pop=lambda: load("pop"); whoosh=lambda: load("whoosh"); ding=lambda: load("ding"); thud=lambda: load("stamp"); tick=lambda: load("tick", .35)
 boing=pop; sparkle=ding
 sfx=np.zeros(N)
 def put(x,t,g=1.0):
@@ -22,7 +22,7 @@ for t in [S('h2')+.75,S('c6')+.05]: put(thud(),t)
 for t in [S('c5')+.05,S('a3')-.12]: put(ding(),t)
 put(sparkle(),S('e0')-.1)
 t=S('c0')+.2
-while t<S('c0')+1.8: put(tick(),t); t+=.25
+put(tick(),t)
 mus=music(N)
 def w(name,x):
     x=np.clip(x,-1,1); s=(np.stack([x,x],1)*32767).astype(np.int16)

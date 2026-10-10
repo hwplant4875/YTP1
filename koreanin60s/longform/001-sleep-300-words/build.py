@@ -80,17 +80,10 @@ for kind, arg, clips, dur in seq:
         if p is None: continue
         x = cache.setdefault(p, rd(p)); i = int((t + off) * SR); vo[i:i + len(x)] += x[:N - i]
     t += dur
-# soft ambient pad, 64 s loop (Cmaj7 - Am9 - Fmaj7 - G6), very quiet
-L = 64 * SR; tt = np.arange(L) / SR; pad = np.zeros(L, np.float32)
-chords = [[130.8, 196.0, 246.9, 329.6], [110.0, 164.8, 246.9, 261.6], [87.3, 174.6, 220.0, 329.6], [98.0, 196.0, 246.9, 329.6]]
-seg = L // 4
-for j, ch in enumerate(chords):
-    s0 = j * seg; ts = np.arange(seg * 2) / SR; e = np.sin(np.pi * np.arange(seg * 2) / (seg * 2)) ** 2
-    v = sum(np.sin(2 * np.pi * f * ts + .3 * np.sin(2 * np.pi * .2 * ts)) * (.5 if f < 150 else .25) for f in ch) * e
-    idx = (np.arange(seg * 2) + s0) % L; np.add.at(pad, idx, v.astype(np.float32))
-pad = pad / np.abs(pad).max() * .08
-reps = int(np.ceil(N / L)); bed = np.tile(pad, reps)[:N]
-fade = int(8 * SR); bed[:fade] *= np.linspace(0, 1, fade); bed[-fade:] *= np.linspace(1, 0, fade)
+# calm ElevenLabs piano/pad bed, looped with long crossfades
+from sound import music
+bed = (music(N, "sleep_music", 4.0) * .22).astype(np.float32)
+fade = int(8 * SR); bed[:fade] *= np.linspace(0, 1, fade)
 mix = vo * .9 + bed[:, None]
 mix = mix / max(1.0, np.abs(mix).max() / .95)
 with wave.open(f"{OUT}/mix.wav", "wb") as f:

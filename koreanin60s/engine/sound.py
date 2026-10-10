@@ -9,9 +9,9 @@ def load(name, peak=0.5):
         x = np.frombuffer(raw, np.float32).astype(np.float64)
         _c[name] = x / (np.abs(x).max() + 1e-9) * peak
     return _c[name]
-def music(N):
+def music(N, name="music", xfade=0.5):
     """Loop the music bed to N samples with a short crossfade at each seam and a fade-out at the end."""
-    m = load("music", 0.6); xf = int(0.5 * SR); out = np.zeros(N); i = 0
+    m = load(name, 0.6); xf = int(xfade * SR); out = np.zeros(N); i = 0
     while i < N:
         seg = m.copy()
         if i: seg[:xf] *= np.linspace(0, 1, xf); out[i - xf:i] *= np.linspace(1, 0, xf)[: len(out[i - xf:i])]
