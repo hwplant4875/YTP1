@@ -1,10 +1,10 @@
-import json, sys
-import os; sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../mascot"))
-from cat import cat as bird
+import json, sys, base64
+STK="/home/user/YTP1/koreanin60s/assets/baepsae"
+img=lambda n:"data:image/png;base64,"+base64.b64encode(open(f"{STK}/{n}.png","rb").read()).decode()
 T = json.load(open("timeline.json"))
-poses = ["default","happy","surprised","wrong","thinking"]
-birds = "".join(f'<div class="pose" data-p="{p}">{bird(p, "s"+p)}</div>' for p in poses)
-birdsBig = "".join(f'<div class="pose" data-p="{p}">{bird(p, "b"+p)}</div>' for p in poses)
+poses = ["shocked","talk","correct_o","teacher","excited","thinking","smug","laugh_flap","idea"]
+birds = "".join(f'<div class="pose" data-p="{p}"><img src="{img(p)}"></div>' for p in poses)
+birdsBig = f'<div class="pose" data-p="hi_wave"><img src="{img("hi_wave")}"></div>'
 CAP = {
  "h1": "Koreans have <b class=k>TWO</b> completely different ways to count...",
  "h2": "...and they use <b class=k>BOTH</b> in the same sentence.",

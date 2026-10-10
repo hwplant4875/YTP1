@@ -84,57 +84,24 @@ def build(spec_path, out):
     print(out, "END", END)
 
 def mix_audio(out, wavs, scenes, END):
-    rng = np.random.default_rng(1); N = int((END + 0.4) * SR)
-    def env(n, a=.003, d=.2):
-        tt = np.arange(n) / SR; e = np.exp(-tt / d); k = max(1, int(a * SR)); e[:k] *= np.linspace(0, 1, k); return e
-    def sweep(f0, f1, dur, d, g):
-        n = int(dur * SR); f = np.linspace(f0, f1, n); return np.sin(2 * np.pi * np.cumsum(f) / SR) * env(n, .001, d) * g
-    pop = sweep(900, 300, .12, .035, .5)
-    thud = sweep(140, 45, .35, .12, .9)
-    def whoosh():
-        n = int(.45 * SR); x = rng.standard_normal(n); y = np.zeros(n); s = 0; a = np.linspace(.02, .35, n)
-        for i in range(n): s += a[i] * (x[i] - s); y[i] = s
-        y = y - np.convolve(y, np.ones(40) / 40, 'same'); return y * np.sin(np.linspace(0, np.pi, n)) ** 2 * 1.3
-    wh = whoosh()
-    n = int(1.0 * SR); tt = np.arange(n) / SR
-    ding = sum(np.sin(2 * np.pi * f * tt) * g for f, g in [(1568, 1), (2349, .45), (3136, .25)]) * env(n, .002, .28) * .26
-    n = int(.5 * SR); tt = np.arange(n) / SR
-    buzz = (np.sign(np.sin(2 * np.pi * 110 * tt)) * .5 + np.sin(2 * np.pi * 116 * tt) * .5) * env(n, .002, .25) * .18
-    sfx = np.zeros(N)
-    def put(x, t, g=1.0):
-        i = int(max(0, t) * SR); j = min(N, i + len(x))
+    from sound import load, music
+    N = int((END + 0.4) * SR); sfx = np.zeros(N)
+    def put(name, t, g=1.0):
+        x = load(name); i = int(max(0, t) * SR); j = min(N, i + len(x))
         if i < N: sfx[i:j] += x[:j - i] * g
     for i, sc in enumerate(scenes):
-        if i: put(wh, sc["t0"] - .05, .8)
+        if i: put("whoosh", sc["t0"] - .05, .7)
         for e in sc["els"]:
-            if e["type"] == "stamp": put(thud, e["t"])
-            elif e.get("sfx") == "ding": put(ding, e["t"])
-            elif e.get("sfx") == "buzz": put(buzz, e["t"])
-            elif e.get("sfx") != "none": put(pop, e["t"], .75)
-            if "hlT" in e: put(ding, e["hlT"])
-            if "dimT" in e: put(buzz, e["dimT"])
-    # music: 100bpm C G Am F pluck + kick + hat
-    bpm = 100; beat = 60 / bpm; mus = np.zeros(N)
-    chords = [[261.6, 329.6, 392.0], [196.0, 246.9, 293.7], [220.0, 261.6, 329.6], [174.6, 220.0, 261.6]]
-    def pluck(f, dur=.5, g=.11):
-        n = int(dur * SR); tt = np.arange(n) / SR
-        return (np.sin(2 * np.pi * f * tt) + .3 * np.sin(2 * np.pi * 2 * f * tt) + .1 * np.sin(2 * np.pi * 3 * f * tt)) * env(n, .004, .18) * g
-    kick = sweep(110, 40, .25, .09, .45)
-    def add(x, t):
-        i = int(t * SR); j = min(N, i + len(x))
-        if i < N: mus[i:j] += x[:j - i]
-    b = 0; t = 0.0
-    while t < END:
-        c = chords[(b // 4) % 4]; arp = [c[0], c[1], c[2], c[1] * 2]
-        for k in range(2): add(pluck(arp[(b * 2 + k) % 4] * (2 if k else 1)), t + k * beat / 2)
-        if b % 2 == 0: add(kick, t)
-        n = int(.05 * SR); hx = np.diff(np.concatenate([[0], rng.standard_normal(n)])) * env(n, .0005, .012) * .1; add(hx, t + beat / 2)
-        b += 1; t += beat
-    k = int(1.2 * SR); mus[-k:] *= np.linspace(1, 0, k)
+            if e["type"] == "stamp" and e.get("sfx") != "none": put("stamp", e["t"])
+            elif e.get("sfx") in ("ding", "buzz"): put(e["sfx"], e["t"])
+            elif e.get("sfx") != "none": put("pop", e["t"], .7)
+            if "hlT" in e: put("ding", e["hlT"])
+            if "dimT" in e: put("buzz", e["dimT"])
+    mus = music(N)
     def w(name, x):
         x = np.clip(x, -1, 1); s = (np.stack([x, x], 1) * 32767).astype(np.int16)
         with wave.open(name, "wb") as f: f.setnchannels(2); f.setsampwidth(2); f.setframerate(SR); f.writeframes(s.tobytes())
-    w(f"{out}/sfx.wav", sfx * .7); w(f"{out}/music.wav", mus * .8)
+    w(f"{out}/sfx.wav", sfx * .55); w(f"{out}/music.wav", mus)
     wavs = [w for w in wavs if w[0]]
     if not wavs: wavs = [(f"{out}/sfx.wav", 0.0)]  # dry preview: no voice yet
     inp = []; flt = []
@@ -143,8 +110,11 @@ def mix_audio(out, wavs, scenes, END):
     flt.append("".join(f"[v{i}]" for i in range(len(wavs))) + f"amix=inputs={len(wavs)}:normalize=0,apad=whole_dur={END + .4}[vo]")
     subprocess.run(["ffmpeg", "-v", "error", "-y", *inp, "-filter_complex", ";".join(flt), "-map", "[vo]", "-ar", str(SR), "-ac", "2", f"{out}/vo.wav"], check=True)
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{out}/vo.wav", "-i", f"{out}/music.wav", "-i", f"{out}/sfx.wav", "-filter_complex",
-        "[0]asplit[vo][sc];[1]volume=0.5[m];[m][sc]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=300[md];[vo][md][2]amix=inputs=3:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9[out]",
+        "[0]asplit[vo][sc];[1]volume=0.3[m];[m][sc]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=300[md];[vo][md][2]amix=inputs=3:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9[out]",
         "-map", "[out]", "-ar", str(SR), "-ac", "2", f"{out}/mix.wav"], check=True)
 
 if __name__ == "__main__":
     build(sys.argv[1], sys.argv[2])
+    if len(sys.argv) > 3 and sys.argv[3] == "--remux":  # audio-only change: swap the new mix into the existing render
+        o = sys.argv[2]; subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{o}/out.mp4", "-i", f"{o}/mix.wav", "-map", "0:v", "-map", "1:a",
+            "-c:v", "copy", "-c:a", "aac", "-b:a", "256k", "-movflags", "+faststart", "-shortest", f"{o}/final.mp4"], check=True)
