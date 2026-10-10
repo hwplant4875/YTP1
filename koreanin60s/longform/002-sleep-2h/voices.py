@@ -8,12 +8,15 @@ TRIM = "silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremo
 def _dur(p): return float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", p]))
 def _finish(raw, wav):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw, "-af", TRIM, "-ar", "48000", "-ac", "1", wav], check=True); os.remove(raw)
-def korean(text, tempo=0.9, voice=None):
-    voice = voice or TC_VOICE
-    wav = f"{CACHE}/ko_{hashlib.sha1(f'{voice}|{tempo}|{text}'.encode()).hexdigest()[:16]}.wav"
+def korean(text, tempo=0.9, voice=None, emotion=None, fall=None):
+    """fall: cap the ending pitch so every line ends calm and low (falltone.py); on unless K60_FALL=0."""
+    if fall is None: fall = os.environ.get("K60_FALL", "1") == "1"
+    voice = voice or TC_VOICE; emotion = emotion or os.environ.get("K60_KO_EMOTION", "normal")
+    key = f'{voice}|{tempo}|{text}' if emotion == "normal" else f'{voice}|{tempo}|{emotion}|{text}'  # keeps old cache valid
+    wav = f"{CACHE}/ko_{hashlib.sha1(key.encode()).hexdigest()[:16]}.wav"
     if not os.path.exists(wav):
         body = {"voice_id": voice, "text": text, "model": "ssfm-v30", "language": "kor",
-                "prompt": {"emotion_preset": "normal", "emotion_intensity": 1.0}, "output": {"audio_format": "wav", "audio_tempo": tempo}}
+                "prompt": {"emotion_preset": emotion, "emotion_intensity": 1.0}, "output": {"audio_format": "wav", "audio_tempo": tempo}}
         raw = wav + ".raw"
         for attempt in range(6):  # rate limits and dropped connections happen on long runs
             code = subprocess.run(["curl", "-s", "-X", "POST", "https://api.typecast.ai/v1/text-to-speech", "-H", "X-API-KEY: " + os.environ["TYPECAST_API_KEY"],
@@ -24,6 +27,12 @@ def korean(text, tempo=0.9, voice=None):
             msg = open(raw, errors="replace").read()[:200] if os.path.exists(raw) else ""
             raise SystemExit(f"Typecast failed ({code}) for {text!r}: {msg}")
         _finish(raw, wav)
+    if fall:
+        fw = wav[:-4] + "_fall.wav"
+        if not os.path.exists(fw):
+            from falltone import fall as _fall
+            _fall(wav, fw + ".tmp.wav"); subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", fw + ".tmp.wav", "-ar", "48000", "-ac", "1", "-c:a", "pcm_s16le", fw], check=True); os.remove(fw + ".tmp.wav")
+        wav = fw
     return wav, _dur(wav)
 def english(text, rate=0.9):
     wav = f"{CACHE}/en_{hashlib.sha1(f'{G_VOICE}|{rate}|ssml|{text}'.encode()).hexdigest()[:16]}.wav"
