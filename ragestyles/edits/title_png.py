@@ -92,16 +92,27 @@ def main(out, text, fontfile='/home/user/rs_work/fonts/TikTokSans-Black.ttf', ma
 def caption(out, parts, fontfile, size=100, stroke=9, maxw=1000):
     """Name caption: parts = [(text, colour), ...] on one line, thick black outline, transparent 1080-wide strip."""
     text = ''.join(t for t, _ in parts)
+
+    def length(t, font, size):
+        # some fonts (Gmarket Sans web build) have no space glyph: advance spaces by hand
+        if font.getmask(' ').getbbox() is None:
+            return font.getlength(t)
+        return sum(font.getlength(w) for w in t.split(' ')) + t.count(' ') * size * 0.28
+
     font = ImageFont.truetype(fontfile, size)
-    while font.getlength(text) > maxw - 2 * stroke:
+    while length(text, font, size) > maxw - 2 * stroke:
         size -= 2
         font = ImageFont.truetype(fontfile, size)
     img = Image.new('RGBA', (W, int(size * 1.3) + 2 * stroke), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
-    x = (W - font.getlength(text)) / 2
+    x = (W - length(text, font, size)) / 2
     for t, c in parts:
-        d.text((x, stroke), t, font=font, fill=c, stroke_width=stroke, stroke_fill='#000000')
-        x += font.getlength(t)
+        for j, w in enumerate(t.split(' ')):
+            if j:
+                x += length(' ', font, size)
+            if w:
+                d.text((x, stroke), w, font=font, fill=c, stroke_width=stroke, stroke_fill='#000000')
+                x += font.getlength(w)
     img.save(out)
     return img.size
 
