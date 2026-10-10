@@ -15,9 +15,6 @@ img = lambda n: "data:image/png;base64," + base64.b64encode(open(f"{STK}/{n}.png
 rows = list(csv.DictReader(open(f"{HERE}/items.tsv", encoding="utf-8"), delimiter="\t"))[:LIMIT]
 cats = list(dict.fromkeys(r["category"] for r in rows))
 GAP = dict(after_ew=0.7, after_kw=1.6, after_es=1.1, after_ks=1.6, after_kss=2.8)
-INTRO = ("Welcome to Korean in sixty seconds. Get comfortable and close your eyes. "
-         "You'll hear a word in English, then in Korean, then a short sentence in both languages. Just listen and relax.")
-OUTRO = "That's all for tonight. You did great. Sleep well."
 # ---------- visuals (1920x1080, night sky, same look as the 300-word video)
 html = f'''<!doctype html><html><head><meta charset="utf-8"><style>
 body{{margin:0;width:1920px;height:1080px;overflow:hidden;position:relative;font-family:'YouTube Sans',Pretendard;color:#FFF6EA;
@@ -61,18 +58,18 @@ def item_seg(r, i):
     for w, d, g in [(ew, dew, GAP["after_ew"]), (kw, dkw, GAP["after_kw"]), (es, des, GAP["after_es"]), (ks, dks, GAP["after_ks"]), (kss, dkss, GAP["after_kss"])]:
         clips.append((w, t)); t += d + g
     return ("word", (r, i), clips, t)
-intro_w, d = english(INTRO); intro = [("title", ("Korean while you sleep", "English · 한국어 · listen and relax"), [(intro_w, 1.5)], d + 4.0)]
 body = []; prev = None
 for i, r in enumerate(rows, 1):
-    if r["category"] != prev:
-        prev = r["category"]; w, d = english(prev.replace("&", "and") + ".")
+    new_cat = r["category"] != prev; prev = r["category"]
+    if new_cat and i > 1:  # no intro and no first title card: the video opens straight on 안녕하세요
+        w, d = english(prev.replace("&", "and") + ".")
         body.append(("title", (prev, f"part {cats.index(prev) + 1} of {len(cats)}"), [(w, 1.0)], d + 3.0))
     body.append(item_seg(r, i))
-outro_w, d = english(OUTRO); outro = [("title", ("잘 자요 🌙", "jal jayo · sleep well"), [(outro_w, 1.0)], d + 8.0)]
+outro_w, d = korean("잘 자요."); outro = [("title", ("잘 자요 🌙", "jal jayo · sleep well"), [(outro_w, 1.0)], d + 8.0)]  # Korean host voice, not Charon
 dur = lambda seq: sum(s[3] for s in seq)
-print(f"items {len(rows)}  body {dur(body)/60:.1f} min  8h total {(dur(intro)+4*dur(body)+dur(outro))/3600:.2f} h", flush=True)
+print(f"items {len(rows)}  body {dur(body)/60:.1f} min  8h total {(4*dur(body)+dur(outro))/3600:.2f} h", flush=True)
 # ---------- stills
-allseq = [("intro", intro), ("body", body), ("outro", outro)]
+allseq = [("body", body), ("outro", outro)]
 jobs = []
 for part, seq in allseq:
     for k, (kind, arg, _, _) in enumerate(seq):
@@ -103,9 +100,9 @@ def render(part, seq, fade_in, fade_out):
         "-vf", "fps=30,format=yuv420p", "-c:v", "libx264", "-preset", "medium", "-crf", "22", "-tune", "stillimage", "-g", "300",
         "-c:a", "aac", "-b:a", "160k", "-ar", "48000", "-ac", "2", "-shortest", f"{OUT}/{part}.mp4"], check=True)
     print("rendered", part, flush=True)
-render("intro", intro, 1.5, 1.5); render("body", body, 1.0, 1.0); render("outro", outro, 1.0, 6)
-with open(f"{OUT}/final8h.txt", "w") as fh: fh.write("file 'intro.mp4'\n" + "file 'body.mp4'\n" * 4 + "file 'outro.mp4'\n")
-with open(f"{OUT}/final2h.txt", "w") as fh: fh.write("file 'intro.mp4'\nfile 'body.mp4'\nfile 'outro.mp4'\n")
+render("body", body, 1.5, 1.0); render("outro", outro, 1.0, 6)
+with open(f"{OUT}/final8h.txt", "w") as fh: fh.write("file 'body.mp4'\n" * 4 + "file 'outro.mp4'\n")
+with open(f"{OUT}/final2h.txt", "w") as fh: fh.write("file 'body.mp4'\nfile 'outro.mp4'\n")
 for n in ("final2h", "final8h"):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", f"{OUT}/{n}.txt", "-c", "copy", "-movflags", "+faststart", f"{OUT}/{n}.mp4"], check=True)
 print("done", flush=True)
