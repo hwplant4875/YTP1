@@ -1,29 +1,179 @@
 {
- "src": {"pc": "/home/user/rs_work/src/yt/Y7xBTvYgoIY.mp4"},
- "srcFilter": {"pc": "crop=460:360:90:0,hqdn3d=1.5:1.5:3:3"},
- "title": ["BODYBUILDERS IN SUITS", "1999 MR. OLYMPIA PRESS CONFERENCE"],
- "titleSize": 80, "subSize": 44,
- "window": {"y": 300, "h": 1440},
+ "bg": "black",
+ "font": "/home/user/rs_work/fonts/TikTokSans-Black.ttf",
+ "titleY": 225,
+ "window": {
+  "y": 520,
+  "h": 1080
+ },
+ "src": {
+  "pc": "/home/user/rs_work/src/yt/Y7xBTvYgoIY.mp4"
+ },
+ "srcFilter": {
+  "pc": "crop=460:360:90:0,hqdn3d=1.5:1.5:3:3"
+ },
+ "titlePng": "/home/user/rs_work/e01/title.png",
+ "sfx": {
+  "hit": {
+   "file": "/mnt/project-files/sfx/drive/051_둥(큰북소리).wav",
+   "filter": "atrim=0:1.3,lowpass=f=170,afade=t=out:st=0.6:d=0.7",
+   "gain": -16
+  }
+ },
  "shots": [
-  {"src": "pc", "in": 0.3, "out": 2.8, "fit": "wide", "zoom": 1.25, "tr": "fade", "td": 0.2},
-  {"src": "pc", "in": 153.0, "out": 155.6, "fit": "wide", "zoom": 1.1, "tr": "fadewhite", "td": 0.2},
-  {"src": "pc", "in": 185.6, "out": 186.9, "cx": [0.5, 0.6], "zoom": 1.1, "cy": 0.52, "tr": "fade", "td": 0.2,
-   "cap": "#1 MARKUS RUHL", "capIn": 0.15, "capOut": 2.5},
-  {"src": "pc", "in": 88.1, "out": 89.6, "cx": 0.55, "zoom": 1.1, "cy": 0.52, "tr": "fadewhite", "td": 0.2},
-  {"src": "pc", "in": 53.0, "out": 57.0, "cx": 0.58, "zoom": 1.1, "cy": 0.52, "tr": "fade", "td": 0.2,
-   "cap": "#2 NASSER EL SONBATY", "capIn": 0.15, "capOut": 8.9},
-  {"src": "pc", "in": 72.0, "out": 74.5, "cx": 0.5, "zoom": 1.1, "cy": 0.52, "tr": "fade", "td": 0.2},
-  {"src": "pc", "in": 513.0, "out": 516.0, "cx": 0.55, "zoom": 1.1, "cy": 0.52, "tr": "fadewhite", "td": 0.2},
-  {"src": "pc", "in": 112.5, "out": 116.5, "cx": 0.47, "zoom": 1.1, "cy": 0.52, "tr": "fade", "td": 0.2,
-   "cap": "#3 SHAWN RAY", "capIn": 0.15, "capOut": 7.1},
-  {"src": "pc", "in": 126.0, "out": 129.5, "cx": 0.4, "zoom": 1.1, "cy": 0.52, "tr": "fadewhite", "td": 0.2},
-  {"src": "pc", "in": 95.0, "out": 97.5, "cx": 0.5, "zoom": 1.1, "cy": 0.52, "tr": "fade", "td": 0.2,
-   "cap": "#4 FLEX WHEELER", "capIn": 0.15, "capOut": 6.1},
-  {"src": "pc", "in": 163.0, "out": 167.0, "cx": 0.5, "zoom": 1.1, "cy": 0.52, "tr": "fadewhite", "td": 0.2},
-  {"src": "pc", "in": 475.1, "out": 476.4, "cx": 0.5, "zoom": 1.1, "cy": 0.52, "tr": "fade", "td": 0.2,
-   "cap": "#5 RONNIE COLEMAN", "capIn": 0.15, "capOut": 30, "capColor": "0xFFD400"},
-  {"src": "pc", "in": 361.0, "out": 365.0, "cx": 0.44, "zoom": 1.1, "cy": 0.52, "tr": "fade", "td": 0.2},
-  {"src": "pc", "in": 192.5, "out": 196.5, "cx": 0.5, "zoom": 1.1, "cy": 0.52, "tr": "fade", "td": 0.2},
-  {"src": "pc", "in": 386.0, "out": 392.0, "cx": 0.45, "zoom": 1.1, "cy": 0.52}
+  {
+   "src": "pc",
+   "in": 53.0,
+   "out": 57.0,
+   "cx": 0.58,
+   "zoom": 1.2,
+   "cy": 0.42,
+   "punch": true,
+   "cap": "#1 NASSER EL SONBATY",
+   "capIn": 0.1,
+   "capOut": 9.1,
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "pc",
+   "in": 72.0,
+   "out": 74.5,
+   "cx": 0.5,
+   "zoom": 1.2,
+   "cy": 0.42,
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "pc",
+   "in": 513.0,
+   "out": 516.0,
+   "cx": 0.55,
+   "zoom": 1.2,
+   "cy": 0.42,
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "pc",
+   "in": 185.6,
+   "out": 186.9,
+   "cx": [
+    0.5,
+    0.6
+   ],
+   "zoom": 1.2,
+   "cy": 0.42,
+   "punch": true,
+   "cap": "#2 MARKUS RUHL",
+   "capIn": 0.1,
+   "capOut": 2.6,
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "pc",
+   "in": 88.1,
+   "out": 89.6,
+   "cx": 0.55,
+   "zoom": 1.2,
+   "cy": 0.42,
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "pc",
+   "in": 112.5,
+   "out": 116.5,
+   "cx": 0.47,
+   "zoom": 1.2,
+   "cy": 0.42,
+   "punch": true,
+   "cap": "#3 SHAWN RAY",
+   "capIn": 0.1,
+   "capOut": 7.3,
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "pc",
+   "in": 126.0,
+   "out": 129.5,
+   "cx": 0.4,
+   "zoom": 1.2,
+   "cy": 0.42,
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "pc",
+   "in": 95.0,
+   "out": 97.5,
+   "cx": 0.5,
+   "zoom": 1.2,
+   "cy": 0.42,
+   "punch": true,
+   "cap": "#4 FLEX WHEELER",
+   "capIn": 0.1,
+   "capOut": 6.3,
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "pc",
+   "in": 163.0,
+   "out": 167.0,
+   "cx": 0.5,
+   "zoom": 1.2,
+   "cy": 0.42,
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "pc",
+   "in": 475.1,
+   "out": 476.4,
+   "cx": 0.5,
+   "zoom": 1.2,
+   "cy": 0.42,
+   "punch": true,
+   "cap": "#5 RONNIE COLEMAN",
+   "capIn": 0.1,
+   "capOut": 99,
+   "capColor": "0xFFD400",
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "pc",
+   "in": 361.0,
+   "out": 365.0,
+   "cx": 0.44,
+   "zoom": 1.2,
+   "cy": 0.42,
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "pc",
+   "in": 192.5,
+   "out": 196.5,
+   "cx": 0.5,
+   "zoom": 1.2,
+   "cy": 0.42,
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "pc",
+   "in": 386.0,
+   "out": 392.0,
+   "cx": 0.45,
+   "zoom": 1.2,
+   "cy": 0.42,
+   "tr": "fade",
+   "td": 0.2
+  }
  ]
 }

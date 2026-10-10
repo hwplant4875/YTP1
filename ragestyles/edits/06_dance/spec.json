@@ -1,71 +1,42 @@
 {
+ "bg": "black",
+ "font": "/home/user/rs_work/fonts/TikTokSans-Black.ttf",
+ "titleY": 225,
+ "window": {
+  "y": 520,
+  "h": 1080
+ },
  "src": {
   "r": "/home/user/rs_work/src/hd/ronnie_2003_full.mp4"
  },
- "srcCrop": {
-  "r": "944:712:168:4"
+ "srcFilter": {
+  "r": "crop=944:712:168:4"
  },
- "title": [
-  "RONNIE COLEMAN",
-  "MR. OLYMPIA 2003"
- ],
- "window": {
-  "y": 300,
-  "h": 1440
- },
+ "titlePng": "/home/user/rs_work/e06/title.png",
  "shots": [
   {
    "src": "r",
-   "in": 213.6,
-   "out": 219.2,
-   "fit": "wide",
+   "in": 166.8,
+   "out": 172.6,
+   "cx": 0.48,
    "tr": "fadewhite",
-   "td": 0.2,
-   "cap": "300 LBS. FULL SPLITS.",
-   "capIn": 0.5,
-   "png": [
-    {
-     "file": "/home/user/rs_work/e06/arc.png",
-     "in": 2.6,
-     "out": 5.0
-    }
-   ],
-   "zoom": 1.2
-  },
-  {
-   "src": "r",
-   "in": 32.0,
-   "out": 37.9,
-   "cx": [
-    0.47,
-    0.5
-   ],
-   "tr": "fade",
-   "td": 0.25
-  },
-  {
-   "src": "r",
-   "in": 38.5,
-   "out": 42.9,
-   "cx": [
-    0.5,
-    0.5
-   ],
-   "tr": "fade",
-   "td": 0.25
+   "td": 0.2
   },
   {
    "src": "r",
    "in": 48.5,
    "out": 54.6,
-   "cx": [
-    0.5,
-    0.48
-   ],
+   "cx": 0.5,
    "tr": "fade",
-   "td": 0.25,
-   "cap": "HE DANCED.",
-   "capIn": 0.3
+   "td": 0.2
+  },
+  {
+   "src": "r",
+   "in": 38.5,
+   "out": 42.9,
+   "cx": 0.5,
+   "tr": "fade",
+   "td": 0.2
   },
   {
    "src": "r",
@@ -80,45 +51,41 @@
   },
   {
    "src": "r",
+   "in": 213.6,
+   "out": 219.2,
+   "cx": 0.53,
+   "tr": "fade",
+   "td": 0.2
+  },
+  {
+   "src": "r",
    "in": 112.0,
    "out": 117.3,
-   "cx": [
-    0.5,
-    0.5
-   ],
+   "cx": 0.5,
    "tr": "fade",
-   "td": 0.15,
-   "cap": "SPLITS AGAIN. SMILING.",
-   "capIn": 0.4
+   "td": 0.15
   },
   {
    "src": "r",
    "in": 117.5,
    "out": 121.0,
-   "fit": "wide",
+   "cx": 0.47,
    "tr": "fade",
-   "td": 0.25,
-   "zoom": 1.15
+   "td": 0.2
   },
   {
    "src": "r",
    "in": 158.0,
    "out": 162.5,
    "fit": "wide",
-   "tr": "zoomin",
-   "td": 0.3
+   "tr": "fade",
+   "td": 0.25
   },
   {
    "src": "r",
    "in": 225.0,
    "out": 230.5,
-   "cx": [
-    0.5,
-    0.5
-   ],
-   "cap": "TITLE #6",
-   "capIn": 0.6,
-   "capColor": "0xFFD400"
+   "cx": 0.5
   }
  ]
 }
