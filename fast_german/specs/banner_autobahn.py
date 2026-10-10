@@ -5,7 +5,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 import numpy as np
 from PIL import Image, ImageDraw
-from branding_v4 import W, H, CX, CY, SAFE
+from branding_v4 import W, H, CX, CY, SAFE, fit
 from branding_v5 import asphalt, worn
 D = "/mnt/project-files/fast_german/branding/final/"
 PX = 15.5            # pixels per metre (423 px crop ≈ 27 m of road cross-section)
@@ -19,7 +19,7 @@ def grey_bg():
     return Image.fromarray(np.repeat(g[..., None], 3, 2).clip(0, 255).astype("uint8")).convert("RGBA")
 
 
-def carriageway(h, seed, flip=False):
+def carriageway(h, seed, flip=False, skip=None):
     """One direction: hard shoulder, edge line, two lanes split by dashes, inner edge line, narrow inner strip."""
     im = asphalt(W, h, seed)
     d = ImageDraw.Draw(im)
@@ -35,7 +35,9 @@ def carriageway(h, seed, flip=False):
     for yy in rows:
         x = -(seed * 97) % (dash + gap)
         while x < W:
-            d.rectangle((x, yy - th // 2, x + dash, yy + th // 2), fill=LINE + (255,)); x += dash + gap
+            if not (skip and x + dash > skip[0] and x < skip[1]):
+                d.rectangle((x, yy - th // 2, x + dash, yy + th // 2), fill=LINE + (255,))
+            x += dash + gap
     im = worn(im, seed, 0.0)
     return im.transpose(Image.FLIP_TOP_BOTTOM) if flip else im
 
@@ -58,14 +60,21 @@ def banner():
     total = bot - top
     side = int(2.6 * PX) + (int(0.3 * PX) + 2) * 2 + int(3.75 * PX) * 2 + int(0.5 * PX)
     median = total - 2 * side
-    # grass median with a little texture
-    rnd = np.random.default_rng(5)
-    g = np.array([78, 118, 62], float)[None, None, :] + rnd.normal(0, 9, (median, W, 1))
-    grass = Image.fromarray(g.clip(0, 255).astype("uint8")).convert("RGBA")
+    # paved median (no grass, user 2026-10-10), a shade lighter than the lanes
+    grass = asphalt(W, median, 5)
+    grass = Image.fromarray((np.array(grass, float) * [1.15, 1.15, 1.15, 1]).clip(0, 255).astype("uint8"))
     im.alpha_composite(carriageway(side, 1), (0, top))                  # top carriageway: hard shoulder at the outer (top) edge
     im.alpha_composite(grass, (0, top + side))
     im.alpha_composite(guardrail(W, median), (0, top + side))
-    im.alpha_composite(carriageway(side, 2, flip=True), (0, top + side + median))   # mirrored: shoulder at the bottom
+    TW = 820
+    low = carriageway(side, 2, flip=True, skip=((W - TW) // 2 - 80, (W + TW) // 2 + 80))   # mirrored: shoulder at the bottom
+    # "FAST GERMAN" painted across both lanes of the lower carriageway, like a road marking; lane dashes cleared under it
+    shoulder, edge, lane = int(2.6 * PX), int(0.3 * PX) + 2, int(3.75 * PX)
+    y0 = side - shoulder - edge - 2 * lane                                    # top of the two lanes (after the flip)
+    t = fit("FAST GERMAN", TW, LINE).resize((TW, 2 * lane - 26))
+    tx = (W - t.width) // 2
+    low.alpha_composite(worn(t, 7, 0.1), (tx, y0 + 13))
+    im.alpha_composite(low, (0, top + side + median))
     # outer guard-rails on the verge edge, and a soft shadow so the strip sits on the grey
     for y in (top - 10, bot - 10):
         im.alpha_composite(guardrail(W, 20), (0, y))
