@@ -1,0 +1,501 @@
+category	en_word	ko_word	en_sentence	ko_sentence
+Greetings & Manners	Hello.	안녕하세요	Hello, everyone.	여러분, 안녕하세요.
+Greetings & Manners	Nice to meet you.	만나서 반가워요	Nice to meet you, I'm Mina.	만나서 반가워요, 저는 미나예요.
+Greetings & Manners	Thank you.	고마워요	Thank you for your help.	도와줘서 고마워요.
+Greetings & Manners	Thank you (polite).	감사해요	Thank you for the delicious food.	맛있는 음식 감사해요.
+Greetings & Manners	Sorry.	미안해요	Sorry, I'm a little late.	미안해요, 조금 늦었어요.
+Greetings & Manners	I'm sorry (polite).	죄송해요	I'm sorry, please wait a moment.	죄송해요, 잠시만 기다려 주세요.
+Greetings & Manners	Goodbye (to someone leaving).	안녕히 가세요	Goodbye, have a nice day.	안녕히 가세요, 좋은 하루 보내세요.
+Greetings & Manners	Goodbye (when you leave).	안녕히 계세요	Goodbye, I'll come again.	안녕히 계세요, 또 올게요.
+Greetings & Manners	Yes.	네	Yes, that's right.	네, 맞아요.
+Greetings & Manners	No.	아니요	No, it's okay.	아니요, 괜찮아요.
+Greetings & Manners	It's okay.	괜찮아요	It's okay, don't worry.	괜찮아요, 걱정하지 마세요.
+Greetings & Manners	Please give me.	주세요	Water, please.	물 주세요.
+Greetings & Manners	Excuse me.	저기요	Excuse me, a menu, please.	저기요, 메뉴판 주세요.
+Greetings & Manners	Welcome.	어서 오세요	Welcome, have a seat here.	어서 오세요, 여기 앉으세요.
+Greetings & Manners	Good night.	잘 자요	Good night, have sweet dreams.	잘 자요, 좋은 꿈 꿔요.
+Greetings & Manners	See you tomorrow.	내일 봐요	See you tomorrow, sleep well.	내일 봐요, 잘 자요.
+Greetings & Manners	See you later.	나중에 봐요	See you later, have fun.	나중에 봐요, 재미있게 놀아요.
+Greetings & Manners	Congratulations.	축하해요	Congratulations on your birthday.	생일 축하해요.
+Greetings & Manners	Enjoy your meal.	맛있게 드세요	Here you go, enjoy your meal.	여기요, 맛있게 드세요.
+Greetings & Manners	I enjoyed the meal.	잘 먹었어요	I enjoyed the meal, thank you.	잘 먹었어요, 고마워요.
+Greetings & Manners	Long time no see.	오랜만이에요	Long time no see, Jisu.	지수 씨, 오랜만이에요.
+Greetings & Manners	Get home safely.	조심히 가세요	It's dark, so get home safely.	어두우니까 조심히 가세요.
+Greetings & Manners	Cheer up.	힘내세요	Cheer up, you can do it.	힘내세요, 할 수 있어요.
+Greetings & Manners	Of course.	물론이에요	Of course, I'll help you.	물론이에요, 도와줄게요.
+Greetings & Manners	Just a moment.	잠시만요	Just a moment, I'll be right back.	잠시만요, 금방 올게요.
+People & Family	person.	사람	There are many people here.	여기에 사람이 많아요.
+People & Family	family.	가족	I love my family.	저는 가족을 사랑해요.
+People & Family	mom.	엄마	My mom cooks very well.	엄마는 요리를 정말 잘해요.
+People & Family	dad.	아빠	My dad likes reading books.	아빠는 책 읽는 걸 좋아해요.
+People & Family	mother.	어머니	My mother is a teacher.	어머니는 선생님이에요.
+People & Family	father.	아버지	My father works at a bank.	아버지는 은행에서 일해요.
+People & Family	older brother (for a woman).	오빠	My older brother is tall.	오빠는 키가 커요.
+People & Family	older brother (for a man).	형	My older brother plays soccer.	형은 축구를 해요.
+People & Family	older sister (for a woman).	언니	My older sister is very kind.	언니는 정말 친절해요.
+People & Family	older sister (for a man).	누나	My older sister sings well.	누나는 노래를 잘해요.
+People & Family	younger sibling.	동생	My younger sibling is ten years old.	제 동생은 열 살이에요.
+People & Family	grandmother.	할머니	My grandmother makes kimchi.	할머니가 김치를 만들어요.
+People & Family	grandfather.	할아버지	My grandfather walks every morning.	할아버지는 매일 아침 산책해요.
+People & Family	friend.	친구	I met a friend today.	오늘 친구를 만났어요.
+People & Family	baby.	아기	The baby is sleeping.	아기가 자고 있어요.
+People & Family	child.	아이	The child is smiling.	아이가 웃고 있어요.
+People & Family	husband.	남편	My husband makes dinner.	남편이 저녁을 만들어요.
+People & Family	wife.	아내	My wife likes flowers.	아내는 꽃을 좋아해요.
+People & Family	son.	아들	Our son is a student.	우리 아들은 학생이에요.
+People & Family	daughter.	딸	My daughter likes drawing.	딸은 그림 그리는 걸 좋아해요.
+People & Family	parents.	부모님	I call my parents every week.	매주 부모님께 전화해요.
+People & Family	siblings.	형제자매	I have two siblings.	형제자매가 두 명 있어요.
+People & Family	man.	남자	That man is very kind.	저 남자는 정말 친절해요.
+People & Family	woman.	여자	That woman is a doctor.	저 여자는 의사예요.
+People & Family	name.	이름	My name is Minsu.	제 이름은 민수예요.
+Numbers & Counting	one (1).	일	I live on the first floor.	저는 일 층에 살아요.
+Numbers & Counting	two (2).	이	Two plus two is four.	이 더하기 이는 사예요.
+Numbers & Counting	three (3).	삼	It's March now.	지금은 삼월이에요.
+Numbers & Counting	four (4).	사	My room is number four.	제 방은 사 호예요.
+Numbers & Counting	five (5).	오	Please wait five minutes.	오 분만 기다려 주세요.
+Numbers & Counting	six (6).	육	Please open to page six.	육 쪽을 펴 주세요.
+Numbers & Counting	seven (7).	칠	I take bus number seven.	칠 번 버스를 타요.
+Numbers & Counting	eight (8).	팔	My birthday is August eighth.	제 생일은 팔월 팔일이에요.
+Numbers & Counting	nine (9).	구	It's nine thousand won.	구천 원이에요.
+Numbers & Counting	ten (10).	십	Ten minutes is enough.	십 분이면 충분해요.
+Numbers & Counting	hundred.	백	This candy is one hundred won.	이 사탕은 백 원이에요.
+Numbers & Counting	thousand.	천	This coffee is three thousand won.	이 커피는 삼천 원이에요.
+Numbers & Counting	ten thousand.	만	The ticket is ten thousand won.	표는 만 원이에요.
+Numbers & Counting	one (native Korean).	하나	One coffee, please.	커피 하나 주세요.
+Numbers & Counting	two (native Korean).	둘	There are two of us.	저희는 둘이에요.
+Numbers & Counting	three (native Korean).	셋	One, two, three, smile.	하나, 둘, 셋, 웃으세요.
+Numbers & Counting	four (native Korean).	넷	There are four people in my family.	우리 가족은 넷이에요.
+Numbers & Counting	five (native Korean).	다섯	I wake up at five.	다섯 시에 일어나요.
+Numbers & Counting	six (native Korean).	여섯	Dinner is at six o'clock.	저녁은 여섯 시예요.
+Numbers & Counting	seven (native Korean).	일곱	My son is seven years old.	아들은 일곱 살이에요.
+Numbers & Counting	eight (native Korean).	여덟	I sleep for eight hours.	저는 여덟 시간 자요.
+Numbers & Counting	nine (native Korean).	아홉	School starts at nine.	학교는 아홉 시에 시작해요.
+Numbers & Counting	ten (native Korean).	열	I slowly count to ten.	천천히 열까지 세요.
+Numbers & Counting	counter for things.	개	Two apples, please.	사과 두 개 주세요.
+Numbers & Counting	counter for people.	명	We are a party of three.	세 명이에요.
+Time & Days	today.	오늘	The weather is nice today.	오늘 날씨가 좋아요.
+Time & Days	tomorrow.	내일	I'll meet my friend tomorrow.	내일 친구를 만나요.
+Time & Days	yesterday.	어제	I rested at home yesterday.	어제 집에서 쉬었어요.
+Time & Days	now.	지금	I'm at home now.	지금 집에 있어요.
+Time & Days	morning.	아침	I drink tea every morning.	매일 아침 차를 마셔요.
+Time & Days	afternoon.	오후	Let's meet in the afternoon.	오후에 만나요.
+Time & Days	evening.	저녁	I take a walk in the evening.	저녁에 산책해요.
+Time & Days	night.	밤	The night is quiet and calm.	밤이 조용하고 평화로워요.
+Time & Days	one week.	일주일	I exercise three times a week.	일주일에 세 번 운동해요.
+Time & Days	weekend.	주말	I relax on the weekend.	주말에 푹 쉬어요.
+Time & Days	Monday.	월요일	I start work on Monday.	월요일에 일을 시작해요.
+Time & Days	Tuesday.	화요일	I do yoga on Tuesday.	화요일에 요가를 해요.
+Time & Days	Wednesday.	수요일	Wednesday is a busy day.	수요일은 바쁜 날이에요.
+Time & Days	Thursday.	목요일	I meet friends on Thursday.	목요일에 친구들을 만나요.
+Time & Days	Friday.	금요일	I like Friday evenings.	저는 금요일 저녁이 좋아요.
+Time & Days	Saturday.	토요일	I sleep in on Saturday.	토요일에 늦잠을 자요.
+Time & Days	Sunday.	일요일	I clean my room on Sunday.	일요일에 방을 청소해요.
+Time & Days	o'clock.	시	It's three o'clock now.	지금 세 시예요.
+Time & Days	minute.	분	It takes twenty minutes on foot.	걸어서 이십 분 걸려요.
+Time & Days	next month.	다음 달	I'm going to Korea next month.	다음 달에 한국에 가요.
+Time & Days	this year.	올해	I'm learning Korean this year.	올해 한국어를 배워요.
+Time & Days	one day.	하루	Today was a good day.	오늘은 좋은 하루였어요.
+Time & Days	birthday.	생일	My birthday is in May.	제 생일은 오월이에요.
+Time & Days	time.	시간	I have time today.	오늘 시간이 있어요.
+Time & Days	every day.	매일	I study Korean every day.	매일 한국어를 공부해요.
+Food	food.	음식	Korean food is delicious.	한국 음식은 맛있어요.
+Food	rice (cooked).	밥	I eat rice every day.	저는 매일 밥을 먹어요.
+Food	kimchi.	김치	Kimchi is a little spicy.	김치는 조금 매워요.
+Food	bread.	빵	I eat bread for breakfast.	아침에 빵을 먹어요.
+Food	noodles.	국수	Grandma makes warm noodles.	할머니가 따뜻한 국수를 만들어요.
+Food	ramen.	라면	Ramen is easy to make.	라면은 만들기 쉬워요.
+Food	meat.	고기	We grill meat together.	같이 고기를 구워요.
+Food	chicken (meat).	닭고기	I like chicken.	저는 닭고기를 좋아해요.
+Food	fish (food).	생선	I eat fish for dinner.	저녁에 생선을 먹어요.
+Food	egg.	계란	I boil two eggs.	계란 두 개를 삶아요.
+Food	vegetables.	채소	Vegetables are good for you.	채소는 몸에 좋아요.
+Food	fruit.	과일	I eat fruit after dinner.	저녁 먹고 과일을 먹어요.
+Food	apple.	사과	This apple is very sweet.	이 사과는 정말 달아요.
+Food	strawberry.	딸기	I really love strawberries.	저는 딸기를 정말 좋아해요.
+Food	banana.	바나나	I eat a banana in the morning.	아침에 바나나를 먹어요.
+Food	tteokbokki.	떡볶이	Tteokbokki is sweet and spicy.	떡볶이는 달고 매워요.
+Food	bibimbap.	비빔밥	I'll have bibimbap.	저는 비빔밥 먹을게요.
+Food	fried chicken.	치킨	Let's order fried chicken tonight.	오늘 밤에 치킨 시켜 먹어요.
+Food	meal.	식사	Let's have a meal together.	같이 식사해요.
+Food	lunch.	점심	I eat lunch at noon.	열두 시에 점심을 먹어요.
+Food	snack.	간식	I eat a little snack.	간식을 조금 먹어요.
+Food	spoon.	숟가락	A spoon, please.	숟가락 주세요.
+Food	chopsticks.	젓가락	I use chopsticks well.	저는 젓가락을 잘 써요.
+Food	side dishes.	반찬	Korean meals have many side dishes.	한식에는 반찬이 많아요.
+Food	dumplings.	만두	Mom makes dumplings.	엄마가 만두를 만들어요.
+Drinks & Café	water.	물	I drink a lot of water.	물을 많이 마셔요.
+Drinks & Café	coffee.	커피	I drink coffee in the morning.	아침에 커피를 마셔요.
+Drinks & Café	iced Americano.	아이스 아메리카노	One iced Americano, please.	아이스 아메리카노 한 잔 주세요.
+Drinks & Café	latte.	라테	A warm latte, please.	따뜻한 라테 주세요.
+Drinks & Café	tea.	차	Let's drink tea together.	같이 차 마셔요.
+Drinks & Café	green tea.	녹차	Green tea smells nice.	녹차 향이 좋아요.
+Drinks & Café	milk.	우유	I drink warm milk before bed.	자기 전에 따뜻한 우유를 마셔요.
+Drinks & Café	juice.	주스	Orange juice is sweet.	오렌지 주스는 달아요.
+Drinks & Café	café.	카페	Let's meet at the café.	카페에서 만나요.
+Drinks & Café	cup (counter).	잔	Two cups of coffee, please.	커피 두 잔 주세요.
+Drinks & Café	cup.	컵	This cup is pretty.	이 컵 예뻐요.
+Drinks & Café	ice.	얼음	Just a little ice, please.	얼음 조금만 넣어 주세요.
+Drinks & Café	hot (to the touch).	뜨거워요	The tea is very hot.	차가 정말 뜨거워요.
+Drinks & Café	cold (to the touch).	차가워요	The juice is nice and cold.	주스가 차가워요.
+Drinks & Café	cake.	케이크	This cake is soft.	이 케이크는 부드러워요.
+Drinks & Café	dessert.	디저트	Let's have dessert.	디저트 먹어요.
+Drinks & Café	menu.	메뉴	Please show me the menu.	메뉴 좀 보여 주세요.
+Drinks & Café	to go (takeout).	포장	To go, please.	포장해 주세요.
+Drinks & Café	for here (in the store).	매장	I'll eat here.	매장에서 먹을게요.
+Drinks & Café	straw.	빨대	I don't need a straw.	빨대는 필요 없어요.
+Drinks & Café	sugar.	설탕	No sugar, please.	설탕은 빼 주세요.
+Drinks & Café	order.	주문해요	I order coffee at the café.	카페에서 커피를 주문해요.
+Drinks & Café	drink.	마셔요	I drink my tea slowly.	차를 천천히 마셔요.
+Drinks & Café	bottle.	병	One bottle of water, please.	물 한 병 주세요.
+Drinks & Café	smoothie.	스무디	One strawberry smoothie, please.	딸기 스무디 하나 주세요.
+Home	house.	집	My house is small and cozy.	우리 집은 작고 아늑해요.
+Home	room.	방	My room is clean.	제 방은 깨끗해요.
+Home	bed.	침대	My bed is soft and cozy.	제 침대는 푹신해요.
+Home	pillow.	베개	This pillow is really comfortable.	이 베개는 정말 편해요.
+Home	blanket.	이불	I sleep under a warm blanket.	따뜻한 이불을 덮고 자요.
+Home	kitchen.	부엌	Mom is in the kitchen.	엄마는 부엌에 있어요.
+Home	bathroom.	화장실	The bathroom is over there.	화장실은 저쪽에 있어요.
+Home	living room.	거실	We rest in the living room.	거실에서 쉬어요.
+Home	door.	문	Please close the door.	문 좀 닫아 주세요.
+Home	window.	창문	I open the window.	창문을 열어요.
+Home	dining table.	식탁	Dinner is ready on the table.	식탁에 저녁이 차려져 있어요.
+Home	desk.	책상	My book is on the desk.	책이 책상 위에 있어요.
+Home	chair.	의자	This chair is comfortable.	이 의자는 편해요.
+Home	sofa.	소파	The cat sleeps on the sofa.	고양이가 소파에서 자요.
+Home	light (lamp).	불	Please turn off the light.	불 좀 꺼 주세요.
+Home	TV.	텔레비전	I watch TV after dinner.	저녁 먹고 텔레비전을 봐요.
+Home	refrigerator.	냉장고	The milk is in the fridge.	우유는 냉장고에 있어요.
+Home	shower.	샤워	I take a warm shower.	따뜻한 물로 샤워해요.
+Home	mirror.	거울	I look in the mirror.	거울을 봐요.
+Home	clock.	시계	The clock is on the wall.	시계가 벽에 걸려 있어요.
+Home	towel.	수건	Here is a clean towel.	여기 깨끗한 수건이 있어요.
+Home	toothbrush.	칫솔	I bought a new toothbrush.	새 칫솔을 샀어요.
+Home	key.	열쇠	I have the key.	열쇠는 저한테 있어요.
+Home	garden.	정원	There are flowers in the garden.	정원에 꽃이 있어요.
+Home	apartment.	아파트	I live in an apartment.	저는 아파트에 살아요.
+Body & Health	body.	몸	My body feels light.	몸이 가벼워요.
+Body & Health	head.	머리	My head feels clear.	머리가 맑아요.
+Body & Health	hair.	머리카락	My hair is long.	머리카락이 길어요.
+Body & Health	face.	얼굴	I wash my face.	얼굴을 씻어요.
+Body & Health	eye.	눈	Slowly close your eyes.	천천히 눈을 감으세요.
+Body & Health	nose.	코	My nose is cold.	코가 차가워요.
+Body & Health	mouth.	입	Please open your mouth.	입을 벌려 주세요.
+Body & Health	ear.	귀	Rabbits have long ears.	토끼는 귀가 길어요.
+Body & Health	hand.	손	Please wash your hands.	손을 씻으세요.
+Body & Health	foot.	발	My feet are warm.	발이 따뜻해요.
+Body & Health	leg.	다리	I stretch out my legs.	다리를 쭉 펴요.
+Body & Health	shoulder.	어깨	Relax your shoulders.	어깨에 힘을 빼세요.
+Body & Health	stomach (belly).	배	My stomach is full.	배가 불러요.
+Body & Health	back (body).	등	I lie on my back.	등을 대고 누워요.
+Body & Health	health.	건강	Health is the most important.	건강이 제일 중요해요.
+Body & Health	hospital.	병원	The hospital is near my house.	병원이 집 근처에 있어요.
+Body & Health	medicine.	약	Take this medicine after meals.	식사 후에 이 약을 드세요.
+Body & Health	doctor.	의사	The doctor is very kind.	의사 선생님이 정말 친절해요.
+Body & Health	a cold.	감기	I have a slight cold.	감기에 조금 걸렸어요.
+Body & Health	It hurts.	아파요	My head hurts a little.	머리가 조금 아파요.
+Body & Health	tired.	피곤해요	I'm a little tired today.	오늘 조금 피곤해요.
+Body & Health	rest.	쉬어요	Rest well today.	오늘은 푹 쉬어요.
+Body & Health	breathe.	숨 쉬어요	Breathe slowly and deeply.	천천히 깊게 숨 쉬어요.
+Body & Health	exercise.	운동	I exercise every morning.	매일 아침 운동해요.
+Body & Health	finger.	손가락	I count with my fingers.	손가락으로 세어요.
+Clothes & Shopping	clothes.	옷	I bought new clothes.	새 옷을 샀어요.
+Clothes & Shopping	T-shirt.	티셔츠	I'm wearing a white T-shirt.	하얀 티셔츠를 입어요.
+Clothes & Shopping	pants.	바지	These pants are comfortable.	이 바지는 편해요.
+Clothes & Shopping	skirt.	치마	The skirt is pretty.	치마가 예뻐요.
+Clothes & Shopping	dress.	원피스	My sister wears a blue dress.	언니가 파란 원피스를 입어요.
+Clothes & Shopping	jacket.	재킷	It's cold, so take a jacket.	추우니까 재킷을 챙기세요.
+Clothes & Shopping	shoes.	신발	These shoes fit well.	이 신발은 잘 맞아요.
+Clothes & Shopping	socks.	양말	I wear warm socks.	따뜻한 양말을 신어요.
+Clothes & Shopping	hat.	모자	I wear a hat in summer.	여름에 모자를 써요.
+Clothes & Shopping	bag.	가방	My bag is light.	제 가방은 가벼워요.
+Clothes & Shopping	glasses.	안경	I wear glasses.	저는 안경을 써요.
+Clothes & Shopping	wear (clothes).	입어요	I wear a coat in winter.	겨울에 코트를 입어요.
+Clothes & Shopping	wear (shoes, socks).	신어요	I put on my shoes.	신발을 신어요.
+Clothes & Shopping	shopping.	쇼핑	I go shopping with my friend.	친구랑 쇼핑해요.
+Clothes & Shopping	store.	가게	The store opens at ten.	가게는 열 시에 문을 열어요.
+Clothes & Shopping	price.	가격	The price is reasonable.	가격이 괜찮아요.
+Clothes & Shopping	How much is it?	얼마예요	How much is this bag?	이 가방 얼마예요?
+Clothes & Shopping	cheap.	싸요	This is really cheap.	이거 정말 싸요.
+Clothes & Shopping	expensive.	비싸요	It's a little expensive.	조금 비싸요.
+Clothes & Shopping	buy.	사요	I buy fruit at the market.	시장에서 과일을 사요.
+Clothes & Shopping	money.	돈	I save money every month.	매달 돈을 모아요.
+Clothes & Shopping	card (credit card).	카드	I'll pay by card.	카드로 낼게요.
+Clothes & Shopping	cash.	현금	I pay in cash.	현금으로 계산해요.
+Clothes & Shopping	size.	사이즈	This size fits me perfectly.	이 사이즈가 딱 맞아요.
+Clothes & Shopping	discount (sale).	할인	It's on sale today.	오늘 할인해요.
+Transport & Directions	bus.	버스	I take the bus to work.	버스를 타고 회사에 가요.
+Transport & Directions	subway.	지하철	The subway is fast.	지하철은 빨라요.
+Transport & Directions	taxi.	택시	Let's take a taxi.	택시를 타요.
+Transport & Directions	car.	자동차	My car is white.	제 자동차는 하얀색이에요.
+Transport & Directions	train.	기차	I travel by train.	기차로 여행해요.
+Transport & Directions	airplane.	비행기	I take a plane to Jeju.	비행기를 타고 제주도에 가요.
+Transport & Directions	bicycle.	자전거	I ride my bike in the park.	공원에서 자전거를 타요.
+Transport & Directions	station.	역	Let's meet at the station.	역에서 만나요.
+Transport & Directions	bus stop.	정류장	The bus stop is right there.	정류장은 바로 저기예요.
+Transport & Directions	ride (take).	타요	I take the subway every day.	매일 지하철을 타요.
+Transport & Directions	get off.	내려요	I get off at the next stop.	다음 역에서 내려요.
+Transport & Directions	transfer.	갈아타요	I transfer at Seoul Station.	서울역에서 갈아타요.
+Transport & Directions	left.	왼쪽	Go left here.	여기서 왼쪽으로 가세요.
+Transport & Directions	right (direction).	오른쪽	The bank is on the right.	은행은 오른쪽에 있어요.
+Transport & Directions	go straight.	직진	Go straight from here.	여기서 직진하세요.
+Transport & Directions	here.	여기	Please stop here.	여기서 세워 주세요.
+Transport & Directions	over there.	저기	The station is over there.	역은 저기에 있어요.
+Transport & Directions	close (near).	가까워요	The subway station is close.	지하철역이 가까워요.
+Transport & Directions	far.	멀어요	My school is far from here.	학교는 여기서 멀어요.
+Transport & Directions	map.	지도	I look at the map.	지도를 봐요.
+Transport & Directions	road (street).	길	This street is quiet.	이 길은 조용해요.
+Transport & Directions	ticket.	표	I bought a train ticket.	기차표를 샀어요.
+Transport & Directions	transit card.	교통카드	I tap my transit card.	교통카드를 찍어요.
+Transport & Directions	walk (go on foot).	걸어가요	I walk to school.	학교에 걸어가요.
+Transport & Directions	airport.	공항	I arrive at the airport at noon.	열두 시에 공항에 도착해요.
+Places in the City	city.	도시	Seoul is a big city.	서울은 큰 도시예요.
+Places in the City	bank.	은행	The bank closes at four.	은행은 네 시에 문을 닫아요.
+Places in the City	post office.	우체국	I send a letter at the post office.	우체국에서 편지를 보내요.
+Places in the City	convenience store.	편의점	There's a convenience store nearby.	근처에 편의점이 있어요.
+Places in the City	supermarket.	마트	I buy milk at the supermarket.	마트에서 우유를 사요.
+Places in the City	market.	시장	The market is lively.	시장이 활기차요.
+Places in the City	restaurant.	식당	This restaurant is famous.	이 식당은 유명해요.
+Places in the City	park.	공원	I take a walk in the park.	공원에서 산책해요.
+Places in the City	library.	도서관	The library is quiet.	도서관은 조용해요.
+Places in the City	museum.	박물관	I visit the museum on Sunday.	일요일에 박물관에 가요.
+Places in the City	movie theater.	영화관	Let's meet at the movie theater.	영화관에서 만나요.
+Places in the City	pharmacy.	약국	The pharmacy opens at nine.	약국은 아홉 시에 문을 열어요.
+Places in the City	department store.	백화점	The department store is really big.	백화점이 정말 커요.
+Places in the City	bakery.	빵집	The bakery smells wonderful.	빵집에서 좋은 냄새가 나요.
+Places in the City	hair salon.	미용실	I get a haircut at the salon.	미용실에서 머리를 잘라요.
+Places in the City	gym.	헬스장	I go to the gym after work.	퇴근 후에 헬스장에 가요.
+Places in the City	building.	건물	That building is very tall.	저 건물은 정말 높아요.
+Places in the City	bookstore.	서점	I buy a book at the bookstore.	서점에서 책을 사요.
+Places in the City	crosswalk.	횡단보도	Cross at the crosswalk.	횡단보도에서 건너세요.
+Places in the City	traffic light.	신호등	The traffic light is green.	신호등이 초록색이에요.
+Places in the City	neighborhood.	동네	I love my neighborhood.	저는 우리 동네가 좋아요.
+Places in the City	next to.	옆	The café is next to the bank.	카페는 은행 옆에 있어요.
+Places in the City	in front of.	앞	Let's meet in front of the station.	역 앞에서 만나요.
+Places in the City	behind.	뒤	The park is behind the school.	공원은 학교 뒤에 있어요.
+Places in the City	across the street.	건너편	The bakery is across the street.	빵집은 길 건너편에 있어요.
+School & Work	school.	학교	I go to school by bus.	버스로 학교에 가요.
+School & Work	student.	학생	I am a student.	저는 학생이에요.
+School & Work	teacher.	선생님	The teacher is kind.	선생님은 친절하세요.
+School & Work	class.	수업	Class starts at nine.	수업은 아홉 시에 시작해요.
+School & Work	homework.	숙제	I finished my homework.	숙제를 다 했어요.
+School & Work	book.	책	I read a book before bed.	자기 전에 책을 읽어요.
+School & Work	notebook.	공책	I write in my notebook.	공책에 써요.
+School & Work	pencil.	연필	I need a pencil.	연필이 필요해요.
+School & Work	study.	공부해요	I study in the library.	도서관에서 공부해요.
+School & Work	Korean (language).	한국어	Korean is fun.	한국어는 재미있어요.
+School & Work	English (language).	영어	I teach English.	저는 영어를 가르쳐요.
+School & Work	test.	시험	The test was easy.	시험이 쉬웠어요.
+School & Work	question.	질문	I have a question.	질문이 있어요.
+School & Work	correct answer.	정답	That's the correct answer.	그게 정답이에요.
+School & Work	company.	회사	My company is in Seoul.	우리 회사는 서울에 있어요.
+School & Work	office.	사무실	The office is bright.	사무실이 밝아요.
+School & Work	work.	일해요	I work from nine to six.	아홉 시부터 여섯 시까지 일해요.
+School & Work	meeting.	회의	I have a meeting at two.	두 시에 회의가 있어요.
+School & Work	job.	직업	I like my job.	저는 제 직업이 좋아요.
+School & Work	coworker.	동료	My coworkers are friendly.	동료들이 친절해요.
+School & Work	computer.	컴퓨터	I work on the computer.	컴퓨터로 일해요.
+School & Work	email.	이메일	I send an email.	이메일을 보내요.
+School & Work	go to work.	출근해요	I go to work at eight.	여덟 시에 출근해요.
+School & Work	leave work.	퇴근해요	I leave work at six.	여섯 시에 퇴근해요.
+School & Work	university.	대학교	My older brother goes to university.	형은 대학교에 다녀요.
+Weather & Nature	weather.	날씨	I like this kind of weather.	이런 날씨가 좋아요.
+Weather & Nature	sun.	해	The sun is bright.	해가 밝아요.
+Weather & Nature	sky.	하늘	The sky is blue.	하늘이 파래요.
+Weather & Nature	cloud.	구름	White clouds float in the sky.	하늘에 하얀 구름이 떠 있어요.
+Weather & Nature	rain.	비	I like the sound of rain.	비 오는 소리가 좋아요.
+Weather & Nature	It snows.	눈이 와요	It's snowing outside.	밖에 눈이 와요.
+Weather & Nature	wind.	바람	The wind blows gently.	바람이 살랑살랑 불어요.
+Weather & Nature	spring.	봄	Flowers bloom in spring.	봄에 꽃이 피어요.
+Weather & Nature	summer.	여름	I swim in summer.	여름에 수영해요.
+Weather & Nature	fall (autumn).	가을	The fall sky is high and clear.	가을 하늘은 높고 맑아요.
+Weather & Nature	winter.	겨울	Winter is cold here.	여기는 겨울이 추워요.
+Weather & Nature	hot (weather).	더워요	It's hot today.	오늘 더워요.
+Weather & Nature	cold (weather).	추워요	It's cold outside.	밖이 추워요.
+Weather & Nature	warm.	따뜻해요	The spring sunshine is warm.	봄 햇살이 따뜻해요.
+Weather & Nature	cool (refreshing).	시원해요	The evening air is cool.	저녁 공기가 시원해요.
+Weather & Nature	clear (sky).	맑아요	The sky is clear today.	오늘은 하늘이 맑아요.
+Weather & Nature	cloudy.	흐려요	It's cloudy this morning.	오늘 아침은 흐려요.
+Weather & Nature	flower.	꽃	These flowers smell lovely.	이 꽃은 향기가 좋아요.
+Weather & Nature	tree.	나무	There is a big tree.	큰 나무가 있어요.
+Weather & Nature	mountain.	산	I go up the mountain.	산에 올라가요.
+Weather & Nature	sea.	바다	The sea is calm.	바다가 잔잔해요.
+Weather & Nature	river.	강	I walk along the river.	강을 따라 걸어요.
+Weather & Nature	star.	별	The stars are bright tonight.	오늘 밤 별이 밝아요.
+Weather & Nature	moon.	달	The moon is round tonight.	오늘 밤 달이 둥글어요.
+Weather & Nature	rainbow.	무지개	A rainbow appears after the rain.	비 온 뒤에 무지개가 떠요.
+Animals	animal.	동물	I love animals.	저는 동물을 좋아해요.
+Animals	dog (puppy).	강아지	My puppy is sleeping.	강아지가 자고 있어요.
+Animals	cat.	고양이	My cat is very soft.	우리 고양이는 정말 부드러워요.
+Animals	bird.	새	Birds sing in the morning.	아침에 새가 노래해요.
+Animals	fish (animal).	물고기	Fish swim in the river.	물고기가 강에서 헤엄쳐요.
+Animals	rabbit.	토끼	The rabbit eats carrots.	토끼가 당근을 먹어요.
+Animals	bear.	곰	The bear sleeps all winter.	곰은 겨울 내내 자요.
+Animals	tiger.	호랑이	Tigers are strong.	호랑이는 힘이 세요.
+Animals	lion.	사자	The lion is resting.	사자가 쉬고 있어요.
+Animals	elephant.	코끼리	Elephants have long noses.	코끼리는 코가 길어요.
+Animals	monkey.	원숭이	Monkeys like bananas.	원숭이는 바나나를 좋아해요.
+Animals	horse.	말	The horse runs fast.	말이 빨리 달려요.
+Animals	cow.	소	The cow eats grass.	소가 풀을 먹어요.
+Animals	pig.	돼지	The little pig is pink.	아기 돼지는 분홍색이에요.
+Animals	chicken (animal).	닭	The chicken lays eggs.	닭이 알을 낳아요.
+Animals	duck.	오리	Ducks swim in the pond.	오리가 연못에서 헤엄쳐요.
+Animals	sheep.	양	I count sheep when I can't sleep.	잠이 안 오면 양을 세요.
+Animals	turtle.	거북이	The turtle walks slowly.	거북이는 천천히 걸어요.
+Animals	butterfly.	나비	A butterfly sits on a flower.	나비가 꽃에 앉아요.
+Animals	dolphin.	돌고래	Dolphins are smart.	돌고래는 똑똑해요.
+Animals	panda.	판다	The panda eats bamboo.	판다가 대나무를 먹어요.
+Animals	penguin.	펭귄	Penguins live in cold places.	펭귄은 추운 곳에 살아요.
+Animals	fox.	여우	The fox has a fluffy tail.	여우는 꼬리가 복슬복슬해요.
+Animals	giraffe.	기린	The giraffe has a long neck.	기린은 목이 길어요.
+Animals	pet.	반려동물	I have a pet.	저는 반려동물을 키워요.
+Feelings	happy.	행복해요	I'm really happy today.	오늘 정말 행복해요.
+Feelings	glad.	기뻐요	I'm glad to see you.	만나서 기뻐요.
+Feelings	sad.	슬퍼요	This movie is a little sad.	이 영화는 조금 슬퍼요.
+Feelings	excited (fun).	신나요	This song is exciting.	이 노래는 신나요.
+Feelings	excited (heart fluttering).	설레요	I feel excited before the trip.	여행 전에 마음이 설레요.
+Feelings	calm (at ease).	편안해요	I feel calm at night.	밤에는 마음이 편안해요.
+Feelings	nervous.	긴장돼요	I'm a little nervous.	조금 긴장돼요.
+Feelings	worried.	걱정돼요	I'm worried about the test.	시험이 걱정돼요.
+Feelings	surprised.	놀라요	I was really surprised.	정말 놀랐어요.
+Feelings	bored.	심심해요	I'm bored at home.	집에 있으니까 심심해요.
+Feelings	fun.	재미있어요	This game is fun.	이 게임 재미있어요.
+Feelings	love.	사랑해요	I love you, Mom.	엄마, 사랑해요.
+Feelings	like.	좋아해요	I like music.	저는 음악을 좋아해요.
+Feelings	dislike.	싫어해요	My cat dislikes water.	고양이는 물을 싫어해요.
+Feelings	good.	좋아요	I feel good.	기분이 좋아요.
+Feelings	mood.	기분	I'm in a great mood today.	오늘 기분이 최고예요.
+Feelings	heart (mind).	마음	My heart feels warm.	마음이 따뜻해요.
+Feelings	proud.	자랑스러워요	I'm proud of my son.	아들이 자랑스러워요.
+Feelings	relieved.	다행이에요	That's a relief.	정말 다행이에요.
+Feelings	comfortable.	편해요	I feel comfortable with my friends.	친구들이랑 있으면 편해요.
+Feelings	shy.	부끄러워요	I'm a little shy.	저는 좀 부끄러워요.
+Feelings	sleepy.	졸려요	I'm sleepy now.	이제 졸려요.
+Feelings	satisfied.	만족해요	I'm satisfied with the result.	결과에 만족해요.
+Feelings	miss (someone).	보고 싶어요	I miss my family.	가족이 보고 싶어요.
+Feelings	smile.	웃어요	I smile a lot.	저는 많이 웃어요.
+Everyday Verbs	eat.	먹어요	I eat breakfast at seven.	일곱 시에 아침을 먹어요.
+Everyday Verbs	go.	가요	I'm going home now.	이제 집에 가요.
+Everyday Verbs	come.	와요	My friend is coming today.	오늘 친구가 와요.
+Everyday Verbs	see (watch).	봐요	I watch a movie.	영화를 봐요.
+Everyday Verbs	sleep.	자요	I go to sleep at eleven.	열한 시에 자요.
+Everyday Verbs	wake up.	일어나요	I wake up at seven.	일곱 시에 일어나요.
+Everyday Verbs	read.	읽어요	I read a book slowly.	천천히 책을 읽어요.
+Everyday Verbs	write.	써요	I write in my diary.	일기를 써요.
+Everyday Verbs	listen.	들어요	I listen to music.	음악을 들어요.
+Everyday Verbs	speak.	말해요	My sister speaks slowly.	언니는 천천히 말해요.
+Everyday Verbs	meet.	만나요	I meet my friend at noon.	정오에 친구를 만나요.
+Everyday Verbs	wait.	기다려요	I'm waiting for the bus.	버스를 기다려요.
+Everyday Verbs	make.	만들어요	I make a cake.	케이크를 만들어요.
+Everyday Verbs	wash.	씻어요	I wash my hands.	손을 씻어요.
+Everyday Verbs	learn.	배워요	I learn Korean.	한국어를 배워요.
+Everyday Verbs	teach.	가르쳐요	My mom teaches piano.	엄마는 피아노를 가르쳐요.
+Everyday Verbs	open.	열어요	I open the door.	문을 열어요.
+Everyday Verbs	close (shut).	닫아요	I close the window at night.	밤에 창문을 닫아요.
+Everyday Verbs	sit.	앉아요	I sit on the chair.	의자에 앉아요.
+Everyday Verbs	walk.	걸어요	I walk every evening.	매일 저녁 걸어요.
+Everyday Verbs	run.	달려요	I run in the park.	공원에서 달려요.
+Everyday Verbs	know.	알아요	I know that song.	그 노래 알아요.
+Everyday Verbs	call (on the phone).	전화해요	I call my mom.	엄마한테 전화해요.
+Everyday Verbs	help.	도와요	I help my mom.	엄마를 도와요.
+Everyday Verbs	live.	살아요	I live in Seoul.	저는 서울에 살아요.
+Describing Words	big.	커요	This house is big.	이 집은 커요.
+Describing Words	small.	작아요	The puppy is small.	강아지가 작아요.
+Describing Words	pretty.	예뻐요	The flowers are pretty.	꽃이 예뻐요.
+Describing Words	cute.	귀여워요	The baby is so cute.	아기가 정말 귀여워요.
+Describing Words	delicious.	맛있어요	This soup is delicious.	이 국 정말 맛있어요.
+Describing Words	spicy.	매워요	Kimchi stew is spicy.	김치찌개는 매워요.
+Describing Words	sweet.	달아요	Honey is sweet.	꿀은 달아요.
+Describing Words	many (a lot).	많아요	There are many stars.	별이 많아요.
+Describing Words	few (little).	적어요	There are few people today.	오늘은 사람이 적어요.
+Describing Words	easy.	쉬워요	Hangeul is easy.	한글은 쉬워요.
+Describing Words	difficult.	어려워요	Grammar is a little difficult.	문법은 조금 어려워요.
+Describing Words	fast.	빨라요	The train is fast.	기차가 빨라요.
+Describing Words	slow.	느려요	The turtle is slow.	거북이는 느려요.
+Describing Words	quiet.	조용해요	This room is quiet.	이 방은 조용해요.
+Describing Words	clean.	깨끗해요	The air is clean here.	여기는 공기가 깨끗해요.
+Describing Words	long.	길어요	The movie is long.	영화가 길어요.
+Describing Words	short.	짧아요	My hair is short.	제 머리는 짧아요.
+Describing Words	heavy.	무거워요	This bag is heavy.	이 가방은 무거워요.
+Describing Words	light (not heavy).	가벼워요	The pillow is light.	베개가 가벼워요.
+Describing Words	high (tall).	높아요	The mountain is high.	산이 높아요.
+Describing Words	kind.	친절해요	The staff are kind.	직원이 친절해요.
+Describing Words	busy.	바빠요	I'm busy today.	오늘은 바빠요.
+Describing Words	bright.	밝아요	The room is bright.	방이 밝아요.
+Describing Words	dark.	어두워요	It's dark outside.	밖이 어두워요.
+Describing Words	soft.	부드러워요	This towel is soft.	이 수건은 부드러워요.
+Hobbies & K-Culture	hobby.	취미	My hobby is reading.	제 취미는 독서예요.
+Hobbies & K-Culture	music.	음악	I listen to calm music.	조용한 음악을 들어요.
+Hobbies & K-Culture	song.	노래	This song is really good.	이 노래 정말 좋아요.
+Hobbies & K-Culture	dance.	춤	I'm learning a K-pop dance.	케이팝 춤을 배워요.
+Hobbies & K-Culture	K-pop.	케이팝	I love K-pop.	저는 케이팝을 정말 좋아해요.
+Hobbies & K-Culture	singer.	가수	That singer has a lovely voice.	그 가수는 목소리가 예뻐요.
+Hobbies & K-Culture	idol.	아이돌	Idols practice every day.	아이돌은 매일 연습해요.
+Hobbies & K-Culture	concert.	콘서트	I'm going to a concert.	콘서트에 가요.
+Hobbies & K-Culture	fan.	팬	I'm a big fan.	저는 완전 팬이에요.
+Hobbies & K-Culture	drama (TV series).	드라마	I watch Korean dramas.	한국 드라마를 봐요.
+Hobbies & K-Culture	movie.	영화	Let's watch a movie tonight.	오늘 밤에 영화 봐요.
+Hobbies & K-Culture	actor.	배우	That actor is famous.	그 배우는 유명해요.
+Hobbies & K-Culture	game.	게임	I play games on weekends.	주말에 게임을 해요.
+Hobbies & K-Culture	webtoon.	웹툰	I read webtoons on my phone.	휴대폰으로 웹툰을 봐요.
+Hobbies & K-Culture	photo.	사진	I take photos.	사진을 찍어요.
+Hobbies & K-Culture	drawing.	그림	I draw pictures.	그림을 그려요.
+Hobbies & K-Culture	soccer.	축구	We play soccer on Saturday.	토요일에 축구를 해요.
+Hobbies & K-Culture	swimming.	수영	I like swimming.	저는 수영을 좋아해요.
+Hobbies & K-Culture	reading.	독서	I enjoy reading at night.	밤에 독서를 즐겨요.
+Hobbies & K-Culture	piano.	피아노	I play the piano.	피아노를 쳐요.
+Hobbies & K-Culture	camping.	캠핑	We go camping in the fall.	가을에 캠핑을 가요.
+Hobbies & K-Culture	karaoke.	노래방	Let's go to karaoke.	노래방에 가요.
+Hobbies & K-Culture	light stick.	응원봉	I wave my light stick.	응원봉을 흔들어요.
+Hobbies & K-Culture	subtitles.	자막	I watch dramas with subtitles.	자막을 켜고 드라마를 봐요.
+Hobbies & K-Culture	practice.	연습해요	I practice every day.	매일 연습해요.
+Travel in Korea	travel.	여행	I really love traveling.	저는 여행을 정말 좋아해요.
+Travel in Korea	passport.	여권	Here is my passport.	여기 제 여권이에요.
+Travel in Korea	hotel.	호텔	The hotel is near the sea.	호텔이 바다 근처에 있어요.
+Travel in Korea	reservation.	예약	I have a reservation.	예약했어요.
+Travel in Korea	suitcase.	캐리어	My suitcase is heavy.	캐리어가 무거워요.
+Travel in Korea	Seoul.	서울	Seoul is beautiful at night.	서울은 밤에 아름다워요.
+Travel in Korea	Busan.	부산	Busan has beautiful beaches.	부산에는 예쁜 해변이 있어요.
+Travel in Korea	Jeju Island.	제주도	Jeju Island is warm.	제주도는 따뜻해요.
+Travel in Korea	Gyeongbokgung Palace.	경복궁	Gyeongbokgung Palace is beautiful.	경복궁은 정말 아름다워요.
+Travel in Korea	hanbok.	한복	I wear a hanbok.	한복을 입어요.
+Travel in Korea	temple.	절	The temple is peaceful.	절이 고요해요.
+Travel in Korea	beach.	해변	I walk on the beach.	해변을 걸어요.
+Travel in Korea	souvenir.	기념품	I buy souvenirs.	기념품을 사요.
+Travel in Korea	sightseeing.	구경	Let's go sightseeing.	구경하러 가요.
+Travel in Korea	currency exchange.	환전	I exchange money at the bank.	은행에서 환전해요.
+Travel in Korea	won (Korean money).	원	It's five thousand won.	오천 원이에요.
+Travel in Korea	night view.	야경	The night view is beautiful.	야경이 정말 예뻐요.
+Travel in Korea	street food.	길거리 음식	I try some street food.	길거리 음식을 먹어 봐요.
+Travel in Korea	check-in.	체크인	Check-in is at three.	체크인은 세 시예요.
+Travel in Korea	hanok village.	한옥 마을	I walk through a hanok village.	한옥 마을을 걸어요.
+Travel in Korea	tour guide.	가이드	The guide is friendly.	가이드가 친절해요.
+Travel in Korea	schedule.	일정	Today's schedule is relaxed.	오늘 일정은 여유로워요.
+Travel in Korea	vacation.	휴가	I'm on vacation.	저는 휴가 중이에요.
+Travel in Korea	Han River.	한강	We have a picnic by the Han River.	한강에서 피크닉해요.
+Travel in Korea	foreigner.	외국인	Many foreigners visit Korea.	한국에 오는 외국인이 많아요.
+Useful Phrases for Conversation	I don't know.	몰라요	I don't know that word.	그 단어는 몰라요.
+Useful Phrases for Conversation	I understand.	알겠어요	Okay, I understand.	네, 알겠어요.
+Useful Phrases for Conversation	I don't understand.	이해가 안 돼요	Sorry, I don't understand.	죄송해요, 이해가 안 돼요.
+Useful Phrases for Conversation	Please say it again.	다시 말해 주세요	Please say it again slowly.	천천히 다시 말해 주세요.
+Useful Phrases for Conversation	really.	정말	This is really nice.	이거 정말 좋아요.
+Useful Phrases for Conversation	That's right.	맞아요	That's right, it's Tuesday.	맞아요, 화요일이에요.
+Useful Phrases for Conversation	Oh, I see.	그렇군요	Oh, I see, that's interesting.	아, 그렇군요. 재미있네요.
+Useful Phrases for Conversation	Me too.	저도요	Me too, I like it too.	저도요, 저도 좋아해요.
+Useful Phrases for Conversation	What is this?	이게 뭐예요	Excuse me, what is this?	저기요, 이게 뭐예요?
+Useful Phrases for Conversation	Where is it?	어디예요	Where is the bathroom?	화장실이 어디예요?
+Useful Phrases for Conversation	I'm doing well.	잘 지내요	I'm doing well these days.	요즘 잘 지내요.
+Useful Phrases for Conversation	I'm full.	배불러요	I'm full, thank you.	배불러요, 고마워요.
+Useful Phrases for Conversation	Please help me.	도와주세요	Excuse me, please help me.	저기요, 좀 도와주세요.
+Useful Phrases for Conversation	Thanks for your hard work.	수고하셨어요	Thanks for your hard work today.	오늘 수고하셨어요.
+Useful Phrases for Conversation	together.	같이	Let's eat together.	같이 먹어요.
+Useful Phrases for Conversation	Please recommend.	추천해 주세요	Please recommend a good restaurant.	맛집 추천해 주세요.
+Useful Phrases for Conversation	Here you go.	여기요	Here you go, here's your coffee.	여기요, 커피 나왔어요.
+Useful Phrases for Conversation	a little.	조금	I speak a little Korean.	한국어를 조금 해요.
+Useful Phrases for Conversation	a lot.	많이	I ate a lot today.	오늘 많이 먹었어요.
+Useful Phrases for Conversation	Please write it down.	써 주세요	Please write it here.	여기에 써 주세요.
+Useful Phrases for Conversation	It's possible.	돼요	Card payment is possible.	카드 결제 돼요.
+Useful Phrases for Conversation	No problem.	문제없어요	No problem, I can do it.	문제없어요, 할 수 있어요.
+Useful Phrases for Conversation	hard (diligently).	열심히	I study hard every day.	매일 열심히 공부해요.
+Useful Phrases for Conversation	See you again.	또 만나요	Let's meet again soon.	곧 또 만나요.
+Useful Phrases for Conversation	Sweet dreams.	좋은 꿈 꿔요	Good night and sweet dreams.	잘 자고 좋은 꿈 꿔요.
