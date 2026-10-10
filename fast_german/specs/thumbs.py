@@ -28,8 +28,8 @@ def make(name, theme, lines, icons, tag=None):
         im.alpha_composite(p, (46, 720 - p.height - 36))
     im.convert("RGB").save(os.path.join(OUT, name), quality=92)
 
-make("thumb_L1.jpg", DARK, [("500 German", 120, (255, 255, 255)), ("words", 120, (255, 255, 255)), ("while you sleep", 74, C.YELLOW)],
-     [("crescent-moon", 330, 170), ("sleeping-face", 260, 360)], tag="Beginner · der die das colors")
+make("thumb_L1.jpg", DARK, [("8 HOURS", 130, C.YELLOW), ("German words", 96, (255, 255, 255)), ("while you sleep", 74, (255, 255, 255))],
+     [("crescent-moon", 330, 150), ("sleeping-face", 210, 440)], tag="350 beginner words · said slowly")
 make("thumb_L2.jpg", LIGHT, [("GERMAN A1", 130, C.YELLOW), ("in 25 MIN", 130, (255, 255, 255))],
      [("rocket", 360, 200)], tag="No boring grammar")
 make("thumb_L3.jpg", LIGHT, [("KITCHEN", 140, C.YELLOW), ("in German", 100, (255, 255, 255))],

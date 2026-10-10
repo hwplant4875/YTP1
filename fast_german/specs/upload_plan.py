@@ -32,17 +32,25 @@ LONG = [
   "All the A1 basics in 25 minutes: greetings, introducing yourself, the der/die/das color trick, numbers, the 10 most useful verbs, "
   "questions, café and restaurant phrases, directions, time and days, and the mistakes that make Germans laugh. "
   "Repeat out loud when you see REPEAT AFTER ME, and stay for the speed quiz at the end.", ["learn german a1", "german crash course", "german basics"]),
- ("out/L1_sleep_500_words.mp4", "Learn 500 German Words While You Sleep 😴 (Beginner)", "out/thumb_L1.jpg", "2026-10-18T15:00:00Z",
-  "500 useful beginner German words with a calm voice, a picture and an example sentence, then a gentle review. "
-  "Soft rain in the background, dark screen. Just listen and relax.", ["learn german while you sleep", "german vocabulary", "sleep learning"]),
+ ("out/L1_sleep_8h.mp4", "8 Hours of German Words While You Sleep 😴 Calm Voice, Slow Sentences (Beginner)", "out/thumb_L1.jpg",
+  "2026-10-10T12:30:00Z",
+  "Fall asleep while you learn German. 350 useful beginner words, each one said in German, then in English, then in a "
+  "short German sentence, the same sentence slowly, and its English translation. The full set plays four times, so you "
+  "hear every word again and again through the night.\n\n"
+  "Calm, soft voice. Gentle sleep music and quiet rain. Dark screen with the word, its picture and the sentence.\n\n"
+  "0:00:00 Round 1\n2:00:00 Round 2\n4:00:00 Round 3\n6:00:00 Round 4",
+  ["learn german while you sleep", "german sleep learning", "german vocabulary", "german words for beginners",
+   "sleep learning", "8 hours german"]),
 ]
 UP = ["Voxel Revolution", "Digital Lemonade", "Newer Wave", "Werq", "Pookatori and Friends", "Delightful D", "Tech Live",
       "Raving Energy"]
-CREDITS = {"out/L1_sleep_500_words.mp4": ["Deep Relaxation"], "out/L2_a1_in_25_minutes.mp4": UP}
+CREDITS = {"out/L1_sleep_8h.mp4": [], "out/L2_a1_in_25_minutes.mp4": UP}
 
 
 def credit(titles):
     # Incompetech tracks are CC BY 4.0: the license requires this credit in the description.
+    if not titles:
+        return ""
     return "\n\nMusic:\n" + "\n".join(f'"{t}" Kevin MacLeod (incompetech.com)' for t in titles) + \
         "\nLicensed under Creative Commons: By Attribution 4.0 License\nhttp://creativecommons.org/licenses/by/4.0/"
 
