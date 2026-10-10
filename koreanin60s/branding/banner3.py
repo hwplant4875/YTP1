@@ -9,8 +9,8 @@ S = [("hi_wave", 525, 585, 285, -6), ("iced_coffee", 1755, 580, 285, 6),
      ("sing_mic", 40, 60, 300, -8), ("headphones", 400, 120, 270, 6), ("ramen", 760, 40, 260, -4), ("love_heart", 1090, 90, 250, 8),
      ("excited", 1400, 50, 270, -6), ("camera", 1730, 110, 260, 5), ("trophy", 2060, 40, 260, -7), ("umbrella", 2300, 230, 240, 8),
      ("o_x_quiz", 60, 430, 320, 4), ("reading", 90, 830, 300, -5), ("suitcase", 2230, 500, 300, -4), ("idea", 2210, 870, 290, 6),
-     ("laugh_tears", 30, 1150, 260, 7), ("phone", 360, 1020, 270, -6), ("rice_bowl", 700, 1110, 260, 5), ("sleeping", 1000, 1000, 330, 0),
-     ("dash", 1380, 1110, 270, -5), ("pay_card", 1700, 1060, 260, 6), ("shy_cover", 2000, 1150, 250, -6), ("teacher", 2300, 1140, 240, 4)]
+     ("laugh_tears", 30, 1150, 260, 7), ("phone", 360, 1020, 270, -6), ("rice_bowl", 700, 1110, 260, 5), ("pay_card", 1000, 1060, 260, 6),
+     ("dash", 1380, 1110, 270, -5), ("sleeping", 1680, 1020, 330, 0), ("shy_cover", 2000, 1150, 250, -6), ("teacher", 2300, 1140, 240, 4)]
 sd = "".join(f'<img src="{img(n)}" style="position:absolute;left:{x}px;top:{y}px;width:{w}px;transform:rotate({r}deg);filter:drop-shadow(0 14px 16px rgba(120,90,80,.22))">' for n, x, y, w, r in S)
 html = f'''<html><head><meta charset="utf-8"><style>body{{margin:0;width:2560px;height:1440px;overflow:hidden;position:relative;
 background:radial-gradient(ellipse at 20% 20%,#FCE1E6 0,transparent 50%),radial-gradient(ellipse at 85% 85%,#E3F2EC 0,transparent 50%),#FBF4EA}}
@@ -19,3 +19,9 @@ text-shadow:0 0 30px #FBF4EA,0 0 60px #FBF4EA}}
 h1 span{{color:#E8678A}}
 </style></head><body>{sd}<h1>Korean in <span>60s</span></h1></body></html>'''
 open(f"{sys.argv[1]}/banner3.html", "w").write(html)
+# day/night variant: right part is night sky, title text stays on the day side
+night = ('<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,#454A85 0,transparent 60%),linear-gradient(180deg,#1B1F3B,#2A2E57);'
+         'clip-path:polygon(79% 0,100% 0,100% 100%,70% 100%)"></div>'
+         '<div style="position:absolute;left:2110px;top:330px;width:100px;height:100px;border-radius:50%;box-shadow:-24px 14px 0 0 #F7E7B4;transform:rotate(-20deg)"></div>')
+st = "".join(f'<div style="position:absolute;left:{1800 + (i * 397) % 760}px;top:{(i * 211) % 1440}px;width:{2 + i % 3}px;height:{2 + i % 3}px;border-radius:50%;background:#FFF6D8;opacity:{.35 + (i % 5) / 8}"></div>' for i in range(60))
+open(f"{sys.argv[1]}/banner3_dn.html", "w").write(html.replace("<body>", "<body>" + night + st, 1).replace("text-shadow:0 0 30px #FBF4EA,0 0 60px #FBF4EA", "text-shadow:none"))

@@ -14,6 +14,11 @@ OPTS = {
     "a": ("radial-gradient(circle at 50% 45%,#FFFBF4 0,#FCE6EA 55%,#F2B8C8 100%)", "", "hi_wave", 600, 95, 110),
     "b": ("radial-gradient(circle at 50% 45%,#F4FBF7 0,#D6F0E4 55%,#A9DCC7 100%)", "", "excited", 620, 90, 100),
     "c": ("radial-gradient(circle at 60% 30%,#454A85 0,transparent 60%),linear-gradient(180deg,#1B1F3B,#2A2E57)", stars(40), "sleeping", 620, 90, 120),
+    # day/night split (user pick 2026-10-10): teacher 뱁새 in the middle
+    "d": ("linear-gradient(135deg,#FDE8EC 0,#F6C9D4 50%,#2A2E57 50%,#1B1F3B 100%)",
+          '<div style="position:absolute;left:0;top:0;width:800px;height:800px;clip-path:polygon(100% 0,100% 100%,0 100%)">' + stars(40) + '</div>'
+          '<div style="position:absolute;right:150px;bottom:110px;width:90px;height:90px;border-radius:50%;box-shadow:-20px 12px 0 0 #F7E7B4;transform:rotate(-20deg)"></div>',
+          "teacher", 640, 80, 150),
 }
 for k, (bg, extra, n, w, x, y) in OPTS.items():
     open(f"{sys.argv[1]}/profile_{k}.html", "w").write(f'''<html><head><meta charset="utf-8"><style>body{{margin:0;width:800px;height:800px;overflow:hidden;position:relative;background:{bg}}}
