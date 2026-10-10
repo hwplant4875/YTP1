@@ -1,12 +1,14 @@
 # Upload info: Berlin's Ghost Stations (English, long-form #1)
 
-## Title (1 recommended)
-1. The Station Where No One Got Off for 28 Years
-2. Berlin's Ghost Stations: The Trains That Never Stopped
-3. 16 Stations That Vanished Under Berlin
+## A/B test: title and thumbnail pairs
 
-## Thumbnail
-thumbnail_en.jpg ("NO EXIT", 1280x720)
+| # | Title | Thumbnail | Benchmark (1M+ views) |
+|---|---|---|---|
+| 1a | How Berlin's Ghost Stations Worked | 1a.jpg: 3D graphic: guard alone on a sealed platform, "NO EXIT" | neo, "How the Berlin Wall Worked" (9.3M) |
+| 1b | The Subway That Ran Through Another Country | 1b.jpg: Provocative: red circle on the armed guard, red arrow on the West Berlin train, "TRAINS NEVER STOPPED" | Tim Traveller, "The Belgian City That Built A Metro Line... And Never Opened It" (2.4M) |
+| 1c | The Station Where No One Got Off for 28 Years | 1c.jpg: Real photo: Rosenthaler Platz ghost station, Dec 1989, "SEALED FOR 28 YEARS" | Vox, "The mistake that toppled the Berlin Wall" (6.6M): one concrete, surprising fact |
+
+YouTube's "Test & compare" tests thumbnails (and title + thumbnail pairs where available); start with the 'a' title as the main one.
 
 ## Description
 From 1961 to 1989, sixteen stations under Berlin were sealed off. West Berlin trains still ran through them, under East Berlin, but they never stopped. The only people on the platforms were armed border guards.

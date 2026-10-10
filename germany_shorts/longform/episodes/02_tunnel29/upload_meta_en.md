@@ -1,12 +1,14 @@
 # Upload info: Tunnel 29 (English, long-form #2)
 
-## Title (1 recommended)
-1. 29 People Crawled Under the Berlin Wall. NBC Filmed It.
-2. Tunnel 29: The Escape TV Paid For
-3. The Tunnel Under the Berlin Wall That America Tried to Hide
+## A/B test: title and thumbnail pairs
 
-## Thumbnail
-thumbnail_en.jpg ("29 PEOPLE. ONE TUNNEL.", 1280x720)
+| # | Title | Thumbnail | Benchmark (1M+ views) |
+|---|---|---|---|
+| 2a | How 29 People Escaped Under the Berlin Wall | 2a.jpg: 3D graphic: cutaway of the street, the Wall and the lit tunnel, "29 PEOPLE. ONE TUNNEL." | neo, "How the Berlin Wall Worked" (9.3M); Mark Rober, "How to Escape Alcatraz..." (38.7M) |
+| 2b | Why American TV Paid for a Tunnel Under the Berlin Wall | 2b.jpg: Provocative: red circle on the NBC camera in the tunnel, "TV PAID FOR THIS TUNNEL" | RealLifeLore / Vox "Why..." format; VICE, "Inside El Chapo's Escape Tunnel" (24.2M) |
+| 2c | The Tunnel That Beat the Berlin Wall | 2c.jpg: Real photo: the Wall at Bernauer Straße, June 1962, with the glowing tunnel drawn under the street, "THEY DUG UNDER THIS" | IMPERIAL, "The Greatest Escape in History" (2.7M) |
+
+YouTube's "Test & compare" tests thumbnails (and title + thumbnail pairs where available); start with the 'a' title as the main one.
 
 ## Description
 In 1962, a group of West Berlin students dug a tunnel from a factory cellar on Bernauer Straße, under the Berlin Wall, into East Berlin. Behind them crawled an American TV crew. NBC had paid for the story.
