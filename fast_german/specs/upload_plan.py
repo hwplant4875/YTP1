@@ -34,8 +34,8 @@ LONG = [
   "Repeat out loud when you see REPEAT AFTER ME, and stay for the speed quiz at the end.", ["learn german a1", "german crash course", "german basics"]),
  ("out/L1_sleep_8h.mp4", "8 Hours of German Words While You Sleep 😴 Calm Voice, Slow Sentences (Beginner)", "out/thumb_L1.jpg",
   "2026-10-10T12:30:00Z",
-  "Fall asleep while you learn German. 350 useful beginner words, each one said in English, then in German, then a "
-  "short sentence in English, in German, and once more slowly in German. The full set plays four times, so you "
+  "Fall asleep while you learn German. 350 useful beginner words, each one said in German, then in English, then a "
+  "short German sentence, its English translation, and the German sentence once more, slowly. The full set plays four times, so you "
   "hear every word again and again through the night.\n\n"
   "Calm, soft voice. Gentle sleep music and quiet rain. Dark screen with the word, its picture and the sentence.\n\n"
   "0:00:00 Round 1\n2:00:00 Round 2\n4:00:00 Round 3\n6:00:00 Round 4",
