@@ -1,10 +1,29 @@
 {
  "bg": "black",
  "font": "/home/user/rs_work/fonts/TikTokSans-Black.ttf",
- "titleY": 225,
+ "box": {
+  "y": 266,
+  "h": 211,
+  "color": "#ffffff",
+  "text": "#000000",
+  "size": 66
+ },
  "window": {
-  "y": 520,
-  "h": 1080
+  "y": 477,
+  "h": 974
+ },
+ "sfx": {
+  "boom": {
+   "file": "/mnt/project-files/sfx/drive/051_둥(큰북소리).wav",
+   "peak": 0.026,
+   "gain": -3,
+   "filter": "atrim=0:1.6,highpass=f=45,equalizer=f=250:t=q:w=1:g=3,afade=t=out:st=0.7:d=0.9"
+  },
+  "ding": {
+   "file": "/mnt/project-files/sfx/drive/015_띠링.mp3",
+   "peak": 0.0,
+   "gain": -9
+  }
  },
  "src": {
   "pc": "/home/user/rs_work/src/yt/Y7xBTvYgoIY.mp4"
@@ -12,48 +31,68 @@
  "srcFilter": {
   "pc": "crop=460:360:90:0,hqdn3d=1.5:1.5:3:3"
  },
- "titlePng": "/home/user/rs_work/e01/title.png",
- "sfx": {
-  "hit": {
-   "file": "/mnt/project-files/sfx/drive/051_둥(큰북소리).wav",
-   "filter": "atrim=0:1.3,lowpass=f=170,afade=t=out:st=0.6:d=0.7",
-   "gain": -16
+ "titles": [
+  {
+   "from": 0,
+   "text": "*At the 1999 Olympia press conference, Nasser El Sonbaty walked in like this* 🥶"
+  },
+  {
+   "from": 3,
+   "text": "*Markus Ruhl's suit was fighting for its life* 💀"
+  },
+  {
+   "from": 5,
+   "text": "*Shawn Ray showed up with shades on his head* 😎"
+  },
+  {
+   "from": 7,
+   "text": "*Flex Wheeler went all black* 🖤"
+  },
+  {
+   "from": 9,
+   "text": "Then Ronnie Coleman walked in 👑"
   }
- },
+ ],
  "shots": [
   {
    "src": "pc",
    "in": 53.0,
    "out": 57.0,
    "cx": 0.58,
+   "cy": 0.4,
    "zoom": 1.2,
-   "cy": 0.42,
-   "punch": true,
-   "cap": "#1 NASSER EL SONBATY",
-   "capIn": 0.1,
-   "capOut": 9.1,
-   "tr": "fade",
-   "td": 0.2
+   "hits": [
+    {
+     "t": 0.3,
+     "zoom": 1.08,
+     "amount": 0.5,
+     "strong": false
+    }
+   ]
   },
   {
    "src": "pc",
    "in": 72.0,
    "out": 74.5,
    "cx": 0.5,
-   "zoom": 1.2,
    "cy": 0.42,
-   "tr": "fade",
-   "td": 0.2
+   "zoom": 1.2
   },
   {
    "src": "pc",
    "in": 513.0,
    "out": 516.0,
    "cx": 0.55,
+   "cy": 0.4,
    "zoom": 1.2,
-   "cy": 0.42,
-   "tr": "fade",
-   "td": 0.2
+   "hits": [
+    {
+     "t": 0.3,
+     "zoom": 1.04,
+     "amount": 0.35,
+     "boom": -9
+    }
+   ]
   },
   {
    "src": "pc",
@@ -63,117 +102,128 @@
     0.5,
     0.6
    ],
+   "cy": 0.4,
    "zoom": 1.2,
-   "cy": 0.42,
-   "punch": true,
-   "cap": "#2 MARKUS RUHL",
-   "capIn": 0.1,
-   "capOut": 2.6,
-   "tr": "fade",
-   "td": 0.2
+   "hits": [
+    {
+     "t": 0.3,
+     "zoom": 1.06,
+     "amount": 0.5,
+     "strong": false
+    }
+   ]
   },
   {
    "src": "pc",
    "in": 88.1,
    "out": 89.6,
    "cx": 0.55,
-   "zoom": 1.2,
    "cy": 0.42,
-   "tr": "fade",
-   "td": 0.2
+   "zoom": 1.2
   },
   {
    "src": "pc",
    "in": 112.5,
    "out": 116.5,
    "cx": 0.47,
+   "cy": 0.4,
    "zoom": 1.2,
-   "cy": 0.42,
-   "punch": true,
-   "cap": "#3 SHAWN RAY",
-   "capIn": 0.1,
-   "capOut": 7.3,
-   "tr": "fade",
-   "td": 0.2
+   "hits": [
+    {
+     "t": 0.3,
+     "zoom": 1.08,
+     "amount": 0.5,
+     "strong": false
+    }
+   ]
   },
   {
    "src": "pc",
    "in": 126.0,
    "out": 129.5,
    "cx": 0.4,
-   "zoom": 1.2,
    "cy": 0.42,
-   "tr": "fade",
-   "td": 0.2
+   "zoom": 1.2,
+   "overlays": [
+    {
+     "png": "/home/user/rs_work/e01/arrow_shades.png",
+     "in": 0.6,
+     "out": 2.6,
+     "sfx": "ding"
+    }
+   ]
   },
   {
    "src": "pc",
    "in": 95.0,
    "out": 97.5,
    "cx": 0.5,
+   "cy": 0.4,
    "zoom": 1.2,
-   "cy": 0.42,
-   "punch": true,
-   "cap": "#4 FLEX WHEELER",
-   "capIn": 0.1,
-   "capOut": 6.3,
-   "tr": "fade",
-   "td": 0.2
+   "hits": [
+    {
+     "t": 0.3,
+     "zoom": 1.06,
+     "amount": 0.5,
+     "strong": false
+    }
+   ]
   },
   {
    "src": "pc",
    "in": 163.0,
    "out": 167.0,
    "cx": 0.5,
-   "zoom": 1.2,
-   "cy": 0.42,
-   "tr": "fade",
-   "td": 0.2
+   "cy": 0.4,
+   "zoom": 1.2
   },
   {
    "src": "pc",
    "in": 475.1,
    "out": 476.4,
    "cx": 0.5,
+   "cy": 0.4,
    "zoom": 1.2,
-   "cy": 0.42,
-   "punch": true,
-   "cap": "#5 RONNIE COLEMAN",
-   "capIn": 0.1,
-   "capOut": 99,
-   "capColor": "0xFFD400",
-   "tr": "fade",
-   "td": 0.2
+   "hits": [
+    {
+     "t": 0.3,
+     "zoom": 1.08,
+     "amount": 0.5,
+     "strong": true
+    }
+   ]
   },
   {
    "src": "pc",
    "in": 361.0,
    "out": 365.0,
    "cx": 0.44,
-   "zoom": 1.2,
-   "cy": 0.42,
-   "tr": "fade",
-   "td": 0.2
+   "cy": 0.4,
+   "zoom": 1.2
   },
   {
    "src": "pc",
    "in": 192.5,
    "out": 196.5,
    "cx": 0.5,
+   "cy": 0.4,
    "zoom": 1.2,
-   "cy": 0.42,
-   "tr": "fade",
-   "td": 0.2
+   "hits": [
+    {
+     "t": 0.5,
+     "zoom": 1.04,
+     "amount": 0.35,
+     "boom": -9
+    }
+   ]
   },
   {
    "src": "pc",
    "in": 386.0,
    "out": 392.0,
    "cx": 0.45,
-   "zoom": 1.2,
-   "cy": 0.42,
-   "tr": "fade",
-   "td": 0.2
+   "cy": 0.4,
+   "zoom": 1.2
   }
  ]
 }

@@ -56,7 +56,8 @@ def render_line(img, line, font, size, y, color):
             x += font.getlength(s)
 
 
-def main(out, text, fontfile='/home/user/rs_work/fonts/TikTokSans-Black.ttf', max_size=84, color='#ffffff'):
+def main(out, text, fontfile='/home/user/rs_work/fonts/TikTokSans-Black.ttf', max_size=84, color='#ffffff', box=''):
+    """box='#ffffff:200' draws the title centred on a solid full-width box of that height."""
     max_size = int(max_size)
     size = max_size
     font = ImageFont.truetype(fontfile, size)
@@ -69,9 +70,15 @@ def main(out, text, fontfile='/home/user/rs_work/fonts/TikTokSans-Black.ttf', ma
             size -= 2
             font = ImageFont.truetype(fontfile, size)
     lh = int(size * 1.18)
-    img = Image.new('RGBA', (W, lh * len(lines) + 40), (0, 0, 0, 0))
+    if box:
+        bcol, bh = box.split(':')
+        img = Image.new('RGBA', (W, int(bh)), bcol)
+        top = (int(bh) - lh * len(lines)) / 2 + size * .04
+    else:
+        img = Image.new('RGBA', (W, lh * len(lines) + 40), (0, 0, 0, 0))
+        top = 10
     for i, l in enumerate(lines):
-        render_line(img, l, font, size, 10 + i * lh, color)
+        render_line(img, l, font, size, top + i * lh, color)
     img.save(out)
     print(out, img.size, size)
 

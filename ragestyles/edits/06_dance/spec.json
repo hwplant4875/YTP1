@@ -1,10 +1,29 @@
 {
  "bg": "black",
  "font": "/home/user/rs_work/fonts/TikTokSans-Black.ttf",
- "titleY": 225,
+ "box": {
+  "y": 266,
+  "h": 211,
+  "color": "#ffffff",
+  "text": "#000000",
+  "size": 66
+ },
  "window": {
-  "y": 520,
-  "h": 1080
+  "y": 477,
+  "h": 974
+ },
+ "sfx": {
+  "boom": {
+   "file": "/mnt/project-files/sfx/drive/051_둥(큰북소리).wav",
+   "peak": 0.026,
+   "gain": -3,
+   "filter": "atrim=0:1.6,highpass=f=45,equalizer=f=250:t=q:w=1:g=3,afade=t=out:st=0.7:d=0.9"
+  },
+  "ding": {
+   "file": "/mnt/project-files/sfx/drive/015_띠링.mp3",
+   "peak": 0.0,
+   "gain": -9
+  }
  },
  "src": {
   "r": "/home/user/rs_work/src/hd/ronnie_2003_full.mp4"
@@ -12,31 +31,68 @@
  "srcFilter": {
   "r": "crop=944:712:168:4"
  },
- "titlePng": "/home/user/rs_work/e06/title.png",
+ "titles": [
+  {
+   "from": 0,
+   "text": "*At the 2003 Olympia, Ronnie Coleman walked out at nearly 300 lbs* 😳"
+  },
+  {
+   "from": 2,
+   "text": "*Then instead of just posing, he started dancing* 👀"
+  },
+  {
+   "from": 4,
+   "text": "*And then he dropped into full splits* 😱"
+  },
+  {
+   "from": 7,
+   "text": "Nobody that big should move like that 💀"
+  }
+ ],
  "shots": [
   {
    "src": "r",
    "in": 166.8,
    "out": 172.6,
    "cx": 0.48,
-   "tr": "fadewhite",
-   "td": 0.2
+   "cy": 0.45,
+   "hits": [
+    {
+     "t": 0.35,
+     "zoom": 1.08,
+     "amount": 0.5
+    }
+   ]
   },
   {
    "src": "r",
    "in": 48.5,
    "out": 54.6,
    "cx": 0.5,
-   "tr": "fade",
-   "td": 0.2
+   "cy": 0.55,
+   "kb": 0.1,
+   "hits": [
+    {
+     "t": 2.0,
+     "zoom": 1.04,
+     "amount": 0.35,
+     "boom": -9
+    }
+   ]
   },
   {
    "src": "r",
    "in": 38.5,
    "out": 42.9,
    "cx": 0.5,
-   "tr": "fade",
-   "td": 0.2
+   "cy": 0.4,
+   "hits": [
+    {
+     "t": 3.0,
+     "zoom": 1.06,
+     "amount": 0.5
+    }
+   ]
   },
   {
    "src": "r",
@@ -46,46 +102,92 @@
     0.6,
     0.64
    ],
-   "tr": "fadewhite",
-   "td": 0.2
+   "cy": 0.4,
+   "kb": 0.08,
+   "hits": [
+    {
+     "t": 1.5,
+     "zoom": 1.04,
+     "amount": 0.35,
+     "boom": -9
+    }
+   ]
   },
   {
    "src": "r",
    "in": 213.6,
    "out": 219.2,
    "cx": 0.53,
-   "tr": "fade",
-   "td": 0.2
+   "cy": 0.5,
+   "hits": [
+    {
+     "t": 2.4,
+     "zoom": 1.08,
+     "amount": 0.5,
+     "strong": true
+    }
+   ],
+   "overlays": [
+    {
+     "png": "/home/user/rs_work/e06/arrow_split.png",
+     "in": 2.75,
+     "out": 4.9,
+     "sfx": "ding"
+    }
+   ]
   },
   {
    "src": "r",
    "in": 112.0,
    "out": 117.3,
    "cx": 0.5,
-   "tr": "fade",
-   "td": 0.15
+   "cy": 0.4,
+   "hits": [
+    {
+     "t": 2.5,
+     "zoom": 1.04,
+     "amount": 0.35,
+     "boom": -9
+    }
+   ]
   },
   {
    "src": "r",
    "in": 117.5,
    "out": 121.0,
    "cx": 0.47,
-   "tr": "fade",
-   "td": 0.2
+   "cy": 0.55,
+   "kb": 0.08
   },
   {
    "src": "r",
    "in": 158.0,
    "out": 162.5,
    "fit": "wide",
-   "tr": "fade",
-   "td": 0.25
+   "kb": 0.05,
+   "hits": [
+    {
+     "t": 2.0,
+     "zoom": 1.08,
+     "amount": 0.5,
+     "strong": true
+    }
+   ]
   },
   {
    "src": "r",
    "in": 225.0,
    "out": 230.5,
-   "cx": 0.5
+   "cx": 0.5,
+   "cy": 0.35,
+   "kb": 0.07,
+   "hits": [
+    {
+     "t": 0.4,
+     "zoom": 1.05,
+     "amount": 0.45
+    }
+   ]
   }
  ]
 }

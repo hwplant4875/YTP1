@@ -1,0 +1,13 @@
+{
+ "boom": {
+  "file": "/mnt/project-files/sfx/drive/051_둥(큰북소리).wav",
+  "peak": 0.026,
+  "gain": -3,
+  "filter": "atrim=0:1.6,highpass=f=45,equalizer=f=250:t=q:w=1:g=3,afade=t=out:st=0.7:d=0.9"
+ },
+ "ding": {
+  "file": "/mnt/project-files/sfx/drive/015_띠링.mp3",
+  "peak": 0.0,
+  "gain": -9
+ }
+}
