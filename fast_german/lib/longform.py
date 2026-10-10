@@ -155,8 +155,9 @@ def _tts_piece(item):
     return mp3
 
 
-def build(slides, out_path, fps=10, bed=None, workers=4, crf=24, lufs=-14):
-    """slides: list of (PIL image or callable, [audio items]). bed: optional ffmpeg lavfi audio bed source."""
+def build(slides, out_path, fps=10, bed=None, workers=4, crf=24, lufs=-14, music=None, music_vol=0.18):
+    """slides: list of (PIL image or callable, [audio items]). bed: optional ffmpeg lavfi audio bed source.
+    music: optional list of mp3s played in order and looped, ducked under the voice."""
     tmp = tempfile.mkdtemp(dir=os.environ.get("FG_TMP"))
     # 1. TTS in parallel
     items = {it[1] + repr(sorted(it[2].items())): it for _, aud in slides for it in aud if it[0] == "tts"}
@@ -199,14 +200,25 @@ def build(slides, out_path, fps=10, bed=None, workers=4, crf=24, lufs=-14):
         lf.write(f"file '{p}'\n")
     # 3. Mix voice with optional bed, normalize
     wav = os.path.join(tmp, "mix.m4a")
+    cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "s16le", "-ar", str(SR), "-ac", "1", "-i", audio_path]
+    f = ["[0:a]aformat=channel_layouts=stereo,asplit=2[v][key]"]
+    mix = ["[v]"]
     if bed:
-        cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "s16le", "-ar", str(SR), "-ac", "1", "-i", audio_path,
-               "-f", "lavfi", "-t", f"{total:.3f}", "-i", bed, "-filter_complex",
-               "[0:a]aformat=channel_layouts=stereo[v];[1:a]aformat=channel_layouts=stereo[b];"
-               f"[v][b]amix=inputs=2:normalize=0:duration=first,loudnorm=I={lufs}:TP=-1.5:LRA=11[a]", "-map", "[a]", "-c:a", "aac", "-b:a", "160k", wav]
+        cmd += ["-f", "lavfi", "-t", f"{total:.3f}", "-i", bed]
+        f.append(f"[{len(mix)}:a]aformat=channel_layouts=stereo[b]")
+        mix.append("[b]")
+    if music:
+        pl = os.path.join(tmp, "music.txt")
+        open(pl, "w").write("".join("file '%s'\n" % m.replace("'", "'\\''") for m in music))
+        cmd += ["-stream_loop", "-1", "-f", "concat", "-safe", "0", "-i", pl]
+        f.append(f"[{len(mix)}:a]aformat=channel_layouts=stereo:sample_rates={SR},atrim=0:{total:.3f},"
+                 f"afade=t=in:d=2,afade=t=out:st={max(0, total - 4):.3f}:d=4,volume={music_vol}[m0]")
+        f.append("[m0][key]sidechaincompress=threshold=0.03:ratio=5:attack=30:release=500[m]")
+        mix.append("[m]")
     else:
-        cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "s16le", "-ar", str(SR), "-ac", "1", "-i", audio_path,
-               "-af", f"aformat=channel_layouts=stereo,loudnorm=I={lufs}:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", "160k", wav]
+        f.append("[key]anullsink")
+    f.append("".join(mix) + f"amix=inputs={len(mix)}:normalize=0:duration=first,loudnorm=I={lufs}:TP=-1.5:LRA=11[a]")
+    cmd += ["-filter_complex", ";".join(f), "-map", "[a]", "-c:a", "aac", "-b:a", "160k", wav]
     subprocess.run(cmd, check=True)
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", concat, "-i", wav,
                     "-vf", f"fps={fps},format=yuv420p", "-c:v", "libx264", "-preset", "veryfast", "-tune", "stillimage",

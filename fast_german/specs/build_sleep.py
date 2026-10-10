@@ -39,4 +39,5 @@ outro = "Gute Nacht. Good night. Sleep well, and see you tomorrow on Fast German
 S.append((lambda: slide(DARK, top_left="FAST GERMAN", word="Gute Nacht", en="good night", icon="crescent-moon"),
           [("tts", outro, EN), ("sil", 20.0)]))
 rain = "anoisesrc=color=brown:amplitude=0.035:sample_rate=48000,lowpass=f=600,highpass=f=60"
-print(build(S, sys.argv[1], fps=5, bed=rain, workers=3, crf=28, lufs=-20))
+print(build(S, sys.argv[1], fps=5, bed=rain, workers=3, crf=28, lufs=-20,
+            music=['/mnt/project-files/fast_german/cache/music/incompetech/Deep Relaxation.mp3'], music_vol=0.12))  # Kevin MacLeod, CC BY 4.0, credit in description

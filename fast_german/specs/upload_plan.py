@@ -35,12 +35,20 @@ LONG = [
  ("out/L1_sleep_500_words.mp4", "Learn 500 German Words While You Sleep 😴 (Beginner)", "out/thumb_L1.jpg", "2026-10-18T15:00:00Z",
   "500 useful beginner German words with a calm voice, a picture and an example sentence, then a gentle review. "
   "Soft rain in the background, dark screen. Just listen and relax.", ["learn german while you sleep", "german vocabulary", "sleep learning"]),
- ("out/L3_kitchen_dictionary.mp4", "German Picture Dictionary: The Kitchen (der/die/das colors)", "out/thumb_L3.jpg", "2026-10-25T15:00:00Z",
-  "43 kitchen words with pictures, colors and example sentences, then a picture quiz. Blue = der, red = die, green = das.",
-  ["german picture dictionary", "kitchen in german", "german vocabulary"]),
 ]
+UP = ["Voxel Revolution", "Digital Lemonade", "Newer Wave", "Werq", "Pookatori and Friends", "Delightful D", "Tech Live",
+      "Raving Energy"]
+CREDITS = {"out/L1_sleep_500_words.mp4": ["Deep Relaxation"], "out/L2_a1_in_25_minutes.mp4": UP}
+
+
+def credit(titles):
+    # Incompetech tracks are CC BY 4.0: the license requires this credit in the description.
+    return "\n\nMusic:\n" + "\n".join(f'"{t}" Kevin MacLeod (incompetech.com)' for t in titles) + \
+        "\nLicensed under Creative Commons: By Attribution 4.0 License\nhttp://creativecommons.org/licenses/by/4.0/"
+
+
 for f, title, thumb, at, desc, tags in LONG:
-    plan.append({"file": f, "title": title, "thumb": thumb, "publishAt": at, "description": desc + TAIL + "\n\n#learngerman #german",
+    plan.append({"file": f, "title": title, "thumb": thumb, "publishAt": at, "description": desc + TAIL + credit(CREDITS[f]) + "\n\n#learngerman #german",
                  "tags": TAGS + tags})
 json.dump(plan, open(os.path.join(HERE, "..", "upload_plan.json"), "w"), ensure_ascii=False, indent=1)
 print(len(plan))

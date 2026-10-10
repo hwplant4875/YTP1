@@ -80,4 +80,5 @@ for i, (s, a, w, en, ic, ex, exen) in enumerate(ITEMS):
               [("sfx", "ding"), ("tts", f"{a} {w}", DE), ("sil", 1.0)]))
 outro = "How many did you get? Tell me in the comments, and follow for more German."
 S.append((lambda: slide(LIGHT, top_left=TL, word="Follow for more German", icon="pretzel"), [("tts", outro, NAR), ("sil", 15.0)]))
-print(build(S, sys.argv[1], fps=10, workers=1, crf=22))
+print(build(S, sys.argv[1], fps=10, workers=1, crf=22,
+            music=['/mnt/project-files/fast_german/cache/music/incompetech/Raving Energy.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Tech Live.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Delightful D.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Pookatori and Friends.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Werq.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Newer Wave.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Digital Lemonade.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Voxel Revolution.mp3']))  # Kevin MacLeod, CC BY 4.0, credit in description

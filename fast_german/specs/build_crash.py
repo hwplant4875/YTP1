@@ -38,4 +38,5 @@ for ci, ch in enumerate(spec["chapters"]):
                                                article=l.get("article"), en=l["quiz"]),
                       [("sfx", "ding"), ("tts", l["answer"], DE), ("sil", 1.2)]))
 S.append((lambda: slide(LIGHT, top_left="FAST GERMAN", word="Follow for more German", icon="pretzel"), [("sil", 15.0)]))
-print(build(S, sys.argv[1], fps=10, workers=1, crf=22))
+print(build(S, sys.argv[1], fps=10, workers=1, crf=22,
+            music=['/mnt/project-files/fast_german/cache/music/incompetech/Voxel Revolution.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Digital Lemonade.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Newer Wave.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Werq.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Pookatori and Friends.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Delightful D.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Tech Live.mp3', '/mnt/project-files/fast_german/cache/music/incompetech/Raving Energy.mp3']))  # Kevin MacLeod, CC BY 4.0, credit in description

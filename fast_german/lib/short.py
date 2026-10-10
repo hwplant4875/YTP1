@@ -24,7 +24,8 @@ SENT_GAP = 0.3  # between sentences inside a beat
 SFX_VOL = {"pop": 0.35, "ding": 0.35, "start": 0.35, "buzz": 0.3, "snap": 0.35, "whoosh": 0.3, "tick": 0.35,
            "swoosh_up": 0.35, "clock": 0.25}
 THINK = 3.0  # quiz: seconds the viewer gets to guess, with a 3-2-1 countdown
-MUSIC = os.path.join(C.CACHE, "music", "kpop_bed_v2.mp3")
+# User's picks 2026-10-10 (all ElevenLabs originals); shorts rotate through them by spec number.
+MUSIC_ROTATION = [os.path.join(C.CACHE, "music", n + ".mp3") for n in ("kpop_beat_a", "kpop_beat_c", "rave_c")]
 MUSIC_VOL = 0.22
 
 
@@ -305,7 +306,10 @@ def render(spec_path, out_path):
                        f"volume={SFX_VOL.get(s, 0.35)},adelay={int(at * 1000)}:all=1[f{k}]")
         fx.append(f"[f{k}]")
         k += 1
-    music = spec.get("music", MUSIC)
+    music = spec.get("music")
+    if music is None:
+        num = int(re.match(r"\d*", os.path.basename(spec_path)).group() or 0)
+        music = MUSIC_ROTATION[num % len(MUSIC_ROTATION)]
     if music and os.path.exists(music):
         inputs += ["-stream_loop", "-1", "-i", music]
         filters.append(f"[{k}:a]aformat=channel_layouts=stereo,atrim=0:{total},afade=t=in:d=0.6,"
