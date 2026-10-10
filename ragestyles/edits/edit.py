@@ -119,7 +119,7 @@ def build(spec, out, preview=False):
             a = starts[i] + s.get('capIn', 0)
             b = min(starts[i] + s.get('capOut', durs[i]), total - .1)
             png = f"{work}/cap{i}.png"
-            title_png.caption(png, s['capParts'], font, s.get('capSize', 100))
+            title_png.caption(png, s['capParts'], spec.get('capFont', font), s.get('capSize', 100))
             ins += ['-loop', '1', '-framerate', '30', '-t', f'{total:.3f}', '-i', png]
             fc.append(f"[{cur}][{k}:v]overlay=0:{wy + wh + s.get('capGap', 30)}:enable='between(t,{a:.3f},{b:.3f})'[c{k}]")
             cur, k = f'c{k}', k + 1
