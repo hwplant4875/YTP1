@@ -1,6 +1,6 @@
 """Learn German Words While You Sleep (8 h): one ~2 h block of unique words, played 4 times.
 Per word (user's final pick, 2026-10-10 12:16): German word, English word, German sentence, the German sentence
-slowly, English sentence. Voice: Google Chirp 3 HD Leda (free tier), soft sleep treatment; ElevenLabs sleep music bed.
+slowly, English sentence. Voices: Google Chirp 3 HD Leda for German, Aoede for English (free tier), soft sleep treatment; ElevenLabs sleep music bed.
 Usage: build_sleep.py OUT.mp4 [n_words] [loops]"""
 import json, os, subprocess, sys, tempfile
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "lib"))
@@ -13,7 +13,7 @@ loops = int(sys.argv[3]) if len(sys.argv) > 3 else 4
 words = words[:n]
 DE = {"engine": "google", "lang": "de-DE", "rate": 0.8}
 SLOW = {"engine": "google", "lang": "de-DE", "rate": 0.6}
-EN = {"engine": "google", "lang": "en-US", "rate": 0.8}
+EN = {"engine": "google", "lang": "en-US", "rate": 0.8, "voice": "Chirp3-HD-Aoede"}  # user pick 2026-10-10
 MUSIC = [os.path.join(C.CACHE, "music", "sleep_bed_loop.wav")]  # sleep_bed.mp3, silence trimmed, seamless loop
 
 

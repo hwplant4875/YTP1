@@ -152,7 +152,7 @@ def slide(theme, top_left=None, top_right=None, icon=None, word=None, article=No
 def _tts_piece(item):
     _, text, opt = item
     if opt.get("engine") == "google":
-        return C.gtts(text, opt.get("lang", "de-DE"), opt.get("rate", 0.8))
+        return C.gtts(text, opt.get("lang", "de-DE"), opt.get("rate", 0.8), opt.get("voice", C.GOOGLE_VOICE))
     mp3, _ = C.tts(text, **opt)
     return mp3
 
