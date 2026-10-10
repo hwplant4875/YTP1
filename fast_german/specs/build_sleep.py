@@ -1,6 +1,6 @@
 """Learn German Words While You Sleep (8 h): one ~2 h block of unique words, played 4 times.
-Per word (user's order, 2026-10-10): English word, German word, English sentence, German sentence, the German
-sentence slowly. Voice: Google Chirp 3 HD Leda (free tier), soft sleep treatment; ElevenLabs sleep music bed.
+Per word (user's final order, 2026-10-10 11:53): English word, German word, English sentence, German sentence,
+the German sentence slowly. Slide layout unchanged. Voice: Google Chirp 3 HD Leda (free tier), soft sleep treatment; ElevenLabs sleep music bed.
 Usage: build_sleep.py OUT.mp4 [n_words] [loops]"""
 import json, os, subprocess, sys, tempfile
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "lib"))
@@ -25,14 +25,17 @@ def word_slide(w, i):
     return (lambda: slide(DARK, top_left="FAST GERMAN", top_right=f"{w['cat'].title()} · {i + 1}/{len(words)}",
                           icon=w.get("icon"), word=say(w)[:-1], article=w["article"], en=w["en"],
                           sub=w["ex_de"], sub2=w["ex_en"], icon_size=380),
-            [("sil", 0.6), ("tts", w["en"] + ".", EN), ("sil", 1.5), ("tts", say(w), DE), ("sil", 1.8),
-             ("tts", w["ex_en"], EN), ("sil", 1.5), ("tts", w["ex_de"], DE), ("sil", 1.5),
+            [("sil", 0.6), ("tts", w["en"] + ".", EN), ("sil", 1.3), ("tts", say(w), DE), ("sil", 1.6),
+             ("tts", w["ex_en"], EN), ("sil", 1.3), ("tts", w["ex_de"], DE), ("sil", 1.4),
              ("tts", w["ex_de"], SLOW), ("sil", 2.4)])
 
 
 CORE = [word_slide(w, i) for i, w in enumerate(words)]
-OUTRO = [(lambda: slide(DARK, top_left="FAST GERMAN", word="Gute Nacht", en="good night", icon="crescent-moon"),
-          [("tts", "Gute Nacht.", DE), ("sil", 1.5), ("tts", "Good night. Sleep well.", EN), ("sil", 20.0)])]
+OUTRO = [(lambda: slide(DARK, top_left="FAST GERMAN", word="Gute Nacht", en="good night", icon="crescent-moon",
+                        sub="Gute Nacht, schlaf gut.", sub2="Good night, sleep well.", icon_size=380),
+          [("sil", 0.6), ("tts", "Good night.", EN), ("sil", 1.3), ("tts", "Gute Nacht.", DE), ("sil", 1.6),
+           ("tts", "Good night, sleep well.", EN), ("sil", 1.3), ("tts", "Gute Nacht, schlaf gut.", DE), ("sil", 1.4),
+           ("tts", "Gute Nacht, schlaf gut.", SLOW), ("sil", 20.0)])]
 rain = "anoisesrc=color=brown:amplitude=0.02:sample_rate=48000,lowpass=f=500,highpass=f=60"
 kw = dict(fps=5, bed=rain, workers=8, crf=28, lufs=-22, music=MUSIC, music_vol=0.078, voice_fx=C.SLEEP_VOICE_FX)
 

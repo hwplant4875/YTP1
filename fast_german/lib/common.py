@@ -161,14 +161,16 @@ SLEEP_VOICE_FX = ("highpass=f=70,lowshelf=g=2:f=180,equalizer=f=3500:t=q:w=1.2:g
 
 def gtts(text, lang="de-DE", rate=0.8, voice=GOOGLE_VOICE):
     """Google Cloud TTS (key in GOOGLE_TTS_API_KEY), cached wav path. Isolated words keep their trailing period
-    so they end on a falling tone."""
-    h = hashlib.sha1(json.dumps(["google", voice, lang, text, rate]).encode()).hexdigest()[:16]
+    so they end on a falling tone. Plain-text requests were sometimes cut off mid-sound at the end (~13 % of clips),
+    so the text goes in as SSML with a trailing break, and the clip gets short fades."""
+    h = hashlib.sha1(json.dumps(["google-ssml", voice, lang, text, rate]).encode()).hexdigest()[:16]
     out = os.path.join(CACHE, "gtts", h + ".wav")
     if not os.path.exists(out):
         import time
         import urllib.error
         os.makedirs(os.path.dirname(out), exist_ok=True)
-        body = {"input": {"text": text}, "voice": {"languageCode": lang, "name": f"{lang}-{voice}"},
+        from xml.sax.saxutils import escape
+        body = {"input": {"ssml": f'<speak>{escape(text)}<break time="600ms"/></speak>'}, "voice": {"languageCode": lang, "name": f"{lang}-{voice}"},
                 "audioConfig": {"audioEncoding": "LINEAR16", "sampleRateHertz": 24000, "speakingRate": rate}}
         for attempt in range(8):
             try:
@@ -181,6 +183,18 @@ def gtts(text, lang="de-DE", rate=0.8, voice=GOOGLE_VOICE):
                 if attempt == 7 or getattr(e, "code", 429) not in (429, 500, 503):
                     raise
                 time.sleep(2 ** attempt)
-        open(out + ".tmp", "wb").write(base64.b64decode(d["audioContent"]))
+        import io
+        import wave
+        import numpy as np
+        with wave.open(io.BytesIO(base64.b64decode(d["audioContent"]))) as w:  # parses chunks; data only
+            sr, a = w.getframerate(), np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32)
+        fi, fo = min(len(a), sr // 100), min(len(a), sr * 8 // 100)  # 10 ms in, 80 ms out
+        a[:fi] *= np.linspace(0, 1, fi)
+        a[len(a) - fo:] *= np.linspace(1, 0, fo)
+        with wave.open(out + ".tmp", "wb") as w:
+            w.setnchannels(1)
+            w.setsampwidth(2)
+            w.setframerate(sr)
+            w.writeframes(a.astype(np.int16).tobytes())
         os.replace(out + ".tmp", out)
     return out
