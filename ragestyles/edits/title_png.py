@@ -62,7 +62,13 @@ def main(out, text, fontfile='/home/user/rs_work/fonts/TikTokSans-Black.ttf', ma
     size = max_size
     font = ImageFont.truetype(fontfile, size)
     lines = [text]
+    # prefer one line: shrink down to 80% before wrapping
+    while measure(text, font, size) > MAXW and size > max_size * 0.8:
+        size -= 2
+        font = ImageFont.truetype(fontfile, size)
     if measure(text, font, size) > MAXW:
+        size = max_size
+        font = ImageFont.truetype(fontfile, size)
         words = text.split(' ')
         best = min(range(1, len(words)), key=lambda k: max(measure(' '.join(words[:k]), font, size), measure(' '.join(words[k:]), font, size)))
         lines = [' '.join(words[:best]), ' '.join(words[best:])]

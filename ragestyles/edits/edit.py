@@ -54,8 +54,12 @@ def build(spec, out, preview=False):
         sf = spec.get('srcFilter', {}).get(s['src'], '')
         fxcam.render_shot(srcs[s['src']], s['in'], d, sf, s, W, wh, f'{work}/v{i}.mp4',
                           crf=20 if preview else 14, preset='veryfast' if preview else 'medium')
-        run(['ffmpeg', '-v', 'error', '-y', '-ss', f"{s['in']:.3f}", '-t', f'{d:.3f}', '-i', srcs[s['src']], '-vn',
-             '-af', 'aresample=48000,aformat=channel_layouts=stereo,apad', '-t', f'{d:.3f}', '-c:a', 'pcm_s16le', f'{work}/a{i}.wav'])
+        if spec.get('mute'):  # the user lays music over it; source audio (voices, arena music) is dropped
+            run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo', '-t', f'{d:.3f}',
+                 '-c:a', 'pcm_s16le', f'{work}/a{i}.wav'])
+        else:
+            run(['ffmpeg', '-v', 'error', '-y', '-ss', f"{s['in']:.3f}", '-t', f'{d:.3f}', '-i', srcs[s['src']], '-vn',
+                 '-af', 'aresample=48000,aformat=channel_layouts=stereo,apad', '-t', f'{d:.3f}', '-c:a', 'pcm_s16le', f'{work}/a{i}.wav'])
 
     with ThreadPoolExecutor(4) as ex:
         list(ex.map(part, range(n)))
@@ -102,14 +106,14 @@ def build(spec, out, preview=False):
             if o.get('sfx'):
                 sfx_events.append((o['sfx'], a, o.get('gain')))
         for h in s.get('hits', []):
-            if h.get('boom', 0) is not None:
+            if h.get('boom', 0) is not None and not (spec.get('mute') and 'boom' not in h):
                 sfx_events.append(('boom', starts[i] + h['t'], h.get('boom')))
     dt = []
     for i, s in enumerate(shots):
         if s.get('cap'):
             a = starts[i] + s.get('capIn', 0.3)
             b = min(starts[i] + s.get('capOut', durs[i]), total - .1)
-            dt.append(f"drawtext=fontfile={font}:text='{esc(s['cap'])}':fontsize=60:fontcolor=white:x=(w-tw)/2:y={wy + wh + 40}:"
+            dt.append(f"drawtext=fontfile={font}:text='{esc(s['cap'])}':fontsize={s.get('capSize', 64)}:fontcolor=white:x=(w-tw)/2:y={wy + wh + 44}:"
                       f"enable='between(t,{a:.3f},{b:.3f})'")
     chain = (','.join(dt) + ',') if dt else ''
     fc.append(f"[{cur}]{chain}fade=t=out:st={total - .4:.3f}:d=0.4,format=yuv420p[vout]")
@@ -124,7 +128,8 @@ def build(spec, out, preview=False):
         amix.append(f'[s{k}]')
         k += 1
     mixed = f"{''.join(amix)}amix=inputs={len(amix)}:normalize=0:duration=first," if len(amix) > 1 else amix[0]
-    fc.append(f"{mixed}afade=t=out:st={total - .4:.3f}:d=0.4,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[aout]")
+    norm = 'anull' if spec.get('mute') else 'loudnorm=I=-14:TP=-1.5:LRA=11'
+    fc.append(f"{mixed}afade=t=out:st={total - .4:.3f}:d=0.4,{norm},aresample=48000[aout]")
     open(out + '.filter.txt', 'w').write(';\n'.join(fc))
     run(['ffmpeg', '-v', 'error', '-y'] + ins + ['-filter_complex_script', out + '.filter.txt', '-map', '[vout]', '-map', '[aout]',
          '-t', f"{total:.3f}", '-c:v', 'libx264', '-preset', 'veryfast' if preview else 'slow', '-crf', '22' if preview else '17',

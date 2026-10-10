@@ -6,7 +6,7 @@
   "h": 211,
   "color": "#ffffff",
   "text": "#000000",
-  "size": 66
+  "size": 84
  },
  "window": {
   "y": 477,
@@ -14,17 +14,12 @@
  },
  "sfx": {
   "boom": {
-   "file": "/mnt/project-files/sfx/drive/051_둥(큰북소리).wav",
-   "peak": 0.026,
-   "gain": -3,
-   "filter": "atrim=0:1.6,highpass=f=45,equalizer=f=250:t=q:w=1:g=3,afade=t=out:st=0.7:d=0.9"
-  },
-  "ding": {
-   "file": "/mnt/project-files/sfx/drive/015_띠링.mp3",
-   "peak": 0.0,
-   "gain": -9
+   "file": "/mnt/project-files/sfx/user/sub_hit_warm.wav",
+   "peak": 0.032,
+   "gain": -4
   }
  },
+ "mute": true,
  "src": {
   "pc": "/home/user/rs_work/src/yt/Y7xBTvYgoIY.mp4"
  },
@@ -34,196 +29,173 @@
  "titles": [
   {
    "from": 0,
-   "text": "*At the 1999 Olympia press conference, Nasser El Sonbaty walked in like this* 🥶"
+   "text": "they dressed like a cartel 🗿"
   },
   {
-   "from": 3,
-   "text": "*Markus Ruhl's suit was fighting for its life* 💀"
-  },
-  {
-   "from": 5,
-   "text": "*Shawn Ray showed up with shades on his head* 😎"
-  },
-  {
-   "from": 7,
-   "text": "*Flex Wheeler went all black* 🖤"
-  },
-  {
-   "from": 9,
-   "text": "Then Ronnie Coleman walked in 👑"
+   "from": 8,
+   "text": "no one's touching this lineup ☠️"
   }
  ],
  "shots": [
   {
    "src": "pc",
    "in": 53.0,
-   "out": 57.0,
+   "out": 56.2,
    "cx": 0.58,
-   "cy": 0.4,
-   "zoom": 1.2,
+   "cy": 0.42,
+   "zoom": 1.25,
+   "kb": 0.08,
    "hits": [
     {
      "t": 0.3,
-     "zoom": 1.08,
+     "zoom": 1.1,
      "amount": 0.5,
-     "strong": false
+     "boom": -4
     }
-   ]
+   ],
+   "cap": "1. Nasser El Sonbaty",
+   "capIn": 0.1,
+   "capOut": 5.6,
+   "tr": "fade",
+   "td": 0.15
   },
   {
    "src": "pc",
    "in": 72.0,
-   "out": 74.5,
+   "out": 74.6,
    "cx": 0.5,
-   "cy": 0.42,
-   "zoom": 1.2
-  },
-  {
-   "src": "pc",
-   "in": 513.0,
-   "out": 516.0,
-   "cx": 0.55,
-   "cy": 0.4,
-   "zoom": 1.2,
-   "hits": [
-    {
-     "t": 0.3,
-     "zoom": 1.04,
-     "amount": 0.35,
-     "boom": -9
-    }
-   ]
+   "cy": 0.41,
+   "zoom": 1.32,
+   "kb": -0.1,
+   "tr": "fade",
+   "td": 0.15
   },
   {
    "src": "pc",
    "in": 185.6,
-   "out": 186.9,
+   "out": 187.0,
    "cx": [
     0.5,
     0.6
    ],
-   "cy": 0.4,
+   "cy": 0.42,
    "zoom": 1.2,
-   "hits": [
-    {
-     "t": 0.3,
-     "zoom": 1.06,
-     "amount": 0.5,
-     "strong": false
-    }
-   ]
+   "kb": 0.06,
+   "cap": "2. Markus Ruhl",
+   "capIn": 0.1,
+   "capOut": 2.95,
+   "tr": "fade",
+   "td": 0.15
   },
   {
    "src": "pc",
    "in": 88.1,
-   "out": 89.6,
+   "out": 89.8,
    "cx": 0.55,
-   "cy": 0.42,
-   "zoom": 1.2
+   "cy": 0.41,
+   "zoom": 1.32,
+   "kb": -0.08,
+   "tr": "fade",
+   "td": 0.15
   },
   {
    "src": "pc",
    "in": 112.5,
-   "out": 116.5,
-   "cx": 0.47,
-   "cy": 0.4,
+   "out": 115.5,
+   "cx": [
+    0.44,
+    0.5
+   ],
+   "cy": 0.42,
    "zoom": 1.2,
-   "hits": [
-    {
-     "t": 0.3,
-     "zoom": 1.08,
-     "amount": 0.5,
-     "strong": false
-    }
-   ]
+   "kb": 0.0,
+   "cap": "3. Shawn Ray",
+   "capIn": 0.1,
+   "capOut": 5.45,
+   "tr": "fade",
+   "td": 0.15
   },
   {
    "src": "pc",
    "in": 126.0,
-   "out": 129.5,
+   "out": 128.6,
    "cx": 0.4,
    "cy": 0.42,
    "zoom": 1.2,
-   "overlays": [
-    {
-     "png": "/home/user/rs_work/e01/arrow_shades.png",
-     "in": 0.6,
-     "out": 2.6,
-     "sfx": "ding"
-    }
-   ]
+   "kb": 0.1,
+   "tr": "fade",
+   "td": 0.15
   },
   {
    "src": "pc",
    "in": 95.0,
-   "out": 97.5,
+   "out": 97.6,
    "cx": 0.5,
-   "cy": 0.4,
-   "zoom": 1.2,
-   "hits": [
-    {
-     "t": 0.3,
-     "zoom": 1.06,
-     "amount": 0.5,
-     "strong": false
-    }
-   ]
+   "cy": 0.41,
+   "zoom": 1.32,
+   "kb": -0.08,
+   "cap": "4. Flex Wheeler",
+   "capIn": 0.1,
+   "capOut": 5.15,
+   "tr": "fade",
+   "td": 0.15
   },
   {
    "src": "pc",
-   "in": 163.0,
-   "out": 167.0,
+   "in": 163.5,
+   "out": 166.2,
    "cx": 0.5,
-   "cy": 0.4,
-   "zoom": 1.2
+   "cy": 0.42,
+   "zoom": 1.2,
+   "kb": 0.1,
+   "tr": "fade",
+   "td": 0.15
   },
   {
    "src": "pc",
    "in": 475.1,
-   "out": 476.4,
+   "out": 476.5,
    "cx": 0.5,
-   "cy": 0.4,
+   "cy": 0.42,
    "zoom": 1.2,
+   "kb": 0.04,
    "hits": [
     {
-     "t": 0.3,
+     "t": 0.25,
      "zoom": 1.08,
-     "amount": 0.5,
-     "strong": true
+     "amount": 0.45
     }
-   ]
+   ],
+   "cap": "5. Ronnie Coleman",
+   "capIn": 0.1,
+   "capOut": 99,
+   "tr": "fade",
+   "td": 0.15
   },
   {
    "src": "pc",
    "in": 361.0,
-   "out": 365.0,
-   "cx": 0.44,
-   "cy": 0.4,
-   "zoom": 1.2
-  },
-  {
-   "src": "pc",
-   "in": 192.5,
-   "out": 196.5,
-   "cx": 0.5,
-   "cy": 0.4,
+   "out": 364.6,
+   "cx": [
+    0.4,
+    0.46
+   ],
+   "cy": 0.42,
    "zoom": 1.2,
-   "hits": [
-    {
-     "t": 0.5,
-     "zoom": 1.04,
-     "amount": 0.35,
-     "boom": -9
-    }
-   ]
+   "kb": 0.0,
+   "tr": "fade",
+   "td": 0.15
   },
   {
    "src": "pc",
    "in": 386.0,
-   "out": 392.0,
+   "out": 389.5,
    "cx": 0.45,
-   "cy": 0.4,
-   "zoom": 1.2
+   "cy": 0.42,
+   "zoom": 1.25,
+   "kb": 0.12,
+   "tr": "fade",
+   "td": 0.15
   }
  ]
 }
