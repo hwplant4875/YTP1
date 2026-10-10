@@ -43,25 +43,35 @@
    "kb": 0.08,
    "hits": [
     {
-     "t": 0.3,
+     "t": 0.7,
      "zoom": 1.1,
-     "amount": 0.45,
+     "amount": 0.4,
      "boom": -4
     }
    ],
-   "capIn": 0,
-   "capOut": 5.799999999999997,
    "tr": "cut",
    "zout": 1.22,
-   "capParts": [
-    [
-     "1. ",
-     "#FFFFFF"
-    ],
-    [
-     "Nasser El Sonbaty",
-     "#FFD60A"
-    ]
+   "caps": [
+    {
+     "parts": [
+      [
+       "1st",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Nasser El Sonbaty",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 5.799999999999997
+    }
    ]
   },
   {
@@ -87,27 +97,37 @@
    "cy": 0.42,
    "zoom": 1.2,
    "kb": 0.06,
-   "capIn": 0,
-   "capOut": 3.1000000000000085,
    "tr": "cut",
    "zout": 1.22,
    "zin": 1.22,
-   "capParts": [
-    [
-     "2. ",
-     "#FFFFFF"
-    ],
-    [
-     "Markus Ruhl",
-     "#FFD60A"
-    ]
-   ],
    "hits": [
     {
-     "t": 0.02,
-     "zoom": 1.0,
-     "amount": 0.35,
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
      "boom": -4
+    }
+   ],
+   "caps": [
+    {
+     "parts": [
+      [
+       "2nd",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Markus Ruhl",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 3.1000000000000085
     }
    ]
   },
@@ -134,27 +154,37 @@
    "cy": 0.42,
    "zoom": 1.2,
    "kb": 0.0,
-   "capIn": 0,
-   "capOut": 5.599999999999994,
    "tr": "cut",
    "zout": 1.22,
    "zin": 1.22,
-   "capParts": [
-    [
-     "3. ",
-     "#FFFFFF"
-    ],
-    [
-     "Shawn Ray",
-     "#FFD60A"
-    ]
-   ],
    "hits": [
     {
-     "t": 0.02,
-     "zoom": 1.0,
-     "amount": 0.35,
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
      "boom": -4
+    }
+   ],
+   "caps": [
+    {
+     "parts": [
+      [
+       "3rd",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Shawn Ray",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 5.599999999999994
     }
    ]
   },
@@ -178,27 +208,37 @@
    "cy": 0.41,
    "zoom": 1.32,
    "kb": -0.08,
-   "capIn": 0,
-   "capOut": 5.299999999999983,
    "tr": "cut",
    "zout": 1.22,
    "zin": 1.22,
-   "capParts": [
-    [
-     "4. ",
-     "#FFFFFF"
-    ],
-    [
-     "Flex Wheeler",
-     "#FFD60A"
-    ]
-   ],
    "hits": [
     {
-     "t": 0.02,
-     "zoom": 1.0,
-     "amount": 0.35,
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
      "boom": -4
+    }
+   ],
+   "caps": [
+    {
+     "parts": [
+      [
+       "4th",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Flex Wheeler",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 5.299999999999983
     }
    ]
   },
@@ -224,26 +264,36 @@
    "kb": 0.04,
    "hits": [
     {
-     "t": 0.02,
-     "zoom": 1.0,
-     "amount": 0.35,
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
      "boom": -4
     }
    ],
-   "capIn": 0,
-   "capOut": 99,
    "tr": "cut",
    "zout": 1.22,
    "zin": 1.22,
-   "capParts": [
-    [
-     "5. ",
-     "#FFFFFF"
-    ],
-    [
-     "Ronnie Coleman",
-     "#FF3B30"
-    ]
+   "caps": [
+    {
+     "parts": [
+      [
+       "5th",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Ronnie Coleman",
+       "#FF3B30"
+      ]
+     ],
+     "in": 0.7,
+     "out": 99
+    }
    ]
   },
   {

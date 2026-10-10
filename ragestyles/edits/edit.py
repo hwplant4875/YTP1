@@ -115,13 +115,16 @@ def build(spec, out, preview=False):
             if h.get('boom', 0) is not None and not (spec.get('mute') and 'boom' not in h):
                 sfx_events.append(('boom', starts[i] + h['t'], h.get('boom')))
     for i, s in enumerate(shots):
+        caps = s.get('caps', [])  # [{"parts": [[text, colour], ...], "in": s, "out": s}] relative to shot start
         if s.get('capParts'):
-            a = starts[i] + s.get('capIn', 0)
-            b = min(starts[i] + s.get('capOut', durs[i]), total - .1)
-            png = f"{work}/cap{i}.png"
-            title_png.caption(png, s['capParts'], spec.get('capFont', font), s.get('capSize', 100))
+            caps = [{'parts': s['capParts'], 'in': s.get('capIn', 0), 'out': s.get('capOut', durs[i])}] + caps
+        for j, cp in enumerate(caps):
+            a = starts[i] + cp.get('in', 0)
+            b = min(starts[i] + cp.get('out', durs[i]), total - .1)
+            png = f"{work}/cap{i}_{j}.png"
+            title_png.caption(png, cp['parts'], spec.get('capFont', font), s.get('capSize', 100))
             ins += ['-loop', '1', '-framerate', '30', '-t', f'{total:.3f}', '-i', png]
-            fc.append(f"[{cur}][{k}:v]overlay=0:{wy + wh + s.get('capGap', 30)}:enable='between(t,{a:.3f},{b:.3f})'[c{k}]")
+            fc.append(f"[{cur}][{k}:v]overlay=0:{wy + wh + s.get('capGap', 30)}:enable='between(t,{a:.3f},{b - 0.001:.3f})'[c{k}]")
             cur, k = f'c{k}', k + 1
     dt = []
     for i, s in enumerate(shots):
