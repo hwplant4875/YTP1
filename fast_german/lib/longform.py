@@ -151,11 +151,13 @@ def slide(theme, top_left=None, top_right=None, icon=None, word=None, article=No
 
 def _tts_piece(item):
     _, text, opt = item
+    if opt.get("engine") == "google":
+        return C.gtts(text, opt.get("lang", "de-DE"), opt.get("rate", 0.8))
     mp3, _ = C.tts(text, **opt)
     return mp3
 
 
-def build(slides, out_path, fps=10, bed=None, workers=4, crf=24, lufs=-14, music=None, music_vol=0.18):
+def build(slides, out_path, fps=10, bed=None, workers=4, crf=24, lufs=-14, music=None, music_vol=0.18, voice_fx=None):
     """slides: list of (PIL image or callable, [audio items]). bed: optional ffmpeg lavfi audio bed source.
     music: optional list of mp3s played in order and looped, ducked under the voice."""
     tmp = tempfile.mkdtemp(dir=os.environ.get("FG_TMP"))
@@ -201,7 +203,7 @@ def build(slides, out_path, fps=10, bed=None, workers=4, crf=24, lufs=-14, music
     # 3. Mix voice with optional bed, normalize
     wav = os.path.join(tmp, "mix.m4a")
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "s16le", "-ar", str(SR), "-ac", "1", "-i", audio_path]
-    f = ["[0:a]aformat=channel_layouts=stereo,asplit=2[v][key]"]
+    f = ["[0:a]" + (voice_fx + "," if voice_fx else "") + "aformat=channel_layouts=stereo,asplit=2[v][key]"]
     mix = ["[v]"]
     if bed:
         cmd += ["-f", "lavfi", "-t", f"{total:.3f}", "-i", bed]

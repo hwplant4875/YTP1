@@ -151,3 +151,36 @@ def music(name, prompt, seconds=60):
 KPOP_BED = ("Light, bright K-pop style instrumental background music for a cute language-learning video. "
             "Bouncy synth plucks, soft claps, warm bass, catchy but simple, mid tempo around 105 bpm, no vocals, "
             "no drops, steady energy, loop-friendly, sits quietly under a voice-over.")
+
+
+GOOGLE_VOICE = "Chirp3-HD-Leda"  # sleep videos (user's pick 2026-10-10); free tier of Google Cloud TTS
+# Warm, soft "sleep" treatment for the Google voice: fewer highs and harshness, gentle compression, tiny room.
+SLEEP_VOICE_FX = ("highpass=f=70,lowshelf=g=2:f=180,equalizer=f=3500:t=q:w=1.2:g=-4,highshelf=g=-6:f=7000,"
+                  "lowpass=f=9000,acompressor=threshold=-24dB:ratio=2.5:attack=20:release=250,aecho=0.8:0.5:40:0.12")
+
+
+def gtts(text, lang="de-DE", rate=0.8, voice=GOOGLE_VOICE):
+    """Google Cloud TTS (key in GOOGLE_TTS_API_KEY), cached wav path. Isolated words keep their trailing period
+    so they end on a falling tone."""
+    h = hashlib.sha1(json.dumps(["google", voice, lang, text, rate]).encode()).hexdigest()[:16]
+    out = os.path.join(CACHE, "gtts", h + ".wav")
+    if not os.path.exists(out):
+        import time
+        import urllib.error
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        body = {"input": {"text": text}, "voice": {"languageCode": lang, "name": f"{lang}-{voice}"},
+                "audioConfig": {"audioEncoding": "LINEAR16", "sampleRateHertz": 24000, "speakingRate": rate}}
+        for attempt in range(8):
+            try:
+                req = urllib.request.Request(
+                    "https://texttospeech.googleapis.com/v1/text:synthesize?key=" + os.environ["GOOGLE_TTS_API_KEY"],
+                    data=json.dumps(body).encode(), headers={"Content-Type": "application/json"})
+                d = json.load(urllib.request.urlopen(req, timeout=60))
+                break
+            except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
+                if attempt == 7 or getattr(e, "code", 429) not in (429, 500, 503):
+                    raise
+                time.sleep(2 ** attempt)
+        open(out + ".tmp", "wb").write(base64.b64decode(d["audioContent"]))
+        os.replace(out + ".tmp", out)
+    return out
