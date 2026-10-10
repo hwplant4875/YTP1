@@ -1,0 +1,12 @@
+{"voice": "bfGb7JTLUnZebZRiFYyq", "model": "eleven_multilingual_v2",
+ "settings": {"stability": 0.4, "similarity_boost": 0.82, "style": 0.45, "use_speaker_boost": true},
+ "lines": {
+  "l1": "Nearly three hundred pounds of muscle... doing the splits.",
+  "l2": "Mister Olympia, two thousand three.",
+  "l3": "Most giants just stand there and flex.",
+  "l4": "Ronnie Coleman? He danced.",
+  "l5": "He strutted... he spun...",
+  "l6": "then dropped to the floor like a gymnast.",
+  "l7": "Title number six.",
+  "l8": "Name one bigger man who moves like this."
+ }}
