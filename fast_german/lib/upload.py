@@ -1,4 +1,4 @@
-"""Upload videos to the CC channel (Fast German) with scheduled publishing. Records results in uploads.json."""
+"""Upload videos to the Fast German channel (TT token since 2026-10-10) with scheduled publishing. Records results in uploads.json."""
 import json
 import os
 import sys
@@ -11,7 +11,7 @@ LOG = os.path.join(ROOT, "uploads.json")
 
 def token():
     d = urllib.parse.urlencode({"client_id": os.environ["YT_CLIENT_ID"], "client_secret": os.environ["YT_CLIENT_SECRET"],
-                                "refresh_token": os.environ["YT_REFRESH_TOKEN_CC"], "grant_type": "refresh_token"}).encode()
+                                "refresh_token": os.environ[os.environ.get("FG_TOKEN_VAR", "YT_REFRESH_TOKEN_TT")], "grant_type": "refresh_token"}).encode()
     return json.load(urllib.request.urlopen("https://oauth2.googleapis.com/token", d))["access_token"]
 
 
