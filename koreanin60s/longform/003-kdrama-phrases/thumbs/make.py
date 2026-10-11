@@ -18,17 +18,19 @@ T = {
 <img class=st src="{STK}/popcorn_tv.png" style="left:820px;top:200px;width:440px">""",
 "1b": f"""<div class=bg></div><div class=grid></div>
 <div class=a style="left:56px;top:40px;font-size:200px;font-weight:700;letter-spacing:-6px">50</div>
-<div class=a style="left:400px;top:50px;width:500px;height:190px;background:#F2C14E;border-radius:50px;display:flex;align-items:center;justify-content:center;font-size:110px;font-weight:700;color:#3A3134;box-shadow:0 12px 0 #D9A631">장난해?!</div>
+<div class=a style="left:400px;top:50px;width:500px;height:190px;background:#F2C14E;border-radius:50px;display:flex;align-items:center;justify-content:center;font-size:110px;font-weight:700;color:#3A3134;box-shadow:0 12px 0 #D9A631">사랑해 💗</div>
 <div class=a style="left:470px;top:236px;width:0;height:0;border-left:34px solid transparent;border-right:34px solid transparent;border-top:50px solid #D9A631"></div>
 <div class=a style="left:52px;top:270px;font-size:150px;font-weight:700;letter-spacing:-4px;color:#A48AEB">PHRASES</div>
 <div class=a style="left:62px;top:480px;font-size:58px;font-weight:700;color:#5E514C">from every K-Drama 🇰🇷</div>
-<img class=st src="{STK}/steam_angry.png" style="left:900px;top:330px;width:350px">""",
+<img class=st src="{STK}/finger_heart.png" style="left:900px;top:330px;width:350px">""",
 "1c": f"""<div class=bg></div><div class=grid></div>
-<div class="a card" style="left:50px;top:150px;width:470px;height:300px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:60px;font-weight:700;line-height:1.15;color:#5E514C">Are you<br>kidding me?</div>
-<div class=a style="left:530px;top:230px;font-size:120px;font-weight:700;color:#3A3134">→</div>
-<div class="a card" style="left:670px;top:110px;width:560px;height:380px;display:flex;align-items:center;justify-content:center;font-size:140px;font-weight:700;color:#E2A21C;letter-spacing:-4px">장난해?</div>
-<div class=a style="left:60px;top:560px;font-size:64px;font-weight:700">You already know these 😳</div>
-<img class=st src="{STK}/mind_blown.png" style="left:1010px;top:440px;width:270px">""",
+<div class=a style="left:50px;top:40px;transform:rotate(-5deg);background:#F28BA8;border-radius:40px;padding:22px 40px 18px;text-align:center;box-shadow:0 10px 0 #D86A8A,0 18px 30px rgba(80,50,40,.15)"><div style="font-size:110px;font-weight:700;color:#fff;line-height:1.05">사랑해</div><div style="font-size:34px;font-weight:700;color:rgba(255,255,255,.9)">I love you</div></div>
+<div class=a style="left:470px;top:30px;transform:rotate(4deg);background:#F2C14E;border-radius:40px;padding:22px 40px 18px;text-align:center;box-shadow:0 10px 0 #D9A631,0 18px 30px rgba(80,50,40,.15)"><div style="font-size:92px;font-weight:700;color:#fff;line-height:1.05">대박!</div><div style="font-size:34px;font-weight:700;color:rgba(255,255,255,.9)">Wow!</div></div>
+<div class=a style="left:870px;top:60px;transform:rotate(-3deg);background:#A48AEB;border-radius:40px;padding:22px 40px 18px;text-align:center;box-shadow:0 10px 0 #8467D0,0 18px 30px rgba(80,50,40,.15)"><div style="font-size:84px;font-weight:700;color:#fff;line-height:1.05">보고 싶어</div><div style="font-size:34px;font-weight:700;color:rgba(255,255,255,.9)">I miss you</div></div>
+<div class=a style="left:60px;top:330px;transform:rotate(3deg);background:#5CC4A8;border-radius:40px;padding:22px 40px 18px;text-align:center;box-shadow:0 10px 0 #3EA388,0 18px 30px rgba(80,50,40,.15)"><div style="font-size:88px;font-weight:700;color:#fff;line-height:1.05">괜찮아?</div><div style="font-size:34px;font-weight:700;color:rgba(255,255,255,.9)">Are you okay?</div></div>
+<div class=a style="left:890px;top:330px;transform:rotate(-4deg);background:#7FA9E8;border-radius:40px;padding:22px 40px 18px;text-align:center;box-shadow:0 10px 0 #5C88CC,0 18px 30px rgba(80,50,40,.15)"><div style="font-size:96px;font-weight:700;color:#fff;line-height:1.05">가지 마</div><div style="font-size:34px;font-weight:700;color:rgba(255,255,255,.9)">Don't go</div></div>
+<div class=a style="left:0;width:1280px;top:585px;text-align:center;font-size:76px;font-weight:700;color:#3A3134">You already know these 😳</div>
+<img class=st src="{STK}/popcorn_tv.png" style="left:470px;top:225px;width:340px">""",
 }
 out = sys.argv[1]; os.makedirs(out, exist_ok=True)
 for k, body in T.items():
