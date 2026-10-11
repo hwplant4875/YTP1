@@ -300,6 +300,18 @@ def draw_el(frame, built, el, local, appear, scene_len):
     frame.alpha_composite(im, (int(cx - im.width / 2), int(cy - im.height / 2 + dy)))
 
 
+_HEADERS = {}
+
+
+def header_im(text):
+    """Part title next to the top-left pretzel in long-form ("Part 1 · Saying hello")."""
+    if not text:
+        return None
+    if text not in _HEADERS:
+        _HEADERS[text] = text_im(text, en_font(58), WHITE)
+    return _HEADERS[text]
+
+
 def german_take(text, speed=1.0):
     """German clip with a falling ending: try a few stabilities, keep the first whose ending falls.
     Pitch is only measured, never edited (user rule 2026-10-10)."""
@@ -346,7 +358,8 @@ def render(spec_path, out_path):
                 t += C.duration(mp3) + SEG_GAP
             t += LINE_GAP - SEG_GAP
         t += sc.get("hold", 0)
-        timeline.append({"scene": sc, "start": start, "end": t, "shows": shows})
+        header = sc.get("header", timeline[-1]["header"] if timeline else None)
+        timeline.append({"scene": sc, "start": start, "end": t, "shows": shows, "header": header})
         t += sc.get("gap", SCENE_GAP)
     total = t + 0.4
     # audio
@@ -387,7 +400,7 @@ def render(spec_path, out_path):
         import road_loop as RL
         horiz = spec.get("road_dir") == "h"           # default: road runs down the screen, also in 16:9
         if horiz:
-            tex = np.ascontiguousarray(np.transpose(RL.strip(H, (W // RL.PERIOD + 1) * RL.PERIOD), (1, 0, 2)))
+            tex = np.ascontiguousarray(np.transpose(RL.strip(H, (W // RL.PERIOD + 1) * RL.PERIOD, tracks=False), (1, 0, 2)))
             loop_px = tex.shape[1] / (RL.SECS * FPS)
         else:
             tex = RL.strip(W, (H // RL.PERIOD + 1) * RL.PERIOD)
@@ -415,7 +428,13 @@ def render(spec_path, out_path):
             else:
                 fr = (np.roll(tex, int(fi * loop_px) % tex.shape[0], axis=0)[:H] * vig).astype(np.uint8)
             frame = Image.fromarray(fr).convert("RGBA")
-            frame.alpha_composite(badge, ((W - 150) // 2 - 28, 110 - 28))
+            if W > H:                                   # long-form: pretzel top-left with the part title beside it
+                frame.alpha_composite(badge, (60 - 28, 40 - 28))
+                hd = header_im(tl["header"])
+                if hd is not None:
+                    frame.alpha_composite(hd, (240, 115 - hd.height // 2))
+            else:
+                frame.alpha_composite(badge, ((W - 150) // 2 - 28, 110 - 28))
         else:
             frame = bg.copy()
         local = now - tl["start"]

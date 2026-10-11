@@ -9,7 +9,7 @@ FPS, SECS = 30, 16                     # 16 s loop, slow drift
 PERIOD = 480                           # dash 6 m + gap 12 m at 26.7 px/m
 
 
-def strip(width, length, seed=5):
+def strip(width, length, seed=5, tracks=True):
     """Asphalt strip `length` px along the road, wrapping seamlessly at both ends (road axis = rows)."""
     rng = np.random.default_rng(seed)
     n = rng.normal(0, 1, (length, width))
@@ -24,7 +24,7 @@ def strip(width, length, seed=5):
     # two faint tyre tracks per lane (slightly darker, smoother)
     x = np.arange(width)[None, :]
     c = width / 2
-    for off in (-0.36, -0.14, 0.14, 0.36):
+    for off in ((-0.36, -0.14, 0.14, 0.36) if tracks else ()):  # long-form: none (user saw them as 4 dark stripes)
         base -= 5 * np.exp(-((x - c - off * width) / (width * 0.035)) ** 2)
     rgb = np.stack([base, base + 1, base + 4], -1)
     # centre dashes

@@ -3,13 +3,14 @@
  "title": "German Greetings & Basic Phrases for Beginners",
  "landscape": true,
  "bg": "road",
+ "road_dir": "h",
  "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
  "scenes": [
   {
    "lines": [
     [
      {
-      "en": "Fifty German phrases. Ten minutes.",
+      "en": "Fifty German phrases in ten minutes.",
       "show": [
        "t1",
        "t2"
@@ -18,7 +19,7 @@
     ],
     [
      {
-      "en": "By the end, you can say hello, introduce yourself, survive when you don't understand, and say goodbye like a German."
+      "en": "By the end, you can say hello, introduce yourself, and get by when you don't understand."
      }
     ],
     [
@@ -80,6 +81,7 @@
     ]
    ],
    "hold": 0.6,
+   "header": "Part 1 \u00b7 Saying hello",
    "els": [
     {
      "id": "i",
@@ -155,7 +157,7 @@
      "size": 170,
      "max_w": 900,
      "x": 1370,
-     "y": 470
+     "y": 430
     },
     {
      "id": "e",
@@ -168,7 +170,7 @@
       0
      ],
      "x": 1370,
-     "y": 650
+     "y": 630
     },
     {
      "id": "tm",
@@ -232,7 +234,7 @@
      "size": 170,
      "max_w": 900,
      "x": 1370,
-     "y": 470
+     "y": 430
     },
     {
      "id": "e",
@@ -245,7 +247,7 @@
       0
      ],
      "x": 1370,
-     "y": 650
+     "y": 630
     },
     {
      "id": "tm",
@@ -309,7 +311,7 @@
      "size": 170,
      "max_w": 900,
      "x": 1370,
-     "y": 470
+     "y": 430
     },
     {
      "id": "e",
@@ -322,7 +324,7 @@
       0
      ],
      "x": 1370,
-     "y": 650
+     "y": 630
     },
     {
      "id": "tm",
@@ -362,28 +364,12 @@
     ],
     [
      {
-      "pause": 2.2,
+      "pause": 2.6,
       "show": [
-       "tm"
+       "tm",
+       "tip"
       ],
       "quiet": true
-     }
-    ],
-    [
-     {
-      "de": "Guten Tag",
-      "show": [
-       "tip"
-      ]
-     },
-     {
-      "en": "in shops,"
-     },
-     {
-      "de": "Hallo"
-     },
-     {
-      "en": "with friends."
      }
     ]
    ],
@@ -403,7 +389,7 @@
      "size": 170,
      "max_w": 900,
      "x": 1370,
-     "y": 470
+     "y": 430
     },
     {
      "id": "e",
@@ -416,13 +402,13 @@
       0
      ],
      "x": 1370,
-     "y": 650
+     "y": 630
     },
     {
      "id": "tm",
      "type": "timer",
      "s": 130,
-     "dur": 2.2,
+     "dur": 2.6,
      "x": 1370,
      "y": 830
     },
@@ -432,7 +418,7 @@
      "text": "Guten Tag in shops, Hallo with friends.",
      "size": 62,
      "x": 960,
-     "y": 960
+     "y": 975
     }
    ],
    "hold": 0.3
@@ -488,7 +474,7 @@
      "size": 170,
      "max_w": 900,
      "x": 1370,
-     "y": 470
+     "y": 430
     },
     {
      "id": "e",
@@ -501,7 +487,7 @@
       0
      ],
      "x": 1370,
-     "y": 650
+     "y": 630
     },
     {
      "id": "tm",
@@ -541,25 +527,12 @@
     ],
     [
      {
-      "pause": 2.2,
+      "pause": 2.6,
       "show": [
-       "tm"
+       "tm",
+       "tip"
       ],
       "quiet": true
-     }
-    ],
-    [
-     {
-      "en": "Up north, people say",
-      "show": [
-       "tip"
-      ]
-     },
-     {
-      "de": "Moin"
-     },
-     {
-      "en": "all day long."
      }
     ]
    ],
@@ -579,7 +552,7 @@
      "size": 170,
      "max_w": 900,
      "x": 1370,
-     "y": 470
+     "y": 430
     },
     {
      "id": "e",
@@ -592,23 +565,23 @@
       0
      ],
      "x": 1370,
-     "y": 650
+     "y": 630
     },
     {
      "id": "tm",
      "type": "timer",
      "s": 130,
-     "dur": 2.2,
+     "dur": 2.6,
      "x": 1370,
      "y": 830
     },
     {
      "id": "tip",
      "type": "text",
-     "text": "Up north, people say Moin all day long.",
+     "text": "In the north, people say Moin all day long.",
      "size": 62,
      "x": 960,
-     "y": 960
+     "y": 975
     }
    ],
    "hold": 0.3
@@ -640,22 +613,12 @@
     ],
     [
      {
-      "pause": 2.2,
+      "pause": 2.6,
       "show": [
-       "tm"
+       "tm",
+       "tip"
       ],
       "quiet": true
-     }
-    ],
-    [
-     {
-      "de": "Servus",
-      "show": [
-       "tip"
-      ]
-     },
-     {
-      "en": "means hi and bye."
      }
     ]
    ],
@@ -675,7 +638,7 @@
      "size": 170,
      "max_w": 900,
      "x": 1370,
-     "y": 470
+     "y": 430
     },
     {
      "id": "e",
@@ -688,23 +651,23 @@
       0
      ],
      "x": 1370,
-     "y": 650
+     "y": 630
     },
     {
      "id": "tm",
      "type": "timer",
      "s": 130,
-     "dur": 2.2,
+     "dur": 2.6,
      "x": 1370,
      "y": 830
     },
     {
      "id": "tip",
      "type": "text",
-     "text": "Servus means hi and bye.",
+     "text": "Servus means hi AND bye.",
      "size": 62,
      "x": 960,
-     "y": 960
+     "y": 975
     }
    ],
    "hold": 0.3
@@ -760,7 +723,7 @@
      "size": 170,
      "max_w": 900,
      "x": 1370,
-     "y": 470
+     "y": 430
     },
     {
      "id": "e",
@@ -773,7 +736,7 @@
       0
      ],
      "x": 1370,
-     "y": 650
+     "y": 630
     },
     {
      "id": "tm",
