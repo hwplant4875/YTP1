@@ -15,7 +15,7 @@ def tts(text):
     """One request per utterance: English with the Korean words in Hangul inline, one speaker (Jennie).
     Returns (wav, duration, alignment) where alignment gives per-character start/end seconds."""
     h = hashlib.sha1(f"{VOICE}|{MODEL}|speed1|{text}".encode()).hexdigest()[:16]
-    js = f"{CACHE}/{h}.json"; wav = f"{CACHE}/{h}.wav"
+    js = f"{CACHE}/{h}.json"; wav = f"{CACHE}/{h}_fade.wav"
     if not os.path.exists(js):
         body = {"text": text, "model_id": MODEL, "voice_settings": {"stability": 0.5, "similarity_boost": 0.8, "style": 0.4, "use_speaker_boost": True}}
         out = subprocess.run(["curl", "-s", "-X", "POST", f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE}/with-timestamps?output_format=mp3_44100_192",
@@ -27,7 +27,10 @@ def tts(text):
     r = json.load(open(js))
     if not os.path.exists(wav):
         open(f"{CACHE}/{h}.mp3", "wb").write(base64.b64decode(r["audio_base64"]))
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{CACHE}/{h}.mp3", "-ar", str(SR), "-ac", "2", wav], check=True)
+        # ElevenLabs clips can stop mid-decay; fade the last 150 ms so every line rings out instead of cutting off (user, 2026-10-11)
+        d0 = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f"{CACHE}/{h}.mp3"]))
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{CACHE}/{h}.mp3", "-af", f"afade=t=out:st={max(0, d0 - .15):.3f}:d=0.15",
+                        "-ar", str(SR), "-ac", "2", wav], check=True)
     d = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", wav]))
     return wav, d, r["alignment"]
 

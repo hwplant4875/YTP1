@@ -37,7 +37,9 @@ def say(text):
 os.makedirs("vo", exist_ok=True); groups = []
 for g, text, parts in G:
     r = say(text); mp3 = f"vo/{g}.mp3"; open(mp3, "wb").write(base64.b64decode(r["audio_base64"]))
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", mp3, "-ar", "48000", "-ac", "2", f"vo/{g}.wav"], check=True)
+    d0 = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", mp3]))
+    # fade the last 150 ms so lines ring out instead of cutting off (user, 2026-10-11)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", mp3, "-af", f"afade=t=out:st={max(0, d0 - 0.15):.3f}:d=0.15", "-ar", "48000", "-ac", "2", f"vo/{g}.wav"], check=True)
     a = r["alignment"]; chars = "".join(a["characters"]); st, en = a["character_start_times_seconds"], a["character_end_times_seconds"]
     assert chars == text, (chars, text)
     keys, cur, spans = KEYS.get(g, [g]), 0, []
