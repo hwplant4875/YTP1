@@ -16,7 +16,7 @@ def place(buf, clip, t, gain=1.0):
 def db(x): return 10 ** (x / 20)
 
 def write(buf, out):
-    peak = np.abs(buf).max(); buf = buf / max(1.0, peak / 0.95)
+    peak = np.abs(buf).max(); print('peak before limit', round(float(peak), 2)); buf = buf / max(1.0, peak / 0.95)
     with wave.open(out, 'wb') as w:
         w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
         w.writeframes((np.clip(buf, -1, 1) * 32767).astype(np.int16).tobytes())
@@ -51,66 +51,77 @@ if what == 'map':
         place(buf, ding, tt, db(-22))
     write(buf, f'{C}/out/map_audio.wav')
 elif what == 'marble':
-    # usage: mix.py marble [candidate 1-8]  (one-shots are cut from the chosen marble_sfx clip)
-    import glob
+    # usage: mix.py marble [boom|stone]   v3: low thumps only (user: quiet Vine Boom feel; bright clicks are grating)
     R = json.load(open(f'{C}/marble/race.json'))
-    LEAD = -0.8; D = 43.0; fps = R['fps']
-    arg = sys.argv[2] if len(sys.argv) > 2 else '0'
-    scheme = None if arg.isdigit() else arg  # a marble_sounds.py scheme name, e.g. A_marimba_mountain_king
-    cand = 0 if scheme else int(arg)          # 0 = the original synthesized glass click, 1-8 = ElevenLabs clips
-    shots = []
-    if cand:
-      src = load(sorted(glob.glob(f'{C}/audio/marble_sfx/{cand:02d}_*.mp3'))[0])
-      mono = np.abs(src).mean(1); hop = 240
-      env = np.array([mono[i:i + hop].max() for i in range(0, len(mono), hop)])
-      lastk = -99
-      for k in range(1, len(env)):
-          if env[k] > 0.12 * env.max() and env[k] > 2.2 * max(env[k - 1], 1e-4) and k - lastk > 20:
-              lastk = k; a = max(0, k * hop - 120); c = src[a:a + int(0.16 * SR)].copy()
-              if len(c) < int(0.16 * SR): continue
-              fo = int(0.05 * SR); c[-fo:] *= np.linspace(1, 0, fo)[:, None] ** 2
-              c /= np.abs(c).max() + 1e-6; shots.append(c)
-    print('one-shots', len(shots))
-    buf = music(f'{C}/audio/Run_Amok.mp3', D, ss=0, fin=0.05, fout=2.5, gain_db=-17)
-    if scheme:
-        sys.path.insert(0, f'{C}/audio'); import marble_sounds as MS
-        if not MS.SCHEMES[scheme][4]: buf[:] = 0  # melody schemes are the music
-        buf += np.repeat(MS.render(scheme, D, LEAD)[:len(buf)], 1, 0)
-    rng = np.random.default_rng(3)
-    F = np.array(R['frames'])
-    v = np.diff(F[:, :, :2], axis=0) * fps
+    style = sys.argv[2] if len(sys.argv) > 2 else 'boom'
+    fps = R['fps']
+    # timeline, same as marble/scene.js TIMING / timeline()
+    LEAD, PRE, POST, RATE, END = -0.8, 1.0, 0.35, 0.3, 2.8
+    tw = min(r['finish'] for r in R['res']); last_f = max(r['finish'] for r in R['res'])
+    A, B = tw - PRE, tw + POST; tA = A + LEAD; span = (B - A) / RATE
+    vt = lambda s: s + LEAD if s < A else (tA + (s - A) / RATE if s < B else tA + span + (s - B))
+    D = vt(last_f) + END
+    buf = music(f'{C}/audio/Run_Amok.mp3', D, ss=1.68, fin=0.02, fout=2.5, gain_db=-1)
+    import os
+    if os.environ.get('SOLO') == 'music': HITS = 0
+    else: HITS = 1
+    if os.environ.get('SOLO') == 'hits': buf[:] = 0
+    tt = np.arange(len(buf)) / SR
+    duck = 1 - 0.55 * np.clip((tt - tA + 0.3) / 0.4, 0, 1) * np.clip((tA + span + 0.3 - tt) / 0.4, 0, 1)
+    buf *= duck[:, None]
+    def lowpass(x, fc):
+        a = np.exp(-2 * np.pi * fc / SR); y = np.zeros_like(x); acc = 0.0
+        for n in range(len(x)): acc = (1 - a) * x[n] + a * acc; y[n] = acc
+        return y
+    def thump(f0, dur, rng):
+        n = int(dur * SR); t = np.arange(n) / SR
+        fr = f0 * (1 + 1.3 * np.exp(-t / 0.035)); ph = 2 * np.pi * np.cumsum(fr) / SR
+        body = np.tanh(1.8 * np.sin(ph)) * np.minimum(1, t / 0.004) * np.exp(-t / (dur / 3.2))
+        click = lowpass(rng.normal(0, 1, n) * np.exp(-t / 0.004), 900) * 0.6
+        return (body + click).astype(np.float32)
+    def knock(f0, rng):  # dull stone tok: short low-mid body + muffled contact noise
+        n = int(0.22 * SR); t = np.arange(n) / SR
+        body = (np.sin(2 * np.pi * f0 * t) + 0.45 * np.sin(2 * np.pi * f0 * 2.31 * t) * np.exp(-t / 0.02)) * np.minimum(1, t / 0.0015) * np.exp(-t / 0.045)
+        noise = lowpass(rng.normal(0, 1, n) * np.exp(-t / 0.006), 1400) * 0.9
+        return (body + noise).astype(np.float32)
+    rng = np.random.default_rng(11)
+    HIT_DB = {'boom': -19, 'stone': -11}
+    bank = {}
+    def voice(r, slow):
+        key = (round(r, 2), slow)
+        if key not in bank:
+            if style == 'boom': bank[key] = [thump((62 - 26 * min(1, (r - 0.2) / 0.7)) * (0.8 if slow else 1), 0.9 if slow else 0.6, rng) for _ in range(3)]
+            else: bank[key] = [knock((330 - 160 * min(1, (r - 0.2) / 0.7)) * (0.75 if slow else 1) * rng.uniform(0.95, 1.05), rng) for _ in range(3)]
+        return bank[key][rng.integers(3)]
+    F = np.array(R['frames']); v = np.diff(F[:, :, :2], axis=0) * fps
     a = np.linalg.norm(np.diff(v, axis=0), axis=2)
-    last = np.full(F.shape[1], -1.0)
-    def resample(c, rate):
-        n = int(len(c) / rate); x = np.arange(n) * rate
-        return np.stack([np.interp(x, np.arange(len(c)), c[:, ch]) for ch in (0, 1)], 1).astype(np.float32)
-    for k in range(a.shape[0] if not scheme else 0):
-        tv = LEAD + (k + 1) / fps
-        if tv < 0: continue
+    lastv = np.full(F.shape[1], -9.0); lastg = -9.0
+    for k in range(a.shape[0]):
+        s_ = (k + 1) / fps; t_ = vt(s_)
+        if t_ < 0 or t_ > D: continue
         for i in range(a.shape[1]):
-            if a[k, i] > 1.6 and (k - last[i]) > 4:
-                last[i] = k
-                r = R['res'][i]['r']
-                st = min(1.0, (a[k, i] - 1.2) / 8) * (0.55 + 0.9 * r)
-                if not cand:
-                    place(buf, click(rng, st * 0.5), tv); continue
-                c = resample(shots[rng.integers(len(shots))], 1.25 - 0.5 * min(1, (r - 0.3) / 0.9) + rng.uniform(-0.04, 0.04))
-                pan = float(np.clip(F[k, i, 0] / 9, -0.7, 0.7))
-                c = c * np.array([1 - pan * 0.6, 1 + pan * 0.6], np.float32)
-                place(buf, c, tv, st * db(-15))
+            if a[k, i] < 2.2: continue
+            if t_ - lastv[i] < 0.14: continue          # same marble: no machine-gun
+            st = min(1.0, (a[k, i] - 1.8) / 9)
+            if st < 0.12: continue                      # tiny touches stay silent
+            r = R['res'][i]['r']
+            if t_ - lastg < 0.035 and st < 0.5: continue  # thin out simultaneous small hits
+            lastv[i] = t_; lastg = t_
+            c = voice(r, A <= s_ < B) * (0.25 + 0.75 * st) * (0.7 + 0.5 * min(1, r / 0.9))
+            pan = float(np.clip(F[k, i, 0] / 9, -0.6, 0.6))
+            place(buf, np.stack([c * (1 - pan * 0.5), c * (1 + pan * 0.5)], 1), t_, HITS * db(HIT_DB[style]))
     T = R['track']
-    hit = load('/mnt/project-files/sfx/user/sub_hit_warm.wav')
-    fo = int(0.3 * SR); hit[-fo:] *= np.linspace(1, 0, fo)[:, None]
-    place(buf, hit, LEAD + T['lipT'] - 0.03, db(-19))
-    win = min(r['finish'] for r in R['res'])
+    hit = load('/mnt/project-files/sfx/user/sub_hit_warm.wav'); fo = int(0.3 * SR); hit[-fo:] *= np.linspace(1, 0, fo)[:, None]
+    place(buf, hit, vt(T['lipT']) - 0.03, db(-10))
     def faded(path, dur, fade):
         c = load(path, dur); n = int(fade * SR); c[-n:] *= (np.linspace(1, 0, n) ** 1.5)[:, None]
         fi = int(0.02 * SR); c[:fi] *= np.linspace(0, 1, fi)[:, None]; return c
-    place(buf, faded(SFX + '012_군중환호.mp3', 6.5, 2.5), LEAD + win - 0.3, db(-21))
-    place(buf, faded(f'{C}/audio/fireworks.mp3', 4.5, 1.5), LEAD + win, db(-23))
-    out = np.zeros_like(buf); tt = np.arange(len(buf)) / SR
-    buf *= np.clip((D - tt) / 1.2, 0, 1)[:, None]  # everything (applause included) fades with the picture
-    write(buf, f'{C}/out/marble_audio_{scheme or "c" + str(cand)}.wav')
+    wt = vt(tw)
+    place(buf, hit, wt - 0.02, db(-7))
+    place(buf, faded(SFX + '012_군중환호.mp3', 7.0, 2.5), wt - 0.2, db(-11))
+    place(buf, faded(f'{C}/audio/fireworks.mp3', 4.5, 1.5), wt + 0.1, db(-14))
+    buf *= np.clip((D - tt) / 1.2, 0, 1)[:, None]
+    write(buf, f'{C}/out/marble_v3_audio_{style}.wav'); print('duration', round(D, 2))
 elif what == 'lies':
     E = json.load(open(f'{C}/counted/edl.json'))
     D = E['end'] + E['outro']

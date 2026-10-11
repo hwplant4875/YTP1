@@ -12,53 +12,75 @@ export const COUNTRIES = [ // code, name, population (millions, 2024 UN WPP roun
 const radius = pop => 0.38 * Math.pow(pop / 50, 0.25);
 const FPS = 60, DT = 1 / 120;
 
-// ---------- track (all static geometry as polylines / circles / kinematic bars) ----------
+// ---------- track v3: colourful themed sections (sec = colour theme index used by the scene) ----------
 function buildTrack() {
-  const T = { walls: [], pegs: [], spinners: [], gate: null, sections: [] };
-  const wall = (pts, kind = 'ramp') => T.walls.push({ pts, kind });
+  const T = { walls: [], pegs: [], spinners: [], bumpers: [], gate: null, sections: [] };
+  let sec = 0;
+  const wall = (pts, kind = 'ramp') => T.walls.push({ pts, kind, sec });
   const W = 8;
-  // hopper
+  // 0 hopper
   wall([[-W, 0], [-2.2, -2.2]]); wall([[W, 0], [2.2, -2.2]]);
-  T.gate = { x1: -2.2, x2: 2.2, y: -2.2 };
-  // zigzag ramps
-  let y = -4.0;
-  T.sections.push({ name: 'ZIGZAG', y: -3 });
-  for (let i = 0; i < 5; i++) {
-    const toRight = i % 2 === 0; // marbles roll toward +x on even ramps
-    if (toRight) wall([[-W, y], [W - 3.4, y - 3.4]]); else wall([[W, y], [-W + 3.4, y - 3.4]]);
+  // 1 zigzag
+  sec = 1; let y = -4.0;
+  T.sections.push({ name: 'ZIGZAG', y: -3, sec });
+  for (let i = 0; i < 3; i++) {
+    if (i % 2 === 0) wall([[-W, y], [W - 3.4, y - 3.4]]); else wall([[W, y], [-W + 3.4, y - 3.4]]);
     y -= 5.0;
   }
-  // deflector: steer the drop from the last ramp back toward the middle of the peg field
-  wall([[W, y - 0.6], [1.0, y - 2.4]]);
-  // plinko
-  y -= 3.4;
-  T.sections.push({ name: 'PEG FIELD', y: y + 1 });
-  for (let r = 0; r < 7; r++) {
-    const off = r % 2 ? 1.3 : 0;
-    for (let x = -W + 1.3 + off; x < W - 0.9; x += 2.6) T.pegs.push({ x, y, r: 0.24 });
-    y -= 2.0;
-  }
-  // size gate: V funnel whose centre gap only lets small marbles through until the lips slide open
-  y -= 0.5;
-  T.sections.push({ name: 'THE SIZE GATE', y: y });
+  // 2 bumper field: bouncy round bumpers scatter the pack
+  sec = 2; y -= 1.5;
+  T.sections.push({ name: 'BUMPERS', y, sec });
+  wall([[-W, y + 2.5], [-3.5, y - 0.2]]);
+  const rows = [[-4.0, 0, 4.0], [-2.0, 2.0, 5.4], [-5.4, -1.6, 2.6]];
+  rows.forEach((xs, r) => { for (const x of xs) T.bumpers.push({ x, y: y - 2.6 - r * 3.4, r: 0.8 }); });
+  y -= 2.6 + 3 * 3.4;
+  // 3 fork: a wedge splits the pack into a switchback lane (left) and a spinner lane (right)
+  sec = 3;
+  T.sections.push({ name: 'FORK', y, sec });
+  wall([[-3, y - 2.6], [0, y], [3, y - 2.6]]);
+  wall([[0, y - 2.6], [0, y - 13]], 'side');
+  wall([[-1.0, y - 4.4], [-6.0, y - 6.6]]);
+  wall([[-W, y - 8.4], [-2.2, y - 10.8]]);
+  for (let r = 0; r < 4; r++) for (const x of (r % 2 ? [3.9] : [2.6, 5.3])) T.pegs.push({ x, y: y - 4.4 - r * 2.1, r: 0.3, c: 3 });
+  y -= 13;
+  // 4 merge funnel + size gate
+  sec = 4;
+  T.sections.push({ name: 'THE SIZE GATE', y, sec });
   wall([[-W, y], [-1.2, y - 4.2]]); wall([[W, y], [1.2, y - 4.2]]);
   T.lips = { y: y - 4.2, inner: 0.57, outer: 1.2, openTo: 1.45 };
-  y -= 7.5;
-  // spinners
-  T.sections.push({ name: 'SPINNERS', y: y + 1.5 });
-  for (let i = 0; i < 3; i++) {
-    const sy = y - i * 5.2;
-    T.spinners.push({ x: -3.5, y: sy, len: 4.6, w: 0.28, speed: 1.15 * (i % 2 ? -1 : 1) });
-    T.spinners.push({ x: 3.5, y: sy - 2.6, len: 4.6, w: 0.28, speed: 1.15 * (i % 2 ? 1 : -1) });
+  y -= 6.2;
+  // 5 wave run: bumpy downhill rails, there and back
+  sec = 5;
+  T.sections.push({ name: 'WAVES', y, sec });
+  const wave = (x0, x1, y0, drop, n) => { const pts = []; for (let k = 0; k <= n; k++) { const f = k / n, x = x0 + (x1 - x0) * f; pts.push([+x.toFixed(3), +(y0 - drop * f + 0.2 * Math.sin(f * Math.PI * 2 * 3)).toFixed(3)]); } return pts; };
+  wall(wave(-W, W - 3.2, y, 4.0, 64));
+  wall(wave(W, -W + 3.2, y - 6.0, 4.0, 64));
+  y -= 11.5;
+  // 6 rainbow peg field
+  sec = 6;
+  T.sections.push({ name: 'PEG FIELD', y: y + 1, sec });
+  wall([[W, y + 1.2], [1.5, y - 1.0]]);
+  y -= 2.6;
+  for (let r = 0; r < 5; r++) {
+    for (const x of (r % 2 ? [-3.9, -1.3, 1.3, 3.9] : [-5.2, -2.6, 0, 2.6, 5.2])) T.pegs.push({ x, y, r: 0.24, c: r });
+    y -= 2.0;
   }
-  y -= 15.5;
-  // final funnel, then the home straight down to the finish on the left
-  T.sections.push({ name: 'FINAL STRAIGHT', y: y });
+  // 7 spinner pair right before the finish: last chance for a comeback
+  sec = 7; y -= 1.0;
+  T.sections.push({ name: 'SPINNERS', y, sec });
+  wall([[-W, y + 0.5], [-1.4, y - 2.6]]); wall([[W, y + 0.5], [1.4, y - 2.6]]);
+  y -= 5.4;
+  T.spinners.push({ x: -3.2, y, len: 4.4, w: 0.28, speed: 1.2 });
+  T.spinners.push({ x: 3.2, y: y - 0.3, len: 4.4, w: 0.28, speed: -1.2 });
+  y -= 4.2;
+  // 8 final funnel, home straight to the finish on the left
+  sec = 8;
+  T.sections.push({ name: 'FINAL STRAIGHT', y, sec });
   wall([[-W, y], [-1.2, y - 4]]); wall([[W, y], [1.2, y - 4]]);
   y -= 6;
   wall([[W, y + 0.5], [-W + 3.0, y - 3.6]]);
   T.finishX = -W + 3.0; T.finishY = y - 3.6; T.finishTop = y + 0.5;
-  // catch tray
+  sec = 0;
   wall([[-W, y - 4.5], [-W, y - 9]], 'side'); wall([[-W, y - 9], [-W + 9, y - 9.4]], 'side'); wall([[-W + 9, y - 9.4], [-W + 9, y - 6.5]], 'side');
   wall([[-W, 8], [-W, y - 4.5]], 'side'); wall([[W, 8], [W, y + 0.5]], 'side');
   T.bottom = y - 10;
@@ -73,6 +95,7 @@ export function simulate(seed, keep = true) {
   for (const w of T.walls) for (let i = 0; i < w.pts.length - 1; i++)
     ground.createFixture(Edge(Vec2(...w.pts[i]), Vec2(...w.pts[i + 1])), { friction: 0.25, restitution: 0.35 });
   for (const p of T.pegs) ground.createFixture(Circle(Vec2(p.x, p.y), p.r), { friction: 0.2, restitution: 0.55 });
+  for (const b of T.bumpers) ground.createFixture(Circle(Vec2(b.x, b.y), b.r), { friction: 0.1, restitution: 0.95 });
   const L = T.lips;
   const lipL = world.createKinematicBody(), lipR = world.createKinematicBody();
   lipL.createFixture(Edge(Vec2(-L.outer, L.y), Vec2(-L.inner, L.y - 0.5)), { friction: 0.3, restitution: 0.3 });
