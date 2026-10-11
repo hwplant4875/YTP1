@@ -1,5 +1,5 @@
 // Portrait reframing for Shorts: wraps an episode scene and nudges its camera per shot when the frame is taller
-// than wide (yaw/pitch in radians, positive yaw turns left; fov replaces the vertical fov; fovScale multiplies it).
+// than wide (exposure multiplies the tone-mapping exposure; yaw/pitch in radians, positive yaw turns left; fov replaces the vertical fov; fovScale multiplies it).
 // Landscape renders pass through untouched. The tweak is applied on top of whatever the scene set this frame.
 export function wrap(O, tweaks) {
   let portrait = false;
@@ -7,6 +7,7 @@ export function wrap(O, tweaks) {
     portrait = W < H;
     const ctx = await O.setup(THREE, renderer, W, H);
     ctx._tweak = portrait ? tweaks[ctx.shot] : null;
+    if (ctx._tweak && ctx._tweak.exposure) renderer.toneMappingExposure *= ctx._tweak.exposure;   // phone screens: lift dark shots
     return ctx;
   };
   const update = (ctx, t) => {

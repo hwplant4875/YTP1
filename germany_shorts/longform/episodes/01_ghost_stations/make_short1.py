@@ -1,4 +1,4 @@
-"""ORBIS Short #1 'The train that never stopped' (vertical 1080x1920). Writes short1.json next to this file.
+"""STRATA Short #1 'The train that never stopped' (vertical 1080x1920). Writes short1.json next to this file.
 
 Render (from the longform dir):
   LONGFORM_W=1080 LONGFORM_H=1920 LONGFORM_CACHE=episodes/01_ghost_stations/cache \
@@ -58,10 +58,10 @@ say("And on the platform, someone was always watching.", v3("s1_intro", "guard",
 say("In 1961, the Berlin Wall split the city in two.", v3("s1_section", "stack", 0), text=key("1961", 0.30, 0.35))
 say("But West Berlin's U6, U8 and S-Bahn trains still ran right underneath the East.")
 say("So East Germany sealed sixteen stations.",
-    {"type": "g2d", "name": "c19_short", "module": "short_graphics.py", "args": {"mode": "stations", "keys": [[1.0, 0.59, 0.5], [1.05, 0.59, 0.5]]}}, hold=0.5)
+    {"type": "g2d", "name": "c19_short", "module": "short_graphics.py", "args": {"mode": "stations", "keys": [[1.0, 0.59, 0.5], [1.05, 0.59, 0.5]], "counter_dy": 240}}, hold=0.5)
 say("Entrances were bricked up. The stations vanished from the maps.", v3("s1_walk", "title", 0))
 # the ghost platforms
-say("On the dark platforms, armed guards stood watch,", v3("s1_watch", "guardroom", 0))
+say("On the dark platforms, armed guards stood watch,", v3("s1_room", "guardroom", 0))
 say("so no one could jump aboard.", v3("s1_watch", "teaser", 0.6))
 say("West Berliners rolled past, staring out at stations frozen in time.", v3("s1_watch", "windows", 3.6))
 say("Barbed wire lined the edges.", v3("s1_walk", "wire", 0))
@@ -69,9 +69,9 @@ say("A few people risked the tracks to escape. Most never made it.", v3("s1_esca
 say("And for twenty-eight years, the trains just kept rolling through.", v3("s1_watch", "nostop", 0.2),
     text=key("28 YEARS", 0.30, 0.6), hold=0.3)
 # end card
-say("Full story on Orbis.", v3("s1_endcard", "amber", 0), id="end_card", hold=0.4, trans="dip",
-    text=[{"kind": "label", "content": "FULL STORY ON", "pos": [0.5, 0.575], "delay": 0.15},
-          {"kind": "title", "content": "ORBIS", "pos": [0.5, 0.655], "delay": 0.35}],
+say("Full story on Strata.", v3("s1_endcard", "amber", 0), id="end_card", hold=0.4, trans="dip",
+    text=[{"kind": "label", "content": "FULL STORY ON", "pos": [0.5, 0.575], "delay": 0.15, "extend": 1.0},
+          {"kind": "title", "content": "STRATA", "pos": [0.5, 0.655], "delay": 0.35, "extend": 1.0}],
     sfx=dict(HIT, vol=0.2, at=0.05))
 
 spec = {
@@ -83,7 +83,7 @@ spec = {
     "style_fields": {
         # key words: big, amber, black outer stroke
         "YEAR": {"Fontsize": 200, "PrimaryColour": AMB, "Outline": 11, "Shadow": 0, "Spacing": 2},
-        "LABEL": {"Fontsize": 84, "PrimaryColour": AMB, "Outline": 7, "Shadow": 0, "Spacing": 6},
+        "LABEL": {"Fontsize": 100, "PrimaryColour": AMB, "Outline": 7, "Shadow": 0, "Spacing": 6},
         "TITLE": {"Fontsize": 230, "PrimaryColour": "&H00D0DCE4", "Outline": 0, "Shadow": 0, "Spacing": 14},
     },
     "fonts": {"YEAR": "YouTube Sans", "LABEL": "YouTube Sans", "TITLE": "Playfair Display", "FX": "YouTube Sans"},

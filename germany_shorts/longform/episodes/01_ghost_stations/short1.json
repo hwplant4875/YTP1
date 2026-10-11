@@ -19,7 +19,7 @@
    "Spacing": 2
   },
   "LABEL": {
-   "Fontsize": 84,
+   "Fontsize": 100,
    "PrimaryColour": "&H005CB2FF",
    "Outline": 7,
    "Shadow": 0,
@@ -151,7 +151,8 @@
        0.59,
        0.5
       ]
-     ]
+     ],
+     "counter_dy": 240
     }
    },
    "hold": 0.5
@@ -169,7 +170,7 @@
    "say": "On the dark platforms, armed guards stood watch,",
    "visual": {
     "type": "3d",
-    "scene": "s1_watch",
+    "scene": "s1_room",
     "shot": "guardroom",
     "t0": 0
    }
@@ -231,7 +232,7 @@
    "hold": 0.3
   },
   {
-   "say": "Full story on Orbis.",
+   "say": "Full story on Strata.",
    "visual": {
     "type": "3d",
     "scene": "s1_endcard",
@@ -249,16 +250,18 @@
       0.5,
       0.575
      ],
-     "delay": 0.15
+     "delay": 0.15,
+     "extend": 1.0
     },
     {
      "kind": "title",
-     "content": "ORBIS",
+     "content": "STRATA",
      "pos": [
       0.5,
       0.655
      ],
-     "delay": 0.35
+     "delay": 0.35,
+     "extend": 1.0
     }
    ],
    "sfx": {
