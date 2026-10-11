@@ -75,7 +75,7 @@ def build(out, sample=False):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{out}/vo.wav", "-i", f"{out}/music.wav", "-i", f"{out}/sfx.wav", "-filter_complex",
         "[0]asplit[vo][sc];[1]volume=0.28[m];[m][sc]sidechaincompress=threshold=0.02:ratio=6:attack=30:release=400[md];[vo][md][2]amix=inputs=3:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9[out]",
         "-map", "[out]", "-ar", str(SR), "-ac", "2", f"{out}/mix.wav"], check=True)
-    poses = sorted({e["pose"] for e in ev if e["k"] == "phrase"} | {"teacher", "excited", "hi_wave", "love_heart"})
+    poses = sorted({e["pose"] for e in ev if e["k"] == "phrase"} | {"popcorn_tv", "excited", "hi_wave", "love_heart"})
     imgs = {p: "data:image/png;base64," + base64.b64encode(open(f"{STK}/{p}.png", "rb").read()).decode() for p in poses}
     html = open(os.path.join(HERE, "template.html")).read().replace("/*DATA*/", "const D=" + json.dumps({"ev": ev, "END": END, "TOTAL": 50}, ensure_ascii=False) + ";const IMG=" + json.dumps(imgs) + ";")
     open(f"{out}/short.html", "w").write(html); json.dump({"END": END, "ev": ev}, open(f"{out}/timeline.json", "w"), ensure_ascii=False)

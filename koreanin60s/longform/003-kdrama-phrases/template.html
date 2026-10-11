@@ -47,7 +47,7 @@ $('floaters').innerHTML=FL.map((c,i)=>`<div class="fl" id="fl${i}" style="font-s
 const imgs=n=>Object.keys(IMG).map(k=>`<img data-p="${k}" src="${IMG[k]}">`).join('');
 ['bird','hookB','chB','outB'].forEach(id=>$(id).innerHTML=imgs());
 const show=(id,p)=>$(id).querySelectorAll('img').forEach(i=>i.style.display=i.dataset.p===p?'block':'none');
-show('hookB','teacher');show('chB','excited');show('outB','love_heart');
+show('hookB','popcorn_tv');show('chB','excited');show('outB','love_heart');
 function fitText(n,max){const tr=n.style.transform;n.style.transform='none';let fs=max;n.style.fontSize=fs+'px';const w=()=>{const r=document.createRange();r.selectNodeContents(n);return r.getBoundingClientRect().width};while(w()>1180&&fs>60){fs-=4;n.style.fontSize=fs+'px'}n.style.transform=tr;return fs}
 window.fit=()=>{};
 let cur=null;
