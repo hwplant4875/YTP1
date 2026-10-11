@@ -37,9 +37,33 @@ def glow_behind(im, alpha_src, pos, col, blur, strength):
     im.alpha_composite(g.filter(ImageFilter.GaussianBlur(blur)))
 
 
+def fill_small_holes(mask, max_area):
+    """Fill enclosed gaps smaller than max_area px (outside = whatever floods from the corner)."""
+    inv = Image.fromarray(np.where(np.array(mask) > 127, 0, 200).astype("uint8"))
+    ImageDraw.floodfill(inv, (0, 0), 1)
+    out = np.array(mask).copy()
+    for _ in range(50):
+        arr = np.array(inv)
+        idx = np.argwhere(arr == 200)
+        if not len(idx):
+            break
+        y, x = map(int, idx[0])
+        ImageDraw.floodfill(inv, (x, y), 50)
+        region = np.array(inv) == 50
+        if region.sum() < max_area:
+            out[region] = 255
+        inv = Image.fromarray(np.where(region, 2, np.array(inv)).astype("uint8"))
+    return Image.fromarray(out)
+
+
 def profile_a():
     im = sky()
-    p = C.icon("pretzel", 480)
+    raw = C.icon("pretzel", 470)
+    p = Image.new("RGBA", (raw.width + 60, raw.height + 60)); p.alpha_composite(raw, (30, 30))
+    a = p.split()[3].filter(ImageFilter.MinFilter(9)).filter(ImageFilter.MaxFilter(37))   # white sticker stroke; the min-filter drops stray crumbs
+    a = a.filter(ImageFilter.GaussianBlur(4)).point(lambda v: 255 if v > 110 else 0).filter(ImageFilter.GaussianBlur(1))
+    a = fill_small_holes(a.filter(ImageFilter.MaxFilter(21)).filter(ImageFilter.MinFilter(21)), 4000)
+    st = Image.new("RGBA", p.size, (255, 255, 255, 0)); st.putalpha(a); st.alpha_composite(p); p = st
     pos = ((S - p.width) // 2, (S - p.height) // 2 + 10)
     glow_behind(im, p.split()[3], pos, (255, 200, 120), 22, 0.85)
     glow_behind(im, p.split()[3], pos, (255, 230, 170), 8, 0.6)
