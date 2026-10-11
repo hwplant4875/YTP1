@@ -1,0 +1,414 @@
+{
+ "voice": {
+  "engine": "elevenlabs",
+  "voice_id": "DrBEKFgWMDWUG6bjTSTk",
+  "model": "eleven_v4",
+  "stability": 0.5,
+  "speed": 1.0
+ },
+ "gap": 0.1,
+ "subtitles": false,
+ "declick": true,
+ "sfx_gain_db": -6,
+ "style_fields": {
+  "YEAR": {
+   "Fontsize": 200,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 11,
+   "Shadow": 0,
+   "Spacing": 2
+  },
+  "LABEL": {
+   "Fontsize": 100,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 7,
+   "Shadow": 0,
+   "Spacing": 6
+  },
+  "TITLE": {
+   "Fontsize": 230,
+   "PrimaryColour": "&H00D0DCE4",
+   "Outline": 0,
+   "Shadow": 0,
+   "Spacing": 14
+  },
+  "CREDIT": {
+   "Fontsize": 24,
+   "PrimaryColour": "&H80B4B4B4",
+   "Alignment": 1,
+   "MarginL": 44,
+   "MarginR": 200,
+   "MarginV": 492
+  }
+ },
+ "fonts": {
+  "YEAR": "YouTube Sans",
+  "LABEL": "YouTube Sans",
+  "TITLE": "Playfair Display",
+  "FX": "YouTube Sans"
+ },
+ "music": [
+  {
+   "file": "music/m1_intro.mp3",
+   "from": "intro",
+   "to": "fall",
+   "vol": 0.17,
+   "fade_in": 0.6,
+   "fade_out": 1.0
+  },
+  {
+   "file": "music/m4_resolution.mp3",
+   "from": "fall",
+   "to": "end",
+   "vol": 0.17,
+   "fade_in": 0.8,
+   "fade_out": 1.2
+  }
+ ],
+ "beats": [
+  {
+   "say": "For twenty-eight years, these subway stations were frozen in time.",
+   "visual": {
+    "type": "3d",
+    "scene": "s5_walk",
+    "shot": "years",
+    "t0": 0
+   },
+   "id": "intro",
+   "text": {
+    "kind": "year",
+    "content": "FROZEN",
+    "pos": [
+     0.5,
+     0.32
+    ],
+    "delay": 0.25,
+    "extend": 0.0
+   },
+   "sfx": [
+    {
+     "prompt": "empty underground subway station ambience, faint electrical hum, distant water drips, low air rumble",
+     "len": 14,
+     "vol": 0.13,
+     "at": 0.0,
+     "filter": "atrim=0:14.00,afade=t=in:d=0.03,afade=t=out:st=11.00:d=3.00"
+    },
+    {
+     "prompt": "old clock ticking fast in an empty hall, slight echo",
+     "len": 3.4,
+     "vol": 0.1,
+     "at": 0.0,
+     "filter": "atrim=0:3.40,afade=t=in:d=0.03,afade=t=out:st=2.40:d=1.00"
+    }
+   ]
+  },
+  {
+   "say": "In 1961, the Berlin Wall split the city, and East Germany sealed them.",
+   "visual": {
+    "type": "3d",
+    "scene": "s5_section",
+    "shot": "stack",
+    "t0": 0
+   },
+   "text": {
+    "kind": "year",
+    "content": "1961",
+    "pos": [
+     0.5,
+     0.29
+    ],
+    "delay": 0.3,
+    "extend": 0.0
+   }
+  },
+  {
+   "say": "West Berlin trains rolled straight through, without stopping.",
+   "visual": {
+    "type": "3d",
+    "scene": "s5_intro",
+    "shot": "passby",
+    "t0": 0.4
+   },
+   "sfx": {
+    "prompt": "subway train rushing past through an empty underground station, rattling wheels, whoosh, echo",
+    "len": 4.5,
+    "vol": 0.18,
+    "at": 0.0,
+    "filter": "atrim=0:4.50,afade=t=in:d=0.03,afade=t=out:st=3.00:d=1.50"
+   }
+  },
+  {
+   "say": "On the dark platforms, the posters and signs from 1961 never changed.",
+   "visual": {
+    "type": "3d",
+    "scene": "s5_walk",
+    "shot": "walk",
+    "t0": 5.3
+   }
+  },
+  {
+   "say": "Only armed guards stood watch.",
+   "visual": {
+    "type": "3d",
+    "scene": "s5_intro",
+    "shot": "guard",
+    "t0": 2.2
+   },
+   "hold": 0.2
+  },
+  {
+   "say": "Then, on November 9th, 1989, the Wall fell.",
+   "visual": {
+    "type": "3d",
+    "scene": "s5_reopen",
+    "shot": "bornholmer",
+    "t0": 0
+   },
+   "id": "fall",
+   "trans": "dip",
+   "text": {
+    "kind": "year",
+    "content": "1989",
+    "pos": [
+     0.5,
+     0.29
+    ],
+    "delay": 1.1,
+    "extend": 0.0
+   },
+   "sfx": {
+    "prompt": "distant cheering crowd at night, celebration, outdoor",
+    "len": 5,
+    "vol": 0.12,
+    "at": 0.3,
+    "filter": "atrim=0:5.00,afade=t=in:d=0.03,afade=t=out:st=3.20:d=1.80"
+   }
+  },
+  {
+   "say": "Two days later, a train stopped at Jannowitzbrücke,",
+   "visual": {
+    "type": "3d",
+    "scene": "s5_reopen",
+    "shot": "stop",
+    "t0": 1.6
+   },
+   "sfx": {
+    "prompt": "subway train braking slowly to a stop in a station, squealing brakes, hiss of air",
+    "len": 5,
+    "vol": 0.14,
+    "at": 0.2,
+    "filter": "atrim=0:5.00,afade=t=in:d=0.03,afade=t=out:st=3.50:d=1.50"
+   }
+  },
+  {
+   "say": "for the first time in twenty-eight years.",
+   "visual": "same",
+   "text": {
+    "kind": "year",
+    "content": "FIRST\\NSTOP",
+    "pos": [
+     0.5,
+     0.29
+    ],
+    "delay": 0.2,
+    "extend": 0.0
+   }
+  },
+  {
+   "say": "And the platform was packed.",
+   "visual": {
+    "type": "g2d",
+    "name": "photo_s5",
+    "module": "short5_graphics.py",
+    "args": {
+     "file": "assets/c01.jpg",
+     "keys": [
+      [
+       0,
+       1.0,
+       0.1,
+       0.5
+      ],
+      [
+       0.75,
+       1.0,
+       0.1,
+       0.5
+      ],
+      [
+       2.0,
+       1.0,
+       0.64,
+       0.5
+      ],
+      [
+       9,
+       1.05,
+       0.64,
+       0.5
+      ]
+     ],
+     "lift": 1.06,
+     "ring": {
+      "c": [
+       208,
+       400
+      ],
+      "r": [
+       200,
+       62
+      ],
+      "at": 0.15
+     }
+    },
+    "credit": "Bundesarchiv, Bild 183-1989-1111-007 / Robert Roeske / CC BY-SA 3.0"
+   },
+   "hold": 0.5,
+   "sfx": {
+    "prompt": "crowd of people cheering and clapping in an underground station, echo",
+    "len": 3.5,
+    "vol": 0.11,
+    "at": 0.2,
+    "filter": "atrim=0:3.50,afade=t=in:d=0.03,afade=t=out:st=2.10:d=1.40"
+   }
+  },
+  {
+   "say": "In December, Rosenthaler Platz reopened too.",
+   "visual": {
+    "type": "g2d",
+    "name": "photo_s5",
+    "module": "short5_graphics.py",
+    "args": {
+     "file": "assets/c03.jpg",
+     "keys": [
+      [
+       0,
+       1.0,
+       0.24,
+       0.5
+      ],
+      [
+       0.9,
+       1.0,
+       0.24,
+       0.5
+      ],
+      [
+       3.0,
+       1.06,
+       0.42,
+       0.52
+      ],
+      [
+       9,
+       1.08,
+       0.44,
+       0.52
+      ]
+     ],
+     "lift": 1.06,
+     "ring": {
+      "c": [
+       295,
+       320
+      ],
+      "r": [
+       190,
+       60
+      ],
+      "at": "Rosenthaler"
+     }
+    },
+    "credit": "Bundesarchiv, Bild 183-1989-1220-301 / Peer Grimm / CC BY-SA 3.0"
+   }
+  },
+  {
+   "say": "When the lights came on, it looked like time had stopped in 1961.",
+   "visual": {
+    "type": "3d",
+    "scene": "s5_walk",
+    "shot": "title",
+    "t0": 0
+   },
+   "text": {
+    "kind": "year",
+    "content": "STILL\\N1961",
+    "pos": [
+     0.5,
+     0.3
+    ],
+    "delay": 1.6,
+    "extend": 0.0
+   }
+  },
+  {
+   "say": "One by one, the ghost stations came back to life.",
+   "visual": {
+    "type": "g2d",
+    "name": "photo_s5",
+    "module": "short5_graphics.py",
+    "args": {
+     "file": "assets/c05.jpg",
+     "keys": [
+      [
+       0,
+       1.0,
+       0.38,
+       0.5
+      ],
+      [
+       9,
+       1.08,
+       0.5,
+       0.5
+      ]
+     ],
+     "lift": 1.0
+    },
+    "credit": "Bundesarchiv, Bild 183-1990-0412-010 / Thomas Uhlemann / CC BY-SA 3.0"
+   },
+   "hold": 0.3
+  },
+  {
+   "say": "Full story on Strata.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_endcard",
+    "shot": "amber",
+    "t0": 0
+   },
+   "id": "end_card",
+   "hold": 0.4,
+   "trans": "dip",
+   "text": [
+    {
+     "kind": "label",
+     "content": "FULL STORY ON",
+     "pos": [
+      0.5,
+      0.575
+     ],
+     "delay": 0.15,
+     "extend": 1.0
+    },
+    {
+     "kind": "title",
+     "content": "STRATA",
+     "pos": [
+      0.5,
+      0.655
+     ],
+     "delay": 0.35,
+     "extend": 1.0
+    }
+   ],
+   "sfx": {
+    "prompt": "deep cinematic sub boom hit with short metallic tail",
+    "len": 2.5,
+    "vol": 0.2,
+    "at": 0.05,
+    "filter": "atrim=0:2.50,afade=t=in:d=0.03,afade=t=out:st=1.10:d=1.40"
+   }
+  }
+ ]
+}

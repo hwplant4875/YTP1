@@ -45,12 +45,12 @@ def map_s4(args, d, timing, base, out):
     fx, fy = g.FRIEDRICHSTR
     z0, z1 = args.get("z", [1.0, 1.75])
     for t in g.frames(d):
-        # zoom towards Friedrichstrasse, keeping it at ~43 % of the frame height once the frame can move
+        # zoom towards Friedrichstrasse, keeping it at ~43 % of the frame height and 30 % of its width once the frame can move
         z = z0 + (z1 - z0) * g.smooth(t / max(d, 1e-6))
         ch = mh / z
         cw = ch * W / H
         sc = W / cw
-        left = min(max(fx - (W / 2) / sc, 0), mw - cw)
+        left = min(max(fx - (W * 0.3) / sc, 0), mw - cw)   # dot left of centre: its map label stays in frame
         top = min(max(fy - (H * 0.43) / sc, 0), mh - ch)
         box = (int(left), int(top), int(left + cw), int(top + ch))
         light = np.zeros((box[3] - box[1], box[2] - box[0], 3), np.float32)
@@ -137,14 +137,14 @@ def split_s4(args, d, timing, base, out):
         # --- West: platforms and a train that pulls in and stops
         kw = g.ramp(t, 0.0, 0.4)
         a = int(255 * kw)
-        g.text(dr, (W / 2 - 40, 300), "WEST BERLIN TRAINS", 66, fill=WESTC, alpha=a)
-        dr.rectangle([90, 400, 900, 438], fill=(70, 70, 74, a))
-        dr.rectangle([90, 600, 900, 638], fill=(70, 70, 74, a))
-        for yy in (470, 568):
+        g.text(dr, (W / 2 - 40, 262), "WEST BERLIN TRAINS", 66, fill=WESTC, alpha=a)
+        dr.rectangle([90, 352, 900, 390], fill=(70, 70, 74, a))
+        dr.rectangle([90, 552, 900, 590], fill=(70, 70, 74, a))
+        for yy in (422, 520):
             dr.line([90, yy, 900, yy], fill=(55, 55, 58, a), width=4)
         u = g.smooth(t / 1.6)
         tx = -900 + (150 + 900) * u
-        train(dr, tx, 452, 740, 130, a)
+        train(dr, tx, 404, 740, 130, a)
         # --- the wall of steel and glass
         kwall = g.ramp(t, t_wall - 0.25, 0.7)
         if kwall > 0:

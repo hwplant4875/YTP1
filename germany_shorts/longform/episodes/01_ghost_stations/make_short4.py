@@ -110,7 +110,7 @@ say("In March 1974, a Polish man threatened his own embassy with a fake bomb, de
 say("East Germany pretended to agree.", v3("s4_checkpoint", "agree", 0.1),
     sfx=fx("heavy rubber stamp slammed onto a passport on a wooden desk", 1.2, 0.2, 0.55, 0.5))
 say("Just past the checkpoint, a hidden Stasi officer shot him dead.", v3("s4_checkpoint", "shot", 0.2),
-    text=ring(790, 860, 190, 300, 0.75),
+    text=ring(790, 860, 190, 300, 1.05),
     sfx=[fx("single muffled pistol shot in a concrete corridor with echo tail", 2.2, 0.16, 1.4, 1.5)])
 say("West Berlin was only a few steps away.", v3("s4_checkpoint", "steps", 0), hold=0.4,
     text=[key("WEST", 0.20, 0.3), arrow(250, 1330, 470, 1080, 0.6)],

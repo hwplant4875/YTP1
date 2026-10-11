@@ -4,6 +4,7 @@ import * as O from './checkpoint.js';
 import { wrap } from './s1_portrait.js';
 export const { setup, update } = wrap(O, {
   bomb: { exposure: 1.1 },
+  agree: { exposure: 1.35 },
   shot: { yaw: -0.13, fovScale: 1.12, exposure: 1.2 },
   steps: { exposure: 1.25 },
 });
