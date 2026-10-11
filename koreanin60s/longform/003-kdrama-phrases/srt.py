@@ -10,7 +10,7 @@ for e in ev:
     elif e["k"] == "chapter": cues.append((e["t"] + 0.2, e["t1"], f"Chapter {NUM[e['i'] - 1]}: {e['title']}"))
     elif e["k"] == "phrase":
         cues += [(e["t"] + 0.35, e["reveal"] - 0.05, e["en"]), (e["reveal"], e["slow"] - 0.05, f"{e['ko']} ({e['rom']})"),
-                 (e["slow"], e["t1"] - 0.4, f"{e['ko']} (slowly)")]
+                 (e["slow"], e["t1"] - 0.4, f"{e['ko']} ({e['rom']})")]
     elif e["k"] == "outro": cues.append((e["t"] + 0.2, e["t1"], OUTRO))
 open(f"{out}/captions.srt", "w").write("\n".join(f"{i}\n{ts(a)} --> {ts(b)}\n{txt}\n" for i, (a, b, txt) in enumerate(cues, 1)))
 print(len(cues))
