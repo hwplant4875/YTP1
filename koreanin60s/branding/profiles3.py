@@ -19,6 +19,8 @@ OPTS = {
           '<div style="position:absolute;left:0;top:0;width:800px;height:800px;clip-path:polygon(100% 0,100% 100%,0 100%)">' + stars(40) + '</div>'
           '<div style="position:absolute;right:150px;bottom:110px;width:90px;height:90px;border-radius:50%;box-shadow:-20px 12px 0 0 #F7E7B4;transform:rotate(-20deg)"></div>',
           "teacher", 640, 80, 150),
+    # pink background + teacher 뱁새 (user 2026-10-11: waving one moved off the profile)
+    "e": ("radial-gradient(circle at 50% 45%,#FFFBF4 0,#FCE6EA 55%,#F2B8C8 100%)", "", "teacher", 620, 85, 170),
 }
 for k, (bg, extra, n, w, x, y) in OPTS.items():
     open(f"{sys.argv[1]}/profile_{k}.html", "w").write(f'''<html><head><meta charset="utf-8"><style>body{{margin:0;width:800px;height:800px;overflow:hidden;position:relative;background:{bg}}}
