@@ -3,12 +3,7 @@
  "title": "This German word means: panic before the gate closes 😱",
  "photos": [
   "tor_3",
-  "tor_1",
-  "lock_1",
-  "hourglass_3",
-  "cake30_3",
-  "ring_7",
-  "house_7"
+  "tor_1"
  ],
  "scenes": [
   {
@@ -54,9 +49,9 @@
      "text": "= panic before the gate closes",
      "size": 70,
      "colour": [
-      255,
-      214,
-      120
+      205,
+      112,
+      10
      ],
      "x": 540,
      "y": 1470
@@ -113,15 +108,11 @@
     {
      "id": "r2",
      "type": "row",
-     "photo": "lock_1.jpg",
-     "focus": [
-      0.62,
-      0.5
-     ],
      "de": "Schluss",
      "en": "= closing",
      "x": 540,
-     "y": 970
+     "y": 970,
+     "icon": "locked"
     },
     {
      "id": "r3",
@@ -167,10 +158,9 @@
     },
     {
      "id": "p",
-     "type": "photo",
-     "src": "hourglass_3.jpg",
-     "w": 640,
-     "h": 860,
+     "type": "tile",
+     "icon": "hourglass-not-done",
+     "s": 620,
      "x": 540,
      "y": 1120
     }
@@ -211,25 +201,16 @@
    "els": [
     {
      "id": "cake",
-     "type": "photo",
-     "src": "cake30_3.jpg",
-     "focus": [
-      0.5,
-      0.35
-     ],
-     "w": 920,
-     "h": 600,
+     "type": "tile",
+     "icon": "birthday-cake",
+     "s": 520,
      "x": 540,
-     "y": 750
+     "y": 720
     },
     {
      "id": "ring",
      "type": "tile",
-     "photo": "ring_7.jpg",
-     "focus": [
-      0.5,
-      0.3
-     ],
+     "icon": "ring",
      "s": 280,
      "x": 230,
      "y": 1310
@@ -237,7 +218,7 @@
     {
      "id": "house",
      "type": "tile",
-     "photo": "house_7.jpg",
+     "icon": "house-with-garden",
      "s": 280,
      "x": 540,
      "y": 1310
@@ -245,7 +226,7 @@
     {
      "id": "de",
      "type": "tile",
-     "label": "DEUTSCH",
+     "icon": "speaking-head",
      "s": 280,
      "x": 850,
      "y": 1310
@@ -306,16 +287,12 @@
     {
      "id": "r2",
      "type": "row",
-     "photo": "lock_1.jpg",
-     "focus": [
-      0.62,
-      0.5
-     ],
      "de": "Schluss",
      "article": "der",
      "show_article": true,
      "x": 540,
-     "y": 830
+     "y": 830,
+     "icon": "locked"
     },
     {
      "id": "r3",
@@ -334,9 +311,9 @@
      "de": "Torschlusspanik",
      "article": "die",
      "colour": [
-      240,
-      110,
-      114
+      229,
+      72,
+      77
      ],
      "size": 150,
      "x": 540,
@@ -370,5 +347,6 @@
     }
    ]
   }
- ]
+ ],
+ "music": "/mnt/project-files/fast_german/cache/music/incompetech/Pookatori and Friends.mp3"
 }

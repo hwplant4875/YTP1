@@ -19,8 +19,10 @@ import common as C
 W, H, FPS = 1080, 1920, 30
 MX = 80                      # side margin: nothing may come closer to the frame edge
 LINE_GAP, SEG_GAP, SCENE_GAP = 0.32, 0.10, 0.45
-NAVY_T, NAVY_B = (22, 27, 58), (10, 12, 28)
-WHITE, GREY = (250, 250, 247), (178, 184, 204)
+# Beige theme (user 2026-10-11: night sky dropped, back to the calm beige). WHITE = main text colour.
+WHITE, GREY = (28, 28, 30), (110, 104, 98)
+ACCENT = (205, 112, 10)
+PROFILE = "/mnt/project-files/fast_german/branding/final/PROFILE_FINAL_fast_german.png"
 PHOTOS = "/mnt/project-files/fast_german/cache/photos/"
 FD = "/mnt/project-files/fonts/de/"
 UI = "/mnt/project-files/fonts/YouTubeSans-Black.otf"
@@ -56,7 +58,7 @@ def shadow(im, r=22, a=120, dy=12):
     out = Image.new("RGBA", (im.width + pad * 2, im.height + pad * 2))
     sh = Image.new("RGBA", out.size, (0, 0, 0, 0))
     m = Image.new("L", out.size, 0)
-    m.paste(im.split()[3].point(lambda v: v * a // 255), (pad, pad + dy))
+    m.paste(im.split()[3].point(lambda v: v * a * 45 // 25500), (pad, pad + dy))  # soft on beige
     sh.putalpha(m.filter(ImageFilter.GaussianBlur(r)))
     out.alpha_composite(sh)
     out.alpha_composite(im, (pad, pad))
@@ -116,7 +118,7 @@ def word_block(de, article=None, en=None, max_w=W - 2 * MX, size=200, colour=Non
     return out
 
 
-def lighten(c, k=0.18):
+def lighten(c, k=0.0):
     return tuple(int(v + (255 - v) * k) for v in c)
 
 
@@ -124,7 +126,7 @@ def thumb(el, s):
     if el.get("photo"):
         return rounded(cover(PHOTOS + el["photo"], s, s, tuple(el.get("focus", (0.5, 0.5)))), 34)
     tile = Image.new("RGBA", (s, s))
-    ImageDraw.Draw(tile).rounded_rectangle((0, 0, s - 1, s - 1), 34, fill=(255, 255, 255, 30))
+    ImageDraw.Draw(tile).rounded_rectangle((0, 0, s - 1, s - 1), 34, fill=(255, 255, 255, 255))
     ic = C.icon(el["icon"], int(s * 0.74))
     tile.alpha_composite(ic, ((s - ic.width) // 2, (s - ic.height) // 2))
     return tile
@@ -147,7 +149,7 @@ def row_im(el, w=W - 2 * MX, s=250):
     d.text((tx - l + f.getlength(lead), 18 - t), el["de"], font=f, fill=wc)
     if el.get("en"):
         fe = fit(el["en"], ui_font, w - tx, 78, 30)
-        e = text_im(el["en"], fe, (255, 214, 120))
+        e = text_im(el["en"], fe, ACCENT)
         im.alpha_composite(e, (tx, s - e.height - 22))
     if el.get("hl"):
         hl = Image.new("RGBA", (w + 40, s + 40))
@@ -158,7 +160,7 @@ def row_im(el, w=W - 2 * MX, s=250):
 
 
 def logo_im():
-    p = Image.open("/mnt/project-files/fast_german/branding/final/profile_night_pretzel_filled.png").convert("RGB")
+    p = Image.open(PROFILE).convert("RGB")
     p = p.resize((420, 420), Image.LANCZOS)
     m = Image.new("L", p.size, 0)
     ImageDraw.Draw(m).ellipse((0, 0, 419, 419), fill=255)
@@ -168,22 +170,16 @@ def logo_im():
 
 
 def background():
-    y = np.linspace(0, 1, H)[:, None, None]
-    top, bot = np.array(NAVY_T, np.float32), np.array(NAVY_B, np.float32)
-    g = top * (1 - y) + bot * y
-    xx = np.linspace(-1, 1, W)[None, :, None]
-    yy = np.linspace(-1, 1, H)[:, None, None]
-    g = g * (1 - 0.25 * np.clip(xx ** 2 + (yy * 0.6) ** 2, 0, 1))
-    rng = np.random.default_rng(3)
-    g = g + rng.normal(0, 2.2, (H, W, 1))
-    bg = Image.fromarray(np.clip(g, 0, 255).astype(np.uint8)).convert("RGBA")
+    rng = np.random.default_rng(7)
+    base = np.zeros((H, W, 3), np.float32) + np.array(C.CREAM, np.float32)
+    base = base * (1 - 0.05 * np.linspace(0, 1, H)[:, None, None])
+    bg = Image.fromarray(np.clip(base + rng.normal(0, 4, (H, W, 1)), 0, 255).astype(np.uint8)).convert("RGBA")
     d = ImageDraw.Draw(bg)
-    for _ in range(90):  # faint stars, same night sky as the profile picture
-        x, yv = rng.integers(0, W), rng.integers(0, H)
-        r = rng.choice([1, 1, 2])
-        d.ellipse((x - r, yv - r, x + r, yv + r), fill=(255, 255, 255, int(rng.integers(40, 110))))
-    tag = text_im("FAST GERMAN", de_font(46), (255, 214, 120))
-    bg.alpha_composite(tag, ((W - tag.width) // 2, 150))
+    for y in range(60, H, 90):                       # soft dotted pattern, as in the first batch
+        for x in range(45 if (y // 90) % 2 else 0, W, 90):
+            d.ellipse((x - 4, y - 4, x + 4, y + 4), fill=(240, 226, 200, 255))
+    badge = Image.open(PROFILE).convert("RGB").resize((150, 150), Image.LANCZOS)
+    bg.alpha_composite(shadow(rounded(badge, 36), 14, 120, 6), ((W - 150) // 2 - 28, 110 - 28))
     return bg
 
 
@@ -305,8 +301,8 @@ def render(spec_path, out_path):
         inputs += ["-i", mp3]
         fl.append(f"[{i}:a]aformat=sample_rates=48000:channel_layouts=stereo,adelay={int(st * 1000)}:all=1[c{i}]")
     n = len(clips)
-    fl.append("".join(f"[c{i}]" for i in range(n)) + f"amix=inputs={n}:normalize=0,apad=whole_dur={total},"
-              f"atrim=0:{total},loudnorm=I=-15:TP=-2:LRA=11,asplit=2[voice][key]")
+    fl.append("".join(f"[c{i}]" for i in range(n)) + f"amix=inputs={n}:normalize=0,apad=whole_dur={total + 4},"
+              f"loudnorm=I=-15:TP=-2:LRA=11,apad,atrim=0:{total},asplit=2[voice][key]")  # loudnorm eats its last seconds: pad first
     k, mix = n, []
     pop = C.get_sfx("pop")
     for at in pops:
@@ -322,7 +318,7 @@ def render(spec_path, out_path):
               f"afade=t=out:st={total - 1.2}:d=1.2,volume={MUSIC_VOL}[m0]")
     fl.append("[m0][key]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=350[music]")
     mix.append("[music]")
-    fl.append("[voice]" + "".join(mix) + f"amix=inputs={1 + len(mix)}:normalize=0,alimiter=limit=0.89[a]")
+    fl.append("[voice]" + "".join(mix) + f"amix=inputs={1 + len(mix)}:normalize=0,alimiter=limit=0.89,apad[a]")
     wav = os.path.join(tmp, "a.wav")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", *inputs, "-filter_complex", ";".join(fl), "-map", "[a]",
                     "-t", f"{total:.3f}", wav], check=True)
