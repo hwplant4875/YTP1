@@ -21,10 +21,10 @@
  },
  "mute": true,
  "src": {
-  "pc": "/home/user/rs_work/src/yt/Y7xBTvYgoIY.mp4"
+  "pc": "/mnt/project-files/suits_getbig_hd.mp4"
  },
  "srcFilter": {
-  "pc": "crop=460:360:90:0,hqdn3d=1.5:1.5:3:3"
+  "pc": "crop=1380:1080:270:0,hqdn3d=1:1:2:2"
  },
  "titles": [
   {
