@@ -1,0 +1,266 @@
+{
+ "bg": "black",
+ "font": "/home/user/rs_work/fonts/TikTokSans-Black.ttf",
+ "box": {
+  "y": 266,
+  "h": 211,
+  "color": "#ffffff",
+  "text": "#000000",
+  "size": 84
+ },
+ "window": {
+  "y": 477,
+  "h": 810
+ },
+ "sfx": {
+  "boom": {
+   "file": "/mnt/project-files/sfx/user/sub_hit_warm.wav",
+   "peak": 0.032,
+   "gain": -4
+  }
+ },
+ "mute": true,
+ "grade": {
+  "clarity": 0.35,
+  "contrast": 0.12,
+  "saturation": 0.08,
+  "sharpen": 0.7,
+  "structure": 0.35,
+  "exposure": 0.2,
+  "brightness": 0.12
+ },
+ "capFont": "/mnt/project-files/fonts/YouTubeSans-Black.otf",
+ "src": {
+  "s": "/home/user/rs_work/src/n3/squat.mp4",
+  "l": "/home/user/rs_work/src/n3/legpress.mp4",
+  "d": "/home/user/rs_work/src/n3/deadlift.mp4"
+ },
+ "srcFilter": {
+  "s": "crop=956:720:160:0",
+  "l": "crop=956:720:160:0",
+  "d": "crop=1426:1078:252:0"
+ },
+ "titles": [
+  {
+   "from": 0,
+   "text": "light weight baby 🗿"
+  }
+ ],
+ "shots": [
+  {
+   "src": "s",
+   "in": 183.0,
+   "out": 189.5,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.08,
+   "kb": 0.06,
+   "tr": "cut",
+   "zout": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "1.",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "1. ",
+       "#FFFFFF"
+      ],
+      [
+       "800 lb Squat",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 15.5
+    }
+   ],
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ]
+  },
+  {
+   "src": "s",
+   "in": 189.5,
+   "out": 195.5,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.08,
+   "kb": 0.04,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "s",
+   "in": 207.0,
+   "out": 210.0,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.08,
+   "kb": -0.06,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "l",
+   "in": 30.0,
+   "out": 33.5,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.08,
+   "kb": 0.06,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "2.",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "2. ",
+       "#FFFFFF"
+      ],
+      [
+       "2,300 lb Leg Press",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 12.5
+    }
+   ],
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ]
+  },
+  {
+   "src": "l",
+   "in": 64.0,
+   "out": 70.0,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.08,
+   "kb": 0.04,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "l",
+   "in": 141.0,
+   "out": 144.0,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.08,
+   "kb": -0.06,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "d",
+   "in": 685.0,
+   "out": 689.0,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.1,
+   "kb": 0.06,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "3.",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "3. ",
+       "#FFFFFF"
+      ],
+      [
+       "800 lb Deadlift",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 99
+    }
+   ],
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ]
+  },
+  {
+   "src": "d",
+   "in": 690.0,
+   "out": 698.0,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.1,
+   "kb": 0.04,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "hits": [
+    {
+     "t": 5.0,
+     "zoom": 1.1,
+     "amount": 0.35
+    }
+   ]
+  },
+  {
+   "src": "d",
+   "in": 709.0,
+   "out": 712.0,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.1,
+   "kb": -0.06,
+   "tr": "cut",
+   "zin": 1.22
+  }
+ ]
+}

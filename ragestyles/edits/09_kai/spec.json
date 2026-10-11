@@ -1,0 +1,177 @@
+{
+ "bg": "black",
+ "font": "/home/user/rs_work/fonts/TikTokSans-Black.ttf",
+ "box": {
+  "y": 266,
+  "h": 211,
+  "color": "#ffffff",
+  "text": "#000000",
+  "size": 84
+ },
+ "window": {
+  "y": 477,
+  "h": 810
+ },
+ "sfx": {
+  "boom": {
+   "file": "/mnt/project-files/sfx/user/sub_hit_warm.wav",
+   "peak": 0.032,
+   "gain": -4
+  }
+ },
+ "mute": true,
+ "grade": {
+  "clarity": 0.35,
+  "contrast": 0.12,
+  "saturation": 0.08,
+  "sharpen": 0.7,
+  "structure": 0.35,
+  "exposure": 0.2,
+  "brightness": 0.12
+ },
+ "capFont": "/mnt/project-files/fonts/YouTubeSans-Black.otf",
+ "src": {
+  "k": "/home/user/rs_work/src/n3/kai.mp4"
+ },
+ "srcFilter": {
+  "k": "crop=1208:704:52:8"
+ },
+ "titles": [
+  {
+   "from": 0,
+   "text": "Kai Greene posing was art 🎨"
+  }
+ ],
+ "shots": [
+  {
+   "src": "k",
+   "in": 62.0,
+   "out": 67.0,
+   "cx": 0.5,
+   "cy": 0.4,
+   "zoom": 1.25,
+   "kb": 0.06,
+   "tr": "cut",
+   "zout": 1.22,
+   "hits": [
+    {
+     "t": 0.4,
+     "zoom": 1.12,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ]
+  },
+  {
+   "src": "k",
+   "in": 12.0,
+   "out": 16.0,
+   "cx": 0.5,
+   "cy": 0.4,
+   "zoom": 1.25,
+   "kb": -0.06,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "k",
+   "in": 32.0,
+   "out": 35.0,
+   "cx": 0.5,
+   "cy": 0.4,
+   "zoom": 1.25,
+   "kb": 0.08,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "hits": [
+    {
+     "t": 1.0,
+     "zoom": 1.12,
+     "amount": 0.4
+    }
+   ]
+  },
+  {
+   "src": "k",
+   "in": 58.0,
+   "out": 61.5,
+   "cx": 0.5,
+   "cy": 0.4,
+   "zoom": 1.25,
+   "kb": 0.0,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "k",
+   "in": 46.0,
+   "out": 50.0,
+   "cx": 0.5,
+   "cy": 0.4,
+   "zoom": 1.25,
+   "kb": 0.06,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "hits": [
+    {
+     "t": 2.0,
+     "zoom": 1.12,
+     "amount": 0.4
+    }
+   ]
+  },
+  {
+   "src": "k",
+   "in": 26.0,
+   "out": 30.0,
+   "cx": 0.5,
+   "cy": 0.4,
+   "zoom": 1.25,
+   "kb": -0.06,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "hits": [
+    {
+     "t": 1.5,
+     "zoom": 1.12,
+     "amount": 0.4
+    }
+   ]
+  },
+  {
+   "src": "k",
+   "in": 128.0,
+   "out": 132.0,
+   "cx": 0.5,
+   "cy": 0.4,
+   "zoom": 1.25,
+   "kb": 0.0,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "k",
+   "in": 136.0,
+   "out": 140.5,
+   "cx": 0.5,
+   "cy": 0.4,
+   "zoom": 1.25,
+   "kb": 0.06,
+   "tr": "cut",
+   "zin": 1.22,
+   "hits": [
+    {
+     "t": 2.0,
+     "zoom": 1.12,
+     "amount": 0.4
+    }
+   ]
+  }
+ ]
+}
