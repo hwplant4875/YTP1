@@ -29,10 +29,11 @@ def w(name,x):
     with wave.open(name,"wb") as f: f.setnchannels(2); f.setsampwidth(2); f.setframerate(SR); f.writeframes(s.tobytes())
 w("sfx.wav",sfx*.55); w("music.wav",mus)
 # VO track
-keys=[k for k in T if k!="END"]
+GS=json.load(open("group_starts.json"))  # one clip per spoken line (English with the Korean words inside)
+keys=list(GS)
 inp=[]; flt=[]
 for i,k in enumerate(keys):
-    inp+=["-i",f"vo/{k}.wav"]; d=int(S(k)*1000); flt.append(f"[{i}]adelay={d}|{d}[v{i}]")
+    inp+=["-i",f"vo/{k}.wav"]; d=int(GS[k]*1000); flt.append(f"[{i}]adelay={d}|{d}[v{i}]")
 flt.append("".join(f"[v{i}]" for i in range(len(keys)))+f"amix=inputs={len(keys)}:normalize=0,apad=whole_dur={T['END']+.3}[vo]")
 subprocess.run(["ffmpeg","-v","error","-y",*inp,"-filter_complex",";".join(flt),"-map","[vo]","-ar","48000","-ac","2","vo.wav"],check=True)
 subprocess.run(["ffmpeg","-v","error","-y","-i","vo.wav","-i","music.wav","-i","sfx.wav","-filter_complex",
