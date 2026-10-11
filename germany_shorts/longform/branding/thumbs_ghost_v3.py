@@ -63,12 +63,12 @@ def label(im, xy, s, size=34, anchor="la"):
 from PIL import ImageEnhance
 O="/tmp/claude-0/th/out/"
 def boost(im,b=1.25,c=1.15): return ImageEnhance.Contrast(ImageEnhance.Brightness(im).enhance(b)).enhance(c)
-# A: 3D ghost platform
+# A: 3D ghost platform, text at the bottom
 im=boost(fit(Image.open("/tmp/claude-0/th/big_escape_rare_0.3.png")),1.45,1.2)
-im=shade(im,(0,0,W,300),220,"t")
+im=shade(im,(0,H-320,W,H),235,"b")
 d=ImageDraw.Draw(im)
-text(d,(W//2,40),"SEALED",150,AMBER,"ma",10)
-text(d,(W//2,205),"FOR 28 YEARS",60,CREAM,"ma",7)
+text(d,(W//2,H-300),"SEALED",160,AMBER,"ma",10)
+text(d,(W//2,H-120),"FOR 28 YEARS",64,CREAM,"ma",7)
 im.save(O+"2a.jpg",quality=92)
 # B: provocative, train blasting through
 im=boost(fit(Image.open("/tmp/claude-0/th/big_intro_passby_0.3.png")),1.1,1.15)
@@ -80,12 +80,13 @@ im=glow_layer(im,ring(800,410,95,70))
 im=glow_layer(im,arrow(560,330,690,400))
 label(im,(800,520),"EAST BERLIN · 1961-1989",34,"ma")
 im.save(O+"2b.jpg",quality=92)
-# C: real photo 1989 crowd
+# C: real photo, 11 Nov 1989, Jannowitzbruecke reopens
 src=Image.open("/home/user/YTP1/germany_shorts/longform/episodes/01_ghost_stations/assets/c01.jpg").convert("L")
 im=ImageOps.colorize(src,(10,8,6),(255,226,180)).convert("RGB")
 im=boost(fit(im),1.05,1.25)
-im=shade(im,(0,H-300,W,H),230,"b")
+im=shade(im,(0,0,760,H),235,"l")
 d=ImageDraw.Draw(im)
-text(d,(W//2,H-230),"28 YEARS LATER",120,AMBER,"ma",10)
-text(d,(W//2,H-95),"THE TRAIN STOPPED",58,CREAM,"ma",7)
+text(d,(50,330),"OPEN",150,AMBER,"la",10)
+text(d,(54,490),"AFTER 28 YEARS",60,CREAM,"la",7)
+text(d,(56,575),"NOVEMBER 1989",40,CREAM,"la",5)
 im.save(O+"2c.jpg",quality=92)
