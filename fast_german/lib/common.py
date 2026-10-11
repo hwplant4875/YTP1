@@ -15,7 +15,7 @@ os.makedirs(CACHE, exist_ok=True)
 
 VOICE = "rKiu7lQ4c5P3az3745s3"  # Carla Blum - Confident and Informative (sample 6-Carla, user's pick 2026-10-09)
 MODEL = "eleven_multilingual_v2"
-KEY = os.environ.get("ELEVENLABS_API_KEY", "")
+KEY = os.environ.get(os.environ.get("FG_EL_KEY_VAR", "ELEVENLABS_API_KEY"), "")  # FG_EL_KEY_VAR=ELEVENLABS_JC_API_KEY for long-form (second account)
 
 # der / die / das colors: the channel signature, identical in every video.
 GENDER = {"der": (47, 111, 237), "die": (229, 72, 77), "das": (34, 160, 80), None: (28, 28, 30)}

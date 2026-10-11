@@ -1,0 +1,790 @@
+{
+ "id": "l3_greetings",
+ "title": "German Greetings & Basic Phrases for Beginners",
+ "landscape": true,
+ "bg": "road",
+ "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
+ "scenes": [
+  {
+   "lines": [
+    [
+     {
+      "en": "Fifty German phrases. Ten minutes.",
+      "show": [
+       "t1",
+       "t2"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "By the end, you can say hello, introduce yourself, survive when you don't understand, and say goodbye like a German."
+     }
+    ],
+    [
+     {
+      "en": "When you see this circle, say it out loud.",
+      "show": [
+       "tm"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 1.0
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "t1",
+     "type": "word",
+     "de": "50 German phrases",
+     "size": 150,
+     "x": 960,
+     "y": 420
+    },
+    {
+     "id": "t2",
+     "type": "text",
+     "text": "in 10 minutes",
+     "size": 90,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 580
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 960,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Part 1. Saying hello.",
+      "show": [
+       "i",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.6,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "waving-hand-default",
+     "s": 300,
+     "x": 960,
+     "y": 430
+    },
+    {
+     "id": "t",
+     "type": "word",
+     "de": "Saying hello",
+     "size": 130,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 720
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hello.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Hallo.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Hallo.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "waving-hand-default",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Hallo",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Hello",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 650
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hello, everyone.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Hallo zusammen.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Hallo zusammen.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "people-hugging",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Hallo zusammen",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Hello, everyone",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 650
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Good morning.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Guten Morgen.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Guten Morgen.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "sunrise",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Guten Morgen",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Good morning",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 650
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Good day.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Guten Tag.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Guten Tag.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Guten Tag",
+      "show": [
+       "tip"
+      ]
+     },
+     {
+      "en": "in shops,"
+     },
+     {
+      "de": "Hallo"
+     },
+     {
+      "en": "with friends."
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "sun",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Guten Tag",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Good day",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 650
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "Guten Tag in shops, Hallo with friends.",
+     "size": 62,
+     "x": 960,
+     "y": 960
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Good evening.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Guten Abend.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Guten Abend.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "sunset",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Guten Abend",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Good evening",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 650
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hi, in the north.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Moin.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Moin.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "en": "Up north, people say",
+      "show": [
+       "tip"
+      ]
+     },
+     {
+      "de": "Moin"
+     },
+     {
+      "en": "all day long."
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "anchor",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Moin",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Hi, in the north",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 650
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "Up north, people say Moin all day long.",
+     "size": 62,
+     "x": 960,
+     "y": 960
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hi, in the south.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Servus.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Servus.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Servus",
+      "show": [
+       "tip"
+      ]
+     },
+     {
+      "en": "means hi and bye."
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "snow-capped-mountain",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Servus",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Hi, in the south",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 650
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "Servus means hi and bye.",
+     "size": 62,
+     "x": 960,
+     "y": 960
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hello, in Bavaria and Austria.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Gr\u00fc\u00df Gott.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Gr\u00fc\u00df Gott.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "church",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Gr\u00fc\u00df Gott",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Hello, in Bavaria and Austria",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 650
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  }
+ ]
+}

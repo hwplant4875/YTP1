@@ -225,6 +225,8 @@ def build_el(el):
     if t == "text":
         f = fit(el["text"], en_font, W - 2 * MX, el.get("size", 84))
         return ("img", text_im(el["text"], f, tuple(el.get("colour", WHITE))))
+    if t == "timer":
+        return ("timer", el.get("s", 150), el.get("dur", 2.0))
     if t == "ring":
         w, h, lw = el["w"], el["h"], el.get("width", 12)
         im = Image.new("RGBA", (w, h))
@@ -255,6 +257,15 @@ def draw_el(frame, built, el, local, appear, scene_len):
     if p <= 0:
         return
     cx, cy = el["x"], el["y"]
+    if built[0] == "timer":
+        s, dur = built[1], built[2]
+        q = min(1.0, max(0.0, (local - appear) / dur))
+        im = Image.new("RGBA", (s, s))
+        d = ImageDraw.Draw(im)
+        d.ellipse((8, 8, s - 9, s - 9), outline=(255, 255, 255, 70), width=14)
+        if q > 0:
+            d.arc((8, 8, s - 9, s - 9), -90, -90 + 360 * q, fill=ACCENT + (255,), width=14)
+        built = ("img", shadow(im, 8, 80, 4))
     if built[0] == "photo":
         big, (w, h, border) = built[1], built[2]
         z = 1.0 + 0.06 * min(1, max(0, local) / max(1.0, scene_len))     # slow push-in, kept inside the card
@@ -289,13 +300,13 @@ def draw_el(frame, built, el, local, appear, scene_len):
     frame.alpha_composite(im, (int(cx - im.width / 2), int(cy - im.height / 2 + dy)))
 
 
-def german_take(text):
+def german_take(text, speed=1.0):
     """German clip with a falling ending: try a few stabilities, keep the first whose ending falls.
     Pitch is only measured, never edited (user rule 2026-10-10)."""
     import parselmouth
     best = None
     for st in (0.45, 0.55, 0.65, 0.35):
-        mp3, _ = C.tts(text, stability=st, lang="de")
+        mp3, _ = C.tts(text, speed=speed, stability=st, lang="de")
         wav = mp3[:-4] + ".wav"
         if not os.path.exists(wav):
             subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp3, wav], check=True)
@@ -312,7 +323,10 @@ def german_take(text):
 
 
 def render(spec_path, out_path):
+    global W, H
     spec = json.load(open(spec_path))
+    if spec.get("landscape"):                          # long-form: 16:9, road runs left-right
+        W, H = 1920, 1080
     t = 0.4
     clips, timeline, pops = [], [], []
     for sc in spec["scenes"]:
@@ -320,13 +334,14 @@ def render(spec_path, out_path):
         shows = {}
         for line in sc["lines"]:
             for seg in line:
+                for e in seg.get("show", []):
+                    shows[e] = t - start
+                    if not seg.get("quiet"):
+                        pops.append(t)
                 if "pause" in seg:
                     t += seg["pause"]
                     continue
-                for e in seg.get("show", []):
-                    shows[e] = t - start
-                    pops.append(t)
-                mp3 = german_take(seg["de"]) if "de" in seg else C.tts(seg["en"])[0]
+                mp3 = german_take(seg["de"], seg.get("speed", 1.0)) if "de" in seg else C.tts(seg["en"])[0]
                 clips.append((mp3, t))
                 t += C.duration(mp3) + SEG_GAP
             t += LINE_GAP - SEG_GAP
@@ -370,8 +385,13 @@ def render(spec_path, out_path):
     if road:
         use_road_theme()
         import road_loop as RL
-        tex = RL.strip(W, (H // RL.PERIOD + 1) * RL.PERIOD)
-        loop_px = tex.shape[0] / (RL.SECS * FPS)                  # same drift speed as the approved loop
+        horiz = spec.get("road_dir") == "h"           # default: road runs down the screen, also in 16:9
+        if horiz:
+            tex = np.ascontiguousarray(np.transpose(RL.strip(H, (W // RL.PERIOD + 1) * RL.PERIOD), (1, 0, 2)))
+            loop_px = tex.shape[1] / (RL.SECS * FPS)
+        else:
+            tex = RL.strip(W, (H // RL.PERIOD + 1) * RL.PERIOD)
+            loop_px = tex.shape[0] / (RL.SECS * FPS)                  # same drift speed as the approved loop
         badge = shadow(C.icon("pretzel", 150), 14, 120, 6)     # pretzel only, no red square (user)
         yy, xx = np.mgrid[0:H, 0:W]
         vig = (1 - 0.22 * (((xx / W - 0.5) * 2) ** 2 + ((yy / H - 0.5) * 2) ** 2) / 2)[..., None]
@@ -390,7 +410,10 @@ def render(spec_path, out_path):
             si -= 1
             tl = timeline[si]
         if road:
-            fr = (np.roll(tex, int(fi * loop_px) % tex.shape[0], axis=0)[:H] * vig).astype(np.uint8)
+            if horiz:
+                fr = (np.roll(tex, -int(fi * loop_px) % tex.shape[1], axis=1)[:, :W] * vig).astype(np.uint8)
+            else:
+                fr = (np.roll(tex, int(fi * loop_px) % tex.shape[0], axis=0)[:H] * vig).astype(np.uint8)
             frame = Image.fromarray(fr).convert("RGBA")
             frame.alpha_composite(badge, ((W - 150) // 2 - 28, 110 - 28))
         else:
