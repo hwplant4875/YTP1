@@ -4,6 +4,6 @@ seq=[("h1",.25),("h2",.08),("n0",.35),("n1a",.12),("n1b",.35),("n1c",.35),("s0",
 def dur(k): return float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",f"vo/{k}.wav"]))
 t=0; T={}
 for k,g in seq:
-    t+=g; d=dur(k); T[k]=[round(t,3),round(t+d,3)]; t+=d
+    t+=g+.1; d=dur(k); T[k]=[round(t,3),round(t+d,3)]; t+=d
 T["END"]=round(t+1.6,3)
 json.dump(T,open("timeline.json","w"),indent=1); print(T["END"])

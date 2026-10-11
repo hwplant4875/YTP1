@@ -10,7 +10,8 @@ CACHE = os.path.expanduser("~/.cache/k60_tts"); os.makedirs(CACHE, exist_ok=True
 SR = 48000
 
 def tts(text, lang):
-    h = hashlib.sha1((f"{VOICE}|{lang}|{text}" + ("|slow" if lang == "ko" else "")).encode()).hexdigest()[:16]
+    # speed 1.0 for everything (user, 2026-10-11): natural pace, no sped-up or slowed-down voice
+    h = hashlib.sha1(f"{VOICE}|{lang}|speed1|{text}".encode()).hexdigest()[:16]
     mp3 = f"{CACHE}/{h}.mp3"; wav = f"{CACHE}/{h}.wav"
     if not os.path.exists(wav) and os.environ.get("K60_DRY"):
         # layout preview without spending TTS credits: estimate the spoken length
@@ -19,7 +20,8 @@ def tts(text, lang):
     if not os.path.exists(wav):
         body = {"text": text, "model_id": "eleven_multilingual_v2",
                 "voice_settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.4, "use_speaker_boost": True}}
-        if lang == "ko": body["language_code"] = "ko"; body["voice_settings"]["speed"] = 0.8  # learners need to hear every syllable
+        body["voice_settings"]["speed"] = 1.0
+        if lang == "ko": body["language_code"] = "ko"  # Hangul read as Korean, never romanized English
         code = subprocess.run(["curl", "-s", "-X", "POST", f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE}?output_format=mp3_44100_192",
             "-H", "xi-api-key: " + os.environ["ELEVENLABS_API_KEY"], "-H", "Content-Type: application/json",
             "-d", json.dumps(body), "-o", mp3, "-w", "%{http_code}"], capture_output=True, text=True).stdout
