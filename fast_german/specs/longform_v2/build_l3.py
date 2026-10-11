@@ -52,8 +52,8 @@ def build(sample=False):
     for n, (title, icon, phrases) in enumerate(CHAPTERS[:1] if sample else CHAPTERS, 1):
         scenes.append(chapter_card(n, title, icon))
         scenes += [phrase_scene(*p) for p in phrases]
-    return {"id": "l3_greetings", "title": "German Greetings & Basic Phrases for Beginners", "landscape": True, "bg": "road", "road_dir": "h",
-            "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3", "scenes": scenes}
+    return {"id": "l3_greetings", "title": "German Greetings & Basic Phrases for Beginners", "landscape": True, "bg": "road",
+            "music": ["/mnt/project-files/fast_german/cache/music/incompetech/lobby_time_loop.wav", "/mnt/project-files/fast_german/cache/music/incompetech/easy_lemon_loop.wav"], "scenes": scenes}
 
 
 if __name__ == "__main__":

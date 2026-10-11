@@ -383,10 +383,21 @@ def render(spec_path, out_path):
         k += 1
     num = int(re.match(r"\d*", os.path.basename(spec_path)).group() or 0)
     music = spec.get("music") or MUSIC[num % len(MUSIC)]
-    inputs += ["-stream_loop", "-1", "-i", music]
-    fl.append(f"[{k}:a]aformat=sample_rates=48000:channel_layouts=stereo,loudnorm=I=-13:TP=-1.5:LRA=11,"
-              f"aresample=48000,atrim=0:{total},afade=t=in:d=0.5,"
-              f"afade=t=out:st={total - 1.2}:d=1.2,volume={MUSIC_VOL}[m0]")
+    if isinstance(music, list):                 # two seamless loops, switching with a crossfade halfway through
+        half, xf = total / 2, 4.0
+        inputs += ["-stream_loop", "-1", "-i", music[0], "-stream_loop", "-1", "-i", music[1]]
+        fl.append(f"[{k}:a]aformat=sample_rates=48000:channel_layouts=stereo,loudnorm=I=-13:TP=-1.5:LRA=11,"
+                  f"aresample=48000,atrim=0:{half + xf / 2},afade=t=in:d=0.5,afade=t=out:st={half - xf / 2}:d={xf}[ma]")
+        fl.append(f"[{k + 1}:a]aformat=sample_rates=48000:channel_layouts=stereo,loudnorm=I=-13:TP=-1.5:LRA=11,"
+                  f"aresample=48000,atrim=0:{total - half + xf / 2},afade=t=in:d={xf},"
+                  f"adelay={int((half - xf / 2) * 1000)}:all=1[mb]")
+        fl.append(f"[ma][mb]amix=inputs=2:normalize=0:duration=longest,atrim=0:{total},"
+                  f"afade=t=out:st={total - 1.2}:d=1.2,volume={MUSIC_VOL}[m0]")
+    else:
+        inputs += ["-stream_loop", "-1", "-i", music]
+        fl.append(f"[{k}:a]aformat=sample_rates=48000:channel_layouts=stereo,loudnorm=I=-13:TP=-1.5:LRA=11,"
+                  f"aresample=48000,atrim=0:{total},afade=t=in:d=0.5,"
+                  f"afade=t=out:st={total - 1.2}:d=1.2,volume={MUSIC_VOL}[m0]")
     fl.append("[m0][key]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=350[music]")
     mix.append("[music]")
     fl.append("[voice]" + "".join(mix) + f"amix=inputs={1 + len(mix)}:normalize=0,alimiter=limit=0.89,apad[a]")
@@ -403,7 +414,7 @@ def render(spec_path, out_path):
             tex = np.ascontiguousarray(np.transpose(RL.strip(H, (W // RL.PERIOD + 1) * RL.PERIOD, tracks=False), (1, 0, 2)))
             loop_px = tex.shape[1] / (RL.SECS * FPS)
         else:
-            tex = RL.strip(W, (H // RL.PERIOD + 1) * RL.PERIOD)
+            tex = RL.strip(W, (H // RL.PERIOD + 1) * RL.PERIOD, tracks=H > W)   # 16:9: plain asphalt, no stripes
             loop_px = tex.shape[0] / (RL.SECS * FPS)                  # same drift speed as the approved loop
         badge = shadow(C.icon("pretzel", 150), 14, 120, 6)     # pretzel only, no red square (user)
         yy, xx = np.mgrid[0:H, 0:W]

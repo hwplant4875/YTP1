@@ -3,8 +3,10 @@
  "title": "German Greetings & Basic Phrases for Beginners",
  "landscape": true,
  "bg": "road",
- "road_dir": "h",
- "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
+ "music": [
+  "/mnt/project-files/fast_german/cache/music/incompetech/lobby_time_loop.wav",
+  "/mnt/project-files/fast_german/cache/music/incompetech/easy_lemon_loop.wav"
+ ],
  "scenes": [
   {
    "lines": [
