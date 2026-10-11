@@ -84,6 +84,14 @@ function buildTrack() {
   wall([[-W, y], [-1.2, y - 4]]); wall([[W, y], [1.2, y - 4]]);
   y -= 6;
   wall([[W, y + 0.5], [-W + 3.0, y - 3.6]]);
+  // the flipper: a one-armed paddle hinged IN the home-straight floor, spinning clockwise. While its arm is above the
+  // floor it scoops marbles up and back (up-right), so a leader can be thrown back up the ramp; while it is below
+  // the floor the lane is clear.
+  if (!process.env.NO_SWEEPER) {
+    const sx = +(process.env.SWEEP_X || -2.2), rampY = x => (y + 0.5) + (x - W) * (4.1 / (2 * W - 3.0));
+    T.spinners.push({ x: sx, y: rampY(sx), len: +(process.env.SWEEP_LEN || 1.4), w: 0.26, speed: -(+(process.env.SWEEP_SPEED || 2.0)), arms: 1, sweeper: true });
+    T.walls[T.walls.length - 1].slot = sx;
+  }
   T.finishX = -W + 3.0; T.finishY = y - 3.6; T.finishTop = y + 0.5;
   sec = 0;
   wall([[-W, y - 4.5], [-W, y - 9]], 'side'); wall([[-W, y - 9], [-W + 9, y - 9.4]], 'side'); wall([[-W + 9, y - 9.4], [-W + 9, y - 6.5]], 'side');
@@ -108,9 +116,19 @@ export function simulate(seed, keep = true) {
   let firstThrough = null, lipOpen = 0, lipT = null;
     const spin = T.spinners.map(sp => {
     const b = world.createKinematicBody({ position: Vec2(sp.x, sp.y) });
-    b.createFixture(Box(sp.len / 2, sp.w / 2), { friction: 0.3, restitution: 0.3 });
-    b.createFixture(Box(sp.w / 2, sp.len / 2), { friction: 0.3, restitution: 0.3 });
-    b.setAngularVelocity(sp.speed); b.setAngle(rnd() * Math.PI); return b;
+    if (sp.arms === 1) { b.createFixture(Box(sp.len / 2, sp.w / 2, Vec2(sp.len / 2, 0), 0), { friction: 0.3, restitution: 0.5 }); b.createFixture(Circle(Vec2(0, 0), 0.16), { friction: 0.3, restitution: 0.3 }); b.sweeper = true; }
+    else {
+      b.createFixture(Box(sp.len / 2, sp.w / 2), { friction: 0.3, restitution: 0.3 });
+      b.createFixture(Box(sp.w / 2, sp.len / 2), { friction: 0.3, restitution: 0.3 });
+    }
+    b.setAngularVelocity(sp.speed); b.setAngle(sp.sweeper ? 0 : rnd() * Math.PI); return b;
+  });
+  const sweeps = []; // [time, marble index] whenever the sweeper arm touches a marble
+  world.on('begin-contact', c => {
+    const a = c.getFixtureA().getBody(), b = c.getFixtureB().getBody();
+    const sw = a.sweeper ? a : b.sweeper ? b : null; if (!sw) return;
+    const other = sw === a ? b : a, i = balls.findIndex(m => m.b === other);
+    if (i >= 0 && (!sweeps.length || sweeps[sweeps.length - 1][1] !== i || t - sweeps[sweeps.length - 1][0] > 0.4)) sweeps.push([+t.toFixed(3), i]);
   });
   const order = META.items.map((c, i) => i).sort(() => rnd() - 0.5);
   const balls = META.items.map(([code, name, pop], i) => {
@@ -146,9 +164,9 @@ export function simulate(seed, keep = true) {
     }
     if (done === balls.length && t > (Math.max(...balls.map(b => b.finish)) + 3)) break;
   }
-  const res = balls.map(m => ({ code: m.code, name: m.name, pop: m.pop, r: m.r, finish: m.finish, nudges: m.nudges || 0 }));
-  T.lipT = lipT; T.firstThrough = firstThrough;
-  return { T, res, frames, spinFrames, t };
+  const res = balls.map((m, i) => ({ code: m.code, name: m.name, pop: m.pop, disp: META.items[i][3], r: m.r, finish: m.finish, nudges: m.nudges || 0 }));
+  T.lipT = lipT; T.firstThrough = firstThrough; T.sweeps = sweeps;
+  return { T, res, frames, spinFrames, t, sweeps };
 }
 
 // leader changes, for picking an exciting seed
@@ -162,7 +180,7 @@ function stats(sim) {
   return { lc: sim.frames.length ? leadChanges(sim) : -1, order: rank.map(r => sim.res[r[1]].code).join(','), winner: sim.res[rank[0][1]].name, first: rank[0][0], last: rank[rank.length - 1][0], unfinished: sim.res.filter(r => r.finish === null).length, nudges: sim.res.reduce((a, r) => a + r.nudges, 0) };
 }
 
-const args = process.argv.slice(2);
+const args = import.meta.url === new URL('file://' + process.argv[1]).href ? process.argv.slice(2) : [];
 if (args.includes('--search')) {
   const n = +args[args.indexOf('--search') + 1];
   for (let seed = 1; seed <= n; seed++) {

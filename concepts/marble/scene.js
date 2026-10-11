@@ -16,6 +16,7 @@ const easeOutBack = t => { const c = 1.7; return 1 + (c + 1) * Math.pow(t - 1, 3
 const POP = p => p >= 1000 ? (p / 1000).toFixed(2).replace(/0$/, '') + 'B' : (p >= 10 ? Math.round(p) : p.toFixed(1)) + 'M';
 let META = { key: 'pop', subtitle: 'Marble size = Population', label: 'population', prefix: 'pop. ' };
 const FMT = v => META.key === 'area' ? (v >= 1 ? v.toFixed(1) + 'M km²' : Math.round(v * 1000) + 'K km²') : META.key === 'gdp' ? '$' + v.toFixed(v >= 10 ? 1 : 2) + 'T' : POP(v);
+const DSP = r => r.disp ?? FMT(r.pop);
 // Shorts UI covers x > 900 below y 1035 and everything below y 1540; keep graphics out of it
 const SAFE_CX = 490;
 
@@ -110,8 +111,12 @@ export async function setup(THREE, renderer, W, H) {
       const m = new THREE.Mesh(geo, railMat(w.sec)); m.castShadow = m.receiveShadow = true; scene.add(m);
       continue;
     }
-    for (let i = 0; i < w.pts.length - 1; i++) {
-      const a = w.pts[i], b = w.pts[i + 1];
+    const pts = w.slot === undefined ? w.pts : (() => { // leave a visible slot in the rail where the flipper arm dips through
+      const [a, b] = w.pts, f = x => [x, a[1] + (b[1] - a[1]) * (x - a[0]) / (b[0] - a[0])];
+      return [a, f(w.slot + 0.3), null, f(w.slot - 0.3), b];
+    })();
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], b = pts[i + 1]; if (!a || !b) continue;
       const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy); let nx = -dy / L, ny = dx / L;
       if (side) { nx = Math.abs(a[0]) < 0.01 ? 0 : (a[0] < 0 ? -1 : 1); ny = 0; } else if (ny > 0) { nx = -nx; ny = -ny; }
       const o = th / 2;
@@ -137,8 +142,16 @@ export async function setup(THREE, renderer, W, H) {
   });
   const spinMat = new THREE.MeshPhysicalMaterial({ color: SEC[7], emissive: SEC[7], emissiveIntensity: 0.15, roughness: 0.35, clearcoat: 0.8 });
   const hubMat = new THREE.MeshPhysicalMaterial({ color: 0xffc04a, metalness: 1, roughness: 0.22 });
+  const flipMat = new THREE.MeshPhysicalMaterial({ color: 0xff1f4b, emissive: 0xff1f4b, emissiveIntensity: 0.55, roughness: 0.3, clearcoat: 1 });
   const spinners = T.spinners.map(sp => {
     const g = new THREE.Group(); g.position.set(sp.x, sp.y, 0);
+    if (sp.arms === 1) { // the flipper: one red arm on a gold hub, hinged in the floor
+      const arm = new THREE.Mesh(new RoundedBoxGeometry(sp.len, sp.w, 0.9, 3, 0.11), flipMat); arm.position.x = sp.len / 2;
+      const tip = new THREE.Mesh(new THREE.CylinderGeometry(sp.w * 0.62, sp.w * 0.62, 0.95, 24), hubMat); tip.rotation.x = Math.PI / 2; tip.position.x = sp.len - 0.05;
+      const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, 1.35, 32), hubMat); hub.rotation.x = Math.PI / 2;
+      for (const m of [arm, tip, hub]) { m.castShadow = true; g.add(m); }
+      scene.add(g); return g;
+    }
     const a = new THREE.Mesh(new RoundedBoxGeometry(sp.len, sp.w, 1.1, 3, 0.1), spinMat);
     const b = new THREE.Mesh(new RoundedBoxGeometry(sp.w, sp.len, 1.1, 3, 0.1), spinMat);
     const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 1.3, 32), hubMat); hub.rotation.x = Math.PI / 2;
@@ -179,6 +192,14 @@ export async function setup(THREE, renderer, W, H) {
     if (cand !== cur && k - since >= R.fps * 0.5) { if (cur >= 0) leads.push({ s: since / R.fps, i: cand }); cur = cand; }
   }
 
+  // flipper hits on a marble running 1st or 2nd (sim time), for the "knocked back" toast
+  const flips = [];
+  for (const [ts, i] of (T.sweeps || [])) {
+    const k = Math.min(F - 1, Math.round(ts * R.fps)), st = R.res.map((r, j) => [r.finish !== null && r.finish <= ts ? -1e6 + r.finish : R.frames[k][j][1], j]).sort((a, b) => a[0] - b[0]).map(o => o[1]);
+    const done = R.res.filter(r => r.finish !== null && r.finish <= ts).length;
+    if (st.indexOf(i) - done <= 1 && st.indexOf(i) >= done && (!flips.length || ts - flips[flips.length - 1].s > 1.2)) flips.push({ s: ts, i });
+  }
+
   // smoothed camera path: follow the leader, pulled toward the pack, low-pass filtered
   const camY = new Float32Array(F), camX = new Float32Array(F);
   for (let k = 0; k < F; k++) {
@@ -199,7 +220,7 @@ export async function setup(THREE, renderer, W, H) {
   composer.addPass(new OutputPass());
   const finish = new ShaderPass(FinishShader); composer.addPass(finish);
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
-  return { THREE, scene, camera, composer, finish, R, T, TL, marbles, spinners, lips, bumpers, bumpHits, leads, order, camY: sm, camX: smx, pipCam, key, flags, W, H, rows: {} };
+  return { THREE, scene, camera, composer, finish, R, T, TL, marbles, spinners, lips, bumpers, bumpHits, leads, flips, order, camY: sm, camX: smx, pipCam, key, flags, W, H, rows: {} };
 }
 
 export function update(ctx, t) {
@@ -282,7 +303,7 @@ export function overlay(ctx, g, t) {
   const a0 = easeOut(clamp(t / 0.25)), sh = easeOut(clamp((t - 4) / 0.7));
   g.textAlign = 'center'; g.globalAlpha = a0;
   g.shadowColor = 'rgba(0,0,0,0.7)'; g.shadowBlur = 20;
-  g.font = `${Math.round(lerp(66, 54, sh))}px Jua`; g.fillStyle = '#ffc04a'; g.fillText(META.subtitle, W / 2, lerp(226, 204, sh));
+  g.font = `${Math.round(lerp(66, 54, sh))}px Jua`; { const fs = Math.round(lerp(66, 54, sh) * Math.min(1, 940 / g.measureText(META.subtitle).width)); g.font = `${fs}px Jua`; } g.fillStyle = '#ffc04a'; g.fillText(META.subtitle, W / 2, lerp(226, 204, sh));
   g.font = `${Math.round(lerp(84, 60, sh))}px YTSans`; g.fillStyle = '#fff'; g.fillText('Which country wins?', W / 2, lerp(322, 282, sh));
   g.shadowColor = 'transparent'; g.globalAlpha = 1;
 
@@ -304,7 +325,7 @@ export function overlay(ctx, g, t) {
     g.fillText(String(pos + 1), bx + 22, y + 42);
     flagDot(g, flags[r.code], bx + 82, y + 32, 20);
     g.font = '28px YTSans'; g.fillStyle = '#fff'; g.fillText(r.name, bx + 114, y + 33);
-    g.font = '500 21px Fredoka'; g.fillStyle = 'rgba(255,255,255,0.6)'; g.fillText(META.prefix + FMT(r.pop), bx + 114, y + 56);
+    g.font = '500 21px Fredoka'; g.fillStyle = 'rgba(255,255,255,0.6)'; g.fillText((r.disp ? '' : META.prefix) + DSP(r), bx + 114, y + 56);
     if (r.finish !== null && r.finish <= tt) { g.fillStyle = '#3ddc84'; g.font = '26px YTSans'; g.textAlign = 'right'; g.fillText('✓', bx + 312, y + 42); }
   }
   g.globalAlpha = 1;
@@ -316,6 +337,17 @@ export function overlay(ctx, g, t) {
     g.fillStyle = '#ffc04a'; rr(g, 0, 0, w, 54, 27); g.fill();
     flagDot(g, flags[r.code], 30, 27, 17);
     g.fillStyle = '#1a1205'; g.textAlign = 'left'; g.fillText(label, 58, 37); g.restore();
+  }
+
+  // flipper toast: red pill under the board, wins over the lead toast while it shows
+  const lastFlip = ctx.flips.filter(f => f.s <= tt).pop();
+  if (lastFlip && tt - lastFlip.s < 1.8) {
+    const u = tt - lastFlip.s, a = easeOutBack(clamp(u / 0.25)) * (1 - clamp((u - 1.5) / 0.3)), r = R.res[lastFlip.i];
+    g.save(); g.globalAlpha = clamp(a); g.translate(bx, by + rowH * 5 + 108); g.scale(0.8 + 0.2 * clamp(a), 0.8 + 0.2 * clamp(a));
+    g.font = '30px Jua'; const label = `${r.name} got flipped back!`, w = g.measureText(label).width + 84;
+    g.fillStyle = '#ff2d55'; rr(g, 0, 0, w, 54, 27); g.fill();
+    flagDot(g, flags[r.code], 30, 27, 17);
+    g.fillStyle = '#fff'; g.textAlign = 'left'; g.fillText(label, 58, 37); g.restore();
   }
 
   // LIVE tag on the picture-in-picture
@@ -349,14 +381,14 @@ export function overlay(ctx, g, t) {
       flagDot(g, ctx.flags[r.code], 0, -80, 62);
       g.textAlign = 'center'; g.fillStyle = '#111'; const wtxt = r.name.toUpperCase() + ' WINS'; g.font = '72px YTSans'; const fsz = Math.min(72, 72 * 640 / g.measureText(wtxt).width); g.font = `${Math.floor(fsz)}px YTSans`; g.fillText(wtxt, 0, 60);
       g.font = '36px Jua'; g.fillStyle = '#666'; g.fillText(`by ${(second[0] - win[0]).toFixed(2)}s over ${R.res[second[1]].name}`, 0, 118);
-      g.font = '30px Jua'; g.fillStyle = '#999'; g.fillText(META.label + ' ' + FMT(r.pop), 0, 160);
+      g.font = '30px Jua'; g.fillStyle = '#999'; g.fillText([META.label, DSP(r)].filter(Boolean).join(' '), 0, 160);
       g.restore();
     }
   }
   if (tt > last[0] - 0.2) {
     const a = easeOut(clamp((tt - last[0] + 0.2) / 0.5)), r = R.res[last[1]];
     const biggest = R.res.every(o => o.pop <= r.pop);
-    banner(g, W, a, `${r.name.toUpperCase()} FINISHED LAST`, biggest ? `The biggest marble: ${FMT(r.pop)}${META.key === 'pop' ? ' people' : ''}` : `${META.label} ${FMT(r.pop)}`, '#ffc04a');
+    banner(g, W, a, `${r.name.toUpperCase()} FINISHED LAST`, biggest ? `The biggest marble: ${DSP(r)}${META.key === 'pop' ? ' people' : ''}` : [META.label, DSP(r)].filter(Boolean).join(' '), '#ffc04a');
   }
 }
 

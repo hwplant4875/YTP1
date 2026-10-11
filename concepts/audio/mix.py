@@ -86,13 +86,20 @@ elif what == 'marble':
         body = (np.sin(2 * np.pi * f0 * t) + 0.45 * np.sin(2 * np.pi * f0 * 2.31 * t) * np.exp(-t / 0.02)) * np.minimum(1, t / 0.0015) * np.exp(-t / 0.045)
         noise = lowpass(rng.normal(0, 1, n) * np.exp(-t / 0.006), 1400) * 0.9
         return (body + noise).astype(np.float32)
+    def wood(f0, rng):  # hollow wooden block: low partials, soft attack, quick decay (no bright ring)
+        n = int(0.25 * SR); t = np.arange(n) / SR
+        body = (np.sin(2 * np.pi * f0 * t) * np.exp(-t / 0.06) + 0.5 * np.sin(2 * np.pi * f0 * 2.76 * t) * np.exp(-t / 0.018) + 0.2 * np.sin(2 * np.pi * f0 * 5.4 * t) * np.exp(-t / 0.008)) * np.minimum(1, t / 0.002)
+        noise = lowpass(rng.normal(0, 1, n) * np.exp(-t / 0.003), 2000) * 0.5
+        return (body + noise).astype(np.float32)
     rng = np.random.default_rng(11)
-    HIT_DB = {'boom': -19, 'stone': -11}
+    HIT_DB = {'boom': -19, 'stone': -11, 'wood': -12, 'click': 4}
     bank = {}
     def voice(r, slow):
         key = (round(r, 2), slow)
         if key not in bank:
             if style == 'boom': bank[key] = [thump((62 - 26 * min(1, (r - 0.2) / 0.7)) * (0.8 if slow else 1), 0.9 if slow else 0.6, rng) for _ in range(3)]
+            elif style == 'wood': bank[key] = [wood((420 - 200 * min(1, (r - 0.2) / 0.7)) * (0.8 if slow else 1) * rng.uniform(0.96, 1.04), rng) for _ in range(3)]
+            elif style == 'click': bank[key] = [click(rng, 1.0)[:, 0] * 2 for _ in range(3)]  # v1/v2 glass click (user liked the first video)
             else: bank[key] = [knock((330 - 160 * min(1, (r - 0.2) / 0.7)) * (0.75 if slow else 1) * rng.uniform(0.95, 1.05), rng) for _ in range(3)]
         return bank[key][rng.integers(3)]
     F = np.array(R['frames']); v = np.diff(F[:, :, :2], axis=0) * fps
@@ -113,6 +120,18 @@ elif what == 'marble':
             pan = float(np.clip(F[k, i, 0] / 9, -0.6, 0.6))
             place(buf, np.stack([c * (1 - pan * 0.5), c * (1 + pan * 0.5)], 1), t_, HITS * db(HIT_DB[style]))
     T = R['track']
+    # flipper: a soft punchy thwack each time the arm swats a marble (louder if it was a top-2 marble, like the toast)
+    thw = thump(70, 0.5, np.random.default_rng(5)); kk = knock(190, np.random.default_rng(6)); thw[:len(kk)] += kk * 0.6
+    fo2 = int(0.12 * SR); thw[-fo2:] *= np.linspace(1, 0, fo2)
+    lastsw = -9
+    for ts, i in T.get('sweeps', []):
+        t_ = vt(ts)
+        if t_ > D or t_ - lastsw < 0.25: continue
+        lastsw = t_; pan = -0.3
+        k = min(len(R['frames']) - 1, int(round(ts * fps)))
+        live = sorted([(R['frames'][k][j][1], j) for j, r in enumerate(R['res']) if r['finish'] is None or r['finish'] > ts])
+        top = i in [j for _, j in live[:2]]          # same rule as the scene's "flipped back" toast
+        place(buf, np.stack([thw * (1 - pan * 0.5), thw * (1 + pan * 0.5)], 1), t_, HITS * db(-12 if top else -22))
     hit = load('/mnt/project-files/sfx/user/sub_hit_warm.wav'); fo = int(0.3 * SR); hit[-fo:] *= np.linspace(1, 0, fo)[:, None]
     place(buf, hit, vt(T['lipT']) - 0.03, db(-10))
     def faded(path, dur, fade):
@@ -123,7 +142,7 @@ elif what == 'marble':
     place(buf, faded(SFX + '012_군중환호.mp3', 7.0, 2.5), wt - 0.2, db(-11))
     place(buf, faded(f'{C}/audio/fireworks.mp3', 4.5, 1.5), wt + 0.1, db(-14))
     buf *= np.clip((D - tt) / 1.2, 0, 1)[:, None]
-    write(buf, f'{C}/out/marble_v3_audio_{style}' + ('' if RACE == 'race.json' else '_' + RACE[:-5]) + '.wav'); print('duration', round(D, 2))
+    write(buf, os.environ.get('OUT') or f'{C}/out/marble_v3_audio_{style}' + ('' if RACE == 'race.json' else '_' + RACE[:-5]) + '.wav'); print('duration', round(D, 2))
 elif what == 'lies':
     E = json.load(open(f'{C}/counted/edl.json'))
     D = E['end'] + E['outro']
