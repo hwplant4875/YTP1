@@ -229,10 +229,19 @@ def render_g2d(v, d, start, beats, base):
     """2D motion graphics from graphics2d.py, timed to the narration of the beats they cover."""
     import graphics2d
     graphics2d.W, graphics2d.H = W, H   # graphics follow the frame size override (set here so graphics2d.py, part of the cache key, stays as is)
+    extra = ""
+    if v.get("module"):   # optional adapter module next to the spec that registers more graphics (e.g. for a short)
+        import importlib.util
+        mp = os.path.join(base, v["module"])
+        m = importlib.util.spec_from_file_location(os.path.splitext(os.path.basename(mp))[0], mp)
+        mod = importlib.util.module_from_spec(m)
+        m.loader.exec_module(mod)
+        graphics2d.GRAPHICS.update(mod.GRAPHICS)
+        extra = hashlib.sha1(open(mp, "rb").read()).hexdigest()[:10]
     timing = [{"start": round(b["_start"] - start, 3), "say_at": round(b["_say_at"] - start, 3), "say_d": round(b["_say_d"], 3),
                "say": b.get("say", ""), "end": round(b["_end"] - start, 3)} for b in beats]
     src = open(os.path.join(HERE, "graphics2d.py"), "rb").read()
-    k = key(v, round(d, 3), timing, hashlib.sha1(src).hexdigest()[:10], *SIZE_KEY)
+    k = key(v, round(d, 3), timing, hashlib.sha1(src).hexdigest()[:10], *SIZE_KEY, *([extra] if extra else []))
     ext = "mov" if v.get("alpha") else "mp4"
     return cached(f"g2d_{v['name']}_{k}.{ext}", lambda p: graphics2d.render(v, d, timing, base, p, ext))
 

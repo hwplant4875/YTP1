@@ -39,7 +39,7 @@ od.rectangle([0,500,2560,940],fill=(0,0,0,150)); ov=ov.filter(ImageFilter.Gaussi
 d=ImageDraw.Draw(B)
 mk=mark(210); B.paste(mk,(1280-560,615),mk)
 f=F(170,800); tw=track(d,(1280+130,720),"STRATA",f,CREAM,26)
-track(d,(1280,880),"HIDDEN EUROPE, CUT OPEN IN 3D",F(44,600),AMBER,10)
+track(d,(1280,880),"THE HIDDEN WORLD, CUT OPEN IN 3D",F(44,600),AMBER,10)
 B.save("banner_strata_2560x1440.jpg",quality=92)
 # safe-area preview (TV/desktop/mobile guides)
 pv=B.resize((1280,720)); pd=ImageDraw.Draw(pv); pd.rectangle([(1280-773)//2,(720-212)//2,(1280+773)//2,(720+212)//2],outline=(0,255,0),width=2)

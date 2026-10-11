@@ -94,10 +94,10 @@
    },
    "text": {
     "kind": "label",
-    "content": "{\\an5\\bord10\\shad0\\1a&HFF&\\3c&H2A2AE6&\\blur0.8\\fscx135\\fscy135\\t(0,260,\\fscx100\\fscy100)\\p1}m 190 0 b 295 0 380 170 380 380 b 380 590 295 760 190 760 b 85 760 0 590 0 380 b 0 170 85 0 190 0{\\p0}",
+    "content": "{\\an5\\bord10\\shad0\\1a&HFF&\\3c&H2A2AE6&\\blur0.8\\fscx135\\fscy135\\t(0,260,\\fscx100\\fscy100)\\p1}m 200 0 b 310 0 400 188 400 420 b 400 652 310 840 200 840 b 90 840 0 652 0 420 b 0 188 90 0 200 0{\\p0}",
     "pos": [
      0.5,
-     0.4479166666666667
+     0.5
     ],
     "delay": 0.9,
     "extend": 0.0
@@ -136,7 +136,8 @@
    "say": "So East Germany sealed sixteen stations.",
    "visual": {
     "type": "g2d",
-    "name": "c19",
+    "name": "c19_short",
+    "module": "short_graphics.py",
     "args": {
      "mode": "stations",
      "keys": [
@@ -165,12 +166,21 @@
    }
   },
   {
-   "say": "Down on the dark platforms, armed guards stood watch, so no one could jump aboard.",
+   "say": "On the dark platforms, armed guards stood watch,",
    "visual": {
     "type": "3d",
     "scene": "s1_watch",
     "shot": "guardroom",
     "t0": 0
+   }
+  },
+  {
+   "say": "so no one could jump aboard.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_watch",
+    "shot": "teaser",
+    "t0": 0.6
    }
   },
   {
@@ -229,7 +239,7 @@
     "t0": 0
    },
    "id": "end_card",
-   "hold": 2.3,
+   "hold": 0.4,
    "trans": "dip",
    "text": [
     {
@@ -237,7 +247,7 @@
      "content": "FULL STORY ON",
      "pos": [
       0.5,
-      0.6
+      0.575
      ],
      "delay": 0.15
     },
@@ -246,7 +256,7 @@
      "content": "ORBIS",
      "pos": [
       0.5,
-      0.675
+      0.655
      ],
      "delay": 0.35
     }

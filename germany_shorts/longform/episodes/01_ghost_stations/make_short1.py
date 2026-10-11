@@ -53,24 +53,25 @@ def say(line, visual="same", **kw):
 say("For twenty-eight years, this train never stopped.", v3("s1_intro", "passby", 0.4), id="intro",
     text=key("NEVER\\NSTOPPED", 0.34, 0.15), sfx=[TRAIN_PASS, AMBIENT])
 say("And on the platform, someone was always watching.", v3("s1_intro", "guard", 2.2),
-    text=ring(540, 860, 190, 380, 0.9), sfx=dict(HIT, at=0.9, vol=0.22))
+    text=ring(540, 960, 200, 420, 0.9), sfx=dict(HIT, at=0.9, vol=0.22))
 # context
 say("In 1961, the Berlin Wall split the city in two.", v3("s1_section", "stack", 0), text=key("1961", 0.30, 0.35))
 say("But West Berlin's U6, U8 and S-Bahn trains still ran right underneath the East.")
 say("So East Germany sealed sixteen stations.",
-    {"type": "g2d", "name": "c19", "args": {"mode": "stations", "keys": [[1.0, 0.56, 0.5], [1.06, 0.56, 0.5]]}}, hold=0.5)
+    {"type": "g2d", "name": "c19_short", "module": "short_graphics.py", "args": {"mode": "stations", "keys": [[1.0, 0.56, 0.5], [1.06, 0.56, 0.5]]}}, hold=0.5)
 say("Entrances were bricked up. The stations vanished from the maps.", v3("s1_walk", "title", 0))
 # the ghost platforms
-say("Down on the dark platforms, armed guards stood watch, so no one could jump aboard.", v3("s1_watch", "guardroom", 0))
+say("On the dark platforms, armed guards stood watch,", v3("s1_watch", "guardroom", 0))
+say("so no one could jump aboard.", v3("s1_watch", "teaser", 0.6))
 say("West Berliners rolled past, staring out at stations frozen in time.", v3("s1_watch", "windows", 3.6))
 say("Barbed wire lined the edges.", v3("s1_walk", "wire", 0))
 say("A few people risked the tracks to escape. Most never made it.", v3("s1_escape", "rare", 1.0))
 say("And for twenty-eight years, the trains just kept rolling through.", v3("s1_watch", "nostop", 0.2),
     text=key("28 YEARS", 0.30, 0.6), hold=0.3)
 # end card
-say("Full story on Orbis.", v3("s1_endcard", "amber", 0), id="end_card", hold=2.3, trans="dip",
-    text=[{"kind": "label", "content": "FULL STORY ON", "pos": [0.5, 0.60], "delay": 0.15},
-          {"kind": "title", "content": "ORBIS", "pos": [0.5, 0.675], "delay": 0.35}],
+say("Full story on Orbis.", v3("s1_endcard", "amber", 0), id="end_card", hold=0.4, trans="dip",
+    text=[{"kind": "label", "content": "FULL STORY ON", "pos": [0.5, 0.575], "delay": 0.15},
+          {"kind": "title", "content": "ORBIS", "pos": [0.5, 0.655], "delay": 0.35}],
     sfx=dict(HIT, vol=0.2, at=0.05))
 
 spec = {
