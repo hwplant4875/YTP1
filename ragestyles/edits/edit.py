@@ -58,10 +58,24 @@ def build(spec, out, preview=False):
             run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo', '-t', f'{d:.3f}',
                  '-c:a', 'pcm_s16le', f'{work}/a{i}.wav'])
         else:
-            run(['ffmpeg', '-v', 'error', '-y', '-ss', f"{s['in']:.3f}", '-t', f'{d:.3f}', '-i', srcs[s['src']], '-vn',
-                 '-af', f"aresample=48000,aformat=channel_layouts=stereo,apad,atrim=0:{d:.3f},"
-                        f"afade=t=in:d={s.get('afi', 0.08)},afade=t=out:st={d - s.get('afo', 0.12):.3f}:d={s.get('afo', 0.12)}",
-                 '-t', f'{d:.3f}', '-c:a', 'pcm_s16le', f'{work}/a{i}.wav'])
+            # audioSrc: per-source replacement track on the same timeline (e.g. music removed, voice only)
+            asrc = spec.get('audioSrc', {}).get(s['src'], srcs[s['src']])
+            cmd = ['ffmpeg', '-v', 'error', '-y', '-ss', f"{s['in']:.3f}", '-t', f'{d:.3f}', '-i', asrc]
+            fade = (f"afade=t=in:d={s.get('afi', 0.08)},afade=t=out:st={d - s.get('afo', 0.12):.3f}:d={s.get('afo', 0.12)}")
+            base = f"aresample=48000,aformat=channel_layouts=stereo,apad,atrim=0:{d:.3f}"
+            for a0, b0 in s.get('muteAt', []):  # silence a word (source seconds), e.g. profanity
+                base += f",volume=0:enable='between(t,{a0 - s['in']:.3f},{b0 - s['in']:.3f})'"
+            vo = s.get('vo')  # borrowed voice line laid over this shot: {"src", "in", "out", "at", "gain"}
+            if vo:
+                vsrc = spec.get('audioSrc', {}).get(vo['src'], srcs[vo['src']])
+                ms = int(vo.get('at', 0) * 1000)
+                cmd += ['-ss', f"{vo['in']:.3f}", '-t', f"{vo['out'] - vo['in']:.3f}", '-i', vsrc,
+                        '-filter_complex', f"[0:a]{base}[b];[1:a]aresample=48000,aformat=channel_layouts=stereo,"
+                        f"afade=t=in:d=0.05,afade=t=out:st={vo['out'] - vo['in'] - 0.08:.3f}:d=0.08,volume={vo.get('gain', 0)}dB,adelay={ms}|{ms}[v];"
+                        f"[b][v]amix=inputs=2:normalize=0:duration=first,{fade}[o]", '-map', '[o]']
+            else:
+                cmd += ['-vn', '-af', f'{base},{fade}']
+            run(cmd + ['-t', f'{d:.3f}', '-c:a', 'pcm_s16le', f'{work}/a{i}.wav'])
 
     with ThreadPoolExecutor(4) as ex:
         list(ex.map(part, range(n)))
