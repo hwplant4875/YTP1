@@ -66,9 +66,16 @@ function elHTML(e){const c=e.c||'d';
 let sh='';D.scenes.forEach(sc=>{sh+=`<div class="scene" id="${sc.id}">`;sc.els.forEach(e=>{sh+=`<div class="el" id="${e.id}">${elHTML(e)}</div>`});sh+='</div>'});
 $('scenes').innerHTML=sh;
 // position: x center default
-window.layout=()=>D.scenes.forEach(sc=>sc.els.forEach(e=>{const n=$(e.id);const w=n.firstElementChild.offsetWidth,h=n.firstElementChild.offsetHeight;
+// Gmarket Sans runs wider than the old font: keep headline words on one line and shrink them to fit instead of wrapping
+function fit(){document.querySelectorAll('.word .ko,.word .rom,.el .card [style*="font-weight:900"],.el .card [style*="font-weight:600"],.el > .txt').forEach(n=>{
+  if(n.classList.contains('txt')&&!n.innerHTML.includes('<br'))return;
+  n.style.whiteSpace='nowrap';if(n.parentElement&&!n.parentElement.classList.contains('card'))n.parentElement.style.minWidth='0';let fs=parseFloat(getComputedStyle(n).fontSize);const box=n.classList.contains('txt')?n:n.parentElement;
+  const avail=()=>box===n?n.clientWidth:box.clientWidth-(box.classList.contains('card')?70:0);
+  while(n.scrollWidth>avail()&&fs>24){fs-=2;n.style.fontSize=fs+'px'}})}
+fit();
+window.layout=()=>D.scenes.forEach(sc=>sc.els.forEach(e=>{const n=$(e.id);n.style.width='';n.style.height='';const w=n.firstElementChild.offsetWidth,h=n.firstElementChild.offsetHeight;
   e._x=(e.x!==undefined?e.x:540)-w/2;e._y=(e.y!==undefined?e.y:700)-h/2;n.style.left=e._x+'px';n.style.top=e._y+'px';n.style.width=w+'px';n.style.height=h+'px'}));
-layout();window.addEventListener('load',()=>{layout();window.render(0)});
+layout();window.addEventListener('load',()=>{fit();layout();window.render(0)});
 function animEl(e,t){const n=$(e.id);const t0=e.t;const a=e.anim||'pop';let p=cl((t-t0)/(e.d||.45));let s=p<=0?0:eOutBack(p),o=cl((t-t0)/.12),tx=0,ty=0,r=e.rot||0;
   if(a==='up'){const q=eOutCubic(cl((t-t0)/.5));ty=140*(1-q);s=p<=0?0:.9+.1*eOutBack(p)}
   if(a==='left'||a==='right'){const q=eOutCubic(cl((t-t0)/.5));tx=(a==='left'?-1:1)*260*(1-q);s=p<=0?0:.9+.1*eOutBack(p);r+=(a==='left'?-1:1)*8*(1-q)}

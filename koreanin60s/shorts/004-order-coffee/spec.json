@@ -151,19 +151,20 @@
   {
    "els": [
     {
-     "type": "sticker",
-     "name": "iced_coffee",
-     "w": 420,
-     "y": 560,
+     "type": "emoji",
+     "e": "☕🧊",
+     "size": 150,
+     "y": 430,
      "at": "h1",
+     "anim": "drop",
      "float": true
     },
     {
      "type": "txt",
      "html": "Order coffee<br>like a <span class='c-m'>local</span> ☕",
      "size": 110,
-     "y": 930,
-     "at": "h1+0.5",
+     "y": 680,
+     "at": "h1+0.3",
      "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.1"
     }
    ]
@@ -175,7 +176,7 @@
      "type": "chip",
      "html": "STEP 1 · ORDER",
      "c": "m",
-     "y": 340,
+     "y": 290,
      "at": "o0"
     },
     {
@@ -186,7 +187,7 @@
      "c": "m",
      "size": 96,
      "w": 960,
-     "y": 620,
+     "y": 700,
      "at": "o1"
     },
     {
@@ -197,7 +198,7 @@
      "size": 100,
      "w": 440,
      "x": 290,
-     "y": 1010,
+     "y": 1060,
      "at": "o2a"
     },
     {
@@ -208,7 +209,7 @@
      "size": 100,
      "w": 440,
      "x": 790,
-     "y": 1010,
+     "y": 1060,
      "at": "o2c"
     }
    ]
@@ -263,8 +264,8 @@
      "html": "YES, REALLY 😂",
      "c": "y",
      "size": 66,
-     "x": 760,
-     "y": 1150,
+     "x": 700,
+     "y": 1110,
      "at": "s3e",
      "anim": "stamp",
      "rot": -5
@@ -309,27 +310,19 @@
    "from": "e0",
    "els": [
     {
-     "type": "sticker",
-     "name": "cold_scarf",
-     "w": 400,
-     "y": 560,
-     "at": "e0",
-     "float": true
-    },
-    {
      "type": "txt",
      "html": "Korean in <span class='c-p'>60s</span>",
      "size": 110,
-     "y": 900,
-     "at": "e0+0.3",
+     "y": 640,
+     "at": "e0",
      "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.1"
     },
     {
      "type": "box",
-     "html": "<div class='txt' style='font-size:46px'>Team 얼죽아? 🧊 Comment below 👇</div>",
-     "w": 900,
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap'>Team 얼죽아? 🧊 Comment below 👇</div>",
+     "w": 960,
      "pad": 22,
-     "y": 1070,
+     "y": 830,
      "at": "e0+0.7",
      "anim": "up"
     }

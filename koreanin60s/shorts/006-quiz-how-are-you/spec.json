@@ -275,27 +275,19 @@
    "from": "e0",
    "els": [
     {
-     "type": "sticker",
-     "name": "ramen",
-     "w": 400,
-     "y": 560,
-     "at": "e0",
-     "float": true
-    },
-    {
      "type": "txt",
      "html": "Korean in <span class='c-p'>60s</span>",
      "size": 110,
-     "y": 900,
-     "at": "e0+0.3",
+     "y": 640,
+     "at": "e0",
      "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.1"
     },
     {
      "type": "box",
-     "html": "<div class='txt' style='font-size:46px'>What did you eat today? 🍜👇</div>",
-     "w": 900,
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap'>What did you eat today? 🍜👇</div>",
+     "w": 960,
      "pad": 22,
-     "y": 1070,
+     "y": 830,
      "at": "e0+0.7",
      "anim": "up"
     }
