@@ -7,6 +7,7 @@ from PIL import Image, ImageDraw, ImageFilter
 import common as C
 D = "/mnt/project-files/fast_german/branding/final/"
 S, K = 800, 3
+OX_SHIFT = 0
 YAW, PITCH = math.radians(42), math.radians(40)
 BW, BD, BH = 1.0, 1.0, 0.26          # box width (x), depth (z), height (y)
 SCALE, OX, OY = 400, 400, 470
@@ -40,8 +41,13 @@ def lid_pts(theta, flap=0.07):
     hx, hz = BW / 2 + 0.012, BD / 2 + 0.012
     top = [L(-hx, -hz), L(hx, -hz), L(hx, hz), L(-hx, hz)]
     front = [L(-hx, hz), L(hx, hz), L(hx, hz, flap), L(-hx, hz, flap)]
+    left = [L(-hx, -hz), L(-hx, hz), L(-hx, hz, flap), L(-hx, -hz, flap)]
     right = [L(hx, -hz), L(hx, hz), L(hx, hz, flap), L(hx, -hz, flap)]
-    return top, front, right
+    return top, front, left, right
+
+
+def view():
+    return np.array([math.sin(YAW) * math.cos(PITCH), math.sin(PITCH), math.cos(YAW) * math.cos(PITCH)])
 
 
 def dots(d, quad3d, n=(7, 7), r=0.018, col=(255, 200, 40)):
@@ -58,60 +64,63 @@ def dots(d, quad3d, n=(7, 7), r=0.018, col=(255, 200, 40)):
 
 
 def pretzel_on_floor(im):
-    pz = C.icon("pretzel", 470).resize((470 * K, 470 * K), Image.LANCZOS)
-    m = 0.06
-    y = 0.02
-    corners = [(-BW / 2 + m, y, -BD / 2 + m), (BW / 2 - m, y, -BD / 2 + m), (-BW / 2 + m, y, BD / 2 - m)]
-    dst = np.array([proj(p) for p in corners])            # screen positions of image corners (0,0),(w,0),(0,h)
-    w, h = pz.size
-    src = np.array([(0, 0), (w, 0), (0, h)], float)
-    # affine screen -> image for PIL (inverse map)
-    A = np.hstack([dst, np.ones((3, 1))])
-    cx = np.linalg.solve(A, src[:, 0]); cy = np.linalg.solve(A, src[:, 1])
-    out = pz.transform(im.size, Image.AFFINE, (*cx, *cy), Image.BICUBIC)
-    sh = out.split()[3].point(lambda v: v * 60 // 255).filter(ImageFilter.GaussianBlur(9 * K))
-    im.paste((120, 110, 100), (0, int(10 * K)), sh)
-    im.alpha_composite(out)
+    """Pretzel sitting upright in the box, facing the camera; the near walls drawn afterwards hide its bottom."""
+    pz = C.icon("pretzel", 330).resize((330 * K, 330 * K), Image.LANCZOS).rotate(-6, Image.BICUBIC, expand=True)
+    cx, cy = proj((0.02, 0.20, 0.0))
+    x, y = int(cx - pz.width / 2), int(cy - pz.height * 0.62)
+    sh = Image.new("L", im.size, 0)
+    sh.paste(pz.split()[3].point(lambda v: v * 70 // 255), (x + 14 * K, y + 18 * K))
+    im.paste((110, 100, 90), (0, 0), sh.filter(ImageFilter.GaussianBlur(12 * K)))
+    im.alpha_composite(pz, (x, y))
 
 
 def profile(theta_deg=42):
     th = math.radians(theta_deg)
+    v = view()
     im = Image.new("RGBA", (S * K, S * K), (255, 255, 255, 255))
     d = ImageDraw.Draw(im)
     hx, hz = BW / 2, BD / 2
-    # ground shadow
     sh = Image.new("L", im.size, 0)
-    ImageDraw.Draw(sh).polygon([proj(p) for p in [(-hx - .05, 0, -hz - .05), (hx + .1, 0, -hz), (hx + .1, 0, hz + .1), (-hx, 0, hz + .1)]], fill=110)
+    ImageDraw.Draw(sh).polygon([proj(p) for p in [(-hx - .06, 0, -hz - .06), (hx + .06, 0, -hz - .06),
+                                                  (hx + .06, 0, hz + .06), (-hx - .06, 0, hz + .06)]], fill=110)
     im.paste((60, 60, 70), (0, 0), sh.filter(ImageFilter.GaussianBlur(22 * K)))
-    top, front, right = lid_pts(th)
-    if theta_deg > 70:                       # lid leaning back: its inner side shows, behind the box
-        face(d, right, (206, 207, 212))
-        face(d, top, (240, 240, 238))
-        face(d, front, (226, 226, 224))
-    # inside: floor, back + left inner walls
+    walls = {"front": ((0, 0, 1), [(-hx, 0, hz), (hx, 0, hz), (hx, BH, hz), (-hx, BH, hz)]),
+             "back": ((0, 0, -1), [(-hx, 0, -hz), (hx, 0, -hz), (hx, BH, -hz), (-hx, BH, -hz)]),
+             "right": ((1, 0, 0), [(hx, 0, -hz), (hx, 0, hz), (hx, BH, hz), (hx, BH, -hz)]),
+             "left": ((-1, 0, 0), [(-hx, 0, -hz), (-hx, 0, hz), (-hx, BH, hz), (-hx, BH, -hz)])}
+    light = np.array([-0.5, 0.8, 0.45]); light /= np.linalg.norm(light)
+
+    def shade(n, base=248, amb=0.80):
+        k = amb + (1 - amb) * max(0, float(np.dot(n, light)))
+        return tuple(int(base * k * c) for c in (1.0, 1.0, 1.01))
+
+    top, front, left, right = lid_pts(th)
+    lid_n = np.array([0, math.cos(th), math.sin(th)])            # lid top normal
+    side = left if v[0] < 0 else right
+    lid_behind = theta_deg > 70
+    if lid_behind:
+        face(d, side, shade(np.array([np.sign(v[0]), 0, 0]), 236))
+        face(d, top, (236, 236, 238))
+        face(d, front, shade(np.array([0, -math.sin(th), math.cos(th)]), 236))
+    # inner walls (seen from inside), floor, pretzel
+    for n, q in walls.values():
+        if np.dot(n, v) < 0:
+            face(d, q, shade(-np.array(n), 232, 0.72))
     face(d, [(-hx, 0, -hz), (hx, 0, -hz), (hx, 0, hz), (-hx, 0, hz)], (238, 236, 232))
-    face(d, [(-hx, 0, -hz), (hx, 0, -hz), (hx, BH, -hz), (-hx, BH, -hz)], (214, 212, 208))
-    face(d, [(-hx, 0, -hz), (-hx, 0, hz), (-hx, BH, hz), (-hx, BH, -hz)], (226, 224, 220))
     pretzel_on_floor(im)
     d = ImageDraw.Draw(im)
-    # outer walls facing us: front (+z) and right (+x)
-    face(d, [(-hx, 0, hz), (hx, 0, hz), (hx, BH, hz), (-hx, BH, hz)], (244, 244, 242))
-    face(d, [(hx, 0, -hz), (hx, 0, hz), (hx, BH, hz), (hx, BH, -hz)], (212, 213, 218))
-    dots(d, [(-hx, 0.03, hz), (hx, 0.03, hz), (hx, BH - 0.03, hz), (-hx, BH - 0.03, hz)], (8, 2), 0.022)
-    dots(d, [(hx, 0.03, hz), (hx, 0.03, -hz), (hx, BH - 0.03, -hz), (hx, BH - 0.03, hz)], (8, 2), 0.022,
-         (236, 186, 30))
-    # lid
-    if theta_deg > 70:
-        return im.resize((S, S), Image.LANCZOS)
-    face(d, right, (206, 207, 212))
-    face(d, top, (252, 252, 251))
-    dots(d, top, (6, 6), 0.026)
-    face(d, front, (236, 236, 234))
-    dots(d, front, (8, 1), 0.018, (236, 186, 30))
+    for n, q in walls.values():
+        if np.dot(n, v) > 0:
+            face(d, q, shade(np.array(n)))
+    if not lid_behind:
+        face(d, side, shade(np.array([np.sign(v[0]), 0, 0]), 236))
+        face(d, top, shade(lid_n, 252))
+        face(d, front, shade(np.array([0, -math.sin(th), math.cos(th)]), 240))
     return im.resize((S, S), Image.LANCZOS)
 
 
 if __name__ == "__main__":
-    profile(20).convert("RGB").save(D + "profile_box45_A_ajar.png")
-    SCALE, OY = 350, 560
-    profile(105).convert("RGB").save(D + "profile_box45_B_open.png")
+    YAW, PITCH = math.radians(42 - 90), math.radians(24)
+    SCALE, OY = 360, 540
+    for a in (65,):
+        profile(a).convert("RGB").save(D + f"profile_box_left_{a}.png")
