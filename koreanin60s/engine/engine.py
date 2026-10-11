@@ -9,30 +9,36 @@ VOICE = "z6Kj0hecH20CdetSElRT"  # Jennie
 CACHE = os.path.expanduser("~/.cache/k60_tts"); os.makedirs(CACHE, exist_ok=True)
 SR = 48000
 
-def tts(text, lang):
-    # speed 1.0 for everything (user, 2026-10-11): natural pace, no sped-up or slowed-down voice
-    h = hashlib.sha1(f"{VOICE}|{lang}|speed1|{text}".encode()).hexdigest()[:16]
-    mp3 = f"{CACHE}/{h}.mp3"; wav = f"{CACHE}/{h}.wav"
-    if not os.path.exists(wav) and os.environ.get("K60_DRY"):
-        # layout preview without spending TTS credits: estimate the spoken length
-        n = len(re.sub(r"[^가-힣]", "", text))
-        return None, (0.32 * n + 0.25 if lang == "ko" else len(text) / 14.5 + 0.2)
+MODEL = "eleven_v3"  # v3 reads Hangul inside English lines as real Korean; v2 said "il ai saem" (user chose v3, 2026-10-11)
+
+def tts(text):
+    """One request per utterance: English with the Korean words in Hangul inline, one speaker (Jennie).
+    Returns (wav, duration, alignment) where alignment gives per-character start/end seconds."""
+    h = hashlib.sha1(f"{VOICE}|{MODEL}|speed1|{text}".encode()).hexdigest()[:16]
+    js = f"{CACHE}/{h}.json"; wav = f"{CACHE}/{h}.wav"
+    if not os.path.exists(js):
+        body = {"text": text, "model_id": MODEL, "voice_settings": {"stability": 0.5, "similarity_boost": 0.8, "style": 0.4, "use_speaker_boost": True}}
+        out = subprocess.run(["curl", "-s", "-X", "POST", f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE}/with-timestamps?output_format=mp3_44100_192",
+            "-H", "xi-api-key: " + os.environ["ELEVENLABS_API_KEY"], "-H", "Content-Type: application/json", "-d", json.dumps(body)],
+            capture_output=True, text=True).stdout
+        r = json.loads(out)
+        if "audio_base64" not in r: raise SystemExit(f"ElevenLabs TTS failed: {out[:300]}")
+        json.dump(r, open(js, "w"))
+    r = json.load(open(js))
     if not os.path.exists(wav):
-        body = {"text": text, "model_id": "eleven_multilingual_v2",
-                "voice_settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.4, "use_speaker_boost": True}}
-        body["voice_settings"]["speed"] = 1.0
-        if lang == "ko": body["language_code"] = "ko"  # Hangul read as Korean, never romanized English
-        code = subprocess.run(["curl", "-s", "-X", "POST", f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE}?output_format=mp3_44100_192",
-            "-H", "xi-api-key: " + os.environ["ELEVENLABS_API_KEY"], "-H", "Content-Type: application/json",
-            "-d", json.dumps(body), "-o", mp3, "-w", "%{http_code}"], capture_output=True, text=True).stdout
-        if code != "200":
-            msg = open(mp3, errors="replace").read()[:300]; os.remove(mp3)
-            raise SystemExit(f"ElevenLabs TTS failed ({code}): {msg}")
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", mp3, "-af",
-            "silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse",
-            "-ar", str(SR), "-ac", "2", wav], check=True)
+        open(f"{CACHE}/{h}.mp3", "wb").write(base64.b64decode(r["audio_base64"]))
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{CACHE}/{h}.mp3", "-ar", str(SR), "-ac", "2", wav], check=True)
     d = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", wav]))
-    return wav, d
+    return wav, d, r["alignment"]
+
+def utterances(lines):
+    # a Korean line is always read together with the line before it (and the English that follows it, until a "gap"),
+    # so the language switch sounds natural
+    U = []
+    for ln in lines:
+        if not U or (ln.get("lang") != "ko" and ("gap" in ln or len(U[-1]) >= 3)): U.append([ln])
+        else: U[-1].append(ln)
+    return U
 
 def resolve(at, T):
     # "key", "key@end", "key+0.3", "key@end-0.2", or number
@@ -45,12 +51,18 @@ def resolve(at, T):
 def build(spec_path, out):
     spec = json.load(open(spec_path)); os.makedirs(out, exist_ok=True)
     # 1. voice + timeline
-    T = {}; t = 0.0; wavs = []; prev = None
-    for ln in spec["lines"]:
-        wav, d = tts(ln["say"], ln.get("lang", "en"))
-        t += ln.get("gap", 0.25 if t > 0 else 0.3) + (0.2 if prev == "ko" else 0)
-        prev = ln.get("lang", "en")
-        T[ln["k"]] = [round(t, 3), round(t + d, 3)]; wavs.append((wav, t)); t += d
+    T = {}; t = 0.0; wavs = []
+    for u in utterances(spec["lines"]):
+        text = " ".join(ln["say"] for ln in u)
+        wav, d, al = tts(text)
+        t += u[0].get("gap", 0.25 if t > 0 else 0.3)
+        chars = "".join(al["characters"]); st, en = al["character_start_times_seconds"], al["character_end_times_seconds"]
+        assert chars == text, (chars, text)
+        cur = 0
+        for ln in u:
+            i = text.index(ln["say"], cur); j = i + len(ln["say"]) - 1; cur = j + 1
+            T[ln["k"]] = [round(t + st[i], 3), round(t + en[j], 3)]
+        wavs.append((wav, t)); t += d
     END = round(t + spec.get("tail", 1.8), 3); T["END"] = [END, END]
     # 2. scenes + elements absolute times
     scenes = []
@@ -77,8 +89,8 @@ def build(spec_path, out):
     if not poses or poses[0][0] > 0.01: poses.insert(0, [0, spec.get("pose0", "hi_wave")])
     stickers = sorted({p for _, p in poses} | {e["name"] for sc in scenes for e in sc["els"] if e["type"] == "sticker"})
     imgs = {n: "data:image/png;base64," + base64.b64encode(open(f"{STK}/{n}.png", "rb").read()).decode() for n in stickers}
-    data = {"T": T, "END": END, "scenes": scenes, "caps": caps, "poses": poses, "label": spec.get("label", ""), "labelColor": spec.get("labelColor", "#1C1718")}
-    html = open(os.path.join(HERE, "template.html")).read().replace("/*DATA*/", "const D=" + json.dumps(data, ensure_ascii=False) + ";const IMG=" + json.dumps(imgs) + ";")
+    data = {"T": T, "END": END, "scenes": scenes, "caps": caps, "poses": poses, "label": spec.get("label", ""), "pillOut": min(3.0, scenes[1]["t0"] - .3) if len(scenes) > 1 else 3.0, "labelColor": spec.get("labelColor", "#1C1718")}
+    html = open(os.path.join(HERE, "template.html")).read().replace("/*DATA*/", "const D=" + json.dumps(data, ensure_ascii=False).replace("YouTube Sans,Pretendard", "GmarketSans,Pretendard") + ";const IMG=" + json.dumps(imgs) + ";")
     open(f"{out}/short.html", "w").write(html)
     json.dump({"T": T, "END": END}, open(f"{out}/timeline.json", "w"))
     # 4. audio

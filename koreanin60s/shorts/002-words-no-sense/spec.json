@@ -155,11 +155,11 @@
    "els": [
     {
      "type": "txt",
-     "html": "Korean words that<br>make <span class='c-p'>NO</span> sense",
-     "size": 104,
+     "html": "Korean words<br>that make <span class='c-p'>NO</span> sense",
+     "size": 80,
      "y": 660,
      "at": "h1",
-     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.1"
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.1;white-space:nowrap"
     },
     {
      "type": "emoji",
@@ -417,27 +417,19 @@
    "from": "e0",
    "els": [
     {
-     "type": "sticker",
-     "name": "love_heart",
-     "w": 400,
-     "y": 560,
-     "at": "e0",
-     "float": true
-    },
-    {
      "type": "txt",
      "html": "Korean in <span class='c-p'>60s</span>",
      "size": 110,
-     "y": 900,
-     "at": "e0+0.3",
+     "y": 640,
+     "at": "e0",
      "style": "font-family:YouTube Sans,Pretendard;font-weight:900"
     },
     {
      "type": "box",
-     "html": "<div class='txt' style='font-size:46px'>Your language's weirdest word? 👇</div>",
-     "w": 900,
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap'>Your language's weirdest word? 👇</div>",
+     "w": 960,
      "pad": 22,
-     "y": 1070,
+     "y": 830,
      "at": "e0+0.7",
      "anim": "up"
     }
