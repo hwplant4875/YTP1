@@ -12,6 +12,8 @@
 //   line  (8.7 s)  train-headlight POV through the tunnel: a hand-painted white border line (wall, ceiling, wall,
 //                  drips, "SEKTORENGRENZE" stencil). Crossing it (~5.2 s) the warm work lamps give way to cold
 //                  grey ones and a border guard stands far ahead.
+//   title (7.6 s)  slow crane rising and pulling back over the right track, revealing the whole platform: rows of
+//                  amber bulbs, posters on both walls, columns, clocks; the centre of frame stays calm for the title.
 //   years (3 s)    time-lapse on a bench under a peeling poster: dust settles on the bench, the bulb stutters,
 //                  the poster curls away from the wall, cobweb grows.
 import { AMBER, concreteTex, canvasTex, rng, lerp } from './lib.js';
@@ -899,14 +901,14 @@ export function update(ctx, t) {
     ctx.newspaper.material.color.setRGB(1 - 0.2 * k, 1 - 0.26 * k, 1 - 0.38 * k);
     // the bulb stutters like a time-lapse: frames of on, dim and off
     const fr = Math.floor(t * 15), hv = hash(fr);
-    const v = hv < 0.12 ? 0.08 : hv < 0.3 ? 0.55 : 0.9 + 0.1 * hash(fr + 99);
+    const stut = hv < 0.12 ? 0.12 : hv < 0.3 ? 0.55 : 0.9 + 0.1 * hash(fr + 99);
+    const v = lerp(stut, 0.72 + 0.04 * Math.sin(t * 9), smooth((t - 2.5) / 0.7));   // after the years, the bulb settles, weaker
     ctx.setLamp(ctx.yb, v);
     ctx.dust.material.uniforms.fall.value = 0.9;
     ctx.dust.material.uniforms.amb.value = 0.05 + 0.1 * v;
     const u = ctx.dust.material.uniforms; u.lp.value[0].copy(ctx.yb.light.position); u.ld.value[0].set(0, -1, 0); u.lc.value[0] = Math.cos(1.0); u.li.value[0] = 1.5 * v;
     if (ctx.bokeh) ctx.bokeh.uniforms.focus.value = camera.position.distanceTo(new THREE.Vector3(7.6, 1.8, 4.7));
   } else if (shot === 'title') {
-    const ease = (x) => x;   // path keys already ease in/out
     const p = V(ctx.camP(t)), look = V(ctx.lookP(t));
     p.x += nz(t * 0.3, 1) * 0.03; p.y += nz(t * 0.25, 2) * 0.02;
     camera.position.copy(p); camera.lookAt(look);

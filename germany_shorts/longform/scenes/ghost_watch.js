@@ -62,7 +62,7 @@ export async function setup(THREE, renderer, W, H) {
     for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i).applyMatrix4(m.matrixWorld); uv.setXY(i, v.z / 4, v.y / 1.8); }
     m.receiveShadow = true; return m;
   };
-  const SL = { z0: -0.75, z1: 0.75, y0: 2.645, y1: 2.735 };  // the guard room slit
+  const SL = { z0: -0.75, z1: 0.75, y0: 2.63, y1: 2.78 };  // the guard room slit
   wallPiece(1, -L / 2, L / 2, 0, HT);
   wallPiece(-1, -L / 2, SL.z0, 0, HT); wallPiece(-1, SL.z1, L / 2, 0, HT);
   wallPiece(-1, SL.z0, SL.z1, 0, SL.y0); wallPiece(-1, SL.z0, SL.z1, SL.y1, HT);
@@ -182,18 +182,40 @@ export async function setup(THREE, renderer, W, H) {
     }
     g.computeVertexNormals(); return g;
   })();
+  // painted face shading on the sphere UVs (front of the head is u = 0.25): sockets, brows, nose shadow, lips, stubble, hairline
+  const faceTex = (() => {
+    const c = document.createElement('canvas'); c.width = 512; c.height = 256; const g = c.getContext('2d'); const r = rng(808);
+    g.fillStyle = '#e6e2de'; g.fillRect(0, 0, 512, 256);
+    for (let i = 0; i < 3000; i++) { const v = 200 + r() * 50; g.fillStyle = `rgba(${v},${v - 8},${v - 14},0.25)`; g.fillRect(r() * 512, r() * 256, 2, 2); }
+    const blob = (x, y, rx, ry, col, a) => { g.save(); g.translate(x, y); g.scale(1, ry / rx); const gr = g.createRadialGradient(0, 0, 0, 0, 0, rx);
+      gr.addColorStop(0, `rgba(${col},${a})`); gr.addColorStop(1, `rgba(${col},0)`); g.fillStyle = gr; g.beginPath(); g.arc(0, 0, rx, 0, 7); g.fill(); g.restore(); };
+    for (const ex of [96, 160]) {
+      blob(ex, 110, 26, 16, '40,26,20', 0.75);          // socket shadow
+      blob(ex, 112, 12, 5, '15,10,8', 0.9);             // lash line / lids
+      g.fillStyle = 'rgba(30,22,18,0.85)'; g.save(); g.translate(ex, 94); g.rotate(ex < 128 ? 0.1 : -0.1); g.fillRect(-15, -3, 30, 5); g.restore();   // brows
+      blob(ex + (ex < 128 ? -8 : 8), 132, 22, 14, '90,50,40', 0.25);                                     // cheek shading
+    }
+    blob(128, 140, 12, 7, '50,30,24', 0.3);          // under-nose shadow
+    blob(138, 125, 7, 18, '60,36,28', 0.35);          // nose side shadow
+    g.fillStyle = 'rgba(70,40,36,0.45)'; g.fillRect(116, 159, 24, 2); blob(128, 164, 12, 4, '90,60,50', 0.2);   // lips
+    for (let i = 0; i < 1600; i++) { const x = 88 + r() * 80, y = 150 + r() * 60; if (Math.abs(x - 128) < 16 && y < 170) continue; g.fillStyle = 'rgba(40,30,26,0.18)'; g.fillRect(x, y, 1.5, 1.5); } // stubble
+    const hg = g.createLinearGradient(0, 40, 0, 80); hg.addColorStop(0, 'rgba(25,18,14,1)'); hg.addColorStop(1, 'rgba(25,18,14,0)');
+    g.fillStyle = hg; g.fillRect(0, 0, 512, 80); g.fillStyle = 'rgba(25,18,14,1)'; g.fillRect(256, 0, 256, 150); // hair top and back
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+  })();
+  const faceMats = new Map();
+  const faceOf = (m) => { if (!faceMats.has(m)) { const f = m.clone(); f.map = faceTex; f.color = m.color.clone().multiplyScalar(1.15); faceMats.set(m, f); } return faceMats.get(m); };
   const addFace = (head, mats, o = {}) => {
     const H = (geo, mat, x, y, z) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); head.add(m); return m; };
-    H(skullGeo, mats.skin, 0, o.y0 ?? 0.02, 0).castShadow = true;
+    H(skullGeo, faceOf(mats.skin), 0, o.y0 ?? 0.02, 0).castShadow = true;
     const y0 = (o.y0 ?? 0.02) + 0.005;
     for (const sx of [-1, 1]) {
       H(new THREE.SphereGeometry(0.02, 10, 8), mats.skin, sx * 0.088, y0 + 0.0, -0.01).scale.set(0.4, 1.1, 0.75);   // ears
       if (o.closed) H(new THREE.SphereGeometry(0.0125, 10, 8), mats.skin, sx * 0.034, y0 + 0.022, 0.08).scale.set(1.15, 0.8, 1);
       else {
-        H(new THREE.SphereGeometry(0.011, 12, 10), M.eyeW, sx * 0.034, y0 + 0.022, 0.074).scale.set(1.1, 0.65, 1);
+        H(new THREE.SphereGeometry(0.009, 12, 10), M.eyeW, sx * 0.034, y0 + 0.021, 0.074).scale.set(1.1, 0.55, 1);
       }
-      H(new THREE.BoxGeometry(0.03, 0.004, 0.006), mats.brow || mats.skin, sx * 0.036, y0 + 0.046, 0.095).rotation.z = sx * -0.1;
-    }
+          }
     if (o.mouthOpen) H(new THREE.SphereGeometry(0.01, 8, 6), M.dark, 0, y0 - 0.058, 0.088).scale.set(1.3, 0.7, 0.5);
   };
   // East German border guard: borderGuard() from look.js, re-dressed (skin, boots, posable arms with gloves)
@@ -240,7 +262,7 @@ export async function setup(THREE, renderer, W, H) {
 
   // West Berliners: low-poly people with coats, hats, faces. origin on the floor under the hips, facing +z
   const pmat = {};
-  const coatM = (c) => pmat[c] || (pmat[c] = std({ color: c, roughness: 0.9, emissive: c, emissiveIntensity: 0.06 }));
+  const coatM = (c) => pmat[c] || (pmat[c] = std({ color: c, roughness: 0.88 }));
   const skinP = std({ color: 0x7e7068, roughness: 0.7, emissive: 0x1a120c, emissiveIntensity: 0.3 });
   const stareSkin = std({ color: 0x6e6058, roughness: 0.7, emissive: 0x140c08, emissiveIntensity: 0.4 });
   const hairM = (c) => pmat['h' + c] || (pmat['h' + c] = std({ color: c, roughness: 0.8 }));
@@ -255,7 +277,7 @@ export async function setup(THREE, renderer, W, H) {
       if (standing) { limb([sx * 0.1, 0.95, 0], [sx * 0.1, 0.1, 0], 0.07, coatM(0x1f1f1f), g); M2(new THREE.BoxGeometry(0.1, 0.07, 0.26), M.boot, sx * 0.1, 0.035, 0.05); }
       else {
         limb([sx * 0.1, 0.5, -0.02], [sx * 0.11, 0.5, 0.4], 0.075, female ? cm : coatM(0x222220), g);
-        limb([sx * 0.11, 0.48, 0.42], [sx * 0.11, 0.1, 0.44], female ? 0.05 : 0.06, female ? skinP : coatM(0x222220), g);
+        limb([sx * 0.11, 0.48, 0.42], [sx * 0.11, 0.1, 0.44], female ? 0.05 : 0.06, coatM(female ? 0x2a2420 : 0x222220), g);
         M2(new THREE.BoxGeometry(0.09, 0.07, 0.24), M.boot, sx * 0.11, 0.035, 0.5);
       }
     }
@@ -264,6 +286,11 @@ export async function setup(THREE, renderer, W, H) {
       : [[0, 0.44], [0.22, 0.46], [0.22, 0.6], [0.2, 0.75], [0.22, 0.92], [0.23, 0.99], [0.19, 1.05], [0.1, 1.09], [0, 1.1]]).map(([a, b]) => new THREE.Vector2(a, b));
     const torso = M2(new THREE.LatheGeometry(prof, 22), cm, 0, 0, 0); torso.scale.set(1, 1, 0.66);
     const col = M2(new THREE.CylinderGeometry(0.085, 0.12, 0.08, 14), cm, 0, 1.08 + dy, 0); col.scale.z = 0.8;
+    const zf = (y) => 0.66 * (standing ? 0.235 : 0.215);
+    M2(new THREE.BoxGeometry(0.012, standing ? 0.95 : 0.5, 0.01), M.dark, 0.015, (standing ? 0.98 : 0.74) + 0, zf() + 0.004);       // front opening
+    for (let k = 0; k < 3; k++) M2(new THREE.SphereGeometry(0.011, 6, 4), M.dark, 0.045, 0.9 + dy - k * 0.12, zf() + 0.006);         // buttons
+    for (const sx of [-1, 1]) { const lp = M2(new THREE.BoxGeometry(0.07, 0.2, 0.012), M.dark, sx * 0.05, 0.97 + dy, zf() + 0.002); lp.rotation.z = sx * 0.35; lp.material = coatM(0x1a1816); }
+    if (o.scarfNeck) { M2(new THREE.TorusGeometry(0.075, 0.03, 8, 16), coatM(o.scarfNeck), 0, 1.07 + dy, 0.0).rotation.x = Math.PI / 2; }
     M2(new THREE.CylinderGeometry(0.05, 0.055, 0.08, 10), skinP, 0, 1.13 + dy, 0);
     // head
     const head = new THREE.Group(); head.position.set(0, 1.24 + dy, 0.01); g.add(head);
@@ -333,14 +360,14 @@ export async function setup(THREE, renderer, W, H) {
     seat: std({ color: 0x5e4436, roughness: 0.85, emissive: 0x1a1008, emissiveIntensity: 0.4 }),
     floor: std({ color: 0x3a3631, roughness: 0.9 }), chrome: std({ color: 0xd0d0d0, metalness: 1, roughness: 0.22 }),
     strip: new THREE.MeshBasicMaterial({ color: 0xa89880 }), rubber: std({ color: 0x0c0c0c, roughness: 0.7 }),
-    glass: new THREE.MeshStandardMaterial({ color: 0x9aa3a6, transparent: true, opacity: 0.08, roughness: 0.05, metalness: 0.6, depthWrite: false, side: THREE.DoubleSide }),
+    glass: new THREE.MeshStandardMaterial({ color: 0x9aa3a6, transparent: true, opacity: 0.06, roughness: 0.7, metalness: 0.0, depthWrite: false, side: THREE.DoubleSide }),
     wind: std({ color: 0x0a0b0c, roughness: 0.1, metalness: 0.7 }),
   };
   const destTex = canvasTex(THREE, 512, 96, (g, w, h) => { g.fillStyle = '#121212'; g.fillRect(0, 0, w, h); g.fillStyle = '#f4e6c8'; g.font = 'bold 54px "DejaVu Sans Condensed"'; g.textAlign = 'center'; g.fillText('8  Leinestraße', w / 2, 66); });
   const train = new THREE.Group();
   const doorsU = [-3.5, -12.0], bays = [[-2.75, -0.25], [-11.25, -4.25], [-15.25, -12.75]];
   const rp = rng(91);
-  const coats = [0x3b3a38, 0x5a4a3a, 0x2b3140, 0x6b6458, 0x46423c, 0x2e2c2a, 0x7a6a52];
+  const coats = [0x2e2c2a, 0x3a3029, 0x262a33, 0x403830, 0x34302c, 0x2a2826, 0x463c32];
   const special = {};
   for (let i = 0; i < NC; i++) {
     const c = new THREE.Group(); c.position.z = -i * (CAR + GAP); train.add(c);
@@ -385,18 +412,18 @@ export async function setup(THREE, renderer, W, H) {
     // passengers
     const list = [];
     if (i === 0) {
-      list.push({ u: -1.3, sx: 1, o: { coat: 0x46423c, hat: 'cap', pose: 'lap' } });
-      list.push({ u: -5.28, sx: 1, o: { coat: 0x5a4a3a, hat: 'fedora', pose: 'paper' }, tag: 'paper' });
-      list.push({ u: -6.96, sx: 1, o: { coat: 0x2b3140, hat: 'fedora', pose: 'crossed', closed: true, mouthOpen: true, hatCol: 0x3a3632 }, tag: 'sleep' });
+      list.push({ u: -1.3, sx: 1, o: { coat: 0x34302c, hat: 'cap', pose: 'lap' } });
+      list.push({ u: -5.28, sx: 1, o: { coat: 0x3e342b, hat: 'fedora', pose: 'paper' }, tag: 'paper' });
+      list.push({ u: -6.96, sx: 1, o: { coat: 0x2b3140, hat: 'fedora', pose: 'crossed', scarfNeck: 0x4a4038, closed: true, mouthOpen: true, hatCol: 0x3a3632 }, tag: 'sleep' });
       list.push({ u: -8.88, sx: 1, o: { coat: 0x2e2c2a, hat: 'none', hair: 0x1a1410, pose: 'lap' }, tag: 'stare' });
-      list.push({ u: -10.3, sx: 1, o: { coat: 0x7a6a52, hat: 'scarf', hatCol: 0x6a5a4a, pose: 'lap', female: true } });
-      list.push({ u: -13.6, sx: 1, o: { coat: 0x6b6458, hat: 'scarf', hatCol: 0x2a2826, pose: 'crossed', female: true } });
+      list.push({ u: -10.3, sx: 1, o: { coat: 0x463c32, hat: 'scarf', hatCol: 0x4a3c30, pose: 'lap', female: true } });
+      list.push({ u: -13.6, sx: 1, o: { coat: 0x3a3029, hat: 'scarf', hatCol: 0x2a2826, pose: 'crossed', female: true } });
       list.push({ u: -14.7, sx: -1, o: { coat: 0x2b3140, hat: 'cap', pose: 'lap' } });
     } else {
       for (const [a, b] of bays) for (let u = a + 0.45; u < b - 0.3; u += 0.62 + rp() * 0.5) for (const sx of [-1, 1]) {
         if (rp() < 0.55) continue;
         const hats = ['fedora', 'cap', 'scarf', 'none'], h = hats[Math.floor(rp() * 4)];
-        list.push({ u, sx, o: { coat: coats[Math.floor(rp() * coats.length)], hat: h, female: h === 'scarf', pose: rp() < 0.3 ? 'crossed' : rp() < 0.2 ? 'paper' : 'lap', hatCol: rp() < 0.5 ? 0x1e1d1b : 0x4a4038, scale: 0.95 + rp() * 0.1 } });
+        list.push({ u, sx, o: { coat: coats[Math.floor(rp() * coats.length)], hat: h, female: h === 'scarf', pose: rp() < 0.3 ? 'crossed' : rp() < 0.2 ? 'paper' : 'lap', hatCol: rp() < 0.5 ? 0x1e1d1b : 0x4a4038, scale: 0.95 + rp() * 0.1, scarfNeck: rp() < 0.3 ? 0x5a4a3c : null } });
       }
     }
     for (const p of list) {
@@ -470,7 +497,7 @@ export async function setup(THREE, renderer, W, H) {
   // light through the slit: projected band so only a strip of the platform's light enters
   const SD = 7.0, SA = 0.16;
   const slitSpot = new THREE.SpotLight(0xffb873, 0, 16, SA, 0.1, 0);
-  slitSpot.position.set(-8 + SD, 2.697, 0.0); slitSpot.target.position.set(-9.8, 2.69, 0.0);
+  slitSpot.position.set(-8 + SD, 2.732, 0.0); slitSpot.target.position.set(-9.8, 2.69, 0.0);
   slitSpot.castShadow = true; slitSpot.shadow.mapSize.set(1024, 1024); slitSpot.shadow.bias = -0.0006; slitSpot.shadow.camera.near = 0.5;
   slitSpot.map = canvasTex(THREE, 512, 512, (g, w, h) => { g.fillStyle = '#000'; g.fillRect(0, 0, w, h);
     // the slit seen from the light: 1.5 x 0.14 m at 2.6 m inside a cone of half-width tan(0.42)*2.6
@@ -588,7 +615,7 @@ export function update(ctx, t) {
     // outside the cut the two guards press their eyes to the slit
     const atSlit = t < 5.6;
     ctx.inA.group.position.set(atSlit ? -8.56 : -9.15, 1, atSlit ? 0.36 : 0.4); ctx.inB.group.position.set(atSlit ? -8.55 : -8.9, 1, atSlit ? -0.42 : -0.6);
-    ctx.roomBulb.intensity = t < 5.6 ? 0.05 : 0.3; ctx.rbg.material.opacity = 0.5;
+    ctx.roomBulb.intensity = t < 5.6 ? 0.35 : 0.3; ctx.rbg.material.opacity = 0.5;
     placeGuard(gA, -6.5, -5.2, Math.PI / 2 + 0.7); placeGuard(gB, -6.0, -7.2, Math.PI / 2 + 0.1); ctx.key.intensity = 12;
     gA.head.rotation.y = 0.2 * Math.sin(t * 0.4); breathe(gA, 0); breathe(gB, 2);
     // guards on post: tiny head shifts; after the door opens they glance back
@@ -608,9 +635,9 @@ export function update(ctx, t) {
     if (t < 5.6) {
       // platform: guards in the gloom, then push in on the slit where two pairs of eyes catch the light
       const k1 = seg(t, 0, 5.8), k0 = seg(t, 0.8, 4.4);
-      camera.position.set(lerp(-4.9, -7.3, k1), lerp(2.15, 2.69, k1), lerp(3.4, 0.2, k1));
-      camera.lookAt(lerp(-6.3, -8.1, k0), lerp(1.85, 2.69, k0), lerp(-6.3, -0.04, k0));
-      fov = lerp(40, 28, seg(t, 2.6, 5.6));
+      camera.position.set(lerp(-4.9, -6.75, k1), lerp(2.15, 2.72, k1), lerp(3.4, 0.45, k1));
+      camera.lookAt(lerp(-6.3, -8.2, k0), lerp(1.85, 2.7, k0), lerp(-6.3, -0.02, k0));
+      fov = lerp(40, 22, seg(t, 2.6, 5.6));
     } else if (t < 12.5) {
       const k = (t - 5.6) / 6.9;
       camera.position.set(lerp(-8.42, -8.45, k), lerp(2.58, 2.56, k), lerp(1.95, 1.85, k));
@@ -712,6 +739,7 @@ export function update(ctx, t) {
     lampLevel = (l) => (1 - 0.55 * dark) * (0.92 + 0.08 * Math.sin(t * 9 + l.seed)) * (dark > 0 && l.seed % 5 === 2 ? flicker(t, 6.4, l.seed) : 1);
   }
   lamps.forEach(l => setLamp(l, lampLevel(l)));
+  if (shot === 'windows') lamps.forEach(l => { if (l.sx > 0) { l.halo.visible = false; l.beam.visible = false; l.bulb.visible = false; } });
   if (window.DBG) { camera.position.set(...window.DBG.p); camera.lookAt(...window.DBG.l); fov = 30; }
   if (camera.fov !== fov) { camera.fov = fov; camera.updateProjectionMatrix(); }
   // train lights
