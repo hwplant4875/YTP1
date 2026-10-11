@@ -60,7 +60,7 @@ function buildTrack() {
   T.finishX = -W + 3.0; T.finishY = y - 3.6; T.finishTop = y + 0.5;
   // catch tray
   wall([[-W, y - 4.5], [-W, y - 9]], 'side'); wall([[-W, y - 9], [-W + 9, y - 9.4]], 'side'); wall([[-W + 9, y - 9.4], [-W + 9, y - 6.5]], 'side');
-  wall([[-W, 0], [-W, y - 4.5]], 'side'); wall([[W, 0], [W, y + 0.5]], 'side');
+  wall([[-W, 8], [-W, y - 4.5]], 'side'); wall([[W, 8], [W, y + 0.5]], 'side');
   T.bottom = y - 10;
   return T;
 }
@@ -78,8 +78,7 @@ export function simulate(seed, keep = true) {
   lipL.createFixture(Edge(Vec2(-L.outer, L.y), Vec2(-L.inner, L.y - 0.5)), { friction: 0.3, restitution: 0.3 });
   lipR.createFixture(Edge(Vec2(L.outer, L.y), Vec2(L.inner, L.y - 0.5)), { friction: 0.3, restitution: 0.3 });
   let firstThrough = null, lipOpen = 0, lipT = null;
-  const gate = world.createBody(); gate.createFixture(Edge(Vec2(T.gate.x1, T.gate.y), Vec2(T.gate.x2, T.gate.y)));
-  const spin = T.spinners.map(sp => {
+    const spin = T.spinners.map(sp => {
     const b = world.createKinematicBody({ position: Vec2(sp.x, sp.y) });
     b.createFixture(Box(sp.len / 2, sp.w / 2), { friction: 0.3, restitution: 0.3 });
     b.createFixture(Box(sp.w / 2, sp.len / 2), { friction: 0.3, restitution: 0.3 });
@@ -88,16 +87,16 @@ export function simulate(seed, keep = true) {
   const order = COUNTRIES.map((c, i) => i).sort(() => rnd() - 0.5);
   const balls = COUNTRIES.map(([code, name, pop], i) => {
     const r = radius(pop), k = order.indexOf(i);
-    const b = world.createDynamicBody({ position: Vec2(-6 + (k % 6) * 2.3 + rnd() * 0.3, 0.6 + Math.floor(k / 6) * 1.7), bullet: true, angularDamping: 0.05 });
+    // no starting gate: marbles are dropped from above the hopper so the video opens mid-fall
+    const b = world.createDynamicBody({ position: Vec2(-5.8 + (k % 6) * 2.3 + rnd() * 0.3, 2.0 + Math.floor(k / 6) * 1.6 + rnd() * 0.4), linearVelocity: Vec2((rnd() - 0.5) * 1.5, -2), bullet: true, angularDamping: 0.05 });
     b.createFixture(Circle(r), { density: 1, friction: 0.3, restitution: 0.45 });
     return { code, name, pop, r, b, finish: null };
   });
   const frames = [], spinFrames = [];
-  let t = 0, done = 0, fi = 0, gateOpen = false;
-  const GATE_T = 1.6, MAXT = 80;
+  let t = 0, done = 0, fi = 0;
+  const MAXT = 80, GATE_HOLD = +(process.env.GATE_HOLD || 2.2);
   while (t < MAXT) {
-    if (!gateOpen && t >= GATE_T) { world.destroyBody(gate); gateOpen = true; }
-    if (firstThrough !== null && lipT === null && t > firstThrough + 4.5) lipT = t;
+    if (firstThrough !== null && lipT === null && t > firstThrough + GATE_HOLD) lipT = t;
     const target = lipT === null ? 0 : Math.min(1, (t - lipT) / 0.6);
     const v = (target - lipOpen) / DT * (L.openTo - L.inner) * 0; // positions set directly (kinematic teleport is fine for slow moves)
     lipOpen = target;
@@ -110,7 +109,7 @@ export function simulate(seed, keep = true) {
       // nudge anything stuck (zero velocity for long) so the race never stalls
       const v = m.b.getLinearVelocity();
       m.still = (Math.abs(v.x) + Math.abs(v.y) < 0.05) ? (m.still || 0) + DT : 0;
-      if (m.still > 1.0 && m.finish === null && gateOpen) { const ms = m.b.getMass(); m.b.applyLinearImpulse(Vec2((rnd() - 0.5) * 4 * ms, 5 * ms), p, true); m.still = 0; m.nudges = (m.nudges || 0) + 1; }
+      if (m.still > 1.0 && m.finish === null) { const ms = m.b.getMass(); m.b.applyLinearImpulse(Vec2((rnd() - 0.5) * 4 * ms, 5 * ms), p, true); m.still = 0; m.nudges = (m.nudges || 0) + 1; }
     }
     if (keep && t >= fi / FPS) {
       frames.push(balls.map(m => { const p = m.b.getPosition(); return [+p.x.toFixed(4), +p.y.toFixed(4), +m.b.getAngle().toFixed(4)]; }));
@@ -132,7 +131,7 @@ function leadChanges(sim) {
 }
 function stats(sim) {
   const rank = sim.res.map((r, i) => [r.finish ?? 1e9, i]).sort((a, b) => a[0] - b[0]);
-  return { lc: sim.frames.length ? leadChanges(sim) : -1, order: rank.map(r => sim.res[r[1]].code).join(','), winner: sim.res[rank[0][1]].name, first: rank[0][0], last: rank[rank.length - 1][0], unfinished: sim.res.filter(r => r.finish === null).length };
+  return { lc: sim.frames.length ? leadChanges(sim) : -1, order: rank.map(r => sim.res[r[1]].code).join(','), winner: sim.res[rank[0][1]].name, first: rank[0][0], last: rank[rank.length - 1][0], unfinished: sim.res.filter(r => r.finish === null).length, nudges: sim.res.reduce((a, r) => a + r.nudges, 0) };
 }
 
 const args = process.argv.slice(2);
@@ -140,7 +139,7 @@ if (args.includes('--search')) {
   const n = +args[args.indexOf('--search') + 1];
   for (let seed = 1; seed <= n; seed++) {
     const sim = simulate(seed, true); const st = stats(sim);
-    console.log(seed, st.winner, st.first.toFixed(1), st.last.toFixed(1), st.unfinished, 'lc', st.lc, st.order);
+    console.log(seed, st.winner, st.first.toFixed(1), st.last.toFixed(1), st.unfinished, 'lc', st.lc, 'n', st.nudges, st.order);
   }
 } else if (args.length) {
   const seed = +args[0]; const sim = simulate(seed);

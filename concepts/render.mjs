@@ -33,8 +33,8 @@ renderer.setSize(${W}, ${H}); renderer.setPixelRatio(1);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 document.body.appendChild(renderer.domElement);
-for (const [fam, file] of [['YTSans','/fonts/YouTubeSans-Black.otf'],['Pret','/fonts/Pretendard-Bold.otf'],['TikTok','/fonts/TikTokSans-Black.ttf']]) {
-  const f = new FontFace(fam, 'url(' + file + ')'); await f.load(); document.fonts.add(f); }
+for (const [fam, file, d] of [['YTSans','/fonts/YouTubeSans-Black.otf'],['Pret','/fonts/Pretendard-Bold.otf'],['TikTok','/fonts/TikTokSans-Black.ttf'],['Jua','/fonts/Jua-Regular.ttf'],['Fredoka','/fonts/Fredoka-VF.ttf',{ weight: '300 700' }]]) {
+  const f = new FontFace(fam, 'url(' + file + ')', d || {}); await f.load(); document.fonts.add(f); }
 const ctx = await S.setup(THREE, renderer, ${W}, ${H});
 const ov = document.createElement('canvas'); ov.width = ${W}; ov.height = ${H}; const g2 = ov.getContext('2d');
 window.frameAt = async (t) => { S.update(ctx, t);

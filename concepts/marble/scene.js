@@ -11,7 +11,7 @@ const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, t) => a + (b - a) * t;
 const easeOut = t => 1 - Math.pow(1 - t, 3);
 const easeOutBack = t => { const c = 1.7; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
-export const LEAD = 0.8;          // seconds of video before the sim starts
+export const LEAD = -0.8;         // video starts 0.8 s into the sim, marbles already falling
 const POP = p => p >= 1000 ? (p / 1000).toFixed(2).replace(/0$/, '') + 'B' : (p >= 10 ? Math.round(p) : p.toFixed(1)) + 'M';
 
 const FinishShader = {
@@ -116,7 +116,7 @@ export async function setup(THREE, renderer, W, H) {
   for (let k = 0; k < F; k++) {
     const live = R.frames[k].map((p, i) => [p, i]).filter(([p, i]) => !(R.res[i].finish !== null && k / R.fps > R.res[i].finish + 0.5)).sort((a, b) => a[0][1] - b[0][1]);
     const lead = live.length ? live[0][0] : [T.finishX, T.finishY - 3], med = live.length ? live[Math.floor(live.length / 3)][0] : lead;
-    camY[k] = Math.min(-5, lead[1] * 0.7 + med[1] * 0.3 + 3.5);
+    camY[k] = Math.min(-3, lead[1] * 0.7 + med[1] * 0.3 + 3.5);
     camX[k] = clamp(lead[0] * 0.6 + med[0] * 0.4, -2.2, 2.2);
   }
   const smooth = (a, rad) => { const o = new Float32Array(F); for (let k = 0; k < F; k++) { let s = 0, w = 0; for (let j = -rad; j <= rad; j++) { const q = clamp(k + j, 0, F - 1), ww = Math.exp(-(j * j) / (2 * (rad / 2.2) ** 2)); s += a[q] * ww; w += ww; } o[k] = s / w; } return o; };
@@ -133,7 +133,7 @@ export async function setup(THREE, renderer, W, H) {
 }
 
 const frameOf = (ctx, t) => clamp(Math.round((t - LEAD) * ctx.R.fps), 0, ctx.R.frames.length - 1);
-export const DURATION = 51;
+export const DURATION = 43;
 
 export function update(ctx, t) {
   const { R, camera, marbles, spinners, lips, key } = ctx;
@@ -146,13 +146,16 @@ export function update(ctx, t) {
   const sway = Math.sin(t * 0.4) * 0.8;
   camera.position.set(cx + sway, cy + 1.6, 31); camera.lookAt(cx + sway * 0.4, cy, 0);
   key.position.set(8, cy + 14, 18); key.target.position.set(0, cy, 0);
-  ctx.finish.uniforms.fade.value = clamp(t / 0.4) * clamp((DURATION - t) / 0.5);
+  ctx.finish.uniforms.fade.value = clamp((DURATION - t) / 0.8); // no fade-in: marbles are already moving on frame 1
   ctx.k = k;
 }
 
 // picture-in-picture replay of the size gate while the camera follows the leaders
 const PIP = { x: 560, y: 1060, w: 480, h: 480 };
-function pipAlpha(ctx, tt) { const T = ctx.T; return clamp((tt - (T.firstThrough - 1.2)) / 0.4) * (1 - clamp((tt - (T.lipT + 2.6)) / 0.4)); }
+function pipAlpha(ctx, tt) {
+  const T = ctx.T, win = Math.min(...ctx.R.res.map(r => r.finish));
+  return clamp((tt - (T.firstThrough - 1.2)) / 0.4) * (1 - clamp((tt - Math.min(T.lipT + 2.6, win - 0.5)) / 0.4));
+}
 export function post(ctx, renderer, t) {
   const tt = ctx.k / ctx.R.fps, a = pipAlpha(ctx, tt);
   if (a <= 0.02) return;
@@ -184,7 +187,7 @@ export function overlay(ctx, g, t) {
   g.fillStyle = tg; g.fillRect(0, 0, W, 640);
 
   // name tags under/over marbles
-  g.font = '26px Pret'; g.textAlign = 'center';
+  g.font = '28px Jua'; g.textAlign = 'center';
   const top3 = new Set(standings(ctx, k).slice(0, 3));
   const lastIdx = R.res.map((r, i) => [r.finish, i]).sort((a, b) => b[0] - a[0])[0][1];
   R.res.forEach((r, i) => {
@@ -192,29 +195,18 @@ export function overlay(ctx, g, t) {
     const v = marbles[i].position.clone(); v.y += r.r + 0.35; const q = v.project(camera);
     const x = (q.x + 1) / 2 * W, y = (1 - q.y) / 2 * H;
     if (y < 380 || y > H - 40) return;
-    const label = r.name.toUpperCase(), w = g.measureText(label).width + 20;
+    const label = r.name, w = g.measureText(label).width + 24;
     g.globalAlpha = 0.9; g.fillStyle = 'rgba(8,10,18,0.72)'; rr(g, x - w / 2, y - 30, w, 34, 17); g.fill();
-    g.fillStyle = '#fff'; g.fillText(label, x, y - 5); g.globalAlpha = 1;
+    g.fillStyle = '#fff'; g.fillText(label, x, y - 6); g.globalAlpha = 1;
   });
 
   // title
-  const a0 = easeOut(clamp(t / 0.5)), sh = easeOut(clamp((t - 4) / 0.7));
+  const a0 = easeOut(clamp(t / 0.25)), sh = easeOut(clamp((t - 4) / 0.7));
   g.textAlign = 'center'; g.globalAlpha = a0;
   g.shadowColor = 'rgba(0,0,0,0.6)'; g.shadowBlur = 20;
-  g.font = '30px YTSans'; g.fillStyle = '#ffc04a'; g.letterSpacing = '7px'; g.fillText('MARBLE SIZE = POPULATION', W / 2, lerp(228, 200, sh)); g.letterSpacing = '0px';
+  g.font = `${Math.round(lerp(46, 38, sh))}px Jua`; g.fillStyle = '#ffc04a'; g.fillText('Marble size = Population', W / 2, lerp(222, 196, sh));
   g.font = `${Math.round(lerp(82, 56, sh))}px YTSans`; g.fillStyle = '#fff'; g.fillText('Which country wins?', W / 2, lerp(320, 268, sh));
   g.shadowColor = 'transparent'; g.globalAlpha = 1;
-
-  // countdown before the gate opens
-  const gateT = LEAD + 1.6;
-  if (t < gateT + 0.6) {
-    const n = Math.ceil(gateT - t); const ph = (gateT - t) % 1;
-    const txt = t < gateT ? String(Math.max(1, Math.min(3, n))) : 'GO!';
-    const s = t < gateT ? 1 + 0.4 * (1 - easeOut(clamp(1 - ph))) : easeOutBack(clamp((t - gateT) / 0.3));
-    g.save(); g.translate(W / 2, 760); g.scale(s, s); g.globalAlpha = t < gateT ? 1 : 1 - clamp((t - gateT - 0.3) / 0.3);
-    g.font = '150px YTSans'; g.fillStyle = t < gateT ? '#fff' : '#3ddc84'; g.shadowColor = 'rgba(0,0,0,0.6)'; g.shadowBlur = 30;
-    g.fillText(txt, 0, 50); g.restore();
-  }
 
   // live leaderboard (top 5) with smooth row moves
   const st = standings(ctx, k);
@@ -231,7 +223,7 @@ export function overlay(ctx, g, t) {
     g.fillText(String(pos + 1), bx + 22, y + 42);
     flagDot(g, flags[r.code], bx + 82, y + 32, 20);
     g.font = '28px YTSans'; g.fillStyle = '#fff'; g.fillText(r.name, bx + 114, y + 33);
-    g.font = '20px Pret'; g.fillStyle = 'rgba(255,255,255,0.55)'; g.fillText('pop. ' + POP(r.pop), bx + 114, y + 55);
+    g.font = '500 21px Fredoka'; g.fillStyle = 'rgba(255,255,255,0.6)'; g.fillText('pop. ' + POP(r.pop), bx + 114, y + 56);
     if (r.finish !== null && r.finish <= tt) { g.fillStyle = '#3ddc84'; g.font = '26px YTSans'; g.textAlign = 'right'; g.fillText('✓', bx + 312, y + 42); }
   }
   g.globalAlpha = 1;
@@ -240,20 +232,18 @@ export function overlay(ctx, g, t) {
   if (pa > 0.02) {
     const s = 0.7 + 0.3 * easeOut(pa), w = PIP.w * s, h = PIP.h * s, x = PIP.x + (PIP.w - w) / 2, y = PIP.y + (PIP.h - h) / 2;
     g.save(); g.globalAlpha = pa; g.strokeStyle = '#fff'; g.lineWidth = 6; rr(g, x, y, w, h, 18); g.stroke();
-    g.fillStyle = '#ff2d55'; rr(g, x + 16, y + 16, 196, 44, 10); g.fill();
-    g.fillStyle = '#fff'; g.font = '26px YTSans'; g.textAlign = 'left'; g.fillText('● SIZE GATE', x + 30, y + 47);
+    // broadcast-style LIVE tag: blinking red recording dot + white text, no box
+    const blink = 0.55 + 0.45 * Math.cos(t * Math.PI * 2 * 0.9);
+    g.shadowColor = 'rgba(0,0,0,0.75)'; g.shadowBlur = 12;
+    g.globalAlpha = pa * blink; g.fillStyle = '#ff2d2d'; g.beginPath(); g.arc(x + 40, y + 42, 11, 0, 7); g.fill();
+    g.globalAlpha = pa; g.fillStyle = '#fff'; g.font = '32px YTSans'; g.textAlign = 'left'; g.fillText('LIVE', x + 60, y + 54);
     g.restore();
-  }
-  // size gate callouts
-  const ft = T.firstThrough, lt = T.lipT;
-  if (tt > ft - 2.5 && tt < lt + 1.2) {
-    const a = clamp((tt - (ft - 2.5)) / 0.4) * (1 - clamp((tt - lt - 0.8) / 0.4));
-    banner(g, W, a, tt < lt ? 'THE SIZE GATE' : 'GATE OPEN!', tt < lt ? 'Too big? You wait.' : 'Big marbles released', tt < lt ? '#ff2d55' : '#3ddc84', PIP.x + PIP.w / 2);
   }
   // winner card
   const order = R.res.map((r, i) => [r.finish, i]).sort((a, b) => a[0] - b[0]);
   const win = order[0], last = order[order.length - 1];
   if (tt > win[0]) {
+    fireworks(g, W, tt - win[0]);
     const a = easeOutBack(clamp((tt - win[0]) / 0.6)), fade = 1 - clamp((tt - win[0] - 5.5) / 0.5);
     if (fade > 0) {
       const r = R.res[win[1]];
@@ -261,7 +251,7 @@ export function overlay(ctx, g, t) {
       g.shadowColor = 'rgba(0,0,0,0.5)'; g.shadowBlur = 40; g.fillStyle = 'rgba(255,255,255,0.97)'; rr(g, -380, -170, 760, 340, 40); g.fill(); g.shadowColor = 'transparent';
       flagDot(g, flags[r.code], 0, -80, 62);
       g.textAlign = 'center'; g.fillStyle = '#111'; g.font = '72px YTSans'; g.fillText(r.name.toUpperCase() + ' WINS', 0, 60);
-      g.font = '32px Pret'; g.fillStyle = '#666'; g.fillText('population ' + POP(r.pop), 0, 115);
+      g.font = '36px Jua'; g.fillStyle = '#666'; g.fillText('population ' + POP(r.pop), 0, 115);
       g.restore();
     }
   }
@@ -275,6 +265,63 @@ function banner(g, W, a, big, small, color, cx = W / 2) {
   g.save(); g.globalAlpha = a; g.translate(0, (1 - a) * 30);
   g.textAlign = 'center'; g.shadowColor = 'rgba(0,0,0,0.6)'; g.shadowBlur = 22;
   g.font = '64px YTSans'; g.fillStyle = color; g.fillText(big, cx, 1625);
-  g.font = '40px YTSans'; g.fillStyle = '#fff'; g.fillText(small, cx, 1685);
+  g.font = '46px Jua'; g.fillStyle = '#fff'; g.fillText(small, cx, 1690);
+  g.restore();
+}
+
+// ---------- winner fireworks + confetti (pure function of time since the win, so every frame is independent) ----------
+const hash = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+const FW_COLORS = ['#ffd34a', '#ff5a7a', '#5ad1ff', '#7dff9a', '#ffffff', '#ff9a3c', '#c58bff'];
+const BURSTS = [ // [start s, x, y, color index, size]
+  [0.05, 540, 820, 0, 1.15], [0.30, 250, 700, 1, 0.9], [0.45, 830, 690, 2, 0.95], [0.85, 190, 1420, 3, 0.8], [1.0, 900, 1440, 4, 0.85],
+  [1.45, 420, 560, 5, 0.9], [1.7, 700, 600, 6, 0.9], [2.2, 540, 760, 0, 1.0], [2.6, 280, 1300, 2, 0.75], [2.9, 820, 1280, 1, 0.75],
+];
+const glowCache = {};
+function glow(col) { // soft round sprite: white core, coloured halo
+  if (glowCache[col]) return glowCache[col];
+  const c = document.createElement('canvas'); c.width = c.height = 64; const q = c.getContext('2d');
+  const rg = q.createRadialGradient(32, 32, 0, 32, 32, 32);
+  rg.addColorStop(0, 'rgba(255,255,255,1)'); rg.addColorStop(0.12, 'rgba(255,255,255,0.95)'); rg.addColorStop(0.3, col + 'cc'); rg.addColorStop(1, col + '00');
+  q.fillStyle = rg; q.fillRect(0, 0, 64, 64); return (glowCache[col] = c);
+}
+function fireworks(g, W, dt) {
+  if (dt > 6.2) return;
+  g.save(); g.globalCompositeOperation = 'lighter';
+  BURSTS.forEach(([t0, bx, by, ci, size], b) => {
+    const u = dt - t0; if (u < 0 || u > 2.0) return;
+    const col = FW_COLORS[ci], n = 96, life = 1 - clamp(u / 2.0);
+    // flash at the core
+    if (u < 0.18) { const fa = 1 - u / 0.18, rg = g.createRadialGradient(bx, by, 0, bx, by, 160 * size); rg.addColorStop(0, `rgba(255,255,240,${0.55 * fa})`); rg.addColorStop(1, 'rgba(255,255,240,0)'); g.fillStyle = rg; g.fillRect(bx - 170, by - 170, 340, 340); }
+    for (let i = 0; i < n; i++) {
+      const h1 = hash(b * 97 + i), h2 = hash(b * 31 + i * 7.3), h3 = hash(b * 13 + i * 3.1);
+      const ang = (i / n) * Math.PI * 2 + h1 * 0.25, sp = (520 + 300 * h2) * size, k = 2.6;
+      const pos = s => { const d = (1 - Math.exp(-k * s)) / k; return [bx + Math.cos(ang) * sp * d, by + Math.sin(ang) * sp * d + 160 * s * s]; };
+      const [x, y] = pos(u);
+      const tw = 0.55 + 0.45 * Math.sin(u * 38 + i * 2.1); // late twinkle
+      const a = life * (u > 1.1 ? tw : 1);
+      // fading trail made of a few segments, then a glowing head
+      g.lineCap = 'round'; g.strokeStyle = col;
+      for (let sgm = 0; sgm < 4; sgm++) {
+        const [ax, ay] = pos(Math.max(0, u - 0.035 * (sgm + 1))), [cx, cy] = pos(Math.max(0, u - 0.035 * sgm));
+        g.globalAlpha = a * 0.7 * (1 - sgm / 4); g.lineWidth = (4.5 - sgm) * size; g.beginPath(); g.moveTo(ax, ay); g.lineTo(cx, cy); g.stroke();
+      }
+      const sz = (30 + 16 * h2) * size * (0.6 + 0.4 * life);
+      g.globalAlpha = a; g.drawImage(glow(col), x - sz / 2, y - sz / 2, sz, sz);
+    }
+  });
+  g.restore();
+  // confetti rain from the top
+  g.save();
+  const CN = 110;
+  for (let i = 0; i < CN; i++) {
+    const h1 = hash(i * 5.7 + 1), h2 = hash(i * 9.1 + 2), h3 = hash(i * 2.3 + 3), u = dt - h3 * 0.9;
+    if (u < 0) continue;
+    const y = -40 + u * (330 + 220 * h2), x = h1 * W + Math.sin(u * (2 + 2 * h2) + i) * 40;
+    if (y > 1960) continue;
+    const a = clamp((6.2 - dt) / 0.8);
+    g.globalAlpha = a; g.fillStyle = FW_COLORS[i % FW_COLORS.length];
+    g.translate(x, y); g.rotate(u * (3 + 4 * h1) + i); g.scale(1, Math.cos(u * (5 + 6 * h2) + i));
+    g.fillRect(-9, -5, 18, 10); g.setTransform(1, 0, 0, 1, 0, 0);
+  }
   g.restore();
 }
