@@ -55,19 +55,27 @@ elif what == 'marble':
     import glob
     R = json.load(open(f'{C}/marble/race.json'))
     LEAD = -0.8; D = 43.0; fps = R['fps']
-    cand = int(sys.argv[2]) if len(sys.argv) > 2 else 1
-    src = load(sorted(glob.glob(f'{C}/audio/marble_sfx/{cand:02d}_*.mp3'))[0])
-    mono = np.abs(src).mean(1); hop = 240
-    env = np.array([mono[i:i + hop].max() for i in range(0, len(mono), hop)])
-    shots = []; lastk = -99
-    for k in range(1, len(env)):
-        if env[k] > 0.12 * env.max() and env[k] > 2.2 * max(env[k - 1], 1e-4) and k - lastk > 20:
-            lastk = k; a = max(0, k * hop - 120); c = src[a:a + int(0.16 * SR)].copy()
-            if len(c) < int(0.16 * SR): continue
-            fo = int(0.05 * SR); c[-fo:] *= np.linspace(1, 0, fo)[:, None] ** 2
-            c /= np.abs(c).max() + 1e-6; shots.append(c)
+    arg = sys.argv[2] if len(sys.argv) > 2 else '0'
+    scheme = None if arg.isdigit() else arg  # a marble_sounds.py scheme name, e.g. A_marimba_mountain_king
+    cand = 0 if scheme else int(arg)          # 0 = the original synthesized glass click, 1-8 = ElevenLabs clips
+    shots = []
+    if cand:
+      src = load(sorted(glob.glob(f'{C}/audio/marble_sfx/{cand:02d}_*.mp3'))[0])
+      mono = np.abs(src).mean(1); hop = 240
+      env = np.array([mono[i:i + hop].max() for i in range(0, len(mono), hop)])
+      lastk = -99
+      for k in range(1, len(env)):
+          if env[k] > 0.12 * env.max() and env[k] > 2.2 * max(env[k - 1], 1e-4) and k - lastk > 20:
+              lastk = k; a = max(0, k * hop - 120); c = src[a:a + int(0.16 * SR)].copy()
+              if len(c) < int(0.16 * SR): continue
+              fo = int(0.05 * SR); c[-fo:] *= np.linspace(1, 0, fo)[:, None] ** 2
+              c /= np.abs(c).max() + 1e-6; shots.append(c)
     print('one-shots', len(shots))
     buf = music(f'{C}/audio/Run_Amok.mp3', D, ss=0, fin=0.05, fout=2.5, gain_db=-17)
+    if scheme:
+        sys.path.insert(0, f'{C}/audio'); import marble_sounds as MS
+        if not MS.SCHEMES[scheme][4]: buf[:] = 0  # melody schemes are the music
+        buf += np.repeat(MS.render(scheme, D, LEAD)[:len(buf)], 1, 0)
     rng = np.random.default_rng(3)
     F = np.array(R['frames'])
     v = np.diff(F[:, :, :2], axis=0) * fps
@@ -76,7 +84,7 @@ elif what == 'marble':
     def resample(c, rate):
         n = int(len(c) / rate); x = np.arange(n) * rate
         return np.stack([np.interp(x, np.arange(len(c)), c[:, ch]) for ch in (0, 1)], 1).astype(np.float32)
-    for k in range(a.shape[0]):
+    for k in range(a.shape[0] if not scheme else 0):
         tv = LEAD + (k + 1) / fps
         if tv < 0: continue
         for i in range(a.shape[1]):
@@ -84,6 +92,8 @@ elif what == 'marble':
                 last[i] = k
                 r = R['res'][i]['r']
                 st = min(1.0, (a[k, i] - 1.2) / 8) * (0.55 + 0.9 * r)
+                if not cand:
+                    place(buf, click(rng, st * 0.5), tv); continue
                 c = resample(shots[rng.integers(len(shots))], 1.25 - 0.5 * min(1, (r - 0.3) / 0.9) + rng.uniform(-0.04, 0.04))
                 pan = float(np.clip(F[k, i, 0] / 9, -0.7, 0.7))
                 c = c * np.array([1 - pan * 0.6, 1 + pan * 0.6], np.float32)
@@ -100,7 +110,7 @@ elif what == 'marble':
     place(buf, faded(f'{C}/audio/fireworks.mp3', 4.5, 1.5), LEAD + win, db(-23))
     out = np.zeros_like(buf); tt = np.arange(len(buf)) / SR
     buf *= np.clip((D - tt) / 1.2, 0, 1)[:, None]  # everything (applause included) fades with the picture
-    write(buf, f'{C}/out/marble_audio_c{cand}.wav')
+    write(buf, f'{C}/out/marble_audio_{scheme or "c" + str(cand)}.wav')
 elif what == 'lies':
     E = json.load(open(f'{C}/counted/edl.json'))
     D = E['end'] + E['outro']
