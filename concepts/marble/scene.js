@@ -14,6 +14,10 @@ const easeOut = t => 1 - Math.pow(1 - t, 3);
 const easeInOut = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 const easeOutBack = t => { const c = 1.7; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
 const POP = p => p >= 1000 ? (p / 1000).toFixed(2).replace(/0$/, '') + 'B' : (p >= 10 ? Math.round(p) : p.toFixed(1)) + 'M';
+let META = { key: 'pop', subtitle: 'Marble size = Population', label: 'population', prefix: 'pop. ' };
+const FMT = v => META.key === 'area' ? (v >= 1 ? v.toFixed(1) + 'M km²' : Math.round(v * 1000) + 'K km²') : META.key === 'gdp' ? '$' + v.toFixed(v >= 10 ? 1 : 2) + 'T' : POP(v);
+// Shorts UI covers x > 900 below y 1035 and everything below y 1540; keep graphics out of it
+const SAFE_CX = 490;
 
 // timeline: video starts mid-fall; the winner's finish plays in slow motion (keep in sync with audio/mix.py)
 export const TIMING = { LEAD: -0.8, PRE: 1.0, POST: 0.35, RATE: 0.3, END: 2.8 };
@@ -44,7 +48,8 @@ const FinishShader = {
 };
 
 export async function setup(THREE, renderer, W, H) {
-  const R = await (await fetch('/marble/race.json')).json();
+  const R = await (await fetch('/marble/' + (new URLSearchParams(location.search).get('shot') || 'race.json'))).json();
+  if (R.meta) META = R.meta;
   const TL = timeline(R); DURATION = TL.duration;
   const T = R.track, N = R.res.length, F = R.frames.length;
   const scene = new THREE.Scene();
@@ -223,7 +228,7 @@ export function update(ctx, t) {
 }
 
 // picture-in-picture view of the size gate while the camera follows the leaders
-const PIP = { x: 560, y: 1060, w: 480, h: 480 };
+const PIP = { x: 400, y: 1020, w: 440, h: 440 };
 function pipAlpha(ctx, tt) {
   const T = ctx.T, win = ctx.TL.tw;
   return clamp((tt - (T.firstThrough - 1.2)) / 0.4) * (1 - clamp((tt - Math.min(T.lipT + 2.6, win - 0.5)) / 0.4));
@@ -277,12 +282,12 @@ export function overlay(ctx, g, t) {
   const a0 = easeOut(clamp(t / 0.25)), sh = easeOut(clamp((t - 4) / 0.7));
   g.textAlign = 'center'; g.globalAlpha = a0;
   g.shadowColor = 'rgba(0,0,0,0.7)'; g.shadowBlur = 20;
-  g.font = `${Math.round(lerp(66, 54, sh))}px Jua`; g.fillStyle = '#ffc04a'; g.fillText('Marble size = Population', W / 2, lerp(226, 204, sh));
+  g.font = `${Math.round(lerp(66, 54, sh))}px Jua`; g.fillStyle = '#ffc04a'; g.fillText(META.subtitle, W / 2, lerp(226, 204, sh));
   g.font = `${Math.round(lerp(84, 60, sh))}px YTSans`; g.fillStyle = '#fff'; g.fillText('Which country wins?', W / 2, lerp(322, 282, sh));
   g.shadowColor = 'transparent'; g.globalAlpha = 1;
 
   // live leaderboard (top 5) with smooth row moves
-  const bx = 40, by = lerp(400, 330, easeOut(clamp((t - 4) / 0.7))), rowH = 64;
+  const bx = 70, by = lerp(400, 330, easeOut(clamp((t - 4) / 0.7))), rowH = 64;
   g.fillStyle = 'rgba(8,10,18,0.7)'; rr(g, bx, by, 330, rowH * 5 + 24, 24); g.fill();
   // flash the first row when the lead changes
   const lastLead = ctx.leads.filter(l => l.s <= tt).pop();
@@ -299,7 +304,7 @@ export function overlay(ctx, g, t) {
     g.fillText(String(pos + 1), bx + 22, y + 42);
     flagDot(g, flags[r.code], bx + 82, y + 32, 20);
     g.font = '28px YTSans'; g.fillStyle = '#fff'; g.fillText(r.name, bx + 114, y + 33);
-    g.font = '500 21px Fredoka'; g.fillStyle = 'rgba(255,255,255,0.6)'; g.fillText('pop. ' + POP(r.pop), bx + 114, y + 56);
+    g.font = '500 21px Fredoka'; g.fillStyle = 'rgba(255,255,255,0.6)'; g.fillText(META.prefix + FMT(r.pop), bx + 114, y + 56);
     if (r.finish !== null && r.finish <= tt) { g.fillStyle = '#3ddc84'; g.font = '26px YTSans'; g.textAlign = 'right'; g.fillText('✓', bx + 312, y + 42); }
   }
   g.globalAlpha = 1;
@@ -327,8 +332,8 @@ export function overlay(ctx, g, t) {
   // slow-motion badge during the photo finish
   if (ctx.slow > 0.02 && tt < TL.B + 0.2) {
     g.save(); g.globalAlpha = ctx.slow; g.textAlign = 'center'; g.shadowColor = 'rgba(0,0,0,0.7)'; g.shadowBlur = 18;
-    g.font = '58px YTSans'; g.fillStyle = '#fff'; g.fillText('PHOTO FINISH', W / 2, 1540);
-    g.font = '34px Jua'; g.fillStyle = '#ffc04a'; g.fillText(`${R.res[ctx.order[0][1]].name} vs ${R.res[ctx.order[1][1]].name}`, W / 2, 1592);
+    g.font = '58px YTSans'; g.fillStyle = '#fff'; g.fillText('PHOTO FINISH', SAFE_CX, 1380);
+    g.font = '34px Jua'; g.fillStyle = '#ffc04a'; g.fillText(`${R.res[ctx.order[0][1]].name} vs ${R.res[ctx.order[1][1]].name}`, SAFE_CX, 1432);
     g.restore();
   }
   // winner card
@@ -339,26 +344,29 @@ export function overlay(ctx, g, t) {
     const a = easeOutBack(clamp((t - wt) / 0.6)), fade = 1 - clamp((t - wt - 6.5) / 0.5);
     if (fade > 0) {
       const r = R.res[win[1]];
-      g.save(); g.globalAlpha = fade; g.translate(W / 2, 1060); g.scale(a, a);
-      g.shadowColor = 'rgba(0,0,0,0.5)'; g.shadowBlur = 40; g.fillStyle = 'rgba(255,255,255,0.97)'; rr(g, -380, -170, 760, 360, 40); g.fill(); g.shadowColor = 'transparent';
+      g.save(); g.globalAlpha = fade; g.translate(SAFE_CX, 1060); g.scale(a, a);
+      g.shadowColor = 'rgba(0,0,0,0.5)'; g.shadowBlur = 40; g.fillStyle = 'rgba(255,255,255,0.97)'; rr(g, -350, -170, 700, 360, 40); g.fill(); g.shadowColor = 'transparent';
       flagDot(g, ctx.flags[r.code], 0, -80, 62);
-      g.textAlign = 'center'; g.fillStyle = '#111'; g.font = '72px YTSans'; g.fillText(r.name.toUpperCase() + ' WINS', 0, 60);
+      g.textAlign = 'center'; g.fillStyle = '#111'; const wtxt = r.name.toUpperCase() + ' WINS'; g.font = '72px YTSans'; const fsz = Math.min(72, 72 * 640 / g.measureText(wtxt).width); g.font = `${Math.floor(fsz)}px YTSans`; g.fillText(wtxt, 0, 60);
       g.font = '36px Jua'; g.fillStyle = '#666'; g.fillText(`by ${(second[0] - win[0]).toFixed(2)}s over ${R.res[second[1]].name}`, 0, 118);
-      g.font = '30px Jua'; g.fillStyle = '#999'; g.fillText('population ' + POP(r.pop), 0, 160);
+      g.font = '30px Jua'; g.fillStyle = '#999'; g.fillText(META.label + ' ' + FMT(r.pop), 0, 160);
       g.restore();
     }
   }
   if (tt > last[0] - 0.2) {
     const a = easeOut(clamp((tt - last[0] + 0.2) / 0.5)), r = R.res[last[1]];
-    banner(g, W, a, `${r.name.toUpperCase()} FINISHED LAST`, `The biggest marble: ${POP(r.pop)} people`, '#ffc04a');
+    const biggest = R.res.every(o => o.pop <= r.pop);
+    banner(g, W, a, `${r.name.toUpperCase()} FINISHED LAST`, biggest ? `The biggest marble: ${FMT(r.pop)}${META.key === 'pop' ? ' people' : ''}` : `${META.label} ${FMT(r.pop)}`, '#ffc04a');
   }
 }
 
-function banner(g, W, a, big, small, color, cx = W / 2) {
+function banner(g, W, a, big, small, color, cx = SAFE_CX) {
   g.save(); g.globalAlpha = a; g.translate(0, (1 - a) * 30);
+  g.font = '64px YTSans'; const bw = Math.max(g.measureText(big).width, (g.font = '46px Jua', g.measureText(small).width)) + 80;
+  g.fillStyle = 'rgba(8,10,18,0.72)'; rr(g, cx - bw / 2, 1316, bw, 166, 30); g.fill();
   g.textAlign = 'center'; g.shadowColor = 'rgba(0,0,0,0.6)'; g.shadowBlur = 22;
-  g.font = '64px YTSans'; g.fillStyle = color; g.fillText(big, cx, 1625);
-  g.font = '46px Jua'; g.fillStyle = '#fff'; g.fillText(small, cx, 1690);
+  g.font = '64px YTSans'; g.fillStyle = color; g.fillText(big, cx, 1390);
+  g.font = '46px Jua'; g.fillStyle = '#fff'; g.fillText(small, cx, 1452);
   g.restore();
 }
 // ---------- winner fireworks + confetti (pure function of time since the win, so every frame is independent) ----------

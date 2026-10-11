@@ -52,7 +52,9 @@ if what == 'map':
     write(buf, f'{C}/out/map_audio.wav')
 elif what == 'marble':
     # usage: mix.py marble [boom|stone]   v3: low thumps only (user: quiet Vine Boom feel; bright clicks are grating)
-    R = json.load(open(f'{C}/marble/race.json'))
+    import os
+    RACE = os.environ.get('RACE', 'race.json')
+    R = json.load(open(f'{C}/marble/{RACE}'))
     style = sys.argv[2] if len(sys.argv) > 2 else 'boom'
     fps = R['fps']
     # timeline, same as marble/scene.js TIMING / timeline()
@@ -121,7 +123,7 @@ elif what == 'marble':
     place(buf, faded(SFX + '012_군중환호.mp3', 7.0, 2.5), wt - 0.2, db(-11))
     place(buf, faded(f'{C}/audio/fireworks.mp3', 4.5, 1.5), wt + 0.1, db(-14))
     buf *= np.clip((D - tt) / 1.2, 0, 1)[:, None]
-    write(buf, f'{C}/out/marble_v3_audio_{style}.wav'); print('duration', round(D, 2))
+    write(buf, f'{C}/out/marble_v3_audio_{style}' + ('' if RACE == 'race.json' else '_' + RACE[:-5]) + '.wav'); print('duration', round(D, 2))
 elif what == 'lies':
     E = json.load(open(f'{C}/counted/edl.json'))
     D = E['end'] + E['outro']

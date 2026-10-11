@@ -9,7 +9,12 @@ export const COUNTRIES = [ // code, name, population (millions, 2024 UN WPP roun
   ['br', 'Brazil', 212], ['mx', 'Mexico', 131], ['jp', 'Japan', 124], ['de', 'Germany', 84], ['fr', 'France', 66],
   ['gb', 'UK', 69], ['kr', 'South Korea', 52], ['au', 'Australia', 27], ['nl', 'Netherlands', 18], ['pt', 'Portugal', 10], ['ie', 'Ireland', 5.3],
 ];
-const radius = pop => 0.38 * Math.pow(pop / 50, 0.25);
+// dataset: env DATA=data/area.json etc. (default: population). Radius spans 0.22..0.88 whatever the data range.
+export const META = process.env.DATA ? JSON.parse(fs.readFileSync(new URL(process.env.DATA, import.meta.url))) : { key: 'pop', subtitle: 'Marble size = Population', label: 'population', prefix: 'pop. ', items: COUNTRIES };
+const VALS = META.items.map(c => c[2]), VMAX = Math.max(...VALS), VMIN = Math.min(...VALS);
+const RMAX = META.rmax || 0.88, RMIN = META.rmin || 0.22;
+const EXP = Math.log(RMAX / RMIN) / Math.log(VMAX / VMIN);
+const radius = v => RMAX * Math.pow(v / VMAX, EXP);
 const FPS = 60, DT = 1 / 120;
 
 // ---------- track v3: colourful themed sections (sec = colour theme index used by the scene) ----------
@@ -107,8 +112,8 @@ export function simulate(seed, keep = true) {
     b.createFixture(Box(sp.w / 2, sp.len / 2), { friction: 0.3, restitution: 0.3 });
     b.setAngularVelocity(sp.speed); b.setAngle(rnd() * Math.PI); return b;
   });
-  const order = COUNTRIES.map((c, i) => i).sort(() => rnd() - 0.5);
-  const balls = COUNTRIES.map(([code, name, pop], i) => {
+  const order = META.items.map((c, i) => i).sort(() => rnd() - 0.5);
+  const balls = META.items.map(([code, name, pop], i) => {
     const r = radius(pop), k = order.indexOf(i);
     // no starting gate: marbles are dropped from above the hopper so the video opens mid-fall
     const b = world.createDynamicBody({ position: Vec2(-5.8 + (k % 6) * 2.3 + rnd() * 0.3, 2.0 + Math.floor(k / 6) * 1.6 + rnd() * 0.4), linearVelocity: Vec2((rnd() - 0.5) * 1.5, -2), bullet: true, angularDamping: 0.05 });
@@ -167,5 +172,6 @@ if (args.includes('--search')) {
 } else if (args.length) {
   const seed = +args[0]; const sim = simulate(seed);
   console.log(stats(sim), sim.frames.length);
-  fs.writeFileSync(new URL('./race.json', import.meta.url), JSON.stringify({ seed, fps: FPS, track: sim.T, res: sim.res, frames: sim.frames, spin: sim.spinFrames }));
+  const { items, ...meta } = META;
+  fs.writeFileSync(new URL(process.env.OUT || './race.json', import.meta.url), JSON.stringify({ seed, fps: FPS, meta, track: sim.T, res: sim.res, frames: sim.frames, spin: sim.spinFrames }));
 }
