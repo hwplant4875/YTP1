@@ -572,7 +572,7 @@ def main():
             f.write("".join(f"{int(a // 60)}:{int(a % 60):02d} {c}\n" for a, c in chapters))
     sh("ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-i", audio, *extra,
        "-filter_complex", chain, "-map", "[vout]", "-map", "1:a", "-t", f"{total:.2f}",
-       "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
+       "-c:v", "libx264", "-preset", "fast", *os.environ.get("FINAL_RATE", "-b:v 8M -maxrate 10M -bufsize 16M").split(), "-pix_fmt", "yuv420p",
        "-c:a", "aac", "-b:a", "256k", "-movflags", "+faststart", out)
     print(out, f"{total:.1f}s")
 
