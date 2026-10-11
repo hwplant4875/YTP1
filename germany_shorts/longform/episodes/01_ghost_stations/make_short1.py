@@ -58,7 +58,7 @@ say("And on the platform, someone was always watching.", v3("s1_intro", "guard",
 say("In 1961, the Berlin Wall split the city in two.", v3("s1_section", "stack", 0), text=key("1961", 0.30, 0.35))
 say("But West Berlin's U6, U8 and S-Bahn trains still ran right underneath the East.")
 say("So East Germany sealed sixteen stations.",
-    {"type": "g2d", "name": "c19_short", "module": "short_graphics.py", "args": {"mode": "stations", "keys": [[1.0, 0.56, 0.5], [1.06, 0.56, 0.5]]}}, hold=0.5)
+    {"type": "g2d", "name": "c19_short", "module": "short_graphics.py", "args": {"mode": "stations", "keys": [[1.0, 0.59, 0.5], [1.05, 0.59, 0.5]]}}, hold=0.5)
 say("Entrances were bricked up. The stations vanished from the maps.", v3("s1_walk", "title", 0))
 # the ghost platforms
 say("On the dark platforms, armed guards stood watch,", v3("s1_watch", "guardroom", 0))
