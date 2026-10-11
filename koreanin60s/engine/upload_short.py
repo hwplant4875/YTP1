@@ -5,8 +5,10 @@ tok = json.load(urllib.request.urlopen("https://oauth2.googleapis.com/token", ur
     "refresh_token": os.environ["YT_REFRESH_TOKEN_" + os.environ.get("YT_CH", "CC")], "grant_type": "refresh_token"}).encode()))["access_token"]
 m = json.load(open(meta))
 now = datetime.datetime.now(datetime.timezone.utc)
-pub = now.replace(hour=10, minute=0, second=0, microsecond=0)  # 19:00 KST
+kst = int(os.environ.get("KST_HOUR", "21"))  # Korean in 60s viewers peak 22:00-04:00 KST (user's Studio data, 2026-10-11)
+pub = now.replace(hour=(kst - 9) % 24, minute=0, second=0, microsecond=0)
 if pub < now + datetime.timedelta(minutes=30): pub += datetime.timedelta(days=1)
+pub += datetime.timedelta(days=int(os.environ.get("DAY_OFFSET", "0")))
 body = {"snippet": {k: m[k] for k in ("title", "description", "tags")} | {"categoryId": "27", "defaultLanguage": "en", "defaultAudioLanguage": "en"},
         "status": {"privacyStatus": "private", "publishAt": pub.isoformat().replace("+00:00", "Z"), "selfDeclaredMadeForKids": False}}
 size = os.path.getsize(video)
