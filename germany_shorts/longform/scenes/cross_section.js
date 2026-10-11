@@ -1,6 +1,7 @@
 // Cut-away of Berlin 1961-1989: the Wall on the street, a sealed station underneath,
 // a West Berlin train passing through it. Used for the thumbnail and the explainer shots.
 // shots: thumb | reveal (camera sinks from street level into the ground) | pass
+//        stack (high over the death strip, a tower searchlight sweeping, then a descent down the cut face to the train)
 import { AMBER, tileTex, concreteTex, textTex, person, ease, lerp, rng } from './lib.js';
 import { makeComposer, glow, beam } from './look.js';
 
@@ -95,12 +96,16 @@ export async function setup(THREE, renderer, W, H) {
   scene.add(new THREE.HemisphereLight(0x6f7a88, 0x0a0907, 0.35));
   const moon = new THREE.DirectionalLight(0x9fb0c8, 0.5); moon.position.set(-20, 40, 30); scene.add(moon);
   // soft cold fill on the cut face so the earth layers read
-  const fill = new THREE.DirectionalLight(0xa9a59c, 1.8); fill.position.set(10, 2, 60); fill.target.position.set(0, -6, 0); scene.add(fill, fill.target);
+  const fill = new THREE.DirectionalLight(0xa9a59c, shot === 'stack' ? 4.5 : 1.8); fill.position.set(10, 2, 60); fill.target.position.set(0, -6, 0); scene.add(fill, fill.target);
 
+  // watchtower searchlight (swept in the stack shot)
+  const search = new THREE.SpotLight(0xe8eef5, shot === 'stack' ? 220 : 0, 60, 0.13, 0.4, 1.2);
+  search.position.set(10, 9.3, -2.5); scene.add(search, search.target);
+  const searchBeam = beam(THREE, 0xdfe8f2, 30, 3.6, shot === 'stack' ? 0.07 : 0); searchBeam.position.copy(search.position); scene.add(searchBeam);
   const halo = glow(THREE, AMBER, 2.4, 0.9); halo.position.copy(bulb.position); scene.add(halo);
   const bm = beam(THREE, AMBER, 5, 2.4, 0.06); bm.position.copy(bulb.position); scene.add(bm);
   const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: 0.8, bloomRadius: 0.75, bloomThreshold: 0.6, exposure: 1.05 });
-  return { scene, camera, train, lamp, shot, ...post };
+  return { THREE, scene, camera, train, lamp, shot, search, searchBeam, ...post };
 }
 
 export function update(ctx, t) {
@@ -112,6 +117,16 @@ export function update(ctx, t) {
     camera.position.set(lerp(-6, 2, k), lerp(4, -3.5, k), lerp(26, 30, k));
     camera.lookAt(lerp(-2, 0, k), lerp(3, -5.5, k), 0);
     train.position.x = lerp(-60, 30, t / 12);
+  } else if (shot === 'stack') {
+    // the searchlight sweeps the strip while we hang above it, then the camera drops down the cut face
+    const a = -0.6 + Math.sin(t * 0.55) * 0.9;
+    ctx.search.target.position.set(10 + Math.sin(a) * 26, 0, 6 + Math.cos(a) * 6);
+    ctx.searchBeam.lookAt(ctx.search.target.position); ctx.searchBeam.rotateX(-Math.PI / 2);
+    const k1 = ease((t - 4.4) / 3.4);
+    const drift = t * 0.6;
+    camera.position.set(lerp(-30 + drift, 2, k1), lerp(22, -4.0, k1), lerp(74, 36, k1));
+    camera.lookAt(lerp(2, 0, k1), lerp(-1.5, -6.2, k1), 0);
+    train.position.x = lerp(-90, 40, (t - 5.4) / 9);
   } else if (shot === 'pass') {
     camera.position.set(0, -4.2, 26); camera.lookAt(0, -6.2, 0);
     train.position.x = lerp(-70, 40, t / 8);

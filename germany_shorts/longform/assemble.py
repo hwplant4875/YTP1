@@ -217,6 +217,17 @@ def render_video(v, d, base):
         "-an", "-vf", vf, "-t", f"{d:.3f}", "-c:v", "libx264", "-preset", "medium", "-crf", "17", "-pix_fmt", "yuv420p", "-f", "mp4", p))
 
 
+def render_g2d(v, d, start, beats, base):
+    """2D motion graphics from graphics2d.py, timed to the narration of the beats they cover."""
+    import graphics2d
+    timing = [{"start": round(b["_start"] - start, 3), "say_at": round(b["_say_at"] - start, 3), "say_d": round(b["_say_d"], 3),
+               "say": b.get("say", ""), "end": round(b["_end"] - start, 3)} for b in beats]
+    src = open(os.path.join(HERE, "graphics2d.py"), "rb").read()
+    k = key(v, round(d, 3), timing, hashlib.sha1(src).hexdigest()[:10])
+    ext = "mov" if v.get("alpha") else "mp4"
+    return cached(f"g2d_{v['name']}_{k}.{ext}", lambda p: graphics2d.render(v, d, timing, base, p, ext))
+
+
 def render_black(d):
     return cached(f"black_{round(d, 3)}.mp4", lambda p: sh(
         "ffmpeg", "-y", "-f", "lavfi", "-i", f"color=c=black:s={W}x{H}:r={FPS}", "-t", f"{d:.3f}",
@@ -246,6 +257,7 @@ Style: TITLE,Noto Serif KR Black,168,&H00FFFFFF,&H00FFFFFF,&H00000000,&H96000000
 Style: QUOTE,Noto Serif KR SemiBold,64,&H00F0F0F0,&H00FFFFFF,&H00000000,&H96000000,0,0,0,0,100,100,1,0,1,0,4,5,0,0,0,1
 Style: CREDIT,Pretendard Medium,22,&H99FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,3,0,30,22,1
 Style: SUB,Pretendard SemiBold,50,&H00F4F4F4,&H00FFFFFF,&H00000000,&H64000000,0,0,0,0,100,100,0.5,0,1,0,2.5,2,120,120,62,1
+Style: CHAPTER,YouTube Sans Dark,118,&H00F4F4F4,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,1,0,1,7,0,5,0,0,0,1
 Style: FX,Pretendard Black,10,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
 
 [Events]
@@ -313,13 +325,15 @@ def trans_events(kind, at):
 
 def text_event(tx, start, end):
     kind = tx.get("kind", "label")
-    style = {"year": "YEAR", "label": "LABEL", "title": "TITLE", "quote": "QUOTE", "flicker": "TITLE"}[kind]
+    style = {"year": "YEAR", "label": "LABEL", "title": "TITLE", "quote": "QUOTE", "flicker": "TITLE", "chapter": "CHAPTER"}[kind]
     px, py = tx.get("pos", [0.5, 0.5])
-    body = tx["content"].replace("\n", "\\N")
+    body = accent(tx["content"].replace("\n", "\\N"))
     if kind == "year":
         fx = "{\\fad(180,250)\\t(0,1200,\\fscx104\\fscy104)}"
     elif kind == "title":
         fx = "{\\fad(500,600)\\blur1}"
+    elif kind == "chapter":   # centred curiosity question at a chapter change
+        fx = "{\\fad(350,450)\\fscx96\\fscy96\\t(0,900,\\fscx100\\fscy100)}"
     elif kind == "flicker":   # an old tube catching: off, stutter, on, with a warm bloom
         seq = [(0, 255), (90, 0), (140, 255), (300, 0), (330, 200), (420, 0), (470, 160), (520, 0)]
         tr = "".join(f"\\t({a},{a + 1},\\alpha&H{v:02X}&)" for a, v in seq)
@@ -422,7 +436,11 @@ def main():
         inputs += ["-stream_loop", "-1", "-i", os.path.join(base, m["file"])]
         idx = len([x for x in inputs if x == "-i"]) - 1
         L = z - a
-        filt.append(f"[{idx}:a]aresample=48000,atrim=0:{L:.2f},asetpts=PTS-STARTPTS,volume={m.get('vol', 0.16)},"
+        vol = str(m.get('vol', 0.16))
+        for gn in m.get("gain", []):   # e.g. {"at": "nordbf", "db": -7, "ramp": 1.5}: drop the bed from a beat on
+            x, r, g = anchors[gn["at"]] - a, gn.get("ramp", 1.5), gn["db"] / 20
+            vol += f"*if(lt(t,{x:.2f}),1,pow(10,{g}*min((t-{x:.2f})/{r},1)))"
+        filt.append(f"[{idx}:a]aresample=48000,atrim=0:{L:.2f},asetpts=PTS-STARTPTS,volume='{vol}':eval=frame,"
                     f"afade=t=in:d={m.get('fade_in', 1.5)},afade=t=out:st={max(L - m.get('fade_out', 2.0), 0):.2f}:d={m.get('fade_out', 2.0)},"
                     f"adelay={int(a * 1000)}:all=1[m{k}]")
         mus.append(f"[m{k}]")
@@ -465,8 +483,9 @@ def main():
         v = b.get("visual", "same")
         if v == "same" and shots:
             shots[-1]["end"] = b["_end"]
+            shots[-1]["beats"].append(b)
         else:
-            shots.append({"v": v if v != "same" else {"type": "black"}, "start": b["_start"], "end": b["_end"]})
+            shots.append({"v": v if v != "same" else {"type": "black"}, "start": b["_start"], "end": b["_end"], "beats": [b]})
     shots[-1]["end"] = total
     segs = []
     for i, s in enumerate(shots):
@@ -479,6 +498,8 @@ def main():
             segs.append(render_image(v, d, base))
         elif v["type"] == "video":
             segs.append(render_video(v, d, base))
+        elif v["type"] == "g2d":
+            segs.append(render_g2d(v, d, s["start"], s["beats"], base))
         else:
             segs.append(render_black(d))
     lst = os.path.join(work, "shots.txt")
@@ -494,10 +515,13 @@ def main():
         if b.get("trans"):
             ev += trans_events(b["trans"], b["_start"])
     for b in spec["beats"]:
-        if b.get("text"):
-            tx = b["text"]
-            end = b["_end"] if not tx.get("span") else b["_end"] + tx["span"]
+        for tx in (b.get("text") if isinstance(b.get("text"), list) else [b["text"]] if b.get("text") else []):
+            end = (b["_end"] if not tx.get("span") else b["_end"] + tx["span"]) + tx.get("extend", 0)
             ev.append(text_event(tx, b["_start"] + tx.get("delay", 0), end))
+        if b.get("fade_out"):   # picture sinks slowly into black over the first seconds of the beat, then stays black
+            a, z = b["_start"], b["_end"]
+            ms = int(b["fade_out"] * 1000)
+            ev.append(f"Dialogue: 4,{ass_time(a)},{ass_time(z)},FX,,0,0,0,,{{\\pos(0,0)\\an7\\bord0\\shad0\\1c&H000000&\\alpha&HFF&\\t(0,{ms},\\alpha&H00&)\\p1}}m 0 0 l {W} 0 {W} {H} 0 {H}{{\\p0}}")
     for s in shots:
         if s["v"].get("credit"):
             ev.append(f"Dialogue: 2,{ass_time(s['start'])},{ass_time(s['end'])},CREDIT,,0,0,0,,{s['v']['credit']}")
@@ -505,10 +529,36 @@ def main():
     open(ass, "w", encoding="utf-8").write(ASS_HEAD + "\n".join(ev) + "\n")
 
     esc = lambda p: p.replace("\\", "\\\\").replace(":", "\\:").replace("'", "\\'")
-    grade = ("noise=alls=7:allf=t+u,vignette=angle=PI/4.6,"
-             f"ass='{esc(ass)}':fontsdir='{esc(os.path.abspath(FONTS))}'")
-    sh("ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-i", audio,
-       "-vf", grade, "-map", "0:v", "-map", "1:a", "-t", f"{total:.2f}",
+    beats = spec["beats"]
+    def window(i, b, key):
+        n = (b[key].get("beats", 1) if isinstance(b[key], dict) else 1)
+        return b["_start"], beats[min(i + n, len(beats)) - 1]["_end"]
+    # darken + blur the picture behind graphics and centred text: one blurred branch, blended in over time windows
+    dims = [window(i, b, "dim") for i, b in enumerate(beats) if b.get("dim")]
+    ovs = []
+    for i, b in enumerate(beats):
+        if b.get("overlay"):
+            a, z = window(i, b, "overlay")
+            ovs.append((a, z, render_g2d({**b["overlay"], "alpha": True}, z - a, a, beats[i:i + b["overlay"].get("beats", 1)], base)))
+    chain, extra = "[0:v]null[v0]", []
+    cur = "[v0]"
+    if dims:
+        k = "+".join(f"clip(min((T-{a:.2f})/0.45,({z:.2f}-T)/0.45),0,1)" for a, z in dims)
+        chain += f";{cur}split[da][db];[db]gblur=sigma=16,eq=brightness=-0.16:saturation=0.5[dbb];" \
+                 f"[da][dbb]blend=all_expr='A+(B-A)*min({k},1)'[vd]"
+        cur = "[vd]"
+    for n, (a, z, f) in enumerate(ovs):
+        extra += ["-i", f]
+        chain += f";[{n + 2}:v]setpts=PTS-STARTPTS+{a:.3f}/TB[o{n}];{cur}[o{n}]overlay=eof_action=pass:enable='between(t,{a:.3f},{z:.3f})'[vo{n}]"
+        cur = f"[vo{n}]"
+    chain += (f";{cur}noise=alls=7:allf=t+u,vignette=angle=PI/4.6,"
+              f"ass='{esc(ass)}':fontsdir='{esc(os.path.abspath(FONTS))}',format=yuv420p[vout]")
+    chapters = [(b["_start"], b["chapter"]) for b in beats if b.get("chapter")]
+    if chapters:
+        with open(os.path.splitext(out)[0] + "_chapters.txt", "w", encoding="utf-8") as f:
+            f.write("".join(f"{int(a // 60)}:{int(a % 60):02d} {c}\n" for a, c in chapters))
+    sh("ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-i", audio, *extra,
+       "-filter_complex", chain, "-map", "[vout]", "-map", "1:a", "-t", f"{total:.2f}",
        "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
        "-c:a", "aac", "-b:a", "256k", "-movflags", "+faststart", out)
     print(out, f"{total:.1f}s")

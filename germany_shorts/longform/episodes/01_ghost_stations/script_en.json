@@ -23,6 +23,24 @@
    "Outline": 5.2,
    "Shadow": 2.5,
    "MarginV": 110
+  },
+  "LABEL": {
+   "Fontsize": 84,
+   "Outline": 5.5,
+   "Shadow": 0
+  },
+  "TITLE": {
+   "Outline": 8,
+   "Shadow": 0
+  },
+  "QUOTE": {
+   "Fontsize": 84,
+   "Outline": 5,
+   "Shadow": 0
+  },
+  "YEAR": {
+   "Outline": 10,
+   "Shadow": 0
   }
  },
  "fonts": {
@@ -62,8 +80,16 @@
   {
    "file": "music/m4_resolution.mp3",
    "from": "act5",
-   "to": "end",
-   "vol": 0.18
+   "to": "t29",
+   "vol": 0.18,
+   "fade_out": 0.05,
+   "gain": [
+    {
+     "at": "nordbf",
+     "db": -7,
+     "ramp": 1.5
+    }
+   ]
   }
  ],
  "beats": [
@@ -76,6 +102,7 @@
    },
    "hold": 1.3,
    "id": "intro",
+   "chapter": "The train that never stopped",
    "sfx": [
     {
      "prompt": "deep low cinematic drone swelling slowly from silence",
@@ -113,7 +140,7 @@
    "trans": "dip",
    "text": {
     "kind": "quote",
-    "content": "„Voltastraße. Letzter Bahnhof in Berlin-West.“\\N{\\fs40}Voltastraße. Last station in West Berlin.",
+    "content": "„Voltastraße. Letzter Bahnhof in Berlin-West.“\\N{\\fs52}Voltastraße. Last station in West Berlin.",
     "pos": [
      0.5,
      0.8
@@ -436,27 +463,27 @@
    "say": "What were those guards really guarding?",
    "visual": {
     "type": "3d",
-    "scene": "intro",
-    "shot": "guardclose",
-    "t0": 3.5
+    "scene": "ghost_watch",
+    "shot": "teaser",
+    "t0": 0
    }
   },
   {
    "say": "And how did one man use these tunnels to escape?",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "border",
-    "t0": 2
+    "scene": "escape",
+    "shot": "teaser",
+    "t0": 0
    }
   },
   {
    "say": "This is the story of the stations that vanished from the map, and the city that paid for its own trains to pass through them.",
    "visual": {
     "type": "3d",
-    "scene": "intro",
-    "shot": "drift",
-    "t0": 4
+    "scene": "ghost_walk",
+    "shot": "title",
+    "t0": 0
    },
    "hold": 0.8,
    "sub": "The stations that *vanished* from the map",
@@ -471,19 +498,43 @@
    }
   },
   {
-   "say": "Before the Wall, Berlin was a strange city.",
    "visual": {
     "type": "video",
     "file": "assets/1962-08-16_The_Wall.mp4",
-    "start": 9,
+    "start": 6.4,
     "credit": "Universal Newsreel, 16 Aug 1962 (public domain)"
    },
-   "id": "act1",
-   "trans": "dip"
+   "hold": 2.6,
+   "chapter": "How one city became two",
+   "trans": "dip",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "How did *one city*\\Nbecome two?",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "soft low cinematic tone swell, gentle and quiet",
+    "len": 3,
+    "vol": 0.1,
+    "nogain": true
+   },
+   "id": "act1"
+  },
+  {
+   "say": "Before the Wall, Berlin was a strange city.",
+   "visual": "same"
   },
   {
    "say": "After the war, the victors carved Germany's capital into four sectors.",
-   "visual": "same"
+   "visual": {
+    "type": "g2d",
+    "name": "zones",
+    "args": {}
+   }
   },
   {
    "say": "The Soviets took the east. The Americans, British and French took the west.",
@@ -491,11 +542,19 @@
   },
   {
    "say": "But underground, none of that mattered. One subway ride, and you were on the other side.",
-   "visual": "same"
+   "visual": {
+    "type": "g2d",
+    "name": "underground",
+    "args": {}
+   }
   },
   {
    "say": "Tens of thousands of people lived in the East and commuted to jobs in the West.",
-   "visual": "same"
+   "visual": {
+    "type": "g2d",
+    "name": "commuters",
+    "args": {}
+   }
   },
   {
    "say": "The problem was, many of them never came back.",
@@ -514,15 +573,16 @@
     "start": 57.5,
     "credit": "Universal Newsreel, 31 Aug 1961 (public domain)"
    },
-   "text": {
-    "kind": "year",
-    "content": "1961"
-   },
    "sfx": {
     "prompt": "deep cinematic sub boom hit with short metallic tail",
     "len": 2.5,
     "vol": 0.55
-   }
+   },
+   "text": {
+    "kind": "year",
+    "content": "{\\fs110}13 AUGUST\\N{\\fs240}1961"
+   },
+   "dim": true
   },
   {
    "say": "East Germany cut Berlin in two. Overnight.",
@@ -573,11 +633,6 @@
     "scene": "cross_section",
     "shot": "pass",
     "t0": 0
-   },
-   "sfx": {
-    "prompt": "dark cinematic riser building tension, rising pitch, ends abruptly",
-    "len": 4,
-    "vol": 0.4
    }
   },
   {
@@ -592,18 +647,23 @@
   {
    "say": "So a few lines started in West Berlin, ran under East Berlin, and came back up in the West.",
    "visual": {
-    "type": "image",
-    "file": "assets/c19.png",
-    "from": [
-     1.0,
-     0.55,
-     0.5
-    ],
-    "to": [
-     1.25,
-     0.62,
-     0.55
-    ],
+    "type": "g2d",
+    "name": "c19",
+    "args": {
+     "mode": "lines",
+     "keys": [
+      [
+       1.0,
+       0.55,
+       0.5
+      ],
+      [
+       1.25,
+       0.62,
+       0.55
+      ]
+     ]
+    },
     "credit": "Map: Ericmetro / CC0"
    }
   },
@@ -620,7 +680,7 @@
    "visual": {
     "type": "3d",
     "scene": "cross_section",
-    "shot": "reveal",
+    "shot": "stack",
     "t0": 0
    }
   },
@@ -642,9 +702,9 @@
    "say": "So instead of cutting the lines, East Germany chose something far stranger.",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "cab",
-    "t0": 10
+    "scene": "ghost_watch",
+    "shot": "nostop",
+    "t0": 0
    }
   },
   {
@@ -654,86 +714,106 @@
   },
   {
    "say": "And the strangest part of this story? West Berlin was paying East Germany for the privilege.",
-   "visual": "same",
-   "sub": "West Berlin was *paying* East Germany for it"
+   "visual": {
+    "type": "video",
+    "file": "assets/1962-08-16_The_Wall.mp4",
+    "start": 45,
+    "credit": "Universal Newsreel, 16 Aug 1962 (public domain)"
+   },
+   "sub": "West Berlin was *paying* East Germany for it",
+   "dim": {
+    "beats": 1
+   },
+   "overlay": {
+    "name": "money_hook",
+    "beats": 2
+   }
   },
   {
    "say": "We'll get to the money. First, let's step inside a ghost station.",
    "visual": "same"
   },
   {
-   "say": "On August 13th, 1961, the stations died overnight.",
    "visual": {
     "type": "video",
     "file": "assets/1962-08-16_The_Wall.mp4",
-    "start": 18,
+    "start": 15.4,
     "credit": "Universal Newsreel, 16 Aug 1962 (public domain)"
    },
-   "id": "act2",
+   "hold": 2.6,
+   "chapter": "Sixteen stations vanish",
+   "trans": "dip",
+   "dim": true,
    "text": {
-    "kind": "label",
-    "content": "Bernauer Straße",
+    "kind": "chapter",
+    "content": "Which stations\\N*disappeared*?",
     "pos": [
      0.5,
-     0.86
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "soft low cinematic tone swell, gentle and quiet",
+    "len": 3,
+    "vol": 0.1,
+    "nogain": true
+   },
+   "id": "act2"
+  },
+  {
+   "say": "On August 13th, 1961, the stations died overnight.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}Bernauer Straße",
+    "pos": [
+     0.5,
+     0.84
     ]
    }
   },
   {
    "say": "On the U8: Bernauer Straße, Rosenthaler Platz, Weinmeisterstraße, Alexanderplatz, Jannowitzbrücke, Heinrich-Heine-Straße.",
    "visual": {
-    "type": "image",
-    "file": "assets/c19.png",
-    "from": [
-     1.25,
-     0.72,
-     0.5
-    ],
-    "to": [
-     1.4,
-     0.72,
-     0.62
-    ],
+    "type": "g2d",
+    "name": "c19",
+    "args": {
+     "mode": "stations",
+     "keys": [
+      [
+       1.3,
+       0.68,
+       0.47
+      ],
+      [
+       1.3,
+       0.36,
+       0.47
+      ],
+      [
+       1.3,
+       0.45,
+       0.66
+      ],
+      [
+       1.0,
+       0.5,
+       0.32
+      ]
+     ]
+    },
     "credit": "Map: Ericmetro / CC0"
    },
    "sub": "U8: six stations, *all closed*"
   },
   {
    "say": "On the U6: Schwartzkopffstraße, Nordbahnhof, Oranienburger Tor, Französische Straße, and Stadtmitte.",
-   "visual": {
-    "type": "image",
-    "file": "assets/c19.png",
-    "from": [
-     1.3,
-     0.35,
-     0.45
-    ],
-    "to": [
-     1.45,
-     0.4,
-     0.6
-    ],
-    "credit": "Map: Ericmetro / CC0"
-   },
+   "visual": "same",
    "sub": "U6: five more"
   },
   {
    "say": "And on the S-Bahn: Nordbahnhof, Oranienburger Straße, Unter den Linden, and Potsdamer Platz.",
-   "visual": {
-    "type": "image",
-    "file": "assets/c19.png",
-    "from": [
-     1.3,
-     0.5,
-     0.5
-    ],
-    "to": [
-     1.4,
-     0.45,
-     0.8
-    ],
-    "credit": "Map: Ericmetro / CC0"
-   },
+   "visual": "same",
    "sub": "S-Bahn: four more"
   },
   {
@@ -773,10 +853,10 @@
    },
    "text": {
     "kind": "label",
-    "content": "Potsdamer Platz",
+    "content": "{\\fs120}{\\c&H5CB2FF&}Potsdamer Platz",
     "pos": [
      0.5,
-     0.86
+     0.82
     ]
    }
   },
@@ -794,12 +874,13 @@
   },
   {
    "say": "On West Berlin's subway maps, meanwhile, there was a quiet little note.",
-   "visual": {
-    "type": "black"
-   }
+   "visual": "same",
+   "fade_out": 4.0
   },
   {
-   "visual": "same",
+   "visual": {
+    "type": "black"
+   },
    "hold": 3.4,
    "sfx": {
     "prompt": "single old typewriter keystrokes and carriage bell, short",
@@ -808,7 +889,7 @@
    },
    "text": {
     "kind": "quote",
-    "content": "„Bahnhöfe, auf denen die Züge nicht halten“\\N\\N{\\fs44}Stations where trains do not stop",
+    "content": "{\\fs120}„Bahnhöfe, auf denen\\Ndie Züge nicht halten“\\N\\N{\\fs100\\c&H5CB2FF&}Stations where trains do not stop",
     "pos": [
      0.5,
      0.5
@@ -819,8 +900,8 @@
    "say": "So what was it like down on the platform?",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "platform",
+    "scene": "ghost_walk",
+    "shot": "walk",
     "t0": 0
    },
    "sfx": {
@@ -828,6 +909,16 @@
     "len": 22,
     "vol": 0.22,
     "at": 0
+   },
+   "chapter": "Life on a ghost platform",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "So what was it like\\Ndown on the *platform*?",
+    "pos": [
+     0.5,
+     0.5
+    ]
    }
   },
   {
@@ -847,9 +938,9 @@
    "say": "And in that darkness stood the border guards.",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "guard",
-    "t0": 4
+    "scene": "ghost_watch",
+    "shot": "guardroom",
+    "t0": 0
    }
   },
   {
@@ -874,8 +965,8 @@
    "say": "Put yourself in their boots for a second.",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "thumb",
+    "scene": "ghost_watch",
+    "shot": "boots",
     "t0": 0
    }
   },
@@ -885,13 +976,18 @@
    "sfx": {
     "prompt": "subway train passing slowly through an empty station, echo, rumble",
     "len": 6,
-    "vol": 0.3,
+    "vol": 0.095,
     "at": 0.8
    }
   },
   {
    "say": "Through the windows, you see West Berliners.",
-   "visual": "same"
+   "visual": {
+    "type": "3d",
+    "scene": "ghost_watch",
+    "shot": "windows",
+    "t0": 0
+   }
   },
   {
    "say": "Someone reading a newspaper. Someone asleep. Someone staring right back at you.",
@@ -904,15 +1000,20 @@
   },
   {
    "say": "That's exactly why East Germany made the guards watch each other.",
-   "visual": "same"
+   "visual": {
+    "type": "3d",
+    "scene": "ghost_watch",
+    "shot": "eachother",
+    "t0": 0
+   }
   },
   {
    "say": "Barbed wire was laid along the edge of the platforms.",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "platform",
-    "t0": 12
+    "scene": "ghost_walk",
+    "shot": "wire",
+    "t0": 0
    }
   },
   {
@@ -927,8 +1028,8 @@
    "say": "And on the tunnel wall, someone painted a single white line.",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "border",
+    "scene": "ghost_walk",
+    "shot": "line",
     "t0": 0
    },
    "sfx": {
@@ -941,15 +1042,22 @@
    "say": "The border. From here on, you were in East Germany.",
    "visual": "same",
    "hold": 1.2,
-   "sub": "The border. From here on: *East Germany*"
+   "sub": "The border. From here on: *East Germany*",
+   "text": {
+    "kind": "label",
+    "content": "{\\fs110}{\\c&H5CB2FF&}THE BORDER",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
   },
   {
    "say": "Western trains had to crawl through at fifteen kilometers an hour.",
    "visual": {
-    "type": "3d",
-    "scene": "ghost_station",
-    "shot": "cab",
-    "t0": 22
+    "type": "g2d",
+    "name": "speed",
+    "args": {}
    },
    "sub": "Trains crawled through at *15 km/h*"
   },
@@ -970,15 +1078,21 @@
    "say": "So did anyone actually escape through the ghost tunnels?",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "border",
-    "t0": 4
+    "scene": "escape",
+    "shot": "tunnel",
+    "t0": 0
    },
    "id": "act3",
-   "sfx": {
-    "prompt": "dark cinematic riser building tension, rising pitch, ends abruptly",
-    "len": 4,
-    "vol": 0.4
+   "trans": "dip",
+   "chapter": "The escape",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "Did anyone\\Nactually *escape*?",
+    "pos": [
+     0.5,
+     0.5
+    ]
    }
   },
   {
@@ -992,7 +1106,7 @@
    },
    "text": {
     "kind": "label",
-    "content": "DIETER WENDT · 1980",
+    "content": "{\\fs120}DIETER WENDT\\N{\\fs84}{\\c&H5CB2FF&}1980",
     "pos": [
      0.5,
      0.5
@@ -1006,20 +1120,25 @@
   },
   {
    "say": "He was twenty-eight, and he worked as a signal technician on the East Berlin subway.",
-   "visual": "same"
-  },
-  {
-   "say": "He knew the signals in those tunnels better than almost anyone.",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "cab",
+    "scene": "escape",
+    "shot": "tech",
     "t0": 0
    }
   },
   {
-   "say": "Because he worked down there every day.",
+   "say": "He knew the signals in those tunnels better than almost anyone.",
    "visual": "same"
+  },
+  {
+   "say": "Because he worked down there every day.",
+   "visual": {
+    "type": "3d",
+    "scene": "escape",
+    "shot": "plan",
+    "t0": 0
+   }
   },
   {
    "say": "So he made a plan.",
@@ -1031,27 +1150,37 @@
   },
   {
    "say": "When a signal breaks, a technician is allowed into the tunnel to fix it.",
-   "visual": "same"
+   "visual": {
+    "type": "3d",
+    "scene": "escape",
+    "shot": "allowed",
+    "t0": 0
+   }
   },
   {
    "say": "The spot: a tunnel near Jannowitzbrücke station.",
    "visual": "same",
    "text": {
     "kind": "label",
-    "content": "Jannowitzbrücke",
+    "content": "{\\fs110}{\\c&H5CB2FF&}Jannowitzbrücke",
     "pos": [
      0.5,
-     0.86
+     0.82
     ]
    }
   },
   {
    "say": "As a West Berlin train approached, he stood by the tracks and flagged it down.",
-   "visual": "same",
+   "visual": {
+    "type": "3d",
+    "scene": "escape",
+    "shot": "flag",
+    "t0": 0
+   },
    "sfx": {
     "prompt": "dark cinematic riser building tension, rising pitch, ends abruptly",
     "len": 4,
-    "vol": 0.4
+    "vol": 0.09
    }
   },
   {
@@ -1060,12 +1189,17 @@
    "sfx": {
     "prompt": "subway train emergency braking, loud metal screech in a tunnel",
     "len": 3,
-    "vol": 0.55
+    "vol": 0.123
    }
   },
   {
    "say": "The stunned driver opened the door and shouted:",
-   "visual": "same"
+   "visual": {
+    "type": "3d",
+    "scene": "escape",
+    "shot": "door",
+    "t0": 0
+   }
   },
   {
    "visual": {
@@ -1076,7 +1210,7 @@
     {
      "prompt": "deep cinematic sub boom hit with short metallic tail",
      "len": 2.5,
-     "vol": 0.55
+     "vol": 0.123
     },
     {
      "file": "driver_shout.wav",
@@ -1087,7 +1221,7 @@
    ],
    "text": {
     "kind": "quote",
-    "content": "„Rein und hinlegen!“\\N\\N{\\fs44}Get in and lie down!",
+    "content": "{\\fs120}„Rein und hinlegen!“\\N\\N{\\fs84\\c&H5CB2FF&}Get in and lie down!",
     "pos": [
      0.5,
      0.5
@@ -1098,14 +1232,14 @@
    "say": "Minutes later, the train pulled into West Berlin.",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "platform",
-    "t0": 4
+    "scene": "escape",
+    "shot": "west",
+    "t0": 0
    },
    "sfx": {
     "prompt": "subway train accelerating away, doors closing beep",
     "len": 4,
-    "vol": 0.4
+    "vol": 0.09
    }
   },
   {
@@ -1116,7 +1250,12 @@
   },
   {
    "say": "But luck like that was rare. Most attempts ended long before anyone reached the line.",
-   "visual": "same"
+   "visual": {
+    "type": "3d",
+    "scene": "escape",
+    "shot": "rare",
+    "t0": 0
+   }
   },
   {
    "say": "For twenty-eight years, the ghost stations let almost no one through.",
@@ -1126,14 +1265,13 @@
    "say": "If you're enjoying this story, subscribing helps more than you think. There's a lot more hidden under Berlin.",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "cab",
-    "t0": 40
+    "scene": "escape",
+    "shot": "deep",
+    "t0": 0
    },
    "sub": "Subscribe: there's a lot more *hidden under Berlin*"
   },
   {
-   "say": "Now, of all the stations under East Berlin, trains stopped at exactly one.",
    "visual": {
     "type": "image",
     "file": "assets/c13.jpg",
@@ -1149,7 +1287,29 @@
     ],
     "credit": "Bundesarchiv, Bild 183-35539-0001 / Peter Heinz Junge / CC BY-SA 3.0"
    },
-   "id": "act4",
+   "hold": 2.6,
+   "chapter": "Friedrichstraße, the one stop",
+   "trans": "dip",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "Where did trains\\N*still stop*?",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "soft low cinematic tone swell, gentle and quiet",
+    "len": 3,
+    "vol": 0.1,
+    "nogain": true
+   },
+   "id": "act4"
+  },
+  {
+   "say": "Now, of all the stations under East Berlin, trains stopped at exactly one.",
+   "visual": "same",
    "sub": "Trains stopped at *exactly one*"
   },
   {
@@ -1157,16 +1317,16 @@
    "visual": "same",
    "text": {
     "kind": "label",
-    "content": "Bahnhof Friedrichstraße",
+    "content": "{\\fs130}{\\c&H5CB2FF&}Bahnhof Friedrichstraße",
     "pos": [
      0.5,
-     0.86
+     0.8
     ]
    },
    "sfx": {
     "prompt": "crowd murmur in an echoing train station hall, 1960s",
     "len": 10,
-    "vol": 0.18
+    "vol": 0.12
    }
   },
   {
@@ -1190,6 +1350,29 @@
   {
    "say": "And at the same time, it was a border crossing into East Germany.",
    "visual": {
+    "type": "g2d",
+    "name": "c19",
+    "args": {
+     "mode": "fstr",
+     "keys": [
+      [
+       1.6,
+       0.42,
+       0.67
+      ],
+      [
+       1.75,
+       0.42,
+       0.67
+      ]
+     ]
+    },
+    "credit": "Map: Ericmetro / CC0"
+   }
+  },
+  {
+   "say": "Two countries inside one station, separated by a wall.",
+   "visual": {
     "type": "image",
     "file": "assets/c07.jpg",
     "from": [
@@ -1203,11 +1386,7 @@
      0.55
     ],
     "credit": "Bundesarchiv, Bild 183-1990-0403-016 / Klaus Franke / CC BY-SA 3.0"
-   }
-  },
-  {
-   "say": "Two countries inside one station, separated by a wall.",
-   "visual": "same",
+   },
    "sub": "Two countries in *one station*"
   },
   {
@@ -1251,7 +1430,7 @@
    "visual": "same",
    "text": {
     "kind": "title",
-    "content": "Tränenpalast",
+    "content": "{\\c&H5CB2FF&}Tränenpalast",
     "pos": [
      0.5,
      0.47
@@ -1262,6 +1441,7 @@
     "len": 2.5,
     "vol": 0.55
    },
+   "dim": true,
    "sub": "*The Palace of Tears*"
   },
   {
@@ -1298,15 +1478,17 @@
   {
    "say": "The rag collector.",
    "visual": "same",
+   "dim": true,
+   "hold": 0.6,
+   "sub": "*The rag collector*",
    "text": {
     "kind": "quote",
-    "content": "„Lumpensammler“",
+    "content": "{\\fs150}{\\c&H5CB2FF&}„Lumpensammler“\\N{\\fs76\\c&HF0F0F0&}The rag collector",
     "pos": [
      0.5,
-     0.8
+     0.5
     ]
-   },
-   "sub": "*The rag collector*"
+   }
   },
   {
    "say": "But Friedrichstraße wasn't always harmless.",
@@ -1324,24 +1506,42 @@
      0.4
     ],
     "credit": "Bundesarchiv, Bild 183-1990-0403-309 / Klaus Franke / CC BY-SA 3.0"
-   },
-   "sfx": {
-    "prompt": "dark cinematic riser building tension, rising pitch, ends abruptly",
-    "len": 4,
-    "vol": 0.4
    }
   },
   {
    "say": "In March 1974, a Polish man threatened the embassy with a fake bomb, demanding to be let out to the West.",
-   "visual": "same"
+   "visual": {
+    "type": "3d",
+    "scene": "checkpoint",
+    "shot": "bomb",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}MARCH 1974",
+    "pos": [
+     0.5,
+     0.12
+    ]
+   }
   },
   {
    "say": "East Germany pretended to agree.",
-   "visual": "same"
+   "visual": {
+    "type": "3d",
+    "scene": "checkpoint",
+    "shot": "agree",
+    "t0": 0
+   }
   },
   {
    "say": "Moments after he passed through the checkpoint here, a hidden Stasi officer shot him.",
-   "visual": "same",
+   "visual": {
+    "type": "3d",
+    "scene": "checkpoint",
+    "shot": "shot",
+    "t0": 0
+   },
    "sub": "A hidden *Stasi* officer shot him",
    "sfx": {
     "prompt": "single distant gunshot echoing in a concrete hall",
@@ -1352,17 +1552,42 @@
   },
   {
    "say": "West Berlin was only a few steps away.",
-   "visual": "same",
-   "hold": 1.5
+   "visual": {
+    "type": "3d",
+    "scene": "checkpoint",
+    "shot": "steps",
+    "t0": 0
+   },
+   "hold": 0.4
+  },
+  {
+   "visual": {
+    "type": "g2d",
+    "name": "money",
+    "args": {}
+   },
+   "hold": 2.6,
+   "chapter": "The money",
+   "trans": "dip",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "Who *paid* for\\Nthe ghost trains?",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "soft low cinematic tone swell, gentle and quiet",
+    "len": 3,
+    "vol": 0.1,
+    "nogain": true
+   }
   },
   {
    "say": "Now, about that money.",
-   "visual": {
-    "type": "3d",
-    "scene": "cross_section",
-    "shot": "pass",
-    "t0": 0
-   },
+   "visual": "same",
    "sfx": {
     "prompt": "old cash register ding and coins",
     "len": 1.5,
@@ -1376,10 +1601,6 @@
   {
    "say": "from 1963, West Berlin paid East Germany a fee. Every single month.",
    "visual": "same",
-   "text": {
-    "kind": "year",
-    "content": "1963"
-   },
    "sub": "West Berlin paid East Germany. *Every month*"
   },
   {
@@ -1389,14 +1610,6 @@
   {
    "say": "By 1989, it was almost half a million.",
    "visual": "same",
-   "text": {
-    "kind": "label",
-    "content": "181,132 DM  {\\fnPretendard Black}→{\\fnYouTube Sans}  495,756 DM / month",
-    "pos": [
-     0.5,
-     0.86
-    ]
-   },
    "sub": "By 1989: almost *half a million*"
   },
   {
@@ -1437,12 +1650,14 @@
   {
    "say": "The slogan: every S-Bahn ticket pays for the barbed wire.",
    "visual": "same",
+   "dim": true,
+   "hold": 0.6,
    "text": {
     "kind": "quote",
-    "content": "„Der S-Bahn-Fahrer zahlt den Stacheldraht“",
+    "content": "{\\fs104}„Der S-Bahn-Fahrer\\Nzahlt den Stacheldraht“\\N{\\fs68\\c&H5CB2FF&}Every S-Bahn rider pays for the barbed wire",
     "pos": [
      0.5,
-     0.8
+     0.5
     ]
    }
   },
@@ -1479,20 +1694,54 @@
    "sub": "Killed once by *war*. Once by the *Wall*"
   },
   {
-   "say": "And so, twenty-eight years went by.",
    "visual": {
     "type": "3d",
-    "scene": "ghost_station",
-    "shot": "platform",
-    "t0": 8
+    "scene": "ghost_walk",
+    "shot": "years",
+    "t0": 0
+   },
+   "hold": 2.6,
+   "chapter": "1989: the ghosts come back",
+   "trans": "dip",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "How did the stations\\N*come back*?",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "soft low cinematic tone swell, gentle and quiet",
+    "len": 3,
+    "vol": 0.1,
+    "nogain": true
    },
    "id": "act5"
   },
   {
+   "say": "And so, twenty-eight years went by.",
+   "visual": "same"
+  },
+  {
    "say": "Then, on the night of November 9th, 1989, the Wall fell.",
    "visual": {
-    "type": "black"
+    "type": "image",
+    "file": "assets/c21.jpg",
+    "from": [
+     1.0,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.14,
+     0.5,
+     0.45
+    ],
+    "credit": "Photo: unknown, repr. Lear 21 / Wikimedia Commons (public domain)"
    },
+   "dim": true,
    "text": {
     "kind": "year",
     "content": "1989"
@@ -1513,7 +1762,12 @@
   },
   {
    "say": "The first crossing to open that night was at Bornholmer Straße.",
-   "visual": "same"
+   "visual": {
+    "type": "3d",
+    "scene": "reopen",
+    "shot": "bornholmer",
+    "t0": 0
+   }
   },
   {
    "say": "Right next to it: the ghost station of Bornholmer Straße.",
@@ -1522,19 +1776,10 @@
   {
    "say": "Just two days later, on November 11th...",
    "visual": {
-    "type": "image",
-    "file": "assets/c01.jpg",
-    "from": [
-     1.05,
-     0.5,
-     0.5
-    ],
-    "to": [
-     1.2,
-     0.42,
-     0.5
-    ],
-    "credit": "Bundesarchiv, Bild 183-1989-1111-007 / Robert Roeske / CC BY-SA 3.0"
+    "type": "3d",
+    "scene": "reopen",
+    "shot": "stop",
+    "t0": 0
    }
   },
   {
@@ -1549,21 +1794,31 @@
   },
   {
    "say": "The destination signs were handwritten.",
-   "visual": "same"
+   "visual": {
+    "type": "3d",
+    "scene": "reopen",
+    "shot": "sign",
+    "t0": 0
+   }
   },
   {
    "say": "A ticket to West Berlin cost two marks seventy.",
-   "visual": "same"
+   "visual": {
+    "type": "3d",
+    "scene": "reopen",
+    "shot": "ticket",
+    "t0": 0
+   }
   },
   {
    "say": "When the doors opened, the platform was packed.",
-   "visual": "same",
-   "hold": 1.2,
-   "sfx": {
-    "prompt": "crowd murmur in an echoing train station hall, 1960s",
-    "len": 10,
-    "vol": 0.18
-   }
+   "visual": {
+    "type": "3d",
+    "scene": "reopen",
+    "shot": "crowd",
+    "t0": 0
+   },
+   "hold": 1.2
   },
   {
    "say": "One by one, the ghost stations came back to life.",
@@ -1626,15 +1881,6 @@
   {
    "say": "And the very last ghost station, Potsdamer Platz, reopened in March 1992.",
    "visual": {
-    "type": "video",
-    "file": "assets/1962-08-16_The_Wall.mp4",
-    "start": 30,
-    "credit": "Universal Newsreel, 16 Aug 1962 (public domain)"
-   }
-  },
-  {
-   "say": "Ride the Berlin U-Bahn today, and these look like perfectly ordinary stations.",
-   "visual": {
     "type": "image",
     "file": "assets/c16.jpg",
     "from": [
@@ -1643,30 +1889,52 @@
      0.5
     ],
     "to": [
-     1.15,
-     0.5,
+     1.12,
+     0.45,
      0.5
     ],
     "credit": "Lothar Weber, CC BY-SA 4.0"
    }
   },
   {
+   "say": "Ride the Berlin U-Bahn today, and these look like perfectly ordinary stations.",
+   "visual": "same"
+  },
+  {
    "say": "But at Nordbahnhof, you can still see traces of that time.",
    "visual": {
-    "type": "image",
-    "file": "assets/c20.jpg",
-    "from": [
-     1.05,
-     0.5,
-     0.5
-    ],
-    "to": [
-     1.18,
-     0.4,
-     0.5
-    ],
+    "type": "g2d",
+    "name": "photo",
+    "args": {
+     "file": "assets/c20.jpg",
+     "from": [
+      1.05,
+      0.5,
+      0.5
+     ],
+     "to": [
+      1.18,
+      0.4,
+      0.5
+     ],
+     "at": "traces",
+     "arrow": {
+      "from": [
+       1150,
+       1150
+      ],
+      "to": [
+       760,
+       780
+      ],
+      "label": "GHOST STATIONS",
+      "label_dx": 60,
+      "label_dy": 80
+     }
+    },
     "credit": "Colin Smith (geo.hlipp.de), CC BY-SA 2.0"
-   }
+   },
+   "id": "nordbf"
   },
   {
    "say": "The Palace of Tears is a museum now, keeping the memory of a divided city.",
@@ -1689,10 +1957,27 @@
   {
    "say": "So if you're ever in Berlin, take the U8 through Rosenthaler Platz.",
    "visual": {
-    "type": "3d",
-    "scene": "ghost_station",
-    "shot": "platform",
-    "t0": 14
+    "type": "image",
+    "file": "assets/c22.jpg",
+    "from": [
+     1.15,
+     0.35,
+     0.5
+    ],
+    "to": [
+     1.35,
+     0.3,
+     0.52
+    ],
+    "credit": "Photo: Spindux / CC BY-SA 3.0"
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs96}{\\c&H5CB2FF&}U8 · Rosenthaler Platz",
+    "pos": [
+     0.5,
+     0.84
+    ]
    }
   },
   {
@@ -1709,54 +1994,52 @@
    "say": "But the subway wasn't the only tunnel under the Wall.",
    "visual": {
     "type": "3d",
-    "scene": "cross_section",
-    "shot": "reveal",
-    "t0": 2
+    "scene": "tunnel29",
+    "shot": "section",
+    "t0": 1
    },
    "id": "outro",
-   "sfx": {
-    "prompt": "dark cinematic riser building tension, rising pitch, ends abruptly",
-    "len": 4,
-    "vol": 0.4
-   }
+   "chapter": "Next: Tunnel 29"
   },
   {
    "say": "In 1962, an American TV network secretly paid a group of students to dig one, and filmed every meter.",
-   "visual": "same",
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "dig",
+    "t0": 2
+   },
    "sub": "An American TV network *paid* for an escape tunnel"
   },
   {
    "say": "Twenty-nine people crawled through it to freedom.",
-   "visual": "same"
+   "visual": {
+    "type": "3d",
+    "scene": "tunnel29",
+    "shot": "crawl",
+    "t0": 1
+   }
   },
   {
    "say": "That's the next story.",
    "visual": {
     "type": "black"
    },
-   "hold": 2.5,
+   "hold": 3.0,
    "sfx": {
     "prompt": "deep cinematic sub boom hit with short metallic tail",
     "len": 2.5,
     "vol": 0.55
    },
+   "id": "t29",
    "text": {
     "kind": "title",
-    "content": "TUNNEL 29",
+    "content": "{\\c&H5CB2FF&}TUNNEL 29",
     "pos": [
      0.5,
      0.47
     ]
    }
-  },
-  {
-   "visual": {
-    "type": "3d",
-    "scene": "ghost_station",
-    "shot": "platform",
-    "t0": 20
-   },
-   "hold": 16.0
   }
  ]
 }
