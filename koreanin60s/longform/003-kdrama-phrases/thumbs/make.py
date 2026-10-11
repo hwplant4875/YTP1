@@ -33,8 +33,12 @@ T = {
 <div class=a style="left:0;width:1280px;top:585px;text-align:center;font-size:76px;font-weight:700;color:#3A3134">You already know these 😳</div>
 <img class=st src="{STK}/popcorn_tv.png" style="left:470px;top:225px;width:340px">""",
 }
-out = sys.argv[1]; os.makedirs(out, exist_ok=True)
-for k, body in T.items():
-    h = f"{out}/{k}.html"; open(h, "w").write(f"<!doctype html><meta charset=utf-8><style>{BASE}</style>{body}")
-    subprocess.run(["node", os.path.join(HERE, "..", "..", "..", "branding", "shot.js"), h, "1280", "720", f"{out}/{k}.png"], check=True, env={**os.environ, "NODE_PATH": "/opt/node22/lib/node_modules"})
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{out}/{k}.png", "-q:v", "2", f"{out}/thumb_{k}.jpg"], check=True)
+def render(T, out):
+    os.makedirs(out, exist_ok=True)
+    for k, body in T.items():
+        h = f"{out}/{k}.html"; open(h, "w").write(f"<!doctype html><meta charset=utf-8><style>{BASE}</style>{body}")
+        subprocess.run(["node", os.path.join(HERE, "..", "..", "..", "branding", "shot.js"), h, "1280", "720", f"{out}/{k}.png"], check=True, env={**os.environ, "NODE_PATH": "/opt/node22/lib/node_modules"})
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{out}/{k}.png", "-q:v", "2", f"{out}/thumb_{k}.jpg"], check=True)
+
+if __name__ == "__main__":
+    render(T, sys.argv[1])
