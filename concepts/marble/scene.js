@@ -394,11 +394,13 @@ export function overlay(ctx, g, t) {
 
 function banner(g, W, a, big, small, color, cx = SAFE_CX) {
   g.save(); g.globalAlpha = a; g.translate(0, (1 - a) * 30);
-  g.font = '64px YTSans'; const bw = Math.max(g.measureText(big).width, (g.font = '46px Jua', g.measureText(small).width)) + 80;
+  // keep the banner inside the Shorts safe area (x 80..900): shrink the text when a long name would overflow
+  g.font = '64px YTSans'; const wb = g.measureText(big).width; g.font = '46px Jua'; const ws = g.measureText(small).width;
+  const k = Math.min(1, 740 / Math.max(wb, ws)), bw = Math.max(wb, ws) * k + 80;
   g.fillStyle = 'rgba(8,10,18,0.72)'; rr(g, cx - bw / 2, 1316, bw, 166, 30); g.fill();
   g.textAlign = 'center'; g.shadowColor = 'rgba(0,0,0,0.6)'; g.shadowBlur = 22;
-  g.font = '64px YTSans'; g.fillStyle = color; g.fillText(big, cx, 1390);
-  g.font = '46px Jua'; g.fillStyle = '#fff'; g.fillText(small, cx, 1452);
+  g.font = `${Math.floor(64 * k)}px YTSans`; g.fillStyle = color; g.fillText(big, cx, 1390);
+  g.font = `${Math.floor(46 * k)}px Jua`; g.fillStyle = '#fff'; g.fillText(small, cx, 1452);
   g.restore();
 }
 // ---------- winner fireworks + confetti (pure function of time since the win, so every frame is independent) ----------
