@@ -325,7 +325,7 @@ def render(spec_path, out_path):
             t += LINE_GAP - SEG_GAP
         t += sc.get("hold", 0)
         timeline.append({"scene": sc, "start": start, "end": t, "shows": shows})
-        t += SCENE_GAP
+        t += sc.get("gap", SCENE_GAP)
     total = t + 0.4
     # audio
     tmp = tempfile.mkdtemp()

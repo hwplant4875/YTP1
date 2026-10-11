@@ -4,7 +4,7 @@
  "photos": [
   "gift_8"
  ],
- "music": "/mnt/project-files/fast_german/cache/music/ukulele_b.mp3",
+ "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
  "scenes": [
   {
    "lines": [
@@ -14,12 +14,13 @@
       "show": [
        "p",
        "t",
-       "w"
+       "w",
+       "q"
       ]
      }
     ]
    ],
-   "hold": 0.3,
+   "hold": 0,
    "els": [
     {
      "id": "p",
@@ -44,14 +45,28 @@
      "de": "GIFT",
      "size": 220,
      "colour": [
-      205,
-      112,
-      10
+      255,
+      204,
+      0
      ],
      "x": 540,
      "y": 1400
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "?",
+     "size": 300,
+     "colour": [
+      229,
+      72,
+      77
+     ],
+     "x": 930,
+     "y": 470
     }
-   ]
+   ],
+   "gap": 0.15
   },
   {
    "lines": [
@@ -162,9 +177,9 @@
      "id": "x",
      "type": "tile",
      "icon": "cross-mark",
-     "s": 220,
-     "x": 800,
-     "y": 1020
+     "s": 300,
+     "x": 520,
+     "y": 600
     }
    ]
   },
@@ -194,5 +209,6 @@
     }
    ]
   }
- ]
+ ],
+ "bg": "road"
 }
