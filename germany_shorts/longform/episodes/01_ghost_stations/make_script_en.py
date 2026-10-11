@@ -68,31 +68,32 @@ say("West Berlin. 1975.", gi("cab", 6), trans="flash", text={"kind": "label", "c
 say("You're riding the U8, heading north.")
 say("You've just passed the last station in the West. The train slips back into the dark.",
     sub="The *last station* in the West. The train slips back into the dark")
-say("Then, it starts to slow down.", sfx={"prompt": "old subway train brakes squealing, slowing down in a tunnel", "len": 3, "vol": 0.4})
+say("Then, it starts to slow down.", sfx={"prompt": "old subway train brakes squealing, slowing down in a tunnel", "len": 3, "vol": 0.09, "nogain": True})
 say("Lights. A platform.")
 say("Old posters on the walls. Benches. Signs. Nobody waiting.")
 say("No... not nobody.", gi("guardclose", 0), trans="dip", sub="No. *Not nobody*",
     sfx={"prompt": "low ominous cinematic hit, deep sub boom", "len": 2, "vol": 0.55})
 say("A soldier with a rifle turns his head, and looks straight at you.", sub="A soldier with a rifle turns, and looks *straight at you*")
 say("The train doesn't stop.", gi("passby", 1.5), sub="The train *doesn't stop*",
-    sfx={"prompt": "subway train passing by fast at close range, whoosh and rumble, doppler", "len": 5, "vol": 0.45})
+    sfx={"prompt": "subway train passing by fast at close range, whoosh and rumble, doppler", "len": 5, "vol": 0.18, "nogain": True})
 say("It rolls on, and the platform disappears behind you.", gi("leave", 0), hold=1.0)
 say("This is Rosenthaler Platz.", img(2, (1.06, 0.5, 0.55), (1.2, 0.45, 0.6)), trans="flash",
-    text={"kind": "label", "content": "U-Bahnhof Rosenthaler Platz", "pos": [0.5, 0.12]}, sfx=FLASH)
+    text={"kind": "quote", "content": "U-Bahnhof {\\c&H5CB2FF&}Rosenthaler Platz", "pos": [0.5, 0.8]}, sfx=FLASH)
 say("For twenty-eight years, not a single passenger got on or off here.", img(3, (1.12, 0.5, 0.45), (1.3, 0.45, 0.42)),
     sub="For 28 years, *not a single passenger* got off here")
 say("And beneath Berlin, there were sixteen stations just like it.", g3("reveal", "cross_section"), trans="dip",
-    sub="And beneath Berlin, there were *sixteen* of them", sfx=RISER)
+    sub="And beneath Berlin, there were *sixteen* of them")
 say("Berliners had a name for them.")
 B.append({"visual": gi("drift", 0), "hold": 4.2, "text": {"kind": "flicker", "content": "GHOST STATIONS", "pos": [0.5, 0.45]},
-          "sfx": [{"prompt": "fluorescent tube flickering on, electric buzz and pings", "len": 3, "vol": 0.5},
+          "sfx": [{"prompt": "fluorescent tube flickering on, electric buzz and pings", "len": 3, "vol": 0.13, "nogain": True},
                   {"prompt": "deep cinematic impact boom with long dark reverb tail", "len": 4, "vol": 0.6, "at": 0.5}]})
 B.append({"visual": "same", "hold": 0.1, "text": {"kind": "label", "content": "GEISTERBAHNHÖFE", "pos": [0.5, 0.58], "delay": -3.0, "span": 0}})
-say("Why did they exist?", news(N61, 63, C61), trans="flash", sfx={"prompt": "short whoosh", "len": 0.8, "vol": 0.4, "at": -0.1})
+say("Why did they exist?", news(N61, 63, C61), trans="flash", sfx={"prompt": "short whoosh", "len": 0.8, "vol": 0.13, "at": -0.1, "nogain": True})
 say("What were those guards really guarding?", gi("guardclose", 3.5))
 say("And how did one man use these tunnels to escape?", g3("border", t0=2))
 say("This is the story of the stations that vanished from the map, and the city that paid for its own trains to pass through them.",
-    gi("drift", 4), hold=0.8, sub="The stations that *vanished* from the map")
+    gi("drift", 4), hold=0.8, sub="The stations that *vanished* from the map",
+    text={"kind": "title", "content": "{\\fs84}THE STORY OF\\N{\\fs120\\c&H5CB2FF&}THE GHOST STATIONS", "pos": [0.5, 0.5], "delay": 0.4})
 
 # ---------------------------------------------------------------- act 1: the city splits
 say("Before the Wall, Berlin was a strange city.", news(N62, 9, C62), id="act1", trans="dip")
@@ -280,8 +281,10 @@ spec = {
     "voice": {"engine": "elevenlabs", "voice_id": "DrBEKFgWMDWUG6bjTSTk", "model": "eleven_v4", "stability": 0.5, "speed": 1.0},
     "gap": 0.12,
     "subtitles": False,
+    "declick": True,
+    "sfx_gain_db": -6,
     "sub_limit": 21,
-    "style_fields": {"SUB": {"Fontsize": 120, "Outline": 5.2, "Shadow": 2.5, "MarginV": 110}},
+    "style_fields": {"CREDIT": {"PrimaryColour": "&H80B4B4B4", "Alignment": 1, "MarginL": 30, "MarginR": 0}, "SUB": {"Fontsize": 120, "Outline": 5.2, "Shadow": 2.5, "MarginV": 110}},
     "fonts": {"SUB": "YouTube Sans", "LABEL": "YouTube Sans", "YEAR": "YouTube Sans", "FX": "YouTube Sans", "CREDIT": "YouTube Sans"},
     "music": [
         {"file": "music/m1_intro.mp3", "from": "intro", "to": "act1", "vol": 0.14, "fade_in": 4},

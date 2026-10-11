@@ -98,7 +98,8 @@ def tts(text, voice, ctx=None):
               "areverse,silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.05,areverse,"
               f"silenceremove=stop_periods=-1:stop_duration={sd}:stop_threshold=-50dB:stop_silence={ss},"
               "aresample=48000,aformat=channel_layouts=mono")
-        return cached(f"tight_{key(raw, af)}.wav", lambda p: sh("ffmpeg", "-y", "-i", raw, "-af", af, "-f", "wav", p))
+        tight = cached(f"tight_{key(raw, af)}.wav", lambda p: sh("ffmpeg", "-y", "-i", raw, "-af", af, "-f", "wav", p))
+        return cached(f"dc_{key(tight)}.wav", lambda p: declick_tail(tight, p)) if DECLICK else tight
     body = {"voice_id": voice.get("voice_id", PILJAE), "text": text, "model": voice.get("model", "ssfm-v21"),
             "language": "kor",
             "prompt": {"emotion_preset": voice.get("emotion", "normal"), "emotion_intensity": voice.get("intensity", 1.0)},
@@ -112,6 +113,33 @@ def tts(text, voice, ctx=None):
           "silenceremove=stop_periods=-1:stop_duration=0.14:stop_threshold=-45dB:stop_silence=0.09,"
           "aresample=48000,aformat=channel_layouts=mono")
     return cached(f"tight_{key(body, af)}.wav", lambda p: sh("ffmpeg", "-y", "-i", raw, "-af", af, "-f", "wav", p))
+
+
+def declick_tail(src, dst):
+    """eleven_v4 sometimes ends a line with a 10-60 ms burst after half a second of silence; it is heard as a glitch.
+    Mute it (same length, so the timeline does not move) and soften both ends of the line."""
+    import wave
+    import numpy as np
+    with wave.open(src) as w:
+        sr, ch, raw = w.getframerate(), w.getnchannels(), w.readframes(w.getnframes())
+    x = np.frombuffer(raw, np.int16).astype(np.float32).copy()
+    fr = sr // 100
+    n = len(x) // fr
+    db = np.array([20 * np.log10(np.sqrt(np.mean((x[i * fr:(i + 1) * fr] / 32768) ** 2)) + 1e-9) for i in range(n)])
+    k = n - 1
+    while k > 0 and db[k] > -45:
+        k -= 1
+    burst, m = n - 1 - k, k
+    while m > 0 and db[m] < -45:
+        m -= 1
+    if 0 < burst <= 8 and k - m >= 25:
+        x[(k + 1) * fr:] = 0
+    f = min(len(x) // 4, sr * 12 // 1000)
+    x[:f] *= np.linspace(0, 1, f)
+    x[len(x) - f:] *= np.linspace(1, 0, f)
+    with wave.open(dst, "wb") as w:
+        w.setnchannels(ch); w.setsampwidth(2); w.setframerate(sr)
+        w.writeframes(x.astype(np.int16).tobytes())
 
 
 def sfx(prompt, seconds=None):
@@ -227,6 +255,8 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
 AMBER_ASS = "&H5CB2FF&"
 SUB_LIMIT = None
+DECLICK = False
+SFX_GAIN = 1.0
 
 
 def accent(text):
@@ -317,8 +347,10 @@ def main():
             if m["to"] not in [b.get("id") for b in spec["beats"]]:
                 m["to"] = "end"
     voice = {"voice_id": PILJAE, **spec.get("voice", {})}
-    global SUB_LIMIT, ASS_HEAD
+    global SUB_LIMIT, ASS_HEAD, DECLICK, SFX_GAIN
     SUB_LIMIT = spec.get("sub_limit")
+    DECLICK = spec.get("declick", False)
+    SFX_GAIN = 10 ** (spec.get("sfx_gain_db", 0) / 20)   # global trim for sound effects; announcements and "nogain" cues keep their level
     for name, font in spec.get("fonts", {}).items():   # e.g. {"TITLE": "Some Serif"} for Latin-script episodes
         ASS_HEAD = re.sub(rf"^(Style: {name},)[^,]+", rf"\g<1>{font}", ASS_HEAD, flags=re.M)
     ASS_FIELDS = ["Name", "Fontname", "Fontsize", "PrimaryColour", "SecondaryColour", "OutlineColour", "BackColour", "Bold", "Italic",
@@ -380,7 +412,7 @@ def main():
             inputs += ["-i", src]
             at = max(0.0, b["_start"] + sx.get("at", 0))
             chain = sx.get("filter", "")
-            filt.append(f"[{len(inputs) // 2 - 1}:a]aresample=48000,{chain + ',' if chain else ''}adelay={int(at * 1000)}:all=1,volume={sx.get('vol', 0.45)}[f{n}]")
+            filt.append(f"[{len(inputs) // 2 - 1}:a]aresample=48000,{chain + ',' if chain else ''}adelay={int(at * 1000)}:all=1,volume={sx.get('vol', 0.45) * (1 if sx.get('nogain') or sx.get('duck') is False else SFX_GAIN):.4f}[f{n}]")
             # dialogue-like layers (announcements) stay on top, everything else ducks under the narration
             (fx if sx.get("duck") is False else ducked).append(f"[f{n}]")
             n += 1

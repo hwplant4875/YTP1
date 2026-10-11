@@ -8,8 +8,16 @@
  },
  "gap": 0.12,
  "subtitles": false,
+ "declick": true,
+ "sfx_gain_db": -6,
  "sub_limit": 21,
  "style_fields": {
+  "CREDIT": {
+   "PrimaryColour": "&H80B4B4B4",
+   "Alignment": 1,
+   "MarginL": 30,
+   "MarginR": 0
+  },
   "SUB": {
    "Fontsize": 120,
    "Outline": 5.2,
@@ -236,7 +244,8 @@
    "sfx": {
     "prompt": "old subway train brakes squealing, slowing down in a tunnel",
     "len": 3,
-    "vol": 0.4
+    "vol": 0.09,
+    "nogain": true
    }
   },
   {
@@ -280,7 +289,8 @@
    "sfx": {
     "prompt": "subway train passing by fast at close range, whoosh and rumble, doppler",
     "len": 5,
-    "vol": 0.45
+    "vol": 0.18,
+    "nogain": true
    }
   },
   {
@@ -312,11 +322,11 @@
    },
    "trans": "flash",
    "text": {
-    "kind": "label",
-    "content": "U-Bahnhof Rosenthaler Platz",
+    "kind": "quote",
+    "content": "U-Bahnhof {\\c&H5CB2FF&}Rosenthaler Platz",
     "pos": [
      0.5,
-     0.12
+     0.8
     ]
    },
    "sfx": {
@@ -354,12 +364,7 @@
     "t0": 0
    },
    "trans": "dip",
-   "sub": "And beneath Berlin, there were *sixteen* of them",
-   "sfx": {
-    "prompt": "dark cinematic riser building tension, rising pitch, ends abruptly",
-    "len": 4,
-    "vol": 0.4
-   }
+   "sub": "And beneath Berlin, there were *sixteen* of them"
   },
   {
    "say": "Berliners had a name for them.",
@@ -385,7 +390,8 @@
     {
      "prompt": "fluorescent tube flickering on, electric buzz and pings",
      "len": 3,
-     "vol": 0.5
+     "vol": 0.13,
+     "nogain": true
     },
     {
      "prompt": "deep cinematic impact boom with long dark reverb tail",
@@ -421,8 +427,9 @@
    "sfx": {
     "prompt": "short whoosh",
     "len": 0.8,
-    "vol": 0.4,
-    "at": -0.1
+    "vol": 0.13,
+    "at": -0.1,
+    "nogain": true
    }
   },
   {
@@ -452,7 +459,16 @@
     "t0": 4
    },
    "hold": 0.8,
-   "sub": "The stations that *vanished* from the map"
+   "sub": "The stations that *vanished* from the map",
+   "text": {
+    "kind": "title",
+    "content": "{\\fs84}THE STORY OF\\N{\\fs120\\c&H5CB2FF&}THE GHOST STATIONS",
+    "pos": [
+     0.5,
+     0.5
+    ],
+    "delay": 0.4
+   }
   },
   {
    "say": "Before the Wall, Berlin was a strange city.",
