@@ -1,0 +1,369 @@
+{
+ "voice": {
+  "engine": "elevenlabs",
+  "voice_id": "DrBEKFgWMDWUG6bjTSTk",
+  "model": "eleven_v4",
+  "stability": 0.5,
+  "speed": 1.0
+ },
+ "gap": 0.1,
+ "subtitles": false,
+ "declick": true,
+ "sfx_gain_db": -6,
+ "style_fields": {
+  "YEAR": {
+   "Fontsize": 200,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 11,
+   "Shadow": 0,
+   "Spacing": 2
+  },
+  "LABEL": {
+   "Fontsize": 100,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 7,
+   "Shadow": 0,
+   "Spacing": 6
+  },
+  "TITLE": {
+   "Fontsize": 230,
+   "PrimaryColour": "&H00D0DCE4",
+   "Outline": 0,
+   "Shadow": 0,
+   "Spacing": 14
+  },
+  "CREDIT": {
+   "Fontsize": 24,
+   "PrimaryColour": "&H80B4B4B4",
+   "Alignment": 1,
+   "MarginL": 44,
+   "MarginR": 200,
+   "MarginV": 492
+  }
+ },
+ "fonts": {
+  "YEAR": "YouTube Sans",
+  "LABEL": "YouTube Sans",
+  "TITLE": "Playfair Display",
+  "FX": "YouTube Sans"
+ },
+ "music": [
+  {
+   "file": "music/m2_investigate.mp3",
+   "from": "intro",
+   "to": "end",
+   "vol": 0.17,
+   "fade_in": 0.6,
+   "fade_out": 1.2
+  }
+ ],
+ "beats": [
+  {
+   "say": "For twenty-eight years, West Berlin's trains crossed under East Berlin without stopping.",
+   "visual": {
+    "type": "3d",
+    "scene": "s4_intro",
+    "shot": "cab",
+    "t0": 3.5
+   },
+   "id": "intro",
+   "text": {
+    "kind": "year",
+    "content": "NO STOPS",
+    "pos": [
+     0.5,
+     0.3
+    ],
+    "delay": 0.6,
+    "extend": 0.0
+   },
+   "sfx": [
+    {
+     "prompt": "subway train driving through a tunnel, rumble and rattling wheels, cab interior",
+     "len": 6,
+     "vol": 0.2,
+     "at": 0.0,
+     "filter": "atrim=0:6.00,afade=t=in:d=0.03,afade=t=out:st=4.00:d=2.00"
+    },
+    {
+     "prompt": "empty underground subway station ambience, faint electrical hum, low air rumble",
+     "len": 8,
+     "vol": 0.1,
+     "at": 0.0,
+     "filter": "atrim=0:8.00,afade=t=in:d=0.03,afade=t=out:st=5.00:d=3.00"
+    }
+   ]
+  },
+  {
+   "say": "Except at one station.",
+   "visual": {
+    "type": "g2d",
+    "name": "map_s4",
+    "module": "short4_graphics.py",
+    "args": {},
+    "credit": "Map: Ericmetro / CC0"
+   },
+   "sfx": {
+    "prompt": "soft bright synth ping with gentle reverb tail",
+    "len": 2.0,
+    "vol": 0.14,
+    "at": 0.35,
+    "filter": "atrim=0:2.00,afade=t=in:d=0.03,afade=t=out:st=0.80:d=1.20"
+   }
+  },
+  {
+   "say": "Friedrichstraße.",
+   "visual": "same",
+   "hold": 0.35
+  },
+  {
+   "say": "Here, West Berliners changed trains without a single check.",
+   "visual": {
+    "type": "image",
+    "file": "assets/c13.jpg",
+    "from": [
+     1.0,
+     0.64,
+     0.5
+    ],
+    "to": [
+     1.1,
+     0.66,
+     0.48
+    ],
+    "credit": "Bundesarchiv, Bild 183-35539-0001 / Peter Heinz Junge / CC BY-SA 3.0"
+   },
+   "text": {
+    "kind": "year",
+    "content": "NO CHECKS",
+    "pos": [
+     0.5,
+     0.3
+    ],
+    "delay": 0.5,
+    "extend": 0.0
+   },
+   "sfx": {
+    "prompt": "crowd murmur in an echoing underground train station, footsteps",
+    "len": 4.5,
+    "vol": 0.12,
+    "at": 0.0,
+    "filter": "atrim=0:4.50,afade=t=in:d=0.03,afade=t=out:st=3.00:d=1.50"
+   }
+  },
+  {
+   "say": "But behind a wall of steel and glass, it was a border crossing into East Germany.",
+   "visual": {
+    "type": "g2d",
+    "name": "split_s4",
+    "module": "short4_graphics.py",
+    "args": {}
+   },
+   "trans": "dip",
+   "sfx": {
+    "prompt": "heavy steel door slamming shut in a large hall, echo",
+    "len": 2.5,
+    "vol": 0.16,
+    "at": 1.0,
+    "filter": "atrim=0:2.50,afade=t=in:d=0.03,afade=t=out:st=1.10:d=1.40"
+   }
+  },
+  {
+   "say": "A maze of passport checks, searches and interrogation rooms.",
+   "visual": "same",
+   "sfx": {
+    "prompt": "rubber stamp thumped onto paper twice",
+    "len": 1.4,
+    "vol": 0.16,
+    "at": 0.6,
+    "filter": "atrim=0:1.40,afade=t=in:d=0.03,afade=t=out:st=0.80:d=0.60"
+   }
+  },
+  {
+   "say": "The hall where families said goodbye got a nickname:",
+   "visual": {
+    "type": "image",
+    "file": "assets/c10.jpg",
+    "from": [
+     1.0,
+     0.27,
+     0.5
+    ],
+    "to": [
+     1.1,
+     0.25,
+     0.47
+    ],
+    "credit": "Bundesarchiv, Bild 183-A0706-0010-001 / Krueger / CC BY-SA 3.0"
+   }
+  },
+  {
+   "say": "the Palace of Tears.",
+   "visual": "same",
+   "text": {
+    "kind": "year",
+    "content": "PALACE\\NOF TEARS",
+    "pos": [
+     0.5,
+     0.27
+    ],
+    "delay": 0.0,
+    "extend": 0.0
+   },
+   "hold": 0.35
+  },
+  {
+   "say": "In March 1974, a Polish man threatened his own embassy with a fake bomb, demanding to go West.",
+   "visual": {
+    "type": "3d",
+    "scene": "s4_checkpoint",
+    "shot": "bomb",
+    "t0": 0
+   },
+   "trans": "dip",
+   "text": {
+    "kind": "year",
+    "content": "MARCH\\N1974",
+    "pos": [
+     0.5,
+     0.27
+    ],
+    "delay": 0.2,
+    "extend": 0.0
+   },
+   "sfx": [
+    {
+     "prompt": "old mechanical alarm clock ticking, close, dry",
+     "len": 7,
+     "vol": 0.13,
+     "at": 0.0,
+     "filter": "atrim=0:7.00,afade=t=in:d=0.03,afade=t=out:st=5.00:d=2.00"
+    }
+   ]
+  },
+  {
+   "say": "East Germany pretended to agree.",
+   "visual": {
+    "type": "3d",
+    "scene": "s4_checkpoint",
+    "shot": "agree",
+    "t0": 0.1
+   },
+   "sfx": {
+    "prompt": "heavy rubber stamp slammed onto a passport on a wooden desk",
+    "len": 1.2,
+    "vol": 0.2,
+    "at": 0.55,
+    "filter": "atrim=0:1.20,afade=t=in:d=0.03,afade=t=out:st=0.70:d=0.50"
+   }
+  },
+  {
+   "say": "Just past the checkpoint, a hidden Stasi officer shot him dead.",
+   "visual": {
+    "type": "3d",
+    "scene": "s4_checkpoint",
+    "shot": "shot",
+    "t0": 0.2
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\an5\\bord10\\shad0\\1a&HFF&\\3c&H2A2AE6&\\blur0.8\\fscx135\\fscy135\\t(0,260,\\fscx100\\fscy100)\\p1}m 190 0 b 295 0 380 134 380 300 b 380 466 295 600 190 600 b 85 600 0 466 0 300 b 0 134 85 0 190 0{\\p0}",
+    "pos": [
+     0.7314814814814815,
+     0.4479166666666667
+    ],
+    "delay": 0.75,
+    "extend": 0.0
+   },
+   "sfx": [
+    {
+     "prompt": "single muffled pistol shot in a concrete corridor with echo tail",
+     "len": 2.2,
+     "vol": 0.16,
+     "at": 1.4,
+     "filter": "atrim=0:2.20,afade=t=in:d=0.03,afade=t=out:st=0.70:d=1.50"
+    }
+   ]
+  },
+  {
+   "say": "West Berlin was only a few steps away.",
+   "visual": {
+    "type": "3d",
+    "scene": "s4_checkpoint",
+    "shot": "steps",
+    "t0": 0
+   },
+   "hold": 0.4,
+   "text": [
+    {
+     "kind": "year",
+     "content": "WEST",
+     "pos": [
+      0.5,
+      0.2
+     ],
+     "delay": 0.3,
+     "extend": 0.0
+    },
+    {
+     "kind": "label",
+     "content": "{\\an7\\org(250,1330)\\frz48.7\\bord6\\shad0\\1c&H2A2AE6&\\3c&H000000&\\blur0.6\\fscx40\\t(0,350,\\fscx100)\\p1}m 0 -16 l 253 -16 l 253 -46 l 333 0 l 253 46 l 253 16 l 0 16{\\p0}",
+     "pos": [
+      0.23148148148148148,
+      0.6927083333333334
+     ],
+     "delay": 0.6,
+     "extend": 0.0
+    }
+   ],
+   "sfx": {
+    "prompt": "low ominous drone swell, soft",
+    "len": 3.5,
+    "vol": 0.12,
+    "at": 0.0,
+    "filter": "atrim=0:3.50,afade=t=in:d=0.03,afade=t=out:st=1.90:d=1.60"
+   }
+  },
+  {
+   "say": "Full story on Strata.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_endcard",
+    "shot": "amber",
+    "t0": 0
+   },
+   "id": "end_card",
+   "hold": 0.4,
+   "trans": "dip",
+   "text": [
+    {
+     "kind": "label",
+     "content": "FULL STORY ON",
+     "pos": [
+      0.5,
+      0.575
+     ],
+     "delay": 0.15,
+     "extend": 1.0
+    },
+    {
+     "kind": "title",
+     "content": "STRATA",
+     "pos": [
+      0.5,
+      0.655
+     ],
+     "delay": 0.35,
+     "extend": 1.0
+    }
+   ],
+   "sfx": {
+    "prompt": "deep cinematic sub boom hit with short metallic tail",
+    "len": 2.5,
+    "vol": 0.2,
+    "at": 0.05,
+    "filter": "atrim=0:2.50,afade=t=in:d=0.03,afade=t=out:st=1.10:d=1.40"
+   }
+  }
+ ]
+}

@@ -65,7 +65,7 @@ say("So he made a plan: fake a signal fault.", v3("s2_escape", "plan", 1.2), hol
     text=key("FAKE\\NFAULT", 0.50, 0.9),
     sfx=fx("electrical relay click and a small spark crackle, short", 2, 0.22, 2.6, 0.6))
 say("When a signal breaks, a technician is allowed into the tunnel to fix it.", v3("s2_escape", "allowed", 0))
-say("The spot: a tunnel near Jannowitzbrücke station.", text=ring(790, 800, 130, 160, 0.25))
+say("The spot: a tunnel near Jannowitzbrücke station.", text=ring(845, 775, 150, 120, 0.25))
 # the train
 say("As a West Berlin train approached, he stood by the tracks and flagged it down.", v3("s2_escape", "flag", 0), hold=0.7,
     sfx=[fx("subway train approaching fast through a tunnel, rattling wheels, rising roar", 5, 0.16, 0.2, 1.2),
