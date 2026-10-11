@@ -1,0 +1,338 @@
+{
+ "label": "KONGLISH 🤯",
+ "labelColor": "#5A8FD8",
+ "pose0": "shocked",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "These English words mean something totally different in Korea.",
+   "pose": "shocked"
+  },
+  {
+   "k": "w1",
+   "say": "Your phone? Koreans call it",
+   "pose": "talk",
+   "gap": 0.35
+  },
+  {
+   "k": "w1k",
+   "say": "핸드폰.",
+   "pose": "phone",
+   "lang": "ko"
+  },
+  {
+   "k": "w1e",
+   "say": "Hand phone. Honestly, that makes sense.",
+   "pose": "laugh_flap"
+  },
+  {
+   "k": "w2",
+   "say": "A selfie?",
+   "pose": "thinking",
+   "gap": 0.4
+  },
+  {
+   "k": "w2k",
+   "say": "셀카.",
+   "pose": "camera",
+   "lang": "ko"
+  },
+  {
+   "k": "w2e",
+   "say": "Self camera.",
+   "pose": "smug"
+  },
+  {
+   "k": "w3",
+   "say": "Looking around shops without buying anything?",
+   "pose": "thinking",
+   "gap": 0.4
+  },
+  {
+   "k": "w3k",
+   "say": "아이쇼핑.",
+   "pose": "excited",
+   "lang": "ko"
+  },
+  {
+   "k": "w3e",
+   "say": "Eye shopping!",
+   "pose": "laugh_flap"
+  },
+  {
+   "k": "w4",
+   "say": "Your laptop?",
+   "pose": "thinking",
+   "gap": 0.4
+  },
+  {
+   "k": "w4k",
+   "say": "노트북.",
+   "pose": "talk",
+   "lang": "ko"
+  },
+  {
+   "k": "w4e",
+   "say": "Notebook. Not the paper one.",
+   "pose": "smug"
+  },
+  {
+   "k": "t0",
+   "say": "But here's the best one.",
+   "pose": "excited",
+   "gap": 0.45
+  },
+  {
+   "k": "t1",
+   "say": "When Koreans cheer someone on, they shout",
+   "pose": "fired_up"
+  },
+  {
+   "k": "t1k",
+   "say": "화이팅!",
+   "pose": "fired_up",
+   "lang": "ko"
+  },
+  {
+   "k": "t2",
+   "say": "Fighting! Not a fight. It means: you can do it!",
+   "pose": "jump"
+  },
+  {
+   "k": "e0",
+   "say": "Which one surprised you the most? Comment below!",
+   "pose": "love_heart",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "txt",
+     "html": "English words that<br>mean <span class='c-p'>something else</span>",
+     "size": 80,
+     "y": 660,
+     "at": "h1",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.15;white-space:nowrap"
+    },
+    {
+     "type": "emoji",
+     "e": "📱🤳🛍️💻",
+     "size": 120,
+     "y": 430,
+     "at": "h1+0.6",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "stamp",
+     "html": "KONGLISH 🇰🇷",
+     "c": "p",
+     "size": 86,
+     "y": 960,
+     "at": "h1@end-0.6",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "w1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "📱",
+     "size": 230,
+     "y": 420,
+     "at": "w1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "핸드폰",
+     "rom": "haen-deu-pon",
+     "en": "cell phone",
+     "c": "b",
+     "size": 180,
+     "w": 700,
+     "y": 760,
+     "at": "w1k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:58px;white-space:nowrap'>hand + phone 🤚📱</div>",
+     "w": 820,
+     "pad": 20,
+     "y": 1075,
+     "at": "w1e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "w2",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🤳",
+     "size": 150,
+     "y": 395,
+     "x": 290,
+     "at": "w2",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "셀카",
+     "rom": "sel-ka",
+     "en": "selfie",
+     "c": "p",
+     "size": 150,
+     "w": 450,
+     "y": 660,
+     "at": "w2k",
+     "x": 290
+    },
+    {
+     "type": "txt",
+     "html": "<span class='c-p' style='font-family:YouTube Sans,Pretendard;font-weight:900'>셀</span>f + <span class='c-p' style='font-family:YouTube Sans,Pretendard;font-weight:900'>카</span>mera",
+     "size": 46,
+     "w": 480,
+     "x": 290,
+     "y": 930,
+     "at": "w2e",
+     "anim": "up"
+    },
+    {
+     "type": "emoji",
+     "e": "👀🛍️",
+     "size": 150,
+     "y": 395,
+     "x": 790,
+     "at": "w3",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "아이쇼핑",
+     "rom": "a-i-syo-ping",
+     "en": "window shopping",
+     "c": "m",
+     "size": 110,
+     "w": 450,
+     "y": 660,
+     "at": "w3k",
+     "x": 790
+    },
+    {
+     "type": "txt",
+     "html": "eye + shopping 👀",
+     "size": 46,
+     "w": 480,
+     "x": 790,
+     "y": 930,
+     "at": "w3e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "w4",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "💻",
+     "size": 200,
+     "y": 410,
+     "at": "w4",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "노트북",
+     "rom": "no-teu-buk",
+     "en": "laptop",
+     "c": "y",
+     "size": 180,
+     "w": 700,
+     "y": 760,
+     "at": "w4k"
+    },
+    {
+     "type": "stamp",
+     "html": "NOT PAPER 📓❌",
+     "c": "y",
+     "size": 80,
+     "y": 1060,
+     "at": "w4e+0.5",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "t0",
+   "els": [
+    {
+     "type": "chip",
+     "html": "⭐ THE BEST ONE ⭐",
+     "c": "k",
+     "y": 340,
+     "at": "t0"
+    },
+    {
+     "type": "emoji",
+     "e": "💪",
+     "size": 200,
+     "y": 510,
+     "at": "t1",
+     "anim": "spin",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "화이팅!",
+     "rom": "hwa-i-ting",
+     "en": "you can do it!",
+     "c": "k",
+     "size": 170,
+     "w": 760,
+     "y": 790,
+     "at": "t1k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:52px;white-space:nowrap'>not a fight 🥊❌ &nbsp;→&nbsp; cheering 📣</div>",
+     "w": 900,
+     "pad": 22,
+     "y": 1110,
+     "at": "t2+0.9",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap'>Which one surprised you? 👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}
