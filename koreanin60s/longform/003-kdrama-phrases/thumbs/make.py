@@ -11,11 +11,12 @@ BASE = FONT + """html,body{margin:0;width:1280px;height:720px;overflow:hidden;fo
 .card{background:#fff;border-radius:44px;box-shadow:0 14px 0 #EAD9CB,0 24px 40px rgba(80,50,40,.15)}"""
 T = {
 "1a": f"""<div class=bg></div><div class=grid></div>
-<div class=a style="left:60px;top:58px"><span class=chip style="background:#3A3134;font-size:40px">🎬 50 K-DRAMA PHRASES</span></div>
-<div class="a card" style="left:60px;top:190px;width:760px;height:380px;display:flex;flex-direction:column;align-items:center;justify-content:center">
- <div style="font-size:52px;font-weight:700;color:#8A7A74">I miss you.</div>
- <div style="font-size:150px;font-weight:700;color:#EF6F92;letter-spacing:-4px;line-height:1.05">보고 싶어</div></div>
-<img class=st src="{STK}/popcorn_tv.png" style="left:820px;top:200px;width:440px">""",
+<div class="a card" style="left:60px;top:40px;width:700px;height:130px;border-radius:34px;display:flex;align-items:center;padding:0 36px;box-sizing:border-box;gap:26px"><span style="font-size:64px">✅</span><span style="font-size:84px;font-weight:700;color:#EF6F92">사랑해</span><span style="font-size:36px;font-weight:700;color:#8A7A74">I love you</span></div>
+<div class="a card" style="left:60px;top:195px;width:700px;height:130px;border-radius:34px;display:flex;align-items:center;padding:0 36px;box-sizing:border-box;gap:26px"><span style="font-size:64px">✅</span><span style="font-size:84px;font-weight:700;color:#E2A21C">대박!</span><span style="font-size:36px;font-weight:700;color:#8A7A74">Wow!</span></div>
+<div class="a card" style="left:60px;top:350px;width:700px;height:130px;border-radius:34px;display:flex;align-items:center;padding:0 36px;box-sizing:border-box;gap:26px"><span style="font-size:64px">🤔</span><span style="font-size:84px;font-weight:700;color:#A48AEB">보고 싶어</span><span style="font-size:36px;font-weight:700;color:#8A7A74">???</span></div>
+<div class=a style="left:60px;top:520px;font-size:84px;font-weight:700;line-height:1;color:#3A3134">How many do<br>you know? 🎬</div>
+<div class=a style="left:870px;top:40px;width:340px;height:200px;background:#3A3134;border-radius:44px;display:flex;align-items:center;justify-content:center;font-size:120px;font-weight:700;color:#fff">?<span style="color:#F2C14E">/50</span></div>
+<img class=st src="{STK}/point_idea.png" style="left:850px;top:290px;width:390px">""",
 "1b": f"""<div class=bg></div><div class=grid></div>
 <div class=a style="left:56px;top:40px;font-size:200px;font-weight:700;letter-spacing:-6px">50</div>
 <div class=a style="left:400px;top:50px;width:500px;height:190px;background:#F2C14E;border-radius:50px;display:flex;align-items:center;justify-content:center;font-size:110px;font-weight:700;color:#3A3134;box-shadow:0 12px 0 #D9A631">사랑해 💗</div>
