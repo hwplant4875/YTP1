@@ -1,0 +1,262 @@
+{
+ "voice": {
+  "engine": "elevenlabs",
+  "voice_id": "DrBEKFgWMDWUG6bjTSTk",
+  "model": "eleven_v4",
+  "stability": 0.5,
+  "speed": 1.0
+ },
+ "gap": 0.1,
+ "subtitles": false,
+ "declick": true,
+ "sfx_gain_db": -6,
+ "style_fields": {
+  "YEAR": {
+   "Fontsize": 200,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 11,
+   "Shadow": 0,
+   "Spacing": 2
+  },
+  "LABEL": {
+   "Fontsize": 84,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 7,
+   "Shadow": 0,
+   "Spacing": 6
+  },
+  "TITLE": {
+   "Fontsize": 230,
+   "PrimaryColour": "&H00D0DCE4",
+   "Outline": 0,
+   "Shadow": 0,
+   "Spacing": 14
+  }
+ },
+ "fonts": {
+  "YEAR": "YouTube Sans",
+  "LABEL": "YouTube Sans",
+  "TITLE": "Playfair Display",
+  "FX": "YouTube Sans"
+ },
+ "music": [
+  {
+   "file": "music/m1_intro.mp3",
+   "from": "intro",
+   "to": "end",
+   "vol": 0.17,
+   "fade_in": 0.6,
+   "fade_out": 1.2
+  }
+ ],
+ "beats": [
+  {
+   "say": "For twenty-eight years, this train never stopped.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_intro",
+    "shot": "passby",
+    "t0": 0.4
+   },
+   "id": "intro",
+   "text": {
+    "kind": "year",
+    "content": "NEVER\\NSTOPPED",
+    "pos": [
+     0.5,
+     0.34
+    ],
+    "delay": 0.15,
+    "extend": 0.0
+   },
+   "sfx": [
+    {
+     "prompt": "subway train rushing past through an empty underground station, rattling wheels, whoosh, echo",
+     "len": 6,
+     "vol": 0.22,
+     "at": 0.3
+    },
+    {
+     "prompt": "empty underground subway station ambience, faint electrical hum, distant water drips, low air rumble",
+     "len": 22,
+     "vol": 0.16,
+     "at": 0
+    }
+   ]
+  },
+  {
+   "say": "And on the platform, someone was always watching.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_intro",
+    "shot": "guard",
+    "t0": 2.2
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\an5\\bord10\\shad0\\1a&HFF&\\3c&H2A2AE6&\\blur0.8\\fscx135\\fscy135\\t(0,260,\\fscx100\\fscy100)\\p1}m 190 0 b 295 0 380 170 380 380 b 380 590 295 760 190 760 b 85 760 0 590 0 380 b 0 170 85 0 190 0{\\p0}",
+    "pos": [
+     0.5,
+     0.4479166666666667
+    ],
+    "delay": 0.9,
+    "extend": 0.0
+   },
+   "sfx": {
+    "prompt": "deep cinematic sub boom hit with short metallic tail",
+    "len": 2.5,
+    "vol": 0.22,
+    "at": 0.9
+   }
+  },
+  {
+   "say": "In 1961, the Berlin Wall split the city in two.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_section",
+    "shot": "stack",
+    "t0": 0
+   },
+   "text": {
+    "kind": "year",
+    "content": "1961",
+    "pos": [
+     0.5,
+     0.3
+    ],
+    "delay": 0.35,
+    "extend": 0.0
+   }
+  },
+  {
+   "say": "But West Berlin's U6, U8 and S-Bahn trains still ran right underneath the East.",
+   "visual": "same"
+  },
+  {
+   "say": "So East Germany sealed sixteen stations.",
+   "visual": {
+    "type": "g2d",
+    "name": "c19",
+    "args": {
+     "mode": "stations",
+     "keys": [
+      [
+       1.0,
+       0.56,
+       0.5
+      ],
+      [
+       1.06,
+       0.56,
+       0.5
+      ]
+     ]
+    }
+   },
+   "hold": 0.5
+  },
+  {
+   "say": "Entrances were bricked up. The stations vanished from the maps.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_walk",
+    "shot": "title",
+    "t0": 0
+   }
+  },
+  {
+   "say": "Down on the dark platforms, armed guards stood watch, so no one could jump aboard.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_watch",
+    "shot": "guardroom",
+    "t0": 0
+   }
+  },
+  {
+   "say": "West Berliners rolled past, staring out at stations frozen in time.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_watch",
+    "shot": "windows",
+    "t0": 3.6
+   }
+  },
+  {
+   "say": "Barbed wire lined the edges.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_walk",
+    "shot": "wire",
+    "t0": 0
+   }
+  },
+  {
+   "say": "A few people risked the tracks to escape. Most never made it.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_escape",
+    "shot": "rare",
+    "t0": 1.0
+   }
+  },
+  {
+   "say": "And for twenty-eight years, the trains just kept rolling through.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_watch",
+    "shot": "nostop",
+    "t0": 0.2
+   },
+   "text": {
+    "kind": "year",
+    "content": "28 YEARS",
+    "pos": [
+     0.5,
+     0.3
+    ],
+    "delay": 0.6,
+    "extend": 0.0
+   },
+   "hold": 0.3
+  },
+  {
+   "say": "Full story on Orbis.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_endcard",
+    "shot": "amber",
+    "t0": 0
+   },
+   "id": "end_card",
+   "hold": 2.3,
+   "trans": "dip",
+   "text": [
+    {
+     "kind": "label",
+     "content": "FULL STORY ON",
+     "pos": [
+      0.5,
+      0.6
+     ],
+     "delay": 0.15
+    },
+    {
+     "kind": "title",
+     "content": "ORBIS",
+     "pos": [
+      0.5,
+      0.675
+     ],
+     "delay": 0.35
+    }
+   ],
+   "sfx": {
+    "prompt": "deep cinematic sub boom hit with short metallic tail",
+    "len": 2.5,
+    "vol": 0.2,
+    "at": 0.05
+   }
+  }
+ ]
+}

@@ -34,7 +34,9 @@ import urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 FONTS = os.path.join(HERE, "..", "fonts")
 CACHE = os.environ.get("LONGFORM_CACHE", os.path.join(HERE, ".cache"))
-W, H, FPS = 1920, 1080, 30
+W, H, FPS = int(os.environ.get("LONGFORM_W", 1920)), int(os.environ.get("LONGFORM_H", 1080)), 30
+# non-default frame sizes (e.g. 1080x1920 shorts) go into every visual cache key; the landscape keys stay as they were
+SIZE_KEY = [] if (W, H) == (1920, 1080) else [W, H]
 UA = {"User-Agent": "Mozilla/5.0 (germany-longform)"}
 PILJAE = "tc_68257f68bc6e3c161ab5078d"
 
@@ -166,11 +168,12 @@ def scene_hash(scene):
 
 
 def render_3d(v, d):
-    k = key(v, round(d, 3), scene_hash(v["scene"]))
+    k = key(v, round(d, 3), scene_hash(v["scene"]), *SIZE_KEY)
     def make(p):
         for attempt in range(3):   # headless Chromium occasionally exits without writing under heavy load
             r = subprocess.run([str(c) for c in ("node", os.path.join(HERE, "render.mjs"), f"scenes/{v['scene']}.js", p + ".mp4",
-                                "--dur", f"{d:.3f}", "--fps", FPS, "--shot", v.get("shot", ""), "--t0", v.get("t0", 0))],
+                                "--dur", f"{d:.3f}", "--fps", FPS, "--shot", v.get("shot", ""), "--t0", v.get("t0", 0),
+                                "--w", W, "--h", H)],
                                capture_output=True, text=True)
             if r.returncode == 0 and os.path.exists(p + ".mp4"):
                 break
@@ -182,7 +185,7 @@ def render_3d(v, d):
 def render_image(v, d, base):
     """Ken Burns on a still, done in float precision (no zoompan jitter)."""
     from PIL import Image
-    k = key(v, round(d, 3))
+    k = key(v, round(d, 3), *SIZE_KEY)
     def make(p):
         src = Image.open(os.path.join(base, v["file"])).convert("L").convert("RGB")
         # fit to cover 16:9 at 2x so the zoom stays sharp
@@ -212,7 +215,7 @@ def render_image(v, d, base):
 
 
 def render_video(v, d, base):
-    k = key(v, round(d, 3))
+    k = key(v, round(d, 3), *SIZE_KEY)
     speed = v.get("speed", 1.0)
     crop = v.get("crop")  # [x, y, w, h] in source pixels, to cut away old captions or logos
     vf = (f"crop={crop[2]}:{crop[3]}:{crop[0]}:{crop[1]}," if crop else "") + \
@@ -225,16 +228,17 @@ def render_video(v, d, base):
 def render_g2d(v, d, start, beats, base):
     """2D motion graphics from graphics2d.py, timed to the narration of the beats they cover."""
     import graphics2d
+    graphics2d.W, graphics2d.H = W, H   # graphics follow the frame size override (set here so graphics2d.py, part of the cache key, stays as is)
     timing = [{"start": round(b["_start"] - start, 3), "say_at": round(b["_say_at"] - start, 3), "say_d": round(b["_say_d"], 3),
                "say": b.get("say", ""), "end": round(b["_end"] - start, 3)} for b in beats]
     src = open(os.path.join(HERE, "graphics2d.py"), "rb").read()
-    k = key(v, round(d, 3), timing, hashlib.sha1(src).hexdigest()[:10])
+    k = key(v, round(d, 3), timing, hashlib.sha1(src).hexdigest()[:10], *SIZE_KEY)
     ext = "mov" if v.get("alpha") else "mp4"
     return cached(f"g2d_{v['name']}_{k}.{ext}", lambda p: graphics2d.render(v, d, timing, base, p, ext))
 
 
 def render_black(d):
-    return cached(f"black_{round(d, 3)}.mp4", lambda p: sh(
+    return cached(f"black_{round(d, 3)}{''.join(f'_{x}' for x in SIZE_KEY)}.mp4", lambda p: sh(
         "ffmpeg", "-y", "-f", "lavfi", "-i", f"color=c=black:s={W}x{H}:r={FPS}", "-t", f"{d:.3f}",
         "-c:v", "libx264", "-pix_fmt", "yuv420p", "-f", "mp4", p))
 
