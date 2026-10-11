@@ -4,10 +4,10 @@ import base64, os, sys
 STK = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "baepsae")
 img = lambda n: "data:image/png;base64," + base64.b64encode(open(f"{STK}/{n}.png", "rb").read()).decode()
 # (sticker, x, y, width, rotation): first block sits inside the mobile safe area, rest fills the desktop frame
-S = [("hi_wave", 525, 585, 285, -6), ("iced_coffee", 1755, 580, 285, 6),
+S = [("excited", 525, 585, 285, -6), ("iced_coffee", 1755, 580, 285, 6),
      ("flap", 1150, 300, 220, 4), 
      ("sing_mic", 40, 60, 300, -8), ("headphones", 400, 120, 270, 6), ("ramen", 760, 40, 260, -4), ("love_heart", 1090, 90, 250, 8),
-     ("excited", 1400, 50, 270, -6), ("camera", 1730, 110, 260, 5), ("trophy", 2060, 40, 260, -7), ("umbrella", 2300, 230, 240, 8),
+     ("laugh_flap", 1400, 50, 270, -6), ("camera", 1730, 110, 260, 5), ("trophy", 2060, 40, 260, -7), ("umbrella", 2300, 230, 240, 8),
      ("o_x_quiz", 60, 430, 320, 4), ("reading", 90, 830, 300, -5), ("suitcase", 2230, 500, 300, -4), ("idea", 2210, 870, 290, 6),
      ("laugh_tears", 30, 1150, 260, 7), ("phone", 360, 1020, 270, -6), ("rice_bowl", 700, 1110, 260, 5), ("pay_card", 1000, 1060, 260, 6),
      ("dash", 1380, 1110, 270, -5), ("sleeping", 1680, 1020, 330, 0), ("shy_cover", 2000, 1150, 250, -6), ("teacher", 2300, 1140, 240, 4)]
