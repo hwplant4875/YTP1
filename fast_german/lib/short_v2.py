@@ -356,7 +356,8 @@ def render(spec_path, out_path):
     num = int(re.match(r"\d*", os.path.basename(spec_path)).group() or 0)
     music = spec.get("music") or MUSIC[num % len(MUSIC)]
     inputs += ["-stream_loop", "-1", "-i", music]
-    fl.append(f"[{k}:a]aformat=sample_rates=48000:channel_layouts=stereo,atrim=0:{total},afade=t=in:d=0.5,"
+    fl.append(f"[{k}:a]aformat=sample_rates=48000:channel_layouts=stereo,loudnorm=I=-13:TP=-1.5:LRA=11,"
+              f"aresample=48000,atrim=0:{total},afade=t=in:d=0.5,"
               f"afade=t=out:st={total - 1.2}:d=1.2,volume={MUSIC_VOL}[m0]")
     fl.append("[m0][key]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=350[music]")
     mix.append("[music]")
