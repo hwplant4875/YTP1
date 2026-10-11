@@ -453,7 +453,7 @@ export async function setup(THREE, renderer, W, H) {
       const tb = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 1.5, 8), new THREE.MeshBasicMaterial({ color: 0x151515 })); tb.rotation.x = Math.PI / 2; tb.position.set(x, HT - 0.19, z); scene.add(tb);
       const h = glow(THREE, 0xfff4e4, 1.6, 0.5); h.position.set(x, HT - 0.22, z); h.scale.set(2.4, 0.8, 1); h.material.opacity = 0; scene.add(h);
       const ent = { tb, h, z, seed: i * 2 + (x > 3 ? 1 : 0), light: null };
-      if (x < 3 && Math.abs(z - (shot === 'crowd' ? 0 : -6)) < 26 && lightN < 7) { const pl = new THREE.PointLight(shot === 'crowd' ? AMBER : 0xffe9cc, 0, 14, 1.5); pl.position.set(x + 0.8, HT - 0.35, z); scene.add(pl); ent.light = pl; lightN++; }
+      if (x < 3 && Math.abs(z - (shot === 'crowd' ? 0 : -6)) < 26 && lightN < (shot === 'crowd' ? 5 : 7)) { const pl = new THREE.PointLight(shot === 'crowd' ? AMBER : 0xffe9cc, 0, 14, 1.5); pl.position.set(x + 0.8, HT - 0.35, z); scene.add(pl); ent.light = pl; lightN++; }
       tubes.push(ent);
     }
   }
@@ -584,7 +584,7 @@ export async function setup(THREE, renderer, W, H) {
   const dust = makeDust(THREE, 900, [-2.2, PX + PW], [0.3, HT - 0.2], [-45, 30], 0.02, 12); scene.add(dust.pts);
   const post = makeComposer(THREE, renderer, scene, camera, W, H, {
     bloom: 0.8, bloomRadius: 0.65, bloomThreshold: 0.65, exposure: 1.05,
-    dof: shot === 'sign' ? { focus: 1.6, aperture: 0.004, maxblur: 0.01 } : shot === 'crowd' ? { focus: 3, aperture: 0.0016, maxblur: 0.006 } : null,
+    dof: shot === 'sign' ? { focus: 1.6, aperture: 0.004, maxblur: 0.01 } : null,
   });
   Object.assign(ctx, { train, tubes, tubeOn, head, headBeam, hl, card, cabLamp, crowd, dust, PX, PW }, post);
   return ctx;

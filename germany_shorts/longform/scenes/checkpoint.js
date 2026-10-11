@@ -40,7 +40,7 @@ function ik(THREE, a, c, l1, l2, pole) {
 }
 
 // civilian man in a 1970s coat; limbs are posed every frame with IK. Faces +z. Origin at the feet.
-function makeMan(THREE, { coatMat, skinMat, hairMat, trouserMat, shoeMat, hat = false, hatMat = null }) {
+function makeMan(THREE, { coatMat, skinMat, hairMat, trouserMat, shoeMat, hat = false, hatMat = null, gloves = null }) {
   const root = new THREE.Group();
   const body = new THREE.Group(); root.add(body);
   const add = (parent, geo, mat, x = 0, y = 0, z = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; parent.add(m); return m; };
@@ -70,7 +70,7 @@ function makeMan(THREE, { coatMat, skinMat, hairMat, trouserMat, shoeMat, hat = 
     limbs['ua' + s] = mk(0.062, coatMat); limbs['fa' + s] = mk(0.055, coatMat); limbs['el' + s] = joint(0.058, coatMat);
     limbs['th' + s] = mk(0.075, trouserMat); limbs['sh' + s] = mk(0.06, trouserMat); limbs['kn' + s] = joint(0.064, trouserMat);
     const shoe = add(root, new THREE.BoxGeometry(0.1, 0.08, 0.27), shoeMat); limbs['shoe' + s] = shoe;
-    limbs['hand' + s] = makeHand(THREE, skinMat, coatMat); root.add(limbs['hand' + s]);
+    limbs['hand' + s] = gloves ? makeGlove(THREE, gloves, coatMat) : makeHand(THREE, skinMat, coatMat); root.add(limbs['hand' + s]);
   }
   const V = (x, y, z) => new THREE.Vector3(x, y, z);
   const man = {
@@ -102,6 +102,20 @@ function makeMan(THREE, { coatMat, skinMat, hairMat, trouserMat, shoeMat, hat = 
     },
   };
   return man;
+}
+// dark leather glove (near-black with a slight sheen)
+function gloveMat(THREE) { return new THREE.MeshPhysicalMaterial({ color: 0x141211, roughness: 0.42, metalness: 0.0, clearcoat: 0.35, clearcoatRoughness: 0.35 }); }
+// closed gloved grip: wrist at origin, along +y, palm +z, curled fingers as one mass towards +z
+function makeGlove(THREE, glove, sleeve) {
+  const g = new THREE.Group();
+  const add = (geo, mat, x, y, z) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = true; g.add(m); return m; };
+  add(new THREE.CylinderGeometry(0.062, 0.066, 0.13, 16), sleeve, 0, -0.07, 0);                       // coat sleeve
+  add(new THREE.CylinderGeometry(0.052, 0.056, 0.03, 16), sleeve, 0, -0.005, 0).scale.set(1, 1, 0.9);  // cuff edge
+  add(new THREE.CylinderGeometry(0.042, 0.048, 0.04, 16), glove, 0, 0.012, 0).scale.set(1, 1, 0.8);   // glove gauntlet
+  add(new RoundedBoxGeometry(0.086, 0.095, 0.04, 4, 0.016), glove, 0, 0.065, 0);                       // back of the hand
+  const fing = add(new RoundedBoxGeometry(0.084, 0.05, 0.05, 4, 0.02), glove, 0, 0.112, 0.024); fing.rotation.x = 0.55;   // curled fingers
+  const th = add(new THREE.CapsuleGeometry(0.014, 0.035, 4, 10), glove, 0.042, 0.06, 0.03); th.rotation.set(0.5, 0, -0.5); // thumb
+  return g;
 }
 // gripping hand: wrist at origin, hand extends along +y, palm faces +z, fingers curl towards +z
 function makeHand(THREE, skin, sleeve) {
@@ -281,7 +295,7 @@ export async function setup(THREE, renderer, W, H) {
     // the bomb
     const bomb = makeBomb(THREE, std, clockFace); bomb.group.position.set(0.12, deskY, 0.12); bomb.group.rotation.y = -0.18; room.add(bomb.group);
     // the man behind the desk
-    const man = makeMan(THREE, { coatMat, skinMat, hairMat, trouserMat, shoeMat });
+    const man = makeMan(THREE, { coatMat, skinMat, hairMat, trouserMat, shoeMat, gloves: gloveMat(THREE) });
     man.root.position.set(0.18, 0, -0.62); room.add(man.root);
     // dust in the lamp light
     const dust = makeDust(THREE, 500, [-1, 1.2], [0.8, 2.0], [-0.6, 1.2], 0.012, 21); room.add(dust.pts);
@@ -457,14 +471,11 @@ export async function setup(THREE, renderer, W, H) {
     // the official's fist around the handle (+x side = towards the passage) and his uniform sleeve
     const fist = new THREE.Group(); stamp.add(fist); stamp.userData.fist = fist;
     const F = (geo, mat, x, y, z) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = true; fist.add(m); return m; };
-    F(new RoundedBoxGeometry(0.07, 0.07, 0.092, 3, 0.022), skinMat, -0.012, 0.1, 0).rotation.z = 0.25;            // palm and back of the hand round the handle
-    for (let i = 0; i < 4; i++) {                                                                                    // curled fingers, seen from the front
-      const f = F(new RoundedBoxGeometry(0.034, 0.02, 0.026, 2, 0.009), skinMat, 0.03, 0.118 - i * 0.0005, -0.036 + i * 0.024);
-      f.rotation.set(0, 0, -0.5); f.scale.set(1, 1 + (i === 1 || i === 2 ? 0.1 : 0), 1);
-      const tip = F(new RoundedBoxGeometry(0.022, 0.03, 0.023, 2, 0.009), skinMat, 0.04, 0.094, -0.036 + i * 0.024); tip.rotation.z = 0.15;
-    }
-    const th = F(new THREE.CapsuleGeometry(0.012, 0.045, 4, 10), skinMat, 0.012, 0.13, 0.05); th.rotation.set(-0.4, 0, 1.0);
-    const sleeveM = std({ color: 0x55574f, roughness: 0.9 });
+    const gl = gloveMat(THREE);
+    F(new RoundedBoxGeometry(0.075, 0.075, 0.096, 4, 0.024), gl, -0.01, 0.104, 0).rotation.z = 0.25;          // gloved fist over the knob
+    const fg = F(new RoundedBoxGeometry(0.036, 0.06, 0.092, 4, 0.016), gl, 0.03, 0.098, 0); fg.rotation.z = -0.2;  // curled fingers, one mass
+    const th = F(new THREE.CapsuleGeometry(0.013, 0.04, 4, 10), gl, 0.012, 0.135, 0.048); th.rotation.set(-0.4, 0, 1.0);
+    const sleeveM = std({ color: 0x3a3c37, roughness: 0.95 });
     const sl = F(new THREE.CylinderGeometry(0.05, 0.058, 1, 16), sleeveM, 0, 0, 0); seg(THREE, sl, new THREE.Vector3(-0.045, 0.14, 0), new THREE.Vector3(-0.55, 0.42, 0.06));
     const cuff = F(new THREE.CylinderGeometry(0.052, 0.052, 0.025, 16), std({ color: 0x3a3c36 }), 0, 0, 0); seg(THREE, cuff, new THREE.Vector3(-0.06, 0.148, 0.001), new THREE.Vector3(-0.085, 0.163, 0.002)); cuff.scale.y = 0.03; }
   const pad = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.018, 0.08), std({ color: 0x2a2a2a, metalness: 0.5, roughness: 0.4 })); scene.add(pad);
@@ -534,8 +545,8 @@ function update2(ctx, t) {
     });
     // camera: ECU on hand + clock, slow pull back and rise to reveal the man
     const k = smooth(Math.min(1, t / 8.2));
-    const tgt = V(lerp(bp.x + 0.0, 0.12, k), lerp(deskY + 0.24, 1.18, k), lerp(bp.z + 0.05, -0.3, k));
-    camera.position.set(lerp(bp.x + 0.16, 0.5, k), lerp(deskY + 0.3, 1.3, k), lerp(bp.z + 0.62, 2.45, k));
+    const tgt = V(lerp(bp.x + 0.0, 0.12, k), lerp(deskY + 0.17, 1.18, k), lerp(bp.z + 0.05, -0.3, k));
+    camera.position.set(lerp(bp.x + 0.16, 0.5, k), lerp(deskY + 0.2, 1.3, k), lerp(bp.z + 0.62, 2.45, k));
     camera.lookAt(tgt);
     camera.fov = lerp(30, 36, k); camera.updateProjectionMatrix();
     if (ctx.bokeh) { ctx.bokeh.uniforms.focus.value = camera.position.distanceTo(lerp(0, 1, k) > 0.5 ? V(0.18, 1.2, -0.55) : V(bp.x, deskY + 0.25, bp.z + 0.06)) ; ctx.bokeh.uniforms.focus.value = lerp(camera.position.distanceTo(V(bp.x, deskY + 0.25, bp.z + 0.1)), camera.position.distanceTo(V(0.18, 1.3, -0.55)), smooth((t - 3) / 4)); ctx.bokeh.uniforms.aperture.value = lerp(0.006, 0.002, k); }
