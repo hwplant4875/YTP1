@@ -85,6 +85,26 @@ def say(line, visual="same", **kw):
 
 
 # hook: driver's view, a sealed ghost station slides past
+
+def _arrow(x0, y0, x1, y1, delay=0.3, extend=0.0):
+    """red arrow from (x0, y0) to the tip (x1, y1), pixel coords, black edge, grows in"""
+    import math
+    L = math.hypot(x1 - x0, y1 - y0)
+    ang = -math.degrees(math.atan2(y1 - y0, x1 - x0))
+    sw, hw, hl = 16, 46, 80
+    shape = (f"m 0 {-sw} l {L - hl:.0f} {-sw} l {L - hl:.0f} {-hw} l {L:.0f} 0 l {L - hl:.0f} {hw} "
+             f"l {L - hl:.0f} {sw} l 0 {sw}")
+    body = ("{\\an7\\org(" + f"{x0},{y0}" + ")\\frz" + f"{ang:.1f}" + "\\bord6\\shad0\\1c" + RED + "\\3c&H000000&\\blur0.6"
+            "\\fscx40\\t(0,350,\\fscx100)\\p1}" + shape + "{\\p0}")
+    return {"kind": "label", "content": body, "pos": [x0 / W, y0 / H], "delay": delay, "extend": extend}
+
+
+def ring(cx, cy, rx, ry, delay=0.3, extend=0.0):
+    """user 2026-10-12: red arrows instead of red circles. Arrow from the lower left, tip just off the subject."""
+    tx, ty = cx - rx * 0.75, cy + ry * 0.55
+    return _arrow(max(60, tx - 230), ty + 230, tx, ty, delay, extend)
+
+
 say("For twenty-eight years, West Berlin's trains crossed under East Berlin without stopping.", v3("s4_intro", "cab", 3.5), id="intro",
     text=key("NO STOPS", 0.30, 0.6),
     sfx=[fx("subway train driving through a tunnel, rumble and rattling wheels, cab interior", 6, 0.2, 0.0, 2.0),

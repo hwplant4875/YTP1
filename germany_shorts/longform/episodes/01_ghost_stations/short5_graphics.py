@@ -25,6 +25,27 @@ def cam_at(keys, t):
     return keys[-1][1:]
 
 
+
+def red_arrow(dr, x0, y0, x1, y1, k=1.0, alpha=255):
+    """Red arrow from (x0, y0) to the tip (x1, y1), black edge, grows in (user 2026-10-12: arrows, not circles)."""
+    import math
+    if k <= 0:
+        return
+    k = min(k, 1.0)
+    L = math.hypot(x1 - x0, y1 - y0) * (0.4 + 0.6 * k)
+    ux, uy = (x1 - x0) / math.hypot(x1 - x0, y1 - y0), (y1 - y0) / math.hypot(x1 - x0, y1 - y0)
+    tx, ty = x1, y1
+    sx, sy = tx - ux * L, ty - uy * L
+    sw, hw, hl = 16, 46, 80
+    nx, ny = -uy, ux
+    bx, by = tx - ux * hl, ty - uy * hl
+    pts = [(sx + nx * sw, sy + ny * sw), (bx + nx * sw, by + ny * sw), (bx + nx * hw, by + ny * hw), (tx, ty),
+           (bx - nx * hw, by - ny * hw), (bx - nx * sw, by - ny * sw), (sx - nx * sw, sy - ny * sw)]
+    a = int(alpha * k)
+    dr.line(pts + [pts[0]], fill=(0, 0, 0, a), width=12, joint="curve")
+    dr.polygon(pts, fill=(*RED, a))
+
+
 def photo_s5(args, d, timing, base, out):
     W, H = g.W, g.H
     src = Image.open(os.path.join(base, args["file"])).convert("L").convert("RGB")
@@ -52,12 +73,11 @@ def photo_s5(args, d, timing, base, out):
                 px = (ring["c"][0] * s - left) * W / cw
                 py = (ring["c"][1] * s - top) * H / ch
                 rx, ry = ring["r"][0] * s * W / cw, ring["r"][1] * s * H / ch
-                sc = 1.35 - 0.35 * k
-                box = [px - rx * sc, py - ry * sc, px + rx * sc, py + ry * sc]
+                # red arrow from the lower left to the subject's lower-left edge (user 2026-10-12: arrows, not circles)
+                tx, ty = px - rx * 0.55, py + ry * 1.05
                 ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
                 od = ImageDraw.Draw(ov)
-                od.ellipse(box, outline=(0, 0, 0, int(255 * k)), width=20)
-                od.ellipse([box[0] + 1, box[1] + 1, box[2] - 1, box[3] - 1], outline=(*RED, int(255 * k)), width=12)
+                red_arrow(od, max(60, tx - 240), ty + 250, tx, ty, k)
                 frame = Image.alpha_composite(frame.convert("RGBA"), ov).convert("RGB")
         out.write(frame)
 
