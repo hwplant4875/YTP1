@@ -221,21 +221,25 @@ export async function setup(THREE, renderer, W, H) {
     const plat = new THREE.Mesh(new THREE.BoxGeometry(PX1 - PX0, 0.95, 5.2), platM); plat.position.set((PX0 + PX1) / 2, 0.475, PZ); plat.receiveShadow = true; scene.add(plat);
     for (const sz of [-1, 1]) { const e = new THREE.Mesh(new THREE.BoxGeometry(PX1 - PX0, 0.02, 0.3), std({ color: 0xbab5aa })); e.position.set((PX0 + PX1) / 2, 0.96, PZ + sz * 2.45); scene.add(e); }
     const steelM = std({ color: 0x26262a, metalness: 0.6, roughness: 0.5 });
-    for (let x = PX0 + 4; x < PX1 - 2; x += 8) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 3.2, 10), steelM); c.position.set(x, 0.95 + 1.6, PZ); c.castShadow = true; scene.add(c);
+    for (let x = 44; x < PX1 - 2; x += 8) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 3.2, 10), steelM); c.position.set(x, 0.95 + 1.6, PZ); c.castShadow = true; scene.add(c);
       const arm = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.25, 5.6), steelM); arm.position.set(x, 4.1, PZ); scene.add(arm); }
-    const roof = new THREE.Mesh(new THREE.BoxGeometry(PX1 - PX0 - 8, 0.15, 6.2), std({ color: 0x1d1d1f, roughness: 0.7 })); roof.position.set((PX0 + PX1) / 2 + 2, 4.3, PZ); roof.rotation.x = 0.0; roof.castShadow = true; scene.add(roof);
-    const roofEdge = new THREE.Mesh(new THREE.BoxGeometry(PX1 - PX0 - 8, 0.45, 0.08), std({ color: 0x3a3a3a })); roofEdge.position.set((PX0 + PX1) / 2 + 2, 4.15, PZ - 3.1); scene.add(roofEdge);
+    const roof = new THREE.Mesh(new THREE.BoxGeometry(PX1 - 42, 0.15, 6.2), std({ color: 0x1d1d1f, roughness: 0.7 })); roof.position.set((42 + PX1) / 2, 4.3, PZ); roof.rotation.x = 0.0; roof.castShadow = true; scene.add(roof);
+    const roofEdge = new THREE.Mesh(new THREE.BoxGeometry(PX1 - 42, 0.45, 0.08), std({ color: 0x3a3a3a })); roofEdge.position.set((42 + PX1) / 2, 4.15, PZ - 3.1); scene.add(roofEdge);
     // old station name boards, dead lamps, boarded kiosk, weeds
     const nameTex = ctex(THREE, 1024, 160, (g, w, h) => { g.fillStyle = '#d8d3c6'; g.fillRect(0, 0, w, h); g.fillStyle = '#18291c'; g.fillRect(0, 0, w, 14); g.fillRect(0, h - 14, w, 14);
       g.fillStyle = '#121212'; g.font = 'bold 86px "DejaVu Sans Condensed"'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('Bornholmer Straße', w / 2, h / 2 + 4);
       for (let i = 0; i < 400; i++) { g.fillStyle = `rgba(60,50,40,${r() * 0.25})`; g.fillRect(r() * w, r() * h, 3 + r() * 10, 2 + r() * 4); } });
-    for (const x of [30, 70]) { const sb = new THREE.Mesh(new THREE.PlaneGeometry(4, 0.62), std({ map: nameTex, roughness: 0.7 })); sb.position.set(x, 3.4, PZ - 0.06); sb.rotation.y = Math.PI; scene.add(sb);
-      const sb2 = sb.clone(); sb2.rotation.y = 0; sb2.position.z = PZ + 0.06; scene.add(sb2); }
+    for (const x of [24, 62]) { const sb = new THREE.Mesh(new THREE.PlaneGeometry(4, 0.62), std({ map: nameTex, roughness: 0.7 })); sb.position.set(x, 3.0, PZ - 0.06); sb.scale.setScalar(1.4); sb.rotation.y = Math.PI; scene.add(sb);
+      const sb2 = sb.clone(); sb2.rotation.y = 0; sb2.position.z = PZ + 0.06; scene.add(sb2);
+      for (const dx of [-1.7, 1.7]) { const p = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 2.4, 8), steelM); p.position.set(x + dx, 2.05, PZ); scene.add(p); } }
+    // dead platform lamps
+    for (let x = 16; x < 44; x += 7) { const p = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 3.6, 8), steelM); p.position.set(x, 2.75, PZ + 1.4); scene.add(p);
+      const gl = new THREE.Mesh(new THREE.SphereGeometry(0.22, 12, 8), std({ color: 0x5a5a58, roughness: 0.3 })); gl.position.set(x, 4.6, PZ + 1.4); scene.add(gl); }
     const kiosk = new THREE.Mesh(new THREE.BoxGeometry(3, 2.4, 2), std({ map: ctex(THREE, 256, 256, (g, w, h) => { g.fillStyle = '#4a4238'; g.fillRect(0, 0, w, h); for (let x = 0; x < w; x += 22) { g.fillStyle = `rgba(0,0,0,${0.2 + r() * 0.3})`; g.fillRect(x, 0, 3, h); } }) }));
     kiosk.position.set(48, 0.95 + 1.2, PZ); scene.add(kiosk);
-    const weedM = std({ color: 0x33352c, roughness: 1 });
-    const weeds = new THREE.InstancedMesh(new THREE.ConeGeometry(0.25, 0.6, 5), weedM, 260);
-    for (let i = 0; i < 260; i++) { const x = PX0 + r() * (PX1 - PX0), z = PZ + (r() - 0.5) * 4.6; const s = 0.5 + r(); m4.compose(new THREE.Vector3(x, 0.95 + 0.3 * s, z), new THREE.Quaternion().setFromEuler(new THREE.Euler((r() - 0.5) * 0.5, 0, (r() - 0.5) * 0.5)), new THREE.Vector3(s, s, s)); weeds.setMatrixAt(i, m4); }
+    const weedM = std({ color: 0x5a5c50, roughness: 1 });
+    const weeds = new THREE.InstancedMesh(new THREE.SphereGeometry(0.3, 7, 5), weedM, 160);
+    for (let i = 0; i < 160; i++) { const x = PX0 + r() * (PX1 - PX0), z = PZ + (r() - 0.5) * 4.6; const s = 0.5 + r(); m4.compose(new THREE.Vector3(x, 0.95, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, r() * 3, 0)), new THREE.Vector3(s * (0.6 + r()), s * 0.45, s)); weeds.setMatrixAt(i, m4); }
     scene.add(weeds);
     // border fence + wall along the cutting (the station lay inside the border strip)
     const wallW = new THREE.Mesh(new THREE.BoxGeometry(400, 3.6, 0.25), std({ map: concreteTex(THREE, [100, 1], 66, 150), roughness: 0.9 })); wallW.position.set(200 + 14, 1.8, 22.5); scene.add(wallW);
@@ -284,10 +288,11 @@ export async function setup(THREE, renderer, W, H) {
     }
     // ---- the barrier, raised, and the control hut at the eastern end
     const boomTex = ctex(THREE, 256, 16, (g, w, h) => { for (let i = 0; i < 8; i++) { g.fillStyle = i % 2 ? '#1a1a1a' : '#e8e4da'; g.fillRect(i * 32, 0, 32, h); } });
-    const boomG = new THREE.Group(); boomG.position.set(DX - 2.9, STREET + 1.0, -30); scene.add(boomG);
-    const boom = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.16, 9), std({ map: boomTex, roughness: 0.5 })); boom.material.map.repeat.set(1, 1); boom.geometry.translate(0, 0, 0); boom.position.set(-4.5, 0, 0); boom.rotation.y = Math.PI / 2; boomG.add(boom);
-    boomG.rotation.z = -1.25;
-    const bpost = new THREE.Mesh(new THREE.BoxGeometry(0.4, 1.1, 0.4), std({ color: 0x777770 })); bpost.position.set(DX - 2.9, STREET + 0.55, -30); scene.add(bpost);
+    const boomG = new THREE.Group(); boomG.position.set(DX - 1.0, STREET + 1.05, -33); scene.add(boomG);
+    const boom = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.22, 9), std({ map: boomTex, roughness: 0.5 })); boom.material.map.repeat.set(1, 1); boom.geometry.translate(0, 0, 0); boom.position.set(-4.5, 0, 0); boom.rotation.y = Math.PI / 2; boomG.add(boom);
+    boomG.rotation.z = -1.2;
+    const boomLamp = new THREE.PointLight(0xffe0b0, 25, 14, 1.6); boomLamp.position.set(DX + 2.5, STREET + 3, -35); scene.add(boomLamp);
+    const bpost = new THREE.Mesh(new THREE.BoxGeometry(0.4, 1.1, 0.4), std({ color: 0x777770 })); bpost.position.set(DX - 1.0, STREET + 0.55, -33); scene.add(bpost);
     const hut = new THREE.Mesh(new THREE.BoxGeometry(2.4, 2.6, 2.4), std({ color: 0x8c8a82, roughness: 0.8 })); hut.position.set(-DX - 4, STREET + 1.3, -38); hut.castShadow = true; scene.add(hut);
     const hutWin = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.8), new THREE.MeshBasicMaterial({ color: new THREE.Color(1.6, 1.2, 0.7) })); hutWin.position.set(-DX - 2.79, STREET + 1.7, -38); hutWin.rotation.y = Math.PI / 2; scene.add(hutWin);
     // ---- floodlit West at the far end: TV lights and haze
@@ -302,13 +307,14 @@ export async function setup(THREE, renderer, W, H) {
       for (let j = 0; j < 6; j++) if (r() < 0.5) { const wm = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 1.4), winM); wm.position.set(bx - sxz * (bw / 2 + 0.02), STREET + 3 + r() * (bh - 5), bz + (r() - 0.5) * 9); wm.rotation.y = sxz > 0 ? -Math.PI / 2 : Math.PI / 2; scene.add(wm); } }
     scene.add(new THREE.HemisphereLight(0x6a7488, 0x0a0908, 0.22));
     // border-strip floodlights on tall poles along the cutting: cold light on the dead station
-    for (const [x, z] of [[34, 21], [78, 21], [122, 21]]) {
-      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 12, 8), steelM); pole.position.set(x, 6, z); scene.add(pole);
-      const lp = V(x, 11.8, z - 0.6);
-      const lm = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.5, 0.3), new THREE.MeshBasicMaterial({ color: new THREE.Color(2.4, 2.4, 2.5) })); lm.position.copy(lp); scene.add(lm);
-      const g = glow(THREE, 0xe8eeff, 5, 0.7); g.position.copy(lp); scene.add(g);
-      const sp = new THREE.SpotLight(0xdfe6ff, 320, 60, 0.75, 0.6, 1.4); sp.position.copy(lp); sp.target.position.set(x + 6, 0, PZ); scene.add(sp, sp.target);
-      const bm = beam(THREE, 0xdfe6ff, 16, 7, 0.03); bm.position.copy(lp); bm.lookAt(x + 6, 0, PZ); bm.rotateX(-Math.PI / 2); scene.add(bm);
+    for (const [x, z] of [[34, 21], [78, 21], [122, 21], [22, -24]]) {
+      const hidden = z < 0;                 // a light from the street above the cutting, fixture out of frame
+      const lp = V(x, hidden ? 13 : 11.8, hidden ? -27 : z - 0.6);
+      if (!hidden) { const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 12, 8), steelM); pole.position.set(x, 6, z); scene.add(pole); }
+      if (!hidden) { const lm = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.5, 0.3), new THREE.MeshBasicMaterial({ color: new THREE.Color(2.4, 2.4, 2.5) })); lm.position.copy(lp); scene.add(lm);
+        const g = glow(THREE, 0xe8eeff, 5, 0.7); g.position.copy(lp); scene.add(g); }
+      const sp = new THREE.SpotLight(0xdfe6ff, hidden ? 220 : 320, 60, 0.75, 0.6, 1.4); sp.position.copy(lp); sp.target.position.set(x + (z < 0 ? 4 : 6), 0, PZ); scene.add(sp, sp.target);
+      if (!hidden) { const bm = beam(THREE, 0xdfe6ff, 16, 7, 0.03); bm.position.copy(lp); bm.lookAt(x + 6, 0, PZ); bm.rotateX(-Math.PI / 2); scene.add(bm); }
     }
     const moon = new THREE.DirectionalLight(0x9aa4c0, 0.25); moon.position.set(60, 80, 40); scene.add(moon);
     // ---- the crowd streaming West (+z) across the bridge and along the approach road
@@ -320,7 +326,7 @@ export async function setup(THREE, renderer, W, H) {
     const crowdMat = std({ color: 0xffffff, roughness: 0.9 });
     const crowd = makeCrowd(THREE, ppl, crowdMat); crowd.forEach(m => scene.add(m));
     // a trickle of people towards the cutting rail (looking down at the dark station)
-    const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: 0.75, bloomRadius: 0.6, bloomThreshold: 0.7, exposure: 1.25 });
+    const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: 0.75, bloomRadius: 0.6, bloomThreshold: 0.7, exposure: 1.4 });
     Object.assign(ctx, { crowd, STREET, lamps, ZL, PZ }, post);
     return ctx;
   }
@@ -329,8 +335,8 @@ export async function setup(THREE, renderer, W, H) {
     // ================= ticket counter close-up
     scene.background = new THREE.Color(0x050403);
     scene.fog = new THREE.FogExp2(0x050403, 0.25);
-    const counter = new THREE.Mesh(new THREE.BoxGeometry(2, 0.05, 1.2), std({ map: ctex(THREE, 512, 256, (g, w, h) => { g.fillStyle = '#5a5248'; g.fillRect(0, 0, w, h);
-      for (let i = 0; i < 6000; i++) { const v = 60 + r() * 50; g.fillStyle = `rgba(${v},${v - 4},${v - 10},0.25)`; g.fillRect(r() * w, r() * h, 2, 2); }
+    const counter = new THREE.Mesh(new THREE.BoxGeometry(2, 0.05, 1.2), std({ map: ctex(THREE, 512, 256, (g, w, h) => { g.fillStyle = '#4c4b48'; g.fillRect(0, 0, w, h);
+      for (let i = 0; i < 6000; i++) { const v = 60 + r() * 50; g.fillStyle = `rgba(${v},${v},${v - 3},0.25)`; g.fillRect(r() * w, r() * h, 2, 2); }
       for (let i = 0; i < 30; i++) { g.strokeStyle = `rgba(200,190,170,${0.05 + r() * 0.08})`; g.lineWidth = 1; g.beginPath(); const x = r() * w, y = r() * h; g.moveTo(x, y); g.lineTo(x + 60 + r() * 120, y + (r() - 0.5) * 20); g.stroke(); } }), roughness: 0.35, metalness: 0.1 }));
     counter.position.y = -0.025; counter.receiveShadow = true; scene.add(counter);
     // glass partition with the money slot
@@ -345,17 +351,17 @@ export async function setup(THREE, renderer, W, H) {
     const sign = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.22), std({ map: signT })); sign.position.set(-0.2, 0.75, -0.9); scene.add(sign);
     // the ticket
     const tTex = ctex(THREE, 512, 288, (g, w, h) => {
-      g.fillStyle = '#dcd0ae'; g.fillRect(0, 0, w, h);
+      g.fillStyle = '#d9d3c2'; g.fillRect(0, 0, w, h);
       for (let i = 0; i < 3000; i++) { g.fillStyle = `rgba(120,100,70,${r() * 0.08})`; g.fillRect(r() * w, r() * h, 2, 2); }
       g.strokeStyle = '#3a3226'; g.lineWidth = 3; g.strokeRect(12, 12, w - 24, h - 24);
       for (let y = 22; y < h - 20; y += 6) { g.fillStyle = 'rgba(150,120,80,0.12)'; g.fillRect(16, y, w - 32, 2); }
       g.fillStyle = '#1e1a14'; g.font = 'bold 50px "DejaVu Sans"'; g.fillText('BVG', 30, 70);
       g.font = '17px "DejaVu Sans Condensed"'; g.fillText('Berliner Verkehrs-Betriebe', 30, 96);
       g.font = 'bold 30px "DejaVu Sans Condensed"'; g.fillText('Fahrschein', 280, 58); g.font = '19px "DejaVu Sans Condensed"'; g.fillText('Einzelfahrt  U-Bahn · Bus', 280, 86);
-      g.font = 'bold 92px "DejaVu Sans Condensed"'; g.fillText('2,70 DM', 30, 200);
+      g.font = 'bold 80px "DejaVu Sans Condensed"'; g.fillText('2,70 DM', 30, 200);
       g.font = '18px "DejaVu Sans Mono"'; g.fillText('Nr. 0418 7735', 30, 250); g.fillText('Erwachsene', 330, 250);
       // date stamp from the validator
-      g.save(); g.translate(395, 165); g.rotate(-0.08); g.strokeStyle = 'rgba(40,40,70,0.8)'; g.lineWidth = 3; g.strokeRect(-70, -32, 140, 64);
+      g.save(); g.translate(412, 160); g.rotate(-0.08); g.strokeStyle = 'rgba(40,40,70,0.8)'; g.lineWidth = 3; g.strokeRect(-70, -32, 140, 64);
       g.fillStyle = 'rgba(40,40,70,0.82)'; g.font = 'bold 24px "DejaVu Sans Mono"'; g.textAlign = 'center'; g.fillText('11.11.89', 0, -2); g.font = '16px "DejaVu Sans Mono"'; g.fillText('14:07  U8', 0, 22); g.restore();
     });
     const ticket = new THREE.Mesh(new THREE.BoxGeometry(0.105, 0.0008, 0.059), [std({ color: 0xcfc4a4 }), std({ color: 0xcfc4a4 }), std({ map: tTex, roughness: 0.85 }), std({ color: 0xcfc4a4 }), std({ color: 0xcfc4a4 }), std({ color: 0xcfc4a4 })]);
@@ -376,8 +382,9 @@ export async function setup(THREE, renderer, W, H) {
     }
     // customer's hand + clerk's fingers
     const sleeve = std({ color: 0x3e3a35, roughness: 0.95 });
-    const hand = makeHand(THREE, skinMat, sleeve, 0.55); scene.add(hand);
-    const clerk = makeHand(THREE, std({ color: 0xa88c78, roughness: 0.6 }), std({ color: 0x4a4c48, roughness: 0.9 }), 0.25); scene.add(clerk);
+    const glove = std({ color: 0x2e2621, roughness: 0.42, metalness: 0.05 });   // November: leather gloves
+    const hand = makeHand(THREE, glove, sleeve, 0.55); scene.add(hand);
+    const clerk = new THREE.Group();
     // warm lamp
     const lampP = new THREE.Vector3(0.15, 0.62, 0.05);
     const lamp = new THREE.SpotLight(AMBER, 2.4, 3, 0.65, 0.6, 1.6); lamp.position.copy(lampP); lamp.target.position.set(0, 0, -0.05);
@@ -386,7 +393,7 @@ export async function setup(THREE, renderer, W, H) {
     const halo = glow(THREE, AMBER, 0.5, 0.8); halo.position.copy(lampP); scene.add(halo);
     const fill = new THREE.PointLight(0x9aa4b8, 0.15, 3, 2); fill.position.set(-0.6, 0.4, 0.6); scene.add(fill);
     scene.add(new THREE.HemisphereLight(0x8890a0, 0x0a0806, 0.05));
-    const dust = makeDust(THREE, 300, [-0.5, 0.5], [0.05, 0.7], [-0.4, 0.4], 0.004, 7); scene.add(dust.pts);
+    const dust = makeDust(THREE, 120, [-0.5, 0.5], [0.05, 0.7], [-0.4, 0.4], 0.0018, 7); scene.add(dust.pts);
     const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: 0.6, bloomRadius: 0.5, bloomThreshold: 0.7, exposure: 1.1, dof: { focus: 0.4, aperture: 0.02, maxblur: 0.01 } });
     Object.assign(ctx, { ticket, coins, hand, clerk, dust }, post);
     return ctx;
@@ -473,7 +480,7 @@ export async function setup(THREE, renderer, W, H) {
   }
   // front face (at z = 0, facing -z)
   const front = new THREE.Group(); train.add(front);
-  const fwin = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.0), std({ color: 0x0b0c0d, roughness: 0.05, metalness: 0.6 })); fwin.position.set(0, 2.55, -0.012); fwin.rotation.y = Math.PI; front.add(fwin);
+  const fwin = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.0), std({ color: 0x0b0c0d, roughness: 0.4, metalness: 0.3, transparent: true, opacity: 0.3, depthWrite: false })); fwin.position.set(0, 2.55, -0.065); fwin.rotation.y = Math.PI; front.add(fwin);
   const fdest = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 0.24), new THREE.MeshBasicMaterial({ map: ctex(THREE, 512, 96, (g, w, h) => { g.fillStyle = '#0a0a0a'; g.fillRect(0, 0, w, h); g.fillStyle = '#e8dcc0'; g.font = 'bold 60px "DejaVu Sans Condensed"'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('U8', 60, h / 2 + 2); g.font = 'bold 48px "DejaVu Sans Condensed"'; g.fillText('Leinestraße', 300, h / 2 + 2); }), color: new THREE.Color(1.3, 1.2, 1.1) }));
   fdest.position.set(0, 3.28, -0.012); fdest.rotation.y = Math.PI; front.add(fdest);
   const head = new THREE.SpotLight(0xfff1dc, 0, 90, 0.33, 0.5, 1.1); head.position.set(0, 1.2, -0.3); head.target.position.set(0, 0.8, -40); head.castShadow = false; train.add(head, head.target);
@@ -492,27 +499,27 @@ export async function setup(THREE, renderer, W, H) {
     g.fillStyle = 'rgba(70,55,30,0.18)'; g.fillRect(0, h * 0.48, w, 4);                                // fold
     // pencil guide line + marker letters
     g.strokeStyle = 'rgba(60,60,60,0.25)'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(40, 225); g.lineTo(w - 40, 218); g.stroke();
-    const s1 = 118, t1 = 'JANNOWITZBRÜCKE'; handwrite(g, t1, (w - measure(t1, s1)) / 2 - 10, 95, s1, 11, { slant: 0.08 });
-    const s2 = 132, t2 = 'WESTBERLIN'; const x2 = (w - measure(t2, s2)) / 2; const xe = handwrite(g, t2, x2, 300, s2, 23, { slant: 0.1, weight: 1.1 });
+    const t1 = 'JANNOWITZBRÜCKE', s1 = Math.min(118, 900 / measure(t1, 1)); handwrite(g, t1, (w - measure(t1, s1)) / 2 - 10, 95, s1, 11, { slant: 0.08 });
+    const t2 = 'WESTBERLIN', s2 = Math.min(150, 880 / measure(t2, 1)); const x2 = (w - measure(t2, s2)) / 2; const xe = handwrite(g, t2, x2, 300, s2, 23, { slant: 0.1, weight: 1.1 });
     // underline
     const rr = rng(5); g.strokeStyle = 'rgba(14,14,18,0.85)'; g.lineWidth = 12; g.lineCap = 'round'; g.beginPath(); g.moveTo(x2 - 10, 462); for (let k = 1; k <= 12; k++) g.lineTo(lerp(x2 - 10, xe - 20, k / 12), 462 - k * 1.2 + (rr() - 0.5) * 5); g.stroke();
   });
   const signM = std({ map: signT, roughness: 0.95 });
-  const card = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.6, 8, 4), signM); card.position.set(0.08, 2.5, 0.06); card.rotation.set(0, Math.PI, 0.025); train.add(card);
+  const card = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.6, 8, 4), signM); card.position.set(0.08, 2.5, -0.03); card.rotation.set(0, Math.PI, 0.025); train.add(card);
   { const pa = card.geometry.attributes.position; for (let i = 0; i < pa.count; i++) { const x = pa.getX(i), y = pa.getY(i); pa.setZ(i, 0.012 * Math.sin(x * 2.6) * Math.cos(y * 3)); } card.geometry.computeVertexNormals(); }
   const tapeM = std({ color: 0xd8d2bc, roughness: 0.4, transparent: true, opacity: 0.75 });
-  for (const [x, y, rz] of [[-0.5, 0.29, 0.6], [0.52, 0.27, -0.5], [-0.52, -0.27, -0.55], [0.5, -0.29, 0.6]]) { const tp = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.045), tapeM); tp.position.set(0.08 - x, 2.5 + y, 0.045); tp.rotation.set(0, Math.PI, rz); train.add(tp); }
+  for (const [x, y, rz] of [[-0.5, 0.29, 0.6], [0.52, 0.27, -0.5], [-0.52, -0.27, -0.55], [0.5, -0.29, 0.6]]) { const tp = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.045), tapeM); tp.position.set(0.08 - x, 2.5 + y, -0.045); tp.rotation.set(0, Math.PI, rz); train.add(tp); }
   // cab interior behind the sign (dim), glass reflections
-  const cab = new THREE.Mesh(new THREE.BoxGeometry(2.4, 1.6, 1.2), std({ color: 0x151515, side: THREE.BackSide })); cab.position.set(0, 2.2, 0.7); train.add(cab);
-  const cabLamp = new THREE.PointLight(0xffd9a8, 0, 3, 2); cabLamp.position.set(-0.5, 2.9, 0.8); train.add(cabLamp);
-  const glass = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.0), new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.04, metalness: 0.0, transmission: 0, transparent: true, opacity: 0.08, depthWrite: false }));
-  glass.position.set(0, 2.55, -0.02); glass.rotation.y = Math.PI; train.add(glass);
+
+  const cabLamp = new THREE.PointLight(0xffe6c4, 0, 4, 2); cabLamp.position.set(0.4, 3.4, -0.9); train.add(cabLamp);
+  const glass = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.0), new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.3, metalness: 0.0, transmission: 0, transparent: true, opacity: 0.08, depthWrite: false }));
+  glass.position.set(0, 2.55, -0.07); glass.rotation.y = Math.PI; train.add(glass);
   const streak = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.0), new THREE.MeshBasicMaterial({ map: ctex(THREE, 512, 256, (g, w, h) => { g.clearRect(0, 0, w, h);
     for (let i = 0; i < 4; i++) { const x = 60 + i * 120 + r() * 40; const gr = g.createLinearGradient(x, 0, x + 80, 0); gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.5, `rgba(255,250,240,${0.08 + r() * 0.08})`); gr.addColorStop(1, 'rgba(255,255,255,0)');
       g.save(); g.translate(x, 0); g.transform(1, 0, -0.5, 1, 0, 0); g.fillStyle = gr; g.fillRect(-40, 0, 120, h); g.restore(); } }), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
-  streak.position.set(0, 2.55, -0.025); streak.rotation.y = Math.PI; train.add(streak);
+  streak.position.set(0, 2.55, -0.075); streak.rotation.y = Math.PI; train.add(streak);
   // window frame
-  for (const [w, h, x, y] of [[2.05, 0.08, 0, 3.08], [2.05, 0.08, 0, 2.02], [0.08, 1.1, -1.0, 2.55], [0.08, 1.1, 1.0, 2.55]]) { const f = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.06), darkM); f.position.set(x, y, -0.02); train.add(f); }
+  for (const [w, h, x, y] of [[2.05, 0.08, 0, 3.08], [2.05, 0.08, 0, 2.02], [0.08, 1.1, -1.0, 2.55], [0.08, 1.1, 1.0, 2.55]]) { const f = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.1), darkM); f.position.set(x, y, -0.05); train.add(f); }
   train.position.set(TRK, 0, -400);
   train.rotation.y = shot === 'crowd' ? 0 : Math.PI;     // front faces +z (towards the camera) when it drives in
 
@@ -598,11 +605,11 @@ export function update(ctx, t) {
     });
     // camera: on the eastern approach, high on the embankment; holds on the bridge, then at 3.4 s tilts and pans down
     const a = smooth((t - 3.3) / 2.9);
-    const cp = V(lerp(16, 13.5, a) - 0.25 * t * (1 - a), lerp(STREET + 4.4, 4.2, Math.pow(a, 1.3)), lerp(-33, -21.5, a) + 0.45 * t * (1 - a) + 0.25 * Math.max(0, t - 6.2));
+    const cp = V(lerp(27, 25, a) - 0.3 * t, lerp(STREET + 9, STREET + 6, a), lerp(-46, -38, a) + 0.35 * t);
     camera.position.copy(cp);
-    const look = V(lerp(-2, 42, a), lerp(STREET + 2.8, 1.6, a), lerp(2, -5.5, a));
+    const look = V(lerp(-3, 19, a), lerp(STREET + 1.8, 1.2, a), lerp(4, -5, a));
     camera.lookAt(look);
-    camera.fov = lerp(42, 40, a); camera.updateProjectionMatrix();
+    camera.fov = lerp(36, 40, a); camera.updateProjectionMatrix();
     return;
   }
 
@@ -617,12 +624,12 @@ export function update(ctx, t) {
     clerk.visible = ch < 0.98;
     // the customer's hand comes in from the right with the coins and lets them drop
     const hin = smooth((t - 0.3) / 0.7), hout = smooth((t - 1.9) / 0.8);
-    const hp = V(lerp(0.32, 0.075, hin) + 0.25 * hout, 0.07 + 0.01 * Math.sin(t * 3), lerp(0.18, 0.06, hin) + 0.12 * hout);
+    const hp = V(lerp(0.36, 0.2, hin) + 0.25 * hout, 0.06 + 0.005 * Math.sin(t * 3), lerp(0.12, 0.06, hin) + 0.1 * hout);
     hand.position.copy(hp); hand.rotation.set(0.25, 0, Math.PI / 2 + 0.35); hand.rotateX(-0.2);
     const rest = [V(0.055, 0.00105, 0.035), V(0.09, 0.00105, 0.06), V(0.03, 0.00105, 0.075)];
     coins.forEach((c, i) => {
       const td = 1.15 + i * 0.16;                       // release times
-      const inHand = V(hp.x - 0.04 + i * 0.006, hp.y - 0.035 + i * 0.002, hp.z + 0.005 + i * 0.008);
+      const inHand = V(hp.x - 0.12 + i * 0.008, hp.y - 0.028 + i * 0.002, hp.z - 0.005 + i * 0.008);
       if (t < td) { c.position.copy(inHand); c.rotation.set(0.6, 0, 0.3); }
       else {
         const d = t - td, fall = Math.sqrt(2 * (inHand.y - rest[i].y) / 9.81);
@@ -631,8 +638,8 @@ export function update(ctx, t) {
       }
     });
     const k = smooth(t / 3.6);
-    camera.position.set(lerp(-0.05, -0.02, k), lerp(0.26, 0.22, k), lerp(0.3, 0.25, k));
-    camera.lookAt(lerp(0.01, 0.03, k), 0.0, lerp(-0.04, 0.0, k));
+    camera.position.set(lerp(-0.03, 0.0, k), lerp(0.19, 0.165, k), lerp(0.21, 0.18, k));
+    camera.lookAt(lerp(0.015, 0.03, k), 0.0, lerp(-0.03, 0.0, k));
     camera.fov = 40; camera.updateProjectionMatrix();
     if (ctx.bokeh) ctx.bokeh.uniforms.focus.value = camera.position.distanceTo(V(0.0, 0, 0.0));
     return;
@@ -666,7 +673,7 @@ export function update(ctx, t) {
     camera.position.set(lerp(-0.85, -0.45, k), lerp(2.35, 2.45, k), -2 + lerp(1.55, 1.25, k));
     camera.lookAt(-0.08, 2.5, -2);
     camera.fov = 36; camera.updateProjectionMatrix();
-    if (ctx.bokeh) ctx.bokeh.uniforms.focus.value = camera.position.distanceTo(V(-0.08, 2.5, -2.06));
+    if (ctx.bokeh) ctx.bokeh.uniforms.focus.value = camera.position.distanceTo(V(-0.08, 2.5, -1.97));
     headOn = 0.6;
   } else if (shot === 'crowd') {
     train.position.z = -ctx.dz0;                // door centred at z = 0
@@ -684,7 +691,7 @@ export function update(ctx, t) {
     if (ctx.bokeh) ctx.bokeh.uniforms.focus.value = 3.0;
     headOn = 0.5;
   }
-  ctx.head.intensity = 55 * headOn; ctx.headBeam.material.uniforms.opacity.value = 0.03 * headOn; ctx.hl.forEach(h => h.material.opacity = 0.9 * headOn);
+  ctx.head.intensity = 22 * headOn; ctx.headBeam.material.uniforms.opacity.value = 0.03 * headOn; ctx.hl.forEach(h => h.material.opacity = 0.9 * headOn);
   (train.userData.ilights || []).forEach(l => l.intensity = 2.0 * ilight);
-  ctx.cabLamp.intensity = shot === 'sign' ? 0.6 : 0;
+  ctx.cabLamp.intensity = shot === 'sign' ? 1.6 : 0;
 }

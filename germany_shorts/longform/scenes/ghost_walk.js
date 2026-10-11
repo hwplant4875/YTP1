@@ -741,7 +741,7 @@ export async function setup(THREE, renderer, W, H) {
     for (const tx of [-1.85, 1.85]) for (let i = 0; i < 270; i++) { m4.makeTranslation(tx, 0.08, 30 - i * 0.75); sl.setMatrixAt(k++, m4); } scene.add(sl);
     for (const sx of [-1, 1]) { add(new THREE.BoxGeometry(0.08, 0.1, TL), steel, sx * (TW - 0.55), 0.42, TZc); add(new THREE.BoxGeometry(0.22, 0.03, TL), std({ color: 0x2a2520 }), sx * (TW - 0.55), 0.5, TZc); }
     // central steel columns and transverse ceiling girders
-    const colPaint = std({ color: 0x3a3c37, metalness: 0.55, roughness: 0.55 });
+    const colPaint = std({ color: 0x2c2e2a, metalness: 0.3, roughness: 0.6 });
     const cols = new THREE.InstancedMesh(new THREE.BoxGeometry(0.3, TH, 0.26), colPaint, 80);
     const gird = new THREE.InstancedMesh(new THREE.BoxGeometry(TW * 2, 0.26, 0.18), colPaint, 160); let ci = 0, gi = 0;
     for (let z = 28; z > -150; z -= 3.0) { m4.makeTranslation(0, TH / 2, z); cols.setMatrixAt(ci++, m4); }
@@ -751,7 +751,7 @@ export async function setup(THREE, renderer, W, H) {
     const cableMat = std({ color: 0x141312, roughness: 0.55 });
     const cables = [];
     for (const sx of [-1, 1]) for (const [y, rr] of [[2.55, 0.03], [2.68, 0.024], [2.8, 0.034], [2.93, 0.022]]) { const c = add(new THREE.CylinderGeometry(rr, rr, TL, 8), cableMat, sx * (TW - 0.12 - rr), y, TZc); c.rotation.x = Math.PI / 2; cables.push([sx, y, rr]); }
-    const brk = new THREE.InstancedMesh(new THREE.BoxGeometry(0.22, 0.03, 0.05), steel, 300); let bk = 0;
+    const brk = new THREE.InstancedMesh(new THREE.BoxGeometry(0.22, 0.03, 0.05), steel, 500); let bk = 0;
     for (const sx of [-1, 1]) for (let z = 29; z > -150; z -= 1.5) for (const y of [2.5, 2.98]) { m4.makeTranslation(sx * (TW - 0.11), y, z); brk.setMatrixAt(bk++, m4); }
     brk.count = bk; scene.add(brk);
     // refuge niches
@@ -759,7 +759,7 @@ export async function setup(THREE, renderer, W, H) {
     // ---- the white line: right wall, ceiling, left wall, painted over the cables too
     const paint = (seed, wpx, hpx, drips = true) => canvasTex(THREE, wpx, hpx, (g, w, h) => {
       const r = rng(seed); g.clearRect(0, 0, w, h);
-      const cx = w / 2, half = w * 0.12;
+      const cx = w / 2, half = w * 0.16;
       // main body: overlapping vertical brush strokes
       for (let s = 0; s < 34; s++) {
         const x = cx + (r() - 0.5) * half * 1.6, bw = half * (0.35 + r() * 0.5);
@@ -783,15 +783,15 @@ export async function setup(THREE, renderer, W, H) {
       for (let i = 0; i < 900; i++) { g.save(); g.globalCompositeOperation = 'source-atop'; g.fillStyle = `rgba(80,74,62,${r() * 0.3})`; g.fillRect(r() * w, r() * h, 2 + r() * 6, 2 + r() * 10); g.restore(); }
       g.save(); g.globalCompositeOperation = 'source-atop'; const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, 'rgba(60,54,44,0.0)'); gr.addColorStop(0.8, 'rgba(60,54,44,0.1)'); gr.addColorStop(1, 'rgba(60,54,44,0.55)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); g.restore();
     });
-    const lineMat = (seed, drips) => { const t = paint(seed, 512, 2048, drips); t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping; return std({ map: t, transparent: true, alphaTest: 0.08, roughness: 0.55, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }); };
+    const lineMat = (seed, drips) => { const t = paint(seed, 512, 2048, drips); t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping; return std({ map: t, emissiveMap: t, emissive: 0x8a8a86, transparent: true, alphaTest: 0.08, roughness: 0.55, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }); };
     const LWm = 2.0;    // decal width in metres (the stroke itself is ~0.48 m)
     for (const sx of [-1, 1]) { const d = add(new THREE.PlaneGeometry(LWm, TH), lineMat(sx > 0 ? 3 : 4, true), sx * (TW - 0.01), TH / 2, LZ); d.rotation.y = -sx * Math.PI / 2; d.receiveShadow = true; }
-    const dc = add(new THREE.PlaneGeometry(LWm, TW * 2), lineMat(5, false), 0, TH - 0.01, LZ); dc.rotation.x = Math.PI / 2;
+    const dc = add(new THREE.PlaneGeometry(LWm, TW * 2), lineMat(5, false), 0, TH - 0.01, LZ); dc.rotation.set(Math.PI / 2, 0, Math.PI / 2);
     // paint over the cables, the column face and the sleepers' ends at the line
     const paintSolid = std({ color: 0xe8e5dc, roughness: 0.6 });
     for (const [sx, y, rr] of cables) { const c = add(new THREE.CylinderGeometry(rr + 0.003, rr + 0.003, 0.46, 10), paintSolid, sx * (TW - 0.12 - rr), y, LZ); c.rotation.x = Math.PI / 2; }
     // stencil on the west side of the line
-    const stTex = canvasTex(THREE, 1024, 256, (g, w, h) => { g.clearRect(0, 0, w, h); g.font = 'bold 120px "DejaVu Sans Condensed", sans-serif'; g.textAlign = 'center'; g.fillStyle = 'rgba(236,234,226,0.92)'; g.fillText('SEKTORENGRENZE', w / 2, 160);
+    const stTex = canvasTex(THREE, 1024, 256, (g, w, h) => { g.clearRect(0, 0, w, h); g.font = 'bold 104px "DejaVu Sans Condensed", sans-serif'; g.textAlign = 'center'; g.fillStyle = 'rgba(236,234,226,0.92)'; g.fillText('SEKTORENGRENZE', w / 2, 160);
       g.save(); g.globalCompositeOperation = 'destination-out'; g.fillStyle = '#000'; for (let x = 40; x < w; x += 61) g.fillRect(x, 50, 5, 130); const r = rng(8); for (let i = 0; i < 400; i++) g.fillRect(r() * w, r() * h, 2 + r() * 5, 2 + r() * 5); g.restore(); });
     stTex.wrapS = stTex.wrapT = THREE.ClampToEdgeWrapping;
     const st = add(new THREE.PlaneGeometry(2.2, 0.55), std({ map: stTex, transparent: true, alphaTest: 0.1, roughness: 0.6, depthWrite: false }), TW - 0.012, 1.75, LZ + 1.75); st.rotation.y = -Math.PI / 2;
@@ -808,20 +808,20 @@ export async function setup(THREE, renderer, W, H) {
       const l = new THREE.PointLight(col, inten, dist, 1.5); l.position.set(x - sx * 0.3, y, z); scene.add(l);
       return { b, h, l, base: inten };
     };
-    ctx.warm = [cage(TW, 3.3, 14, AMBER, 5, 11), cage(-TW, 3.3, 3, AMBER, 4, 10), cage(TW, 3.3, -5, AMBER, 5, 11)];
-    ctx.cold = [cage(-TW, 3.3, -24, COLD, 2.2, 10), cage(TW, 3.3, -37, COLD, 1.8, 9), cage(-TW, 3.6, -51.5, COLD, 4, 9)];
+    ctx.warm = [cage(TW, 3.3, 10, AMBER, 5, 11), cage(-TW, 3.3, 1, AMBER, 4, 10), cage(TW, 3.45, -9.4, AMBER, 6, 9)];
+    ctx.cold = [cage(TW, 3.3, -16.5, COLD, 2.2, 9), cage(-TW, 3.3, -28, COLD, 2.0, 10), cage(-TW, 3.6, -42.5, COLD, 6, 9)];
     // the guard far ahead on the cold side, backlit
     const gmat = std({ color: 0x0b0b0b, roughness: 0.95 });
-    const guard = borderGuard(THREE, gmat); guard.group.position.set(-2.9, 0.5, -49); guard.group.rotation.y = 0.35; scene.add(guard.group);
-    add(new THREE.BoxGeometry(1.2, 0.5, 2.4), std({ color: 0x2a2a28 }), -3.3, 0.25, -49);   // walkway ledge he stands on
+    const guard = borderGuard(THREE, gmat); guard.group.position.set(-2.9, 0.5, -40.5); guard.group.rotation.y = 0.35; scene.add(guard.group);
+    add(new THREE.BoxGeometry(1.2, 0.5, 2.4), std({ color: 0x2a2a28 }), -3.3, 0.25, -40.5);   // walkway ledge he stands on
     ctx.guard = guard;
     // headlight carried with the camera
-    const head = new THREE.SpotLight(0xfff0dc, 90, 0, 0.42, 0.55, 1.35);
-    head.castShadow = false; head.shadow.mapSize.set(1024, 1024); head.shadow.bias = -0.0006; head.shadow.camera.near = 0.3; head.shadow.camera.far = 60;
+    const head = new THREE.SpotLight(0xfff0dc, 45, 0, 0.5, 0.6, 1.4);
+    head.castShadow = true; head.shadow.mapSize.set(1024, 1024); head.shadow.bias = -0.0006; head.shadow.camera.near = 0.3; head.shadow.camera.far = 60;
     scene.add(head, head.target);
-    const hb = beam(THREE, 0xfff0dc, 20, 4.0, 0.03); hb.visible = false; scene.add(hb);
-    const dust = dustCloud(THREE, 4500, [-3.8, 0.2, -40], [3.8, 4.2, 8], 37, 0.014, H, fov, 0xfff0dc); dust.visible = false; scene.add(dust);
-    scene.add(new THREE.HemisphereLight(0x8a8f98, 0x0a0908, 0.035));
+    const hb = beam(THREE, 0xfff0dc, 20, 4.0, 0.03); scene.add(hb);
+    const dust = dustCloud(THREE, 4500, [-3.8, 0.2, -40], [3.8, 4.2, 8], 37, 0.014, H, fov, 0xfff0dc); scene.add(dust);
+    scene.add(new THREE.HemisphereLight(0x8a8f98, 0x0a0908, 0.05));
     Object.assign(ctx, { head, hb, dust });
   }
 
@@ -830,7 +830,6 @@ export async function setup(THREE, renderer, W, H) {
     dof: shot === 'years' ? { focus: 3.4, aperture: 0.0016, maxblur: 0.007 } : shot === 'wire' ? { focus: 3.0, aperture: 0.0014, maxblur: 0.008 } : null,
   });
   Object.assign(ctx, post);
-  if (shot === 'line') ctx.composer = null; // DBG
   return ctx;
 }
 
@@ -976,15 +975,16 @@ function updateWire(ctx, t) {
 }
 
 function updateLine(ctx, t) {
-  const { THREE, camera, LZ } = ctx;
-  // slow train: ~3 m/s, crossing the line at ~5.2 s
-  const z = 3.6 - 3.0 * t;
+  const { THREE, camera, LZ } = ctx; const TWL = 3.9;
+  // slow train: ~2.85 m/s, crossing the line at ~5.6 s
+  const z = 4.0 - 2.85 * t;
   const sway = Math.sin(t * 2.1) * 0.012 + Math.sin(t * 5.3) * 0.005;
   camera.position.set(1.85 + sway, 2.3 + Math.sin(t * 7.1) * 0.006, z);
-  // the driver's eye drifts right towards the line, then back down the track
-  const d = z - LZ;
-  const toLine = smooth((t - 0.5) / 2.5) * (1 - smooth((t - 3.9) / 1.6));
-  camera.lookAt(lerp(1.4, 3.9, toLine * 0.75), lerp(1.95, 2.3, toLine), z - lerp(14, 6, toLine));
+  // the driver turns his head to watch the line come up on the right, then looks ahead into the East
+  const w = smooth((t - 1.2) / 2.0) * (1 - smooth((t - 5.0) / 1.8));
+  const yaw = w * Math.min(0.62, Math.atan2(TWL - 1.85, Math.max(0.3, z - LZ)) * 0.95);
+  const pitch = 0.05 * w - 0.04;
+  camera.lookAt(camera.position.x + Math.sin(yaw) * 10, camera.position.y + pitch * 10, z - Math.cos(yaw) * 10);
   camera.rotateZ(sway * 0.4);
   const dir = new THREE.Vector3(); camera.getWorldDirection(dir);
   const hp = new THREE.Vector3(1.85, 1.15, z - 0.4);

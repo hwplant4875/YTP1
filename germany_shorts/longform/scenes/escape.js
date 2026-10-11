@@ -18,6 +18,8 @@
 //                     white light floods the carriage
 //   rare    (9.2 s) - dark tunnel at a sealed ghost platform: barbed wire, a lone guard, a searchlight sweeping;
 //                     the camera retreats into darkness
+//   teaser  (3.1 s) - wide iconic silhouette: one man beside the track, back to camera, a distant train's headlights
+//                     flood the tunnel behind him through mist (rim light, beams); slow push in
 //   deep    (6.1 s) - slow crane up over a branching tunnel junction, many tracks fading into dark portals, amber lamps
 import { AMBER, concreteTex, tileTex, canvasTex, rng, lerp } from './lib.js';
 import { makeComposer, glow, beam, normalFromHeight, borderGuard, smooth, flicker } from './look.js';
@@ -104,8 +106,8 @@ function wallNormal(THREE, rep) {
   return normalFromHeight(THREE, 256, 128, (g, w, h) => {
     g.fillStyle = '#888'; g.fillRect(0, 0, w, h);
     for (let y = 5; y < h; y += 8.5) { g.fillStyle = '#333'; g.fillRect(0, y, w, 1); }
-    for (let i = 0; i < 300; i++) { const v = 100 + r() * 80; g.fillStyle = `rgba(${v},${v},${v},0.5)`; g.fillRect(r() * w, r() * h, 1 + r() * 3, 1 + r() * 2); }
-  }, 2.2, rep);
+    for (let i = 0; i < 300; i++) { const v = 120 + r() * 40; g.fillStyle = `rgba(${v},${v},${v},0.3)`; g.fillRect(r() * w, r() * h, 1 + r() * 2, 1 + r() * 2); }
+  }, 1.2, rep);
 }
 
 function enamelTex(THREE, lines, { w = 1024, h = 256, font = 'bold 120px "DejaVu Sans Condensed", sans-serif', sub = null, seed = 5 } = {}) {
@@ -575,7 +577,7 @@ export async function setup(THREE, renderer, W, H) {
   const ctx = { THREE, scene, camera, shot, mists: [] };
   ctx.hemi = new THREE.HemisphereLight(0x8a93a3, 0x0c0b0a, 0.12); scene.add(ctx.hemi);
 
-  if (['tunnel', 'tech', 'plan', 'allowed', 'flag', 'door'].includes(shot)) {
+  if (['tunnel', 'tech', 'plan', 'allowed', 'flag', 'door', 'teaser'].includes(shot)) {
     scene.fog.density = 0.024; ctx.hemi.intensity = 0.9;
     // lamps: [side, z, lit, has PointLight]
     const lampSets = {
@@ -585,6 +587,7 @@ export async function setup(THREE, renderer, W, H) {
       allowed: [[1, 2, 0.45, true], [-1, 26, 0.55, true], [1, 52, 0.4, false]],
       flag: [[1, -2, 0.45, true], [-1, 30, 0.5, true], [1, 62, 0.4, true], [-1, 100, 0.35, false]],
       door: [[1, 4, 0.5, true], [1, 30, 0.4, false], [-1, -12, 0.4, false]],
+      teaser: [[1, 22, 0.3, false], [-1, 44, 0.25, false]],
     };
     ctx.lamps = buildTunnel(THREE, scene, { z0: -260, z1: 260, lamps: lampSets[shot] });
     // the signal and its relay box near Jannowitzbrücke
@@ -612,7 +615,7 @@ export async function setup(THREE, renderer, W, H) {
       f.hand[1].add(f.lamp.group); f.lamp.group.position.set(0, -0.06, 0.01);
       f.lamp.spot.castShadow = true; f.lamp.spot.shadow.mapSize.set(1024, 1024); f.lamp.spot.shadow.bias = -0.0006; f.lamp.spot.shadow.camera.near = 0.1;
     }
-    if (shot === 'flag' || shot === 'door') {
+    if (shot === 'flag' || shot === 'door' || shot === 'teaser') {
       const T = buildTrain(THREE, { cars: 3 }); T.group.rotation.y = Math.PI; T.group.position.set(TL, 0, 300); scene.add(T.group); ctx.T = T;
       if (shot === 'door') {
         const d = worker(THREE, { suit: 0x2a2c30, cap: 'driver', shadow: false }); ctx.driver = d; T.group.add(d.root);
@@ -621,11 +624,12 @@ export async function setup(THREE, renderer, W, H) {
       ctx.sp = sparks(THREE, scene);
     }
     const dbox = { tunnel: [-4, 4, 0.3, 4, -60, 2], tech: [-4.3, 0, 0.2, 3.6, -16, 4], plan: [-4.3, -1.5, 0.3, 3.4, -4, 1], allowed: [-4.3, 0, 0.2, 3.8, -4, 14],
-      flag: [-4.3, 1, 0.2, 3.8, 4, 40], door: [-4.3, 0, 0.2, 3.8, 4, 16] }[shot];
-    ctx.dust = dustCloud(THREE, scene, dbox, 900, 17, shot === 'plan' ? 0.012 : 0.025, 0.45);
+      flag: [-4.3, 1, 0.2, 3.8, 4, 40], teaser: [-4.2, 1.5, 0.2, 3.8, 6, 40], door: [-4.3, 0, 0.2, 3.8, 4, 16] }[shot];
+    ctx.dust = dustCloud(THREE, scene, dbox, shot === 'teaser' ? 2200 : 900, 17, shot === 'plan' ? 0.012 : 0.025, 0.45);
     // mist banks around the lamps and down the tunnel
     const r = rng(5);
     for (let i = 0; i < 16; i++) ctx.mists.push(mist(THREE, scene, lerp(-3, 3, r()), 1.0 + r() * 2.4, (shot === 'tunnel' ? -150 : -40) + i * (shot === 'tunnel' ? 10 : 9), 5 + r() * 4, 0.05 + r() * 0.04, i + 1));
+    if (shot === 'teaser') for (let i = 0; i < 10; i++) ctx.mists.push(mist(THREE, scene, lerp(-3.5, 1, r()), 0.8 + r() * 2.5, 16 + i * 5, 6 + r() * 4, 0.07, i + 30, 0xb8ab9a));
   } else if (shot === 'west') {
     await buildWest(THREE, scene, ctx, std);
   } else if (shot === 'rare') {
@@ -688,20 +692,20 @@ async function buildWest(THREE, scene, ctx, std) {
   // him, lying face down in the aisle, head towards the camera
   const f = worker(THREE, { lamp: true }); ctx.f = f; car.add(f.root);
   f.hand[1].add(f.lamp.group); setLamp(f.lamp, 0);
-  f.root.rotation.x = Math.PI / 2; f.root.position.set(-0.12, 0.15, 1.2);
+  f.root.rotation.x = Math.PI / 2; f.root.position.set(-0.05, 0.15, 0.75);
   f.root.rotation.z = 0.05;
   for (let i = 0; i < 2; i++) { f.th[i].rotation.set(0.04, 0, (i ? 1 : -1) * 0.1); f.kn[i].rotation.x = 0.12; f.bt[i].rotation.x = 1.15; }
   // arms bent up beside the head, elbows out, lying flat on the floor
-  f.sh[0].rotation.set(0.1, 0, -2.55); f.el[0].rotation.set(0, 0, 1.35);
-  f.sh[1].rotation.set(0.1, 0, 2.55); f.el[1].rotation.set(0, 0, -1.35);
+  f.sh[0].rotation.set(-0.05, 0, -0.32); f.el[0].rotation.set(-0.1, 0, 0.1);
+  f.sh[1].rotation.set(-0.05, 0, 0.32); f.el[1].rotation.set(-0.1, 0, -0.1);
   f.head.rotation.set(0, 1.15, 0);
   f.spine.rotation.set(0, 0, 0); f.hips.rotation.set(0, 0, 0);
   car.remove(f.root); car.add(f.root);
-  f.hand[1].remove(f.lamp.group); car.add(f.lamp.group); f.lamp.group.position.set(0.45, 0.2, 1.6); f.lamp.group.rotation.set(0, 0.5, 0);
+  f.hand[1].remove(f.lamp.group); car.add(f.lamp.group); f.lamp.group.position.set(0.4, 0.2, 1.1); f.lamp.group.rotation.set(0, 0.5, 0);
   // passengers
   const pax = [];
   const P = (x, z, ry, o) => { const p = worker(THREE, o); p.root.position.set(x, 0, z); p.root.rotation.y = ry; car.add(p.root); standPose(p); pax.push(p); return p; };
-  const a = P(0.58, 1.05, -2.4, { suit: 0x2c2b29, coat: true, cap: 'work', hat: false }); a.sh[0].rotation.x = -0.1;
+  const a = P(0.68, 2.9, -2.4, { suit: 0x2c2b29, coat: true, cap: 'work', hat: false }); a.sh[0].rotation.x = -0.1;
   const b = P(-0.75, 0.2, 1.0, { suit: 0x6b665d, skirt: true, coat: true, hat: false });
   const c = P(0.6, -1.6, -2.6, { suit: 0x3a3a40, coat: true, hat: true, cap: 'driver' });
   const d = P(-0.5, -3.4, 0.6, { suit: 0x55524c, hat: false });
@@ -801,7 +805,7 @@ async function buildWest(THREE, scene, ctx, std) {
 
 // ---------------------------------------------------------------- shot 8: the ghost platform
 function buildRare(THREE, scene, ctx, std) {
-  scene.fog = new THREE.FogExp2(0x060505, 0.035);
+  scene.fog = new THREE.FogExp2(0x060505, 0.026); ctx.hemi.intensity = 0.8;
   const z0 = -66, z1 = -22;
   ctx.lamps = buildTunnel(THREE, scene, { z0: -220, z1: 120, gapRight: [z0, z1], lamps: [[-1, -8, 0.3, false], [-1, -90, 0.3, false]] });
   const PW = 4.2, X0 = HW - 1.0, X1 = X0 + PW;   // platform from x=3.4 to 7.6
@@ -811,7 +815,7 @@ function buildRare(THREE, scene, ctx, std) {
   add(scene, new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.02, L), std({ color: 0xbab5a8 })), X0 + 0.15, 1.01, zc);
   const bw = add(scene, new THREE.Mesh(new THREE.PlaneGeometry(L, HT), tiles), X1, HT / 2, zc); bw.rotation.y = -Math.PI / 2; bw.receiveShadow = true;
   const ceil = add(scene, new THREE.Mesh(new THREE.PlaneGeometry(PW + 1, L), std({ map: concreteTex(THREE, [2, 10], 12, 50) })), X0 + PW / 2, HT, zc); ceil.rotation.x = Math.PI / 2;
-  for (const z of [z0, z1]) { const e = add(scene, new THREE.Mesh(new THREE.PlaneGeometry(PW + 1.1, HT), std({ map: wallTex(THREE, 4, 80) })), X0 + PW / 2 - 0.5, HT / 2, z); e.rotation.y = z === z0 ? 0 : Math.PI; }
+  for (const z of [z0, z1]) { const e = add(scene, new THREE.Mesh(new THREE.PlaneGeometry(X1 - HW + 0.02, HT), std({ map: wallTex(THREE, 4, 80) })), (HW + X1) / 2, HT / 2, z); e.rotation.y = z === z0 ? 0 : Math.PI; }
   // station name on the wall, faded
   const nm = enamelTex(THREE, 'Jannowitzbrücke', { seed: 14 });
   for (const z of [-55, -33]) add(scene, new THREE.Mesh(new THREE.PlaneGeometry(3.2, 0.8), std({ map: nm, roughness: 0.5 })), X1 - 0.01, 2.7, z).rotation.y = -Math.PI / 2;
@@ -833,7 +837,7 @@ function buildRare(THREE, scene, ctx, std) {
   for (const z of [-58, -44, -30]) {
     const b = add(scene, new THREE.Mesh(new THREE.SphereGeometry(0.06, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffd09a })), X0 + 2.0, HT - 0.5, z);
     const h = glow(THREE, AMBER, 1.3, 0.9); h.position.copy(b.position); scene.add(h);
-    const l = new THREE.PointLight(AMBER, 3.0, 9, 1.6); l.position.copy(b.position); scene.add(l);
+    const l = new THREE.PointLight(AMBER, 20, 14, 1.4); l.position.copy(b.position); scene.add(l);
     const bm = beam(THREE, AMBER, 3.4, 1.3, 0.05); bm.position.copy(b.position); scene.add(bm);
     ctx.pl.push({ b, h, l, bm });
   }
@@ -849,7 +853,7 @@ function buildRare(THREE, scene, ctx, std) {
   const sg = glow(THREE, 0xfff1dc, 2.4, 1.0); sg.position.set(0, 0, 0.35); yoke.add(sg);
   const sspot = new THREE.SpotLight(0xfff0d8, 220, 70, 0.11, 0.35, 1.0); sspot.position.set(0, 0, 0.25); yoke.add(sspot); sspot.target.position.set(0, 0, 20); yoke.add(sspot.target);
   sspot.castShadow = true; sspot.shadow.mapSize.set(1024, 1024); sspot.shadow.bias = -0.0005;
-  const sb = beam(THREE, 0xfff2de, 45, 2.6, 0.11); sb.rotation.x = -Math.PI / 2; sb.position.set(0, 0, 0.25); yoke.add(sb);
+  const sb = beam(THREE, 0xfff2de, 45, 2.6, 0.07); sb.rotation.x = -Math.PI / 2; sb.position.set(0, 0, 0.25); yoke.add(sb);
   ctx.search = { yoke, sg, sspot, sb };
   ctx.dust = dustCloud(THREE, scene, [-4, 7, 0.3, 4, -60, 10], 1400, 19, 0.035, 0.5);
   const r = rng(9);
@@ -858,11 +862,11 @@ function buildRare(THREE, scene, ctx, std) {
 
 // ---------------------------------------------------------------- shot 9: the junction
 function buildDeep(THREE, scene, ctx, std) {
-  scene.fog = new THREE.FogExp2(0x060504, 0.022);
+  scene.fog = new THREE.FogExp2(0x060504, 0.016); ctx.hemi.intensity = 0.9;
   const HH = 9;
   const floor = add(scene, new THREE.Mesh(new THREE.PlaneGeometry(120, 120), std({ map: concreteTex(THREE, [20, 20], 9, 50), roughness: 0.95 })), 0, 0, -20); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true;
   const ceil = add(scene, new THREE.Mesh(new THREE.PlaneGeometry(120, 120), std({ map: concreteTex(THREE, [12, 12], 11, 45) })), 0, HH, -20); ceil.rotation.x = Math.PI / 2;
-  const railM = std({ color: 0x9a9a98, metalness: 1, roughness: 0.28 });
+  const railM = std({ color: 0xb0b0ac, metalness: 0.7, roughness: 0.3 });
   const slM = std({ color: 0x2c2a27, roughness: 0.95 });
   const conc = std({ map: wallTex(THREE, 12, 84), roughness: 0.92 });
   // track paths: two tracks enter from the camera side and fan out into seven tunnel mouths
@@ -908,12 +912,11 @@ function buildDeep(THREE, scene, ctx, std) {
     // amber lamp over each mouth, and lamps receding inside
     const b = add(g, new THREE.Mesh(new THREE.SphereGeometry(0.09, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffd09a })), 0, TH + 1.25, 0.6);
     const h = glow(THREE, AMBER, 2.0, 0.9); h.position.copy(b.position); g.add(h);
-    const l = new THREE.PointLight(AMBER, 0, 14, 1.5); l.position.set(0, TH + 1.0, 1.2); g.add(l);
+    const l = new THREE.PointLight(AMBER, 0, 26, 1.3); l.position.set(0, TH + 1.0, 1.4); g.add(l);
     const bm = beam(THREE, AMBER, 5.4, 2.2, 0.045); bm.position.copy(b.position); g.add(bm);
     ctx.jl.push({ l, h, seed: i });
     for (let d = 14; d < 130; d += 16 + (i % 3) * 3) {
       const hh = glow(THREE, AMBER, 1.0, 0.75); hh.position.set((d / 16) % 2 ? -TW / 2 + 0.2 : TW / 2 - 0.2, 3.3, -d); g.add(hh);
-      if (d < 20 && i % 2 === 0) { const ll = new THREE.PointLight(AMBER, 2.2, 8, 1.6); ll.position.copy(hh.position); g.add(ll); }
     }
     portals.push(g);
     // the label plate above each mouth: track number
@@ -937,14 +940,14 @@ function buildDeep(THREE, scene, ctx, std) {
     const c = add(scene, new THREE.Mesh(new THREE.BoxGeometry(0.45, HH, 0.45), steel), x, HH / 2, z); c.castShadow = true;
   }
   // hanging lamps over the hall
-  const hl = [[-6, -6], [7, -12], [0, 8], [-14, -16]];
+  const hl = [[-6, -4], [7, -10], [-9, 10], [12, 6]];
   hl.forEach(([x, z], i) => {
     add(scene, new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 2.2), steel), x, HH - 1.1, z);
     const b = add(scene, new THREE.Mesh(new THREE.SphereGeometry(0.08, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffd09a })), x, HH - 2.3, z);
     const shade = add(scene, new THREE.Mesh(new THREE.ConeGeometry(0.35, 0.22, 20, 1, true), std({ color: 0x222, side: THREE.DoubleSide })), x, HH - 2.18, z);
     const h = glow(THREE, AMBER, 1.6, 0.9); h.position.copy(b.position); scene.add(h);
     const bm = beam(THREE, AMBER, 6.5, 2.6, 0.05); bm.position.copy(b.position); scene.add(bm);
-    if (i < 3) { const l = new THREE.PointLight(AMBER, 0, 16, 1.4); l.position.copy(b.position); scene.add(l); ctx.jl.push({ l, h, seed: 10 + i }); }
+    if (i < 4) { const l = new THREE.PointLight(AMBER, 0, 24, 1.3); l.position.copy(b.position); scene.add(l); ctx.jl.push({ l, h, seed: 10 + i }); }
   });
   ctx.dust = dustCloud(THREE, scene, [-14, 14, 0.3, 8, -30, 22], 1600, 29, 0.05, 0.45);
   const r = rng(13);
@@ -1107,6 +1110,20 @@ export function update(ctx, t) {
     camera.position.set(lerp(-3.5, -3.3, kk), lerp(1.55, 1.75, kk), lerp(4.4, 6.9, kk));
     camera.lookAt(lerp(-3.2, -3.45, kk), lerp(2.05, 2.35, kk), 16.5);
     camera.fov = lerp(42, 33, kk); camera.updateProjectionMatrix();
+  } else if (shot === 'teaser') {
+    // one man beside the track, back to us; a train's headlights flood the tunnel far beyond him
+    setSignal(ctx.sig, 0, 0, 0); ctx.rb.door.rotation.y = 0;
+    const T = ctx.T; T.group.position.set(TL, 0, 75 - 4 * t);
+    setHeadlights(T, smooth(seg(t, 0.0, 0.6)) * 0.4 + 0.6); T.headSpot.intensity = 120; T.beams.forEach(b => b.material.uniforms.opacity.value = 0.03); T.headGlows.forEach((h, i) => { if (i % 2) h.material.opacity = 0.22; });
+    updateSparks(ctx.sp, t, [], 0, 0);
+    f.root.position.set(-3.72, 0, 13); f.root.rotation.y = 0.08; standPose(f, t);
+    f.sh[1].rotation.set(-0.12, 0, 0.12); f.el[1].rotation.x = -0.25; hangLamp(f, 1, 0.03 * Math.sin(t * 1.6));
+    f.head.rotation.set(-0.05, 0.08, 0);
+    setLamp(f.lamp, 0.25);
+    const k = smooth(seg(t, 0, 5));
+    camera.position.set(lerp(-3.05, -3.1, k), lerp(0.95, 1.05, k), lerp(5.6, 6.9, k));
+    camera.lookAt(-3.0, 1.75, 40);
+    camera.fov = 40; camera.updateProjectionMatrix();
   } else if (shot === 'west') {
     const S = ctx.S(t), v = t < 2.2 ? 12 : 12 * Math.exp(-(t - 2.2) / 1.7);
     ctx.out.position.z = S;
@@ -1126,32 +1143,37 @@ export function update(ctx, t) {
     // passengers sway with the train
     const sway = 0.03 * Math.sin(t * 2.1) * (v / 12) + (t > 2.2 && t < 5 ? -0.04 * Math.exp(-(t - 2.2)) : 0);
     ctx.pax.forEach((p, i) => { p.root.rotation.z = sway * (i % 2 ? 1 : -1) * 0.6; p.spine.rotation.x = 0.03 + sway * 0.8; });
-    f.root.position.y = 0.14 + 0.004 * Math.sin(t * 23) * (v / 12);
+    f.root.position.y = 0.15 + 0.004 * Math.sin(t * 23) * (v / 12);
     // camera on the floor beside his head, vibrating, slight push and tilt up as the light floods in
     const k = smooth(seg(t, 0, 9));
     const vib = (v / 12) * 0.006 * (Math.sin(t * 41) + Math.sin(t * 67.3));
     camera.position.set(0.42 + vib, 0.3 + vib, lerp(4.3, 4.0, k));
-    camera.lookAt(lerp(-0.35, -0.3, k), lerp(0.62, 0.78, k), -2.5);
-    camera.fov = 52; camera.updateProjectionMatrix();
+    camera.lookAt(lerp(-0.3, -0.25, k), lerp(0.5, 0.68, k), -2.5);
+    camera.fov = 48; camera.updateProjectionMatrix();
     if (ctx.bokeh) ctx.bokeh.uniforms.focus.value = 2.6;
     ctx.renderer && 0;
   } else if (shot === 'rare') {
     // searchlight sweeps across the tracks; camera retreats into the dark
     const s = ctx.search;
-    const a = Math.sin(t * 0.55 - 0.6);
-    s.yoke.rotation.set(0.12 + 0.05 * Math.sin(t * 0.9), Math.PI + 0.25 + a * 0.75, 0);
+    const a = Math.sin(t * 0.62 - 0.4);
+    s.yoke.rotation.set(0.06 + 0.03 * Math.sin(t * 0.9), -0.72 + 0.62 * a, 0);
     const k = smooth(seg(t, 0, 11));
-    camera.position.set(lerp(-1.1, -1.25, k), lerp(1.75, 1.55, k), lerp(-8, 6, k));
-    camera.lookAt(lerp(3.6, 3.2, k), lerp(1.8, 1.7, k), -42);
+    camera.position.set(lerp(1.0, 0.9, k), lerp(1.9, 1.7, k), lerp(-24, -4, k));
+    camera.lookAt(lerp(4.6, 3.4, k), lerp(1.7, 1.55, k), -52);
     camera.fov = 40; camera.updateProjectionMatrix();
     ctx.guard.head.rotation.y = 0.4 * Math.sin(t * 0.55 - 1.2);
+    // the lamp's glare only when it faces the camera
+    s.yoke.updateMatrixWorld(true);
+    const fwd = new THREE.Vector3(0, 0, 1).transformDirection(s.yoke.matrixWorld);
+    const toCam = camera.position.clone().sub(new THREE.Vector3().setFromMatrixPosition(s.yoke.matrixWorld)).normalize();
+    s.sg.material.opacity = Math.pow(Math.max(0, fwd.dot(toCam)), 3);
     const dim = 1 - 0.55 * smooth(seg(t, 6.5, 9.8));
-    ctx.pl.forEach((p, i) => { const v = dim * (0.92 + 0.08 * Math.sin(t * 9 + i)); p.l.intensity = 3.0 * v; p.h.material.opacity = 0.9 * v; p.bm.material.uniforms.opacity.value = 0.05 * v; });
+    ctx.pl.forEach((p, i) => { const v = dim * (0.92 + 0.08 * Math.sin(t * 9 + i)); p.l.intensity = 20 * v; p.h.material.opacity = 0.9 * v; p.bm.material.uniforms.opacity.value = 0.05 * v; });
   } else if (shot === 'deep') {
     const k = smooth(seg(t, 0, 8.5));
     camera.position.set(lerp(-1.5, 1.2, k), lerp(0.9, 6.8, k), lerp(22, 9, k));
     camera.lookAt(lerp(-0.5, 0.5, k), lerp(1.6, 1.0, k), -40);
     camera.fov = 44; camera.updateProjectionMatrix();
-    ctx.jl.forEach(j => { const v = 0.9 + 0.1 * Math.sin(t * 6 + j.seed * 2) * Math.sin(t * 1.7 + j.seed); j.l.intensity = 5.5 * v; j.h.material.opacity = 0.9 * v; });
+    ctx.jl.forEach(j => { const v = 0.9 + 0.1 * Math.sin(t * 6 + j.seed * 2) * Math.sin(t * 1.7 + j.seed); j.l.intensity = 30 * v; j.h.material.opacity = 0.9 * v; });
   }
 }

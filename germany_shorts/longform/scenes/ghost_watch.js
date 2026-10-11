@@ -527,7 +527,7 @@ export async function setup(THREE, renderer, W, H) {
   if (shot === 'eachother') { key.position.set(-6.8, HT - 0.65, 20.3); key.target.position.set(-7.0, 1, 20.6); }
   if (shot === 'boots') { key.position.set(-4.4, 1.7, -17.6); key.target.position.set(-5.8, 0.9, -21); key.angle = 0.5; }
   if (shot === 'nostop') { key.position.set(-6.0, HT - 0.65, -6); key.target.position.set(-6.4, 1, -6.4); }
-  const fill = new THREE.PointLight(0xffb070, 0, 3.2, 1.5); fill.position.set(-4.7, 2.6, 19.8); scene.add(fill); fill.visible = shot === 'eachother';
+  const fill = new THREE.PointLight(0xffb070, 0, 3.2, 1.5); fill.position.set(-6.2, 2.9, 19.6); scene.add(fill); fill.visible = shot === 'eachother';
   const gA = makeGuard({ rifle: 'slung' }), gB = makeGuard({ rifle: 'slung' });
   scene.add(gA.group, gB.group);
   const gRifle = makeRifle(); scene.add(gRifle); gRifle.visible = false;
@@ -604,7 +604,7 @@ export function update(ctx, t) {
     const step = seg(t, 9.0, 10.6);
     ctx.officer.group.position.set(-8.72, 1, -2.4 + 0.65 * step);
     ctx.officer.head.rotation.y = 0.2 * seg(t, 10.5, 12);
-    ctx.watchLight.intensity = 0.4;
+    ctx.watchLight.intensity = 0;
     if (t < 5.6) {
       // platform: guards in the gloom, then push in on the slit where two pairs of eyes catch the light
       const k1 = seg(t, 0, 5.8), k0 = seg(t, 0.8, 4.4);
@@ -686,7 +686,7 @@ export function update(ctx, t) {
     ctx.fingers.forEach((f, k) => { f.f.rotation.x = -(0.25 + tw * (1 + k * 0.3) + 1.3 * cl) * f.len; f.j.rotation.x = -(0.3 + tw + 1.4 * cl); });
     ctx.thumb.rotation.x = -0.6 * cl;
   } else if (shot === 'eachother') {
-    placeGuard(gA, -5.25, 18.3, -0.1); placeGuard(gB, -7.2, 20.6, Math.PI - 0.5); ctx.key.intensity = 14; ctx.fill.intensity = 2.2;
+    placeGuard(gA, -5.25, 18.3, -0.1); placeGuard(gB, -7.2, 20.6, Math.PI - 0.5); ctx.key.intensity = 14; ctx.fill.intensity = 4 * (0.3 + 0.7 * seg(t, 0.4, 1.4));
     breathe(gA, 0); breathe(gB, 2);
     const glance = seg(t, 0.6, 1.6) * (1 - seg(t, 3.0, 4.0));
     gA.head.rotation.y = -0.85 * glance; gA.head.rotation.x = 0.05 * glance;
