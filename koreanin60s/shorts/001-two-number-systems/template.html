@@ -23,7 +23,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#FFF4E6
 .tile .r{font-family:GmarketSans,Pretendard;font-weight:600;font-size:46px;opacity:.9}
 .tile .hz{position:absolute;font-size:250px;font-weight:900;opacity:.13;font-family:"IPAGothic"}
 /* bird + bubble */
-#bird{position:absolute;left:380px;top:1330px;width:320px;height:320px;transform-origin:160px 305px}
+#bird{position:absolute;left:380px;top:1200px;width:320px;height:320px;transform-origin:160px 305px}
 #bird .pose,#bigbird .pose{position:absolute;inset:0;display:none}
 #bird img,#bigbird img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 14px 16px rgba(120,90,80,.25))}
 #bubble{position:absolute;left:372px;top:1262px;width:670px;min-height:200px;background:#fff;border-radius:44px;padding:30px 40px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 16px 0 rgba(0,0,0,.07),0 24px 50px rgba(120,80,70,.16);transform-origin:0 60%}
@@ -61,7 +61,6 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#FFF4E6
   <div class="pop card tile" id="n_t1" style="left:60px;top:470px;background:#fff"><div class="d p">1</div><div class="kk p">하나</div><div class="r">hana</div></div>
   <div class="pop card tile" id="n_t2" style="left:395px;top:470px;background:#fff"><div class="d p">2</div><div class="kk p">둘</div><div class="r">dul</div></div>
   <div class="pop card tile" id="n_t3" style="left:730px;top:470px;background:#fff"><div class="d p">3</div><div class="kk p">셋</div><div class="r">set</div></div>
-  <div class="pop" id="n_sub" style="left:0;width:1080px;top:880px;text-align:center;font-size:44px;font-weight:800;color:#9a7f78">pure Korean · since forever 🇰🇷</div>
 </div>
 <!-- SINO -->
 <div class="scene" id="sc_sino">
@@ -69,7 +68,6 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#FFF4E6
   <div class="pop card tile" id="s_t1" style="left:60px;top:470px;background:#fff;overflow:hidden"><span class="hz m">一</span><div class="d m">1</div><div class="kk m">일</div><div class="r">il</div></div>
   <div class="pop card tile" id="s_t2" style="left:395px;top:470px;background:#fff;overflow:hidden"><span class="hz m">二</span><div class="d m">2</div><div class="kk m">이</div><div class="r">i</div></div>
   <div class="pop card tile" id="s_t3" style="left:730px;top:470px;background:#fff;overflow:hidden"><span class="hz m">三</span><div class="d m">3</div><div class="kk m">삼</div><div class="r">sam</div></div>
-  <div class="pop" id="s_sub" style="left:0;width:1080px;top:880px;text-align:center;font-size:44px;font-weight:800;color:#7f9a92">from Chinese characters 一 二 三</div>
 </div>
 <!-- CLOCK -->
 <div class="scene" id="sc_clock">
@@ -172,9 +170,9 @@ window.render=function(t){
    const shake=(t>S('h2')+.75&&t<S('h2')+1.3)?Math.sin(t*90)*8*(1-(t-S('h2')-.75)/.55):0;
    $('h_a').style.transform+=` translateX(${shake}px)`;$('h_b').style.transform+=` translateX(${-shake}px)`}
   // NATIVE
-  pop('n_ch',t,S('n0')+.05,{base:'translateX(-50%) '});pop('n_t1',t,S('n1a')-.04,{from:[0,120]});pop('n_t2',t,S('n1b')-.04,{from:[0,120]});pop('n_t3',t,S('n1c')-.04,{from:[0,120]});pop('n_sub',t,E('n1c')+.1);
+  pop('n_ch',t,S('n0')+.05,{base:'translateX(-50%) '});pop('n_t1',t,S('n1a')-.04,{from:[0,120]});pop('n_t2',t,S('n1b')-.04,{from:[0,120]});pop('n_t3',t,S('n1c')-.04,{from:[0,120]});
   // SINO
-  pop('s_ch',t,S('s0')+.05,{base:'translateX(-50%) '});pop('s_t1',t,S('s1a')-.04,{from:[0,120]});pop('s_t2',t,S('s1b')-.04,{from:[0,120]});pop('s_t3',t,S('s1c')-.04,{from:[0,120]});pop('s_sub',t,S('s0')+1.2);
+  pop('s_ch',t,S('s0')+.05,{base:'translateX(-50%) '});pop('s_t1',t,S('s1a')-.04,{from:[0,120]});pop('s_t2',t,S('s1b')-.04,{from:[0,120]});pop('s_t3',t,S('s1c')-.04,{from:[0,120]});
   // CLOCK
   {const t0=S('c0');const p=eInOut(cl((t-t0-.2)/1.6));const tot=3.5*p; // hours
    const mA=tot*360, hA=tot*30;$('hh').setAttribute('transform',`rotate(${hA})`);$('mh').setAttribute('transform',`rotate(${mA})`);
