@@ -27,6 +27,15 @@ def grade(f, g):
     saturation boost, then two-radius sharpen (fine detail + structure)."""
     if not g:
         return f
+    exp, lift = g.get('exposure', 0), g.get('brightness', 0)
+    if exp or lift:
+        # exposure gain (stops) with a soft highlight shoulder, then a gamma lift of the mids
+        x = np.clip(f / 255.0, 0, 1) * 2 ** exp
+        knee = 0.85
+        over = np.maximum(x - knee, 0)
+        x = np.where(x > knee, knee + (1 - knee) * (1 - np.exp(-over / (1 - knee))), x)
+        x = x ** (1 / (1 + lift))
+        f = 255 * x
     clar = g.get('clarity', 0.35)
     if clar:
         lum = f.mean(axis=2)

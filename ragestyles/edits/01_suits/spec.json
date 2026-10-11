@@ -329,6 +329,8 @@
   "contrast": 0.12,
   "saturation": 0.08,
   "sharpen": 0.7,
-  "structure": 0.35
+  "structure": 0.35,
+  "exposure": 0.2,
+  "brightness": 0.12
  }
 }
