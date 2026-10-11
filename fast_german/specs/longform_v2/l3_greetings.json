@@ -1,0 +1,5111 @@
+{
+ "id": "l3_greetings",
+ "title": "German Greetings & Basic Phrases for Beginners",
+ "landscape": true,
+ "bg": "road",
+ "music": [
+  "/mnt/project-files/fast_german/cache/music/incompetech/lobby_time_loop.wav",
+  "/mnt/project-files/fast_german/cache/music/incompetech/easy_lemon_loop.wav"
+ ],
+ "scenes": [
+  {
+   "lines": [
+    [
+     {
+      "en": "Fifty German phrases in ten minutes.",
+      "show": [
+       "t1",
+       "t2"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "By the end, you can say hello, introduce yourself, and get by when you don't understand."
+     }
+    ],
+    [
+     {
+      "en": "When you see this circle, say it out loud.",
+      "show": [
+       "tm"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 1.0
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "t1",
+     "type": "word",
+     "de": "50 German phrases",
+     "size": 150,
+     "x": 960,
+     "y": 420
+    },
+    {
+     "id": "t2",
+     "type": "text",
+     "text": "in 10 minutes",
+     "size": 90,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 580
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 960,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Part 1. Saying hello",
+      "show": [
+       "i",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.6,
+   "header": "Part 1 \u00b7 Saying hello",
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "waving-hand-default",
+     "s": 300,
+     "x": 960,
+     "y": 430
+    },
+    {
+     "id": "t",
+     "type": "word",
+     "de": "Saying hello",
+     "size": 130,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 720
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hello.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Hallo.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Hallo.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "waving-hand-default",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Hallo",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Hello",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hello, everyone.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Hallo zusammen.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Hallo zusammen.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "people-hugging",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Hallo zusammen",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Hello, everyone",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Good morning.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Guten Morgen.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Guten Morgen.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "sunrise",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Guten Morgen",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Good morning",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Good day.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Guten Tag.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Guten Tag.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Guten Tag",
+      "show": [
+       "tip"
+      ]
+     },
+     {
+      "en": "in shops,"
+     },
+     {
+      "de": "Hallo"
+     },
+     {
+      "en": "with friends."
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "sun",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Guten Tag",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Good day",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "Guten Tag in shops, Hallo with friends.",
+     "size": 62,
+     "x": 960,
+     "y": 975
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Good evening.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Guten Abend.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Guten Abend.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "sunset",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Guten Abend",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Good evening",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hi, in the north.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Moin.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Moin.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "en": "In the north, people say",
+      "show": [
+       "tip"
+      ]
+     },
+     {
+      "de": "Moin"
+     },
+     {
+      "en": "all day long."
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "anchor",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Moin",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Hi, in the north",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "In the north, people say Moin all day long.",
+     "size": 62,
+     "x": 960,
+     "y": 975
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hi, in the south.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Servus.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Servus.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Servus",
+      "show": [
+       "tip"
+      ]
+     },
+     {
+      "en": "means hi and bye."
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "snow-capped-mountain",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Servus",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Hi, in the south",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "Servus means hi and bye.",
+     "size": 62,
+     "x": 960,
+     "y": 975
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hello, in Bavaria and Austria.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Gr\u00fc\u00df Gott.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Gr\u00fc\u00df Gott.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "church",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Gr\u00fc\u00df Gott",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Hello, in Bavaria and Austria",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Part 2. How are you?",
+      "show": [
+       "i",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.6,
+   "header": "Part 2 \u00b7 How are you?",
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "smiling-face",
+     "s": 300,
+     "x": 960,
+     "y": 430
+    },
+    {
+     "id": "t",
+     "type": "word",
+     "de": "How are you?",
+     "size": 130,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 720
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "How are you?",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Wie geht's?",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Wie geht's?",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "en": "Casual, for friends.",
+      "show": [
+       "tip"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "smiling-face",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Wie geht's?",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "How are you?",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "Casual, for friends.",
+     "size": 62,
+     "x": 960,
+     "y": 975
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "How are you? Polite.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Wie geht es Ihnen?",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Wie geht es Ihnen?",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Ihnen",
+      "show": [
+       "tip"
+      ]
+     },
+     {
+      "en": "is the polite you. Use it with strangers."
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "necktie",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Wie geht es Ihnen?",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "How are you? Polite",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "Ihnen is the polite you. Use it with strangers.",
+     "size": 62,
+     "x": 960,
+     "y": 975
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Good, thanks.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Gut, danke.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Gut, danke.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "thumbs-up-default",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Gut, danke.",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Good, thanks",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Very good!",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Sehr gut!",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Sehr gut!",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "star-struck",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Sehr gut!",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Very good!",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "So-so.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Es geht.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Es geht.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "neutral-face",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Es geht.",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "So-so",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Not so good.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Nicht so gut.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Nicht so gut.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "pensive-face",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Nicht so gut.",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Not so good",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "And you?",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Und dir?",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Und dir?",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "en": "With strangers, say",
+      "show": [
+       "tip"
+      ]
+     },
+     {
+      "de": "Und Ihnen?"
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "index-pointing-at-the-viewer-default",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Und dir?",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "And you?",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "With strangers, say Und Ihnen?",
+     "size": 62,
+     "x": 960,
+     "y": 975
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hey, what's up?",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Na?",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Na?",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "en": "One word. The most German greeting.",
+      "show": [
+       "tip"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "winking-face",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Na?",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Hey, what's up?",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "One word. The most German greeting.",
+     "size": 62,
+     "x": 960,
+     "y": 975
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Part 3. Introducing yourself",
+      "show": [
+       "i",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.6,
+   "header": "Part 3 \u00b7 Introducing yourself",
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "bust-in-silhouette",
+     "s": 300,
+     "x": 960,
+     "y": 430
+    },
+    {
+     "id": "t",
+     "type": "word",
+     "de": "Introducing yourself",
+     "size": 130,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 720
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "My name is Anna.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ich hei\u00dfe Anna.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ich hei\u00dfe Anna.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "name-badge",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Ich hei\u00dfe Anna.",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "My name is Anna",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "What's your name?",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Wie hei\u00dft du?",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Wie hei\u00dft du?",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "red-question-mark",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Wie hei\u00dft du?",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "What's your name?",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "My name is Anna. A bit more formal.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Mein Name ist Anna.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Mein Name ist Anna.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "identification-card",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Mein Name ist Anna.",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "My name is Anna. A bit more formal",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Nice to meet you!",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Freut mich!",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Freut mich!",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "handshake",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Freut mich!",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Nice to meet you!",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "I'm from Canada.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ich komme aus Kanada.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ich komme aus Kanada.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "globe-showing-americas",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Ich komme aus Kanada.",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "I'm from Canada",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Where are you from?",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Woher kommst du?",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Woher kommst du?",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "world-map",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Woher kommst du?",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Where are you from?",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "I live in Berlin.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ich wohne in Berlin.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ich wohne in Berlin.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "house",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Ich wohne in Berlin.",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "I live in Berlin",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "I'm learning German.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ich lerne Deutsch.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ich lerne Deutsch.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "en": "Say this, and Germans will slow down for you.",
+      "show": [
+       "tip"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "books",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Ich lerne Deutsch.",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "I'm learning German",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "Say this, and Germans will slow down for you.",
+     "size": 62,
+     "x": 960,
+     "y": 975
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Quick quiz! What do you say?",
+      "show": [
+       "i",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "red-question-mark",
+     "s": 300,
+     "x": 960,
+     "y": 430
+    },
+    {
+     "id": "t",
+     "type": "word",
+     "de": "Quick quiz!",
+     "size": 140,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 720
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "You meet your boss in the morning.",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Guten Morgen!",
+      "show": [
+       "a",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.8
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "office-building",
+     "s": 360,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "You meet your boss in the morning",
+     "size": 64,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 330
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 560
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Guten Morgen!",
+     "size": 150,
+     "max_w": 900,
+     "x": 1370,
+     "y": 800
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 1040,
+     "h": 300,
+     "width": 14,
+     "x": 1370,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "You meet a friend in Munich.",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Servus!",
+      "show": [
+       "a",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.8
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "beer-mug",
+     "s": 360,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "You meet a friend in Munich",
+     "size": 64,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 330
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 560
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Servus!",
+     "size": 150,
+     "max_w": 900,
+     "x": 1370,
+     "y": 800
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 1040,
+     "h": 300,
+     "width": 14,
+     "x": 1370,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Someone tells you their name.",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Freut mich!",
+      "show": [
+       "a",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.8
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "handshake",
+     "s": 360,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "Someone tells you their name",
+     "size": 64,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 330
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 560
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Freut mich!",
+     "size": 150,
+     "max_w": 900,
+     "x": 1370,
+     "y": 800
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 1040,
+     "h": 300,
+     "width": 14,
+     "x": 1370,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Part 4. Polite essentials",
+      "show": [
+       "i",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.6,
+   "header": "Part 4 \u00b7 Polite essentials",
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "folded-hands-default",
+     "s": 300,
+     "x": 960,
+     "y": 430
+    },
+    {
+     "id": "t",
+     "type": "word",
+     "de": "Polite essentials",
+     "size": 130,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 720
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Please.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Bitte.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Bitte.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Bitte",
+      "show": [
+       "tip"
+      ]
+     },
+     {
+      "en": "also means you're welcome, and here you go."
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "folded-hands-default",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Bitte",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Please",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "Bitte also means you're welcome, and here you go.",
+     "size": 62,
+     "x": 960,
+     "y": 975
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Thanks.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Danke.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Danke.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "red-heart",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Danke",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Thanks",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Thank you very much.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Danke sch\u00f6n.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Danke sch\u00f6n.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "bouquet",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Danke sch\u00f6n",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Thank you very much",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "You're welcome.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Gern geschehen.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Gern geschehen.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "smiling-face-with-smiling-eyes",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Gern geschehen",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "You're welcome",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Excuse me.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Entschuldigung.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Entschuldigung.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "en": "Use it to get attention, or to say sorry.",
+      "show": [
+       "tip"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "person-raising-hand-default",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Entschuldigung",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Excuse me",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "Use it to get attention, or to say sorry.",
+     "size": 62,
+     "x": 960,
+     "y": 975
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "I'm sorry.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Tut mir leid.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Tut mir leid.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "crying-face",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Tut mir leid",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "I'm sorry",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Yes.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ja.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ja.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "check-mark-button",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Ja",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Yes",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "No.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Nein.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Nein.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "cross-mark",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Nein",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "No",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "No problem.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Kein Problem.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Kein Problem.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "ok-hand-default",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Kein Problem",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "No problem",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "All right! Got it!",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Alles klar!",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Alles klar!",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "en": "Germans say",
+      "show": [
+       "tip"
+      ]
+     },
+     {
+      "de": "Alles klar"
+     },
+     {
+      "en": "all the time."
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "thumbs-up-default",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Alles klar!",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "All right! Got it!",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "Germans say Alles klar all the time.",
+     "size": 62,
+     "x": 960,
+     "y": 975
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Part 5. When you don't understand",
+      "show": [
+       "i",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.6,
+   "header": "Part 5 \u00b7 When you don't understand",
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "thinking-face",
+     "s": 300,
+     "x": 960,
+     "y": 430
+    },
+    {
+     "id": "t",
+     "type": "word",
+     "de": "When you don't understand",
+     "size": 130,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 720
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "I don't understand.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ich verstehe nicht.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ich verstehe nicht.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "confused-face",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Ich verstehe nicht.",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "I don't understand",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Once more, please.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Noch einmal, bitte.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Noch einmal, bitte.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "repeat-button",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Noch einmal, bitte.",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Once more, please",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Slower, please.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Langsamer, bitte.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Langsamer, bitte.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "snail",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Langsamer, bitte.",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Slower, please",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Do you speak English?",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Sprechen Sie Englisch?",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Sprechen Sie Englisch?",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "speaking-head",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Sprechen Sie Englisch?",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Do you speak English?",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "What does that mean?",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Was bedeutet das?",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Was bedeutet das?",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "thinking-face",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Was bedeutet das?",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "What does that mean?",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "How do you say that in German?",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Wie sagt man das auf Deutsch?",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Wie sagt man das auf Deutsch?",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "speech-balloon",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Wie sagt man das auf Deutsch?",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "How do you say that in German?",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "I only speak a little German.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ich spreche nur ein bisschen Deutsch.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ich spreche nur ein bisschen Deutsch.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "pinching-hand-default",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Ich spreche nur ein bisschen Deutsch.",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "I only speak a little German",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Part 6. Saying goodbye",
+      "show": [
+       "i",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.6,
+   "header": "Part 6 \u00b7 Saying goodbye",
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "waving-hand-default",
+     "s": 300,
+     "x": 960,
+     "y": 430
+    },
+    {
+     "id": "t",
+     "type": "word",
+     "de": "Saying goodbye",
+     "size": 130,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 720
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Bye.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Tsch\u00fcss.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Tsch\u00fcss.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "waving-hand-default",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Tsch\u00fcss",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Bye",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Goodbye.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Auf Wiedersehen.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Auf Wiedersehen.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "en": "Polite, for shops and strangers.",
+      "show": [
+       "tip"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "door",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Auf Wiedersehen",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Goodbye",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    },
+    {
+     "id": "tip",
+     "type": "text",
+     "text": "Polite, for shops and strangers.",
+     "size": 62,
+     "x": 960,
+     "y": 975
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "See you later.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Bis sp\u00e4ter.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Bis sp\u00e4ter.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "hourglass-not-done",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Bis sp\u00e4ter",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "See you later",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "See you tomorrow.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Bis morgen.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Bis morgen.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "calendar",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Bis morgen",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "See you tomorrow",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "See you soon.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Bis bald.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Bis bald.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "alarm-clock",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Bis bald",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "See you soon",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Have a nice day!",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Sch\u00f6nen Tag noch!",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Sch\u00f6nen Tag noch!",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "sun-with-face",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Sch\u00f6nen Tag noch!",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Have a nice day!",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Good night.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Gute Nacht.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Gute Nacht.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "crescent-moon",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Gute Nacht",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Good night",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Bye. Yes, Germans say it too.",
+      "show": [
+       "i",
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ciao.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ciao.",
+      "speed": 0.8
+     }
+    ],
+    [
+     {
+      "pause": 2.2,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "pinched-fingers-default",
+     "s": 400,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Ciao",
+     "size": 170,
+     "max_w": 900,
+     "x": 1370,
+     "y": 430
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "Bye. Yes, Germans say it too",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 630
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 130,
+     "dur": 2.2,
+     "x": 1370,
+     "y": 830
+    }
+   ],
+   "hold": 0.3
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Quick quiz! What do you say?",
+      "show": [
+       "i",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "red-question-mark",
+     "s": 300,
+     "x": 960,
+     "y": 430
+    },
+    {
+     "id": "t",
+     "type": "word",
+     "de": "Quick quiz!",
+     "size": 140,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 720
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "You leave a bakery.",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Sch\u00f6nen Tag noch!",
+      "show": [
+       "a",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.8
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "baguette-bread",
+     "s": 360,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "You leave a bakery",
+     "size": 64,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 330
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 560
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Sch\u00f6nen Tag noch!",
+     "size": 150,
+     "max_w": 900,
+     "x": 1370,
+     "y": 800
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 1040,
+     "h": 300,
+     "width": 14,
+     "x": 1370,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "You didn't catch that.",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Noch einmal, bitte.",
+      "show": [
+       "a",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.8
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "ear-default",
+     "s": 360,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "You didn't catch that",
+     "size": 64,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 330
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 560
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Noch einmal, bitte.",
+     "size": 150,
+     "max_w": 900,
+     "x": 1370,
+     "y": 800
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 1040,
+     "h": 300,
+     "width": 14,
+     "x": 1370,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Someone says Danke.",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Gern geschehen.",
+      "show": [
+       "a",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.8
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "red-heart",
+     "s": 360,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "Someone says Danke",
+     "size": 64,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 330
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 560
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Gern geschehen.",
+     "size": 150,
+     "max_w": 900,
+     "x": 1370,
+     "y": 800
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 1040,
+     "h": 300,
+     "width": 14,
+     "x": 1370,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "You bump into someone.",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Entschuldigung!",
+      "show": [
+       "a",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.8
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "collision",
+     "s": 360,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "You bump into someone",
+     "size": 64,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 330
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 560
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Entschuldigung!",
+     "size": 150,
+     "max_w": 900,
+     "x": 1370,
+     "y": 800
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 1040,
+     "h": 300,
+     "width": 14,
+     "x": 1370,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "You're going to bed.",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Gute Nacht.",
+      "show": [
+       "a",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.8
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "bed",
+     "s": 360,
+     "x": 500,
+     "y": 540
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "You're going to bed",
+     "size": 64,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 330
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 560
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Gute Nacht.",
+     "size": 150,
+     "max_w": 900,
+     "x": 1370,
+     "y": 800
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 1040,
+     "h": 300,
+     "width": 14,
+     "x": 1370,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "You just learned fifty German phrases.",
+      "show": [
+       "t1"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Follow for more German!",
+      "show": [
+       "t2"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 2.0
+     }
+    ]
+   ],
+   "header": "",
+   "els": [
+    {
+     "id": "t1",
+     "type": "word",
+     "de": "Super gemacht!",
+     "size": 160,
+     "x": 960,
+     "y": 450
+    },
+    {
+     "id": "t2",
+     "type": "text",
+     "text": "Follow for more German",
+     "size": 84,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 640
+    }
+   ]
+  }
+ ]
+}

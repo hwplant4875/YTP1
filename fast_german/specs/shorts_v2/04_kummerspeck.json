@@ -1,0 +1,267 @@
+{
+ "id": "04_kummerspeck",
+ "title": "Germans have a word for this \ud83e\udd53\ud83d\udc94",
+ "scenes": [
+  {
+   "lines": [
+    [
+     {
+      "de": "Kummerspeck.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "This German word means... grief bacon.",
+      "show": [
+       "m"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "bacon_7.jpg",
+     "w": 920,
+     "h": 720,
+     "x": 540,
+     "y": 790
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Kummerspeck",
+     "size": 200,
+     "x": 540,
+     "y": 1320
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= grief bacon",
+     "size": 80,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 540,
+     "y": 1470
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "de": "Kummer",
+      "show": [
+       "r1"
+      ]
+     },
+     {
+      "en": "for grief."
+     }
+    ],
+    [
+     {
+      "de": "Speck",
+      "show": [
+       "r2"
+      ]
+     },
+     {
+      "en": "for bacon."
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "els": [
+    {
+     "id": "r1",
+     "type": "row",
+     "icon": "broken-heart",
+     "de": "Kummer",
+     "en": "= grief",
+     "x": 540,
+     "y": 700
+    },
+    {
+     "id": "r2",
+     "type": "row",
+     "photo": "bacon_7.jpg",
+     "de": "Speck",
+     "en": "= bacon",
+     "x": 540,
+     "y": 1040
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "It's the weight you gain from eating your feelings.",
+      "show": [
+       "h"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "One breakup,",
+      "show": [
+       "a"
+      ]
+     },
+     {
+      "en": "two pizzas,",
+      "show": [
+       "b"
+      ]
+     },
+     {
+      "en": "a lot of ice cream.",
+      "show": [
+       "c"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.3,
+   "els": [
+    {
+     "id": "h",
+     "type": "tile",
+     "icon": "broken-heart",
+     "s": 520,
+     "x": 540,
+     "y": 720
+    },
+    {
+     "id": "a",
+     "type": "tile",
+     "icon": "crying-face",
+     "s": 280,
+     "x": 230,
+     "y": 1310
+    },
+    {
+     "id": "b",
+     "type": "tile",
+     "icon": "pizza",
+     "s": 280,
+     "x": 540,
+     "y": 1310
+    },
+    {
+     "id": "c",
+     "type": "tile",
+     "icon": "soft-ice-cream",
+     "s": 280,
+     "x": 850,
+     "y": 1310
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "And the gender?"
+     }
+    ],
+    [
+     {
+      "de": "der Kummer,",
+      "show": [
+       "r1"
+      ]
+     },
+     {
+      "de": "der Speck.",
+      "show": [
+       "r2"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "So it's"
+     },
+     {
+      "de": "der Kummerspeck.",
+      "show": [
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.5,
+   "els": [
+    {
+     "id": "r1",
+     "type": "row",
+     "icon": "broken-heart",
+     "de": "Kummer",
+     "article": "der",
+     "show_article": true,
+     "x": 540,
+     "y": 600
+    },
+    {
+     "id": "r2",
+     "type": "row",
+     "photo": "bacon_7.jpg",
+     "de": "Speck",
+     "article": "der",
+     "show_article": true,
+     "hl": true,
+     "x": 540,
+     "y": 900
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Kummerspeck",
+     "article": "der",
+     "size": 150,
+     "x": 540,
+     "y": 1260
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Follow for more German."
+     }
+    ]
+   ],
+   "hold": 0.8,
+   "els": [
+    {
+     "id": "l",
+     "type": "logo",
+     "x": 540,
+     "y": 740
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Follow for more German",
+     "size": 70,
+     "x": 540,
+     "y": 1000
+    }
+   ]
+  }
+ ],
+ "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
+ "bg": "road"
+}

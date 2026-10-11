@@ -1,0 +1,256 @@
+{
+ "id": "05_schildkroete",
+ "title": "Germans call a turtle a SHIELD TOAD \ud83d\udc22",
+ "scenes": [
+  {
+   "lines": [
+    [
+     {
+      "en": "In German, a turtle is a"
+     },
+     {
+      "de": "Schildkr\u00f6te.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Literally... a shield toad.",
+      "show": [
+       "m"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "turtle_4.jpg",
+     "w": 920,
+     "h": 720,
+     "x": 540,
+     "y": 790
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Schildkr\u00f6te",
+     "size": 200,
+     "x": 540,
+     "y": 1320
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= shield toad",
+     "size": 80,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 540,
+     "y": 1470
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "de": "Schild",
+      "show": [
+       "r1"
+      ]
+     },
+     {
+      "en": "for shield."
+     }
+    ],
+    [
+     {
+      "de": "Kr\u00f6te",
+      "show": [
+       "r2"
+      ]
+     },
+     {
+      "en": "for toad."
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "els": [
+    {
+     "id": "r1",
+     "type": "row",
+     "icon": "shield",
+     "de": "Schild",
+     "en": "= shield",
+     "x": 540,
+     "y": 700
+    },
+    {
+     "id": "r2",
+     "type": "row",
+     "icon": "frog",
+     "de": "Kr\u00f6te",
+     "en": "= toad",
+     "x": 540,
+     "y": 1040
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "A toad,",
+      "show": [
+       "a"
+      ]
+     },
+     {
+      "en": "carrying a shield on its back.",
+      "show": [
+       "b"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Honestly? Not wrong.",
+      "show": [
+       "c"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "els": [
+    {
+     "id": "a",
+     "type": "tile",
+     "icon": "frog",
+     "s": 420,
+     "x": 300,
+     "y": 800
+    },
+    {
+     "id": "b",
+     "type": "tile",
+     "icon": "shield",
+     "s": 420,
+     "x": 780,
+     "y": 800
+    },
+    {
+     "id": "c",
+     "type": "tile",
+     "icon": "turtle",
+     "s": 520,
+     "x": 540,
+     "y": 1300
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "And the gender?"
+     }
+    ],
+    [
+     {
+      "de": "das Schild,",
+      "show": [
+       "r1"
+      ]
+     },
+     {
+      "de": "die Kr\u00f6te.",
+      "show": [
+       "r2"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "The last word decides. So it's"
+     },
+     {
+      "de": "die Schildkr\u00f6te.",
+      "show": [
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.5,
+   "els": [
+    {
+     "id": "r1",
+     "type": "row",
+     "icon": "shield",
+     "de": "Schild",
+     "article": "das",
+     "show_article": true,
+     "x": 540,
+     "y": 600
+    },
+    {
+     "id": "r2",
+     "type": "row",
+     "icon": "frog",
+     "de": "Kr\u00f6te",
+     "article": "die",
+     "show_article": true,
+     "hl": true,
+     "x": 540,
+     "y": 900
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Schildkr\u00f6te",
+     "article": "die",
+     "size": 150,
+     "x": 540,
+     "y": 1260
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Follow for more German."
+     }
+    ]
+   ],
+   "hold": 0.8,
+   "els": [
+    {
+     "id": "l",
+     "type": "logo",
+     "x": 540,
+     "y": 740
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Follow for more German",
+     "size": 70,
+     "x": 540,
+     "y": 1000
+    }
+   ]
+  }
+ ],
+ "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
+ "bg": "road"
+}

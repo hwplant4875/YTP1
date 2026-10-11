@@ -334,13 +334,10 @@ def german_take(text, speed=1.0):
     return best[0]
 
 
-def render(spec_path, out_path):
-    global W, H
-    spec = json.load(open(spec_path))
-    if spec.get("landscape"):                          # long-form: 16:9, road runs left-right
-        W, H = 1920, 1080
+def plan(spec):
+    """Timeline of a spec: voice clips with start times, scene windows, pop SFX times, total length, subtitle segments."""
     t = 0.4
-    clips, timeline, pops = [], [], []
+    clips, timeline, pops, subs = [], [], [], []
     for sc in spec["scenes"]:
         start = t
         shows = {}
@@ -355,6 +352,7 @@ def render(spec_path, out_path):
                     continue
                 mp3 = german_take(seg["de"], seg.get("speed", 1.0)) if "de" in seg else C.tts(seg["en"])[0]
                 clips.append((mp3, t))
+                subs.append((round(t, 3), round(t + C.duration(mp3), 3), seg.get("de") or seg["en"], "de" in seg))
                 t += C.duration(mp3) + SEG_GAP
             t += LINE_GAP - SEG_GAP
         t += sc.get("hold", 0)
@@ -362,6 +360,17 @@ def render(spec_path, out_path):
         timeline.append({"scene": sc, "start": start, "end": t, "shows": shows, "header": header})
         t += sc.get("gap", SCENE_GAP)
     total = t + 0.4
+    return clips, timeline, pops, total, subs
+
+
+def render(spec_path, out_path):
+    global W, H
+    spec = json.load(open(spec_path))
+    if spec.get("landscape"):                          # long-form: 16:9, road runs left-right
+        W, H = 1920, 1080
+    clips, timeline, pops, total, subs = plan(spec)
+    json.dump({"total": total, "subs": subs, "scenes": [{"start": tl["start"], "header": tl["header"]} for tl in timeline]},
+              open(os.path.splitext(out_path)[0] + ".timeline.json", "w"), indent=0)   # for .srt and chapters
     # audio
     tmp = tempfile.mkdtemp()
     inputs, fl = [], []
