@@ -39,6 +39,7 @@ FD = "/mnt/project-files/fonts/de/"
 UI = "/mnt/project-files/fonts/YouTubeSans-Black.otf"
 MUSIC = [os.path.join(C.CACHE, "music", n + ".mp3") for n in ("kpop_beat_a", "kpop_beat_c", "rave_c")]
 MUSIC_VOL, POP_VOL = 0.17, 0.16   # SFX far under the voice (user rule 2026-10-11)
+CLIP_FADE = 0.3  # fade-out on every voice clip (user rule 2026-10-11: no abrupt cut-offs)
 
 
 def de_font(size, weight="Bold"):
@@ -338,7 +339,9 @@ def render(spec_path, out_path):
     inputs, fl = [], []
     for i, (mp3, st) in enumerate(clips):
         inputs += ["-i", mp3]
-        fl.append(f"[{i}:a]aformat=sample_rates=48000:channel_layouts=stereo,adelay={int(st * 1000)}:all=1[c{i}]")
+        d = C.duration(mp3)  # every clip ends on a fade, so no word or room tone stops dead
+        fl.append(f"[{i}:a]aformat=sample_rates=48000:channel_layouts=stereo,afade=t=in:d=0.02,"
+                  f"afade=t=out:st={max(0, d - CLIP_FADE)}:d={CLIP_FADE},adelay={int(st * 1000)}:all=1[c{i}]")
     n = len(clips)
     fl.append("".join(f"[c{i}]" for i in range(n)) + f"amix=inputs={n}:normalize=0,apad=whole_dur={total + 4},"
               f"loudnorm=I=-15:TP=-2:LRA=11,apad,atrim=0:{total},asplit=2[voice][key]")  # loudnorm eats its last seconds: pad first
