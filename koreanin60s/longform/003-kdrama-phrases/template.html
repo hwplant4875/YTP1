@@ -1,0 +1,90 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box}
+@font-face{font-family:'GmarketSans';font-weight:300;unicode-range:U+0021-10FFFF;src:url('file:///home/user/YTP1/koreanin60s/assets/fonts/GmarketSansLight.woff')}
+@font-face{font-family:'GmarketSans';font-weight:500;unicode-range:U+0021-10FFFF;src:url('file:///home/user/YTP1/koreanin60s/assets/fonts/GmarketSansMedium.woff')}
+@font-face{font-family:'GmarketSans';font-weight:700;unicode-range:U+0021-10FFFF;src:url('file:///home/user/YTP1/koreanin60s/assets/fonts/GmarketSansBold.woff')}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#FBF4EA;font-family:GmarketSans,Pretendard,"Noto Color Emoji",sans-serif;color:#3A3134}
+#bg{position:absolute;inset:0;background:radial-gradient(ellipse at 88% 8%,#FCE1E6 0,transparent 40%),radial-gradient(ellipse at 6% 80%,#E3F2EC 0,transparent 45%),radial-gradient(ellipse at 60% 110%,#E6EEF9 0,transparent 40%),#FBF4EA}
+#grid{position:absolute;inset:-80px;background-image:linear-gradient(#EADFD2 2px,transparent 2px),linear-gradient(90deg,#EADFD2 2px,transparent 2px);background-size:80px 80px;opacity:.32}
+.fl{position:absolute;font-weight:700;opacity:.16}
+.c-p{color:#E8678A}.c-m{color:#2FA587}.c-b{color:#4F86D6}.c-y{color:#D99A00}.c-k{color:#8C6CE0}
+.bg-p{background:#F28BA8}.bg-m{background:#5CC4A8}.bg-b{background:#7FA9E8}.bg-y{background:#F2C14E}.bg-k{background:#A48AEB}
+.bd-p{border-color:#F7B8CA}.bd-m{border-color:#A6E0D0}.bd-b{border-color:#BBD2F3}.bd-y{border-color:#F7DD98}.bd-k{border-color:#D3C5F6}
+.chip{position:absolute;border-radius:60px;font-weight:700;color:#fff;white-space:nowrap;box-shadow:0 8px 0 rgba(0,0,0,.08)}
+#chap{left:60px;top:48px;font-size:34px;padding:14px 30px}
+#count{right:60px;top:48px;font-size:34px;padding:14px 30px;background:#3A3134}
+#bar{position:absolute;left:0;bottom:0;height:10px;background:#F28BA8;opacity:.8}
+#card{position:absolute;left:310px;top:215px;width:1300px;height:560px;background:#fff;border:6px solid #fff;border-radius:56px;
+  box-shadow:0 18px 0 rgba(120,90,80,.07),0 30px 70px rgba(120,90,80,.16);overflow:hidden}
+#en{position:absolute;left:0;right:0;text-align:center;font-weight:700;white-space:nowrap;color:#3A3134}
+#ko{position:absolute;left:0;right:0;top:150px;text-align:center;font-weight:700;font-size:170px;line-height:1.1;white-space:nowrap;letter-spacing:-3px}
+#rom{position:absolute;left:0;right:0;top:370px;text-align:center;font-weight:500;font-size:48px;color:#A8968F;white-space:nowrap}
+#slow{position:absolute;left:50%;top:455px;transform:translateX(-50%);font-size:30px;font-weight:700;color:#8a7a74;background:#F6EFE6;border-radius:40px;padding:10px 26px;white-space:nowrap}
+#q{position:absolute;left:0;right:0;top:330px;text-align:center;font-size:120px;font-weight:700;color:#E9DED3}
+#bird{position:absolute;left:1630px;top:770px;width:270px;height:270px;transform-origin:135px 260px}
+#bird img,.big img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:none;filter:drop-shadow(0 14px 16px rgba(120,90,80,.25))}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0}
+.big{position:relative;width:360px;height:360px;margin-bottom:10px}
+#hookT{font-size:96px;font-weight:700;text-align:center;line-height:1.15;white-space:nowrap}
+#chN{font-size:40px;padding:14px 36px;position:relative}
+#chT{font-size:150px;font-weight:700;margin-top:24px;white-space:nowrap}
+#outT{font-size:80px;font-weight:700;text-align:center;line-height:1.2;white-space:nowrap}
+#outS{margin-top:34px;font-size:44px;padding:16px 40px;position:relative;background:#E25B5B}
+</style></head><body>
+<div id="bg"></div><div id="grid"></div><div id="floaters"></div>
+<div class="scene" id="hook"><div class="big" id="hookB"></div><div id="hookT"><span class="c-p">50</span> Korean Phrases<br>You Hear in Every <span class="c-k">K-Drama</span> 🎬</div></div>
+<div class="scene" id="chs"><div class="big" id="chB"></div><div class="chip" id="chN"></div><div id="chT"></div></div>
+<div class="scene" id="outs"><div class="big" id="outB"></div><div id="outT">Which one have you<br>heard the most? 👇</div><div class="chip" id="outS">Subscribe for more Korean 💌</div></div>
+<div id="card"><div id="en"></div><div id="q">?</div><div id="ko"></div><div id="rom"></div><div id="slow">🐢 slowly</div></div>
+<div class="chip" id="chap"></div><div class="chip" id="count"></div>
+<div id="bird"></div><div id="bar"></div>
+<script>
+/*DATA*/
+const $=id=>document.getElementById(id),cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const eOB=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)},eOC=x=>1-Math.pow(1-x,3),eIC=x=>x*x*x;
+const FL=['한','ㄱ','ㅎ','글','♥','ㅋ','ㄴ','★','안녕','ㅂ','대박','ㅇ','사랑','ㅁ'];const fc=['#F28BA8','#5CC4A8','#7FA9E8','#F2C14E'];
+$('floaters').innerHTML=FL.map((c,i)=>`<div class="fl" id="fl${i}" style="font-size:${60+((i*37)%60)}px;color:${fc[i%4]}">${c}</div>`).join('');
+const imgs=n=>Object.keys(IMG).map(k=>`<img data-p="${k}" src="${IMG[k]}">`).join('');
+['bird','hookB','chB','outB'].forEach(id=>$(id).innerHTML=imgs());
+const show=(id,p)=>$(id).querySelectorAll('img').forEach(i=>i.style.display=i.dataset.p===p?'block':'none');
+show('hookB','teacher');show('chB','excited');show('outB','love_heart');
+function fitText(n,max){const tr=n.style.transform;n.style.transform='none';let fs=max;n.style.fontSize=fs+'px';const w=()=>{const r=document.createRange();r.selectNodeContents(n);return r.getBoundingClientRect().width};while(w()>1180&&fs>60){fs-=4;n.style.fontSize=fs+'px'}n.style.transform=tr;return fs}
+window.fit=()=>{};
+let cur=null;
+function scene(id,e,t){const p=cl((t-e.t)/.45),q=cl((t-(e.t1-.35))/.35);const n=$(id);n.style.opacity=eOC(p)*(1-q);n.style.transform=`scale(${.92+.08*eOB(p)})`}
+window.render=function(t){
+  $('grid').style.transform=`translate(${(t*10)%80}px,${(t*6)%80}px)`;
+  for(let i=0;i<FL.length;i++){const x=((i*263)%1800)+Math.sin(t*.4+i)*30;const y=((i*421+t*(14+i*2))%1300)-120;$('fl'+i).style.transform=`translate(${x}px,${1080-y}px) rotate(${Math.sin(t*.6+i)*12}deg)`}
+  let e=D.ev[0];for(const x of D.ev){if(t>=x.t)e=x}
+  ['hook','chs','outs'].forEach(id=>$(id).style.opacity=0);
+  const card=$('card'),bird=$('bird');
+  const lastPhrase=[...D.ev].reverse().find(x=>x.k==='phrase'&&x.t<=t);
+  // top bar: chapter + counter (from the first chapter on)
+  const chap=[...D.ev].reverse().find(x=>x.k==='chapter'&&x.t<=t);
+  const showTop=e.k==='phrase';$('chap').style.opacity=showTop?1:0;$('count').style.opacity=showTop?1:0;
+  if(chap){$('chap').className='chip bg-'+chap.c;$('chap').innerHTML=`${chap.emo} ${chap.title}`}
+  if(lastPhrase){$('count').innerHTML=`${lastPhrase.n} / ${D.TOTAL}`}
+  $('bar').style.width=(1920*cl(t/D.END))+'px';
+  const bob=Math.sin(t*2.2)*8;
+  if(e.k==='hook'){scene('hook',e,t);$('hookB').style.transform=`translateY(${bob}px)`}
+  if(e.k==='chapter'){scene('chs',e,t);$('chN').className='chip bg-'+e.c;$('chN').innerHTML=`CHAPTER ${e.i}`;$('chT').innerHTML=`<span class="c-${e.c}">${e.title}</span> ${e.emo}`;$('chB').style.transform=`translateY(${bob}px)`}
+  if(e.k==='outro'){scene('outs',e,t);$('outB').style.transform=`translateY(${bob}px)`}
+  if(e.k!=='phrase'){card.style.opacity=0;bird.style.opacity=0;return}
+  if(cur!==e){cur=e;card.className='';card.style.borderColor='';card.classList.add('bd-'+e.c);
+    $('en').innerHTML=e.en;$('ko').innerHTML=e.ko;$('ko').className='c-'+e.c;$('rom').innerHTML=e.rom;fitText($('ko'),170);show('bird',e.pose)}
+  // card in / out
+  const pin=cl((t-e.t)/.4),pout=cl((t-(e.t1-.3))/.3);
+  card.style.opacity=1-pout;card.style.transform=`translateX(${(1-eOC(pin))*900-eIC(pout)*900}px) rotate(${(1-eOC(pin))*2}deg)`;
+  // reveal: English moves up and shrinks, Korean pops in
+  const r=cl((t-e.reveal)/.45),rr=eOC(r);
+  const en=$('en');const fs=88-(88-44)*rr;en.style.fontSize=fs+'px';en.style.top=(230-(230-58)*rr)+'px';en.style.color=r>0?`rgb(${58+(150-58)*rr},${49+(130-49)*rr},${52+(124-52)*rr})`:'#3A3134';
+  $('q').style.opacity=(1-rr)*(t>e.t+.6?.9:0);$('q').style.transform=`scale(${1+.04*Math.sin(t*5)})`;$('q').style.top=(330)+'px';
+  const k=$('ko');k.style.opacity=cl(r*3);k.style.transform=`scale(${r>0?eOB(r)*1:0})`;
+  const ro=cl((t-e.reveal-.25)/.3);$('rom').style.opacity=ro;$('rom').style.transform=`translateY(${(1-eOC(ro))*20}px)`;
+  const so=cl((t-e.slow+.1)/.25);$('slow').style.opacity=so;$('slow').style.transform=`translateX(-50%) scale(${.8+.2*eOB(so)})`;
+  // bird: hop in, squash on reveal
+  const bi=eOB(cl((t-e.t-.1)/.45));const sq=cl((t-e.reveal)/.4),kk=Math.sin(sq*Math.PI)*(1-sq);
+  bird.style.opacity=1-pout;bird.style.transform=`translateY(${bob-Math.abs(Math.sin(t*3))*6}px) scale(${bi*(1+.15*kk)},${bi*(1-.12*kk)})`;
+};
+window.render(0);
+</script></body></html>

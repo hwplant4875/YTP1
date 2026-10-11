@@ -10,7 +10,7 @@ const { chromium } = require('playwright'); const { spawn, execFileSync } = requ
     const a = Math.floor(n * w / W), z = Math.floor(n * (w + 1) / W);
     const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-', '-c:v', 'libx264', '-preset', 'medium', '-crf', '16',
       '-pix_fmt', 'yuv420p', '-profile:v', 'high', `${dir}/seg_${w}.mp4`], { stdio: ['pipe', 'inherit', 'inherit'] });
-    const p = await b.newPage({ viewport: { width: 1080, height: 1920 } });
+    const p = await b.newPage({ viewport: { width: +(process.env.VW || 1080), height: +(process.env.VH || 1920) } });
     await p.goto('file://' + dir + '/short.html'); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(500); await p.evaluate(() => { window.fit && window.fit(); window.layout && window.layout(); });
     for (let i = a; i < z; i++) {
       await p.evaluate(x => window.render(x), i / FPS); const buf = await p.screenshot({ type: 'jpeg', quality: 95 });
