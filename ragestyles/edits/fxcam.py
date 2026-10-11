@@ -21,13 +21,38 @@ def flash_curve(dt, rise=0.06, total=0.5):
     return float(1 - ease((dt - rise) / (total - rise)))
 
 
+def grade(f, g):
+    """'4K edit' look (CapCut/TikTok style), all on float BGR 0-255:
+    clarity = local contrast on luminance (large-radius unsharp), contrast = S-curve around mid grey,
+    saturation boost, then two-radius sharpen (fine detail + structure)."""
+    if not g:
+        return f
+    clar = g.get('clarity', 0.35)
+    if clar:
+        lum = f.mean(axis=2)
+        f = f + clar * (lum - cv2.GaussianBlur(lum, (0, 0), 18))[..., None]
+    c = g.get('contrast', 0.12)
+    if c:
+        x = np.clip(f / 255.0, 0, 1)
+        s_curve = x * x * (3 - 2 * x)
+        f = 255 * (x + c * (s_curve - x) * 2)
+    sat = g.get('saturation', 0.08)
+    if sat:
+        lum = f.mean(axis=2, keepdims=True)
+        f = lum + (f - lum) * (1 + sat)
+    for sigma, amt in ((0.8, g.get('sharpen', 0.7)), (2.2, g.get('structure', 0.35))):
+        if amt:
+            f = f + amt * (f - cv2.GaussianBlur(f, (0, 0), sigma))
+    return f
+
+
 def lerp2(v, u):
     if isinstance(v, (list, tuple)):
         return v[0] + (v[1] - v[0]) * float(ease(u))
     return v
 
 
-def render_shot(src, t_in, dur, pre_filter, shot, out_w, out_h, out_path, bg=(0, 0, 0), fps=30, crf=14, preset='medium'):
+def render_shot(src, t_in, dur, pre_filter, shot, out_w, out_h, out_path, bg=(0, 0, 0), fps=30, crf=14, preset='medium', grade_cfg=None):
     vf = (pre_filter + ',' if pre_filter else '') + f'fps={fps}'
     # frame size after the pre-filter
     sz = subprocess.run(['ffmpeg', '-v', 'error', '-ss', f'{t_in:.3f}', '-i', src, '-frames:v', '1', '-vf', vf,
@@ -84,7 +109,10 @@ def render_shot(src, t_in, dur, pre_filter, shot, out_w, out_h, out_path, bg=(0,
         frame = cv2.warpAffine(img, M, (out_w, out_h), flags=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT, borderValue=bg)
         f = frame.astype(np.float32)
         blur = cv2.GaussianBlur(f, (0, 0), 1.3)
-        f = f + shot.get('sharpen', 0.55) * (f - blur)
+        if grade_cfg is None:
+            f = f + shot.get('sharpen', 0.55) * (f - blur)
+        else:
+            f = grade(f, grade_cfg)
         for h in hits:
             dt = t - h['t']
             k = h.get('amount', 0.5) * flash_curve(dt)

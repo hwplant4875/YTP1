@@ -323,5 +323,12 @@
    "zin": 1.22
   }
  ],
- "capFont": "/mnt/project-files/fonts/YouTubeSans-Black.otf"
+ "capFont": "/mnt/project-files/fonts/YouTubeSans-Black.otf",
+ "grade": {
+  "clarity": 0.35,
+  "contrast": 0.12,
+  "saturation": 0.08,
+  "sharpen": 0.7,
+  "structure": 0.35
+ }
 }

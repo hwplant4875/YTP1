@@ -159,5 +159,12 @@
     }
    ]
   }
- ]
+ ],
+ "grade": {
+  "clarity": 0.35,
+  "contrast": 0.12,
+  "saturation": 0.08,
+  "sharpen": 0.7,
+  "structure": 0.35
+ }
 }

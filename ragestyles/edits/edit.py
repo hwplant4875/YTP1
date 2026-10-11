@@ -53,7 +53,7 @@ def build(spec, out, preview=False):
         s, d = shots[i], durs[i]
         sf = spec.get('srcFilter', {}).get(s['src'], '')
         fxcam.render_shot(srcs[s['src']], s['in'], d, sf, s, W, wh, f'{work}/v{i}.mp4',
-                          crf=20 if preview else 14, preset='veryfast' if preview else 'medium')
+                          crf=20 if preview else 14, preset='veryfast' if preview else 'medium', grade_cfg=spec.get('grade'))
         if spec.get('mute'):  # the user lays music over it; source audio (voices, arena music) is dropped
             run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo', '-t', f'{d:.3f}',
                  '-c:a', 'pcm_s16le', f'{work}/a{i}.wav'])
