@@ -143,10 +143,7 @@
     ],
     [
      {
-      "en": "So please, don't call your present",
-      "show": [
-       "g"
-      ]
+      "en": "So please, don't call your present"
      },
      {
       "de": "giftig.",
@@ -163,7 +160,6 @@
       "de": "das Geschenk.",
       "show": [
        "g2",
-       "g2m",
        "ok"
       ]
      }
@@ -179,15 +175,7 @@
      "en": "= poisonous",
      "w": 820,
      "x": 490,
-     "y": 480
-    },
-    {
-     "id": "g",
-     "type": "tile",
-     "icon": "wrapped-gift",
-     "s": 300,
-     "x": 540,
-     "y": 780
+     "y": 560
     },
     {
      "id": "x",
@@ -195,44 +183,28 @@
      "icon": "cross-mark",
      "s": 130,
      "x": 770,
-     "y": 345
+     "y": 425
+    },
+    {
+     "id": "g2",
+     "type": "row",
+     "icon": "wrapped-gift",
+     "de": "Geschenk",
+     "article": "das",
+     "show_article": true,
+     "en": "= present",
+     "w": 920,
+     "x": 540,
+     "y": 930
     },
     {
      "id": "ok",
      "type": "ring",
-     "w": 160,
-     "h": 160,
-     "x": 895,
-     "y": 975,
-     "width": 22
-    },
-    {
-     "id": "g2",
-     "type": "word",
-     "de": "Geschenk",
-     "article": "das",
-     "size": 150,
-     "max_w": 760,
-     "x": 470,
-     "y": 1080,
-     "colour": [
-      34,
-      160,
-      80
-     ]
-    },
-    {
-     "id": "g2m",
-     "type": "text",
-     "text": "= present",
-     "size": 72,
-     "colour": [
-      255,
-      204,
-      0
-     ],
-     "x": 470,
-     "y": 1215
+     "w": 140,
+     "h": 140,
+     "width": 20,
+     "x": 955,
+     "y": 770
     }
    ]
   },
