@@ -23,14 +23,16 @@ LINE_GAP, SEG_GAP, SCENE_GAP = 0.32, 0.10, 0.45
 WHITE, GREY = (28, 28, 30), (110, 104, 98)
 ACCENT = (205, 112, 10)
 SHADOW_K = 45                       # shadow strength (%), soft on beige
-STROKE = 0                          # dark outline on text (road theme: keeps words clear of the lane dashes)
-SK = (20, 20, 24, 255)
+STROKE = 0                          # outline on German words: white, like the first batch
+SK = (255, 255, 255, 255)
+EN_STROKE = 0                       # dark outline on English lines over the road
+WORD_FILL = (28, 28, 30)
 
 
 def use_road_theme():
     """Dark moving Autobahn background (user 2026-10-11): light text, yellow meanings, stronger shadows."""
-    global WHITE, GREY, ACCENT, SHADOW_K, STROKE
-    WHITE, GREY, ACCENT, SHADOW_K, STROKE = (250, 250, 246), (196, 198, 206), (255, 204, 0), 100, 7
+    global WHITE, GREY, ACCENT, SHADOW_K, STROKE, EN_STROKE
+    WHITE, GREY, ACCENT, SHADOW_K, STROKE, EN_STROKE = (250, 250, 246), (236, 236, 230), (255, 204, 0), 100, 10, 6
 PROFILE = "/mnt/project-files/fast_german/branding/final/PROFILE_FINAL_fast_german.png"
 PHOTOS = "/mnt/project-files/fast_german/cache/photos/"
 FD = "/mnt/project-files/fonts/de/"
@@ -39,8 +41,18 @@ MUSIC = [os.path.join(C.CACHE, "music", n + ".mp3") for n in ("kpop_beat_a", "kp
 MUSIC_VOL, POP_VOL = 0.17, 0.16   # SFX far under the voice (user rule 2026-10-11)
 
 
-def de_font(size):
-    return ImageFont.truetype(FD + "BarlowCondensed-ExtraBold.ttf", size)
+def de_font(size, weight="Bold"):
+    """Fredoka, the rounded font of the first batch (user 2026-10-11: 01's text style was the good one)."""
+    f = ImageFont.truetype(C.FONT, size)
+    try:
+        f.set_variation_by_name(weight)
+    except Exception:
+        pass
+    return f
+
+
+def en_font(size):
+    return de_font(size, "SemiBold")
 
 
 def ui_font(size):
@@ -55,7 +67,7 @@ def fit(text, fnt, max_w, start, lo=40):
 
 
 def text_im(text, f, fill, stroke=None, sfill=(20, 20, 24)):
-    stroke = STROKE if stroke is None else stroke
+    stroke = EN_STROKE if stroke is None else stroke
     l, t, r, b = f.getbbox(text, stroke_width=stroke)
     im = Image.new("RGBA", (r - l + 8, b - t + 8))
     ImageDraw.Draw(im).text((4 - l, 4 - t), text, font=f, fill=fill + (255,), stroke_width=stroke,
@@ -100,7 +112,7 @@ def photo_card(src, w, h, focus=(0.5, 0.5), border=10):
 
 def word_block(de, article=None, en=None, max_w=W - 2 * MX, size=200, colour=None, show_article=True):
     """German word (article in its gender colour) with the English meaning under it, fitted to max_w."""
-    col = colour or WHITE
+    col = colour or WORD_FILL
     acol = C.GENDER.get(article, WHITE) if article else None
     full = (article + " " + de) if (article and show_article) else de
     f = fit(full, de_font, max_w, size)
@@ -111,12 +123,12 @@ def word_block(de, article=None, en=None, max_w=W - 2 * MX, size=200, colour=Non
     d = ImageDraw.Draw(word_im)
     if lead:
         d.text((p - l, p - t), lead, font=f, fill=lighten(acol) + (255,), stroke_width=STROKE, stroke_fill=SK)
-    d.text((p - l + f.getlength(lead), p - t), de, font=f, fill=(col if not article or colour else WHITE) + (255,),
+    d.text((p - l + f.getlength(lead), p - t), de, font=f, fill=(col if not article or colour else WORD_FILL) + (255,),
            stroke_width=STROKE, stroke_fill=SK)
     parts, wsum, hmax = [word_im], word_im.width, word_im.height
     en_im = None
     if en:
-        fe = fit(en, ui_font, max_w, int(f.size * 0.36), 30)
+        fe = fit(en, en_font, max_w, int(f.size * 0.36), 30)
         en_im = text_im(en, fe, GREY)
     out_h = hmax + (en_im.height + 18 if en_im else 0)
     out_w = max(wsum, en_im.width if en_im else 0)
@@ -137,9 +149,8 @@ def lighten(c, k=0.0):
 def thumb(el, s):
     if el.get("photo"):
         return rounded(cover(PHOTOS + el["photo"], s, s, tuple(el.get("focus", (0.5, 0.5)))), 34)
-    tile = Image.new("RGBA", (s, s))
-    ImageDraw.Draw(tile).rounded_rectangle((0, 0, s - 1, s - 1), 34, fill=(255, 255, 255, 255))
-    ic = C.icon(el["icon"], int(s * 0.74))
+    tile = Image.new("RGBA", (s, s))                  # bare emoji, no card (user 2026-10-11)
+    ic = C.icon(el["icon"], int(s * 0.92))
     tile.alpha_composite(ic, ((s - ic.width) // 2, (s - ic.height) // 2))
     return tile
 
@@ -147,7 +158,8 @@ def thumb(el, s):
 def row_im(el, w=W - 2 * MX, s=250):
     """One line of a stacked breakdown: picture | German word (gender colour) = English."""
     im = Image.new("RGBA", (w, s))
-    im.alpha_composite(thumb(el, s), (0, 0))
+    if el.get("photo"):
+        im.alpha_composite(thumb(el, s), (0, 0))
     art = el.get("article") if el.get("show_article") else None
     col = C.GENDER.get(el.get("article")) if el.get("article") else WHITE
     tx = s + 44
@@ -155,12 +167,12 @@ def row_im(el, w=W - 2 * MX, s=250):
     lead = (art + " ") if art else ""
     l, t, r, b = f.getbbox(lead + el["de"])
     d = ImageDraw.Draw(im)
-    wc = (lighten(col) if el.get("article") else WHITE) + (255,)
+    wc = (lighten(col) if el.get("article") else WORD_FILL) + (255,)
     if lead:
         d.text((tx - l, 18 - t), lead, font=f, fill=wc, stroke_width=STROKE, stroke_fill=SK)
     d.text((tx - l + f.getlength(lead), 18 - t), el["de"], font=f, fill=wc, stroke_width=STROKE, stroke_fill=SK)
     if el.get("en"):
-        fe = fit(el["en"], ui_font, w - tx, 78, 30)
+        fe = fit(el["en"], en_font, w - tx, 78, 30)
         e = text_im(el["en"], fe, ACCENT)
         im.alpha_composite(e, (tx, s - e.height - 22))
     if el.get("hl"):
@@ -204,14 +216,18 @@ def build_el(el):
                                           el.get("size", 200), tuple(el["colour"]) if el.get("colour") else None),
                               24, 150, 8))
     if t == "row":
+        if el.get("icon"):
+            return ("row", row_im(el), shadow(thumb(el, 250), 16, 110, 10), 20 if el.get("hl") else 0)
         return ("img", row_im(el))
     if t == "tile":
         s = el["s"]
+        if el.get("icon"):
+            return ("float", shadow(thumb(el, s), 20, 120, 12))
         return ("img", shadow(thumb(el, s) if el.get("photo") or el.get("icon") else label_tile(el, s), 20, 140, 10))
     if t == "logo":
         return ("img", shadow(logo_im(), 30, 160, 10))
     if t == "text":
-        f = fit(el["text"], ui_font, W - 2 * MX, el.get("size", 84))
+        f = fit(el["text"], en_font, W - 2 * MX, el.get("size", 84))
         return ("img", text_im(el["text"], f, tuple(el.get("colour", WHITE))))
     raise ValueError(t)
 
@@ -250,6 +266,17 @@ def draw_el(frame, built, el, local, appear, scene_len):
         im = shadow(card, 26, 150, 14)
     else:
         im = built[1]
+    if built[0] == "float":                           # gentle bob, like the first batch's icons
+        cy += 10 * math.sin(local * 2.2 + (hash(el["id"]) % 7))
+    if built[0] == "row":                             # the row's emoji floats on its own
+        icon = built[2]
+        im = im.copy()
+        bob = int(8 * math.sin(local * 2.2 + (hash(el["id"]) % 7)))
+        canvas = Image.new("RGBA", (im.width + 80, im.height + 80))
+        canvas.alpha_composite(im, (40, 40))
+        o = 40 + built[3]
+        canvas.alpha_composite(icon, (o + 125 - icon.width // 2, o + 125 - icon.height // 2 + bob))
+        im = canvas
     sc = 0.9 + 0.1 * p
     if sc < 0.999:
         im = im.resize((max(1, int(im.width * sc)), max(1, int(im.height * sc))), Image.BICUBIC)
@@ -341,8 +368,7 @@ def render(spec_path, out_path):
         import road_loop as RL
         tex = RL.strip(W, (H // RL.PERIOD + 1) * RL.PERIOD)
         loop_px = tex.shape[0] / (RL.SECS * FPS)                  # same drift speed as the approved loop
-        badge = Image.open(PROFILE).convert("RGB").resize((150, 150), Image.LANCZOS)
-        badge = shadow(rounded(badge, 36), 14, 120, 6)
+        badge = shadow(C.icon("pretzel", 150), 14, 120, 6)     # pretzel only, no red square (user)
         yy, xx = np.mgrid[0:H, 0:W]
         vig = (1 - 0.22 * (((xx / W - 0.5) * 2) ** 2 + ((yy / H - 0.5) * 2) ** 2) / 2)[..., None]
     bg = None if road else background()
