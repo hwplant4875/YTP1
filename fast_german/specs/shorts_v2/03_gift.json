@@ -1,0 +1,199 @@
+{
+ "id": "03_gift",
+ "title": "Never give a German a GIFT \ud83d\udc80",
+ "photos": [
+  "gift_8"
+ ],
+ "bg": "road",
+ "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
+ "scenes": [
+  {
+   "lines": [
+    [
+     {
+      "en": "Never give a German a gift.",
+      "show": [
+       "p",
+       "t",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.3,
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "gift_8.jpg",
+     "w": 920,
+     "h": 720,
+     "x": 540,
+     "y": 760
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Never give a German a",
+     "size": 80,
+     "x": 540,
+     "y": 1240
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "GIFT",
+     "size": 220,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 540,
+     "y": 1400
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Because in German,"
+     },
+     {
+      "de": "das Gift",
+      "show": [
+       "r1"
+      ]
+     },
+     {
+      "en": "means poison."
+     }
+    ],
+    [
+     {
+      "en": "A present is"
+     },
+     {
+      "de": "das Geschenk.",
+      "show": [
+       "r2"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "els": [
+    {
+     "id": "r1",
+     "type": "row",
+     "icon": "skull-and-crossbones",
+     "de": "Gift",
+     "article": "das",
+     "show_article": true,
+     "en": "= poison",
+     "x": 540,
+     "y": 700
+    },
+    {
+     "id": "r2",
+     "type": "row",
+     "icon": "wrapped-gift",
+     "de": "Geschenk",
+     "article": "das",
+     "show_article": true,
+     "en": "= present",
+     "hl": true,
+     "x": 540,
+     "y": 1060
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "And"
+     },
+     {
+      "de": "giftig",
+      "show": [
+       "r3"
+      ]
+     },
+     {
+      "en": "means poisonous."
+     }
+    ],
+    [
+     {
+      "en": "So please, don't call your present",
+      "show": [
+       "g"
+      ]
+     },
+     {
+      "de": "giftig.",
+      "show": [
+       "x"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.5,
+   "els": [
+    {
+     "id": "r3",
+     "type": "row",
+     "icon": "nauseated-face",
+     "de": "giftig",
+     "en": "= poisonous",
+     "x": 540,
+     "y": 620
+    },
+    {
+     "id": "g",
+     "type": "tile",
+     "icon": "wrapped-gift",
+     "s": 440,
+     "x": 540,
+     "y": 1180
+    },
+    {
+     "id": "x",
+     "type": "tile",
+     "icon": "cross-mark",
+     "s": 220,
+     "x": 800,
+     "y": 1020
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Follow for more German."
+     }
+    ]
+   ],
+   "hold": 0.8,
+   "els": [
+    {
+     "id": "l",
+     "type": "logo",
+     "x": 540,
+     "y": 870
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Follow for more German",
+     "size": 84,
+     "x": 540,
+     "y": 1240
+    }
+   ]
+  }
+ ]
+}
