@@ -363,8 +363,8 @@ export async function setup(THREE, renderer, W, H) {
   const shot = new URLSearchParams(location.search).get('shot') || 'walk';
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x020202);
-  scene.fog = new THREE.FogExp2(0x070605, shot === 'line' ? 0.03 : 0.045);
-  const fov = shot === 'walk' ? 54 : shot === 'line' ? 52 : 40;
+  scene.fog = new THREE.FogExp2(0x070605, shot === 'line' ? 0.03 : shot === 'title' ? 0.024 : 0.045);
+  const fov = shot === 'title' ? 50 : shot === 'walk' ? 54 : shot === 'line' ? 52 : shot === 'years' ? 46 : 40;
   const camera = new THREE.PerspectiveCamera(fov, W / H, 0.03, 400);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -450,7 +450,7 @@ export async function setup(THREE, renderer, W, H) {
     // station name boards
     const sign = std({ map: signTex(THREE), roughness: 0.4 });
     for (const sx of [-1, 1]) for (const z of [-40, 23.2]) {
-      const b = add(new THREE.PlaneGeometry(3.0, 0.5), sign, sx * (HW - 0.03), 3.55, z); b.rotation.y = -sx * Math.PI / 2;
+      const b = add(new THREE.PlaneGeometry(3.0, 0.5), sign, sx * (HW - 0.04), 3.55, z); b.rotation.y = -sx * Math.PI / 2;
       const fr = add(new THREE.BoxGeometry(0.03, 0.56, 3.06), darkMetal, sx * (HW - 0.015), 3.55, z);
     }
     // benches: wooden slats on cast iron legs
@@ -478,16 +478,20 @@ export async function setup(THREE, renderer, W, H) {
         const f = add(new THREE.BoxGeometry(0.03, fh, fw), darkMetal, sx * (HW - 0.015), y + fy, z + fz * sx); f.castShadow = true;
         if (fh < 0.1) f.scale.set(1, 1, 1);
       }
-      const m = peelPoster(THREE, posterTex(THREE, kind, seed), pw, ph, peelCorner);
+      ctx.ptex = ctx.ptex || {};
+      const tex = shot === 'title' ? (ctx.ptex[kind] = ctx.ptex[kind] || posterTex(THREE, kind, seed)) : posterTex(THREE, kind, seed);
+      const m = peelPoster(THREE, tex, pw, ph, peelCorner);
       m.position.set(sx * (HW - 0.024), y, z); m.rotation.y = -sx * Math.PI / 2; scene.add(m);
       m.userData.setPeel(peel); ctx.posters.push(m); return m;
     };
+    ctx.putPoster = putPoster;
     const pz = [17.6, 15.9, 14.2, 12.5, 10.8, 9.1];
     const peels = [[[1, -1], 0.32], [[-1, 1], 0.12], [[1, 1], 0.22], [[-1, -1], 0.08], [[1, -1], 0.0], [[-1, 1], 0.3]];
     kinds.forEach((kd, i) => putPoster(kd, 1, pz[i], 2.55, peels[i][0], peels[i][1], 100 + i));
     // the poster above the 'years' bench
     ctx.yearsPoster = putPoster('oval', 1, 5.2, 2.75, [-1, -1], 0.05, 140);
     putPoster('kino', 1, 3.5, 2.75, [1, 1], 0.1, 141);
+    putPoster('ostsee', 1, 7.05, 2.75, [1, -1], 0.18, 142);
     for (let i = 0; i < 6; i++) putPoster(kinds[(i + 2) % 6], -1, 14 - i * 1.7, 2.55, [1, -1], 0.1 + (i % 3) * 0.1, 120 + i);
     // the calendar hanging on a nail
     const cal = add(new THREE.PlaneGeometry(0.56, 0.84), std({ map: calendarTex(THREE), roughness: 0.9, alphaTest: 0.5 }), HW - 0.025, 2.45, 19.35);
@@ -520,7 +524,7 @@ export async function setup(THREE, renderer, W, H) {
       return g;
     };
     ctx.clock(6.0, 4.15, 19.0);
-    if (shot === 'years') ctx.clock(6.1, 4.3, 7.4, 4, 12);
+    if (shot === 'years') ctx.clock(6.3, 4.05, 3.3, 4, 12);
     // a newspaper dropped on the platform
     const np = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.56, 6, 8), std({ map: newspaperTex(THREE), roughness: 0.95, alphaTest: 0.5, side: THREE.DoubleSide }));
     { const p = np.geometry.attributes.position; for (let i = 0; i < p.count; i++) p.setZ(i, Math.max(0, Math.sin(p.getX(i) * 9) * 0.02 + p.getY(i) * p.getY(i) * 0.15)); np.geometry.computeVertexNormals(); }
@@ -548,10 +552,30 @@ export async function setup(THREE, renderer, W, H) {
     ctx.aimP = path([[0, [5.3, 1.0, 21.5]], [1.6, [4.9, 1.1, 19.5]], [2.4, [3.9, 1.0, 19.5]], [3.5, [3.6, 1.8, 15.0]], [4.4, [4.6, 3.4, 15.5]], [5.2, [6.0, 4.15, 19.0]], [6.0, [6.0, 4.1, 19.0]], [6.8, [7.95, 2.5, 19.35]], [7.5, [7.95, 2.45, 19.35]], [8.3, [7.95, 2.75, 18.0]], [9.4, [7.95, 2.3, 17.3]], [10.6, [7.95, 2.6, 16.2]], [12.0, [7.95, 2.45, 15.3]], [13.5, [7.95, 2.5, 14.3]]]);
   }
 
+  // ======================================================================== title
+  if (shot === 'title') {
+    const kinds = ['lumin', 'kino', 'ostsee', 'oval', 'bvg', 'pils'];
+    const busy = (sx, z) => (sx > 0 && z > 1 && z < 21) || (sx < 0 && z > 4 && z < 16) || Math.abs(z - 23.2) < 2.2 || Math.abs(z + 40) < 2.2;
+    let k = 0;
+    for (const sx of [-1, 1]) for (let z = -52; z <= 50; z += 1.75) { if (busy(sx, z)) continue; if ((k++ % 5) === 4) continue; ctx.putPoster(kinds[k % 6], sx, z, 2.55, [k % 2 ? 1 : -1, -1], 0.05 + (k % 4) * 0.07, 200 + k); }
+    for (const z of [-30, -10, 30, 40]) ctx.bench(z, 2.0, z > 0 ? -1 : 1);
+    ctx.clock(-6.0, 4.15, 8, 1, 47); ctx.clock(6.0, 4.15, -14, 1, 47);
+    ctx.tl = [];
+    for (let z = -45; z <= 45; z += 10) for (const sx of [-1, 1]) {
+      const near = z >= -15;
+      if (near) ctx.tl.push(hangBulb(sx * 6.1, 4.75, z + (sx > 0 ? 0 : 5), { inten: 10, dist: 16, halo: 1.1 }));
+      else { const b = add(new THREE.SphereGeometry(0.06, 12, 8), bulbMat, sx * 6.1, 4.75, z); const h = glow(THREE, AMBER, 1.2, 0.9); h.position.set(sx * 6.1, 4.73, z); scene.add(h);
+        add(new THREE.ConeGeometry(0.26, 0.17, 20, 1, true), std({ color: 0x1e1e1e, side: THREE.DoubleSide }), sx * 6.1, 4.85, z); }
+    }
+    const dust = dustCloud(THREE, 3500, [-7.5, 0.5, 0], [7.5, 5.2, 58], 41, 0.012, H, fov); dust.material.uniforms.amb.value = 0.22; scene.add(dust); ctx.dust = dust;
+    ctx.camP = path([[0, [2.4, 1.15, 31]], [7.6, [2.9, 4.1, 48.5]], [10, [3.0, 4.35, 52]]]);
+    ctx.lookP = path([[0, [1.2, 1.7, -20]], [7.6, [0.8, 1.6, -28]], [10, [0.7, 1.55, -30]]]);
+  }
+
   // ======================================================================== years
   if (shot === 'years') {
-    ctx.yb = hangBulb(6.6, 4.7, 4.6, { inten: 14, dist: 12, halo: 1.3, spot: true, shadow: true });
-    ctx.yb.light.angle = 0.9; ctx.yb.light.target.position.set(7.4, 1.4, 4.9);
+    ctx.yb = hangBulb(6.6, 4.7, 5.3, { inten: 26, dist: 12, halo: 1.3, spot: true, shadow: true });
+    ctx.yb.light.angle = 1.1; ctx.yb.light.target.position.set(7.6, 1.4, 5.4);
     hangBulb(-6.1, 4.75, -10, { inten: 1.5, dist: 10, halo: 0.8 });
     // dust layer settling on the bench (alpha plane over the slats) and on the newspaper
     const dustLayerTex = canvasTex(THREE, 512, 128, (g, w, h) => { const r = rng(31); g.clearRect(0, 0, w, h);
@@ -566,10 +590,10 @@ export async function setup(THREE, renderer, W, H) {
       const cx = 0, cy = 0; for (let a = 0; a < 12; a++) { const an = a / 11 * Math.PI / 2; g.beginPath(); g.moveTo(cx, cy); g.lineTo(Math.cos(an) * 520, Math.sin(an) * 520); g.stroke(); }
       for (let rr = 30; rr < 520; rr += 26 + rr * 0.05) { g.beginPath(); for (let a = 0; a < 12; a++) { const an = a / 11 * Math.PI / 2, q = rr * (0.92 + 0.08 * Math.sin(a * 3)); a ? g.lineTo(Math.cos(an) * q, Math.sin(an) * q) : g.moveTo(Math.cos(an) * q, Math.sin(an) * q); } g.stroke(); } });
     webTex.wrapS = webTex.wrapT = THREE.ClampToEdgeWrapping;
-    ctx.web = add(new THREE.PlaneGeometry(0.6, 0.6), new THREE.MeshBasicMaterial({ map: webTex, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, color: 0xbdb5a8 }), HW - 0.35, 1.72, 5.83);
-    ctx.web.rotation.y = 0.0;
-    const dust = dustCloud(THREE, 2500, [5.2, 1.0, 2.0], [8, 5.2, 7.5], 23, 0.01, H, fov); scene.add(dust);
-    dust.material.uniforms.amb.value = 0.25; ctx.dust = dust;
+    ctx.web = add(new THREE.PlaneGeometry(0.9, 0.9), new THREE.MeshBasicMaterial({ map: webTex, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, color: 0x8a8378 }), HW - 0.05, 1.5, 5.75);
+    ctx.web.rotation.set(0, -Math.PI / 2, Math.PI);
+    const dust = dustCloud(THREE, 1100, [5.2, 1.0, 2.5], [8, 5.2, 8.5], 23, 0.008, H, fov); scene.add(dust);
+    dust.material.uniforms.amb.value = 0.1; ctx.dust = dust;
   }
 
   // ======================================================================== wire
@@ -760,23 +784,25 @@ export async function setup(THREE, renderer, W, H) {
     const paint = (seed, wpx, hpx, drips = true) => canvasTex(THREE, wpx, hpx, (g, w, h) => {
       const r = rng(seed); g.clearRect(0, 0, w, h);
       const cx = w / 2, half = w * 0.16;
-      // main body: overlapping vertical brush strokes
-      for (let s = 0; s < 34; s++) {
-        const x = cx + (r() - 0.5) * half * 1.6, bw = half * (0.35 + r() * 0.5);
-        const y0 = -20 + r() * h * 0.05, y1 = h + 20 - r() * h * 0.04;
-        g.fillStyle = `rgba(242,240,232,${0.55 + r() * 0.45})`;
+      // main body: overlapping vertical brush strokes with ragged, wandering edges
+      const edge = (y, k) => Math.sin(y * 0.004 + k) * 10 + Math.sin(y * 0.021 + k * 2.3) * 6 + Math.sin(y * 0.09 + k * 5.1) * 3;
+      for (let s = 0; s < 40; s++) {
+        const x = cx + (r() - 0.5) * half * 1.2, bw = half * (0.5 + r() * 0.9);
+        const y0 = -20 + r() * h * 0.08, y1 = h + 20 - r() * h * 0.12;
+        g.fillStyle = `rgba(242,240,232,${0.45 + r() * 0.55})`;
         g.beginPath(); g.moveTo(x - bw / 2, y0);
-        for (let y = y0; y <= y1; y += 24) g.lineTo(x - bw / 2 + Math.sin(y * 0.01 + s) * 4 + (r() - 0.5) * 3, y);
-        for (let y = y1; y >= y0; y -= 24) g.lineTo(x + bw / 2 + Math.sin(y * 0.013 + s) * 4 + (r() - 0.5) * 3, y);
+        for (let y = y0; y <= y1; y += 12) g.lineTo(x - bw / 2 + edge(y, s) + (r() - 0.5) * 4, y);
+        for (let y = y1; y >= y0; y -= 12) g.lineTo(x + bw / 2 + edge(y, s + 9) + (r() - 0.5) * 4, y);
         g.fill();
       }
-      // dry-brush bristle streaks: thin gaps and thin overshoots
-      for (let i = 0; i < 120; i++) { const x = cx + (r() - 0.5) * half * 2.2, y = r() * h, len = 40 + r() * 300;
-        g.fillStyle = Math.abs(x - cx) > half * 0.95 ? `rgba(240,238,230,${0.3 + r() * 0.4})` : `rgba(0,0,0,0)`; g.fillRect(x, y, 1 + r() * 2, len);
-        if (Math.abs(x - cx) < half * 0.9 && r() < 0.5) { g.save(); g.globalCompositeOperation = 'destination-out'; g.fillStyle = `rgba(0,0,0,${0.3 + r() * 0.5})`; g.fillRect(x, y, 1 + r() * 2, len * 0.6); g.restore(); } }
-      // drips
-      if (drips) for (let i = 0; i < 18; i++) { const x = cx + (r() - 0.5) * half * 1.9, y = r() * h * 0.95, len = 30 + r() * 240 * (r() < 0.3 ? 2 : 1), dw = 3 + r() * 6;
-        g.fillStyle = 'rgba(242,240,232,0.95)'; g.fillRect(x - dw / 2, y, dw, len); g.beginPath(); g.ellipse(x, y + len, dw * 0.85, dw * 1.2, 0, 0, 7); g.fill(); }
+      // dry-brush: bristle gaps inside, thin bristle trails outside the edges
+      for (let i = 0; i < 260; i++) { const x = cx + (r() - 0.5) * half * 2.6, y = r() * h, len = 40 + r() * 380;
+        if (Math.abs(x - cx) > half * 0.85) { g.fillStyle = `rgba(240,238,230,${0.25 + r() * 0.45})`; g.fillRect(x, y, 1 + r() * 2.5, len); }
+        else if (r() < 0.6) { g.save(); g.globalCompositeOperation = 'destination-out'; g.fillStyle = `rgba(0,0,0,${0.25 + r() * 0.6})`; g.fillRect(x, y, 1 + r() * 3, len * 0.5); g.restore(); } }
+      // drips running down from the edges and the bottom of each loaded stroke
+      if (drips) for (let i = 0; i < 26; i++) { const side = r() < 0.5 ? -1 : 1, x = cx + side * half * (0.75 + r() * 0.45), y = h * (0.05 + r() * 0.85), len = 40 + r() * 260 * (r() < 0.3 ? 2.2 : 1), dw = 4 + r() * 7;
+        g.fillStyle = 'rgba(244,242,234,0.97)'; g.beginPath(); g.moveTo(x - dw / 2, y); g.lineTo(x - dw * 0.3, y + len); g.lineTo(x + dw * 0.3, y + len); g.lineTo(x + dw / 2, y); g.fill();
+        g.beginPath(); g.ellipse(x, y + len, dw * 0.55, dw * 0.9, 0, 0, 7); g.fill(); }
       // splatter
       for (let i = 0; i < 80; i++) { const x = cx + (r() - 0.5) * half * 7, y = r() * h, rr = 0.8 + r() * 3.5; g.fillStyle = `rgba(242,240,232,${0.5 + r() * 0.5})`; g.beginPath(); g.arc(x, y, rr, 0, 7); g.fill(); }
       // grime over the paint
@@ -794,7 +820,7 @@ export async function setup(THREE, renderer, W, H) {
     const stTex = canvasTex(THREE, 1024, 256, (g, w, h) => { g.clearRect(0, 0, w, h); g.font = 'bold 104px "DejaVu Sans Condensed", sans-serif'; g.textAlign = 'center'; g.fillStyle = 'rgba(236,234,226,0.92)'; g.fillText('SEKTORENGRENZE', w / 2, 160);
       g.save(); g.globalCompositeOperation = 'destination-out'; g.fillStyle = '#000'; for (let x = 40; x < w; x += 61) g.fillRect(x, 50, 5, 130); const r = rng(8); for (let i = 0; i < 400; i++) g.fillRect(r() * w, r() * h, 2 + r() * 5, 2 + r() * 5); g.restore(); });
     stTex.wrapS = stTex.wrapT = THREE.ClampToEdgeWrapping;
-    const st = add(new THREE.PlaneGeometry(2.2, 0.55), std({ map: stTex, transparent: true, alphaTest: 0.1, roughness: 0.6, depthWrite: false }), TW - 0.012, 1.75, LZ + 1.75); st.rotation.y = -Math.PI / 2;
+    const st = add(new THREE.PlaneGeometry(2.2, 0.55), std({ map: stTex, emissiveMap: stTex, emissive: 0x6a6a66, transparent: true, alphaTest: 0.1, roughness: 0.6, depthWrite: false }), TW - 0.012, 1.75, LZ + 1.75); st.rotation.y = -Math.PI / 2;
     // small enamel kilometre plates
     const kmTex = (s) => canvasTex(THREE, 256, 128, (g, w, h) => { g.fillStyle = '#e8e4d8'; g.fillRect(0, 0, w, h); g.strokeStyle = '#111'; g.lineWidth = 8; g.strokeRect(6, 6, w - 12, h - 12); txt(g, s, w / 2, 90, 'bold 70px "DejaVu Sans Condensed", sans-serif', '#111'); agePaper(g, w, h, rng(s.length), { tear: 0, fade: 0.2 }); });
     for (const [z, s] of [[6, '4,6'], [-28, '4,8'], [-62, '5,0']]) { const p = add(new THREE.PlaneGeometry(0.36, 0.18), std({ map: kmTex(s), roughness: 0.4 }), TW - 0.015, 1.9, z); p.rotation.y = -Math.PI / 2; }
@@ -809,11 +835,11 @@ export async function setup(THREE, renderer, W, H) {
       return { b, h, l, base: inten };
     };
     ctx.warm = [cage(TW, 3.3, 10, AMBER, 5, 11), cage(-TW, 3.3, 1, AMBER, 4, 10), cage(TW, 3.45, -9.4, AMBER, 6, 9)];
-    ctx.cold = [cage(TW, 3.3, -16.5, COLD, 2.2, 9), cage(-TW, 3.3, -28, COLD, 2.0, 10), cage(-TW, 3.6, -42.5, COLD, 6, 9)];
+    ctx.cold = [cage(TW, 3.3, -16.5, COLD, 2.2, 9), cage(-TW, 3.3, -28, COLD, 2.0, 10), cage(TW, 3.7, -36.6, COLD, 9, 9)];
     // the guard far ahead on the cold side, backlit
     const gmat = std({ color: 0x0b0b0b, roughness: 0.95 });
-    const guard = borderGuard(THREE, gmat); guard.group.position.set(-2.9, 0.5, -40.5); guard.group.rotation.y = 0.35; scene.add(guard.group);
-    add(new THREE.BoxGeometry(1.2, 0.5, 2.4), std({ color: 0x2a2a28 }), -3.3, 0.25, -40.5);   // walkway ledge he stands on
+    const guard = borderGuard(THREE, gmat); guard.group.position.set(3.0, 0.5, -35.2); guard.group.rotation.y = -0.4; scene.add(guard.group);
+    add(new THREE.BoxGeometry(1.2, 0.5, 2.4), std({ color: 0x2a2a28 }), 3.3, 0.25, -35.2);   // walkway ledge he stands on
     ctx.guard = guard;
     // headlight carried with the camera
     const head = new THREE.SpotLight(0xfff0dc, 45, 0, 0.5, 0.6, 1.4);
@@ -826,7 +852,7 @@ export async function setup(THREE, renderer, W, H) {
   }
 
   const post = makeComposer(THREE, renderer, scene, camera, W, H, {
-    bloom: 0.85, bloomRadius: 0.75, bloomThreshold: 0.6, exposure: shot === 'walk' ? 1.2 : 1.1,
+    bloom: 0.85, bloomRadius: 0.75, bloomThreshold: 0.6, exposure: shot === 'walk' ? 1.2 : shot === 'title' ? 1.3 : 1.1,
     dof: shot === 'years' ? { focus: 3.4, aperture: 0.0016, maxblur: 0.007 } : shot === 'wire' ? { focus: 3.0, aperture: 0.0014, maxblur: 0.008 } : null,
   });
   Object.assign(ctx, post);
@@ -864,8 +890,8 @@ export function update(ctx, t) {
   } else if (shot === 'years') {
     // time-lapse: 28 years in a few seconds
     const k = smooth(t / 3.2), k2 = Math.min(1, t / 3.6);
-    camera.position.set(lerp(5.05, 5.35, k2), lerp(1.95, 1.9, k2), lerp(1.3, 1.75, k2));
-    camera.lookAt(7.6, lerp(2.2, 2.15, k2), lerp(5.0, 5.0, k2));
+    camera.position.set(lerp(4.65, 4.95, k2), lerp(2.25, 2.2, k2), lerp(1.2, 1.7, k2));
+    camera.lookAt(7.6, lerp(2.6, 2.55, k2), 4.05);
     ctx.yearsPoster.userData.setPeel(0.05 + 0.75 * smooth(t / 3.4) + 0.05 * Math.max(0, t - 3.4));
     ctx.dustLayer.material.opacity = 0.95 * k;
     ctx.web.material.opacity = 0.9 * smooth((t - 0.6) / 2.4);
@@ -876,9 +902,15 @@ export function update(ctx, t) {
     const v = hv < 0.12 ? 0.08 : hv < 0.3 ? 0.55 : 0.9 + 0.1 * hash(fr + 99);
     ctx.setLamp(ctx.yb, v);
     ctx.dust.material.uniforms.fall.value = 0.9;
-    ctx.dust.material.uniforms.amb.value = 0.12 + 0.25 * v;
+    ctx.dust.material.uniforms.amb.value = 0.05 + 0.1 * v;
     const u = ctx.dust.material.uniforms; u.lp.value[0].copy(ctx.yb.light.position); u.ld.value[0].set(0, -1, 0); u.lc.value[0] = Math.cos(1.0); u.li.value[0] = 1.5 * v;
     if (ctx.bokeh) ctx.bokeh.uniforms.focus.value = camera.position.distanceTo(new THREE.Vector3(7.6, 1.8, 4.7));
+  } else if (shot === 'title') {
+    const ease = (x) => x;   // path keys already ease in/out
+    const p = V(ctx.camP(t)), look = V(ctx.lookP(t));
+    p.x += nz(t * 0.3, 1) * 0.03; p.y += nz(t * 0.25, 2) * 0.02;
+    camera.position.copy(p); camera.lookAt(look);
+    ctx.tl.forEach((l, i) => ctx.setLamp(l, 0.9 + 0.1 * Math.sin(t * 6 + i * 1.7) * Math.sin(t * 2.3 + i)));
   } else if (shot === 'wire') {
     updateWire(ctx, t);
   } else if (shot === 'line') {

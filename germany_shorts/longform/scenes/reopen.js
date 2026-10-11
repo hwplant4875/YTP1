@@ -11,7 +11,7 @@
 //                        a hand drops the coins (2 DM, 50 Pf, 20 Pf)
 //   crowd      (4.6 s) - from inside the carriage: the doors slide open onto a platform packed with people
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { mergeGeometries, mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { AMBER, tileTex, concreteTex, rng, lerp } from './lib.js';
 import { makeComposer, glow, beam, normalFromHeight, smooth, flicker } from './look.js';
 
@@ -72,8 +72,8 @@ function personGeo(THREE, kind) {
   else P(new THREE.CapsuleGeometry(0.06, 0.52, 3, 7), -0.27, 1.15, 0.02, 0, 0, -0.1);
   if (kind === 'bag') P(new THREE.BoxGeometry(0.1, 0.3, 0.38), 0.33, 0.72, 0);
   const g = mergeGeometries(parts.map(p => { const q = p.index ? p.toNonIndexed() : p; for (const k of Object.keys(q.attributes)) if (k !== 'position' && k !== 'normal') q.deleteAttribute(k); return q; }));
-  g.computeVertexNormals();
-  return g;
+  const gi = mergeVertices(g, 1e-4); gi.computeVertexNormals();
+  return gi;
 }
 const KINDS = ['hat', 'plain', 'woman', 'cap', 'wave', 'both', 'bag'];
 function makeCrowd(THREE, list, mat) {
@@ -152,7 +152,7 @@ function glyphPolys(ch) {
     return pts;
   });
 }
-function glyphWidth(ch) { if (ch === ' ') return 0.45; let m = 0; (GLYPHS[ch] || []).forEach(c => { for (let i = 0; i < c.length; i++) if (typeof c[i] === 'number' && (i % 1 === 0)) {} }); for (const p of glyphPolys(ch)) for (const [x] of p) m = Math.max(m, x); return m; }
+function glyphWidth(ch) { if (ch === ' ') return 0.45; let m = 0; for (const p of glyphPolys(ch)) for (const [x] of p) m = Math.max(m, x); return m; }
 function handwrite(g, text, x0, y0, size, seed, opt = {}) {
   const r = rng(seed); let x = x0;
   const slant = opt.slant ?? 0.1;
@@ -445,20 +445,25 @@ export async function setup(THREE, renderer, W, H) {
   // fluorescent tubes in housings along the platform (off at first)
   const tubes = [];
   const tubeOn = new THREE.Color(2.2, 2.1, 1.9);
-  const tubeMat = (i) => new THREE.MeshBasicMaterial({ color: 0x151515 });
   const housingM = std({ color: 0x2e2e2c, metalness: 0.4, roughness: 0.5 });
   let lightN = 0;
   for (let z = -48, i = 0; z <= 48; z += 6, i++) {
     for (const x of [PX + 1.1, PX + 4.1]) {
       const hsg = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.08, 1.6), housingM); hsg.position.set(x, HT - 0.12, z); scene.add(hsg);
-      const tb = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 1.5, 8), tubeMat(i)); tb.rotation.x = Math.PI / 2; tb.position.set(x, HT - 0.19, z); scene.add(tb);
+      const tb = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 1.5, 8), new THREE.MeshBasicMaterial({ color: 0x151515 })); tb.rotation.x = Math.PI / 2; tb.position.set(x, HT - 0.19, z); scene.add(tb);
       const h = glow(THREE, 0xfff4e4, 1.6, 0.5); h.position.set(x, HT - 0.22, z); h.scale.set(2.4, 0.8, 1); h.material.opacity = 0; scene.add(h);
       const ent = { tb, h, z, seed: i * 2 + (x > 3 ? 1 : 0), light: null };
-      if (x < 3 && Math.abs(z - (shot === 'crowd' ? 0 : -6)) < 26 && lightN < 7) { const pl = new THREE.PointLight(0xffe9cc, 0, 14, 1.5); pl.position.set(x + 0.8, HT - 0.35, z); scene.add(pl); ent.light = pl; lightN++; }
+      if (x < 3 && Math.abs(z - (shot === 'crowd' ? 0 : -6)) < 26 && lightN < 7) { const pl = new THREE.PointLight(shot === 'crowd' ? AMBER : 0xffe9cc, 0, 14, 1.5); pl.position.set(x + 0.8, HT - 0.35, z); scene.add(pl); ent.light = pl; lightN++; }
       tubes.push(ent);
     }
   }
-  scene.add(new THREE.HemisphereLight(0x7c8696, 0x090807, 0.03));
+  scene.add(new THREE.HemisphereLight(0x7c8696, 0x090807, shot === 'stop' ? 0.12 : 0.03));
+  if (shot === 'stop') {   // a single caged emergency bulb kept burning in the sealed station
+    const ep = new THREE.Vector3(PX + PW - 0.4, 3.2, -14);
+    const eb = new THREE.Mesh(new THREE.SphereGeometry(0.05, 10, 8), new THREE.MeshBasicMaterial({ color: new THREE.Color(2.2, 1.5, 0.8) })); eb.position.copy(ep); scene.add(eb);
+    const eg = glow(THREE, AMBER, 0.9, 0.7); eg.position.copy(ep); scene.add(eg);
+    const el = new THREE.PointLight(AMBER, 2.5, 14, 1.6); el.position.copy(ep); scene.add(el);
+  }
 
   // ---- the U8 train (Großprofil): flat front, headlights low, destination window, lit interior
   const train = new THREE.Group(); scene.add(train);
@@ -531,10 +536,10 @@ export async function setup(THREE, renderer, W, H) {
       const x = PX + 0.55 + Math.pow(r(), 0.8) * (PW - 0.8), z = (r() - 0.5) * 22;
       if (Math.abs(x - (PX + 2.6)) < 0.3 && Math.abs(((z + 1000) % 7) - 3.5) < 0.3) continue;
       const kind = r() < 0.22 ? (r() < 0.6 ? 'wave' : 'both') : KINDS[Math.floor(r() * 4)];
-      ppl.push({ kind, x, z, s: 0.92 + r() * 0.16, ry: -Math.PI / 2 + (r() - 0.5) * 1.2, ph: r() * 10, tone: 0.18 + r() * 0.3 });
+      ppl.push({ kind, x, z, s: 0.92 + r() * 0.16, ry: -Math.PI / 2 + (r() - 0.5) * 1.2, ph: r() * 10, tone: 0.05 + r() * 0.16 });
     }
     // the very front row, pressing towards the door
-    for (let i = 0; i < 9; i++) ppl.push({ kind: i % 3 === 0 ? 'wave' : KINDS[i % 4], x: PX + 0.45 + r() * 0.3, z: -2.2 + i * 0.55 + r() * 0.2, s: 0.95 + r() * 0.1, ry: -Math.PI / 2 + (r() - 0.5) * 0.5, ph: r() * 10, tone: 0.2 + r() * 0.2 });
+    for (let i = 0; i < 9; i++) ppl.push({ kind: i % 3 === 0 ? 'wave' : KINDS[i % 4], x: PX + 0.45 + r() * 0.3, z: -2.2 + i * 0.55 + r() * 0.2, s: 0.95 + r() * 0.1, ry: -Math.PI / 2 + (r() - 0.5) * 0.5, ph: r() * 10, tone: 0.06 + r() * 0.12 });
     crowd = makeCrowd(THREE, ppl, std({ color: 0xffffff, roughness: 0.85 }));
     crowd.forEach(m => scene.add(m));
     // carriage interior around the camera (car 0 sits at z 0..16; doors on +x)
@@ -545,8 +550,13 @@ export async function setup(THREE, renderer, W, H) {
     // walls inside with window holes: panels below/above windows, piers between
     const dz0 = 1.6 + 1 * 4.2 - 0.75;                      // door centre z (k=1)
     for (const sx of [-1, 1]) {
-      const wl = new THREE.Mesh(new THREE.PlaneGeometry(CL - 0.3, 0.95), iw); wl.position.set(sx * (CW2 / 2 - 0.08), 1.5, CL / 2); wl.rotation.y = -sx * Math.PI / 2; inner.add(wl);
-      const wu = new THREE.Mesh(new THREE.PlaneGeometry(CL - 0.3, 0.5), iw); wu.position.set(sx * (CW2 / 2 - 0.08), 3.2, CL / 2); wu.rotation.y = -sx * Math.PI / 2; inner.add(wu);
+      const spans = sx > 0 ? [[0.15, dz0 - 0.68], [dz0 + 0.68, CL - 0.15]] : [[0.15, CL - 0.15]];
+      for (const [za, zb] of spans) {
+        const wl = new THREE.Mesh(new THREE.PlaneGeometry(zb - za, 0.95), iw); wl.position.set(sx * (CW2 / 2 - 0.08), 1.5, (za + zb) / 2); wl.rotation.y = -sx * Math.PI / 2; inner.add(wl);
+        const wu = new THREE.Mesh(new THREE.PlaneGeometry(zb - za, 0.5), iw); wu.position.set(sx * (CW2 / 2 - 0.08), 3.2, (za + zb) / 2); wu.rotation.y = -sx * Math.PI / 2; inner.add(wu);
+      }
+      // window posts
+      for (let z = 0.4; z < CL; z += 2.1) if (sx < 0 || Math.abs(z - dz0) > 0.9) { const pst = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.95, 0.12), iw); pst.position.set(sx * (CW2 / 2 - 0.09), 2.45, z); inner.add(pst); }
     }
     // seats (longitudinal benches) and grab poles
     const seatM = std({ color: 0x6a5a48, roughness: 0.7 });
@@ -585,7 +595,7 @@ function setTubes(ctx, f) {
     const v = f(tb);
     tb.tb.material.color.setRGB(0.08 + v * 2.1, 0.08 + v * 2.0, 0.08 + v * 1.85);
     tb.h.material.opacity = 0.5 * v;
-    if (tb.light) tb.light.intensity = 9 * v;
+    if (tb.light) tb.light.intensity = 9 * v * (ctx.shot === 'crowd' ? 0.8 : 1);
   }
 }
 
@@ -685,8 +695,8 @@ export function update(ctx, t) {
       return { x: p.x - lean * 0.5, y: 1.0 + (p.kind === 'wave' || p.kind === 'both' ? Math.abs(Math.sin(t * 2.2 + p.ph)) * 0.03 : 0), z: p.z, ry: p.ry, rz: sw + lean, s: p.s };
     });
     const k = smooth(t / 5.5);
-    camera.position.set(lerp(-0.75, -0.55, k), lerp(2.15, 2.1, k), lerp(0.55, 0.35, k));
-    camera.lookAt(5, lerp(1.95, 2.0, k), lerp(-0.4, -0.2, k));
+    camera.position.set(lerp(-1.05, -0.8, k), lerp(2.6, 2.55, k), lerp(0.5, 0.3, k));
+    camera.lookAt(5, lerp(2.35, 2.4, k), lerp(-0.4, -0.2, k));
     camera.fov = 50; camera.updateProjectionMatrix();
     if (ctx.bokeh) ctx.bokeh.uniforms.focus.value = 3.0;
     headOn = 0.5;

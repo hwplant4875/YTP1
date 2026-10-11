@@ -168,8 +168,13 @@ def scene_hash(scene):
 def render_3d(v, d):
     k = key(v, round(d, 3), scene_hash(v["scene"]))
     def make(p):
-        sh("node", os.path.join(HERE, "render.mjs"), f"scenes/{v['scene']}.js", p + ".mp4",
-           "--dur", f"{d:.3f}", "--fps", FPS, "--shot", v.get("shot", ""), "--t0", v.get("t0", 0))
+        for attempt in range(3):   # headless Chromium occasionally exits without writing under heavy load
+            r = subprocess.run([str(c) for c in ("node", os.path.join(HERE, "render.mjs"), f"scenes/{v['scene']}.js", p + ".mp4",
+                                "--dur", f"{d:.3f}", "--fps", FPS, "--shot", v.get("shot", ""), "--t0", v.get("t0", 0))],
+                               capture_output=True, text=True)
+            if r.returncode == 0 and os.path.exists(p + ".mp4"):
+                break
+            print("3d render failed, retrying", v, r.stderr[-400:], flush=True)
         os.replace(p + ".mp4", p)
     return cached(f"3d_{v['scene']}_{v.get('shot', '')}_{k}.mp4", make)
 

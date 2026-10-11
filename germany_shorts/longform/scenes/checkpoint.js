@@ -457,12 +457,13 @@ export async function setup(THREE, renderer, W, H) {
     // the official's fist around the handle (+x side = towards the passage) and his uniform sleeve
     const fist = new THREE.Group(); stamp.add(fist); stamp.userData.fist = fist;
     const F = (geo, mat, x, y, z) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = true; fist.add(m); return m; };
-    F(new RoundedBoxGeometry(0.085, 0.055, 0.1, 3, 0.02), skinMat, -0.006, 0.124, 0).rotation.z = 0.4;          // back of the hand over the knob
-    for (let i = 0; i < 4; i++) {                                                                                    // curled fingers round the neck
-      const f = F(new THREE.TorusGeometry(0.026 - i * 0.0015, 0.0098 - Math.abs(i - 1.2) * 0.0008, 8, 16, Math.PI * 1.15), skinMat, 0.0, 0.108 - i * 0.0185, 0.0);
-      f.rotation.set(Math.PI / 2, 0, -Math.PI * 0.575);
+    F(new RoundedBoxGeometry(0.07, 0.07, 0.092, 3, 0.022), skinMat, -0.012, 0.1, 0).rotation.z = 0.25;            // palm and back of the hand round the handle
+    for (let i = 0; i < 4; i++) {                                                                                    // curled fingers, seen from the front
+      const f = F(new RoundedBoxGeometry(0.034, 0.02, 0.026, 2, 0.009), skinMat, 0.03, 0.118 - i * 0.0005, -0.036 + i * 0.024);
+      f.rotation.set(0, 0, -0.5); f.scale.set(1, 1 + (i === 1 || i === 2 ? 0.1 : 0), 1);
+      const tip = F(new RoundedBoxGeometry(0.022, 0.03, 0.023, 2, 0.009), skinMat, 0.04, 0.094, -0.036 + i * 0.024); tip.rotation.z = 0.15;
     }
-    const th = F(new THREE.CapsuleGeometry(0.012, 0.05, 4, 10), skinMat, 0.005, 0.12, -0.04); th.rotation.set(0.3, 0, 1.2);
+    const th = F(new THREE.CapsuleGeometry(0.012, 0.045, 4, 10), skinMat, 0.012, 0.13, 0.05); th.rotation.set(-0.4, 0, 1.0);
     const sleeveM = std({ color: 0x55574f, roughness: 0.9 });
     const sl = F(new THREE.CylinderGeometry(0.05, 0.058, 1, 16), sleeveM, 0, 0, 0); seg(THREE, sl, new THREE.Vector3(-0.045, 0.14, 0), new THREE.Vector3(-0.55, 0.42, 0.06));
     const cuff = F(new THREE.CylinderGeometry(0.052, 0.052, 0.025, 16), std({ color: 0x3a3c36 }), 0, 0, 0); seg(THREE, cuff, new THREE.Vector3(-0.06, 0.148, 0.001), new THREE.Vector3(-0.085, 0.163, 0.002)); cuff.scale.y = 0.03; }

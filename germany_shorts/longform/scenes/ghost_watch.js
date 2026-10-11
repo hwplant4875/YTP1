@@ -155,10 +155,10 @@ export async function setup(THREE, renderer, W, H) {
   // ======================= PEOPLE =======================
   const M = {
     coat: std({ color: 0x3b3e38, roughness: 0.92 }), belt: std({ color: 0x0e0d0c, roughness: 0.5 }),
-    boot: std({ color: 0x080808, roughness: 0.28, metalness: 0.2 }), skin: std({ color: 0xa08e84, roughness: 0.6 }),
+    boot: std({ color: 0x080808, roughness: 0.28, metalness: 0.2 }), skin: std({ color: 0x6a5c54, roughness: 0.72 }),
     visor: std({ color: 0x050505, roughness: 0.2, metalness: 0.3 }), glove: std({ color: 0x121110, roughness: 0.55 }),
     gun: std({ color: 0x1a1a1a, roughness: 0.4, metalness: 0.6 }), wood: std({ color: 0x5e3318, roughness: 0.55 }),
-    eyeW: std({ color: 0xd8d2c8, roughness: 0.3, emissive: 0x222222 }), dark: std({ color: 0x0a0807, roughness: 0.6 }),
+    eyeW: new THREE.MeshStandardMaterial({ color: 0x0c0a09, roughness: 0.08, metalness: 0.0 }), dark: std({ color: 0x0a0807, roughness: 0.6 }),
   };
   // sculpted head: a sphere pushed into a face (brow, sockets, nose, cheekbones, jaw, chin), face toward +z
   const skullGeo = (() => {
@@ -190,11 +190,9 @@ export async function setup(THREE, renderer, W, H) {
       H(new THREE.SphereGeometry(0.02, 10, 8), mats.skin, sx * 0.088, y0 + 0.0, -0.01).scale.set(0.4, 1.1, 0.75);   // ears
       if (o.closed) H(new THREE.SphereGeometry(0.0125, 10, 8), mats.skin, sx * 0.034, y0 + 0.022, 0.08).scale.set(1.15, 0.8, 1);
       else {
-        H(new THREE.SphereGeometry(0.0125, 12, 10), M.eyeW, sx * 0.034, y0 + 0.022, 0.078);
-        H(new THREE.SphereGeometry(0.0068, 10, 8), M.dark, sx * 0.034, y0 + 0.022, 0.0855);
-        H(new THREE.SphereGeometry(0.0135, 12, 8, 0, Math.PI * 2, 0, 1.25), mats.skin, sx * 0.034, y0 + 0.0225, 0.0785).rotation.x = 0.45; // upper lid
+        H(new THREE.SphereGeometry(0.011, 12, 10), M.eyeW, sx * 0.034, y0 + 0.022, 0.074).scale.set(1.1, 0.65, 1);
       }
-      H(new THREE.BoxGeometry(0.03, 0.005, 0.008), mats.brow || M.dark, sx * 0.036, y0 + 0.046, 0.095).rotation.z = sx * -0.1;
+      H(new THREE.BoxGeometry(0.03, 0.004, 0.006), mats.brow || mats.skin, sx * 0.036, y0 + 0.046, 0.095).rotation.z = sx * -0.1;
     }
     if (o.mouthOpen) H(new THREE.SphereGeometry(0.01, 8, 6), M.dark, 0, y0 - 0.058, 0.088).scale.set(1.3, 0.7, 0.5);
   };
@@ -243,7 +241,8 @@ export async function setup(THREE, renderer, W, H) {
   // West Berliners: low-poly people with coats, hats, faces. origin on the floor under the hips, facing +z
   const pmat = {};
   const coatM = (c) => pmat[c] || (pmat[c] = std({ color: c, roughness: 0.9, emissive: c, emissiveIntensity: 0.06 }));
-  const skinP = std({ color: 0xb09c90, roughness: 0.55, emissive: 0x2a1c14, emissiveIntensity: 0.5 });
+  const skinP = std({ color: 0x7e7068, roughness: 0.7, emissive: 0x1a120c, emissiveIntensity: 0.3 });
+  const stareSkin = std({ color: 0x6e6058, roughness: 0.7, emissive: 0x140c08, emissiveIntensity: 0.4 });
   const hairM = (c) => pmat['h' + c] || (pmat['h' + c] = std({ color: c, roughness: 0.8 }));
   const civilian = (o) => {
     const { coat = 0x3b3a38, hat = 'fedora', hatCol = 0x1e1d1b, pose = 'lap', standing = false, closed = false, scale = 1, hair = 0x2a2018, female = false, mouthOpen = false } = o;
@@ -328,10 +327,10 @@ export async function setup(THREE, renderer, W, H) {
 
   // ======================= TRAIN =======================
   const T = {
-    body: std({ color: 0xd8aa3c, roughness: 0.42, metalness: 0.25 }), door: std({ color: 0xc89b32, roughness: 0.45, metalness: 0.25 }),
+    body: std({ color: 0xbfa060, roughness: 0.42, metalness: 0.25 }), door: std({ color: 0xae9050, roughness: 0.45, metalness: 0.25 }),
     roof: std({ color: 0x5f5e5a, roughness: 0.6, metalness: 0.3 }), under: std({ color: 0x141414, roughness: 0.8 }),
-    inner: std({ color: 0xcfc4ac, roughness: 0.7, emissive: 0x3a2c1a, emissiveIntensity: 0.6 }),
-    seat: std({ color: 0x7b4a2c, roughness: 0.85, emissive: 0x2a1408, emissiveIntensity: 0.5 }),
+    inner: std({ color: 0xb4aea0, roughness: 0.7, emissive: 0x2a241a, emissiveIntensity: 0.35 }),
+    seat: std({ color: 0x5e4436, roughness: 0.85, emissive: 0x1a1008, emissiveIntensity: 0.4 }),
     floor: std({ color: 0x3a3631, roughness: 0.9 }), chrome: std({ color: 0xd0d0d0, metalness: 1, roughness: 0.22 }),
     strip: new THREE.MeshBasicMaterial({ color: 0xa89880 }), rubber: std({ color: 0x0c0c0c, roughness: 0.7 }),
     glass: new THREE.MeshStandardMaterial({ color: 0x9aa3a6, transparent: true, opacity: 0.08, roughness: 0.05, metalness: 0.6, depthWrite: false, side: THREE.DoubleSide }),
@@ -404,6 +403,7 @@ export async function setup(THREE, renderer, W, H) {
       const m = civilian(p.o); m.position.set(p.sx * (CW / 2 - 0.4), FL, p.u); m.rotation.y = p.sx > 0 ? -Math.PI / 2 : Math.PI / 2; c.add(m);
       if (p.tag === 'sleep') { const h = m.userData.head; h.rotation.z = 0.42; h.rotation.x = 0.25; h.position.x += 0.05; }
       if (p.tag) special[p.tag] = m;
+      if (p.tag === 'stare') m.traverse(o => { if (o.isMesh && o.material === skinP) o.material = stareSkin; });
     }
   }
   // cab front (local z = 0) and tail (local z = -TRAIN_LEN)
@@ -461,7 +461,7 @@ export async function setup(THREE, renderer, W, H) {
   const leaf = box(DX1 - DX0 - 0.01, DY - 1 - 0.01, 0.05, std({ color: 0x4a4d47, roughness: 0.6, metalness: 0.3 }), (DX1 - DX0) / 2, (DY - 1) / 2, 0, doorG); leaf.castShadow = true;
   box(0.12, 0.03, 0.05, railM, DX1 - DX0 - 0.1, 1.0, 0.05, doorG);
   // lit corridor behind the door
-  const corr = new THREE.Mesh(new THREE.PlaneGeometry(XF - XB, YC - 1), new THREE.MeshBasicMaterial({ color: 0xffc98e, fog: false }));
+  const corr = new THREE.Mesh(new THREE.PlaneGeometry(XF - XB, YC - 1), new THREE.MeshBasicMaterial({ color: 0x8c6c4c, fog: false }));
   corr.position.set((XB + XF) / 2, (YC + 1) / 2, ZA + 0.01); rooms.add(corr);
   const corrGlow = glow(THREE, AMBER, 3.0, 0.7); corrGlow.position.set(-8.72, 2.6, ZA + 0.2); rooms.add(corrGlow);
   const doorSpot = new THREE.SpotLight(0xffc48a, 0, 9, 0.55, 0.6, 1.2);
@@ -470,11 +470,11 @@ export async function setup(THREE, renderer, W, H) {
   // light through the slit: projected band so only a strip of the platform's light enters
   const SD = 7.0, SA = 0.16;
   const slitSpot = new THREE.SpotLight(0xffb873, 0, 16, SA, 0.1, 0);
-  slitSpot.position.set(-8 + SD, 2.69, 0.0); slitSpot.target.position.set(-9.8, 2.69, 0.0);
+  slitSpot.position.set(-8 + SD, 2.697, 0.0); slitSpot.target.position.set(-9.8, 2.69, 0.0);
   slitSpot.castShadow = true; slitSpot.shadow.mapSize.set(1024, 1024); slitSpot.shadow.bias = -0.0006; slitSpot.shadow.camera.near = 0.5;
   slitSpot.map = canvasTex(THREE, 512, 512, (g, w, h) => { g.fillStyle = '#000'; g.fillRect(0, 0, w, h);
     // the slit seen from the light: 1.5 x 0.14 m at 2.6 m inside a cone of half-width tan(0.42)*2.6
-    const hx = 1.5 / (2 * Math.tan(SA) * SD) * w / 2, hy = (SL.y1 - SL.y0) / (2 * Math.tan(SA) * SD) * h / 2;
+    const hx = 1.5 / (2 * Math.tan(SA) * SD) * w / 2, hy = 0.4 * (SL.y1 - SL.y0) / (2 * Math.tan(SA) * SD) * h / 2;
     g.fillStyle = '#fff'; g.filter = 'blur(1px)'; g.fillRect(w / 2 - hx, h / 2 - hy, 2 * hx, 2 * hy); }, [1, 1]);
   slitSpot.map.wrapS = slitSpot.map.wrapT = THREE.ClampToEdgeWrapping; slitSpot.map.colorSpace = THREE.NoColorSpace;
   scene.add(slitSpot, slitSpot.target);
@@ -584,11 +584,11 @@ export function update(ctx, t) {
   gA.group.visible = gB.group.visible = true;
 
   if (shot === 'guardroom') {
-    ctx.slitSpot.intensity = t < 5.6 ? 5 : 12;
+    ctx.slitSpot.intensity = t < 5.6 ? 9 : 12;
     // outside the cut the two guards press their eyes to the slit
     const atSlit = t < 5.6;
     ctx.inA.group.position.set(atSlit ? -8.56 : -9.15, 1, atSlit ? 0.36 : 0.4); ctx.inB.group.position.set(atSlit ? -8.55 : -8.9, 1, atSlit ? -0.42 : -0.6);
-    ctx.roomBulb.intensity = 0.35; ctx.rbg.material.opacity = 0.5;
+    ctx.roomBulb.intensity = t < 5.6 ? 0.05 : 0.3; ctx.rbg.material.opacity = 0.5;
     placeGuard(gA, -6.5, -5.2, Math.PI / 2 + 0.7); placeGuard(gB, -6.0, -7.2, Math.PI / 2 + 0.1); ctx.key.intensity = 12;
     gA.head.rotation.y = 0.2 * Math.sin(t * 0.4); breathe(gA, 0); breathe(gB, 2);
     // guards on post: tiny head shifts; after the door opens they glance back
@@ -600,7 +600,7 @@ export function update(ctx, t) {
     // inspection
     const open = seg(t, 8.0, 9.1);
     ctx.doorG.rotation.y = -1.45 * open;
-    ctx.doorSpot.intensity = 9 * open; ctx.corrGlow.material.opacity = 0.6 * open;
+    ctx.doorSpot.intensity = 3 * open; ctx.corrGlow.material.opacity = 0.18 * open;
     const step = seg(t, 9.0, 10.6);
     ctx.officer.group.position.set(-8.72, 1, -2.4 + 0.65 * step);
     ctx.officer.head.rotation.y = 0.2 * seg(t, 10.5, 12);
@@ -626,13 +626,13 @@ export function update(ctx, t) {
   } else if (shot === 'teaser') {
     // tight on a guard's eyes in the slit while a train's window light strobes across his face
     ctx.inA.group.position.set(-8.56, 1, 0.36); ctx.inB.group.position.set(-8.55, 1, -0.42);
-    ctx.roomBulb.intensity = 0.15;
+    ctx.roomBulb.intensity = 0.0;
     const trainX = 8 * t;                                     // window band position (m), 1.75 m pitch
     const ph = ((trainX % 1.75) + 1.75) % 1.75;
     const win = smooth(ph / 0.18) * (1 - smooth((ph - 1.45) / 0.18));
     const gapDark = (t > 0.9 && t < 1.15) ? 0.15 : 1;          // car gap
     const sv = win * gapDark;
-    ctx.slitSpot.intensity = 0.3 + 4 * sv; ctx.strobe.intensity = 0.1 + 2.2 * sv;
+    ctx.slitSpot.intensity = 0.8 + 11 * sv; ctx.strobe.intensity = 0.05 + 0.5 * sv;
     ctx.strobe.position.z = 0.3 + (ph - 0.75) * 2.4;
     ctx.inA.head.rotation.y = -0.35 + 0.25 * seg(t, 0, 2.6); ctx.inA.head.rotation.x = 0.03;
     const k = seg(t, 0, 3.0);
@@ -665,7 +665,7 @@ export function update(ctx, t) {
     const v = 1.2, F0 = -19.04;
     train.rotation.y = 0; train.position.set(TL, 0, F0 + v * t);
     const lean = seg(t, 9.6, 11.6);
-    const pan = 0.5 * seg(t, 5.2, 7.4) - 0.5 * seg(t, 8.2, 10.2);
+    const pan = 1.1 * seg(t, 5.2, 7.4) - 1.1 * seg(t, 8.2, 10.2);
     camera.position.set(-5.75 + 0.5 * lean, 2.62 - 0.05 * lean + 0.008 * Math.sin(t * 1.3), -20 + 0.1 * Math.sin(t * 0.4));
     camera.lookAt(-2.75, 2.2 - 0.3 * lean, -20.9 + pan + 0.4 * lean);
     fov = 36 - 9 * seg(t, 5.0, 6.6) * (1 - seg(t, 7.8, 9.2));
@@ -726,7 +726,7 @@ export function update(ctx, t) {
       const zl = -1.5 - sp * j, d = Math.abs(zl - lc.z);
       if (d >= 6) continue;
       const inTrain = zl < 0 && zl > -TRAIN_LEN;
-      L4.position.set(0, 2.75, zl); L4.intensity = inTrain ? 3.2 * (1 - smooth(d / 6)) : 0;
+      L4.position.set(0, 2.75, zl); L4.intensity = inTrain ? 2.5 * (1 - smooth(d / 6)) : 0;
     }
     for (const L4 of ctx.tLights) { const d = Math.abs(L4.position.z - lc.z); if (d >= 6) L4.intensity = 0; }
   }
