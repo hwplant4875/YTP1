@@ -9,11 +9,16 @@ def load(name, peak=0.5):
         x = np.frombuffer(raw, np.float32).astype(np.float64)
         _c[name] = x / (np.abs(x).max() + 1e-9) * peak
     return _c[name]
-def music(N, name="music", xfade=0.5):
-    """Loop the music bed to N samples with a short crossfade at each seam and a fade-out at the end."""
-    m = load(name, 0.6); xf = int(xfade * SR); out = np.zeros(N); i = 0
+def music(N, name="music", xfade=2.0):
+    """Loop the music bed to N samples: trim the silent head/tail of the track, then join the loops with an
+    equal-power crossfade so the seam never dips into silence; fade-out at the end."""
+    m = load(name, 0.6); loud = np.flatnonzero(np.abs(m) > 10 ** (-40 / 20) * max(np.abs(m).max(), 1e-9))
+    m = m[loud[0]:loud[-1] + 1] if len(loud) else m
+    xf = min(int(xfade * SR), len(m) // 4); out = np.zeros(N); i = 0
+    fin, fout = np.sin(np.linspace(0, np.pi / 2, xf)), np.cos(np.linspace(0, np.pi / 2, xf))
     while i < N:
         seg = m.copy()
-        if i: seg[:xf] *= np.linspace(0, 1, xf); out[i - xf:i] *= np.linspace(1, 0, xf)[: len(out[i - xf:i])]
+        if i:
+            seg[:xf] *= fin; o = out[i - xf:i]; o *= fout[: len(o)]
         start = i - xf if i else 0; j = min(N, start + len(seg)); out[start:j] += seg[: j - start]; i = start + len(seg)
     k = int(1.5 * SR); out[-k:] *= np.linspace(1, 0, k); return out
