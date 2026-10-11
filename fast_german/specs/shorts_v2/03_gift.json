@@ -27,9 +27,22 @@
      "type": "photo",
      "src": "gift_8.jpg",
      "w": 920,
-     "h": 720,
+     "h": 640,
      "x": 540,
-     "y": 760
+     "y": 700
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "?",
+     "size": 420,
+     "colour": [
+      229,
+      72,
+      77
+     ],
+     "x": 290,
+     "y": 690
     },
     {
      "id": "t",
@@ -37,7 +50,7 @@
      "text": "Never give a German a",
      "size": 80,
      "x": 540,
-     "y": 1240
+     "y": 1180
     },
     {
      "id": "w",
@@ -50,20 +63,7 @@
       0
      ],
      "x": 540,
-     "y": 1400
-    },
-    {
-     "id": "q",
-     "type": "text",
-     "text": "?",
-     "size": 300,
-     "colour": [
-      229,
-      72,
-      77
-     ],
-     "x": 930,
-     "y": 470
+     "y": 1335
     }
    ],
    "gap": 0.15
@@ -106,8 +106,9 @@
      "article": "das",
      "show_article": true,
      "en": "= poison",
-     "x": 540,
-     "y": 700
+     "x": 490,
+     "y": 620,
+     "w": 820
     },
     {
      "id": "r2",
@@ -118,8 +119,9 @@
      "show_article": true,
      "en": "= present",
      "hl": true,
-     "x": 540,
-     "y": 1060
+     "x": 490,
+     "y": 960,
+     "w": 820
     }
    ]
   },
@@ -152,6 +154,19 @@
        "x"
       ]
      }
+    ],
+    [
+     {
+      "en": "Call it"
+     },
+     {
+      "de": "das Geschenk.",
+      "show": [
+       "g2",
+       "g2m",
+       "ok"
+      ]
+     }
     ]
    ],
    "hold": 0.5,
@@ -162,24 +177,62 @@
      "icon": "nauseated-face",
      "de": "giftig",
      "en": "= poisonous",
-     "x": 540,
-     "y": 620
+     "w": 820,
+     "x": 490,
+     "y": 480
     },
     {
      "id": "g",
      "type": "tile",
      "icon": "wrapped-gift",
-     "s": 440,
+     "s": 300,
      "x": 540,
-     "y": 1180
+     "y": 780
     },
     {
      "id": "x",
      "type": "tile",
      "icon": "cross-mark",
-     "s": 300,
-     "x": 520,
-     "y": 600
+     "s": 130,
+     "x": 770,
+     "y": 345
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 160,
+     "h": 160,
+     "x": 895,
+     "y": 975,
+     "width": 22
+    },
+    {
+     "id": "g2",
+     "type": "word",
+     "de": "Geschenk",
+     "article": "das",
+     "size": 150,
+     "max_w": 760,
+     "x": 470,
+     "y": 1080,
+     "colour": [
+      34,
+      160,
+      80
+     ]
+    },
+    {
+     "id": "g2m",
+     "type": "text",
+     "text": "= present",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 470,
+     "y": 1215
     }
    ]
   },
@@ -197,15 +250,15 @@
      "id": "l",
      "type": "logo",
      "x": 540,
-     "y": 870
+     "y": 740
     },
     {
      "id": "t",
      "type": "text",
      "text": "Follow for more German",
-     "size": 84,
+     "size": 70,
      "x": 540,
-     "y": 1240
+     "y": 1000
     }
    ]
   }

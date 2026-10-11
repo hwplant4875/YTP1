@@ -39,6 +39,7 @@ FD = "/mnt/project-files/fonts/de/"
 UI = "/mnt/project-files/fonts/YouTubeSans-Black.otf"
 MUSIC = [os.path.join(C.CACHE, "music", n + ".mp3") for n in ("kpop_beat_a", "kpop_beat_c", "rave_c")]
 MUSIC_VOL, POP_VOL = 0.17, 0.16   # SFX far under the voice (user rule 2026-10-11)
+ROW_EXTRA = 34  # gap between a row's German word and its yellow meaning (user 2026-10-11)
 CLIP_FADE = 0.3  # fade-out on every voice clip (user rule 2026-10-11: no abrupt cut-offs)
 
 
@@ -158,7 +159,7 @@ def thumb(el, s):
 
 def row_im(el, w=W - 2 * MX, s=250):
     """One line of a stacked breakdown: picture | German word (gender colour) = English."""
-    im = Image.new("RGBA", (w, s))
+    im = Image.new("RGBA", (w, s + ROW_EXTRA))
     if el.get("photo"):
         im.alpha_composite(thumb(el, s), (0, 0))
     art = el.get("article") if el.get("show_article") else None
@@ -175,10 +176,11 @@ def row_im(el, w=W - 2 * MX, s=250):
     if el.get("en"):
         fe = fit(el["en"], en_font, w - tx, 78, 30)
         e = text_im(el["en"], fe, ACCENT)
-        im.alpha_composite(e, (tx, s - e.height - 22))
+        ey = min(18 + (b - t) + ROW_EXTRA, im.height - e.height)  # meaning sits a clear gap under the word
+        im.alpha_composite(e, (tx, ey))
     if el.get("hl"):
-        hl = Image.new("RGBA", (w + 40, s + 40))
-        ImageDraw.Draw(hl).rounded_rectangle((0, 0, w + 39, s + 39), 44, outline=lighten(col) + (255,), width=8)
+        hl = Image.new("RGBA", (w + 40, im.height + 40))
+        ImageDraw.Draw(hl).rounded_rectangle((0, 0, w + 39, im.height + 39), 44, outline=lighten(col) + (255,), width=8)
         hl.alpha_composite(im, (20, 20))
         return hl
     return im
@@ -211,8 +213,8 @@ def build_el(el):
                               24, 150, 8))
     if t == "row":
         if el.get("icon"):
-            return ("row", row_im(el), shadow(thumb(el, 250), 16, 110, 10), 20 if el.get("hl") else 0)
-        return ("img", row_im(el))
+            return ("row", row_im(el, el.get("w", W - 2 * MX)), shadow(thumb(el, 250), 16, 110, 10), 20 if el.get("hl") else 0)
+        return ("img", row_im(el, el.get("w", W - 2 * MX)))
     if t == "tile":
         s = el["s"]
         if el.get("icon"):
@@ -223,6 +225,11 @@ def build_el(el):
     if t == "text":
         f = fit(el["text"], en_font, W - 2 * MX, el.get("size", 84))
         return ("img", text_im(el["text"], f, tuple(el.get("colour", WHITE))))
+    if t == "ring":
+        w, h, lw = el["w"], el["h"], el.get("width", 12)
+        im = Image.new("RGBA", (w, h))
+        ImageDraw.Draw(im).ellipse((lw, lw, w - lw - 1, h - lw - 1), outline=tuple(el.get("colour", (52, 199, 89))) + (255,), width=lw)
+        return ("img", shadow(im, 10, 90, 4))
     raise ValueError(t)
 
 
@@ -269,7 +276,7 @@ def draw_el(frame, built, el, local, appear, scene_len):
         canvas = Image.new("RGBA", (im.width + 80, im.height + 80))
         canvas.alpha_composite(im, (40, 40))
         o = 40 + built[3]
-        canvas.alpha_composite(icon, (o + 125 - icon.width // 2, o + 125 - icon.height // 2 + bob))
+        canvas.alpha_composite(icon, (o + 125 - icon.width // 2, o + 125 + ROW_EXTRA // 2 - icon.height // 2 + bob))
         im = canvas
     sc = 0.9 + 0.1 * p
     if sc < 0.999:
