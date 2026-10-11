@@ -556,9 +556,20 @@ def main():
     chain, extra = "[0:v]null[v0]", []
     cur = "[v0]"
     if dims:
-        k = "+".join(f"clip(min((T-{a:.2f})/0.45,({z:.2f}-T)/0.45),0,1)" for a, z in dims)
-        chain += f";{cur}split[da][db];[db]gblur=sigma=16,eq=brightness=-0.16:saturation=0.5[dbb];" \
-                 f"[da][dbb]blend=all_expr='A+(B-A)*min({k},1)'[vd]"
+        # cheap per-frame filters only: blur switched on inside the windows, darkening ramps in/out
+        on = "+".join(f"between(t,{a:.3f},{z:.3f})" for a, z in dims)
+        k = "min(" + "+".join(f"clip(min((t-{a:.2f})/0.45,({z:.2f}-t)/0.45),0,1)" for a, z in dims) + ",1)"
+        cmds = []
+        for a, z in dims:   # ramp the blur radius in 9 steps at both ends of each window
+            for i in range(1, 10):
+                sg = 16 * i / 9
+                cmds.append(f"{a + (i - 1) * 0.05:.3f} gblur sigma {sg:.2f};")
+                cmds.append(f"{z - i * 0.05:.3f} gblur sigma {sg:.2f};")
+        cmds.sort(key=lambda c: float(c.split()[0]))
+        cf = os.path.join(work, "dim_cmds.txt")
+        open(cf, "w").write("\n".join(cmds) + "\n")
+        chain += (f";{cur}sendcmd=f='{esc(cf)}',gblur=sigma=16:enable='{on}',"
+                  f"eq=eval=frame:brightness='-0.16*{k}':saturation='1-0.5*{k}'[vd]")
         cur = "[vd]"
     for n, (a, z, f) in enumerate(ovs):
         extra += ["-i", f]
