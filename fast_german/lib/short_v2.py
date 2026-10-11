@@ -195,16 +195,9 @@ def logo_im():
 
 
 def background():
-    rng = np.random.default_rng(7)
-    base = np.zeros((H, W, 3), np.float32) + np.array(C.CREAM, np.float32)
-    base = base * (1 - 0.05 * np.linspace(0, 1, H)[:, None, None])
-    bg = Image.fromarray(np.clip(base + rng.normal(0, 4, (H, W, 1)), 0, 255).astype(np.uint8)).convert("RGBA")
-    d = ImageDraw.Draw(bg)
-    for y in range(60, H, 90):                       # soft dotted pattern, as in the first batch
-        for x in range(45 if (y // 90) % 2 else 0, W, 90):
-            d.ellipse((x - 4, y - 4, x + 4, y + 4), fill=(240, 226, 200, 255))
-    badge = Image.open(PROFILE).convert("RGB").resize((150, 150), Image.LANCZOS)
-    bg.alpha_composite(shadow(rounded(badge, 36), 14, 120, 6), ((W - 150) // 2 - 28, 110 - 28))
+    """Plain, clean cream page (user 2026-10-11: no pattern, no road) with the bare pretzel badge."""
+    bg = Image.new("RGBA", (W, H), tuple(C.CREAM) + (255,))
+    bg.alpha_composite(shadow(C.icon("pretzel", 150), 14, 60, 6), ((W - 150) // 2 - 28, 110 - 28))
     return bg
 
 

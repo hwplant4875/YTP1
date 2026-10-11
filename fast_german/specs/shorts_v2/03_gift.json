@@ -4,8 +4,7 @@
  "photos": [
   "gift_8"
  ],
- "bg": "road",
- "music": "/mnt/project-files/fast_german/cache/music/ukulele_marimba_a.mp3",
+ "music": "/mnt/project-files/fast_german/cache/music/ukulele_b.mp3",
  "scenes": [
   {
    "lines": [
@@ -45,9 +44,9 @@
      "de": "GIFT",
      "size": 220,
      "colour": [
-      255,
-      204,
-      0
+      205,
+      112,
+      10
      ],
      "x": 540,
      "y": 1400
