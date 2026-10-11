@@ -22,6 +22,15 @@ LINE_GAP, SEG_GAP, SCENE_GAP = 0.32, 0.10, 0.45
 # Beige theme (user 2026-10-11: night sky dropped, back to the calm beige). WHITE = main text colour.
 WHITE, GREY = (28, 28, 30), (110, 104, 98)
 ACCENT = (205, 112, 10)
+SHADOW_K = 45                       # shadow strength (%), soft on beige
+STROKE = 0                          # dark outline on text (road theme: keeps words clear of the lane dashes)
+SK = (20, 20, 24, 255)
+
+
+def use_road_theme():
+    """Dark moving Autobahn background (user 2026-10-11): light text, yellow meanings, stronger shadows."""
+    global WHITE, GREY, ACCENT, SHADOW_K, STROKE
+    WHITE, GREY, ACCENT, SHADOW_K, STROKE = (250, 250, 246), (196, 198, 206), (255, 204, 0), 100, 7
 PROFILE = "/mnt/project-files/fast_german/branding/final/PROFILE_FINAL_fast_german.png"
 PHOTOS = "/mnt/project-files/fast_german/cache/photos/"
 FD = "/mnt/project-files/fonts/de/"
@@ -45,7 +54,8 @@ def fit(text, fnt, max_w, start, lo=40):
     return fnt(s)
 
 
-def text_im(text, f, fill, stroke=0, sfill=(0, 0, 0)):
+def text_im(text, f, fill, stroke=None, sfill=(20, 20, 24)):
+    stroke = STROKE if stroke is None else stroke
     l, t, r, b = f.getbbox(text, stroke_width=stroke)
     im = Image.new("RGBA", (r - l + 8, b - t + 8))
     ImageDraw.Draw(im).text((4 - l, 4 - t), text, font=f, fill=fill + (255,), stroke_width=stroke,
@@ -58,7 +68,7 @@ def shadow(im, r=22, a=120, dy=12):
     out = Image.new("RGBA", (im.width + pad * 2, im.height + pad * 2))
     sh = Image.new("RGBA", out.size, (0, 0, 0, 0))
     m = Image.new("L", out.size, 0)
-    m.paste(im.split()[3].point(lambda v: v * a * 45 // 25500), (pad, pad + dy))  # soft on beige
+    m.paste(im.split()[3].point(lambda v: v * a * SHADOW_K // 25500), (pad, pad + dy))  # soft on beige
     sh.putalpha(m.filter(ImageFilter.GaussianBlur(r)))
     out.alpha_composite(sh)
     out.alpha_composite(im, (pad, pad))
@@ -96,11 +106,13 @@ def word_block(de, article=None, en=None, max_w=W - 2 * MX, size=200, colour=Non
     f = fit(full, de_font, max_w, size)
     lead = (article + " ") if (article and show_article) else ""
     l, t, r, b = f.getbbox(full)
-    word_im = Image.new("RGBA", (r - l + 8, b - t + 8))
+    p = 4 + STROKE
+    word_im = Image.new("RGBA", (r - l + 2 * p, b - t + 2 * p))
     d = ImageDraw.Draw(word_im)
     if lead:
-        d.text((4 - l, 4 - t), lead, font=f, fill=lighten(acol) + (255,))
-    d.text((4 - l + f.getlength(lead), 4 - t), de, font=f, fill=(col if not article or colour else WHITE) + (255,))
+        d.text((p - l, p - t), lead, font=f, fill=lighten(acol) + (255,), stroke_width=STROKE, stroke_fill=SK)
+    d.text((p - l + f.getlength(lead), p - t), de, font=f, fill=(col if not article or colour else WHITE) + (255,),
+           stroke_width=STROKE, stroke_fill=SK)
     parts, wsum, hmax = [word_im], word_im.width, word_im.height
     en_im = None
     if en:
@@ -145,8 +157,8 @@ def row_im(el, w=W - 2 * MX, s=250):
     d = ImageDraw.Draw(im)
     wc = (lighten(col) if el.get("article") else WHITE) + (255,)
     if lead:
-        d.text((tx - l, 18 - t), lead, font=f, fill=wc)
-    d.text((tx - l + f.getlength(lead), 18 - t), el["de"], font=f, fill=wc)
+        d.text((tx - l, 18 - t), lead, font=f, fill=wc, stroke_width=STROKE, stroke_fill=SK)
+    d.text((tx - l + f.getlength(lead), 18 - t), el["de"], font=f, fill=wc, stroke_width=STROKE, stroke_fill=SK)
     if el.get("en"):
         fe = fit(el["en"], ui_font, w - tx, 78, 30)
         e = text_im(el["en"], fe, ACCENT)
@@ -323,7 +335,17 @@ def render(spec_path, out_path):
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", *inputs, "-filter_complex", ";".join(fl), "-map", "[a]",
                     "-t", f"{total:.3f}", wav], check=True)
     # frames
-    bg = background()
+    road = spec.get("bg") == "road"
+    if road:
+        use_road_theme()
+        import road_loop as RL
+        tex = RL.strip(W, (H // RL.PERIOD + 1) * RL.PERIOD)
+        loop_px = tex.shape[0] / (RL.SECS * FPS)                  # same drift speed as the approved loop
+        badge = Image.open(PROFILE).convert("RGB").resize((150, 150), Image.LANCZOS)
+        badge = shadow(rounded(badge, 36), 14, 120, 6)
+        yy, xx = np.mgrid[0:H, 0:W]
+        vig = (1 - 0.22 * (((xx / W - 0.5) * 2) ** 2 + ((yy / H - 0.5) * 2) ** 2) / 2)[..., None]
+    bg = None if road else background()
     built = [{e["id"]: build_el(e) for e in tl["scene"]["els"]} for tl in timeline]
     ff = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "warning", "-f", "rawvideo", "-pix_fmt", "rgb24",
                            "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-i", wav, "-c:v", "libx264", "-preset",
@@ -337,7 +359,12 @@ def render(spec_path, out_path):
         if si > 0 and now - tl["start"] < first:      # nothing new on screen yet: keep the last scene up
             si -= 1
             tl = timeline[si]
-        frame = bg.copy()
+        if road:
+            fr = (np.roll(tex, int(fi * loop_px) % tex.shape[0], axis=0)[:H] * vig).astype(np.uint8)
+            frame = Image.fromarray(fr).convert("RGBA")
+            frame.alpha_composite(badge, ((W - 150) // 2 - 28, 110 - 28))
+        else:
+            frame = bg.copy()
         local = now - tl["start"]
         L = tl["end"] - tl["start"] + SCENE_GAP
         for e in tl["scene"]["els"]:

@@ -49,9 +49,9 @@
      "text": "= panic before the gate closes",
      "size": 70,
      "colour": [
-      205,
-      112,
-      10
+      255,
+      204,
+      0
      ],
      "x": 540,
      "y": 1470
@@ -348,5 +348,6 @@
    ]
   }
  ],
- "music": "/mnt/project-files/fast_german/cache/music/incompetech/Pookatori and Friends.mp3"
+ "music": "/mnt/project-files/fast_german/cache/music/incompetech/Pookatori and Friends.mp3",
+ "bg": "road"
 }
