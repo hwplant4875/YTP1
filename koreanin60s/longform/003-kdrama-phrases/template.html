@@ -20,6 +20,8 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#FBF4EA
 #ko{position:absolute;left:0;right:0;top:150px;text-align:center;font-weight:700;font-size:170px;line-height:1.1;white-space:nowrap;letter-spacing:-3px}
 #rom{position:absolute;left:0;right:0;top:370px;text-align:center;font-weight:500;font-size:48px;color:#A8968F;white-space:nowrap}
 #slow{position:absolute;left:50%;top:455px;transform:translateX(-50%);font-size:30px;font-weight:700;color:#8a7a74;background:#F6EFE6;border-radius:40px;padding:10px 26px;white-space:nowrap}
+#mean{position:absolute;left:50%;top:445px;transform:translateX(-50%);font-size:52px;font-weight:700;color:#3A3134;background:#F6EFE6;border-radius:44px;padding:12px 34px;white-space:nowrap;opacity:0}
+.pt{display:inline-block;background:#F6EFE6;border-radius:30px;padding:6px 26px 10px;margin:0 10px;text-align:center;vertical-align:middle;line-height:1}.pt b{display:block;font-size:1.3em}.pt small{display:block;font-size:.5em;color:#A8968F;margin-top:6px}.op{color:#C9B8AC;margin:0 6px}
 #q{position:absolute;left:0;right:0;top:330px;text-align:center;font-size:120px;font-weight:700;color:#E9DED3}
 #bird{position:absolute;left:1630px;top:770px;width:270px;height:270px;transform-origin:135px 260px}
 #bird img,.big img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:none;filter:drop-shadow(0 14px 16px rgba(120,90,80,.25))}
@@ -35,7 +37,7 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#FBF4EA
 <div class="scene" id="hook"><div class="big" id="hookB"></div><div id="hookT"><span class="c-p">50</span> Korean Phrases<br>You Hear in Every <span class="c-k">K-Drama</span> 🎬</div></div>
 <div class="scene" id="chs"><div class="big" id="chB"></div><div class="chip" id="chN"></div><div id="chT"></div></div>
 <div class="scene" id="outs"><div class="big" id="outB"></div><div id="outT">Which one have you<br>heard the most? 👇</div><div class="chip" id="outS">Subscribe for more Korean 💌</div></div>
-<div id="card"><div id="en"></div><div id="q">?</div><div id="ko"></div><div id="rom"></div><div id="slow">🐢 slowly</div></div>
+<div id="card"><div id="en"></div><div id="q">?</div><div id="ko"></div><div id="rom"></div><div id="slow">🐢 slowly</div><div id="mean"></div></div>
 <div class="chip" id="chap"></div><div class="chip" id="count"></div>
 <div id="bird"></div><div id="bar"></div>
 <script>
@@ -47,7 +49,8 @@ $('floaters').innerHTML=FL.map((c,i)=>`<div class="fl" id="fl${i}" style="font-s
 const imgs=n=>Object.keys(IMG).map(k=>`<img data-p="${k}" src="${IMG[k]}">`).join('');
 ['bird','hookB','chB','outB'].forEach(id=>$(id).innerHTML=imgs());
 const show=(id,p)=>$(id).querySelectorAll('img').forEach(i=>i.style.display=i.dataset.p===p?'block':'none');
-show('hookB','popcorn_tv');show('chB','excited');show('outB','love_heart');
+show('hookB',D.HOOK_POSE||'popcorn_tv');show('chB','excited');show('outB',D.OUTRO_POSE||'love_heart');
+if(D.HOOK_HTML)$('hookT').innerHTML=D.HOOK_HTML;if(D.OUTRO_HTML)$('outT').innerHTML=D.OUTRO_HTML;
 function fitText(n,max){const tr=n.style.transform;n.style.transform='none';let fs=max;n.style.fontSize=fs+'px';const w=()=>{const r=document.createRange();r.selectNodeContents(n);return r.getBoundingClientRect().width};while(w()>1180&&fs>60){fs-=4;n.style.fontSize=fs+'px'}n.style.transform=tr;return fs}
 window.fit=()=>{};
 let cur=null;
@@ -71,16 +74,17 @@ window.render=function(t){
   if(e.k==='outro'){scene('outs',e,t);$('outB').style.transform=`translateY(${bob}px)`}
   if(e.k!=='phrase'){card.style.opacity=0;bird.style.opacity=0;return}
   if(cur!==e){cur=e;card.className='';card.style.borderColor='';card.classList.add('bd-'+e.c);
-    $('en').innerHTML=e.en;$('ko').innerHTML=e.ko;$('ko').className='c-'+e.c;$('rom').innerHTML=e.rom;fitText($('ko'),170);show('bird',e.pose)}
+    $('en').innerHTML=e.parts?e.parts.map(q=>`<span class="pt">${q[0]} <b>${q[2]}</b><small>${q[1]}</small></span>`).join('<span class="op">+</span>')+'<span class="op">= ?</span>':e.en;$('mean').innerHTML='= '+e.en.replace(/\.$/,'');$('slow').style.display=e.parts?'none':'';$('mean').style.display=e.parts?'':'none';$('ko').innerHTML=e.ko;$('ko').className='c-'+e.c;$('rom').innerHTML=e.rom;fitText($('ko'),170);show('bird',e.pose)}
   // card in / out
   const pin=cl((t-e.t)/.4),pout=cl((t-(e.t1-.3))/.3);
   card.style.opacity=1-pout;card.style.transform=`translateX(${(1-eOC(pin))*900-eIC(pout)*900}px) rotate(${(1-eOC(pin))*2}deg)`;
   // reveal: English moves up and shrinks, Korean pops in
   const r=cl((t-e.reveal)/.45),rr=eOC(r);
-  const en=$('en');const fs=88-(88-44)*rr;en.style.fontSize=fs+'px';en.style.top=(230-(230-58)*rr)+'px';en.style.color=r>0?`rgb(${58+(150-58)*rr},${49+(130-49)*rr},${52+(124-52)*rr})`:'#3A3134';
-  $('q').style.opacity=(1-rr)*(t>e.t+.6?.9:0);$('q').style.transform=`scale(${1+.04*Math.sin(t*5)})`;$('q').style.top=(330)+'px';
+  const en=$('en');const fs=(e.parts?100-(100-36)*rr:88-(88-44)*rr);en.style.fontSize=fs+'px';en.style.top=((e.parts?105:230)-((e.parts?105:230)-(e.parts?36:58))*rr)+'px';en.style.color=r>0?`rgb(${58+(150-58)*rr},${49+(130-49)*rr},${52+(124-52)*rr})`:'#3A3134';
+  $('q').style.opacity=e.parts?0:(1-rr)*(t>e.t+.6?.9:0);$('q').style.transform=`scale(${1+.04*Math.sin(t*5)})`;$('q').style.top=(330)+'px';
   const k=$('ko');k.style.opacity=cl(r*3);k.style.transform=`scale(${r>0?eOB(r)*1:0})`;
   const ro=cl((t-e.reveal-.25)/.3);$('rom').style.opacity=ro;$('rom').style.transform=`translateY(${(1-eOC(ro))*20}px)`;
+  const mo=cl((t-e.slow+.1)/.3);$('mean').style.opacity=mo;$('mean').style.transform=`translateX(-50%) scale(${.8+.2*eOB(mo)})`;
   const so=cl((t-e.slow+.1)/.25);$('slow').style.opacity=so;$('slow').style.transform=`translateX(-50%) scale(${.8+.2*eOB(so)})`;
   // bird: hop in, squash on reveal
   const bi=eOB(cl((t-e.t-.1)/.45));const sq=cl((t-e.reveal)/.4),kk=Math.sin(sq*Math.PI)*(1-sq);

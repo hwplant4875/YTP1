@@ -1,0 +1,261 @@
+{
+ "label": "MUST-TRY FOOD 🌶️",
+ "labelColor": "#E8833A",
+ "pose0": "excited",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Four Korean foods you have to try, and how to order them.",
+   "pose": "excited"
+  },
+  {
+   "k": "f1",
+   "say": "Spicy rice cakes.",
+   "pose": "tteokbokki",
+   "gap": 0.4
+  },
+  {
+   "k": "f1k",
+   "say": "떡볶이.",
+   "pose": "tteokbokki",
+   "lang": "ko"
+  },
+  {
+   "k": "f2",
+   "say": "Seaweed rice rolls.",
+   "pose": "kimbap",
+   "gap": 0.4
+  },
+  {
+   "k": "f2k",
+   "say": "김밥.",
+   "pose": "kimbap",
+   "lang": "ko"
+  },
+  {
+   "k": "f3",
+   "say": "Korean fried chicken.",
+   "pose": "laugh_flap",
+   "gap": 0.4
+  },
+  {
+   "k": "f3k",
+   "say": "치킨.",
+   "pose": "excited",
+   "lang": "ko"
+  },
+  {
+   "k": "f4",
+   "say": "Grilled pork belly.",
+   "pose": "cheers",
+   "gap": 0.4
+  },
+  {
+   "k": "f4k",
+   "say": "삼겹살.",
+   "pose": "cheers",
+   "lang": "ko"
+  },
+  {
+   "k": "t0",
+   "say": "And when it's amazing, say",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "t0k",
+   "say": "맛있어요!",
+   "pose": "love_heart",
+   "lang": "ko"
+  },
+  {
+   "k": "t1",
+   "say": "It's delicious!",
+   "pose": "party_cake"
+  },
+  {
+   "k": "e0",
+   "say": "Which one are you trying first? Comment below!",
+   "pose": "shopping_bubbletea",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "txt",
+     "html": "4 foods you<br><span class='c-y'>HAVE</span> to try 🇰🇷",
+     "size": 90,
+     "y": 660,
+     "at": "h1",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.15;white-space:nowrap"
+    },
+    {
+     "type": "emoji",
+     "e": "🌶️🥢🍗🥓",
+     "size": 120,
+     "y": 430,
+     "at": "h1+0.6",
+     "anim": "up",
+     "float": true
+    }
+   ]
+  },
+  {
+   "from": "f1",
+   "els": [
+    {
+     "type": "chip",
+     "html": "🌶️ STREET FOOD",
+     "c": "y",
+     "y": 340,
+     "at": "f1"
+    },
+    {
+     "type": "emoji",
+     "e": "🌶️",
+     "size": 150,
+     "y": 520,
+     "x": 290,
+     "at": "f1",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "떡볶이",
+     "rom": "tteok-bok-ki",
+     "en": "spicy rice cakes",
+     "c": "y",
+     "size": 120,
+     "w": 450,
+     "y": 800,
+     "x": 290,
+     "at": "f1k"
+    },
+    {
+     "type": "emoji",
+     "e": "🥢",
+     "size": 150,
+     "y": 520,
+     "x": 790,
+     "at": "f2",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "김밥",
+     "rom": "gim-bap",
+     "en": "seaweed rice roll",
+     "c": "m",
+     "size": 150,
+     "w": 450,
+     "y": 800,
+     "x": 790,
+     "at": "f2k"
+    }
+   ]
+  },
+  {
+   "from": "f3",
+   "els": [
+    {
+     "type": "chip",
+     "html": "🍻 NIGHT FOOD",
+     "c": "p",
+     "y": 340,
+     "at": "f3"
+    },
+    {
+     "type": "emoji",
+     "e": "🍗",
+     "size": 150,
+     "y": 520,
+     "x": 290,
+     "at": "f3",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "치킨",
+     "rom": "chi-kin",
+     "en": "fried chicken",
+     "c": "y",
+     "size": 150,
+     "w": 450,
+     "y": 800,
+     "x": 290,
+     "at": "f3k"
+    },
+    {
+     "type": "emoji",
+     "e": "🥓",
+     "size": 150,
+     "y": 520,
+     "x": 790,
+     "at": "f4",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "삼겹살",
+     "rom": "sam-gyeop-sal",
+     "en": "pork belly",
+     "c": "p",
+     "size": 120,
+     "w": 450,
+     "y": 800,
+     "x": 790,
+     "at": "f4k"
+    }
+   ]
+  },
+  {
+   "from": "t0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "😋",
+     "size": 220,
+     "y": 440,
+     "at": "t0",
+     "anim": "spin",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "맛있어요!",
+     "rom": "ma-si-sseo-yo",
+     "en": "it's delicious!",
+     "c": "k",
+     "size": 150,
+     "w": 800,
+     "y": 780,
+     "at": "t0k"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap'>Which one first? 👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

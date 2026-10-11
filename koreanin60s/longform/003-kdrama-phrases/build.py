@@ -1,9 +1,12 @@
 """Long-form: K-drama phrases (16:9). Voice: Jennie on ElevenLabs v3, one request per phrase ("English. ... 한국어. ... 한국어, 천천히."),
 a guessing pause is inserted in the silent gap between the English and the Korean (never inside speech); every clip fades out.
+Other sets reuse this engine: SET=<dir with phrases.py> python3 build.py <outdir>. An item with a 5th field (parts) is a
+compound-word puzzle: "eye... 눈. water... 물. Together? ... 눈물! Tears." (the guessing pause goes before the answer).
 Usage: python3 build.py <outdir> [sample]  -> short.html (template), timeline.json, mix.wav; render with engine/prender.js (VW=1920 VH=1080)."""
 import base64, hashlib, json, os, re, subprocess, sys, wave
 import numpy as np
-HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, "..", "..", "engine"))
+HERE = os.path.dirname(os.path.abspath(__file__)); SET = os.path.abspath(os.environ.get("SET", HERE)); sys.path.insert(0, HERE); sys.path.insert(0, SET); sys.path.insert(0, os.path.join(HERE, "..", "..", "engine"))
+import phrases as P
 from phrases import CHAPTERS, NUM, HOOK, OUTRO
 from sound import load, music
 SR = 48000; VOICE = "z6Kj0hecH20CdetSElRT"; MODEL = "eleven_v3"
@@ -49,15 +52,25 @@ def build(out, sample=False):
     chapters = CHAPTERS[:1] if sample else CHAPTERS
     for ci, (title, emo, col, items) in enumerate(chapters):
         c0 = t; say(f"Chapter {NUM[ci]}. {title}.", 0.9); ev.append({"k": "chapter", "t": c0 - 0.2, "t1": t - 0.25, "i": ci + 1, "title": title, "emo": emo, "c": col})
-        for en_, ko, rom, pose in (items[:5] if sample else items):
-            n += 1; text = f"{en_} ... {ko} ... {slow(ko)}"
-            x, st, en = tts(text)
-            e0, e1, cur = span(text, en_, st, en); k0, k1, cur = span(text, ko, st, en, cur); s0, s1, _ = span(text, slow(ko), st, en, cur)
+        for it in (items[:5] if sample else items):
+            en_, ko, rom, pose = it[:4]; parts = it[4] if len(it) > 4 else None; n += 1
+            if parts:  # compound puzzle
+                (ea, pe, ka), (eb, pe2, kb) = parts; ans = ko + "!"
+                text = f"{pe}... {ka}. {pe2}... {kb}. Together? ... {ans} {en_}"
+                x, st, en = tts(text)
+                _, e1, cur = span(text, "Together?", st, en); k0, k1, cur = span(text, ans, st, en, cur); s0, s1, _ = span(text, en_, st, en, cur)
+            else:
+                text = f"{en_} ... {ko} ... {slow(ko)}"
+                x, st, en = tts(text)
+                e0, e1, cur = span(text, en_, st, en); k0, k1, cur = span(text, ko, st, en, cur); s0, s1, _ = span(text, slow(ko), st, en, cur)
             cut = int((e1 + k0) / 2 * SR); p0 = t
             clips.append((t, fade(x[:cut], 0.05))); t2 = t + cut / SR + GUESS; clips.append((t2, fade(x[cut:])))
             sh = lambda v: (p0 + v) if v * SR < cut else (t2 + v - cut / SR)
-            ev.append({"k": "phrase", "n": n, "t": p0 - 0.35, "en": en_, "ko": ko.rstrip("."), "rom": rom, "pose": pose, "c": col, "ch": title, "emo": emo,
-                       "reveal": sh(k0) - 0.12, "slow": sh(s0), "t1": t2 + len(x) / SR - cut / SR + 0.55})
+            e = {"k": "phrase", "n": n, "t": p0 - 0.35, "en": en_, "ko": ko.rstrip("."), "rom": rom, "pose": pose, "c": col, "ch": title, "emo": emo,
+                 "reveal": sh(k0) - 0.12, "slow": sh(s0), "t1": t2 + len(x) / SR - cut / SR + 0.55}
+            if parts:
+                e["parts"] = [list(q) for q in parts]; e["t1"] += 0.5
+            ev.append(e)
             t = ev[-1]["t1"] + 0.25
     o0 = t; say(OUTRO, 1.2); ev.append({"k": "outro", "t": o0 - 0.2, "t1": t + 1})
     END = round(t + 1.2, 2)
@@ -75,9 +88,9 @@ def build(out, sample=False):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{out}/vo.wav", "-i", f"{out}/music.wav", "-i", f"{out}/sfx.wav", "-filter_complex",
         "[0]asplit[vo][sc];[1]volume=0.28[m];[m][sc]sidechaincompress=threshold=0.02:ratio=6:attack=30:release=400[md];[vo][md][2]amix=inputs=3:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9[out]",
         "-map", "[out]", "-ar", str(SR), "-ac", "2", f"{out}/mix.wav"], check=True)
-    poses = sorted({e["pose"] for e in ev if e["k"] == "phrase"} | {"popcorn_tv", "excited", "hi_wave", "love_heart"})
+    poses = sorted({e["pose"] for e in ev if e["k"] == "phrase"} | {getattr(P, "HOOK_POSE", "popcorn_tv"), "excited", "hi_wave", getattr(P, "OUTRO_POSE", "love_heart")})
     imgs = {p: "data:image/png;base64," + base64.b64encode(open(f"{STK}/{p}.png", "rb").read()).decode() for p in poses}
-    html = open(os.path.join(HERE, "template.html")).read().replace("/*DATA*/", "const D=" + json.dumps({"ev": ev, "END": END, "TOTAL": 50}, ensure_ascii=False) + ";const IMG=" + json.dumps(imgs) + ";")
+    html = open(os.path.join(HERE, "template.html")).read().replace("/*DATA*/", "const D=" + json.dumps({"ev": ev, "END": END, "TOTAL": n, "HOOK_HTML": getattr(P, "HOOK_HTML", None), "OUTRO_HTML": getattr(P, "OUTRO_HTML", None), "HOOK_POSE": getattr(P, "HOOK_POSE", "popcorn_tv"), "OUTRO_POSE": getattr(P, "OUTRO_POSE", "love_heart")}, ensure_ascii=False) + ";const IMG=" + json.dumps(imgs) + ";")
     open(f"{out}/short.html", "w").write(html); json.dump({"END": END, "ev": ev}, open(f"{out}/timeline.json", "w"), ensure_ascii=False)
     print("END", END, "phrases", n)
 

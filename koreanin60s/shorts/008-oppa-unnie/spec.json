@@ -1,0 +1,255 @@
+{
+ "label": "WHO'S OPPA? 🤔",
+ "labelColor": "#E26D96",
+ "pose0": "thinking",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "In Korea, you don't call older friends by their name. You use one of these four words.",
+   "pose": "thinking"
+  },
+  {
+   "k": "g0",
+   "say": "If you're a girl, an older guy is",
+   "pose": "talk",
+   "gap": 0.4
+  },
+  {
+   "k": "g0k",
+   "say": "오빠.",
+   "pose": "shy_cover",
+   "lang": "ko"
+  },
+  {
+   "k": "g1",
+   "say": "and an older girl is",
+   "pose": "point_idea"
+  },
+  {
+   "k": "g1k",
+   "say": "언니.",
+   "pose": "finger_heart",
+   "lang": "ko"
+  },
+  {
+   "k": "b0",
+   "say": "If you're a guy, an older guy is",
+   "pose": "talk",
+   "gap": 0.4
+  },
+  {
+   "k": "b0k",
+   "say": "형.",
+   "pose": "thumbs_up",
+   "lang": "ko"
+  },
+  {
+   "k": "b1",
+   "say": "and an older girl is",
+   "pose": "point_idea"
+  },
+  {
+   "k": "b1k",
+   "say": "누나.",
+   "pose": "bow",
+   "lang": "ko"
+  },
+  {
+   "k": "t0",
+   "say": "Same person, different word. It all depends on who's talking!",
+   "pose": "mind_blown",
+   "gap": 0.45
+  },
+  {
+   "k": "e0",
+   "say": "Who's your oppa? Tell me in the comments!",
+   "pose": "love_heart",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "txt",
+     "html": "Don't call them<br>by their <span class='c-p'>name</span> 🙅",
+     "size": 84,
+     "y": 660,
+     "at": "h1",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.15;white-space:nowrap"
+    },
+    {
+     "type": "emoji",
+     "e": "👧👦👩👨",
+     "size": 120,
+     "y": 430,
+     "at": "h1+0.6",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "stamp",
+     "html": "오빠? 언니? 형? 누나?",
+     "c": "p",
+     "size": 70,
+     "y": 960,
+     "at": "h1@end-1.2",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "g0",
+   "els": [
+    {
+     "type": "chip",
+     "html": "IF YOU'RE A GIRL 👧",
+     "c": "p",
+     "y": 340,
+     "at": "g0"
+    },
+    {
+     "type": "emoji",
+     "e": "👦",
+     "size": 150,
+     "y": 520,
+     "x": 290,
+     "at": "g0",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "오빠",
+     "rom": "op-pa",
+     "en": "older guy",
+     "c": "b",
+     "size": 150,
+     "w": 450,
+     "y": 800,
+     "x": 290,
+     "at": "g0k"
+    },
+    {
+     "type": "emoji",
+     "e": "👩",
+     "size": 150,
+     "y": 520,
+     "x": 790,
+     "at": "g1",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "언니",
+     "rom": "eon-ni",
+     "en": "older girl",
+     "c": "p",
+     "size": 150,
+     "w": 450,
+     "y": 800,
+     "x": 790,
+     "at": "g1k"
+    }
+   ]
+  },
+  {
+   "from": "b0",
+   "els": [
+    {
+     "type": "chip",
+     "html": "IF YOU'RE A GUY 👦",
+     "c": "b",
+     "y": 340,
+     "at": "b0"
+    },
+    {
+     "type": "emoji",
+     "e": "👨",
+     "size": 150,
+     "y": 520,
+     "x": 290,
+     "at": "b0",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "형",
+     "rom": "hyeong",
+     "en": "older guy",
+     "c": "b",
+     "size": 150,
+     "w": 450,
+     "y": 800,
+     "x": 290,
+     "at": "b0k"
+    },
+    {
+     "type": "emoji",
+     "e": "👩",
+     "size": 150,
+     "y": 520,
+     "x": 790,
+     "at": "b1",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "누나",
+     "rom": "nu-na",
+     "en": "older girl",
+     "c": "p",
+     "size": 150,
+     "w": 450,
+     "y": 800,
+     "x": 790,
+     "at": "b1k"
+    }
+   ]
+  },
+  {
+   "from": "t0",
+   "els": [
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:54px;white-space:nowrap;line-height:1.5'>👧 → 오빠 &nbsp;|&nbsp; 👦 → 형<br>(same older guy!)</div>",
+     "w": 900,
+     "pad": 26,
+     "y": 620,
+     "at": "t0",
+     "anim": "up"
+    },
+    {
+     "type": "stamp",
+     "html": "WHO'S TALKING? 🤯",
+     "c": "y",
+     "size": 76,
+     "y": 960,
+     "at": "t0+1.0",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap'>Who's your oppa? 👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

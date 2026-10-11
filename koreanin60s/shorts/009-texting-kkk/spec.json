@@ -1,0 +1,208 @@
+{
+ "label": "KOREAN TEXTING 💬",
+ "labelColor": "#4FB592",
+ "pose0": "phone_chat",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Koreans text in consonants. Here's how to read the four you'll see everywhere.",
+   "pose": "phone_chat"
+  },
+  {
+   "k": "w1",
+   "say": "Something funny? Koreans type this. It sounds like",
+   "pose": "laugh_flap",
+   "gap": 0.4
+  },
+  {
+   "k": "w1k",
+   "say": "크크크.",
+   "pose": "laugh_tears",
+   "lang": "ko"
+  },
+  {
+   "k": "w2",
+   "say": "A softer smile sounds like",
+   "pose": "smug",
+   "gap": 0.4
+  },
+  {
+   "k": "w2k",
+   "say": "히히.",
+   "pose": "tilt_shy",
+   "lang": "ko"
+  },
+  {
+   "k": "w3",
+   "say": "Sad? These are two crying eyes.",
+   "pose": "tissue_cry",
+   "gap": 0.4
+  },
+  {
+   "k": "w4",
+   "say": "And a quick yes? That's",
+   "pose": "thumbs_up",
+   "gap": 0.4
+  },
+  {
+   "k": "w4k",
+   "say": "응, 응.",
+   "pose": "thumbs_up",
+   "lang": "ko"
+  },
+  {
+   "k": "e0",
+   "say": "Now type your best Korean laugh in the comments!",
+   "pose": "laugh_flap",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean texting<br>in <span class='c-m'>4 letters</span> 💬",
+     "size": 86,
+     "y": 660,
+     "at": "h1",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.15;white-space:nowrap"
+    },
+    {
+     "type": "emoji",
+     "e": "📱💬",
+     "size": 130,
+     "y": 430,
+     "at": "h1+0.6",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "stamp",
+     "html": "ㅋㅋㅋ ㅎㅎ ㅠㅠ ㅇㅇ",
+     "c": "m",
+     "size": 80,
+     "y": 960,
+     "at": "h1@end-1.2",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "w1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🤣",
+     "size": 150,
+     "y": 420,
+     "x": 290,
+     "at": "w1",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "ㅋㅋㅋ",
+     "rom": "keu-keu-keu",
+     "en": "LOL",
+     "c": "y",
+     "size": 140,
+     "w": 450,
+     "y": 700,
+     "x": 290,
+     "at": "w1k"
+    },
+    {
+     "type": "emoji",
+     "e": "😊",
+     "size": 150,
+     "y": 420,
+     "x": 790,
+     "at": "w2",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "ㅎㅎ",
+     "rom": "hi-hi",
+     "en": "hehe",
+     "c": "p",
+     "size": 140,
+     "w": 450,
+     "y": 700,
+     "x": 790,
+     "at": "w2k"
+    }
+   ]
+  },
+  {
+   "from": "w3",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "😭",
+     "size": 150,
+     "y": 420,
+     "x": 290,
+     "at": "w3",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "ㅠㅠ",
+     "rom": "crying eyes",
+     "en": "sad",
+     "c": "b",
+     "size": 140,
+     "w": 450,
+     "y": 700,
+     "x": 290,
+     "at": "w3+0.5"
+    },
+    {
+     "type": "emoji",
+     "e": "👌",
+     "size": 150,
+     "y": 420,
+     "x": 790,
+     "at": "w4",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "ㅇㅇ",
+     "rom": "eung-eung",
+     "en": "yep",
+     "c": "m",
+     "size": 140,
+     "w": 450,
+     "y": 700,
+     "x": 790,
+     "at": "w4k"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap'>Type your Korean laugh 👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}
