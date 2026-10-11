@@ -41,16 +41,26 @@ def _post(url, body):
             time.sleep(min(60, 2 ** attempt * 2) + attempt)
 
 
-def tts(text, speed=1.0, stability=0.45, style=0.3):
-    """Return (mp3_path, alignment dict with chars + start/end times). Cached by text and settings."""
+# German bits keep the same voice and model; German context text around them makes the model read them as German.
+LANG_CTX = {"de": {"previous_text": "Hallo, ich spreche jetzt Deutsch, ganz ruhig und deutlich.",
+                   "next_text": "Das war ein deutsches Wort."},
+            "de-turbo": {"language_code": "de"}}
+
+
+def tts(text, speed=1.0, stability=0.45, style=0.3, lang=None):
+    """Return (mp3_path, alignment dict with chars + start/end times). Cached by text and settings.
+    lang="de": German pronunciation forced (user 2026-10-11: "die" was read as English "die"), same voice on a
+    model that accepts language_code."""
     settings = {"stability": stability, "similarity_boost": 0.8, "style": style, "speed": speed}
-    h = hashlib.sha1(json.dumps([VOICE, MODEL, text, settings]).encode()).hexdigest()[:16]
+    model = MODEL if lang != "de-turbo" else "eleven_turbo_v2_5"
+    key = [VOICE, MODEL, text, settings] if not lang else [VOICE, model, lang, text, settings]
+    h = hashlib.sha1(json.dumps(key).encode()).hexdigest()[:16]
     mp3 = os.path.join(CACHE, "tts", h + ".mp3")
     js = os.path.join(CACHE, "tts", h + ".json")
     if not os.path.exists(mp3):
         os.makedirs(os.path.dirname(mp3), exist_ok=True)
         raw = _post(f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE}/with-timestamps?output_format=mp3_44100_128",
-                    {"text": text, "model_id": MODEL, "voice_settings": settings})
+                    dict({"text": text, "model_id": model, "voice_settings": settings}, **LANG_CTX.get(lang, {})))
         d = json.loads(raw)
         open(mp3, "wb").write(base64.b64decode(d["audio_base64"]))
         json.dump({"text": text, "alignment": d.get("normalized_alignment") or d.get("alignment")}, open(js, "w"))

@@ -1,0 +1,374 @@
+{
+ "id": "02_torschlusspanik",
+ "title": "This German word means: panic before the gate closes 😱",
+ "photos": [
+  "tor_3",
+  "tor_1",
+  "lock_1",
+  "hourglass_3",
+  "cake30_3",
+  "ring_7",
+  "house_7"
+ ],
+ "scenes": [
+  {
+   "lines": [
+    [
+     {
+      "de": "Torschlusspanik.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "This German word means... panic before the gate closes.",
+      "show": [
+       "m"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "tor_3.jpg",
+     "w": 920,
+     "h": 720,
+     "x": 540,
+     "y": 790
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Torschlusspanik",
+     "size": 200,
+     "x": 540,
+     "y": 1320
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= panic before the gate closes",
+     "size": 70,
+     "colour": [
+      255,
+      214,
+      120
+     ],
+     "x": 540,
+     "y": 1470
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "de": "Tor.",
+      "show": [
+       "r1"
+      ]
+     },
+     {
+      "en": "for gate."
+     }
+    ],
+    [
+     {
+      "de": "Schluss.",
+      "show": [
+       "r2"
+      ]
+     },
+     {
+      "en": "for closing."
+     }
+    ],
+    [
+     {
+      "de": "Panik.",
+      "show": [
+       "r3"
+      ]
+     },
+     {
+      "en": "for panic."
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "els": [
+    {
+     "id": "r1",
+     "type": "row",
+     "photo": "tor_1.jpg",
+     "de": "Tor",
+     "en": "= gate",
+     "x": 540,
+     "y": 630
+    },
+    {
+     "id": "r2",
+     "type": "row",
+     "photo": "lock_1.jpg",
+     "focus": [
+      0.62,
+      0.5
+     ],
+     "de": "Schluss",
+     "en": "= closing",
+     "x": 540,
+     "y": 970
+    },
+    {
+     "id": "r3",
+     "type": "row",
+     "icon": "face-screaming-in-fear",
+     "de": "Panik",
+     "en": "= panic",
+     "x": 540,
+     "y": 1310
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Put them together:"
+     },
+     {
+      "de": "Torschlusspanik.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "The fear that time is running out for the big things in life.",
+      "show": [
+       "p"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Torschlusspanik",
+     "size": 190,
+     "x": 540,
+     "y": 510
+    },
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "hourglass_3.jpg",
+     "w": 640,
+     "h": 860,
+     "x": 540,
+     "y": 1120
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Like turning thirty,",
+      "show": [
+       "cake"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "and suddenly you want a ring,",
+      "show": [
+       "ring"
+      ]
+     },
+     {
+      "en": "a house,",
+      "show": [
+       "house"
+      ]
+     },
+     {
+      "en": "and fluent German.",
+      "show": [
+       "de"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.3,
+   "els": [
+    {
+     "id": "cake",
+     "type": "photo",
+     "src": "cake30_3.jpg",
+     "focus": [
+      0.5,
+      0.35
+     ],
+     "w": 920,
+     "h": 600,
+     "x": 540,
+     "y": 750
+    },
+    {
+     "id": "ring",
+     "type": "tile",
+     "photo": "ring_7.jpg",
+     "focus": [
+      0.5,
+      0.3
+     ],
+     "s": 280,
+     "x": 230,
+     "y": 1310
+    },
+    {
+     "id": "house",
+     "type": "tile",
+     "photo": "house_7.jpg",
+     "s": 280,
+     "x": 540,
+     "y": 1310
+    },
+    {
+     "id": "de",
+     "type": "tile",
+     "label": "DEUTSCH",
+     "s": 280,
+     "x": 850,
+     "y": 1310
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "And the gender?"
+     }
+    ],
+    [
+     {
+      "de": "das Tor,",
+      "show": [
+       "r1"
+      ]
+     },
+     {
+      "de": "der Schluss,",
+      "show": [
+       "r2"
+      ]
+     },
+     {
+      "de": "die Panik.",
+      "show": [
+       "r3"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "The last word decides. So it's"
+     },
+     {
+      "de": "die Torschlusspanik.",
+      "show": [
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.5,
+   "els": [
+    {
+     "id": "r1",
+     "type": "row",
+     "photo": "tor_1.jpg",
+     "de": "Tor",
+     "article": "das",
+     "show_article": true,
+     "x": 540,
+     "y": 540
+    },
+    {
+     "id": "r2",
+     "type": "row",
+     "photo": "lock_1.jpg",
+     "focus": [
+      0.62,
+      0.5
+     ],
+     "de": "Schluss",
+     "article": "der",
+     "show_article": true,
+     "x": 540,
+     "y": 830
+    },
+    {
+     "id": "r3",
+     "type": "row",
+     "icon": "face-screaming-in-fear",
+     "de": "Panik",
+     "article": "die",
+     "show_article": true,
+     "hl": true,
+     "x": 540,
+     "y": 1130
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Torschlusspanik",
+     "article": "die",
+     "colour": [
+      240,
+      110,
+      114
+     ],
+     "size": 150,
+     "x": 540,
+     "y": 1440
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Follow for more German."
+     }
+    ]
+   ],
+   "hold": 0.8,
+   "els": [
+    {
+     "id": "l",
+     "type": "logo",
+     "x": 540,
+     "y": 870
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Follow for more German",
+     "size": 84,
+     "x": 540,
+     "y": 1240
+    }
+   ]
+  }
+ ]
+}
