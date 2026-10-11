@@ -1,0 +1,267 @@
+{
+ "voice": {
+  "engine": "elevenlabs",
+  "voice_id": "DrBEKFgWMDWUG6bjTSTk",
+  "model": "eleven_v4",
+  "stability": 0.5,
+  "speed": 1.0
+ },
+ "gap": 0.1,
+ "subtitles": false,
+ "declick": true,
+ "sfx_gain_db": -6,
+ "style_fields": {
+  "YEAR": {
+   "Fontsize": 200,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 11,
+   "Shadow": 0,
+   "Spacing": 2
+  },
+  "LABEL": {
+   "Fontsize": 100,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 7,
+   "Shadow": 0,
+   "Spacing": 6
+  },
+  "TITLE": {
+   "Fontsize": 230,
+   "PrimaryColour": "&H00D0DCE4",
+   "Outline": 0,
+   "Shadow": 0,
+   "Spacing": 14
+  }
+ },
+ "fonts": {
+  "YEAR": "YouTube Sans",
+  "LABEL": "YouTube Sans",
+  "TITLE": "Playfair Display",
+  "FX": "YouTube Sans"
+ },
+ "music": [
+  {
+   "file": "music/m2_investigate.mp3",
+   "from": "intro",
+   "to": "end",
+   "vol": 0.17,
+   "fade_in": 0.6,
+   "fade_out": 1.2
+  }
+ ],
+ "beats": [
+  {
+   "say": "West Berlin paid East Germany, just to run its own subway.",
+   "visual": {
+    "type": "3d",
+    "scene": "s3_watch",
+    "shot": "boots",
+    "t0": 1.2
+   },
+   "id": "intro",
+   "text": {
+    "kind": "year",
+    "content": "PAID",
+    "pos": [
+     0.5,
+     0.33
+    ],
+    "delay": 0.35,
+    "extend": 0.0
+   },
+   "sfx": [
+    {
+     "prompt": "subway train approaching through a tunnel, rumble and rattling wheels, echo",
+     "len": 5,
+     "vol": 0.2,
+     "at": 0.0,
+     "filter": "atrim=0:5.00,afade=t=in:d=0.03,afade=t=out:st=3.50:d=1.50"
+    },
+    {
+     "prompt": "empty underground subway station ambience, faint electrical hum, low air rumble",
+     "len": 12,
+     "vol": 0.12,
+     "at": 0.0,
+     "filter": "atrim=0:12.00,afade=t=in:d=0.03,afade=t=out:st=9.00:d=3.00"
+    }
+   ]
+  },
+  {
+   "say": "In 1961 the Wall went up, but West Berlin's trains still ran under the East,",
+   "visual": {
+    "type": "3d",
+    "scene": "s3_section",
+    "shot": "pass",
+    "t0": 0
+   },
+   "text": {
+    "kind": "year",
+    "content": "1961",
+    "pos": [
+     0.5,
+     0.27
+    ],
+    "delay": 0.3,
+    "extend": 0.0
+   }
+  },
+  {
+   "say": "through sealed, guarded ghost stations.",
+   "visual": {
+    "type": "3d",
+    "scene": "s3_watch",
+    "shot": "eachother",
+    "t0": 0.3
+   }
+  },
+  {
+   "say": "From 1963, East Germany sent a bill. Every month.",
+   "visual": {
+    "type": "g2d",
+    "name": "money_s3",
+    "module": "short3_graphics.py",
+    "args": {}
+   },
+   "trans": "dip",
+   "sfx": {
+    "prompt": "old cash register ding and a few coins",
+    "len": 1.6,
+    "vol": 0.2,
+    "at": 0.9,
+    "filter": "atrim=0:1.60,afade=t=in:d=0.03,afade=t=out:st=1.00:d=0.60"
+   }
+  },
+  {
+   "say": "First, about a hundred and eighty thousand marks.",
+   "visual": "same"
+  },
+  {
+   "say": "By 1989, almost half a million.",
+   "visual": "same",
+   "sfx": {
+    "prompt": "coins pouring onto a pile, short",
+    "len": 1.8,
+    "vol": 0.14,
+    "at": 0.3,
+    "filter": "atrim=0:1.80,afade=t=in:d=0.03,afade=t=out:st=1.00:d=0.80"
+   }
+  },
+  {
+   "say": "Close to six million marks a year,",
+   "visual": "same"
+  },
+  {
+   "say": "paid to the country that walled them in.",
+   "visual": "same",
+   "hold": 0.3,
+   "sfx": {
+    "prompt": "deep cinematic sub boom hit with short metallic tail",
+    "len": 2.5,
+    "vol": 0.18,
+    "at": 0.2,
+    "filter": "atrim=0:2.50,afade=t=in:d=0.03,afade=t=out:st=1.10:d=1.40"
+   }
+  },
+  {
+   "say": "And inside West Berlin, the S-Bahn was run by East Germany.",
+   "visual": {
+    "type": "3d",
+    "scene": "s3_reopen",
+    "shot": "stop",
+    "t0": 0.3
+   },
+   "trans": "dip",
+   "text": {
+    "kind": "year",
+    "content": "RUN BY\\NTHE EAST",
+    "pos": [
+     0.5,
+     0.3
+    ],
+    "delay": 0.9,
+    "extend": 0.0
+   }
+  },
+  {
+   "say": "So West Berliners boycotted it.",
+   "visual": "same",
+   "text": {
+    "kind": "year",
+    "content": "BOYCOTT",
+    "pos": [
+     0.5,
+     0.3
+    ],
+    "delay": 0.2,
+    "extend": 0.0
+   }
+  },
+  {
+   "say": "Every ticket, they said, pays for the barbed wire.",
+   "visual": {
+    "type": "3d",
+    "scene": "s3_walk",
+    "shot": "wire",
+    "t0": 0
+   }
+  },
+  {
+   "say": "Ridership crashed from half a million a day to under fifty thousand.",
+   "visual": {
+    "type": "g2d",
+    "name": "riders_s3",
+    "module": "short3_graphics.py",
+    "args": {}
+   },
+   "hold": 0.3,
+   "sfx": {
+    "prompt": "low descending whoosh, soft",
+    "len": 2.0,
+    "vol": 0.12,
+    "at": 2.2,
+    "filter": "atrim=0:2.00,afade=t=in:d=0.03,afade=t=out:st=1.10:d=0.90"
+   }
+  },
+  {
+   "say": "Full story on Strata.",
+   "visual": {
+    "type": "3d",
+    "scene": "s1_endcard",
+    "shot": "amber",
+    "t0": 0
+   },
+   "id": "end_card",
+   "hold": 0.4,
+   "trans": "dip",
+   "text": [
+    {
+     "kind": "label",
+     "content": "FULL STORY ON",
+     "pos": [
+      0.5,
+      0.575
+     ],
+     "delay": 0.15,
+     "extend": 1.0
+    },
+    {
+     "kind": "title",
+     "content": "STRATA",
+     "pos": [
+      0.5,
+      0.655
+     ],
+     "delay": 0.35,
+     "extend": 1.0
+    }
+   ],
+   "sfx": {
+    "prompt": "deep cinematic sub boom hit with short metallic tail",
+    "len": 2.5,
+    "vol": 0.2,
+    "at": 0.05,
+    "filter": "atrim=0:2.50,afade=t=in:d=0.03,afade=t=out:st=1.10:d=1.40"
+   }
+  }
+ ]
+}
