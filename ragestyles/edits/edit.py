@@ -59,7 +59,9 @@ def build(spec, out, preview=False):
                  '-c:a', 'pcm_s16le', f'{work}/a{i}.wav'])
         else:
             run(['ffmpeg', '-v', 'error', '-y', '-ss', f"{s['in']:.3f}", '-t', f'{d:.3f}', '-i', srcs[s['src']], '-vn',
-                 '-af', 'aresample=48000,aformat=channel_layouts=stereo,apad', '-t', f'{d:.3f}', '-c:a', 'pcm_s16le', f'{work}/a{i}.wav'])
+                 '-af', f"aresample=48000,aformat=channel_layouts=stereo,apad,atrim=0:{d:.3f},"
+                        f"afade=t=in:d={s.get('afi', 0.08)},afade=t=out:st={d - s.get('afo', 0.12):.3f}:d={s.get('afo', 0.12)}",
+                 '-t', f'{d:.3f}', '-c:a', 'pcm_s16le', f'{work}/a{i}.wav'])
 
     with ThreadPoolExecutor(4) as ex:
         list(ex.map(part, range(n)))

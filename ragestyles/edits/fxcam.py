@@ -74,6 +74,10 @@ def render_shot(src, t_in, dur, pre_filter, shot, out_w, out_h, out_path, bg=(0,
     enc = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'bgr24', '-s', f'{out_w}x{out_h}', '-r', str(fps),
                             '-i', '-', '-c:v', 'libx264', '-preset', preset, '-crf', str(crf), '-pix_fmt', 'yuv420p', out_path],
                            stdin=subprocess.PIPE)
+    if grade_cfg and (grade_cfg.get('exposure') or grade_cfg.get('brightness')):
+        # brighten dark footage only: full lift below ~0.22 mean luma, none above ~0.42 (bright shots glare otherwise)
+        k = float(np.clip((0.42 - first.mean() / 255.0) / 0.2, 0, 1))
+        grade_cfg = dict(grade_cfg, exposure=grade_cfg.get('exposure', 0) * k, brightness=grade_cfg.get('brightness', 0) * k)
     wide = shot.get('fit') == 'wide'
     out_aspect = out_w / out_h
     hits = shot.get('hits', [])
