@@ -493,9 +493,14 @@ def main():
             shots.append({"v": v if v != "same" else {"type": "black"}, "start": b["_start"], "end": b["_end"], "beats": [b]})
     shots[-1]["end"] = total
     segs = []
+    shard = os.environ.get("ASSEMBLE_SHARD")   # "k/n": only pre-render every n-th shot into the cache, then stop
     for i, s in enumerate(shots):
         d = s["end"] - s["start"]
         v = s["v"]
+        if shard:
+            k, n = map(int, shard.split("/"))
+            if i % n != k:
+                continue
         print(f"shot {i + 1}/{len(shots)} {v['type']} {d:.1f}s", flush=True)
         if v["type"] == "3d":
             segs.append(render_3d(v, d))
@@ -507,6 +512,9 @@ def main():
             segs.append(render_g2d(v, d, s["start"], s["beats"], base))
         else:
             segs.append(render_black(d))
+    if shard:
+        print("shard done", flush=True)
+        return
     lst = os.path.join(work, "shots.txt")
     open(lst, "w").write("".join(f"file '{os.path.abspath(s)}'\n" for s in segs))
 
