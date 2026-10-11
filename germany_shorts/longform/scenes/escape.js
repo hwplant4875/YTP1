@@ -151,12 +151,28 @@ function plateTex(THREE, text, { w = 256, h = 96, bg = '#e6e2d6', fg = '#111', s
 }
 
 // ---------------------------------------------------------------- the technician (and other people)
+let FAB = null;
+function fabricTex(THREE) {   // woven wool / drill: fine weave, wear and creases, so clothes stop reading as plastic
+  if (FAB) return FAB;
+  const r = rng(77);
+  FAB = canvasTex(THREE, 256, 256, (g, w, h) => {
+    g.fillStyle = '#b8b8b8'; g.fillRect(0, 0, w, h);
+    for (let y = 0; y < h; y += 2) { g.fillStyle = `rgba(0,0,0,${0.06 + r() * 0.06})`; g.fillRect(0, y, w, 1); }
+    for (let x = 0; x < w; x += 2) { g.fillStyle = `rgba(255,255,255,${0.03 + r() * 0.04})`; g.fillRect(x, 0, 1, h); }
+    for (let i = 0; i < 40; i++) { g.strokeStyle = `rgba(0,0,0,${0.08 + r() * 0.12})`; g.lineWidth = 2 + r() * 5; g.beginPath(); const x = r() * w, y = r() * h; g.moveTo(x, y); g.bezierCurveTo(x + 20, y + 30, x - 15, y + 60, x + r() * 30, y + 90); g.stroke(); }
+    for (let i = 0; i < 2500; i++) { const v = r() < 0.5 ? 0 : 255; g.fillStyle = `rgba(${v},${v},${v},${r() * 0.07})`; g.fillRect(r() * w, r() * h, 1 + r() * 2, 1 + r() * 2); }
+  }, [3, 3]);
+  return FAB;
+}
+
 // articulated figure, origin at the feet, facing +z. Returns joints so shots can pose and walk it.
-function worker(THREE, { suit = 0x464b50, skin = 0x8a7c72, cap = 'work', lamp = false, shadow = true, coat = false, skirt = false, hat = true } = {}) {
+function worker(THREE, { suit = 0x464b50, skin = 0x8a7c72, cap = 'work', lamp = false, shadow = true, coat = false, skirt = false, hat = true, fabric = false, legs = null } = {}) {
   const std = stdF(THREE);
-  const cloth = std({ color: suit, roughness: 0.93 });
-  const clothD = std({ color: new THREE.Color(suit).multiplyScalar(0.7), roughness: 0.95 });
-  const skinM = std({ color: skin, roughness: 0.65 });
+  const fm = fabric ? { map: fabricTex(THREE), roughness: 1 } : {};
+  const cloth = std({ color: suit, roughness: 0.93, ...fm });
+  const clothD = std({ color: new THREE.Color(suit).multiplyScalar(0.7), roughness: 0.95, ...fm });
+  const legM = legs !== null ? std({ color: legs, roughness: 0.95, ...fm }) : cloth;
+  const skinM = std({ color: skin, roughness: fabric ? 0.85 : 0.65 });
   const boot = std({ color: 0x141312, roughness: 0.55 });
   const glove = std({ color: 0x2a2622, roughness: 0.8 });
   const hair = std({ color: 0x1c1915, roughness: 0.9 });
@@ -189,7 +205,11 @@ function worker(THREE, { suit = 0x464b50, skin = 0x8a7c72, cap = 'work', lamp = 
   for (const s of [-1, 1]) M(new THREE.SphereGeometry(1, 10, 8), skinM, head, s * 0.088, 0.075, -0.005).scale.set(0.012, 0.024, 0.018);
   M(new THREE.SphereGeometry(1, 16, 12), hair, head, 0, 0.1, -0.014).scale.set(0.092, 0.085, 0.096);               // hair
   if (hat) {
-    if (cap === 'driver') {
+    if (cap === 'fedora') {
+      M(new THREE.CylinderGeometry(0.098, 0.108, 0.1, 20), capM, head, 0, 0.19, -0.005);
+      M(new THREE.CylinderGeometry(0.11, 0.11, 0.025, 20), boot, head, 0, 0.152, -0.005);
+      M(new THREE.CylinderGeometry(0.175, 0.175, 0.012, 24), capM, head, 0, 0.14, -0.005).rotation.x = 0.06;
+    } else if (cap === 'driver') {
       M(new THREE.CylinderGeometry(0.118, 0.098, 0.07, 24), capM, head, 0, 0.175, 0);
       const v = M(new THREE.CylinderGeometry(0.1, 0.1, 0.01, 20, 1, false, -Math.PI / 2, Math.PI), boot, head, 0, 0.14, 0.03); v.rotation.x = 0.25;
       M(new THREE.CylinderGeometry(0.1, 0.1, 0.012, 24), boot, head, 0, 0.145, 0);
@@ -212,9 +232,9 @@ function worker(THREE, { suit = 0x464b50, skin = 0x8a7c72, cap = 'work', lamp = 
     M(new THREE.CapsuleGeometry(0.014, 0.04, 3, 6), glove, hd, -s * 0.035, -0.04, 0.02).rotation.z = s * 0.5;
     sh.push(a); el.push(e); hand.push(hd);
     const tg = new THREE.Group(); tg.position.set(s * 0.093, -0.01, 0); hips.add(tg);
-    M(new THREE.CapsuleGeometry(0.077, 0.3, 4, 12), skirt ? clothD : cloth, tg, 0, -0.21, 0);
+    M(new THREE.CapsuleGeometry(0.077, 0.3, 4, 12), skirt ? clothD : legM, tg, 0, -0.21, 0);
     const k = new THREE.Group(); k.position.y = -0.44; tg.add(k);
-    M(new THREE.CapsuleGeometry(skirt ? 0.045 : 0.064, 0.32, 4, 12), skirt ? skinM : cloth, k, 0, -0.2, 0);
+    M(new THREE.CapsuleGeometry(skirt ? 0.045 : 0.064, 0.32, 4, 12), skirt ? skinM : legM, k, 0, -0.2, 0);
     if (!skirt) M(new THREE.CylinderGeometry(0.068, 0.072, 0.05, 12), clothD, k, 0, -0.39, 0);
     const b = new THREE.Group(); b.position.y = -0.43; k.add(b);
     M(new RB(0.1, 0.085, 0.26, 2, 0.03), boot, b, 0, -0.012, 0.05);
@@ -611,7 +631,7 @@ export async function setup(THREE, renderer, W, H) {
     s2.g.scale.setScalar(1.3); s3.g.scale.setScalar(1.3);
 
     if (shot !== 'tunnel') {
-      const f = worker(THREE, { lamp: true }); scene.add(f.root); ctx.f = f;
+      const f = worker(THREE, shot === 'plan' ? { lamp: true, skin: 0x33281f, fabric: true, suit: 0x3a3e42 } : { lamp: true }); scene.add(f.root); ctx.f = f;
       f.hand[1].add(f.lamp.group); f.lamp.group.position.set(0, -0.06, 0.01);
       f.lamp.spot.castShadow = true; f.lamp.spot.shadow.mapSize.set(1024, 1024); f.lamp.spot.shadow.bias = -0.0006; f.lamp.spot.shadow.camera.near = 0.1;
     }
@@ -660,13 +680,21 @@ async function buildWest(THREE, scene, ctx, std) {
   // walls with window openings (so outside light comes through as moving patches)
   const box = (w, h, d, x, y, z, m, cast = true) => { const b = add(car, new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m), x, y, z); b.castShadow = cast; b.receiveShadow = true; return b; };
   const doors = [-4.6, 4.6];
+  ctx.panes = [];
+  const paneTex = canvasTex(THREE, 128, 64, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, 'rgba(255,255,255,0.15)'); gr.addColorStop(0.45, 'rgba(255,255,255,1)'); gr.addColorStop(0.6, 'rgba(255,255,255,0.9)'); gr.addColorStop(1, 'rgba(255,255,255,0.1)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
   for (const sx of [-1, 1]) {
     const x = sx * (XI + 0.04);
     box(0.08, 0.92, LEN, x, 0.46, 0, panel);
     box(0.08, TOP - 1.85, LEN, x, (1.85 + TOP) / 2, 0, panel);
     for (let z = -LEN / 2; z <= LEN / 2 + 0.01; z += 1.25) box(0.08, 0.95, 0.14, x, 1.4, z, panel);
     // windows: thin glass
-    add(car, new THREE.Mesh(new THREE.PlaneGeometry(LEN, 0.93), new THREE.MeshStandardMaterial({ color: 0x0b0d0e, roughness: 0.05, metalness: 0.2, transparent: true, opacity: 0.18 })), x + sx * 0.035, 1.4, 0).rotation.y = -sx * Math.PI / 2;
+    add(car, new THREE.Mesh(new THREE.PlaneGeometry(LEN, 0.93), new THREE.MeshStandardMaterial({ color: 0x0b0d0e, roughness: 0.45, metalness: 0.1, transparent: true, opacity: 0.18 })), x + sx * 0.035, 1.4, 0).rotation.y = -sx * Math.PI / 2;
+    // per-window glow panes: passing tunnel lamps smear along the window row
+    for (let z = -LEN / 2 + 0.62; z < LEN / 2; z += 1.25) {
+      const m = new THREE.MeshBasicMaterial({ map: paneTex, color: AMBER, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, side: THREE.DoubleSide });
+      const pn = add(car, new THREE.Mesh(new THREE.PlaneGeometry(1.12, 0.86), m), x + sx * 0.05, 1.4, z); pn.rotation.y = -sx * Math.PI / 2;
+      ctx.panes.push({ m, z, sx });
+    }
     // longitudinal benches between the doors
     for (const [a, b] of [[-LEN / 2 + 0.2, -5.5], [-3.7, 3.7], [5.5, LEN / 2 - 0.2]]) {
       const zc = (a + b) / 2, l = b - a;
@@ -683,14 +711,18 @@ async function buildWest(THREE, scene, ctx, std) {
   // end door window into the next car, dim
   add(car, new THREE.Mesh(new THREE.PlaneGeometry(0.6, 1.0), new THREE.MeshBasicMaterial({ color: 0x2a2218 })), 0, 1.4, -LEN / 2 + 0.005);
   // ceiling light boxes
-  const lampM = new THREE.MeshBasicMaterial({ color: 0xf3e6cc });
+  const lampM = new THREE.MeshBasicMaterial({ color: 0xb8ab94 });
   ctx.ceilLamps = lampM;
   for (const sx of [-1, 1]) for (let z = -LEN / 2 + 1.2; z < LEN / 2; z += 2.6) add(car, new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.04, 1.6), lampM), sx * 0.5, TOP - 0.02, z);
   ctx.inLights = [];
   for (const z of [-5, 0.5, 5]) { const l = new THREE.PointLight(0xffe7c2, 0, 7, 1.5); l.position.set(0, TOP - 0.15, z); car.add(l); ctx.inLights.push(l); }
 
   // him, lying face down in the aisle, head towards the camera
-  const f = worker(THREE, { lamp: true }); ctx.f = f; car.add(f.root);
+  const f = worker(THREE, { lamp: true, suit: 0x26292c, skin: 0x3a2e28, fabric: true, hat: false }); ctx.f = f; car.add(f.root);
+  // his cap, fallen off beside his head
+  { const capM = std({ color: 0x1c1e20, roughness: 0.9, map: fabricTex(THREE) }); const cg = new THREE.Group(); cg.position.set(0.32, 0.03, 2.75); cg.rotation.set(0.25, 0.6, 0.1); car.add(cg);
+    add(cg, new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.098, 0.065, 20), capM)).castShadow = true;
+    const v = add(cg, new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.095, 0.012, 20, 1, false, -Math.PI / 2, Math.PI), capM), 0, -0.025, 0.05); v.scale.set(1, 1, 1.25); }
   f.hand[1].add(f.lamp.group); setLamp(f.lamp, 0);
   f.root.rotation.x = Math.PI / 2; f.root.position.set(-0.05, 0.15, 0.75);
   f.root.rotation.z = 0.05;
@@ -698,30 +730,33 @@ async function buildWest(THREE, scene, ctx, std) {
   // arms bent up beside the head, elbows out, lying flat on the floor
   f.sh[0].rotation.set(-0.05, 0, -0.32); f.el[0].rotation.set(-0.1, 0, 0.1);
   f.sh[1].rotation.set(-0.05, 0, 0.32); f.el[1].rotation.set(-0.1, 0, -0.1);
-  f.head.rotation.set(0, 1.15, 0);
+  f.head.rotation.set(0.15, 0.35, 0);
   f.spine.rotation.set(0, 0, 0); f.hips.rotation.set(0, 0, 0);
   car.remove(f.root); car.add(f.root);
   f.hand[1].remove(f.lamp.group); car.add(f.lamp.group); f.lamp.group.position.set(0.4, 0.2, 1.1); f.lamp.group.rotation.set(0, 0.5, 0);
   // passengers
   const pax = [];
   const P = (x, z, ry, o) => { const p = worker(THREE, o); p.root.position.set(x, 0, z); p.root.rotation.y = ry; car.add(p.root); standPose(p); pax.push(p); return p; };
-  const a = P(0.68, 2.9, -2.4, { suit: 0x2c2b29, coat: true, cap: 'work', hat: false }); a.sh[0].rotation.x = -0.1;
-  const b = P(-0.75, 0.2, 1.0, { suit: 0x6b665d, skirt: true, coat: true, hat: false });
-  const c = P(0.6, -1.6, -2.6, { suit: 0x3a3a40, coat: true, hat: true, cap: 'driver' });
-  const d = P(-0.5, -3.4, 0.6, { suit: 0x55524c, hat: false });
-  const e = P(0.4, -6.0, -2.8, { suit: 0x2a2a2a, coat: true, hat: false });
+  const SK = 0x4e3e35, TR = 0x1b1b1c;
+  const pp = (suit, extra = {}) => ({ suit, coat: true, hat: true, cap: 'fedora', fabric: true, legs: TR, skin: SK, ...extra });
+  // two passengers right in front of the camera: their coats and legs frame him
+  const a = P(0.62, 4.75, -2.6, pp(0x1e1f21)); a.sh[0].rotation.x = -0.1;
+  const a2 = P(-0.6, 4.35, 2.7, pp(0x2b2723, { cap: 'work' }));
+  const b = P(-0.72, 0.4, 1.0, pp(0x2e2a26, { skirt: true, hat: false }));
+  const c = P(0.6, -1.4, -2.6, pp(0x23252a));
+  const d = P(-0.5, -3.4, 0.6, pp(0x312c26, { coat: false, cap: 'work' }));
+  const e = P(0.4, -6.0, -2.8, pp(0x1c1c1c));
   // hands on the overhead rail
-  [a, c, e].forEach(p => { p.sh[1].rotation.x = -2.9; p.el[1].rotation.x = -0.2; });
+  [a, a2, c, e].forEach(p => { p.sh[1].rotation.x = -2.9; p.el[1].rotation.x = -0.2; });
   // seated passengers
   const seated = (x, z, ry, o) => { const p = worker(THREE, o); p.root.position.set(x, 0.0, z); p.root.rotation.y = ry; car.add(p.root);
     p.hips.position.y = 0.52; for (let i = 0; i < 2; i++) { p.th[i].rotation.x = -1.45; p.kn[i].rotation.x = 1.5; p.bt[i].rotation.x = 0; p.sh[i].rotation.x = -0.45; p.el[i].rotation.x = -0.9; } return p; };
-  seated(-0.86, -2.0, Math.PI / 2, { suit: 0x403d38, coat: true, hat: false });
-  seated(0.86, -0.4, -Math.PI / 2, { suit: 0x6e6a62, skirt: true, hat: false });
-  seated(-0.86, 5.6, Math.PI / 2, { suit: 0x2e2e2e, hat: false });
-  seated(0.86, -4.2, -Math.PI / 2, { suit: 0x504a40, coat: true, hat: false });
+  seated(-0.86, -2.0, Math.PI / 2, pp(0x2a2724));
+  seated(0.86, -0.4, -Math.PI / 2, pp(0x34302b, { skirt: true, hat: false }));
+  seated(0.86, -4.2, -Math.PI / 2, pp(0x26262a));
   // a briefcase and a shopping bag on the floor
-  add(car, new THREE.Mesh(new RB(0.42, 0.3, 0.1, 2, 0.02), std({ color: 0x2a1f16, roughness: 0.5 })), 0.95, 0.15, 2.3).rotation.y = 0.3;
-  add(car, new THREE.Mesh(new RB(0.3, 0.36, 0.18, 2, 0.04), std({ color: 0x9a9384, roughness: 0.9 })), -0.65, 0.18, -0.6);
+  add(car, new THREE.Mesh(new RB(0.42, 0.3, 0.1, 2, 0.02), std({ color: 0x2a1f16, roughness: 0.5 })), 0.92, 0.15, 3.6).rotation.y = 0.3;
+  add(car, new THREE.Mesh(new RB(0.3, 0.36, 0.18, 2, 0.04), std({ color: 0x5a554c, roughness: 0.9, map: fabricTex(THREE) })), -0.65, 0.18, -0.6);
   ctx.pax = pax;
 
   // outside world: moves along +z as the train drives towards -z
@@ -742,11 +777,16 @@ async function buildWest(THREE, scene, ctx, std) {
   const roof2 = add(out, new THREE.Mesh(new THREE.BoxGeometry(6, 0.3, 100), twall), 0, 3.0, A - STL - 50); roof2.castShadow = true;
   // tunnel lamps flashing past
   ctx.tlamps = [];
-  for (let z = A + 4; z < A + 260; z += 7.5) for (const sx of [-1, 1]) {
-    if (sx < 0 && Math.round(z) % 2) continue;
-    const h = glow(THREE, AMBER, 0.9, 0.95); h.position.set(sx * 1.92, 1.55, z); out.add(h);
-    const b = add(out, new THREE.Mesh(new THREE.SphereGeometry(0.06, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffd09a })), sx * 1.94, 1.55, z);
-    ctx.tlamps.push(z);
+  const sTex = canvasTex(THREE, 256, 32, (g, w, h) => { const gx = g.createLinearGradient(0, 0, w, 0); gx.addColorStop(0, 'rgba(255,255,255,0)'); gx.addColorStop(0.75, 'rgba(255,255,255,1)'); gx.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = gx; g.fillRect(0, 0, w, h); g.globalCompositeOperation = 'destination-in'; const gy = g.createLinearGradient(0, 0, 0, h); gy.addColorStop(0, 'rgba(0,0,0,0)'); gy.addColorStop(0.5, 'rgba(0,0,0,1)'); gy.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gy; g.fillRect(0, 0, w, h); });
+  sTex.wrapS = sTex.wrapT = THREE.ClampToEdgeWrapping;
+  const streakM = new THREE.MeshBasicMaterial({ map: sTex, color: AMBER, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, side: THREE.DoubleSide });
+  const streakCore = new THREE.MeshBasicMaterial({ map: sTex, color: 0xffe2b8, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, side: THREE.DoubleSide });
+  for (let z = A + 4; z < A + 260; z += 6) for (const sx of [-1, 1]) {
+    // lamps smeared into streaks by the speed (long additive cards along the tunnel wall)
+    const st = add(out, new THREE.Mesh(new THREE.PlaneGeometry(3.2, 0.34), streakM), sx * 1.9, 1.5 + (sx > 0 ? 0 : 0.12), z); st.rotation.y = -sx * Math.PI / 2;
+    const st2 = add(out, new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.08), streakCore), sx * 1.89, 1.5 + (sx > 0 ? 0 : 0.12), z); st2.rotation.y = -sx * Math.PI / 2;
+    ctx.tlamps.push([z, sx]);
   }
   // one shadowed spot rides with whichever tunnel lamp is passing the windows
   const ls = new THREE.SpotLight(0xffb870, 0, 9, 0.9, 0.6, 1.3); ls.castShadow = true; ls.shadow.mapSize.set(1024, 1024); ls.shadow.bias = -0.0008;
@@ -1009,7 +1049,7 @@ export function update(ctx, t) {
     const reach = smooth(seg(t, 2.3, 3.6)), pull = smooth(seg(t, 3.85, 4.25));
     f.sh[0].rotation.set(lerp(0.0, -1.32, reach) + 0.28 * pull, 0, lerp(-0.07, 0.05, reach));
     f.el[0].rotation.x = lerp(-0.2, -0.12, reach) - 0.5 * pull;
-    setLamp(f.lamp, 1, 7);
+    setLamp(f.lamp, 1, 7); f.lamp.fill.intensity = 0;   // no spill on his face: it stays in shadow under the brim
     // fuse #3 slides out with the hand
     const fu = ctx.rb.fuses[3]; fu.position.z = -0.05 + 0.13 * pull; fu.rotation.x = 0.25 * pull;
     ctx.rb.door.rotation.y = -1.9;
@@ -1024,7 +1064,7 @@ export function update(ctx, t) {
     // camera: close on the box from his right, then tilts up to the signal head as it dies
     const k = smooth(seg(t, 4.0, 5.0));
     camera.position.set(lerp(-2.75, -2.6, k), lerp(1.5, 1.45, k), lerp(-3.05, -3.25, k) + 0.1 * t / 8);
-    const look = new THREE.Vector3(lerp(-4.0, -3.6, k), lerp(1.38, 2.6, k), lerp(-1.85, -0.1, k));
+    const look = new THREE.Vector3(lerp(-4.0, -3.6, k), lerp(1.3, 2.6, k), lerp(-1.85, -0.1, k));
     camera.lookAt(look);
     camera.fov = lerp(38, 42, k); camera.updateProjectionMatrix();
     if (ctx.bokeh) ctx.bokeh.uniforms.focus.value = camera.position.distanceTo(look);
@@ -1133,12 +1173,19 @@ export function update(ctx, t) {
     ctx.sun.intensity = 7.5 * smooth(seg(lead, -9, -2));
     ctx.fillW.intensity = 14 * inSt;
     ctx.hemi.intensity = 0.1 + 0.55 * inSt;
-    ctx.ceilLamps.color.setRGB(0.95, 0.9, 0.8);
-    ctx.inLights.forEach((l, i) => l.intensity = 2.2 * (0.95 + 0.05 * Math.sin(t * 50 + i)));
+    ctx.ceilLamps.color.setRGB(0.6 + 0.35 * inSt, 0.55 + 0.35 * inSt, 0.48 + 0.32 * inSt);
+    ctx.inLights.forEach((l, i) => l.intensity = 3.2 * (0.95 + 0.05 * Math.sin(t * 50 + i)));
+    // lamp smears sliding along the window rows (only while still in the tunnel)
+    const tun = 1 - clamp01((lead + 8 - 2) / 6);
+    for (const pn of ctx.panes) {
+      let v = 0;
+      for (const [z, sx] of ctx.tlamps) { if (sx !== pn.sx) continue; const d = pn.z - (z + S); if (d > 1.0 || d < -12) continue; v = Math.max(v, d < 0 ? Math.exp(d / 3.5) : Math.exp(-d / 0.35)); }
+      pn.m.opacity = 1.0 * v * tun;
+    }
     // passing tunnel lamp drives the shadowed spot
     const ls = ctx.ls; let best = null;
-    for (const z of ctx.tlamps) { const wz = z + S; if (wz > -9 && wz < 9 && (best === null || Math.abs(wz - 1) < Math.abs(best - 1))) best = wz; }
-    if (best !== null && lead < -8) { ls.position.set(1.9, 1.6, best); ls.target.position.set(-1.0, 0.0, best + 1.0); ls.intensity = 18 * clamp01(1 - Math.abs(best - 1) / 9); }
+    for (const [z] of ctx.tlamps) { const wz = z + S; if (wz > -9 && wz < 9 && (best === null || Math.abs(wz - 1) < Math.abs(best - 1))) best = wz; }
+    if (best !== null && lead < -8) { ls.position.set(1.9, 1.6, best); ls.target.position.set(-0.3, 0.0, best + 0.6); ls.intensity = 18 * clamp01(1 - Math.abs(best - 1) / 9); }
     else ls.intensity = 0;
     // passengers sway with the train
     const sway = 0.03 * Math.sin(t * 2.1) * (v / 12) + (t > 2.2 && t < 5 ? -0.04 * Math.exp(-(t - 2.2)) : 0);
@@ -1147,10 +1194,10 @@ export function update(ctx, t) {
     // camera on the floor beside his head, vibrating, slight push and tilt up as the light floods in
     const k = smooth(seg(t, 0, 9));
     const vib = (v / 12) * 0.006 * (Math.sin(t * 41) + Math.sin(t * 67.3));
-    camera.position.set(0.42 + vib, 0.3 + vib, lerp(4.3, 4.0, k));
-    camera.lookAt(lerp(-0.3, -0.25, k), lerp(0.5, 0.68, k), -2.5);
-    camera.fov = 48; camera.updateProjectionMatrix();
-    if (ctx.bokeh) ctx.bokeh.uniforms.focus.value = 2.6;
+    camera.position.set(0.05 + vib, 1.1 + vib, lerp(6.6, 6.3, k));
+    camera.lookAt(lerp(-0.1, -0.08, k), lerp(0.2, 0.32, k), 0.8);
+    camera.fov = 46; camera.updateProjectionMatrix();
+    if (ctx.bokeh) ctx.bokeh.uniforms.focus.value = 3.8;
     ctx.renderer && 0;
   } else if (shot === 'rare') {
     // searchlight sweeps across the tracks; camera retreats into the dark

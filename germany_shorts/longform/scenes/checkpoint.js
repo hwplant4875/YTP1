@@ -474,7 +474,7 @@ export async function setup(THREE, renderer, W, H) {
 
   const post = makeComposer(THREE, renderer, scene, camera, W, H, {
     bloom: 0.35, bloomRadius: 0.3, bloomThreshold: 0.9, exposure: 1.0,
-    dof: shot === 'agree' ? { focus: 0.6, aperture: 0.03, maxblur: 0.012 } : shot === 'steps' ? { focus: 2.5, aperture: 0.0012, maxblur: 0.005 } : { focus: 6, aperture: 0.0015, maxblur: 0.008 },
+    dof: shot === 'agree' ? { focus: 0.6, aperture: 0.03, maxblur: 0.012 } : shot === 'steps' ? { focus: 2.5, aperture: 0.0012, maxblur: 0.005 } : null,
   });
   Object.assign(ctx, { man, bomb, officer, pistol, muzzle, muzzleGlow, passport, imprint, stamp, pad, sun, westM, doorGlow, rays, lamps, dust, booths }, post);
   return ctx;

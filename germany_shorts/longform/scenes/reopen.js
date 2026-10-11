@@ -481,7 +481,7 @@ export async function setup(THREE, renderer, W, H) {
       for (let k = 0; k < 4; k++) { const wz = z0 + 1.6 + k * 4.2; const wnd = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 0.95), winM); wnd.position.set(sx * (CW2 / 2 + 0.005), 2.45, wz + 1.3); wnd.rotation.y = sx * Math.PI / 2; train.add(wnd);
         const door = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 2.0), darkM); door.position.set(sx * (CW2 / 2 + 0.006), 1.75, wz - 0.75); door.rotation.y = sx * Math.PI / 2; if (!(c === 0 && sx > 0 && k === 1 && shot === 'crowd')) train.add(door); }
     }
-    for (const sx of [-1, 1]) { const ilight = new THREE.PointLight(0xffe0b0, 0, 6, 2); ilight.position.set(sx * 1.8, 2.3, z0 + CL / 2); train.add(ilight); train.userData.ilights = (train.userData.ilights || []).concat(ilight); }
+    if (c === 0) for (const sx of [-1, 1]) { const ilight = new THREE.PointLight(0xffe0b0, 0, 6, 2); ilight.position.set(sx * 1.8, 2.3, z0 + CL / 2); train.add(ilight); train.userData.ilights = (train.userData.ilights || []).concat(ilight); }
   }
   // front face (at z = 0, facing -z)
   const front = new THREE.Group(); train.add(front);
@@ -516,7 +516,7 @@ export async function setup(THREE, renderer, W, H) {
   for (const [x, y, rz] of [[-0.5, 0.29, 0.6], [0.52, 0.27, -0.5], [-0.52, -0.27, -0.55], [0.5, -0.29, 0.6]]) { const tp = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.045), tapeM); tp.position.set(0.08 - x, 2.5 + y, -0.045); tp.rotation.set(0, Math.PI, rz); train.add(tp); }
   // cab interior behind the sign (dim), glass reflections
 
-  const cabLamp = new THREE.PointLight(0xffe6c4, 0, 4, 2); cabLamp.position.set(0.4, 3.4, -0.9); train.add(cabLamp);
+  const cabLamp = new THREE.PointLight(0xffe6c4, 0, 4, 2); cabLamp.position.set(0.4, 3.4, -0.9); if (shot === 'sign') train.add(cabLamp);
   const glass = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.0), new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.3, metalness: 0.0, transmission: 0, transparent: true, opacity: 0.08, depthWrite: false }));
   glass.position.set(0, 2.55, -0.07); glass.rotation.y = Math.PI; train.add(glass);
   const streak = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.0), new THREE.MeshBasicMaterial({ map: ctex(THREE, 512, 256, (g, w, h) => { g.clearRect(0, 0, w, h);
