@@ -31,8 +31,31 @@ def tts(text):
         d0 = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f"{CACHE}/{h}.mp3"]))
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{CACHE}/{h}.mp3", "-af", f"afade=t=out:st={max(0, d0 - .15):.3f}:d=0.15",
                         "-ar", str(SR), "-ac", "2", wav], check=True)
+    wav, al = squeeze(wav, r["alignment"])
     d = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", wav]))
-    return wav, d, r["alignment"]
+    return wav, d, al
+
+def squeeze(wav, al, keep=0.5, over=0.55):
+    """Silence between sentences stays around 0.5 s and never above 0.6 s (user, 2026-10-12, all shorts): any pause inside the clip
+    longer than `over` is shortened to `keep` by cutting its middle; alignment times after each cut move back to match."""
+    out = wav[:-4] + "_sq.wav"
+    with wave.open(wav) as f: ch, sw, sr, raw = f.getnchannels(), f.getsampwidth(), f.getframerate(), f.readframes(f.getnframes())
+    x = np.frombuffer(raw, np.int16).reshape(-1, ch).astype(np.float64); m = np.abs(x).mean(1)
+    w = int(0.01 * sr); n = len(m) // w; rms = np.sqrt((m[:n * w].reshape(n, w) ** 2).mean(1)); q = rms < 10 ** (-38 / 20) * rms.max()
+    cuts, i = [], 0
+    while i < n:
+        j = i
+        while j < n and q[j]: j += 1
+        if j > i and i > 0 and j < n and (j - i) * 0.01 > over:
+            a = i * w + int(keep / 2 * sr); b = j * w - int(keep / 2 * sr); cuts.append((a, b))
+        i = max(j, i + 1)
+    if not cuts: return wav, al
+    keepx = np.concatenate([x[a:b] for a, b in zip([0] + [c[1] for c in cuts], [c[0] for c in cuts] + [len(x)])])
+    with wave.open(out, "wb") as f: f.setnchannels(ch); f.setsampwidth(sw); f.setframerate(sr); f.writeframes(keepx.astype(np.int16).tobytes())
+    sh = lambda t: t - sum(min(b, max(a, t * sr)) - a for a, b in cuts) / sr
+    al = dict(al); al["character_start_times_seconds"] = [sh(t) for t in al["character_start_times_seconds"]]
+    al["character_end_times_seconds"] = [sh(t) for t in al["character_end_times_seconds"]]
+    return out, al
 
 def utterances(lines):
     # a Korean line is always read together with the line before it (and the English that follows it, until a "gap"),
