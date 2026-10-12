@@ -1,0 +1,247 @@
+{
+ "label": "KPDH KOREAN 🐯",
+ "labelColor": "#8C6CE0",
+ "pose0": "popcorn_tv",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "KPop Demon Hunters is full of hidden Korean words. Did you catch these?",
+   "pose": "popcorn_tv"
+  },
+  {
+   "k": "w1",
+   "say": "The magic barrier, the Honmoon, comes from",
+   "pose": "talk",
+   "gap": 0.4
+  },
+  {
+   "k": "w1k",
+   "say": "혼문.",
+   "pose": "mind_blown",
+   "lang": "ko"
+  },
+  {
+   "k": "w1e",
+   "say": "Soul, plus gate. A soul gate!",
+   "pose": "point_idea"
+  },
+  {
+   "k": "w2",
+   "say": "And the Saja Boys? They're named after",
+   "pose": "nervous_sweat",
+   "gap": 0.4
+  },
+  {
+   "k": "w2k",
+   "say": "저승사자.",
+   "pose": "shocked",
+   "lang": "ko"
+  },
+  {
+   "k": "w2e",
+   "say": "The grim reaper!",
+   "pose": "nervous_sweat"
+  },
+  {
+   "k": "w3",
+   "say": "The tiger is",
+   "pose": "excited",
+   "gap": 0.4
+  },
+  {
+   "k": "w3k",
+   "say": "호랑이,",
+   "pose": "clap_confetti",
+   "lang": "ko"
+  },
+  {
+   "k": "w4",
+   "say": "and the bird is a magpie,",
+   "pose": "talk"
+  },
+  {
+   "k": "w4k",
+   "say": "까치.",
+   "pose": "laugh_flap",
+   "lang": "ko"
+  },
+  {
+   "k": "w4e",
+   "say": "A classic pair from old Korean folk paintings!",
+   "pose": "thumbs_up"
+  },
+  {
+   "k": "e0",
+   "say": "Which one did you know? Comment below!",
+   "pose": "love_heart",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🎤⚔️🐯",
+     "size": 120,
+     "y": 420,
+     "at": "h1+0.4",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Hidden <span class='c-k'>Korean</span> in<br>KPop Demon Hunters",
+     "size": 68,
+     "y": 660,
+     "at": "h1",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.15;white-space:nowrap"
+    }
+   ]
+  },
+  {
+   "from": "w1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "✨🚪",
+     "size": 170,
+     "y": 420,
+     "at": "w1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "혼문",
+     "rom": "hon-mun",
+     "en": "Honmoon",
+     "c": "k",
+     "size": 180,
+     "w": 700,
+     "y": 740,
+     "at": "w1k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:50px;white-space:nowrap;line-height:1.45'>혼 soul + 문 gate = soul gate 🚪</div>",
+     "w": 880,
+     "pad": 24,
+     "y": 1080,
+     "at": "w1e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "w2",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🎩🖤",
+     "size": 170,
+     "y": 420,
+     "at": "w2",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "저승사자",
+     "rom": "jeo-seung-sa-ja",
+     "en": "grim reaper",
+     "c": "b",
+     "size": 150,
+     "w": 800,
+     "y": 740,
+     "at": "w2k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.45'>Saja Boys = 사자 = messenger of death 💀</div>",
+     "w": 920,
+     "pad": 24,
+     "y": 1080,
+     "at": "w2e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "w3",
+   "els": [
+    {
+     "type": "chip",
+     "html": "🎨 FOLK PAINTING DUO",
+     "c": "y",
+     "y": 340,
+     "at": "w3"
+    },
+    {
+     "type": "emoji",
+     "e": "🐯",
+     "size": 150,
+     "y": 520,
+     "x": 290,
+     "at": "w3",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "호랑이",
+     "rom": "ho-rang-i",
+     "en": "tiger",
+     "c": "y",
+     "size": 120,
+     "w": 450,
+     "y": 800,
+     "x": 290,
+     "at": "w3k"
+    },
+    {
+     "type": "emoji",
+     "e": "🐦",
+     "size": 150,
+     "y": 520,
+     "x": 790,
+     "at": "w4",
+     "anim": "drop"
+    },
+    {
+     "type": "word",
+     "ko": "까치",
+     "rom": "kka-chi",
+     "en": "magpie",
+     "c": "b",
+     "size": 140,
+     "w": 450,
+     "y": 800,
+     "x": 790,
+     "at": "w4k"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap'>Which one did you know? 👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

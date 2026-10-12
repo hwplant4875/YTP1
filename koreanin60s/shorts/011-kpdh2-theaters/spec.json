@@ -1,0 +1,165 @@
+{
+ "label": "K-NEWS 📣",
+ "labelColor": "#E25B5B",
+ "pose0": "clap_confetti",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Big news! KPop Demon Hunters 2 is coming to theaters!",
+   "pose": "clap_confetti"
+  },
+  {
+   "k": "n1",
+   "say": "Netflix's boss says the sequel gets a big, worldwide release in the",
+   "pose": "talk",
+   "gap": 0.4
+  },
+  {
+   "k": "n1k",
+   "say": "극장.",
+   "pose": "popcorn_tv",
+   "lang": "ko"
+  },
+  {
+   "k": "n2",
+   "say": "The theater! It's aiming for twenty twenty-nine, and the original directors are coming back.",
+   "pose": "excited"
+  },
+  {
+   "k": "t0",
+   "say": "So here's your word for the sequel:",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "t0k",
+   "say": "속편.",
+   "pose": "mind_blown",
+   "lang": "ko"
+  },
+  {
+   "k": "t1",
+   "say": "Sequel. Part two!",
+   "pose": "thumbs_up"
+  },
+  {
+   "k": "e0",
+   "say": "Will you watch it in theaters? Comment below!",
+   "pose": "love_heart",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🎬🍿",
+     "size": 130,
+     "y": 420,
+     "at": "h1+0.4",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "KPop Demon Hunters 2<br>is coming to <span class='c-p'>THEATERS</span>",
+     "size": 66,
+     "y": 660,
+     "at": "h1",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.15;white-space:nowrap"
+    },
+    {
+     "type": "stamp",
+     "html": "BIG NEWS 📣",
+     "c": "p",
+     "size": 86,
+     "y": 950,
+     "at": "h1@end-0.8",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "n1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🍿",
+     "size": 200,
+     "y": 420,
+     "at": "n1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "극장",
+     "rom": "geuk-jang",
+     "en": "movie theater",
+     "c": "p",
+     "size": 180,
+     "w": 700,
+     "y": 740,
+     "at": "n1k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:48px;white-space:nowrap;line-height:1.45'>🎯 aiming for 2029<br>🎬 same directors return</div>",
+     "w": 820,
+     "pad": 24,
+     "y": 1080,
+     "at": "n2+0.6",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "t0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "2️⃣",
+     "size": 200,
+     "y": 440,
+     "at": "t0",
+     "anim": "spin",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "속편",
+     "rom": "sok-pyeon",
+     "en": "sequel",
+     "c": "k",
+     "size": 180,
+     "w": 700,
+     "y": 760,
+     "at": "t0k"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap'>In theaters? 🍿👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

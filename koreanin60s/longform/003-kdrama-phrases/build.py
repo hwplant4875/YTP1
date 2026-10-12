@@ -76,7 +76,7 @@ def build(out, sample=False):
                 text = f"{pe}... {ka}. {pe2}... {kb}. Together? ... {ans} {en_}"
                 x, st, en = tts(text)
                 _, e1, cur = span(text, "Together?", st, en); k0, k1, cur = span(text, ans, st, en, cur)
-                # no silence between "Together?" and the answer (alignment runs ~0.5 s late, so find the last quiet run by energy), keep 0.12 s of it
+                # no silence between "Together?" and the answer (alignment runs ~0.5 s late, so find the last quiet run by energy), keep a natural ~0.55 s of it
                 w = int(0.01 * SR); lo = int(max(0, e1 - 0.8) * SR); seg = x[lo:int((k0 + 0.3) * SR)]; nw = len(seg) // w
                 q = np.sqrt((seg[:nw * w].reshape(nw, w) ** 2).mean(1)) < 10 ** (-35 / 20) * np.abs(x).max(); best = (0, 0); i = 0
                 while i < nw:
@@ -84,7 +84,7 @@ def build(out, sample=False):
                     while j < nw and q[j]: j += 1
                     if j - i >= 20: best = (i, j)  # the LAST quiet run (>= 0.2 s) before the answer
                     i = j + 1
-                a, b = lo + best[0] * w + int(0.06 * SR), lo + best[1] * w - int(0.06 * SR)
+                a, b = lo + best[0] * w + int(0.3 * SR), lo + best[1] * w - int(0.25 * SR)  # keep a natural ~0.55 s breath
                 if b > a:
                     x = np.concatenate([x[:a], x[b:]]); d = (b - a) / SR; st = [v - d if v * SR >= b else v for v in st]; en = [v - d if v * SR >= b else v for v in en]
                 k0, k1, cur = span(text, ans, st, en, cur - len(ans)); s0, s1, _ = span(text, en_, st, en, cur)
