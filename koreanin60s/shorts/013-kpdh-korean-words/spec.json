@@ -127,7 +127,7 @@
      "html": "<div class='txt' style='font-size:50px;white-space:nowrap;line-height:1.45'>혼 soul + 문 gate = soul gate 🚪</div>",
      "w": 880,
      "pad": 24,
-     "y": 1080,
+     "y": 1030,
      "at": "w1e",
      "anim": "up"
     }
@@ -161,7 +161,7 @@
      "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.45'>Saja Boys = 사자 = messenger of death 💀</div>",
      "w": 920,
      "pad": 24,
-     "y": 1080,
+     "y": 1030,
      "at": "w2e",
      "anim": "up"
     }
