@@ -1,0 +1,24 @@
+{"title": [[["THE MOUNTAIN", "#ffffff"]], [["vs ", "#ffffff"], ["511 KG", "#ffd400"]]],
+ "titleSize": 84,
+ "segs": [
+  {"src": "/home/user/rs_work/src/test5/K3ZZUCVuDs8.mp4", "in": 0.6, "out": 2.8, "zoom": [0.5, 0.40, 1.9, 1.65]},
+  {"src": "/home/user/rs_work/src/test5/K3ZZUCVuDs8.mp4", "in": 2.8, "out": 8.2, "zoom": [0.5, 0.40, 1.65, 2.0]},
+  {"src": "/home/user/rs_work/src/test5/K3ZZUCVuDs8.mp4", "in": 6.0, "out": 8.2, "speed": 0.5, "zoom": [0.5, 0.5, 2.4, 2.7], "audio": -8, "tag": "REPLAY"},
+  {"src": "/home/user/rs_work/src/test5/K3ZZUCVuDs8.mp4", "in": 9.6, "out": 12.6, "zoom": [0.5, 0.40, 1.55, 1.4]}
+ ],
+ "caps": [
+  {"t": [["1 KG MORE", "#ffd400"]], "in": 0.0, "out": 1.1},
+  {"t": [["THAN HIS ", "#ffffff"], ["WORLD RECORD", "#ffd400"]], "in": 1.1, "out": 2.2, "size": 80},
+  {"t": [["UP TO THE KNEES...", "#ffffff"]], "in": 2.4, "out": 3.9},
+  {"t": [["STUCK.", "#ff3b3b"]], "in": 3.9, "out": 5.2, "size": 120},
+  {"t": [["STILL ", "#ffffff"], ["PULLING", "#ffd400"]], "in": 5.2, "out": 6.6},
+  {"t": [["4 SECONDS", "#ffd400"], [" LATER", "#ffffff"]], "in": 6.6, "out": 7.4},
+  {"t": [["THE BAR ", "#ffffff"], ["NEVER", "#ff3b3b"]], "in": 7.7, "out": 9.0},
+  {"t": [["GOT PAST", "#ffffff"]], "in": 9.0, "out": 10.4},
+  {"t": [["HIS KNEES", "#ffd400"]], "in": 10.4, "out": 12.0, "size": 110},
+  {"t": [["510 KG", "#ffd400"], [" RECORD", "#ffffff"]], "in": 12.0, "out": 12.9},
+  {"t": [["STILL HIS", "#ffffff"]], "in": 12.9, "out": 13.6},
+  {"t": [["2ND MISS ", "#ff3b3b"], ["IN 2 MONTHS", "#ffffff"]], "in": 13.6, "out": 14.4, "size": 80},
+  {"t": [["\"NEXT TIME.\"", "#ffd400"]], "in": 14.4, "out": 15.0, "size": 110}
+ ],
+ "hits": [7.4, 11.6]}
