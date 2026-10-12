@@ -31,6 +31,22 @@ def tts(text):
     a = r["alignment"]; assert "".join(a["characters"]) == text
     return x, a["character_start_times_seconds"], a["character_end_times_seconds"]
 
+def squeeze(x, keep=0.3):
+    """Shorten silent gaps inside a clip to `keep` s (speech itself is untouched). Returns (y, f) where f maps old times to new."""
+    w = int(0.01 * SR); n = len(x) // w; rms = np.sqrt((x[:n * w].reshape(n, w) ** 2).mean(1)); thr = 10 ** (-30 / 20) * np.abs(x).max()
+    quiet = rms < thr; cuts, i = [], 0
+    while i < n:
+        if quiet[i]:
+            j = i
+            while j < n and quiet[j]: j += 1
+            if (j - i) * 0.01 > keep and i > 0 and j < n: cuts.append((i * w + int(keep / 2 * SR), j * w - int(keep / 2 * SR)))
+            i = j
+        else: i += 1
+    y = np.concatenate([x[a:b] for a, b in zip([0] + [c[1] for c in cuts], [c[0] for c in cuts] + [len(x)])])
+    def f(t):
+        s = t * SR - sum(min(b, max(a, t * SR)) - a for a, b in cuts); return s / SR
+    return y, f
+
 def fade(x, d=0.15):
     n = min(len(x), int(d * SR)); y = x.copy(); y[len(y) - n:] *= np.linspace(1, 0, n); return y
 
@@ -58,7 +74,7 @@ def build(out, sample=False):
             if parts:  # compound puzzle
                 (ea, pe, ka), (eb, pe2, kb) = parts; ans = ko + "!"
                 text = f"{pe}, {ka}. {pe2}, {kb}. Together? {ans} {en_}"
-                x, st, en = tts(text)
+                x, st, en = tts(text); x, f = squeeze(x, 0.24); st = [f(v) for v in st]; en = [f(v) for v in en]
                 _, e1, cur = span(text, "Together?", st, en); k0, k1, cur = span(text, ans, st, en, cur); s0, s1, _ = span(text, en_, st, en, cur)
             else:
                 text = f"{en_} ... {ko} ... {slow(ko)}"
@@ -70,7 +86,7 @@ def build(out, sample=False):
             e = {"k": "phrase", "n": n, "t": p0 - 0.35, "en": en_, "ko": ko.rstrip("."), "rom": rom, "pose": pose, "c": col, "ch": title, "emo": emo,
                  "reveal": sh(k0) - 0.12, "slow": sh(s0), "t1": t2 + len(x) / SR - cut / SR + 0.55}
             if parts:
-                e["parts"] = [list(q) for q in parts]
+                e["parts"] = [list(q) for q in parts]; e["t1"] -= 0.25
             ev.append(e)
             t = ev[-1]["t1"] + 0.25
     o0 = t; say(OUTRO, 1.2); ev.append({"k": "outro", "t": o0 - 0.2, "t1": t + 1})
