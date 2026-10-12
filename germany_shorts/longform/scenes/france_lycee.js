@@ -690,7 +690,10 @@ export async function setup(THREE, renderer, W, H) {
   const dofFocus = { crowded: 6.8, empty_desk: 5.4, leak: 6.0, heat: 4.8, toilets: 5.6, outside_blockade: 6.0, bins_slide: 7.0, facade_age: 7.5, firework: 6.5 }[shot];
   const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: shot === 'cut' ? 0.7 : 0.6, bloomRadius: 0.6, bloomThreshold: 0.8, exposure: dawn ? 1.05 : shot === 'crowded' ? 1.1 : 0.95,
     dof: dofFocus ? { focus: dofFocus, aperture: 0.0009, maxblur: 0.004 } : null });
-  return { THREE, scene, camera, shot, rooms, lights, deskGlow, emptySpot, emptyBeam, motes, leak, heat, wc, cutPlane, cutLine, cutHalo, cutLight, facade, sodium, extra, k: len ? len / (BASE[shot] ?? 8) : 1, ...post };
+  // render speed: a light at zero intensity adds nothing to the image but still costs a full lighting term per pixel
+  // (and a shadow pass if it casts); update() hides such lights frame by frame
+  const allLights = []; scene.traverse(o => { if (o.isPointLight || o.isSpotLight || o.isDirectionalLight) allLights.push(o); });
+  return { allLights, THREE, scene, camera, shot, rooms, lights, deskGlow, emptySpot, emptyBeam, motes, leak, heat, wc, cutPlane, cutLine, cutHalo, cutLight, facade, sodium, extra, k: len ? len / (BASE[shot] ?? 8) : 1, ...post };
 }
 
 const CAMS = {
@@ -711,6 +714,25 @@ const CAMS = {
 };
 
 export function update(ctx, tt) {
+  updateShot(ctx, tt);
+  // a point/spot light whose range sphere misses the view frustum cannot light a visible pixel (three.js cuts it off at
+  // .distance), so it is skipped too; the image is unchanged, only the per-pixel light loop gets shorter
+  const { THREE, camera } = ctx;
+  camera.updateMatrixWorld();
+  const fr = ctx._fr || (ctx._fr = new THREE.Frustum()), m = ctx._m || (ctx._m = new THREE.Matrix4());
+  const sph = ctx._s || (ctx._s = new THREE.Sphere());
+  fr.setFromProjectionMatrix(m.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+  for (const l of ctx.allLights) {
+    let on = l.intensity > 1e-4;
+    if (on && !l.castShadow && (l.isPointLight || l.isSpotLight) && l.distance > 0) {
+      l.updateWorldMatrix(true, false); sph.center.setFromMatrixPosition(l.matrixWorld); sph.radius = l.distance;
+      on = fr.intersectsSphere(sph);
+    }
+    l.visible = on;
+  }
+}
+
+function updateShot(ctx, tt) {
   const { camera, shot } = ctx;
   const t = tt / (ctx.k || 1);
   const c = path(CAMS[shot] ?? CAMS.cut)(t);

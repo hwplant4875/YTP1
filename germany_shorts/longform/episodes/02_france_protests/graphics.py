@@ -60,14 +60,24 @@ def fade_env(t, d, fin=0.35, fout=0.35):
     return G.smooth(t / fin) * G.smooth((d - t) / fout) if d > 0 else 1.0
 
 
+def grade(im):
+    """Light warm cinematic grade for real photos/footage (matches the assembler "look"): colour kept, slight
+    contrast and saturation lift, warm highlights, cooler-neutral shadows. Never brightened."""
+    a = np.asarray(im.convert("RGB"), np.float32)
+    l = a.mean(axis=2, keepdims=True)
+    a = l + (a - l) * 1.12                                   # saturation +12 %
+    a = (a - 128) * 1.06 + 126                               # contrast +6 %, a hair darker
+    a *= np.array([1.04, 1.0, 0.93], np.float32)            # warm
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
+
 @lru_cache(None)
-def _photo(path, blur, dark, w, h, color=False):
+def _photo(path, blur, dark, w, h, color=True):
     im = Image.open(path)
     im.draft("RGB", (w, h))
     im = ImageOps.exif_transpose(im).convert("RGB")
     im = ImageOps.fit(im, (w, h), Image.LANCZOS)
-    if not color:
-        im = im.convert("L").convert("RGB")
+    im = grade(im) if color else im.convert("L").convert("RGB")
     if blur:
         im = im.filter(ImageFilter.GaussianBlur(blur))
     a = np.asarray(im, np.float32) * dark
@@ -82,7 +92,22 @@ def background(args, base):
         r = np.hypot((x - W() / 2) / W(), (y - H() / 2) / H())
         v = np.clip(1.15 - r * 1.1, 0.35, 1)[..., None]
         return Image.fromarray(np.clip(a * v, 0, 255).astype(np.uint8))
-    return G.vignette_bg()
+    return warm_bg()
+
+
+@lru_cache(None)
+def _warm_bg():
+    """No photo: deep warm-brown backdrop with a faint amber glow (not flat grey)."""
+    y, x = np.mgrid[0:H(), 0:W()]
+    r = np.hypot((x - W() / 2) / W(), (y - H() * 0.45) / H())
+    glow = np.clip(1 - r * 1.6, 0, 1)[..., None] ** 1.6
+    rng = np.random.default_rng(3)
+    a = np.array([14, 11, 9], np.float32)[None, None] + glow * np.array([38, 22, 8], np.float32) + rng.normal(0, 2.0, (H(), W(), 1))
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
+
+def warm_bg():
+    return _warm_bg().copy()
 
 
 def credit(dr, s, alpha=1.0):
@@ -521,7 +546,7 @@ def kenburns(src, k, frm, to):
 def _still(path):
     im = Image.open(path)
     im.draft("RGB", (W() * 2, H() * 2))
-    im = ImageOps.exif_transpose(im).convert("L").convert("RGB")
+    im = grade(ImageOps.exif_transpose(im).convert("RGB"))
     s = max(W() * 2 / im.width, H() * 2 / im.height)
     return im.resize((int(im.width * s), int(im.height * s)), Image.LANCZOS)
 
@@ -545,7 +570,7 @@ def g_montage(args, d, timing, base, out):
                 readers[i] = (ClipReader(os.path.join(base, it["video"]), it.get("start", 0), int(W() * f) // 2 * 2,
                                          int(H() * f) // 2 * 2), f)
             r, f = readers[i]
-            fr = r.read().convert("L").convert("RGB")
+            fr = grade(r.read())
             img = fr.resize((W() // 4, H() // 4)).filter(ImageFilter.GaussianBlur(10)).resize((W(), H()))
             img = Image.fromarray((np.asarray(img, np.float32) * 0.45).astype(np.uint8))
             dr0 = ImageDraw.Draw(img)
@@ -640,7 +665,7 @@ def g_tiktok(args, d, timing, base, out):
     for t in G.frames(d):
         img = bg.copy().convert("RGBA")
         sb = phone(img, cx, cy, pw, ph)
-        fr = reader.read().convert("L").convert("RGB").filter(ImageFilter.GaussianBlur(args.get("blur", 16)))
+        fr = grade(reader.read()).filter(ImageFilter.GaussianBlur(args.get("blur", 16)))
         fr = Image.fromarray((np.asarray(fr, np.float32) * 0.8).astype(np.uint8))
         mask = Image.new("L", fr.size, 0)
         ImageDraw.Draw(mask).rounded_rectangle([0, 0, fr.width - 1, fr.height - 1], radius=40, fill=255)

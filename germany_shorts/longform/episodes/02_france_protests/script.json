@@ -6,7 +6,13 @@
   "stability": 0.5,
   "speed": 1.0
  },
- "gap": 0.12,
+ "gap": 0.2,
+ "look": "eq=contrast=1.06:saturation=1.12:brightness=-0.01,colorbalance=rs=0.035:bs=-0.045:rm=0.025:bm=-0.03",
+ "tail": {
+  "keep": 0.25,
+  "fade": 0.15
+ },
+ "reuse_3d": 1.2,
  "subtitles": false,
  "declick": true,
  "sfx_gain_db": -4,
@@ -107,10 +113,14 @@
   {
    "visual": {
     "type": "video",
-    "file": "assets/news/ap_bins.mp4",
-    "start": 0.0,
-    "frame": 0.8,
-    "credit": "Video: AP"
+    "file": "sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_76.webm",
+    "start": 2.0,
+    "speed": 1.0,
+    "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons",
+    "zoom": [
+     1.0,
+     1.1
+    ]
    },
    "hold": 0.0,
    "id": "intro",

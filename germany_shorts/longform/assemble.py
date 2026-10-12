@@ -61,6 +61,9 @@ def cached(name, make):
     path = os.path.join(CACHE, name)
     if not os.path.exists(path):
         tmp = path + ".part"
+        if os.environ.get("ASSEMBLE_SHARD") and name.startswith(("3d_", "img_", "vid_")) and (os.path.exists(tmp) or os.path.exists(tmp + ".mp4")):
+            print("  already being rendered by another process, skipping", name, flush=True)   # pre-render shards only
+            return path
         make(tmp)
         os.replace(tmp, path)
     return path
@@ -96,11 +99,14 @@ def tts(text, voice, ctx=None):
     if voice.get("engine") == "elevenlabs":
         raw = tts_elevenlabs(text, voice, ctx)
         sd, ss = voice.get("squeeze", [0.32, 0.22])
+        keep = TAIL.get("keep", 0.05) if TAIL else 0.05
         af = ("silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.02,"
-              "areverse,silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.05,areverse,"
+              f"areverse,silenceremove=start_periods=1:start_threshold=-50dB:start_silence={keep},areverse,"
               f"silenceremove=stop_periods=-1:stop_duration={sd}:stop_threshold=-50dB:stop_silence={ss},"
               "aresample=48000,aformat=channel_layouts=mono")
         tight = cached(f"tight_{key(raw, af)}.wav", lambda p: sh("ffmpeg", "-y", "-i", raw, "-af", af, "-f", "wav", p))
+        if TAIL:
+            return cached(f"dc_{key(tight, TAIL)}.wav", lambda p: declick_tail(tight, p, TAIL.get("fade", 0.012)))
         return cached(f"dc_{key(tight)}.wav", lambda p: declick_tail(tight, p)) if DECLICK else tight
     body = {"voice_id": voice.get("voice_id", PILJAE), "text": text, "model": voice.get("model", "ssfm-v21"),
             "language": "kor",
@@ -117,7 +123,7 @@ def tts(text, voice, ctx=None):
     return cached(f"tight_{key(body, af)}.wav", lambda p: sh("ffmpeg", "-y", "-i", raw, "-af", af, "-f", "wav", p))
 
 
-def declick_tail(src, dst):
+def declick_tail(src, dst, fade_out=None):
     """eleven_v4 sometimes ends a line with a 10-60 ms burst after half a second of silence; it is heard as a glitch.
     Mute it (same length, so the timeline does not move) and soften both ends of the line."""
     import wave
@@ -138,7 +144,22 @@ def declick_tail(src, dst):
         x[(k + 1) * fr:] = 0
     f = min(len(x) // 4, sr * 12 // 1000)
     x[:f] *= np.linspace(0, 1, f)
-    x[len(x) - f:] *= np.linspace(1, 0, f)
+    if fade_out:   # natural ending: a raised-cosine fade over the decay, never a hard stop
+        # eleven_v4 often appends the onset of a breath or a click (up to ~0.16 s, sometimes loud) after the line has
+        # already decayed into silence; cut it away, keeping the full decay plus a short stretch of the silence
+        q = db < -55
+        e = n
+        while e > 0 and not q[e - 1]:
+            e -= 1
+        z = e
+        while z > 0 and q[z - 1]:
+            z -= 1
+        if (0 < n - e <= 16 or (0 < n - e <= 35 and db[e:].max() < -40)) and e - z >= 15 and z > 0:   # a word is louder
+            x = x[:min(len(x), (z + int(fade_out * 100) + 5) * fr)]
+        fo = min(len(x) // 3, int(sr * fade_out))
+        x[len(x) - fo:] *= 0.5 + 0.5 * np.cos(np.linspace(0, np.pi, fo))
+    else:
+        x[len(x) - f:] *= np.linspace(1, 0, f)
     with wave.open(dst, "wb") as w:
         w.setnchannels(ch); w.setsampwidth(2); w.setframerate(sr)
         w.writeframes(x.astype(np.int16).tobytes())
@@ -156,6 +177,12 @@ def sfx(prompt, seconds=None):
 # ---------------------------------------------------------------- visuals
 
 LOOK = "eq=saturation=0:contrast=1.08:brightness=-0.02"   # archive material goes black and white
+# per-spec options (all off by default, so older specs render and cache exactly as before):
+#   "look": ffmpeg grade for photos/footage, kept in colour (e.g. a light warm grade) instead of black and white
+#   "tail": {"keep": s, "fade": s} keep more of each TTS line's natural decay and fade it out smoothly
+#   "reuse_3d": s  reuse a cached 3D render whose duration differs by up to s seconds (trimmed, or last frame held)
+COLOUR, TAIL, REUSE_3D = False, None, 0.0
+LOOK_KEY = []
 
 
 def scene_hash(scene):
@@ -167,8 +194,48 @@ def scene_hash(scene):
     return h.hexdigest()[:10]
 
 
+def index_3d():
+    p = os.path.join(CACHE, "3d_index.json")
+    return p, (json.load(open(p)) if os.path.exists(p) else {})
+
+
+def record_3d(name, v, d, h):
+    p, idx = index_3d()
+    idx[name] = {"v": v, "d": round(d, 3), "h": h, "size": SIZE_KEY}
+    tmp = p + f".{os.getpid()}"
+    json.dump(idx, open(tmp, "w"), ensure_ascii=False)
+    os.replace(tmp, p)
+
+
+def reuse_3d(v, d, h):
+    """A cached render of the same shot with a slightly different length: the animation timing does not depend on the
+    clip length (shots are stretched by "name:secs"), so a longer one is cut at d and a shorter one holds its last frame."""
+    _, idx = index_3d()
+    best = None
+    for name, e in idx.items():
+        if e["v"] == v and e["h"] == h and e["size"] == SIZE_KEY and abs(e["d"] - d) <= REUSE_3D \
+                and os.path.exists(os.path.join(CACHE, name)):
+            score = (e["d"] < d, abs(e["d"] - d))   # prefer a longer clip (plain cut)
+            if best is None or score < best[0]:
+                best = (score, name, e["d"])
+    if not best:
+        return None
+    src = os.path.join(CACHE, best[1])
+    if best[2] >= d:
+        return (src, d)
+    return (cached(f"3dpad_{key(best[1], round(d, 3))}.mp4", lambda p: sh(
+        "ffmpeg", "-y", "-i", src, "-vf", f"tpad=stop_mode=clone:stop_duration={d - best[2] + 0.1:.3f}", "-t", f"{d:.3f}",
+        "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p", "-f", "mp4", p)), d)
+
+
 def render_3d(v, d):
-    k = key(v, round(d, 3), scene_hash(v["scene"]), *SIZE_KEY)
+    h = scene_hash(v["scene"])
+    k = key(v, round(d, 3), h, *SIZE_KEY)
+    name = f"3d_{v['scene']}_{v.get('shot', '')}_{k}.mp4"
+    if REUSE_3D and not os.path.exists(os.path.join(CACHE, name)):
+        r = reuse_3d(v, d, h)
+        if r:
+            return r
     def make(p):
         for attempt in range(3):   # headless Chromium occasionally exits without writing under heavy load
             r = subprocess.run([str(c) for c in ("node", os.path.join(HERE, "render.mjs"), f"scenes/{v['scene']}.js", p + ".mp4",
@@ -179,15 +246,20 @@ def render_3d(v, d):
                 break
             print("3d render failed, retrying", v, r.stderr[-400:], flush=True)
         os.replace(p + ".mp4", p)
-    return cached(f"3d_{v['scene']}_{v.get('shot', '')}_{k}.mp4", make)
+    out = cached(name, make)
+    if REUSE_3D:
+        record_3d(name, v, d, h)
+    return out
 
 
 def render_image(v, d, base):
     """Ken Burns on a still, done in float precision (no zoompan jitter)."""
     from PIL import Image
-    k = key(v, round(d, 3), *SIZE_KEY)
+    k = key(v, round(d, 3), *SIZE_KEY, *LOOK_KEY)
     def make(p):
-        src = Image.open(os.path.join(base, v["file"])).convert("L").convert("RGB")
+        src = Image.open(os.path.join(base, v["file"])).convert("RGB")
+        if not COLOUR:
+            src = src.convert("L").convert("RGB")
         # fit to cover 16:9 at 2x so the zoom stays sharp
         s = max(W * 2 / src.width, H * 2 / src.height)
         src = src.resize((int(src.width * s), int(src.height * s)), Image.LANCZOS)
@@ -215,11 +287,18 @@ def render_image(v, d, base):
 
 
 def render_video(v, d, base):
-    k = key(v, round(d, 3), *SIZE_KEY)
+    k = key(v, round(d, 3), *SIZE_KEY, *LOOK_KEY)
     speed = v.get("speed", 1.0)
     crop = v.get("crop")  # [x, y, w, h] in source pixels, to cut away old captions or logos
     vf = (f"crop={crop[2]}:{crop[3]}:{crop[0]}:{crop[1]}," if crop else "") + \
         f"setpts=PTS/{speed},scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},setsar=1,{LOOK}"
+    if v.get("zoom"):   # optional slow push-in [z0, z1], computed on a 2x frame so the motion stays smooth
+        z0, z1 = v["zoom"]
+        n = max(1, round(d * FPS))
+        vf = vf.replace(f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS}",
+                        f"scale={W * 2}:{H * 2}:force_original_aspect_ratio=increase,crop={W * 2}:{H * 2},fps={FPS},"
+                        f"zoompan=z='{z0}+({z1}-{z0})*(3*pow(on/{n},2)-2*pow(on/{n},3))':d=1:s={W}x{H}:fps={FPS}:"
+                        f"x='iw/2-iw/zoom/2':y='ih/2-ih/zoom/2'")
     if v.get("frame"):   # optional: shown smaller (fraction of the frame) over a dark, blurred copy of itself, e.g. news footage
         f = v["frame"]
         fw, fh = int(W * f) // 2 * 2, int(H * f) // 2 * 2
@@ -392,6 +471,11 @@ def main():
     global SUB_LIMIT, ASS_HEAD, DECLICK, SFX_GAIN
     SUB_LIMIT = spec.get("sub_limit")
     DECLICK = spec.get("declick", False)
+    global LOOK, COLOUR, TAIL, REUSE_3D, LOOK_KEY
+    if spec.get("look"):
+        LOOK, COLOUR, LOOK_KEY = spec["look"], True, [spec["look"]]
+    TAIL = spec.get("tail")
+    REUSE_3D = float(spec.get("reuse_3d", 0))
     SFX_GAIN = 10 ** (spec.get("sfx_gain_db", 0) / 20)   # global trim for sound effects; announcements and "nogain" cues keep their level
     for name, font in spec.get("fonts", {}).items():   # e.g. {"TITLE": "Some Serif"} for Latin-script episodes
         ASS_HEAD = re.sub(rf"^(Style: {name},)[^,]+", rf"\g<1>{font}", ASS_HEAD, flags=re.M)
@@ -539,7 +623,8 @@ def main():
         print("shard done", flush=True)
         return
     lst = os.path.join(work, "shots.txt")
-    open(lst, "w").write("".join(f"file '{os.path.abspath(s)}'\n" for s in segs))
+    open(lst, "w").write("".join(f"file '{os.path.abspath(s)}'\n" if isinstance(s, str) else
+                                 f"file '{os.path.abspath(s[0])}'\noutpoint {s[1]:.3f}\nduration {s[1]:.3f}\n" for s in segs))
 
     # 4. overlays
     ev = []

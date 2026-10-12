@@ -170,7 +170,7 @@ def d3(n, scene, shot, t0=0):
 
 
 # ================================================================ 0. COLD OPEN
-B.append({"visual": news("ap_bins", "AP", 0.0, 0.8), "hold": 0.0, "id": "intro", "chapter": "Cold open",
+B.append({"visual": {**cc("Lycée_Louis-le-Grand_in_Paris_76", 2.0), "zoom": [1.0, 1.1]}, "hold": 0.0, "id": "intro", "chapter": "Cold open",
           "say": LINES[1], "sfx": [fx("distant street protest crowd and bins scraping on asphalt, outdoor", 5, 0.07)]})
 say(2, g2("montage", items=[
     {"file": ppath("bins"), "credit": photo_credit(P["bins"]), "from": [1.05, 0.5, 0.55], "to": [1.15, 0.5, 0.5]},
@@ -453,7 +453,13 @@ for i, (f, a, z, v) in enumerate(MUSIC):
 
 spec = {
     "voice": {"engine": "elevenlabs", "voice_id": "DrBEKFgWMDWUG6bjTSTk", "model": "eleven_v4", "stability": 0.5, "speed": 1.0},
-    "gap": 0.12,
+    "gap": 0.2,
+    # real photos/footage stay in colour with a light warm grade (no black and white)
+    "look": "eq=contrast=1.06:saturation=1.12:brightness=-0.01,colorbalance=rs=0.035:bs=-0.045:rm=0.025:bm=-0.03",
+    # keep each line's natural decay and fade it out over 150 ms; never a hard stop
+    "tail": {"keep": 0.25, "fade": 0.15},
+    # 3D renders are reused across the small retiming (cut, or last frame held, within 1.2 s)
+    "reuse_3d": 1.2,
     "subtitles": False,
     "declick": True,
     "sfx_gain_db": -4,
