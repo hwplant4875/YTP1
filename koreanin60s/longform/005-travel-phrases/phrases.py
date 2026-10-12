@@ -52,3 +52,4 @@ OUTRO = "Which phrase will you use first? Tell me in the comments, and subscribe
 HOOK_HTML = "<span class=\"c-b\">40</span> Korean Phrases for<br>Your First Trip to <span class=\"c-p\">Korea</span> ✈️"
 OUTRO_HTML = "Which phrase will<br>you use first? 👇"
 HOOK_POSE = "suitcase"
+MUSIC = ["airport_lounge", "easy_lemon"]

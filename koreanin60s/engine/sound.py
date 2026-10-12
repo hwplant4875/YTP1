@@ -22,3 +22,9 @@ def music(N, name="music", xfade=2.0):
             seg[:xf] *= fin; o = out[i - xf:i]; o *= fout[: len(o)]
         start = i - xf if i else 0; j = min(N, start + len(seg)); out[start:j] += seg[: j - start]; i = start + len(seg)
     k = int(1.5 * SR); out[-k:] *= np.linspace(1, 0, k); return out
+
+def music2(N, names, split, xfade=3.0):
+    """Two music beds: names[0] until sample `split`, then names[1]; each loops seamlessly, equal-power crossfade at the switch."""
+    a, b = music(N, names[0]), music(N, names[1]); k = int(xfade * SR); s0 = max(0, split - k // 2); s1 = min(N, s0 + k)
+    w = np.zeros(N); w[:s0] = 1; w[s0:s1] = np.cos(np.linspace(0, np.pi / 2, s1 - s0))
+    return a * w + b * np.sqrt(np.clip(1 - w ** 2, 0, 1))

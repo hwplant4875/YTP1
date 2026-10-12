@@ -1,19 +1,20 @@
 """Long-form: K-drama phrases (16:9). Voice: Jennie on ElevenLabs v3, one request per phrase ("English. ... 한국어. ... 한국어, 천천히."),
 a guessing pause is inserted in the silent gap between the English and the Korean (never inside speech); every clip fades out.
 Other sets reuse this engine: SET=<dir with phrases.py> python3 build.py <outdir>. An item with a 5th field (parts) is a
-compound-word puzzle: "eye... 눈. water... 물. Together? ... 눈물! Tears." (the guessing pause goes before the answer).
+compound-word puzzle: "Eye, 눈. Water, 물. Together? 눈물! Tears." (the guessing pause goes before the answer).
 Usage: python3 build.py <outdir> [sample]  -> short.html (template), timeline.json, mix.wav; render with engine/prender.js (VW=1920 VH=1080)."""
 import base64, hashlib, json, os, re, subprocess, sys, wave
 import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__)); SET = os.path.abspath(os.environ.get("SET", HERE)); sys.path.insert(0, HERE); sys.path.insert(0, SET); sys.path.insert(0, os.path.join(HERE, "..", "..", "engine"))
 import phrases as P
 from phrases import CHAPTERS, NUM, HOOK, OUTRO
-from sound import load, music
+from sound import load, music, music2
 SR = 48000; VOICE = "z6Kj0hecH20CdetSElRT"; MODEL = "eleven_v3"
 KEY = os.environ.get("ELEVENLABS_JC_API_KEY") or os.environ["ELEVENLABS_API_KEY"]
 CACHE = os.path.expanduser("~/.cache/k60_tts"); os.makedirs(CACHE, exist_ok=True)
 STK = os.path.join(HERE, "..", "..", "assets", "baepsae")
-GUESS = 1.4  # extra silence so viewers can guess before the Korean
+GUESS = 1.4  # extra silence so viewers can guess before the Korean (a set can override with GUESS in phrases.py)
+GUESS = getattr(P, "GUESS", GUESS)
 
 def tts(text):
     h = hashlib.sha1(f"{VOICE}|{MODEL}|lf|{text}".encode()).hexdigest()[:16]; js = f"{CACHE}/{h}.json"
@@ -56,7 +57,7 @@ def build(out, sample=False):
             en_, ko, rom, pose = it[:4]; parts = it[4] if len(it) > 4 else None; n += 1
             if parts:  # compound puzzle
                 (ea, pe, ka), (eb, pe2, kb) = parts; ans = ko + "!"
-                text = f"{pe}... {ka}. {pe2}... {kb}. Together? ... {ans} {en_}"
+                text = f"{pe}, {ka}. {pe2}, {kb}. Together? {ans} {en_}"
                 x, st, en = tts(text)
                 _, e1, cur = span(text, "Together?", st, en); k0, k1, cur = span(text, ans, st, en, cur); s0, s1, _ = span(text, en_, st, en, cur)
             else:
@@ -69,7 +70,7 @@ def build(out, sample=False):
             e = {"k": "phrase", "n": n, "t": p0 - 0.35, "en": en_, "ko": ko.rstrip("."), "rom": rom, "pose": pose, "c": col, "ch": title, "emo": emo,
                  "reveal": sh(k0) - 0.12, "slow": sh(s0), "t1": t2 + len(x) / SR - cut / SR + 0.55}
             if parts:
-                e["parts"] = [list(q) for q in parts]; e["t1"] += 0.5
+                e["parts"] = [list(q) for q in parts]
             ev.append(e)
             t = ev[-1]["t1"] + 0.25
     o0 = t; say(OUTRO, 1.2); ev.append({"k": "outro", "t": o0 - 0.2, "t1": t + 1})
@@ -80,7 +81,11 @@ def build(out, sample=False):
     for e in ev:
         if e["k"] == "phrase":
             p = load("pop", .5) * .25; i = int(e["reveal"] * SR); sfx[i:i + len(p)] += p[:N - i]
-    mus = music(N, "lf_music")
+    M = getattr(P, "MUSIC", ["lf_music"])
+    if len(M) > 1:  # switch beds at the chapter start nearest the middle of the video
+        sw = min((e["t"] for e in ev if e["k"] == "chapter"), key=lambda x: abs(x - END / 2)); mus = music2(N, M, int(sw * SR))
+    else:
+        mus = music(N, M[0])
     def w(name, x):
         x = np.clip(x, -1, 1); s = (np.stack([x, x], 1) * 32767).astype(np.int16)
         with wave.open(f"{out}/{name}", "wb") as f: f.setnchannels(2); f.setsampwidth(2); f.setframerate(SR); f.writeframes(s.tobytes())
