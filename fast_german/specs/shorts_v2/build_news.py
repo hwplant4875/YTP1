@@ -19,7 +19,7 @@ TOP = 290      # pictures start under the pretzel badge
 def P(i, src, top=TOP, w=960, maxh=760):
     """Picture in a white card, aspect kept (cover-cropped past maxh). Returns (element, bottom edge y)."""
     iw, ih = Image.open(PH + "news2/" + src).size
-    h = min(maxh, int(w * ih / iw))
+    h = min(maxh, max(int(w * ih / iw), 620))     # wide shots get a fuller 3:2 crop, not a thin strip
     return {"id": i, "type": "photo", "src": "news2/" + src, "w": w, "h": h, "x": 540, "y": top + 10 + h // 2}, top + h + 20
 
 
@@ -55,7 +55,7 @@ def shot(i, src, caps, top=TOP, w=960, maxh=760):
 onion = {"id": "n01_zwiebelmarkt", "title": "This German town crowns a queen… for ONIONS 🧅👑", "scenes": [
  {"lines": [[{"en": "This German town crowns a queen... for onions.", "show": ["p", "t"]}]],
   "els": shot("p", "on_queen_user.png", [("t", "t", "The ONION QUEEN", 96, Y)], maxh=740)},
- {"lines": [[{"en": "In German, she's the", "show": ["p"]}, {"de": "Zwiebelkönigin.", "show": ["w"]}]],
+ {"lines": [[{"en": "In German, she's the", "show": ["p"]}, {"de": "Zwiebelkönigin.", "show": ["w", "m"]}]],
   "els": shot("p", "onq_3.jpg", [("w", "w", "Zwiebelkönigin", 150, Y), ("m", "t", "= onion queen", 66, None)])},
  {"lines": [[{"en": "She rules over the", "show": ["p"]}, {"de": "Zwiebelmarkt,", "show": ["w"]}, {"en": "the onion market in Weimar.", "show": ["m"]}]],
   "els": shot("p", "onc_6.jpg", [("w", "w", "Zwiebelmarkt", 160, None), ("m", "t", "= onion market · Weimar", 66, Y)])},
@@ -82,7 +82,7 @@ rage = {"id": "n02_ragebait", "title": "Germany's word of the year 2026 is… EN
   "els": shot("p", "rgb_5.jpg", [("m", "t", "= posts made to make you angry", 64, None)])},
  {"lines": [[{"en": "About one million teenagers voted.", "show": ["p", "v"]}]],
   "els": shot("p", "rgp_10.jpg", [("v", "t", "~1,000,000 votes", 100, Y)])},
- {"lines": [[{"en": "First, Ragebait.", "show": ["r1"]}, {"en": "Then Peak.", "show": ["r2"]}, {"en": "Then Crashout.", "show": ["r3"]}],
+ {"lines": [[{"en": "First, Ragebait.", "show": ["r1"], "join": 0.35}, {"en": "Then Peak.", "show": ["r2"], "join": 0.35}, {"en": "Then Crashout.", "show": ["r3"]}],
             [{"en": "All three: English.", "show": ["x"]}]],
   "els": [T("v", "Top 3", 430, 96, Y)] + rows + [T("x", "All English!", 1450, 90, RED)]},
  {"lines": [[{"en": "So what's the German word?", "show": ["p"]}, {"de": "Wut-Köder.", "show": ["w"]}], [{"en": "Literally, rage bait.", "show": ["m"]}]],
@@ -114,7 +114,7 @@ wine_x = {"id": "wx", "type": "tile", "png": E3 + "wine.png", "cross": E3 + "cro
 db = {"id": "n04_bahn_alkoholverbot", "title": "From Oct 15: NO alcohol at German train stations 🚫🍺", "scenes": [
  {"lines": [[{"en": "From October 15, you can't drink alcohol at German train stations.", "show": ["p", "t"]}]],
   "els": shot("p", "dbs_2.jpg", [("t", "t", "BANNED from Oct 15", 96, RED)])},
- {"lines": [[{"en": "No beer.", "show": ["bx"]}, {"en": "No wine.", "show": ["wx"]}], [{"en": "Germans call it", "show": []}, {"de": "Alkoholverbot.", "show": ["w"]}]],
+ {"lines": [[{"en": "No beer.", "show": ["bx"], "join": 0.35}, {"en": "No wine.", "show": ["wx"]}], [{"en": "Germans call it", "show": []}, {"de": "Alkoholverbot.", "show": ["w", "m"]}]],
   "els": [beer_x, wine_x, Wd("w", "Alkoholverbot", 1330, 150, Y), T("m", "= alcohol ban", 1460, 64)]},
  {"lines": [[{"en": "It covers 5,400 stations.", "show": ["p", "n"]}]],
   "els": shot("p", "dba_4.jpg", [("n", "t", "5,400 stations", 100, Y)])},
@@ -135,9 +135,9 @@ zeit = {"id": "n05_zeitumstellung", "title": "Germany gets a 25-HOUR day this mo
  {"lines": [[{"en": "On Sunday, October 25th, at 3 a.m.,", "show": ["d", "a"]}, {"en": "the clocks go back to 2 a.m.", "show": ["ar", "b"]}]],
   "els": [T("d", "Sunday, Oct 25", 420, 90, Y), Wd("a", "3:00", 760, 260), {"id": "ar", "type": "tile", "icon": "down-arrow", "s": 150, "x": 540, "y": 980},
           Wd("b", "2:00", 1200, 260, Y)]},
- {"lines": [[{"en": "In German, it's the", "show": ["p"]}, {"de": "Zeitumstellung.", "show": ["w"]}]],
+ {"lines": [[{"en": "In German, it's the", "show": ["p"]}, {"de": "Zeitumstellung.", "show": ["w", "m"]}]],
   "els": shot("p", "zu_1.jpg", [("w", "w", "Zeitumstellung", 150, None), ("m", "t", "= the time change", 66, Y)])},
- {"lines": [[{"en": "And winter time is", "show": ["p"]}, {"de": "Winterzeit.", "show": ["w"]}]],
+ {"lines": [[{"en": "And winter time is", "show": ["p"]}, {"de": "Winterzeit.", "show": ["w", "m"]}]],
   "els": shot("p", "zu_4.jpg", [("w", "w", "Winterzeit", 170, Y), ("m", "t", "= winter time", 66, None)])},
  {"lines": [[{"en": "So enjoy one extra hour of sleep.", "show": ["p", "o"]}, {"de": "Gute Nacht!", "show": ["g"]}]],
   "els": shot("p", "zw_6.jpg", [("o", "t", "+1 hour of sleep", 96, Y), ("g", "w", "Gute Nacht!", 160, None)])},

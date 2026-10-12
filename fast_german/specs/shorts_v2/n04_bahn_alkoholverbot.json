@@ -20,9 +20,9 @@
      "type": "photo",
      "src": "news2/dbs_2.jpg",
      "w": 960,
-     "h": 540,
+     "h": 620,
      "x": 540,
-     "y": 570
+     "y": 610
     },
     {
      "id": "t",
@@ -30,7 +30,7 @@
      "text": "BANNED from Oct 15",
      "size": 96,
      "x": 540,
-     "y": 937,
+     "y": 1017,
      "colour": [
       235,
       64,
@@ -46,7 +46,8 @@
       "en": "No beer.",
       "show": [
        "bx"
-      ]
+      ],
+      "join": 0.35
      },
      {
       "en": "No wine.",
@@ -63,7 +64,8 @@
      {
       "de": "Alkoholverbot.",
       "show": [
-       "w"
+       "w",
+       "m"
       ]
      }
     ]
@@ -213,9 +215,9 @@
      "type": "photo",
      "src": "news2/dbb_8.jpg",
      "w": 960,
-     "h": 540,
+     "h": 620,
      "x": 540,
-     "y": 570
+     "y": 610
     },
     {
      "id": "b",
@@ -223,7 +225,7 @@
      "text": "OK: closed bottles",
      "size": 90,
      "x": 540,
-     "y": 933,
+     "y": 1013,
      "colour": [
       52,
       199,
@@ -285,9 +287,9 @@
      "type": "photo",
      "src": "news2/dbp_2.jpg",
      "w": 960,
-     "h": 540,
+     "h": 620,
      "x": 540,
-     "y": 570
+     "y": 610
     },
     {
      "id": "x",
@@ -295,16 +297,16 @@
      "text": "1st time: leave the station",
      "size": 72,
      "x": 540,
-     "y": 922
+     "y": 1002
     },
     {
      "id": "q",
      "type": "photo",
      "src": "news2/dba_6.jpg",
      "w": 960,
-     "h": 540,
+     "h": 620,
      "x": 540,
-     "y": 570
+     "y": 610
     },
     {
      "id": "y",
@@ -312,7 +314,7 @@
      "text": "Again: banned",
      "size": 100,
      "x": 540,
-     "y": 940,
+     "y": 1020,
      "colour": [
       235,
       64,
