@@ -35,6 +35,7 @@ def end(q): return {"from": "e0", "els": [
 S = {}
 def big(html, y, at, fs=58, w=980):
     return {"type": "txt", "html": html, "size": fs, "w": w, "y": y, "at": at, "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.2"}
+# The K-NEWS label pill sits at y 170-254 for the first ~3 s: first-scene content must start below it (check with engine/checkpill.js).
 # News shorts carry no Korean lesson (user 2026-10-12): just the story, packed with detail, a new visual every few seconds.
 S["011-kpdh2-theaters"] = {"label": "K-NEWS 📣", "labelColor": "#E25B5B", "pose0": "clap_confetti", "lines": [
     L("h1", "Big news! KPop Demon Hunters 2 is coming to theaters!", "clap_confetti"),
@@ -110,7 +111,7 @@ S["014-sequel-2029-cast"] = {"label": "K-NEWS 📣", "labelColor": "#E25B5B", "p
     L("c10", "Meanwhile, Ted Sarandos promised a big, broad, global theatrical release.", "clap_confetti"),
     L("e0", "Would you wait until twenty twenty-nine? Comment below!", "love_heart")],
   "scenes": [
-    {"els": [pic("hl_deseret", 330, "h1", cap="Deseret News · Oct 2, 2026"), pic("o_deseret", 800, "h1+1.8", w=900, cap="KPop Demon Hunters (Netflix)")]},
+    {"els": [pic("hl_deseret", 385, "h1", cap="Deseret News · Oct 2, 2026"), pic("o_deseret", 850, "h1+1.8", w=900, cap="KPop Demon Hunters (Netflix)")]},
     {"from": "c1", "els": [pic("p_mayhong", 540, "c1", w=880, cap="May Hong at FanX Salt Lake · Deseret News"), chip("🎤 May Hong = Mira", 1040, "c1+1.6", "p")]},
     {"from": "c2", "els": [pic("r_msaja", 590, "c2", w=500, crop=(0, 0, 965, 1000), cap="Mystery Saja · KPop Demon Hunters"), chip("🎤 Alan Lee = Mystery Saja", 1080, "c2+1.4", "b")]},
     {"from": "c3", "els": [pic("c_sajaboys", 450, "c3", cap="Saja Boys · KPop Demon Hunters (Netflix)"), big("“Contracts might have been written,<br>but we have <span class='c-p'>not actually worked</span>.”", 900, "c3+1.2", 52)]},
@@ -134,7 +135,7 @@ S["015-golden-history"] = {"label": "K-NEWS 📣", "labelColor": "#E25B5B", "pos
     L("g8", "On Netflix, it's the most-watched movie ever, with three hundred twenty-five million views in its first ninety-one days.", "mind_blown"),
     L("e0", "What's your favorite HUNTR/X song? Comment below!", "love_heart")],
   "scenes": [
-    {"els": [pic("t_9cjX8VMrZdM", 500, "h1", cap="HUNTR/X 'Golden' · Oscars 2026"), chip("🏆 'Golden' · HUNTR/X", 990, "h1+1.4", "y")]},
+    {"els": [pic("t_9cjX8VMrZdM", 590, "h1", cap="HUNTR/X 'Golden' · Oscars 2026"), chip("🏆 'Golden' · HUNTR/X", 1080, "h1+1.4", "y")]},
     {"from": "g1", "els": [pic("hl_bb5", 360, "g1", w=900, cap="Billboard"), pic("o_bb5", 860, "g1+2.2", w=780, cap="HUNTR/X · Billboard")]},
     {"from": "g2", "els": [pic("hl_occ", 330, "g2", cap="Official Charts (UK)"), pic("o_occ", 760, "g2+1.2", w=900, cap="Official Charts · Netflix")]},
     {"from": "g3", "els": [pic("c_golden", 560, "g3", w=600, cap="'Golden' single cover"), chip("🌍 #1 for 20 weeks · Global Excl. US", 1060, "g3+2.2", "b", 44)]},
@@ -156,7 +157,7 @@ S["016-huntrix-tour"] = {"label": "K-NEWS 📣", "labelColor": "#E25B5B", "pose0
     L("t8", "As for the sequel, they're still waiting for the call. EJAE says, stay tuned.", "thinking"),
     L("e0", "Would you buy a ticket? Comment below!", "love_heart")],
   "scenes": [
-    {"els": [pic("t_bFdoLdNUCwg", 500, "h1", cap="HUNTR/X 'Golden' · Billboard Women in Music 2026"), chip("🎤 HUNTR/X World Tour?", 990, "h1+1.6", "p")]},
+    {"els": [pic("t_bFdoLdNUCwg", 590, "h1", cap="HUNTR/X 'Golden' · Billboard Women in Music 2026"), chip("🎤 HUNTR/X World Tour?", 1080, "h1+1.6", "p")]},
     {"from": "t1", "els": [pic("t_25pyl_wl8ss", 520, "t1", w=820, cap="EJAE, REI AMI & Audrey Nuna · Billboard"),
                            pic("r_rumi", 1010, "t1+1.4", w=290, crop=(150, 0, 950, 800), cap="Rumi", x=230),
                            pic("r_mira", 1010, "t1+2.0", w=290, crop=(150, 0, 950, 800), cap="Mira", x=540),
