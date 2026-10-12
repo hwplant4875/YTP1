@@ -45,7 +45,7 @@ S["011-kpdh2-theaters"] = {"label": "K-NEWS 📣", "labelColor": "#E25B5B", "pos
     L("a5", "And when a sing-along version hit theaters for one weekend, it was number one at the U.S. box office.", "clap_confetti"),
     L("a6", "Netflix and Sony confirmed the sequel in March, with directors Maggie Kang and Chris Appelhans coming back.", "point_idea"),
     L("a7", "It's reportedly aiming for twenty twenty-nine, but there's no release date yet.", "thinking"),
-    L("e0", "Would you watch it in theaters? Comment below!", "love_heart", .45)],
+    L("e0", "Would you watch it in theaters? Comment below!", "love_heart")],  # e0 has no gap: read with the lines before it (alone, v3 sounded muffled)
   "scenes": [
     {"els": [pic("art_pinkh", 400, "h1", cap="PinkNews · Oct 1, 2026"), pic("huntrix_v", 900, "h1+1.4", w=860, cap="HUNTR/X · KPop Demon Hunters (Netflix)")]},
     {"from": "a1", "els": [pic("sarandos", 560, "a1", cap="Ted Sarandos (Netflix co-CEO) · Bloomberg Screentime"), chip("🎤 Oct 1, 2026", 1000, "a1+1.0", "y")]},
