@@ -65,37 +65,49 @@ def brand(im, x=70, y=62):
     put(im, e3("pretzel", 100), x, y)
 
 
-# 1a: 3D character waving with a "Hallo!" bubble on the left lane, big "50 German phrases" on the right lane
+def flag(w):
+    """German flag (Noto region-flags, public domain): clean rounded card with a thin white rim."""
+    h = int(w * 0.6)
+    f = S.rounded(Image.open(E3 + "flag_de.png").convert("RGBA").resize((w, h), Image.LANCZOS), 22)
+    card = Image.new("RGBA", (w + 16, h + 16))
+    ImageDraw.Draw(card).rounded_rectangle((0, 0, w + 15, h + 15), 28, fill=WH + (255,))
+    card.alpha_composite(f, (8, 8))
+    return S.shadow(card, 22, 190, 14)
+
+
+TITLE = [("50", 230, Y), ("Useful", 130, WH), ("German", 130, WH), ("Phrases", 130, WH)]
+
+
+def title(im, cx, top, max_w=580):
+    y = top
+    for t, sz, col in TITLE:
+        w = word(t, sz, col)
+        while w.width > max_w:
+            sz -= 6; w = word(t, sz, col)
+        put(im, w, cx, y, "mt")
+        y += w.height - 48
+
+
+# 1a: waving hand + flag on the left lane, "50 Useful German Phrases" on the right
 im = asphalt()
-put(im, e3("wave", 420), 300, 470)          # user 2026-10-12: the waving hand, not a person
-put(im, bubble("Hallo!", 110), 300, 120)
-put(im, word("50", 300, Y, 18), 960, 200)
-put(im, word("German", 130), 960, 395)
-put(im, word("phrases", 130), 960, 520)
-put(im, pill("in 10 minutes", 62, Y), 960, 650)
+put(im, flag(420), 320, 250)
+put(im, e3("wave", 300), 330, 540)
+title(im, 960, 10)
 im.convert("RGB").save(OUT + "1a.jpg", quality=93)
 
-# 1b: super minimal (user 2026-10-12): two words either side of the lane line, one struck out
+# 1b: super minimal: flag left, title right, nothing else
 im = asphalt()
-put(im, word("Hallo", 190), 320, 360)
-w = word("Hallo", 190)
-d = ImageDraw.Draw(im)
-d.line((320 - w.width // 2 + 20, 365, 320 + w.width // 2 - 20, 365), fill=RED + (255,), width=22)
-put(im, word("Servus!", 165, Y), 960, 360)
+put(im, flag(480), 320, 360)
+title(im, 960, 10)
 im.convert("RGB").save(OUT + "1b.jpg", quality=93)
 
-# 1c: real photo (Brandenburg Gate by day; Wolfgang Staudt, CC BY 2.0, credited in the description) as a tilted card on the left lane, text on the right lane
+# 1c: real photo (Brandenburg Gate by day; Wolfgang Staudt, CC BY 2.0, credited in the description)
 im = asphalt()
 ph = S.rounded(S.cover("/mnt/project-files/fast_german/cache/photos/brandenburg_day.jpg", 540, 500, (0.5, 0.5)).convert("RGBA"), 26)
 card = Image.new("RGBA", (570, 530))
 ImageDraw.Draw(card).rounded_rectangle((0, 0, 569, 529), 34, fill=WH + (255,))
 card.alpha_composite(ph, (15, 15))
-card = S.shadow(card.rotate(4, expand=True, resample=Image.BICUBIC), 26, 200, 16)
-put(im, card, 320, 380)
-put(im, e3("wave", 200), 520, 590)
-put(im, word("Speak", 140), 960, 170)
-put(im, word("German", 140), 960, 320)
-put(im, word("today", 140, Y), 960, 470)
-put(im, pill("50 phrases · 10 min", 54, WH), 960, 630)
-brand(im)
+put(im, S.shadow(card.rotate(4, expand=True, resample=Image.BICUBIC), 26, 200, 16), 320, 380)
+put(im, flag(200), 520, 600)
+title(im, 960, 10)
 im.convert("RGB").save(OUT + "1c.jpg", quality=93)
