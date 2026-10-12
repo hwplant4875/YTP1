@@ -1,53 +1,37 @@
-"""A/B thumbnails for L3 (1280x720), v2 (user 2026-10-12: v1 rejected; Autobahn centre line must sit in the middle).
-1a 3D Autobahn with an overhead motorway sign · 1b provocative (Hallo vs Moin/Servus/Na?, red circle + arrow) · 1c real photo."""
+"""A/B thumbnails for L3 (1280x720), v3 (user 2026-10-12: sunset 3D road scrapped; use the video's top-down asphalt with
+the white lane line dead centre). Benchmarks (top German-lesson videos, 5-13M views): one character + speech bubble,
+a huge level/number, 2-4 words in heavy type, bilingual pairs (Hello | Hallo), saturated colour blocks.
+1a 3D character + "Hallo!" bubble + big 50 · 1b provocative Hallo ✗ vs Servus ✓ · 1c real photo card."""
 import os, sys
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFilter
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "lib"))
-import common as C, short_v2 as S
+import road_loop as RL, short_v2 as S
 S.use_road_theme()
 OUT = "/mnt/project-files/fast_german/upload/L3_greetings/"
+E3 = "/mnt/project-files/fast_german/cache/emoji3d/"          # Microsoft Fluent 3D emoji (MIT)
 W, H = 1280, 720
-Y, WH, RED, GREEN = (255, 204, 0), (255, 255, 255), (230, 40, 45), (52, 199, 89)
-SIGN_BLUE = (0, 84, 166)
-BAR = "/mnt/project-files/fonts/de/BarlowCondensed-Black.ttf"
+Y, WH, RED, GREEN, INK = (255, 204, 0), (255, 255, 255), (235, 45, 50), (40, 190, 80), (20, 20, 22)
 
 
-def bar(size):
-    return ImageFont.truetype(BAR, size)
-
-
-def road3d(hz=300, sky_top=(18, 40, 92), sky_bot=(255, 150, 70), seed=3):
-    """Perspective Autobahn at dusk: vanishing point dead centre, dashed centre line on the vertical midline."""
-    rng = np.random.default_rng(seed)
-    y, x = np.mgrid[0:H, 0:W].astype(np.float32)
-    img = np.zeros((H, W, 3), np.float32)
-    t = np.clip(y / hz, 0, 1)[..., None]
-    img[:] = np.array(sky_top) * (1 - t) + np.array(sky_bot) * t
-    g = y > hz
-    z = 520.0 / np.maximum(y - hz, 1)                      # depth
-    xw = (x - W / 2) * z / 100                               # world x in metres-ish
-    asph = 58 + rng.normal(0, 7, (H, W))                     # fine grain
-    road = np.abs(xw) < 7.5
-    col = np.stack([asph * 1.0, asph * 1.0, asph * 1.04], -1)
-    # far shoulder: dark grass
-    dk = np.clip((y - hz) / (H - hz), 0, 1)
-    grass = np.stack([30 + 10 * dk, 44 + 20 * dk, 34 + 6 * dk], -1) + rng.normal(0, 4, (H, W))[..., None]
-    base = np.where(road[..., None], col, grass)
-    paint = (np.abs(np.abs(xw) - 7.1) < 0.18) | ((np.abs(xw) < 0.16) & ((z * 0.9) % 6 < 3.2))   # edges + centre dashes
-    base = np.where(paint[..., None], 235, base)
-    fog = np.clip(1 - (y - hz) / 140, 0, 1)[..., None] * 0.75   # haze near the horizon
-    base = base * (1 - fog) + np.array(sky_bot) * 0.55 * fog
-    img = np.where(g[..., None], base, img)
-    sun = np.exp(-(((x - W / 2) / 260) ** 2 + ((y - hz) / 120) ** 2))[..., None]     # glow at the vanishing point
-    img = img + sun * np.array([255, 190, 110]) * 0.55
-    im = Image.fromarray(np.clip(img, 0, 255).astype(np.uint8)).convert("RGBA")
-    vig = Image.new("L", (W, H), 0)
-    ImageDraw.Draw(vig).ellipse((-300, -250, W + 300, H + 250), fill=255)
-    dark = Image.new("RGBA", (W, H), (0, 0, 0, 150))
-    dark.putalpha(Image.eval(vig.filter(ImageFilter.GaussianBlur(120)), lambda v: int((255 - v) * 0.7)))
+def asphalt():
+    """The video's background: plain top-down asphalt, dashed white centre line on x = W/2."""
+    tex = RL.strip(W, H, tracks=False)[:H, :W]
+    im = Image.fromarray(tex.astype(np.uint8)).convert("RGBA")
+    v = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(v).ellipse((-200, -160, W + 200, H + 160), fill=255)
+    dark = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    dark.putalpha(Image.eval(v.filter(ImageFilter.GaussianBlur(110)), lambda a: int((255 - a) * 0.55)))
     im.alpha_composite(dark)
     return im
+
+
+def e3(name, s):
+    return S.shadow(Image.open(E3 + name + ".png").convert("RGBA").resize((s, s), Image.LANCZOS), 26, 190, 16)
+
+
+def word(t, size, col=WH, stroke=14):
+    return S.shadow(S.text_im(t, S.de_font(size), col, stroke=stroke, sfill=INK), 18, 200, 12)
 
 
 def put(im, el, x, y, anchor="mm"):
@@ -56,81 +40,69 @@ def put(im, el, x, y, anchor="mm"):
     im.alpha_composite(el, (int(x - dx), int(y - dy)))
 
 
-def word(t, size, col=WH, stroke=12):
-    return S.shadow(S.text_im(t, S.de_font(size), col, stroke=stroke), 18, 170, 10)
-
-
-def emoji(name, s):
-    return S.shadow(C.icon(name, s), 24, 170, 14)
-
-
-def sign(lines, w, pad=26, fill=SIGN_BLUE):
-    """German motorway sign: blue board, white rim, DIN-style condensed caps."""
-    ims = []
-    for t, sz, col in lines:
-        while bar(sz).getlength(t) > w - 2 * pad - 30:
-            sz -= 4
-        ims.append(S.text_im(t, bar(sz), col, stroke=0))
-    h = sum(i.height for i in ims) + pad * 2 + 10 * (len(ims) - 1)
-    b = Image.new("RGBA", (w, h))
+def bubble(text, size, fill=WH, col=INK, tail="bl"):
+    t = S.text_im(text, S.de_font(size), col, stroke=0)
+    w, h = t.width + 90, t.height + 60
+    b = Image.new("RGBA", (w + 60, h + 60))
     d = ImageDraw.Draw(b)
-    d.rounded_rectangle((0, 0, w - 1, h - 1), 26, fill=(255, 255, 255, 255))
-    d.rounded_rectangle((9, 9, w - 10, h - 10), 20, fill=fill + (255,))
-    yy = pad
-    for i in ims:
-        b.alpha_composite(i, ((w - i.width) // 2, yy)); yy += i.height + 10
-    return S.shadow(b, 24, 190, 16)
+    d.rounded_rectangle((0, 0, w, h), 44, fill=fill + (255,), outline=INK + (255,), width=8)
+    tx = 70 if tail == "bl" else w - 70
+    d.polygon([(tx - 30, h - 8), (tx + 30, h - 8), (tx - 50 if tail == "bl" else tx + 50, h + 55)], fill=fill + (255,), outline=INK + (255,))
+    d.rectangle((tx - 24, h - 14, tx + 24, h - 4), fill=fill + (255,))
+    b.alpha_composite(t, (45, 30))
+    return S.shadow(b, 18, 170, 10)
 
 
-def posts(im, x0, x1, top):
-    d = ImageDraw.Draw(im)
-    for x in (x0, x1):
-        d.rectangle((x - 9, top, x + 9, 360), fill=(70, 74, 82, 255))
+def pill(text, size, fill, col=INK):
+    t = S.text_im(text, S.de_font(size), col, stroke=0)
+    b = Image.new("RGBA", (t.width + 60, t.height + 30))
+    ImageDraw.Draw(b).rounded_rectangle((0, 0, b.width - 1, b.height - 1), b.height // 2, fill=fill + (255,), outline=INK + (255,), width=6)
+    b.alpha_composite(t, (30, 15))
+    return S.shadow(b, 16, 170, 10)
 
 
-def pretzel(im, x=78, y=70):
-    put(im, S.shadow(C.icon("pretzel", 110), 12, 170, 6), x, y)
+def brand(im, x=70, y=62):
+    put(im, e3("pretzel", 100), x, y)
 
 
-# ---------- 1a: 3D Autobahn, overhead sign "50 GERMAN PHRASES", waving hand + "in 10 min" sign
-im = road3d()
-posts(im, 190, 1090, 200)
-sg = sign([("50 GERMAN PHRASES", 170, WH), ("YOU'LL ACTUALLY USE", 70, Y)], 1120)
-put(im, sg, W / 2, 175)
-put(im, emoji("waving-hand-default", 360), 200, 545)
-tag = sign([("in 10 min", 84, (20, 20, 20))], 330, pad=14, fill=Y)
-put(im, tag, 1080, 590)
-
+# 1a: 3D character waving with a "Hallo!" bubble on the left lane, big "50 German phrases" on the right lane
+im = asphalt()
+put(im, e3("woman_raise", 470), 300, 470)
+put(im, bubble("Hallo!", 110), 300, 120)
+put(im, word("50", 300, Y, 18), 960, 200)
+put(im, word("German", 130), 960, 395)
+put(im, word("phrases", 130), 960, 520)
+put(im, pill("in 10 minutes", 62, Y), 960, 650)
 im.convert("RGB").save(OUT + "1a.jpg", quality=93)
 
-# ---------- 1b: provocative. Left lane: Hallo, circled red + "STOP". Right lane: Moin / Servus / Na? with a check
-im = road3d(sky_top=(40, 10, 30), sky_bot=(255, 90, 60), seed=5)
-put(im, word("STOP saying only", 96), W / 2, 80)
-put(im, word("Hallo", 190), 330, 330)
+# 1b: provocative. Left lane "Hallo" circled with a big red X, right lane what Germans really say, red arrow across the line
+im = asphalt()
+put(im, word("Hallo", 170), 320, 340)
 d = ImageDraw.Draw(im)
-d.ellipse((70, 215, 590, 450), outline=RED + (255,), width=16)
-d.line((80, 440, 580, 225), fill=RED + (255,), width=16)        # struck through
-for t, yy in [("Moin!", 250), ("Servus!", 385), ("Na?", 520)]:
-    put(im, word(t, 120, Y), 990, yy)
-d.line((610, 330, 760, 330), fill=RED + (255,), width=22)
-d.polygon([(810, 330), (750, 290), (750, 370)], fill=RED + (255,))
-put(im, emoji("face-screaming-in-fear", 210), 330, 590)
-put(im, emoji("check-mark-button", 120), 1190, 640)
-pretzel(im, 78, 70)
+d.ellipse((50, 205, 590, 475), outline=RED + (255,), width=18)
+put(im, e3("cross", 210), 510, 190)
+put(im, e3("scream", 230), 320, 590)
+put(im, word("Real Germans say", 62), 960, 175)
+put(im, word("Servus!", 145, Y), 985, 335)
+put(im, word("Moin!  Na?", 105, Y), 975, 485)
+put(im, e3("check", 170), 1150, 620)
+d.line((598, 340, 650, 340), fill=RED + (255,), width=28)
+d.polygon([(712, 340), (645, 292), (645, 388)], fill=RED + (255,))
+brand(im, 70, 62)
 im.convert("RGB").save(OUT + "1b.jpg", quality=93)
 
-# ---------- 1c: real photo, Brandenburg Gate at sunset
-ph = S.cover("/mnt/project-files/fast_german/cache/photos/brandenburg_1.jpg", W, H, (0.5, 0.6)).convert("RGBA")
-ph = Image.blend(ph, Image.new("RGBA", (W, H), (0, 0, 0, 255)), 0.15)
-grad = np.zeros((H, W, 4), np.uint8)
-grad[..., 3] = (np.clip(1 - np.linspace(0, 1.3, H), 0, 1) * 170).astype(np.uint8)[:, None]   # dark top for the text
-ph.alpha_composite(Image.fromarray(grad))
-put(ph, word("Speak German", 150), W / 2, 110)
-hl = Image.new("RGBA", (760, 130))
-ImageDraw.Draw(hl).rounded_rectangle((0, 0, 759, 129), 24, fill=Y + (255,))
-hl.alpha_composite(S.text_im("in 10 minutes", S.de_font(100), (20, 20, 20), stroke=0), (40, 8))
-put(ph, S.shadow(hl, 20, 170, 10), W / 2, 265)
-put(ph, emoji("waving-hand-default", 260), 1110, 560)
-put(ph, word("Hallo!", 120), 210, 600)
-pretzel(ph, 70, 60)
-ph.convert("RGB").save(OUT + "1c.jpg", quality=93)
+# 1c: real photo (Brandenburg Gate) as a tilted card on the left lane, text on the right lane
+im = asphalt()
+ph = S.rounded(S.cover("/mnt/project-files/fast_german/cache/photos/brandenburg_1.jpg", 540, 500, (0.5, 0.6)).convert("RGBA"), 26)
+card = Image.new("RGBA", (570, 530))
+ImageDraw.Draw(card).rounded_rectangle((0, 0, 569, 529), 34, fill=WH + (255,))
+card.alpha_composite(ph, (15, 15))
+card = S.shadow(card.rotate(4, expand=True, resample=Image.BICUBIC), 26, 200, 16)
+put(im, card, 320, 380)
+put(im, e3("wave", 200), 520, 590)
+put(im, word("Speak", 140), 960, 170)
+put(im, word("German", 140), 960, 320)
+put(im, word("today", 140, Y), 960, 470)
+put(im, pill("50 phrases · 10 min", 54, WH), 960, 630)
+brand(im)
+im.convert("RGB").save(OUT + "1c.jpg", quality=93)
