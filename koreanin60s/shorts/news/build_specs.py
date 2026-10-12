@@ -20,7 +20,10 @@ def L(k, say, pose, gap=None, ko=False):
     if gap: d["gap"] = gap
     if ko: d["lang"] = "ko"
     return d
-def chip(html, y, at, c="p"): return {"type": "chip", "html": html, "c": c, "y": y, "at": at}
+def chip(html, y, at, c="p", size=None):
+    e = {"type": "chip", "html": html, "c": c, "y": y, "at": at}
+    if size: e["size"] = size
+    return e
 def word(ko, rom, en, c, y, at, size=150, w=700, x=None):
     e = {"type": "word", "ko": ko, "rom": rom, "en": en, "c": c, "size": size, "w": w, "y": y, "at": at}
     if x is not None: e["x"] = x
@@ -30,31 +33,50 @@ def end(q): return {"from": "e0", "els": [
     {"type": "txt", "html": "Korean in <span class='c-p'>60s</span>", "size": 110, "y": 640, "at": "e0", "style": "font-family:YouTube Sans,Pretendard;font-weight:900"},
     {"type": "box", "html": f"<div class='txt' style='font-size:46px;white-space:nowrap'>{q}</div>", "w": 960, "pad": 22, "y": 830, "at": "e0+0.7", "anim": "up"}]}
 S = {}
+def big(html, y, at, fs=58, w=980):
+    return {"type": "txt", "html": html, "size": fs, "w": w, "y": y, "at": at, "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.2"}
+# News shorts carry no Korean lesson (user 2026-10-12): just the story, packed with detail, a new visual every few seconds.
 S["011-kpdh2-theaters"] = {"label": "K-NEWS 📣", "labelColor": "#E25B5B", "pose0": "clap_confetti", "lines": [
     L("h1", "Big news! KPop Demon Hunters 2 is coming to theaters!", "clap_confetti"),
-    L("n1", "Netflix's boss says the sequel gets a big, worldwide release in the", "talk", .4), L("n1k", "극장.", "popcorn_tv", ko=True),
-    L("n2", "The theater! It's aiming for twenty twenty-nine, and the original directors are coming back.", "excited"),
-    L("t0", "So here's your word for the sequel:", "point_idea", .45), L("t0k", "속편.", "mind_blown", ko=True),
-    L("t1", "Sequel. Part two!", "thumbs_up"),
-    L("e0", "Will you watch it in theaters? Comment below!", "love_heart", .45)],
+    L("a1", "Netflix co-CEO Ted Sarandos revealed it at Bloomberg's Screentime event.", "talk"),
+    L("a2", "He said, when the sequel comes, you can expect a very broad theatrical release.", "excited"),
+    L("a3", "That's huge, because the first movie skipped theaters and went straight to Netflix.", "shocked"),
+    L("a4", "Then it became the first Netflix title ever to pass three hundred million views.", "mind_blown"),
+    L("a5", "And when a sing-along version hit theaters for one weekend, it was number one at the U.S. box office.", "clap_confetti"),
+    L("a6", "Netflix and Sony confirmed the sequel in March, with directors Maggie Kang and Chris Appelhans coming back.", "point_idea"),
+    L("a7", "It's reportedly aiming for twenty twenty-nine, but there's no release date yet.", "thinking"),
+    L("e0", "Would you watch it in theaters? Comment below!", "love_heart", .45)],
   "scenes": [
-    {"els": [pic("art_pink", 640, "h1", cap="PinkNews · Oct 1, 2026"), {"type": "stamp", "html": "BIG NEWS 📣", "c": "p", "size": 86, "y": 1140, "at": "h1@end-0.8", "anim": "stamp"}]},
-    {"from": "n1", "els": [pic("sarandos", 500, "n1", cap="Ted Sarandos (Netflix co-CEO) · Bloomberg"), word("극장", "geuk-jang", "movie theater", "p", 1060, "n1k", 140)]},
-    {"from": "n2", "els": [pic("art_cbm", 600, "n2", cap="ComicBookMovie · Oct 2, 2026"), chip("🎯 2029 · same directors", 1130, "n2+2.2", "y")]},
-    {"from": "t0", "els": [pic("huntrix_pink", 520, "t0", cap="HUNTR/X · KPop Demon Hunters (Netflix)"), word("속편", "sok-pyeon", "sequel", "k", 1040, "t0k", 150)]},
+    {"els": [pic("art_pinkh", 400, "h1", cap="PinkNews · Oct 1, 2026"), pic("huntrix_v", 900, "h1+1.4", w=860, cap="HUNTR/X · KPop Demon Hunters (Netflix)")]},
+    {"from": "a1", "els": [pic("sarandos", 560, "a1", cap="Ted Sarandos (Netflix co-CEO) · Bloomberg Screentime"), chip("🎤 Oct 1, 2026", 1000, "a1+1.0", "y")]},
+    {"from": "a2", "els": [pic("art_cbm_quote", 420, "a2", cap="ComicBookMovie · Oct 2, 2026"), big("“You can expect a<br><span class='c-p'>very broad</span> theatrical release.”", 820, "a2+1.2")]},
+    {"from": "a3", "els": [pic("huntrix_sing", 560, "a3", cap="KPop Demon Hunters (Netflix, June 2025)"), chip("📺 Netflix only · no theaters", 1000, "a3+1.6", "b")]},
+    {"from": "a4", "els": [pic("art_jad", 330, "a4", cap="Korea JoongAng Daily"), pic("netflix_top", 800, "a4+1.0", w=900, cap="Netflix · Most popular movies, all time")]},
+    {"from": "a5", "els": [pic("singalong", 560, "a5", cap="Sing-along screening · Aug 2025"), chip("🍿 #1 at the U.S. box office", 1010, "a5+2.6", "p")]},
+    {"from": "a6", "els": [pic("art_variety", 330, "a6", cap="Variety · Mar 2026"), pic("directors", 820, "a6+2.4", w=860, cap="Maggie Kang & Chris Appelhans · Netflix Tudum")]},
+    {"from": "a7", "els": [pic("huntrix_close", 560, "a7", cap="KPop Demon Hunters (Netflix)"), chip("🎯 2029? · date not announced", 1000, "a7+1.6", "y")]},
     end("In theaters? 🍿👇")]}
 S["012-jinu-voice-chef"] = {"label": "K-NEWS 📣", "labelColor": "#E25B5B", "pose0": "shocked", "lines": [
-    L("h1", "Remember Jinu's voice from KPop Demon Hunters? He's starring in a new K-drama!", "shocked"),
-    L("a1", "Actor Ahn Hyo-seop plays a genius chef. And chef, or cook, in Korean is", "talk", .4), L("a1k", "요리사.", "rice_bowl", ko=True),
-    L("a2", "The drama is called Final Table. It's about a cooking competition, and it starts October twenty-fourth.", "excited"),
-    L("t0", "And when the food is perfect, you say", "thinking", .45), L("t0k", "맛있다!", "love_heart", ko=True),
-    L("t1", "It's delicious!", "party_cake"),
+    L("h1", "Jinu's voice is back, and this time he's a chef!", "shocked"),
+    L("b1", "안효섭, the voice of Jinu in KPop Demon Hunters, stars in the new JTBC drama, Final Table.", "talk"),
+    L("b2", "He plays Kang Han, a genius chef known as Chris K, who moves to a new restaurant every year.", "excited"),
+    L("b3", "Back in Korea, he becomes head chef of Familia, an Italian restaurant about to close.", "nervous_sweat"),
+    L("b4", "To save it, he teams up with hall manager 최송이, played by 홍화연.", "point_idea"),
+    L("b5", "Together they enter The Table, K Chef twenty twenty-six, a contest for the best Korean chef.", "clap_confetti"),
+    L("b6", "And his old rival, chef 차우진, played by 장률, is waiting.", "steam_angry"),
+    L("b7", "To prepare, 안효섭 trained so hard with knives that he badly cut his finger.", "shocked"),
+    L("b8", "Final Table starts October twenty-fourth on JTBC.", "excited"),
     L("e0", "Will you watch it? Comment below!", "finger_heart", .45)],
   "scenes": [
-    {"els": [pic("jinu_red", 420, "h1", w=840, cap="Jinu · KPop Demon Hunters (Netflix)"), pic("ft_teaser1", 960, "h1+2.4", w=840, cap="JTBC 〈파이널 테이블〉 teaser")]},
-    {"from": "a1", "els": [pic("ahn_photo", 520, "a1", w=600, crop=(0, 40, 700, 680), cap="안효섭 Ahn Hyo-seop"), word("요리사", "yo-ri-sa", "chef, cook", "y", 1080, "a1k", 140)]},
-    {"from": "a2", "els": [pic("art_wt3h", 330, "a2", cap="Wikitree (Korean news) · Sep 2026"), pic("ft_poster", 840, "a2+1.2", w=760), chip("📺 Oct 24 · JTBC", 1190, "a2+3.6", "y")]},
-    {"from": "t0", "els": [pic("ft_teaser3", 500, "t0", cap="〈파이널 테이블〉 3rd teaser · JTBC"), word("맛있다!", "ma-sit-da", "it's delicious!", "p", 1040, "t0k", 140, 760)]},
+    {"els": [pic("jinu_red", 420, "h1", w=860, cap="Jinu · KPop Demon Hunters (Netflix)"), pic("ft_teaser1", 960, "h1+1.6", w=860, cap="JTBC 〈파이널 테이블〉 teaser")]},
+    {"from": "b1", "els": [pic("ahn_photo", 520, "b1", w=580, crop=(0, 40, 700, 680), cap="안효섭 Ahn Hyo-seop"), pic("art_wt3h2", 1040, "b1+2.2", w=900, cap="Wikitree")]},
+    {"from": "b2", "els": [pic("ft_poster2", 600, "b2", w=520, cap="〈파이널 테이블〉 poster · JTBC"), chip("👨‍🍳 Kang Han a.k.a. Chris K", 1060, "b2+1.4", "y")]},
+    {"from": "b3", "els": [pic("ft_apron", 470, "b3", cap="〈파이널 테이블〉 teaser · JTBC"), pic("art_wt4h", 960, "b3+1.8", w=920, cap="Wikitree · Oct 4, 2026")]},
+    {"from": "b4", "els": [pic("ft_teaser2", 560, "b4", cap="Kang Han & Choi Song-yi · 2nd teaser"), chip("🤝 홍화연 Hong Hwa-yeon", 1000, "b4+2.0", "p")]},
+    {"from": "b5", "els": [pic("ft_teaser3", 560, "b5", cap="〈파이널 테이블〉 3rd teaser · JTBC"), chip("🏆 The Table: K Chef 2026", 1000, "b5+1.2", "y"),
+                           chip("⚔️ Rival chef: 장률 Jang Ryul", 1110, "b6", "b", 44)]},
+    {"from": "b7", "els": [pic("art_wt1h", 500, "b7", cap="Wikitree · Oct 9, 2026"), big("🔪 Cut his finger<br>in knife training", 880, "b7+1.4", 64)]},
+    {"from": "b8", "els": [pic("ft_poster", 540, "b8", w=860, cap="〈파이널 테이블〉 poster · JTBC"), chip("📺 Oct 24 · JTBC", 960, "b8+1.0", "y"), chip("Disney+ 🇰🇷 · Prime Video 🌍", 1070, "b8+1.8", "b", 44)]},
     end("Will you watch it? 👇")]}
 S["013-kpdh-korean-words"] = {"label": "KPDH KOREAN 🐯", "labelColor": "#8C6CE0", "pose0": "popcorn_tv", "lines": [
     L("h1", "KPop Demon Hunters is full of hidden Korean words. Did you catch these?", "popcorn_tv"),
