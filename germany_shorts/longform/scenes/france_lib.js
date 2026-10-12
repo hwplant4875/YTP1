@@ -134,3 +134,55 @@ export function figure(THREE, mats, o = {}) {
   g.userData.head = head;
   return g;
 }
+
+// ------------------------------------------------------------------ shared finishing for the newer France scenes
+// makeComposer (bloom, optional DOF, noir grade) + a crisp label layer: every constant-size sprite (label()) is moved to
+// layer 1 and drawn after bloom/DOF so the type stays sharp.
+import { makeComposer } from './look.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+export function finishPost(THREE, renderer, scene, camera, W, H, opt = {}) {
+  const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: 0.8, bloomRadius: 0.6, bloomThreshold: 0.6, exposure: 1.0, ...opt });
+  post.finish.uniforms.vignette.value = opt.vignette ?? 0.55;
+  const labelCam = camera.clone(); labelCam.layers.set(1);
+  scene.traverse(o => { if (o.isSprite && o.material.sizeAttenuation === false) o.layers.set(1); });
+  const lp = new RenderPass(scene, labelCam); lp.clear = false; lp.clearDepth = true;
+  const lpRender = lp.render.bind(lp);
+  lp.render = (...args) => { const bg = scene.background, fog = scene.fog; scene.background = null; lpRender(...args); scene.background = bg; scene.fog = fog; };
+  post.composer.insertPass(lp, post.composer.passes.length - 2);
+  const sync = () => { labelCam.position.copy(camera.position); labelCam.quaternion.copy(camera.quaternion); labelCam.fov = camera.fov; labelCam.updateProjectionMatrix(); };
+  return { ...post, labelCam, sync };
+}
+// call after adding late sprites (labels created after finishPost)
+export function toLabelLayer(obj) { obj.traverse(o => { if (o.isSprite && o.material.sizeAttenuation === false) o.layers.set(1); }); }
+
+// canvas texture (sRGB, clamped) from a draw callback
+export function ctex(THREE, w, h, draw, { repeat = null, aniso = 8 } = {}) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = aniso;
+  if (repeat) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(...repeat); }
+  return t;
+}
+// letter-spaced text on a 2D canvas context
+export function spacedText(g, s, x, y, track = 0, align = 'left') {
+  let w = 0; for (const ch of s) w += g.measureText(ch).width + track; w -= track;
+  let cx = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
+  for (const ch of s) { g.fillText(ch, cx, y); cx += g.measureText(ch).width + track; }
+  return w;
+}
+// a dark studio floor that fades into the fog: soft radial pool of light baked into the texture
+export function studioFloor(THREE, { size = 80, tone = 26, pool = 0.18, grid = 0 } = {}) {
+  const tex = ctex(THREE, 1024, 1024, (g, w, h) => {
+    g.fillStyle = `rgb(${tone},${tone},${tone - 2})`; g.fillRect(0, 0, w, h);
+    const grd = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+    grd.addColorStop(0, `rgba(255,236,210,${pool})`); grd.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = grd; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 26000; i++) { const v = Math.random() * 40; g.fillStyle = `rgba(${v},${v},${v},0.06)`; g.fillRect(Math.random() * w, Math.random() * h, 2, 2); }
+    if (grid) { g.strokeStyle = `rgba(230,220,200,${grid})`; g.lineWidth = 1; for (let k = 0; k <= w; k += w / 32) { g.beginPath(); g.moveTo(k, 0); g.lineTo(k, h); g.stroke(); g.beginPath(); g.moveTo(0, k); g.lineTo(w, k); g.stroke(); } }
+  });
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(size, size), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.55, metalness: 0.2 }));
+  m.rotation.x = -Math.PI / 2; m.receiveShadow = true; return m;
+}
+// shot timing: "name:seconds" stretches the authored base length
+export function timing(base) { const { name, len } = shotArgs(''); const k = len ? len / base : 1; return { name, k }; }
+// smooth ease on [0,1]
+export const ease = (x) => { x = clamp01(x); return x * x * x * (x * (6 * x - 15) + 10); };

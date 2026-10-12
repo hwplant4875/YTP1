@@ -1,0 +1,1106 @@
+{
+ "episode": "02_france_protests",
+ "note": "One entry per beat group; no (scene, shot) pair repeats. shot_arg = name:seconds stretch for render.mjs/assemble. duration_hint = narration estimate at 150 wpm.",
+ "shots": [
+  {
+   "beats": [
+    2
+   ],
+   "beat": 2,
+   "scene": "france_lycee",
+   "shot": "outside_blockade",
+   "base_s": 7,
+   "duration_hint": 3.2,
+   "shot_arg": "outside_blockade:3.2",
+   "status": "fixed",
+   "script_lines": [
+    "With bins. With barriers. With human chains."
+   ],
+   "visual": "gate barricade of wheelie bins + barriers, faceless pupils with readable placards, amber glow on the chained gate"
+  },
+  {
+   "beats": [
+    7
+   ],
+   "beat": 7,
+   "scene": "france_map",
+   "shot": "spark",
+   "base_s": 8,
+   "duration_hint": 6.0,
+   "shot_arg": "spark:6.0",
+   "status": "existing",
+   "script_lines": [
+    "And it all started with a few empty classrooms, in one school outside Paris."
+   ],
+   "visual": "drop from high to one amber point at Créteil"
+  },
+  {
+   "beats": [
+    9
+   ],
+   "beat": 9,
+   "scene": "france_police",
+   "shot": "standoff",
+   "base_s": 7.0,
+   "duration_hint": 5.1,
+   "shot_arg": "standoff:5.1",
+   "status": "new",
+   "script_lines": [
+    "Why are so many of them ending up hurt, or in custody?"
+   ],
+   "visual": "behind pupils toward a shield line in amber haze (replaces the red-tinted 2D silhouette)"
+  },
+  {
+   "beats": [
+    10
+   ],
+   "beat": 10,
+   "scene": "france_calendar",
+   "shot": "teaser",
+   "base_s": 6.0,
+   "duration_hint": 4.8,
+   "shot_arg": "teaser:4.8",
+   "status": "new",
+   "script_lines": [
+    "And can the government calm it down, before the next wave?"
+   ],
+   "visual": "calendar rail, 13/17/23/27 Oct and 5 Nov flick past"
+  },
+  {
+   "beats": [
+    12,
+    13
+   ],
+   "beat": 12,
+   "scene": "france_map",
+   "shot": "creteil_hold",
+   "base_s": 8,
+   "duration_hint": 8.3,
+   "shot_arg": "creteil_hold:8.3",
+   "status": "existing",
+   "script_lines": [
+    "This is what's happening in France's high schools, as of today.",
+    "Créteil [kray-TAY]. A suburb just southeast of Paris."
+   ],
+   "visual": "held framing on the Créteil dot"
+  },
+  {
+   "beats": [
+    14
+   ],
+   "beat": 14,
+   "scene": "france_lycee",
+   "shot": "exterior",
+   "base_s": 8,
+   "duration_hint": 3.2,
+   "shot_arg": "exterior:3.2",
+   "status": "new",
+   "script_lines": [
+    "Lycée Saint-Exupéry [LEE-say san-teg-zoo-pay-REE]. About fifteen hundred pupils."
+   ],
+   "visual": "night, street level, slow push on the intact façade; LYCÉE lettering warms to amber"
+  },
+  {
+   "beats": [
+    16
+   ],
+   "beat": 16,
+   "scene": "france_lycee",
+   "shot": "three_empty",
+   "base_s": 7,
+   "duration_hint": 6.0,
+   "shot_arg": "three_empty:6.0",
+   "status": "new",
+   "script_lines": [
+    "At the start of this school year, several teaching posts there were simply empty."
+   ],
+   "visual": "dollhouse cutaway, three teacher desks in three rooms light amber one by one"
+  },
+  {
+   "beats": [
+    17
+   ],
+   "beat": 17,
+   "scene": "france_calendar",
+   "shot": "sept17",
+   "base_s": 5.0,
+   "duration_hint": 3.6,
+   "shot_arg": "sept17:3.6",
+   "status": "new",
+   "script_lines": [
+    "So in mid-September, the teachers went on strike."
+   ],
+   "visual": "calendar tile 17 SEPT teachers strike"
+  },
+  {
+   "beats": [
+    18
+   ],
+   "beat": 18,
+   "scene": "france_lycee",
+   "shot": "bins_slide",
+   "base_s": 7,
+   "duration_hint": 6.0,
+   "shot_arg": "bins_slide:6.0",
+   "status": "new",
+   "script_lines": [
+    "The next day, the pupils joined in, their own way. They blocked the gates."
+   ],
+   "visual": "dawn, bins slide in from the street one after another and build the barricade, amber on the chain"
+  },
+  {
+   "beats": [
+    19,
+    20
+   ],
+   "beat": 19,
+   "scene": "france_phone",
+   "shot": "posts",
+   "base_s": 7.0,
+   "duration_hint": 10.3,
+   "shot_arg": "posts:10.3",
+   "status": "new",
+   "script_lines": [
+    "A few days later, two MPs from the radical-left party La France Insoumise [lah frahnss an-soo-MEEZ] visited, and posted about it.",
+    "Remember that visit. The government will."
+   ],
+   "visual": "two phones with generic post layouts dated 21 SEPT, amber underline"
+  },
+  {
+   "beats": [
+    21,
+    22,
+    23
+   ],
+   "beat": 21,
+   "scene": "france_phone",
+   "shot": "viral",
+   "base_s": 9.0,
+   "duration_hint": 17.9,
+   "shot_arg": "viral:17.9",
+   "status": "new",
+   "script_lines": [
+    "Then, on September twenty-fourth, a rap-news outlet called Booska-P [BOO-skah PEE] interviewed eight pupils from the school.",
+    "They talked about feeling abandoned, as kids from the banlieue [bahn-LYUH], the working-class suburbs.",
+    "On TikTok, the clip was watched around one and a half million times."
+   ],
+   "visual": "blurred faceless vertical video, caption, counter to 1.5M"
+  },
+  {
+   "beats": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "beat": 24,
+   "scene": "france_map",
+   "shot": "spread",
+   "base_s": 6,
+   "duration_hint": 20.2,
+   "shot_arg": "spread:20.2",
+   "status": "fixed",
+   "script_lines": [
+    "And the idea spread with it. If your school is falling apart... block it.",
+    "By September twenty-fifth, around sixty schools in the Paris region were disrupted.",
+    "Three days later, the Interior Ministry counted one hundred and eighty, across France.",
+    "And on October first... one thousand and twenty-seven."
+   ],
+   "visual": "Créteil → suburbs → cities → 1 Oct flood (labels no longer overlap)"
+  },
+  {
+   "beats": [
+    29,
+    30
+   ],
+   "beat": 29,
+   "scene": "france_lycee",
+   "shot": "cut",
+   "base_s": 8,
+   "duration_hint": 8.3,
+   "shot_arg": "cut:8.3",
+   "status": "existing",
+   "script_lines": [
+    "Teenagers don't shut down a thousand schools over one viral video.",
+    "So what's actually going on inside these buildings?"
+   ],
+   "visual": "amber slice line opens the façade into the cutaway"
+  },
+  {
+   "beats": [
+    31
+   ],
+   "beat": 31,
+   "scene": "france_lycee",
+   "shot": "hall",
+   "base_s": 8,
+   "duration_hint": 3.2,
+   "shot_arg": "hall:3.2",
+   "status": "new",
+   "script_lines": [
+    "Let's walk inside a typical French lycée."
+   ],
+   "visual": "glide through the glass entrance doors into the hall, amber light lands on the stairs"
+  },
+  {
+   "beats": [
+    32
+   ],
+   "beat": 32,
+   "scene": "france_lycee",
+   "shot": "facade_age",
+   "base_s": 7,
+   "duration_hint": 3.9,
+   "shot_arg": "facade_age:3.9",
+   "status": "new",
+   "script_lines": [
+    "First, the building. On average, it's sixty-five years old."
+   ],
+   "visual": "rust streaks and cracks creep over the concrete, one long crack glows amber"
+  },
+  {
+   "beats": [
+    33
+   ],
+   "beat": 33,
+   "scene": "france_lycee",
+   "shot": "toilets",
+   "base_s": 6,
+   "duration_hint": 4.3,
+   "shot_arg": "toilets:4.3",
+   "status": "existing",
+   "script_lines": [
+    "More than half of France's lycées were built before 1970."
+   ],
+   "visual": "broken toilet block, taped HORS SERVICE stall picked out in amber"
+  },
+  {
+   "beats": [
+    34
+   ],
+   "beat": 34,
+   "scene": "france_lycee",
+   "shot": "leak",
+   "base_s": 7,
+   "duration_hint": 4.3,
+   "shot_arg": "leak:4.3",
+   "status": "existing",
+   "script_lines": [
+    "Pupils describe rats, cockroaches, and ceilings that have come down."
+   ],
+   "visual": "stained ceiling, missing tile, drips, rat"
+  },
+  {
+   "beats": [
+    35
+   ],
+   "beat": 35,
+   "scene": "france_lycee",
+   "shot": "heat",
+   "base_s": 6,
+   "duration_hint": 8.0,
+   "shot_arg": "heat:8.0",
+   "status": "existing",
+   "script_lines": [
+    "In summer, teachers report classrooms at thirty-five to forty degrees. In winter, some rooms have no heating at all."
+   ],
+   "visual": "thermometer climbs to 38 °C in low amber sun"
+  },
+  {
+   "beats": [
+    36
+   ],
+   "beat": 36,
+   "scene": "france_money",
+   "shot": "repair_need",
+   "base_s": 8.0,
+   "duration_hint": 7.1,
+   "shot_arg": "repair_need:7.1",
+   "status": "new",
+   "script_lines": [
+    "A Senate report says fixing them would take about one and a half billion euros a year."
+   ],
+   "visual": "coin stacks 2026→2050, \"€1.5 BN needed every year\""
+  },
+  {
+   "beats": [
+    37
+   ],
+   "beat": 37,
+   "scene": "france_lycee",
+   "shot": "empty_desk",
+   "base_s": 6,
+   "duration_hint": 6.3,
+   "shot_arg": "empty_desk:6.3",
+   "status": "existing",
+   "script_lines": [
+    "But for most pupils, the building isn't the biggest problem. It's who's missing from it."
+   ],
+   "visual": "amber pool on an empty teacher desk"
+  },
+  {
+   "beats": [
+    39
+   ],
+   "beat": 39,
+   "scene": "france_staffroom",
+   "shot": "staffroom",
+   "base_s": 8.0,
+   "duration_hint": 3.6,
+   "shot_arg": "staffroom:3.6",
+   "status": "new",
+   "script_lines": [
+    "Fifty-three percent were missing at least one teacher."
+   ],
+   "visual": "empty staff room, blank name tags glow amber"
+  },
+  {
+   "beats": [
+    41
+   ],
+   "beat": 41,
+   "scene": "france_timetable",
+   "shot": "lost_lessons",
+   "base_s": 7.0,
+   "duration_hint": 8.0,
+   "shot_arg": "lost_lessons:8.0",
+   "status": "new",
+   "script_lines": [
+    "But by the ministry's own count, in 2024 to 2025, ten percent of lycée teaching hours simply didn't happen."
+   ],
+   "visual": "timetable, 1 in 10 slots flip to amber gaps"
+  },
+  {
+   "beats": [
+    43
+   ],
+   "beat": 43,
+   "scene": "france_lycee",
+   "shot": "crowded",
+   "base_s": 6,
+   "duration_hint": 8.3,
+   "shot_arg": "crowded:8.3",
+   "status": "fixed",
+   "script_lines": [
+    "And when teachers are there, classrooms are packed. A teacher in Marseille [mar-SAY] says she has thirty-seven pupils in her class."
+   ],
+   "visual": "37 desks light up one by one, the 37th pupil squeezed in by the board flares last"
+  },
+  {
+   "beats": [
+    44
+   ],
+   "beat": 44,
+   "scene": "france_timetable",
+   "shot": "hours",
+   "base_s": 8.0,
+   "duration_hint": 9.5,
+   "shot_arg": "hours:9.5",
+   "status": "new",
+   "script_lines": [
+    "French lycée students also spend around twelve hundred hours a year in class. The average across OECD countries is nine hundred and sixty."
+   ],
+   "visual": "slab stacks 60 vs 48 (×20 h), \"+240 h\""
+  },
+  {
+   "beats": [
+    45
+   ],
+   "beat": 45,
+   "scene": "france_parcoursup",
+   "shot": "dashboard",
+   "base_s": 7.0,
+   "duration_hint": 8.0,
+   "shot_arg": "dashboard:8.0",
+   "status": "new",
+   "script_lines": [
+    "And at the end of all that, there's Parcoursup [par-koor-SOOP], the national platform that decides who gets into university."
+   ],
+   "visual": "generic admissions dashboard, amber cursor"
+  },
+  {
+   "beats": [
+    46
+   ],
+   "beat": 46,
+   "scene": "france_parcoursup",
+   "shot": "cascade",
+   "base_s": 8.0,
+   "duration_hint": 8.8,
+   "shot_arg": "cascade:8.8",
+   "status": "new",
+   "script_lines": [
+    "This summer, eighteen percent of applicants got no offer at all in the main round. Two years ago, it was ten."
+   ],
+   "visual": "100 application cards flip, 18 \"NO OFFER\""
+  },
+  {
+   "beats": [
+    47
+   ],
+   "beat": 47,
+   "scene": "france_state",
+   "shot": "assemblee",
+   "base_s": 7.0,
+   "duration_hint": 4.8,
+   "shot_arg": "assemblee:4.8",
+   "status": "new",
+   "script_lines": [
+    "Then, on October first, the government published its budget for 2027."
+   ],
+   "visual": "Assemblée portico at night, budget beat"
+  },
+  {
+   "beats": [
+    49
+   ],
+   "beat": 49,
+   "scene": "france_staffroom",
+   "shot": "tags_fall",
+   "base_s": 7.0,
+   "duration_hint": 5.5,
+   "shot_arg": "tags_fall:5.5",
+   "status": "new",
+   "script_lines": [
+    "But the same budget cuts one thousand five hundred and eighty-eight teaching posts."
+   ],
+   "visual": "teacher name tags drop out leaving amber gaps"
+  },
+  {
+   "beats": [
+    51
+   ],
+   "beat": 51,
+   "scene": "france_calendar",
+   "shot": "oct1",
+   "base_s": 5.0,
+   "duration_hint": 6.0,
+   "shot_arg": "oct1:6.0",
+   "status": "new",
+   "script_lines": [
+    "The budget landed on the very day the protests hit their most violent point."
+   ],
+   "visual": "calendar 1 OCT tile"
+  },
+  {
+   "beats": [
+    52
+   ],
+   "beat": 52,
+   "scene": "france_map",
+   "shot": "ignite",
+   "base_s": 6,
+   "duration_hint": 3.9,
+   "shot_arg": "ignite:3.9",
+   "status": "new",
+   "script_lines": [
+    "And that day, the map of France caught fire."
+   ],
+   "visual": "low oblique over France, 180 → 1,027 lycées ignite in a rush"
+  },
+  {
+   "beats": [
+    53,
+    54,
+    55,
+    56
+   ],
+   "beat": 53,
+   "scene": "france_map",
+   "shot": "tour",
+   "base_s": 12,
+   "duration_hint": 12.6,
+   "shot_arg": "tour:12.6",
+   "status": "new",
+   "script_lines": [
+    "Here's how fast it moved.",
+    "First, the suburbs north and east of Paris. Saint-Denis. Sarcelles. La Courneuve.",
+    "Then Marseille. Lille. Lyon [lee-OHN].",
+    "Then Nantes. Rennes. Bordeaux. Toulouse. Strasbourg."
+   ],
+   "visual": "day-by-day flight, named cities light (Saint-Denis … Strasbourg)"
+  },
+  {
+   "beats": [
+    58
+   ],
+   "beat": 58,
+   "scene": "france_map",
+   "shot": "blockaded",
+   "base_s": 6,
+   "duration_hint": 3.6,
+   "shot_arg": "blockaded:3.6",
+   "status": "new",
+   "script_lines": [
+    "Two hundred and twenty-two lycées were fully blockaded."
+   ],
+   "visual": "1,027 dim, 222 turn solid amber"
+  },
+  {
+   "beats": [
+    59
+   ],
+   "beat": 59,
+   "scene": "france_aftermath",
+   "shot": "nantes",
+   "base_s": 8.0,
+   "duration_hint": 3.9,
+   "shot_arg": "nantes:3.9",
+   "status": "new",
+   "script_lines": [
+    "In Nantes, a fire destroyed a lycée's entrance hall."
+   ],
+   "visual": "burned entrance hall, soot, tape, embers (generic, no real school)"
+  },
+  {
+   "beats": [
+    60
+   ],
+   "beat": 60,
+   "scene": "france_aftermath",
+   "shot": "marseille",
+   "base_s": 8.0,
+   "duration_hint": 7.5,
+   "shot_arg": "marseille:7.5",
+   "status": "new",
+   "script_lines": [
+    "In Marseille, a firefighters' truck was torched, and the city shut down its entire bus and metro network."
+   ],
+   "visual": "burned generic fire truck, bus shelter \"NETWORK SUSPENDED\""
+  },
+  {
+   "beats": [
+    61
+   ],
+   "beat": 61,
+   "scene": "france_map",
+   "shot": "border",
+   "base_s": 7,
+   "duration_hint": 5.5,
+   "shot_arg": "border:5.5",
+   "status": "new",
+   "script_lines": [
+    "The movement even crossed the border, into schools in Belgium, and then Italy."
+   ],
+   "visual": "amber arcs Lille → Charleroi, Liège (Belgium) and Lyon → Italy"
+  },
+  {
+   "beats": [
+    62,
+    63
+   ],
+   "beat": 62,
+   "scene": "france_map",
+   "shot": "padlocks",
+   "base_s": 7,
+   "duration_hint": 9.9,
+   "shot_arg": "padlocks:9.9",
+   "status": "new",
+   "script_lines": [
+    "On October second, prefects closed around four hundred lycées, and banned gatherings outside them.",
+    "The message from the state was clear. Stay home."
+   ],
+   "visual": "~400 amber padlocks pop over lit lycées"
+  },
+  {
+   "beats": [
+    64
+   ],
+   "beat": 64,
+   "scene": "france_calendar",
+   "shot": "oct6",
+   "base_s": 4.0,
+   "duration_hint": 3.9,
+   "shot_arg": "oct6:3.9",
+   "status": "new",
+   "script_lines": [
+    "The pupils answered with a date. Tuesday, October sixth."
+   ],
+   "visual": "6 Oct police counts as glowing columns"
+  },
+  {
+   "beats": [
+    68
+   ],
+   "beat": 68,
+   "scene": "france_map",
+   "shot": "oct6",
+   "base_s": 6,
+   "duration_hint": 6.0,
+   "shot_arg": "oct6:6.0",
+   "status": "existing",
+   "script_lines": [
+    "In Lyon, twenty thousand, by police count. In Toulouse, thirteen and a half thousand."
+   ],
+   "visual": "6 Oct police counts as glowing columns"
+  },
+  {
+   "beats": [
+    80,
+    81
+   ],
+   "beat": 80,
+   "scene": "france_weapons",
+   "shot": "lineup",
+   "base_s": 8.0,
+   "duration_hint": 5.1,
+   "shot_arg": "lineup:5.1",
+   "status": "new",
+   "script_lines": [
+    "First, the tools.",
+    "French police use what they call \"intermediate weapons\"."
+   ],
+   "visual": "three stylised intermediate weapons on plinths"
+  },
+  {
+   "beats": [
+    82
+   ],
+   "beat": 82,
+   "scene": "france_weapons",
+   "shot": "lbd",
+   "base_s": 6.0,
+   "duration_hint": 3.6,
+   "shot_arg": "lbd:3.6",
+   "status": "new",
+   "script_lines": [
+    "The LBD, a launcher that fires rubber projectiles."
+   ],
+   "visual": "LBD with dotted projectile path"
+  },
+  {
+   "beats": [
+    83
+   ],
+   "beat": 83,
+   "scene": "france_weapons",
+   "shot": "gas",
+   "base_s": 6.0,
+   "duration_hint": 2.4,
+   "shot_arg": "gas:2.4",
+   "status": "new",
+   "script_lines": [
+    "Launchers that fire tear-gas grenades."
+   ],
+   "visual": "tear-gas launcher, canister arc"
+  },
+  {
+   "beats": [
+    84
+   ],
+   "beat": 84,
+   "scene": "france_weapons",
+   "shot": "grenade",
+   "base_s": 6.0,
+   "duration_hint": 4.8,
+   "shot_arg": "grenade:4.8",
+   "status": "new",
+   "script_lines": [
+    "And dispersal and stun grenades, which explode, some scattering rubber pellets."
+   ],
+   "visual": "grenade, abstract radial pellet burst"
+  },
+  {
+   "beats": [
+    86
+   ],
+   "beat": 86,
+   "scene": "france_map",
+   "shot": "cases",
+   "base_s": 7,
+   "duration_hint": 3.6,
+   "shot_arg": "cases:3.6",
+   "status": "new",
+   "script_lines": [
+    "Then came three cases that changed the conversation."
+   ],
+   "visual": "three amber pins drop: Saint-Ouen-l'Aumône 28 SEPT, Tours 30 SEPT, Lens 5 OCT"
+  },
+  {
+   "beats": [
+    87
+   ],
+   "beat": 87,
+   "scene": "france_weapons",
+   "shot": "close_range",
+   "base_s": 6.0,
+   "duration_hint": 8.3,
+   "shot_arg": "close_range:8.3",
+   "status": "new",
+   "script_lines": [
+    "September twenty-eighth. Saint-Ouen-l'Aumône [san-TWAN loh-MOHN], northwest of Paris. A fourteen-year-old's jaw is broken by a tear-gas round, fired at close range."
+   ],
+   "visual": "launcher with amber CLOSE RANGE bracket"
+  },
+  {
+   "beats": [
+    89,
+    90
+   ],
+   "beat": 89,
+   "scene": "france_map",
+   "shot": "cases_fly",
+   "base_s": 9,
+   "duration_hint": 15.9,
+   "shot_arg": "cases_fly:15.9",
+   "status": "new",
+   "script_lines": [
+    "September thirtieth. Tours [TOOR]. A sixteen-year-old loses the use of an eye. The prosecutor says it's consistent with an LBD round.",
+    "October fifth. Lens [LAHNSS], in the far north. A fifteen-year-old loses his hand to a police grenade."
+   ],
+   "visual": "low flight Tours pin → Lens pin"
+  },
+  {
+   "beats": [
+    92
+   ],
+   "beat": 92,
+   "scene": "france_weapons",
+   "shot": "suspended",
+   "base_s": 6.0,
+   "duration_hint": 6.3,
+   "shot_arg": "suspended:6.3",
+   "status": "new",
+   "script_lines": [
+    "Two days later, Nuñez suspended stun grenades at lycée protests, \"until the facts are clarified\"."
+   ],
+   "visual": "grenade under a glass case, SUSPENDED · 7 Oct"
+  },
+  {
+   "beats": [
+    95
+   ],
+   "beat": 95,
+   "scene": "france_police",
+   "shot": "behind_line",
+   "base_s": 7.0,
+   "duration_hint": 3.2,
+   "shot_arg": "behind_line:3.2",
+   "status": "new",
+   "script_lines": [
+    "But the violence hasn't gone one way."
+   ],
+   "visual": "behind police helmets toward pupils with placards"
+  },
+  {
+   "beats": [
+    99
+   ],
+   "beat": 99,
+   "scene": "france_lycee",
+   "shot": "firework",
+   "base_s": 6,
+   "duration_hint": 2.8,
+   "shot_arg": "firework:2.8",
+   "status": "new",
+   "script_lines": [
+    "Headteachers have been hit by fireworks."
+   ],
+   "visual": "night, from the yard: a firework streak arcs over the barricade and bursts in sparks"
+  },
+  {
+   "beats": [
+    102,
+    103
+   ],
+   "beat": 102,
+   "scene": "france_state",
+   "shot": "matignon",
+   "base_s": 7.0,
+   "duration_hint": 7.5,
+   "shot_arg": "matignon:7.5",
+   "status": "new",
+   "script_lines": [
+    "So who does the government blame? And what is it actually offering?",
+    "Its first answer was political."
+   ],
+   "visual": "Matignon façade, one office window goes amber"
+  },
+  {
+   "beats": [
+    106,
+    107
+   ],
+   "beat": 106,
+   "scene": "france_state",
+   "shot": "dossier",
+   "base_s": 8.0,
+   "duration_hint": 11.9,
+   "shot_arg": "dossier:11.9",
+   "status": "new",
+   "script_lines": [
+    "But the newspaper Le Monde [luh MOHND] read the intelligence note behind that claim.",
+    "It covered one area, and a few days. It mentioned outsiders six times. The party, once."
+   ],
+   "visual": "redacted note, \"outsiders\" ×6 vs \"LFI\" ×1 highlighted (ILLUSTRATION tag)"
+  },
+  {
+   "beats": [
+    111,
+    112
+   ],
+   "beat": 111,
+   "scene": "france_teachers",
+   "shot": "standby",
+   "base_s": 8.0,
+   "duration_hint": 10.7,
+   "shot_arg": "standby:10.7",
+   "status": "new",
+   "script_lines": [
+    "Three thousand teachers, he said, would arrive within hours.",
+    "Three thousand and twenty-four supply teachers, already on the payroll, but not assigned to any classes."
+   ],
+   "visual": "rows of teachers on standby, amber lamps, front rows step forward"
+  },
+  {
+   "beats": [
+    113
+   ],
+   "beat": 113,
+   "scene": "france_map",
+   "shot": "red_orange",
+   "base_s": 6,
+   "duration_hint": 8.0,
+   "shot_arg": "red_orange:8.0",
+   "status": "existing",
+   "script_lines": [
+    "They're going to the schools hit hardest: a hundred and fourteen \"red\" lycées, and about four hundred \"orange\" ones."
+   ],
+   "visual": "114 red + ~400 orange lycées (official categories)"
+  },
+  {
+   "beats": [
+    116
+   ],
+   "beat": 116,
+   "scene": "france_teachers",
+   "shot": "drop",
+   "base_s": 8.0,
+   "duration_hint": 7.5,
+   "shot_arg": "drop:7.5",
+   "status": "new",
+   "script_lines": [
+    "And critics asked the obvious question. If three thousand teachers were available, why weren't they in classrooms already?"
+   ],
+   "visual": "teachers descend on amber threads onto red/orange school blocks"
+  },
+  {
+   "beats": [
+    118
+   ],
+   "beat": 118,
+   "scene": "france_aftermath",
+   "shot": "ransacked",
+   "base_s": 7.0,
+   "duration_hint": 4.8,
+   "shot_arg": "ransacked:4.8",
+   "status": "new",
+   "script_lines": [
+    "Then there's the damage. Twenty-four lycées have been burned or ransacked."
+   ],
+   "visual": "ransacked classroom, overturned desks, fire light"
+  },
+  {
+   "beats": [
+    119
+   ],
+   "beat": 119,
+   "scene": "france_teachers",
+   "shot": "empty_field",
+   "base_s": 7.0,
+   "duration_hint": 3.9,
+   "shot_arg": "empty_field:3.9",
+   "status": "new",
+   "script_lines": [
+    "About thirty thousand pupils have no classes in person."
+   ],
+   "visual": "field of empty desks, one amber hero desk"
+  },
+  {
+   "beats": [
+    121
+   ],
+   "beat": 121,
+   "scene": "france_money",
+   "shot": "damage_bill",
+   "base_s": 7.0,
+   "duration_hint": 4.8,
+   "shot_arg": "damage_bill:4.8",
+   "status": "new",
+   "script_lines": [
+    "The government's estimate of the bill: at least thirty million euros."
+   ],
+   "visual": "note-brick pile, \"≥ €30 MILLION\""
+  },
+  {
+   "beats": [
+    123
+   ],
+   "beat": 123,
+   "scene": "france_money",
+   "shot": "fine",
+   "base_s": 7.0,
+   "duration_hint": 9.9,
+   "shot_arg": "fine:9.9",
+   "status": "new",
+   "script_lines": [
+    "Anyone in a group that causes damage could be made to pay up to ten thousand euros, even if they didn't break anything themselves."
+   ],
+   "visual": "ten faceless pupils, €10,000 tags drop"
+  },
+  {
+   "beats": [
+    127,
+    128
+   ],
+   "beat": 127,
+   "scene": "france_map",
+   "shot": "dimming",
+   "base_s": 7,
+   "duration_hint": 11.1,
+   "shot_arg": "dimming:11.1",
+   "status": "new",
+   "script_lines": [
+    "Right now, the blockades are shrinking.",
+    "On October first, more than a thousand lycées were affected. On October ninth, a hundred and forty-one were still closed."
+   ],
+   "visual": "1,027 lit lycées go dark until 141 remain"
+  },
+  {
+   "beats": [
+    130
+   ],
+   "beat": 130,
+   "scene": "france_calendar",
+   "shot": "wall",
+   "base_s": 5.0,
+   "duration_hint": 1.5,
+   "shot_arg": "wall:1.5",
+   "status": "new",
+   "script_lines": [
+    "Here's the calendar."
+   ],
+   "visual": "calendar full wall, NOW line at 11 Oct"
+  },
+  {
+   "beats": [
+    131
+   ],
+   "beat": 131,
+   "scene": "france_calendar",
+   "shot": "oct13",
+   "base_s": 5.0,
+   "duration_hint": 6.8,
+   "shot_arg": "oct13:6.8",
+   "status": "new",
+   "script_lines": [
+    "Tuesday, October thirteenth. A national strike and day of action, called by student and teacher unions."
+   ],
+   "visual": "13 OCT lights amber"
+  },
+  {
+   "beats": [
+    132
+   ],
+   "beat": 132,
+   "scene": "france_phone",
+   "shot": "anon",
+   "base_s": 6.0,
+   "duration_hint": 8.8,
+   "shot_arg": "anon:8.8",
+   "status": "new",
+   "script_lines": [
+    "Saturday the seventeenth. A separate call that's been spreading on TikTok, from an anonymous account, about fuel prices, housing and discrimination."
+   ],
+   "visual": "phone, anonymous call \"SATURDAY 17 OCTOBER\""
+  },
+  {
+   "beats": [
+    133,
+    134
+   ],
+   "beat": 133,
+   "scene": "france_calendar",
+   "shot": "oct17",
+   "base_s": 6.0,
+   "duration_hint": 13.5,
+   "shot_arg": "oct17:13.5",
+   "status": "new",
+   "script_lines": [
+    "It's not an official union date. But some lycée protesters have said they'll be there.",
+    "That same weekend, the autumn school holidays begin. Unions worry two weeks off could drain the movement."
+   ],
+   "visual": "17 OCT dashed outline + autumn holiday band unrolling"
+  },
+  {
+   "beats": [
+    135,
+    136
+   ],
+   "beat": 135,
+   "scene": "france_calendar",
+   "shot": "oct23_27",
+   "base_s": 6.0,
+   "duration_hint": 7.9,
+   "shot_arg": "oct23_27:7.9",
+   "status": "new",
+   "script_lines": [
+    "October twenty-third. The government's online consultation for pupils closes.",
+    "October twenty-seventh. The rioters-pay bill goes to the Senate."
+   ],
+   "visual": "23 + 27 OCT"
+  },
+  {
+   "beats": [
+    137,
+    138
+   ],
+   "beat": 137,
+   "scene": "france_calendar",
+   "shot": "nov5",
+   "base_s": 6.0,
+   "duration_hint": 12.7,
+   "shot_arg": "nov5:12.7",
+   "status": "new",
+   "script_lines": [
+    "By the end of October, Lecornu has promised decisions, and changes to the budget.",
+    "And on November fifth, France's five biggest union confederations strike together, on pay and public services."
+   ],
+   "visual": "END OCT bracket, 5 NOV"
+  },
+  {
+   "beats": [
+    139
+   ],
+   "beat": 139,
+   "scene": "france_calendar",
+   "shot": "apr2027",
+   "base_s": 7.0,
+   "duration_hint": 4.8,
+   "shot_arg": "apr2027:4.8",
+   "status": "new",
+   "script_lines": [
+    "And behind all of it, a presidential election in April 2027."
+   ],
+   "visual": "rail extends to APR 2027"
+  },
+  {
+   "beats": [
+    140,
+    141
+   ],
+   "beat": 140,
+   "scene": "france_map",
+   "shot": "ripple",
+   "base_s": 7,
+   "duration_hint": 9.5,
+   "shot_arg": "ripple:9.5",
+   "status": "new",
+   "script_lines": [
+    "In mid-September, this was about a few empty posts, at one school in Créteil.",
+    "Now, it's a question for the whole country."
+   ],
+   "visual": "holds on the Créteil dot, then an amber wave runs over the whole country"
+  }
+ ]
+}

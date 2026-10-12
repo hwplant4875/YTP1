@@ -8,7 +8,8 @@
 // shots (?shot=):
 //   cut              (8 s) night, 3/4 view. 0-1.4 intact façade, 1.4-5.6 an amber slice line sweeps left to right and
 //                          the façade falls away, revealing the lit rooms. Slow push-in throughout.
-//   crowded          (6 s) high angle into the class of 36; desks light amber one by one (0.6-4.2 s), 36 at the end.
+//   crowded          (6 s) high angle into the class; desks light amber one by one (0.6-4.2 s), then the 37th pupil,
+//                          squeezed in by the board, flares (4.4 s).
 //   empty_desk       (6 s) low across the pupils' heads to the teacher's desk; an amber pool of light fades up on the
 //                          empty desk and chair (1.0-2.6 s), dust in the beam.
 //   leak             (7 s) stained ceiling, a missing tile, drips into a bucket and a puddle, the fallen tile, a rat
@@ -17,7 +18,17 @@
 //   toilets          (6 s) broken toilet block: hanging stall door, cracked mirror, taped "HORS SERVICE", flickering tube,
 //                          puddle; amber light picks out the taped stall.
 //   outside_blockade (7 s) street level at the gate: wheelie bins and barriers piled against it, pallets, pupils with
-//                          banners; sodium street light. Slow lateral dolly.
+//                          placards facing the street; sodium light plus a warm key on the bins; the chain on the gate
+//                          glows amber (2.6-4.2 s). Slow 3/4 dolly.
+//   exterior         (8 s) night, street level, slow push on the intact façade; the LYCÉE lettering warms to amber (2.8-4.6 s).
+//   three_empty      (7 s) dollhouse cutaway from the front: three empty teacher's desks (F0, F1, F2) light amber one by one.
+//   bins_slide       (7 s) dawn at the gate: bins roll in from the street one after another (0.3-5 s) and build the
+//                          barricade; amber glow on the chained gate at the end.
+//   hall             (8 s) glide from the yard through the glass entrance doors into the hall (lockers, notice board,
+//                          stairs); amber light lands on the stairs (4.6-6.2 s).
+//   facade_age       (7 s) close on the concrete façade: rust streaks, stains and cracks creep in, one long crack glows amber.
+//   firework         (6 s) night, from inside the yard: a firework streak arcs over the barricade (1.0-2.6 s) and bursts
+//                          into sparks in the yard. Stylised, no people.
 import { AMBER, canvasTex, rng, tileTex } from './lib.js';
 import { makeComposer, glow, beam } from './look.js';
 import { AMBER_HI, shotArgs, path, clamp01, sstep, fontsReady, figure } from './france_lib.js';
@@ -26,15 +37,21 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 const RX = [-18, -9, 0, 9];          // room x0 (rooms are 9 m wide)
 const FY = (f) => f * 3.4 + 0.3;      // floor top of storey f
 const DEPTH = 8;                      // room depth (z from -8 to 0)
+const OUTS = ['outside_blockade', 'exterior', 'bins_slide', 'facade_age', 'firework'];
+// authored lengths (s); "shot:seconds" stretches the timeline
+const BASE = { cut: 8, crowded: 6, empty_desk: 6, leak: 7, heat: 6, toilets: 6, outside_blockade: 7, exterior: 8, three_empty: 7, bins_slide: 7, hall: 8, facade_age: 7, firework: 6 };
 
 export async function setup(THREE, renderer, W, H) {
-  const { name: shot } = shotArgs('cut');
+  const { name: shot, len } = shotArgs('cut');
   await fontsReady();
   const scene = new THREE.Scene();
-  const outside = shot === 'outside_blockade';
-  scene.background = new THREE.Color(0x07080a);
-  scene.fog = outside ? new THREE.FogExp2(0x0a0b0d, 0.028) : shot === 'cut' ? new THREE.FogExp2(0x07080a, 0.008) : new THREE.FogExp2(0x07080a, 0.02);
-  const camera = new THREE.PerspectiveCamera(shot === 'cut' ? 30 : 38, W / H, 0.05, 400);
+  const outside = OUTS.includes(shot);                         // shots in the street / yard
+  const dawn = shot === 'outside_blockade' || shot === 'bins_slide';
+  const blockShot = ['outside_blockade', 'cut', 'bins_slide', 'firework'].includes(shot);
+  const crowdShot = shot === 'outside_blockade';
+  scene.background = new THREE.Color(dawn ? 0x1c2533 : 0x07080a);
+  scene.fog = dawn ? new THREE.FogExp2(0x1c2533, 0.018) : outside ? new THREE.FogExp2(0x0a0b0d, shot === 'firework' ? 0.03 : 0.012) : shot === 'cut' || shot === 'three_empty' ? new THREE.FogExp2(0x07080a, 0.008) : new THREE.FogExp2(0x07080a, 0.02);
+  const camera = new THREE.PerspectiveCamera(shot === 'cut' || shot === 'three_empty' ? 30 : shot === 'exterior' ? 34 : 38, W / H, 0.05, 400);
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.localClippingEnabled = true;
   const R = rng(1960);
@@ -452,7 +469,7 @@ export async function setup(THREE, renderer, W, H) {
     const letters = new THREE.Mesh(new THREE.PlaneGeometry(9, 0.5), new THREE.MeshStandardMaterial({ map: signTex(['LIBERTÉ · ÉGALITÉ · FRATERNITÉ'], { w: 2048, h: 114, bg: '#00000000', fg: '#d9d2c2', font: '600 74px Inter', tape: false }), transparent: true, clippingPlanes: [cutPlane] }));
     letters.position.set(-4.5, FY(1) - 0.05 + 0.0, 0.34); facade.add(letters);
     const lycee = new THREE.Mesh(new THREE.PlaneGeometry(3.2, 0.6), new THREE.MeshStandardMaterial({ map: signTex(['LYCÉE'], { w: 1024, h: 192, bg: '#00000000', fg: '#e6dfcf', font: '800 150px "Inter Display"', tape: false }), transparent: true, clippingPlanes: [cutPlane] }));
-    lycee.position.set(-4.5, FY(2) - 0.05, 0.34); facade.add(lycee);
+    lycee.position.set(-4.5, FY(2) - 0.05, 0.34); facade.add(lycee); facade.userData.lycee = lycee;
   }
   // cut line (amber laser) and sparks
   const cutLine = new THREE.Group(); scene.add(cutLine);
@@ -484,15 +501,18 @@ export async function setup(THREE, renderer, W, H) {
   const fenceBaked = bake(fence); scene.remove(fence); scene.add(fenceBaked);
   // street lamp (sodium) by the gate
   const lampPos = new THREE.Vector3(3.6, 5.6, 11.2);
-  { const pm = std({ color: 0x2a2c2d, metalness: 0.5, roughness: 0.5 }); box(0.14, 5.7, 0.14, pm, 3.6, 2.85, 11.9); box(0.12, 0.12, 0.9, pm, 3.6, 5.7, 11.5); box(0.4, 0.12, 0.25, pm, lampPos.x, lampPos.y, lampPos.z); }
-  const lampBulb = glow(THREE, 0xffa040, 1.6, 1); lampBulb.position.copy(lampPos).add(new THREE.Vector3(0, -0.1, 0)); scene.add(lampBulb);
-  const sodium = new THREE.SpotLight(0xff9a3a, outside ? 160 : 40, 30, 0.85, 0.55, 1.3); sodium.position.copy(lampPos); sodium.target.position.set(0.5, 0, 8.4);
-  sodium.castShadow = outside; sodium.shadow.mapSize.set(2048, 2048); sodium.shadow.bias = -0.0004; scene.add(sodium, sodium.target);
-  const sodiumBeam = beam(THREE, 0xffa04a, 6.5, 3.4, outside ? 0.05 : 0.02); sodiumBeam.position.copy(lampPos); scene.add(sodiumBeam);
+  const lampG = new THREE.Group(); scene.add(lampG);
+  { const pm = std({ color: 0x2a2c2d, metalness: 0.5, roughness: 0.5 }); box(0.14, 5.7, 0.14, pm, 3.6, 2.85, 11.9, lampG); box(0.12, 0.12, 0.9, pm, 3.6, 5.7, 11.5, lampG); box(0.4, 0.12, 0.25, pm, lampPos.x, lampPos.y, lampPos.z, lampG); }
+  const lampBulb = glow(THREE, 0xffa040, 1.6, 1); lampBulb.position.copy(lampPos).add(new THREE.Vector3(0, -0.1, 0)); lampG.add(lampBulb);
+  if (shot === 'three_empty' || shot === 'hall') { lampG.visible = false; fenceBaked.visible = false; }
+  const sodium = new THREE.SpotLight(0xff9a3a, dawn ? 55 : outside ? 160 : 40, 30, 0.85, 0.55, 1.3); sodium.position.copy(lampPos); sodium.target.position.set(0.5, 0, 8.4);
+  sodium.castShadow = blockShot && outside; sodium.shadow.mapSize.set(2048, 2048); sodium.shadow.bias = -0.0004; scene.add(sodium, sodium.target);
+  const sodiumBeam = beam(THREE, 0xffa04a, 6.5, 3.4, dawn ? 0.03 : outside ? 0.05 : 0.02); sodiumBeam.position.copy(lampPos); scene.add(sodiumBeam);
 
   // blockade at the gate
   const blockade = new THREE.Group(); scene.add(blockade);
-  if (outside || shot === 'cut') {
+  const binList = [];
+  if (blockShot) {
     const r = rng(77);
     const binBody = [0x3d4440, 0x4a4d50, 0x2f3a35].map(c => std({ color: c, roughness: 0.6 }));
     const lids = [0xd8b02a, 0x6b2a2a, 0x3a5a3a, 0xd8b02a].map(c => std({ color: c, roughness: 0.5 }));
@@ -502,7 +522,7 @@ export async function setup(THREE, renderer, W, H) {
       body.geometry.computeVertexNormals();
       const lid = add(new THREE.BoxGeometry(0.66, 0.05, 0.8), lids[k % 4], 0, 1.02, 0.02, b); if (k % 3 === 1) { lid.rotation.x = -1.2; lid.position.set(0, 1.25, -0.35); }
       for (const s of [-1, 1]) { const w = add(new THREE.CylinderGeometry(0.1, 0.1, 0.06, 14), M.dark, s * 0.28, 0.1, -0.3, b); w.rotation.z = Math.PI / 2; }
-      return b;
+      binList.push({ b, p: b.position.clone() }); return b;
     };
     bin(-1.1, 9.55, 0.1, 0, 0); bin(-0.35, 9.6, -0.15, 0, 1); bin(0.45, 9.55, 0.2, 0, 2); bin(1.2, 9.6, -0.05, 0, 3);
     bin(-0.7, 10.3, 1.4, -1.45, 4).position.y = 0.38; bin(0.8, 10.4, 2.2, 0.0, 5);
@@ -521,26 +541,134 @@ export async function setup(THREE, renderer, W, H) {
       for (let k = 0; k < 7; k++) box(1.2, 0.022, 0.1, wood, 0, 0.13, -0.4 + k * 0.133, p); for (const s of [-0.5, 0, 0.5]) box(0.1, 0.1, 0.9, wood, s, 0.06, 0, p); return p; };
     pallet(-2.4, 0, 10.2, 0.4, 0); pallet(-2.3, 0.15, 10.15, 0.2, 0); pallet(2.6, 0.5, 9.75, -0.2, -1.2);
   }
-  const blockBaked = bake(blockade); scene.remove(blockade); scene.add(blockBaked);
-  // pupils outside with banners (faceless)
+  if (shot !== 'bins_slide') { const blockBaked = bake(blockade); scene.remove(blockade); scene.add(blockBaked); }
+  // pupils outside with placards (faceless). They stand either side of the bins, facing the street (and the camera),
+  // so the placards read and nobody hides the barricade.
   const crowd = new THREE.Group(); scene.add(crowd);
-  if (outside) {
+  const extra = {};
+  if (crowdShot) {
     const r = rng(9);
-    const placards = [['MOINS', "D'ÉLÈVES", 'PAR CLASSE'], ['DES PROFS,', 'PAS DES', 'PROMESSES'], ['LYCÉE', 'EN LUTTE'], ['ON VEUT', 'ÉTUDIER'], ['36 PAR', 'CLASSE ?']]
-      .map(ls => std({ map: signTex(ls, { w: 512, h: 340, bg: '#ece6d6', fg: '#16161a', font: 'bold 62px "DejaVu Sans Condensed"', tape: false, paint: true }), roughness: 0.9 }));
-    const spots = [[-4.6, 11.6, 0.3], [-3.2, 12.4, 0.1], [-1.8, 11.9, -0.1], [-0.4, 12.8, 0.05], [1.4, 12.1, -0.2], [2.8, 12.9, -0.35], [4.6, 12.0, -0.5], [-5.8, 13.2, 0.4], [2.2, 13.9, -0.2], [-2.6, 14.0, 0.2], [3.6, 14.2, -0.3], [5.8, 13.6, -0.6], [-4.4, 15.2, 0.3], [4.9, 15.5, -0.4]];
-    spots.forEach(([x, z, ry], k) => {
-      const hasSign = [0, 2, 4, 7, 10].includes(k);
+    const plTex = (ls) => std({ map: signTex(ls, { w: 512, h: 340, bg: '#d6cebb', fg: '#111114', font: 'bold 70px "DejaVu Sans Condensed"', tape: false, paint: true }), roughness: 0.95 });
+    const placards = [['MOINS', "D'ÉLÈVES", 'PAR CLASSE'], ['DES PROFS,', 'PAS DES', 'PROMESSES'], ['LYCÉE', 'EN LUTTE'], ['ON VEUT', 'ÉTUDIER'], ['36 PAR', 'CLASSE ?']].map(plTex);
+    // [x, z, ry, placard index or -1]
+    const spots = [[-2.3, 10.9, 0.25, 1], [-3.4, 11.4, 0.35, 4], [-4.6, 10.8, 0.3, -1], [-5.5, 11.7, 0.4, 2], [-3.0, 12.5, 0.2, -1], [-6.5, 11.0, 0.4, 3], [7.3, 11.2, -0.5, 0], [1.9, 12.9, -0.2, -1]];
+    spots.forEach(([x, z, ry, pi], k) => {
       const f = figure(THREE, { body: hoodies[(k * 3) % hoodies.length], head: M.head, dark: M.pants, shoe: M.shoe, pack: packs[k % packs.length], hair: M.pants, stick: std({ color: 0x8a7050 }) },
-        { hood: k % 2 === 0, hair: k % 2 === 1, backpack: k % 3 !== 2, height: 1.62 + r() * 0.16, sign: hasSign ? placards[[0, 2, 4, 7, 10].indexOf(k)] : null, armsUp: hasSign ? 0 : (k === 5 ? 2 : k === 9 ? 1 : 0) });
-      f.position.set(x, 0, z); f.rotation.y = Math.PI + ry; crowd.add(f);
+        { hood: k % 2 === 0, hair: k % 2 === 1, backpack: k % 3 !== 2, height: 1.62 + r() * 0.16, sign: pi >= 0 ? placards[pi] : null, armsUp: pi >= 0 ? 0 : (k === 5 ? 2 : k === 9 ? 1 : 0) });
+      f.position.set(x, 0, z); f.rotation.y = ry; crowd.add(f);
     });
-    // banner (bedsheet) tied along the fence
-    const ban = new THREE.Mesh(new THREE.PlaneGeometry(5.6, 1.1, 24, 4), std({ map: signTex(['LYCÉE BLOQUÉ'], { w: 1400, h: 280, bg: '#e9e3d4', fg: '#141416', font: 'bold 150px "DejaVu Sans Condensed"', tape: false, paint: true }), roughness: 0.95, side: THREE.DoubleSide }));
-    const bp = ban.geometry.attributes.position; for (let k = 0; k < bp.count; k++) { const x = bp.getX(k), y = bp.getY(k); bp.setZ(k, Math.sin(x * 1.3) * 0.06 + (y < 0 ? Math.sin(x * 2.1) * 0.04 : 0)); bp.setY(k, y - Math.cos(x / 2.8 * Math.PI / 2) * 0.0 - (1 - Math.abs(x) / 2.8) * 0.12); }
-    ban.geometry.computeVertexNormals(); ban.position.set(-6.4, 1.25, 9.06); ban.castShadow = true; scene.add(ban);
+    // bedsheet banner tied along the fence, left of the gate
+    const ban = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 0.85, 24, 4), std({ map: signTex(['LYCÉE BLOQUÉ'], { w: 1400, h: 280, bg: '#efe9da', fg: '#111114', font: 'bold 160px "DejaVu Sans Condensed"', tape: false, paint: true }), roughness: 0.95, side: THREE.DoubleSide, emissive: 0x231e17 }));
+    const bp = ban.geometry.attributes.position; for (let k = 0; k < bp.count; k++) { const x = bp.getX(k), y = bp.getY(k); bp.setZ(k, Math.sin(x * 1.3) * 0.06 + (y < 0 ? Math.sin(x * 2.1) * 0.04 : 0)); bp.setY(k, y - (1 - Math.abs(x) / 2.5) * 0.12); }
+    ban.geometry.computeVertexNormals(); ban.position.set(4.7, 1.45, 9.08); ban.castShadow = true; scene.add(ban);
   }
-  const crowdBaked = outside ? bake(crowd) : crowd; if (outside) { scene.remove(crowd); scene.add(crowdBaked); }
+  const crowdBaked = crowdShot ? bake(crowd) : crowd; if (crowdShot) { scene.remove(crowd); scene.add(crowdBaked); }
+  // amber highlight on the barricade: the chain/padlock and a warm key on the bins
+  extra.binKey = new THREE.SpotLight(0xffb56a, 0, 16, 0.42, 0.7, 1.4); extra.binKey.position.set(-5.0, 6.5, 19.0); extra.binKey.target.position.set(0.3, 0.7, 9.7);
+  extra.binKey.castShadow = dawn; extra.binKey.shadow.mapSize.set(1024, 1024); extra.binKey.shadow.bias = -0.0005; scene.add(extra.binKey, extra.binKey.target);
+  extra.chainGlow = glow(THREE, AMBER, 1.5, 0.9); extra.chainGlow.position.set(0, 1.12, 9.25); extra.chainGlow.material.opacity = 0; scene.add(extra.chainGlow);
+  extra.binList = binList;
+  // dawn: cold sky from behind the school, warm sodium in front
+  extra.dawnSky = new THREE.DirectionalLight(0x9fb4d8, 0); extra.dawnSky.position.set(-12, 14, -20); scene.add(extra.dawnSky);
+  extra.dawnFill = new THREE.DirectionalLight(0xc8ccd4, 0); extra.dawnFill.position.set(-6, 5, 30); scene.add(extra.dawnFill);
+  if (dawn) {   // pale band of dawn sky behind the building
+    const sky = new THREE.Mesh(new THREE.PlaneGeometry(260, 60), new THREE.MeshBasicMaterial({ fog: false, map: T(16, 256, (g, w, h) => { const grd = g.createLinearGradient(0, 0, 0, h); grd.addColorStop(0, '#141b28'); grd.addColorStop(0.55, '#3a4a64'); grd.addColorStop(0.8, '#8a7a6c'); grd.addColorStop(1, '#c08a5a'); g.fillStyle = grd; g.fillRect(0, 0, w, h); }) }));
+    sky.position.set(0, 18, -70); scene.add(sky);
+  }
+
+  // ---------------- façade ageing decals (facade_age): rust streaks, cracks, one amber hero crack
+  extra.age = [];
+  if (shot === 'facade_age' || shot === 'exterior') {
+    const r = rng(65);
+    const streaks = (seed) => T(2048, 384, (g, w, h) => {
+      const rr = rng(seed); g.clearRect(0, 0, w, h);
+      for (let i = 0; i < 70; i++) { const x = rr() * w, y0 = rr() < 0.5 ? h * 0.02 : h * 0.62, len = 40 + rr() * 150, a = 0.25 + rr() * 0.4;
+        const grd = g.createLinearGradient(0, y0, 0, y0 + len); const c = rr() < 0.4 ? '96,62,30' : '28,26,22'; grd.addColorStop(0, `rgba(${c},${a})`); grd.addColorStop(1, `rgba(${c},0)`); g.fillStyle = grd; g.fillRect(x, y0, 3 + rr() * 16, len); }
+      for (let i = 0; i < 18; i++) { const x = rr() * w, y = rr() < 0.5 ? h * (0.04 + rr() * 0.2) : h * (0.66 + rr() * 0.3); const rad = 20 + rr() * 60; const grd = g.createRadialGradient(x, y, 2, x, y, rad); grd.addColorStop(0, 'rgba(34,40,26,0.55)'); grd.addColorStop(1, 'rgba(34,40,26,0)'); g.fillStyle = grd; g.fillRect(x - rad, y - rad, rad * 2, rad * 2); }
+    });
+    const cracks = (seed, col, lw) => T(2048, 384, (g, w, h) => {
+      const rr = rng(seed); g.clearRect(0, 0, w, h); g.strokeStyle = col; g.lineCap = 'round';
+      for (let i = 0; i < 9; i++) { let x = rr() * w, y = rr() < 0.5 ? h * (0.05 + rr() * 0.15) : h * (0.68 + rr() * 0.25), a = Math.PI / 2 + (rr() - 0.5) * 1.2; g.lineWidth = lw; g.beginPath(); g.moveTo(x, y);
+        for (let k = 0; k < 14; k++) { a += (rr() - 0.5) * 0.9; x += Math.cos(a) * 9; y += Math.abs(Math.sin(a)) * 7; g.lineTo(x, y); if (rr() < 0.15) { g.moveTo(x, y); } } g.stroke(); }
+    });
+    for (let f = 0; f < 3; f++) {
+      const y0 = FY(f);
+      for (const [map, kind] of [[streaks(10 + f), 's'], [cracks(20 + f, 'rgba(20,18,16,0.9)', 2.4), 'c']]) {
+        const m = new THREE.Mesh(new THREE.PlaneGeometry(LEN, LEN * 384 / 2048 * 0.6 + 0), new THREE.MeshStandardMaterial({ map, transparent: true, opacity: 0, depthWrite: false, roughness: 0.95, clippingPlanes: [cutPlane], polygonOffset: true, polygonOffsetFactor: -2 }));
+        m.scale.y = 3.4 / (LEN * 384 / 2048 * 0.6); m.position.set(0, y0 + 1.55, 0.34 + (kind === 'c' ? 0.004 : 0.002)); facade.add(m); extra.age.push({ m, kind, f });
+      }
+    }
+    // the hero crack: one long crack that runs from the ground-floor spandrel up through the first-floor one, glowing amber
+    const hero = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 4.4), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, color: AMBER_HI,
+      map: T(256, 704, (g, w, h) => { g.clearRect(0, 0, w, h); const rr = rng(4); let x = w * 0.5, y = h; const pts = [[x, y]]; while (y > 0) { x += (rr() - 0.5) * 34; y -= 14 + rr() * 16; pts.push([x, y]); }
+        for (const [lw, a] of [[16, 0.12], [8, 0.3], [3, 1]]) { g.strokeStyle = `rgba(255,255,255,${a})`; g.lineWidth = lw; g.lineJoin = 'round'; g.beginPath(); pts.forEach(([px, py], i) => i ? g.lineTo(px, py) : g.moveTo(px, py)); g.stroke(); }
+        for (let k = 3; k < pts.length - 3; k += 5) { g.strokeStyle = 'rgba(255,255,255,0.8)'; g.lineWidth = 2; g.beginPath(); g.moveTo(...pts[k]); g.lineTo(pts[k][0] + (rr() - 0.5) * 90, pts[k][1] - rr() * 40); g.stroke(); } }) }));
+    hero.position.set(-8.3, FY(0) + 2.6, 0.36); facade.add(hero); extra.heroCrack = hero;
+    const darkCrack = new THREE.Mesh(hero.geometry, new THREE.MeshBasicMaterial({ map: hero.material.map, transparent: true, opacity: 0, depthWrite: false, color: 0x0b0a08 }));
+    darkCrack.position.copy(hero.position); darkCrack.position.z -= 0.002; facade.add(darkCrack); extra.darkCrack = darkCrack;
+    extra.crackLight = new THREE.PointLight(AMBER, 0, 5, 1.6); extra.crackLight.position.set(-8.3, FY(0) + 2.6, 1.0); scene.add(extra.crackLight);
+  }
+
+  // ---------------- exterior: the LYCÉE lettering warms to amber; a low key on the façade
+  extra.facadeKey = new THREE.SpotLight(0xcfd6e0, 0, 60, 0.5, 0.8, 1.0); extra.facadeKey.position.set(-14, 2.0, 26); extra.facadeKey.target.position.set(-4.5, 4.5, 0); scene.add(extra.facadeKey, extra.facadeKey.target);
+  extra.signGlow = glow(THREE, AMBER, 4.2, 0.8); extra.signGlow.position.set(-4.5, FY(2) - 0.05, 0.7); extra.signGlow.material.opacity = 0; scene.add(extra.signGlow);
+
+  // ---------------- three_empty: amber pools on three empty teacher's desks
+  extra.desks = [];
+  if (shot === 'three_empty') {
+    for (const key of ['f0c', 'empty', 'heat']) {
+      const wp = new THREE.Vector3(); rooms[key].teacherDesk.getWorldPosition(wp);
+      const sp = new THREE.SpotLight(0xffb36a, 0, 7, 0.5, 0.6, 1.3); sp.position.set(wp.x + 0.5, wp.y + 2.9, wp.z + 0.6); sp.target.position.set(wp.x, wp.y + 0.6, wp.z); scene.add(sp, sp.target);
+      const gl = glow(THREE, AMBER, 3.4, 0.8); gl.position.set(wp.x + 0.2, wp.y + 1.0, wp.z + 0.4); gl.material.opacity = 0; scene.add(gl);
+      const bm = beam(THREE, 0xffb36a, 2.7, 1.0, 0); bm.position.copy(sp.position); bm.lookAt(sp.target.position); bm.rotateX(-Math.PI / 2); scene.add(bm);
+      extra.desks.push({ sp, gl, bm });
+    }
+  }
+
+  // ---------------- hall: entrance doors (glass, metal frame) and an amber light on the stairs
+  if (shot === 'hall') {
+    const { x0, y0, g } = rooms.hall;
+    const fr = std({ color: 0x5f6466, metalness: 0.6, roughness: 0.4 });
+    for (const dx of [-1.6, 1.6]) box(0.1, 2.5, 0.12, fr, x0 + 4.5 + dx, y0 + 1.25, -0.05, g);
+    box(3.3, 0.12, 0.12, fr, x0 + 4.5, y0 + 2.5, -0.05, g);
+    for (const s of [-1, 1]) { const d = new THREE.Group(); d.position.set(x0 + 4.5 + s * 1.55, y0, -0.05); d.rotation.y = s * 1.25; g.add(d);
+      box(0.06, 2.4, 0.06, fr, -s * 0.03, 1.2, 0, d); box(0.06, 2.4, 0.06, fr, -s * 1.5, 1.2, 0, d); box(1.5, 0.06, 0.06, fr, -s * 0.77, 2.4, 0, d); box(1.5, 0.06, 0.06, fr, -s * 0.77, 0.05, 0, d);
+      const gp = new THREE.Mesh(new THREE.PlaneGeometry(1.44, 2.3), glassMats[0]); gp.position.set(-s * 0.77, 1.2, 0); d.add(gp); }
+    // notice board + bench
+    const nb = add(new THREE.PlaneGeometry(2.2, 1.1), std({ map: T(512, 256, (gg, w, h) => { gg.fillStyle = '#6a5640'; gg.fillRect(0, 0, w, h); const rr = rng(3);
+      for (let i = 0; i < 16; i++) { gg.fillStyle = ['#e9e4d6', '#f1e6b0', '#d8e0e6', '#ead2c8'][i % 4]; gg.save(); gg.translate(20 + rr() * (w - 80), 14 + rr() * (h - 80)); gg.rotate((rr() - 0.5) * 0.1); gg.fillRect(0, 0, 50 + rr() * 30, 60 + rr() * 20); gg.restore(); } }), roughness: 0.9 }), x0 + 0.13, y0 + 1.55, -3.6, g); nb.rotation.y = Math.PI / 2;
+    box(0.4, 0.45, 2.2, std({ color: 0x4b4f52, roughness: 0.6 }), x0 + 0.5, y0 + 0.225, -5.8, g);
+    extra.hallSpot = new THREE.SpotLight(0xffb36a, 0, 9, 0.45, 0.6, 1.3); extra.hallSpot.position.set(x0 + 6.6, y0 + 2.95, -3.8); extra.hallSpot.target.position.set(x0 + 7.6, y0 + 0.6, -6.0);
+    extra.hallSpot.castShadow = true; extra.hallSpot.shadow.mapSize.set(1024, 1024); scene.add(extra.hallSpot, extra.hallSpot.target);
+    extra.hallGlow = glow(THREE, AMBER, 2.4, 0.8); extra.hallGlow.position.set(x0 + 7.6, y0 + 1.8, -6.6); extra.hallGlow.material.opacity = 0; scene.add(extra.hallGlow);
+    extra.hallFill = new THREE.PointLight(0xdfe6ea, 5, 10, 1.6); extra.hallFill.position.set(x0 + 4.5, y0 + 2.2, -1.0); scene.add(extra.hallFill);
+  }
+
+  // ---------------- firework: a burning streak over the barricade into the yard, then a spray of sparks
+  if (shot === 'firework') {
+    extra.fw = {};
+    const head = glow(THREE, 0xffd9a0, 0.9, 1); scene.add(head); extra.fw.head = head;
+    const core = new THREE.Mesh(new THREE.SphereGeometry(0.05, 10, 8), new THREE.MeshBasicMaterial({ color: 0xfff1d8, fog: false })); scene.add(core); extra.fw.core = core;
+    extra.fw.trail = []; for (let k = 0; k < 40; k++) { const s = glow(THREE, AMBER, 0.5 - k * 0.008, 1); s.material.opacity = 0; scene.add(s); extra.fw.trail.push(s); }
+    const n = 260, pos = new Float32Array(n * 3), r = rng(99); extra.fw.vel = [];
+    for (let k = 0; k < n; k++) { const a = r() * Math.PI * 2, e = r() * 1.2 - 0.1, sp = 2 + r() * 5.5; extra.fw.vel.push([Math.cos(a) * Math.cos(e) * sp, Math.sin(e) * sp + 1.5, Math.sin(a) * Math.cos(e) * sp, 0.6 + r() * 0.9]); }
+    const gg = new THREE.BufferGeometry(); gg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    extra.fw.sparks = new THREE.Points(gg, new THREE.PointsMaterial({ color: 0xffc070, size: 0.07, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, fog: false })); scene.add(extra.fw.sparks);
+    extra.fw.light = new THREE.PointLight(0xffa850, 0, 18, 1.5); scene.add(extra.fw.light);
+    extra.fw.smoke = []; for (let k = 0; k < 14; k++) { const sm = glow(THREE, 0x9a9690, 1.0, 0.5); sm.material.blending = THREE.NormalBlending; sm.material.opacity = 0; scene.add(sm); extra.fw.smoke.push(sm); }
+  }
+
+  // ---------------- crowded: the 37th pupil, squeezed in at the front by the board
+  if (shot === 'crowded') {
+    const { g, x0, y0 } = rooms.crowd;
+    const c = chair(g, x0 + 2.25, -6.95, y0); c.rotation.y = 0.5;
+    const f = pupil(g, x0 + 2.27, -6.95, y0, 101); f.rotation.y = -Math.PI / 2 + 0.5;
+    const strip = new THREE.Mesh(new THREE.CircleGeometry(0.4, 24), new THREE.MeshBasicMaterial({ color: AMBER_HI, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
+    strip.rotation.x = -Math.PI / 2; strip.position.set(x0 + 2.25, y0 + 0.02, -6.95); scene.add(strip);
+    const halo = glow(THREE, AMBER, 2.6, 0.9); halo.position.set(x0 + 2.25, y0 + 1.2, -6.95); halo.material.opacity = 0; scene.add(halo);
+    extra.d37 = { strip, halo };
+    extra.crowdFill = new THREE.PointLight(0xe8eef2, 6, 12, 1.6); extra.crowdFill.position.set(x0 + 5.0, y0 + 2.6, -1.0); scene.add(extra.crowdFill);
+  }
 
   // bake the seated pupils per room (big draw-call saving)
   for (const k of Object.keys(rooms)) { const rm = rooms[k]; if (!rm.studs || rm.studs.children.length === 0) continue;
@@ -548,19 +676,21 @@ export async function setup(THREE, renderer, W, H) {
     const b = bake(rm.studs); rm.studs.parent.add(b); rm.studs.parent.remove(rm.studs); rm.studs = b; }
 
   // ------------------------------------------------------------------ global light
-  scene.add(new THREE.HemisphereLight(0x5d6878, 0x0b0a09, outside ? 0.4 : 0.18));
-  const moon = new THREE.DirectionalLight(0x8fa0b8, outside ? 0.5 : 0.7); moon.position.set(-30, 40, 40); scene.add(moon);
+  scene.add(new THREE.HemisphereLight(dawn ? 0x8a9cba : 0x5d6878, dawn ? 0x2a241e : 0x0b0a09, dawn ? 1.1 : outside ? 0.45 : shot === 'crowded' ? 0.4 : 0.18));
+  const moon = new THREE.DirectionalLight(0x8fa0b8, dawn ? 0.2 : outside ? 0.5 : 0.7); moon.position.set(-30, 40, 40); scene.add(moon);
+  if (dawn) { extra.dawnSky.intensity = 1.4; extra.dawnFill.intensity = 0.9; }
   const yardFill = new THREE.DirectionalLight(0xa9b0b8, shot === 'cut' ? 0.8 : 0.0); yardFill.position.set(10, 8, 40); scene.add(yardFill);
 
   for (const [l, sh] of [[emptySpot, 'empty_desk'], [leak.spot, 'leak'], [heat.sun, 'heat'], [wc.spot, 'toilets']]) l.castShadow = shot === sh;
   // which façade state per shot
   facade.visible = shot === 'cut' || outside;
+  if (shot === 'cut' || outside) for (const k of Object.keys(rooms)) if (rooms[k].studs && shot !== 'cut') rooms[k].studs.visible = shot === 'exterior';
   cutPlane.constant = 30;
   // interior shots don't need the street furniture in shadow passes
-  const dofFocus = { crowded: 6.8, empty_desk: 5.4, leak: 6.0, heat: 4.8, toilets: 5.6, outside_blockade: 9.8 }[shot];
-  const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: shot === 'cut' ? 0.7 : 0.6, bloomRadius: 0.6, bloomThreshold: 0.8, exposure: 0.95,
+  const dofFocus = { crowded: 6.8, empty_desk: 5.4, leak: 6.0, heat: 4.8, toilets: 5.6, outside_blockade: 6.0, bins_slide: 7.0, facade_age: 7.5, firework: 6.5 }[shot];
+  const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: shot === 'cut' ? 0.7 : 0.6, bloomRadius: 0.6, bloomThreshold: 0.8, exposure: dawn ? 1.05 : shot === 'crowded' ? 1.1 : 0.95,
     dof: dofFocus ? { focus: dofFocus, aperture: 0.0009, maxblur: 0.004 } : null });
-  return { THREE, scene, camera, shot, rooms, lights, deskGlow, emptySpot, emptyBeam, motes, leak, heat, wc, cutPlane, cutLine, cutHalo, cutLight, facade, sodium, ...post };
+  return { THREE, scene, camera, shot, rooms, lights, deskGlow, emptySpot, emptyBeam, motes, leak, heat, wc, cutPlane, cutLine, cutHalo, cutLight, facade, sodium, extra, k: len ? len / (BASE[shot] ?? 8) : 1, ...post };
 }
 
 const CAMS = {
@@ -571,11 +701,18 @@ const CAMS = {
   leak: [[0, [-9.8, 8.9, 0.9, -13.4, 8.4, -4.9]], [7, [-10.3, 8.8, 0.4, -13.5, 8.4, -5.0]]],
   heat: [[0, [-4.4, 8.75, -0.2, -0.4, 8.35, -3.4]], [6, [-4.0, 8.7, -0.5, -0.4, 8.4, -3.2]]],
   toilets: [[0, [-10.2, 2.0, 2.4, -13.8, 1.3, -5.6]], [6, [-10.8, 1.9, 1.8, -13.6, 1.3, -5.7]]],
-  outside_blockade: [[0, [-5.0, 2.7, 19.0, -0.3, 1.2, 9.4]], [7, [-3.4, 2.6, 18.4, 0.2, 1.2, 9.4]]],
+  outside_blockade: [[0, [-6.4, 1.75, 16.6, 0.0, 1.15, 9.7]], [7, [-5.0, 1.65, 15.6, 0.4, 1.15, 9.7]]],
+  exterior: [[0, [-17.0, 1.7, 31.0, -4.0, 4.6, 0]], [8, [-12.5, 1.9, 23.5, -4.5, 5.0, 0]]],
+  three_empty: [[0, [1.0, 5.0, 21.0, -3.0, 5.0, -4.5]], [7, [0.2, 5.0, 17.5, -3.2, 5.0, -4.5]]],
+  bins_slide: [[0, [5.2, 1.5, 15.8, -0.2, 0.9, 9.6]], [7, [4.0, 1.45, 14.8, -0.3, 0.9, 9.6]]],
+  hall: [[0, [-4.4, 1.65, 9.0, -4.6, 1.5, -3.0]], [4.5, [-4.5, 1.6, 1.2, -4.8, 1.4, -5.0]], [8, [-4.0, 1.55, -1.6, -1.6, 1.0, -6.4]]],
+  facade_age: [[0, [-3.2, 1.6, 9.5, -8.6, 3.4, 0]], [7, [-4.6, 1.5, 7.6, -8.4, 3.5, 0]]],
+  firework: [[0, [-5.2, 1.35, 2.8, 0.6, 1.6, 12.0]], [6, [-4.6, 1.3, 3.6, 0.6, 1.6, 12.0]]],
 };
 
-export function update(ctx, t) {
+export function update(ctx, tt) {
   const { camera, shot } = ctx;
+  const t = tt / (ctx.k || 1);
   const c = path(CAMS[shot] ?? CAMS.cut)(t);
   camera.position.set(c[0], c[1], c[2]); camera.lookAt(c[3], c[4], c[5]);
 
@@ -583,7 +720,7 @@ export function update(ctx, t) {
   for (const L of ctx.lights) {
     let k = 1;
     if (L.f === 0 && L.i === 0) { const s = Math.sin(t * 37.0) * Math.sin(t * 13.3 + 1.2); k = s > 0.82 ? 0.15 : 0.85 + 0.15 * Math.sin(t * 50); }
-    L.light.intensity = L.base * k * ({ cut: 2.6, crowded: 1.3, leak: 1.3, outside_blockade: 1.6 }[shot] ?? 1);
+    L.light.intensity = L.base * k * ({ cut: 2.6, crowded: 2.0, leak: 1.3, outside_blockade: 1.2, exterior: 2.2, three_empty: 1.6, facade_age: 1.4, hall: 1.4 }[shot] ?? 1);
     L.tubes.forEach((tb, j) => { if (L.base === 0) return; const kk = (L.f === 2 && L.i === 0 && j === 1) ? (Math.sin(t * 23) > 0.6 ? 0.2 : 1) : k; tb.material.color.setScalar(0.2 + 0.6 * kk); });
   }
 
@@ -603,6 +740,8 @@ export function update(ctx, t) {
       const flash = Math.exp(-Math.max(0, t - t0) * 4) * a;
       d.strip.material.opacity = 0.32 * a + 0.5 * flash; d.halo.material.opacity = 0.18 * a + 0.5 * flash;
     });
+    const d37 = ctx.extra.d37, a37 = sstep(4.4, 4.7, t), f37 = Math.exp(-Math.max(0, t - 4.4) * 2.5) * a37;
+    d37.strip.material.opacity = 0.45 * a37 + 0.5 * f37; d37.halo.material.opacity = 0.3 * a37 + 0.6 * f37;
   } else ctx.deskGlow.forEach(d => { d.strip.material.opacity = 0; d.halo.material.opacity = 0; });
   // ---------------- empty desk
   const eOn = shot === 'empty_desk' ? sstep(1.0, 2.6, t) : 0;
@@ -626,4 +765,50 @@ export function update(ctx, t) {
   (H.fan || []).forEach((f, k) => { f.rotation.y = 0.8 + Math.sin(t * 9 + k * 2) * 0.5; });
   // ---------------- toilets
   ctx.wc.spot.intensity = shot === 'toilets' ? 20 * sstep(0.8, 2.2, t) : 0;
+
+  // ---------------- new shots
+  const X = ctx.extra;
+  if (shot === 'outside_blockade') {
+    X.binKey.intensity = 160; X.chainGlow.material.opacity = 0.75 * sstep(2.6, 4.2, t) * (0.9 + 0.1 * Math.sin(t * 7));
+  }
+  if (shot === 'bins_slide') {
+    // bins arrive one after another from both sides of the street and settle into the barricade
+    X.binList.forEach(({ b, p }, k) => {
+      const t0 = 0.3 + k * 0.55, s = 1 - sstep(t0, t0 + 1.1, t);
+      const side = k % 2 ? 1 : -1;
+      b.position.set(p.x + side * 9 * s, p.y + (p.y > 0.5 ? 0 : 0), p.z + 3.5 * s);
+      b.visible = t > t0 - 0.05 || k < 0;
+      if (p.y > 0.5) b.position.y = p.y + 2.2 * s;    // the two on top are lifted on
+    });
+    X.binKey.intensity = 110; X.chainGlow.material.opacity = 0.8 * sstep(4.9, 5.8, t);
+  }
+  if (shot === 'exterior') {
+    X.facadeKey.intensity = 7; const ls = ctx.facade.userData.lycee.material; ls.emissive.setHex(0xffa040); ls.emissiveIntensity = 1.6 * sstep(2.8, 4.6, t); X.signGlow.material.opacity = 0.55 * sstep(2.8, 4.6, t);
+  }
+  if (shot === 'facade_age') {
+    X.facadeKey.intensity = 5; X.facadeKey.position.set(-1, 0.8, 12); X.facadeKey.target.position.set(-8.3, 3.0, 0);
+    X.age.forEach(({ m, kind, f }) => { const t0 = (kind === 's' ? 0.6 : 1.6) + f * 0.35; m.material.opacity = sstep(t0, t0 + 1.8, t); });
+    const h = sstep(3.4, 4.8, t); X.heroCrack.material.opacity = 0.9 * h; X.darkCrack.material.opacity = sstep(2.0, 3.0, t);
+    X.heroCrack.scale.y = 0.15 + 0.85 * sstep(3.2, 4.6, t); X.heroCrack.position.y = 0.7 + 2.2 * X.heroCrack.scale.y;
+    X.darkCrack.scale.y = X.heroCrack.scale.y; X.darkCrack.position.y = X.heroCrack.position.y;
+    X.crackLight.intensity = 6 * h;
+  }
+  if (shot === 'three_empty') {
+    X.desks.forEach((d, k) => { const a = sstep(1.0 + k * 1.1, 1.7 + k * 1.1, t); d.sp.intensity = 40 * a; d.gl.material.opacity = 0.5 * a; d.bm.material.uniforms.opacity.value = 0.08 * a; });
+  }
+  if (shot === 'hall') {
+    const a = sstep(4.6, 6.2, t); X.hallSpot.intensity = 45 * a; X.hallGlow.material.opacity = 0.45 * a;
+  }
+  if (shot === 'firework') {
+    const F = X.fw, T0 = 1.0, T1 = 2.6;      // flight from the street, over the bins, into the yard
+    const at = (u) => { u = clamp01(u); return [2.6 - 3.6 * u, 1.1 + 0.7 * u + 2.4 * Math.sin(Math.PI * u), 18.5 - 12.5 * u]; };
+    const u = (t - T0) / (T1 - T0), fly = t >= T0 && t < T1;
+    const p = at(u); F.head.position.set(...p); F.core.position.set(...p); F.head.visible = F.core.visible = fly;
+    F.trail.forEach((s, k) => { const uu = u - (k + 1) * 0.012; s.position.set(...at(uu)); s.material.opacity = fly && uu > 0 ? 0.9 * (1 - k / 40) : t >= T1 && t < T1 + 0.4 ? 0.9 * (1 - k / 40) * (1 - (t - T1) / 0.4) : 0; });
+    const imp = at(1), bt = t - T1, pa = F.sparks.geometry.attributes.position;
+    F.vel.forEach(([vx, vy, vz, life], k) => { const tt2 = Math.max(0, Math.min(bt, life)); pa.setXYZ(k, imp[0] + vx * tt2, Math.max(0.02, imp[1] + vy * tt2 - 4.9 * tt2 * tt2), imp[2] + vz * tt2); });
+    pa.needsUpdate = true; F.sparks.material.opacity = bt > 0 ? Math.max(0, 1 - bt / 1.6) : 0;
+    F.light.position.set(...(bt > 0 ? imp : p)); F.light.intensity = fly ? 40 : bt > 0 ? 160 * Math.exp(-bt * 2.2) : 0;
+    F.smoke.forEach((sm, k) => { const q = at(k / 14); sm.position.set(q[0], q[1] + Math.max(0, t - T0 - k * 0.11) * 0.25, q[2]); sm.material.opacity = t > T0 + k * 0.11 ? 0.22 * Math.exp(-Math.max(0, t - T0 - k * 0.11) * 0.35) : 0; sm.scale.setScalar(0.6 + Math.max(0, t - T0 - k * 0.11) * 0.5); });
+  }
 }

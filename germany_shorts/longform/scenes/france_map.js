@@ -11,9 +11,19 @@
 //   oct6        (6 s)  6 Oct police counts as glowing columns (linear in marchers; Paris 56,000 tallest).
 //   red_orange  (6 s)  114 red + 400 orange lycées (illustrative distribution, weighted by SNES-FSU shortage academies).
 //   creteil_hold        same framing as the end of spark, without the ignite (for the outro "pull back in").
+//   ignite      (6 s)  low oblique from the south: the whole map catches fire, 180 -> 1,027 lycées in a rush (beat 52).
+//   tour       (12 s)  day-by-day flight: Saint-Denis / Sarcelles / La Courneuve, then Marseille / Lille / Lyon,
+//                      then Nantes / Rennes / Bordeaux / Toulouse / Strasbourg, named as they light (beats 53-56).
+//   blockaded   (6 s)  1 Oct, seen from the north-west: all 1,027 dim, 222 turn solid amber (illustrative pick).
+//   border      (7 s)  from Lille, amber arcs cross into Belgium (Charleroi, Liège) and from Lyon into Italy; pull out.
+//   padlocks    (7 s)  ~400 padlock icons pop over lit lycées across the north half (illustrative pick), 2 Oct.
+//   cases       (7 s)  three amber pins drop: Saint-Ouen-l'Aumône (28 Sept), Tours (30 Sept), Lens (5 Oct).
+//   cases_fly   (9 s)  low flight from the Tours pin north to the Lens pin, each pin flaring as it is reached.
+//   dimming     (7 s)  1,027 lit lycées go dark until 141 remain (9 Oct closures; which ones is illustrative).
+//   ripple      (7 s)  from the Créteil dot an amber wave runs over the whole country, lighting every lycée.
 import { AMBER } from './lib.js';
 import { makeComposer, glow } from './look.js';
-import { AMBER_HI, CREAM, shotArgs, path, clamp01, sstep, fontsReady, label } from './france_lib.js';
+import { AMBER_HI, CREAM, shotArgs, path, clamp01, sstep, fontsReady, label, ease } from './france_lib.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { Line2 } from 'three/addons/lines/Line2.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
@@ -113,12 +123,15 @@ export async function setup(THREE, renderer, W, H) {
     });
     const p = new THREE.Points(g, m); p.renderOrder = 5; p.frustumCulled = false; scene.add(p); return m;
   };
-  const baseMat = mkPoints(ALL, {}, { vdecl: 'uniform float uBase;', vmain: `float sz = 1.0; vA = uBase; vC = vec3(0.93,0.88,0.78);` }, { uBase: { value: 0.0 } }, 0.16); baseMat.uniforms.uMaxPx.value = 3.5;
+  const baseMat = mkPoints(ALL, {}, { vdecl: 'uniform float uBase, uRip, uRipOn; uniform vec2 uCen;', vmain: `float sz = 1.0; vA = uBase; vC = vec3(0.93,0.88,0.78);
+      if (uRipOn > 0.0) { float d = length(position.xz - uCen); float pass = uRipOn * smoothstep(uRip, uRip - 3.0, d); float front = uRipOn * exp(-pow((d - uRip) * 0.45, 2.0));
+        vA = uBase + 0.75 * pass + 1.8 * front; sz = 1.0 + 1.6 * front + 0.5 * pass; vC = mix(vC, vec3(1.0, 0.68, 0.34), max(pass, front)); }` },
+    { uBase: { value: 0.0 }, uRip: { value: 0 }, uRipOn: { value: 0 }, uCen: { value: new THREE.Vector2() } }, 0.16); baseMat.uniforms.uMaxPx.value = 3.5;
   const seedOf = (i) => ((Math.sin(i * 91.7 + 3.1) * 43758.5453) % 1 + 1) % 1;
   const lyMat = mkPoints(LY.map((q, i) => [...q, i]), {
-    aDay: q => q[3] >= 0 ? dayOfRank(q[3]) : 999., aRO: q => q[4], aSeed: q => seedOf(q[5]),
+    aDay: q => q[3] >= 0 ? dayOfRank(q[3]) : 999., aRO: q => q[4], aSeed: q => seedOf(q[5]), aSel: q => q[3] >= 0 ? seedOf(q[5] * 7.3 + 11) : 2.0,
   }, {
-    vdecl: 'uniform float uDay, uMode, uRO, uTime;',
+    vdecl: 'uniform float uDay, uMode, uRO, uTime, uSel, uSelOn, uDim;',
     vmain: `float sz = 0.0; vA = 0.0; vC = vec3(1.0);
       if (uMode < 1.5) {                       // spread
         float age = uDay - aDay;
@@ -126,6 +139,12 @@ export async function setup(THREE, renderer, W, H) {
         float flash = on * exp(-max(age, 0.0) * 5.0);
         sz = on * (1.0 + 2.2 * flash); vA = on * (0.85 + 1.6 * flash) * uMode;
         vC = mix(vec3(1.0, 0.62, 0.25), vec3(1.0, 0.9, 0.7), flash);
+        float sel = step(aSel, uSel);
+        float dd = smoothstep(aSeed * 0.6, aSeed * 0.6 + 0.4, uDim);
+        vA *= mix(1.0, sel > 0.5 ? 1.0 : 0.1, dd); sz *= mix(1.0, sel > 0.5 ? 1.0 : 0.7, dd);
+        float so = sel * smoothstep(aSeed * 0.6, aSeed * 0.6 + 0.25, uSelOn);
+        float pop = so * (1.0 - smoothstep(aSeed * 0.6 + 0.1, aSeed * 0.6 + 0.4, uSelOn));
+        sz *= 1.0 + 0.8 * so + 1.2 * pop; vA *= 1.0 + 0.5 * so + pop; vC = mix(vC, vec3(1.0, 0.76, 0.42), so);
       } else {                                 // red / orange
         float r = step(1.5, aRO), o = step(0.5, aRO) * (1.0 - r);
         float t0 = (r > 0.5 ? 0.0 : 0.35) + aSeed * 0.55;
@@ -134,7 +153,7 @@ export async function setup(THREE, renderer, W, H) {
         sz = on * (r > 0.5 ? 2.0 : 1.25) * (1.0 + flash * 1.2); vA = on * (1.0 + flash) * step(0.5, aRO);
         vC = r > 0.5 ? vec3(0.92, 0.09, 0.05) : vec3(1.0, 0.36, 0.04);
       }`,
-  }, { uDay: { value: 0 }, uMode: { value: 0 }, uRO: { value: 0 }, uTime: { value: 0 } }, 0.5);
+  }, { uDay: { value: 0 }, uMode: { value: 0 }, uRO: { value: 0 }, uTime: { value: 0 }, uSel: { value: 0 }, uSelOn: { value: 0 }, uDim: { value: 0 } }, 0.5);
 
   if (shot === 'red_orange') { lyMat.blending = THREE.NormalBlending; lyMat.uniforms.uNormal.value = 1; lyMat.uniforms.uSize.value = 0.78; lyMat.uniforms.uCore.value = 0.42; }
   // ---------------------------------------------------------------- cities
@@ -219,8 +238,80 @@ export async function setup(THREE, renderer, W, H) {
       const l = label(THREE, o.c.name, { size: o.c.police6oct > 10000 ? 0.03 : 0.024, sub: fmt(o.c.police6oct), anchor: o.c.name === 'Aix-en-Provence' ? 'right' : 'left' });
       l.material.opacity = 0; o.g.add(l); o.lab = l;
     }
+  } else if (shot === 'tour') {
+    const anch = { 'Saint-Denis': 'right', 'La Courneuve': 'left', 'Sarcelles': 'left', 'Marseille': 'left', 'Lille': 'left', 'Lyon': 'left', 'Nantes': 'right', 'Rennes': 'right', 'Bordeaux': 'right', 'Toulouse': 'left', 'Strasbourg': 'left' };
+    for (const [n, a] of Object.entries(anch)) { const l = addLabel(n, { size: n.length > 9 && ['Saint-Denis', 'La Courneuve', 'Sarcelles'].includes(n) ? 0.022 : 0.024, anchor: a, color: '#efe6d2' }); if (l) l.material.opacity = 0; }
   } else if (shot === 'red_orange') {
     for (const n of ['Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nantes', 'Lille']) { const l = addLabel(n, { size: 0.019, color: '#cfc6b3', gap: n === 'Paris' ? 90 : 34 }); }
+  }
+
+  // ---------------------------------------------------------------- extra shot furniture
+  const XY = (lon, lat) => { const x = (lon - 2.5) * Math.cos(46.3 * Math.PI / 180) * 11.132, z = -(lat - 46.3) * 11.132; return new THREE.Vector3(x, hAt(x, z) + 0.05, z); };
+  const ex = {};
+  const mkArc = (a, b, lift = 0.25) => {
+    const d = a.distanceTo(b), mid = a.clone().lerp(b, 0.5); mid.y += d * lift;
+    const m = new THREE.ShaderMaterial({
+      uniforms: { prog: { value: 0 }, fadeAll: { value: 1 }, color: { value: new THREE.Color(AMBER_HI) } },
+      vertexShader: `varying float vU; void main(){ vU = uv.x; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+      fragmentShader: `uniform float prog, fadeAll; uniform vec3 color; varying float vU;
+        void main(){ if (vU > prog) discard; float head = exp(-(prog - vU) * 10.0); float a = (0.35 + 1.4*head) * fadeAll;
+          gl_FragColor = vec4(color * a + vec3(1.0,0.9,0.75)*head*0.6*fadeAll, 1.0); }`,
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+    const tube = new THREE.Mesh(new THREE.TubeGeometry(new THREE.QuadraticBezierCurve3(a, mid, b), 96, Math.max(0.08, d * 0.006), 6, false), m); tube.renderOrder = 4; scene.add(tube); return m;
+  };
+  const mkMarker = (p, size) => {
+    const g = new THREE.Group(); g.position.copy(p); scene.add(g);
+    const h = glow(THREE, AMBER, size, 1); h.material.opacity = 0; h.renderOrder = 8; g.add(h);
+    const c = glow(THREE, 0xffe2b8, size * 0.3, 1); c.material.opacity = 0; c.renderOrder = 9; g.add(c);
+    const r = mkRing(AMBER_HI); g.add(r); return { g, h, c, r };
+  };
+  if (shot === 'border') {
+    const lille = cityByName['Lille'], lyon = cityByName['Lyon'];
+    const L0 = new THREE.Vector3(lille.x, lille.y + 0.1, lille.z), Y0 = new THREE.Vector3(lyon.x, lyon.y + 0.1, lyon.z);
+    ex.dest = [[XY(4.44, 50.41), 'Charleroi', 'BELGIUM', 'right', 1.0], [XY(5.58, 50.63), 'Liège', 'BELGIUM', 'left', 1.6], [XY(7.9, 45.2), 'ITALY', null, 'left', 3.4]].map(([p, name, sub, anchor, t0]) => {
+      const m = mkMarker(p, 3.0); const arc = mkArc(name === 'ITALY' ? Y0 : L0, p, name === 'ITALY' ? 0.22 : 0.35);
+      const l = label(THREE, name, { size: name === 'ITALY' ? 0.03 : 0.024, sub, anchor, gap: 30 }); l.position.set(0, 0.6, 0); l.material.opacity = 0; m.g.add(l);
+      return { ...m, arc, l, t0 };
+    });
+    for (const n of ['Lyon']) { const l = addLabel(n, { size: 0.021, color: '#d9d0bd', anchor: 'right' }); }
+  }
+  if (shot === 'cases' || shot === 'cases_fly') {
+    const pinM = new THREE.MeshStandardMaterial({ color: 0xd8d2c4, metalness: 0.6, roughness: 0.3 });
+    const headM = new THREE.MeshStandardMaterial({ color: AMBER_HI, emissive: 0xff9a3a, emissiveIntensity: 0.8, roughness: 0.4 });
+    ex.pins = [['Saint-Ouen-l\'Aumône', '28 SEPT', 'left', 0.6], ['Tours', '30 SEPT', 'right', 2.0], ['Lens', '5 OCT', 'left', 3.4]].map(([n, d, anchor, t0]) => {
+      const c = cityByName[n]; const g = new THREE.Group(); g.position.set(c.x, c.y + 0.05, c.z); scene.add(g);
+      const pin = new THREE.Group(); g.add(pin);
+      const needle = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.006, 1.6, 10).translate(0, 0.8, 0), pinM); pin.add(needle);
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.24, 24, 16), headM); head.position.y = 1.7; pin.add(head);
+      const m = mkMarker(new THREE.Vector3(), 2.4); g.add(m.g); m.g.position.set(0, 0, 0);
+      const l = label(THREE, n.toUpperCase(), { size: 0.024, sub: d, anchor, gap: 34 }); l.position.set(0, 1.95, 0); l.material.opacity = 0; g.add(l);
+      const pl = new THREE.PointLight(AMBER, 0, 6, 1.6); pl.position.y = 1.8; g.add(pl);
+      return { g, pin, head, m, l, pl, t0, c };
+    });
+  }
+  if (shot === 'padlocks') {
+    // ~400 lit lycées get a padlock icon (which ones is illustrative; north half favoured by the framing only)
+    const lockTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d');
+      g.strokeStyle = '#fff'; g.lineWidth = 13; g.beginPath(); g.arc(64, 52, 24, Math.PI, 0); g.lineTo(88, 66); g.moveTo(40, 52); g.lineTo(40, 66); g.stroke();
+      g.fillStyle = '#fff'; g.beginPath(); g.roundRect(26, 62, 76, 56, 10); g.fill(); g.globalCompositeOperation = 'destination-out'; g.beginPath(); g.arc(64, 84, 8, 0, 7); g.fill(); g.fillRect(60, 86, 8, 18);
+      const t = new THREE.CanvasTexture(c); return t; })();
+    const pick = LY.map((q, i) => [q, i]).filter(([q, i]) => q[3] >= 0 && seedOf(i * 3.7 + 5) < 400 / 1027);
+    ex.nLocks = pick.length;
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pick.flatMap(([q]) => [q[0], q[1] + 0.25, q[2]]), 3));
+    g.setAttribute('aT', new THREE.Float32BufferAttribute(pick.map(([q, i]) => 0.6 + seedOf(i * 1.9 + 2) * 2.8), 1));
+    ex.lockMat = new THREE.ShaderMaterial({ uniforms: { uT: { value: 0 }, map: { value: lockTex }, uScale: { value: H / (2 * Math.tan(THREE.MathUtils.degToRad(28 / 2))) } },
+      vertexShader: `attribute float aT; uniform float uT, uScale; varying float vA; varying float vF; void main(){ vec4 mv = modelViewMatrix*vec4(position,1.0); float a = clamp((uT - aT) / 0.18, 0.0, 1.0); float pop = a * (1.0 - clamp((uT - aT - 0.18) / 0.4, 0.0, 1.0));
+        vA = a; vF = pop; gl_PointSize = clamp((2.2 + 1.0 * pop) * a * uScale / -mv.z, 0.0, 70.0); gl_Position = projectionMatrix*mv; }`,
+      fragmentShader: `uniform sampler2D map; varying float vA; varying float vF; void main(){ float m = texture2D(map, gl_PointCoord).a; if (m * vA < 0.02) discard; gl_FragColor = vec4(mix(vec3(1.0,0.55,0.16), vec3(1.0,0.8,0.5), vF) * (0.9 + 0.4 * vF), m * vA); }`,
+      transparent: true, depthWrite: false, depthTest: false });
+    const pts = new THREE.Points(g, ex.lockMat); pts.renderOrder = 10; pts.frustumCulled = false; scene.add(pts);
+  }
+  if (shot === 'ripple') {
+    const thin = (() => { const c = document.createElement('canvas'); c.width = c.height = 512; const g = c.getContext('2d');
+      const grd = g.createRadialGradient(256, 256, 236, 256, 256, 255); grd.addColorStop(0, 'rgba(255,255,255,0)'); grd.addColorStop(0.6, 'rgba(255,255,255,1)'); grd.addColorStop(1, 'rgba(255,255,255,0)');
+      g.fillStyle = grd; g.fillRect(0, 0, 512, 512); return new THREE.CanvasTexture(c); })();
+    ex.rings = [0, 1, 2].map(() => { const r = mkRing(AMBER_HI); r.material.map = thin; r.position.set(cre.x, cre.y + 0.3, cre.z); scene.add(r); return r; });
   }
 
   // ---------------------------------------------------------------- cameras
@@ -232,10 +323,22 @@ export async function setup(THREE, renderer, W, H) {
       [3.1, [-8, 150, 120, -7, 0, 4]], [6, [-6, 145, 115, -7.5, 0, 4]]]),
     oct6: path([[0, [-30, 66, 132, -9, 5, -4]], [6, [-24, 62, 124, -9, 5, -5]]]),
     red_orange: path([[0, [-8, 180, 80, -6, 0, -1]], [6, [-7, 174, 76, -6, 0, -1]]]),
+    ignite: path([[0, [-2, 26, 118, -4, 0, -6]], [6, [-3, 22, 98, -4, 0, -10]]]),
+    tour: path([[0, [cx - 6.5, cy + 4.6, cz + 4.2, cx - 0.4, cy, cz - 1.4]], [2.6, [cx - 7.5, cy + 6.5, cz + 6.5, cx - 0.5, cy, cz - 1.5]],
+      [4.6, [10, 165, 92, 9, 0, -7]], [6.8, [9, 160, 90, 8, 0, -6]], [9.0, [-18, 110, 92, -10, 0, -2]], [12, [-14, 120, 100, -6, 0, -2]]]),
+    blockaded: path([[0, [-92, 105, -60, -4, 0, -2]], [6, [-84, 98, -52, -4, 0, -3]]]),
+    border: path([[0, [8, 26, -24, 11, 0, -45]], [2.2, [10, 40, -14, 13, 0, -40]], [7, [24, 112, 62, 18, 0, -14]]]),
+    padlocks: path([[0, [-4, 78, 40, -4, 0, -24]], [7, [-3, 72, 35, -4, 0, -24]]]),
+    cases: path([[0, [-2, 52, 18, -6, 0, -29]], [7, [-3, 46, 13, -6, 0, -29]]]),
+    cases_fly: path([[0, [-10.5, 6.5, -3.5, -14, 0.5, -12.6]], [2.6, [-11, 6, -4.5, -14, 0.5, -12.6]], [5.0, [-4, 18, -16, -3, 0, -36]], [7.2, [5.5, 6.0, -38, 2.6, 0.5, -46]], [9, [5.0, 5.6, -38.8, 2.6, 0.5, -46]]]),
+    dimming: path([[0, [70, 120, 110, -3, 0, -4]], [7, [64, 112, 102, -3, 0, -4]]]),
+    ripple: path([[0, [cx + 1.6, cy + 3.6, cz + 6.2, cx, cy, cz - 0.2]], [1.2, [cx + 2, cy + 5, cz + 8, cx, cy, cz - 0.3]], [5.5, [0, 170, 125, -6, 0, 2]], [7, [0, 176, 130, -6, 0, 2]]]),
   };
   const camF = cams[shot] ?? cams.spread;
-  const tl = len ? len / 6 : 1;              // timeline stretch
+  const BASEL = { tour: 12, border: 7, padlocks: 7, cases: 7, cases_fly: 9, dimming: 7, ripple: 7 };
+  const tl = len ? len / (BASEL[shot] ?? 6) : 1;              // timeline stretch
   const dof = close ? { focus: 7, aperture: 0.0012, maxblur: 0.005 } : null;
+  if (shot === 'border') mNb.opacity = 0.42;
   const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: 0.85, bloomRadius: 0.6, bloomThreshold: 0.55, exposure: 1.0, dof });
   post.finish.uniforms.vignette.value = 0.6;
   // labels render after bloom/DOF on their own layer so the type stays crisp
@@ -246,7 +349,7 @@ export async function setup(THREE, renderer, W, H) {
   lp.render = (...args) => { const bg = scene.background; scene.background = null; lpRender(...args); scene.background = bg; };
   post.composer.insertPass(lp, post.composer.passes.length - 2);
   return { THREE, scene, camera, labelCam, shot, tl, camF, cityObjs, arcs, lyMat, baseMat, nAt, near, spark, sparkCore, sparkHalo, sparkRings, sparkLight,
-    lineMats: { mCoast, mDepts }, beacon, ...post };
+    lineMats: { mCoast, mDepts }, beacon, ex, cre, ...post };
 }
 
 // spread: seconds (6 s base) -> day since 18 Sept
@@ -257,6 +360,12 @@ export function spreadDay(ts) {
   return K[K.length - 1][1];
 }
 
+const TOUR_KEYS = [[0, 5.7], [1.2, 6.8], [3.2, 8.0], [4.4, 10.2], [6.8, 10.8], [7.6, 12.6], [10.5, 13.15]];
+function tourDay(ts) {
+  const K = TOUR_KEYS; if (ts <= K[0][0]) return K[0][1];
+  for (let i = 0; i < K.length - 1; i++) if (ts <= K[i + 1][0]) { const s = (ts - K[i][0]) / (K[i + 1][0] - K[i][0]); return K[i][1] + (K[i + 1][1] - K[i][1]) * s; }
+  return K[K.length - 1][1];
+}
 function pulseRing(r, phase, maxS, op) {
   const p = ((phase % 1) + 1) % 1;
   r.scale.setScalar(0.2 + p * maxS); r.material.opacity = op * (1 - p) * (1 - p);
@@ -274,7 +383,7 @@ export function update(ctx, t) {
   let sparkOn = 0;
   if (shot === 'spark') sparkOn = sstep(1.2, 1.5, t);
   else if (shot === 'creteil_hold') sparkOn = 1;
-  else if (shot === 'spread') sparkOn = 1;
+  else if (shot === 'spread' || shot === 'ripple') sparkOn = 1;
   const flare = shot === 'spark' ? Math.exp(-Math.max(0, t - 1.25) * 2.2) * sparkOn : 0;
   const beat = 0.85 + 0.15 * Math.sin(t * 4.2);
   const k = camDist * 0.06;              // keep the spark a similar size on screen
@@ -294,10 +403,15 @@ export function update(ctx, t) {
   lyMat.uniforms.uMode.value = 0;
   baseMat.uniforms.uBase.value = shot === 'red_orange' ? 0.07 : shot === 'oct6' ? 0.08 : (shot === 'spark' || shot === 'creteil_hold') ? 0.5 : 0.12;
 
-  if (shot === 'spread') {
-    const day = spreadDay(ts);
+  const X = ctx.ex, LU = lyMat.uniforms;
+  baseMat.uniforms.uRipOn.value = 0; LU.uSel.value = 0; LU.uSelOn.value = 0; LU.uDim.value = 0;
+  const IDF = ['Saint-Denis', 'Sarcelles', 'La Courneuve'];
+  if (shot === 'spread' || shot === 'tour') {
+    const tour = shot === 'tour';
+    const day = tour ? tourDay(ts) : spreadDay(ts);
     lyMat.uniforms.uMode.value = 1; lyMat.uniforms.uDay.value = day;
-    const wide = clamp01((ts - 1.0) / 2.1);
+    if (tour) { baseMat.uniforms.uBase.value = 0.5 - 0.38 * sstep(2.6, 4.2, ts); ctx.lineMats.mDepts.opacity = 0.16 * (1 - sstep(2.6, 4.2, ts)); }
+    const wide = tour ? sstep(2.6, 4.6, ts) : clamp01((ts - 1.0) / 2.1);
     cityObjs.forEach((o, i) => {
       const cc = o.c; if (cc.name === 'Créteil') return;
       const age = day - cc.day; if (age < 0) return;
@@ -308,9 +422,9 @@ export function update(ctx, t) {
       o.halo.scale.setScalar((big ? 3.2 : 1.8) * (0.5 + 0.5 * wide)); o.halo.material.opacity = 0.55 * sstep(0, 0.4, age);
       o.top.position.y = hgt; o.top.scale.setScalar(1.6 * (0.5 + 0.5 * wide)); o.top.material.opacity = big ? 0.5 * sstep(0, 0.6, age) : 0;
       pulseRing(o.rings[0], clamp01(age / 0.6), 6 * (0.5 + 0.5 * wide), age < 0.6 ? 0.8 : 0);
-      if (o.lab) { o.lab.material.opacity = sstep(0.1, 0.8, age) * sstep(2.0, 2.8, ts); o.lab.position.y = hgt + 0.5; }
+      if (o.lab) { o.lab.material.opacity = sstep(0.1, 0.8, age) * (tour ? (IDF.includes(cc.name) ? 1 - sstep(2.9, 3.5, ts) : 1) : sstep(2.3, 3.0, ts)); o.lab.position.y = hgt + 0.5 + (tour ? ({ 'Sarcelles': 0.55, 'La Courneuve': -0.15 }[cc.name] ?? 0) : 0); }
     });
-    const creo = cityObjs.find(o => o.c.name === 'Créteil'); if (creo.lab) { creo.lab.material.opacity = 1 - sstep(1.5, 2.5, ts); creo.lab.position.y = 0.6; }
+    const creo = cityObjs.find(o => o.c.name === 'Créteil'); if (creo.lab && !tour) { creo.lab.material.opacity = 1 - sstep(1.2, 1.9, ts); creo.lab.position.y = 0.6; }
     arcs.forEach(a => { const p = clamp01((day - (a.c.day - 1.0)) / 1.0); a.m.uniforms.prog.value = p; a.m.uniforms.fadeAll.value = p > 0 ? (0.25 + 0.75 * (1 - sstep(0.3, 2.0, day - a.c.day))) : 0; });
   } else if (shot === 'oct6') {
     const max = 56000;
@@ -325,6 +439,38 @@ export function update(ctx, t) {
     });
   } else if (shot === 'red_orange') {
     lyMat.uniforms.uMode.value = 2; lyMat.uniforms.uRO.value = clamp01(t / 4.2);
+  } else if (shot === 'ignite') {
+    const day = 9.2 + 3.95 * ease(sstep(0.5, 4.4, ts));
+    LU.uMode.value = 1; LU.uDay.value = day;
+    cityObjs.forEach((o) => { const cc = o.c; const age = day - Math.max(cc.day, 9.6); if (age < 0 || cc.w < 0.5) return;
+      o.halo.scale.setScalar(5.5); o.halo.material.opacity = 0.55 * sstep(0, 0.3, age); pulseRing(o.rings[0], clamp01(age / 0.7), 9, age < 0.7 ? 0.7 : 0); });
+  } else if (shot === 'blockaded') {
+    LU.uMode.value = 1; LU.uDay.value = 13.15; LU.uSel.value = 222 / 1027; LU.uDim.value = sstep(0.3, 2.2, ts); LU.uSelOn.value = sstep(0.9, 4.6, ts);
+  } else if (shot === 'dimming') {
+    LU.uMode.value = 1; LU.uDay.value = 13.15; LU.uSel.value = 141 / 1027; LU.uDim.value = sstep(0.8, 5.0, ts); LU.uSelOn.value = sstep(4.4, 6.2, ts);
+  } else if (shot === 'padlocks') {
+    LU.uMode.value = 1; LU.uDay.value = 13.15; LU.uDim.value = 1.0; X.lockMat.uniforms.uT.value = ts;
+  } else if (shot === 'border') {
+    LU.uMode.value = 0.8; LU.uDay.value = 13.15;
+    X.dest.forEach((d) => { d.arc.uniforms.prog.value = sstep(d.t0, d.t0 + 1.1, ts); const on = sstep(d.t0 + 1.0, d.t0 + 1.3, ts);
+      d.h.material.opacity = 0.85 * on; d.c.material.opacity = on; d.h.scale.setScalar(4 + 3 * Math.exp(-Math.max(0, ts - d.t0 - 1.0) * 3));
+      pulseRing(d.r, (ts - d.t0 - 1.0) / 1.6, 12, ts > d.t0 + 1.0 ? 0.7 : 0); d.l.material.opacity = sstep(d.t0 + 1.1, d.t0 + 1.7, ts); });
+  } else if (shot === 'cases' || shot === 'cases_fly') {
+    LU.uMode.value = 1; LU.uDay.value = 13.15; LU.uDim.value = 0.85;
+    const fly = shot === 'cases_fly';
+    X.pins.forEach((p, i) => {
+      const t0 = fly ? -9 : p.t0, land = ease(sstep(t0, t0 + 0.45, ts));
+      p.pin.position.y = 7 * (1 - land); p.pin.visible = ts > t0 - 0.01;
+      const hot = fly ? (i === 1 ? sstep(0.3, 1.0, ts) * (1 - sstep(4.2, 5.0, ts)) : i === 2 ? sstep(6.4, 7.2, ts) : 0) : Math.exp(-Math.max(0, ts - t0 - 0.45) * 1.5) * (ts > t0 + 0.45 ? 1 : 0);
+      p.m.h.material.opacity = (fly ? 0.2 : 0.5) * land + (fly ? 0.35 : 0.6) * hot; p.m.h.scale.setScalar(fly ? 1.6 + 1.6 * hot : 2.4 + 3 * hot);
+      pulseRing(p.m.r, fly ? ts / 1.8 : (ts - t0 - 0.45) / 1.8, fly ? 3.5 : 7, fly ? 0.6 * hot : (ts > t0 + 0.45 ? 0.6 : 0));
+      p.l.material.opacity = fly ? (i === 1 ? 1 - sstep(4.6, 5.2, ts) : i === 2 ? sstep(6.2, 6.9, ts) : 0) : sstep(t0 + 0.35, t0 + 0.8, ts);
+      p.pl.intensity = (fly ? 1.5 : 2) * (land + 1.5 * hot); p.head.material.emissiveIntensity = fly ? 0.45 + 0.5 * hot : 0.8 + 1.0 * hot; if (fly) { p.pin.scale.setScalar(0.55); p.l.position.y = 1.35; }
+    });
+  } else if (shot === 'ripple') {
+    const B = baseMat.uniforms, R = 98 * ease(sstep(1.0, 6.2, ts));
+    B.uBase.value = 0.08; B.uRipOn.value = 1; B.uRip.value = R; B.uCen.value.set(ctx.cre.x, ctx.cre.z); B.uMaxPx.value = 7;
+    X.rings.forEach((r, i) => { const ri = Math.max(0.01, R - i * 1.6); r.scale.setScalar(ri * 2 / 0.9); r.material.opacity = ts > 1.0 ? 0.4 * (1 - i * 0.3) * (1 - sstep(5.6, 7.0, ts)) : 0; });
   }
   lyMat.uniforms.uTime.value = t;
 }

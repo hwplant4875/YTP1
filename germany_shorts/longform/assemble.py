@@ -220,6 +220,15 @@ def render_video(v, d, base):
     crop = v.get("crop")  # [x, y, w, h] in source pixels, to cut away old captions or logos
     vf = (f"crop={crop[2]}:{crop[3]}:{crop[0]}:{crop[1]}," if crop else "") + \
         f"setpts=PTS/{speed},scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},setsar=1,{LOOK}"
+    if v.get("frame"):   # optional: shown smaller (fraction of the frame) over a dark, blurred copy of itself, e.g. news footage
+        f = v["frame"]
+        fw, fh = int(W * f) // 2 * 2, int(H * f) // 2 * 2
+        vf = (f"crop={crop[2]}:{crop[3]}:{crop[0]}:{crop[1]}," if crop else "") + \
+            f"setpts=PTS/{speed},fps={FPS},setsar=1,{LOOK},split[a][b];" \
+            f"[a]scale={W // 4}:{H // 4}:force_original_aspect_ratio=increase,crop={W // 4}:{H // 4},gblur=sigma=12," \
+            f"eq=brightness=-0.22:contrast=0.8,scale={W}:{H}[bg];" \
+            f"[b]scale={fw}:{fh}:force_original_aspect_ratio=decrease,pad=iw+6:ih+6:3:3:color=0x3a3a3a[fg];" \
+            f"[bg][fg]overlay=(W-w)/2:(H-h)/2-{int(H * v.get('lift', 0.0))},setsar=1,tpad=stop_mode=clone:stop_duration={d:.3f}"
     return cached(f"vid_{k}.mp4", lambda p: sh(
         "ffmpeg", "-y", "-ss", v.get("start", 0), "-i", os.path.join(base, v["file"]), "-t", f"{d * speed:.3f}",
         "-an", "-vf", vf, "-t", f"{d:.3f}", "-c:v", "libx264", "-preset", "medium", "-crf", "17", "-pix_fmt", "yuv420p", "-f", "mp4", p))
@@ -369,6 +378,7 @@ def main():
     only_audio = "--only-audio" in args
     base = os.path.dirname(os.path.abspath(spec_path))
     spec = json.load(open(spec_path, encoding="utf-8"))
+    all_says = [x.get("say") for x in spec["beats"] if x.get("say")]   # context for TTS stays that of the full script
     if "--until" in args:
         stop = args[args.index("--until") + 1]
         cut = next(i for i, b in enumerate(spec["beats"]) if b.get("id") == stop)
@@ -406,7 +416,7 @@ def main():
             anchors[b["id"]] = t
         lead = b.get("lead", 0.0)
         if b.get("say"):
-            says = [x.get("say") for x in spec["beats"] if x.get("say")]
+            says = all_says
             j = says.index(b["say"])
             ctx = {"previous_text": " ".join(says[max(0, j - 2):j]), "next_text": says[j + 1] if j + 1 < len(says) else ""}
             wav = tts(b["say"], {**voice, **({"emotion": b["emotion"]} if b.get("emotion") else {})},

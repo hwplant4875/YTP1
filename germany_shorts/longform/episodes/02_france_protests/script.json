@@ -1,0 +1,2894 @@
+{
+ "voice": {
+  "engine": "elevenlabs",
+  "voice_id": "DrBEKFgWMDWUG6bjTSTk",
+  "model": "eleven_v4",
+  "stability": 0.5,
+  "speed": 1.0
+ },
+ "gap": 0.12,
+ "subtitles": false,
+ "declick": true,
+ "sfx_gain_db": -4,
+ "style_fields": {
+  "CREDIT": {
+   "PrimaryColour": "&H80B4B4B4",
+   "Alignment": 1,
+   "MarginL": 30,
+   "MarginR": 0,
+   "Fontsize": 24
+  },
+  "LABEL": {
+   "Fontsize": 96,
+   "Outline": 6,
+   "Shadow": 0
+  },
+  "TITLE": {
+   "Outline": 8,
+   "Shadow": 0
+  },
+  "QUOTE": {
+   "Fontsize": 84,
+   "Outline": 5,
+   "Shadow": 0
+  },
+  "CHAPTER": {
+   "Outline": 7
+  },
+  "YEAR": {
+   "Outline": 10,
+   "Shadow": 0
+  }
+ },
+ "fonts": {
+  "LABEL": "YouTube Sans",
+  "YEAR": "YouTube Sans",
+  "FX": "YouTube Sans",
+  "CREDIT": "YouTube Sans",
+  "TITLE": "YouTube Sans",
+  "QUOTE": "Playfair Display"
+ },
+ "music": [
+  {
+   "file": "music/m1_crypto.mp3",
+   "from": "intro",
+   "to": "act2",
+   "vol": 0.13,
+   "fade_in": 2.0,
+   "fade_out": 3.0
+  },
+  {
+   "file": "music/m2_hiding.mp3",
+   "from": "act2",
+   "to": "act3",
+   "vol": 0.12,
+   "fade_in": 3.0,
+   "fade_out": 3.0,
+   "offset": -2.5
+  },
+  {
+   "file": "music/m3_tide.mp3",
+   "from": "act3",
+   "to": "act5",
+   "vol": 0.13,
+   "fade_in": 3.0,
+   "fade_out": 3.0,
+   "offset": -2.5
+  },
+  {
+   "file": "music/m4_lightless.mp3",
+   "from": "act5",
+   "to": "act6",
+   "vol": 0.14,
+   "fade_in": 3.0,
+   "fade_out": 3.0,
+   "offset": -2.5
+  },
+  {
+   "file": "music/m5_interloper.mp3",
+   "from": "act6",
+   "to": "act7",
+   "vol": 0.12,
+   "fade_in": 3.0,
+   "fade_out": 3.0,
+   "offset": -2.5
+  },
+  {
+   "file": "music/m6_floating.mp3",
+   "from": "act7",
+   "to": "end",
+   "vol": 0.14,
+   "fade_in": 3.0,
+   "fade_out": 5.0,
+   "offset": -2.5
+  }
+ ],
+ "beats": [
+  {
+   "visual": {
+    "type": "video",
+    "file": "assets/news/ap_bins.mp4",
+    "start": 0.0,
+    "frame": 0.8,
+    "credit": "Video: AP"
+   },
+   "hold": 0.0,
+   "id": "intro",
+   "chapter": "Cold open",
+   "say": "In France right now, teenagers are blockading their own schools.",
+   "sfx": [
+    {
+     "prompt": "distant street protest crowd and bins scraping on asphalt, outdoor",
+     "len": 5,
+     "vol": 0.07,
+     "at": 0.0,
+     "filter": "afade=t=out:st=3.80:d=1.20"
+    }
+   ]
+  },
+  {
+   "say": "With bins. With barriers. With human chains.",
+   "visual": {
+    "type": "g2d",
+    "name": "montage",
+    "module": "graphics.py",
+    "args": {
+     "items": [
+      {
+       "file": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Jacques-Decour_in_Paris_01.jpg",
+       "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons",
+       "from": [
+        1.05,
+        0.5,
+        0.55
+       ],
+       "to": [
+        1.15,
+        0.5,
+        0.5
+       ]
+      },
+      {
+       "file": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Jules_Ferry_High_School_in_Paris_06.jpg",
+       "at": "With barriers",
+       "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons",
+       "from": [
+        1.08,
+        0.5,
+        0.5
+       ],
+       "to": [
+        1.18,
+        0.5,
+        0.48
+       ]
+      },
+      {
+       "video": "assets/news/afp_chain.mp4",
+       "at": "With human",
+       "start": 0.5,
+       "credit": "Video: AFP",
+       "frame": 0.8
+      }
+     ]
+    }
+   }
+  },
+  {
+   "say": "On October sixth, police counted about a quarter of a million people in the streets.",
+   "visual": {
+    "type": "g2d",
+    "name": "crowd",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_26.jpg",
+     "title": "6 OCTOBER · ACROSS FRANCE",
+     "a": {
+      "value": 250000,
+      "label": "POLICE",
+      "at": "police counted"
+     },
+     "b": {
+      "value": 450000,
+      "label": "ORGANISERS",
+      "at": "four hundred"
+     },
+     "source": "Interior Ministry / unions, 6 Oct 2026"
+    }
+   },
+   "sfx": {
+    "prompt": "soft digital counter ticking, quiet clicks",
+    "len": 2,
+    "vol": 0.06,
+    "at": 0.0,
+    "filter": "afade=t=out:st=1.20:d=0.80"
+   }
+  },
+  {
+   "say": "Organisers say it was four hundred and fifty thousand.",
+   "visual": "same"
+  },
+  {
+   "say": "More than six thousand eight hundred people have been taken into police custody. Eighty-six percent of them are minors.",
+   "visual": {
+    "type": "g2d",
+    "name": "icons",
+    "module": "graphics.py",
+    "args": {
+     "n": 6877,
+     "shape": "person",
+     "box": [
+      110,
+      330,
+      1810,
+      1030
+     ],
+     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_104.jpg",
+     "appear_at": "six thousand",
+     "appear_d": 1.6,
+     "highlight": {
+      "k": 5914,
+      "at": "Eighty-six",
+      "d": 1.4
+     },
+     "head": [
+      {
+       "text": "",
+       "count": 6877,
+       "at": "six thousand",
+       "x": 560,
+       "y": 150,
+       "size": 150,
+       "color": "amber",
+       "roll": 1.4
+      },
+      {
+       "text": "IN POLICE CUSTODY",
+       "at": "six thousand",
+       "x": 560,
+       "y": 262,
+       "size": 54
+      },
+      {
+       "text": "86%",
+       "at": "Eighty-six",
+       "x": 1360,
+       "y": 150,
+       "size": 150,
+       "color": "amber"
+      },
+      {
+       "text": "ARE MINORS",
+       "at": "Eighty-six",
+       "x": 1360,
+       "y": 262,
+       "size": 54
+      }
+     ],
+     "source": "Justice Ministry, to 8 Oct 2026"
+    }
+   }
+  },
+  {
+   "visual": {
+    "type": "g2d",
+    "name": "blackfade",
+    "module": "graphics.py",
+    "args": {
+     "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_023.jpg",
+     "hold": 1.0,
+     "fade": 2.6,
+     "blur": 16,
+     "dark": 0.5
+    },
+    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "say": "One fifteen-year-old lost his hand.",
+   "lead": 0.9,
+   "hold": 0.7,
+   "sfx": {
+    "prompt": "single low sustained cello note, dark, quiet",
+    "len": 4,
+    "vol": 0.07,
+    "at": 0.9,
+    "filter": "afade=t=out:st=2.80:d=1.20"
+   }
+  },
+  {
+   "say": "And it all started with a few empty classrooms, in one school outside Paris.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "spark:6.0",
+    "t0": 0
+   },
+   "trans": "dip",
+   "hold": 0.3
+  },
+  {
+   "say": "What are these teenagers so angry about?",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_63.jpg",
+    "from": [
+     1.15,
+     0.5,
+     0.4
+    ],
+    "to": [
+     1.28,
+     0.5,
+     0.38
+    ],
+    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "trans": "flash"
+  },
+  {
+   "say": "Why are so many of them ending up hurt, or in custody?",
+   "visual": {
+    "type": "3d",
+    "scene": "france_police",
+    "shot": "standoff:5.1",
+    "t0": 0
+   }
+  },
+  {
+   "say": "And can the government calm it down, before the next wave?",
+   "visual": {
+    "type": "3d",
+    "scene": "france_calendar",
+    "shot": "teaser:4.8",
+    "t0": 0
+   }
+  },
+  {
+   "visual": {
+    "type": "video",
+    "file": "sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_77.webm",
+    "start": 0.5,
+    "speed": 1.0,
+    "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons"
+   },
+   "hold": 3.4,
+   "dim": true,
+   "trans": "dip",
+   "text": {
+    "kind": "title",
+    "content": "{\\fs150}FRANCE'S {\\c&H5CB2FF&}SCHOOL REVOLT\\N{\\fs64}{\\c&HE6EEF2&}AUTUMN 2026",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "deep low cinematic boom hit, soft, short dark tail",
+    "len": 2.5,
+    "vol": 0.22,
+    "at": 0.0,
+    "filter": "afade=t=out:st=1.50:d=1.00"
+   }
+  },
+  {
+   "say": "This is what's happening in France's high schools, as of today.",
+   "visual": "same",
+   "hold": 0.4
+  },
+  {
+   "visual": {
+    "type": "video",
+    "file": "sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_86.webm",
+    "start": 12.0,
+    "speed": 1.0,
+    "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons"
+   },
+   "hold": 2.6,
+   "chapter": "So how did it start?",
+   "trans": "dip",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "So how did\\Nit *start*?",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "soft low cinematic tone swell, gentle and quiet",
+    "len": 3,
+    "vol": 0.08,
+    "at": 0.0,
+    "filter": "afade=t=out:st=1.80:d=1.20"
+   },
+   "id": "act1"
+  },
+  {
+   "say": "Créteil. A suburb just southeast of Paris.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "creteil_hold:8.3",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}CRÉTEIL",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "Lycée Saint-Exupéry. About fifteen hundred pupils.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_lycee",
+    "shot": "exterior:3.2",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}{\\fs72}LYCÉE SAINT-EXUPÉRY\\N{\\fs110}~1,500 PUPILS",
+    "pos": [
+     0.5,
+     0.8
+    ]
+   }
+  },
+  {
+   "say": "A lycée is a French high school, for fifteen- to eighteen-year-olds.",
+   "visual": "same",
+   "dim": true,
+   "overlay": {
+    "name": "lycee_def",
+    "module": "graphics.py",
+    "beats": 1,
+    "args": {
+     "at": "A lycée"
+    }
+   }
+  },
+  {
+   "say": "At the start of this school year, several teaching posts there were simply empty.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_lycee",
+    "shot": "three_empty:6.0",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}EMPTY POSTS",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "So in mid-September, the teachers went on strike.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_calendar",
+    "shot": "sept17:3.6",
+    "t0": 0
+   }
+  },
+  {
+   "say": "The next day, the pupils joined in, their own way. They blocked the gates.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_lycee",
+    "shot": "bins_slide:6.0",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs120}{\\c&H5CB2FF&}BLOCKADE",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "A few days later, two MPs from the radical-left party La France Insoumise visited, and posted about it.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_phone",
+    "shot": "posts:15",
+    "t0": 0
+   }
+  },
+  {
+   "say": "Remember that visit. The government will.",
+   "visual": "same",
+   "hold": 0.3
+  },
+  {
+   "say": "Then, on September twenty-fourth, a rap-news outlet called Booska-P interviewed eight pupils from the school.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_phone",
+    "shot": "viral:16",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}{\\fs64}24 SEPT · RAP-NEWS INTERVIEW",
+    "pos": [
+     0.5,
+     0.12
+    ]
+   }
+  },
+  {
+   "say": "They talked about feeling abandoned, as kids from the banlieue, the working-class suburbs.",
+   "visual": "same"
+  },
+  {
+   "say": "On TikTok, the clip was watched around one and a half million times.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "{\\fs110}{\\c&H5CB2FF&}1.5 MILLION VIEWS",
+    "pos": [
+     0.5,
+     0.12
+    ]
+   }
+  },
+  {
+   "say": "And the idea spread with it. If your school is falling apart... block it.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "spread:21",
+    "t0": 0
+   },
+   "overlay": {
+    "name": "day_counter",
+    "module": "graphics.py",
+    "beats": 4,
+    "args": {
+     "label": "SCHOOLS DISRUPTED",
+     "steps": [
+      {
+       "at": "twenty-fifth",
+       "date": "25 SEPT",
+       "day": 8,
+       "value": 60,
+       "approx": true
+      },
+      {
+       "at": "Three days later",
+       "date": "28 SEPT",
+       "day": 11,
+       "value": 180
+      },
+      {
+       "at": "one thousand and twenty-seven",
+       "date": "1 OCT",
+       "day": 14,
+       "value": 1027
+      }
+     ]
+    }
+   }
+  },
+  {
+   "say": "By September twenty-fifth, around sixty schools in the Paris region were disrupted.",
+   "visual": "same"
+  },
+  {
+   "say": "Three days later, the Interior Ministry counted one hundred and eighty, across France.",
+   "visual": "same"
+  },
+  {
+   "say": "And on October first... one thousand and twenty-seven.",
+   "visual": "same",
+   "hold": 0.5
+  },
+  {
+   "say": "That's more than a quarter of all the lycées in France.",
+   "visual": {
+    "type": "g2d",
+    "name": "icons",
+    "module": "graphics.py",
+    "args": {
+     "n": 3700,
+     "shape": "school",
+     "box": [
+      160,
+      330,
+      1760,
+      1020
+     ],
+     "aspect": 1.0,
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_18.jpg",
+     "appear_at": 0.1,
+     "appear_d": 0.8,
+     "highlight": {
+      "k": 1027,
+      "at": "more than a quarter",
+      "d": 1.0
+     },
+     "head": [
+      {
+       "text": "",
+       "count": 1027,
+       "at": 0.2,
+       "x": 560,
+       "y": 160,
+       "size": 140,
+       "color": "amber"
+      },
+      {
+       "text": "OF ~3,700 LYCÉES",
+       "at": 0.2,
+       "x": 560,
+       "y": 268,
+       "size": 52
+      },
+      {
+       "text": "1 IN 4",
+       "at": "more than a quarter",
+       "x": 1360,
+       "y": 190,
+       "size": 170,
+       "color": "amber"
+      }
+     ],
+     "source": "Interior Ministry, 1 Oct 2026"
+    }
+   }
+  },
+  {
+   "say": "Teenagers don't shut down a thousand schools over one viral video.",
+   "visual": {
+    "type": "video",
+    "file": "assets/news/reuters_gate.mp4",
+    "start": 0.0,
+    "frame": 0.8,
+    "credit": "Video: Reuters"
+   }
+  },
+  {
+   "say": "So what's actually going on inside these buildings?",
+   "visual": {
+    "type": "3d",
+    "scene": "france_lycee",
+    "shot": "cut:4.5",
+    "t0": 0
+   },
+   "hold": 0.4,
+   "fade_out": 1.6
+  },
+  {
+   "visual": {
+    "type": "video",
+    "file": "sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_75.webm",
+    "start": 20.0,
+    "speed": 1.0,
+    "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons"
+   },
+   "hold": 2.6,
+   "chapter": "What are they angry about?",
+   "trans": "dip",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "What are they\\N*angry* about?",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "soft low cinematic tone swell, gentle and quiet",
+    "len": 3,
+    "vol": 0.08,
+    "at": 0.0,
+    "filter": "afade=t=out:st=1.80:d=1.20"
+   },
+   "id": "act2"
+  },
+  {
+   "say": "Let's walk inside a typical French lycée.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_lycee",
+    "shot": "hall:3.2",
+    "t0": 0
+   }
+  },
+  {
+   "say": "First, the building. On average, it's sixty-five years old.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_lycee",
+    "shot": "facade_age:3.9",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs96}{\\c&H5CB2FF&}65 YEARS OLD, ON AVERAGE",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "More than half of France's lycées were built before 1970.",
+   "visual": {
+    "type": "g2d",
+    "name": "bars",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_24.jpg",
+     "title": "FRANCE'S LYCÉE BUILDINGS",
+     "items": [
+      {
+       "label": "BUILT BEFORE 1970",
+       "value": 56,
+       "at": "More than half"
+      },
+      {
+       "label": "BUILT OR RENOVATED SINCE 2015",
+       "value": 14,
+       "at": "More than half",
+       "color": "ink"
+      }
+     ],
+     "max": 100,
+     "unit_suffix": "%",
+     "ytop": 600,
+     "gap": 200,
+     "x0": 1000,
+     "x1": 1560,
+     "head": [
+      {
+       "text": "65 YEARS OLD, ON AVERAGE",
+       "at": 0.1,
+       "y": 330,
+       "size": 96,
+       "color": "amber"
+      }
+     ],
+     "source": "franceinfo, 5 Oct 2026 (general & technological lycées)"
+    }
+   }
+  },
+  {
+   "say": "Pupils describe rats, cockroaches, and ceilings that have come down.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_lycee",
+    "shot": "leak:4.3",
+    "t0": 0
+   }
+  },
+  {
+   "say": "In summer, teachers report classrooms at thirty-five to forty degrees. In winter, some rooms have no heating at all.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_lycee",
+    "shot": "heat:8.0",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}35-40°C",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "A Senate report says fixing them would take about one and a half billion euros a year.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_money",
+    "shot": "repair_need:7.1",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}€1.5 BN A YEAR NEEDED",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "But for most pupils, the building isn't the biggest problem. It's who's missing from it.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_lycee",
+    "shot": "empty_desk:6.3",
+    "t0": 0
+   }
+  },
+  {
+   "say": "This September, France's biggest secondary teachers' union surveyed over a thousand schools.",
+   "visual": {
+    "type": "g2d",
+    "name": "icons",
+    "module": "graphics.py",
+    "args": {
+     "n": 1033,
+     "shape": "school",
+     "box": [
+      200,
+      330,
+      1720,
+      1010
+     ],
+     "aspect": 1.0,
+     "bg": "sources/photos/raw/2026-10-06_Manifestation_à_Nancy_pancarte_Prof_en_grève.jpg",
+     "appear_at": "surveyed",
+     "appear_d": 1.0,
+     "highlight": {
+      "k": 548,
+      "at": "Fifty-three",
+      "d": 1.0
+     },
+     "head": [
+      {
+       "text": "1,033 SCHOOLS SURVEYED",
+       "at": "surveyed",
+       "y": 160,
+       "size": 80
+      },
+      {
+       "text": "53% MISSING A TEACHER",
+       "at": "Fifty-three",
+       "y": 262,
+       "size": 80,
+       "color": "amber"
+      }
+     ],
+     "source": "SNES-FSU survey, Sept 2026"
+    }
+   }
+  },
+  {
+   "say": "Fifty-three percent were missing at least one teacher.",
+   "visual": "same"
+  },
+  {
+   "say": "The ministry disputes that. It says more than ninety-six percent of secondary posts are filled.",
+   "visual": {
+    "type": "g2d",
+    "name": "split",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/2026-10-06_Manifestation_à_Nancy_pancarte_Prof_en_grève.jpg",
+     "left": {
+      "head": "TEACHERS' UNION",
+      "big": "53%",
+      "body": [
+       "of schools missing",
+       "at least one teacher"
+      ],
+      "at": 0.1
+     },
+     "right": {
+      "head": "MINISTRY",
+      "big": "96.1%",
+      "body": [
+       "of secondary posts",
+       "filled"
+      ],
+      "at": "ninety-six"
+     },
+     "source": "SNES-FSU / Education Ministry, Sept 2026"
+    }
+   }
+  },
+  {
+   "say": "But by the ministry's own count, in 2024 to 2025, ten percent of lycée teaching hours simply didn't happen.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_timetable",
+    "shot": "lost_lessons:8.0",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}10% OF LESSONS LOST",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "One pupil told Euronews they'd gone six months without a teacher, in an exam subject.",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_08.jpg",
+    "from": [
+     1.05,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.16,
+     0.5,
+     0.45
+    ],
+    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "dim": true,
+   "text": {
+    "kind": "quote",
+    "content": "{\\fs92}“Six months without a teacher,\\Nin an exam subject.”\\N{\\fs50}{\\c&HE6EEF2&}PUPIL, TO EURONEWS",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "And when teachers are there, classrooms are packed. A teacher in Marseille says she has thirty-seven pupils in her class.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_lycee",
+    "shot": "crowded:8.3",
+    "t0": 2
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs120}{\\c&H5CB2FF&}37 PUPILS",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "French lycée students also spend around twelve hundred hours a year in class. The average across OECD countries is nine hundred and sixty.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_timetable",
+    "shot": "hours:9.5",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}1,200 vs 960 HOURS",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "And at the end of all that, there's Parcoursup, the national platform that decides who gets into university.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_parcoursup",
+    "shot": "dashboard:8.0",
+    "t0": 0
+   }
+  },
+  {
+   "say": "This summer, eighteen percent of applicants got no offer at all in the main round. Two years ago, it was ten.",
+   "visual": {
+    "type": "g2d",
+    "name": "line",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_01.jpg",
+     "title": "NO OFFER IN THE MAIN ROUND",
+     "points": [
+      {
+       "x_label": "2024",
+       "value": 10,
+       "at": 0.3
+      },
+      {
+       "x_label": "2025",
+       "value": 11.9,
+       "dec": 1,
+       "at": 0.9
+      },
+      {
+       "x_label": "2026",
+       "value": 18,
+       "at": "eighteen percent"
+      }
+     ],
+     "ymax": 24,
+     "source": "Parcoursup data, via Le Monde, 11 Jul 2026"
+    }
+   }
+  },
+  {
+   "say": "Then, on October first, the government published its budget for 2027.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_state",
+    "shot": "assemblee:4.8",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs96}{\\c&H5CB2FF&}2027 BUDGET · 1 OCT",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "Education spending goes up, by about one point two billion euros.",
+   "visual": {
+    "type": "g2d",
+    "name": "stat",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_092.jpg",
+     "items": [
+      {
+       "value": 1.2,
+       "dec": 1,
+       "prefix": "+€",
+       "suffix": " BN",
+       "label": "EDUCATION SPENDING IN THE 2027 BUDGET",
+       "at": "one point two"
+      }
+     ],
+     "source": "Draft budget, 1 Oct 2026 (excluding pensions)"
+    }
+   }
+  },
+  {
+   "say": "But the same budget cuts one thousand five hundred and eighty-eight teaching posts.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_staffroom",
+    "shot": "tags_fall:5.5",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}−1,588 TEACHING POSTS",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "The government points to about a hundred and eighty thousand fewer pupils expected.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}{\\fs64}GOVERNMENT: ~180,000 FEWER PUPILS EXPECTED",
+    "pos": [
+     0.5,
+     0.86
+    ]
+   }
+  },
+  {
+   "say": "The budget landed on the very day the protests hit their most violent point.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_calendar",
+    "shot": "oct1:6.0",
+    "t0": 0
+   }
+  },
+  {
+   "say": "And that day, the map of France caught fire.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "ignite:3.9",
+    "t0": 0
+   },
+   "hold": 0.3
+  },
+  {
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Mouvement_lycéen_Rennes_2_-_Vive_la_Commune.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.12,
+     0.5,
+     0.5
+    ],
+    "credit": "Procrastineur49, CC BY 4.0, via Wikimedia Commons"
+   },
+   "hold": 2.6,
+   "chapter": "Where is it burning?",
+   "trans": "dip",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "Where is it\\N*burning*?",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "soft low cinematic tone swell, gentle and quiet",
+    "len": 3,
+    "vol": 0.08,
+    "at": 0.0,
+    "filter": "afade=t=out:st=1.80:d=1.20"
+   },
+   "id": "act3"
+  },
+  {
+   "say": "Here's how fast it moved.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "tour:12.6",
+    "t0": 0
+   }
+  },
+  {
+   "say": "First, the suburbs north and east of Paris. Saint-Denis. Sarcelles. La Courneuve.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "{\\fs64}{\\c&H5CB2FF&}SAINT-DENIS · SARCELLES · LA COURNEUVE",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "Then Marseille. Lille. Lyon.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "{\\fs72}{\\c&H5CB2FF&}MARSEILLE · LILLE · LYON",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "Then Nantes. Rennes. Bordeaux. Toulouse. Strasbourg.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "{\\fs56}{\\c&H5CB2FF&}NANTES · RENNES · BORDEAUX · TOULOUSE · STRASBOURG",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "On October first, the Interior Ministry counted one thousand nine hundred and forty-nine arrests. In a single day.",
+   "visual": {
+    "type": "g2d",
+    "name": "stat",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_103.jpg",
+     "items": [
+      {
+       "value": 1949,
+       "label": "ARRESTS IN ONE DAY · 1 OCT",
+       "at": "one thousand nine hundred"
+      }
+     ],
+     "source": "Interior Ministry, 1 Oct 2026"
+    }
+   }
+  },
+  {
+   "say": "Two hundred and twenty-two lycées were fully blockaded.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "blockaded:3.6",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}222 FULLY BLOCKADED",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "In Nantes, a fire destroyed a lycée's entrance hall.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_aftermath",
+    "shot": "nantes:3.9",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}NANTES",
+    "pos": [
+     0.5,
+     0.12
+    ]
+   }
+  },
+  {
+   "say": "In Marseille, a firefighters' truck was torched, and the city shut down its entire bus and metro network.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_aftermath",
+    "shot": "marseille:7.5",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}MARSEILLE",
+    "pos": [
+     0.5,
+     0.12
+    ]
+   }
+  },
+  {
+   "say": "The movement even crossed the border, into schools in Belgium, and then Italy.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "border:5.5",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}BELGIUM → ITALY",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "On October second, prefects closed around four hundred lycées, and banned gatherings outside them.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "padlocks:9.9",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}~400 LYCÉES CLOSED",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "The message from the state was clear. Stay home.",
+   "visual": "same",
+   "hold": 0.3
+  },
+  {
+   "say": "The pupils answered with a date. Tuesday, October sixth.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_calendar",
+    "shot": "oct6:3.9",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs120}{\\c&H5CB2FF&}6 OCTOBER",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   },
+   "hold": 0.4
+  },
+  {
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_26.jpg",
+    "from": [
+     1.03,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.1,
+     0.5,
+     0.5
+    ],
+    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "hold": 2.6,
+   "chapter": "What happened on October 6th?",
+   "trans": "dip",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "What happened\\Non *October 6th*?",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "soft low cinematic tone swell, gentle and quiet",
+    "len": 3,
+    "vol": 0.08,
+    "at": 0.0,
+    "filter": "afade=t=out:st=1.80:d=1.20"
+   },
+   "id": "act4"
+  },
+  {
+   "say": "In Paris, the march left Place de la République at two in the afternoon, heading for Nation.",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_25.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.45
+    ],
+    "to": [
+     1.16,
+     0.5,
+     0.4
+    ],
+    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "sfx": {
+    "prompt": "distant street protest crowd chanting, outdoor, muffled",
+    "len": 8,
+    "vol": 0.06,
+    "at": 0.0,
+    "filter": "afade=t=out:st=5.50:d=2.50"
+   }
+  },
+  {
+   "say": "About two thousand police and gendarmes were deployed, with motorbike units and drones.",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_103.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.14,
+     0.55,
+     0.5
+    ],
+    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}~2,000 OFFICERS",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "Police counted fifty-six thousand people in Paris. Organisers said a hundred thousand.",
+   "visual": {
+    "type": "g2d",
+    "name": "bars",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_26.jpg",
+     "title": "PARIS · 6 OCTOBER",
+     "items": [
+      {
+       "label": "POLICE",
+       "value": 56000,
+       "at": "fifty-six",
+       "color": "ink"
+      },
+      {
+       "label": "ORGANISERS",
+       "value": 100000,
+       "at": "a hundred thousand"
+      }
+     ],
+     "ytop": 480,
+     "gap": 240,
+     "source": "Police / organisers, 6 Oct 2026"
+    }
+   }
+  },
+  {
+   "say": "In Lyon, twenty thousand, by police count. In Toulouse, thirteen and a half thousand.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "oct6:6.0",
+    "t0": 0
+   }
+  },
+  {
+   "say": "And this time, it wasn't just the suburbs.",
+   "visual": {
+    "type": "video",
+    "file": "assets/news/ap_cortege.mp4",
+    "start": 0.0,
+    "frame": 0.8,
+    "credit": "Video: AP"
+   }
+  },
+  {
+   "say": "Pupils from Louis-le-Grand and Henri-Quatre, two of the most elite schools in the country, walked out in solidarity.",
+   "visual": {
+    "type": "video",
+    "file": "sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_78.webm",
+    "start": 0.5,
+    "speed": 1.0,
+    "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons"
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs76}{\\c&H5CB2FF&}LOUIS-LE-GRAND · HENRI-IV",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "The placards said a lot.",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_68.jpg",
+    "from": [
+     1.04,
+     0.4,
+     0.5
+    ],
+    "to": [
+     1.12,
+     0.6,
+     0.5
+    ],
+    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+   }
+  },
+  {
+   "say": "\"Too young to be listened to, but not too young to be clubbed.\"",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_10.jpg",
+    "from": [
+     1.08,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.18,
+     0.5,
+     0.48
+    ],
+    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "dim": true,
+   "text": {
+    "kind": "quote",
+    "content": "{\\fs92}“Too young to be listened to,\\Nbut not too young to be clubbed.”\\N{\\fs50}{\\c&HE6EEF2&}Trop jeune pour être écouté mais pas trop jeune pour être matraqué",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "And in Perpignan, one banner read: \"Sorry for the trouble. We just want a future.\"",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Journée_de_mobilisation_des_lycéens_à_Perpignan_31.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.14,
+     0.5,
+     0.48
+    ],
+    "credit": "Aurelio Cárdenas, CC BY 4.0, via Wikimedia Commons"
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}\"WE JUST WANT A FUTURE\"",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "Across France: about a quarter of a million marchers, police say. Four hundred and fifty thousand, organisers say.",
+   "visual": {
+    "type": "g2d",
+    "name": "bars",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_023.jpg",
+     "title": "ACROSS FRANCE · 6 OCTOBER",
+     "items": [
+      {
+       "label": "POLICE",
+       "value": 250000,
+       "at": "quarter of a million",
+       "color": "ink"
+      },
+      {
+       "label": "ORGANISERS",
+       "value": 450000,
+       "at": "Four hundred and fifty"
+      }
+     ],
+     "ytop": 480,
+     "gap": 240,
+     "source": "Interior Ministry / unions, 6 Oct 2026"
+    }
+   }
+  },
+  {
+   "say": "By evening, there was tear gas, at least four hundred and eighty-eight arrests, and forty-three officers wounded.",
+   "visual": {
+    "type": "video",
+    "file": "assets/news/reuters_teargas.mp4",
+    "start": 0.0,
+    "frame": 0.8,
+    "credit": "Video: Reuters",
+    "speed": 0.8
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs72}{\\c&H5CB2FF&}488+ ARRESTS · 43 OFFICERS HURT",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "Outside parliament, Prime Minister Sébastien Lecornu promised a half-day in every lycée, for pupils to debate.",
+   "visual": {
+    "type": "video",
+    "file": "assets/news/afp_lecornu.mp4",
+    "start": 0.0,
+    "frame": 0.8,
+    "credit": "Video: AFP",
+    "speed": 0.8
+   }
+  },
+  {
+   "say": "Headteachers' unions called it \"a complete cacophony\".",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_07.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.12,
+     0.5,
+     0.5
+    ],
+    "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons"
+   },
+   "dim": true,
+   "text": {
+    "kind": "quote",
+    "content": "{\\fs92}“A complete cacophony”\\N{\\fs50}{\\c&HE6EEF2&}HEADTEACHERS' UNION",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "Because by then, one question was dominating the news.",
+   "visual": "same",
+   "fade_out": 2.6
+  },
+  {
+   "say": "Why were teenagers getting hurt?",
+   "visual": {
+    "type": "black"
+   },
+   "hold": 0.8,
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}Why were teenagers getting hurt?",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_104.jpg",
+    "from": [
+     1.03,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.1,
+     0.5,
+     0.5
+    ],
+    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "hold": 2.6,
+   "chapter": "Why are teenagers getting hurt?",
+   "trans": "dip",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "Why are teenagers\\Ngetting *hurt*?",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "soft low cinematic tone swell, gentle and quiet",
+    "len": 3,
+    "vol": 0.08,
+    "at": 0.0,
+    "filter": "afade=t=out:st=1.80:d=1.20"
+   },
+   "id": "act5"
+  },
+  {
+   "say": "First, the tools.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_weapons",
+    "shot": "lineup:5.1",
+    "t0": 0
+   }
+  },
+  {
+   "say": "French police use what they call \"intermediate weapons\".",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}INTERMEDIATE WEAPONS",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "The LBD, a launcher that fires rubber projectiles.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_weapons",
+    "shot": "lbd:3.6",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}LBD",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "Launchers that fire tear-gas grenades.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_weapons",
+    "shot": "gas:2.4",
+    "t0": 0
+   }
+  },
+  {
+   "say": "And dispersal and stun grenades, which explode, some scattering rubber pellets.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_weapons",
+    "shot": "grenade:4.8",
+    "t0": 0
+   }
+  },
+  {
+   "say": "On October second, Interior Minister Laurent Nuñez said there was no instruction to hold back. Officers could use all the intermediate weapons available.",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_103.jpg",
+    "from": [
+     1.15,
+     0.6,
+     0.5
+    ],
+    "to": [
+     1.25,
+     0.6,
+     0.5
+    ],
+    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}{\\fs64}NUÑEZ: NO INSTRUCTION TO HOLD BACK",
+    "pos": [
+     0.5,
+     0.86
+    ]
+   }
+  },
+  {
+   "say": "Then came three cases that changed the conversation.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "cases:3.6",
+    "t0": 0
+   }
+  },
+  {
+   "say": "September twenty-eighth. Saint-Ouen-l'Aumône, northwest of Paris. A fourteen-year-old's jaw is broken by a tear-gas round, fired at close range.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_weapons",
+    "shot": "close_range:8.3",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs72}{\\c&H5CB2FF&}SAINT-OUEN-L'AUMÔNE · AGE 14",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "Prosecutors say he had struck a policewoman first. On October sixth, the officer who fired was charged.",
+   "visual": {
+    "type": "g2d",
+    "name": "split",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/Journée_de_mobilisation_des_lycéens_à_Perpignan_14.jpg",
+     "left": {
+      "head": "PROSECUTOR",
+      "big": "28 SEPT",
+      "big_size": 120,
+      "body": [
+       "says the boy struck",
+       "a policewoman first"
+      ],
+      "at": 0.1
+     },
+     "right": {
+      "head": "6 OCTOBER",
+      "big": "CHARGED",
+      "big_size": 120,
+      "body": [
+       "the officer who fired"
+      ],
+      "at": "On October sixth"
+     }
+    }
+   }
+  },
+  {
+   "say": "September thirtieth. Tours. A sixteen-year-old loses the use of an eye. The prosecutor says it's consistent with an LBD round.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "cases_fly:15.9",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs80}{\\c&H5CB2FF&}TOURS · AGE 16",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "October fifth. Lens, in the far north. A fifteen-year-old loses his hand to a police grenade.",
+   "visual": "same",
+   "text": {
+    "kind": "label",
+    "content": "{\\fs80}{\\c&H5CB2FF&}LENS · AGE 15",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "A police source says he had picked it up to throw it back. The prosecutor says the shot followed procedure. His mother has filed a complaint.",
+   "visual": "same",
+   "dim": true
+  },
+  {
+   "say": "Two days later, Nuñez suspended stun grenades at lycée protests, \"until the facts are clarified\".",
+   "visual": {
+    "type": "3d",
+    "scene": "france_weapons",
+    "shot": "suspended:6.3",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs72}{\\c&H5CB2FF&}STUN GRENADES SUSPENDED · 7 OCT",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "The police watchdog, the IGPN, now has twenty-four investigations open.",
+   "visual": {
+    "type": "g2d",
+    "name": "icons",
+    "module": "graphics.py",
+    "args": {
+     "n": 24,
+     "shape": "slot",
+     "box": [
+      460,
+      380,
+      1460,
+      960
+     ],
+     "aspect": 0.75,
+     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_104.jpg",
+     "appear_at": "twenty-four",
+     "appear_d": 1.2,
+     "head": [
+      {
+       "text": "24",
+       "at": "twenty-four",
+       "y": 200,
+       "size": 170,
+       "color": "amber"
+      },
+      {
+       "text": "IGPN INVESTIGATIONS",
+       "at": "twenty-four",
+       "y": 320,
+       "size": 60
+      }
+     ],
+     "source": "ICI, 9 Oct 2026"
+    }
+   }
+  },
+  {
+   "say": "Amnesty International, UNICEF France and the UN human rights office have all warned against disproportionate force.",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Journée_de_mobilisation_des_lycéens_à_Perpignan_14.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.12,
+     0.5,
+     0.5
+    ],
+    "credit": "Aurelio Cárdenas, CC BY 4.0, via Wikimedia Commons"
+   },
+   "dim": true,
+   "text": {
+    "kind": "label",
+    "content": "{\\fs72}AMNESTY · UNICEF FRANCE · UN HUMAN RIGHTS OFFICE",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "But the violence hasn't gone one way.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_police",
+    "shot": "behind_line:3.2",
+    "t0": 0
+   }
+  },
+  {
+   "say": "By the interior minister's count on October seventh, seven hundred and sixty-one police and gendarmes had been injured.",
+   "visual": {
+    "type": "g2d",
+    "name": "icons",
+    "module": "graphics.py",
+    "args": {
+     "shape": "person",
+     "box": [
+      120,
+      340,
+      1800,
+      1000
+     ],
+     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_015.jpg",
+     "groups": [
+      {
+       "n": 761,
+       "label": "761 POLICE & GENDARMES",
+       "at": "seven hundred",
+       "color": [
+        205,
+        200,
+        190
+       ],
+       "box": [
+        100,
+        330,
+        1040,
+        930
+       ]
+      },
+      {
+       "n": 215,
+       "label": "215 PUPILS",
+       "at": "two hundred and fifteen",
+       "color": "amber",
+       "box": [
+        1120,
+        330,
+        1500,
+        930
+       ]
+      },
+      {
+       "n": 89,
+       "label": "89 STAFF",
+       "at": "eighty-nine",
+       "color": [
+        150,
+        148,
+        142
+       ],
+       "box": [
+        1580,
+        330,
+        1820,
+        930
+       ]
+      }
+     ],
+     "head": [
+      {
+       "text": "INJURED",
+       "at": 0.1,
+       "y": 180,
+       "size": 110
+      }
+     ],
+     "source": "Interior Minister, 7 Oct 2026"
+    }
+   }
+  },
+  {
+   "say": "Along with two hundred and fifteen pupils, and eighty-nine school staff.",
+   "visual": "same"
+  },
+  {
+   "say": "In Belfort, a plain-clothes police officer was beaten unconscious. Several minors have been charged.",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/2026-10-06_12-00-58_MouvementDesLycéens-Belfort.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.12,
+     0.5,
+     0.5
+    ],
+    "credit": "Thomas Bresson, CC BY 4.0, via Wikimedia Commons"
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}BELFORT",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "Headteachers have been hit by fireworks.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_lycee",
+    "shot": "firework:2.8",
+    "t0": 0
+   }
+  },
+  {
+   "say": "No one has died.",
+   "visual": {
+    "type": "black"
+   },
+   "lead": 0.6,
+   "hold": 0.8,
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}NO ONE HAS DIED",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "So far, two thousand three hundred and seventy-six people have been prosecuted, most of them minors.",
+   "visual": {
+    "type": "g2d",
+    "name": "icons",
+    "module": "graphics.py",
+    "args": {
+     "n": 6877,
+     "shape": "person",
+     "box": [
+      110,
+      340,
+      1810,
+      1030
+     ],
+     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_023.jpg",
+     "appear_at": 0.1,
+     "appear_d": 0.8,
+     "highlight": {
+      "k": 2376,
+      "at": "two thousand three hundred",
+      "d": 1.2
+     },
+     "head": [
+      {
+       "text": "6,877 IN CUSTODY",
+       "at": 0.1,
+       "x": 560,
+       "y": 180,
+       "size": 72
+      },
+      {
+       "text": "2,376 PROSECUTED",
+       "at": "two thousand three hundred",
+       "x": 1360,
+       "y": 180,
+       "size": 72,
+       "color": "amber"
+      }
+     ],
+     "source": "Justice Ministry, to 8 Oct 2026 (1,923 of them minors)"
+    }
+   }
+  },
+  {
+   "say": "So who does the government blame? And what is it actually offering?",
+   "visual": {
+    "type": "3d",
+    "scene": "france_state",
+    "shot": "matignon:7.5",
+    "t0": 0
+   },
+   "hold": 0.3
+  },
+  {
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_079.jpg",
+    "from": [
+     1.03,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.1,
+     0.5,
+     0.5
+    ],
+    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "hold": 2.6,
+   "chapter": "What is the government doing?",
+   "trans": "dip",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "What is the government\\N*doing*?",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "soft low cinematic tone swell, gentle and quiet",
+    "len": 3,
+    "vol": 0.08,
+    "at": 0.0,
+    "filter": "afade=t=out:st=1.80:d=1.20"
+   },
+   "id": "act6"
+  },
+  {
+   "say": "Its first answer was political.",
+   "visual": {
+    "type": "video",
+    "file": "assets/news/lcp_assembly.mp4",
+    "start": 0.0,
+    "frame": 0.8,
+    "credit": "Video: LCP"
+   }
+  },
+  {
+   "say": "The prime minister's office called the movement an operation organised by La France Insoumise, and its allies on the far left.",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_25.jpg",
+    "from": [
+     1.2,
+     0.4,
+     0.45
+    ],
+    "to": [
+     1.3,
+     0.45,
+     0.45
+    ],
+    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "dim": true,
+   "text": {
+    "kind": "quote",
+    "content": "{\\fs92}“An operation organised by\\NLa France Insoumise”\\N{\\fs50}{\\c&HE6EEF2&}PRIME MINISTER'S OFFICE, 1 OCT",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "Remember those two MPs in Créteil?",
+   "visual": {
+    "type": "g2d",
+    "name": "phone_posts",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_24.jpg",
+     "photo": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Jules_Ferry_High_School_in_Paris_06.jpg",
+     "date": "21 SEPT",
+     "underline_at": 0.4
+    }
+   }
+  },
+  {
+   "say": "But the newspaper Le Monde read the intelligence note behind that claim.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_state",
+    "shot": "dossier:11.9",
+    "t0": 0
+   }
+  },
+  {
+   "say": "It covered one area, and a few days. It mentioned outsiders six times. The party, once.",
+   "visual": {
+    "type": "g2d",
+    "name": "doc",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_092.jpg",
+     "title": "INTELLIGENCE NOTE (ILLUSTRATION)",
+     "mark_at": "six times",
+     "lines": [
+      "Seine-Saint-Denis, 21 - 25 Sept █ ██ █",
+      "presence of [[outsiders]] at the gates █",
+      "█ ██ [[outsiders]] █ █ ██ █ ██ █",
+      "[[outsiders]] █ ██ █ █ ██ █ █",
+      "█ [[outsiders]] █ █ ██ █ [[LFI]] █",
+      "█ ██ [[outsiders]] █ █ ██ █",
+      "[[outsiders]] █ █ ██ █ ██ █"
+     ],
+     "tally": [
+      {
+       "text": "×6",
+       "at": "six times",
+       "y": 380,
+       "label": "OUTSIDERS"
+      },
+      {
+       "text": "×1",
+       "at": "The party, once",
+       "y": 700,
+       "label": "THE PARTY",
+       "color": "ink"
+      }
+     ],
+     "source": "As reported by Le Monde"
+    }
+   }
+  },
+  {
+   "say": "The party denies organising anything, and accuses the government of conspiracy thinking.",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_079.jpg",
+    "from": [
+     1.12,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.2,
+     0.5,
+     0.5
+    ],
+    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "dim": true,
+   "text": {
+    "kind": "quote",
+    "content": "{\\fs92}“Conspiracy thinking”\\N{\\fs50}{\\c&HE6EEF2&}LA FRANCE INSOUMISE",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "Lecornu has also said the voice of high-school students is precious, and must be heard.",
+   "visual": "same",
+   "text": {
+    "kind": "quote",
+    "content": "{\\fs92}“The voice of high-school students\\Nis precious, and must be heard.”\\N{\\fs50}{\\c&HE6EEF2&}SÉBASTIEN LECORNU, ON X",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "Then came the offer. On October eighth, Education Minister Édouard Geffray went on prime-time TV.",
+   "visual": {
+    "type": "video",
+    "file": "assets/news/franceinfo_geffray.mp4",
+    "start": 0.0,
+    "frame": 0.8,
+    "credit": "Video: franceinfo",
+    "speed": 0.85
+   }
+  },
+  {
+   "say": "Three thousand teachers, he said, would arrive within hours.",
+   "visual": {
+    "type": "g2d",
+    "name": "stat",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/2026-10-06_Manifestation_à_Nancy_pancarte_Prof_en_grève.jpg",
+     "items": [
+      {
+       "value": 3024,
+       "label": "SUPPLY TEACHERS",
+       "at": "Three thousand teachers"
+      }
+     ],
+     "source": "Education Ministry, 8 Oct 2026"
+    }
+   }
+  },
+  {
+   "say": "Three thousand and twenty-four supply teachers, already on the payroll, but not assigned to any classes.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_teachers",
+    "shot": "standby:10.7",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}{\\fs64}ALREADY PAID · NOT ASSIGNED TO CLASSES",
+    "pos": [
+     0.5,
+     0.88
+    ]
+   }
+  },
+  {
+   "say": "They're going to the schools hit hardest: a hundred and fourteen \"red\" lycées, and about four hundred \"orange\" ones.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "red_orange:8.0",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}114 RED · ~400 ORANGE",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "One pupil association called it a first concrete announcement.",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_08.jpg",
+    "from": [
+     1.15,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.24,
+     0.5,
+     0.45
+    ],
+    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "dim": true,
+   "text": {
+    "kind": "quote",
+    "content": "{\\fs92}“A first concrete announcement”\\N{\\fs50}{\\c&HE6EEF2&}LES LYCÉENS",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "Others weren't convinced. A seventeen-year-old in Nantes told France 24: \"We don't want words. We want action.\"",
+   "visual": "same",
+   "text": {
+    "kind": "quote",
+    "content": "{\\fs92}“We don't want words.\\NWe want action.”\\N{\\fs50}{\\c&HE6EEF2&}PUPIL, 17, NANTES · FRANCE 24",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "And critics asked the obvious question. If three thousand teachers were available, why weren't they in classrooms already?",
+   "visual": {
+    "type": "3d",
+    "scene": "france_teachers",
+    "shot": "drop:7.5",
+    "t0": 0
+   }
+  },
+  {
+   "say": "Geffray admitted they hadn't been assigned.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_teachers",
+    "shot": "empty_field:3.9",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}\"NOT ASSIGNED\"",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "Then there's the damage. Twenty-four lycées have been burned or ransacked.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_aftermath",
+    "shot": "ransacked:4.8",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs72}{\\c&H5CB2FF&}24 LYCÉES BURNED OR RANSACKED",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "About thirty thousand pupils have no classes in person.",
+   "visual": {
+    "type": "g2d",
+    "name": "icons",
+    "module": "graphics.py",
+    "args": {
+     "n": 300,
+     "shape": "desk",
+     "box": [
+      200,
+      340,
+      1720,
+      1000
+     ],
+     "aspect": 0.8,
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_18.jpg",
+     "appear_at": 0.1,
+     "appear_d": 0.8,
+     "blank": {
+      "k": 300,
+      "at": "no classes",
+      "d": 1.0
+     },
+     "head": [
+      {
+       "text": "30,000",
+       "at": "thirty thousand",
+       "y": 170,
+       "size": 160,
+       "color": "amber"
+      },
+      {
+       "text": "PUPILS WITHOUT IN-PERSON CLASSES",
+       "at": "thirty thousand",
+       "y": 290,
+       "size": 56
+      }
+     ],
+     "source": "Education Minister, 5 Oct 2026 · 1 desk = 100 pupils"
+    }
+   }
+  },
+  {
+   "say": "Local officials say many of the fires were set by masked outsiders, not pupils.",
+   "visual": {
+    "type": "video",
+    "file": "assets/news/reuters_fire.mp4",
+    "start": 0.0,
+    "frame": 0.8,
+    "credit": "Video: Reuters"
+   }
+  },
+  {
+   "say": "The government's estimate of the bill: at least thirty million euros.",
+   "visual": {
+    "type": "g2d",
+    "name": "bars",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_015.jpg",
+     "title": "DAMAGE TO LYCÉES",
+     "items": [
+      {
+       "label": "AUVERGNE-RHÔNE-ALPES",
+       "value": 27.5,
+       "text": "€25-30M",
+       "at": 0.3
+      },
+      {
+       "label": "ÎLE-DE-FRANCE",
+       "value": 7,
+       "at": 0.6
+      },
+      {
+       "label": "OCCITANIE",
+       "value": 3,
+       "at": 0.9
+      }
+     ],
+     "unit_prefix": "€",
+     "unit_suffix": "M",
+     "max": 30,
+     "x0": 860,
+     "x1": 1450,
+     "ytop": 360,
+     "gap": 170,
+     "label_size": 50,
+     "head": [
+      {
+       "text": "€30 MILLION+",
+       "at": "thirty million",
+       "y": 900,
+       "size": 130,
+       "color": "amber"
+      }
+     ],
+     "source": "Regional presidents / government source, 9 Oct 2026"
+    }
+   }
+  },
+  {
+   "say": "So it's pushing a law nicknamed \"casseurs-payeurs\". Rioters pay.",
+   "visual": {
+    "type": "black"
+   },
+   "text": {
+    "kind": "title",
+    "content": "{\\fs130}{\\c&H5CB2FF&}\"CASSEURS-PAYEURS\"\\N{\\fs70}{\\c&HE6EEF2&}RIOTERS PAY",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   }
+  },
+  {
+   "say": "Anyone in a group that causes damage could be made to pay up to ten thousand euros, even if they didn't break anything themselves.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_money",
+    "shot": "fine:9.9",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}UP TO €10,000 EACH",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "And the public? In a poll for Le Figaro, sixty-two percent said the movement was justified.",
+   "visual": {
+    "type": "g2d",
+    "name": "donut",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_26.jpg",
+     "title": "ODOXA POLL FOR LE FIGARO",
+     "items": [
+      {
+       "value": 62,
+       "label": "SAY THE MOVEMENT IS JUSTIFIED",
+       "at": "sixty-two",
+       "x": 560
+      },
+      {
+       "value": 78,
+       "label": "SAY LFI IS EXPLOITING IT",
+       "at": "seventy-eight",
+       "x": 1360
+      }
+     ]
+    }
+   }
+  },
+  {
+   "say": "But seventy-eight percent also said La France Insoumise was exploiting it.",
+   "visual": "same"
+  },
+  {
+   "say": "So where does it go from here?",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_01.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.12,
+     0.5,
+     0.5
+    ],
+    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+   }
+  },
+  {
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_092.jpg",
+    "from": [
+     1.03,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.1,
+     0.5,
+     0.5
+    ],
+    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "hold": 2.6,
+   "chapter": "What happens next?",
+   "trans": "dip",
+   "dim": true,
+   "text": {
+    "kind": "chapter",
+    "content": "What happens\\N*next*?",
+    "pos": [
+     0.5,
+     0.5
+    ]
+   },
+   "sfx": {
+    "prompt": "soft low cinematic tone swell, gentle and quiet",
+    "len": 3,
+    "vol": 0.08,
+    "at": 0.0,
+    "filter": "afade=t=out:st=1.80:d=1.20"
+   },
+   "id": "act7"
+  },
+  {
+   "say": "Right now, the blockades are shrinking.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "dimming:11.1",
+    "t0": 0
+   }
+  },
+  {
+   "say": "On October first, more than a thousand lycées were affected. On October ninth, a hundred and forty-one were still closed.",
+   "visual": {
+    "type": "g2d",
+    "name": "stat",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_18.jpg",
+     "items": [
+      {
+       "value": 1027,
+       "label": "LYCÉES AFFECTED · 1 OCT",
+       "at": 0.2,
+       "x": 560,
+       "size": 170,
+       "color": "ink"
+      },
+      {
+       "value": 141,
+       "label": "STILL CLOSED · 9 OCT",
+       "at": "a hundred and forty-one",
+       "x": 1360,
+       "size": 170
+      }
+     ],
+     "source": "Interior / Education Ministry"
+    }
+   }
+  },
+  {
+   "say": "A government source calls it a clear slowdown. Pupil unions say it's not over.",
+   "visual": {
+    "type": "g2d",
+    "name": "split",
+    "module": "graphics.py",
+    "args": {
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_24.jpg",
+     "left": {
+      "head": "GOVERNMENT SOURCE",
+      "big": "SLOWING",
+      "big_size": 130,
+      "body": [
+       "\"a clear deceleration\""
+      ],
+      "at": 0.1
+     },
+     "right": {
+      "head": "PUPIL UNIONS",
+      "big": "NOT OVER",
+      "big_size": 130,
+      "body": [
+       "\"non\""
+      ],
+      "at": "Pupil unions"
+     }
+    }
+   }
+  },
+  {
+   "say": "Here's the calendar.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_calendar",
+    "shot": "wall:1.5",
+    "t0": 0
+   }
+  },
+  {
+   "say": "Tuesday, October thirteenth. A national strike and day of action, called by student and teacher unions.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_calendar",
+    "shot": "oct13:6.8",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}13 OCT",
+    "pos": [
+     0.5,
+     0.12
+    ]
+   }
+  },
+  {
+   "say": "Saturday the seventeenth. A separate call that's been spreading on TikTok, from an anonymous account, about fuel prices, housing and discrimination.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_phone",
+    "shot": "anon:8.8",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\c&H5CB2FF&}17 OCT",
+    "pos": [
+     0.5,
+     0.12
+    ]
+   }
+  },
+  {
+   "say": "It's not an official union date. But some lycée protesters have said they'll be there.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_calendar",
+    "shot": "oct17:13.5",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs72}{\\c&H5CB2FF&}NOT AN OFFICIAL UNION DATE",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "That same weekend, the autumn school holidays begin. Unions worry two weeks off could drain the movement.",
+   "visual": "same"
+  },
+  {
+   "say": "October twenty-third. The government's online consultation for pupils closes.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_calendar",
+    "shot": "oct23_27:7.9",
+    "t0": 0
+   }
+  },
+  {
+   "say": "October twenty-seventh. The rioters-pay bill goes to the Senate.",
+   "visual": "same"
+  },
+  {
+   "say": "By the end of October, Lecornu has promised decisions, and changes to the budget.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_calendar",
+    "shot": "nov5:12.7",
+    "t0": 0
+   }
+  },
+  {
+   "say": "And on November fifth, France's five biggest union confederations strike together, on pay and public services.",
+   "visual": "same"
+  },
+  {
+   "say": "And behind all of it, a presidential election in April 2027.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_calendar",
+    "shot": "apr2027:4.8",
+    "t0": 0
+   },
+   "text": {
+    "kind": "label",
+    "content": "{\\fs72}{\\c&H5CB2FF&}APRIL 2027 · PRESIDENTIAL ELECTION",
+    "pos": [
+     0.5,
+     0.82
+    ]
+   }
+  },
+  {
+   "say": "In mid-September, this was about a few empty posts, at one school in Créteil.",
+   "visual": {
+    "type": "3d",
+    "scene": "france_map",
+    "shot": "ripple:9.5",
+    "t0": 0
+   }
+  },
+  {
+   "say": "Now, it's a question for the whole country.",
+   "visual": "same"
+  },
+  {
+   "say": "What does France owe the teenagers sitting in its classrooms?",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_079.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.45
+    ],
+    "to": [
+     1.16,
+     0.5,
+     0.42
+    ],
+    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "hold": 1.2,
+   "id": "last"
+  },
+  {
+   "say": "We'll keep following this story on the thirteenth, and after. If you'd like to see where it goes, subscribing to STRATA is the simplest way not to miss it.",
+   "visual": {
+    "type": "image",
+    "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_092.jpg",
+    "from": [
+     1.1,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.16,
+     0.5,
+     0.5
+    ],
+    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+   },
+   "hold": 2.5,
+   "fade_out": 3.0,
+   "text": {
+    "kind": "title",
+    "content": "{\\fs130}{\\c&H5CB2FF&}STRATA",
+    "pos": [
+     0.5,
+     0.47
+    ]
+   },
+   "dim": true
+  }
+ ]
+}
