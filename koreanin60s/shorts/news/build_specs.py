@@ -1,4 +1,4 @@
-"""Hallyu news shorts 011-013 with ORIGINAL source visuals (article screenshots, official stills/thumbnails).
+"""Hallyu news shorts 011-016 with ORIGINAL source visuals (article screenshots, official stills/thumbnails).
 Images are not in the repo (third-party); pass the folder that holds them: python3 build_specs.py <img dir> <out dir>.
 Writes <out>/<name>/spec.json with images inlined as data URIs (engine.py renders them in white boxes)."""
 import base64, json, os, sys
@@ -96,6 +96,79 @@ S["013-kpdh-korean-words"] = {"label": "KPDH KOREAN 🐯", "labelColor": "#8C6CE
     {"from": "w3", "els": [pic("hojakdo", 500, "w3", w=560, crop=(0, 0, 700, 700), cap="호작도 · Korean folk painting"),
                            word("호랑이", "ho-rang-i", "tiger", "y", 1040, "w3k", 110, 450, 290), word("까치", "kka-chi", "magpie", "b", 1040, "w4k", 120, 450, 790)]},
     end("Which one did you know? 👇")]}
+S["014-sequel-2029-cast"] = {"label": "K-NEWS 📣", "labelColor": "#E25B5B", "pose0": "thinking", "lines": [
+    L("h1", "Is KPop Demon Hunters 2 really coming in twenty twenty-nine? The cast just answered.", "thinking"),
+    L("c1", "At FanX Salt Lake Comic Con, May Hong, the voice of Mira,", "talk"),
+    L("c2", "and Alan Lee, the Mystery Saja, faced the big question.", "excited"),
+    L("c3", "Lee said, contracts might have been written, but we have not actually worked.", "nervous_sweat"),
+    L("c4", "So anything up until then is just rumor and clickbait.", "shocked"),
+    L("c5", "And May Hong hinted it could even come before twenty twenty-nine!", "mind_blown"),
+    L("c6", "Fun fact: Alan Lee was the temporary voice of Jinu early in production.", "point_idea"),
+    L("c7", "His wish? A jump like Toy Story one to Toy Story two.", "excited"),
+    L("c8", "Mira was May Hong's first ever voice role, and she recorded it in just one week.", "shocked"),
+    L("c9", "She trusts directors Maggie Kang and Chris Appelhans to deliver.", "thumbs_up"),
+    L("c10", "Meanwhile, Ted Sarandos promised a big, broad, global theatrical release.", "clap_confetti"),
+    L("e0", "Would you wait until twenty twenty-nine? Comment below!", "love_heart")],
+  "scenes": [
+    {"els": [pic("hl_deseret", 330, "h1", cap="Deseret News · Oct 2, 2026"), pic("o_deseret", 800, "h1+1.8", w=900, cap="KPop Demon Hunters (Netflix)")]},
+    {"from": "c1", "els": [pic("p_mayhong", 540, "c1", w=880, cap="May Hong at FanX Salt Lake · Deseret News"), chip("🎤 May Hong = Mira", 1040, "c1+1.6", "p")]},
+    {"from": "c2", "els": [pic("r_msaja", 590, "c2", w=500, crop=(0, 0, 965, 1000), cap="Mystery Saja · KPop Demon Hunters"), chip("🎤 Alan Lee = Mystery Saja", 1080, "c2+1.4", "b")]},
+    {"from": "c3", "els": [pic("c_sajaboys", 450, "c3", cap="Saja Boys · KPop Demon Hunters (Netflix)"), big("“Contracts might have been written,<br>but we have <span class='c-p'>not actually worked</span>.”", 900, "c3+1.2", 52)]},
+    {"from": "c4", "els": [big("“Anything up until then is just<br><span class='c-p'>rumor and clickbait</span>.”", 400, "c4", 60), pic("c_youridol", 900, "c4+1.4", w=520, cap="'Your Idol' · Saja Boys")]},
+    {"from": "c5", "els": [pic("r_mira", 560, "c5", w=600, crop=(0, 0, 1100, 1000), cap="Mira · KPop Demon Hunters"), chip("⏩ Maybe even before 2029?", 1040, "c5+1.4", "y")]},
+    {"from": "c6", "els": [pic("r_jinu", 560, "c6", w=440, crop=(0, 0, 716, 830), cap="Jinu · KPop Demon Hunters"), chip("🎙️ Alan Lee: Jinu's temp voice", 1060, "c6+1.8", "b", 44)]},
+    {"from": "c7", "els": [pic("c_gwima", 420, "c7", cap="Gwi-Ma, the villain · KPop Demon Hunters"), big("Toy Story 1 ➜ <span class='c-p'>2</span> 🚀", 880, "c7+1.6", 72)]},
+    {"from": "c8", "els": [pic("huntrix_pink", 520, "c8", cap="HUNTR/X · KPop Demon Hunters (Netflix)"), chip("🎬 First voice role", 960, "c8+1.2", "p"), chip("🗓️ Recorded in 1 week", 1070, "c8+3.0", "y")]},
+    {"from": "c9", "els": [pic("p_maggiekang", 560, "c9", w=520, crop=(0, 60, 960, 1020), cap="Maggie Kang · Wikimedia Commons"), chip("🎬 Maggie Kang & Chris Appelhans", 1060, "c9+1.8", "b", 44)]},
+    {"from": "c10", "els": [pic("sarandos", 520, "c10", cap="Ted Sarandos (Netflix co-CEO)"), big("“big, broad, <span class='c-p'>global</span>”<br>theatrical release 🍿", 960, "c10+2.2", 62)]},
+    end("Would you wait? ⏳👇")]}
+S["015-golden-history"] = {"label": "K-NEWS 📣", "labelColor": "#E25B5B", "pose0": "clap_confetti", "lines": [
+    L("h1", "Golden didn't just top the charts. It rewrote music history.", "clap_confetti"),
+    L("g1", "On the Billboard Hot 100, it became the longest-leading number one ever by an animated act.", "mind_blown"),
+    L("g2", "In the U.K., it stayed at number one for ten weeks.", "excited"),
+    L("g3", "And on Billboard's global chart outside the U.S., it ruled for a record twenty weeks.", "shocked"),
+    L("g4", "Then the trophies came. First, a Golden Globe.", "clap_confetti"),
+    L("g5", "At the Grammys in February, it won Best Song Written for Visual Media, the first Grammy ever for K-pop songwriters.", "mind_blown"),
+    L("g6", "In March, it won the Oscar for Best Original Song. The first K-pop song ever to win an Oscar.", "shocked"),
+    L("g7", "And the movie took Best Animated Feature, too.", "clap_confetti"),
+    L("g8", "On Netflix, it's the most-watched movie ever, with three hundred twenty-five million views in its first ninety-one days.", "mind_blown"),
+    L("e0", "What's your favorite HUNTR/X song? Comment below!", "love_heart")],
+  "scenes": [
+    {"els": [pic("t_9cjX8VMrZdM", 500, "h1", cap="HUNTR/X 'Golden' · Oscars 2026"), chip("🏆 'Golden' · HUNTR/X", 990, "h1+1.4", "y")]},
+    {"from": "g1", "els": [pic("hl_bb5", 360, "g1", w=900, cap="Billboard"), pic("o_bb5", 860, "g1+2.2", w=780, cap="HUNTR/X · Billboard")]},
+    {"from": "g2", "els": [pic("hl_occ", 330, "g2", cap="Official Charts (UK)"), pic("o_occ", 760, "g2+1.2", w=900, cap="Official Charts · Netflix")]},
+    {"from": "g3", "els": [pic("c_golden", 560, "g3", w=600, cap="'Golden' single cover"), chip("🌍 #1 for 20 weeks · Global Excl. US", 1060, "g3+2.2", "b", 44)]},
+    {"from": "g4", "els": [pic("hl_ktimes", 320, "g4", cap="The Korea Times"), pic("o_kpcw", 760, "g4+1.4", w=880, cap="EJAE, Audrey Nuna & REI AMI · NPR"), chip("🌐 Golden Globe ✔", 1150, "g4+2.4", "y")]},
+    {"from": "g5", "els": [pic("hl_soompi", 340, "g5", w=900, cap="Soompi · Feb 2026"), pic("o_sbs", 820, "g5+2.6", w=760, cap="EJAE · SBS Star"), chip("🎶 1st K-pop songwriting Grammy", 1170, "g5+4.6", "p", 44)]},
+    {"from": "g6", "els": [pic("hl_nbc", 300, "g6", cap="NBC Los Angeles · Mar 2026"), pic("o_ada", 720, "g6+1.6", w=880, cap="98th Academy Awards · Best Original Song"), chip("🏆 1st K-pop Oscar", 1120, "g6+3.6", "y")]},
+    {"from": "g7", "els": [pic("o_nbc", 540, "g7", cap="Oscars 2026 · Getty Images via NBC"), chip("🎬 Best Animated Feature", 1000, "g7+1.0", "p")]},
+    {"from": "g8", "els": [pic("o_tudumg", 520, "g8", cap="KPop Demon Hunters · Netflix Tudum"), chip("📺 #1 Netflix movie ever", 960, "g8+1.2", "b"), chip("👀 325.1M views in 91 days", 1070, "g8+3.0", "y")]},
+    end("Favorite HUNTR/X song? 🎤👇")]}
+S["016-huntrix-tour"] = {"label": "K-NEWS 📣", "labelColor": "#E25B5B", "pose0": "excited", "lines": [
+    L("h1", "Will HUNTR/X ever go on a real world tour? The singers finally answered.", "excited"),
+    L("t1", "EJAE, Audrey Nuna and REI AMI, the singing voices of Rumi, Mira and Zoey,", "talk"),
+    L("t2", "were named Billboard's Women of the Year this spring.", "clap_confetti"),
+    L("t3", "Asked about a tour, REI AMI said, people have been asking for a tour.", "point_idea"),
+    L("t4", "We, unfortunately, do not hold that power.", "nervous_sweat"),
+    L("t5", "Netflix owns HUNTR/X, so the call is theirs. But she told fans, you've got to demand it more!", "steam_angry"),
+    L("t6", "EJAE already has a stage idea: recreating the How It's Done jet scene.", "excited"),
+    L("t7", "They've sung live on Fallon, Kimmel, SNL, the Oscars and the BAFTAs.", "clap_confetti"),
+    L("t8", "As for the sequel, they're still waiting for the call. EJAE says, stay tuned.", "thinking"),
+    L("e0", "Would you buy a ticket? Comment below!", "love_heart")],
+  "scenes": [
+    {"els": [pic("t_bFdoLdNUCwg", 500, "h1", cap="HUNTR/X 'Golden' · Billboard Women in Music 2026"), chip("🎤 HUNTR/X World Tour?", 990, "h1+1.6", "p")]},
+    {"from": "t1", "els": [pic("t_25pyl_wl8ss", 520, "t1", w=820, cap="EJAE, REI AMI & Audrey Nuna · Billboard"),
+                           pic("r_rumi", 1010, "t1+1.4", w=290, crop=(150, 0, 950, 800), cap="Rumi", x=230),
+                           pic("r_mira", 1010, "t1+2.0", w=290, crop=(150, 0, 950, 800), cap="Mira", x=540),
+                           pic("r_zoey", 1010, "t1+2.6", w=290, crop=(150, 0, 950, 800), cap="Zoey", x=850)]},
+    {"from": "t2", "els": [pic("t_9IxVmhL71gc", 520, "t2", cap="Billboard Women in Music 2026"), chip("👑 Women of the Year", 990, "t2+1.0", "y")]},
+    {"from": "t3", "els": [pic("t_Be07t0pinjw", 500, "t3", cap="Jimmy Kimmel Live · ABC"), big("“People have been<br>asking for a <span class='c-p'>tour</span>…”", 960, "t3+1.4", 62)]},
+    {"from": "t4", "els": [big("“We, unfortunately,<br>do not hold <span class='c-p'>that power</span>.”", 400, "t4", 62), pic("c_hid", 880, "t4+1.0", w=520, cap="'How It's Done' · HUNTR/X")]},
+    {"from": "t5", "els": [pic("t_IBV2X2E9tek", 500, "t5", cap="HUNTR/X live · BRIT Awards 2026"), chip("🔒 Netflix holds the rights", 960, "t5+0.8", "b"), big("“Demand it more!” 📢", 1100, "t5+3.4", 64)]},
+    {"from": "t6", "els": [pic("huntrix_jet", 540, "t6", cap="'How It's Done' jet scene · Netflix"), chip("✈️ Jet scene, live on stage?", 1000, "t6+2.0", "p")]},
+    {"from": "t7", "els": [pic("t_kes94PVdEBw", 460, "t7", w=700, cap="98th Academy Awards · ABC"), pic("t__tdLYsc_KBY", 940, "t7+2.4", w=700, cap="BAFTA Film Awards · BBC")]},
+    {"from": "t8", "els": [pic("o_outlookoscar", 520, "t8", cap="KPop Demon Hunters · Netflix"), chip("📞 Waiting for the call", 960, "t8+1.4", "y"), chip("👀 Stay tuned", 1070, "t8+3.2", "p")]},
+    end("Would you buy a ticket? 🎟️👇")]}
 for k, v in S.items():
     os.makedirs(f"{OUT}/{k}", exist_ok=True); json.dump(v, open(f"{OUT}/{k}/spec.json", "w"), ensure_ascii=False)
 print("ok")
