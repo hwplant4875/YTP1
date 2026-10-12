@@ -1,0 +1,279 @@
+{
+ "id": "n01_zwiebelmarkt",
+ "title": "Germany just threw a festival… for ONIONS 🧅",
+ "scenes": [
+  {
+   "lines": [
+    [
+     {
+      "en": "Germany just held a festival... for onions.",
+      "show": [
+       "p",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/onion_photo.jpg",
+     "w": 960,
+     "h": 536,
+     "x": 540,
+     "y": 700
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "A festival for onions?!",
+     "size": 84,
+     "x": 540,
+     "y": 1260,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "It's the"
+     },
+     {
+      "de": "Zwiebelmarkt,",
+      "show": [
+       "w"
+      ]
+     },
+     {
+      "en": "the onion market in Weimar.",
+      "show": [
+       "m"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/onion_fid.jpg",
+     "w": 960,
+     "h": 533,
+     "x": 540,
+     "y": 620
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Zwiebelmarkt",
+     "size": 170,
+     "x": 540,
+     "y": 1210
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= onion market · Weimar",
+     "size": 70,
+     "x": 540,
+     "y": 1360,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "For three days, about 250,000 people came",
+      "show": [
+       "n"
+      ]
+     },
+     {
+      "en": "to buy onion braids.",
+      "show": [
+       "b"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/onion_head.jpg",
+     "w": 960,
+     "h": 820,
+     "x": 540,
+     "y": 680
+    },
+    {
+     "id": "n",
+     "type": "text",
+     "text": "250,000 visitors",
+     "size": 96,
+     "x": 540,
+     "y": 1200,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "b",
+     "type": "text",
+     "text": "3 days of onion braids",
+     "size": 70,
+     "x": 540,
+     "y": 1330
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "And it's old. The first one was in 1653.",
+      "show": [
+       "y"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "This year was number 373.",
+      "show": [
+       "k"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.3,
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/onion_photo.jpg",
+     "w": 960,
+     "h": 536,
+     "x": 540,
+     "y": 640
+    },
+    {
+     "id": "y",
+     "type": "word",
+     "de": "since 1653",
+     "size": 160,
+     "x": 540,
+     "y": 1180,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "k",
+     "type": "text",
+     "text": "373rd onion market",
+     "size": 72,
+     "x": 540,
+     "y": 1340
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Oh, and they crown an onion queen.",
+      "show": [
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Would you go?"
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/onion_fid.jpg",
+     "w": 960,
+     "h": 533,
+     "x": 540,
+     "y": 620
+    },
+    {
+     "id": "q",
+     "type": "word",
+     "de": "Zwiebelkönigin",
+     "size": 150,
+     "x": 540,
+     "y": 1210,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= onion queen",
+     "size": 70,
+     "x": 540,
+     "y": 1360
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Follow for more German news."
+     }
+    ]
+   ],
+   "hold": 0.8,
+   "els": [
+    {
+     "id": "l",
+     "type": "logo",
+     "x": 540,
+     "y": 740
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Follow for more German",
+     "size": 70,
+     "x": 540,
+     "y": 1000
+    }
+   ]
+  }
+ ],
+ "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
+ "bg": "road"
+}

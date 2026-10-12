@@ -1,0 +1,256 @@
+{
+ "id": "n05_zeitumstellung",
+ "title": "Germany gets a 25-HOUR day this month ⏰",
+ "scenes": [
+  {
+   "lines": [
+    [
+     {
+      "en": "This month, Germany gets a 25-hour day.",
+      "show": [
+       "p",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/zeit_bz.jpg",
+     "w": 960,
+     "h": 860,
+     "x": 540,
+     "y": 700
+    },
+    {
+     "id": "t",
+     "type": "word",
+     "de": "25 hours",
+     "size": 170,
+     "x": 540,
+     "y": 1290,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "On Sunday, October 25th, at 3 a.m.,",
+      "show": [
+       "a"
+      ]
+     },
+     {
+      "en": "the clocks go back to 2 a.m.",
+      "show": [
+       "b"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.3,
+   "els": [
+    {
+     "id": "d",
+     "type": "text",
+     "text": "Sunday, Oct 25",
+     "size": 90,
+     "x": 540,
+     "y": 420,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "3:00",
+     "size": 260,
+     "x": 540,
+     "y": 760
+    },
+    {
+     "id": "ar",
+     "type": "tile",
+     "icon": "down-arrow",
+     "s": 150,
+     "x": 540,
+     "y": 980
+    },
+    {
+     "id": "b",
+     "type": "word",
+     "de": "2:00",
+     "size": 260,
+     "x": 540,
+     "y": 1200,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "In German, it's the"
+     },
+     {
+      "de": "Zeitumstellung.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "And winter time is"
+     },
+     {
+      "de": "Winterzeit.",
+      "show": [
+       "v"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/zeit_bz.jpg",
+     "w": 960,
+     "h": 640,
+     "x": 540,
+     "y": 600
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Zeitumstellung",
+     "size": 150,
+     "x": 540,
+     "y": 1060
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= the time change",
+     "size": 64,
+     "x": 540,
+     "y": 1190
+    },
+    {
+     "id": "v",
+     "type": "word",
+     "de": "Winterzeit",
+     "size": 150,
+     "x": 540,
+     "y": 1330,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Your phone changes by itself. Your oven clock won't.",
+      "show": [
+       "o"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "So enjoy one extra hour of sleep."
+     },
+     {
+      "de": "Gute Nacht!",
+      "show": [
+       "g"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "els": [
+    {
+     "id": "o",
+     "type": "text",
+     "text": "+1 hour of sleep",
+     "size": 96,
+     "x": 540,
+     "y": 560,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "s",
+     "type": "tile",
+     "icon": "sleeping-face",
+     "s": 420,
+     "x": 540,
+     "y": 900
+    },
+    {
+     "id": "g",
+     "type": "word",
+     "de": "Gute Nacht!",
+     "size": 170,
+     "x": 540,
+     "y": 1300
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Follow for more German news."
+     }
+    ]
+   ],
+   "hold": 0.8,
+   "els": [
+    {
+     "id": "l",
+     "type": "logo",
+     "x": 540,
+     "y": 740
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Follow for more German",
+     "size": 70,
+     "x": 540,
+     "y": 1000
+    }
+   ]
+  }
+ ],
+ "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
+ "bg": "road"
+}

@@ -1,0 +1,259 @@
+{
+ "id": "n04_bahn_alkoholverbot",
+ "title": "Going to Germany? NEW train station rule from Oct 15 🚆🍺",
+ "scenes": [
+  {
+   "lines": [
+    [
+     {
+      "en": "Travelling to Germany? There's a new rule at train stations.",
+      "show": [
+       "p",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/db_press.jpg",
+     "w": 960,
+     "h": 426,
+     "x": 540,
+     "y": 640
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "New rule from October 15",
+     "size": 80,
+     "x": 540,
+     "y": 1160,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "From October 15, no drinking alcohol at all 5,400 stations.",
+      "show": [
+       "n"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "It's called"
+     },
+     {
+      "de": "Alkoholverbot.",
+      "show": [
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/station_train.jpg",
+     "w": 960,
+     "h": 540,
+     "x": 540,
+     "y": 660
+    },
+    {
+     "id": "n",
+     "type": "text",
+     "text": "5,400 stations",
+     "size": 96,
+     "x": 540,
+     "y": 1100,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Alkoholverbot",
+     "size": 160,
+     "x": 540,
+     "y": 1260
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= alcohol ban",
+     "size": 64,
+     "x": 540,
+     "y": 1400
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "But station restaurants and bars are fine.",
+      "show": [
+       "a"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Closed bottles are fine.",
+      "show": [
+       "b"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "And on the train itself, you can still drink.",
+      "show": [
+       "c"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.3,
+   "els": [
+    {
+     "id": "h",
+     "type": "text",
+     "text": "Still allowed:",
+     "size": 90,
+     "x": 540,
+     "y": 450,
+     "colour": [
+      52,
+      199,
+      89
+     ]
+    },
+    {
+     "id": "a",
+     "type": "row",
+     "icon": "fork-and-knife-with-plate",
+     "de": "Restaurants",
+     "en": "in the station",
+     "x": 540,
+     "y": 700
+    },
+    {
+     "id": "b",
+     "type": "row",
+     "icon": "bottle-with-popping-cork",
+     "de": "Closed bottles",
+     "en": "in your bag",
+     "x": 540,
+     "y": 980
+    },
+    {
+     "id": "c",
+     "type": "row",
+     "icon": "high-speed-train",
+     "de": "On the train",
+     "en": "yes, really",
+     "x": 540,
+     "y": 1260
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Break the rule, and you'll be asked to leave.",
+      "show": [
+       "x"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Do it again, and you can be banned.",
+      "show": [
+       "y"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/db_eu.jpg",
+     "w": 960,
+     "h": 760,
+     "x": 540,
+     "y": 660
+    },
+    {
+     "id": "x",
+     "type": "text",
+     "text": "1st time: leave the station",
+     "size": 70,
+     "x": 540,
+     "y": 1150
+    },
+    {
+     "id": "y",
+     "type": "text",
+     "text": "Again: banned",
+     "size": 90,
+     "x": 540,
+     "y": 1280,
+     "colour": [
+      229,
+      72,
+      77
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Follow for more German news."
+     }
+    ]
+   ],
+   "hold": 0.8,
+   "els": [
+    {
+     "id": "l",
+     "type": "logo",
+     "x": 540,
+     "y": 740
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Follow for more German",
+     "size": 70,
+     "x": 540,
+     "y": 1000
+    }
+   ]
+  }
+ ],
+ "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
+ "bg": "road"
+}

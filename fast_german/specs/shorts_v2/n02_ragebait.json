@@ -1,0 +1,281 @@
+{
+ "id": "n02_ragebait",
+ "title": "Germany's word of the year 2026 is… ENGLISH 😳",
+ "scenes": [
+  {
+   "lines": [
+    [
+     {
+      "en": "Germany's youth word of the year is... not German.",
+      "show": [
+       "p",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/rage_hs.jpg",
+     "w": 960,
+     "h": 900,
+     "x": 540,
+     "y": 720
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Youth word of the year 2026",
+     "size": 70,
+     "x": 540,
+     "y": 1290,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "It's",
+      "show": []
+     },
+     {
+      "en": "Ragebait.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Posts made just to make you angry.",
+      "show": [
+       "m"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/rage_zdf.jpg",
+     "w": 960,
+     "h": 677,
+     "x": 540,
+     "y": 640
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Ragebait",
+     "size": 200,
+     "x": 540,
+     "y": 1150,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= posts made to make you angry",
+     "size": 64,
+     "x": 540,
+     "y": 1320
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "About one million teenagers voted.",
+      "show": [
+       "v"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "First, Ragebait.",
+      "show": [
+       "r1"
+      ]
+     },
+     {
+      "en": "Then Peak.",
+      "show": [
+       "r2"
+      ]
+     },
+     {
+      "en": "Then Crashout.",
+      "show": [
+       "r3"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "All three: English.",
+      "show": [
+       "x"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.3,
+   "els": [
+    {
+     "id": "v",
+     "type": "text",
+     "text": "~1,000,000 votes",
+     "size": 90,
+     "x": 540,
+     "y": 420,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "r1",
+     "type": "row",
+     "icon": "1st-place-medal",
+     "de": "Ragebait",
+     "en": "36.5 %",
+     "hl": true,
+     "x": 540,
+     "y": 680
+    },
+    {
+     "id": "r2",
+     "type": "row",
+     "icon": "2nd-place-medal",
+     "de": "Peak",
+     "en": "33.8 %",
+     "x": 540,
+     "y": 960
+    },
+    {
+     "id": "r3",
+     "type": "row",
+     "icon": "3rd-place-medal",
+     "de": "Crashout",
+     "en": "29.7 %",
+     "x": 540,
+     "y": 1240
+    },
+    {
+     "id": "x",
+     "type": "text",
+     "text": "All English!",
+     "size": 84,
+     "x": 540,
+     "y": 1440,
+     "colour": [
+      229,
+      72,
+      77
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "The official German translation?"
+     },
+     {
+      "de": "Wut-Köder.",
+      "show": [
+       "w"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Rage bait. Literally.",
+      "show": [
+       "m"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news/rage_zdf.jpg",
+     "w": 960,
+     "h": 677,
+     "x": 540,
+     "y": 640
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Wut-Köder",
+     "size": 190,
+     "x": 540,
+     "y": 1150,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= rage bait",
+     "size": 72,
+     "x": 540,
+     "y": 1320
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Follow for more German news."
+     }
+    ]
+   ],
+   "hold": 0.8,
+   "els": [
+    {
+     "id": "l",
+     "type": "logo",
+     "x": 540,
+     "y": 740
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Follow for more German",
+     "size": 70,
+     "x": 540,
+     "y": 1000
+    }
+   ]
+  }
+ ],
+ "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
+ "bg": "road"
+}
