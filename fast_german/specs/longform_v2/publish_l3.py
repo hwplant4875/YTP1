@@ -39,6 +39,7 @@ DESC = ("Learn the 50 German phrases you'll use every day, in 10 minutes. Hello,
         "\n\nNew German every day. Follow for more German.\n\n"
         "Music:\n\"Lobby Time\" Kevin MacLeod (incompetech.com)\n\"Easy Lemon\" Kevin MacLeod (incompetech.com)\n"
         "Licensed under Creative Commons: By Attribution 4.0 License\nhttp://creativecommons.org/licenses/by/4.0/\n\n"
+        "Thumbnail photo: \"Brandenburger Tor\" by Wolfgang Staudt, CC BY 2.0 (flickr.com/photos/53074617@N00/564171359)\n\n"
         "#learngerman #german #germanforbeginners")
 TAGS = ["learn german", "german for beginners", "german greetings", "german phrases", "basic german phrases",
         "how to say hello in german", "german conversation", "deutsch lernen", "german a1", "learn german fast",
