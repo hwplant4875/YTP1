@@ -67,7 +67,7 @@ def brand(im, x=70, y=62):
 
 # 1a: 3D character waving with a "Hallo!" bubble on the left lane, big "50 German phrases" on the right lane
 im = asphalt()
-put(im, e3("woman_raise", 470), 300, 470)
+put(im, e3("wave", 420), 300, 470)          # user 2026-10-12: the waving hand, not a person
 put(im, bubble("Hallo!", 110), 300, 120)
 put(im, word("50", 300, Y, 18), 960, 200)
 put(im, word("German", 130), 960, 395)
@@ -75,25 +75,18 @@ put(im, word("phrases", 130), 960, 520)
 put(im, pill("in 10 minutes", 62, Y), 960, 650)
 im.convert("RGB").save(OUT + "1a.jpg", quality=93)
 
-# 1b: provocative. Left lane "Hallo" circled with a big red X, right lane what Germans really say, red arrow across the line
+# 1b: super minimal (user 2026-10-12): two words either side of the lane line, one struck out
 im = asphalt()
-put(im, word("Hallo", 170), 320, 340)
+put(im, word("Hallo", 190), 320, 360)
+w = word("Hallo", 190)
 d = ImageDraw.Draw(im)
-d.ellipse((50, 205, 590, 475), outline=RED + (255,), width=18)
-put(im, e3("cross", 210), 510, 190)
-put(im, e3("scream", 230), 320, 590)
-put(im, word("Real Germans say", 62), 960, 175)
-put(im, word("Servus!", 145, Y), 985, 335)
-put(im, word("Moin!  Na?", 105, Y), 975, 485)
-put(im, e3("check", 170), 1150, 620)
-d.line((598, 340, 650, 340), fill=RED + (255,), width=28)
-d.polygon([(712, 340), (645, 292), (645, 388)], fill=RED + (255,))
-brand(im, 70, 62)
+d.line((320 - w.width // 2 + 20, 365, 320 + w.width // 2 - 20, 365), fill=RED + (255,), width=22)
+put(im, word("Servus!", 165, Y), 960, 360)
 im.convert("RGB").save(OUT + "1b.jpg", quality=93)
 
-# 1c: real photo (Brandenburg Gate) as a tilted card on the left lane, text on the right lane
+# 1c: real photo (Brandenburg Gate by day; Wolfgang Staudt, CC BY 2.0, credited in the description) as a tilted card on the left lane, text on the right lane
 im = asphalt()
-ph = S.rounded(S.cover("/mnt/project-files/fast_german/cache/photos/brandenburg_1.jpg", 540, 500, (0.5, 0.6)).convert("RGBA"), 26)
+ph = S.rounded(S.cover("/mnt/project-files/fast_german/cache/photos/brandenburg_day.jpg", 540, 500, (0.5, 0.5)).convert("RGBA"), 26)
 card = Image.new("RGBA", (570, 530))
 ImageDraw.Draw(card).rounded_rectangle((0, 0, 569, 529), 34, fill=WH + (255,))
 card.alpha_composite(ph, (15, 15))
