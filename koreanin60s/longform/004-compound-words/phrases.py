@@ -51,5 +51,5 @@ OUTRO = "Which one surprised you the most? Tell me in the comments, and subscrib
 HOOK_HTML = "Korean Words Are<br>Like <span class=\"c-y\">LEGO</span> 🧩"
 OUTRO_HTML = "Which one surprised<br>you the most? 👇"
 HOOK_POSE = "point_idea"
-GUESS = 1.0
+GUESS = 0.0  # user 2026-10-12: no silence between "Together?" and the answer
 MUSIC = ["easy_lemon", "airport_lounge"]

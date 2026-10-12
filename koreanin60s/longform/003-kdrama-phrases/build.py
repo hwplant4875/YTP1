@@ -1,7 +1,7 @@
 """Long-form: K-drama phrases (16:9). Voice: Jennie on ElevenLabs v3, one request per phrase ("English. ... 한국어. ... 한국어, 천천히."),
 a guessing pause is inserted in the silent gap between the English and the Korean (never inside speech); every clip fades out.
 Other sets reuse this engine: SET=<dir with phrases.py> python3 build.py <outdir>. An item with a 5th field (parts) is a
-compound-word puzzle: "Eye, 눈. Water, 물. Together? 눈물! Tears." (the guessing pause goes before the answer).
+compound-word puzzle: "eye... 눈. water... 물. Together? 눈물! Tears." (no pause between "Together?" and the answer).
 Usage: python3 build.py <outdir> [sample]  -> short.html (template), timeline.json, mix.wav; render with engine/prender.js (VW=1920 VH=1080)."""
 import base64, hashlib, json, os, re, subprocess, sys, wave
 import numpy as np
@@ -73,9 +73,21 @@ def build(out, sample=False):
             en_, ko, rom, pose = it[:4]; parts = it[4] if len(it) > 4 else None; n += 1
             if parts:  # compound puzzle
                 (ea, pe, ka), (eb, pe2, kb) = parts; ans = ko + "!"
-                text = f"{pe}, {ka}. {pe2}, {kb}. Together? {ans} {en_}"
-                x, st, en = tts(text); x, f = squeeze(x, 0.24); st = [f(v) for v in st]; en = [f(v) for v in en]
-                _, e1, cur = span(text, "Together?", st, en); k0, k1, cur = span(text, ans, st, en, cur); s0, s1, _ = span(text, en_, st, en, cur)
+                text = f"{pe}... {ka}. {pe2}... {kb}. Together? ... {ans} {en_}"
+                x, st, en = tts(text)
+                _, e1, cur = span(text, "Together?", st, en); k0, k1, cur = span(text, ans, st, en, cur)
+                # no silence between "Together?" and the answer (alignment runs ~0.5 s late, so find the last quiet run by energy), keep 0.12 s of it
+                w = int(0.01 * SR); lo = int(max(0, e1 - 0.8) * SR); seg = x[lo:int((k0 + 0.3) * SR)]; nw = len(seg) // w
+                q = np.sqrt((seg[:nw * w].reshape(nw, w) ** 2).mean(1)) < 10 ** (-35 / 20) * np.abs(x).max(); best = (0, 0); i = 0
+                while i < nw:
+                    j = i
+                    while j < nw and q[j]: j += 1
+                    if j - i >= 20: best = (i, j)  # the LAST quiet run (>= 0.2 s) before the answer
+                    i = j + 1
+                a, b = lo + best[0] * w + int(0.06 * SR), lo + best[1] * w - int(0.06 * SR)
+                if b > a:
+                    x = np.concatenate([x[:a], x[b:]]); d = (b - a) / SR; st = [v - d if v * SR >= b else v for v in st]; en = [v - d if v * SR >= b else v for v in en]
+                k0, k1, cur = span(text, ans, st, en, cur - len(ans)); s0, s1, _ = span(text, en_, st, en, cur)
             else:
                 text = f"{en_} ... {ko} ... {slow(ko)}"
                 x, st, en = tts(text)
@@ -86,7 +98,7 @@ def build(out, sample=False):
             e = {"k": "phrase", "n": n, "t": p0 - 0.35, "en": en_, "ko": ko.rstrip("."), "rom": rom, "pose": pose, "c": col, "ch": title, "emo": emo,
                  "reveal": sh(k0) - 0.12, "slow": sh(s0), "t1": t2 + len(x) / SR - cut / SR + 0.55}
             if parts:
-                e["parts"] = [list(q) for q in parts]; e["t1"] -= 0.25
+                e["parts"] = [list(q) for q in parts]; e["t1"] += 0.5
             ev.append(e)
             t = ev[-1]["t1"] + 0.25
     o0 = t; say(OUTRO, 1.2); ev.append({"k": "outro", "t": o0 - 0.2, "t1": t + 1})
