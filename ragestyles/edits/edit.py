@@ -65,14 +65,24 @@ def build(spec, out, preview=False):
             base = f"aresample=48000,aformat=channel_layouts=stereo,apad,atrim=0:{d:.3f}"
             for a0, b0 in s.get('muteAt', []):  # silence a word (source seconds), e.g. profanity
                 base += f",volume=0:enable='between(t,{a0 - s['in']:.3f},{b0 - s['in']:.3f})'"
-            vo = s.get('vo')  # borrowed voice line laid over this shot: {"src", "in", "out", "at", "gain"}
-            if vo:
-                vsrc = spec.get('audioSrc', {}).get(vo['src'], srcs[vo['src']])
-                ms = int(vo.get('at', 0) * 1000)
-                cmd += ['-ss', f"{vo['in']:.3f}", '-t', f"{vo['out'] - vo['in']:.3f}", '-i', vsrc,
-                        '-filter_complex', f"[0:a]{base}[b];[1:a]aresample=48000,aformat=channel_layouts=stereo,"
-                        f"afade=t=in:d=0.05,afade=t=out:st={vo['out'] - vo['in'] - 0.08:.3f}:d=0.08,volume={vo.get('gain', 0)}dB,adelay={ms}|{ms}[v];"
-                        f"[b][v]amix=inputs=2:normalize=0:duration=first,{fade}[o]", '-map', '[o]']
+            for a0, b0, g0 in s.get('duck', []):  # lower the shot's own audio (shot seconds) with 0.25 s ramps
+                r = 0.25
+                base += (f",volume='{g0}+(1-{g0})*(1-clip(min((t-{a0 - r:.3f})/{r},({b0 + r:.3f}-t)/{r}),0,1))':eval=frame")
+            vos = s.get('vo') or []  # borrowed voice lines laid over this shot: {"src", "in", "out", "at", "gain"}
+            if isinstance(vos, dict):
+                vos = [vos]
+            if vos:
+                parts = [f"[0:a]{base}[b]"]
+                for k, vo in enumerate(vos):
+                    vsrc = spec.get('audioSrc', {}).get(vo['src'], srcs[vo['src']])
+                    ms = int(vo.get('at', 0) * 1000)
+                    cmd += ['-ss', f"{vo['in']:.3f}", '-t', f"{vo['out'] - vo['in']:.3f}", '-i', vsrc]
+                    parts.append(f"[{k + 1}:a]aresample=48000,aformat=channel_layouts=stereo,"
+                                 f"afade=t=in:d=0.05,afade=t=out:st={vo['out'] - vo['in'] - 0.08:.3f}:d=0.08,"
+                                 f"volume={vo.get('gain', 0)}dB,adelay={ms}|{ms}[v{k}]")
+                mix = '[b]' + ''.join(f'[v{k}]' for k in range(len(vos)))
+                parts.append(f"{mix}amix=inputs={len(vos) + 1}:normalize=0:duration=first,{fade}[o]")
+                cmd += ['-filter_complex', ';'.join(parts), '-map', '[o]']
             else:
                 cmd += ['-vn', '-af', f'{base},{fade}']
             run(cmd + ['-t', f'{d:.3f}', '-c:a', 'pcm_s16le', f'{work}/a{i}.wav'])

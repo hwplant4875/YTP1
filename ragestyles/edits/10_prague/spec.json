@@ -1,0 +1,405 @@
+{
+ "bg": "black",
+ "font": "/home/user/rs_work/fonts/TikTokSans-Black.ttf",
+ "box": {
+  "y": 266,
+  "h": 211,
+  "color": "#ffffff",
+  "text": "#000000",
+  "size": 84
+ },
+ "window": {
+  "y": 477,
+  "h": 810
+ },
+ "sfx": {
+  "boom": {
+   "file": "/mnt/project-files/sfx/user/sub_hit_warm.wav",
+   "peak": 0.032,
+   "gain": -4
+  }
+ },
+ "grade": {
+  "clarity": 0.35,
+  "contrast": 0.12,
+  "saturation": 0.08,
+  "sharpen": 0.7,
+  "structure": 0.35,
+  "exposure": 0.2,
+  "brightness": 0.12
+ },
+ "capFont": "/mnt/project-files/fonts/YouTubeSans-Black.otf",
+ "mute": false,
+ "src": {
+  "p": "/home/user/rs_work/src/prague/iI3OZkjcx0o.mp4"
+ },
+ "srcFilter": {
+  "p": "crop=1440:1080:240:0"
+ },
+ "titles": [
+  {
+   "from": 0,
+   "text": "Who won the 2026 Prague Pro? 🏆"
+  }
+ ],
+ "shots": [
+  {
+   "src": "p",
+   "in": 2366.3,
+   "out": 2369.6,
+   "cx": 0.5,
+   "cy": 0.42,
+   "zoom": 1.06,
+   "kb": 0.05,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "5.",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 1.35
+    },
+    {
+     "parts": [
+      [
+       "5. ",
+       "#FFFFFF"
+      ],
+      [
+       "Krystian Wolski",
+       "#FFD60A"
+      ]
+     ],
+     "in": 1.35,
+     "out": 3.3
+    }
+   ],
+   "hits": [
+    {
+     "t": 1.35,
+     "zoom": 1.1,
+     "amount": 0.35,
+     "boom": -4
+    }
+   ],
+   "vo": [
+    {
+     "src": "p",
+     "in": 2357.3,
+     "out": 2358.3,
+     "at": 0
+    },
+    {
+     "src": "p",
+     "in": 2360.6,
+     "out": 2363.0,
+     "at": 1.2
+    }
+   ],
+   "duck": [
+    [
+     0,
+     3.3,
+     0.25
+    ]
+   ]
+  },
+  {
+   "src": "p",
+   "in": 2384.8,
+   "out": 2388.8,
+   "cx": 0.5,
+   "cy": 0.42,
+   "zoom": 1.06,
+   "kb": -0.05,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "4.",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 1.2
+    },
+    {
+     "parts": [
+      [
+       "4. ",
+       "#FFFFFF"
+      ],
+      [
+       "Jan Turek",
+       "#FFD60A"
+      ]
+     ],
+     "in": 1.2,
+     "out": 4.0
+    }
+   ],
+   "hits": [
+    {
+     "t": 1.2,
+     "zoom": 1.1,
+     "amount": 0.35,
+     "boom": -4
+    }
+   ],
+   "vo": [
+    {
+     "src": "p",
+     "in": 2375.5,
+     "out": 2376.5,
+     "at": 0
+    },
+    {
+     "src": "p",
+     "in": 2380.8,
+     "out": 2382.3,
+     "at": 1.1
+    }
+   ],
+   "duck": [
+    [
+     0,
+     2.6,
+     0.25
+    ]
+   ]
+  },
+  {
+   "src": "p",
+   "in": 2408.0,
+   "out": 2412.6,
+   "cx": 0.5,
+   "cy": 0.42,
+   "zoom": 1.06,
+   "kb": 0.05,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "3.",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 2.0
+    },
+    {
+     "parts": [
+      [
+       "3. ",
+       "#FFFFFF"
+      ],
+      [
+       "Josef Kveton",
+       "#FFD60A"
+      ]
+     ],
+     "in": 2.0,
+     "out": 4.6
+    }
+   ],
+   "hits": [
+    {
+     "t": 2.0,
+     "zoom": 1.1,
+     "amount": 0.35,
+     "boom": -4
+    }
+   ],
+   "vo": [
+    {
+     "src": "p",
+     "in": 2394.5,
+     "out": 2396.3,
+     "at": 0
+    },
+    {
+     "src": "p",
+     "in": 2405.1,
+     "out": 2407.0,
+     "at": 1.9
+    }
+   ],
+   "duck": [
+    [
+     0,
+     3.9,
+     0.25
+    ]
+   ]
+  },
+  {
+   "src": "p",
+   "in": 2447.6,
+   "out": 2450.6,
+   "cx": 0.5,
+   "cy": 0.42,
+   "zoom": 1.06,
+   "kb": -0.05,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "2.",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.3
+    },
+    {
+     "parts": [
+      [
+       "2. ",
+       "#FFFFFF"
+      ],
+      [
+       "Pavel Beran",
+       "#FF9F0A"
+      ]
+     ],
+     "in": 0.3,
+     "out": 3.0
+    }
+   ],
+   "hits": [
+    {
+     "t": 0.3,
+     "zoom": 1.1,
+     "amount": 0.35,
+     "boom": -4
+    }
+   ],
+   "vo": [
+    {
+     "src": "p",
+     "in": 2437.2,
+     "out": 2438.2,
+     "at": 0.1
+    }
+   ],
+   "duck": [
+    [
+     0,
+     3.0,
+     0.08
+    ]
+   ]
+  },
+  {
+   "src": "p",
+   "in": 2481.5,
+   "out": 2489.6,
+   "cx": 0.5,
+   "cy": 0.42,
+   "zoom": 1.06,
+   "kb": 0.05,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "1.",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.6
+    },
+    {
+     "parts": [
+      [
+       "1. ",
+       "#FFFFFF"
+      ],
+      [
+       "Michal Krizo",
+       "#FF3B30"
+      ]
+     ],
+     "in": 0.6,
+     "out": 8.1
+    }
+   ],
+   "hits": [
+    {
+     "t": 0.6,
+     "zoom": 1.12,
+     "amount": 0.45,
+     "boom": -4
+    },
+    {
+     "t": 5.0,
+     "zoom": 1.08,
+     "amount": 0.3,
+     "boom": null
+    }
+   ],
+   "vo": [
+    {
+     "src": "p",
+     "in": 2438.2,
+     "out": 2442.8,
+     "at": 0
+    }
+   ],
+   "duck": [
+    [
+     0,
+     4.3,
+     0.2
+    ]
+   ]
+  },
+  {
+   "src": "p",
+   "in": 2490.0,
+   "out": 2495.4,
+   "cx": 0.5,
+   "cy": 0.42,
+   "zoom": 1.0,
+   "kb": 0.04,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "1. ",
+       "#FFFFFF"
+      ],
+      [
+       "Michal Krizo",
+       "#FF3B30"
+      ]
+     ],
+     "in": 0,
+     "out": 5.4
+    }
+   ],
+   "afo": 0.6
+  }
+ ]
+}
