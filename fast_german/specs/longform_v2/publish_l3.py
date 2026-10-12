@@ -29,9 +29,9 @@ for i, tl in enumerate(timeline):
     elif first.startswith("You just learned"):
         chap.append(f"{ts(tl['start'])} Well done!")
 
-TITLES = [("1a", "German Greetings & Basic Phrases for Beginners (50 Phrases in 10 Minutes)", "German flag + 3D waving hand | 50 Useful German Phrases"),
-          ("1b", "50 Useful German Phrases Every Beginner Needs", "minimal: German flag | 50 Useful German Phrases"),
-          ("1c", "50 Useful German Phrases (Learn in 10 Minutes) 🇩🇪", "real photo: Brandenburg Gate by day + flag | 50 Useful German Phrases")]
+TITLES = [("1a", "German Greetings & Basic Phrases for Beginners (50 Phrases in 10 Minutes)", "German flag + 3D waving hand · 50 Useful German Phrases"),
+          ("1b", "50 Useful German Phrases Every Beginner Needs", "minimal: German flag · 50 Useful German Phrases"),
+          ("1c", "50 Useful German Phrases (Learn in 10 Minutes) 🇩🇪", "real photo: Brandenburg Gate by day + flag · 50 Useful German Phrases")]
 DESC = ("Learn the 50 German phrases you'll use every day, in 10 minutes. Hello, how are you, introducing yourself, "
         "please and thank you, what to say when you don't understand, and how to say goodbye.\n\n"
         "Every phrase: English first, then German, then German slowly. When the yellow circle fills, say it out loud.\n\n"
