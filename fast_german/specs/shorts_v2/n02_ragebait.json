@@ -6,7 +6,7 @@
    "lines": [
     [
      {
-      "en": "Germany's youth word of the year is... not German.",
+      "en": "Germany's youth word of the year isn't even German.",
       "show": [
        "p",
        "t"
@@ -18,19 +18,19 @@
     {
      "id": "p",
      "type": "photo",
-     "src": "news/rage_hs.jpg",
+     "src": "news2/rgb_8.jpg",
      "w": 960,
-     "h": 900,
+     "h": 639,
      "x": 540,
-     "y": 720
+     "y": 619
     },
     {
      "id": "t",
      "type": "text",
      "text": "Youth word of the year 2026",
-     "size": 70,
+     "size": 76,
      "x": 540,
-     "y": 1290,
+     "y": 1024,
      "colour": [
       255,
       204,
@@ -43,48 +43,60 @@
    "lines": [
     [
      {
-      "en": "It's",
-      "show": []
-     },
-     {
-      "en": "Ragebait.",
+      "en": "It's Ragebait.",
       "show": [
+       "p",
        "w"
-      ]
-     }
-    ],
-    [
-     {
-      "en": "Posts made just to make you angry.",
-      "show": [
-       "m"
       ]
      }
     ]
    ],
-   "hold": 0.2,
    "els": [
     {
      "id": "p",
      "type": "photo",
-     "src": "news/rage_zdf.jpg",
+     "src": "news2/rg_lion_user.png",
      "w": 960,
-     "h": 677,
+     "h": 760,
      "x": 540,
-     "y": 640
+     "y": 680
     },
     {
      "id": "w",
      "type": "word",
      "de": "Ragebait",
-     "size": 200,
+     "size": 210,
      "x": 540,
-     "y": 1150,
+     "y": 1228,
      "colour": [
-      255,
-      204,
-      0
+      235,
+      64,
+      52
      ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Posts made just to make you angry.",
+      "show": [
+       "p",
+       "m"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news2/rgb_5.jpg",
+     "w": 960,
+     "h": 720,
+     "x": 540,
+     "y": 660
     },
     {
      "id": "m",
@@ -92,7 +104,7 @@
      "text": "= posts made to make you angry",
      "size": 64,
      "x": 540,
-     "y": 1320
+     "y": 1097
     }
    ]
   },
@@ -102,10 +114,39 @@
      {
       "en": "About one million teenagers voted.",
       "show": [
+       "p",
        "v"
       ]
      }
-    ],
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news2/rgp_10.jpg",
+     "w": 960,
+     "h": 540,
+     "x": 540,
+     "y": 570
+    },
+    {
+     "id": "v",
+     "type": "text",
+     "text": "~1,000,000 votes",
+     "size": 100,
+     "x": 540,
+     "y": 940,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
     [
      {
       "en": "First, Ragebait.",
@@ -135,15 +176,14 @@
      }
     ]
    ],
-   "hold": 0.3,
    "els": [
     {
      "id": "v",
      "type": "text",
-     "text": "~1,000,000 votes",
-     "size": 90,
+     "text": "Top 3",
+     "size": 96,
      "x": 540,
-     "y": 420,
+     "y": 430,
      "colour": [
       255,
       204,
@@ -156,9 +196,14 @@
      "icon": "1st-place-medal",
      "de": "Ragebait",
      "en": "36.5 %",
-     "hl": true,
-     "x": 540,
-     "y": 680
+     "colour": [
+      235,
+      64,
+      52
+     ],
+     "w": 820,
+     "x": 500,
+     "y": 700
     },
     {
      "id": "r2",
@@ -166,8 +211,14 @@
      "icon": "2nd-place-medal",
      "de": "Peak",
      "en": "33.8 %",
-     "x": 540,
-     "y": 960
+     "colour": [
+      64,
+      156,
+      255
+     ],
+     "w": 820,
+     "x": 500,
+     "y": 980
     },
     {
      "id": "r3",
@@ -175,20 +226,26 @@
      "icon": "3rd-place-medal",
      "de": "Crashout",
      "en": "29.7 %",
-     "x": 540,
-     "y": 1240
+     "colour": [
+      255,
+      140,
+      26
+     ],
+     "w": 820,
+     "x": 500,
+     "y": 1260
     },
     {
      "id": "x",
      "type": "text",
      "text": "All English!",
-     "size": 84,
+     "size": 90,
      "x": 540,
-     "y": 1440,
+     "y": 1450,
      "colour": [
-      229,
-      72,
-      77
+      235,
+      64,
+      52
      ]
     }
    ]
@@ -197,7 +254,10 @@
    "lines": [
     [
      {
-      "en": "The official German translation?"
+      "en": "So what's the German word?",
+      "show": [
+       "p"
+      ]
      },
      {
       "de": "Wut-Köder.",
@@ -208,23 +268,22 @@
     ],
     [
      {
-      "en": "Rage bait. Literally.",
+      "en": "Literally, rage bait.",
       "show": [
        "m"
       ]
      }
     ]
    ],
-   "hold": 0.4,
    "els": [
     {
      "id": "p",
      "type": "photo",
-     "src": "news/rage_zdf.jpg",
+     "src": "news2/rg_wut_user.png",
      "w": 960,
-     "h": 677,
+     "h": 593,
      "x": 540,
-     "y": 640
+     "y": 596
     },
     {
      "id": "w",
@@ -232,7 +291,7 @@
      "de": "Wut-Köder",
      "size": 190,
      "x": 540,
-     "y": 1150,
+     "y": 1048,
      "colour": [
       255,
       204,
@@ -242,10 +301,10 @@
     {
      "id": "m",
      "type": "text",
-     "text": "= rage bait",
-     "size": 72,
+     "text": "= rage + bait",
+     "size": 70,
      "x": 540,
-     "y": 1320
+     "y": 1236
     }
    ]
   },
@@ -257,7 +316,6 @@
      }
     ]
    ],
-   "hold": 0.8,
    "els": [
     {
      "id": "l",
@@ -277,5 +335,6 @@
   }
  ],
  "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
- "bg": "road"
+ "bg": "road",
+ "tight": 0.5
 }

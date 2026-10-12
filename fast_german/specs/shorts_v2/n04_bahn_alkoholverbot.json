@@ -1,12 +1,12 @@
 {
  "id": "n04_bahn_alkoholverbot",
- "title": "Going to Germany? NEW train station rule from Oct 15 🚆🍺",
+ "title": "From Oct 15: NO alcohol at German train stations 🚫🍺",
  "scenes": [
   {
    "lines": [
     [
      {
-      "en": "Travelling to Germany? There's a new rule at train stations.",
+      "en": "From October 15, you can't drink alcohol at German train stations.",
       "show": [
        "p",
        "t"
@@ -18,23 +18,23 @@
     {
      "id": "p",
      "type": "photo",
-     "src": "news/db_press.jpg",
+     "src": "news2/dbs_2.jpg",
      "w": 960,
-     "h": 426,
+     "h": 540,
      "x": 540,
-     "y": 640
+     "y": 570
     },
     {
      "id": "t",
      "type": "text",
-     "text": "New rule from October 15",
-     "size": 80,
+     "text": "BANNED from Oct 15",
+     "size": 96,
      "x": 540,
-     "y": 1160,
+     "y": 937,
      "colour": [
-      255,
-      204,
-      0
+      235,
+      64,
+      52
      ]
     }
    ]
@@ -43,15 +43,22 @@
    "lines": [
     [
      {
-      "en": "From October 15, no drinking alcohol at all 5,400 stations.",
+      "en": "No beer.",
       "show": [
-       "n"
+       "bx"
+      ]
+     },
+     {
+      "en": "No wine.",
+      "show": [
+       "wx"
       ]
      }
     ],
     [
      {
-      "en": "It's called"
+      "en": "Germans call it",
+      "show": []
      },
      {
       "de": "Alkoholverbot.",
@@ -61,24 +68,32 @@
      }
     ]
    ],
-   "hold": 0.2,
    "els": [
     {
-     "id": "p",
-     "type": "photo",
-     "src": "news/station_train.jpg",
-     "w": 960,
-     "h": 540,
-     "x": 540,
-     "y": 660
+     "id": "bx",
+     "type": "tile",
+     "png": "/mnt/project-files/fast_german/cache/emoji3d/beer.png",
+     "cross": "/mnt/project-files/fast_german/cache/emoji3d/cross.png",
+     "s": 300,
+     "x": 340,
+     "y": 1000
     },
     {
-     "id": "n",
-     "type": "text",
-     "text": "5,400 stations",
-     "size": 96,
+     "id": "wx",
+     "type": "tile",
+     "png": "/mnt/project-files/fast_german/cache/emoji3d/wine.png",
+     "cross": "/mnt/project-files/fast_german/cache/emoji3d/cross.png",
+     "s": 300,
+     "x": 740,
+     "y": 1000
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Alkoholverbot",
+     "size": 150,
      "x": 540,
-     "y": 1100,
+     "y": 1330,
      "colour": [
       255,
       204,
@@ -86,20 +101,12 @@
      ]
     },
     {
-     "id": "w",
-     "type": "word",
-     "de": "Alkoholverbot",
-     "size": 160,
-     "x": 540,
-     "y": 1260
-    },
-    {
      "id": "m",
      "type": "text",
      "text": "= alcohol ban",
      "size": 64,
      "x": 540,
-     "y": 1400
+     "y": 1460
     }
    ]
   },
@@ -107,17 +114,60 @@
    "lines": [
     [
      {
-      "en": "But station restaurants and bars are fine.",
+      "en": "It covers 5,400 stations.",
       "show": [
+       "p",
+       "n"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news2/dba_4.jpg",
+     "w": 960,
+     "h": 640,
+     "x": 540,
+     "y": 620
+    },
+    {
+     "id": "n",
+     "type": "text",
+     "text": "5,400 stations",
+     "size": 100,
+     "x": 540,
+     "y": 1040,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "But station bars and restaurants are fine.",
+      "show": [
+       "p",
        "a"
       ]
      }
     ],
     [
      {
-      "en": "Closed bottles are fine.",
+      "en": "Closed bottles in your bag are fine.",
       "show": [
+       "q",
        "b"
+      ],
+      "hide": [
+       "p",
+       "a"
       ]
      }
     ],
@@ -125,20 +175,33 @@
      {
       "en": "And on the train itself, you can still drink.",
       "show": [
+       "r",
        "c"
+      ],
+      "hide": [
+       "q",
+       "b"
       ]
      }
     ]
    ],
-   "hold": 0.3,
    "els": [
     {
-     "id": "h",
+     "id": "p",
+     "type": "photo",
+     "src": "news2/dbr_9.jpg",
+     "w": 960,
+     "h": 640,
+     "x": 540,
+     "y": 620
+    },
+    {
+     "id": "a",
      "type": "text",
-     "text": "Still allowed:",
+     "text": "OK: station bars",
      "size": 90,
      "x": 540,
-     "y": 450,
+     "y": 1033,
      "colour": [
       52,
       199,
@@ -146,31 +209,48 @@
      ]
     },
     {
-     "id": "a",
-     "type": "row",
-     "icon": "fork-and-knife-with-plate",
-     "de": "Restaurants",
-     "en": "in the station",
+     "id": "q",
+     "type": "photo",
+     "src": "news2/dbb_8.jpg",
+     "w": 960,
+     "h": 540,
      "x": 540,
-     "y": 700
+     "y": 570
     },
     {
      "id": "b",
-     "type": "row",
-     "icon": "bottle-with-popping-cork",
-     "de": "Closed bottles",
-     "en": "in your bag",
+     "type": "text",
+     "text": "OK: closed bottles",
+     "size": 90,
      "x": 540,
-     "y": 980
+     "y": 933,
+     "colour": [
+      52,
+      199,
+      89
+     ]
+    },
+    {
+     "id": "r",
+     "type": "photo",
+     "src": "news2/dbz_10.jpg",
+     "w": 960,
+     "h": 639,
+     "x": 540,
+     "y": 619
     },
     {
      "id": "c",
-     "type": "row",
-     "icon": "high-speed-train",
-     "de": "On the train",
-     "en": "yes, really",
+     "type": "text",
+     "text": "OK: on the train",
+     "size": 90,
      "x": 540,
-     "y": 1260
+     "y": 1032,
+     "colour": [
+      52,
+      199,
+      89
+     ]
     }
    ]
   },
@@ -180,6 +260,7 @@
      {
       "en": "Break the rule, and you'll be asked to leave.",
       "show": [
+       "p",
        "x"
       ]
      }
@@ -188,41 +269,54 @@
      {
       "en": "Do it again, and you can be banned.",
       "show": [
+       "q",
        "y"
+      ],
+      "hide": [
+       "p",
+       "x"
       ]
      }
     ]
    ],
-   "hold": 0.4,
    "els": [
     {
      "id": "p",
      "type": "photo",
-     "src": "news/db_eu.jpg",
+     "src": "news2/dbp_2.jpg",
      "w": 960,
-     "h": 760,
+     "h": 540,
      "x": 540,
-     "y": 660
+     "y": 570
     },
     {
      "id": "x",
      "type": "text",
      "text": "1st time: leave the station",
-     "size": 70,
+     "size": 72,
      "x": 540,
-     "y": 1150
+     "y": 922
+    },
+    {
+     "id": "q",
+     "type": "photo",
+     "src": "news2/dba_6.jpg",
+     "w": 960,
+     "h": 540,
+     "x": 540,
+     "y": 570
     },
     {
      "id": "y",
      "type": "text",
      "text": "Again: banned",
-     "size": 90,
+     "size": 100,
      "x": 540,
-     "y": 1280,
+     "y": 940,
      "colour": [
-      229,
-      72,
-      77
+      235,
+      64,
+      52
      ]
     }
    ]
@@ -235,7 +329,6 @@
      }
     ]
    ],
-   "hold": 0.8,
    "els": [
     {
      "id": "l",
@@ -255,5 +348,6 @@
   }
  ],
  "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
- "bg": "road"
+ "bg": "road",
+ "tight": 0.5
 }

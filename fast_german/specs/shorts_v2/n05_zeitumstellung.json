@@ -18,19 +18,19 @@
     {
      "id": "p",
      "type": "photo",
-     "src": "news/zeit_bz.jpg",
+     "src": "news2/zu_0.jpg",
      "w": 960,
-     "h": 860,
+     "h": 639,
      "x": 540,
-     "y": 700
+     "y": 619
     },
     {
      "id": "t",
      "type": "word",
      "de": "25 hours",
-     "size": 170,
+     "size": 180,
      "x": 540,
-     "y": 1290,
+     "y": 1088,
      "colour": [
       255,
       204,
@@ -45,18 +45,19 @@
      {
       "en": "On Sunday, October 25th, at 3 a.m.,",
       "show": [
+       "d",
        "a"
       ]
      },
      {
       "en": "the clocks go back to 2 a.m.",
       "show": [
+       "ar",
        "b"
       ]
      }
     ]
    ],
-   "hold": 0.3,
    "els": [
     {
      "id": "d",
@@ -106,7 +107,10 @@
    "lines": [
     [
      {
-      "en": "In German, it's the"
+      "en": "In German, it's the",
+      "show": [
+       "p"
+      ]
      },
      {
       "de": "Zeitumstellung.",
@@ -114,29 +118,17 @@
        "w"
       ]
      }
-    ],
-    [
-     {
-      "en": "And winter time is"
-     },
-     {
-      "de": "Winterzeit.",
-      "show": [
-       "v"
-      ]
-     }
     ]
    ],
-   "hold": 0.2,
    "els": [
     {
      "id": "p",
      "type": "photo",
-     "src": "news/zeit_bz.jpg",
+     "src": "news2/zu_1.jpg",
      "w": 960,
      "h": 640,
      "x": 540,
-     "y": 600
+     "y": 620
     },
     {
      "id": "w",
@@ -144,23 +136,15 @@
      "de": "Zeitumstellung",
      "size": 150,
      "x": 540,
-     "y": 1060
+     "y": 1071
     },
     {
      "id": "m",
      "type": "text",
      "text": "= the time change",
-     "size": 64,
+     "size": 66,
      "x": 540,
-     "y": 1190
-    },
-    {
-     "id": "v",
-     "type": "word",
-     "de": "Winterzeit",
-     "size": 150,
-     "x": 540,
-     "y": 1330,
+     "y": 1232,
      "colour": [
       255,
       204,
@@ -173,15 +157,61 @@
    "lines": [
     [
      {
-      "en": "Your phone changes by itself. Your oven clock won't.",
+      "en": "And winter time is",
       "show": [
-       "o"
+       "p"
+      ]
+     },
+     {
+      "de": "Winterzeit.",
+      "show": [
+       "w"
       ]
      }
-    ],
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news2/zu_4.jpg",
+     "w": 960,
+     "h": 540,
+     "x": 540,
+     "y": 570
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Winterzeit",
+     "size": 170,
+     "x": 540,
+     "y": 983,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= winter time",
+     "size": 66,
+     "x": 540,
+     "y": 1156
+    }
+   ]
+  },
+  {
+   "lines": [
     [
      {
-      "en": "So enjoy one extra hour of sleep."
+      "en": "So enjoy one extra hour of sleep.",
+      "show": [
+       "p",
+       "o"
+      ]
      },
      {
       "de": "Gute Nacht!",
@@ -191,15 +221,23 @@
      }
     ]
    ],
-   "hold": 0.4,
    "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news2/zw_6.jpg",
+     "w": 960,
+     "h": 615,
+     "x": 540,
+     "y": 607
+    },
     {
      "id": "o",
      "type": "text",
      "text": "+1 hour of sleep",
      "size": 96,
      "x": 540,
-     "y": 560,
+     "y": 1012,
      "colour": [
       255,
       204,
@@ -207,20 +245,12 @@
      ]
     },
     {
-     "id": "s",
-     "type": "tile",
-     "icon": "sleeping-face",
-     "s": 420,
-     "x": 540,
-     "y": 900
-    },
-    {
      "id": "g",
      "type": "word",
      "de": "Gute Nacht!",
-     "size": 170,
+     "size": 160,
      "x": 540,
-     "y": 1300
+     "y": 1198
     }
    ]
   },
@@ -232,7 +262,6 @@
      }
     ]
    ],
-   "hold": 0.8,
    "els": [
     {
      "id": "l",
@@ -252,5 +281,6 @@
   }
  ],
  "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
- "bg": "road"
+ "bg": "road",
+ "tight": 0.5
 }

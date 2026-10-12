@@ -149,6 +149,16 @@ def lighten(c, k=0.0):
 
 
 def thumb(el, s):
+    if el.get("png"):
+        tile = Image.new("RGBA", (s, s))
+        ic = Image.open(el["png"]).convert("RGBA")
+        ic.thumbnail((int(s * 0.92), int(s * 0.92)), Image.LANCZOS)
+        tile.alpha_composite(ic, ((s - ic.width) // 2, (s - ic.height) // 2))
+        if el.get("cross"):
+            x = Image.open(el["cross"]).convert("RGBA")
+            x.thumbnail((int(s * 0.62), int(s * 0.62)), Image.LANCZOS)
+            tile.alpha_composite(x, (s - x.width, s - x.height))
+        return tile
     if el.get("photo"):
         return rounded(cover(PHOTOS + el["photo"], s, s, tuple(el.get("focus", (0.5, 0.5)))), 34)
     tile = Image.new("RGBA", (s, s))                  # bare emoji, no card (user 2026-10-11)
@@ -169,7 +179,7 @@ def row_im(el, w=W - 2 * MX, s=250):
     lead = (art + " ") if art else ""
     l, t, r, b = f.getbbox(lead + el["de"])
     d = ImageDraw.Draw(im)
-    wc = (lighten(col) if el.get("article") else WORD_FILL) + (255,)
+    wc = (tuple(el["colour"]) if el.get("colour") else lighten(col) if el.get("article") else WORD_FILL) + (255,)
     if lead:
         d.text((tx - l, 18 - t), lead, font=f, fill=wc, stroke_width=STROKE, stroke_fill=SK)
     d.text((tx - l + f.getlength(lead), 18 - t), el["de"], font=f, fill=wc, stroke_width=STROKE, stroke_fill=SK)
@@ -217,7 +227,7 @@ def build_el(el):
         return ("img", row_im(el, el.get("w", W - 2 * MX)))
     if t == "tile":
         s = el["s"]
-        if el.get("icon"):
+        if el.get("icon") or el.get("png"):
             return ("float", shadow(thumb(el, s), 20, 120, 12))
         return ("img", shadow(thumb(el, s) if el.get("photo") or el.get("icon") else label_tile(el, s), 20, 140, 10))
     if t == "logo":
@@ -334,15 +344,36 @@ def german_take(text, speed=1.0):
     return best[0]
 
 
+_BOUNDS = {}
+
+
+def voiced(mp3, floor_db=-42):
+    """(first, last) second with audible voice in a clip: the TTS file's own lead-in and tail silence."""
+    if mp3 not in _BOUNDS:
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-i", mp3, "-ac", "1", "-ar", "16000", "-f", "s16le", "-"],
+                             capture_output=True, check=True).stdout
+        a = np.abs(np.frombuffer(raw, np.int16).astype(np.float32)) / 32768
+        n = len(a) // 160
+        rms = 20 * np.log10(np.sqrt((a[: n * 160].reshape(n, 160) ** 2).mean(1)) + 1e-9)
+        on = np.where(rms > floor_db)[0]
+        _BOUNDS[mp3] = (0.0, len(a) / 16000) if not len(on) else (max(0, on[0] - 1) * 0.01, min(n, on[-1] + 3) * 0.01)
+    return _BOUNDS[mp3]
+
+
 def plan(spec):
-    """Timeline of a spec: voice clips with start times, scene windows, pop SFX times, total length, subtitle segments."""
-    t = 0.4
+    """Timeline of a spec: voice clips with start times, scene windows, pop SFX times, total length, subtitle segments.
+    spec "tight": seconds of silence between sentences, measured on the voice itself (news shorts, user 2026-10-12:
+    never more than ~0.5 s; words inside one line join with only a breath), first graphic pops at 0 s."""
+    tight = spec.get("tight")
+    t = 0.0 if tight else 0.4
     clips, timeline, pops, subs = [], [], [], []
     for sc in spec["scenes"]:
         start = t
-        shows = {}
+        shows, hides = {}, {}
         for line in sc["lines"]:
             for seg in line:
+                for e in seg.get("hide", []):
+                    hides[e] = t - start
                 for e in seg.get("show", []):
                     shows[e] = t - start
                     if not seg.get("quiet"):
@@ -351,15 +382,24 @@ def plan(spec):
                     t += seg["pause"]
                     continue
                 mp3 = german_take(seg["de"], seg.get("speed", 1.0)) if "de" in seg else C.tts(seg["en"])[0]
+                if tight:
+                    a, b = voiced(mp3)
+                    t = max(t, a + 0.02) if not clips else t
+                    clips.append((mp3, t - a))
+                    subs.append((round(t, 3), round(t + b - a, 3), seg.get("de") or seg["en"], "de" in seg))
+                    t += b - a + seg.get("join", 0.07)
+                    continue
                 clips.append((mp3, t))
                 subs.append((round(t, 3), round(t + C.duration(mp3), 3), seg.get("de") or seg["en"], "de" in seg))
                 t += C.duration(mp3) + SEG_GAP
-            t += LINE_GAP - SEG_GAP
-        t += sc.get("hold", 0)
+            t += (tight - 0.07) if tight else LINE_GAP - SEG_GAP
+        if not tight:
+            t += sc.get("hold", 0)
         header = sc.get("header", timeline[-1]["header"] if timeline else None)
-        timeline.append({"scene": sc, "start": start, "end": t, "shows": shows, "header": header})
-        t += sc.get("gap", SCENE_GAP)
-    total = t + 0.4
+        timeline.append({"scene": sc, "start": start, "end": t, "shows": shows, "hides": hides, "header": header})
+        if not tight:
+            t += sc.get("gap", SCENE_GAP)
+    total = t + (0.6 if tight else 0.4)
     return clips, timeline, pops, total, subs
 
 
@@ -458,11 +498,13 @@ def render(spec_path, out_path):
         else:
             frame = bg.copy()
         local = now - tl["start"]
-        L = tl["end"] - tl["start"] + SCENE_GAP
+        L = tl["end"] - tl["start"] + (0 if spec.get("tight") else SCENE_GAP)
         for e in tl["scene"]["els"]:
+            if local >= tl["hides"].get(e["id"], 1e9):
+                continue
             draw_el(frame, built[si][e["id"]], e, local, tl["shows"].get(e["id"], e.get("at", 0.0) - 0.1), L)
         rgb = frame.convert("RGB")
-        if now < 0.5:                                    # fade up from dark
+        if now < 0.5 and not spec.get("tight"):          # fade up from dark (news shorts: graphic pops at 0 s)
             rgb = Image.blend(Image.new("RGB", (W, H)), rgb, now / 0.5)
         if now > total - 0.6:
             rgb = Image.blend(rgb, Image.new("RGB", (W, H)), min(1, (now - total + 0.6) / 0.6))

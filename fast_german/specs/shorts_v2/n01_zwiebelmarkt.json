@@ -1,12 +1,12 @@
 {
  "id": "n01_zwiebelmarkt",
- "title": "Germany just threw a festival… for ONIONS 🧅",
+ "title": "This German town crowns a queen… for ONIONS 🧅👑",
  "scenes": [
   {
    "lines": [
     [
      {
-      "en": "Germany just held a festival... for onions.",
+      "en": "This German town crowns a queen... for onions.",
       "show": [
        "p",
        "t"
@@ -18,19 +18,19 @@
     {
      "id": "p",
      "type": "photo",
-     "src": "news/onion_photo.jpg",
+     "src": "news2/on_queen_user.png",
      "w": 960,
-     "h": 536,
+     "h": 720,
      "x": 540,
-     "y": 700
+     "y": 660
     },
     {
      "id": "t",
      "type": "text",
-     "text": "A festival for onions?!",
-     "size": 84,
+     "text": "The ONION QUEEN",
+     "size": 96,
      "x": 540,
-     "y": 1260,
+     "y": 1117,
      "colour": [
       255,
       204,
@@ -43,7 +43,60 @@
    "lines": [
     [
      {
-      "en": "It's the"
+      "en": "In German, she's the",
+      "show": [
+       "p"
+      ]
+     },
+     {
+      "de": "Zwiebelkönigin.",
+      "show": [
+       "w"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news2/onq_3.jpg",
+     "w": 960,
+     "h": 540,
+     "x": 540,
+     "y": 570
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Zwiebelkönigin",
+     "size": 150,
+     "x": 540,
+     "y": 971,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= onion queen",
+     "size": 66,
+     "x": 540,
+     "y": 1132
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "She rules over the",
+      "show": [
+       "p"
+      ]
      },
      {
       "de": "Zwiebelmarkt,",
@@ -59,32 +112,31 @@
      }
     ]
    ],
-   "hold": 0.2,
    "els": [
     {
      "id": "p",
      "type": "photo",
-     "src": "news/onion_fid.jpg",
+     "src": "news2/onc_6.jpg",
      "w": 960,
-     "h": 533,
+     "h": 540,
      "x": 540,
-     "y": 620
+     "y": 570
     },
     {
      "id": "w",
      "type": "word",
      "de": "Zwiebelmarkt",
-     "size": 170,
+     "size": 160,
      "x": 540,
-     "y": 1210
+     "y": 977
     },
     {
      "id": "m",
      "type": "text",
      "text": "= onion market · Weimar",
-     "size": 70,
+     "size": 66,
      "x": 540,
-     "y": 1360,
+     "y": 1144,
      "colour": [
       255,
       204,
@@ -97,37 +149,42 @@
    "lines": [
     [
      {
-      "en": "For three days, about 250,000 people came",
+      "en": "This weekend, about 250,000 people came",
       "show": [
+       "p",
        "n"
       ]
      },
      {
-      "en": "to buy onion braids.",
+      "en": "to buy onion braids like these.",
       "show": [
+       "q",
        "b"
+      ],
+      "hide": [
+       "p",
+       "n"
       ]
      }
     ]
    ],
-   "hold": 0.2,
    "els": [
     {
      "id": "p",
      "type": "photo",
-     "src": "news/onion_head.jpg",
+     "src": "news2/onc_11.jpg",
      "w": 960,
-     "h": 820,
+     "h": 540,
      "x": 540,
-     "y": 680
+     "y": 570
     },
     {
      "id": "n",
      "type": "text",
      "text": "250,000 visitors",
-     "size": 96,
+     "size": 100,
      "x": 540,
-     "y": 1200,
+     "y": 940,
      "colour": [
       255,
       204,
@@ -135,12 +192,58 @@
      ]
     },
     {
+     "id": "q",
+     "type": "photo",
+     "src": "news2/onb_0.jpg",
+     "w": 960,
+     "h": 540,
+     "x": 540,
+     "y": 570
+    },
+    {
      "id": "b",
      "type": "text",
-     "text": "3 days of onion braids",
-     "size": 70,
+     "text": "Onion braids",
+     "size": 100,
      "x": 540,
-     "y": 1330
+     "y": 940,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "And cute little onion dolls.",
+      "show": [
+       "p",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news2/on_dolls_user.png",
+     "w": 960,
+     "h": 605,
+     "x": 540,
+     "y": 602
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Onion dolls",
+     "size": 96,
+     "x": 540,
+     "y": 1002
     }
    ]
   },
@@ -150,50 +253,34 @@
      {
       "en": "And it's old. The first one was in 1653.",
       "show": [
+       "p",
        "y"
-      ]
-     }
-    ],
-    [
-     {
-      "en": "This year was number 373.",
-      "show": [
-       "k"
       ]
      }
     ]
    ],
-   "hold": 0.3,
    "els": [
     {
      "id": "p",
      "type": "photo",
-     "src": "news/onion_photo.jpg",
+     "src": "news2/on_stall_user.png",
      "w": 960,
-     "h": 536,
+     "h": 614,
      "x": 540,
-     "y": 640
+     "y": 607
     },
     {
      "id": "y",
      "type": "word",
      "de": "since 1653",
-     "size": 160,
+     "size": 170,
      "x": 540,
-     "y": 1180,
+     "y": 1057,
      "colour": [
       255,
       204,
       0
      ]
-    },
-    {
-     "id": "k",
-     "type": "text",
-     "text": "373rd onion market",
-     "size": 72,
-     "x": 540,
-     "y": 1340
     }
    ]
   },
@@ -201,49 +288,52 @@
    "lines": [
     [
      {
-      "en": "Oh, and they crown an onion queen.",
+      "en": "This was number 373.",
       "show": [
-       "q"
+       "p",
+       "k"
       ]
      }
     ],
     [
      {
-      "en": "Would you go?"
+      "en": "Would you go?",
+      "show": [
+       "q"
+      ]
      }
     ]
    ],
-   "hold": 0.4,
    "els": [
     {
      "id": "p",
      "type": "photo",
-     "src": "news/onion_fid.jpg",
+     "src": "news2/onq_12.jpg",
      "w": 960,
-     "h": 533,
+     "h": 640,
      "x": 540,
      "y": 620
     },
     {
-     "id": "q",
-     "type": "word",
-     "de": "Zwiebelkönigin",
-     "size": 150,
+     "id": "k",
+     "type": "text",
+     "text": "The 373rd onion market",
+     "size": 80,
      "x": 540,
-     "y": 1210,
+     "y": 1027
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "Would you go?",
+     "size": 96,
+     "x": 540,
+     "y": 1163,
      "colour": [
       255,
       204,
       0
      ]
-    },
-    {
-     "id": "m",
-     "type": "text",
-     "text": "= onion queen",
-     "size": 70,
-     "x": 540,
-     "y": 1360
     }
    ]
   },
@@ -255,7 +345,6 @@
      }
     ]
    ],
-   "hold": 0.8,
    "els": [
     {
      "id": "l",
@@ -275,5 +364,6 @@
   }
  ],
  "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
- "bg": "road"
+ "bg": "road",
+ "tight": 0.5
 }

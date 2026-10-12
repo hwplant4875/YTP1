@@ -8,34 +8,52 @@
      {
       "en": "Oktoberfest 2026 just broke its all-time record.",
       "show": [
+       "h",
        "p",
-       "t"
+       "t",
+       "f"
       ]
      }
     ]
    ],
    "els": [
     {
-     "id": "p",
-     "type": "photo",
-     "src": "news/okt_eu.jpg",
-     "w": 960,
-     "h": 790,
-     "x": 540,
-     "y": 700
-    },
-    {
-     "id": "t",
+     "id": "h",
      "type": "text",
-     "text": "New all-time record",
-     "size": 84,
+     "text": "OKTOBERFEST 2026",
+     "size": 104,
      "x": 540,
-     "y": 1260,
+     "y": 330,
      "colour": [
       255,
       204,
       0
      ]
+    },
+    {
+     "id": "p",
+     "type": "photo",
+     "src": "news2/okr_7.jpg",
+     "w": 960,
+     "h": 635,
+     "x": 540,
+     "y": 727
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "New all-time record",
+     "size": 80,
+     "x": 480,
+     "y": 1132
+    },
+    {
+     "id": "f",
+     "type": "tile",
+     "png": "/mnt/project-files/fast_german/cache/emoji3d/party_popper.png",
+     "s": 130,
+     "x": 940,
+     "y": 1132
     }
    ]
   },
@@ -45,6 +63,7 @@
      {
       "en": "7.4 million visitors.",
       "show": [
+       "p",
        "n"
       ]
      }
@@ -58,16 +77,15 @@
      }
     ]
    ],
-   "hold": 0.2,
    "els": [
     {
      "id": "p",
      "type": "photo",
-     "src": "news/okt_crowd.jpg",
+     "src": "news2/okp_11.jpg",
      "w": 960,
-     "h": 638,
+     "h": 640,
      "x": 540,
-     "y": 680
+     "y": 620
     },
     {
      "id": "n",
@@ -75,7 +93,7 @@
      "de": "7,400,000",
      "size": 190,
      "x": 540,
-     "y": 1200,
+     "y": 1095,
      "colour": [
       255,
       204,
@@ -88,7 +106,7 @@
      "text": "old record: 7.2 million",
      "size": 70,
      "x": 540,
-     "y": 1370
+     "y": 1283
     }
    ]
   },
@@ -96,13 +114,17 @@
    "lines": [
     [
      {
-      "en": "They drank 6.7 million"
+      "en": "They drank 6.7 million",
+      "show": [
+       "p"
+      ]
      },
      {
       "de": "Maß.",
       "show": [
        "w"
-      ]
+      ],
+      "join": 0.05
      }
     ],
     [
@@ -114,16 +136,15 @@
      }
     ]
    ],
-   "hold": 0.2,
    "els": [
     {
      "id": "p",
      "type": "photo",
-     "src": "news/okt_waiter.jpg",
+     "src": "news2/okm_3.jpg",
      "w": 960,
-     "h": 640,
+     "h": 639,
      "x": 540,
-     "y": 680
+     "y": 619
     },
     {
      "id": "w",
@@ -131,7 +152,7 @@
      "de": "die Maß",
      "size": 180,
      "x": 540,
-     "y": 1200,
+     "y": 1088,
      "colour": [
       255,
       204,
@@ -141,10 +162,10 @@
     {
      "id": "m",
      "type": "text",
-     "text": "= 1 litre of beer",
+     "text": "= 1-litre beer mug",
      "size": 72,
      "x": 540,
-     "y": 1360
+     "y": 1271
     }
    ]
   },
@@ -152,13 +173,17 @@
    "lines": [
     [
      {
-      "en": "And one"
+      "en": "And one",
+      "show": [
+       "p"
+      ]
      },
      {
       "de": "Maß",
       "show": [
        "n"
-      ]
+      ],
+      "join": 0.05
      },
      {
       "en": "now costs up to 15.90 euros.",
@@ -168,24 +193,23 @@
      }
     ]
    ],
-   "hold": 0.3,
    "els": [
     {
      "id": "p",
      "type": "photo",
-     "src": "news/okt_stz.jpg",
+     "src": "news2/okp_8.jpg",
      "w": 960,
-     "h": 777,
+     "h": 540,
      "x": 540,
-     "y": 680
+     "y": 570
     },
     {
      "id": "n",
      "type": "text",
      "text": "1 Maß =",
-     "size": 80,
+     "size": 84,
      "x": 540,
-     "y": 1200
+     "y": 930
     },
     {
      "id": "e",
@@ -193,7 +217,7 @@
      "de": "€15.90",
      "size": 190,
      "x": 540,
-     "y": 1340,
+     "y": 1127,
      "colour": [
       255,
       204,
@@ -206,35 +230,44 @@
    "lines": [
     [
      {
-      "en": "Biggest surprise? Alcohol-free beer sales went up almost eleven percent.",
+      "en": "Also, alcohol-free beer sales went up almost eleven percent.",
       "show": [
-       "a"
+       "p",
+       "a",
+       "n"
       ]
      }
     ]
    ],
-   "hold": 0.4,
    "els": [
     {
      "id": "p",
      "type": "photo",
-     "src": "news/okt_waiter.jpg",
+     "src": "news2/okz_3.jpg",
      "w": 960,
-     "h": 640,
+     "h": 700,
      "x": 540,
-     "y": 680
+     "y": 650
     },
     {
      "id": "a",
      "type": "text",
-     "text": "Alcohol-free beer: +10.7 %",
-     "size": 80,
+     "text": "Alcohol-free beer",
+     "size": 84,
      "x": 540,
-     "y": 1260,
+     "y": 1090
+    },
+    {
+     "id": "n",
+     "type": "word",
+     "de": "+10.7 %",
+     "size": 190,
+     "x": 540,
+     "y": 1287,
      "colour": [
-      255,
-      204,
-      0
+      52,
+      199,
+      89
      ]
     }
    ]
@@ -247,7 +280,6 @@
      }
     ]
    ],
-   "hold": 0.8,
    "els": [
     {
      "id": "l",
@@ -267,5 +299,6 @@
   }
  ],
  "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
- "bg": "road"
+ "bg": "road",
+ "tight": 0.5
 }
