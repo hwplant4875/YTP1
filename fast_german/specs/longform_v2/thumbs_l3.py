@@ -78,27 +78,32 @@ def flag(w):
 TITLE = [("50", 230, Y), ("Useful", 130, WH), ("German", 130, WH), ("Phrases", 130, WH)]
 
 
-def title(im, cx, top, max_w=580):
-    y = top
+def title(im, cx, top=None, max_w=580, gap=-78):
+    """Stacked title, tight leading (user 2026-10-12), centred vertically unless top is given."""
+    ws = []
     for t, sz, col in TITLE:
         w = word(t, sz, col)
         while w.width > max_w:
             sz -= 6; w = word(t, sz, col)
+        ws.append(w)
+    total = sum(w.height for w in ws) + gap * (len(ws) - 1)
+    y = (H - total) // 2 if top is None else top
+    for w in ws:
         put(im, w, cx, y, "mt")
-        y += w.height - 48
+        y += w.height + gap
 
 
 # 1a: waving hand + flag on the left lane, "50 Useful German Phrases" on the right
 im = asphalt()
 put(im, flag(420), 320, 250)
 put(im, e3("wave", 300), 330, 540)
-title(im, 960, 10)
+title(im, 960)
 im.convert("RGB").save(OUT + "1a.jpg", quality=93)
 
 # 1b: super minimal: flag left, title right, nothing else
 im = asphalt()
 put(im, flag(480), 320, 360)
-title(im, 960, 10)
+title(im, 960)
 im.convert("RGB").save(OUT + "1b.jpg", quality=93)
 
 # 1c: real photo (Brandenburg Gate by day; Wolfgang Staudt, CC BY 2.0, credited in the description)
@@ -109,5 +114,5 @@ ImageDraw.Draw(card).rounded_rectangle((0, 0, 569, 529), 34, fill=WH + (255,))
 card.alpha_composite(ph, (15, 15))
 put(im, S.shadow(card.rotate(4, expand=True, resample=Image.BICUBIC), 26, 200, 16), 320, 380)
 put(im, flag(200), 520, 600)
-title(im, 960, 10)
+title(im, 960)
 im.convert("RGB").save(OUT + "1c.jpg", quality=93)
