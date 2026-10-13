@@ -1,0 +1,397 @@
+{
+ "voice": {
+  "engine": "elevenlabs",
+  "voice_id": "DrBEKFgWMDWUG6bjTSTk",
+  "model": "eleven_v4",
+  "stability": 0.5,
+  "speed": 1.0
+ },
+ "gap": 0.3,
+ "pause": 0.48,
+ "max_pause": 0.5,
+ "tail": {
+  "keep": 0.25,
+  "fade": 0.15
+ },
+ "subtitles": false,
+ "declick": true,
+ "sfx_gain_db": -4,
+ "loud_always": true,
+ "loud_limit": 0.87,
+ "loud_target": -13.0,
+ "style_fields": {
+  "LABEL": {
+   "Fontsize": 84,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 7,
+   "Shadow": 0,
+   "Spacing": 6
+  },
+  "TITLE": {
+   "Fontsize": 200,
+   "PrimaryColour": "&H00D0DCE4",
+   "Outline": 0,
+   "Shadow": 0,
+   "Spacing": 12
+  }
+ },
+ "fonts": {
+  "LABEL": "YouTube Sans",
+  "TITLE": "Playfair Display",
+  "FX": "YouTube Sans"
+ },
+ "music": [
+  {
+   "file": "../music/m4_lightless.mp3",
+   "vol": 0.26,
+   "seek": 5,
+   "name": "Lightless Dawn",
+   "from": "intro",
+   "to": "end",
+   "fade_in": 0.25,
+   "fade_out": 2.2
+  }
+ ],
+ "beats": [
+  {
+   "say": "At France's school protests, police weapons have left teenagers badly hurt.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../assets/news/ap_police_line.mp4",
+       "cap": "TEENS *HURT*\nBY POLICE\nWEAPONS",
+       "col": "red"
+      },
+      {
+       "at": "police weapons",
+       "video": "../cache/3d_france_weapons_lineup:5.1_d0d5dc9a4b8cbd9d.mp4",
+       "grade": false,
+       "start": 1.5
+      },
+      {
+       "at": "teenagers",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_043.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "id": "intro"
+  },
+  {
+   "say": "September twenty-eighth. Saint-Ouen-l'Aumône, northwest of Paris. A fourteen-year-old's jaw is broken by a tear-gas round, fired at close range.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../cache/3d_france_map_cases:3.6_15d33926bd4dca67.mp4",
+       "grade": false,
+       "cap": "28 SEPT\n*SAINT-OUEN-\nL'AUMÔNE*",
+       "start": 0.4,
+       "col": "red"
+      },
+      {
+       "at": "northwest",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_098.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ]
+      },
+      {
+       "at": "A fourteen",
+       "video": "../cache/3d_france_weapons_gas:2.4_c78610b9380e9534.mp4",
+       "grade": false,
+       "cap": "*AGE 14*\nJAW BROKEN",
+       "col": "red"
+      },
+      {
+       "at": "tear-gas round",
+       "video": "../cache/3d_france_weapons_close_range:8.3_0946b504985300b0.mp4",
+       "grade": false,
+       "cap": "TEAR-GAS ROUND\nAT *CLOSE*\n*RANGE*",
+       "start": 2.0,
+       "col": "red"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "On October second, Interior Minister Laurent Nuñez said there was no instruction to hold back. Officers could use all the intermediate weapons available. Then came three cases that changed the conversation.",
+    "next_text": "Prosecutors say he had struck a policewoman first. On October sixth, the officer who fired was charged."
+   }
+  },
+  {
+   "say": "Prosecutors say he had struck a policewoman first. On October sixth, the officer who fired was charged.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/Suspension_blocus_Jules_Ferry_Paris_avec_intervention_forces_de_l_ordre.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "PROSECUTOR:\nHE HIT AN\nOFFICER *FIRST*",
+       "col": "blue"
+      },
+      {
+       "at": "On October sixth",
+       "photo": "../sources/photos/raw/Journée_de_mobilisation_des_lycéens_à_Perpignan_22.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "6 OCT:\nOFFICER\n*CHARGED*",
+       "col": "blue"
+      },
+      {
+       "at": "who fired",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_103.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "Then came three cases that changed the conversation. September twenty-eighth. Saint-Ouen-l'Aumône, northwest of Paris. A fourteen-year-old's jaw is broken by a tear-gas round, fired at close range.",
+    "next_text": "September thirtieth. Tours. A sixteen-year-old loses the use of an eye. The prosecutor says it's consistent with an LBD round."
+   }
+  },
+  {
+   "say": "September thirtieth. Tours. A sixteen-year-old loses the use of an eye. The prosecutor says it's consistent with an LBD round.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../cache/3d_france_map_cases_fly:15.9_5f8d9298f92d1287.mp4",
+       "grade": false,
+       "cap": "30 SEPT\n*TOURS*",
+       "start": 0.5,
+       "col": "red"
+      },
+      {
+       "at": "A sixteen",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_048.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "*AGE 16*\nLOST THE USE\nOF AN EYE",
+       "col": "red"
+      },
+      {
+       "at": "The prosecutor",
+       "video": "../cache/3d_france_weapons_lbd:3.6_d6dfed5bbce46de0.mp4",
+       "grade": false,
+       "cap": "PROSECUTOR:\nAN *LBD* ROUND",
+       "col": "red"
+      },
+      {
+       "at": "LBD round",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_101.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.12,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "September twenty-eighth. Saint-Ouen-l'Aumône, northwest of Paris. A fourteen-year-old's jaw is broken by a tear-gas round, fired at close range. Prosecutors say he had struck a policewoman first. On October sixth, the officer who fired was charged.",
+    "next_text": "October fifth. Lens, in the far north. A fifteen-year-old loses his hand to a police grenade."
+   }
+  },
+  {
+   "say": "October fifth. Lens, in the far north. A fifteen-year-old loses his hand to a police grenade.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_050.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "5 OCT\n*LENS*",
+       "col": "red"
+      },
+      {
+       "at": "A fifteen",
+       "video": "../cache/3d_france_weapons_grenade:4.8_2143fd1d6c348ab1.mp4",
+       "grade": false,
+       "cap": "*AGE 15*\nLOST HIS HAND",
+       "col": "red"
+      },
+      {
+       "at": "police grenade",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_107.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.45,
+        1.12,
+        0.5,
+        0.4
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "Prosecutors say he had struck a policewoman first. On October sixth, the officer who fired was charged. September thirtieth. Tours. A sixteen-year-old loses the use of an eye. The prosecutor says it's consistent with an LBD round.",
+    "next_text": "A police source says he had picked it up to throw it back. The prosecutor says the shot followed procedure. His mother has filed a complaint."
+   }
+  },
+  {
+   "say": "Two days later, Nuñez suspended stun grenades at lycée protests, \"until the facts are clarified\".",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../cache/3d_france_weapons_suspended:6.3_f1f83fa7c85e135f.mp4",
+       "grade": false,
+       "cap": "7 OCT\nSTUN GRENADES\n*SUSPENDED*",
+       "col": "blue"
+      },
+      {
+       "at": "at lycée protests",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_105.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "October fifth. Lens, in the far north. A fifteen-year-old loses his hand to a police grenade. A police source says he had picked it up to throw it back. The prosecutor says the shot followed procedure. His mother has filed a complaint.",
+    "next_text": "The police watchdog, the IGPN, now has twenty-four investigations open."
+   }
+  },
+  {
+   "say": "Full story on the channel.",
+   "id": "end_card",
+   "hold": 1.3,
+   "trans": "dip",
+   "ctx": {},
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "items": [
+      {
+       "at": 0,
+       "full": "../../01_ghost_stations/cache/3d_s1_endcard_amber_dee852c1dc23c600.mp4"
+      }
+     ]
+    }
+   },
+   "text": [
+    {
+     "kind": "label",
+     "content": "FULL STORY ON",
+     "pos": [
+      0.48,
+      0.575
+     ],
+     "delay": 0.15,
+     "extend": 1.0
+    },
+    {
+     "kind": "title",
+     "content": "STRATA",
+     "pos": [
+      0.48,
+      0.655
+     ],
+     "delay": 0.35,
+     "extend": 1.0
+    }
+   ],
+   "sfx": {
+    "prompt": "deep low cinematic boom hit, soft, short dark tail",
+    "len": 2.5,
+    "vol": 0.16,
+    "at": 0.05,
+    "filter": "afade=t=out:st=1.50:d=1.00"
+   }
+  }
+ ]
+}

@@ -123,6 +123,54 @@ def tts(text, voice, ctx=None):
     return cached(f"tight_{key(body, af)}.wav", lambda p: sh("ffmpeg", "-y", "-i", raw, "-af", af, "-f", "wav", p))
 
 
+def _wav_db(path):
+    import wave
+    import numpy as np
+    with wave.open(path) as w:
+        sr, raw = w.getframerate(), w.readframes(w.getnframes())
+    x = np.frombuffer(raw, np.int16).astype(np.float32)
+    fr = sr // 100
+    n = len(x) // fr
+    db = np.array([20 * np.log10(np.sqrt(np.mean((x[i * fr:(i + 1) * fr] / 32768) ** 2)) + 1e-9) for i in range(n)])
+    return sr, x, fr, db
+
+
+def cap_pauses(src, maxp, thr=-40.0):
+    """Shorten silent stretches inside a line (below thr dB) to maxp seconds by cutting out their middle (no speed or
+    pitch change): Shorts want ~0.5 s between sentences, never more than 0.6 s."""
+    def make(dst):
+        import wave
+        import numpy as np
+        sr, x, fr, db = _wav_db(src)
+        q = db < thr
+        keep = np.ones(len(x), bool)
+        k, n = 0, len(q)
+        while k < n:
+            if q[k]:
+                j = k
+                while j < n and q[j]:
+                    j += 1
+                if k > 0 and j < n and (j - k) / 100 > maxp:   # inner pause only
+                    cut = int(((j - k) / 100 - maxp) * sr)
+                    a = k * fr + int(maxp * sr / 2)
+                    keep[a:a + cut] = False
+                k = j
+            else:
+                k += 1
+        y = x[keep]
+        with wave.open(dst, "wb") as w:
+            w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr)
+            w.writeframes(np.clip(y, -32768, 32767).astype(np.int16).tobytes())
+    return cached(f"mp_{key(src, maxp, thr)}.wav", make)
+
+
+def voice_edges(path, thr=-40.0):
+    """(start, end) of audible speech in a take, seconds"""
+    sr, x, fr, db = _wav_db(path)
+    loud = [i for i, v in enumerate(db) if v >= thr]
+    return (loud[0] / 100, (loud[-1] + 1) / 100) if loud else (0.0, len(x) / sr)
+
+
 def declick_tail(src, dst, fade_out=None):
     """eleven_v4 sometimes ends a line with a 10-60 ms burst after half a second of silence; it is heard as a glitch.
     Mute it (same length, so the timeline does not move) and soften both ends of the line."""
@@ -503,9 +551,21 @@ def main():
             says = all_says
             j = says.index(b["say"])
             ctx = {"previous_text": " ".join(says[max(0, j - 2):j]), "next_text": says[j + 1] if j + 1 < len(says) else ""}
+            if b.get("ctx") is not None:   # e.g. a short reusing a long-form line: the long-form context hits its cached take
+                ctx = b["ctx"] or None
             wav = tts(b["say"], {**voice, **({"emotion": b["emotion"]} if b.get("emotion") else {})},
                       ctx if voice.get("engine") == "elevenlabs" and spec.get("context", True) else None)
+            if spec.get("max_pause"):
+                wav = cap_pauses(wav, spec["max_pause"])
             d = dur(wav)
+            if spec.get("pause") is not None:   # fixed audible pause between lines, measured on the takes themselves
+                v0, v1 = voice_edges(wav)
+                on = t + lead if not lines else max(t + lead - v0, lines[-1][0] + 0.01)
+                lines.append((on, wav, d, b["say"]))
+                b["_say_at"], b["_say_d"] = on, d
+                b["_start"], b["_end"] = t, on + v1 + b.get("hold", 0.0) + spec["pause"]
+                t = b["_end"]
+                continue
             lines.append((t + lead, wav, d, b["say"]))
         else:
             d = 0.0
@@ -515,7 +575,7 @@ def main():
     total = t + 1.0
     anchors["end"] = total
     print(f"narration {total / 60:.1f} min, {len(lines)} lines")
-    json.dump({"total": total, "anchors": anchors,
+    json.dump({"total": total, "anchors": anchors, "lines": [[round(a, 3), w, round(d, 3)] for a, w, d, _ in lines],
                "beats": [{"start": round(b["_start"], 2), "end": round(b["_end"], 2), "say": b.get("say", ""), "id": b.get("id")}
                          for b in spec["beats"]]},
               open(os.path.join(work, "timeline.json"), "w"), ensure_ascii=False, indent=1)
@@ -545,7 +605,7 @@ def main():
     mus = list(ducked)
     for k, m in enumerate(spec.get("music", [])):
         a, z = anchors[m["from"]] + m.get("offset", 0), anchors[m["to"]]
-        inputs += ["-stream_loop", "-1", "-i", os.path.join(base, m["file"])]
+        inputs += ["-stream_loop", "-1", *(["-ss", str(m["seek"])] if m.get("seek") else []), "-i", os.path.join(base, m["file"])]
         idx = len([x for x in inputs if x == "-i"]) - 1
         L = z - a
         vol = str(m.get('vol', 0.16))
@@ -583,9 +643,9 @@ def main():
     # second pass: single-pass loudnorm lands low on speech-heavy mixes, pin it to -14 LUFS
     meas = subprocess.run(["ffmpeg", "-i", audio, "-af", "ebur128", "-f", "null", "-"], capture_output=True, text=True).stderr
     lufs = float(re.findall(r"I:\s+(-?[\d.]+) LUFS", meas)[-1])
-    if abs(lufs + 14) > 0.4:
+    if abs(lufs + 14) > 0.4 or spec.get("loud_always"):
         fixed = audio.replace(".wav", "_14.wav")
-        sh("ffmpeg", "-y", "-i", audio, "-af", f"volume={-14 - lufs:.2f}dB,alimiter=limit=0.84:level=false", fixed)
+        sh("ffmpeg", "-y", "-i", audio, "-af", f"volume={spec.get('loud_target', -14) - lufs:.2f}dB,alimiter=limit={spec.get('loud_limit', 0.84)}:level=false", fixed)
         os.replace(fixed, audio)
 
     # subtitles file for upload (not burned in)

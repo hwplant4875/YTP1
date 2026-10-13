@@ -1,0 +1,443 @@
+{
+ "voice": {
+  "engine": "elevenlabs",
+  "voice_id": "DrBEKFgWMDWUG6bjTSTk",
+  "model": "eleven_v4",
+  "stability": 0.5,
+  "speed": 1.0
+ },
+ "gap": 0.3,
+ "pause": 0.48,
+ "max_pause": 0.5,
+ "tail": {
+  "keep": 0.25,
+  "fade": 0.15
+ },
+ "subtitles": false,
+ "declick": true,
+ "sfx_gain_db": -4,
+ "loud_always": true,
+ "loud_limit": 0.87,
+ "loud_target": -13.0,
+ "style_fields": {
+  "LABEL": {
+   "Fontsize": 84,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 7,
+   "Shadow": 0,
+   "Spacing": 6
+  },
+  "TITLE": {
+   "Fontsize": 200,
+   "PrimaryColour": "&H00D0DCE4",
+   "Outline": 0,
+   "Shadow": 0,
+   "Spacing": 12
+  }
+ },
+ "fonts": {
+  "LABEL": "YouTube Sans",
+  "TITLE": "Playfair Display",
+  "FX": "YouTube Sans"
+ },
+ "music": [
+  {
+   "file": "../music/m5_interloper.mp3",
+   "vol": 0.12,
+   "seek": 25,
+   "name": "Interloper",
+   "from": "intro",
+   "to": "end",
+   "fade_in": 0.25,
+   "fade_out": 2.2
+  }
+ ],
+ "beats": [
+  {
+   "say": "France promised its protesting pupils three thousand teachers, within hours.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/2026-10-06_10-28-59_MouvementDesLycéens-Belfort.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.15,
+        0.5,
+        0.5
+       ],
+       "cap": "*3,000*\nTEACHERS,\nWITHIN HOURS",
+       "col": "green"
+      },
+      {
+       "at": "three thousand",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_077.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "id": "intro"
+  },
+  {
+   "say": "Then came the offer. On October eighth, Education Minister Édouard Geffray went on prime-time TV.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_08.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "THEN CAME\nTHE *OFFER*",
+       "col": "green"
+      },
+      {
+       "at": "Education Minister",
+       "video": "../assets/news/franceinfo_geffray.mp4",
+       "cap": "8 OCT\n*PRIME-TIME TV*",
+       "col": "green"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "The party denies organising anything, and accuses the government of conspiracy thinking. Lecornu has also said the voice of high-school students is precious, and must be heard.",
+    "next_text": "Three thousand teachers, he said, would arrive within hours."
+   }
+  },
+  {
+   "say": "Three thousand and twenty-four supply teachers, already on the payroll, but not assigned to any classes.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../cache/3d_france_staffroom_tags_fall:5.5_feea21253b923b73.mp4",
+       "grade": false,
+       "cap": "*3,024*\nSUPPLY\nTEACHERS",
+       "col": "green"
+      },
+      {
+       "at": "already on the payroll",
+       "video": "../cache/3d_france_timetable_lost_lessons:8.0_dc68daaa9698ec85.mp4",
+       "grade": false,
+       "cap": "ALREADY *PAID*,\nNOT ASSIGNED",
+       "col": "green"
+      },
+      {
+       "at": "not assigned",
+       "photo": "../sources/photos/v2/moliere_classroom.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.6,
+        1.14,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "Then came the offer. On October eighth, Education Minister Édouard Geffray went on prime-time TV. Three thousand teachers, he said, would arrive within hours.",
+    "next_text": "They're going to the schools hit hardest: a hundred and fourteen \"red\" lycées, and about four hundred \"orange\" ones."
+   }
+  },
+  {
+   "say": "One pupil association called it a first concrete announcement.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/2026-10-06_11-19-50_MouvementDesLycéens-Belfort.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "\"A FIRST\n*CONCRETE*\nANNOUNCEMENT\"",
+       "col": "blue"
+      },
+      {
+       "at": "concrete",
+       "photo": "../sources/photos/raw/2026-10-06_10-25-30_MouvementDesLycéens-Belfort.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "Three thousand and twenty-four supply teachers, already on the payroll, but not assigned to any classes. They're going to the schools hit hardest: a hundred and fourteen \"red\" lycées, and about four hundred \"orange\" ones.",
+    "next_text": "Others weren't convinced. A seventeen-year-old in Nantes told France 24: \"We don't want words. We want action.\""
+   }
+  },
+  {
+   "say": "Others weren't convinced. A seventeen-year-old in Nantes told France 24: \"We don't want words. We want action.\"",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_65.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "OTHERS\nWEREN'T\n*CONVINCED*",
+       "col": "red"
+      },
+      {
+       "at": "A seventeen",
+       "video": "../sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_82.webm",
+       "start": 2.0
+      },
+      {
+       "at": "We don't want",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_59.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "\"WE DON'T WANT\nWORDS. WE WANT\n*ACTION*.\"",
+       "col": "red"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "They're going to the schools hit hardest: a hundred and fourteen \"red\" lycées, and about four hundred \"orange\" ones. One pupil association called it a first concrete announcement.",
+    "next_text": "And critics asked the obvious question. If three thousand teachers were available, why weren't they in classrooms already?"
+   }
+  },
+  {
+   "say": "And critics asked the obvious question. If three thousand teachers were available, why weren't they in classrooms already?",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/v2/dorian_classroom.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "WHY NOT IN\nCLASSROOMS\n*ALREADY*?",
+       "col": "blue"
+      },
+      {
+       "at": "If three",
+       "photo": "../sources/photos/raw/2026-10-06_10-18-22_MouvementDesLycéens-Belfort.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ]
+      },
+      {
+       "at": "why weren't",
+       "photo": "../sources/photos/v2/lucie_aubrac_corridor.jpg",
+       "kb": [
+        1.03,
+        0.5,
+        0.5,
+        1.16,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "One pupil association called it a first concrete announcement. Others weren't convinced. A seventeen-year-old in Nantes told France 24: \"We don't want words. We want action.\"",
+    "next_text": "Geffray admitted they hadn't been assigned."
+   }
+  },
+  {
+   "say": "Geffray admitted they hadn't been assigned.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_040.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "MINISTER:\nTHEY WEREN'T\n*ASSIGNED*",
+       "col": "blue"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "Others weren't convinced. A seventeen-year-old in Nantes told France 24: \"We don't want words. We want action.\" And critics asked the obvious question. If three thousand teachers were available, why weren't they in classrooms already?",
+    "next_text": "Then there's the damage. Twenty-four lycées have been burned or ransacked."
+   }
+  },
+  {
+   "say": "By the end of October, Lecornu has promised decisions, and changes to the budget.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../cache/3d_france_calendar_oct23_27:7.9_8a257bf681c2dbfd.mp4",
+       "grade": false,
+       "cap": "END OF OCT:\n*DECISIONS*\nPROMISED",
+       "col": "blue"
+      },
+      {
+       "at": "and changes",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_079.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "AND *BUDGET*\nCHANGES",
+       "col": "blue"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "October twenty-third. The government's online consultation for pupils closes. October twenty-seventh. The rioters-pay bill goes to the Senate.",
+    "next_text": "And on November fifth, France's five biggest union confederations strike together, on pay and public services."
+   }
+  },
+  {
+   "say": "Full story on the channel.",
+   "id": "end_card",
+   "hold": 1.3,
+   "trans": "dip",
+   "ctx": {},
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "items": [
+      {
+       "at": 0,
+       "full": "../../01_ghost_stations/cache/3d_s1_endcard_amber_dee852c1dc23c600.mp4"
+      }
+     ]
+    }
+   },
+   "text": [
+    {
+     "kind": "label",
+     "content": "FULL STORY ON",
+     "pos": [
+      0.48,
+      0.575
+     ],
+     "delay": 0.15,
+     "extend": 1.0
+    },
+    {
+     "kind": "title",
+     "content": "STRATA",
+     "pos": [
+      0.48,
+      0.655
+     ],
+     "delay": 0.35,
+     "extend": 1.0
+    }
+   ],
+   "sfx": {
+    "prompt": "deep low cinematic boom hit, soft, short dark tail",
+    "len": 2.5,
+    "vol": 0.16,
+    "at": 0.05,
+    "filter": "afade=t=out:st=1.50:d=1.00"
+   }
+  }
+ ]
+}

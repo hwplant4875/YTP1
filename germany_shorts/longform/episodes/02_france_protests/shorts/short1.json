@@ -1,0 +1,502 @@
+{
+ "voice": {
+  "engine": "elevenlabs",
+  "voice_id": "DrBEKFgWMDWUG6bjTSTk",
+  "model": "eleven_v4",
+  "stability": 0.5,
+  "speed": 1.0
+ },
+ "gap": 0.3,
+ "pause": 0.48,
+ "max_pause": 0.5,
+ "tail": {
+  "keep": 0.25,
+  "fade": 0.15
+ },
+ "subtitles": false,
+ "declick": true,
+ "sfx_gain_db": -4,
+ "loud_always": true,
+ "loud_limit": 0.87,
+ "loud_target": -13.0,
+ "style_fields": {
+  "LABEL": {
+   "Fontsize": 84,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 7,
+   "Shadow": 0,
+   "Spacing": 6
+  },
+  "TITLE": {
+   "Fontsize": 200,
+   "PrimaryColour": "&H00D0DCE4",
+   "Outline": 0,
+   "Shadow": 0,
+   "Spacing": 12
+  }
+ },
+ "fonts": {
+  "LABEL": "YouTube Sans",
+  "TITLE": "Playfair Display",
+  "FX": "YouTube Sans"
+ },
+ "music": [
+  {
+   "file": "../music/m1_crypto.mp3",
+   "vol": 0.13,
+   "name": "Crypto",
+   "from": "intro",
+   "to": "end",
+   "fade_in": 0.25,
+   "fade_out": 2.2
+  }
+ ],
+ "beats": [
+  {
+   "say": "A single TikTok video helped turn one school's strike into a national revolt.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_019.jpg",
+       "kb": [
+        1.05,
+        0.5,
+        0.5,
+        1.16,
+        0.5,
+        0.45
+       ],
+       "cap": "HOW A *TIKTOK*\nSPREAD A\nSCHOOL REVOLT"
+      },
+      {
+       "at": "strike",
+       "video": "../sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_35.webm",
+       "start": 1.0
+      },
+      {
+       "at": "national",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_38.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.12,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "id": "intro",
+   "sfx": {
+    "prompt": "distant street protest crowd and bins scraping on asphalt, outdoor",
+    "len": 5,
+    "vol": 0.05,
+    "at": 0.0,
+    "filter": "afade=t=out:st=3.80:d=1.20"
+   }
+  },
+  {
+   "say": "It began in mid-September, at one lycée in Créteil, just outside Paris.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../cache/3d_france_map_spark:6.0_75b941154fdb461f.mp4",
+       "grade": false,
+       "cap": "*CRÉTEIL*\nMID-SEPT 2026",
+       "start": 0.6
+      },
+      {
+       "at": "Créteil",
+       "photo": "../sources/photos/v2/creteil_saint_exupery.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.55,
+        1.15,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "say": "Teaching posts there were empty, so the teachers went on strike.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/v2/carriat_307.jpg",
+       "cap": "*EMPTY*\nTEACHER POSTS"
+      },
+      {
+       "at": "teachers",
+       "photo": "../sources/photos/raw/2026-10-06_Manifestation_à_Nancy_pancarte_Prof_en_grève.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.4,
+        1.14,
+        0.5,
+        0.35
+       ],
+       "cap": "TEACHERS\nON *STRIKE*"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "say": "The next day, pupils blocked the gates.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Jacques-Decour_in_Paris_03.jpg",
+       "kb": [
+        1.05,
+        0.5,
+        0.5,
+        1.17,
+        0.5,
+        0.45
+       ],
+       "cap": "PUPILS\n*BLOCKED*\nTHE GATES"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "say": "Then, on September twenty-fourth, a rap-news outlet called Booska-P interviewed eight pupils from the school.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../assets/news/reuters_gate.mp4",
+       "cap": "24 SEPT\n*BOOSKA-P*\nINTERVIEW"
+      },
+      {
+       "at": "rap-news",
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Jacques-Decour_in_Paris_02.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.15,
+        0.5,
+        0.48
+       ]
+      },
+      {
+       "at": "eight pupils",
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Jacques-Decour_in_Paris_01.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.55,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "A few days later, two MPs from the radical-left party La France Insoumise visited, and posted about it. Remember that visit. The government will.",
+    "next_text": "They talked about feeling abandoned, as kids from the banlieue, the working-class suburbs."
+   }
+  },
+  {
+   "say": "They talked about feeling abandoned, as kids from the banlieue, the working-class suburbs.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_29.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.45,
+        1.15,
+        0.5,
+        0.4
+       ],
+       "cap": "FEELING\n*ABANDONED*"
+      },
+      {
+       "at": "as kids",
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_03.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.15,
+        0.5,
+        0.5
+       ],
+       "cap": "KIDS OF THE\n*BANLIEUE*"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "Remember that visit. The government will. Then, on September twenty-fourth, a rap-news outlet called Booska-P interviewed eight pupils from the school.",
+    "next_text": "On TikTok, the clip was watched around one and a half million times."
+   }
+  },
+  {
+   "say": "On TikTok, the clip was watched around one and a half million times.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../cache/3d_france_phone_viral:16_6f3b4d3e9b2eb1f1.mp4",
+       "grade": false,
+       "cap": "*{n}*\nTIKTOK VIEWS",
+       "start": 7.0,
+       "count": [
+        0,
+        1500000,
+        3.6
+       ]
+      },
+      {
+       "at": "one and a half",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_12.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "sfx": {
+    "prompt": "soft digital counter ticking, quiet clicks",
+    "len": 2,
+    "vol": 0.045,
+    "at": 0.0,
+    "filter": "afade=t=out:st=1.20:d=0.80"
+   },
+   "ctx": {
+    "previous_text": "Then, on September twenty-fourth, a rap-news outlet called Booska-P interviewed eight pupils from the school. They talked about feeling abandoned, as kids from the banlieue, the working-class suburbs.",
+    "next_text": "And the idea spread with it. If your school is falling apart... block it."
+   }
+  },
+  {
+   "say": "And the idea spread with it. If your school is falling apart... block it.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_01.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "THE IDEA\n*SPREAD*"
+      },
+      {
+       "at": "falling apart",
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Jules_Ferry_High_School_in_Paris_13.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.16,
+        0.45,
+        0.5
+       ],
+       "cap": "FALLING\nAPART?\n*BLOCK IT.*"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "They talked about feeling abandoned, as kids from the banlieue, the working-class suburbs. On TikTok, the clip was watched around one and a half million times.",
+    "next_text": "By September twenty-fifth, around sixty schools in the Paris region were disrupted."
+   }
+  },
+  {
+   "say": "By September twenty-fifth, around sixty schools in the Paris region were disrupted.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../cache/3d_france_map_spread:21_747ba5f5f86f08a4.mp4",
+       "grade": false,
+       "cap": "25 SEPT\n*~60 SCHOOLS*\nPARIS REGION",
+       "start": 8.0
+      },
+      {
+       "at": "Paris region",
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Jules_Ferry_High_School_in_Paris_05.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.45
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "On TikTok, the clip was watched around one and a half million times. And the idea spread with it. If your school is falling apart... block it.",
+    "next_text": "Three days later, the Interior Ministry counted one hundred and eighty, across France."
+   }
+  },
+  {
+   "say": "And on October first... one thousand and twenty-seven.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../cache/3d_france_map_ignite:3.9_4326883615eca42d.mp4",
+       "grade": false,
+       "cap": "1 OCTOBER\n*{n}* LYCÉES",
+       "start": 0.0,
+       "count": [
+        180,
+        1027,
+        2.4
+       ]
+      },
+      {
+       "at": "twenty-seven",
+       "video": "../sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_86.webm",
+       "start": 3.0
+      }
+     ]
+    }
+   },
+   "sfx": {
+    "prompt": "soft digital counter ticking, quiet clicks",
+    "len": 2,
+    "vol": 0.045,
+    "at": 0.0,
+    "filter": "afade=t=out:st=1.20:d=0.80"
+   },
+   "ctx": {
+    "previous_text": "By September twenty-fifth, around sixty schools in the Paris region were disrupted. Three days later, the Interior Ministry counted one hundred and eighty, across France.",
+    "next_text": "That's more than a quarter of all the lycées in France."
+   }
+  },
+  {
+   "say": "Full story on the channel.",
+   "id": "end_card",
+   "hold": 1.3,
+   "trans": "dip",
+   "ctx": {},
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "items": [
+      {
+       "at": 0,
+       "full": "../../01_ghost_stations/cache/3d_s1_endcard_amber_dee852c1dc23c600.mp4"
+      }
+     ]
+    }
+   },
+   "text": [
+    {
+     "kind": "label",
+     "content": "FULL STORY ON",
+     "pos": [
+      0.48,
+      0.575
+     ],
+     "delay": 0.15,
+     "extend": 1.0
+    },
+    {
+     "kind": "title",
+     "content": "STRATA",
+     "pos": [
+      0.48,
+      0.655
+     ],
+     "delay": 0.35,
+     "extend": 1.0
+    }
+   ],
+   "sfx": {
+    "prompt": "deep low cinematic boom hit, soft, short dark tail",
+    "len": 2.5,
+    "vol": 0.16,
+    "at": 0.05,
+    "filter": "afade=t=out:st=1.50:d=1.00"
+   }
+  }
+ ]
+}

@@ -1,0 +1,532 @@
+{
+ "voice": {
+  "engine": "elevenlabs",
+  "voice_id": "DrBEKFgWMDWUG6bjTSTk",
+  "model": "eleven_v4",
+  "stability": 0.5,
+  "speed": 1.0
+ },
+ "gap": 0.3,
+ "pause": 0.48,
+ "max_pause": 0.5,
+ "tail": {
+  "keep": 0.25,
+  "fade": 0.15
+ },
+ "subtitles": false,
+ "declick": true,
+ "sfx_gain_db": -4,
+ "loud_always": true,
+ "loud_limit": 0.87,
+ "loud_target": -13.0,
+ "style_fields": {
+  "LABEL": {
+   "Fontsize": 84,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 7,
+   "Shadow": 0,
+   "Spacing": 6
+  },
+  "TITLE": {
+   "Fontsize": 200,
+   "PrimaryColour": "&H00D0DCE4",
+   "Outline": 0,
+   "Shadow": 0,
+   "Spacing": 12
+  }
+ },
+ "fonts": {
+  "LABEL": "YouTube Sans",
+  "TITLE": "Playfair Display",
+  "FX": "YouTube Sans"
+ },
+ "music": [
+  {
+   "file": "../music/m3_tide.mp3",
+   "vol": 0.2,
+   "seek": 4,
+   "name": "Rising Tide",
+   "from": "intro",
+   "to": "end",
+   "fade_in": 0.25,
+   "fade_out": 2.2
+  }
+ ],
+ "beats": [
+  {
+   "say": "A quarter of a million people marched for France's schools on October sixth, police say.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · 6 OCTOBER",
+     "items": [
+      {
+       "at": 0,
+       "video": "../assets/news/ap_cortege.mp4",
+       "cap": "*{n}*\nMARCHED",
+       "count": [
+        0,
+        250000,
+        2.2
+       ],
+       "col": "blue"
+      },
+      {
+       "at": "France's schools",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_005.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.45
+       ]
+      },
+      {
+       "at": "October sixth",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_022.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "sfx": {
+    "prompt": "distant street protest crowd chanting, outdoor, muffled",
+    "len": 8,
+    "vol": 0.05,
+    "at": 0.0,
+    "filter": "afade=t=out:st=5.50:d=2.50"
+   },
+   "id": "intro"
+  },
+  {
+   "say": "Organisers say it was four hundred and fifty thousand.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · 6 OCTOBER",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/2026-10-06_Manifestation_à_Nancy_marche_rue_Saint_Jean.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.45
+       ],
+       "cap": "ORGANISERS:\n*450,000*",
+       "col": "red"
+      },
+      {
+       "at": "four hundred",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_023.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "With bins. With barriers. With human chains. On October sixth, police counted about a quarter of a million people in the streets.",
+    "next_text": "More than six thousand eight hundred people have been taken into police custody. Eighty-six percent of them are minors."
+   }
+  },
+  {
+   "say": "Police counted fifty-six thousand people in Paris. Organisers said a hundred thousand.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · 6 OCTOBER",
+     "items": [
+      {
+       "at": 0,
+       "video": "../sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_75.webm",
+       "cap": "PARIS\nPOLICE COUNT:\n*56,000*",
+       "start": 20.0,
+       "col": "blue"
+      },
+      {
+       "at": "fifty-six",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_010.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.5
+       ]
+      },
+      {
+       "at": "Organisers",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_012.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.5
+       ],
+       "cap": "PARIS\nORGANISERS:\n*100,000*",
+       "col": "red"
+      },
+      {
+       "at": "hundred thousand",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_011.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.12,
+        0.5,
+        0.45
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "In Paris, the march left Place de la République at two in the afternoon, heading for Nation. About two thousand police and gendarmes were deployed, with motorbike units and drones.",
+    "next_text": "In Lyon, twenty thousand, by police count. In Toulouse, thirteen and a half thousand."
+   }
+  },
+  {
+   "say": "Pupils from Louis-le-Grand and Henri-Quatre, two of the most elite schools in the country, walked out in solidarity.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · 6 OCTOBER",
+     "items": [
+      {
+       "at": 0,
+       "video": "../sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_78.webm",
+       "cap": "ELITE SCHOOLS\n*WALKED OUT*",
+       "start": 0.5,
+       "col": "blue"
+      },
+      {
+       "at": "two of the most",
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_06.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ]
+      },
+      {
+       "at": "walked out",
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_27.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.45,
+        1.14,
+        0.5,
+        0.45
+       ],
+       "cap": "IN\n*SOLIDARITY*",
+       "col": "blue"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "In Lyon, twenty thousand, by police count. In Toulouse, thirteen and a half thousand. And this time, it wasn't just the suburbs.",
+    "next_text": "The placards said a lot."
+   }
+  },
+  {
+   "say": "\"Too young to be listened to, but not too young to be clubbed.\"",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · 6 OCTOBER",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_10.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.15,
+        0.5,
+        0.5
+       ],
+       "cap": "\"TOO YOUNG\nTO BE *HEARD*...\"",
+       "col": "red"
+      },
+      {
+       "at": "but not",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_053.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.15,
+        0.5,
+        0.5
+       ],
+       "cap": "\"...BUT NOT TOO\nYOUNG TO BE\n*CLUBBED*\"",
+       "col": "red"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "Pupils from Louis-le-Grand and Henri-Quatre, two of the most elite schools in the country, walked out in solidarity. The placards said a lot.",
+    "next_text": "And in Perpignan, one banner read: \"Sorry for the trouble. We just want a future.\""
+   }
+  },
+  {
+   "say": "And in Perpignan, one banner read: \"Sorry for the trouble. We just want a future.\"",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · 6 OCTOBER",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/Manifestation_des_lycéens_et_des_étudiants_à_Perpignan_Acte_III_11.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "*PERPIGNAN*",
+       "col": "blue"
+      },
+      {
+       "at": "one banner",
+       "photo": "../sources/photos/raw/Journée_de_mobilisation_des_lycéens_à_Perpignan_34.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.5
+       ]
+      },
+      {
+       "at": "We just want",
+       "photo": "../sources/photos/raw/Journée_de_mobilisation_des_lycéens_à_Perpignan_31.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.5
+       ],
+       "cap": "\"WE JUST\nWANT A\n*FUTURE*\"",
+       "col": "blue"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "The placards said a lot. \"Too young to be listened to, but not too young to be clubbed.\"",
+    "next_text": "Across France: about a quarter of a million marchers, police say. Four hundred and fifty thousand, organisers say."
+   }
+  },
+  {
+   "say": "By evening, there was tear gas, at least four hundred and eighty-eight arrests, and forty-three officers wounded.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · 6 OCTOBER",
+     "items": [
+      {
+       "at": 0,
+       "video": "../assets/news/reuters_teargas.mp4",
+       "cap": "BY EVENING:\n*TEAR GAS*",
+       "col": "red"
+      },
+      {
+       "at": "four hundred",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_002.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.5
+       ],
+       "cap": "*488+*\nARRESTS",
+       "col": "red"
+      },
+      {
+       "at": "forty-three",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_097.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.45
+       ],
+       "cap": "*43* OFFICERS\nWOUNDED",
+       "col": "blue"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "And in Perpignan, one banner read: \"Sorry for the trouble. We just want a future.\" Across France: about a quarter of a million marchers, police say. Four hundred and fifty thousand, organisers say.",
+    "next_text": "Outside parliament, Prime Minister Sébastien Lecornu promised a half-day in every lycée, for pupils to debate."
+   }
+  },
+  {
+   "say": "More than six thousand eight hundred people have been taken into police custody. Eighty-six percent of them are minors.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · 6 OCTOBER",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_106.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.45
+       ],
+       "cap": "*{n}*\nIN CUSTODY",
+       "count": [
+        0,
+        6877,
+        1.8
+       ],
+       "col": "blue"
+      },
+      {
+       "at": "eight hundred",
+       "video": "../sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_80.webm",
+       "start": 1.0
+      },
+      {
+       "at": "Eighty-six",
+       "photo": "../sources/photos/raw/Journée_de_mobilisation_des_lycéens_à_Perpignan_28.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "*86%*\nARE MINORS",
+       "col": "red"
+      }
+     ]
+    }
+   },
+   "sfx": {
+    "prompt": "soft digital counter ticking, quiet clicks",
+    "len": 2,
+    "vol": 0.045,
+    "at": 0.0,
+    "filter": "afade=t=out:st=1.20:d=0.80"
+   },
+   "ctx": {
+    "previous_text": "On October sixth, police counted about a quarter of a million people in the streets. Organisers say it was four hundred and fifty thousand.",
+    "next_text": "One fifteen-year-old lost his hand."
+   }
+  },
+  {
+   "say": "Full story on the channel.",
+   "id": "end_card",
+   "hold": 1.3,
+   "trans": "dip",
+   "ctx": {},
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "items": [
+      {
+       "at": 0,
+       "full": "../../01_ghost_stations/cache/3d_s1_endcard_amber_dee852c1dc23c600.mp4"
+      }
+     ]
+    }
+   },
+   "text": [
+    {
+     "kind": "label",
+     "content": "FULL STORY ON",
+     "pos": [
+      0.48,
+      0.575
+     ],
+     "delay": 0.15,
+     "extend": 1.0
+    },
+    {
+     "kind": "title",
+     "content": "STRATA",
+     "pos": [
+      0.48,
+      0.655
+     ],
+     "delay": 0.35,
+     "extend": 1.0
+    }
+   ],
+   "sfx": {
+    "prompt": "deep low cinematic boom hit, soft, short dark tail",
+    "len": 2.5,
+    "vol": 0.16,
+    "at": 0.05,
+    "filter": "afade=t=out:st=1.50:d=1.00"
+   }
+  }
+ ]
+}

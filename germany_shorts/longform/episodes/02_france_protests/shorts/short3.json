@@ -1,0 +1,445 @@
+{
+ "voice": {
+  "engine": "elevenlabs",
+  "voice_id": "DrBEKFgWMDWUG6bjTSTk",
+  "model": "eleven_v4",
+  "stability": 0.5,
+  "speed": 1.0
+ },
+ "gap": 0.3,
+ "pause": 0.48,
+ "max_pause": 0.5,
+ "tail": {
+  "keep": 0.25,
+  "fade": 0.15
+ },
+ "subtitles": false,
+ "declick": true,
+ "sfx_gain_db": -4,
+ "loud_always": true,
+ "loud_limit": 0.87,
+ "loud_target": -13.0,
+ "style_fields": {
+  "LABEL": {
+   "Fontsize": 84,
+   "PrimaryColour": "&H005CB2FF",
+   "Outline": 7,
+   "Shadow": 0,
+   "Spacing": 6
+  },
+  "TITLE": {
+   "Fontsize": 200,
+   "PrimaryColour": "&H00D0DCE4",
+   "Outline": 0,
+   "Shadow": 0,
+   "Spacing": 12
+  }
+ },
+ "fonts": {
+  "LABEL": "YouTube Sans",
+  "TITLE": "Playfair Display",
+  "FX": "YouTube Sans"
+ },
+ "music": [
+  {
+   "file": "../music/m2_hiding.mp3",
+   "vol": 0.12,
+   "seek": 12,
+   "name": "Hiding Your Reality",
+   "from": "intro",
+   "to": "end",
+   "fade_in": 0.25,
+   "fade_out": 2.2
+  }
+ ],
+ "beats": [
+  {
+   "say": "In France, teenagers are blockading schools they say are falling apart.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_68.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.15,
+        0.5,
+        0.5
+       ],
+       "cap": "SCHOOLS\n*FALLING APART*",
+       "col": "cyan"
+      },
+      {
+       "at": "blockading",
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Jacques-Decour_in_Paris_04.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ]
+      },
+      {
+       "at": "falling apart",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_027.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.45,
+        1.14,
+        0.5,
+        0.4
+       ]
+      }
+     ]
+    }
+   },
+   "id": "intro",
+   "sfx": {
+    "prompt": "distant street protest crowd and bins scraping on asphalt, outdoor",
+    "len": 5,
+    "vol": 0.05,
+    "at": 0.0,
+    "filter": "afade=t=out:st=3.80:d=1.20"
+   }
+  },
+  {
+   "say": "The average French lycée is sixty-five years old.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/v2/paul_eluard.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "AVERAGE AGE:\n*65 YEARS*",
+       "col": "cyan"
+      },
+      {
+       "at": "sixty-five",
+       "photo": "../sources/photos/v2/montreuil_jaures.jpg",
+       "kb": [
+        1.12,
+        0.5,
+        0.4,
+        1.24,
+        0.5,
+        0.35
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "say": "More than half of France's lycées were built before 1970.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Jules_Ferry_High_School_in_Paris_07.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.45,
+        1.14,
+        0.5,
+        0.4
+       ],
+       "cap": "*56%*\nBUILT BEFORE\n1970",
+       "col": "cyan"
+      },
+      {
+       "at": "built before",
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_31.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.4,
+        1.14,
+        0.5,
+        0.35
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "Let's walk inside a typical French lycée. First, the building. On average, it's sixty-five years old.",
+    "next_text": "Pupils describe rats, cockroaches, and ceilings that have come down."
+   }
+  },
+  {
+   "say": "Pupils describe rats, cockroaches, and ceilings that have come down.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../assets/news/f24_ceiling.mp4",
+       "cap": "RATS, ROACHES,\n*FALLEN CEILINGS*",
+       "col": "cyan"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "First, the building. On average, it's sixty-five years old. More than half of France's lycées were built before 1970.",
+    "next_text": "In summer, teachers report classrooms at thirty-five to forty degrees. In winter, some rooms have no heating at all."
+   }
+  },
+  {
+   "say": "In summer, teachers report classrooms at thirty-five to forty degrees. In winter, some rooms have no heating at all.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/raw/2026-10-06_11-20-19_MouvementDesLycéens-Belfort.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.15,
+        0.5,
+        0.5
+       ],
+       "cap": "*35-40°C*\nIN SUMMER",
+       "col": "red"
+      },
+      {
+       "at": "thirty-five",
+       "photo": "../sources/photos/raw/2026-10-06_11-20-15_MouvementDesLycéens-Belfort.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ]
+      },
+      {
+       "at": "In winter",
+       "video": "../assets/news/f24_radiator.mp4",
+       "cap": "*NO HEATING*\nIN WINTER",
+       "col": "cyan"
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "More than half of France's lycées were built before 1970. Pupils describe rats, cockroaches, and ceilings that have come down.",
+    "next_text": "A Senate report says fixing them would take about one and a half billion euros a year."
+   }
+  },
+  {
+   "say": "A Senate report says fixing them would take about one and a half billion euros a year.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../cache/3d_france_money_repair_need:7.1_acf828b2adad3c97.mp4",
+       "grade": false,
+       "cap": "*€1.5 BN*\nA YEAR\nTO FIX THEM",
+       "start": 4.2,
+       "col": "green"
+      },
+      {
+       "at": "would take",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_24.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "Pupils describe rats, cockroaches, and ceilings that have come down. In summer, teachers report classrooms at thirty-five to forty degrees. In winter, some rooms have no heating at all.",
+    "next_text": "But for most pupils, the building isn't the biggest problem. It's who's missing from it."
+   }
+  },
+  {
+   "say": "And when teachers are there, classrooms are packed. A teacher in Marseille says she has thirty-seven pupils in her class.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "photo": "../sources/photos/v2/salle57_pupils.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ],
+       "cap": "CLASSES\n*PACKED*",
+       "col": "cyan"
+      },
+      {
+       "at": "A teacher",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_084.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.15,
+        0.5,
+        0.45
+       ],
+       "cap": "*37 PUPILS*\nIN ONE CLASS",
+       "col": "cyan"
+      },
+      {
+       "at": "she has",
+       "photo": "../sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_14.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.13,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   },
+   "ctx": {
+    "previous_text": "But by the ministry's own count, in 2024 to 2025, ten percent of lycée teaching hours simply didn't happen. One pupil told Euronews they'd gone six months without a teacher, in an exam subject.",
+    "next_text": "French lycée students also spend around twelve hundred hours a year in class. The average across OECD countries is nine hundred and sixty."
+   }
+  },
+  {
+   "say": "That's why so many pupils have been blocking their own schools.",
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "badge": "FRANCE · LYCÉE PROTESTS",
+     "items": [
+      {
+       "at": 0,
+       "video": "../sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_36.webm",
+       "cap": "SO THEY\n*BLOCKED THEM*",
+       "start": 0.5,
+       "col": "cyan"
+      },
+      {
+       "at": "blocking",
+       "photo": "../sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_63.jpg",
+       "kb": [
+        1.04,
+        0.5,
+        0.5,
+        1.14,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "say": "Full story on the channel.",
+   "id": "end_card",
+   "hold": 1.3,
+   "trans": "dip",
+   "ctx": {},
+   "visual": {
+    "type": "g2d",
+    "name": "card",
+    "module": "short_card.py",
+    "args": {
+     "items": [
+      {
+       "at": 0,
+       "full": "../../01_ghost_stations/cache/3d_s1_endcard_amber_dee852c1dc23c600.mp4"
+      }
+     ]
+    }
+   },
+   "text": [
+    {
+     "kind": "label",
+     "content": "FULL STORY ON",
+     "pos": [
+      0.48,
+      0.575
+     ],
+     "delay": 0.15,
+     "extend": 1.0
+    },
+    {
+     "kind": "title",
+     "content": "STRATA",
+     "pos": [
+      0.48,
+      0.655
+     ],
+     "delay": 0.35,
+     "extend": 1.0
+    }
+   ],
+   "sfx": {
+    "prompt": "deep low cinematic boom hit, soft, short dark tail",
+    "len": 2.5,
+    "vol": 0.16,
+    "at": 0.05,
+    "filter": "afade=t=out:st=1.50:d=1.00"
+   }
+  }
+ ]
+}
