@@ -109,18 +109,39 @@
    "offset": -2.5
   }
  ],
+ "music_duck": [
+  {
+   "from": "duck_a",
+   "to": "duck_b",
+   "db": -9,
+   "ramp": 1.5
+  }
+ ],
  "beats": [
   {
    "visual": {
-    "type": "video",
-    "file": "sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_76.webm",
-    "start": 2.0,
-    "speed": 1.0,
-    "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons",
-    "zoom": [
-     1.0,
-     1.1
-    ]
+    "type": "g2d",
+    "name": "montage",
+    "module": "graphics.py",
+    "args": {
+     "items": [
+      {
+       "video": "sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_76.webm",
+       "full": true,
+       "start": 2.0,
+       "from": [
+        1.05,
+        0.5,
+        0.55
+       ],
+       "to": [
+        1.25,
+        0.5,
+        0.5
+       ]
+      }
+     ]
+    }
    },
    "hold": 0.0,
    "id": "intro",
@@ -146,7 +167,6 @@
      "items": [
       {
        "file": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Jacques-Decour_in_Paris_01.jpg",
-       "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons",
        "from": [
         1.05,
         0.5,
@@ -161,7 +181,6 @@
       {
        "file": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Jules_Ferry_High_School_in_Paris_06.jpg",
        "at": "With barriers",
-       "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons",
        "from": [
         1.08,
         0.5,
@@ -177,7 +196,6 @@
        "video": "assets/news/afp_chain.mp4",
        "at": "With human",
        "start": 0.5,
-       "credit": "Video: AFP",
        "frame": 0.8
       }
      ]
@@ -191,7 +209,8 @@
     "name": "crowd",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_26.jpg",
+     "accent": "blue",
+     "bg": "sources/photos/raw/2026-10-06_Manifestation_à_Nancy_marche_rue_Saint_Jean.jpg",
      "title": "6 OCTOBER · ACROSS FRANCE",
      "a": {
       "value": 250000,
@@ -233,7 +252,8 @@
       1810,
       1030
      ],
-     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_104.jpg",
+     "accent": "red",
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_30.jpg",
      "appear_at": "six thousand",
      "appear_d": 1.6,
      "highlight": {
@@ -290,8 +310,7 @@
      "fade": 2.6,
      "blur": 16,
      "dark": 0.5
-    },
-    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+    }
    },
    "say": "One fifteen-year-old lost his hand.",
    "lead": 0.9,
@@ -329,18 +348,17 @@
      1.28,
      0.5,
      0.38
-    ],
-    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    },
    "trans": "flash"
   },
   {
    "say": "Why are so many of them ending up hurt, or in custody?",
    "visual": {
-    "type": "3d",
-    "scene": "france_police",
-    "shot": "standoff:5.1",
-    "t0": 0
+    "type": "video",
+    "file": "assets/news/ap_police_line.mp4",
+    "start": 0.0,
+    "frame": 0.8
    }
   },
   {
@@ -357,8 +375,7 @@
     "type": "video",
     "file": "sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_77.webm",
     "start": 0.5,
-    "speed": 1.0,
-    "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons"
+    "speed": 1.0
    },
    "hold": 3.4,
    "dim": true,
@@ -389,8 +406,7 @@
     "type": "video",
     "file": "sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_86.webm",
     "start": 12.0,
-    "speed": 1.0,
-    "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons"
+    "speed": 1.0
    },
    "hold": 2.6,
    "chapter": "So how did it start?",
@@ -433,10 +449,18 @@
   {
    "say": "Lycée Saint-Exupéry. About fifteen hundred pupils.",
    "visual": {
-    "type": "3d",
-    "scene": "france_lycee",
-    "shot": "exterior:3.2",
-    "t0": 0
+    "type": "image",
+    "file": "sources/photos/v2/creteil_saint_exupery.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.55
+    ],
+    "to": [
+     1.16,
+     0.5,
+     0.5
+    ]
    },
    "text": {
     "kind": "label",
@@ -456,17 +480,26 @@
     "module": "graphics.py",
     "beats": 1,
     "args": {
-     "at": "A lycée"
+     "at": "A lycée",
+     "accent": "blue"
     }
    }
   },
   {
    "say": "At the start of this school year, several teaching posts there were simply empty.",
    "visual": {
-    "type": "3d",
-    "scene": "france_lycee",
-    "shot": "three_empty:6.0",
-    "t0": 0
+    "type": "image",
+    "file": "sources/photos/v2/carriat_307.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.15,
+     0.55,
+     0.5
+    ]
    },
    "text": {
     "kind": "label",
@@ -489,10 +522,18 @@
   {
    "say": "The next day, the pupils joined in, their own way. They blocked the gates.",
    "visual": {
-    "type": "3d",
-    "scene": "france_lycee",
-    "shot": "bins_slide:6.0",
-    "t0": 0
+    "type": "image",
+    "file": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Jacques-Decour_in_Paris_03.jpg",
+    "from": [
+     1.05,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.17,
+     0.5,
+     0.45
+    ]
    },
    "text": {
     "kind": "label",
@@ -563,6 +604,7 @@
     "module": "graphics.py",
     "beats": 4,
     "args": {
+     "accent": "blue",
      "label": "SCHOOLS DISRUPTED",
      "steps": [
       {
@@ -617,6 +659,7 @@
       1020
      ],
      "aspect": 1.0,
+     "accent": "teal",
      "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_18.jpg",
      "appear_at": 0.1,
      "appear_d": 0.8,
@@ -661,17 +704,24 @@
     "type": "video",
     "file": "assets/news/reuters_gate.mp4",
     "start": 0.0,
-    "frame": 0.8,
-    "credit": "Video: Reuters"
+    "frame": 0.8
    }
   },
   {
    "say": "So what's actually going on inside these buildings?",
    "visual": {
-    "type": "3d",
-    "scene": "france_lycee",
-    "shot": "cut:4.5",
-    "t0": 0
+    "type": "image",
+    "file": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Jules_Ferry_High_School_in_Paris_07.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.45
+    ],
+    "to": [
+     1.14,
+     0.5,
+     0.4
+    ]
    },
    "hold": 0.4,
    "fade_out": 1.6
@@ -681,8 +731,7 @@
     "type": "video",
     "file": "sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_75.webm",
     "start": 20.0,
-    "speed": 1.0,
-    "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons"
+    "speed": 1.0
    },
    "hold": 2.6,
    "chapter": "What are they angry about?",
@@ -708,19 +757,57 @@
   {
    "say": "Let's walk inside a typical French lycée.",
    "visual": {
-    "type": "3d",
-    "scene": "france_lycee",
-    "shot": "hall:3.2",
-    "t0": 0
+    "type": "image",
+    "file": "sources/photos/v2/lucie_aubrac_corridor.jpg",
+    "from": [
+     1.03,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.16,
+     0.5,
+     0.5
+    ]
    }
   },
   {
    "say": "First, the building. On average, it's sixty-five years old.",
    "visual": {
-    "type": "3d",
-    "scene": "france_lycee",
-    "shot": "facade_age:3.9",
-    "t0": 0
+    "type": "g2d",
+    "name": "montage",
+    "module": "graphics.py",
+    "args": {
+     "items": [
+      {
+       "file": "sources/photos/v2/montreuil_jaures.jpg",
+       "from": [
+        1.15,
+        0.5,
+        0.35
+       ],
+       "to": [
+        1.26,
+        0.5,
+        0.3
+       ]
+      },
+      {
+       "file": "sources/photos/v2/paul_eluard.jpg",
+       "at": "sixty-five",
+       "from": [
+        1.05,
+        0.5,
+        0.5
+       ],
+       "to": [
+        1.15,
+        0.45,
+        0.5
+       ]
+      }
+     ]
+    }
    },
    "text": {
     "kind": "label",
@@ -738,7 +825,8 @@
     "name": "bars",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_24.jpg",
+     "accent": "sky",
+     "bg": "sources/photos/raw/2026-10-06_10-12-13_MouvementDesLycéens-Belfort.jpg",
      "title": "FRANCE'S LYCÉE BUILDINGS",
      "items": [
       {
@@ -775,27 +863,46 @@
   {
    "say": "Pupils describe rats, cockroaches, and ceilings that have come down.",
    "visual": {
-    "type": "3d",
-    "scene": "france_lycee",
-    "shot": "leak:4.3",
-    "t0": 0
+    "type": "video",
+    "file": "assets/news/f24_ceiling.mp4",
+    "start": 0.0,
+    "frame": 0.8
    }
   },
   {
    "say": "In summer, teachers report classrooms at thirty-five to forty degrees. In winter, some rooms have no heating at all.",
    "visual": {
-    "type": "3d",
-    "scene": "france_lycee",
-    "shot": "heat:8.0",
-    "t0": 0
-   },
-   "text": {
-    "kind": "label",
-    "content": "{\\c&H5CB2FF&}35-40°C",
-    "pos": [
-     0.5,
-     0.82
-    ]
+    "type": "g2d",
+    "name": "montage",
+    "module": "graphics.py",
+    "args": {
+     "items": [
+      {
+       "file": "sources/photos/raw/2026-10-06_11-20-19_MouvementDesLycéens-Belfort.jpg",
+       "from": [
+        1.05,
+        0.5,
+        0.5
+       ],
+       "to": [
+        1.16,
+        0.5,
+        0.45
+       ],
+       "dark": 0.55,
+       "caption": "35-40°C",
+       "caption_size": 190
+      },
+      {
+       "video": "assets/news/f24_radiator.mp4",
+       "at": "In winter",
+       "frame": 0.8,
+       "dark": 0.6,
+       "caption": "NO HEATING",
+       "caption_size": 170
+      }
+     ]
+    }
    }
   },
   {
@@ -818,10 +925,18 @@
   {
    "say": "But for most pupils, the building isn't the biggest problem. It's who's missing from it.",
    "visual": {
-    "type": "3d",
-    "scene": "france_lycee",
-    "shot": "empty_desk:6.3",
-    "t0": 0
+    "type": "image",
+    "file": "sources/photos/v2/dorian_classroom.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.15,
+     0.5,
+     0.5
+    ]
    }
   },
   {
@@ -840,7 +955,8 @@
       1010
      ],
      "aspect": 1.0,
-     "bg": "sources/photos/raw/2026-10-06_Manifestation_à_Nancy_pancarte_Prof_en_grève.jpg",
+     "accent": "red",
+     "bg": "sources/photos/raw/2026-10-06_10-28-59_MouvementDesLycéens-Belfort.jpg",
      "appear_at": "surveyed",
      "appear_d": 1.0,
      "highlight": {
@@ -878,7 +994,8 @@
     "name": "split",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/2026-10-06_Manifestation_à_Nancy_pancarte_Prof_en_grève.jpg",
+     "accent": "blue",
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Condorcet_High_School_in_Paris_08.jpg",
      "left": {
       "head": "TEACHERS' UNION",
       "big": "53%",
@@ -932,8 +1049,7 @@
      1.16,
      0.5,
      0.45
-    ],
-    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    },
    "dim": true,
    "text": {
@@ -948,10 +1064,18 @@
   {
    "say": "And when teachers are there, classrooms are packed. A teacher in Marseille says she has thirty-seven pupils in her class.",
    "visual": {
-    "type": "3d",
-    "scene": "france_lycee",
-    "shot": "crowded:8.3",
-    "t0": 2
+    "type": "image",
+    "file": "sources/photos/v2/salle57_pupils.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.14,
+     0.5,
+     0.5
+    ]
    },
    "text": {
     "kind": "label",
@@ -977,7 +1101,8 @@
      0.5,
      0.82
     ]
-   }
+   },
+   "id": "duck_a"
   },
   {
    "say": "And at the end of all that, there's Parcoursup, the national platform that decides who gets into university.",
@@ -995,7 +1120,8 @@
     "name": "line",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_01.jpg",
+     "accent": "teal",
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_23.jpg",
      "title": "NO OFFER IN THE MAIN ROUND",
      "points": [
       {
@@ -1018,15 +1144,24 @@
      "ymax": 24,
      "source": "Parcoursup data, via Le Monde, 11 Jul 2026"
     }
-   }
+   },
+   "id": "duck_b"
   },
   {
    "say": "Then, on October first, the government published its budget for 2027.",
    "visual": {
-    "type": "3d",
-    "scene": "france_state",
-    "shot": "assemblee:4.8",
-    "t0": 0
+    "type": "image",
+    "file": "sources/photos/v2/bercy.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.14,
+     0.5,
+     0.5
+    ]
    },
    "text": {
     "kind": "label",
@@ -1044,7 +1179,8 @@
     "name": "stat",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_092.jpg",
+     "accent": "green",
+     "bg": "sources/photos/raw/2026-10-06_10-25-36_MouvementDesLycéens-Belfort.jpg",
      "items": [
       {
        "value": 1.2,
@@ -1120,8 +1256,7 @@
      1.12,
      0.5,
      0.5
-    ],
-    "credit": "Procrastineur49, CC BY 4.0, via Wikimedia Commons"
+    ]
    },
    "hold": 2.6,
    "chapter": "Where is it burning?",
@@ -1196,7 +1331,8 @@
     "name": "stat",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_103.jpg",
+     "accent": "red",
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Condorcet_High_School_in_Paris_10.jpg",
      "items": [
       {
        "value": 1949,
@@ -1228,10 +1364,11 @@
   {
    "say": "In Nantes, a fire destroyed a lycée's entrance hall.",
    "visual": {
-    "type": "3d",
-    "scene": "france_aftermath",
-    "shot": "nantes:3.9",
-    "t0": 0
+    "type": "video",
+    "file": "assets/news/fi_nantes_hall.mp4",
+    "start": 0.0,
+    "frame": 0.8,
+    "speed": 0.72
    },
    "text": {
     "kind": "label",
@@ -1329,8 +1466,7 @@
      1.1,
      0.5,
      0.5
-    ],
-    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    },
    "hold": 2.6,
    "chapter": "What happened on October 6th?",
@@ -1367,8 +1503,7 @@
      1.16,
      0.5,
      0.4
-    ],
-    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    },
    "sfx": {
     "prompt": "distant street protest crowd chanting, outdoor, muffled",
@@ -1392,8 +1527,7 @@
      1.14,
      0.55,
      0.5
-    ],
-    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    },
    "text": {
     "kind": "label",
@@ -1411,7 +1545,8 @@
     "name": "bars",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_26.jpg",
+     "accent": "blue",
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Condorcet_High_School_in_Paris_02.jpg",
      "title": "PARIS · 6 OCTOBER",
      "items": [
       {
@@ -1447,8 +1582,7 @@
     "type": "video",
     "file": "assets/news/ap_cortege.mp4",
     "start": 0.0,
-    "frame": 0.8,
-    "credit": "Video: AP"
+    "frame": 0.8
    }
   },
   {
@@ -1457,8 +1591,7 @@
     "type": "video",
     "file": "sources/video/commons_2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_78.webm",
     "start": 0.5,
-    "speed": 1.0,
-    "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons"
+    "speed": 1.0
    },
    "text": {
     "kind": "label",
@@ -1483,8 +1616,7 @@
      1.12,
      0.6,
      0.5
-    ],
-    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    }
   },
   {
@@ -1501,8 +1633,7 @@
      1.18,
      0.5,
      0.48
-    ],
-    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    },
    "dim": true,
    "text": {
@@ -1528,8 +1659,7 @@
      1.14,
      0.5,
      0.48
-    ],
-    "credit": "Aurelio Cárdenas, CC BY 4.0, via Wikimedia Commons"
+    ]
    },
    "text": {
     "kind": "label",
@@ -1547,7 +1677,8 @@
     "name": "bars",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_023.jpg",
+     "accent": "sky",
+     "bg": "sources/photos/raw/2026-10-06_Manifestation_à_Nancy_marche_rue_Saint_Jean_02.jpg",
      "title": "ACROSS FRANCE · 6 OCTOBER",
      "items": [
       {
@@ -1575,7 +1706,6 @@
     "file": "assets/news/reuters_teargas.mp4",
     "start": 0.0,
     "frame": 0.8,
-    "credit": "Video: Reuters",
     "speed": 0.8
    },
    "text": {
@@ -1594,7 +1724,6 @@
     "file": "assets/news/afp_lecornu.mp4",
     "start": 0.0,
     "frame": 0.8,
-    "credit": "Video: AFP",
     "speed": 0.8
    }
   },
@@ -1612,8 +1741,7 @@
      1.12,
      0.5,
      0.5
-    ],
-    "credit": "Wyslijp16, CC BY 4.0, via Wikimedia Commons"
+    ]
    },
    "dim": true,
    "text": {
@@ -1658,8 +1786,7 @@
      1.1,
      0.5,
      0.5
-    ],
-    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    },
    "hold": 2.6,
    "chapter": "Why are teenagers getting hurt?",
@@ -1742,18 +1869,17 @@
    "say": "On October second, Interior Minister Laurent Nuñez said there was no instruction to hold back. Officers could use all the intermediate weapons available.",
    "visual": {
     "type": "image",
-    "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_103.jpg",
+    "file": "sources/photos/raw/Suspension_blocus_Jules_Ferry_Paris_avec_intervention_forces_de_l_ordre.jpg",
     "from": [
-     1.15,
-     0.6,
+     1.04,
+     0.5,
      0.5
     ],
     "to": [
-     1.25,
-     0.6,
+     1.14,
+     0.5,
      0.5
-    ],
-    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    },
    "text": {
     "kind": "label",
@@ -1797,7 +1923,8 @@
     "name": "split",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/Journée_de_mobilisation_des_lycéens_à_Perpignan_14.jpg",
+     "accent": "white",
+     "bg": "sources/photos/raw/2026-10-06_10-50-18_MouvementDesLycéens-Belfort.jpg",
      "left": {
       "head": "PROSECUTOR",
       "big": "28 SEPT",
@@ -1887,7 +2014,8 @@
       960
      ],
      "aspect": 0.75,
-     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_104.jpg",
+     "accent": "blue",
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_21.jpg",
      "appear_at": "twenty-four",
      "appear_d": 1.2,
      "head": [
@@ -1923,8 +2051,7 @@
      1.12,
      0.5,
      0.5
-    ],
-    "credit": "Aurelio Cárdenas, CC BY 4.0, via Wikimedia Commons"
+    ]
    },
    "dim": true,
    "text": {
@@ -1939,10 +2066,10 @@
   {
    "say": "But the violence hasn't gone one way.",
    "visual": {
-    "type": "3d",
-    "scene": "france_police",
-    "shot": "behind_line:3.2",
-    "t0": 0
+    "type": "video",
+    "file": "assets/news/ap_fire_crowd.mp4",
+    "start": 0.0,
+    "frame": 0.8
    }
   },
   {
@@ -1959,6 +2086,7 @@
       1800,
       1000
      ],
+     "accent": "red",
      "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_015.jpg",
      "groups": [
       {
@@ -2036,8 +2164,7 @@
      1.12,
      0.5,
      0.5
-    ],
-    "credit": "Thomas Bresson, CC BY 4.0, via Wikimedia Commons"
+    ]
    },
    "text": {
     "kind": "label",
@@ -2051,10 +2178,10 @@
   {
    "say": "Headteachers have been hit by fireworks.",
    "visual": {
-    "type": "3d",
-    "scene": "france_lycee",
-    "shot": "firework:2.8",
-    "t0": 0
+    "type": "video",
+    "file": "assets/news/ap_thrower.mp4",
+    "start": 0.0,
+    "frame": 0.8
    }
   },
   {
@@ -2088,7 +2215,8 @@
       1810,
       1030
      ],
-     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_023.jpg",
+     "accent": "red",
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_20.jpg",
      "appear_at": 0.1,
      "appear_d": 0.8,
      "highlight": {
@@ -2120,10 +2248,18 @@
   {
    "say": "So who does the government blame? And what is it actually offering?",
    "visual": {
-    "type": "3d",
-    "scene": "france_state",
-    "shot": "matignon:7.5",
-    "t0": 0
+    "type": "image",
+    "file": "sources/photos/v2/matignon.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.13,
+     0.5,
+     0.48
+    ]
    },
    "hold": 0.3
   },
@@ -2140,8 +2276,7 @@
      1.1,
      0.5,
      0.5
-    ],
-    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    },
    "hold": 2.6,
    "chapter": "What is the government doing?",
@@ -2170,26 +2305,24 @@
     "type": "video",
     "file": "assets/news/lcp_assembly.mp4",
     "start": 0.0,
-    "frame": 0.8,
-    "credit": "Video: LCP"
+    "frame": 0.8
    }
   },
   {
    "say": "The prime minister's office called the movement an operation organised by La France Insoumise, and its allies on the far left.",
    "visual": {
     "type": "image",
-    "file": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_25.jpg",
+    "file": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Condorcet_High_School_in_Paris_03.jpg",
     "from": [
-     1.2,
-     0.4,
-     0.45
+     1.04,
+     0.5,
+     0.5
     ],
     "to": [
-     1.3,
-     0.45,
-     0.45
-    ],
-    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+     1.14,
+     0.5,
+     0.48
+    ]
    },
    "dim": true,
    "text": {
@@ -2208,8 +2341,9 @@
     "name": "phone_posts",
     "module": "graphics.py",
     "args": {
+     "accent": "sky",
      "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_24.jpg",
-     "photo": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Jules_Ferry_High_School_in_Paris_06.jpg",
+     "photo": "sources/photos/raw/2026-10-06_11-24-12_MouvementDesLycéens-Belfort.jpg",
      "date": "21 SEPT",
      "underline_at": 0.4
     }
@@ -2231,7 +2365,8 @@
     "name": "doc",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_092.jpg",
+     "accent": "red",
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_28.jpg",
      "title": "INTELLIGENCE NOTE (ILLUSTRATION)",
      "mark_at": "six times",
      "lines": [
@@ -2266,18 +2401,17 @@
    "say": "The party denies organising anything, and accuses the government of conspiracy thinking.",
    "visual": {
     "type": "image",
-    "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_079.jpg",
+    "file": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_03.jpg",
     "from": [
-     1.12,
+     1.04,
      0.5,
      0.5
     ],
     "to": [
-     1.2,
+     1.14,
      0.5,
      0.5
-    ],
-    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    },
    "dim": true,
    "text": {
@@ -2308,7 +2442,6 @@
     "file": "assets/news/franceinfo_geffray.mp4",
     "start": 0.0,
     "frame": 0.8,
-    "credit": "Video: franceinfo",
     "speed": 0.85
    }
   },
@@ -2319,6 +2452,7 @@
     "name": "stat",
     "module": "graphics.py",
     "args": {
+     "accent": "blue",
      "bg": "sources/photos/raw/2026-10-06_Manifestation_à_Nancy_pancarte_Prof_en_grève.jpg",
      "items": [
       {
@@ -2334,10 +2468,18 @@
   {
    "say": "Three thousand and twenty-four supply teachers, already on the payroll, but not assigned to any classes.",
    "visual": {
-    "type": "3d",
-    "scene": "france_teachers",
-    "shot": "standby:10.7",
-    "t0": 0
+    "type": "image",
+    "file": "sources/photos/raw/2026-10-06_11-20-15_MouvementDesLycéens-Belfort.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.14,
+     0.5,
+     0.5
+    ]
    },
    "text": {
     "kind": "label",
@@ -2369,18 +2511,17 @@
    "say": "One pupil association called it a first concrete announcement.",
    "visual": {
     "type": "image",
-    "file": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_08.jpg",
+    "file": "sources/photos/raw/2026-10-06_11-19-50_MouvementDesLycéens-Belfort.jpg",
     "from": [
-     1.15,
+     1.04,
      0.5,
      0.5
     ],
     "to": [
-     1.24,
+     1.14,
      0.5,
-     0.45
-    ],
-    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+     0.48
+    ]
    },
    "dim": true,
    "text": {
@@ -2407,19 +2548,35 @@
   {
    "say": "And critics asked the obvious question. If three thousand teachers were available, why weren't they in classrooms already?",
    "visual": {
-    "type": "3d",
-    "scene": "france_teachers",
-    "shot": "drop:7.5",
-    "t0": 0
+    "type": "image",
+    "file": "sources/photos/v2/moliere_classroom.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.6
+    ],
+    "to": [
+     1.14,
+     0.5,
+     0.5
+    ]
    }
   },
   {
    "say": "Geffray admitted they hadn't been assigned.",
    "visual": {
-    "type": "3d",
-    "scene": "france_teachers",
-    "shot": "empty_field:3.9",
-    "t0": 0
+    "type": "image",
+    "file": "sources/photos/raw/2026-10-06_10-18-22_MouvementDesLycéens-Belfort.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.14,
+     0.5,
+     0.5
+    ]
    },
    "text": {
     "kind": "label",
@@ -2433,10 +2590,10 @@
   {
    "say": "Then there's the damage. Twenty-four lycées have been burned or ransacked.",
    "visual": {
-    "type": "3d",
-    "scene": "france_aftermath",
-    "shot": "ransacked:4.8",
-    "t0": 0
+    "type": "video",
+    "file": "assets/news/fi_nantes_interior.mp4",
+    "start": 0.0,
+    "frame": 0.8
    },
    "text": {
     "kind": "label",
@@ -2463,7 +2620,8 @@
       1000
      ],
      "aspect": 0.8,
-     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_18.jpg",
+     "accent": "teal",
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_34.jpg",
      "appear_at": 0.1,
      "appear_d": 0.8,
      "blank": {
@@ -2496,8 +2654,7 @@
     "type": "video",
     "file": "assets/news/reuters_fire.mp4",
     "start": 0.0,
-    "frame": 0.8,
-    "credit": "Video: Reuters"
+    "frame": 0.8
    }
   },
   {
@@ -2507,7 +2664,7 @@
     "name": "bars",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_015.jpg",
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_07.jpg",
      "title": "DAMAGE TO LYCÉES",
      "items": [
       {
@@ -2565,10 +2722,18 @@
   {
    "say": "Anyone in a group that causes damage could be made to pay up to ten thousand euros, even if they didn't break anything themselves.",
    "visual": {
-    "type": "3d",
-    "scene": "france_money",
-    "shot": "fine:9.9",
-    "t0": 0
+    "type": "image",
+    "file": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_17.jpg",
+    "from": [
+     1.04,
+     0.5,
+     0.5
+    ],
+    "to": [
+     1.15,
+     0.5,
+     0.5
+    ]
    },
    "text": {
     "kind": "label",
@@ -2586,7 +2751,8 @@
     "name": "donut",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_26.jpg",
+     "accent": "blue",
+     "bg": "sources/photos/raw/2026-10-06_11-48-59_MouvementDesLycéens-Belfort.jpg",
      "title": "ODOXA POLL FOR LE FIGARO",
      "items": [
       {
@@ -2623,8 +2789,7 @@
      1.12,
      0.5,
      0.5
-    ],
-    "credit": "FreCha, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    }
   },
   {
@@ -2640,8 +2805,7 @@
      1.1,
      0.5,
      0.5
-    ],
-    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    },
    "hold": 2.6,
    "chapter": "What happens next?",
@@ -2680,7 +2844,8 @@
     "name": "stat",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_18.jpg",
+     "accent": "teal",
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_14.jpg",
      "items": [
       {
        "value": 1027,
@@ -2709,7 +2874,8 @@
     "name": "split",
     "module": "graphics.py",
     "args": {
-     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Colbert_in_Paris_24.jpg",
+     "accent": "white",
+     "bg": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_15.jpg",
      "left": {
       "head": "GOVERNMENT SOURCE",
       "big": "SLOWING",
@@ -2855,18 +3021,17 @@
    "say": "What does France owe the teenagers sitting in its classrooms?",
    "visual": {
     "type": "image",
-    "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_079.jpg",
+    "file": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Condorcet_High_School_in_Paris_05.jpg",
     "from": [
      1.04,
      0.5,
-     0.45
+     0.5
     ],
     "to": [
-     1.16,
+     1.14,
      0.5,
-     0.42
-    ],
-    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+     0.48
+    ]
    },
    "hold": 1.2,
    "id": "last"
@@ -2875,18 +3040,17 @@
    "say": "We'll keep following this story on the thirteenth, and after. If you'd like to see where it goes, subscribing to STRATA is the simplest way not to miss it.",
    "visual": {
     "type": "image",
-    "file": "sources/photos/raw/Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_092.jpg",
+    "file": "sources/photos/raw/2026_high_school_student_movement_and_blockades_at_Lycée_Louis-le-Grand_in_Paris_19.jpg",
     "from": [
-     1.1,
+     1.04,
      0.5,
      0.5
     ],
     "to": [
-     1.16,
+     1.1,
      0.5,
      0.5
-    ],
-    "credit": "Jules*, CC BY-SA 4.0, via Wikimedia Commons"
+    ]
    },
    "hold": 2.5,
    "fade_out": 3.0,

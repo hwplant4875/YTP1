@@ -8,9 +8,10 @@
 //   anon    (6 s)  a phone lying on a dark table: an anonymous account (blank avatar, "?") posts a call for
 //                  SAT 17 OCT, topics FUEL · HOUSING · DISCRIMINATION; the date sits in a dashed amber outline;
 //                  share bubbles drift up (beat 132).
-import { AMBER } from './lib.js';
+const AMBER = 0x38bdf8;   // v2: subject colour instead of the channel amber
 import { glow } from './look.js';
-import { AMBER_HI, path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, ease } from './france_lib.js';
+import { path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, ease } from './france_lib.js';
+const AMBER_HI = 0x7dd3fc;
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 const SW = 540, SH = 1170;     // screen canvas
@@ -19,7 +20,7 @@ const rr = (g, x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x 
 function drawVideo(g, views, cap) {
   // blurred, faceless group of eight pupils on a night street (soft blobs only)
   const bg = g.createLinearGradient(0, 0, 0, SH); bg.addColorStop(0, '#1d1c1f'); bg.addColorStop(0.6, '#2a2622'); bg.addColorStop(1, '#141313'); g.fillStyle = bg; g.fillRect(0, 0, SW, SH);
-  const lamp = g.createRadialGradient(400, 260, 10, 400, 260, 380); lamp.addColorStop(0, 'rgba(255,170,90,0.55)'); lamp.addColorStop(1, 'rgba(255,170,90,0)'); g.fillStyle = lamp; g.fillRect(0, 0, SW, SH);
+  const lamp = g.createRadialGradient(400, 260, 10, 400, 260, 380); lamp.addColorStop(0, 'rgba(56,189,248,0.55)'); lamp.addColorStop(1, 'rgba(56,189,248,0)'); g.fillStyle = lamp; g.fillRect(0, 0, SW, SH);
   g.filter = 'blur(10px)';
   const cols = ['#4a4f57', '#6b2f2f', '#2e3a4e', '#55604a', '#8a8478', '#3d4b5a', '#7a5a3a', '#5e5450'];
   for (let i = 0; i < 8; i++) { const x = 40 + i * 62 + (i % 2) * 14, y = 560 + (i % 3) * 30, s = 1 + (i % 2) * 0.12;
@@ -34,9 +35,9 @@ function drawVideo(g, views, cap) {
   g.textAlign = 'left'; g.fillStyle = '#4a4744'; g.beginPath(); g.arc(54, SH - 232, 24, 0, 7); g.fill(); g.fillStyle = 'rgba(242,236,224,0.8)'; g.fillRect(92, SH - 244, 190, 22);
   if (cap > 0) { g.globalAlpha = cap; g.font = '600 38px Inter, sans-serif'; g.fillText('"they do less for us"', 30, SH - 165); g.globalAlpha = 1; }
   g.fillStyle = 'rgba(0,0,0,0.55)'; rr(g, 24, 70, 300, 64, 32); g.fill();
-  g.fillStyle = '#ffb25c'; g.font = '800 40px "Inter Display", Inter, sans-serif'; g.fillText('▶ ' + views, 48, 116);
+  g.fillStyle = '#38bdf8'; g.font = '800 40px "Inter Display", Inter, sans-serif'; g.fillText('▶ ' + views, 48, 116);
   // progress bar
-  g.fillStyle = 'rgba(255,255,255,0.25)'; g.fillRect(0, SH - 8, SW, 8); g.fillStyle = '#ffb25c'; g.fillRect(0, SH - 8, SW * 0.62, 8);
+  g.fillStyle = 'rgba(255,255,255,0.25)'; g.fillRect(0, SH - 8, SW, 8); g.fillStyle = '#38bdf8'; g.fillRect(0, SH - 8, SW * 0.62, 8);
 }
 function drawPost(g, variant) {
   g.fillStyle = '#121214'; g.fillRect(0, 0, SW, SH);
@@ -44,12 +45,12 @@ function drawPost(g, variant) {
   // avatar (blank), name bars, date
   g.fillStyle = '#4a4744'; g.beginPath(); g.arc(70, 190, 36, 0, 7); g.fill();
   g.fillStyle = 'rgba(240,235,225,0.75)'; g.fillRect(124, 166, variant ? 170 : 210, 18); g.fillStyle = 'rgba(240,235,225,0.35)'; g.fillRect(124, 198, 120, 14);
-  g.fillStyle = '#e9dfca'; g.font = '700 30px Inter, sans-serif'; g.textAlign = 'right'; g.fillText('21 SEPT', SW - 30, 202); g.textAlign = 'left';
+  g.fillStyle = '#e3e8ef'; g.font = '700 30px Inter, sans-serif'; g.textAlign = 'right'; g.fillText('21 SEPT', SW - 30, 202); g.textAlign = 'left';
   // text lines
   g.fillStyle = 'rgba(240,235,225,0.55)'; for (let i = 0; i < 3; i++) g.fillRect(30, 260 + i * 36, i === 2 ? 260 : 470, 16);
   // photo: school gate with bins at night
   const y0 = 380, h = 520; const bg = g.createLinearGradient(0, y0, 0, y0 + h); bg.addColorStop(0, '#26252a'); bg.addColorStop(1, '#3a332b'); g.fillStyle = bg; g.fillRect(30, y0, SW - 60, h);
-  const lamp = g.createRadialGradient(variant ? 140 : 400, y0 + 80, 5, variant ? 140 : 400, y0 + 80, 300); lamp.addColorStop(0, 'rgba(255,170,90,0.6)'); lamp.addColorStop(1, 'rgba(255,170,90,0)'); g.fillStyle = lamp; g.fillRect(30, y0, SW - 60, h);
+  const lamp = g.createRadialGradient(variant ? 140 : 400, y0 + 80, 5, variant ? 140 : 400, y0 + 80, 300); lamp.addColorStop(0, 'rgba(56,189,248,0.6)'); lamp.addColorStop(1, 'rgba(56,189,248,0)'); g.fillStyle = lamp; g.fillRect(30, y0, SW - 60, h);
   g.fillStyle = '#4e4b45'; g.fillRect(30, y0 + 200, SW - 60, 60);   // building band
   g.strokeStyle = '#191a1b'; g.lineWidth = 5; for (let x = 40; x < SW - 30; x += 16) { g.beginPath(); g.moveTo(x, y0 + 300); g.lineTo(x, y0 + 440); g.stroke(); }
   g.fillStyle = '#191a1b'; g.fillRect(30, y0 + 300, SW - 60, 8); g.fillRect(30, y0 + 432, SW - 60, 8);
@@ -61,14 +62,14 @@ function drawPost(g, variant) {
 }
 function drawAnon(g, t) {
   g.fillStyle = '#0f0f11'; g.fillRect(0, 0, SW, SH);
-  const glowG = g.createRadialGradient(SW / 2, 560, 10, SW / 2, 560, 420); glowG.addColorStop(0, 'rgba(255,178,92,0.18)'); glowG.addColorStop(1, 'rgba(255,178,92,0)'); g.fillStyle = glowG; g.fillRect(0, 0, SW, SH);
+  const glowG = g.createRadialGradient(SW / 2, 560, 10, SW / 2, 560, 420); glowG.addColorStop(0, 'rgba(56,189,248,0.18)'); glowG.addColorStop(1, 'rgba(56,189,248,0)'); g.fillStyle = glowG; g.fillRect(0, 0, SW, SH);
   g.fillStyle = '#3a3836'; g.beginPath(); g.arc(70, 150, 38, 0, 7); g.fill(); g.fillStyle = '#9a948a'; g.font = '700 44px Inter, sans-serif'; g.textAlign = 'center'; g.fillText('?', 70, 166);
   g.textAlign = 'left'; g.fillStyle = 'rgba(240,235,225,0.75)'; g.font = '600 28px Inter, sans-serif'; g.fillText('anonymous account', 126, 145); g.fillStyle = 'rgba(240,235,225,0.35)'; g.fillRect(126, 166, 120, 12);
-  g.textAlign = 'center'; g.fillStyle = '#e9dfca'; g.font = '700 40px Inter, sans-serif'; spacedText(g, 'SATURDAY', SW / 2, 410, 8, 'center');
-  g.font = '800 230px "Inter Display", Inter, sans-serif'; g.fillStyle = '#ffb25c'; g.fillText('17', SW / 2, 640);
-  g.font = '700 46px Inter, sans-serif'; g.fillStyle = '#e9dfca'; spacedText(g, 'OCTOBER', SW / 2, 730, 10, 'center');
+  g.textAlign = 'center'; g.fillStyle = '#e3e8ef'; g.font = '700 40px Inter, sans-serif'; spacedText(g, 'SATURDAY', SW / 2, 410, 8, 'center');
+  g.font = '800 230px "Inter Display", Inter, sans-serif'; g.fillStyle = '#38bdf8'; g.fillText('17', SW / 2, 640);
+  g.font = '700 46px Inter, sans-serif'; g.fillStyle = '#e3e8ef'; spacedText(g, 'OCTOBER', SW / 2, 730, 10, 'center');
   // dashed outline
-  g.strokeStyle = '#ffb25c'; g.lineWidth = 6; g.setLineDash([22, 16]); g.lineDashOffset = -t * 40; rr(g, 70, 330, SW - 140, 450, 30); g.stroke(); g.setLineDash([]);
+  g.strokeStyle = '#38bdf8'; g.lineWidth = 6; g.setLineDash([22, 16]); g.lineDashOffset = -t * 40; rr(g, 70, 330, SW - 140, 450, 30); g.stroke(); g.setLineDash([]);
   g.font = '600 30px Inter, sans-serif'; g.fillStyle = 'rgba(240,235,225,0.8)'; ['FUEL', 'HOUSING', 'DISCRIMINATION'].forEach((s, i) => { const w = g.measureText(s).width + 40, x = [80, 205, 290][i] + (i === 2 ? -40 : 0);
     const y = i < 2 ? 850 : 912; const xx = i < 2 ? [100, 260][i] : SW / 2 - w / 2; g.strokeStyle = 'rgba(240,235,225,0.5)'; g.lineWidth = 2; rr(g, xx, y - 36, w, 52, 26); g.stroke(); g.textAlign = 'left'; g.fillText(s, xx + 20, y); });
   g.fillStyle = 'rgba(240,235,225,0.25)'; for (let i = 0; i < 3; i++) g.fillRect(40, 1000 + i * 34, 440 - i * 90, 12);
@@ -97,7 +98,7 @@ export async function setup(THREE, renderer, W, H) {
   };
   const ctx = { THREE, scene, camera, shot, k };
   scene.add(new THREE.HemisphereLight(0x8e94a0, 0x080706, 0.35));
-  const key = new THREE.SpotLight(0xfff0dc, 40, 20, 0.5, 0.8, 1.4); key.position.set(-2.5, 4, 3.5); key.castShadow = true; key.shadow.mapSize.set(1024, 1024); scene.add(key, key.target);
+  const key = new THREE.SpotLight(0xf1f4fa, 40, 20, 0.5, 0.8, 1.4); key.position.set(-2.5, 4, 3.5); key.castShadow = true; key.shadow.mapSize.set(1024, 1024); scene.add(key, key.target);
   const rim = new THREE.SpotLight(AMBER, shot === 'anon' ? 8 : 30, 12, 0.6, 0.6, 1.4); rim.position.set(2.8, 1.6, -2.5); scene.add(rim, rim.target);
 
   if (shot === 'viral') {
@@ -133,11 +134,11 @@ export async function setup(THREE, renderer, W, H) {
     const p = phone(scr); p.rotation.x = -Math.PI / 2; p.rotation.z = 0.25; p.position.set(0, 0.045, 0); scene.add(p); ctx.hero = p;
     const tableT = ctex(THREE, 1024, 1024, (g, w, h) => { g.fillStyle = '#1a1714'; g.fillRect(0, 0, w, h); for (let i = 0; i < 260; i++) { g.strokeStyle = `rgba(${40 + Math.random() * 30},${32 + Math.random() * 20},${24},0.5)`; g.lineWidth = 1 + Math.random() * 3; g.beginPath(); const y = Math.random() * h; g.moveTo(0, y); g.bezierCurveTo(w * 0.3, y + 10, w * 0.6, y - 10, w, y + 4); g.stroke(); } }, { repeat: [2, 2] });
     const table = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), new THREE.MeshStandardMaterial({ map: tableT, roughness: 0.55, metalness: 0.05 })); table.rotation.x = -Math.PI / 2; table.receiveShadow = true; scene.add(table);
-    const screenLight = new THREE.PointLight(0xffd2a0, 3, 2.5, 2); screenLight.position.set(0, 0.35, 0); scene.add(screenLight);
+    const screenLight = new THREE.PointLight(0xf1f4fa, 3, 2.5, 2); screenLight.position.set(0, 0.35, 0); scene.add(screenLight);
     key.position.set(-1.5, 3.5, 1.5); key.target.position.set(0, 0, 0); key.intensity = 14; rim.position.set(1.5, 0.6, -1.5); rim.target.position.set(0, 0, 0);
     // share bubbles (rounded quads drifting up)
-    const bt = ctex(THREE, 256, 96, (g, w, h) => { g.fillStyle = 'rgba(28,28,30,0.92)'; rr(g, 2, 2, w - 4, h - 4, 44); g.fill(); g.strokeStyle = 'rgba(255,178,92,0.8)'; g.lineWidth = 3; rr(g, 2, 2, w - 4, h - 4, 44); g.stroke();
-      g.fillStyle = '#ffb25c'; g.beginPath(); g.arc(48, h / 2, 20, 0, 7); g.fill(); g.fillStyle = 'rgba(240,235,225,0.6)'; g.fillRect(84, 36, 130, 10); g.fillRect(84, 54, 90, 8); });
+    const bt = ctex(THREE, 256, 96, (g, w, h) => { g.fillStyle = 'rgba(28,28,30,0.92)'; rr(g, 2, 2, w - 4, h - 4, 44); g.fill(); g.strokeStyle = 'rgba(56,189,248,0.8)'; g.lineWidth = 3; rr(g, 2, 2, w - 4, h - 4, 44); g.stroke();
+      g.fillStyle = '#38bdf8'; g.beginPath(); g.arc(48, h / 2, 20, 0, 7); g.fill(); g.fillStyle = 'rgba(240,235,225,0.6)'; g.fillRect(84, 36, 130, 10); g.fillRect(84, 54, 90, 8); });
     ctx.bubbles = [];
     for (let i = 0; i < 14; i++) { const m = new THREE.Mesh(new THREE.PlaneGeometry(0.27, 0.1), new THREE.MeshBasicMaterial({ map: bt, transparent: true, opacity: 0, depthWrite: false, toneMapped: false }));
       m.userData = { a: i * 2.39, r: 0.75 + (i % 4) * 0.2, t0: 1.2 + i * 0.28 }; scene.add(m); ctx.bubbles.push(m); }

@@ -12,9 +12,10 @@
 //   oct23_27 (6 s)  pan 23 -> 27 Oct: "CONSULTATION CLOSES", then "BILL AT THE SENATE".
 //   nov5     (6 s)  an "END OCT · DECISIONS PROMISED" bracket, then 5 NOV lights: "5 UNION CONFEDERATIONS STRIKE".
 //   apr2027  (7 s)  pull back and away: the rail runs off into the dark to a lone APR 2027 tile, "PRESIDENTIAL ELECTION".
-import { AMBER } from './lib.js';
+const AMBER = 0x3b82f6;   // v2: subject colour instead of the channel amber
 import { glow } from './look.js';
-import { AMBER_HI, path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, label } from './france_lib.js';
+import { path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, label } from './france_lib.js';
+const AMBER_HI = 0x60a5fa;
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 const START = Date.UTC(2026, 8, 14);          // Mon 14 Sept 2026
@@ -71,8 +72,8 @@ export async function setup(THREE, renderer, W, H) {
       g.font = '600 34px Inter, sans-serif'; spacedText(g, MON[d.m], w / 2, 360, 9, 'center');
     }
     if (ev || d.apr) {
-      g.fillStyle = glowOnly ? '#ffffff' : '#ffb25c'; g.fillRect(w / 2 - 70, 392, 140, 5);
-      g.strokeStyle = glowOnly ? 'rgba(255,255,255,0.9)' : 'rgba(255,178,92,0.0)'; g.lineWidth = 8; g.strokeRect(10, 10, w - 20, h - 20);
+      g.fillStyle = glowOnly ? '#ffffff' : '#60a5fa'; g.fillRect(w / 2 - 70, 392, 140, 5);
+      g.strokeStyle = glowOnly ? 'rgba(255,255,255,0.9)' : 'rgba(96,165,250,0.0)'; g.lineWidth = 8; g.strokeRect(10, 10, w - 20, h - 20);
     }
   });
   const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1c, roughness: 0.45, metalness: 0.3 });
@@ -93,24 +94,24 @@ export async function setup(THREE, renderer, W, H) {
   // ledge / rail the tiles stand in, plus a far dotted continuation to April
   const ledgeMat = new THREE.MeshStandardMaterial({ color: 0x121214, roughness: 0.35, metalness: 0.5 });
   const ledge = new THREE.Mesh(new THREE.BoxGeometry(railEnd + 1.2, 0.12, 0.7), ledgeMat); ledge.position.set(railEnd / 2 - 0.55, 0.06, 0.05); ledge.receiveShadow = true; scene.add(ledge);
-  const lip = new THREE.Mesh(new THREE.BoxGeometry(railEnd + 1.2, 0.02, 0.02), new THREE.MeshBasicMaterial({ color: 0x6d655a })); lip.position.set(railEnd / 2 - 0.55, 0.125, 0.4); scene.add(lip);
+  const lip = new THREE.Mesh(new THREE.BoxGeometry(railEnd + 1.2, 0.02, 0.02), new THREE.MeshBasicMaterial({ color: 0x5d6673 })); lip.position.set(railEnd / 2 - 0.55, 0.125, 0.4); scene.add(lip);
   const aprLedge = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.12, 0.7), ledgeMat); aprLedge.position.set(apr.x, 0.06, 0.05); scene.add(aprLedge);
   const dots = new THREE.Group(); scene.add(dots);
-  for (let xx = railEnd + 0.8; xx < apr.x - 1.0; xx += 0.6) { const dd = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.02, 0.02), new THREE.MeshBasicMaterial({ color: 0x8a8174, transparent: true, opacity: 0.8 })); dd.position.set(xx, 0.06, 0.4); dots.add(dd); }
+  for (let xx = railEnd + 0.8; xx < apr.x - 1.0; xx += 0.6) { const dd = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.02, 0.02), new THREE.MeshBasicMaterial({ color: 0x7d8796, transparent: true, opacity: 0.8 })); dd.position.set(xx, 0.06, 0.4); dots.add(dd); }
   // floor
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(600, 60), new THREE.MeshStandardMaterial({ color: 0x0c0c0d, roughness: 0.3, metalness: 0.6 }));
   floor.rotation.x = -Math.PI / 2; floor.position.set(40, -0.001, 0); floor.receiveShadow = true; scene.add(floor);
   // month headers on the floor in front of the rail
   for (const d of days) if (d.dd === 1 || d.i === 0) {
-    const t = ctex(THREE, 1024, 160, (g, w, h) => { g.fillStyle = '#d8cfbd'; g.font = '700 96px Inter, sans-serif'; g.textBaseline = 'middle'; spacedText(g, ['', '', '', '', '', '', '', '', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER'][d.m] + ' 2026', 8, h / 2, 26); });
+    const t = ctex(THREE, 1024, 160, (g, w, h) => { g.fillStyle = '#d3dae4'; g.font = '700 96px Inter, sans-serif'; g.textBaseline = 'middle'; spacedText(g, ['', '', '', '', '', '', '', '', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER'][d.m] + ' 2026', 8, h / 2, 26); });
     const p = new THREE.Mesh(new THREE.PlaneGeometry(4.8, 0.75), new THREE.MeshBasicMaterial({ map: t, transparent: true, opacity: 0.3, depthWrite: false }));
     p.rotation.x = -Math.PI / 2; p.position.set(d.x - 0.45 + 2.4, 0.005, 1.15); scene.add(p);
   }
   // holiday band (17 Oct -> 2 Nov), unrolls along the floor
   const hx0 = byKey['10-17'].d.x - 0.47, hx1 = byKey['11-2'].d.x + 0.47;
   const bandT = ctex(THREE, 4096, 128, (g, w, h) => {
-    g.fillStyle = 'rgba(255,178,92,0.10)'; g.fillRect(0, 0, w, h); g.fillStyle = 'rgba(255,178,92,0.75)'; g.fillRect(0, 0, w, 5); g.fillRect(0, h - 5, w, 5);
-    g.fillStyle = 'rgba(255,200,140,0.9)'; g.font = '700 60px Inter, sans-serif'; g.textBaseline = 'middle'; spacedText(g, 'AUTUMN SCHOOL HOLIDAYS', 40, h / 2 + 3, 16);
+    g.fillStyle = 'rgba(96,165,250,0.10)'; g.fillRect(0, 0, w, h); g.fillStyle = 'rgba(96,165,250,0.75)'; g.fillRect(0, 0, w, 5); g.fillRect(0, h - 5, w, 5);
+    g.fillStyle = 'rgba(191,219,254,0.9)'; g.font = '700 60px Inter, sans-serif'; g.textBaseline = 'middle'; spacedText(g, 'AUTUMN SCHOOL HOLIDAYS', 40, h / 2 + 3, 16);
   });
   const band = new THREE.Mesh(new THREE.PlaneGeometry(1, 0.5), new THREE.MeshBasicMaterial({ map: bandT, transparent: true, depthWrite: false, opacity: 0 }));
   band.rotation.x = -Math.PI / 2; band.position.set(hx0, 0.006, 0.78); band.renderOrder = 3; scene.add(band);
@@ -137,18 +138,18 @@ export async function setup(THREE, renderer, W, H) {
   const captions = {};
   for (const [key, lines] of Object.entries(EVENTS)) {
     const t = byKey[key]; if (!t) continue;
-    const l = label(THREE, lines[0], { size: 0.042, sub: lines[1] ?? null, anchor: 'center', subColor: '#e9dfca', gap: 0 });
+    const l = label(THREE, lines[0], { size: 0.042, sub: lines[1] ?? null, anchor: 'center', subColor: '#e3e8ef', gap: 0 });
     l.material.opacity = 0; l.position.set(0, 0.9, 0.1); t.grp.add(l); captions[key] = l;
   }
   { const l = label(THREE, 'PRESIDENTIAL ELECTION', { size: 0.032, anchor: 'center', gap: 0 }); l.material.opacity = 0; l.position.set(0, 1.2, 0.1); byKey.apr.grp.add(l); captions.apr = l; }
-  { const l = label(THREE, 'END OCT', { size: 0.026, sub: 'DECISIONS PROMISED', anchor: 'center', subColor: '#e9dfca', gap: 0 }); l.material.opacity = 0; l.position.set((bx0 + bx1) / 2, 2.05, 0); scene.add(l); captions.endoct = l; }
+  { const l = label(THREE, 'END OCT', { size: 0.026, sub: 'DECISIONS PROMISED', anchor: 'center', subColor: '#e3e8ef', gap: 0 }); l.material.opacity = 0; l.position.set((bx0 + bx1) / 2, 2.05, 0); scene.add(l); captions.endoct = l; }
   { const l = label(THREE, 'NOW', { size: 0.022, anchor: 'center', gap: 0, color: '#f2e8d4' }); l.material.opacity = 0; l.position.set(nowX, 2.2, 0.45); scene.add(l); captions.now = l; }
 
   // ------------------------------------------------------------------ light
   scene.add(new THREE.HemisphereLight(0x8b8f99, 0x0a0908, 0.35));
-  const key = new THREE.SpotLight(0xffe2c0, 0, 40, 0.5, 0.7, 1.2); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -0.0003; scene.add(key, key.target);
+  const key = new THREE.SpotLight(0xf1f4fa, 0, 40, 0.5, 0.7, 1.2); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -0.0003; scene.add(key, key.target);
   const rim = new THREE.DirectionalLight(0xb7c0cc, 0.5); rim.position.set(-10, 8, -12); scene.add(rim);
-  const front = new THREE.DirectionalLight(0xfff0dc, 0.55); front.position.set(4, 5, 14); scene.add(front);
+  const front = new THREE.DirectionalLight(0xf1f4fa, 0.55); front.position.set(4, 5, 14); scene.add(front);
   const hot = new THREE.PointLight(AMBER, 0, 6, 1.6); scene.add(hot);
 
   const post = finishPost(THREE, renderer, scene, camera, W, H, { bloom: 0.6, bloomRadius: 0.5, bloomThreshold: 0.7,

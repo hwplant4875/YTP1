@@ -6,9 +6,10 @@
 //                     display reading "NETWORK SUSPENDED" in amber LEDs; lateral dolly.
 //   ransacked  (7 s)  inside a classroom after an attack: desks overturned, papers, a broken window, soot on the
 //                     ceiling; cold daylight through the window, amber light on the scorched wall.
-import { AMBER } from './lib.js';
+const AMBER = 0xffa64a;   // v2: subject colour instead of the channel amber
 import { glow, beam } from './look.js';
-import { AMBER_HI, path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, ease } from './france_lib.js';
+import { path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, ease } from './france_lib.js';
+const AMBER_HI = 0xff8a3d;
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 export async function setup(THREE, renderer, W, H) {

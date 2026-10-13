@@ -556,10 +556,18 @@ def main():
                     f"afade=t=in:d={m.get('fade_in', 1.5)},afade=t=out:st={max(L - m.get('fade_out', 2.0), 0):.2f}:d={m.get('fade_out', 2.0)},"
                     f"adelay={int(a * 1000)}:all=1[m{k}]")
         mus.append(f"[m{k}]")
+    def duck_expr():
+        # optional "music_duck": [{"from": id, "to": id, "db": -9, "ramp": 1.5}] lowers the whole bed over a section
+        terms = []
+        for dk in spec.get("music_duck", []):
+            a, z, r, g = anchors[dk["from"]], anchors[dk["to"]], dk.get("ramp", 1.5), dk["db"] / 20
+            w = f"min(max((t-{a - r:.2f})/{r},0),1)*min(max(({z + r:.2f}-t)/{r},0),1)"
+            terms.append(f"*pow(10,{g}*{w})")
+        return f",volume='1{''.join(terms)}':eval=frame" if terms else ""
     # fix input indexing for narration/sfx (they were counted in pairs above)
     graph = ";".join(filt)
     if mus:
-        graph += f";{''.join(mus)}amix=inputs={len(mus)}:normalize=0:duration=longest[mraw];" \
+        graph += f";{''.join(mus)}amix=inputs={len(mus)}:normalize=0:duration=longest{duck_expr()}[mraw];" \
                  f"[mraw][key]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=500:makeup=1[mduck]"
         bed = "[mduck]"
     else:
@@ -601,12 +609,20 @@ def main():
     shots[-1]["end"] = total
     segs = []
     shard = os.environ.get("ASSEMBLE_SHARD")   # "k/n": only pre-render every n-th shot into the cache, then stop
+    only = os.environ.get("ASSEMBLE_TYPES")    # with a shard: e.g. "3d" pre-renders only those visual types
+    j = -1
     for i, s in enumerate(shots):
         d = s["end"] - s["start"]
         v = s["v"]
         if shard:
             k, n = map(int, shard.split("/"))
-            if i % n != k:
+            if only:
+                if v["type"] not in only.split(","):
+                    continue
+                j += 1
+                if j % n != k:
+                    continue
+            elif i % n != k:
                 continue
         print(f"shot {i + 1}/{len(shots)} {v['type']} {d:.1f}s", flush=True)
         if v["type"] == "3d":

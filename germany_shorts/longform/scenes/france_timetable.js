@@ -4,9 +4,10 @@
 //                       in ten flips over to a blank, amber-edged gap (10% of lycée teaching hours not delivered).
 //   hours        (8 s)  two stacks of hour slabs build up side by side (1 slab = 20 h): France 60 slabs = 1,200 h,
 //                       OECD average 48 = 960 h. The top 12 French slabs (the extra 240 h) glow amber. Crane up.
-import { AMBER } from './lib.js';
+const AMBER = 0x22d3ee;   // v2: subject colour instead of the channel amber
 import { glow } from './look.js';
-import { AMBER_HI, path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, label, ease, studioFloor } from './france_lib.js';
+import { path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, label, ease, studioFloor } from './france_lib.js';
+const AMBER_HI = 0xf87171;
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 const SUBJ = [['MATHS', '#5b6e7a'], ['FRANÇAIS', '#7a5b5b'], ['HIST-GÉO', '#6f6a52'], ['ANGLAIS', '#56705d'], ['PHYSIQUE', '#5d5b78'], ['SVT', '#4f6d6a'], ['PHILO', '#77634f'], ['EPS', '#66605a'], ['ESPAGNOL', '#6d5a6b'], ['SES', '#5a6a55']];
@@ -38,7 +39,7 @@ export async function setup(THREE, renderer, W, H) {
     // header row
     const days = ['LUN', 'MAR', 'MER', 'JEU', 'VEN'];
     const colW = (boardW - 0.7) / 5, rowH = (boardH - 0.4) / 10;
-    days.forEach((d, i) => { const t = ctex(THREE, 256, 64, (g, w, h) => { g.fillStyle = '#d9cfbd'; g.font = '700 38px Inter, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; spacedText(g, d, w / 2, h / 2, 6, 'center'); });
+    days.forEach((d, i) => { const t = ctex(THREE, 256, 64, (g, w, h) => { g.fillStyle = '#d6dce5'; g.font = '700 38px Inter, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; spacedText(g, d, w / 2, h / 2, 6, 'center'); });
       const m = new THREE.Mesh(new THREE.PlaneGeometry(colW * 0.9, 0.2), new THREE.MeshBasicMaterial({ map: t, transparent: true })); m.position.set(bx - boardW / 2 + 0.6 + colW * (i + 0.5), by + boardH / 2 - 0.2, 0.04); scene.add(m); });
     for (let r = 0; r < 10; r++) { const t = ctex(THREE, 128, 64, (g, w, h) => { g.fillStyle = '#a49b8b'; g.font = '600 30px Inter, sans-serif'; g.textAlign = 'right'; g.textBaseline = 'middle'; g.fillText(`${8 + r}h`, w - 8, h / 2); });
       const m = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.2), new THREE.MeshBasicMaterial({ map: t, transparent: true })); m.position.set(bx - boardW / 2 + 0.28, by + boardH / 2 - 0.4 - rowH * (r + 0.5), 0.04); scene.add(m); }
@@ -62,7 +63,7 @@ export async function setup(THREE, renderer, W, H) {
       tiles.push({ t, isGone, edge, ord: [...gone].indexOf(idx) });
     }
     ctx.tiles = tiles; ctx.gapMat = gap;
-    const key = new THREE.SpotLight(0xfff1df, 26, 14, 0.42, 0.7, 1.5); key.position.set(-1.8, 5.5, 4.5); key.target.position.set(0, 2.3, 0); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); scene.add(key, key.target);
+    const key = new THREE.SpotLight(0xf1f4fa, 26, 14, 0.42, 0.7, 1.5); key.position.set(-1.8, 5.5, 4.5); key.target.position.set(0, 2.3, 0); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); scene.add(key, key.target);
     const tube = new THREE.RectAreaLight ? null : null;
     const amberPt = new THREE.PointLight(AMBER, 0, 3, 1.8); amberPt.position.set(0, 2.3, 0.8); scene.add(amberPt); ctx.amberPt = amberPt;
   } else {
@@ -76,10 +77,10 @@ export async function setup(THREE, renderer, W, H) {
     // 960 h reference line across both stacks
     const ln = new THREE.Mesh(new THREE.BoxGeometry(4.6, 0.012, 0.012), new THREE.MeshBasicMaterial({ color: 0xe9dfca, transparent: true, opacity: 0 })); ln.position.set(0, 0.05 + 48 * 0.1 - 0.04, 0.55); scene.add(ln); ctx.ln = ln;
     const lfr = label(THREE, 'FRANCE', { size: 0.036, sub: '≈ 1,200 hours / year', anchor: 'right' }); lfr.position.set(-1.95, 2.6, 0.5); lfr.material.opacity = 0; scene.add(lfr);
-    const loe = label(THREE, 'OECD AVERAGE', { size: 0.036, sub: '960 hours / year', anchor: 'left', subColor: '#e9dfca' }); loe.position.set(1.95, 2.6, 0.5); loe.material.opacity = 0; scene.add(loe);
-    const lx = label(THREE, '+240 h', { size: 0.05, anchor: 'right', color: '#ffb25c' }); lx.position.set(-1.95, 0.05 + 54 * 0.1, 0.5); lx.material.opacity = 0; scene.add(lx);
+    const loe = label(THREE, 'OECD AVERAGE', { size: 0.036, sub: '960 hours / year', anchor: 'left', subColor: '#e3e8ef' }); loe.position.set(1.95, 2.6, 0.5); loe.material.opacity = 0; scene.add(loe);
+    const lx = label(THREE, '+240 h', { size: 0.05, anchor: 'right', color: '#22d3ee' }); lx.position.set(-1.95, 0.05 + 54 * 0.1, 0.5); lx.material.opacity = 0; scene.add(lx);
     ctx.labs = { lfr, loe, lx };
-    const key = new THREE.SpotLight(0xfff1df, 120, 30, 0.5, 0.7, 1.3); key.position.set(-3, 9, 6); key.target.position.set(0, 2.5, 0); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); scene.add(key, key.target);
+    const key = new THREE.SpotLight(0xf1f4fa, 120, 30, 0.5, 0.7, 1.3); key.position.set(-3, 9, 6); key.target.position.set(0, 2.5, 0); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); scene.add(key, key.target);
     const rim = new THREE.SpotLight(AMBER, 25, 20, 0.5, 0.6, 1.3); rim.position.set(-2, 7, -6); rim.target.position.set(-1.1, 4, 0); scene.add(rim, rim.target);
     const fill = new THREE.DirectionalLight(0xdfe4ea, 0.5); fill.position.set(4, 3, 8); scene.add(fill);
     const hotPt = new THREE.PointLight(AMBER, 0, 5, 1.6); hotPt.position.set(-1.1, 5.4, 1.2); scene.add(hotPt); ctx.hotPt = hotPt;

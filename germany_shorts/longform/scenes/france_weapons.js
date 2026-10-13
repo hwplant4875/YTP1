@@ -8,9 +8,10 @@
 //   grenade     (6 s)  the grenade; at 2 s it opens into an exploded radial burst of rubber pellets (abstract, slow).
 //   close_range (6 s)  top-down-ish: launcher muzzle and a short amber distance bracket, "CLOSE RANGE".
 //   suspended   (6 s)  the grenade under a spot; a glass case lowers over it, the light turns cold, SUSPENDED · 7 OCT.
-import { AMBER } from './lib.js';
+const AMBER = 0xcbd5e1;   // v2: subject colour instead of the channel amber
 import { glow, beam } from './look.js';
-import { AMBER_HI, path, clamp01, sstep, fontsReady, finishPost, ctex, timing, label, ease } from './france_lib.js';
+import { path, clamp01, sstep, fontsReady, finishPost, ctex, timing, label, ease } from './france_lib.js';
+const AMBER_HI = 0x60a5fa;
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 export async function setup(THREE, renderer, W, H) {
@@ -39,7 +40,7 @@ export async function setup(THREE, renderer, W, H) {
   const PX = [-3.2, 0, 3.2], PY = 0.62;
   for (const x of PX) {
     add(RB(1.9, PY, 1.0, 0.02), plinthMat, x, PY / 2, 0, scene);
-    const edge = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.006, 0.006), new THREE.MeshBasicMaterial({ color: 0x8a6a40 })); edge.position.set(x, PY, 0.5); scene.add(edge);
+    const edge = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.006, 0.006), new THREE.MeshBasicMaterial({ color: 0x5a6a80 })); edge.position.set(x, PY, 0.5); scene.add(edge);
   }
 
   // ------------------------------------------------------------------ LBD launcher (stylised, single-shot 40 mm)
@@ -122,9 +123,9 @@ export async function setup(THREE, renderer, W, H) {
 
   // ------------------------------------------------------------------ lights
   scene.add(new THREE.HemisphereLight(0x8e94a0, 0x080706, 0.55));
-  const spots = PX.map((x) => { const s = new THREE.SpotLight(0xfff1df, 0, 12, 0.2, 0.7, 1.4); s.position.set(x + 0.4, 4.2, 1.6); s.target.position.set(x, PY, 0); s.castShadow = true; s.shadow.mapSize.set(1024, 1024); s.shadow.bias = -0.0004; scene.add(s, s.target); return s; });
+  const spots = PX.map((x) => { const s = new THREE.SpotLight(0xf1f4fa, 0, 12, 0.2, 0.7, 1.4); s.position.set(x + 0.4, 4.2, 1.6); s.target.position.set(x, PY, 0); s.castShadow = true; s.shadow.mapSize.set(1024, 1024); s.shadow.bias = -0.0004; scene.add(s, s.target); return s; });
   const rims = PX.map((x) => { const r = new THREE.SpotLight(AMBER, 0, 3.4, 0.3, 0.5, 2.0); r.position.set(x - 0.6, PY + 1.2, -2.6); r.target.position.set(x, PY + 0.25, 0); scene.add(r, r.target); return r; });
-  const beams = PX.map((x) => { const b = beam(THREE, 0xfff0dc, 4.0, 0.9, 0.035); b.position.set(x + 0.4, 4.2, 1.6); b.quaternion.setFromUnitVectors(new THREE.Vector3(0, -1, 0), new THREE.Vector3(-0.4, PY - 4.2, -1.6).normalize()); scene.add(b); return b; });
+  const beams = PX.map((x) => { const b = beam(THREE, 0xf1f4fa, 4.0, 0.9, 0.035); b.position.set(x + 0.4, 4.2, 1.6); b.quaternion.setFromUnitVectors(new THREE.Vector3(0, -1, 0), new THREE.Vector3(-0.4, PY - 4.2, -1.6).normalize()); scene.add(b); return b; });
   const cold = new THREE.SpotLight(0xbfd2e6, 0, 10, 0.35, 0.6, 1.3); cold.position.set(PX[2] - 0.3, 4.0, 1.4); cold.target.position.set(PX[2], PY, 0); scene.add(cold, cold.target);
   const flash = new THREE.PointLight(AMBER, 0, 4, 1.5); flash.position.set(PX[2], PY + 0.4, 0.3); scene.add(flash);
 

@@ -97,12 +97,12 @@ def background(args, base):
 
 @lru_cache(None)
 def _warm_bg():
-    """No photo: deep warm-brown backdrop with a faint amber glow (not flat grey)."""
+    """No photo: deep slate backdrop with a faint cool glow (not flat grey)."""
     y, x = np.mgrid[0:H(), 0:W()]
     r = np.hypot((x - W() / 2) / W(), (y - H() * 0.45) / H())
     glow = np.clip(1 - r * 1.6, 0, 1)[..., None] ** 1.6
     rng = np.random.default_rng(3)
-    a = np.array([14, 11, 9], np.float32)[None, None] + glow * np.array([38, 22, 8], np.float32) + rng.normal(0, 2.0, (H(), W(), 1))
+    a = np.array([9, 11, 14], np.float32)[None, None] + glow * np.array([14, 24, 38], np.float32) + rng.normal(0, 2.0, (H(), W(), 1))
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
 
 
@@ -111,9 +111,8 @@ def warm_bg():
 
 
 def credit(dr, s, alpha=1.0):
-    """Bottom-left source line, grey at 50 %, like the assembler's CREDIT style."""
-    if s and alpha > 0:
-        dr.text((30, H() - 26), s, font=G.font(22, SEMI), fill=(*CREDIT_COL, int(128 * alpha)), anchor="ls")
+    """v1 drew a bottom-left grey credit line here; v2 draws nothing."""
+    return   # v2: no on-screen credits (they go in the video description)
 
 
 def source(dr, s, alpha=1.0, xy=None):
@@ -564,6 +563,10 @@ def g_montage(args, d, timing, base, out):
         k = (t - starts[i]) / max(ends[i] - starts[i], 0.1)
         if it.get("file"):
             img = kenburns(_still(os.path.join(base, it["file"])), k, it.get("from", [1.05, 0.5, 0.5]), it.get("to", [1.18, 0.5, 0.5]))
+        elif it.get("full"):   # full-frame clip, read at 2x and pushed in exactly like the stills
+            if i not in readers:
+                readers[i] = (ClipReader(os.path.join(base, it["video"]), it.get("start", 0), W() * 2, H() * 2), 1.0)
+            img = kenburns(grade(readers[i][0].read()), k, it.get("from", [1.05, 0.5, 0.55]), it.get("to", [1.15, 0.5, 0.5]))
         else:
             if i not in readers:
                 f = it.get("frame", 0.78)
@@ -577,8 +580,12 @@ def g_montage(args, d, timing, base, out):
             x, y = (W() - fr.width) // 2, (H() - fr.height) // 2
             dr0.rectangle([x - 3, y - 3, x + fr.width + 2, y + fr.height + 2], fill=(58, 58, 58))
             img.paste(fr, (x, y))
+        if it.get("dark"):
+            img = Image.fromarray((np.asarray(img, np.float32) * it["dark"]).astype(np.uint8))
         img = img.convert("RGBA")
-        credit(ImageDraw.Draw(img), it.get("credit"))
+        if it.get("caption"):   # big white centred word(s), black outer stroke, quick fade in
+            T(ImageDraw.Draw(img), (W() / 2, it.get("caption_y", H() / 2)), it["caption"], it.get("caption_size", 150), fill=INK,
+              alpha=G.smooth((t - starts[i]) / 0.3))
         out.write(img.convert("RGB"))
     for r, _ in readers.values():
         r.close()
@@ -794,3 +801,24 @@ def g_doc(args, d, timing, base, out):
 GRAPHICS = {"crowd": g_crowd, "icons": g_icons, "stat": g_stat, "bars": g_bars, "line": g_line, "donut": g_donut,
             "split": g_split, "montage": g_montage, "blackfade": g_blackfade, "phone_posts": g_phone_posts, "tiktok": g_tiktok,
             "lycee_def": g_lycee_def, "day_counter": g_day_counter, "doc": g_doc}
+
+
+# ---------------------------------------------------------------- v2: per-graphic accent colour
+ACCENTS = {"amber": G.AMBER, "blue": (96, 165, 250), "sky": (125, 211, 252), "teal": (45, 212, 191), "green": (52, 211, 153),
+           "red": (248, 113, 113), "white": (236, 240, 245)}
+_AMBER0 = AMBER
+
+
+def _with_accent(fn):
+    def run(args, *a, **kw):
+        global AMBER
+        AMBER = ACCENTS.get(args.get("accent"), _AMBER0) if isinstance(args, dict) else _AMBER0
+        try:
+            return fn(args, *a, **kw)
+        finally:
+            AMBER = _AMBER0
+    run.__name__, run.__doc__ = fn.__name__, fn.__doc__
+    return run
+
+
+GRAPHICS = {k: _with_accent(f) for k, f in GRAPHICS.items()}

@@ -6,9 +6,10 @@
 //                      label "≥ €30 MILLION · government estimate".
 //   fine        (7 s)  ten faceless pupils in a row; a €10,000 tag drops on a string in front of each in turn,
 //                      though only one figure stands by a broken window pane (the "rioters pay" bill).
-import { AMBER } from './lib.js';
+const AMBER = 0x34d399;   // v2: subject colour instead of the channel amber
 import { glow } from './look.js';
-import { AMBER_HI, path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, label, ease, studioFloor, figure } from './france_lib.js';
+import { path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, label, ease, studioFloor, figure } from './france_lib.js';
+const AMBER_HI = 0x6ee7b7;
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 export async function setup(THREE, renderer, W, H) {
@@ -26,7 +27,7 @@ export async function setup(THREE, renderer, W, H) {
   const ctx = { THREE, scene, camera, shot, k };
   scene.add(studioFloor(THREE, { size: 80, tone: 20, pool: 0.1 }));
   scene.add(new THREE.HemisphereLight(0x8e94a0, 0x080706, 0.35));
-  const key = new THREE.SpotLight(0xfff1df, 80, 30, 0.55, 0.7, 1.3); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -0.0003; scene.add(key, key.target);
+  const key = new THREE.SpotLight(0xf1f4fa, 80, 30, 0.55, 0.7, 1.3); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -0.0003; scene.add(key, key.target);
   const rim = new THREE.SpotLight(AMBER, 40, 20, 0.6, 0.6, 1.4); scene.add(rim, rim.target);
   const fill = new THREE.DirectionalLight(0xdfe4ea, 0.45); fill.position.set(4, 3, 8); scene.add(fill);
 
@@ -41,7 +42,7 @@ export async function setup(THREE, renderer, W, H) {
     { const t = ctex(THREE, 256, 64, (g, w, h) => { g.fillStyle = '#a49b8b'; g.font = '600 40px Inter, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('2050', w / 2, h / 2); });
       const m = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 0.15), new THREE.MeshBasicMaterial({ map: t, transparent: true })); m.rotation.x = -Math.PI / 2; m.position.set(12 * dx, 0.005, 0.45); scene.add(m); }
     const l1 = label(THREE, '€1.5 BN', { size: 0.045, sub: 'needed every year', anchor: 'left' }); l1.position.set(-12 * dx + 0.3, 0.95, 0); l1.material.opacity = 0; scene.add(l1);
-    const l2 = label(THREE, '≈ €40 BN', { size: 0.06, sub: 'by 2050 · Senate estimate', anchor: 'right', color: '#ffb25c', subColor: '#e9dfca' }); l2.position.set(12 * dx - 0.3, 1.2, 0); l2.material.opacity = 0; scene.add(l2);
+    const l2 = label(THREE, '≈ €40 BN', { size: 0.06, sub: 'by 2050 · Senate estimate', anchor: 'right', color: '#34d399', subColor: '#e3e8ef' }); l2.position.set(12 * dx - 0.3, 1.2, 0); l2.material.opacity = 0; scene.add(l2);
     ctx.labs = [l1, l2]; ctx.dx = dx;
     key.position.set(0, 7, 5); key.target.position.set(0, 0.3, 0); rim.position.set(-3, 2, -5); rim.target.position.set(0, 0.3, 0); rim.intensity = 12;
   } else if (shot === 'damage_bill') {
@@ -49,8 +50,8 @@ export async function setup(THREE, renderer, W, H) {
     const wood = std({ color: 0x8a7050, roughness: 0.9 });
     for (let i = 0; i < 7; i++) { const m = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.03, 0.2), wood); m.position.set(0, 0.14, -0.9 + i * 0.3); m.castShadow = m.receiveShadow = true; pallet.add(m); }
     for (const x of [-1.1, 0, 1.1]) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.12, 2.0), wood); m.position.set(x, 0.06, 0); m.castShadow = true; pallet.add(m); }
-    const noteT = ctex(THREE, 512, 256, (g, w, h) => { g.fillStyle = '#d9d1bf'; g.fillRect(0, 0, w, h); for (let y = 6; y < h; y += 7) { g.fillStyle = `rgba(120,110,90,${0.25 + 0.2 * Math.sin(y)})`; g.fillRect(0, y, w, 2); }
-      g.fillStyle = '#ffb25c'; g.fillRect(w * 0.42, 0, w * 0.16, h); g.fillStyle = '#2a2420'; g.font = '700 46px Inter, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.save(); g.translate(w / 2, h / 2); g.rotate(-Math.PI / 2); g.fillText('€', 0, 0); g.restore(); });
+    const noteT = ctex(THREE, 512, 256, (g, w, h) => { g.fillStyle = '#d9dcd0'; g.fillRect(0, 0, w, h); for (let y = 6; y < h; y += 7) { g.fillStyle = `rgba(120,110,90,${0.25 + 0.2 * Math.sin(y)})`; g.fillRect(0, y, w, 2); }
+      g.fillStyle = '#34d399'; g.fillRect(w * 0.42, 0, w * 0.16, h); g.fillStyle = '#2a2420'; g.font = '700 46px Inter, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.save(); g.translate(w / 2, h / 2); g.rotate(-Math.PI / 2); g.fillText('€', 0, 0); g.restore(); });
     const brickGeo = new RoundedBoxGeometry(0.5, 0.12, 0.24, 2, 0.01);
     const bm = std({ map: noteT, roughness: 0.85, color: 0x9a9384 });
     const side = std({ color: 0x8f887a, roughness: 0.9 });
@@ -62,14 +63,14 @@ export async function setup(THREE, renderer, W, H) {
       m.castShadow = m.receiveShadow = true; m.rotation.y = (R() - 0.5) * 0.06; scene.add(m);
       ctx.bricks.push({ m, tx, ty, tz, d: y * 0.3 + R() * 0.25 });
     }
-    const l = label(THREE, '≥ €30 MILLION', { size: 0.055, sub: 'damage · government estimate', anchor: 'left', color: '#ffb25c', subColor: '#e9dfca' }); l.position.set(1.3, 1.3, 0); l.material.opacity = 0; scene.add(l); ctx.lab = l;
+    const l = label(THREE, '≥ €30 MILLION', { size: 0.055, sub: 'damage · government estimate', anchor: 'left', color: '#34d399', subColor: '#e3e8ef' }); l.position.set(1.3, 1.3, 0); l.material.opacity = 0; scene.add(l); ctx.lab = l;
     key.position.set(-2, 6, 4); key.target.position.set(0, 0.5, 0); key.intensity = 35; rim.position.set(2.5, 2, -3); rim.target.position.set(0, 0.6, 0);
   } else {
     const hoodies = [0x4a4f57, 0x6b2f2f, 0x2e3a4e, 0x55604a, 0x8a8478, 0x2a2a2c, 0x7a5a3a, 0x3d4b5a, 0x5e5450, 0x9a9488].map(c => std({ color: c, roughness: 0.9 }));
     const skin = std({ color: 0xcfc7bb, roughness: 0.55 }), pants = std({ color: 0x2b2f38, roughness: 0.85 }), shoe = std({ color: 0x1c1c1e });
-    const tagT = ctex(THREE, 512, 256, (g, w, h) => { g.fillStyle = '#ffb25c'; g.fillRect(0, 0, w, h); g.fillStyle = '#1a1410'; g.beginPath(); g.arc(40, h / 2, 16, 0, 7); g.fill();
+    const tagT = ctex(THREE, 512, 256, (g, w, h) => { g.fillStyle = '#34d399'; g.fillRect(0, 0, w, h); g.fillStyle = '#1a1410'; g.beginPath(); g.arc(40, h / 2, 16, 0, 7); g.fill();
       g.font = '800 92px "Inter Display", Inter, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('€10,000', w / 2 + 20, h / 2 + 4); });
-    const tagM = std({ map: tagT, roughness: 0.5, emissive: new THREE.Color(0xffb25c), emissiveMap: tagT, emissiveIntensity: 0.08 });
+    const tagM = std({ map: tagT, roughness: 0.5, emissive: new THREE.Color(0x34d399), emissiveMap: tagT, emissiveIntensity: 0.08 });
     ctx.tags = [];
     for (let i = 0; i < 10; i++) {
       const x = (i - 4.5) * 0.95;

@@ -21,9 +21,11 @@
 //   cases_fly   (9 s)  low flight from the Tours pin north to the Lens pin, each pin flaring as it is reached.
 //   dimming     (7 s)  1,027 lit lycées go dark until 141 remain (9 Oct closures; which ones is illustrative).
 //   ripple      (7 s)  from the Créteil dot an amber wave runs over the whole country, lighting every lycée.
-import { AMBER } from './lib.js';
+const AMBER = 0xdfe8fb;   // v2: subject colour instead of the channel amber
+import { naturalGrade } from './france_lib.js';
 import { makeComposer, glow } from './look.js';
-import { AMBER_HI, CREAM, shotArgs, path, clamp01, sstep, fontsReady, label, ease } from './france_lib.js';
+import { CREAM, shotArgs, path, clamp01, sstep, fontsReady, label, ease } from './france_lib.js';
+const AMBER_HI = 0xe5484d;
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { Line2 } from 'three/addons/lines/Line2.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
@@ -66,9 +68,9 @@ export async function setup(THREE, renderer, W, H) {
   };
 
   // lights: a low warm key from the north-west (agrees with the baked hillshade), cold faint fill
-  const key = new THREE.DirectionalLight(0xfff0dc, 2.3); key.position.set(-60, 45, -50); scene.add(key);
+  const key = new THREE.DirectionalLight(0xf1f4fa, 2.3); key.position.set(-60, 45, -50); scene.add(key);
   const fill = new THREE.DirectionalLight(0x7d8ba0, 0.35); fill.position.set(60, 30, 60); scene.add(fill);
-  scene.add(new THREE.HemisphereLight(0x8a919c, 0x0a0908, 0.35));
+  scene.add(new THREE.HemisphereLight(0x8a919c, 0x08090b, 0.35));
 
   // ---------------------------------------------------------------- draped lines
   const lineMats = [];
@@ -84,11 +86,11 @@ export async function setup(THREE, renderer, W, H) {
     scene.add(grp); return mat;
   };
   const close = shot === 'spark' || shot === 'creteil_hold';
-  const mCoast = addLines(lines.coast, 0xe9dcc2, close ? 2.2 : 1.5, 0.75);
-  const mBorder = addLines(lines.border, 0xe9dcc2, close ? 1.6 : 1.1, 0.42);
-  const mRegions = addLines(lines.regions, 0xe9dcc2, close ? 1.2 : 1.0, close ? 0.2 : 0.2);
-  const mDepts = addLines(lines.depts, 0xe9dcc2, 1.0, close ? 0.16 : 0.0);
-  const mNb = addLines(lines.neighbours, 0xbdb6a8, 1.0, 0.12);
+  const mCoast = addLines(lines.coast, 0xd5dde9, close ? 2.2 : 1.5, 0.75);
+  const mBorder = addLines(lines.border, 0xd5dde9, close ? 1.6 : 1.1, 0.42);
+  const mRegions = addLines(lines.regions, 0xd5dde9, close ? 1.2 : 1.0, close ? 0.2 : 0.2);
+  const mDepts = addLines(lines.depts, 0xd5dde9, 1.0, close ? 0.16 : 0.0);
+  const mNb = addLines(lines.neighbours, 0xaab3c0, 1.0, 0.12);
   const mRiv = addLines(lines.rivers, 0x8f9aa6, close ? 1.3 : 1.0, close ? 0.22 : 0.16);
 
   // ---------------------------------------------------------------- lycée points (one Points object, shader-driven)
@@ -123,9 +125,9 @@ export async function setup(THREE, renderer, W, H) {
     });
     const p = new THREE.Points(g, m); p.renderOrder = 5; p.frustumCulled = false; scene.add(p); return m;
   };
-  const baseMat = mkPoints(ALL, {}, { vdecl: 'uniform float uBase, uRip, uRipOn; uniform vec2 uCen;', vmain: `float sz = 1.0; vA = uBase; vC = vec3(0.93,0.88,0.78);
+  const baseMat = mkPoints(ALL, {}, { vdecl: 'uniform float uBase, uRip, uRipOn; uniform vec2 uCen;', vmain: `float sz = 1.0; vA = uBase; vC = vec3(0.84,0.88,0.95);
       if (uRipOn > 0.0) { float d = length(position.xz - uCen); float pass = uRipOn * smoothstep(uRip, uRip - 3.0, d); float front = uRipOn * exp(-pow((d - uRip) * 0.45, 2.0));
-        vA = uBase + 0.75 * pass + 1.8 * front; sz = 1.0 + 1.6 * front + 0.5 * pass; vC = mix(vC, vec3(1.0, 0.68, 0.34), max(pass, front)); }` },
+        vA = uBase + 0.75 * pass + 1.8 * front; sz = 1.0 + 1.6 * front + 0.5 * pass; vC = mix(vC, vec3(0.45, 0.72, 1.0), max(pass, front)); }` },
     { uBase: { value: 0.0 }, uRip: { value: 0 }, uRipOn: { value: 0 }, uCen: { value: new THREE.Vector2() } }, 0.16); baseMat.uniforms.uMaxPx.value = 3.5;
   const seedOf = (i) => ((Math.sin(i * 91.7 + 3.1) * 43758.5453) % 1 + 1) % 1;
   const lyMat = mkPoints(LY.map((q, i) => [...q, i]), {
@@ -138,13 +140,13 @@ export async function setup(THREE, renderer, W, H) {
         float on = step(0.0, age);
         float flash = on * exp(-max(age, 0.0) * 5.0);
         sz = on * (1.0 + 2.2 * flash); vA = on * (0.85 + 1.6 * flash) * uMode;
-        vC = mix(vec3(1.0, 0.62, 0.25), vec3(1.0, 0.9, 0.7), flash);
+        vC = mix(vec3(0.62, 0.8, 1.0), vec3(0.95, 0.97, 1.0), flash);
         float sel = step(aSel, uSel);
         float dd = smoothstep(aSeed * 0.6, aSeed * 0.6 + 0.4, uDim);
         vA *= mix(1.0, sel > 0.5 ? 1.0 : 0.1, dd); sz *= mix(1.0, sel > 0.5 ? 1.0 : 0.7, dd);
         float so = sel * smoothstep(aSeed * 0.6, aSeed * 0.6 + 0.25, uSelOn);
         float pop = so * (1.0 - smoothstep(aSeed * 0.6 + 0.1, aSeed * 0.6 + 0.4, uSelOn));
-        sz *= 1.0 + 0.8 * so + 1.2 * pop; vA *= 1.0 + 0.5 * so + pop; vC = mix(vC, vec3(1.0, 0.76, 0.42), so);
+        sz *= 1.0 + 0.8 * so + 1.2 * pop; vA *= 1.0 + 0.5 * so + pop; vC = mix(vC, vec3(1.0, 1.0, 1.0), so);
       } else {                                 // red / orange
         float r = step(1.5, aRO), o = step(0.5, aRO) * (1.0 - r);
         float t0 = (r > 0.5 ? 0.0 : 0.35) + aSeed * 0.55;
@@ -183,10 +185,10 @@ export async function setup(THREE, renderer, W, H) {
     const g = new THREE.Group(); g.position.set(c.x, c.y + 0.03, c.z); scene.add(g);
     const col = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 1, 28, 1, true).translate(0, 0.5, 0), columnMat(AMBER_HI, 1.0));
     col.scale.set(1, 0.001, 1); col.renderOrder = 7; g.add(col);
-    const coreM = new THREE.MeshBasicMaterial({ color: 0xffd8a0, transparent: true, opacity: 0, fog: false, blending: THREE.AdditiveBlending, depthWrite: false });
+    const coreM = new THREE.MeshBasicMaterial({ color: 0xf1f4fa, transparent: true, opacity: 0, fog: false, blending: THREE.AdditiveBlending, depthWrite: false });
     const core = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 1, 10, 1, true).translate(0, 0.5, 0), coreM); core.scale.set(1, 0.001, 1); g.add(core);
     const halo = glow(THREE, AMBER, 1, 1); halo.material.opacity = 0; halo.renderOrder = 8; halo.position.y = 0.08; g.add(halo);
-    const top = glow(THREE, 0xffd9a8, 1, 1); top.material.opacity = 0; top.renderOrder = 8; g.add(top);
+    const top = glow(THREE, 0xf1f4fa, 1, 1); top.material.opacity = 0; top.renderOrder = 8; g.add(top);
     const rings = [mkRing(AMBER_HI), mkRing(AMBER_HI)]; rings.forEach(r => { r.position.y = 0.04; g.add(r); });
     return { c, g, col, core, halo, top, rings, lab: null };
   });
@@ -216,20 +218,20 @@ export async function setup(THREE, renderer, W, H) {
 
   // ---------------------------------------------------------------- Créteil spark (hero point)
   const spark = new THREE.Group(); spark.position.set(cre.x, cre.y + 0.05, cre.z); scene.add(spark);
-  const sparkCore = glow(THREE, 0xffe2b8, 1, 1); sparkCore.renderOrder = 9; spark.add(sparkCore);
+  const sparkCore = glow(THREE, 0xf1f4fa, 1, 1); sparkCore.renderOrder = 9; spark.add(sparkCore);
   const sparkHalo = glow(THREE, AMBER, 1, 1); sparkHalo.renderOrder = 9; spark.add(sparkHalo);
   const sparkRings = [0, 1, 2].map(() => { const r = mkRing(AMBER_HI); spark.add(r); return r; });
   const sparkLight = new THREE.PointLight(AMBER, 0, 8, 1.6); sparkLight.position.set(0, 0.6, 0); spark.add(sparkLight);
-  const beacon = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 1, 12, 1, true).translate(0, 0.5, 0), columnMat(0xffc27a, 1.0));
+  const beacon = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 1, 12, 1, true).translate(0, 0.5, 0), columnMat(0xe5484d, 1.0));
   beacon.renderOrder = 7; beacon.scale.y = 0.001; spark.add(beacon);
 
   // ---------------------------------------------------------------- per-shot labels
   if (shot === 'spark' || shot === 'creteil_hold') {
-    addLabel('Paris', { size: 0.024, color: '#d9d0bd' });
+    addLabel('Paris', { size: 0.024, color: '#d6dde8' });
     const l = addLabel('Créteil', { size: 0.03, gap: 70 }); if (l) l.material.opacity = 0;
   } else if (shot === 'spread') {
     for (const n of ['Paris', 'Marseille', 'Lyon', 'Lille', 'Toulouse', 'Bordeaux', 'Nantes', 'Rennes', 'Strasbourg', 'Nice']) {
-      const l = addLabel(n, { size: 0.021, color: '#e6dcc6' }); l.material.opacity = 0;
+      const l = addLabel(n, { size: 0.021, color: '#e2e8f0' }); l.material.opacity = 0;
     }
     const l = addLabel('Créteil', { size: 0.023, anchor: 'right' }); l.material.opacity = 0;
   } else if (shot === 'oct6') {
@@ -240,9 +242,9 @@ export async function setup(THREE, renderer, W, H) {
     }
   } else if (shot === 'tour') {
     const anch = { 'Saint-Denis': 'right', 'La Courneuve': 'left', 'Sarcelles': 'left', 'Marseille': 'left', 'Lille': 'left', 'Lyon': 'left', 'Nantes': 'right', 'Rennes': 'right', 'Bordeaux': 'right', 'Toulouse': 'left', 'Strasbourg': 'left' };
-    for (const [n, a] of Object.entries(anch)) { const l = addLabel(n, { size: n.length > 9 && ['Saint-Denis', 'La Courneuve', 'Sarcelles'].includes(n) ? 0.022 : 0.024, anchor: a, color: '#efe6d2' }); if (l) l.material.opacity = 0; }
+    for (const [n, a] of Object.entries(anch)) { const l = addLabel(n, { size: n.length > 9 && ['Saint-Denis', 'La Courneuve', 'Sarcelles'].includes(n) ? 0.022 : 0.024, anchor: a, color: '#edf1f7' }); if (l) l.material.opacity = 0; }
   } else if (shot === 'red_orange') {
-    for (const n of ['Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nantes', 'Lille']) { const l = addLabel(n, { size: 0.019, color: '#cfc6b3', gap: n === 'Paris' ? 90 : 34 }); }
+    for (const n of ['Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nantes', 'Lille']) { const l = addLabel(n, { size: 0.019, color: '#cdd5e0', gap: n === 'Paris' ? 90 : 34 }); }
   }
 
   // ---------------------------------------------------------------- extra shot furniture
@@ -262,7 +264,7 @@ export async function setup(THREE, renderer, W, H) {
   const mkMarker = (p, size) => {
     const g = new THREE.Group(); g.position.copy(p); scene.add(g);
     const h = glow(THREE, AMBER, size, 1); h.material.opacity = 0; h.renderOrder = 8; g.add(h);
-    const c = glow(THREE, 0xffe2b8, size * 0.3, 1); c.material.opacity = 0; c.renderOrder = 9; g.add(c);
+    const c = glow(THREE, 0xf1f4fa, size * 0.3, 1); c.material.opacity = 0; c.renderOrder = 9; g.add(c);
     const r = mkRing(AMBER_HI); g.add(r); return { g, h, c, r };
   };
   if (shot === 'border') {
@@ -273,11 +275,11 @@ export async function setup(THREE, renderer, W, H) {
       const l = label(THREE, name, { size: name === 'ITALY' ? 0.03 : 0.024, sub, anchor, gap: 30 }); l.position.set(0, 0.6, 0); l.material.opacity = 0; m.g.add(l);
       return { ...m, arc, l, t0 };
     });
-    for (const n of ['Lyon']) { const l = addLabel(n, { size: 0.021, color: '#d9d0bd', anchor: 'right' }); }
+    for (const n of ['Lyon']) { const l = addLabel(n, { size: 0.021, color: '#d6dde8', anchor: 'right' }); }
   }
   if (shot === 'cases' || shot === 'cases_fly') {
-    const pinM = new THREE.MeshStandardMaterial({ color: 0xd8d2c4, metalness: 0.6, roughness: 0.3 });
-    const headM = new THREE.MeshStandardMaterial({ color: AMBER_HI, emissive: 0xff9a3a, emissiveIntensity: 0.8, roughness: 0.4 });
+    const pinM = new THREE.MeshStandardMaterial({ color: 0xd3d8df, metalness: 0.6, roughness: 0.3 });
+    const headM = new THREE.MeshStandardMaterial({ color: AMBER_HI, emissive: 0xe5484d, emissiveIntensity: 0.8, roughness: 0.4 });
     ex.pins = [['Saint-Ouen-l\'Aumône', '28 SEPT', 'left', 0.6], ['Tours', '30 SEPT', 'right', 2.0], ['Lens', '5 OCT', 'left', 3.4]].map(([n, d, anchor, t0]) => {
       const c = cityByName[n]; const g = new THREE.Group(); g.position.set(c.x, c.y + 0.05, c.z); scene.add(g);
       const pin = new THREE.Group(); g.add(pin);
@@ -303,7 +305,7 @@ export async function setup(THREE, renderer, W, H) {
     ex.lockMat = new THREE.ShaderMaterial({ uniforms: { uT: { value: 0 }, map: { value: lockTex }, uScale: { value: H / (2 * Math.tan(THREE.MathUtils.degToRad(28 / 2))) } },
       vertexShader: `attribute float aT; uniform float uT, uScale; varying float vA; varying float vF; void main(){ vec4 mv = modelViewMatrix*vec4(position,1.0); float a = clamp((uT - aT) / 0.18, 0.0, 1.0); float pop = a * (1.0 - clamp((uT - aT - 0.18) / 0.4, 0.0, 1.0));
         vA = a; vF = pop; gl_PointSize = clamp((2.2 + 1.0 * pop) * a * uScale / -mv.z, 0.0, 70.0); gl_Position = projectionMatrix*mv; }`,
-      fragmentShader: `uniform sampler2D map; varying float vA; varying float vF; void main(){ float m = texture2D(map, gl_PointCoord).a; if (m * vA < 0.02) discard; gl_FragColor = vec4(mix(vec3(1.0,0.55,0.16), vec3(1.0,0.8,0.5), vF) * (0.9 + 0.4 * vF), m * vA); }`,
+      fragmentShader: `uniform sampler2D map; varying float vA; varying float vF; void main(){ float m = texture2D(map, gl_PointCoord).a; if (m * vA < 0.02) discard; gl_FragColor = vec4(mix(vec3(0.36,0.62,1.0), vec3(0.85,0.92,1.0), vF) * (0.9 + 0.4 * vF), m * vA); }`,
       transparent: true, depthWrite: false, depthTest: false });
     const pts = new THREE.Points(g, ex.lockMat); pts.renderOrder = 10; pts.frustumCulled = false; scene.add(pts);
   }
@@ -339,7 +341,7 @@ export async function setup(THREE, renderer, W, H) {
   const tl = len ? len / (BASEL[shot] ?? 6) : 1;              // timeline stretch
   const dof = close ? { focus: 7, aperture: 0.0012, maxblur: 0.005 } : null;
   if (shot === 'border') mNb.opacity = 0.42;
-  const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: 0.85, bloomRadius: 0.6, bloomThreshold: 0.55, exposure: 1.0, dof });
+  const post = naturalGrade(makeComposer(THREE, renderer, scene, camera, W, H, { bloom: 0.85, bloomRadius: 0.6, bloomThreshold: 0.55, exposure: 1.0, dof }));
   post.finish.uniforms.vignette.value = 0.6;
   // labels render after bloom/DOF on their own layer so the type stays crisp
   const labelCam = camera.clone(); labelCam.layers.set(1);

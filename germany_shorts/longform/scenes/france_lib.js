@@ -34,7 +34,7 @@ export async function fontsReady() {
 }
 
 // cream text label as a constant-screen-size sprite. anchor 'left' puts the text to the right of the point.
-export function label(THREE, text, { size = 0.028, sub = null, color = CREAM, subColor = '#ffb25c', weight = 600, anchor = 'left', opacity = 1, tracking = 0.14, gap = 20 } = {}) {
+export function label(THREE, text, { size = 0.028, sub = null, color = CREAM, subColor = '#a9c4e8', weight = 600, anchor = 'left', opacity = 1, tracking = 0.14, gap = 20 } = {}) {
   const c = document.createElement('canvas'); const g = c.getContext('2d');
   const fs = 64, fs2 = 50;
   const font = `${weight} ${fs}px Inter, "DejaVu Sans", sans-serif`, font2 = `500 ${fs2}px Inter, "DejaVu Sans", sans-serif`;
@@ -140,8 +140,17 @@ export function figure(THREE, mats, o = {}) {
 // layer 1 and drawn after bloom/DOF so the type stays sharp.
 import { makeComposer } from './look.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+// v2 look: natural colour instead of the house noir grade (which kept only amber saturated). Swaps the finishing
+// shader's grade line, everything else (grain, vignette, fringe, film curve) stays as in look.js.
+export function naturalGrade(post, sat = 0.92) {
+  const m = post.finish.material;
+  m.fragmentShader = m.fragmentShader.replace(/float warm = [^;]*;\s*col = mix\([^;]*;/,
+    `col = mix(vec3(l), col, ${sat.toFixed(2)});`);
+  m.needsUpdate = true;
+  return post;
+}
 export function finishPost(THREE, renderer, scene, camera, W, H, opt = {}) {
-  const post = makeComposer(THREE, renderer, scene, camera, W, H, { bloom: 0.8, bloomRadius: 0.6, bloomThreshold: 0.6, exposure: 1.0, ...opt });
+  const post = naturalGrade(makeComposer(THREE, renderer, scene, camera, W, H, { bloom: 0.8, bloomRadius: 0.6, bloomThreshold: 0.6, exposure: 1.0, ...opt }));
   post.finish.uniforms.vignette.value = opt.vignette ?? 0.55;
   const labelCam = camera.clone(); labelCam.layers.set(1);
   scene.traverse(o => { if (o.isSprite && o.material.sizeAttenuation === false) o.layers.set(1); });

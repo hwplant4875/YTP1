@@ -4,9 +4,10 @@
 //                    slow push into the screen while an amber cursor bar walks down the list.
 //   cascade   (8 s)  100 application cards hang in a curved wall; they flip one after another to their result;
 //                    18 of them land on "NO OFFER" (dark, amber edge), the rest on a pale "OFFER". Camera drifts left.
-import { AMBER } from './lib.js';
+const AMBER = 0x2dd4bf;   // v2: subject colour instead of the channel amber
 import { glow } from './look.js';
-import { AMBER_HI, path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, label, ease } from './france_lib.js';
+import { path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, label, ease } from './france_lib.js';
+const AMBER_HI = 0x5eead4;
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 const rr = (g, x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
@@ -14,15 +15,15 @@ const PROG = ['LAW · Paris', 'MEDICINE · Créteil', 'BTS · Commerce', 'IUT ·
 
 function drawDash(g, w, h, cur) {
   g.fillStyle = '#121315'; g.fillRect(0, 0, w, h);
-  g.fillStyle = '#1b1c1f'; g.fillRect(0, 0, w, 90); g.fillStyle = '#e9dfca'; g.font = '700 34px Inter, sans-serif'; g.fillText('ADMISSIONS PLATFORM', 40, 58);
+  g.fillStyle = '#1b1c1f'; g.fillRect(0, 0, w, 90); g.fillStyle = '#e3e8ef'; g.font = '700 34px Inter, sans-serif'; g.fillText('ADMISSIONS PLATFORM', 40, 58);
   g.fillStyle = 'rgba(233,223,202,0.45)'; g.font = '500 24px Inter, sans-serif'; g.fillText('My applications · main round', 40, 140);
-  g.fillStyle = '#ffb25c'; g.font = '700 24px Inter, sans-serif'; g.textAlign = 'right'; g.fillText('10 / 10', w - 40, 140); g.textAlign = 'left';
+  g.fillStyle = '#2dd4bf'; g.font = '700 24px Inter, sans-serif'; g.textAlign = 'right'; g.fillText('10 / 10', w - 40, 140); g.textAlign = 'left';
   for (let i = 0; i < 10; i++) {
     const y = 175 + i * 82;
     g.fillStyle = i === cur ? '#2a2620' : '#18191b'; rr(g, 36, y, w - 72, 70, 10); g.fill();
-    if (i === cur) { g.fillStyle = '#ffb25c'; g.fillRect(36, y, 8, 70); }
+    if (i === cur) { g.fillStyle = '#2dd4bf'; g.fillRect(36, y, 8, 70); }
     g.fillStyle = 'rgba(233,223,202,0.5)'; g.font = '600 20px Inter, sans-serif'; g.fillText(`CHOICE ${i + 1}`, 64, y + 28);
-    g.fillStyle = '#e9dfca'; g.font = '600 28px Inter, sans-serif'; g.fillText(PROG[i], 64, y + 58);
+    g.fillStyle = '#e3e8ef'; g.font = '600 28px Inter, sans-serif'; g.fillText(PROG[i], 64, y + 58);
     g.strokeStyle = 'rgba(233,223,202,0.35)'; g.lineWidth = 2; rr(g, w - 250, y + 18, 190, 36, 18); g.stroke();
     g.fillStyle = 'rgba(233,223,202,0.6)'; g.font = '700 18px Inter, sans-serif'; g.textAlign = 'center'; g.fillText('WAITING', w - 155, y + 43); g.textAlign = 'left';
   }
@@ -71,8 +72,8 @@ export async function setup(THREE, renderer, W, H) {
       g.strokeStyle = 'rgba(233,223,202,0.4)'; g.lineWidth = 3; rr(g, 24, h - 80, w - 48, 46, 23); g.stroke(); g.fillStyle = 'rgba(233,223,202,0.7)'; g.font = '700 24px Inter, sans-serif'; g.textAlign = 'center'; g.fillText('WAITING', w / 2, h - 49); });
     const offer = ctex(THREE, 256, 340, (g, w, h) => { g.fillStyle = '#cfc6b6'; g.fillRect(0, 0, w, h); g.fillStyle = 'rgba(30,30,30,0.45)'; g.fillRect(24, 30, 120, 12); g.fillRect(24, 54, 80, 10);
       g.fillStyle = '#2a2a2a'; g.font = '800 40px Inter, sans-serif'; g.textAlign = 'center'; g.fillText('OFFER', w / 2, h - 44); });
-    const none = ctex(THREE, 256, 340, (g, w, h) => { g.fillStyle = '#0d0d0e'; g.fillRect(0, 0, w, h); g.strokeStyle = '#ffb25c'; g.lineWidth = 8; g.strokeRect(6, 6, w - 12, h - 12);
-      g.fillStyle = '#ffb25c'; g.font = '800 40px Inter, sans-serif'; g.textAlign = 'center'; g.fillText('NO', w / 2, h / 2 - 6); g.fillText('OFFER', w / 2, h / 2 + 40); });
+    const none = ctex(THREE, 256, 340, (g, w, h) => { g.fillStyle = '#0d0d0e'; g.fillRect(0, 0, w, h); g.strokeStyle = '#f87171'; g.lineWidth = 8; g.strokeRect(6, 6, w - 12, h - 12);
+      g.fillStyle = '#f87171'; g.font = '800 40px Inter, sans-serif'; g.textAlign = 'center'; g.fillText('NO', w / 2, h / 2 - 6); g.fillText('OFFER', w / 2, h / 2 + 40); });
     const geo = new RoundedBoxGeometry(0.5, 0.66, 0.015, 2, 0.01);
     const mFront = std({ map: front }), mOffer = std({ map: offer }), mNone = std({ map: none, emissive: new THREE.Color(AMBER_HI), emissiveMap: none, emissiveIntensity: 0 });
     const edge = std({ color: 0x18181a });
@@ -89,9 +90,9 @@ export async function setup(THREE, renderer, W, H) {
     }
     ctx.cards = cards; ctx.mNone = mNone;
     const floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), std({ color: 0x0b0b0c, roughness: 0.3, metalness: 0.6 })); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
-    const key = new THREE.SpotLight(0xfff1df, 50, 30, 0.6, 0.8, 1.3); key.position.set(2, 8, 9); key.target.position.set(0, 2, 0); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); scene.add(key, key.target);
+    const key = new THREE.SpotLight(0xf1f4fa, 50, 30, 0.6, 0.8, 1.3); key.position.set(2, 8, 9); key.target.position.set(0, 2, 0); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); scene.add(key, key.target);
     const fill = new THREE.DirectionalLight(0xdfe4ea, 0.35); fill.position.set(-4, 3, 8); scene.add(fill);
-    const l = label(THREE, '18%', { size: 0.07, sub: 'no offer in the main round', anchor: 'center', gap: 0, color: '#ffb25c', subColor: '#e9dfca' }); l.position.set(0, 4.7, 0.3); l.material.opacity = 0; scene.add(l); ctx.lab = l;
+    const l = label(THREE, '18%', { size: 0.07, sub: 'no offer in the main round', anchor: 'center', gap: 0, color: '#f87171', subColor: '#e3e8ef' }); l.position.set(0, 4.7, 0.3); l.material.opacity = 0; scene.add(l); ctx.lab = l;
   }
   const post = finishPost(THREE, renderer, scene, camera, W, H, { bloom: 0.6, bloomRadius: 0.55, bloomThreshold: 0.75,
     dof: shot === 'dashboard' ? { focus: 1.6, aperture: 0.002, maxblur: 0.007 } : { focus: 10.5, aperture: 0.0008, maxblur: 0.004 } });

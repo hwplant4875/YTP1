@@ -7,9 +7,10 @@
 //                    slow push from the gate; a single first-floor window warms to amber (beats 102-103).
 //   dossier   (8 s)  a note on a desk under a lamp: grey text lines, black redaction bars; an amber highlighter
 //                    marks "outsiders" six times, then "LFI" once (beats 106-107). Tagged ILLUSTRATION.
-import { AMBER } from './lib.js';
+const AMBER = 0xe9eef5;   // v2: subject colour instead of the channel amber
 import { glow, beam } from './look.js';
-import { AMBER_HI, path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, label, ease } from './france_lib.js';
+import { path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, label, ease } from './france_lib.js';
+const AMBER_HI = 0xe5484d;
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 export async function setup(THREE, renderer, W, H) {
@@ -30,7 +31,7 @@ export async function setup(THREE, renderer, W, H) {
   const stone = std({ map: ctex(THREE, 512, 512, (g, w, h) => { g.fillStyle = '#c9bea6'; g.fillRect(0, 0, w, h); for (let i = 0; i < 14000; i++) { const v = 170 + R() * 60; g.fillStyle = `rgba(${v},${v - 8},${v - 26},0.15)`; g.fillRect(R() * w, R() * h, 2, 2); }
     g.strokeStyle = 'rgba(90,80,64,0.35)'; g.lineWidth = 2; for (let y = 0; y < h; y += 64) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); } }, { repeat: [6, 3] }), roughness: 0.9 });
   const pediment = (w, h, d, mat) => { const s = new THREE.Shape(); s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(0, h); s.closePath(); const g = new THREE.ExtrudeGeometry(s, { depth: d, bevelEnabled: false }); g.translate(0, 0, -d / 2); return new THREE.Mesh(g, mat); };
-  const winM = (lit) => std({ color: lit ? 0x3a2c1c : 0x14161a, roughness: 0.2, metalness: 0.5, emissive: new THREE.Color(lit ? 0xffb36a : 0x000000), emissiveIntensity: lit ? 0.35 : 0 });
+  const winM = (lit) => std({ color: lit ? 0x3a2c1c : 0x14161a, roughness: 0.2, metalness: 0.5, emissive: new THREE.Color(lit ? 0xe8eef8 : 0x000000), emissiveIntensity: lit ? 0.35 : 0 });
 
   if (shot === 'assemblee') {
     const ground = add(new THREE.PlaneGeometry(300, 200), std({ color: 0x2a2a2c, roughness: 0.4, metalness: 0.3 }), 0, 0, 0, -Math.PI / 2); ground.castShadow = false;
@@ -55,12 +56,12 @@ export async function setup(THREE, renderer, W, H) {
     fg.computeVertexNormals(); const ft = ctex(THREE, 300, 200, (g) => { g.fillStyle = '#28356e'; g.fillRect(0, 0, 100, 200); g.fillStyle = '#efefef'; g.fillRect(100, 0, 100, 200); g.fillStyle = '#c8242e'; g.fillRect(200, 0, 100, 200); });
     add(fg, std({ map: ft, side: THREE.DoubleSide, roughness: 0.8 }), 1.8, 4.6, 0, 0, 0, 0, flag);
     // uplights from the steps
-    ctx.up = []; for (let i = 0; i < 6; i++) { const s = new THREE.SpotLight(0xffd6a0, 0, 40, 0.5, 0.7, 1.2); s.position.set(-17.5 + i * 7, 1, 12); s.target.position.set(-17.5 + i * 7, 18, 2); scene.add(s, s.target); ctx.up.push(s); }
+    ctx.up = []; for (let i = 0; i < 6; i++) { const s = new THREE.SpotLight(0xf1f4fa, 0, 40, 0.5, 0.7, 1.2); s.position.set(-17.5 + i * 7, 1, 12); s.target.position.set(-17.5 + i * 7, 18, 2); scene.add(s, s.target); ctx.up.push(s); }
     scene.add(new THREE.HemisphereLight(0x5d6a86, 0x0c0b0a, 0.45));
     const moon = new THREE.DirectionalLight(0x8c9cbc, 0.5); moon.position.set(-40, 60, 60); scene.add(moon);
     // quay lamps
-    for (let i = 0; i < 7; i++) { const x = -42 + i * 14; add(new THREE.CylinderGeometry(0.12, 0.16, 5, 10), std({ color: 0x1c1c1c, metalness: 0.5 }), x, 2.5, 26); const b = glow(THREE, 0xffc070, 2.2, 1); b.position.set(x, 5.3, 26); scene.add(b);
-      const l = new THREE.PointLight(0xffa850, 20, 18, 1.6); l.position.set(x, 5.2, 26); scene.add(l); }
+    for (let i = 0; i < 7; i++) { const x = -42 + i * 14; add(new THREE.CylinderGeometry(0.12, 0.16, 5, 10), std({ color: 0x1c1c1c, metalness: 0.5 }), x, 2.5, 26); const b = glow(THREE, 0xe5484d, 2.2, 1); b.position.set(x, 5.3, 26); scene.add(b);
+      const l = new THREE.PointLight(0xdbe7ff, 20, 18, 1.6); l.position.set(x, 5.2, 26); scene.add(l); }
   } else if (shot === 'matignon') {
     const ground = add(new THREE.PlaneGeometry(200, 200), std({ map: ctex(THREE, 512, 512, (g, w, h) => { g.fillStyle = '#5a554c'; g.fillRect(0, 0, w, h); for (let y = 0; y < h; y += 32) for (let x = 0; x < w; x += 32) { const v = 70 + R() * 30; g.fillStyle = `rgb(${v},${v - 4},${v - 12})`; g.fillRect(x + 2, y + 2, 28, 28); } }, { repeat: [40, 40] }), roughness: 0.6, metalness: 0.15 }), 0, 0, 0, -Math.PI / 2);
     ground.castShadow = false;
@@ -88,9 +89,9 @@ export async function setup(THREE, renderer, W, H) {
     const pole = add(new THREE.CylinderGeometry(0.05, 0.05, 3.2, 8), std({ color: 0x9a9a9a, metalness: 0.6 }), 0, 13.2, 2.6, 0.6, 0, 0);
     add(fg, std({ map: ft, side: THREE.DoubleSide }), 1.15, 13.6, 3.6, 0.15, 0, -0.1);
     // courtyard: gate posts and lanterns, gravel, two guard boxes (empty)
-    for (const s of [-1, 1]) { add(new THREE.BoxGeometry(1.2, 4, 1.2), stone, s * 6, 2, 30); const b = glow(THREE, 0xffc070, 1.8, 1); b.position.set(s * 6, 4.6, 30); scene.add(b); const l = new THREE.PointLight(0xffa850, 16, 14, 1.6); l.position.set(s * 6, 4.6, 30.8); scene.add(l);
+    for (const s of [-1, 1]) { add(new THREE.BoxGeometry(1.2, 4, 1.2), stone, s * 6, 2, 30); const b = glow(THREE, 0xe8eef8, 1.8, 1); b.position.set(s * 6, 4.6, 30); scene.add(b); const l = new THREE.PointLight(0xe5484d, 16, 14, 1.6); l.position.set(s * 6, 4.6, 30.8); scene.add(l);
       add(new THREE.BoxGeometry(1.4, 2.6, 1.4), std({ color: 0x2a2c30 }), s * 9, 1.3, 27); }
-    ctx.up = []; for (let i = 0; i < 5; i++) { const s = new THREE.SpotLight(0xffd6a0, 0, 30, 0.6, 0.7, 1.2); s.position.set(-16 + i * 8, 0.5, 9); s.target.position.set(-16 + i * 8, 10, 0); scene.add(s, s.target); ctx.up.push(s); }
+    ctx.up = []; for (let i = 0; i < 5; i++) { const s = new THREE.SpotLight(0xf1f4fa, 0, 30, 0.6, 0.7, 1.2); s.position.set(-16 + i * 8, 0.5, 9); s.target.position.set(-16 + i * 8, 10, 0); scene.add(s, s.target); ctx.up.push(s); }
     scene.add(new THREE.HemisphereLight(0x5d6a86, 0x0c0b0a, 0.45));
     const moon = new THREE.DirectionalLight(0x8c9cbc, 0.45); moon.position.set(-40, 60, 60); scene.add(moon);
   } else {
@@ -119,16 +120,16 @@ export async function setup(THREE, renderer, W, H) {
     const folder = add(new RoundedBoxGeometry(pw + 0.3, 0.02, ph + 0.25, 2, 0.01), std({ color: 0x6a5a40, roughness: 0.8 }), 0.1, -0.005, 0, 0, -0.06, 0);
     // highlighter strokes: amber, additive quads placed over each word (page local -> world via the page's matrix)
     page.updateMatrixWorld(true);
-    const hm = new THREE.MeshBasicMaterial({ color: 0xff9a2a, transparent: true, opacity: 0.6, depthWrite: false });
+    const hm = new THREE.MeshBasicMaterial({ color: 0xe5484d, transparent: true, opacity: 0.6, depthWrite: false });
     ctx.marks = words.map((wd) => { const u = (wd.x - 8) / PW, v = (wd.y - 22) / PH, uw = (wd.w + 16) / PW, vh = 34 / PH;
       const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), hm.clone()); m.geometry.translate(0.5, -0.5, 0);
       m.position.set((u - 0.5) * pw, (0.5 - v) * ph, 0.003); m.userData = { w: uw * pw, h: vh * ph, k: wd.k }; m.scale.set(0.0001, vh * ph, 1); page.add(m); return m; });
     // pen
-    const pen = new THREE.Group(); add(new THREE.CylinderGeometry(0.03, 0.03, 0.9, 16), std({ color: 0xffb25c, roughness: 0.4 }), 0, 0, 0, 0, 0, Math.PI / 2, pen); add(new THREE.CylinderGeometry(0.031, 0.031, 0.25, 16), std({ color: 0x1a1a1a }), -0.5, 0, 0, 0, 0, Math.PI / 2, pen);
+    const pen = new THREE.Group(); add(new THREE.CylinderGeometry(0.03, 0.03, 0.9, 16), std({ color: 0x1d4ed8, roughness: 0.4 }), 0, 0, 0, 0, 0, Math.PI / 2, pen); add(new THREE.CylinderGeometry(0.031, 0.031, 0.25, 16), std({ color: 0x1a1a1a }), -0.5, 0, 0, 0, 0, Math.PI / 2, pen);
     pen.position.set(1.5, 0.04, 0.6); pen.rotation.y = 0.6; scene.add(pen);
     // lamp light
     scene.add(new THREE.HemisphereLight(0x8e94a0, 0x0a0806, 0.25));
-    const lamp = new THREE.SpotLight(0xffe2b8, 5, 8, 0.55, 0.8, 1.5); lamp.position.set(-1.3, 2.6, -1.0); lamp.target.position.set(0, 0, 0); lamp.castShadow = true; lamp.shadow.mapSize.set(2048, 2048); scene.add(lamp, lamp.target);
+    const lamp = new THREE.SpotLight(0xf1f4fa, 5, 8, 0.55, 0.8, 1.5); lamp.position.set(-1.3, 2.6, -1.0); lamp.target.position.set(0, 0, 0); lamp.castShadow = true; lamp.shadow.mapSize.set(2048, 2048); scene.add(lamp, lamp.target);
     const shade = add(new THREE.ConeGeometry(0.35, 0.35, 24, 1, true), std({ color: 0x1d1d1f, side: THREE.DoubleSide, metalness: 0.5 }), -1.3, 2.75, -1.0); const bulb = glow(THREE, 0xffd29a, 0.6, 1); bulb.position.set(-1.3, 2.6, -1.0); scene.add(bulb);
   }
   const post = finishPost(THREE, renderer, scene, camera, W, H, { bloom: 0.65, bloomRadius: 0.6, bloomThreshold: 0.7,
@@ -149,7 +150,7 @@ export function update(ctx, tt) {
   camera.position.set(c[0], c[1], c[2]); camera.lookAt(c[3], c[4], c[5]); ctx.sync();
   if (shot === 'assemblee') {
     const w = sstep(2.0, 4.0, t);
-    ctx.up.forEach(s => { s.intensity = 70 * (0.6 + 0.4 * w); s.color.setHex(0xffd6a0).lerp(new THREE_COLOR(0xffa64a), w); });
+    ctx.up.forEach(s => { s.intensity = 70 * (0.6 + 0.4 * w); s.color.setHex(0xf1f4fa).lerp(new THREE_COLOR(0x3b82f6), w); });
     ctx.porticoWins.forEach(m => m.material.emissiveIntensity = 0.2 + 0.35 * w);
   } else if (shot === 'matignon') {
     ctx.up.forEach(s => s.intensity = 45);

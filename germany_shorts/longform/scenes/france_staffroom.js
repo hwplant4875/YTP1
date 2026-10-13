@@ -5,9 +5,10 @@
 //                    one by one pick up an amber glow (unfilled posts). Coffee cups, a cold radiator, blinds.
 //   tags_fall (7 s)  close on the staff board: tags come loose and drop out of their slots, leaving amber-lit gaps
 //                    (post cuts in the 2027 budget).
-import { AMBER } from './lib.js';
+const AMBER = 0xdbe4ee;   // v2: subject colour instead of the channel amber
 import { glow, beam } from './look.js';
-import { AMBER_HI, path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, ease } from './france_lib.js';
+import { path, clamp01, sstep, fontsReady, finishPost, ctex, spacedText, timing, ease } from './france_lib.js';
+const AMBER_HI = 0xe5484d;
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 

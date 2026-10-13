@@ -6,9 +6,10 @@
 //                      on thin amber light threads onto them; camera orbits (beat 116, "why weren't they there?").
 //   empty_field (7 s)  30,000 pupils without classes: a field of empty desks and chairs receding into fog, cold
 //                      light, one desk in the foreground under an amber pool (beat 119).
-import { AMBER } from './lib.js';
+const AMBER = 0x3b82f6;   // v2: subject colour instead of the channel amber
 import { glow, beam } from './look.js';
-import { AMBER_HI, path, clamp01, sstep, fontsReady, finishPost, ctex, timing, label, ease, figure } from './france_lib.js';
+import { path, clamp01, sstep, fontsReady, finishPost, ctex, timing, label, ease, figure } from './france_lib.js';
+const AMBER_HI = 0x93c5fd;
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 // one merged geometry per figure material slot (body / head / dark) for instancing
@@ -53,9 +54,9 @@ export async function setup(THREE, renderer, W, H) {
     // overhead lamps per row
     ctx.lamps = []; for (let r = 0; r < ROWS; r += 2) { const z = -r * sz - 0.8;
       const bar = new THREE.Mesh(new THREE.BoxGeometry(COLS * sx, 0.06, 0.12), new THREE.MeshBasicMaterial({ color: 0x2a2620 })); bar.position.set(0, 6, z); scene.add(bar);
-      const s = new THREE.SpotLight(0xffc27a, 0, 18, 1.2, 0.7, 1.3); s.position.set(0, 5.8, z); s.target.position.set(0, 0, z); scene.add(s, s.target);
+      const s = new THREE.SpotLight(0x60a5fa, 0, 18, 1.2, 0.7, 1.3); s.position.set(0, 5.8, z); s.target.position.set(0, 0, z); scene.add(s, s.target);
       ctx.lamps.push({ bar, s, r }); }
-    const sign = label(THREE, 'ON THE PAYROLL', { size: 0.042, sub: 'not assigned to any class', anchor: 'center', gap: 0, subColor: '#e9dfca' }); sign.position.set(0, 2.9, 3.2); sign.material.opacity = 0; scene.add(sign); ctx.sign = sign;
+    const sign = label(THREE, 'ON THE PAYROLL', { size: 0.042, sub: 'not assigned to any class', anchor: 'center', gap: 0, subColor: '#e3e8ef' }); sign.position.set(0, 2.9, 3.2); sign.material.opacity = 0; scene.add(sign); ctx.sign = sign;
     const front = new THREE.DirectionalLight(0xc9d2e0, 0.35); front.position.set(3, 6, 12); scene.add(front);
   } else if (shot === 'drop') {
     const table = new THREE.Mesh(new THREE.CircleGeometry(30, 96), std({ color: 0x3a3936, roughness: 0.6, metalness: 0.1, map: ctex(THREE, 1024, 1024, (g, w, h) => { g.fillStyle = '#4a4844'; g.fillRect(0, 0, w, h); g.strokeStyle = 'rgba(233,223,202,0.12)'; g.lineWidth = 2; for (let x = 0; x <= w; x += 32) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.stroke(); g.beginPath(); g.moveTo(0, x); g.lineTo(w, x); g.stroke(); } }) })); table.rotation.x = -Math.PI / 2; table.receiveShadow = true; scene.add(table);
@@ -74,8 +75,8 @@ export async function setup(THREE, renderer, W, H) {
     for (let i = 0; i < N; i++) { const T = targets[i % targets.length]; const ox = (i >= targets.length ? 0.18 : -0.18);
       const th = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 1, 6), threadM); th.geometry.translate(0, 0.5, 0); scene.add(th);
       ctx.drops.push({ x: T.x + ox * 1.6, z: T.z, y0: T.h, t0: 1.0 + R() * 4.5, th, s: 0.32 }); }
-    const key = new THREE.SpotLight(0xfff1df, 500, 60, 0.6, 0.8, 1.2); key.position.set(-8, 22, 10); key.target.position.set(0, 0, 0); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); scene.add(key, key.target);
-    const l = label(THREE, '3,024', { size: 0.06, sub: 'supply teachers sent to red and orange lycées', anchor: 'center', gap: 0, color: '#ffb25c', subColor: '#e9dfca' }); l.position.set(0, 4.2, 0); l.material.opacity = 0; scene.add(l); ctx.lab = l; scene.add(new THREE.HemisphereLight(0xb0b6c0, 0x1a1816, 0.5));
+    const key = new THREE.SpotLight(0xf1f4fa, 500, 60, 0.6, 0.8, 1.2); key.position.set(-8, 22, 10); key.target.position.set(0, 0, 0); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); scene.add(key, key.target);
+    const l = label(THREE, '3,024', { size: 0.06, sub: 'supply teachers sent to red and orange lycées', anchor: 'center', gap: 0, color: '#60a5fa', subColor: '#e3e8ef' }); l.position.set(0, 4.2, 0); l.material.opacity = 0; scene.add(l); ctx.lab = l; scene.add(new THREE.HemisphereLight(0xb0b6c0, 0x1a1816, 0.5));
   } else {
     const floor = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), std({ color: 0x4a4844, roughness: 0.55, metalness: 0.15 })); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
     // desk + chair merged geometry, instanced
@@ -93,7 +94,7 @@ export async function setup(THREE, renderer, W, H) {
     const hero = new THREE.Mesh(geo, std({ color: 0x8a6c4c, roughness: 0.55 })); hero.position.set(0.9, 0, 3.4); hero.rotation.y = 0.05; hero.castShadow = true; scene.add(hero);
     const paper = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.005, 0.21), std({ color: 0xece7da })); paper.position.set(1.0, 0.77, 3.4); scene.add(paper);
     const pool = new THREE.SpotLight(AMBER, 0, 8, 0.32, 0.7, 1.4); pool.position.set(0.9, 5, 4.0); pool.target.position.set(0.9, 0, 3.4); pool.castShadow = true; scene.add(pool, pool.target); ctx.pool = pool;
-    const poolBeam = beam(THREE, 0xffb060, 5, 1.4, 0.05); poolBeam.position.set(0.9, 5, 4.0); scene.add(poolBeam); ctx.poolBeam = poolBeam;
+    const poolBeam = beam(THREE, 0x60a5fa, 5, 1.4, 0.05); poolBeam.position.set(0.9, 5, 4.0); scene.add(poolBeam); ctx.poolBeam = poolBeam;
     const cold = new THREE.DirectionalLight(0xb9c6d8, 2.4); cold.position.set(-20, 18, 12); cold.castShadow = false; scene.add(cold); scene.add(new THREE.HemisphereLight(0x9aa6b8, 0x1a1816, 0.6));
   }
   const post = finishPost(THREE, renderer, scene, camera, W, H, { bloom: 0.65, bloomRadius: 0.6, bloomThreshold: 0.7,
