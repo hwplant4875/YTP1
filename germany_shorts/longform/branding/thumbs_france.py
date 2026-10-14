@@ -1,137 +1,184 @@
 # STRATA long-form 2 (France 2026 lycée protests): A/B/C thumbnails, 1280x720.
-#   2a: 3D map frame (map_tour render) with the country lit up, "1 SCHOOL -> 1,000"
-#   2b: provocative: real photo (Perpignan, police vs. pupils with the tricolour), red ring + arrow
-#   2c: edited real photo: "NES POUR BRILLER PAS POUR ETRE NEGLIGES" banner (Paris, 6 Oct)
+# Rebuilt after a benchmark of Neo, Vox, Johnny Harris, Wendover, PolyMatter, RealLifeLore,
+# Economics Explained, VICE News and DW (see upload/2_france_protests/benchmark.md):
+# one real photo carries the thumbnail, 0-3 words, one accent colour, no flag stripes.
+#   2a  clean / cinematic: Paris, 6 Oct: a sea of pupils, a burning barricade, riot police behind.
+#       "1,000 SCHOOLS" in white, no stroke (Neo style).
+#   2b  provocative: Perpignan, 2 Oct: riot police in green tear gas facing masked pupils with
+#       raised hands. Hand-drawn red ring on the pupils, "POLICE vs. TEENS" (Wendover/VICE style).
+#   2c  real photo, different angle: Lycée Jacques-Decour, Paris: the school door walled off with
+#       wheelie bins, pupils sitting on them. A cardboard placard: "WE SHUT IT DOWN".
+# Photos: Wikimedia Commons (Jules* CC BY-SA 4.0, Aurelio Cárdenas CC BY 4.0, Wyslijp16 CC BY 4.0).
 # usage: python3 thumbs_france.py <out dir>
-import sys, os, glob, math, subprocess
-from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps, ImageEnhance
+import sys, os, math, random
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps, ImageEnhance, ImageChops
 
 EP = "/home/user/YTP1/germany_shorts/longform/episodes/02_france_protests"
-FONT = "/home/user/YTP1/germany_shorts/fonts/YouTubeSans-Black.otf"
+RAW = f"{EP}/sources/photos/raw"
+FD = "/home/user/YTP1/germany_shorts/fonts"
+ANTON = f"{FD}/Anton-Regular.ttf"                     # condensed headline (OFL)
+MARKER = f"{FD}/PermanentMarker-Regular.ttf"          # placard handwriting (Apache 2.0)
+CLEAN = "/usr/share/fonts/opentype/inter/InterDisplay-Black.otf"
 OUT = sys.argv[1] if len(sys.argv) > 1 else "."
 W, H = 1280, 720
-WHITE, BLUE, RED = (255, 255, 255), (38, 110, 255), (239, 35, 50)
-F = lambda s: ImageFont.truetype(FONT, s)
+WHITE, RED = (255, 255, 255), (232, 30, 40)
+F = lambda path, s: ImageFont.truetype(path, s)
 
 
-def fit(im, centering=(0.5, 0.5)):
-    return ImageOps.fit(im.convert("RGB"), (W, H), Image.LANCZOS, centering=centering)
+def load(name):
+    return ImageOps.exif_transpose(Image.open(f"{RAW}/{name}")).convert("RGB")
 
 
-def shade(im, box, alpha, side):
-    """dark gradient over box, strongest at `side` ('l','r','t','b'), fading inward"""
+def crop16(im, x0, y0, w):
+    """crop a 16:9 window (x0, y0, width w in source px) and scale to 1280x720"""
+    h = round(w * 9 / 16)
+    return im.crop((x0, y0, x0 + w, y0 + h)).resize((W, H), Image.LANCZOS)
+
+
+def grade(im, b=1.0, c=1.0, s=1.0, sharp=0):
+    im = ImageEnhance.Color(ImageEnhance.Contrast(ImageEnhance.Brightness(im).enhance(b)).enhance(c)).enhance(s)
+    return im.filter(ImageFilter.UnsharpMask(2, sharp, 2)) if sharp else im
+
+
+def vignette(im, strength=0.45, power=2.2):
+    m = Image.new("L", (W, H)); px = m.load()
+    for y in range(0, H, 4):
+        for x in range(0, W, 4):
+            d = math.hypot((x - W / 2) / (W / 2), (y - H / 2) / (H / 2)) / math.sqrt(2)
+            v = int(255 * strength * min(1, d ** power * 1.6))
+            for dy in range(4):
+                for dx in range(4): px[x + dx, y + dy] = v
+    return Image.composite(Image.new("RGB", (W, H)), im, m.filter(ImageFilter.GaussianBlur(30)))
+
+
+def gradient(im, side, size, alpha):
+    """darken from one edge, fading inward ('t','b','l','r')"""
     m = Image.new("L", (W, H), 0); d = ImageDraw.Draw(m)
-    x0, y0, x1, y1 = box
-    n = (x1 - x0) if side in "lr" else (y1 - y0)
-    for i in range(n):
-        v = int(alpha * (1 - i / n) ** 1.3)
-        if side == "l": d.line([(x0 + i, y0), (x0 + i, y1)], fill=v)
-        if side == "r": d.line([(x1 - i, y0), (x1 - i, y1)], fill=v)
-        if side == "t": d.line([(x0, y0 + i), (x1, y0 + i)], fill=v)
-        if side == "b": d.line([(x0, y1 - i), (x1, y1 - i)], fill=v)
-    return Image.composite(Image.new("RGB", (W, H), (0, 0, 0)), im, m)
+    for i in range(size):
+        v = int(alpha * (1 - i / size) ** 1.6)
+        if side == "t": d.line([(0, i), (W, i)], fill=v)
+        if side == "b": d.line([(0, H - 1 - i), (W, H - 1 - i)], fill=v)
+        if side == "l": d.line([(i, 0), (i, H)], fill=v)
+        if side == "r": d.line([(W - 1 - i, 0), (W - 1 - i, H)], fill=v)
+    return Image.composite(Image.new("RGB", (W, H)), im, m)
 
 
-def text(im, xy, s, size, fill, anchor="la", stroke=10, shadow=True):
-    if shadow:  # soft drop shadow so the black stroke separates from busy backgrounds
-        sh = Image.new("L", (W, H), 0)
-        ImageDraw.Draw(sh).text((xy[0] + 6, xy[1] + 8), s, font=F(size), fill=200, anchor=anchor, stroke_width=stroke + 4)
-        im = Image.composite(Image.new("RGB", (W, H), (0, 0, 0)), im, sh.filter(ImageFilter.GaussianBlur(10)))
-    ImageDraw.Draw(im).text(xy, s, font=F(size), fill=fill, anchor=anchor, stroke_width=stroke, stroke_fill=(0, 0, 0))
+def soft_text(im, xy, s, font, fill=WHITE, anchor="la", shadow=170, blur=14, off=(0, 6), stroke=0):
+    """text with a soft drop shadow only (no hard outline): the clean Neo/DW look"""
+    sh = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(sh).text((xy[0] + off[0], xy[1] + off[1]), s, font=font, fill=shadow, anchor=anchor,
+                            stroke_width=stroke + 6)
+    im = Image.composite(Image.new("RGB", (W, H)), im, sh.filter(ImageFilter.GaussianBlur(blur)))
+    ImageDraw.Draw(im).text(xy, s, font=font, fill=fill, anchor=anchor, stroke_width=stroke, stroke_fill=(0, 0, 0))
     return im
 
 
-def glow_layer(im, draw_fn, blur=10, strength=0.9):
-    halo = Image.new("L", (W, H), 0); draw_fn(ImageDraw.Draw(halo), 255, extra=10)
-    halo = halo.filter(ImageFilter.GaussianBlur(blur)).point(lambda v: int(v * strength))
-    im = Image.composite(Image.new("RGB", (W, H), (0, 0, 0)), im, halo)
-    draw_fn(ImageDraw.Draw(im), RED, extra=0); return im
-
-
-def ring(cx, cy, rx, ry, w=12):
-    def fn(d, col, extra=0):
-        d.ellipse([cx - rx, cy - ry, cx + rx, cy + ry], outline=col, width=w + extra)
-    return fn
-
-
-def arrow(x0, y0, x1, y1, w=18, head=50, bend=40):
-    """curved arrow; the shaft is stamped with discs so it stays smooth at any width"""
-    def fn(d, col, extra=0):
-        a = math.atan2(y1 - y0, x1 - x0)
-        bx, by = x1 - head * 0.7 * math.cos(a), y1 - head * 0.7 * math.sin(a)
-        mx, my = (x0 + bx) / 2 - math.sin(a) * bend, (y0 + by) / 2 + math.cos(a) * bend
-        pts = [((1 - t) ** 2 * x0 + 2 * (1 - t) * t * mx + t * t * bx, (1 - t) ** 2 * y0 + 2 * (1 - t) * t * my + t * t * by)
-               for t in [i / 120 for i in range(121)]]
-        r = (w + extra) / 2
-        for x, y in pts: d.ellipse([x - r, y - r, x + r, y + r], fill=col)
-        a2 = math.atan2(by - pts[-6][1], bx - pts[-6][0])
-        tip = (bx + (head * 0.7 + extra) * math.cos(a2), by + (head * 0.7 + extra) * math.sin(a2))
-        p = [tip]
-        for s in (-1, 1): p.append((tip[0] - (head + 2 * extra) * math.cos(a2 + s * 0.55), tip[1] - (head + 2 * extra) * math.sin(a2 + s * 0.55)))
-        d.polygon(p, fill=col)
-    return fn
-
-
-def tricolour(im, x, y, w=150, h=14):
+def hand_ring(im, cx, cy, rx, ry, col=RED, w=11, turns=1.12, seed=3, tilt=-0.18):
+    """marker-drawn ellipse: slightly over-rotated, wobbly, uneven pressure, with a dark halo"""
+    rnd = random.Random(seed)
+    ph = [rnd.uniform(0, 6.28) for _ in range(3)]
+    pts = []
+    n = 260
+    for i in range(n + 1):
+        t = i / n * turns * 2 * math.pi + 2.2
+        wob = 1 + 0.035 * math.sin(3 * t + ph[0]) + 0.025 * math.sin(5 * t + ph[1])
+        grow = 1 + 0.06 * i / n                       # second pass drifts outward, like a real stroke
+        x, y = rx * wob * grow * math.cos(t), ry * wob * grow * math.sin(t)
+        pts.append((cx + x * math.cos(tilt) - y * math.sin(tilt), cy + x * math.sin(tilt) + y * math.cos(tilt)))
+    halo = Image.new("L", (W, H), 0); dh = ImageDraw.Draw(halo)
+    for x, y in pts: dh.ellipse([x - w, y - w, x + w, y + w], fill=150)
+    im = Image.composite(Image.new("RGB", (W, H)), im, halo.filter(ImageFilter.GaussianBlur(9)))
     d = ImageDraw.Draw(im)
-    d.rectangle([x - 3, y - 3, x + w + 3, y + h + 3], fill=(0, 0, 0))
-    for i, c in enumerate([(0, 85, 164), WHITE, RED]):
-        d.rectangle([x + i * w // 3, y, x + (i + 1) * w // 3, y + h], fill=c)
+    for i, (x, y) in enumerate(pts):
+        r = w / 2 * (0.75 + 0.35 * math.sin(i / n * math.pi))   # thin start/end, full in the middle
+        d.ellipse([x - r, y - r, x + r, y + r], fill=col)
+    return im
 
 
-def boost(im, b=1.0, c=1.0, s=1.0):
-    return ImageEnhance.Color(ImageEnhance.Contrast(ImageEnhance.Brightness(im).enhance(b)).enhance(c)).enhance(s)
+def placard(lines, size, w, h, angle, seed=7):
+    """a hand-lettered cardboard sign: corrugated brown board, torn edges, black marker, red underline"""
+    rnd = random.Random(seed)
+    pad = 40
+    board = Image.new("RGBA", (w + 2 * pad, h + 2 * pad), (0, 0, 0, 0))
+    base = Image.new("RGB", (w, h), (196, 158, 108))
+    # flute stripes + paper grain
+    d = ImageDraw.Draw(base)
+    for x in range(0, w, 9):
+        d.line([(x, 0), (x, h)], fill=(188, 150, 101), width=3)
+    noise = Image.effect_noise((w, h), 22).convert("L")
+    base = Image.composite(Image.new("RGB", (w, h), (150, 112, 68)), base, noise.point(lambda v: int(max(0, v - 120) * 0.9)))
+    base = ImageEnhance.Brightness(base).enhance(1.04)
+    # torn outline
+    poly = []
+    for i in range(41): poly.append((i / 40 * w, rnd.uniform(0, 9)))
+    for i in range(1, 24): poly.append((w - rnd.uniform(0, 9), i / 24 * h))
+    for i in range(40, -1, -1): poly.append((i / 40 * w, h - rnd.uniform(0, 9)))
+    for i in range(23, 0, -1): poly.append((rnd.uniform(0, 9), i / 24 * h))
+    mask = Image.new("L", (w, h), 0); ImageDraw.Draw(mask).polygon(poly, fill=255)
+    card = Image.new("RGBA", (w, h)); card.paste(base, (0, 0), mask)
+    # marker text, centred line by line, each line nudged a little like handwriting
+    dc = ImageDraw.Draw(card)
+    font = F(MARKER, size)
+    lh = size * 1.08
+    y = h / 2 - lh * len(lines) / 2 + lh / 2 + 4
+    for i, s in enumerate(lines):
+        dc.text((w / 2 + rnd.uniform(-10, 10), y), s, font=font, fill=(18, 16, 16), anchor="mm")
+        if i == len(lines) - 1:   # red marker underline under the last line
+            tw = dc.textlength(s, font=font)
+            x0, x1 = w / 2 - tw / 2 - 6, w / 2 + tw / 2 + 6
+            yy = y + size * 0.55
+            for k in range(60):
+                t = k / 59
+                xx = x0 + (x1 - x0) * t; yv = yy + 6 * math.sin(t * 3.2) - 4 * t
+                dc.ellipse([xx - 7, yv - 6, xx + 7, yv + 6], fill=(205, 28, 36))
+        y += lh
+    board.paste(card, (pad, pad), card)
+    board = board.rotate(angle, resample=Image.BICUBIC, expand=True)
+    shadow = Image.new("RGBA", board.size, (0, 0, 0, 0))
+    shadow.putalpha(board.getchannel("A").point(lambda v: int(v * 0.65)).filter(ImageFilter.GaussianBlur(14)))
+    return board, shadow
+
+
+def paste_rgba(im, layer, shadow, x, y, sh_off=(10, 16)):
+    im = im.convert("RGBA")
+    blk = Image.new("RGBA", shadow.size, (0, 0, 0, 255)); blk.putalpha(shadow.getchannel("A"))
+    im.alpha_composite(blk, (x + sh_off[0], y + sh_off[1]))
+    im.alpha_composite(layer, (x, y))
+    return im.convert("RGB")
 
 
 os.makedirs(OUT, exist_ok=True)
 
-# ---- 2a: 3D map, France lit up (frame 9 s of the recoloured map_tour render)
-frame = os.path.join(OUT, "_map_tour_9s.png")
-src = glob.glob(f"{EP}/cache/3d_france_map_tour*.mp4")[0]
-subprocess.run(["ffmpeg", "-v", "0", "-y", "-ss", "9", "-i", src, "-frames:v", "1", frame], check=True)
-im = Image.open(frame).convert("RGB").resize((1460, 821), Image.LANCZOS).crop((40, 40, 40 + W, 40 + H))
-# cool night grade: shadows pushed to navy, lights stay white
-r, g, b = im.split()
-im = Image.merge("RGB", (r.point(lambda v: int(v * 0.86)), g.point(lambda v: int(v * 0.93)), b.point(lambda v: min(255, int(v * 1.12 + 10)))))
-im = boost(im, 1.25, 1.2)
-# red origin glow on Paris / Creteil, where it started
-glow = Image.new("L", (W, H), 0); ImageDraw.Draw(glow).ellipse([680 - 70, 160 - 70, 680 + 70, 160 + 70], fill=255)
-im = Image.composite(Image.new("RGB", (W, H), RED), im, glow.filter(ImageFilter.GaussianBlur(38)).point(lambda v: int(v * 0.75)))
-im = shade(im, (0, 0, 640, H), 245, "l")
-im = text(im, (52, 70), "1 SCHOOL", 118, WHITE, stroke=10)
-im = glow_layer(im, arrow(150, 215, 175, 395, w=22, head=62, bend=30))
-im = text(im, (40, 395), "1,000", 250, RED, stroke=13)
-tricolour(im, 300, 680, 210, 16)
+# ---- 2a: clean / cinematic. A sea of pupils, a black smoke column, riot police on the horizon.
+im = load("Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_017.jpg")      # 3840x2160
+im = crop16(im, 1700, 900, 2140)         # right side: crowd, fire, smoke; leaves the flags out
+im = grade(im, 1.08, 1.12, 0.95, sharp=60)
+r, g, b = im.split()                     # cool the shadows slightly, keep skin tones
+im = Image.merge("RGB", (r.point(lambda v: int(v * 0.97)), g, b.point(lambda v: min(255, int(v * 1.04 + 4)))))
+im = vignette(im, 0.4)
+im = gradient(im, "t", 300, 150)
+im = soft_text(im, (56, 40), "1,000", F(CLEAN, 150), off=(0, 6))
+im = soft_text(im, (60, 194), "SCHOOLS", F(CLEAN, 88), off=(0, 5))
 im.save(f"{OUT}/2a.jpg", quality=92)
-os.remove(frame)
 
-# ---- 2b: provocative: riot police facing pupils carrying the tricolour (Perpignan, 2 Oct)
-p = f"{EP}/sources/photos/best/Journée_de_mobilisation_des_lycéens_à_Perpignan_14.jpg"
-im = Image.open(p).convert("RGB")
-im = im.crop((0, 0, im.width, im.height))  # full frame, 16:9 already
-im = boost(fit(im, (0.5, 0.6)), 1.0, 1.15, 1.1)
-im = shade(im, (0, 0, W, 300), 235, "t")
-im = text(im, (W // 2, 22), "POLICE vs. TEENS", 130, WHITE, "ma", 11)
-ImageDraw.Draw(im)
-# ring the pupils with the flag, arrow from the riot officer toward them
-im = glow_layer(im, ring(690, 420, 175, 150, w=13))
-im = glow_layer(im, arrow(330, 530, 505, 455, w=22, head=60, bend=-35))
+# ---- 2b: provocative. Riot police in green tear gas facing masked pupils with raised hands.
+im = load("Journée_de_mobilisation_des_lycéens_à_Perpignan_05.jpg")                     # 3840x2163
+im = crop16(im, 180, 40, 3540)
+im = grade(im, 1.0, 1.18, 1.12, sharp=70)
+im = vignette(im, 0.42)
+im = gradient(im, "t", 260, 170)
+im = hand_ring(im, 832, 392, 162, 196, w=12, tilt=-0.06)
+f = F(ANTON, 132)
+im = soft_text(im, (W // 2, 16), "POLICE vs. TEENS", f, anchor="ma", shadow=220, blur=12, off=(0, 5), stroke=3)
 im.save(f"{OUT}/2b.jpg", quality=92)
 
-# ---- 2c: edited real photo: the "born to shine, not to be neglected" banner (Paris, 6 Oct)
-p = f"{EP}/sources/photos/best/Manifestation_lycéenne_du_6_octobre_2026_à_Paris_63.jpg"
-im = Image.open(p).convert("RGB")
-w0, h0 = im.size
-x0 = 0; cw = w0; ch = int(cw * 9 / 16); y0 = int(h0 * 0.10)  # keep the whole banner, NEGLIGES included
-im = im.crop((x0, y0, x0 + cw, y0 + ch))
-im = boost(fit(im), 1.02, 1.2, 1.15)
-im = shade(im, (600, 0, W, H), 235, "r")
-im = text(im, (W - 36, 120), "SO THEY", 104, WHITE, "ra", 10)
-im = text(im, (W - 36, 240), "REVOLTED", 116, BLUE, "ra", 12)
-d = ImageDraw.Draw(im)
-for i, line in enumerate(['"BORN TO SHINE,', 'NOT TO BE NEGLECTED"']):
-    im = text(im, (W - 40, 410 + i * 54), line, 42, WHITE, "ra", 6, shadow=False)
-tricolour(im, W - 250, 540, 210, 18)
+# ---- 2c: the school door walled off with wheelie bins, pupils sitting on top.
+im = load("2026_high_school_student_movement_and_blockades_at_Lycée_Jacques-Decour_in_Paris_03.jpg")  # 3840x2560
+im = crop16(im, 420, 872, 3000)
+im = grade(im, 1.0, 1.14, 1.1, sharp=60)
+im = vignette(im, 0.38)
+board, shadow = placard(["WE SHUT", "IT DOWN"], 100, 560, 310, 4, seed=11)
+im = paste_rgba(im, board, shadow, 20, 6)
 im.save(f"{OUT}/2c.jpg", quality=92)
 
 # ---- compare sheet
@@ -139,6 +186,6 @@ ims = [Image.open(f"{OUT}/2{k}.jpg") for k in "abc"]
 sheet = Image.new("RGB", (3 * 426 + 4 * 10, 240 + 20 + 40), (24, 24, 24)); d = ImageDraw.Draw(sheet)
 for i, t in enumerate(ims):
     sheet.paste(t.resize((426, 240), Image.LANCZOS), (10 + i * 436, 10))
-    d.text((10 + i * 436 + 213, 262), "2" + "abc"[i], font=F(28), fill=WHITE, anchor="ma")
+    d.text((10 + i * 436 + 213, 262), "2" + "abc"[i], font=F(CLEAN, 28), fill=WHITE, anchor="ma")
 sheet.save(f"{OUT}/2_compare.jpg", quality=88)
 for k in "abc": print(k, os.path.getsize(f"{OUT}/2{k}.jpg") // 1024, "KB")
