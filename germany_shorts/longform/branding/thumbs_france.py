@@ -2,13 +2,13 @@
 # Rebuilt after a benchmark of Neo, Vox, Johnny Harris, Wendover, PolyMatter, RealLifeLore,
 # Economics Explained, VICE News and DW (see upload/2_france_protests/benchmark.md):
 # one real photo carries the thumbnail, 0-3 words, one accent colour, no flag stripes.
-#   2a  clean / cinematic: Paris, 6 Oct: a sea of pupils, a burning barricade, riot police behind.
-#       "1,000 SCHOOLS" in white, no stroke (Neo style).
+#   2a  provocative (v3): two lycéens in smoke around a smouldering bin, "TEEN REVOLT" (REVOLT red).
+#       (v2 was the Paris crowd + barricade with "1,000 SCHOOLS"; the user found it not provocative enough.)
 #   2b  provocative: Perpignan, 2 Oct: riot police in green tear gas facing masked pupils with
 #       raised hands. Hand-drawn red ring on the pupils, "POLICE vs. TEENS" (Wendover/VICE style).
 #   2c  real photo, different angle: Lycée Jacques-Decour, Paris: the school door walled off with
 #       wheelie bins, pupils sitting on them. A cardboard placard: "WE SHUT IT DOWN".
-# Photos: Wikimedia Commons (Jules* CC BY-SA 4.0, Aurelio Cárdenas CC BY 4.0, Wyslijp16 CC BY 4.0).
+# Photos: Wikimedia Commons (Camille Hestaux CC0, Aurelio Cárdenas CC BY 4.0, Wyslijp16 CC BY 4.0).
 # usage: python3 thumbs_france.py <out dir>
 import sys, os, math, random
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps, ImageEnhance, ImageChops
@@ -149,16 +149,19 @@ def paste_rgba(im, layer, shadow, x, y, sh_off=(10, 16)):
 
 os.makedirs(OUT, exist_ok=True)
 
-# ---- 2a: clean / cinematic. A sea of pupils, a black smoke column, riot police on the horizon.
-im = load("Manifestation_lycéenne_et_étudiante_du_6_octobre_2026_à_Paris_017.jpg")      # 3840x2160
-im = crop16(im, 1700, 900, 2140)         # right side: crowd, fire, smoke; leaves the flags out
-im = grade(im, 1.08, 1.12, 0.95, sharp=60)
-r, g, b = im.split()                     # cool the shadows slightly, keep skin tones
-im = Image.merge("RGB", (r.point(lambda v: int(v * 0.97)), g, b.point(lambda v: min(255, int(v * 1.04 + 4)))))
-im = vignette(im, 0.4)
-im = gradient(im, "t", 300, 150)
-im = soft_text(im, (56, 40), "1,000", F(CLEAN, 150), off=(0, 6))
-im = soft_text(im, (60, 194), "SCHOOLS", F(CLEAN, 88), off=(0, 5))
+# ---- 2a (v3, provocative): two lycéens in a cloud of smoke around a smouldering wheelie bin
+# (29 Sep, Camille Hestaux, CC0). Two words: "TEEN" white, "REVOLT" red (Wendover "RIOT" pattern).
+im = load("Deux_lycéens_tentent_d_éteindre_une_poubelle.jpg")                          # 1920x2880 portrait
+im = crop16(im, 0, 880, 1920)
+im = grade(im, 0.98, 1.22, 1.08, sharp=80)
+im = vignette(im, 0.5)
+im = gradient(im, "t", 300, 215)
+f = F(ANTON, 160)
+tw = ImageDraw.Draw(im).textlength("TEEN REVOLT", font=f)
+x0 = (W - tw) / 2
+im = soft_text(im, (x0, 4), "TEEN", f, shadow=230, blur=12, off=(0, 6), stroke=3)
+im = soft_text(im, (x0 + ImageDraw.Draw(im).textlength("TEEN ", font=f), 4), "REVOLT", f, fill=RED,
+               shadow=230, blur=12, off=(0, 6), stroke=3)
 im.save(f"{OUT}/2a.jpg", quality=92)
 
 # ---- 2b: provocative. Riot police in green tear gas facing masked pupils with raised hands.
