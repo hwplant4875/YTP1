@@ -217,6 +217,8 @@ def build_el(el):
     t = el["type"]
     if t == "photo":
         return ("photo",) + photo_card(el["src"], el["w"], el["h"], tuple(el.get("focus", (0.5, 0.5))))
+    if t == "video":
+        return ("video", video_frames(el), (el["w"], el["h"], 10))
     if t == "word":
         return ("img", shadow(word_block(el["de"], el.get("article"), el.get("en"), el.get("max_w", W - 2 * MX),
                                           el.get("size", 200), tuple(el["colour"]) if el.get("colour") else None),
@@ -262,6 +264,17 @@ def ease(t):
     return 1 - (1 - t) ** 3
 
 
+def video_frames(el):
+    """Real footage in a card (user 2026-10-16: spectacle hooks). el: src (absolute), start, dur, crop [x,y,w,h] in source px.
+    Frames are decoded once at card size (30 fps) and played from the moment the element appears."""
+    w, h = el["w"], el["h"]
+    vf = (f"crop={el['crop'][2]}:{el['crop'][3]}:{el['crop'][0]}:{el['crop'][1]}," if el.get("crop") else "") + \
+         f"scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},fps={FPS},eq=contrast=1.06:saturation=1.08,unsharp=5:5:0.6"
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(el.get("start", 0)), "-t", str(el.get("dur", 6)), "-i", el["src"],
+                          "-vf", vf, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True, check=True).stdout
+    return np.frombuffer(raw, np.uint8).reshape(-1, h, w, 3)
+
+
 def draw_el(frame, built, el, local, appear, scene_len):
     p = ease((local - appear) / 0.32)
     if p <= 0:
@@ -276,6 +289,13 @@ def draw_el(frame, built, el, local, appear, scene_len):
         if q > 0:
             d.arc((8, 8, s - 9, s - 9), -90, -90 + 360 * q, fill=ACCENT + (255,), width=14)
         built = ("img", shadow(im, 8, 80, 4))
+    if built[0] == "video":
+        frames, (w, h, border) = built[1], built[2]
+        img = Image.fromarray(frames[min(len(frames) - 1, max(0, int((local - appear) * FPS)))]).convert("RGBA")
+        card = Image.new("RGBA", (w + 2 * border, h + 2 * border))
+        ImageDraw.Draw(card).rounded_rectangle((0, 0, card.width - 1, card.height - 1), 40, fill=(255, 255, 255, 255))
+        card.alpha_composite(rounded(img, 32), (border, border))
+        built = ("img", shadow(card, 26, 150, 14))
     if built[0] == "photo":
         big, (w, h, border) = built[1], built[2]
         z = 1.0 + 0.06 * min(1, max(0, local) / max(1.0, scene_len))     # slow push-in, kept inside the card
@@ -448,6 +468,18 @@ def render(spec_path, out_path):
                   f"aresample=48000,atrim=0:{total},afade=t=in:d=0.5,"
                   f"afade=t=out:st={total - 1.2}:d=1.2,volume={MUSIC_VOL}[m0]")
     fl.append("[m0][key]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=350[music]")
+    for tl in timeline:                       # footage keeps its own sound (bells, splashes, crowd), low under the voice
+        for e in tl["scene"]["els"]:
+            if e["type"] != "video" or not e.get("vol", 0.3):
+                continue
+            at = tl["start"] + tl["shows"].get(e["id"], 0)
+            d = min(e.get("dur", 6), tl["hides"].get(e["id"], 1e9) - tl["shows"].get(e["id"], 0),
+                    (timeline[timeline.index(tl) + 1]["start"] if tl is not timeline[-1] else total) - at)
+            inputs += ["-ss", str(e.get("start", 0)), "-t", str(d), "-i", e["src"]]
+            idx = sum(1 for x in inputs if x == "-i") - 1
+            fl.append(f"[{idx}:a]aformat=sample_rates=48000:channel_layouts=stereo,volume={e.get('vol', 0.3)},"
+                      f"afade=t=in:d=0.15,afade=t=out:st={max(0, d - 0.4)}:d=0.4,adelay={int(at * 1000)}:all=1[v{idx}]")
+            mix.append(f"[v{idx}]")
     mix.append("[music]")
     fl.append("[voice]" + "".join(mix) + f"amix=inputs={1 + len(mix)}:normalize=0,alimiter=limit=0.89,apad[a]")
     wav = os.path.join(tmp, "a.wav")
