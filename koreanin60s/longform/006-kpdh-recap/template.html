@@ -1,0 +1,116 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* KPDH recap long-form, 1920x1080. Dark night-sky look (HUNTR/X pink, violet, gold), one timeline running along the bottom. */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#0d0a1f;font-family:"YouTube Sans","Pretendard",sans-serif;color:#fff}
+#sky{position:absolute;inset:0;background:radial-gradient(900px 600px at 15% 20%,rgba(255,70,170,.22),transparent 70%),radial-gradient(800px 700px at 85% 75%,rgba(120,80,255,.25),transparent 70%),radial-gradient(600px 400px at 70% 10%,rgba(255,200,80,.10),transparent 70%),#0d0a1f}
+.lay{position:absolute;inset:0;opacity:0}
+.bg{position:absolute;inset:-40px;background-size:cover;background-position:center}
+.card{position:absolute;left:90px;top:70px;width:1380px;height:776px;border-radius:26px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 3px rgba(255,255,255,.08)}
+.card .ph{position:absolute;inset:0;background-size:cover;background-position:center;transform-origin:50% 45%}
+.card .vbg{position:absolute;inset:-30px;background-size:cover;background-position:center}
+.card .vfg{position:absolute;top:0;height:100%;left:50%;transform:translateX(-50%);background-size:cover;background-position:center;box-shadow:0 0 60px rgba(0,0,0,.7)}
+.full .card{left:0;top:0;width:1920px;height:1080px;border-radius:0}
+.cap{position:absolute;left:130px;top:742px;max-width:1300px;font-weight:900;font-size:64px;line-height:1.08;padding:14px 30px 18px;border-radius:18px;background:rgba(10,6,28,.72);
+ -webkit-text-stroke:0;text-shadow:0 4px 0 #000,0 0 20px rgba(0,0,0,.6)}
+.cap em,.big em,.q em{font-style:normal;color:#ffd84a}
+.dim{position:absolute;inset:0;background:rgba(8,4,24,.62)}
+.big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 80px}
+.stroke{paint-order:stroke fill;-webkit-text-stroke:14px #000}
+.num{font-weight:900;font-size:250px;line-height:1;color:#ffd84a}
+.lbl{font-weight:900;font-size:60px;margin-top:26px;max-width:1200px}
+.stmt{font-weight:900;font-size:104px;line-height:1.12}
+.stmt small{display:block;font-size:52px;margin-top:22px;color:#ddd}
+.paper{position:absolute;left:780px;top:430px;width:1240px;background:#fff;border-radius:14px;padding:34px;box-shadow:0 30px 90px rgba(0,0,0,.7)}
+.paper img{width:100%;display:block}
+.paper .src{color:#555;font:700 30px "YouTube Sans",sans-serif;margin-bottom:16px;letter-spacing:.04em;text-transform:uppercase}
+/* right column */
+#side{position:absolute;left:1500px;top:70px;width:340px;height:776px}
+.pill{display:inline-block;padding:10px 22px;border-radius:40px;background:linear-gradient(90deg,#ff3fa4,#8b5cff);font-weight:900;font-size:30px;white-space:nowrap}
+.ctr{margin-top:22px;padding:20px 24px;border-radius:20px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.12)}
+.ctr .k{font-size:28px;font-weight:700;color:#cfc6ff}
+.ctr .v{font-size:76px;font-weight:900;color:#ffd84a;line-height:1.05;margin-top:4px}
+#stk{position:absolute;left:1520px;top:560px;width:300px;height:300px;background-size:contain;background-repeat:no-repeat;background-position:center bottom;filter:drop-shadow(0 12px 18px rgba(0,0,0,.5))}
+/* timeline */
+#tl{position:absolute;left:110px;top:928px;width:1700px;height:120px}
+#tl .bar{position:absolute;left:0;top:30px;width:100%;height:8px;border-radius:4px;background:rgba(255,255,255,.14)}
+#tl .fill{position:absolute;left:0;top:30px;height:8px;border-radius:4px;background:linear-gradient(90deg,#ff3fa4,#ffd84a);box-shadow:0 0 18px #ff3fa4}
+#tl .tick{position:absolute;top:24px;width:4px;height:20px;margin-left:-2px;background:rgba(255,255,255,.35);border-radius:2px}
+#tl .ml{position:absolute;top:58px;width:120px;margin-left:-60px;text-align:center;font-size:26px;font-weight:700;color:rgba(255,255,255,.55)}
+#tl .ml.yr{color:#ffd84a}
+#tl .dot{position:absolute;top:16px;width:36px;height:36px;margin-left:-18px;border-radius:50%;background:#fff;box-shadow:0 0 0 7px rgba(255,63,164,.55),0 0 34px 10px rgba(255,63,164,.8)}
+/* chapter, title, Korean moment, outro */
+.chap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:120px}
+.chap .n{font-weight:900;font-size:46px;letter-spacing:.3em;color:#ff6fbf}
+.chap .q{font-weight:900;font-size:118px;line-height:1.1;max-width:1600px;margin-top:22px}
+.chap .d{margin-top:40px}
+.ko{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:90px;background:radial-gradient(900px 600px at 50% 50%,rgba(255,63,164,.28),transparent 70%)}
+.ko .w{font-family:"Pretendard",sans-serif;font-weight:900;font-size:250px;line-height:1}
+.ko .r{font-size:66px;font-weight:700;color:#ffd84a;margin-top:18px}
+.ko .mn{font-size:60px;font-weight:900;margin-top:14px}
+.ko .st{width:420px;height:420px;background-size:contain;background-repeat:no-repeat;background-position:center}
+.ttl .a{font-weight:900;font-size:150px;line-height:1}
+.ttl .b{font-weight:900;font-size:78px;color:#ffd84a;margin-top:26px;letter-spacing:.12em}
+.sub{margin-top:46px;display:inline-block;padding:22px 56px;border-radius:60px;background:#ff0033;font-weight:900;font-size:60px}
+</style></head><body>
+<div id="sky"></div><div id="stage"></div>
+<div id="side" class="lay"><div class="pill" id="chp"></div><div class="ctr" id="cv"><div class="k">👀 Netflix views</div><div class="v" id="vv"></div></div>
+ <div class="ctr" id="ca"><div class="k">🏆 Big awards won</div><div class="v" id="av"></div></div></div>
+<div id="stk" class="lay"></div>
+<div id="tl" class="lay"><div class="bar"></div><div class="fill" id="fill"></div><div class="dot" id="dot"></div></div>
+<script>
+/*DATA*/
+const MON=["Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct"];
+const X=m=>m/16*1700, E=D.ev, st=document.getElementById('stage');
+const tl=document.getElementById('tl');
+MON.forEach((s,i)=>{const t=document.createElement('div');t.className='tick';t.style.left=X(i)+'px';tl.appendChild(t);
+ if(i%2==0||i==16){const l=document.createElement('div');l.className='ml'+(i==0||i==7?' yr':'');l.style.left=X(i)+'px';l.textContent=s+(i==0?" '25":i==7?" '26":'');tl.appendChild(l);}});
+const img=n=>`url(img/${n}.jpg)`, bg=n=>`url(img/${n}_bg.jpg)`;
+function photo(v,dim){ // card with the photo (vertical sources sit on a blurred copy of themselves)
+  if(v.ar&&v.ar<1.25) return `<div class="vbg" style="background-image:${bg(v.img)}"></div><div class="vfg ph" style="width:${Math.round(776*v.ar)}px;background-image:${img(v.img)}"></div>`+(dim?'<div class="dim"></div>':'');
+  return `<div class="ph" style="background-image:${img(v.img)}"></div>`+(dim?'<div class="dim"></div>':'');}
+function numParts(s){const m=s.match(/^([^0-9]*)([0-9][0-9,]*\.?[0-9]*)(.*)$/);return m?[m[1],m[2],m[3]]:null}
+E.forEach((v,i)=>{const d=document.createElement('div');d.className='lay';let h='';
+  if(v.k=='P') h=`<div class="bg" style="background-image:${bg(v.img)}"></div><div class="card">${photo(v)}</div>`+(v.cap?`<div class="cap" style="left:${(v.ch==0||v.ch==9)?310:130}px">${v.cap}</div>`:'');
+  if(v.k=='B') h=`<div class="bg" style="background-image:${bg(v.img)}"></div><div class="card">${photo(v,1)}<div class="big"><div class="stmt stroke">${v.text}</div></div></div>`;
+  if(v.k=='N') h=`<div class="bg" style="background-image:${bg(v.img)}"></div><div class="card">${photo(v,1)}<div class="big"><div class="num stroke" id="n${i}">${v.num}</div><div class="lbl stroke">${v.label}</div></div></div>`;
+  if(v.k=='H') h=`<div class="bg" style="background-image:${bg(v.img)}"></div><div class="card" style="opacity:.55">${photo(v)}</div><div class="paper" id="p${i}"><div class="src">${v.src}</div><img src="img/${v.head}.jpg"></div>`;
+  if(v.k=='T') h=`<div class="bg" style="background-image:${bg(v.img)}"></div><div class="chap ttl"><div class="a stroke">KPop Demon Hunters</div><div class="b stroke">ONE YEAR LATER</div></div>`;
+  if(v.k=='C') h=`<div class="bg" style="background-image:${bg(v.img)};opacity:.7"></div><div class="chap"><div class="n">CHAPTER ${v.i}</div><div class="q stroke">${v.q}</div><div class="d pill">${v.date}</div></div>`;
+  if(v.k=='K') h=`<div class="ko"><div><div class="pill">🇰🇷 KOREAN MOMENT</div><div class="w" style="margin-top:34px">${v.w}</div><div class="r">${v.rom}</div><div class="mn">= ${v.mean}</div></div><div class="st" style="background-image:url(img/st_${v.pose}.png)"></div></div>`;
+  if(v.k=='O') h=`<div class="ko"><div style="text-align:center"><div class="ttl"><div class="a stroke" style="font-size:110px">Korean in 60s</div></div><div class="sub">SUBSCRIBE</div></div><div class="st" style="background-image:url(img/st_love_heart.png)"></div></div>`;
+  if(v.ch==0||v.ch==9) h=h.replace(/class="card"/g,'class="card" style="left:270px;'+(v.k=='H'?'opacity:.55':'')+'"').replace('style="left:270px;opacity:.55" style="opacity:.55"','style="left:270px;opacity:.55"');d.innerHTML=h;v.el=d;v.ph=d.querySelector('.card .ph');v.nm=document.getElementById('n'+i)||d.querySelector('.num');v.pp=d.querySelector('.paper');st.appendChild(d);
+  if(v.nm) v.np=numParts(v.num);});
+const ease=x=>x<0?0:x>1?1:x*x*(3-2*x), FD=0.45;
+function fmtV(n){return n==null?'':(n>=100?(Number.isInteger(n)?n:n.toFixed(1)):n)+'M'+(n>=500?'+':'')}
+let lastM=null;
+window.render=function(t){
+  let cur=0;for(let i=0;i<E.length;i++) if(E[i].t<=t) cur=i;
+  E.forEach((v,i)=>{let o=0;
+    if(i==cur) o=ease((t-v.t)/FD); else if(i==cur-1) o=1-ease((t-E[cur].t)/FD); // previous stays under the new one while it fades in
+    if(t<E[0].t) o=0;
+    v.el.style.opacity=o; v.el.style.display=o>0?'block':'none';
+    if(o>0){const p=(t-v.t)/Math.max(1,(v.t1-v.t));
+      if(v.ph) v.ph.style.transform=`scale(${1.0+0.06*Math.min(1.2,p)})`;
+      if(v.pp){const q=ease((t-v.t)/0.6);v.pp.style.transform=`translate(-50%,-50%) rotate(-1deg) scale(${0.92+0.08*q})`;}
+      if(v.nm&&v.np){const q=ease((t-v.t-0.1)/0.9),raw=v.np[1].replace(/,/g,''),val=parseFloat(raw)*q,dec=(raw.split('.')[1]||'').length;
+        let s=val.toFixed(dec); if(v.np[1].includes(',')) s=Number(s).toLocaleString('en-US'); v.nm.textContent=v.np[0]+s+v.np[2];}
+    }});
+  const v=E[cur], inBody=(v.k=='P'||v.k=='B'||v.k=='N'||v.k=='H')&&v.ch>=1&&v.ch<=8;
+  // side column + sticker + timeline: only inside chapter bodies; fade with the content
+  const sideO=inBody?1:0; const sd=document.getElementById('side'), sk=document.getElementById('stk'), tll=document.getElementById('tl');
+  const prev=E[cur-1], wasBody=prev&&(prev.k=='P'||prev.k=='B'||prev.k=='N'||prev.k=='H')&&prev.ch>=1&&prev.ch<=8, f=ease((t-v.t)/FD);
+  const so=inBody?(wasBody?1:f):(wasBody?1-f:0);
+  sd.style.opacity=so; sk.style.opacity=so;
+  const tlo=(v.m!=null&&v.ch>=1&&v.ch<=8)?((prev&&prev.m!=null&&prev.ch>=1)?1:f):((prev&&prev.m!=null&&prev.ch>=1)?1-f:0); tll.style.opacity=tlo;
+  if(inBody||wasBody){const s=inBody?v:prev;
+    document.getElementById('chp').textContent=`CH ${s.ch} · ${s.date||''}`;
+    const vv=s.cnt.views, aw=s.cnt.awards;
+    document.getElementById('cv').style.display=vv?'block':'none'; document.getElementById('vv').textContent=fmtV(vv);
+    document.getElementById('ca').style.display=aw?'block':'none'; document.getElementById('av').textContent=aw||'';
+    sk.style.backgroundImage=`url(img/st_${s.pose}.png)`; sk.style.transform=`translateY(${Math.sin(t*2.2)*8}px) rotate(${Math.sin(t*1.3)*2}deg)`;}
+  // timeline marker glides from the previous position
+  const m1=v.m!=null?v.m:(prev&&prev.m!=null?prev.m:0), m0=(prev&&prev.m!=null)?prev.m:m1, m=m0+(m1-m0)*ease((t-v.t)/0.8);
+  document.getElementById('dot').style.left=X(m)+'px'; document.getElementById('fill').style.width=X(m)+'px';
+};
+window.render(0);
+</script></body></html>
