@@ -11,6 +11,8 @@ spec:
   "caps":  [{"t": [[text, color], ...], "in", "out", "y" (default 1180), "size" (default 92)}]   output seconds
   "hits":  [t, ...]   output seconds: white flash + sub hit
   "endfade": seconds of fade at the end (audio only, video stays)
+  "list":  {"x", "y", "gap", "size", "items": [{"n": "5.", "label": "HOOPER", "at": t}]}  classic ranked list on the left;
+           numbers always shown, label appears at "at" and stays yellow while it is the latest one
 """
 import json, os, subprocess, sys
 from PIL import Image, ImageDraw, ImageFont
@@ -145,6 +147,18 @@ def build(spec, out, preview=False):
                 if key not in fonts:
                     fonts[key] = ImageFont.truetype(CFONT, fs)
                 text_layer(d, [(tx, col) for tx, col in c['t']], fonts[key], c.get('y', 1180), max(6, fs // 9))
+        L = spec.get('list')
+        if L:
+            lf = fonts.setdefault(('list', L.get('size', 52)), ImageFont.truetype(CFONT, L.get('size', 52)))
+            shown = [it for it in L['items'] if it['at'] <= t]
+            cur = max(shown, key=lambda it: it['at']) if shown else None
+            for k, it in enumerate(L['items']):
+                yy = L.get('y', 640) + k * L.get('gap', 96)
+                d.text((L.get('x', 40), yy), it['n'], font=lf, fill='white', stroke_width=6, stroke_fill='black', anchor='ls')
+                if it in shown:
+                    nx = L.get('x', 40) + d.textlength(it['n'] + ' ', font=lf)
+                    d.text((nx, yy), it['label'], font=lf, fill='#ffd400' if it is cur else 'white',
+                           stroke_width=6, stroke_fill='black', anchor='ls')
         for a, b, tag in tags:
             if a <= t < b:
                 f = fonts.setdefault('tag', ImageFont.truetype(TFONT, 44))

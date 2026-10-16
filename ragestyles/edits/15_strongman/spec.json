@@ -1,0 +1,275 @@
+{
+ "title": [
+  [
+   [
+    "Heaviest Strongman",
+    "#ffffff"
+   ]
+  ],
+  [
+   [
+    "World Records",
+    "#ffd400"
+   ]
+  ]
+ ],
+ "titleSize": 76,
+ "list": {
+  "x": 44,
+  "y": 640,
+  "gap": 104,
+  "size": 64,
+  "items": [
+   {
+    "n": "1.",
+    "label": "RAUL FLORES",
+    "at": 42.7
+   },
+   {
+    "n": "2.",
+    "label": "THOR",
+    "at": 35.1
+   },
+   {
+    "n": "3.",
+    "label": "EDDIE HALL",
+    "at": 19.1
+   },
+   {
+    "n": "4.",
+    "label": "IRON BIBY",
+    "at": 8.9
+   },
+   {
+    "n": "5.",
+    "label": "HOOPER",
+    "at": 0.3
+   }
+  ]
+ },
+ "segs": [
+  {
+   "src": "/home/user/rs_work/src/strong/nQk41ZMc5oM.mkv",
+   "in": 127.0,
+   "out": 135.6,
+   "zoom": [
+    0.55,
+    0.5,
+    1.0,
+    1.12
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/strong/1o3dQuT4Tfw.webm",
+   "in": 313.0,
+   "out": 323.2,
+   "zoom": [
+    0.5,
+    0.5,
+    1.0,
+    1.08
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/strong/IGaN66dcZEs.webm",
+   "in": 34.5,
+   "out": 50.5,
+   "zoom": [
+    0.47,
+    0.45,
+    1.05,
+    1.2
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/strong/ZHI7COyl6WA.webm",
+   "in": 87.0,
+   "out": 94.6,
+   "zoom": [
+    0.5,
+    0.45,
+    1.0,
+    1.12
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/strong/4oHrTDCgVAs.webm",
+   "in": 187.5,
+   "out": 199.6,
+   "zoom": [
+    0.5,
+    0.52,
+    1.15,
+    1.35
+   ]
+  }
+ ],
+ "caps": [
+  {
+   "t": [
+    [
+     "AXLE PRESS",
+     "#ffffff"
+    ]
+   ],
+   "in": 0.0,
+   "out": 2.6,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "218 KG",
+     "#ffd400"
+    ]
+   ],
+   "in": 2.6,
+   "out": 8.6,
+   "y": 1430,
+   "size": 130
+  },
+  {
+   "t": [
+    [
+     "LOG PRESS",
+     "#ffffff"
+    ]
+   ],
+   "in": 8.6,
+   "out": 14.1,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "231 KG",
+     "#ffd400"
+    ]
+   ],
+   "in": 14.1,
+   "out": 18.8,
+   "y": 1430,
+   "size": 130
+  },
+  {
+   "t": [
+    [
+     "DEADLIFT, 2016",
+     "#ffffff"
+    ]
+   ],
+   "in": 18.8,
+   "out": 20.8,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "FIRST EVER ",
+     "#ffffff"
+    ],
+    [
+     "500 KG",
+     "#ffd400"
+    ]
+   ],
+   "in": 20.8,
+   "out": 26.3,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "HELD IT",
+     "#ffffff"
+    ]
+   ],
+   "in": 26.3,
+   "out": 29.8,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "THEN ",
+     "#ffffff"
+    ],
+    [
+     "COLLAPSED",
+     "#ff3b3b"
+    ]
+   ],
+   "in": 29.8,
+   "out": 34.8,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "DEADLIFT, 2025",
+     "#ffffff"
+    ]
+   ],
+   "in": 34.8,
+   "out": 37.3,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "510 KG",
+     "#ffd400"
+    ]
+   ],
+   "in": 37.3,
+   "out": 42.4,
+   "y": 1430,
+   "size": 130
+  },
+  {
+   "t": [
+    [
+     "DEADLIFT, SEPT 2026",
+     "#ffffff"
+    ]
+   ],
+   "in": 42.4,
+   "out": 44.9,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "511 KG",
+     "#ffd400"
+    ]
+   ],
+   "in": 44.9,
+   "out": 49.9,
+   "y": 1430,
+   "size": 140
+  },
+  {
+   "t": [
+    [
+     "1 KG ",
+     "#ffd400"
+    ],
+    [
+     "MORE THAN THOR",
+     "#ffffff"
+    ]
+   ],
+   "in": 49.9,
+   "out": 54.5,
+   "y": 1430
+  }
+ ],
+ "hits": [
+  2.6,
+  15.2,
+  24.6,
+  38.4,
+  45.6
+ ]
+}
