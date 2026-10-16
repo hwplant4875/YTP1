@@ -136,6 +136,7 @@ export async function loadHuman(THREE, { avatar = 'Male_Adult_03', tex = 'm004',
       h.pose(curPose, curW, [['Bip01_Spine2', X, Math.sin(t * 2.1) * 1.2 * breathe], ['Bip01_Neck', X, Math.sin(t * 2.1 + 0.6) * 0.6 * breathe]]);
       let bl = 0; for (const b of blinkAt) { const d = Math.abs(t - b); if (d < 0.09) bl = Math.max(bl, 1 - d / 0.09); }
       h.expr(curExpr, curExprW, bl);
+      h.syncHead && h.syncHead();
       if (sphere && sphereOn) {
         root.updateMatrixWorld(true);
         const hb = bones.Bip01_Head; const p = new THREE.Vector3(); hb.getWorldPosition(p);
@@ -143,6 +144,15 @@ export async function loadHuman(THREE, { avatar = 'Male_Adult_03', tex = 'm004',
       }
     },
   };
+  // head-mounted props (hats, monocles, collars): a group in root space that follows the head bone.
+  // Children are authored in metres in an upright frame: origin at the head bone pivot (top of the neck), +y up, +z forward.
+  const headGroup = new THREE.Group(); root.add(headGroup); h.headGroup = headGroup;
+  const _m = new THREE.Matrix4(), _p = new THREE.Vector3(), _q = new THREE.Quaternion(), _s = new THREE.Vector3();
+  const headRel = () => { root.updateMatrixWorld(true); _m.copy(root.matrixWorld).invert().multiply(bones.Bip01_Head.matrixWorld); _m.decompose(_p, _q, _s); return [_p.clone(), _q.clone()]; };
+  const headBindQInv = headRel()[1].invert();
+  h.syncHead = () => { const [p, q] = headRel(); headGroup.position.copy(p); headGroup.quaternion.copy(q.multiply(headBindQInv)); };
+  // per-material colour tint (e.g. recolour the modern jacket into a period coat): h.tint('body', 0x553322)
+  h.tint = (which, color) => { mats[which].color.set(color); };
   h.pose(POSES.stand);
   return h;
 }

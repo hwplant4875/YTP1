@@ -11,4 +11,5 @@ redistribution, YouTube included. Credit is optional, but if you give it: "Chara
 
 To add another avatar, fetch `Assets/Avatars/<Group>/<Name>/Export/<Name>_facial.fbx` and its `Textures/<mNNN>_*.tga`
 from raw.githubusercontent.com/microsoft/Microsoft-Rocketbox/master/ (the texture prefix is named inside the FBX), then convert the same way.
+Also included: Male_Adult_05 (m009), Male_Adult_08 (m014), Female_Adult_01 (f001), fetched with `tools/fetch_rocketbox.sh`.
 Other avatars checked: Adults/Male_Adult_01..14, Professions/Business_Male_01..03 and Police_Male_01 all have `_facial` exports.
