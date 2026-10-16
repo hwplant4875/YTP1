@@ -2,7 +2,7 @@
 # Rebuilt after a benchmark of Neo, Vox, Johnny Harris, Wendover, PolyMatter, RealLifeLore,
 # Economics Explained, VICE News and DW (see upload/2_france_protests/benchmark.md):
 # one real photo carries the thumbnail, 0-3 words, one accent colour, no flag stripes.
-#   2a  provocative (v3): two lycéens in smoke around a smouldering bin, "TEEN REVOLT" (REVOLT red).
+#   2a  provocative (v3): two lycéens in smoke around a smouldering bin, "STUDENTS ARE ANGRY" (ANGRY red).
 #       (v2 was the Paris crowd + barricade with "1,000 SCHOOLS"; the user found it not provocative enough.)
 #   2b  provocative: Perpignan, 2 Oct: riot police in green tear gas facing masked pupils with
 #       raised hands. Hand-drawn red ring on the pupils, "POLICE vs. TEENS" (Wendover/VICE style).
@@ -150,17 +150,20 @@ def paste_rgba(im, layer, shadow, x, y, sh_off=(10, 16)):
 os.makedirs(OUT, exist_ok=True)
 
 # ---- 2a (v3, provocative): two lycéens in a cloud of smoke around a smouldering wheelie bin
-# (29 Sep, Camille Hestaux, CC0). Two words: "TEEN" white, "REVOLT" red (Wendover "RIOT" pattern).
+# (29 Sep, Camille Hestaux, CC0). "STUDENTS ARE ANGRY", ANGRY red (Wendover "RIOT" pattern);
+# plain everyday words for non-native viewers (v3 "TEEN REVOLT" was too abstract).
 im = load("Deux_lycéens_tentent_d_éteindre_une_poubelle.jpg")                          # 1920x2880 portrait
 im = crop16(im, 0, 880, 1920)
 im = grade(im, 0.98, 1.22, 1.08, sharp=80)
 im = vignette(im, 0.5)
 im = gradient(im, "t", 300, 215)
-f = F(ANTON, 160)
-tw = ImageDraw.Draw(im).textlength("TEEN REVOLT", font=f)
-x0 = (W - tw) / 2
-im = soft_text(im, (x0, 4), "TEEN", f, shadow=230, blur=12, off=(0, 6), stroke=3)
-im = soft_text(im, (x0 + ImageDraw.Draw(im).textlength("TEEN ", font=f), 4), "REVOLT", f, fill=RED,
+sz = 170                                  # one line, as big as fits: faces start ~y=205
+while ImageDraw.Draw(im).textlength("STUDENTS ARE ANGRY", font=F(ANTON, sz)) > W - 70: sz -= 2
+f = F(ANTON, sz)
+d0 = ImageDraw.Draw(im)
+x0 = (W - d0.textlength("STUDENTS ARE ANGRY", font=f)) / 2
+im = soft_text(im, (x0, 8), "STUDENTS ARE", f, shadow=230, blur=12, off=(0, 6), stroke=3)
+im = soft_text(im, (x0 + d0.textlength("STUDENTS ARE ", font=f), 8), "ANGRY", f, fill=RED,
                shadow=230, blur=12, off=(0, 6), stroke=3)
 im.save(f"{OUT}/2a.jpg", quality=92)
 
