@@ -55,23 +55,71 @@ export const POSES = {
 
 const FINGERS = ['1', '2', '3', '4'];
 
-export async function loadHuman(THREE, { avatar = 'Male_Adult_03', tex = 'm004', anisotropy = 8 } = {}) {
-  const dir = BASE + avatar + '/';
-  // FBX references D:\...\*.tga; give it a dummy handler so it does not warn or fetch them, we assign our own maps.
-  const manager = new THREE.LoadingManager();
-  manager.addHandler(/\.tga$/i, { load: () => new THREE.Texture(), setPath() { return this; }, setCrossOrigin() { return this; } });
-  const fbx = await new FBXLoader(manager).loadAsync(dir + avatar + '_facial.fbx');
-  const tl = new THREE.TextureLoader();
-  const T = async (name, srgb) => {
-    const t = await tl.loadAsync(dir + tex + '_' + name);
-    t.flipY = true; t.anisotropy = anisotropy; if (srgb) t.colorSpace = THREE.SRGBColorSpace; return t;
-  };
-  const [bc, bn, br, hc, hn, hr, op] = await Promise.all([
-    T('body_color.jpg', true), T('body_normal.jpg'), T('body_rough.jpg'),
-    T('head_color.jpg', true), T('head_normal.jpg'), T('head_rough.jpg'), T('opacity_color.png', true)]);
+// one FBX + texture set per avatar, shared by every person cast from it
+const TEMPL = new Map();
+function getTemplate(THREE, avatar, tex, anisotropy) {
+  const k = avatar + '/' + tex;
+  if (!TEMPL.has(k)) TEMPL.set(k, (async () => {
+    const dir = BASE + avatar + '/';
+    // FBX references D:\...\*.tga; give it a dummy handler so it does not warn or fetch them, we assign our own maps.
+    const manager = new THREE.LoadingManager();
+    manager.addHandler(/\.tga$/i, { load: () => new THREE.Texture(), setPath() { return this; }, setCrossOrigin() { return this; } });
+    const fbx = await new FBXLoader(manager).loadAsync(dir + avatar + '_facial.fbx');
+    const tl = new THREE.TextureLoader();
+    const T = async (name, srgb) => {
+      const t = await tl.loadAsync(dir + tex + '_' + name);
+      t.flipY = true; t.anisotropy = anisotropy; if (srgb) t.colorSpace = THREE.SRGBColorSpace; return t;
+    };
+    const [bc, bn, br, hc, hn, hr, op] = await Promise.all([
+      T('body_color.jpg', true), T('body_normal.jpg'), T('body_rough.jpg'),
+      T('head_color.jpg', true), T('head_normal.jpg'), T('head_rough.jpg'), T('opacity_color.png', true)]);
+    let geo = null; fbx.traverse(o => { if (o.isSkinnedMesh) geo = o.geometry; });
+    // same buffers without the 175 blendshapes: far cheaper to skin, for crowd extras
+    const lite = new THREE.BufferGeometry();
+    for (const [n, a] of Object.entries(geo.attributes)) lite.setAttribute(n, a);
+    lite.setIndex(geo.index); for (const g of geo.groups) lite.addGroup(g.start, g.count, g.materialIndex);
+    lite.boundingSphere = geo.boundingSphere; lite.boundingBox = geo.boundingBox;
+    return { fbx, maps: { bc, bn, br, hc, hn, hr, op }, lite, recol: new Map() };
+  })());
+  return TEMPL.get(k);
+}
+
+// recolour the clothes in the body texture (keeps skin-like pixels): modern jeans/shirts -> period wool in `tint`
+function recolorMap(THREE, tpl, tint, size = 1024, tint2 = null, split = 0.56) {
+  const key = tint + '/' + tint2 + '/' + size;
+  if (tpl.recol.has(key)) return tpl.recol.get(key);
+  const img = tpl.maps.bc.image, c = document.createElement('canvas'); c.width = c.height = size;
+  const g = c.getContext('2d'); g.drawImage(img, 0, 0, size, size);
+  // skin reference: the cheeks in the head texture; body pixels with the same chromaticity are kept (hands, arms)
+  if (!tpl.skinRef) {
+    const hc = document.createElement('canvas'); hc.width = hc.height = 256; const hg = hc.getContext('2d'); hg.drawImage(tpl.maps.hc.image, 0, 0, 256, 256);
+    const q = hg.getImageData(100, 120, 56, 40).data; let R = 0, G = 0, B = 0; for (let i = 0; i < q.length; i += 4) { R += q[i]; G += q[i + 1]; B += q[i + 2]; }
+    const S = R + G + B; tpl.skinRef = [R / S, G / S];
+  }
+  const [sr, sg] = tpl.skinRef;
+  const d = g.getImageData(0, 0, size, size), px = d.data, col = new THREE.Color(tint), col2 = new THREE.Color(tint2 ?? tint);
+  const T1 = [col.r * 255, col.g * 255, col.b * 255], T2 = [col2.r * 255, col2.g * 255, col2.b * 255], rowSplit = Math.floor(size * split) * size * 4;
+  for (let i = 0; i < px.length; i += 4) {
+    const r = px[i], gg = px[i + 1], b = px[i + 2], sum = r + gg + b + 1;
+    const skin = sum > 150 && Math.abs(r / sum - sr) < 0.02 && Math.abs(gg / sum - sg) < 0.014 && (r - b) / sum > 0.12;
+    if (skin || sum < 24) continue;
+    const l = Math.pow((0.3 * r + 0.59 * gg + 0.11 * b) / 150, 0.85);
+    const [tr, tg, tb] = i >= rowSplit ? T2 : T1;
+    px[i] = Math.min(255, tr * l); px[i + 1] = Math.min(255, tg * l); px[i + 2] = Math.min(255, tb * l);
+  }
+  g.putImageData(d, 0, 0);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.flipY = true; t.anisotropy = 4;
+  tpl.recol.set(key, t); return t;
+}
+
+export async function loadHuman(THREE, { avatar = 'Male_Adult_03', tex = 'm004', anisotropy = 8, morph = true, recolor = null, recolor2 = null, shadows = true, texSize = 1024 } = {}) {
+  const { clone } = await import('three/addons/utils/SkeletonUtils.js');
+  const tpl = await getTemplate(THREE, avatar, tex, anisotropy);
+  const fbx = clone(tpl.fbx);
+  const { bc, bn, br, hc, hn, hr, op } = tpl.maps;
   const mats = {
-    body: new THREE.MeshStandardMaterial({ name: 'body', map: bc, normalMap: bn, roughnessMap: br, roughness: 0.9, normalScale: new THREE.Vector2(1, 1) }),
-    // skin: a touch of sheen + warm emissive lift fakes subsurface scattering so the face does not look like plastic
+    body: new THREE.MeshStandardMaterial({ name: 'body', map: recolor ? recolorMap(THREE, tpl, recolor, texSize, recolor2) : bc, normalMap: bn, roughnessMap: br, roughness: 0.9, normalScale: new THREE.Vector2(1, 1) }),
+    // skin: a touch of sheen fakes subsurface scattering so the face does not look like plastic
     head: new THREE.MeshPhysicalMaterial({ name: 'head', map: hc, normalMap: hn, roughnessMap: hr, roughness: 0.7,
       sheen: 0.2, sheenRoughness: 0.6, sheenColor: new THREE.Color(0xff8a70), normalScale: new THREE.Vector2(0.8, 0.8) }),
     hair: new THREE.MeshStandardMaterial({ name: 'hair', map: op, alphaTest: 0.42, side: THREE.DoubleSide, roughness: 0.7, alphaToCoverage: true }),
@@ -79,8 +127,9 @@ export async function loadHuman(THREE, { avatar = 'Male_Adult_03', tex = 'm004',
   let mesh = null;
   fbx.traverse(o => {
     if (!o.isSkinnedMesh) return;
-    mesh = o; o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false;
+    mesh = o; o.castShadow = shadows; o.receiveShadow = shadows; o.frustumCulled = false;
     o.material = [].concat(o.material).map(m => /head/i.test(m.name) ? mats.head : /opacity/i.test(m.name) ? mats.hair : mats.body);
+    if (!morph) { o.geometry = tpl.lite; o.morphTargetInfluences = undefined; o.morphTargetDictionary = undefined; }
   });
   fbx.scale.setScalar(0.01);
   const root = new THREE.Group(); root.add(fbx);
@@ -88,26 +137,28 @@ export async function loadHuman(THREE, { avatar = 'Male_Adult_03', tex = 'm004',
   const bones = {}; fbx.traverse(o => { if (o.isBone) bones[o.name] = o; });
   const bind = {}; for (const k in bones) bind[k] = bones[k].quaternion.clone();
   // blendshape index by short name: "blendShape1.AK_25_JawOpen" -> "JawOpen", also "AU_26_JawDrop" -> "AU_JawDrop"
-  const morph = {};
-  for (const [k, i] of Object.entries(mesh.morphTargetDictionary)) {
+  const morphIdx = {};
+  for (const [k, i] of Object.entries(mesh.morphTargetDictionary || {})) {
     const m = k.match(/(AK|AU|AA_VI|HB)_\d+_(.+)$/); if (!m) continue;
-    morph[m[1] === 'AK' ? m[2] : m[1] + '_' + m[2]] = i;
+    morphIdx[m[1] === 'AK' ? m[2] : m[1] + '_' + m[2]] = i;
   }
 
-  const qa = new THREE.Quaternion(), qp = new THREE.Quaternion(), qb = new THREE.Quaternion(), ax = new THREE.Vector3();
+  const qa = new THREE.Quaternion(), qp = new THREE.Quaternion(), qb = new THREE.Quaternion(), qr = new THREE.Quaternion(), ax = new THREE.Vector3();
+  // pose axes are in the character's own frame (x = his left, y = up, z = forward), whatever way the root faces
   function rotWorld(b, axis, deg) {
     b.parent.updateWorldMatrix(true, false); b.updateWorldMatrix(false, false);
     b.parent.getWorldQuaternion(qp); b.getWorldQuaternion(qb);
-    qa.setFromAxisAngle(ax.set(...axis).normalize(), deg * Math.PI / 180);
+    qa.setFromAxisAngle(ax.set(...axis).normalize().applyQuaternion(qr), deg * Math.PI / 180);
     b.quaternion.copy(qp.invert().multiply(qa.multiply(qb)));
   }
   let curPose = [], curW = 1, curExpr = {}, curExprW = 0, sphere = null, sphereOn = false;
   const h = {
-    root, mesh, bones, morph, mats,
+    root, mesh, bones, morph: morphIdx, mats,
     // apply a pose (array of [bone, axis, deg]) blended by w (0..1); optional extra list appended after
     pose(list, w = 1, extra = []) {
       curPose = list; curW = w;
       for (const k in bones) bones[k].quaternion.copy(bind[k]);
+      root.updateWorldMatrix(true, false); root.getWorldQuaternion(qr);
       for (const [n, a, d] of [...list, ...extra]) if (bones[n]) rotWorld(bones[n], a, d * w);
       // relaxed fingers
       for (const s of ['L', 'R']) for (const f of FINGERS) for (const j of ['', '1', '2']) {
@@ -116,7 +167,7 @@ export async function loadHuman(THREE, { avatar = 'Male_Adult_03', tex = 'm004',
     },
     expr(dict, w = 1, blink = 0) {
       curExpr = dict; curExprW = w;
-      const inf = mesh.morphTargetInfluences; inf.fill(0);
+      const inf = mesh.morphTargetInfluences; if (!inf) return; const morph = morphIdx; inf.fill(0);
       for (const [k, v] of Object.entries(dict)) if (k in morph) inf[morph[k]] = Math.min(1, v * w);
       if (blink > 0) { inf[morph.EyeBlinkLeft] = Math.max(inf[morph.EyeBlinkLeft], blink); inf[morph.EyeBlinkRight] = Math.max(inf[morph.EyeBlinkRight], blink); }
     },
@@ -136,7 +187,7 @@ export async function loadHuman(THREE, { avatar = 'Male_Adult_03', tex = 'm004',
       h.pose(curPose, curW, [['Bip01_Spine2', X, Math.sin(t * 2.1) * 1.2 * breathe], ['Bip01_Neck', X, Math.sin(t * 2.1 + 0.6) * 0.6 * breathe]]);
       let bl = 0; for (const b of blinkAt) { const d = Math.abs(t - b); if (d < 0.09) bl = Math.max(bl, 1 - d / 0.09); }
       h.expr(curExpr, curExprW, bl);
-      h.syncHead && h.syncHead();
+      h.syncAll();
       if (sphere && sphereOn) {
         root.updateMatrixWorld(true);
         const hb = bones.Bip01_Head; const p = new THREE.Vector3(); hb.getWorldPosition(p);
@@ -146,11 +197,21 @@ export async function loadHuman(THREE, { avatar = 'Male_Adult_03', tex = 'm004',
   };
   // head-mounted props (hats, monocles, collars): a group in root space that follows the head bone.
   // Children are authored in metres in an upright frame: origin at the head bone pivot (top of the neck), +y up, +z forward.
-  const headGroup = new THREE.Group(); root.add(headGroup); h.headGroup = headGroup;
+  // h.pelvisGroup does the same for the hips (skirts, belts).
   const _m = new THREE.Matrix4(), _p = new THREE.Vector3(), _q = new THREE.Quaternion(), _s = new THREE.Vector3();
-  const headRel = () => { root.updateMatrixWorld(true); _m.copy(root.matrixWorld).invert().multiply(bones.Bip01_Head.matrixWorld); _m.decompose(_p, _q, _s); return [_p.clone(), _q.clone()]; };
-  const headBindQInv = headRel()[1].invert();
-  h.syncHead = () => { const [p, q] = headRel(); headGroup.position.copy(p); headGroup.quaternion.copy(q.multiply(headBindQInv)); };
+  const rel = (bone) => { _m.copy(root.matrixWorld).invert().multiply(bone.matrixWorld); _m.decompose(_p, _q, _s); return [_p.clone(), _q.clone()]; };
+  const followers = [];
+  const follow = (name) => {
+    const g = new THREE.Group(); root.add(g); root.updateMatrixWorld(true);
+    const inv = rel(bones[name])[1].invert(); followers.push([g, bones[name], inv]); return g;
+  };
+  h.headGroup = follow('Bip01_Head'); h.pelvisGroup = follow('Bip01_Pelvis'); h.chestGroup = follow('Bip01_Spine2');
+  const headGroup = h.headGroup;
+  h.syncAll = () => { root.updateMatrixWorld(true); for (const [g, b, inv] of followers) { const [p, q] = rel(b); g.position.copy(p); g.quaternion.copy(q.multiply(inv)); } };
+  h.syncHead = h.syncAll;
+  // where the eyes sit in the head frame (for placing hats, coifs, monocles)
+  h.eyeLocal = () => { h.syncAll(); const e = new THREE.Vector3(), f = new THREE.Vector3(); bones.Bip01_LEye.getWorldPosition(e); bones.Bip01_REye.getWorldPosition(f);
+    headGroup.updateMatrixWorld(true); return headGroup.worldToLocal(e.add(f).multiplyScalar(0.5)); };
   // per-material colour tint (e.g. recolour the modern jacket into a period coat): h.tint('body', 0x553322)
   h.tint = (which, color) => { mats[which].color.set(color); };
   h.pose(POSES.stand);
