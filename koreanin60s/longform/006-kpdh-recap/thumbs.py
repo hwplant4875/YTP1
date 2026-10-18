@@ -6,23 +6,26 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}body{width:1280px;height:720
 .ph{position:absolute;background-size:cover;background-position:center}.a{position:absolute}
 .s{paint-order:stroke fill;-webkit-text-stroke:16px #000;font-weight:900}.y{color:#ffd84a}
 .chip{display:inline-block;padding:8px 26px 12px;border-radius:16px;font-weight:900}"""
+PINK = "#F7B8CA"  # channel highlight pink
+HL = f'background:{PINK};color:#111;-webkit-text-stroke:0;padding:0 18px 6px;border-radius:14px;box-shadow:0 8px 0 #000'
+# Benchmark (top KPDH thumbnails 2026-10-18): one huge character face filling the frame, 0-2 words, one focal point, one contrast object.
 T = {
-# 4a: "The Entire History of KPop Demon Hunters in 8 Minutes": one big HUNTR/X still, two words, the channel's 뱁새
-"4a": f"""<div class=ph style="inset:0;background-image:url({IMG}/og_mbw.jpg);background-size:112%;background-position:55% 40%"></div>
-<div class=a style="inset:0;background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,transparent 40%)"></div>
-<div class="a s" style="left:44px;top:548px;font-size:120px;line-height:1;white-space:nowrap">FULL <span class=y>HISTORY</span></div>
-<img class=a src="{STK}/popcorn_tv.png" style="right:26px;bottom:18px;width:260px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))">""",
-# 4b: "Every Record KPop Demon Hunters Broke in Its First Year": the official "Golden" art, two words, 뱁새 with a trophy
-"4b": f"""<div class=ph style="inset:0;background-image:url({IMG}/y_yebNIHKAC4A_maxresdefault.jpg);background-size:128%;background-position:75% 8%"></div>
-<div class=a style="inset:0;background:linear-gradient(0deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.6) 28%,transparent 46%)"></div>
-<div class="a s" style="left:44px;top:548px;font-size:120px;line-height:1;white-space:nowrap">EVERY <span class=y>RECORD</span></div>
-<img class=a src="{STK}/trophy.png" style="right:26px;bottom:18px;width:260px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))">""",
-# 4c: "How KPop Demon Hunters Went From Netflix to 2 Oscars in 1 Year": HUNTR/X big on the left, the real Oscar winners on the right
-"4c": f"""<div class=ph style="left:0;top:0;width:840px;height:720px;background-image:url({IMG}/og_deadline.jpg);background-size:auto 100%;background-position:45% 0%"></div>
-<div class=ph style="left:820px;top:0;width:460px;height:720px;background-image:url({IMG}/y_uH5bGSSw_l0_maxres2.jpg);background-size:auto 105%;background-position:52% 20%;border-left:8px solid #fff;box-shadow:-14px 0 30px rgba(0,0,0,.6)"></div>
-<div class=a style="inset:0;background:linear-gradient(0deg,rgba(0,0,0,.85) 0%,transparent 32%)"></div>
-<div class="a s" style="left:44px;top:560px;font-size:120px;line-height:1;white-space:nowrap">2 <span class=y>OSCARS</span></div>
-<img class=a src="{STK}/excited.png" style="right:22px;bottom:16px;width:230px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))">""",
+# 4a: "The Entire History of KPop Demon Hunters in 8 Minutes": Rumi's face huge, "FULL STORY", 뱁새
+"4a": f"""<div class=ph style="inset:0;background-image:url({IMG}/og_wonend.jpg);background-size:150%;background-position:52% 22%"></div>
+<div class=a style="inset:0;background:linear-gradient(90deg,rgba(0,0,0,.55) 0%,transparent 45%)"></div>
+<div class="a s" style="left:44px;top:60px;font-size:132px;line-height:1.12">FULL<br><span style="{HL}">STORY</span></div>
+<img class=a src="{STK}/popcorn_tv.png" style="left:30px;bottom:14px;width:250px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))">""",
+# 4b: "Every Record KPop Demon Hunters Broke in Its First Year": the official "Golden" art zoomed to the three faces, "EVERY RECORD", 뱁새 with a trophy
+"4b": f"""<div class=ph style="inset:0;background-image:url({IMG}/y_yebNIHKAC4A_maxresdefault.jpg);background-size:140%;background-position:62% 0%"></div>
+<div class=a style="inset:0;background:linear-gradient(0deg,rgba(0,0,0,.8) 0%,transparent 40%)"></div>
+<div class="a s" style="left:44px;top:556px;font-size:118px;line-height:1;white-space:nowrap">EVERY <span style="{HL}">RECORD</span></div>
+<img class=a src="{STK}/trophy.png" style="right:22px;bottom:14px;width:240px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))">""",
+# 4c: "How KPop Demon Hunters Went From Netflix to 2 Oscars in 1 Year": Mira's face huge + the real Oscar statuettes, "2 OSCARS", 뱁새
+"4c": f"""<div class=ph style="inset:0;background-image:url({IMG}/og_deadline.jpg);background-size:190%;background-position:48% 18%"></div>
+<div class=a style="right:34px;top:40px;width:420px;height:470px;border-radius:22px;border:8px solid #fff;background:url({IMG}/y_uH5bGSSw_l0_maxres2.jpg) 47% 78%/auto 210%;transform:rotate(4deg);box-shadow:0 16px 40px rgba(0,0,0,.7)"></div>
+<div class=a style="inset:0;background:linear-gradient(0deg,rgba(0,0,0,.8) 0%,transparent 34%)"></div>
+<div class="a s" style="left:44px;top:556px;font-size:118px;line-height:1;white-space:nowrap">2 <span style="{HL}">OSCARS</span></div>
+<img class=a src="{STK}/excited.png" style="right:22px;bottom:14px;width:220px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))">""",
 }
 for k, body in T.items():
     open(f"{OUT}/{k}.html", "w").write(f"<!doctype html><html><head><meta charset=utf-8><style>{CSS}</style></head><body>{body}</body></html>")
