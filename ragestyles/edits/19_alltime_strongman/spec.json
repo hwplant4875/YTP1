@@ -1,12 +1,21 @@
 {
- "title": "STRONGEST MEN EVER",
+ "title": [
+  [
+   "MOST WORLD'S STRONGEST",
+   "#ffffff"
+  ],
+  [
+   "MAN TITLES",
+   "#ffd400"
+  ]
+ ],
  "font": "/home/user/rs_work/gfonts/Kanit-BlackItalic.ttf",
  "list": {
   "x": 36,
-  "y": 300,
+  "y": 110,
   "gap": 86,
   "size": 54,
-  "titleSize": 66
+  "titleSize": 72
  },
  "reveal": {
   "dur": 1.4,
@@ -16,7 +25,7 @@
  "athletes": [
   {
    "rank": 5,
-   "name": "MAGNUSSON",
+   "name": "MAGNUSSON  4x",
    "shots": [
     {
      "src": "/home/user/rs_work/src/wsm/UJqeN6Kv5V0.mkv",
@@ -40,7 +49,7 @@
   },
   {
    "rank": 4,
-   "name": "SIGMARSSON",
+   "name": "SIGMARSSON  4x",
    "shots": [
     {
      "src": "/home/user/rs_work/src/wsm/I1Hx7GZByxk.webm",
@@ -64,7 +73,7 @@
   },
   {
    "rank": 3,
-   "name": "SHAW",
+   "name": "SHAW  4x",
    "shots": [
     {
      "src": "/home/user/rs_work/src/wsm/FI3z2MSrBFQ.mkv",
@@ -94,7 +103,7 @@
   },
   {
    "rank": 2,
-   "name": "SAVICKAS",
+   "name": "SAVICKAS  4x",
    "shots": [
     {
      "src": "/home/user/rs_work/src/wsm/Ova-z04LRn8.mkv",
@@ -112,7 +121,7 @@
   },
   {
    "rank": 1,
-   "name": "PUDZIANOWSKI",
+   "name": "PUDZIANOWSKI  5x",
    "shots": [
     {
      "src": "/home/user/rs_work/src/wsm/eWbiMIsgJqk.mkv",

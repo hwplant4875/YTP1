@@ -1,10 +1,10 @@
-"""1:1 ranking edit: square footage, ranked list on the left, fixed name reveal
+"""9:16 shorts ranking edit: 1:1 footage square on a black 9:16 canvas, ranked list on the left, fixed name reveal
 (eased zoom-in with a ~30% brightness bump that eases back to normal as the zoom lands).
 
     python3 rank.py spec.json out.mp4
 
 spec:
-  "title": "ALL-TIME STRONGEST MEN"   small line at the top (optional)
+  "title": [["MOST WORLD'S STRONGEST", "#fff"], ["MAN TITLES", "#ffd400"]]   lines above the footage (optional)
   "font":  path to the TTF used for title and list
   "athletes": [{"rank": 5, "name": "MAGNUSSON",
                 "shots": [{"src", "in", "out", "cx"}]}]   first shot carries the reveal
@@ -14,6 +14,7 @@ import json, os, subprocess, sys, tempfile
 from PIL import Image, ImageDraw, ImageFont
 
 S, FPS = 1080, 30
+W, H, TOP = 1080, 1920, 420   # square footage sits at y TOP..TOP+S
 
 
 def run(cmd):
@@ -34,7 +35,7 @@ def shot(s, out, reveal=None):
                f"eq=eval=frame:brightness='0.35*{bump}':gamma='1+{bump}'"]
     else:
         vf += [f"crop=ih:ih:(iw-ih)*{cx}:0", f"scale={S}:{S}:flags=lanczos"]
-    vf += ["unsharp=5:5:0.6,eq=contrast=1.05:saturation=1.08:brightness=0.01", "setsar=1", "format=yuv420p"]
+    vf += ["unsharp=5:5:0.6,eq=contrast=1.05:saturation=1.08:brightness=0.01", f"pad={W}:{H}:0:{TOP}:black", "setsar=1", "format=yuv420p"]
     af = f"aresample=48000,afade=t=in:d=0.06,afade=t=out:st={dur - 0.1:.3f}:d=0.1"
     run(['ffmpeg', '-v', 'error', '-y', '-ss', str(s['in']), '-t', f'{dur:.3f}', '-i', s['src'],
          '-vf', ','.join(vf), '-af', af, '-c:v', 'libx264', '-preset', 'medium', '-crf', '16',
@@ -43,16 +44,19 @@ def shot(s, out, reveal=None):
 
 
 def list_png(spec, shown, cur, path):
-    im = Image.new('RGBA', (S, S), (0, 0, 0, 0))
+    im = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
     L = spec.get('list', {})
     f = ImageFont.truetype(spec['font'], L.get('size', 56))
     if spec.get('title'):
-        tf = ImageFont.truetype(spec['font'], L.get('titleSize', 62))
-        d.text((S / 2, 105), spec['title'], font=tf, fill='white', stroke_width=6, stroke_fill='black', anchor='ms')
+        ts = L.get('titleSize', 84)
+        tf = ImageFont.truetype(spec['font'], ts)
+        lines = spec['title'][::-1]
+        for k, (txt, col) in enumerate(lines):  # bottom line sits just above the footage
+            d.text((W / 2, TOP - 40 - k * int(ts * 1.1)), txt, font=tf, fill=col, stroke_width=6, stroke_fill='black', anchor='ms')
     ranks = sorted((a['rank'] for a in spec['athletes']))
     for k, r in enumerate(ranks):
-        y = L.get('y', 300) + k * L.get('gap', 86)
+        y = TOP + L.get('y', 120) + k * L.get('gap', 86)
         x = L.get('x', 36)
         d.text((x, y), f'{r}.', font=f, fill='white', stroke_width=5, stroke_fill='black', anchor='ls')
         if r in shown:
