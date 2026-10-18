@@ -7,7 +7,7 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}body{width:1280px;height:720
 .s{paint-order:stroke fill;-webkit-text-stroke:16px #000;font-weight:900}.y{color:#ffd84a}
 .chip{display:inline-block;padding:8px 26px 12px;border-radius:16px;font-weight:900}"""
 PINK = "#F7B8CA"  # channel highlight pink
-HL = f'background:{PINK};color:#111;-webkit-text-stroke:0;padding:0 18px 6px;border-radius:14px;box-shadow:0 8px 0 #000'
+HL = f'color:{PINK}'  # highlighted word: channel pink text (was yellow), same black stroke
 # Benchmark (top KPDH thumbnails 2026-10-18): one huge character face filling the frame, 0-2 words, one focal point, one contrast object.
 T = {
 # 4a: "The Entire History of KPop Demon Hunters in 8 Minutes": Rumi's face huge, "FULL STORY", 뱁새
