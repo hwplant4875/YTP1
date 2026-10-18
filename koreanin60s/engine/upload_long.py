@@ -23,3 +23,9 @@ if srt:
     data = (f"--{b}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n{meta_}\r\n--{b}\r\nContent-Type: application/octet-stream\r\n\r\n").encode() + open(srt, "rb").read() + f"\r\n--{b}--".encode()
     r = urllib.request.Request("https://www.googleapis.com/upload/youtube/v3/captions?uploadType=multipart&part=snippet", data=data, headers=H | {"Content-Type": f"multipart/related; boundary={b}"})
     print("captions", urllib.request.urlopen(r).status)
+if os.environ.get("PUBLISH_IN_MIN"):  # schedule: stays private, YouTube publishes it N minutes after the upload finished
+    import datetime
+    at = (datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=float(os.environ["PUBLISH_IN_MIN"]))).strftime("%Y-%m-%dT%H:%M:%SZ")
+    r = urllib.request.Request("https://www.googleapis.com/youtube/v3/videos?part=status", method="PUT", data=json.dumps(
+        {"id": vid, "status": {"privacyStatus": "private", "publishAt": at, "selfDeclaredMadeForKids": False}}).encode(), headers=H | {"Content-Type": "application/json"})
+    print("publishAt", at, urllib.request.urlopen(r).status)

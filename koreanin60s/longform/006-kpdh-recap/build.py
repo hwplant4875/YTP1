@@ -107,7 +107,7 @@ def build(src_dir, out, sample=False):
     for ci, c in enumerate(chapters, 1):
         n0 = len(ev); nseg = sum(len(b) for b in c["beats"]); a_, b_ = c["m"]
         m = lambda k, n0=n0, nseg=nseg, a_=a_, b_=b_: round(a_ + (b_ - a_) * (k - n0) / max(1, nseg - 1), 3)
-        for b in (c["beats"][:7] if sample else c["beats"]): beat(b, ci, m)
+        for b in (c["beats"][:6] if sample else c["beats"]): beat(b, ci, m)
         for e in ev[n0:]: e["date"], e["pose"] = c["date"], c["pose"]
         ev[n0]["q"] = c["q"]  # YouTube chapter marker (meta.py)
         if c.get("ko"):
