@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset="utf-8"><style>
-/* KPDH recap long-form v2, 1920x1080. Sources full-frame, centered captions, a rolling month counter top-left, Netflix views / awards chips
+/* KPDH recap long-form v2, 1920x1080. Sources full-frame, centered captions, a year timeline along the bottom, Netflix views / awards chips
    top-right, 뱁새 in the bottom-right corner (pops in at each chapter). Channel font: Baloo 2 (Latin) + Jua (Hangul), both rounded. */
 @font-face{font-family:'Baloo 2';font-weight:400 800;src:url('file:///home/user/YTP1/koreanin60s/assets/fonts/Baloo2.ttf')}
 @font-face{font-family:'Jua';src:url('file:///home/user/YTP1/koreanin60s/assets/fonts/Jua.ttf')}
@@ -13,8 +13,8 @@ html,body{width:1920px;height:1080px;overflow:hidden;background:#0d0a1f;font-fam
 .grad{position:absolute;inset:0;background:linear-gradient(0deg,rgba(6,3,18,.82) 0%,rgba(6,3,18,.35) 24%,transparent 42%),linear-gradient(180deg,rgba(6,3,18,.5) 0%,transparent 16%)}
 .dim{position:absolute;inset:0;background:rgba(8,4,24,.6)}
 .stroke{paint-order:stroke fill;-webkit-text-stroke:14px #000}
-.cap{position:absolute;left:50%;bottom:66px;max-width:1560px;width:max-content;text-align:center;font-size:74px;line-height:1.05;padding:16px 44px 6px;border-radius:30px;background:rgba(10,6,28,.88);box-shadow:0 12px 40px rgba(0,0,0,.5);paint-order:stroke fill;-webkit-text-stroke:10px #000}
-.hook .cap{font-size:92px;bottom:80px}
+.cap{position:absolute;left:50%;bottom:168px;max-width:1560px;width:max-content;text-align:center;font-size:74px;line-height:1.05;padding:16px 44px 6px;border-radius:30px;background:rgba(10,6,28,.88);box-shadow:0 12px 40px rgba(0,0,0,.5);paint-order:stroke fill;-webkit-text-stroke:10px #000}
+.hook .cap{font-size:92px;bottom:168px}
 em{font-style:normal;color:#F7B8CA}
 .big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 120px}
 .num{font-size:280px;line-height:.9;color:#F7B8CA}
@@ -24,16 +24,20 @@ em{font-style:normal;color:#F7B8CA}
 .paper{position:absolute;left:960px;top:520px;width:1180px;background:#fff;border-radius:22px;padding:30px;box-shadow:0 30px 90px rgba(0,0,0,.7)}
 .paper img{width:100%;display:block;border-radius:8px}
 .paper .src{color:#555;font-size:32px;margin-bottom:12px;letter-spacing:.04em;text-transform:uppercase}
-/* rolling month counter */
-#date{position:absolute;left:44px;top:38px;display:flex;align-items:center;gap:18px;padding:10px 26px 10px 14px;border-radius:60px;background:rgba(12,8,30,.72);border:3px solid #F7B8CA;box-shadow:0 10px 30px rgba(0,0,0,.45)}
-#date .chn{padding:4px 18px 0;border-radius:40px;background:#F7B8CA;color:#1a1030;font-size:34px;line-height:52px;white-space:nowrap}
-#date .win{height:64px;overflow:hidden;width:250px}
-#date .strip div{height:64px;line-height:70px;font-size:52px;white-space:nowrap}
+/* year timeline along the bottom, visible from the first frame */
+#tl{position:absolute;left:0;top:930px;width:1920px;height:150px;background:linear-gradient(0deg,rgba(6,3,18,.85),rgba(6,3,18,.55) 60%,transparent)}
+#tl .in{position:absolute;left:110px;top:28px;width:1700px;height:100px}
+#tl .bar{position:absolute;left:0;top:30px;width:100%;height:10px;border-radius:5px;background:rgba(255,255,255,.18)}
+#tl .fill{position:absolute;left:0;top:30px;height:10px;border-radius:5px;background:linear-gradient(90deg,#ff3fa4,#F7B8CA);box-shadow:0 0 18px #ff3fa4}
+#tl .tick{position:absolute;top:24px;width:4px;height:22px;margin-left:-2px;background:rgba(255,255,255,.4);border-radius:2px}
+#tl .ml{position:absolute;top:58px;width:140px;margin-left:-70px;text-align:center;font-size:30px;color:rgba(255,255,255,.7)}
+#tl .ml.yr{color:#F7B8CA;font-size:36px;top:54px}
+#tl .dot{position:absolute;top:17px;width:36px;height:36px;margin-left:-18px;border-radius:50%;background:#fff;box-shadow:0 0 0 7px rgba(255,63,164,.55),0 0 34px 10px rgba(255,63,164,.8)}
 /* counters */
 #chips{position:absolute;right:44px;top:38px;display:flex;flex-direction:column;align-items:flex-end;gap:14px}
 .chip{padding:6px 28px 2px;border-radius:60px;background:rgba(12,8,30,.72);border:3px solid rgba(255,255,255,.25);font-size:46px;line-height:66px;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.45);transform-origin:100% 50%}
 .chip b{color:#F7B8CA;font-weight:800}
-#stk{position:absolute;right:26px;bottom:18px;width:210px;height:210px;background-size:contain;background-repeat:no-repeat;background-position:center bottom;filter:drop-shadow(0 12px 18px rgba(0,0,0,.55));transform-origin:50% 100%}
+#stk{position:absolute;right:26px;bottom:150px;width:190px;height:190px;background-size:contain;background-repeat:no-repeat;background-position:center bottom;filter:drop-shadow(0 12px 18px rgba(0,0,0,.55));transform-origin:50% 100%}
 /* chapter, title, Korean moment, outro */
 .chap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 .chap .n{font-size:52px;letter-spacing:.25em;color:#F7B8CA}
@@ -51,14 +55,20 @@ em{font-style:normal;color:#F7B8CA}
 .sub{margin-top:46px;display:inline-block;padding:14px 64px 6px;border-radius:60px;background:#ff0033;font-size:66px}
 </style></head><body>
 <div id="sky"></div><div id="stage"></div>
-<div id="date" class="lay" style="inset:auto"><div class="chn" id="chn"></div><div class="win"><div class="strip" id="strip"></div></div></div>
+<div id="tl"><div class="in" id="tli"><div class="bar"></div><div class="fill" id="fill"></div><div class="dot" id="dot"></div></div></div>
 <div id="chips" class="lay" style="inset:auto;right:44px;top:38px"><div class="chip" id="cv">👀 <b id="vv"></b> views</div><div class="chip" id="ca">🏆 <b id="av"></b> awards</div></div>
-<div id="stk" class="lay" style="inset:auto;right:26px;bottom:18px"></div>
+<div id="stk" class="lay" style="inset:auto;right:26px;bottom:150px"></div>
 <script>
 /*DATA*/
 const MON=["JUN","JUL","AUG","SEP","OCT","NOV","DEC","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT"];
-const E=D.ev, st=document.getElementById('stage'), RH=64;
-document.getElementById('strip').innerHTML=MON.map((s,i)=>`<div>${s} <span style="color:#F7B8CA">${i<7?2025:2026}</span></div>`).join('');
+const E=D.ev, st=document.getElementById('stage'), X=m=>m/16*1700, tli=document.getElementById('tli');
+// labels: every other month, "JUN 2025" at the start and the year "2026" right after DEC
+MON.forEach((s,i)=>{const k=document.createElement('div');k.className='tick';k.style.left=X(i)+'px';tli.appendChild(k);
+  const lab=i==0?"JUN '25":i==7?'2026':(i%2==0||i==16)?s:null; if(!lab) return;
+  const l=document.createElement('div');l.className='ml'+(i==0||i==7?' yr':'');l.style.left=X(i)+'px';l.textContent=lab;tli.appendChild(l);});
+const C1=E.findIndex(e=>e.k=='C'), TI=E.findIndex(e=>e.k=='T');
+// timeline position at time t: the hook sweeps the whole year once, chapters glide between their months, the outro stays at the end
+function mAt(i){const e=E[i];return e.ch==0?16:(e.m!=null?e.m:16);}
 const img=n=>`url(img/${n}.jpg)`, bg=n=>`url(img/${n}_bg.jpg)`;
 function photo(v,dim){ // full-frame photo; vertical sources sit on a blurred copy of themselves
   if(v.ar&&v.ar<1.25) return `<div class="vbg" style="background-image:${bg(v.img)}"></div><div class="vfg ph2" style="width:${Math.round(1080*v.ar)}px;margin-left:-${Math.round(540*v.ar)}px;background-image:${img(v.img)}"></div>`+(dim?'<div class="dim"></div>':'');
@@ -96,15 +106,14 @@ window.render=function(t){
     }});
   const v=E[cur], prev=E[cur-1], f=ease((t-v.t)/0.45);
   const ov=(on,was)=>on?(was?1:f):(was?1-f:0);
-  // month counter, chips, sticker: inside chapter bodies only
-  const dt=document.getElementById('date'), ch=document.getElementById('chips'), sk=document.getElementById('stk');
-  const bo=ov(body(v),body(prev)); dt.style.opacity=bo; ch.style.opacity=bo; sk.style.opacity=bo;
+  // timeline (always on)
+  let m; if(v.ch==0&&cur<TI) m=16*ease(clamp((t-E[0].t)/(E[TI].t-E[0].t))); else {const m1=mAt(cur), m0=cur>0?(E[cur-1].ch==0&&cur-1<TI?16:mAt(cur-1)):0; m=m0+(m1-m0)*ease((t-v.t)/0.8);}
+  if(t<E[0].t) m=0; document.getElementById('dot').style.left=X(m)+'px'; document.getElementById('fill').style.width=X(m)+'px';
+  // chips, sticker: inside chapter bodies only
+  const ch=document.getElementById('chips'), sk=document.getElementById('stk');
+  const bo=ov(body(v),body(prev)); ch.style.opacity=bo; sk.style.opacity=bo;
   const s=body(v)?v:(body(prev)?prev:null);
   if(s){
-    document.getElementById('chn').textContent=`CH ${s.ch}`;
-    // roll from the previous month to this one (whole months only)
-    const m1=Math.floor(s.m+1e-3), pm=(s===v&&body(prev)&&prev.m!=null)?Math.floor(prev.m+1e-3):m1, mm=pm+(m1-pm)*ease((t-s.t)/0.7);
-    document.getElementById('strip').style.transform=`translateY(${-mm*RH}px)`;
     const vv=s.cnt.views, aw=s.cnt.awards, pv=prev&&prev.cnt||{};
     const cv=document.getElementById('cv'), ca=document.getElementById('ca');
     cv.style.display=vv?'block':'none'; document.getElementById('vv').textContent=fmtV(vv);

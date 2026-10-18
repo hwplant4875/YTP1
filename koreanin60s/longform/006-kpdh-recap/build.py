@@ -62,7 +62,7 @@ def prep_img(src_dir, name, out):
     im = Image.open(os.path.join(src_dir, f)).convert("RGB")
     if max(im.size) > 4000: im.thumbnail((3200, 3200))
     g = np.asarray(im.convert("L"), np.float32); cols = np.flatnonzero(g.mean(0) > 14); rows = np.flatnonzero(g.mean(1) > 14)
-    if len(cols) and len(rows) and not name.startswith("h1_"): im = im.crop((cols[0], rows[0], cols[-1] + 1, rows[-1] + 1))
+    if len(cols) and len(rows) and not name.startswith(("h1_", "td_")): im = im.crop((cols[0], rows[0], cols[-1] + 1, rows[-1] + 1))
     if any(k in name for k in SUBS): im = im.crop((0, 0, im.size[0], int(im.size[1] * 0.8)))  # burned-in lyric subtitles at the bottom
     c = im.copy(); c.thumbnail((1600, 1600)); c.save(f"{out}/img/{name}.jpg", quality=90)
     b = im.copy(); b.thumbnail((480, 480)); b = b.filter(ImageFilter.GaussianBlur(14)); b = ImageEnhance.Brightness(b).enhance(0.45); b.save(f"{out}/img/{name}_bg.jpg", quality=85)

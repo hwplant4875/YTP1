@@ -13,20 +13,20 @@ NF, SPA = "Netflix", "Sony Pictures Animation / Netflix"
 # timeline months: 0 = Jun 2025 ... 16 = Oct 2026
 HOOK = [  # cold open: payoff first, fast cuts, then the question
     [("This cartoon K-pop movie won two Oscars.", P("y_2ftx6oQzfoI_maxresdefault", "ABC / A.M.P.A.S.", "<em>2</em> Oscars 🏆"))],
-    [("Their song Golden hit number one in more than thirty countries,", P("y_6m9Ur3bo7bY_maxresdefault", "TODAY / NBC", "<em>#1</em> in 30+ countries")),
-     ("fans paid to watch a movie that was already free,", P("y_AzCAwdp1uIQ_maxres1", NF, "Sold-out <em>sing-alongs</em> 🎤")),
-     ("and it became the most-watched movie in Netflix history.", P("y_AzCAwdp1uIQ_maxres2", NF, "Netflix's <em>most-watched</em> movie ever"))],
-    [("But one year ago? Nobody knew who they were.", P("og_mbw", SPA, "Who are <em>HUNTR/X</em>?"))],
-    [("This is the entire story, from day one to the Oscars and beyond.", P("y_oDSEGkT6J-0_maxresdefault", NF))],
+    [("Their song Golden hit number one in more than thirty countries,", P("td_three_point", NF, "<em>#1</em> in 30+ countries")),
+     ("fans paid to watch a movie that was already free,", P("td_concert", NF, "Sold-out <em>sing-alongs</em> 🎤")),
+     ("and it became the most-watched movie in Netflix history.", P("td_stage_sing", NF, "Netflix's <em>most-watched</em> movie ever"))],
+    [("But one year ago? Nobody knew who they were.", P("td_white_trio", NF, "Who are <em>HUNTR/X</em>?"))],
+    [("This is the entire story, from day one to the Oscars and beyond.", P("td_boat_sunset", NF))],
 ]
 CHAPTERS = [
   {"q": "Where did it all start?", "date": "June 2025", "m": (0, 0.6), "pose": "popcorn_tv", "beats": [
-    [("On June twentieth, twenty twenty-five, Netflix released an animated movie with almost no hype.", P("y_AzCAwdp1uIQ_maxresdefault", NF, "June 20, 2025"))],
-    [("It was made by Sony Pictures Animation, the studio behind the Spider-Verse movies,", P("y_3JTVQTk36R8_maxresdefault", SPA, "Sony Pictures Animation")),
-     ("and directed by Maggie Kang and Chris Appelhans.", P("y_C7jHSbFCrO4_maxres3", "Collider", "Maggie Kang & Chris Appelhans"))],
+    [("On June twentieth, twenty twenty-five, Netflix released an animated movie with almost no hype.", P("td_logo", NF, "June 20, 2025"))],
+    [("It was made by Sony Pictures Animation, the studio behind the Spider-Verse movies,", P("td_dance_yellow", SPA, "Sony Pictures Animation")),
+     ("and directed by Maggie Kang and Chris Appelhans.", P("td_directors", NF, "Maggie Kang & Chris Appelhans"))],
     [("Kang first pitched the idea back in twenty eighteen. She wanted a story rooted in her Korean heritage, mixing K-pop, mythology and demons.", P("y_WxOZKMv3GTY_maxres1", "CNN", "Pitched in <em>2018</em>"))],
-    [("The idea sounded wild.", B("The idea sounded <em>wild</em> 🤯", "y_HT46zbEQdiw_maxres3", NF)),
-     ("Three K-pop idols, Rumi, Mira and Zoey, secretly hunt demons,", P("og_deadline", SPA, "Rumi · Mira · Zoey")),
+    [("The idea sounded wild.", B("The idea sounded <em>wild</em> 🤯", "td_weapons_glow", NF)),
+     ("Three K-pop idols, Rumi, Mira and Zoey, secretly hunt demons,", P("td_weapons_trio", SPA, "Rumi · Mira · Zoey")),
      ("and their voices power a magic barrier called the Honmoon.", P("y_3JTVQTk36R8_maxres3", SPA, "The <em>Honmoon</em>"))],
     [("Their rivals? A boy band called the Saja Boys, who are secretly demons.", P("og_kt_saja", SPA, "The <em>Saja Boys</em> 😈"))],
     [("The voice cast included Arden Cho, May Hong, Ji-young Yoo and 안효섭,", P("og_jad_236", NF, "Arden Cho · May Hong · Ji-young Yoo · Ahn Hyo-seop")),
@@ -34,31 +34,31 @@ CHAPTERS = [
     [("There was no big theater launch, just a Netflix release.", P("y_uH5bGSSw_l0_maxresdefault", "The Hollywood Reporter")),
      ("But within days, something strange started happening.", P("y_2FS3JAPTKXs_maxres2", NF, "Something <em>strange</em>…"))],
   ]},
-  {"q": "How did a fake girl group top the real charts?", "date": "Jul – Dec 2025", "m": (0.6, 6), "pose": "sing_mic", "ko": ("1위", "il-wi", "number one", "Korean moment! 1위. It means number one."), "beats": [
-    [("The songs exploded online.", P("y_yebNIHKAC4A_maxres1", SPA, "'Golden' 🎵"))],
-    [("Golden entered the Billboard Hot 100 at number eighty-one.", N("#81", "Billboard Hot 100 debut", "y_yebNIHKAC4A_maxres3", SPA)),
+  {"q": "How did a fake girl group top the real charts?", "date": "Jul – Dec 2025", "m": (0.6, 6), "pose": "sing_mic", "beats": [
+    [("The songs exploded online.", P("td_golden_stage", SPA, "'Golden' 🎵"))],
+    [("Golden entered the Billboard Hot 100 at number eighty-one.", N("#81", "Billboard Hot 100 debut", "td_pink_set", SPA)),
      ("Two weeks later, it was in the top ten. Then, it hit number one.", N("#1", "Billboard Hot 100", "y_8y-ViyUk7Dk_maxres3", "The Tonight Show Starring Jimmy Fallon / NBC"))],
     [("HUNTR/X became the first girl group of three or more to top the Hot 100 since Destiny's Child in two thousand one.", P("y_8y-ViyUk7Dk_maxres2", "The Tonight Show Starring Jimmy Fallon / NBC", "First since <em>2001</em>"))],
-    [("In its fifth week at number one, Golden passed The Chipmunks and The Archies,", B("5 weeks at <em>#1</em><br>beats The Chipmunks & The Archies", "y_3JTVQTk36R8_maxres1", SPA)),
+    [("In its fifth week at number one, Golden passed The Chipmunks and The Archies,", B("5 weeks at <em>#1</em><br>beats The Chipmunks & The Archies", "td_golden_pose", SPA)),
      ("becoming the longest-leading hit ever by an animated act.", P("og_visitseoul", "Netflix / Visit Seoul", "Longest <em>#1</em> ever by an animated act"))],
     [("In the U.K., it spent ten weeks at number one, the longest run ever for a fictional band.", N("10", "weeks at #1 in the UK", "og_wonend", NF))],
-    [("It held number one on the Billboard Global 200 for eighteen weeks,", N("18", "weeks at #1 · Billboard Global 200", "y_yebNIHKAC4A_maxresdefault", NF)),
-     ("and topped the charts in more than thirty countries.", N("30+", "countries at #1", "y_HT46zbEQdiw_maxresdefault", NF))],
+    [("It held number one on the Billboard Global 200 for eighteen weeks,", N("18", "weeks at #1 · Billboard Global 200", "td_golden_frame", NF)),
+     ("and topped the charts in more than thirty countries.", N("30+", "countries at #1", "td_top10", NF))],
     [("The soundtrack became the first ever to put four songs in the Hot 100 top ten at the same time.", N("4", "songs in the Hot 100 top 10 at once", "y_oDSEGkT6J-0_maxres2", NF))],
-    [("The album itself debuted at number eight on the Billboard 200, the best debut for any soundtrack that year.", N("#8", "Billboard 200 debut · best soundtrack debut of 2025", "y_2FS3JAPTKXs_maxres3", NF))],
-    [("Even the villains had a hit.", P("y_2FS3JAPTKXs_maxres1", NF, "Even the <em>villains</em>")),
+    [("The album itself debuted at number eight on the Billboard 200, the best debut for any soundtrack that year.", N("#8", "Billboard 200 debut · best soundtrack debut of 2025", "td_dance_yellow2", NF))],
+    [("Even the villains had a hit.", P("td_saja", NF, "Even the <em>villains</em>")),
      ("Your Idol took number one on the U.S. Spotify chart, the highest ever for a male K-pop group.", P("y_cWppAbqm9I8_maxres2", SPA, "'Your Idol' · #1 on U.S. Spotify"))],
     [("And in Korea, Golden scored a perfect all-kill: number one on every major chart at once.", P("y_LTbg4Wps4GE_maxresdefault", "Seoul Metropolitan Government", "Perfect <em>all-kill</em> in Korea 🇰🇷"))],
   ]},
-  {"q": "Why would anyone pay to watch a free movie?", "date": "August 2025", "m": (2, 2.8), "pose": "popcorn_tv", "ko": ("극장", "geuk-jang", "movie theater", "Korean moment! 극장. It means movie theater."), "beats": [
-    [("Here's the strangest part. The movie was free on Netflix.", B("It was <em>free</em> on Netflix 📺", "y_6m9Ur3bo7bY_maxres3", "TODAY / NBC"))],
+  {"q": "Why would anyone pay to watch a free movie?", "date": "August 2025", "m": (2, 2.8), "pose": "popcorn_tv", "beats": [
+    [("Here's the strangest part. The movie was free on Netflix.", B("It was <em>free</em> on Netflix 📺", "td_eating", NF))],
     [("But on August twenty-third, a sing-along version opened in about seventeen hundred theaters for one weekend,", N("1,700", "theaters · one weekend", "y_fGyTN5UjnL4_maxres3", NF)),
      ("the widest release ever for a Netflix film.", B("Netflix's <em>widest</em> theater release ever", "y_fGyTN5UjnL4_maxres2", NF))],
     [("Fans showed up in costumes and sang every word.", P("y_LyM5k1d65TY_maxres1", "RUMCA (fan recording)", "Sing-along screening 🎤"))],
     [("It made an estimated eighteen million dollars, more than any other movie that weekend.", H("h1_thr", "og_thr", "The Hollywood Reporter")),
      ("A first for Netflix.", B("A <em>first</em> for Netflix 🍿", "y_fGyTN5UjnL4_maxres1", NF))],
   ]},
-  {"q": "Who are the real voices of HUNTR/X?", "date": "Oct – Nov 2025", "m": (4, 5.9), "pose": "sing_mic", "ko": ("목소리", "mok-so-ri", "voice", "Korean moment! 목소리. It means voice."), "beats": [
+  {"q": "Who are the real voices of HUNTR/X?", "date": "Oct – Nov 2025", "m": (4, 5.9), "pose": "sing_mic", "beats": [
     [("Meanwhile, the real singers were becoming stars too.", P("y_z9PusX5ugbI_maxres3", "The Tonight Show Starring Jimmy Fallon / NBC", "The <em>real</em> HUNTR/X"))],
     [("EJAE, the singing voice of Rumi, also co-wrote Golden.", P("y_bFdoLdNUCwg_maxres1", "Billboard", "EJAE · Rumi's voice ✍️ co-wrote 'Golden'"))],
     [("In October, they surprised everyone on Saturday Night Live, singing Golden and How It's Done.", B("Surprise on <em>Saturday Night Live</em> 🎤", "y_z9PusX5ugbI_maxres1", "The Tonight Show Starring Jimmy Fallon / NBC"))],
@@ -67,7 +67,7 @@ CHAPTERS = [
     [("By Thanksgiving, they were singing Golden at the Macy's parade in New York,", P("y_r7TA1mn91F8_maxres3", "NBC", "Macy's Thanksgiving Day Parade")),
      ("next to a giant Derpy Tiger balloon.", P("y_r7TA1mn91F8_maxres1", "NBC", "Derpy 🐯 balloon"))],
   ]},
-  {"q": "Is it really Netflix's biggest movie ever?", "date": "Jul – Dec 2025", "m": (1, 6.8), "pose": "mind_blown", "ko": ("대박", "dae-bak", "awesome! / a huge hit", "Korean moment! 대박. It means awesome, or a huge hit."), "beats": [
+  {"q": "Is it really Netflix's biggest movie ever?", "date": "Jul – Dec 2025", "m": (1, 6.8), "pose": "mind_blown", "beats": [
     [("And the views kept climbing.", P("y_6m9Ur3bo7bY_maxres2", "TODAY / NBC", "Views keep <em>climbing</em> 📈"))],
     [("In August, it passed Red Notice to become Netflix's most-watched film ever.", H("h1_jad_236", "og_jad_squid", "Korea JoongAng Daily", cnt={"views": 236}))],
     [("In September, it passed Squid Game season one, and became Netflix's most-watched title of all time.", H("h1_jad_squid", "y_6m9Ur3bo7bY_maxres1", "Korea JoongAng Daily · TODAY / NBC", cnt={"views": 266}))],
@@ -80,7 +80,7 @@ CHAPTERS = [
     [("And the National Museum of Korea drew more than five million visitors,", N("5M+", "visitors · National Museum of Korea", "c_nmk", "Ethan Doyle White / CC BY-SA 4.0")),
      ("as fans hunted for tiger-and-magpie souvenirs.", H("h1_euronews", "og_animscoop", "Euronews · Animation Scoop"))],
   ]},
-  {"q": "How many trophies can one cartoon win?", "date": "Jan – Mar 2026", "m": (7, 9.5), "pose": "trophy", "ko": ("상", "sang", "award, prize", "Korean moment! 상. It means award."), "beats": [
+  {"q": "How many trophies can one cartoon win?", "date": "Jan – Mar 2026", "m": (7, 9.5), "pose": "trophy", "beats": [
     [("Then came award season.", P("y_TEjd00f3ats_maxres1", "Golden Globes", "Award <em>season</em> 🏆"))],
     [("At the Critics' Choice Awards in January, it won Best Animated Feature and Best Song.", P("y_ztWeRpZvfl0_maxres3", "Critics Choice Association", "Critics' Choice · 2 wins", cnt={"awards": 2}))],
     [("At the Golden Globes, it won the same two.", P("y_TEjd00f3ats_maxres2", "Golden Globes", "Golden Globes · 2 wins", cnt={"awards": 4}))],
@@ -104,13 +104,13 @@ CHAPTERS = [
      ("Vans sneakers,", P("og_vans", "Vans / House of Heat", "Vans 👟")),
      ("and a new immersive experience opening at Netflix House in Dallas and Philadelphia this November.", P("og_tudumimm", "Netflix Tudum", "Netflix House · Nov 2026"))],
   ]},
-  {"q": "What comes next?", "date": "2026 → 2029?", "m": (16, 16.6), "pose": "thinking", "ko": ("속편", "sok-pyeon", "sequel", "Korean moment! 속편. It means sequel."), "beats": [
-    [("So, what's next? The sequel is official.", B("The <em>sequel</em> is official", "y_HT46zbEQdiw_maxres1", NF))],
+  {"q": "What comes next?", "date": "2026 → 2029?", "m": (16, 16.6), "pose": "thinking", "beats": [
+    [("So, what's next? The sequel is official.", B("The <em>sequel</em> is official", "td_stage_lights", NF))],
     [("In March, Maggie Kang and Chris Appelhans were confirmed to return to write and direct.", P("y_C7jHSbFCrO4_maxres2", "Collider", "Kang & Appelhans are back"))],
     [("It's been reported for twenty twenty-nine, but Sony Pictures Animation's president has said it may not be finished by then.", N("2029?", "reported release year", "y_mUjA-pNVw1w_maxres2", "CBC News")),
      ("And at FanX, voice actor Alan Lee called every rumored date just rumor and clickbait.", B("“Just <em>rumor and clickbait</em>”<br><small>Alan Lee · FanX Salt Lake</small>", "y_cWppAbqm9I8_maxres1", SPA))],
     [("This time, it's headed to theaters. Netflix co-CEO Ted Sarandos promised a big, broad, global theatrical release.", H("h1_deadline", "y_cWppAbqm9I8_maxres3", "Deadline"))],
-    [("And the biggest news for fans: in May, Netflix and AEG Presents announced an official KPop Demon Hunters world concert tour.", H("h1_won", "y_uH5bGSSw_l0_maxres1", "What's on Netflix · The Hollywood Reporter"))],
+    [("And the biggest news for fans: in May, Netflix and AEG Presents announced an official KPop Demon Hunters world concert tour.", H("h1_won", "td_world_tour", "What's on Netflix · The Hollywood Reporter"))],
     [("Cities and dates haven't been announced yet, so for now, fans can only join the waitlist.", P("y_kes94PVdEBw_maxres1", "ABC / A.M.P.A.S.", "World tour · <em>dates TBA</em>"))],
   ]},
 ]
@@ -119,6 +119,6 @@ OUTRO = [
     ],
     [("And honestly? This story is far from over.", P("y_X5AqywbwReM_maxres1", "A.M.P.A.S.", "The story is <em>far from over</em>")),
      ("A sequel, a world tour, and whatever comes next, we'll be watching.", P("y_r7TA1mn91F8_maxresdefault", "NBC", "We'll be <em>watching</em> 👀"))],
-    [("Which moment was your favorite? Tell me in the comments,", B("Your favorite moment? 👇", "y_3JTVQTk36R8_maxres2", SPA)),
+    [("Which moment was your favorite? Tell me in the comments,", B("Your favorite moment? 👇", "td_laughing", SPA)),
      ("and subscribe to Korean in 60s for more Korea news and Korean you can actually use.", {"k": "O"})],
 ]
