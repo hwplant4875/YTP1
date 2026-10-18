@@ -571,7 +571,7 @@ def render(spec_path, out_path):
             if local >= tl["hides"].get(e["id"], 1e9):
                 continue
             draw_el(frame, built[si][e["id"]], e, local, tl["shows"].get(e["id"], e.get("at", 0.0) - 0.1), L)
-            if e.get("full") and road and W < H and (k + 1 == len(els) or not els[k + 1].get("full")):
+            if e.get("full") and road and W < H and spec.get("badge", True) and (k + 1 == len(els) or not els[k + 1].get("full")):
                 frame.alpha_composite(badge, ((W - 150) // 2 - 28, 110 - 28))   # pretzel stays on top of the footage
         rgb = frame.convert("RGB")
         if now < 0.5 and not spec.get("tight"):          # fade up from dark (news shorts: graphic pops at 0 s)

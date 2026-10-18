@@ -1,12 +1,13 @@
 {
  "id": "s01_kuerbisregatta",
  "title": "Germans race across a lake… in GIANT PUMPKINS 🎃",
+ "badge": false,
  "scenes": [
   {
    "lines": [
     [
      {
-      "en": "In Germany, people race across a lake... sitting inside giant pumpkins.",
+      "en": "This is a real race in Germany, and the boats are giant pumpkins.",
       "show": [
        "h",
        "p"
@@ -23,16 +24,16 @@
      "start": 39.0,
      "dur": 5,
      "crop": [
-      110,
+      160,
       230,
-      405,
+      304,
       540
      ],
      "w": 1080,
-     "h": 1440,
+     "h": 1920,
      "x": 540,
      "y": 960,
-     "vol": 0.28
+     "vol": 0
     },
     {
      "id": "h",
@@ -40,7 +41,54 @@
      "text": "They race in PUMPKINS",
      "size": 96,
      "x": 540,
-     "y": 360,
+     "y": 380,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "But the hardest part isn't the paddling.",
+      "show": [
+       "p",
+       "n"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "video",
+     "full": true,
+     "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
+     "start": 11.0,
+     "dur": 4,
+     "crop": [
+      120,
+      230,
+      304,
+      540
+     ],
+     "w": 1080,
+     "h": 1920,
+     "x": 540,
+     "y": 960,
+     "vol": 0
+    },
+    {
+     "id": "n",
+     "type": "text",
+     "text": "The hardest part?",
+     "size": 96,
+     "x": 540,
+     "y": 1430,
      "colour": [
       255,
       204,
@@ -78,19 +126,19 @@
      "type": "video",
      "full": true,
      "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
-     "start": 11.0,
-     "dur": 4,
+     "start": 4.0,
+     "dur": 5,
      "crop": [
-      70,
+      0,
       230,
-      405,
+      304,
       540
      ],
      "w": 1080,
-     "h": 1440,
+     "h": 1920,
      "x": 540,
      "y": 960,
-     "vol": 0.28
+     "vol": 0
     },
     {
      "id": "w",
@@ -119,61 +167,14 @@
    "lines": [
     [
      {
-      "en": "Sixty racers took on the palace lake.",
-      "show": [
-       "p",
-       "n"
-      ]
-     }
-    ]
-   ],
-   "els": [
-    {
-     "id": "p",
-     "type": "video",
-     "full": true,
-     "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
-     "start": 4.0,
-     "dur": 6,
-     "crop": [
-      100,
-      230,
-      405,
-      540
-     ],
-     "w": 1080,
-     "h": 1440,
-     "x": 540,
-     "y": 960,
-     "vol": 0.28
-    },
-    {
-     "id": "n",
-     "type": "text",
-     "text": "60 racers",
-     "size": 120,
-     "x": 540,
-     "y": 1415,
-     "colour": [
-      255,
-      204,
-      0
-     ]
-    }
-   ]
-  },
-  {
-   "lines": [
-    [
-     {
-      "en": "This year, the pumpkins weighed over 350 kilos,",
+      "en": "It's getting in. These pumpkins weigh over 350 kilos,",
       "show": [
        "p",
        "n"
       ]
      },
      {
-      "en": "so some racers flipped over just getting in.",
+      "en": "and people flip over before the race even starts.",
       "show": [
        "f"
       ]
@@ -187,18 +188,18 @@
      "full": true,
      "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
      "start": 22.0,
-     "dur": 9,
+     "dur": 7.4,
      "crop": [
-      90,
+      140,
       230,
-      405,
+      304,
       540
      ],
      "w": 1080,
-     "h": 1440,
+     "h": 1920,
      "x": 540,
      "y": 960,
-     "vol": 0.28
+     "vol": 0
     },
     {
      "id": "n",
@@ -216,7 +217,7 @@
     {
      "id": "f",
      "type": "text",
-     "text": "...and some flipped over",
+     "text": "...and people flip over",
      "size": 72,
      "x": 540,
      "y": 1445
@@ -252,20 +253,20 @@
      "type": "video",
      "full": true,
      "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
-     "start": 44.0,
-     "dur": 5.4,
+     "start": 44.4,
+     "dur": 5.6,
      "crop": [
-      120,
+      170,
       230,
-      405,
+      304,
       540
      ],
      "w": 1080,
-     "h": 1440,
+     "h": 1920,
      "x": 540,
      "y": 960,
-     "vol": 0.28,
-     "speed": 0.55
+     "vol": 0,
+     "speed": 0.4
     },
     {
      "id": "w",
@@ -294,7 +295,7 @@
    "lines": [
     [
      {
-      "en": "Now it's the 23rd year, and hundreds of people come to watch.",
+      "en": "Twenty-three years later, hundreds of people come to watch.",
       "show": [
        "p",
        "n"
@@ -311,24 +312,24 @@
      "start": 33.0,
      "dur": 7,
      "crop": [
-      150,
+      200,
       230,
-      405,
+      304,
       540
      ],
      "w": 1080,
-     "h": 1440,
+     "h": 1920,
      "x": 540,
      "y": 960,
-     "vol": 0.28
+     "vol": 0
     },
     {
      "id": "n",
      "type": "text",
-     "text": "23rd pumpkin regatta",
-     "size": 84,
+     "text": "23 years later",
+     "size": 90,
      "x": 540,
-     "y": 1437
+     "y": 1434
     }
    ]
   },
@@ -336,21 +337,16 @@
    "lines": [
     [
      {
-      "en": "Would you get in?",
+      "en": "So, would you climb into a",
       "show": [
        "p",
        "q"
       ]
      },
      {
-      "de": "Kürbis",
+      "de": "Kürbis?",
       "show": [
-       "w"
-      ]
-     },
-     {
-      "en": "means pumpkin.",
-      "show": [
+       "w",
        "m"
       ]
      }
@@ -363,23 +359,23 @@
      "full": true,
      "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
      "start": 18.0,
-     "dur": 4.4,
+     "dur": 4,
      "crop": [
-      100,
+      150,
       230,
-      405,
+      304,
       540
      ],
      "w": 1080,
-     "h": 1440,
+     "h": 1920,
      "x": 540,
      "y": 960,
-     "vol": 0.28
+     "vol": 0
     },
     {
      "id": "q",
      "type": "text",
-     "text": "Would you get in?",
+     "text": "Would you climb in?",
      "size": 90,
      "x": 540,
      "y": 1118,
@@ -404,31 +400,6 @@
      "size": 66,
      "x": 540,
      "y": 1449
-    }
-   ]
-  },
-  {
-   "lines": [
-    [
-     {
-      "en": "Follow for more German."
-     }
-    ]
-   ],
-   "els": [
-    {
-     "id": "l",
-     "type": "logo",
-     "x": 540,
-     "y": 740
-    },
-    {
-     "id": "t",
-     "type": "text",
-     "text": "Follow for more German",
-     "size": 70,
-     "x": 540,
-     "y": 1000
     }
    ]
   }
