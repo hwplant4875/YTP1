@@ -1,0 +1,372 @@
+{
+ "id": "s02_viehscheid",
+ "title": "Rush hour in a German village 🐄👑",
+ "badge": false,
+ "scenes": [
+  {
+   "lines": [
+    [
+     {
+      "en": "This is rush hour in a German village.",
+      "show": [
+       "h",
+       "p"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "video",
+     "full": true,
+     "src": "/home/user/fg_src/TQcMKbHcwhc_cut.mp4",
+     "start": 2.0,
+     "dur": 4.5,
+     "crop": [
+      0,
+      0,
+      608,
+      1080
+     ],
+     "w": 1080,
+     "h": 1920,
+     "x": 540,
+     "y": 960,
+     "vol": 0,
+     "grade": "eq=contrast=1.08:saturation=1.4:gamma=1.15:brightness=0.03,colorbalance=rs=0.06:gs=0.02:bs=-0.06:rm=0.04:bm=-0.04"
+    },
+    {
+     "id": "h",
+     "type": "text",
+     "text": "Rush hour in Germany",
+     "size": 96,
+     "x": 540,
+     "y": 380,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "A whole herd, straight through town. But watch for the one with the crown.",
+      "show": [
+       "p",
+       "n"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "video",
+     "full": true,
+     "src": "/home/user/fg_src/TQcMKbHcwhc_cut.mp4",
+     "start": 11.0,
+     "dur": 5.5,
+     "crop": [
+      0,
+      0,
+      608,
+      1080
+     ],
+     "w": 1080,
+     "h": 1920,
+     "x": 540,
+     "y": 960,
+     "vol": 0,
+     "grade": "eq=contrast=1.08:saturation=1.4:gamma=1.15:brightness=0.03,colorbalance=rs=0.06:gs=0.02:bs=-0.06:rm=0.04:bm=-0.04"
+    },
+    {
+     "id": "n",
+     "type": "text",
+     "text": "Watch for the crown...",
+     "size": 84,
+     "x": 540,
+     "y": 1437,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Every September, the cows come home after a whole summer up in the Alps.",
+      "show": [
+       "p",
+       "n"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "video",
+     "full": true,
+     "src": "/home/user/fg_src/TQcMKbHcwhc_cut.mp4",
+     "start": 20.0,
+     "dur": 5.5,
+     "crop": [
+      0,
+      0,
+      608,
+      1080
+     ],
+     "w": 1080,
+     "h": 1920,
+     "x": 540,
+     "y": 960,
+     "vol": 0,
+     "grade": "eq=contrast=1.08:saturation=1.4:gamma=1.15:brightness=0.03,colorbalance=rs=0.06:gs=0.02:bs=-0.06:rm=0.04:bm=-0.04"
+    },
+    {
+     "id": "n",
+     "type": "text",
+     "text": "Summer in the Alps is over",
+     "size": 76,
+     "x": 540,
+     "y": 1442
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "In the Allgäu, it's called the",
+      "show": [
+       "p"
+      ]
+     },
+     {
+      "de": "Viehscheid.",
+      "show": [
+       "w",
+       "m"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "video",
+     "full": true,
+     "src": "/home/user/fg_src/TQcMKbHcwhc_cut.mp4",
+     "start": 6.5,
+     "dur": 4,
+     "crop": [
+      0,
+      0,
+      608,
+      1080
+     ],
+     "w": 1080,
+     "h": 1920,
+     "x": 540,
+     "y": 960,
+     "vol": 0,
+     "grade": "eq=contrast=1.08:saturation=1.4:gamma=1.15:brightness=0.03,colorbalance=rs=0.06:gs=0.02:bs=-0.06:rm=0.04:bm=-0.04"
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "der Viehscheid",
+     "size": 150,
+     "x": 540,
+     "y": 1298,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= cattle homecoming",
+     "size": 66,
+     "x": 540,
+     "y": 1449
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "And this is the",
+      "show": [
+       "p"
+      ]
+     },
+     {
+      "de": "Kranzrind,",
+      "show": [
+       "w"
+      ]
+     },
+     {
+      "en": "the lead cow with the flower crown.",
+      "show": [
+       "m"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "video",
+     "full": true,
+     "src": "/home/user/fg_src/crown_cut.mp4",
+     "start": 2.7,
+     "dur": 6.5,
+     "crop": [
+      776,
+      0,
+      608,
+      1080
+     ],
+     "w": 1080,
+     "h": 1920,
+     "x": 540,
+     "y": 960,
+     "vol": 0
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "das Kranzrind",
+     "size": 150,
+     "x": 540,
+     "y": 1298,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= the crowned lead cow",
+     "size": 66,
+     "x": 540,
+     "y": 1449
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "She only gets it if no animal was lost all summer.",
+      "show": [
+       "p",
+       "n"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "video",
+     "full": true,
+     "src": "/home/user/fg_src/crown_cut.mp4",
+     "start": 9.0,
+     "dur": 6,
+     "crop": [
+      536,
+      0,
+      608,
+      1080
+     ],
+     "w": 1080,
+     "h": 1920,
+     "x": 540,
+     "y": 960,
+     "vol": 0
+    },
+    {
+     "id": "n",
+     "type": "text",
+     "text": "Only if EVERY cow made it home",
+     "size": 70,
+     "x": 540,
+     "y": 1446,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "So, would you wait in this traffic jam?",
+      "show": [
+       "p",
+       "q"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "p",
+     "type": "video",
+     "full": true,
+     "src": "/home/user/fg_src/TQcMKbHcwhc_cut.mp4",
+     "start": 33.0,
+     "dur": 5,
+     "crop": [
+      0,
+      0,
+      608,
+      1080
+     ],
+     "w": 1080,
+     "h": 1920,
+     "x": 540,
+     "y": 960,
+     "vol": 0,
+     "grade": "eq=contrast=1.08:saturation=1.4:gamma=1.15:brightness=0.03,colorbalance=rs=0.06:gs=0.02:bs=-0.06:rm=0.04:bm=-0.04"
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "Would you wait?",
+     "size": 96,
+     "x": 540,
+     "y": 1430,
+     "colour": [
+      255,
+      204,
+      0
+     ]
+    }
+   ]
+  }
+ ],
+ "music": "/mnt/project-files/fast_german/cache/music/kpop_beat_c.mp3",
+ "bg": "road",
+ "tight": 0.5
+}

@@ -45,8 +45,8 @@ def caps(items, bottom=1490):
     return els[::-1]
 
 
-def shot(i, src, start, items, x0=150, dur=6, speed=None):
-    f = F(i, src, start, dur, (x0, 230, 304, 540))
+def shot(i, src, start, items, x0=150, dur=6, speed=None, crop=None, grade=None):
+    f = F(i, src, start, dur, crop or (x0, 230, 304, 540), grade=grade)
     if speed: f["speed"] = speed
     return [f] + caps(items)     # 9:16 window between the StZ logo and subtitles
 
@@ -70,5 +70,27 @@ regatta = {"id": "s01_kuerbisregatta", "title": "Germans race across a lake… i
  {"lines": [[{"en": "So, would you climb into a", "show": ["p", "q"]}, {"de": "Kürbis?", "show": ["w", "m"]}]],
   "els": shot("p", R, 18.0, [("q", "t", "Would you climb in?", 90, Y), ("w", "w", "der Kürbis", 160, None), ("m", "t", "= pumpkin", 66, None)], dur=4)}]}
 
-for d in (regatta,):
+A = "TQcMKbHcwhc_cut.mp4"   # Namaragina, Almabtrieb in Wertach (Allgäu) 2026, 608x1080, grey day: warm, brighter grade
+B = "crown_cut.mp4"          # wertachtv q7nj92iArQg 1:19-1:38, crowned lead cow walking at the camera, 1920x1080
+WARM = "eq=contrast=1.08:saturation=1.4:gamma=1.15:brightness=0.03,colorbalance=rs=0.06:gs=0.02:bs=-0.06:rm=0.04:bm=-0.04"
+FA = (0, 0, 608, 1080)
+FB1 = (776, 0, 608, 1080)   # crowned cow walks x 1050-1240 here; wertach-tv mark (x > 1680) stays out
+FB2 = (536, 0, 608, 1080)   # then drifts left to x 640-960
+cows = {"id": "s02_viehscheid", "title": "Rush hour in a German village 🐄👑", "badge": False, "scenes": [
+ {"lines": [[{"en": "This is rush hour in a German village.", "show": ["h", "p"]}]],
+  "els": shot("p", A, 2.0, [], crop=FA, dur=4.5, grade=WARM) + [T("h", "Rush hour in Germany", 380, 96, Y)]},
+ {"lines": [[{"en": "A whole herd, straight through town. But watch for the one with the crown.", "show": ["p", "n"]}]],
+  "els": shot("p", A, 11.0, [("n", "t", "Watch for the crown...", 84, Y)], crop=FA, dur=5.5, grade=WARM)},
+ {"lines": [[{"en": "Every September, the cows come home after a whole summer up in the Alps.", "show": ["p", "n"]}]],
+  "els": shot("p", A, 20.0, [("n", "t", "Summer in the Alps is over", 76, None)], crop=FA, dur=5.5, grade=WARM)},
+ {"lines": [[{"en": "In the Allgäu, it's called the", "show": ["p"]}, {"de": "Viehscheid.", "show": ["w", "m"]}]],
+  "els": shot("p", A, 6.5, [("w", "w", "der Viehscheid", 150, Y), ("m", "t", "= cattle homecoming", 66, None)], crop=FA, dur=4, grade=WARM)},
+ {"lines": [[{"en": "And this is the", "show": ["p"]}, {"de": "Kranzrind,", "show": ["w"]}, {"en": "the lead cow with the flower crown.", "show": ["m"]}]],
+  "els": shot("p", B, 2.7, [("w", "w", "das Kranzrind", 150, Y), ("m", "t", "= the crowned lead cow", 66, None)], crop=FB1, dur=6.5)},
+ {"lines": [[{"en": "She only gets it if no animal was lost all summer.", "show": ["p", "n"]}]],
+  "els": shot("p", B, 9.0, [("n", "t", "Only if EVERY cow made it home", 70, Y)], crop=FB2, dur=6)},
+ {"lines": [[{"en": "So, would you wait in this traffic jam?", "show": ["p", "q"]}]],
+  "els": shot("p", A, 33.0, [("q", "t", "Would you wait?", 96, Y)], crop=FA, dur=5, grade=WARM)}]}
+
+for d in (regatta, cows):
     json.dump({**d, **BASE}, open(os.path.join(HERE, d["id"] + ".json"), "w"), indent=1, ensure_ascii=False)
