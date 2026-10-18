@@ -264,15 +264,44 @@ def ease(t):
     return 1 - (1 - t) ** 3
 
 
-def video_frames(el):
-    """Real footage in a card (user 2026-10-16: spectacle hooks). el: src (absolute), start, dur, crop [x,y,w,h] in source px.
-    Frames are decoded once at card size (30 fps) and played from the moment the element appears."""
-    w, h = el["w"], el["h"]
-    vf = (f"crop={el['crop'][2]}:{el['crop'][3]}:{el['crop'][0]}:{el['crop'][1]}," if el.get("crop") else "") + \
-         f"scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},fps={FPS},eq=contrast=1.06:saturation=1.08,unsharp=5:5:0.6"
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(el.get("start", 0)), "-t", str(el.get("dur", 6)), "-i", el["src"],
-                          "-vf", vf, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True, check=True).stdout
-    return np.frombuffer(raw, np.uint8).reshape(-1, h, w, 3)
+class video_frames:
+    """Real footage (user 2026-10-16: spectacle hooks). el: src (absolute), start, dur, crop [x,y,w,h] in source px.
+    Decoded lazily at element size (30 fps) through one ffmpeg pipe, so full-frame clips don't sit in memory;
+    frames are only ever asked for in order, and the last one holds once the clip runs out."""
+    def __init__(self, el):
+        self.el, self.proc, self.idx, self.last = el, None, -1, None
+
+    def get(self, i):
+        el = self.el
+        w, h = el["w"], el["h"]
+        if self.proc is None:
+            vf = (f"crop={el['crop'][2]}:{el['crop'][3]}:{el['crop'][0]}:{el['crop'][1]}," if el.get("crop") else "") + \
+                 (f"setpts=PTS/{el['speed']}," if el.get("speed") else "") + \
+                 f"scale={w}:{h}:force_original_aspect_ratio=increase:flags=lanczos,crop={w}:{h},fps={FPS}," + \
+                 el.get("grade", "eq=contrast=1.06:saturation=1.08") + ",unsharp=5:5:0.6"
+            self.proc = subprocess.Popen(["ffmpeg", "-v", "error", "-ss", str(el.get("start", 0)),
+                                          "-t", str(el.get("dur", 6) * el.get("speed", 1)),
+                                          "-i", el["src"], "-vf", vf, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
+                                         stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+        while self.idx < i:
+            raw = self.proc.stdout.read(w * h * 3)
+            if len(raw) < w * h * 3:
+                break
+            self.last = np.frombuffer(raw, np.uint8).reshape(h, w, 3)
+            self.idx += 1
+        return self.last
+
+
+_SHADE = {}
+
+
+def shade(w, h):
+    """Soft dark bands at the top and bottom of full-frame footage so the badge and captions stay readable."""
+    if (w, h) not in _SHADE:
+        y = np.arange(h)[:, None] / h
+        a = np.clip(np.maximum((0.16 - y) / 0.16 * 0.45, (y - 0.55) / 0.45 * 0.55), 0, 1)
+        _SHADE[(w, h)] = Image.fromarray(np.broadcast_to((a * 255).astype(np.uint8), (h, w)).copy(), "L")
+    return _SHADE[(w, h)]
 
 
 def draw_el(frame, built, el, local, appear, scene_len):
@@ -291,7 +320,11 @@ def draw_el(frame, built, el, local, appear, scene_len):
         built = ("img", shadow(im, 8, 80, 4))
     if built[0] == "video":
         frames, (w, h, border) = built[1], built[2]
-        img = Image.fromarray(frames[min(len(frames) - 1, max(0, int((local - appear) * FPS)))]).convert("RGBA")
+        img = Image.fromarray(frames.get(max(0, int((local - appear) * FPS)))).convert("RGBA")
+        if el.get("full"):                            # footage fills the frame (user 2026-10-18): hard cut, no card
+            img = Image.composite(Image.new("RGBA", (w, h), (0, 0, 0, 255)), img, shade(w, h))
+            frame.alpha_composite(img, (int(cx - w / 2), int(cy - h / 2)))
+            return
         card = Image.new("RGBA", (w + 2 * border, h + 2 * border))
         ImageDraw.Draw(card).rounded_rectangle((0, 0, card.width - 1, card.height - 1), 40, fill=(255, 255, 255, 255))
         card.alpha_composite(rounded(img, 32), (border, border))
@@ -475,9 +508,11 @@ def render(spec_path, out_path):
             at = tl["start"] + tl["shows"].get(e["id"], 0)
             d = min(e.get("dur", 6), tl["hides"].get(e["id"], 1e9) - tl["shows"].get(e["id"], 0),
                     (timeline[timeline.index(tl) + 1]["start"] if tl is not timeline[-1] else total) - at)
-            inputs += ["-ss", str(e.get("start", 0)), "-t", str(d), "-i", e["src"]]
+            sp = e.get("speed", 1)                    # slow-motion clips (speed < 1) keep their sound in step
+            inputs += ["-ss", str(e.get("start", 0)), "-t", str(d * sp), "-i", e["src"]]
             idx = sum(1 for x in inputs if x == "-i") - 1
-            fl.append(f"[{idx}:a]aformat=sample_rates=48000:channel_layouts=stereo,volume={e.get('vol', 0.3)},"
+            fl.append(f"[{idx}:a]aformat=sample_rates=48000:channel_layouts=stereo,{f'atempo={sp},' if sp != 1 else ''}"
+                      f"{e.get('afilter', '') + ',' if e.get('afilter') else ''}volume={e.get('vol', 0.3)},"
                       f"afade=t=in:d=0.15,afade=t=out:st={max(0, d - 0.4)}:d=0.4,adelay={int(at * 1000)}:all=1[v{idx}]")
             mix.append(f"[v{idx}]")
     mix.append("[music]")
@@ -531,10 +566,13 @@ def render(spec_path, out_path):
             frame = bg.copy()
         local = now - tl["start"]
         L = tl["end"] - tl["start"] + (0 if spec.get("tight") else SCENE_GAP)
-        for e in tl["scene"]["els"]:
+        els = sorted(tl["scene"]["els"], key=lambda e: not e.get("full"))
+        for k, e in enumerate(els):
             if local >= tl["hides"].get(e["id"], 1e9):
                 continue
             draw_el(frame, built[si][e["id"]], e, local, tl["shows"].get(e["id"], e.get("at", 0.0) - 0.1), L)
+            if e.get("full") and road and W < H and (k + 1 == len(els) or not els[k + 1].get("full")):
+                frame.alpha_composite(badge, ((W - 150) // 2 - 28, 110 - 28))   # pretzel stays on top of the footage
         rgb = frame.convert("RGB")
         if now < 0.5 and not spec.get("tight"):          # fade up from dark (news shorts: graphic pops at 0 s)
             rgb = Image.blend(Image.new("RGB", (W, H)), rgb, now / 0.5)

@@ -16,35 +16,36 @@
    ],
    "els": [
     {
+     "id": "p",
+     "type": "video",
+     "full": true,
+     "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
+     "start": 39.0,
+     "dur": 5,
+     "crop": [
+      110,
+      230,
+      405,
+      540
+     ],
+     "w": 1080,
+     "h": 1440,
+     "x": 540,
+     "y": 960,
+     "vol": 0.28
+    },
+    {
      "id": "h",
      "type": "text",
      "text": "They race in PUMPKINS",
-     "size": 92,
+     "size": 96,
      "x": 540,
-     "y": 330,
+     "y": 360,
      "colour": [
       255,
       204,
       0
      ]
-    },
-    {
-     "id": "p",
-     "type": "video",
-     "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
-     "start": 39.4,
-     "dur": 6,
-     "crop": [
-      0,
-      250,
-      608,
-      455
-     ],
-     "w": 960,
-     "h": 700,
-     "x": 540,
-     "y": 760,
-     "vol": 0.28
     }
    ]
   },
@@ -75,19 +76,20 @@
     {
      "id": "p",
      "type": "video",
+     "full": true,
      "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
-     "start": 12.0,
-     "dur": 6,
+     "start": 11.0,
+     "dur": 4,
      "crop": [
-      0,
+      70,
       230,
-      608,
-      490
+      405,
+      540
      ],
-     "w": 960,
-     "h": 774,
+     "w": 1080,
+     "h": 1440,
      "x": 540,
-     "y": 687,
+     "y": 960,
      "vol": 0.28
     },
     {
@@ -96,7 +98,7 @@
      "de": "Kürbisregatta",
      "size": 160,
      "x": 540,
-     "y": 1211,
+     "y": 1295,
      "colour": [
       255,
       204,
@@ -109,7 +111,7 @@
      "text": "= pumpkin regatta · Ludwigsburg",
      "size": 62,
      "x": 540,
-     "y": 1376
+     "y": 1451
     }
    ]
   },
@@ -129,28 +131,29 @@
     {
      "id": "p",
      "type": "video",
+     "full": true,
      "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
-     "start": 6.4,
+     "start": 4.0,
      "dur": 6,
      "crop": [
-      0,
+      100,
       230,
-      608,
-      490
+      405,
+      540
      ],
-     "w": 960,
-     "h": 774,
+     "w": 1080,
+     "h": 1440,
      "x": 540,
-     "y": 687,
+     "y": 960,
      "vol": 0.28
     },
     {
      "id": "n",
      "type": "text",
      "text": "60 racers",
-     "size": 110,
+     "size": 120,
      "x": 540,
-     "y": 1180,
+     "y": 1415,
      "colour": [
       255,
       204,
@@ -181,19 +184,20 @@
     {
      "id": "p",
      "type": "video",
+     "full": true,
      "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
-     "start": 20.6,
-     "dur": 8,
+     "start": 22.0,
+     "dur": 9,
      "crop": [
-      0,
+      90,
       230,
-      608,
-      490
+      405,
+      540
      ],
-     "w": 960,
-     "h": 774,
+     "w": 1080,
+     "h": 1440,
      "x": 540,
-     "y": 687,
+     "y": 960,
      "vol": 0.28
     },
     {
@@ -202,7 +206,7 @@
      "de": "350+ kg",
      "size": 190,
      "x": 540,
-     "y": 1229,
+     "y": 1265,
      "colour": [
       255,
       204,
@@ -215,7 +219,7 @@
      "text": "...and some flipped over",
      "size": 72,
      "x": 540,
-     "y": 1418
+     "y": 1445
     }
    ]
   },
@@ -246,20 +250,22 @@
     {
      "id": "p",
      "type": "video",
+     "full": true,
      "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
-     "start": 26.8,
-     "dur": 7,
+     "start": 44.0,
+     "dur": 5.4,
      "crop": [
-      0,
+      120,
       230,
-      608,
-      490
+      405,
+      540
      ],
-     "w": 960,
-     "h": 774,
+     "w": 1080,
+     "h": 1440,
      "x": 540,
-     "y": 687,
-     "vol": 0.28
+     "y": 960,
+     "vol": 0.28,
+     "speed": 0.55
     },
     {
      "id": "w",
@@ -267,7 +273,7 @@
      "de": "Schnapsidee",
      "size": 170,
      "x": 540,
-     "y": 1217,
+     "y": 1279,
      "colour": [
       255,
       204,
@@ -280,7 +286,7 @@
      "text": "= a crazy idea",
      "size": 70,
      "x": 540,
-     "y": 1393
+     "y": 1446
     }
    ]
   },
@@ -300,19 +306,20 @@
     {
      "id": "p",
      "type": "video",
+     "full": true,
      "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
-     "start": 32.6,
+     "start": 33.0,
      "dur": 7,
      "crop": [
-      0,
+      150,
       230,
-      608,
-      490
+      405,
+      540
      ],
-     "w": 960,
-     "h": 774,
+     "w": 1080,
+     "h": 1440,
      "x": 540,
-     "y": 687,
+     "y": 960,
      "vol": 0.28
     },
     {
@@ -321,7 +328,7 @@
      "text": "23rd pumpkin regatta",
      "size": 84,
      "x": 540,
-     "y": 1164
+     "y": 1437
     }
    ]
   },
@@ -353,19 +360,20 @@
     {
      "id": "p",
      "type": "video",
+     "full": true,
      "src": "/home/user/fg_src/WNdEpxh65Lo.mp4",
-     "start": 45.0,
-     "dur": 6,
+     "start": 18.0,
+     "dur": 4.4,
      "crop": [
-      0,
+      100,
       230,
-      608,
-      490
+      405,
+      540
      ],
-     "w": 960,
-     "h": 774,
+     "w": 1080,
+     "h": 1440,
      "x": 540,
-     "y": 687,
+     "y": 960,
      "vol": 0.28
     },
     {
@@ -374,7 +382,7 @@
      "text": "Would you get in?",
      "size": 90,
      "x": 540,
-     "y": 1167,
+     "y": 1118,
      "colour": [
       255,
       204,
@@ -387,7 +395,7 @@
      "de": "der Kürbis",
      "size": 160,
      "x": 540,
-     "y": 1349
+     "y": 1291
     },
     {
      "id": "m",
@@ -395,7 +403,7 @@
      "text": "= pumpkin",
      "size": 66,
      "x": 540,
-     "y": 1516
+     "y": 1449
     }
    ]
   },
