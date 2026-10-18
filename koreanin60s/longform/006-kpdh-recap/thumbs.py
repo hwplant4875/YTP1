@@ -20,12 +20,12 @@ T = {
 <div class=a style="inset:0;background:linear-gradient(0deg,rgba(0,0,0,.8) 0%,transparent 40%)"></div>
 <div class="a s" style="left:44px;top:556px;font-size:118px;line-height:1;white-space:nowrap">EVERY <span style="{HL}">RECORD</span></div>
 <img class=a src="{STK}/trophy.png" style="right:22px;bottom:14px;width:240px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))">""",
-# 4c: "How KPop Demon Hunters Went From Netflix to 2 Oscars in 1 Year": Mira's face huge + the real Oscar statuettes, "2 OSCARS", 뱁새
-"4c": f"""<div class=ph style="inset:0;background-image:url({IMG}/og_deadline.jpg);background-size:190%;background-position:48% 18%"></div>
-<div class=a style="right:34px;top:40px;width:420px;height:470px;border-radius:22px;border:8px solid #fff;background:url({IMG}/y_uH5bGSSw_l0_maxres2.jpg) 47% 78%/auto 210%;transform:rotate(4deg);box-shadow:0 16px 40px rgba(0,0,0,.7)"></div>
-<div class=a style="inset:0;background:linear-gradient(0deg,rgba(0,0,0,.8) 0%,transparent 34%)"></div>
-<div class="a s" style="left:44px;top:556px;font-size:118px;line-height:1;white-space:nowrap">2 <span style="{HL}">OSCARS</span></div>
-<img class=a src="{STK}/excited.png" style="right:22px;bottom:14px;width:220px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))">""",
+# 4c: "How KPop Demon Hunters Went From Netflix to 2 Oscars in 1 Year": Rumi singing (cartoon) next to EJAE, her real voice, singing at the Oscars
+"4c": f"""<div class=ph style="left:0;top:0;width:650px;height:720px;background-image:url({IMG}/y_uH5bGSSw_l0_maxres1.jpg);background-size:auto 118%;background-position:38% 10%"></div>
+<div class=ph style="left:640px;top:0;width:640px;height:720px;background-image:url({IMG}/y_kes94PVdEBw_maxres2.jpg);background-size:auto 112%;background-position:62% 20%;border-left:8px solid #fff"></div>
+<div class=a style="inset:0;background:linear-gradient(0deg,rgba(0,0,0,.85) 0%,transparent 32%)"></div>
+<div class="a s" style="left:0;width:1280px;text-align:center;top:566px;font-size:118px;line-height:1;white-space:nowrap">2 <span style="{HL}">OSCARS</span></div>
+<img class=a src="{STK}/excited.png" style="right:18px;bottom:12px;width:190px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))">""",
 }
 for k, body in T.items():
     open(f"{OUT}/{k}.html", "w").write(f"<!doctype html><html><head><meta charset=utf-8><style>{CSS}</style></head><body>{body}</body></html>")
