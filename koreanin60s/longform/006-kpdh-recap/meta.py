@@ -18,7 +18,7 @@ IMGS = ", ".join(srcs).replace("Ethan Doyle White, CC BY-SA 4.0", "National Muse
 mm = lambda s: f"{int(s) // 60}:{int(s) % 60:02d}"
 ch = ["0:00 One year ago, nobody knew HUNTR/X"] + [f"{mm(e['t'] + 0.1)} {e['q']}" for e in ev if e["k"] == "C"]
 outro = next(e for e in ev if e.get("ch") == 9); ch.append(f"{mm(outro['t'])} What's your favorite moment?")
-TITLES = ["The Year KPop Demon Hunters Took Over the World 🏆", "How a Netflix Cartoon Beat Real K-pop (1 Year Later)", "KPop Demon Hunters: From Netflix to 2 Oscars in 1 Year"]
+TITLES = ["The Entire History of KPop Demon Hunters in 8 Minutes", "Every Record KPop Demon Hunters Broke in Its First Year", "How KPop Demon Hunters Went From Netflix to 2 Oscars in 1 Year"]
 desc = f"""One year ago, almost nobody had heard of HUNTR/X. Then a cartoon girl group topped the Billboard Hot 100, packed theaters for a sing-along, became Netflix's most-watched movie ever and won two Oscars. Here's the whole year of KPop Demon Hunters, from its quiet Netflix release to the sequel and the world tour, with a little Korean along the way 🇰🇷
 
 {chr(10).join(ch)}
