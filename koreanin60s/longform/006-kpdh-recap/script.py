@@ -11,13 +11,13 @@ def B(text, img, src, cnt=None): return {"k": "B", "text": text, "img": img, "sr
 
 NF, SPA = "Netflix", "Sony Pictures Animation / Netflix"
 # timeline months: 0 = Jun 2025 ... 16 = Oct 2026
-HOOK = [
-    [("One year ago, almost nobody had heard of HUNTR/X.", P("og_mbw", SPA, "Who are <em>HUNTR/X</em>?"))],
-    [("Then a cartoon girl group beat real pop stars on the charts,", B("<em>#1</em> on the Billboard Hot 100", "y_yebNIHKAC4A_maxres2", SPA)),
-     ("packed movie theaters,", P("og_won", SPA, "Sold-out <em>sing-alongs</em>")),
-     ("and walked away with two Oscars.", P("y_uH5bGSSw_l0_maxres2", "The Hollywood Reporter", "<em>2</em> Oscars 🏆"))],
-    [("This is the year KPop Demon Hunters took over the world.", B("The Year <em>KPop Demon Hunters</em><br>Took Over the World", "y_AzCAwdp1uIQ_maxres3", NF)),
-     ("Let's go back to where it all started.", P("y_oDSEGkT6J-0_maxresdefault", NF))],
+HOOK = [  # cold open: payoff first, fast cuts, then the question
+    [("This cartoon K-pop movie won two Oscars.", P("y_2ftx6oQzfoI_maxresdefault", "ABC / A.M.P.A.S.", "<em>2</em> Oscars 🏆"))],
+    [("Their song Golden hit number one in more than thirty countries,", P("y_6m9Ur3bo7bY_maxresdefault", "TODAY / NBC", "<em>#1</em> in 30+ countries")),
+     ("fans paid to watch a movie that was already free,", P("y_AzCAwdp1uIQ_maxres1", NF, "Sold-out <em>sing-alongs</em> 🎤")),
+     ("and it became the most-watched movie in Netflix history.", P("y_AzCAwdp1uIQ_maxres2", NF, "Netflix's <em>most-watched</em> movie ever"))],
+    [("But one year ago? Nobody knew who they were.", P("og_mbw", SPA, "Who are <em>HUNTR/X</em>?"))],
+    [("This is the entire story, from day one to the Oscars and beyond.", P("y_oDSEGkT6J-0_maxresdefault", NF))],
 ]
 CHAPTERS = [
   {"q": "Where did it all start?", "date": "June 2025", "m": (0, 0.6), "pose": "popcorn_tv", "beats": [
@@ -48,7 +48,7 @@ CHAPTERS = [
     [("The album itself debuted at number eight on the Billboard 200, the best debut for any soundtrack that year.", N("#8", "Billboard 200 debut · best soundtrack debut of 2025", "y_2FS3JAPTKXs_maxres3", NF))],
     [("Even the villains had a hit.", P("y_2FS3JAPTKXs_maxres1", NF, "Even the <em>villains</em>")),
      ("Your Idol took number one on the U.S. Spotify chart, the highest ever for a male K-pop group.", P("y_cWppAbqm9I8_maxres2", SPA, "'Your Idol' · #1 on U.S. Spotify"))],
-    [("And in Korea, Golden scored a perfect all-kill: number one on every major chart at once.", P("y_LTbg4Wps4GE_maxres3", "Seoul Metropolitan Government", "Perfect <em>all-kill</em> in Korea 🇰🇷"))],
+    [("And in Korea, Golden scored a perfect all-kill: number one on every major chart at once.", P("y_LTbg4Wps4GE_maxresdefault", "Seoul Metropolitan Government", "Perfect <em>all-kill</em> in Korea 🇰🇷"))],
   ]},
   {"q": "Why would anyone pay to watch a free movie?", "date": "August 2025", "m": (2, 2.8), "pose": "popcorn_tv", "ko": ("극장", "geuk-jang", "movie theater", "Korean moment! 극장. It means movie theater."), "beats": [
     [("Here's the strangest part. The movie was free on Netflix.", B("It was <em>free</em> on Netflix 📺", "y_6m9Ur3bo7bY_maxres3", "TODAY / NBC"))],
@@ -116,6 +116,9 @@ CHAPTERS = [
 ]
 OUTRO = [
     [("From a quiet Netflix release to two Oscars and a world tour, all in one year.", P("y_56uqT8Hmjo0_maxres2", "ABC / A.M.P.A.S.", "One year. <em>One phenomenon.</em>")),
-     ("Which moment was your favorite? Tell me in the comments,", B("Your favorite moment? 👇", "y_3JTVQTk36R8_maxres2", SPA)),
+    ],
+    [("And honestly? This story is far from over.", P("y_X5AqywbwReM_maxres1", "A.M.P.A.S.", "The story is <em>far from over</em>")),
+     ("A sequel, a world tour, and whatever comes next, we'll be watching.", P("y_r7TA1mn91F8_maxresdefault", "NBC", "We'll be <em>watching</em> 👀"))],
+    [("Which moment was your favorite? Tell me in the comments,", B("Your favorite moment? 👇", "y_3JTVQTk36R8_maxres2", SPA)),
      ("and subscribe to Korean in 60s for more Korea news and Korean you can actually use.", {"k": "O"})],
 ]

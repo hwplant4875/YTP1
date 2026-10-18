@@ -1,116 +1,121 @@
 <!doctype html><html><head><meta charset="utf-8"><style>
-/* KPDH recap long-form, 1920x1080. Dark night-sky look (HUNTR/X pink, violet, gold), one timeline running along the bottom. */
+/* KPDH recap long-form v2, 1920x1080. Sources full-frame, centered captions, a rolling month counter top-left, Netflix views / awards chips
+   top-right, 뱁새 in the bottom-right corner (pops in at each chapter). Channel font: Baloo 2 (Latin) + Jua (Hangul), both rounded. */
+@font-face{font-family:'Baloo 2';font-weight:400 800;src:url('file:///home/user/YTP1/koreanin60s/assets/fonts/Baloo2.ttf')}
+@font-face{font-family:'Jua';src:url('file:///home/user/YTP1/koreanin60s/assets/fonts/Jua.ttf')}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:1920px;height:1080px;overflow:hidden;background:#0d0a1f;font-family:"YouTube Sans","Pretendard",sans-serif;color:#fff}
-#sky{position:absolute;inset:0;background:radial-gradient(900px 600px at 15% 20%,rgba(255,70,170,.22),transparent 70%),radial-gradient(800px 700px at 85% 75%,rgba(120,80,255,.25),transparent 70%),radial-gradient(600px 400px at 70% 10%,rgba(255,200,80,.10),transparent 70%),#0d0a1f}
-.lay{position:absolute;inset:0;opacity:0}
-.bg{position:absolute;inset:-40px;background-size:cover;background-position:center}
-.card{position:absolute;left:90px;top:70px;width:1380px;height:776px;border-radius:26px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 3px rgba(255,255,255,.08)}
-.card .ph{position:absolute;inset:0;background-size:cover;background-position:center;transform-origin:50% 45%}
-.card .vbg{position:absolute;inset:-30px;background-size:cover;background-position:center}
-.card .vfg{position:absolute;top:0;height:100%;left:50%;transform:translateX(-50%);background-size:cover;background-position:center;box-shadow:0 0 60px rgba(0,0,0,.7)}
-.full .card{left:0;top:0;width:1920px;height:1080px;border-radius:0}
-.cap{position:absolute;left:130px;top:742px;max-width:1300px;font-weight:900;font-size:64px;line-height:1.08;padding:14px 30px 18px;border-radius:18px;background:rgba(10,6,28,.72);
- -webkit-text-stroke:0;text-shadow:0 4px 0 #000,0 0 20px rgba(0,0,0,.6)}
-.cap em,.big em,.q em{font-style:normal;color:#ffd84a}
-.dim{position:absolute;inset:0;background:rgba(8,4,24,.62)}
-.big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 80px}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#0d0a1f;font-family:"Baloo 2","Jua","Noto Color Emoji",sans-serif;font-weight:800;color:#fff}
+#sky{position:absolute;inset:0;background:radial-gradient(900px 600px at 15% 20%,rgba(255,70,170,.22),transparent 70%),radial-gradient(800px 700px at 85% 75%,rgba(120,80,255,.25),transparent 70%),#0d0a1f}
+.lay{position:absolute;inset:0;opacity:0;overflow:hidden}
+.ph{position:absolute;inset:0;background-size:cover;background-position:center;transform-origin:50% 45%}
+.vbg{position:absolute;inset:-40px;background-size:cover;background-position:center}
+.vfg{position:absolute;top:0;height:100%;left:50%;background-size:cover;background-position:center;box-shadow:0 0 80px rgba(0,0,0,.8);transform-origin:50% 45%}
+.grad{position:absolute;inset:0;background:linear-gradient(0deg,rgba(6,3,18,.82) 0%,rgba(6,3,18,.35) 24%,transparent 42%),linear-gradient(180deg,rgba(6,3,18,.5) 0%,transparent 16%)}
+.dim{position:absolute;inset:0;background:rgba(8,4,24,.6)}
 .stroke{paint-order:stroke fill;-webkit-text-stroke:14px #000}
-.num{font-weight:900;font-size:250px;line-height:1;color:#ffd84a}
-.lbl{font-weight:900;font-size:60px;margin-top:26px;max-width:1200px}
-.stmt{font-weight:900;font-size:104px;line-height:1.12}
-.stmt small{display:block;font-size:52px;margin-top:22px;color:#ddd}
-.paper{position:absolute;left:780px;top:430px;width:1240px;background:#fff;border-radius:14px;padding:34px;box-shadow:0 30px 90px rgba(0,0,0,.7)}
-.paper img{width:100%;display:block}
-.paper .src{color:#555;font:700 30px "YouTube Sans",sans-serif;margin-bottom:16px;letter-spacing:.04em;text-transform:uppercase}
-/* right column */
-#side{position:absolute;left:1500px;top:70px;width:340px;height:776px}
-.pill{display:inline-block;padding:10px 22px;border-radius:40px;background:linear-gradient(90deg,#ff3fa4,#8b5cff);font-weight:900;font-size:30px;white-space:nowrap}
-.ctr{margin-top:22px;padding:20px 24px;border-radius:20px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.12)}
-.ctr .k{font-size:28px;font-weight:700;color:#cfc6ff}
-.ctr .v{font-size:76px;font-weight:900;color:#ffd84a;line-height:1.05;margin-top:4px}
-#stk{position:absolute;left:1520px;top:560px;width:300px;height:300px;background-size:contain;background-repeat:no-repeat;background-position:center bottom;filter:drop-shadow(0 12px 18px rgba(0,0,0,.5))}
-/* timeline */
-#tl{position:absolute;left:110px;top:928px;width:1700px;height:120px}
-#tl .bar{position:absolute;left:0;top:30px;width:100%;height:8px;border-radius:4px;background:rgba(255,255,255,.14)}
-#tl .fill{position:absolute;left:0;top:30px;height:8px;border-radius:4px;background:linear-gradient(90deg,#ff3fa4,#ffd84a);box-shadow:0 0 18px #ff3fa4}
-#tl .tick{position:absolute;top:24px;width:4px;height:20px;margin-left:-2px;background:rgba(255,255,255,.35);border-radius:2px}
-#tl .ml{position:absolute;top:58px;width:120px;margin-left:-60px;text-align:center;font-size:26px;font-weight:700;color:rgba(255,255,255,.55)}
-#tl .ml.yr{color:#ffd84a}
-#tl .dot{position:absolute;top:16px;width:36px;height:36px;margin-left:-18px;border-radius:50%;background:#fff;box-shadow:0 0 0 7px rgba(255,63,164,.55),0 0 34px 10px rgba(255,63,164,.8)}
+.cap{position:absolute;left:50%;bottom:66px;max-width:1560px;width:max-content;text-align:center;font-size:74px;line-height:1.05;padding:16px 44px 6px;border-radius:30px;background:rgba(10,6,28,.88);box-shadow:0 12px 40px rgba(0,0,0,.5);paint-order:stroke fill;-webkit-text-stroke:10px #000}
+.hook .cap{font-size:92px;bottom:80px}
+em{font-style:normal;color:#F7B8CA}
+.big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 120px}
+.num{font-size:280px;line-height:.9;color:#F7B8CA}
+.lbl{font-size:70px;line-height:1.05;margin-top:30px;max-width:1500px}
+.stmt{font-size:118px;line-height:1.08}
+.stmt small{display:block;font-size:60px;margin-top:24px;color:#eee}
+.paper{position:absolute;left:960px;top:520px;width:1180px;background:#fff;border-radius:22px;padding:30px;box-shadow:0 30px 90px rgba(0,0,0,.7)}
+.paper img{width:100%;display:block;border-radius:8px}
+.paper .src{color:#555;font-size:32px;margin-bottom:12px;letter-spacing:.04em;text-transform:uppercase}
+/* rolling month counter */
+#date{position:absolute;left:44px;top:38px;display:flex;align-items:center;gap:18px;padding:10px 26px 10px 14px;border-radius:60px;background:rgba(12,8,30,.72);border:3px solid #F7B8CA;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+#date .chn{padding:4px 18px 0;border-radius:40px;background:#F7B8CA;color:#1a1030;font-size:34px;line-height:52px;white-space:nowrap}
+#date .win{height:64px;overflow:hidden;width:250px}
+#date .strip div{height:64px;line-height:70px;font-size:52px;white-space:nowrap}
+/* counters */
+#chips{position:absolute;right:44px;top:38px;display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+.chip{padding:6px 28px 2px;border-radius:60px;background:rgba(12,8,30,.72);border:3px solid rgba(255,255,255,.25);font-size:46px;line-height:66px;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.45);transform-origin:100% 50%}
+.chip b{color:#F7B8CA;font-weight:800}
+#stk{position:absolute;right:26px;bottom:18px;width:210px;height:210px;background-size:contain;background-repeat:no-repeat;background-position:center bottom;filter:drop-shadow(0 12px 18px rgba(0,0,0,.55));transform-origin:50% 100%}
 /* chapter, title, Korean moment, outro */
-.chap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:120px}
-.chap .n{font-weight:900;font-size:46px;letter-spacing:.3em;color:#ff6fbf}
-.chap .q{font-weight:900;font-size:118px;line-height:1.1;max-width:1600px;margin-top:22px}
+.chap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.chap .n{font-size:52px;letter-spacing:.25em;color:#F7B8CA}
+.chap .q{font-size:128px;line-height:1.04;max-width:1640px;margin-top:16px}
+.pill{display:inline-block;padding:8px 34px 2px;border-radius:50px;background:#F7B8CA;color:#1a1030;font-size:44px;line-height:64px;white-space:nowrap}
 .chap .d{margin-top:40px}
-.ko{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:90px;background:radial-gradient(900px 600px at 50% 50%,rgba(255,63,164,.28),transparent 70%)}
-.ko .w{font-family:"Pretendard",sans-serif;font-weight:900;font-size:250px;line-height:1}
-.ko .r{font-size:66px;font-weight:700;color:#ffd84a;margin-top:18px}
-.ko .mn{font-size:60px;font-weight:900;margin-top:14px}
-.ko .st{width:420px;height:420px;background-size:contain;background-repeat:no-repeat;background-position:center}
-.ttl .a{font-weight:900;font-size:150px;line-height:1}
-.ttl .b{font-weight:900;font-size:78px;color:#ffd84a;margin-top:26px;letter-spacing:.12em}
-.sub{margin-top:46px;display:inline-block;padding:22px 56px;border-radius:60px;background:#ff0033;font-weight:900;font-size:60px}
+.cst{position:absolute;right:120px;bottom:60px;width:300px;height:300px;background-size:contain;background-repeat:no-repeat;background-position:center bottom;transform-origin:50% 100%}
+.ko{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:90px;background:radial-gradient(900px 600px at 50% 50%,rgba(247,184,202,.30),transparent 70%)}
+.ko .w{font-family:"Jua",sans-serif;font-weight:400;font-size:270px;line-height:1}
+.ko .r{font-size:72px;color:#F7B8CA;margin-top:18px}
+.ko .mn{font-size:64px;margin-top:6px}
+.ko .st{width:440px;height:440px;background-size:contain;background-repeat:no-repeat;background-position:center}
+.ttl .a{font-size:160px;line-height:1}
+.ttl .b{font-size:84px;color:#F7B8CA;margin-top:22px;letter-spacing:.1em}
+.sub{margin-top:46px;display:inline-block;padding:14px 64px 6px;border-radius:60px;background:#ff0033;font-size:66px}
 </style></head><body>
 <div id="sky"></div><div id="stage"></div>
-<div id="side" class="lay"><div class="pill" id="chp"></div><div class="ctr" id="cv"><div class="k">👀 Netflix views</div><div class="v" id="vv"></div></div>
- <div class="ctr" id="ca"><div class="k">🏆 Big awards won</div><div class="v" id="av"></div></div></div>
-<div id="stk" class="lay"></div>
-<div id="tl" class="lay"><div class="bar"></div><div class="fill" id="fill"></div><div class="dot" id="dot"></div></div>
+<div id="date" class="lay" style="inset:auto"><div class="chn" id="chn"></div><div class="win"><div class="strip" id="strip"></div></div></div>
+<div id="chips" class="lay" style="inset:auto;right:44px;top:38px"><div class="chip" id="cv">👀 <b id="vv"></b> views</div><div class="chip" id="ca">🏆 <b id="av"></b> awards</div></div>
+<div id="stk" class="lay" style="inset:auto;right:26px;bottom:18px"></div>
 <script>
 /*DATA*/
-const MON=["Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct"];
-const X=m=>m/16*1700, E=D.ev, st=document.getElementById('stage');
-const tl=document.getElementById('tl');
-MON.forEach((s,i)=>{const t=document.createElement('div');t.className='tick';t.style.left=X(i)+'px';tl.appendChild(t);
- if(i%2==0||i==16){const l=document.createElement('div');l.className='ml'+(i==0||i==7?' yr':'');l.style.left=X(i)+'px';l.textContent=s+(i==0?" '25":i==7?" '26":'');tl.appendChild(l);}});
+const MON=["JUN","JUL","AUG","SEP","OCT","NOV","DEC","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT"];
+const E=D.ev, st=document.getElementById('stage'), RH=64;
+document.getElementById('strip').innerHTML=MON.map((s,i)=>`<div>${s} <span style="color:#F7B8CA">${i<7?2025:2026}</span></div>`).join('');
 const img=n=>`url(img/${n}.jpg)`, bg=n=>`url(img/${n}_bg.jpg)`;
-function photo(v,dim){ // card with the photo (vertical sources sit on a blurred copy of themselves)
-  if(v.ar&&v.ar<1.25) return `<div class="vbg" style="background-image:${bg(v.img)}"></div><div class="vfg ph" style="width:${Math.round(776*v.ar)}px;background-image:${img(v.img)}"></div>`+(dim?'<div class="dim"></div>':'');
-  return `<div class="ph" style="background-image:${img(v.img)}"></div>`+(dim?'<div class="dim"></div>':'');}
+function photo(v,dim){ // full-frame photo; vertical sources sit on a blurred copy of themselves
+  if(v.ar&&v.ar<1.25) return `<div class="vbg" style="background-image:${bg(v.img)}"></div><div class="vfg ph2" style="width:${Math.round(1080*v.ar)}px;margin-left:-${Math.round(540*v.ar)}px;background-image:${img(v.img)}"></div>`+(dim?'<div class="dim"></div>':'');
+  return `<div class="ph ph2" style="background-image:${img(v.img)}"></div>`+(dim?'<div class="dim"></div>':'');}
 function numParts(s){const m=s.match(/^([^0-9]*)([0-9][0-9,]*\.?[0-9]*)(.*)$/);return m?[m[1],m[2],m[3]]:null}
-E.forEach((v,i)=>{const d=document.createElement('div');d.className='lay';let h='';
-  if(v.k=='P') h=`<div class="bg" style="background-image:${bg(v.img)}"></div><div class="card">${photo(v)}</div>`+(v.cap?`<div class="cap" style="left:${(v.ch==0||v.ch==9)?310:130}px">${v.cap}</div>`:'');
-  if(v.k=='B') h=`<div class="bg" style="background-image:${bg(v.img)}"></div><div class="card">${photo(v,1)}<div class="big"><div class="stmt stroke">${v.text}</div></div></div>`;
-  if(v.k=='N') h=`<div class="bg" style="background-image:${bg(v.img)}"></div><div class="card">${photo(v,1)}<div class="big"><div class="num stroke" id="n${i}">${v.num}</div><div class="lbl stroke">${v.label}</div></div></div>`;
-  if(v.k=='H') h=`<div class="bg" style="background-image:${bg(v.img)}"></div><div class="card" style="opacity:.55">${photo(v)}</div><div class="paper" id="p${i}"><div class="src">${v.src}</div><img src="img/${v.head}.jpg"></div>`;
-  if(v.k=='T') h=`<div class="bg" style="background-image:${bg(v.img)}"></div><div class="chap ttl"><div class="a stroke">KPop Demon Hunters</div><div class="b stroke">ONE YEAR LATER</div></div>`;
-  if(v.k=='C') h=`<div class="bg" style="background-image:${bg(v.img)};opacity:.7"></div><div class="chap"><div class="n">CHAPTER ${v.i}</div><div class="q stroke">${v.q}</div><div class="d pill">${v.date}</div></div>`;
+E.forEach((v,i)=>{const d=document.createElement('div');d.className='lay'+(v.ch==0?' hook':'');let h='';
+  if(v.k=='P') h=photo(v)+'<div class="grad"></div>'+(v.cap?`<div class="cap">${v.cap}</div>`:'');
+  if(v.k=='B') h=photo(v,1)+`<div class="big"><div class="stmt stroke">${v.text}</div></div>`;
+  if(v.k=='N') h=photo(v,1)+`<div class="big"><div class="num stroke">${v.num}</div><div class="lbl stroke">${v.label}</div></div>`;
+  if(v.k=='H') h=photo(v,1)+`<div class="paper"><div class="src">${v.src}</div><img src="img/${v.head}.jpg"></div>`;
+  if(v.k=='T') h=`<div class="vbg" style="background-image:${bg(v.img)}"></div><div class="chap ttl"><div class="a stroke">KPop Demon Hunters</div><div class="b stroke">THE ENTIRE STORY</div></div>`;
+  if(v.k=='C') h=`<div class="vbg" style="background-image:${bg(v.img)};opacity:.75"></div><div class="chap"><div class="n">CHAPTER ${v.i}</div><div class="q stroke">${v.q}</div><div class="d pill">${v.date}</div></div><div class="cst" style="background-image:url(img/st_${v.pose}.png)"></div>`;
   if(v.k=='K') h=`<div class="ko"><div><div class="pill">🇰🇷 KOREAN MOMENT</div><div class="w" style="margin-top:34px">${v.w}</div><div class="r">${v.rom}</div><div class="mn">= ${v.mean}</div></div><div class="st" style="background-image:url(img/st_${v.pose}.png)"></div></div>`;
-  if(v.k=='O') h=`<div class="ko"><div style="text-align:center"><div class="ttl"><div class="a stroke" style="font-size:110px">Korean in 60s</div></div><div class="sub">SUBSCRIBE</div></div><div class="st" style="background-image:url(img/st_love_heart.png)"></div></div>`;
-  if(v.ch==0||v.ch==9) h=h.replace(/class="card"/g,'class="card" style="left:270px;'+(v.k=='H'?'opacity:.55':'')+'"').replace('style="left:270px;opacity:.55" style="opacity:.55"','style="left:270px;opacity:.55"');d.innerHTML=h;v.el=d;v.ph=d.querySelector('.card .ph');v.nm=document.getElementById('n'+i)||d.querySelector('.num');v.pp=d.querySelector('.paper');st.appendChild(d);
+  if(v.k=='O') h=`<div class="ko"><div style="text-align:center"><div class="ttl"><div class="a stroke" style="font-size:120px">Korean in 60s</div></div><div class="sub">SUBSCRIBE</div></div><div class="st" style="background-image:url(img/st_love_heart.png)"></div></div>`;
+  d.innerHTML=h;v.el=d;v.ph=d.querySelector('.ph2');v.nm=d.querySelector('.num');v.pp=d.querySelector('.paper');v.cp=d.querySelector('.cap');v.cs=d.querySelector('.cst, .ko .st');st.appendChild(d);
   if(v.nm) v.np=numParts(v.num);});
-const ease=x=>x<0?0:x>1?1:x*x*(3-2*x), FD=0.45;
+const ease=x=>x<0?0:x>1?1:x*x*(3-2*x), clamp=x=>x<0?0:x>1?1:x;
+const back=x=>{x=clamp(x);const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)}; // overshoot pop
 function fmtV(n){return n==null?'':(n>=100?(Number.isInteger(n)?n:n.toFixed(1)):n)+'M'+(n>=500?'+':'')}
-let lastM=null;
+const body=v=>v&&(v.k=='P'||v.k=='B'||v.k=='N'||v.k=='H')&&v.ch>=1&&v.ch<=8;
 window.render=function(t){
   let cur=0;for(let i=0;i<E.length;i++) if(E[i].t<=t) cur=i;
+  const FD=E[cur].ch==0&&E[cur].k!='T'?0.14:0.45; // the hook cuts fast
   E.forEach((v,i)=>{let o=0;
-    if(i==cur) o=ease((t-v.t)/FD); else if(i==cur-1) o=1-ease((t-E[cur].t)/FD); // previous stays under the new one while it fades in
+    if(i==cur) o=ease((t-v.t)/FD); else if(i==cur-1) o=1-ease((t-E[cur].t)/FD);
     if(t<E[0].t) o=0;
     v.el.style.opacity=o; v.el.style.display=o>0?'block':'none';
     if(o>0){const p=(t-v.t)/Math.max(1,(v.t1-v.t));
-      if(v.ph) v.ph.style.transform=`scale(${1.0+0.06*Math.min(1.2,p)})`;
-      if(v.pp){const q=ease((t-v.t)/0.6);v.pp.style.transform=`translate(-50%,-50%) rotate(-1deg) scale(${0.92+0.08*q})`;}
+      if(v.ph) v.ph.style.transform=v.ch==0?`scale(${1.04+0.10*(1-ease((t-v.t)/0.5))+0.03*Math.min(1,p)})`:`scale(${1.0+0.07*Math.min(1.2,p)})`;
+      if(v.cp){const q=back((t-v.t-0.05)/0.45);v.cp.style.transform=`translate(-50%,${(1-q)*40}px) scale(${0.85+0.15*q})`;v.cp.style.opacity=clamp((t-v.t)/0.2);}
+      if(v.pp){const q=back((t-v.t)/0.6);v.pp.style.transform=`translate(-50%,-50%) rotate(-1.2deg) scale(${0.85+0.15*q})`;}
+      if(v.cs){const q=back((t-v.t-0.35)/0.55);v.cs.style.transform=`scale(${q}) rotate(${Math.sin(t*2)*3}deg)`;}
       if(v.nm&&v.np){const q=ease((t-v.t-0.1)/0.9),raw=v.np[1].replace(/,/g,''),val=parseFloat(raw)*q,dec=(raw.split('.')[1]||'').length;
         let s=val.toFixed(dec); if(v.np[1].includes(',')) s=Number(s).toLocaleString('en-US'); v.nm.textContent=v.np[0]+s+v.np[2];}
     }});
-  const v=E[cur], inBody=(v.k=='P'||v.k=='B'||v.k=='N'||v.k=='H')&&v.ch>=1&&v.ch<=8;
-  // side column + sticker + timeline: only inside chapter bodies; fade with the content
-  const sideO=inBody?1:0; const sd=document.getElementById('side'), sk=document.getElementById('stk'), tll=document.getElementById('tl');
-  const prev=E[cur-1], wasBody=prev&&(prev.k=='P'||prev.k=='B'||prev.k=='N'||prev.k=='H')&&prev.ch>=1&&prev.ch<=8, f=ease((t-v.t)/FD);
-  const so=inBody?(wasBody?1:f):(wasBody?1-f:0);
-  sd.style.opacity=so; sk.style.opacity=so;
-  const tlo=(v.m!=null&&v.ch>=1&&v.ch<=8)?((prev&&prev.m!=null&&prev.ch>=1)?1:f):((prev&&prev.m!=null&&prev.ch>=1)?1-f:0); tll.style.opacity=tlo;
-  if(inBody||wasBody){const s=inBody?v:prev;
-    document.getElementById('chp').textContent=`CH ${s.ch} · ${s.date||''}`;
-    const vv=s.cnt.views, aw=s.cnt.awards;
-    document.getElementById('cv').style.display=vv?'block':'none'; document.getElementById('vv').textContent=fmtV(vv);
-    document.getElementById('ca').style.display=aw?'block':'none'; document.getElementById('av').textContent=aw||'';
-    sk.style.backgroundImage=`url(img/st_${s.pose}.png)`; sk.style.transform=`translateY(${Math.sin(t*2.2)*8}px) rotate(${Math.sin(t*1.3)*2}deg)`;}
-  // timeline marker glides from the previous position
-  const m1=v.m!=null?v.m:(prev&&prev.m!=null?prev.m:0), m0=(prev&&prev.m!=null)?prev.m:m1, m=m0+(m1-m0)*ease((t-v.t)/0.8);
-  document.getElementById('dot').style.left=X(m)+'px'; document.getElementById('fill').style.width=X(m)+'px';
+  const v=E[cur], prev=E[cur-1], f=ease((t-v.t)/0.45);
+  const ov=(on,was)=>on?(was?1:f):(was?1-f:0);
+  // month counter, chips, sticker: inside chapter bodies only
+  const dt=document.getElementById('date'), ch=document.getElementById('chips'), sk=document.getElementById('stk');
+  const bo=ov(body(v),body(prev)); dt.style.opacity=bo; ch.style.opacity=bo; sk.style.opacity=bo;
+  const s=body(v)?v:(body(prev)?prev:null);
+  if(s){
+    document.getElementById('chn').textContent=`CH ${s.ch}`;
+    // roll from the previous month to this one (whole months only)
+    const m1=Math.floor(s.m+1e-3), pm=(s===v&&body(prev)&&prev.m!=null)?Math.floor(prev.m+1e-3):m1, mm=pm+(m1-pm)*ease((t-s.t)/0.7);
+    document.getElementById('strip').style.transform=`translateY(${-mm*RH}px)`;
+    const vv=s.cnt.views, aw=s.cnt.awards, pv=prev&&prev.cnt||{};
+    const cv=document.getElementById('cv'), ca=document.getElementById('ca');
+    cv.style.display=vv?'block':'none'; document.getElementById('vv').textContent=fmtV(vv);
+    ca.style.display=aw?'block':'none'; document.getElementById('av').textContent=aw||'';
+    cv.style.transform=`scale(${s===v&&vv!=pv.views?0.7+0.3*back((t-v.t-0.2)/0.5):1})`;
+    ca.style.transform=`scale(${s===v&&aw!=pv.awards?0.7+0.3*back((t-v.t-0.2)/0.5):1})`;
+    sk.style.backgroundImage=`url(img/st_${s.pose}.png)`;
+    // 뱁새 jumps in at the first beat of each chapter, then bobs gently
+    let c0=cur;while(c0>0&&body(E[c0-1])&&E[c0-1].ch==s.ch) c0--; const since=t-E[c0].t, pop=back((since-0.2)/0.6);
+    sk.style.transform=`translateY(${Math.sin(t*2.2)*7}px) rotate(${Math.sin(t*1.3)*3}deg) scale(${pop})`;
+  }
 };
 window.render(0);
 </script></body></html>

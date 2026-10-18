@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image, ImageFilter, ImageEnhance
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, "..", "..", "engine"))
 from script import HOOK, CHAPTERS, OUTRO
-from sound import load, music2
+from sound import load
 Image.MAX_IMAGE_PIXELS = None
 SR = 48000; VOICE = "z6Kj0hecH20CdetSElRT"; MODEL = "eleven_v3"
 KEY = os.environ.get("ELEVENLABS_JC_API_KEY") or os.environ["ELEVENLABS_API_KEY"]
@@ -105,7 +105,7 @@ def build(src_dir, out, sample=False):
     chapters = CHAPTERS[:1] if sample else CHAPTERS
     for ci, c in enumerate(chapters, 1):
         first = next(v["img"] for s, v in c["beats"][0])
-        card("C", f"Chapter {NUM[ci - 1]}. {c['q']}", {"i": ci, "q": c["q"], "date": c["date"], "img": first, "ch": ci, "cnt": dict(cnt), "m": c["m"][0]}, 0.7)
+        card("C", f"Chapter {NUM[ci - 1]}. {c['q']}", {"i": ci, "q": c["q"], "date": c["date"], "pose": c["pose"], "img": first, "ch": ci, "cnt": dict(cnt), "m": c["m"][0]}, 0.7)
         n0 = len(ev); nseg = sum(len(b) for b in c["beats"]); a_, b_ = c["m"]
         m = lambda k, n0=n0, nseg=nseg, a_=a_, b_=b_: round(a_ + (b_ - a_) * (k - n0) / max(1, nseg - 1), 3)
         for b in (c["beats"][:3] if sample else c["beats"]): beat(b, ci, m)
@@ -119,19 +119,21 @@ def build(src_dir, out, sample=False):
         if v.get("img"): v["ar"] = aspects.get(v["img"])
     for a, b in zip(ev, ev[1:]): a["t1"] = b["t"]
     ev[-1]["t1"] = END
-    # audio: voice + music (Easy Lemon, then Airport Lounge from the chapter nearest the middle) + a soft ding on each Korean moment
+    # audio: voice + music + a soft ding on each Korean moment
     N = int((END + 0.5) * SR); vo = np.zeros(N); sfx = np.zeros(N)
     for t_, x in clips: i = int(t_ * SR); vo[i:i + len(x)] += x[:N - i]
     for e in ev:
         if e["k"] == "K": p = load("ding", .5) * .18; i = int((e["t"] + 0.15) * SR); sfx[i:i + len(p)] += p[:N - i]
-    sw = min((e["t"] for e in ev if e["k"] == "C"), key=lambda x: abs(x - END / 2)); mus = music2(N, ["easy_lemon", "airport_lounge"], int(sw * SR))
-    k = int(2.0 * SR); mus[:k] *= np.linspace(0, 1, k)
+    # music: the user's own loop (kpdh_bgm_user.mp3), tiled back to back as-is (it loops seamlessly), kept low under the voice
+    raw = subprocess.check_output(["ffmpeg", "-v", "error", "-i", os.path.join(HERE, "..", "..", "assets", "sfx", "kpdh_bgm_user.mp3"), "-f", "f32le", "-ac", "2", "-ar", str(SR), "-"])
+    m2 = np.frombuffer(raw, np.float32).astype(np.float64).reshape(-1, 2); mus = np.tile(m2, (N // len(m2) + 1, 1))[:N]
+    k = int(2.0 * SR); mus[:k] *= np.linspace(0, 1, k)[:, None]; k = int(3.0 * SR); mus[-k:] *= np.linspace(1, 0, k)[:, None]
     def w(name, x):
-        x = np.clip(x, -1, 1); s = (np.stack([x, x], 1) * 32767).astype(np.int16)
+        x = np.clip(x, -1, 1); s = ((x if x.ndim == 2 else np.stack([x, x], 1)) * 32767).astype(np.int16)
         with wave.open(f"{out}/{name}", "wb") as f: f.setnchannels(2); f.setsampwidth(2); f.setframerate(SR); f.writeframes(s.tobytes())
     w("vo.wav", vo * .9); w("music.wav", mus); w("sfx.wav", sfx)
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{out}/vo.wav", "-i", f"{out}/music.wav", "-i", f"{out}/sfx.wav", "-filter_complex",
-        "[0]asplit[vo][sc];[1]volume=0.26[m];[m][sc]sidechaincompress=threshold=0.02:ratio=6:attack=30:release=400[md];[vo][md][2]amix=inputs=3:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9[out]",
+        "[0]asplit[vo][sc];[1]volume=0.13[m];[m][sc]sidechaincompress=threshold=0.02:ratio=6:attack=30:release=400[md];[vo][md][2]amix=inputs=3:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9[out]",
         "-map", "[out]", "-ar", str(SR), "-ac", "2", f"{out}/mix.wav"], check=True)
     poses = sorted({c["pose"] for c in CHAPTERS} | {"love_heart"})
     for p in poses: Image.open(f"{STK}/{p}.png").save(f"{out}/img/st_{p}.png")

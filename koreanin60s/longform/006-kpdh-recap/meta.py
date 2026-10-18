@@ -16,7 +16,7 @@ for e in ev:
         if x and x not in srcs: srcs.append(x)
 IMGS = ", ".join(srcs).replace("Ethan Doyle White, CC BY-SA 4.0", "National Museum of Korea photo: Ethan Doyle White (CC BY-SA 4.0)")
 mm = lambda s: f"{int(s) // 60}:{int(s) % 60:02d}"
-ch = ["0:00 One year ago, nobody knew HUNTR/X"] + [f"{mm(e['t'] + 0.1)} {e['q']}" for e in ev if e["k"] == "C"]
+ch = ["0:00 Two Oscars, one year"] + [f"{mm(e['t'] + 0.1)} {e['q']}" for e in ev if e["k"] == "C"]
 outro = next(e for e in ev if e.get("ch") == 9); ch.append(f"{mm(outro['t'])} What's your favorite moment?")
 TITLES = ["The Entire History of KPop Demon Hunters in 8 Minutes", "Every Record KPop Demon Hunters Broke in Its First Year", "How KPop Demon Hunters Went From Netflix to 2 Oscars in 1 Year"]
 desc = f"""One year ago, almost nobody had heard of HUNTR/X. Then a cartoon girl group topped the Billboard Hot 100, packed theaters for a sing-along, became Netflix's most-watched movie ever and won two Oscars. Here's the whole year of KPop Demon Hunters, from its quiet Netflix release to the sequel and the world tour, with a little Korean along the way 🇰🇷
@@ -30,11 +30,6 @@ Subscribe for Korea news and Korean you can actually use 💌
 Sources: Netflix Tudum, Billboard, Official Charts, The Hollywood Reporter, Deadline, Variety, Korea JoongAng Daily, The Korea Times, Euronews, What's on Netflix, Collider, Travel And Tour World, Wikipedia.
 Images (news commentary): {IMGS}.
 This video is an independent recap and is not affiliated with Netflix or Sony Pictures Animation.
-
-Music:
-"Easy Lemon" and "Airport Lounge" Kevin MacLeod (incompetech.com)
-Licensed under Creative Commons: By Attribution 4.0 License
-http://creativecommons.org/licenses/by/4.0/
 
 #kpopdemonhunters #huntrix #golden #netflix #korean"""
 tags = ["kpop demon hunters", "kpop demon hunters recap", "huntrix", "golden huntrix", "kpop demon hunters oscars", "kpop demon hunters 2", "saja boys", "ejae",
