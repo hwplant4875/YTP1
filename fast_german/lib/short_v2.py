@@ -306,6 +306,8 @@ def shade(w, h):
 
 def draw_el(frame, built, el, local, appear, scene_len):
     p = ease((local - appear) / 0.32)
+    if el.get("full") and local >= appear - 0.2:     # full-frame footage is on screen from its very first frame
+        p = 1.0
     if p <= 0:
         return
     cx, cy = el["x"], el["y"]
