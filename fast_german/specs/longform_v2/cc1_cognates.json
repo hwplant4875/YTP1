@@ -1,0 +1,7703 @@
+{
+ "id": "cc1_cognates",
+ "title": "You Already Know 1,000 German Words",
+ "landscape": true,
+ "bg": "road",
+ "tight": 0.5,
+ "music": [
+  "/mnt/project-files/fast_german/cache/music/incompetech/lobby_time_loop.wav",
+  "/mnt/project-files/fast_german/cache/music/incompetech/easy_lemon_loop.wav"
+ ],
+ "scenes": [
+  {
+   "lines": [
+    [
+     {
+      "en": "You already know a thousand German words.",
+      "show": [
+       "t1"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "You just don't know it yet.",
+      "show": [
+       "t2"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "t1",
+     "type": "word",
+     "de": "1,000 German words",
+     "size": 210,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 440
+    },
+    {
+     "id": "t2",
+     "type": "text",
+     "text": "you already know",
+     "size": 110,
+     "x": 960,
+     "y": 660
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "de": "Hand.",
+      "show": [
+       "h0"
+      ],
+      "join": 0.15
+     },
+     {
+      "de": "Hotel.",
+      "show": [
+       "h1"
+      ],
+      "join": 0.15
+     },
+     {
+      "de": "Baby.",
+      "show": [
+       "h2"
+      ],
+      "join": 0.15
+     },
+     {
+      "de": "Taxi.",
+      "show": [
+       "h3"
+      ],
+      "join": 0.15
+     },
+     {
+      "de": "Musik.",
+      "show": [
+       "h4"
+      ],
+      "join": 0.15
+     },
+     {
+      "de": "Kaffee.",
+      "show": [
+       "h5"
+      ],
+      "join": 0.15
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "h0",
+     "type": "word",
+     "de": "Hand",
+     "size": 180,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 400,
+     "y": 400
+    },
+    {
+     "id": "h1",
+     "type": "word",
+     "de": "Hotel",
+     "size": 180,
+     "colour": null,
+     "x": 960,
+     "y": 400
+    },
+    {
+     "id": "h2",
+     "type": "word",
+     "de": "Baby",
+     "size": 180,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1520,
+     "y": 400
+    },
+    {
+     "id": "h3",
+     "type": "word",
+     "de": "Taxi",
+     "size": 180,
+     "colour": null,
+     "x": 400,
+     "y": 720
+    },
+    {
+     "id": "h4",
+     "type": "word",
+     "de": "Musik",
+     "size": 180,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 720
+    },
+    {
+     "id": "h5",
+     "type": "word",
+     "de": "Kaffee",
+     "size": 180,
+     "colour": null,
+     "x": 1520,
+     "y": 720
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Right now, this sentence looks like nonsense.",
+      "show": [
+       "s"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "By the end of this video, you'll read it. No dictionary.",
+      "show": [
+       "q"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "s",
+     "type": "word",
+     "de": "Mein Bruder trinkt Kaffee im Hotel.",
+     "size": 140,
+     "max_w": 1760,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "You'll read this by the end",
+     "size": 70,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 680
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "English and German are sisters. They share thousands of words, and they change in the same few ways.",
+      "show": [
+       "t"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Learn those few changes, and the words unlock themselves. These are your cheat codes.",
+      "show": [
+       "c"
+      ]
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "t",
+     "type": "text",
+     "text": "English + German = sister languages",
+     "size": 96,
+     "x": 960,
+     "y": 450
+    },
+    {
+     "id": "c",
+     "type": "word",
+     "de": "8 cheat codes",
+     "size": 220,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 650
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Cheat code 1.",
+      "show": [
+       "c"
+      ]
+     },
+     {
+      "en": "Some words are exactly the same.",
+      "show": [
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Same spelling, same meaning. Only the sound is German.",
+      "show": [
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "header": "Cheat code 1 · Same word",
+   "els": [
+    {
+     "id": "c",
+     "type": "text",
+     "text": "CHEAT CODE 1",
+     "size": 100,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 330
+    },
+    {
+     "id": "r",
+     "type": "word",
+     "de": "Same word",
+     "size": 260,
+     "max_w": 1600,
+     "x": 960,
+     "y": 540
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Same spelling, same meaning. Only the sound is German.",
+     "size": 66,
+     "x": 960,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hand.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Hand.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "raised-hand-default",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "hand",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Hand",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Finger.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Finger.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "index-pointing-up-default",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "finger",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Finger",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Arm.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Arm.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "flexed-biceps-default",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "arm",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Arm",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Name.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Name.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "identification-card",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "name",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Name",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Hotel.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Hotel.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "hotel",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "hotel",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Hotel",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Taxi.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Taxi.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "taxi",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "taxi",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Taxi",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Baby.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Baby.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "baby-default",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "baby",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Baby",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Film.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Film.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "film-frames",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "film",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Film",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Bus.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Bus.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "bus",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "bus",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Bus",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Radio.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Radio.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "radio",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "radio",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Radio",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Wind.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Wind.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "wind-face",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "wind",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Wind",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Winter.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Winter.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "snowman",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "winter",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Winter",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Park.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Park.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "national-park",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "park",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Park",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Sport.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Sport.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "Same word",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "soccer-ball",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "sport",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Sport",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Notice something? In German, every noun starts with a capital letter.",
+      "show": [
+       "t",
+       "u"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.3,
+   "els": [
+    {
+     "id": "t",
+     "type": "word",
+     "de": "Hand · Hotel · Baby",
+     "size": 140,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "u",
+     "type": "text",
+     "text": "every noun = Capital letter",
+     "size": 70,
+     "x": 960,
+     "y": 650
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Cheat code 2.",
+      "show": [
+       "c"
+      ]
+     },
+     {
+      "en": "O U becomes A U.",
+      "show": [
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Same sound, German spelling.",
+      "show": [
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "header": "Cheat code 2 · ou » au",
+   "els": [
+    {
+     "id": "c",
+     "type": "text",
+     "text": "CHEAT CODE 2",
+     "size": 100,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 330
+    },
+    {
+     "id": "r",
+     "type": "word",
+     "de": "ou » au",
+     "size": 260,
+     "max_w": 1600,
+     "x": 960,
+     "y": 540
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "Same sound, German spelling.",
+     "size": 66,
+     "x": 960,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "House.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Haus.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "ou » au",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "house",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "house",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Haus",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Mouse.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Maus.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "ou » au",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "mouse-face",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "mouse",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Maus",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Out.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "aus.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "ou » au",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "door",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "out",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "aus",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Brown.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "braun.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "ou » au",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "brown-circle",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "brown",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "braun",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Loud.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "laut.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "ou » au",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "loudspeaker",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "loud",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "laut",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Cheat code 3.",
+      "show": [
+       "c"
+      ]
+     },
+     {
+      "en": "D becomes T.",
+      "show": [
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "An English D often turns into a German T.",
+      "show": [
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "header": "Cheat code 3 · d » t",
+   "els": [
+    {
+     "id": "c",
+     "type": "text",
+     "text": "CHEAT CODE 3",
+     "size": 100,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 330
+    },
+    {
+     "id": "r",
+     "type": "word",
+     "de": "d » t",
+     "size": 260,
+     "max_w": 1600,
+     "x": 960,
+     "y": 540
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "An English D often turns into a German T.",
+     "size": 66,
+     "x": 960,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Day.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Tag.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "d » t",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "sun",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "day",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Tag",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Drink.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "trinken.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "d » t",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "cup-with-straw",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "drink",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "trinken",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Dream.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Traum.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "d » t",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "thought-balloon",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "dream",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Traum",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Door.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Tür.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "d » t",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "door",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "door",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Tür",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Red.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "rot.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "d » t",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "red-circle",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "red",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "rot",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Bread.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Brot.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "d » t",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "bread",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "bread",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Brot",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Good.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "gut.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "d » t",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "thumbs-up-default",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "good",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "gut",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Cheat code 4.",
+      "show": [
+       "c"
+      ]
+     },
+     {
+      "en": "T becomes Z, or double S.",
+      "show": [
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "At the start of a word, T becomes Z. In the middle, it becomes double S.",
+      "show": [
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "header": "Cheat code 4 · t » z / ss",
+   "els": [
+    {
+     "id": "c",
+     "type": "text",
+     "text": "CHEAT CODE 4",
+     "size": 100,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 330
+    },
+    {
+     "id": "r",
+     "type": "word",
+     "de": "t » z / ss",
+     "size": 260,
+     "max_w": 1600,
+     "x": 960,
+     "y": 540
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "At the start of a word, T becomes Z. In the middle, it becomes double S.",
+     "size": 66,
+     "x": 960,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Ten.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "zehn.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "t » z / ss",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "keycap-10",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "ten",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "zehn",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Time.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Zeit.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "t » z / ss",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "stopwatch",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "time",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Zeit",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Salt.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Salz.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "t » z / ss",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "salt",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "salt",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Salz",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Heart.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Herz.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "t » z / ss",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "red-heart",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "heart",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Herz",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Water.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Wasser.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "t » z / ss",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "droplet",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "water",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Wasser",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Eat.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "essen.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "t » z / ss",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "fork-and-knife",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "eat",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "essen",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Better.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "besser.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "t » z / ss",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "chart-increasing",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "better",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "besser",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "White.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "weiß.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "t » z / ss",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "white-circle",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "white",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "weiß",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Street.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Straße.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "t » z / ss",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "motorway",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "street",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Straße",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Cheat code 5.",
+      "show": [
+       "c"
+      ]
+     },
+     {
+      "en": "P becomes P F, or F.",
+      "show": [
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "P turns into P F at the start, and into F in the middle.",
+      "show": [
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "header": "Cheat code 5 · p » pf / f",
+   "els": [
+    {
+     "id": "c",
+     "type": "text",
+     "text": "CHEAT CODE 5",
+     "size": 100,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 330
+    },
+    {
+     "id": "r",
+     "type": "word",
+     "de": "p » pf / f",
+     "size": 260,
+     "max_w": 1600,
+     "x": 960,
+     "y": 540
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "P turns into P F at the start, and into F in the middle.",
+     "size": 66,
+     "x": 960,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Apple.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Apfel.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "p » pf / f",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "red-apple",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "apple",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Apfel",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Pepper.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Pfeffer.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "p » pf / f",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "hot-pepper",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "pepper",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Pfeffer",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Pound.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Pfund.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "p » pf / f",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "balance-scale",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "pound",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Pfund",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Ship.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Schiff.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "p » pf / f",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "ship",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "ship",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Schiff",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Sleep.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "schlafen.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "p » pf / f",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "sleeping-face",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "sleep",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "schlafen",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Help.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "helfen.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "p » pf / f",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "sos-button",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "help",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "helfen",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Deep.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "tief.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "p » pf / f",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "diving-mask",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "deep",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "tief",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Cheat code 6.",
+      "show": [
+       "c"
+      ]
+     },
+     {
+      "en": "T H becomes D.",
+      "show": [
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "German has no T H sound. So it uses D, or T.",
+      "show": [
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "header": "Cheat code 6 · th » d",
+   "els": [
+    {
+     "id": "c",
+     "type": "text",
+     "text": "CHEAT CODE 6",
+     "size": 100,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 330
+    },
+    {
+     "id": "r",
+     "type": "word",
+     "de": "th » d",
+     "size": 260,
+     "max_w": 1600,
+     "x": 960,
+     "y": 540
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "German has no T H sound. So it uses D, or T.",
+     "size": 66,
+     "x": 960,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Thank you.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "danke.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "th » d",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "folded-hands-default",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "thank you",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "danke",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Thing.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Ding.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "th » d",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "package",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "thing",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Ding",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Three.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "drei.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "th » d",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "keycap-3",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "three",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "drei",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Thick.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "dick.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "th » d",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "hamburger",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "thick",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "dick",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Brother.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Bruder.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "th » d",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "people-hugging",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "brother",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Bruder",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Father.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Vater.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "th » d",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "man-beard-default",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "father",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Vater",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Mother.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Mutter.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "th » d",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "woman-default",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "mother",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Mutter",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Cheat code 7.",
+      "show": [
+       "c"
+      ]
+     },
+     {
+      "en": "Y becomes J, and C becomes K.",
+      "show": [
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "In German, J sounds like an English Y.",
+      "show": [
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "header": "Cheat code 7 · y » j   c » k",
+   "els": [
+    {
+     "id": "c",
+     "type": "text",
+     "text": "CHEAT CODE 7",
+     "size": 100,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 330
+    },
+    {
+     "id": "r",
+     "type": "word",
+     "de": "y » j   c » k",
+     "size": 260,
+     "max_w": 1600,
+     "x": 960,
+     "y": 540
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "In German, J sounds like an English Y.",
+     "size": 66,
+     "x": 960,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Yes.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "ja.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "y » j   c » k",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "check-mark-button",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "yes",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "ja",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Year.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Jahr.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "y » j   c » k",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "calendar",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "year",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Jahr",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Young.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "jung.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "y » j   c » k",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "child-default",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "young",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "jung",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Coffee.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Kaffee.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "y » j   c » k",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "hot-beverage",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "coffee",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Kaffee",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Cat.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Katze.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "y » j   c » k",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "cat-face",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "cat",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Katze",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Class.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Klasse.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "y » j   c » k",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "school",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "class",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Klasse",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Cold.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "kalt.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "y » j   c » k",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "cold-face",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "cold",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "kalt",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Cheat code 8.",
+      "show": [
+       "c"
+      ]
+     },
+     {
+      "en": "And the biggest cheat code of all: the endings.",
+      "show": [
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "These five endings alone give you more than a thousand words.",
+      "show": [
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "header": "Cheat code 8 · The endings",
+   "els": [
+    {
+     "id": "c",
+     "type": "text",
+     "text": "CHEAT CODE 8",
+     "size": 100,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 330
+    },
+    {
+     "id": "r",
+     "type": "word",
+     "de": "The endings",
+     "size": 260,
+     "max_w": 1600,
+     "x": 960,
+     "y": 540
+    },
+    {
+     "id": "t",
+     "type": "text",
+     "text": "These five endings alone give you more than a thousand words.",
+     "size": 66,
+     "x": 960,
+     "y": 800
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Nation.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Nation.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-tion » -tion",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "globe-showing-europe-africa",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "nation",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Nation",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Information.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Information.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-tion » -tion",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "information",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "information",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Information",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Station.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Station.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-tion » -tion",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "station",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "station",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Station",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "University.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Universität.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-ity » -ität",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "graduation-cap",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "university",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Universität",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Quality.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Qualität.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-ity » -ität",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "sparkles",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "quality",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Qualität",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Reality.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Realität.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-ity » -ität",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "eyes",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "reality",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Realität",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Biology.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Biologie.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-y » -ie",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "dna",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "biology",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Biologie",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Energy.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Energie.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-y » -ie",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "high-voltage",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "energy",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Energie",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Photography.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Fotografie.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-y » -ie",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "camera",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "photography",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Fotografie",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Music.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Musik.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-ic » -ik",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "musical-notes",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "music",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Musik",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Politics.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Politik.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-ics » -ik",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "classical-building",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "politics",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Politik",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Physics.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Physik.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-ics » -ik",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "atom-symbol",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "physics",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Physik",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "To telephone.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "telefonieren.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-ate / -ize » -ieren",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "telephone-receiver",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "to telephone",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "telefonieren",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "To organize.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "organisieren.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-ate / -ize » -ieren",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "card-index-dividers",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "to organize",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "organisieren",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "To repair.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "reparieren.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "verb » -ieren",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "wrench",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "to repair",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "reparieren",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "To study.",
+      "show": [
+       "i",
+       "e",
+       "r"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "studieren.",
+      "show": [
+       "a",
+       "w"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.15,
+   "els": [
+    {
+     "id": "r",
+     "type": "text",
+     "text": "verb » -ieren",
+     "size": 72,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 215
+    },
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "books",
+     "s": 380,
+     "x": 960,
+     "y": 470
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "to study",
+     "size": 150,
+     "max_w": 760,
+     "x": 500,
+     "y": 830
+    },
+    {
+     "id": "a",
+     "type": "text",
+     "text": "»",
+     "size": 150,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 830
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "studieren",
+     "size": 200,
+     "max_w": 820,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1420,
+     "y": 830
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "But careful. A few words are traps.",
+      "show": [
+       "t",
+       "i"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.3,
+   "header": "Watch out · False friends",
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "warning",
+     "s": 280,
+     "x": 960,
+     "y": 420
+    },
+    {
+     "id": "t",
+     "type": "word",
+     "de": "False friends",
+     "size": 150,
+     "colour": [
+      255,
+      90,
+      90
+     ],
+     "x": 960,
+     "y": 720
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "de": "Gift.",
+      "show": [
+       "w",
+       "i"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "It's not a gift. It means poison.",
+      "show": [
+       "x",
+       "m"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "skull",
+     "s": 280,
+     "x": 960,
+     "y": 380
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Gift",
+     "size": 170,
+     "x": 960,
+     "y": 640
+    },
+    {
+     "id": "x",
+     "type": "text",
+     "text": "not a gift",
+     "size": 70,
+     "colour": [
+      255,
+      90,
+      90
+     ],
+     "x": 620,
+     "y": 860
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= poison",
+     "size": 80,
+     "colour": [
+      52,
+      199,
+      89
+     ],
+     "x": 1300,
+     "y": 860
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "de": "Rat.",
+      "show": [
+       "w",
+       "i"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "It's not a rat. It means advice.",
+      "show": [
+       "x",
+       "m"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "speech-balloon",
+     "s": 280,
+     "x": 960,
+     "y": 380
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "Rat",
+     "size": 170,
+     "x": 960,
+     "y": 640
+    },
+    {
+     "id": "x",
+     "type": "text",
+     "text": "not a rat",
+     "size": 70,
+     "colour": [
+      255,
+      90,
+      90
+     ],
+     "x": 620,
+     "y": 860
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= advice",
+     "size": 80,
+     "colour": [
+      52,
+      199,
+      89
+     ],
+     "x": 1300,
+     "y": 860
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "de": "bald.",
+      "show": [
+       "w",
+       "i"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "It's not bald. It means soon.",
+      "show": [
+       "x",
+       "m"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "hourglass-not-done",
+     "s": 280,
+     "x": 960,
+     "y": 380
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "bald",
+     "size": 170,
+     "x": 960,
+     "y": 640
+    },
+    {
+     "id": "x",
+     "type": "text",
+     "text": "not bald",
+     "size": 70,
+     "colour": [
+      255,
+      90,
+      90
+     ],
+     "x": 620,
+     "y": 860
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= soon",
+     "size": 80,
+     "colour": [
+      52,
+      199,
+      89
+     ],
+     "x": 1300,
+     "y": 860
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "de": "also.",
+      "show": [
+       "w",
+       "i"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "It's not also. It means so.",
+      "show": [
+       "x",
+       "m"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "thinking-face",
+     "s": 280,
+     "x": 960,
+     "y": 380
+    },
+    {
+     "id": "w",
+     "type": "word",
+     "de": "also",
+     "size": 170,
+     "x": 960,
+     "y": 640
+    },
+    {
+     "id": "x",
+     "type": "text",
+     "text": "not also",
+     "size": 70,
+     "colour": [
+      255,
+      90,
+      90
+     ],
+     "x": 620,
+     "y": 860
+    },
+    {
+     "id": "m",
+     "type": "text",
+     "text": "= so",
+     "size": 80,
+     "colour": [
+      52,
+      199,
+      89
+     ],
+     "x": 1300,
+     "y": 860
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Now you try. Use the cheat codes and guess the German word.",
+      "show": [
+       "i",
+       "t"
+      ]
+     }
+    ]
+   ],
+   "hold": 0.4,
+   "header": "Quiz · Crack the code",
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "video-game",
+     "s": 300,
+     "x": 960,
+     "y": 430
+    },
+    {
+     "id": "t",
+     "type": "word",
+     "de": "Crack the code!",
+     "size": 140,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 720
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Garden?",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Garten.",
+      "show": [
+       "a",
+       "r",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.6
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "seedling",
+     "s": 330,
+     "x": 500,
+     "y": 520
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "garden",
+     "size": 110,
+     "x": 1370,
+     "y": 300
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 520
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Garten",
+     "size": 160,
+     "max_w": 900,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 760
+    },
+    {
+     "id": "r",
+     "type": "text",
+     "text": "d » t",
+     "size": 56,
+     "x": 1370,
+     "y": 920
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 900,
+     "h": 260,
+     "width": 12,
+     "x": 1370,
+     "y": 760
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Foot?",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Fuß.",
+      "show": [
+       "a",
+       "r",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.6
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "footprints",
+     "s": 330,
+     "x": 500,
+     "y": 520
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "foot",
+     "size": 110,
+     "x": 1370,
+     "y": 300
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 520
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Fuß",
+     "size": 160,
+     "max_w": 900,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 760
+    },
+    {
+     "id": "r",
+     "type": "text",
+     "text": "t » ß",
+     "size": 56,
+     "x": 1370,
+     "y": 920
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 900,
+     "h": 260,
+     "width": 12,
+     "x": 1370,
+     "y": 760
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Tongue?",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Zunge.",
+      "show": [
+       "a",
+       "r",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.6
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "tongue",
+     "s": 330,
+     "x": 500,
+     "y": 520
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "tongue",
+     "size": 110,
+     "x": 1370,
+     "y": 300
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 520
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Zunge",
+     "size": 160,
+     "max_w": 900,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 760
+    },
+    {
+     "id": "r",
+     "type": "text",
+     "text": "t » z",
+     "size": 56,
+     "x": 1370,
+     "y": 920
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 900,
+     "h": 260,
+     "width": 12,
+     "x": 1370,
+     "y": 760
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Nut?",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Nuss.",
+      "show": [
+       "a",
+       "r",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.6
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "chestnut",
+     "s": 330,
+     "x": 500,
+     "y": 520
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "nut",
+     "size": 110,
+     "x": 1370,
+     "y": 300
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 520
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Nuss",
+     "size": 160,
+     "max_w": 900,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 760
+    },
+    {
+     "id": "r",
+     "type": "text",
+     "text": "t » ss",
+     "size": 56,
+     "x": 1370,
+     "y": 920
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 900,
+     "h": 260,
+     "width": 12,
+     "x": 1370,
+     "y": 760
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Democracy?",
+      "show": [
+       "i",
+       "q"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 3.0,
+      "show": [
+       "tm"
+      ],
+      "quiet": true
+     }
+    ],
+    [
+     {
+      "de": "Demokratie.",
+      "show": [
+       "a",
+       "r",
+       "ok"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 0.6
+     }
+    ]
+   ],
+   "hold": 0.2,
+   "els": [
+    {
+     "id": "i",
+     "type": "tile",
+     "icon": "ballot-box-with-ballot",
+     "s": 330,
+     "x": 500,
+     "y": 520
+    },
+    {
+     "id": "q",
+     "type": "text",
+     "text": "democracy",
+     "size": 110,
+     "x": 1370,
+     "y": 300
+    },
+    {
+     "id": "tm",
+     "type": "timer",
+     "s": 150,
+     "dur": 3.0,
+     "x": 1370,
+     "y": 520
+    },
+    {
+     "id": "a",
+     "type": "word",
+     "de": "Demokratie",
+     "size": 160,
+     "max_w": 900,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 1370,
+     "y": 760
+    },
+    {
+     "id": "r",
+     "type": "text",
+     "text": "-y » -ie",
+     "size": 56,
+     "x": 1370,
+     "y": 920
+    },
+    {
+     "id": "ok",
+     "type": "ring",
+     "w": 900,
+     "h": 260,
+     "width": 12,
+     "x": 1370,
+     "y": 760
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "Now, remember this sentence?",
+      "show": [
+       "s"
+      ]
+     }
+    ],
+    [
+     {
+      "de": "Mein Bruder trinkt Kaffee im Hotel.",
+      "show": [
+       "s2"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "My brother drinks coffee in the hotel.",
+      "show": [
+       "e"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Brother, th becomes d. Drinks, d becomes t. Coffee, c becomes k. And hotel is just hotel.",
+      "show": [
+       "k"
+      ]
+     }
+    ]
+   ],
+   "header": "",
+   "hold": 0.4,
+   "els": [
+    {
+     "id": "s",
+     "type": "word",
+     "de": "Mein Bruder trinkt Kaffee im Hotel.",
+     "size": 110,
+     "max_w": 1700,
+     "x": 960,
+     "y": 380
+    },
+    {
+     "id": "s2",
+     "type": "text",
+     "text": "▲ you can read this now",
+     "size": 56,
+     "colour": [
+      52,
+      199,
+      89
+     ],
+     "x": 960,
+     "y": 500
+    },
+    {
+     "id": "e",
+     "type": "text",
+     "text": "My brother drinks coffee in the hotel.",
+     "size": 80,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 640
+    },
+    {
+     "id": "k",
+     "type": "text",
+     "text": "Bruder (th » d) · trinkt (d » t) · Kaffee (c » k) · Hotel",
+     "size": 54,
+     "x": 960,
+     "y": 790
+    }
+   ]
+  },
+  {
+   "lines": [
+    [
+     {
+      "en": "You just read German, with zero vocabulary lists.",
+      "show": [
+       "t"
+      ]
+     }
+    ],
+    [
+     {
+      "en": "Next cheat code: guess the grammar rule yourself.",
+      "show": [
+       "n"
+      ]
+     }
+    ],
+    [
+     {
+      "pause": 1.5
+     }
+    ]
+   ],
+   "els": [
+    {
+     "id": "t",
+     "type": "word",
+     "de": "Super gemacht!",
+     "size": 160,
+     "colour": [
+      255,
+      204,
+      0
+     ],
+     "x": 960,
+     "y": 450
+    },
+    {
+     "id": "n",
+     "type": "text",
+     "text": "Next: Cheat code #2",
+     "size": 80,
+     "x": 960,
+     "y": 640
+    }
+   ]
+  }
+ ]
+}

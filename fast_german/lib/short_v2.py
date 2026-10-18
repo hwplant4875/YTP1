@@ -235,7 +235,7 @@ def build_el(el):
     if t == "logo":
         return ("img", shadow(logo_im(), 30, 160, 10))
     if t == "text":
-        f = fit(el["text"], en_font, W - 2 * MX, el.get("size", 84))
+        f = fit(el["text"], en_font, el.get("max_w", W - 2 * MX), el.get("size", 84))
         return ("img", text_im(el["text"], f, tuple(el.get("colour", WHITE))))
     if t == "timer":
         return ("timer", el.get("s", 150), el.get("dur", 2.0))
