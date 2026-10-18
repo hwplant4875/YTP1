@@ -52,6 +52,12 @@ em{font-style:normal;color:#F7B8CA}
 .ko .st{width:440px;height:440px;background-size:contain;background-repeat:no-repeat;background-position:center}
 .ttl .a{font-size:160px;line-height:1}
 .ttl .b{font-size:84px;color:#F7B8CA;margin-top:22px;letter-spacing:.1em}
+/* real-person photos in white cards (voice cast, singers) */
+.gw{position:absolute;left:0;right:0;top:110px;display:flex;justify-content:center;gap:44px}
+.gc{background:#fff;border-radius:26px;padding:16px 16px 10px;box-shadow:0 30px 80px rgba(0,0,0,.65);text-align:center;color:#141020}
+.gc .pi{border-radius:14px;background-size:cover;background-position:center top}
+.gc .nm{font-size:46px;line-height:1.1;margin-top:14px}
+.gc .su{font-size:32px;line-height:1.1;color:#d0457f;margin-bottom:4px}
 .sub{margin-top:46px;display:inline-block;padding:14px 64px 6px;border-radius:60px;background:#ff0033;font-size:66px}
 </style></head><body>
 <div id="sky"></div><div id="stage"></div>
@@ -70,7 +76,7 @@ const C1=E.findIndex(e=>e.k=='C'), TI=E.findIndex(e=>e.k=='T');
 // timeline position at time t: the hook sweeps the whole year once, chapters glide between their months, the outro stays at the end
 function mAt(i){const e=E[i];return e.ch==0?16:(e.m!=null?e.m:16);}
 const img=n=>`url(img/${n}.jpg)`, bg=n=>`url(img/${n}_bg.jpg)`;
-function photo(v,dim){ // full-frame photo; vertical sources sit on a blurred copy of themselves
+function photo(v,dim){ if(!v.img) return dim?'<div class="dim" style="background:rgba(8,4,24,.35)"></div>':''; // full-frame photo; vertical sources sit on a blurred copy of themselves
   if(v.ar&&v.ar<1.25) return `<div class="vbg" style="background-image:${bg(v.img)}"></div><div class="vfg ph2" style="width:${Math.round(1080*v.ar)}px;margin-left:-${Math.round(540*v.ar)}px;background-image:${img(v.img)}"></div>`+(dim?'<div class="dim"></div>':'');
   return `<div class="ph ph2" style="background-image:${img(v.img)}"></div>`+(dim?'<div class="dim"></div>':'');}
 function numParts(s){const m=s.match(/^([^0-9]*)([0-9][0-9,]*\.?[0-9]*)(.*)$/);return m?[m[1],m[2],m[3]]:null}
@@ -79,36 +85,37 @@ E.forEach((v,i)=>{const d=document.createElement('div');d.className='lay'+(v.ch=
   if(v.k=='B') h=photo(v,1)+`<div class="big"><div class="stmt stroke">${v.text}</div></div>`;
   if(v.k=='N') h=photo(v,1)+`<div class="big"><div class="num stroke">${v.num}</div><div class="lbl stroke">${v.label}</div></div>`;
   if(v.k=='H') h=photo(v,1)+`<div class="paper"><div class="src">${v.src}</div><img src="img/${v.head}.jpg"></div>`;
+  if(v.k=='G'){const w=v.cards.length>3?330:400;h=photo(v,1)+'<div class="gw">'+v.cards.map(c=>`<div class="gc"><div class="pi" style="width:${w}px;height:${Math.round(w*1.25)}px;background-image:${img(c.img)}"></div><div class="nm">${c.name}</div><div class="su">${c.sub}</div></div>`).join('')+'</div>';}
   if(v.k=='T') h=`<div class="vbg" style="background-image:${bg(v.img)}"></div><div class="chap ttl"><div class="a stroke">KPop Demon Hunters</div><div class="b stroke">THE ENTIRE STORY</div></div>`;
   if(v.k=='C') h=`<div class="vbg" style="background-image:${bg(v.img)};opacity:.75"></div><div class="chap"><div class="n">CHAPTER ${v.i}</div><div class="q stroke">${v.q}</div><div class="d pill">${v.date}</div></div><div class="cst" style="background-image:url(img/st_${v.pose}.png)"></div>`;
   if(v.k=='K') h=`<div class="ko"><div><div class="pill">🇰🇷 KOREAN MOMENT</div><div class="w" style="margin-top:34px">${v.w}</div><div class="r">${v.rom}</div><div class="mn">= ${v.mean}</div></div><div class="st" style="background-image:url(img/st_${v.pose}.png)"></div></div>`;
   if(v.k=='O') h=`<div class="ko"><div style="text-align:center"><div class="ttl"><div class="a stroke" style="font-size:120px">Korean in 60s</div></div><div class="sub">SUBSCRIBE</div></div><div class="st" style="background-image:url(img/st_love_heart.png)"></div></div>`;
-  d.innerHTML=h;v.el=d;v.ph=d.querySelector('.ph2');v.nm=d.querySelector('.num');v.pp=d.querySelector('.paper');v.cp=d.querySelector('.cap');v.cs=d.querySelector('.cst, .ko .st');st.appendChild(d);
+  d.innerHTML=h;v.el=d;v.ph=d.querySelector('.ph2');v.nm=d.querySelector('.num');v.pp=d.querySelector('.paper');v.cp=d.querySelector('.cap');v.cs=d.querySelector('.cst, .ko .st');v.gcs=[...d.querySelectorAll('.gc')];st.appendChild(d);
   if(v.nm) v.np=numParts(v.num);});
 const ease=x=>x<0?0:x>1?1:x*x*(3-2*x), clamp=x=>x<0?0:x>1?1:x;
 const back=x=>{x=clamp(x);const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)}; // overshoot pop
 function fmtV(n){return n==null?'':(n>=100?(Number.isInteger(n)?n:n.toFixed(1)):n)+'M'+(n>=500?'+':'')}
-const body=v=>v&&(v.k=='P'||v.k=='B'||v.k=='N'||v.k=='H')&&v.ch>=1&&v.ch<=8;
+const body=v=>v&&(v.k=='P'||v.k=='B'||v.k=='N'||v.k=='H'||v.k=='G')&&v.ch>=1&&v.ch<=8;
 window.render=function(t){
   let cur=0;for(let i=0;i<E.length;i++) if(E[i].t<=t) cur=i;
   const FD=E[cur].ch==0&&E[cur].k!='T'?0.14:0.45; // the hook cuts fast
   E.forEach((v,i)=>{let o=0;
     if(i==cur) o=ease((t-v.t)/FD); else if(i==cur-1) o=1-ease((t-E[cur].t)/FD);
-    if(t<E[0].t) o=0;
+    if(cur==0&&i==0) o=1; // the video opens straight on the first picture
     v.el.style.opacity=o; v.el.style.display=o>0?'block':'none';
     if(o>0){const p=(t-v.t)/Math.max(1,(v.t1-v.t));
       if(v.ph) v.ph.style.transform=v.ch==0?`scale(${1.04+0.10*(1-ease((t-v.t)/0.5))+0.03*Math.min(1,p)})`:`scale(${1.0+0.07*Math.min(1.2,p)})`;
       if(v.cp){const q=back((t-v.t-0.05)/0.45);v.cp.style.transform=`translate(-50%,${(1-q)*40}px) scale(${0.85+0.15*q})`;v.cp.style.opacity=clamp((t-v.t)/0.2);}
       if(v.pp){const q=back((t-v.t)/0.6);v.pp.style.transform=`translate(-50%,-50%) rotate(-1.2deg) scale(${0.85+0.15*q})`;}
       if(v.cs){const q=back((t-v.t-0.35)/0.55);v.cs.style.transform=`scale(${q}) rotate(${Math.sin(t*2)*3}deg)`;}
+      v.gcs.forEach((g,j)=>{const q=back((t-v.t-0.12*j)/0.55);g.style.transform=`translateY(${(1-q)*60}px) scale(${0.8+0.2*q})`;g.style.opacity=clamp((t-v.t-0.12*j)/0.25);});
       if(v.nm&&v.np){const q=ease((t-v.t-0.1)/0.9),raw=v.np[1].replace(/,/g,''),val=parseFloat(raw)*q,dec=(raw.split('.')[1]||'').length;
         let s=val.toFixed(dec); if(v.np[1].includes(',')) s=Number(s).toLocaleString('en-US'); v.nm.textContent=v.np[0]+s+v.np[2];}
     }});
   const v=E[cur], prev=E[cur-1], f=ease((t-v.t)/0.45);
   const ov=(on,was)=>on?(was?1:f):(was?1-f:0);
   // timeline (always on)
-  let m; if(v.ch==0&&cur<TI) m=16*ease(clamp((t-E[0].t)/(E[TI].t-E[0].t))); else {const m1=mAt(cur), m0=cur>0?(E[cur-1].ch==0&&cur-1<TI?16:mAt(cur-1)):0; m=m0+(m1-m0)*ease((t-v.t)/0.8);}
-  if(t<E[0].t) m=0; document.getElementById('dot').style.left=X(m)+'px'; document.getElementById('fill').style.width=X(m)+'px';
+  const m1=mAt(cur), m0=cur>0?mAt(cur-1):m1, m=m0+(m1-m0)*ease((t-v.t)/0.8); document.getElementById('dot').style.left=X(m)+'px'; document.getElementById('fill').style.width=X(m)+'px';
   // chips, sticker: inside chapter bodies only
   const ch=document.getElementById('chips'), sk=document.getElementById('stk');
   const bo=ov(body(v),body(prev)); ch.style.opacity=bo; sk.style.opacity=bo;

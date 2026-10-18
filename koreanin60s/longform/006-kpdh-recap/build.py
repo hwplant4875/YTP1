@@ -5,7 +5,7 @@ import base64, hashlib, json, os, re, subprocess, sys, wave
 import numpy as np
 from PIL import Image, ImageFilter, ImageEnhance
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, "..", "..", "engine"))
-from script import HOOK, CHAPTERS, OUTRO
+from script import CHAPTERS, OUTRO
 from sound import load
 Image.MAX_IMAGE_PIXELS = None
 SR = 48000; VOICE = "z6Kj0hecH20CdetSElRT"; MODEL = "eleven_v3"
@@ -71,7 +71,7 @@ def prep_img(src_dir, name, out):
 def build(src_dir, out, sample=False):
     os.makedirs(f"{out}/img", exist_ok=True)
     clips, ev, cues = [], [], []  # clips: (t, samples); ev: visual events; cues: (t0, t1, text) for the .srt
-    t = 0.5; cnt = {"views": None, "awards": None}; aspects = {}
+    t = 0.3; cnt = {"views": None, "awards": None}; aspects = {}
 
     def speak(text):
         x, st = tts(say(text)); y, f = squeeze(x); return y, [f(v) for v in st]
@@ -92,6 +92,8 @@ def build(src_dir, out, sample=False):
             vis["cnt"] = dict(cnt); vis["m"] = m(len(ev)) if m else None
             if vis.get("img") and vis["img"] not in aspects: aspects[vis["img"]] = prep_img(src_dir, vis["img"], out)
             if vis.get("head") and vis["head"] not in aspects: aspects[vis["head"]] = prep_img(src_dir, vis["head"], out)
+            for c in vis.get("cards", []):
+                if c["img"] not in aspects: aspects[c["img"]] = prep_img(src_dir, c["img"], out)
             ev.append(vis)
         t = t0 + len(y) / SR + 0.45
 
@@ -100,16 +102,14 @@ def build(src_dir, out, sample=False):
         y, _ = speak(text); t0 = t; clips.append((t0 + 0.3, fade(y))); cues.append((t0 + 0.3, t0 + 0.3 + len(y) / SR, text))
         ev.append({"k": kind, "t": t0 - 0.1, **extra}); t = t0 + 0.3 + len(y) / SR + hold
 
-    for b in HOOK: beat(b, 0, None)
-    ev.append({"k": "T", "t": t - 0.1, "img": ev[-1]["img"], "ch": 0, "cnt": dict(cnt), "m": None}); t += 2.6
+    # v4: no cold open, no title card, no chapter cards; the video opens on the first sentence and chapters run into each other
     chapters = CHAPTERS[:1] if sample else CHAPTERS
     for ci, c in enumerate(chapters, 1):
-        first = next(v["img"] for s, v in c["beats"][0])
-        card("C", f"Chapter {NUM[ci - 1]}. {c['q']}", {"i": ci, "q": c["q"], "date": c["date"], "pose": c["pose"], "img": first, "ch": ci, "cnt": dict(cnt), "m": c["m"][0]}, 0.7)
         n0 = len(ev); nseg = sum(len(b) for b in c["beats"]); a_, b_ = c["m"]
         m = lambda k, n0=n0, nseg=nseg, a_=a_, b_=b_: round(a_ + (b_ - a_) * (k - n0) / max(1, nseg - 1), 3)
         for b in (c["beats"][:3] if sample else c["beats"]): beat(b, ci, m)
         for e in ev[n0:]: e["date"], e["pose"] = c["date"], c["pose"]
+        ev[n0]["q"] = c["q"]  # YouTube chapter marker (meta.py)
         if c.get("ko"):
             w, rom, mean, line = c["ko"]; card("K", line, {"w": w, "rom": rom, "mean": mean, "pose": c["pose"], "ch": ci, "cnt": dict(cnt), "m": b_}, 0.8)
     if not sample:

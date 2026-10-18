@@ -8,10 +8,11 @@ def P(img, src, t=None, cnt=None): return {"k": "P", "img": img, "src": src, "t"
 def H(head, img, src, cnt=None): return {"k": "H", "head": head, "img": img, "src": src, "cnt": cnt}
 def N(num, label, img, src, cnt=None): return {"k": "N", "num": num, "label": label, "img": img, "src": src, "cnt": cnt}
 def B(text, img, src, cnt=None): return {"k": "B", "text": text, "img": img, "src": src, "cnt": cnt}
+def G(cards, img, src): return {"k": "G", "cards": [{"img": i, "name": n, "sub": u} for i, n, u in cards], "img": img, "src": src}  # real photos in white cards
 
 NF, SPA = "Netflix", "Sony Pictures Animation / Netflix"
 # timeline months: 0 = Jun 2025 ... 16 = Oct 2026
-HOOK = [  # cold open: payoff first, fast cuts, then the question
+HOOK_OLD = [  # v3 cold open, dropped in v4 (start straight in on June 20): payoff first, fast cuts, then the question
     [("This cartoon K-pop movie won two Oscars.", P("y_2ftx6oQzfoI_maxresdefault", "ABC / A.M.P.A.S.", "<em>2</em> Oscars 🏆"))],
     [("Their song Golden hit number one in more than thirty countries,", P("td_three_point", NF, "<em>#1</em> in 30+ countries")),
      ("fans paid to watch a movie that was already free,", P("td_concert", NF, "Sold-out <em>sing-alongs</em> 🎤")),
@@ -25,14 +26,14 @@ CHAPTERS = [
     [("It was made by Sony Pictures Animation, the studio behind the Spider-Verse movies,", P("td_dance_yellow", SPA, "Sony Pictures Animation")),
      ("and directed by Maggie Kang and Chris Appelhans.", P("td_directors", NF, "Maggie Kang & Chris Appelhans"))],
     [("Kang first pitched the idea back in twenty eighteen. She wanted a story rooted in her Korean heritage, mixing K-pop, mythology and demons.", P("y_WxOZKMv3GTY_maxres1", "CNN", "Pitched in <em>2018</em>"))],
-    [("The idea sounded wild.", B("The idea sounded <em>wild</em> 🤯", "td_weapons_glow", NF)),
+    [("At first, the idea sounded wild.", B("The idea sounded <em>wild</em> 🤯", "td_weapons_glow", NF)),
      ("Three K-pop idols, Rumi, Mira and Zoey, secretly hunt demons,", P("td_weapons_trio", SPA, "Rumi · Mira · Zoey")),
-     ("and their voices power a magic barrier called the Honmoon.", P("y_3JTVQTk36R8_maxres3", SPA, "The <em>Honmoon</em>"))],
-    [("Their rivals? A boy band called the Saja Boys, who are secretly demons.", P("og_kt_saja", SPA, "The <em>Saja Boys</em> 😈"))],
-    [("The voice cast included Arden Cho, May Hong, Ji-young Yoo and 안효섭,", P("og_jad_236", NF, "Arden Cho · May Hong · Ji-young Yoo · Ahn Hyo-seop")),
-     ("while EJAE, Audrey Nuna and REI AMI sang for HUNTR/X.", P("y_z9PusX5ugbI_maxres2", "The Tonight Show Starring Jimmy Fallon / NBC", "EJAE · Audrey Nuna · REI AMI"))],
-    [("There was no big theater launch, just a Netflix release.", P("y_uH5bGSSw_l0_maxresdefault", "The Hollywood Reporter")),
-     ("But within days, something strange started happening.", P("y_2FS3JAPTKXs_maxres2", NF, "Something <em>strange</em>…"))],
+     ("and their voices power a magic barrier called the Honmoon.", P("td_honmoon", NF, "The <em>Honmoon</em>"))],
+    [("Their rivals? A boy band called the Saja Boys, who are secretly demons.", P("td_saja_banner", NF, "The <em>Saja Boys</em> 😈"))],
+    [("The voice cast included Arden Cho, May Hong, Ji-young Yoo and 안효섭,", G([("td_p_arden", "Arden Cho", "Rumi"), ("td_p_may", "May Hong", "Mira"), ("td_p_jiyoung", "Ji-young Yoo", "Zoey"), ("td_p_ahn", "Ahn Hyo-seop", "Jinu")], "td_weapons_trio", NF)),
+     ("while EJAE, Audrey Nuna and REI AMI sang for HUNTR/X.", G([("td_p_ejae", "EJAE", "sings Rumi"), ("td_p_audrey", "Audrey Nuna", "sings Mira"), ("td_p_reiami", "REI AMI", "sings Zoey")], "td_stage_sing", NF))],
+    [("There was no big theater launch, just a Netflix release.", P("td_signing", NF)),
+     ("But within days, something strange started happening.", B("Something <em>strange</em><br>started happening…", None, None))],
   ]},
   {"q": "How did a fake girl group top the real charts?", "date": "Jul – Dec 2025", "m": (0.6, 6), "pose": "sing_mic", "beats": [
     [("The songs exploded online.", P("td_golden_stage", SPA, "'Golden' 🎵"))],
@@ -51,12 +52,12 @@ CHAPTERS = [
     [("And in Korea, Golden scored a perfect all-kill: number one on every major chart at once.", P("y_LTbg4Wps4GE_maxresdefault", "Seoul Metropolitan Government", "Perfect <em>all-kill</em> in Korea 🇰🇷"))],
   ]},
   {"q": "Why would anyone pay to watch a free movie?", "date": "August 2025", "m": (2, 2.8), "pose": "popcorn_tv", "beats": [
-    [("Here's the strangest part. The movie was free on Netflix.", B("It was <em>free</em> on Netflix 📺", "td_eating", NF))],
-    [("But on August twenty-third, a sing-along version opened in about seventeen hundred theaters for one weekend,", N("1,700", "theaters · one weekend", "y_fGyTN5UjnL4_maxres3", NF)),
-     ("the widest release ever for a Netflix film.", B("Netflix's <em>widest</em> theater release ever", "y_fGyTN5UjnL4_maxres2", NF))],
-    [("Fans showed up in costumes and sang every word.", P("y_LyM5k1d65TY_maxres1", "RUMCA (fan recording)", "Sing-along screening 🎤"))],
+    [("But the charts were only the beginning. Here's the strangest part: the movie was free on Netflix.", B("It was <em>free</em> on Netflix 📺", "td_eating", NF))],
+    [("But on August twenty-third, a sing-along version opened in about seventeen hundred theaters for one weekend,", N("1,700", "theaters · one weekend", "td_battle", NF)),
+     ("the widest release ever for a Netflix film.", B("Netflix's <em>widest</em> theater release ever", "td_three_point", NF))],
+    [("Fans showed up in costumes and sang every word.", P("td_concert", NF, "Sing-along screenings 🎤"))],
     [("It made an estimated eighteen million dollars, more than any other movie that weekend.", H("h1_thr", "og_thr", "The Hollywood Reporter")),
-     ("A first for Netflix.", B("A <em>first</em> for Netflix 🍿", "y_fGyTN5UjnL4_maxres1", NF))],
+     ("A first for Netflix.", B("A <em>first</em> for Netflix 🍿", "td_white_trio", NF))],
   ]},
   {"q": "Who are the real voices of HUNTR/X?", "date": "Oct – Nov 2025", "m": (4, 5.9), "pose": "sing_mic", "beats": [
     [("Meanwhile, the real singers were becoming stars too.", P("y_z9PusX5ugbI_maxres3", "The Tonight Show Starring Jimmy Fallon / NBC", "The <em>real</em> HUNTR/X"))],
@@ -68,7 +69,7 @@ CHAPTERS = [
      ("next to a giant Derpy Tiger balloon.", P("y_r7TA1mn91F8_maxres1", "NBC", "Derpy 🐯 balloon"))],
   ]},
   {"q": "Is it really Netflix's biggest movie ever?", "date": "Jul – Dec 2025", "m": (1, 6.8), "pose": "mind_blown", "beats": [
-    [("And the views kept climbing.", P("y_6m9Ur3bo7bY_maxres2", "TODAY / NBC", "Views keep <em>climbing</em> 📈"))],
+    [("And the views kept climbing.", P("td_boat_sunset", NF, "Views keep <em>climbing</em> 📈"))],
     [("In August, it passed Red Notice to become Netflix's most-watched film ever.", H("h1_jad_236", "og_jad_squid", "Korea JoongAng Daily", cnt={"views": 236}))],
     [("In September, it passed Squid Game season one, and became Netflix's most-watched title of all time.", H("h1_jad_squid", "y_6m9Ur3bo7bY_maxres1", "Korea JoongAng Daily · TODAY / NBC", cnt={"views": 266}))],
     [("In its first ninety-one days, it reached three hundred twenty-five point one million views.", N("325.1M", "views in 91 days", "y_PakJTQn7VzY_maxres3", "ABC10", cnt={"views": 325.1})),
@@ -94,7 +95,7 @@ CHAPTERS = [
     [("Two Oscars, for a movie that started as a quiet Netflix release.", P("y_X5AqywbwReM_maxres2", "A.M.P.A.S.", "<em>2</em> Oscars"))],
   ]},
   {"q": "Where are the stars now?", "date": "Apr – Oct 2026", "m": (10, 16), "pose": "excited", "beats": [
-    [("In April, Billboard honored EJAE, Audrey Nuna and REI AMI as Women of the Year,", P("y_25pyl_wl8ss_maxres1", "Billboard", "Billboard Women in Music 2026")),
+    [("After the Oscars, the stars kept rising. In April, Billboard honored EJAE, Audrey Nuna and REI AMI as Women of the Year,", P("y_25pyl_wl8ss_maxres1", "Billboard", "Billboard Women in Music 2026")),
      ("the first time a group was honored together.", P("y_9IxVmhL71gc_maxres3", "Billboard", "First <em>group</em> ever honored"))],
     [("The singing voices of the Saja Boys joined Korea's music performers' federation, getting ready for real activities.", H("h1_kt_saja", "y_2FS3JAPTKXs_maxresdefault", "The Korea Times · Netflix"))],
     [("안효섭, the voice of Jinu, now stars as a genius chef in the JTBC drama Final Table, premiering October twenty-fourth.", P("y_3gpEGPKI814_maxresdefault", "JTBC", "Ahn Hyo-seop · 〈Final Table〉 Oct 24")),
@@ -117,7 +118,7 @@ CHAPTERS = [
 OUTRO = [
     [("From a quiet Netflix release to two Oscars and a world tour, all in one year.", P("y_56uqT8Hmjo0_maxres2", "ABC / A.M.P.A.S.", "One year. <em>One phenomenon.</em>")),
     ],
-    [("And honestly? This story is far from over.", P("y_X5AqywbwReM_maxres1", "A.M.P.A.S.", "The story is <em>far from over</em>")),
+    [("And honestly? This story is far from over.", P("td_confetti", NF, "The story is <em>far from over</em>")),
      ("A sequel, a world tour, and whatever comes next, we'll be watching.", P("y_r7TA1mn91F8_maxresdefault", "NBC", "We'll be <em>watching</em> 👀"))],
     [("Which moment was your favorite? Tell me in the comments,", B("Your favorite moment? 👇", "td_laughing", SPA)),
      ("and subscribe to Korean in 60s for more Korea news and Korean you can actually use.", {"k": "O"})],
