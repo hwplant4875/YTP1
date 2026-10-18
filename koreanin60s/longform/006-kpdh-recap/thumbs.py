@@ -8,12 +8,13 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}body{width:1280px;height:720
 .chip{display:inline-block;padding:8px 26px 12px;border-radius:16px;font-weight:900}"""
 PINK = "#F7B8CA"  # channel highlight pink
 HL = f'color:{PINK}'  # highlighted word: channel pink text (was yellow), same black stroke
+HLBOX = f'background:{PINK};color:#111;-webkit-text-stroke:0;padding:0 18px 6px;border-radius:14px;box-shadow:0 8px 0 #000'  # 4a: pink box, black text (user picked after testing)
 # Benchmark (top KPDH thumbnails 2026-10-18): one huge character face filling the frame, 0-2 words, one focal point, one contrast object.
 T = {
 # 4a: "The Entire History of KPop Demon Hunters in 8 Minutes": Rumi's face huge, "FULL STORY", 뱁새
 "4a": f"""<div class=ph style="inset:0;background-image:url({IMG}/og_wonend.jpg);background-size:150%;background-position:52% 22%"></div>
 <div class=a style="inset:0;background:linear-gradient(90deg,rgba(0,0,0,.55) 0%,transparent 45%)"></div>
-<div class="a s" style="left:44px;top:60px;font-size:132px;line-height:1.12">FULL<br><span style="{HL}">STORY</span></div>
+<div class="a s" style="left:44px;top:60px;font-size:132px;line-height:1.12">FULL<br><span style="{HLBOX}">STORY</span></div>
 <img class=a src="{STK}/popcorn_tv.png" style="left:30px;bottom:14px;width:250px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))">""",
 # 4b: "Every Record KPop Demon Hunters Broke in Its First Year": the official "Golden" art zoomed to the three faces, "EVERY RECORD", 뱁새 with a trophy
 "4b": f"""<div class=ph style="inset:0;background-image:url({IMG}/y_yebNIHKAC4A_maxresdefault.jpg);background-size:140%;background-position:62% 0%"></div>
