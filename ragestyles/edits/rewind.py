@@ -8,8 +8,11 @@ spec:
   "font": TTF, "boom": sfx path
   "segments": [
     {"type": "clip", "src", "in", "out", "ratio", "crop": [x, y, w, h] (source content box, drops letterbox bars),
-     "track": [[t, x, y, zoom], ...], "hits": [{"at": t, "x", "y", "zoom"}]},      times are source times
-    {"type": "meme", "src", "ss", "dur", "cap", "boomVol"}]
+     "track": [[t, x, y, zoom], ...], "hits": [{"at": t, "x", "y", "zoom", "dur"}],   times are source times;
+     each hit eases from wherever the previous one left the frame
+     "circles": [{"from", "to", "track": [[t, x, y], ...], "rx", "ry"}]   red ring on the source (x, y as fractions of the frame, radii of its width),
+     "sfx": [{"at", "src", "ss", "vol"}]},
+    {"type": "meme", "src" (video or still image), "ss", "dur", "cap", "boomVol"}]
 """
 import json, os, subprocess, sys, tempfile
 import cv2
@@ -42,13 +45,30 @@ def clip_frames(s, n):
             fr = fr[y0:y0 + ch, x0:x0 + cw]
         t = s['in'] + j / FPS
         x, y, z = interp(s.get('track', [[0, 0.5, 0.5, 1.0]]), t)
-        hits = [h for h in s.get('hits', []) if h['at'] <= t]
-        if hits:
-            h = hits[-1]
+        bz = z
+        for h in sorted(s.get('hits', []), key=lambda h: h['at']):
+            if h['at'] > t:
+                break
             e = ease((t - h['at']) / h.get('dur', PUNCH))
             x, y = x + (h.get('x', x) - x) * e, y + (h.get('y', y) - y) * e
-            z *= 1 + (h.get('zoom', 1.3) - 1) * e
+            z += (bz * h.get('zoom', 1.3) - z) * e
+        for c in s.get('circles', []):
+            if c['from'] <= t <= c['to']:
+                fr = ring(fr, c, t)
         yield sharpen(compose(fr, {'ratio': s.get('ratio', '9:16'), 'track': [[0, x, y, z]], 'lift': 0}, t))
+
+
+def ring(fr, c, t):
+    """hand-drawn style red ellipse that pops in slightly oversized and settles"""
+    fr = fr.copy()
+    sh, sw = fr.shape[:2]
+    cx, cy, _ = interp([k + [1.0] for k in c['track']], t)
+    pop = 1 + 0.35 * (1 - ease((t - c['from']) / 0.15))
+    rx, ry = c['rx'] * sw * pop, c.get('ry', c['rx']) * sw * pop
+    th = max(3, int(sw * 0.009))
+    cv2.ellipse(fr, (int(cx * sw), int(cy * sh)), (int(rx), int(ry)), -8, 0, 360, (0, 0, 0), th + 4, cv2.LINE_AA)
+    cv2.ellipse(fr, (int(cx * sw), int(cy * sh)), (int(rx), int(ry)), -8, 0, 360, (235, 20, 20), th, cv2.LINE_AA)
+    return fr
 
 
 def caption_rgba(font, text, y):
@@ -64,14 +84,12 @@ def caption_rgba(font, text, y):
 
 
 def meme_frames(spec, s, n):
-    w, h = map(int, subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v', '-show_entries',
-                                    'stream=width,height', '-of', 'csv=p=0', s['src']],
-                                   capture_output=True, text=True).stdout.split(',')[:2])
-    mh = int(round(h * W / w / 2)) * 2
-    raw = subprocess.run(['ffmpeg', '-v', 'error', '-stream_loop', '-1', '-ss', f"{s.get('ss', 0):.3f}", '-i', s['src'],
-                          '-t', f'{n / FPS + 0.1:.3f}', '-vf', f'scale={W}:{mh}:flags=lanczos,fps={FPS},format=rgb24',
-                          '-f', 'rawvideo', '-'], capture_output=True, check=True).stdout
-    fr = np.frombuffer(raw, np.uint8).reshape(-1, mh, W, 3)
+    if s['src'].lower().endswith(('.png', '.jpg', '.jpeg', '.webp')):
+        im = Image.open(s['src']).convert('RGB')
+        mh = int(round(im.height * W / im.width / 2)) * 2
+        fr = np.asarray(im.resize((W, mh), Image.LANCZOS))[None]
+    else:
+        fr, mh = video_meme(s, n)
     top = max(0, 860 - mh // 2)
     cap = caption_rgba(spec['font'], s['cap'], min(top + mh + 70, 1480)) if s.get('cap') else None
     for j in range(n):
@@ -84,6 +102,17 @@ def meme_frames(spec, s, n):
             a = cap[..., 3:4].astype(np.float32) / 255
             bg = (bg * (1 - a) + cap[..., :3] * a).astype(np.uint8)
         yield sharpen(bg)
+
+
+def video_meme(s, n):
+    w, h = map(int, subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v', '-show_entries',
+                                    'stream=width,height', '-of', 'csv=p=0', s['src']],
+                                   capture_output=True, text=True).stdout.split(',')[:2])
+    mh = int(round(h * W / w / 2)) * 2
+    raw = subprocess.run(['ffmpeg', '-v', 'error', '-stream_loop', '-1', '-ss', f"{s.get('ss', 0):.3f}", '-i', s['src'],
+                          '-t', f'{n / FPS + 0.1:.3f}', '-vf', f'scale={W}:{mh}:flags=lanczos,fps={FPS},format=rgb24',
+                          '-f', 'rawvideo', '-'], capture_output=True, check=True).stdout
+    return np.frombuffer(raw, np.uint8).reshape(-1, mh, W, 3), mh
 
 
 def build(spec, out):
@@ -123,14 +152,16 @@ def build(spec, out):
             subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo',
                             '-t', f'{dur:.3f}', a], check=True)
             if s['type'] == 'meme':
-                sfx.append((spec['boom'], starts[i] / FPS - 0.05, s.get('boomVol', 0.6)))
+                sfx.append((spec['boom'], 0, starts[i] / FPS - 0.05, s.get('boomVol', 0.6)))
+        for e in s.get('sfx', []):
+            sfx.append((e['src'], e.get('ss', 0), starts[i] / FPS + e['at'] - s['in'], e.get('vol', 0.8)))
         audio.append(a)
     enc.stdin.close(); enc.wait()
     total = starts[-1] / FPS
     open(f'{tmp}/a.txt', 'w').write(''.join(f"file '{a}'\n" for a in audio))
     ins, chain, mix = ['-f', 'concat', '-safe', '0', '-i', f'{tmp}/a.txt'], '', ['[0:a]']
-    for k, (f, at, vol) in enumerate(sfx):
-        ins += ['-i', f]
+    for k, (f, ss, at, vol) in enumerate(sfx):
+        ins += ['-ss', f'{ss:.3f}', '-i', f]
         chain += f"[{k + 1}:a]volume={vol},adelay={int(max(at, 0) * 1000)}:all=1,aresample=48000[s{k}];"
         mix.append(f'[s{k}]')
     chain += f"{''.join(mix)}amix=inputs={len(mix)}:normalize=0[a]"
