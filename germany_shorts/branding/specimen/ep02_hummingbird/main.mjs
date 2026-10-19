@@ -1,0 +1,12 @@
+import * as S1 from './s1.mjs'; import * as S2 from './s2.mjs'; import * as S3 from './s3.mjs';
+import { sceneAt, TOTAL, SC } from './tl.mjs';
+import { W, H, f1, eo } from '/tmp/claude-0/sp2/eng2.mjs';
+import { bgAir } from '/tmp/claude-0/hb/bird.mjs';
+export { FONTS, W, H } from '/tmp/claude-0/sp2/eng2.mjs';
+export { TOTAL };
+const F = { ...S1, ...S2, ...S3 };
+export const BG = { h20: 'night', h21: 'night' };
+export const scene = (id, t) => { const k = eo(0, 0.35, t), z = 1.035 - 0.035 * k;
+  const body = F[id] ? F[id](t) : `<text x="960" y="540" font-size="80" text-anchor="middle">${id}</text>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${bgAir(t + id.length * 7, BG[id] || 'air')}<g transform="translate(960 540) scale(${f1(z * 1000) / 1000}) translate(-960 -540)">${body}</g></svg>`; };
+export const frame = T => { const [s, t] = sceneAt(T); return scene(s.id, t); };
