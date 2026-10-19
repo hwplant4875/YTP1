@@ -16,7 +16,7 @@ const html = `<!doctype html><html><head><style>
 @font-face{font-family:Gaegu;src:url(fonts/gaegu.woff2)}
 body{margin:0;background:#000}</style></head><body>
 <canvas id="c" width="${W}" height="${H}"></canvas>
-<script src="ink.js"></script><script src="scenes.js"></script><script src="scenes2.js"></script><script src="scenes3.js"></script></body></html>`;
+<script src="ink.js"></script><script src="scenes.js"></script><script src="scenes2.js"></script><script src="scenes3.js"></script><script src="stick.js"></script></body></html>`;
 writeFileSync(path.join(dir, 'page.html'), html);
 
 const browser = await chromium.launch();

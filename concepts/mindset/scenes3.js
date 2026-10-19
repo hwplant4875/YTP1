@@ -287,4 +287,5 @@ function scene9(ctx, W, H, t) {
 }
 
 Object.assign(window.SCENES, { '7': scene7, '8': scene8, '9': scene9 });
+window.Board = { boardBase, boardTray, magnet, sticky, mtext, M, arrow };
 })();
