@@ -55,7 +55,7 @@ CLIPS_BOTH = beat(
 BENCH = A + "7642939162378767629.mp4"
 BENCH_SLIDE = beat(
     clip(BENCH, vol=0, **{"in": 8.6, "out": 10.5,
-         "circles": [{"from": 8.6, "to": 9.3, "rx": 0.13, "ry": 0.13, "track": [[8.6, 0.22, 0.32]]}]}),
+         "circles": [{"from": 8.6, "to": 9.3, "rx": 0.12, "ry": 0.12, "track": [[8.6, 0.2, 0.41]]}]}),
     SIDE_EYE, "Bro was speedrunning 💀",
     clip(BENCH, vol=0, **{"in": 9.2, "out": 11.8, "speed": [[9.2, 1.0], [9.45, 0.45], [10.4, 1.0]],
          "hits": [{"at": 9.45, "x": 0.32, "y": 0.38, "zoom": 1.25},
@@ -76,14 +76,15 @@ TREAD_LAUNCH = beat(
 
 # hops sideways off a running treadmill, rolls across the floor, pops up like nothing happened
 DISMOUNT = B + "7488460918595144990.mp4"
+ROLLK = {"crop": [0, 528, 1080, 1392], "ratio": "3:4", "vol": 0}   # drops the burned-in caption that clashed with the title
 TREAD_ROLL = beat(
-    clip(DISMOUNT, vol=0, **{"in": 4.8, "out": 7.1,
-         "circles": [{"from": 4.8, "to": 5.45, "rx": 0.14, "ry": 0.35,
-                      "track": [[4.8, 0.58, 0.5], [5.45, 0.5, 0.5]]}]}),
+    clip(DISMOUNT, **ROLLK, **{"in": 4.8, "out": 7.1,
+         "circles": [{"from": 4.8, "to": 5.45, "rx": 0.14, "ry": 0.4,
+                      "track": [[4.8, 0.58, 0.31], [5.45, 0.5, 0.33]]}]}),
     SHOCKED, "Bro did a combat roll 💀",
-    clip(DISMOUNT, vol=0, **{"in": 5.6, "out": 8.8, "speed": [[5.6, 1.0], [5.8, 0.45], [6.9, 1.0]],
-         "hits": [{"at": 5.8, "x": 0.4, "y": 0.6, "zoom": 1.2},
-                  {"at": 7.6, "x": 0.55, "y": 0.6, "zoom": 1.1, "dur": 0.6}],
+    clip(DISMOUNT, **ROLLK, **{"in": 5.6, "out": 8.8, "speed": [[5.6, 1.0], [5.8, 0.45], [6.9, 1.0]],
+         "hits": [{"at": 5.8, "x": 0.4, "y": 0.45, "zoom": 1.2},
+                  {"at": 7.6, "x": 0.55, "y": 0.45, "zoom": 1.1, "dur": 0.6}],
          "sfx": [{"at": 6.3, "src": LIB + "thud_heavy.mp3", "vol": 0.8}]}))
 
 # spotter clips the upright plate beside the bench; ring on the plate from the first frame (user 10/20)
@@ -109,7 +110,7 @@ LEAVE_ME = beat(
                       "track": [[1.2, 0.7, 0.3], [2.1, 0.83, 0.3]]}]}),
     SIDE_EYE, "Make up your mind bro 😭",
     clip(LEAVE, vol=0, **{"in": 4.8, "out": 6.95, "speed": [[4.8, 1.0], [5.1, 0.45], [6.1, 1.0]],
-         "hits": [{"at": 5.1, "x": 0.6, "y": 0.4, "zoom": 1.2}],
+         "hits": [{"at": 5.1, "x": 0.5, "y": 0.4, "zoom": 1.2}],
          "sfx": [{"at": 5.15, "src": DRV + "021_노갓플리즈.mp3", "ss": 0.4, "dur": 1.9, "vol": 0.9}]}))
 
 # kicks the heavy bag clean off its chain, then hits a casual flex
