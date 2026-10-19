@@ -11,7 +11,7 @@ spec:
      "track": [[t, x, y, zoom], ...], "hits": [{"at": t, "x", "y", "zoom", "dur"}],   times are source times;
      each hit eases from wherever the previous one left the frame
      "circles": [{"from", "to", "track": [[t, x, y], ...], "rx", "ry"}]   red ring on the source (x, y as fractions of the frame, radii of its width),
-     "sfx": [{"at", "src", "ss", "vol"}],
+     "sfx": [{"at", "src", "ss", "vol", "dur"}],
      "speed": [[t, factor], ...]   from source time t on, play at factor (0.5 = slow-mo, 1.6 = fast-forward);
                                    slow parts are motion-interpolated}, audio follows with atempo
     {"type": "meme", "src" (video or still image), "ss", "dur", "hold" (freeze after this many s), "cap",
@@ -268,21 +268,22 @@ def build(spec, out):
             subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo',
                             '-t', f'{dur:.3f}', a], check=True)
             if s['type'] == 'meme':
-                sfx.append((spec['boom'], 0, starts[i] / FPS - 0.05, s.get('boomVol', 0.6)))
+                sfx.append((spec['boom'], 0, starts[i] / FPS - 0.05, s.get('boomVol', 0.6), None))
         for e in s.get('sfx', []):
             if s['type'] == 'clip' and s.get('speed'):
                 off = sum(1 for x in src_times(s) if x < e['at']) / FPS
             else:
                 off = e['at'] - s.get('in', 0)
-            sfx.append((e['src'], e.get('ss', 0), starts[i] / FPS + off, e.get('vol', 0.8)))
+            sfx.append((e['src'], e.get('ss', 0), starts[i] / FPS + off, e.get('vol', 0.8), e.get('dur')))
         audio.append(a)
     enc.stdin.close(); enc.wait()
     total = starts[-1] / FPS
     open(f'{tmp}/a.txt', 'w').write(''.join(f"file '{a}'\n" for a in audio))
     ins, chain, mix = ['-f', 'concat', '-safe', '0', '-i', f'{tmp}/a.txt'], '', ['[0:a]']
-    for k, (f, ss, at, vol) in enumerate(sfx):
-        ins += ['-ss', f'{ss:.3f}', '-i', f]
-        chain += f"[{k + 1}:a]volume={vol},adelay={int(max(at, 0) * 1000)}:all=1,aresample=48000[s{k}];"
+    for k, (f, ss, at, vol, d) in enumerate(sfx):
+        ins += ['-ss', f'{ss:.3f}'] + (['-t', f'{d:.3f}'] if d else []) + ['-i', f]
+        fade = f"afade=t=out:st={d - 0.12:.3f}:d=0.12," if d else ''
+        chain += f"[{k + 1}:a]{fade}volume={vol},adelay={int(max(at, 0) * 1000)}:all=1,aresample=48000[s{k}];"
         mix.append(f'[s{k}]')
     if spec.get('bgm'):
         b = spec['bgm']
