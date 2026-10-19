@@ -1,0 +1,99 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 80,
+ "title": {
+  "text": "Always Clip Both Sides 💀",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 26.0,
+  "vol": 0.6
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1ng2nwz.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 0.0,
+   "out": 2.6,
+   "circles": [
+    {
+     "from": 0.0,
+     "to": 0.7,
+     "rx": 0.16,
+     "ry": 0.1,
+     "track": [
+      [
+       0.0,
+       0.24,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/confused-cat__cuW62FiZhBw__cat-stare-blinking-loop-lopped.mp4",
+   "dur": 0.75,
+   "cap": "Bro forgot the clips 😭"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1ng2nwz.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 1.2,
+   "out": 3.25,
+   "speed": [
+    [
+     1.2,
+     1.0
+    ],
+    [
+     1.5,
+     0.45
+    ],
+    [
+     2.4,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 1.5,
+     "x": 0.4,
+     "y": 0.35,
+     "zoom": 1.2
+    }
+   ],
+   "sfx": [
+    {
+     "at": 1.85,
+     "src": "/mnt/project-files/sfx/meme/lego-breaking.mp3",
+     "ss": 0.08,
+     "vol": 0.9
+    }
+   ]
+  }
+ ]
+}

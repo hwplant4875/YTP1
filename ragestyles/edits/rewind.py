@@ -16,7 +16,8 @@ spec:
                                    slow parts are motion-interpolated}, audio follows with atempo
     {"type": "meme", "src" (video or still image), "ss", "dur", "hold" (freeze after this many s), "cap",
      "boomVol"}]
-  optional: "memeBg": "blur" | "black", "capSize", "title": {"text", "y", "size"} (fixed caption on every frame,
+  optional: "bgm": {"src", "ss", "vol"} (music bed under the whole short, fades out at the end),
+  "memeBg": "blur" | "black", "capSize", "title": {"text", "y", "size"} (fixed caption on every frame,
   emoji allowed)
 """
 import json, os, subprocess, sys, tempfile
@@ -283,6 +284,13 @@ def build(spec, out):
         ins += ['-ss', f'{ss:.3f}', '-i', f]
         chain += f"[{k + 1}:a]volume={vol},adelay={int(max(at, 0) * 1000)}:all=1,aresample=48000[s{k}];"
         mix.append(f'[s{k}]')
+    if spec.get('bgm'):
+        b = spec['bgm']
+        k = len(sfx) + 1
+        ins += ['-ss', f"{b.get('ss', 0):.3f}", '-i', b['src']]
+        chain += (f"[{k}:a]volume={b.get('vol', 0.4)},aresample=48000,afade=t=in:d=0.05,"
+                  f"afade=t=out:st={max(total - 0.8, 0):.3f}:d=0.8[bg];")
+        mix.append('[bg]')
     chain += f"{''.join(mix)}amix=inputs={len(mix)}:normalize=0[a]"
     subprocess.run(['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', chain, '-map', '[a]', '-t', f'{total:.3f}',
                     f'{tmp}/a.wav'], check=True)
