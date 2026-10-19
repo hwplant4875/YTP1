@@ -1,0 +1,216 @@
+[
+ {
+  "id": "n01",
+  "vis": "opened shark, labels LIVER / HEART / SPINE",
+  "text": "This is a great white shark. One of the most feared animals on Earth. But have you ever wondered what's actually inside one? Today, we're opening it up, one part at a time.",
+  "dur": 12.0,
+  "file": 11.964082
+ },
+ {
+  "id": "n02",
+  "vis": "shark next to a car and a rhino: 6 m / 2 tons",
+  "text": "First, how big is it? A big great white can be about six meters long. That's longer than a car. And it can weigh up to two tons. About as heavy as a rhino.",
+  "dur": 11.44,
+  "file": 11.389388
+ },
+ {
+  "id": "n03",
+  "vis": "0 BONES \u2192 CARTILAGE, a nose and an ear",
+  "text": "Here's the first surprise. A great white shark has zero bones. None at all. Its skeleton is made of cartilage. That's the same bendy stuff inside your nose and your ears. Go ahead, wiggle your ear. That's what a shark is built from.",
+  "dur": 15.52,
+  "file": 15.490612
+ },
+ {
+  "id": "n04",
+  "vis": "LIGHT + BENDY, the shark makes a tight turn",
+  "text": "Cartilage is lighter than bone, and it can bend. So a shark can turn quickly and doesn't sink as easily.",
+  "dur": 6.8,
+  "file": 6.765714
+ },
+ {
+  "id": "n05",
+  "vis": "backbone \u2192 tree rings, 70+ YEARS",
+  "text": "But the backbone has a secret. It grows rings, just like a tree. Scientists count those rings to guess a shark's age. Some great whites live for more than seventy years.",
+  "dur": 11.6,
+  "file": 11.546122
+ },
+ {
+  "id": "n06",
+  "vis": "hand stroking the skin: SMOOTH / ROUGH, zoom into DENTICLES",
+  "text": "Next, the skin. Stroke a shark from head to tail, and it feels smooth. Stroke it the other way, and it feels like sandpaper. Why? Because shark skin is covered in tiny scales shaped like little teeth. They're called denticles, and they help the shark slide through the water.",
+  "dur": 17.52,
+  "file": 17.475918
+ },
+ {
+  "id": "n07",
+  "vis": "jaw with rows: \u2248300 TEETH, conveyor belt",
+  "text": "Speaking of teeth, let's open the mouth. A great white has about three hundred teeth, lined up in rows. When a front tooth falls out, the one behind it moves up to take its place. It's like a conveyor belt for teeth.",
+  "dur": 14.0,
+  "file": 13.949388
+ },
+ {
+  "id": "n07b",
+  "vis": "top teeth = KNIFE, bottom teeth = FORK, NO CHEWING",
+  "text": "The top and bottom teeth have different jobs. The top teeth are wide and jagged, like steak knives, for cutting. The bottom teeth are narrower and pointier, for holding on. And sharks don't chew. They bite off a chunk and swallow it whole.",
+  "dur": 15.44
+ },
+ {
+  "id": "n08",
+  "vis": "teeth piling up: 1,000s, FOSSIL",
+  "text": "A shark can go through thousands of teeth in its life. That's why shark teeth are some of the most common fossils people find.",
+  "dur": 7.28,
+  "file": 7.235918
+ },
+ {
+  "id": "n09",
+  "vis": "two bars: YOU vs SHARK",
+  "text": "So how strong is that bite? Scientists used a computer model to find out. A big great white may bite with about eighteen thousand newtons of force. A strong human bite is about one thousand. That's around eighteen times stronger.",
+  "dur": 15.52,
+  "file": 15.490612
+ },
+ {
+  "id": "n10",
+  "vis": "question mark \u2192 LIVER grows huge, 1/4",
+  "text": "Now, can you guess the biggest organ inside? It's not the heart. It's not the stomach. It's the liver. It can be about a quarter of the shark's whole weight.",
+  "dur": 10.4,
+  "file": 10.370612
+ },
+ {
+  "id": "n11",
+  "vis": "LIVER = FLOAT, oil rises in water, swim bladder crossed out",
+  "text": "And it's full of oil. Oil is lighter than water, so the liver works like a giant pool float. Most fish float with a bubble of air called a swim bladder. Sharks don't have one. They use their liver instead.",
+  "dur": 13.76,
+  "file": 13.714286
+ },
+ {
+  "id": "n12",
+  "vis": "fuel gauge: LIVER = FUEL",
+  "text": "That oil is also fuel. On long trips across the ocean, the shark burns it for energy, like a car using gas from its tank.",
+  "dur": 8.64,
+  "file": 8.594286
+ },
+ {
+  "id": "n13",
+  "vis": "map: NICOLE, South Africa \u2192 Australia \u2192 back, 20,000 KM",
+  "text": "And those trips can be huge. Scientists put a tracker on a great white named Nicole. She swam from South Africa all the way to Australia, and back again. About twenty thousand kilometers, in less than nine months.",
+  "dur": 14.96,
+  "file": 14.915918
+ },
+ {
+  "id": "n14",
+  "vis": "fins light up one by one: WINGS / KEEL / ENGINE",
+  "text": "Now look at the fins. The two big side fins work like airplane wings. They lift the front of the shark as it swims. The tall fin on top stops it from rolling over. And the tail is the engine.",
+  "dur": 12.96,
+  "file": 13.00898
+ },
+ {
+  "id": "n15",
+  "vis": "speedometer 40 KM/H \u2192 shark flies out of the water",
+  "text": "With one hard swish of that tail, a great white can reach about forty kilometers per hour. Off the coast of South Africa, they shoot up from below so fast that they fly right out of the water. Two tons, in the air.",
+  "dur": 14.24,
+  "file": 14.210612
+ },
+ {
+  "id": "n15b",
+  "vis": "size bar: FISH under 3 m, SEALS over 3 m",
+  "text": "Great whites don't eat seals their whole lives. Young ones mostly eat fish. But once they grow past about three meters, their teeth get wider and stronger, and they start hunting seals.",
+  "dur": 11.76
+ },
+ {
+  "id": "n16",
+  "vis": "water flows through the GILLS; STOP = no air",
+  "text": "Behind the head are five gill slits on each side. Water goes in the mouth, over the gills, and out the slits. The gills pull oxygen out of the water. But a great white has to keep swimming to push water through. If it stops, it can't breathe properly.",
+  "dur": 16.64,
+  "file": 16.587755
+ },
+ {
+  "id": "n17",
+  "vis": "one loop: HEART \u2192 GILLS \u2192 BODY",
+  "text": "That oxygen is pumped around the body by the heart. Your heart pumps blood in two loops. A shark's heart uses just one big loop. Heart, gills, body, and back again.",
+  "dur": 12.16,
+  "file": 12.120816
+ },
+ {
+  "id": "n18",
+  "vis": "thermal camera: WARM, +14\u00b0C",
+  "text": "Here's something most fish can't do. Most fish are as cold as the water around them. But a great white keeps parts of its body warm, up to about fourteen degrees warmer than the ocean. And warm muscles are fast muscles.",
+  "dur": 14.64,
+  "file": 14.602449
+ },
+ {
+  "id": "n19",
+  "vis": "U-shaped STOMACH \u2192 corkscrew SPIRAL VALVE",
+  "text": "Food goes into a stomach shaped like the letter U. Then it enters something really weird, called the spiral valve. Instead of a long tube like ours, the shark's gut twists like a corkscrew, so food spins slowly through it. And here's a gross one. Some sharks can push their stomach out through their mouth to rinse it, then pull it back in.",
+  "file": 14.602449,
+  "dur": 22.0
+ },
+ {
+  "id": "n20",
+  "vis": "snout pores light up: ELECTRIC SENSE, fish hiding in sand",
+  "text": "Now, the superpowers. Look at the dots on the snout. They're tiny pores filled with jelly, and they can feel electricity. Every living animal makes a tiny electric signal when its muscles move. So even a fish hiding under the sand can't hide from a great white.",
+  "dur": 17.36,
+  "file": 17.319184
+ },
+ {
+  "id": "n21",
+  "vis": "line along the side: LATERAL LINE, ripples",
+  "text": "Along its sides runs a line of sensors called the lateral line. It feels movement in the water. A fish splashing far away? The shark feels it before it even sees it.",
+  "dur": 10.88,
+  "file": 10.840816
+ },
+ {
+  "id": "n22",
+  "vis": "brain: SMELL part glows",
+  "text": "Then there's smell. A shark has two nostrils, but it doesn't breathe through them. They're only for smelling. The brain is small, but the part used for smelling is big. Great whites can pick up faint smells from far away.",
+  "file": 9.325714,
+  "dur": 14.8
+ },
+ {
+  "id": "n23",
+  "vis": "eye: MIRROR, then the eye rolls back: BITES BLIND",
+  "text": "Its eyes have a mirror at the back, which helps it see in dark water. And right when it bites, a great white rolls its eyes backward to protect them. For that moment, it bites blind.",
+  "dur": 11.68,
+  "file": 11.650612
+ },
+ {
+  "id": "n24",
+  "vis": "head pops out of the water: SPY-HOP",
+  "text": "Great whites can even look above the water. They poke their head straight up and look around. Scientists call it spy-hopping.",
+  "dur": 8.24,
+  "file": 8.202449
+ },
+ {
+  "id": "n25",
+  "vis": "four steps: SMELL \u2192 FEEL \u2192 SEE \u2192 ZAP",
+  "text": "So here's how it all works together. First, it smells its prey from far away. Then it feels the movement. Then it sees it. And at the very last second, it uses electricity to aim the bite.",
+  "dur": 13.68,
+  "file": 13.635918
+ },
+ {
+  "id": "n26",
+  "vis": "baby shark: 1 YEAR+, 1 M LONG, NO PARENTS",
+  "text": "Great white babies grow inside their mother for a year or even longer. A mother can carry around two to ten pups at once. When they're born, they're already more than a meter long, with a full set of teeth. And right away, they swim off on their own. No parents. No lessons.",
+  "file": 14.367347,
+  "dur": 18.08
+ },
+ {
+  "id": "n27",
+  "vis": "timeline: SHARKS before TREES before DINOSAURS",
+  "text": "Sharks have been around for more than four hundred million years. That's older than trees, and much older than dinosaurs.",
+  "dur": 7.68,
+  "file": 7.627755
+ },
+ {
+  "id": "n27b",
+  "vis": "shield: PROTECTED",
+  "text": "Today, there are fewer great whites than there used to be, so they are protected in many countries. Scientists study them, like we just did, so we can help keep them safe.",
+  "dur": 10.4
+ },
+ {
+  "id": "n28",
+  "vis": "all labels come back on the open shark",
+  "text": "No bones. Teeth on its skin. A liver that floats. Muscles that stay warm. And a sixth sense for electricity. That's what's inside a great white shark. So, what should we open next? Tell us in the comments.",
+  "dur": 15.52,
+  "file": 15.56898
+ }
+]

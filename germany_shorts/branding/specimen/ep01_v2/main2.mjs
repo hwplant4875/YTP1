@@ -1,0 +1,10 @@
+import * as S1 from './s1.mjs'; import * as S2 from './s2.mjs'; import * as S3 from './s3.mjs';
+import { sceneAt, TOTAL, SC } from './tl2.mjs';
+import { bg, W, H, f1, eo } from './eng2.mjs';
+export { FONTS, W, H } from './eng2.mjs';
+export { TOTAL };
+const F = { ...S1, ...S2, ...S3 };
+const BG = { n16: 'deep', n17: 'deep', n18: 'night', n20: 'night', n21: 'deep', n22: 'deep', n23: 'night', n26: 'deep', n27: 'sand' };
+export const scene = (id, t) => { const k = eo(0, 0.35, t), z = 1.035 - 0.035 * k;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${bg(t + id.length * 7, BG[id] || 'sea')}<g transform="translate(960 540) scale(${f1(z * 1000) / 1000}) translate(-960 -540)">${F[id](t)}</g></svg>`; };
+export const frame = T => { const [s, t] = sceneAt(T); return scene(s.id, t); };
