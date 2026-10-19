@@ -1,0 +1,13 @@
+{"composition_plan":{
+ "positive_global_styles":["cinematic instrumental","emotional motivational","modern piano and synth","clean mix","no vocals"],
+ "negative_global_styles":["vocals","singing","choir","lyrics","EDM drop","dubstep"],
+ "sections":[
+  {"section_name":"Night","positive_local_styles":["sparse sad solo piano","slow","lonely late night","soft low drone","quiet"],"negative_local_styles":["drums","percussion"],"duration_ms":33000,"lines":[]},
+  {"section_name":"Decision","positive_local_styles":["piano continues","subtle ticking pulse","tension rising","hopeful chord change"],"negative_local_styles":["full drums"],"duration_ms":13000,"lines":[]},
+  {"section_name":"First run","positive_local_styles":["soft kick pulse enters at 120 bpm","struggling","heavy","building anticipation","felt piano arpeggio"],"negative_local_styles":["big drop"],"duration_ms":12000,"lines":[]},
+  {"section_name":"Montage","positive_local_styles":["driving uplifting beat 120 bpm","punchy drums","bright synth arpeggios","piano motif","momentum","progress"],"negative_local_styles":["sad"],"duration_ms":36000,"lines":[]},
+  {"section_name":"Rain","positive_local_styles":["breakdown","drums drop out","pads and piano only","determined","quiet tension"],"negative_local_styles":["loud drums"],"duration_ms":10000,"lines":[]},
+  {"section_name":"Climax","positive_local_styles":["full triumphant return of the beat","soaring synth lead","big emotional piano chords","victory","sunrise"],"negative_local_styles":["sad"],"duration_ms":18000,"lines":[]},
+  {"section_name":"Outro","positive_local_styles":["warm calm resolution","solo piano with soft pads","peaceful morning","gentle ending fading out"],"negative_local_styles":["drums"],"duration_ms":24000,"lines":[]}
+ ]},
+ "model_id":"music_v1"}
