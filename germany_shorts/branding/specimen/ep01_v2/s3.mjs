@@ -1,4 +1,4 @@
-import { K, W, H, f1, clamp, sm, eo, pop, lerp, seed, rnd, big, tag, place, toScr, sharkSolid, sharkInside, sharkOpen, bob, PT, icon, ICON, cross, count, SHARK } from './eng2.mjs';
+import { K, W, H, f1, clamp, sm, eo, pop, lerp, seed, rnd, big, tag, place, toScr, sharkSolid, sharkInside, sharkOpen, bob, PT, icon, ICON, cross, count, SHARK, fade, xfade } from './eng2.mjs';
 import { at } from './tl2.mjs';
 const wave = (wl, t, c = '#fff') => `<path d="M0 ${wl} ${Array.from({ length: 49 }, (_, i) => `L${i * 40} ${f1(wl + 8 * Math.sin(i * 0.5 + t * 2.5))}`).join(' ')}" stroke="${c}" stroke-width="6" fill="none"/>`;
 
@@ -88,12 +88,23 @@ export function n22(t) {
     s += big(1100, 930, 'ONLY FOR SMELL', t, at('n22', "They're only"), { size: 110, fill: K.yellow, stroke: K.navy, sw: 12 });
     if (t > at('n22', "doesn't breathe")) s += cross(1640, 560, 80, t, at('n22', "doesn't breathe")) + big(1640, 700, 'NO AIR', t, at('n22', "doesn't breathe"), { size: 70 });
   } else {
-    const hi = sm(at('n22', 'the part used'), at('n22', 'the part used') + 0.5, t), puls = 1 + 0.05 * Math.sin(t * 6) * hi;
-    s += `<g transform="translate(900 470) scale(1.4)"><ellipse cx="-300" cy="0" rx="100" ry="80" fill="#fff" stroke="${K.navy}" stroke-width="7"/><ellipse cx="-150" cy="0" rx="90" ry="100" fill="#fff" stroke="${K.navy}" stroke-width="7"/>
-      <ellipse cx="0" cy="-45" rx="70" ry="55" fill="#fff" stroke="${K.navy}" stroke-width="7"/><ellipse cx="0" cy="45" rx="70" ry="55" fill="#fff" stroke="${K.navy}" stroke-width="7"/>
-      ${[-1, 1].map(sg => `<path d="M60 ${sg * 40} C130 ${sg * 40} 180 ${sg * 110} 240 ${sg * 160}" stroke="${hi > 0 ? K.red : K.navy}" stroke-width="20" fill="none" stroke-linecap="round"/><g transform="translate(300 ${sg * 190}) scale(${f1(puls * 100) / 100})"><ellipse rx="${f1(80 + 20 * hi)}" ry="${f1(60 + 14 * hi)}" fill="${hi > 0 ? K.red : '#fff'}" stroke="${K.navy}" stroke-width="7"/></g>`).join('')}</g>`;
-    s += big(420, 960, 'BRAIN', t, tb, { size: 110 }) + tag(900 + 360 * 1.4, 470 - 266, 1640, 120, 'SMELL', t, at('n22', 'the part used'), { col: K.red, txt: '#fff', size: 80 });
-    s += big(1300, 960, 'SUPER NOSE', t, at('n22', 'faint smells'), { size: 110, fill: K.yellow, stroke: K.navy, sw: 12 });
+    // top view of the head with the real brain layout: spinal cord, cerebellum, optic lobes, forebrain, long smell tracts, huge smell bulbs
+    const hi = sm(at('n22', 'the part used'), at('n22', 'the part used') + 0.5, t), puls = 1 + 0.06 * Math.sin(t * 6) * hi;
+    const B = '#f2d3c4', o = `stroke="${K.navy}" stroke-width="6"`, sm1 = hi > 0 ? K.red : B;
+    let g = `<path d="M-620 -250 C-300 -262 100 -240 340 -160 C480 -110 570 -44 592 0 C570 44 480 110 340 160 C100 240 -300 262 -620 250Z" fill="#fff" fill-opacity=".14" stroke="#fff" stroke-width="7"/>`;
+    g += [-1, 1].map(sg => `<ellipse cx="170" cy="${sg * 182}" rx="34" ry="22" fill="${K.navy}"/><circle cx="178" cy="${sg * 186}" r="7" fill="#fff"/>`).join('');
+    g += `<path d="M-640 -20 L-330 -20 C-300 -40 -270 -50 -250 -46 L-250 46 C-270 50 -300 40 -330 20 L-640 20Z" fill="${B}" ${o}/>`;  // cord + medulla
+    g += `<ellipse cx="-196" cy="0" rx="74" ry="92" fill="${B}" ${o}/><path d="M-250 -40 C-220 -30 -170 -30 -140 -44 M-262 0 C-220 10 -170 10 -126 0 M-250 40 C-220 30 -170 30 -140 44" stroke="${K.navy}" stroke-width="4" fill="none" opacity=".6"/>`;  // cerebellum
+    g += [-1, 1].map(sg => `<ellipse cx="-70" cy="${sg * 58}" rx="66" ry="54" fill="${B}" ${o}/>`).join('');  // optic lobes
+    g += [-1, 1].map(sg => `<ellipse cx="78" cy="${sg * 52}" rx="74" ry="60" fill="${B}" ${o}/><path d="M40 ${sg * 30} C70 ${sg * 50} 100 ${sg * 50} 120 ${sg * 30}" stroke="${K.navy}" stroke-width="4" fill="none" opacity=".5"/>`).join('');  // forebrain
+    g += [-1, 1].map(sg => `<path d="M140 ${sg * 40} C220 ${sg * 50} 280 ${sg * 110} 330 ${sg * 160}" stroke="${K.navy}" stroke-width="30" fill="none" stroke-linecap="round"/><path d="M140 ${sg * 40} C220 ${sg * 50} 280 ${sg * 110} 330 ${sg * 160}" stroke="${sm1}" stroke-width="18" fill="none" stroke-linecap="round"/>
+      <g transform="translate(372 ${sg * 168}) scale(${f1(puls * 100) / 100})"><ellipse rx="${f1(62 + 14 * hi)}" ry="${f1(46 + 10 * hi)}" fill="${sm1}" ${o}/></g>
+      <g transform="translate(470 ${sg * 150})"><ellipse rx="44" ry="26" fill="#fff" ${o}/>${[-24, -12, 0, 12, 24].map(dx => `<path d="M${dx} -20 L${dx} 20" stroke="${K.navy}" stroke-width="3"/>`).join('')}</g>`).join('');  // smell tracts, bulbs, nose rosettes
+    s += `<g transform="translate(860 500) scale(1.25)">${g}</g>`;
+    const [bx, by] = [860 + 372 * 1.25, 500 - 168 * 1.25];
+    s += tag(bx, by, 1640, 120, 'SMELL', t, at('n22', 'the part used'), { col: K.red, txt: '#fff', size: 80 });
+    s += tag(860 - 196 * 1.25, 500 - 92 * 1.25, 330, 130, 'BRAIN', t, tb, { col: '#fff' });
+    s += big(1100, 960, 'SUPER NOSE', t, at('n22', 'faint smells'), { size: 120, fill: K.yellow, stroke: K.navy, sw: 12 });
   }
   return s;
 }
@@ -112,11 +123,22 @@ export function n23(t) {
       if (ph > 0.5) s += `<path d="M${xb} ${yy} L${f1(lerp(xb, 1800, (ph - 0.5) * 2))} ${f1(yy - i * 30 * (ph - 0.5))}" stroke="#fff" stroke-width="8" stroke-dasharray="20 14" opacity="${f1(rk)}"/>`; }
     s += tag(cx - R + 10, cy - 160, 320, 170, 'MIRROR', t, at('n23', 'mirror'), { col: '#fff' }) + big(1400, 930, 'SEES IN THE DARK', t, at('n23', 'dark water'), { size: 90, fill: K.yellow, stroke: K.navy, sw: 10 });
   } else {
-    const roll = eo(at('n23', 'rolls its eyes'), at('n23', 'rolls its eyes') + 0.8, t);
-    s += `<g transform="translate(960 480) scale(3)"><path d="M-120 0 Q0 -95 120 0 Q0 95 -120 0Z" fill="#fff" stroke="${K.navy}" stroke-width="7"/><defs><clipPath id="e23"><path d="M-120 0 Q0 -95 120 0 Q0 95 -120 0Z"/></clipPath></defs>
-      <g clip-path="url(#e23)"><circle cx="${f1(-110 * roll)}" cy="0" r="44" fill="${K.navy}"/><circle cx="${f1(-110 * roll - 14)}" cy="-14" r="12" fill="#fff"/></g></g>`;
-    s += big(960, 900, 'BITES BLIND!', t, at('n23', 'it bites blind'), { size: 160, fill: K.red, stroke: '#fff', sw: 16 });
-    s += big(960, 160, 'EYES ROLL BACK', t, at('n23', 'rolls its eyes'), { size: 100 });
+    const tro = at('n23', 'rolls its eyes'), roll = eo(tro, tro + 0.7, t), tb = at('n23', 'it bites blind'), bite = sm(tb - 0.3, tb, t) * (1 - sm(tb + 0.6, tb + 1.0, t));
+    const cx = 20, cy = 600, sc = 2.8;
+    let g = `<path d="${SHARK}" fill="#fff" stroke="${K.navy}" stroke-width="4" stroke-linejoin="round"/>`;
+    g += [0, 1, 2, 3, 4].map(i => `<path d="M${716 + i * 17} 178 C${722 + i * 17} 210 ${720 + i * 17} 240 ${712 + i * 17} 258" stroke="${K.navy}" stroke-width="3" fill="none" opacity=".5"/>`).join('');
+    // jaw opens for the bite
+    const jo = 6 + 34 * bite;
+    g += `<path d="M880 236 C905 ${f1(236 + jo * 0.6)} 935 ${f1(236 + jo)} 972 ${f1(228 + jo * 0.6)} L980 226 C950 232 915 234 880 236Z" fill="#3a0f1e" stroke="${K.navy}" stroke-width="3"/>`;
+    for (let i = 0; i < 6; i++) { const x = 900 + i * 12; g += `<path d="M${x} 234 l5 ${f1(6 + jo * 0.15)} l5 -${f1(6 + jo * 0.15)}Z" fill="#fff"/>`; }
+    // eye: black, then rolls back so the tough white side faces out
+    g += `<defs><clipPath id="ey23"><circle cx="905" cy="190" r="14"/></clipPath></defs><circle cx="905" cy="190" r="14" fill="${K.navy}"/>
+      <g clip-path="url(#ey23)"><circle cx="${f1(905 + 30 * (1 - roll) + 3 * roll)}" cy="190" r="14" fill="#f2f2ea"/></g><circle cx="905" cy="190" r="14" fill="none" stroke="${K.navy}" stroke-width="3"/>`;
+    s += place(cx, cy, sc, g);
+    const [ex, ey] = toScr(cx, cy, sc, 905, 190);
+    if (roll > 0 && roll < 1) s += `<path d="M${f1(ex + 70)} ${f1(ey - 60)} A90 90 0 0 0 ${f1(ex - 70)} ${f1(ey - 60)}" stroke="${K.yellow}" stroke-width="12" fill="none" stroke-linecap="round" opacity="${f1(Math.sin(Math.PI * roll))}"/>`;
+    s += tag(ex, ey, 1500, 170, 'EYES ROLL BACK', t, tro, { col: '#fff', size: 72 });
+    s += big(960, 960, 'BITES BLIND!', t, tb, { size: 160, fill: K.red, stroke: '#fff', sw: 16 });
   }
   return s;
 }
@@ -144,8 +166,11 @@ export function n25(t) {
     s += `<g transform="translate(${x} ${y}) scale(${f1((on ? 1.08 : 0.92) * k * 100) / 100})"><rect x="-170" y="-170" width="340" height="340" rx="40" fill="${on ? K.navy : '#2f6fa8'}" stroke="${on ? K.yellow : '#fff'}" stroke-width="10"/>
       <g transform="translate(0 -30) scale(${ic === 'eye' ? 1.1 : 0.9})">${ICON[ic](c)}</g><text y="130" font-family="Black" font-size="64" fill="#fff" text-anchor="middle">${n}</text></g>`;
     if (i < 3) s += `<path d="M${x + 185} ${y} l40 0" stroke="#fff" stroke-width="12" stroke-linecap="round" opacity="${f1(k)}"/>`; });
-  const u = eo(st[0][2] - 0.5, st[3][2] + 1, t), px = 1700;
-  s += place(lerp(260, px - 330, u), 850, 0.4, sharkSolid('#fff', K.navy, 14)) + `<g transform="translate(${px} 850) scale(.8)">${ICON.fish()}</g>`;
+  const u = eo(st[0][2] - 0.5, st[3][2] + 1, t), px = 1700, tc = at('n25', 'aim the bite') - 0.5;
+  const fx = px + 900 * Math.pow(clamp((t - tc) / 0.7), 1.6), fy = 850 + (t > tc ? 30 * Math.sin((t - tc) * 30) : 0);
+  const sx = lerp(260, px - 330, u) + 1200 * Math.pow(clamp((t - tc - 0.15) / 0.8), 1.7);
+  s += place(sx, 850, 0.4, sharkSolid('#fff', K.navy, 14)) + `<g transform="translate(${f1(fx)} ${f1(fy)}) rotate(${t > tc ? f1(12 * Math.sin((t - tc) * 30)) : 0}) scale(-.8 .8)">${ICON.fish()}</g>`;
+  if (t > tc) for (let i = 0; i < 3; i++) s += `<path d="M${f1(fx - 220 - i * 50)} ${f1(fy - 40 + i * 40)} L${f1(fx - 120 - i * 50)} ${f1(fy - 40 + i * 40)}" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity="${f1(0.7 * (1 - sm(tc + 0.6, tc + 0.9, t)))}"/>`;
   return s;
 }
 
@@ -164,9 +189,8 @@ export function n26(t) {
     const u = eo(ts, ts + 3, t), bx = lerp(760, 2300, u * u);
     s += `<path d="M420 760 L${420 + 520} 760" stroke="#fff" stroke-width="12" stroke-linecap="round"/><path d="M420 735 L420 785 M940 735 L940 785" stroke="#fff" stroke-width="12" stroke-linecap="round"/>` + big(680, 850, '1 M+', t, at('n26', 'more than a meter'), { size: 110, fill: K.yellow, stroke: K.navy, sw: 12 });
     s += place(bx - 80, 600, 0.56, sharkSolid('#fff', K.navy, 11));
-    s += big(1350, 380, 'FULL SET', t, at('n26', 'full set'), { size: 90 }) + big(1350, 490, 'OF TEETH', t, at('n26', 'full set') + 0.2, { size: 90 });
-    if (t > at('n26', 'No parents') - 0.1) s += `<rect width="${W}" height="${H}" fill="${K.navy}" opacity="${f1(0.9 * sm(at('n26', 'No parents') - 0.1, at('n26', 'No parents') + 0.2, t))}"/>`;
-    s += big(960, 440, 'NO PARENTS.', t, at('n26', 'No parents'), { size: 170 }) + big(960, 640, 'NO LESSONS.', t, at('n26', 'No lessons'), { size: 170, fill: K.yellow });
+    if (t < at('n26', 'on their own')) s += big(1350, 380, 'FULL SET', t, at('n26', 'full set'), { size: 90 }) + big(1350, 490, 'OF TEETH', t, at('n26', 'full set') + 0.2, { size: 90 });
+    s += big(960, 200, 'ON ITS OWN!', t, at('n26', 'on their own'), { size: 150, fill: K.yellow, stroke: K.navy, sw: 14 });
   }
   return s;
 }
@@ -184,17 +208,28 @@ export function n27(t) {
   return s;
 }
 
-// 27b protected
+// 27b fewer sharks → protected (safety bubble) → scientists track them (satellite tag)
 export function n27b(t) {
-  const tp = at('n27b', 'protected'), tf = at('n27b', 'fewer'); let s = '';
-  if (t < tp) for (let i = 0; i < 6; i++) { const x = 520 + (i % 3) * 440, y = 420 + Math.floor(i / 3) * 260, gone = i % 2 === 1 || i === 4 ? sm(tf + 0.2 + i * 0.1, tf + 0.6 + i * 0.1, t) : 0;
-    s += `<g opacity="${f1(1 - gone)}">${place(x, y + bob(t + i, 6), 0.32, sharkSolid('#fff', K.navy, 20))}</g>`; }
-  s += icon('shield', 960, 470, 1.9, t, tp);
-  if (t > tp) s += place(960, 480, 0.18 * pop(tp, t), sharkSolid('#fff', K.navy, 40));
-  s += big(960, 160, 'FEWER SHARKS', t, at('n27b', 'fewer'), { size: 120 });
-  s += big(960, 900, 'PROTECTED', t, at('n27b', 'protected'), { size: 170, fill: K.green, stroke: K.navy, sw: 14 });
-  if (t > at('n27b', 'keep them safe')) s += `<rect x="560" y="780" width="800" height="240" fill="${K.sea2}" opacity="0"/>`;
-  return s;
+  const tf = at('n27b', 'fewer'), tp = at('n27b', 'so they are protected'), tsc = at('n27b', 'Scientists study');
+  const A = () => { let s = big(960, 150, 'FEWER SHARKS', t, tf, { size: 120 });
+    for (let i = 0; i < 8; i++) { const x = 300 + (i % 4) * 440, y = 430 + Math.floor(i / 4) * 300, gone = [1, 2, 4, 6, 7].includes(i) ? sm(tf + 0.3 + i * 0.12, tf + 0.8 + i * 0.12, t) : 0;
+      s += `<g opacity="${f1(1 - 0.75 * gone)}">${place(x + 20 * Math.sin(t + i), y + bob(t + i, 6), 0.3, gone > 0.5 ? `<path d="${SHARK}" fill="none" stroke="#fff" stroke-width="16" stroke-dasharray="40 30"/>` : sharkSolid('#fff', K.navy, 20))}</g>`; }
+    return s; };
+  const B = () => { const cx = 960, cy = 520, sh = sm(tp, tp + 0.8, t);
+    let s = place(cx + 30 * Math.sin(t * 0.8), cy + bob(t, 8), 0.95, sharkSolid('#fff', K.navy, 9));
+    if (sh > 0) { const r = 560 * eo(tp, tp + 0.8, t);
+      s += `<ellipse cx="${cx}" cy="${cy}" rx="${f1(r)}" ry="${f1(r * 0.55)}" fill="${K.cyan}" fill-opacity=".14" stroke="${K.cyan}" stroke-width="14" opacity="${f1(sh)}"/>`;
+      s += `<path d="M${f1(cx - r * 0.7)} ${f1(cy - r * 0.32)} A${f1(r * 0.8)} ${f1(r * 0.45)} 0 0 1 ${f1(cx - r * 0.2)} ${f1(cy - r * 0.5)}" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round" opacity="${f1(0.7 * sh)}"/>`; }
+    s += icon('shield', 1500, 260, 0.9, t, tp + 0.5);
+    // satellite tag on the dorsal fin, blinking, with signal arcs to the sky
+    const tk = sm(tsc, tsc + 0.4, t);
+    if (tk > 0) { const [dx, dy] = toScr(cx + 30 * Math.sin(t * 0.8), cy + bob(t, 8), 0.95, 520, 70), bl = Math.sin(t * 8) > 0 ? 1 : 0.3;
+      s += `<g opacity="${f1(tk)}"><rect x="${f1(dx - 26)}" y="${f1(dy - 8)}" width="52" height="30" rx="8" fill="${K.yellow}" stroke="${K.navy}" stroke-width="6"/><circle cx="${f1(dx + 12)}" cy="${f1(dy + 7)}" r="6" fill="${K.red}" opacity="${bl}"/>
+        ${[0, 1, 2].map(i => { const r = 40 + ((t * 80 + i * 45) % 135); return `<path d="M${f1(dx - r * 0.7)} ${f1(dy - r * 0.7)} A${f1(r)} ${f1(r)} 0 0 1 ${f1(dx + r * 0.7)} ${f1(dy - r * 0.7)}" stroke="#fff" stroke-width="7" fill="none" opacity="${f1(1 - (r - 40) / 135)}"/>`; }).join('')}</g>`;
+      s += tag(dx, dy - 20, 560, 200, 'TRACKER', t, tsc + 0.3, { col: K.yellow }); }
+    s += t < tsc + 0.2 ? big(960, 960, 'PROTECTED', t, tp, { size: 170, fill: K.green, stroke: K.navy, sw: 14 }) : fade(960, 960, 'KEEP THEM SAFE', t, tsc + 0.2, { size: 130, fill: K.green, stroke: K.navy, sw: 14, d: 0.4 });
+    return s; };
+  return t < tp - 0.3 ? A() : xfade(t, tp - 0.3, 0.5, A, B);
 }
 
 // 28 summary on the opened shark → what next?

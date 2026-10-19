@@ -58,10 +58,32 @@ export const PT = { liver: [575, 258], heart: [774, 272], spine: [500, 168], sto
 // simple chunky icons (drawn around 0,0, about 200 px wide)
 export const ICON = {
   car: (c = '#fff') => `<path d="M-230 40 L-230 -10 Q-220 -40 -170 -45 L-110 -100 Q-90 -115 -40 -115 L60 -115 Q100 -115 130 -90 L190 -45 Q230 -40 235 -5 L235 40Z" fill="${c}" stroke="${K.navy}" stroke-width="8" stroke-linejoin="round"/><path d="M-95 -50 L-55 -92 L10 -92 L10 -50Z M30 -50 L30 -92 L80 -92 L135 -50Z" fill="${K.cyan}" stroke="${K.navy}" stroke-width="6"/><circle cx="-130" cy="45" r="42" fill="${K.navy}"/><circle cx="135" cy="45" r="42" fill="${K.navy}"/><circle cx="-130" cy="45" r="16" fill="#ccc"/><circle cx="135" cy="45" r="16" fill="#ccc"/>`,
-  rhino: (c = '#b9c0cc') => `<path d="M-200 30 Q-215 -60 -150 -95 Q-60 -130 60 -110 Q120 -100 150 -70 L190 -100 L185 -60 Q230 -50 240 -10 Q245 20 215 30 L190 30 L185 90 L145 90 L140 40 L-110 40 L-115 90 L-155 90 L-160 40Z" fill="${c}" stroke="${K.navy}" stroke-width="8" stroke-linejoin="round"/><path d="M215 -25 L268 -95 L240 -18Z" fill="#fff" stroke="${K.navy}" stroke-width="6"/><circle cx="170" cy="-40" r="7" fill="${K.navy}"/><path d="M120 -95 L135 -140 L150 -92" fill="${c}" stroke="${K.navy}" stroke-width="6"/>`,
+  rhino: (c = '#b9c0cc') => { const d = '#99a1b0', o = `stroke="${K.navy}" stroke-width="7" stroke-linejoin="round"`;
+    return `<path d="M50 40 L46 104 L84 104 L86 40Z M-112 40 L-116 104 L-80 104 L-78 40Z" fill="${d}" ${o}/>
+    <path d="M-205 -18 C-226 -8 -234 12 -228 32" stroke="${K.navy}" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M152 -76 C142 -100 148 -122 162 -134 C172 -118 172 -98 166 -78Z" fill="${c}" ${o}/>
+    <path d="M196 -56 C200 -74 206 -88 214 -98 C216 -82 216 -66 214 -50Z" fill="#efe9dc" ${o}/>
+    <path d="M226 -38 C236 -78 250 -110 270 -130 C264 -96 260 -62 254 -28Z" fill="#efe9dc" ${o}/>
+    <path d="M86 40 L82 112 L128 112 L132 40Z M-148 32 L-156 112 L-108 112 L-102 40Z" fill="${c}" ${o}/>
+    <path d="M-210 22 C-232 -40 -200 -100 -130 -116 C-60 -132 40 -126 100 -106 C128 -96 146 -84 156 -66 C184 -72 214 -60 234 -36 C250 -20 262 0 260 20 C258 38 240 48 220 46 C204 46 190 42 176 44 C164 62 150 72 136 74 C100 72 64 62 40 62 L-120 62 C-162 62 -200 50 -210 22Z" fill="${c}" ${o}/>
+    <path d="M80 -112 C68 -62 74 -12 94 40 M-118 -114 C-108 -62 -110 -12 -100 48 M136 -88 C126 -58 126 -22 140 8" stroke="${K.navy}" stroke-width="4" fill="none" opacity=".45" stroke-linecap="round"/>
+    <path d="M222 30 C232 34 244 32 252 26" stroke="${K.navy}" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="194" cy="-26" r="7" fill="${K.navy}"/>
+    <path d="M90 110 l8 -10 M106 111 l6 -10 M-146 110 l8 -10 M-130 111 l6 -10" stroke="${K.navy}" stroke-width="4" stroke-linecap="round"/>`; },
   fish: (c = K.yellow) => `<path d="M-90 0 C-50 -55 50 -55 90 0 C50 55 -50 55 -90 0Z" fill="${c}" stroke="${K.navy}" stroke-width="7"/><path d="M85 0 L140 -45 L140 45Z" fill="${c}" stroke="${K.navy}" stroke-width="7" stroke-linejoin="round"/><circle cx="-45" cy="-10" r="9" fill="${K.navy}"/>`,
-  seal: (c = '#8a8f9c') => `<path d="M-150 20 Q-160 -40 -100 -60 Q-20 -80 60 -50 Q120 -25 150 20 Q120 45 40 45 L-90 45 Q-140 45 -150 20Z" fill="${c}" stroke="${K.navy}" stroke-width="7"/><circle cx="-110" cy="-20" r="8" fill="${K.navy}"/><path d="M140 15 L190 -20 L185 40Z" fill="${c}" stroke="${K.navy}" stroke-width="6"/><path d="M-40 40 L-10 80 L20 40" fill="${c}" stroke="${K.navy}" stroke-width="6"/>`,
-  tree: () => `<rect x="-22" y="20" width="44" height="120" fill="#8a5a2b" stroke="${K.navy}" stroke-width="7"/><circle cx="0" cy="-30" r="95" fill="${K.green}" stroke="${K.navy}" stroke-width="7"/><circle cx="-60" cy="20" r="55" fill="${K.green}" stroke="${K.navy}" stroke-width="7"/><circle cx="60" cy="20" r="55" fill="${K.green}" stroke="${K.navy}" stroke-width="7"/>`,
+  seal: (c = '#6f6458') => { const o = `stroke="${K.navy}" stroke-width="6" stroke-linejoin="round"`;
+    return `<defs><linearGradient id="sealG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5047"/><stop offset=".55" stop-color="${c}"/><stop offset="1" stop-color="#b9a68e"/></linearGradient></defs>
+    <path d="M150 18 C178 2 200 -6 214 -2 C206 14 196 28 176 36 C196 44 210 56 212 70 C194 70 172 60 150 44Z" fill="#4e463e" ${o}/>
+    <path d="M-176 -6 C-170 -34 -146 -52 -118 -54 C-96 -56 -80 -48 -66 -40 C-20 -52 60 -50 120 -24 C150 -10 162 20 152 42 C120 52 60 56 0 52 C-50 50 -90 44 -116 30 C-138 32 -160 26 -172 14 C-178 8 -178 2 -176 -6Z" fill="url(#sealG)" ${o}/>
+    <path d="M-40 34 C-34 60 -20 84 6 96 C-12 98 -36 92 -50 78 C-60 66 -60 48 -56 36Z" fill="#4e463e" ${o}/>
+    <path d="M-104 -50 C-102 -60 -96 -64 -90 -60" stroke="${K.navy}" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <circle cx="-136" cy="-28" r="8" fill="${K.navy}"/><circle cx="-139" cy="-31" r="2.5" fill="#fff"/><ellipse cx="-172" cy="-4" rx="7" ry="5" fill="${K.navy}"/>
+    <path d="M-160 4 L-204 -6 M-160 8 L-206 8 M-158 12 L-200 22" stroke="#fff" stroke-width="2.5" opacity=".85" stroke-linecap="round"/>`; },
+  tree: () => { const o = `stroke="${K.navy}" stroke-width="7" stroke-linejoin="round"`;
+    return `<path d="M-30 150 C-22 90 -24 40 -14 -10 L14 -10 C24 40 22 90 34 150 C10 156 -8 156 -30 150Z" fill="#8a5a2b" ${o}/>
+    <path d="M-8 20 C-40 0 -60 -20 -70 -40 M6 0 C34 -20 56 -40 66 -60 M-6 130 C-4 100 -10 70 -4 40 M12 120 C14 90 8 60 12 30" stroke="${K.navy}" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M-150 -10 C-190 -20 -200 -80 -160 -100 C-170 -150 -110 -180 -80 -150 C-70 -200 10 -215 30 -170 C70 -200 140 -170 130 -120 C180 -110 190 -40 150 -20 C150 20 90 40 60 10 C30 40 -30 40 -50 10 C-90 30 -150 20 -150 -10Z" fill="#2fb36a" ${o}/>
+    <path d="M-120 -40 C-110 -70 -80 -80 -60 -70 M-10 -120 C10 -140 40 -140 60 -120 M60 -60 C80 -80 110 -80 120 -60 M-70 -10 C-50 -30 -20 -30 0 -14" stroke="#1d8a4e" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <circle cx="-60" cy="-110" r="12" fill="#5fd38d"/><circle cx="70" cy="-140" r="10" fill="#5fd38d"/><circle cx="110" cy="-40" r="9" fill="#5fd38d"/><circle cx="-120" cy="-20" r="8" fill="#5fd38d"/>`; },
   dino: () => `<path d="M-200 60 Q-120 40 -80 -10 Q-40 -60 20 -60 Q60 -60 80 -110 Q90 -170 140 -175 Q200 -178 205 -140 Q205 -115 165 -115 L140 -110 Q120 -40 110 0 Q100 60 60 70 L60 120 L25 120 L25 75 L-40 75 L-40 120 L-75 120 L-78 70 Q-140 75 -200 60Z" fill="#7ac36a" stroke="${K.navy}" stroke-width="7" stroke-linejoin="round"/><circle cx="170" cy="-150" r="7" fill="${K.navy}"/>`,
   eye: (c = '#fff') => `<path d="M-120 0 Q0 -95 120 0 Q0 95 -120 0Z" fill="${c}" stroke="${K.navy}" stroke-width="8"/><circle r="42" fill="${K.navy}"/><circle cx="-14" cy="-14" r="12" fill="#fff"/>`,
   nose: () => `<path d="M-30 -110 Q10 -40 70 20 Q80 50 40 55 L-40 55" fill="none" stroke="${K.navy}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>`,
@@ -78,3 +100,12 @@ export const cross = (x, y, r, t, t0) => { const k = eo(t0, t0 + 0.25, t); if (k
   return `<path d="M${x - r} ${y - r} L${f1(x - r + 2 * r * k)} ${f1(y - r + 2 * r * k)}" stroke="${K.red}" stroke-width="28" stroke-linecap="round"/>` + (k >= 1 ? `<path d="M${x + r} ${y - r} L${f1(x + r - 2 * r * eo(t0 + 0.2, t0 + 0.45, t))} ${f1(y - r + 2 * r * eo(t0 + 0.2, t0 + 0.45, t))}" stroke="${K.red}" stroke-width="28" stroke-linecap="round"/>` : ''); };
 // counter that rolls up to a number
 export const count = (to, t, t0, d = 1.0, fmt = v => Math.round(v).toLocaleString('en-US')) => t < t0 ? '' : fmt(to * eo(t0, t0 + d, t));
+
+// word that fades in softly (no pop)
+export const fade = (x, y, word, t, t0, { size = 160, fill = K.white, anchor = 'middle', stroke = K.navy, sw = 0, d = 0.5 } = {}) => {
+  const k = sm(t0, t0 + d, t); if (k <= 0) return '';
+  return `<text x="${f1(x)}" y="${f1(y + size * 0.36)}" font-family="Black" font-size="${size}" fill="${fill}" text-anchor="${anchor}" opacity="${f1(k)}"${sw ? ` stroke="${stroke}" stroke-width="${sw}" paint-order="stroke"` : ''}>${esc(word)}</text>`;
+};
+// cross-dissolve between two scene parts over [t0, t0 + d]
+export const xfade = (t, t0, d, A, B) => { const k = sm(t0, t0 + d, t);
+  return (k < 1 ? `<g opacity="${f1(1 - k)}">${A()}</g>` : '') + (k > 0 ? `<g opacity="${f1(k)}">${B()}</g>` : ''); };

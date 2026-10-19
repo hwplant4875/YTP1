@@ -107,17 +107,43 @@ export function n15(t) {
     s += `<path d="M${cx} ${cy} L${f1(cx + (r - 80) * Math.cos(av))} ${f1(cy - (r - 80) * Math.sin(av))}" stroke="${K.navy}" stroke-width="22" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="38" fill="${K.navy}"/>`;
     s += big(cx, cy + 190, Math.max(0, Math.round(v)) + ' KM/H', t, Math.min(t0, 0.3), { size: 150, stroke: K.navy, sw: 14 });
   } else {
-    const wl = 640, t0 = at('n15', 'shoot up'), t1 = at('n15', 'fly right out') + 0.7, u = eo(t0, t1, t);
+    const wl = 640, t0 = at('n15', 'shoot up'), tb = at('n15', 'fly right out'), G = 1250, VY = 1100, VX = 300, SLO = 0.6, tr = tb + 2 * VY / G / SLO;
+    const xb = 1100, xr = xb + VX * (tr - tb) * SLO;
     s += `<rect x="0" y="${wl}" width="${W}" height="${H - wl}" fill="${K.deep}" opacity=".55"/>`;
-    const P = u => { const x = lerp(1000, 1400, u), y = u < 0.7 ? lerp(1250, wl, Math.pow(u / 0.7, 1.2)) : wl - 380 * Math.sin((u - 0.7) / 0.3 * Math.PI / 2); return [x, y]; };
-    const [x, y] = P(Math.max(u, 0.001)), [x2, y2] = P(Math.max(0, u - 0.03)), rot = u > 0.03 ? Math.atan2(y - y2, x - x2) * 180 / Math.PI : -70;
-    s += `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(rot)}) scale(0.55) translate(-985 -212)"><path d="${SHARK}" fill="#fff" stroke="${K.navy}" stroke-width="12"/><circle cx="905" cy="190" r="12" fill="${K.navy}"/></g>`;
-    const sealX = t > t1 - 0.3 ? 1480 + 300 * eo(t1 - 0.3, t1 + 0.6, t) : 1480;
-    s += `<g transform="translate(${f1(sealX)} ${wl - 10})">${ICON.seal()}</g>`;
-    if (y < wl) { seed(15); for (let i = 0; i < 18; i++) { const a = Math.PI * (0.1 + 0.8 * rnd()), d = 60 + rnd() * 260 * sm(t1 - 0.8, t1, t); s += `<circle cx="${f1(1380 + Math.cos(a) * d)}" cy="${f1(wl - Math.sin(a) * d * 0.8)}" r="${f1(8 + rnd() * 12)}" fill="#fff" opacity=".85"/>`; } }
+    // shark: rises from the deep, breaks the surface exactly at tb, flies a ballistic arc, dives back in at tr
+    let x, y, rot;
+    if (t < tb) { const k = Math.pow(clamp((t - t0 + 0.6) / (tb - t0 + 0.6)), 1.6); x = lerp(960, xb, k); y = lerp(1500, wl - 40, k); rot = -72; }
+    else { const d = (t - tb) * SLO; x = xb + VX * d; y = wl - 40 - VY * d + 0.5 * G * d * d; rot = Math.atan2(-VY + G * d, VX) * 180 / Math.PI; }
+    const drawShark = `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(rot)}) scale(0.55) translate(-985 -212)"><path d="${SHARK}" fill="#fff" stroke="${K.navy}" stroke-width="12"/><circle cx="905" cy="190" r="12" fill="${K.navy}"/></g>`;
+    s += drawShark;
+    // seal leaps away just before the strike
+    const ks = eo(tb - 0.35, tb + 0.45, t), kd = eo(tb + 0.45, tb + 1.2, t), sealX = 1480 + 260 * ks + 80 * kd, sealY = wl - 18 - 170 * Math.sin(Math.PI * ks) + 260 * kd;
+    s += `<g opacity="${f1(1 - sm(0.5, 1, kd))}" transform="translate(${f1(sealX)} ${f1(sealY)}) rotate(${f1(-25 * Math.sin(Math.PI * ks) + 40 * kd)}) scale(-1.05 1.05)">${ICON.seal()}</g>`;
+    s += `<rect x="0" y="${wl}" width="${W}" height="${H - wl}" fill="${K.deep}" opacity=".3"/>`;
+    s += splash(xb, wl, t - tb, 1.35, 15) + splash(xr, wl, t - tr, 0.8, 27);
     s += `<path d="M0 ${wl} ${Array.from({ length: 49 }, (_, i) => `L${i * 40} ${f1(wl + 8 * Math.sin(i * 0.5 + t * 2.5))}`).join(' ')}" stroke="#fff" stroke-width="6" fill="none"/>`;
     s += big(430, 230, '2 TONS', t, at('n15', 'Two tons'), { size: 140, stroke: K.navy, sw: 12 }) + big(430, 380, 'IN THE AIR!', t, at('n15', 'in the air'), { size: 110, fill: K.yellow, stroke: K.navy, sw: 12 });
   }
+  return s;
+}
+// fountain-like splash: a rising water column, crown sheets, flying droplets and a foam ring (d = seconds since impact)
+export function splash(x0, wl, d, A = 1, sd = 1) {
+  if (d < 0 || d > 2.2) return '';
+  let s = '';
+  const g = 2000, fadeAll = 1 - sm(1.4, 2.2, d);
+  // central column shooting up then collapsing
+  const ch = A * Math.max(0, 520 * d - 0.5 * 1900 * d * d), cw = A * (60 + 50 * d);
+  if (ch > 2) s += `<path d="M${f1(x0 - cw)} ${wl} C${f1(x0 - cw * 0.6)} ${f1(wl - ch * 0.6)} ${f1(x0 - cw * 0.3)} ${f1(wl - ch)} ${f1(x0)} ${f1(wl - ch * 1.05)} C${f1(x0 + cw * 0.3)} ${f1(wl - ch)} ${f1(x0 + cw * 0.6)} ${f1(wl - ch * 0.6)} ${f1(x0 + cw)} ${wl}Z" fill="#eafaff" stroke="#bfefff" stroke-width="5" opacity="${f1(0.92 * fadeAll)}"/>`;
+  // crown sheets flaring out to both sides
+  for (const sg of [-1, 1]) { const h = A * Math.max(0, 330 * d - 0.5 * 1300 * d * d), r = A * (70 + 260 * Math.sqrt(d));
+    if (h > 2) s += `<path d="M${f1(x0 + sg * 40 * A)} ${wl} C${f1(x0 + sg * r * 0.4)} ${f1(wl - h * 0.9)} ${f1(x0 + sg * r * 0.8)} ${f1(wl - h)} ${f1(x0 + sg * r)} ${f1(wl - h * 0.55)} L${f1(x0 + sg * r * 0.9)} ${wl}Z" fill="#ffffff" opacity="${f1(0.75 * fadeAll)}"/>`; }
+  // droplets on ballistic paths, drawn as teardrops along their velocity
+  seed(sd); for (let i = 0; i < 110; i++) { const vx = (rnd() * 2 - 1) * 520 * A, vy = -(500 + rnd() * 1000) * A, dl = rnd() * 0.15, tt = d - dl, r = (5 + rnd() * 12) * Math.sqrt(A);
+    if (tt <= 0) continue; const px = x0 + vx * tt + (rnd() - 0.5) * 60, py = wl + vy * tt + 0.5 * g * tt * tt; if (py > wl + 10) continue;
+    const vyy = vy + g * tt, ang = Math.atan2(vyy, vx) * 180 / Math.PI, len = Math.min(3.2, 1 + Math.hypot(vx, vyy) / 600);
+    s += `<ellipse cx="${f1(px)}" cy="${f1(py)}" rx="${f1(r * len)}" ry="${f1(r)}" transform="rotate(${f1(ang)} ${f1(px)} ${f1(py)})" fill="${i % 3 ? '#ffffff' : '#bfefff'}" opacity="${f1(0.9 * fadeAll)}"/>`; }
+  // foam ring spreading on the surface
+  const fr = A * (90 + 420 * eo(0, 1.8, d)); s += `<ellipse cx="${f1(x0)}" cy="${wl + 6}" rx="${f1(fr)}" ry="${f1(fr * 0.12)}" fill="none" stroke="#fff" stroke-width="${f1(12 * (1 - eo(0, 2, d)) + 2)}" opacity="${f1(0.8 * fadeAll)}"/>`;
   return s;
 }
 
@@ -131,7 +157,7 @@ export function n15b(t) {
   const sc = L * pxm / 970; s += `<g transform="translate(${f1(x0 - 15 * sc)} ${f1(ry - 40 - 330 * sc)}) scale(${f1(sc * 1000) / 1000})">${sharkSolid('#fff', K.navy, 6 / sc)}</g>`;
   s += icon('fish', 520, 830, 1.1, t, at('n15b', 'mostly eat fish')) + big(520, 990, 'FISH', t, at('n15b', 'mostly eat fish') + 0.2, { size: 90 });
   s += icon('seal', 1420, 830, 1.15, t, ts) + big(1420, 990, 'SEALS', t, ts + 0.2, { size: 90 });
-  if (t > tt) { const k = sm(tt, tt + 1.2, t), w = lerp(40, 110, k); s += `<g transform="translate(960 900) scale(1.1)"><path d="M${f1(-w)} 0 L-8 -220 L8 -220 L${f1(w)} 0Z" fill="#fff" stroke="${K.navy}" stroke-width="8" stroke-linejoin="round"/></g>`; }
+  if (t > tt) { const k = sm(tt, tt + 1.2, t), w = lerp(40, 110, k); s += `<g transform="translate(960 1000) scale(0.85)"><path d="M${f1(-w)} 0 L-8 -220 L8 -220 L${f1(w)} 0Z" fill="#fff" stroke="${K.navy}" stroke-width="8" stroke-linejoin="round"/></g>`; }
   return s;
 }
 

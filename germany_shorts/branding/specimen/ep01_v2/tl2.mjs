@@ -1,7 +1,7 @@
 // timeline v2: scene order, durations and word timing from the Will narration alignment
 import fs from 'fs';
 const A = '/tmp/claude-0/sp2/audio/';
-export const LEAD = 0.35, GAP = 2.1, TAIL = 3.5;
+export const LEAD = 0.25, GAP = 0.5, TAIL = 3.0;
 export const SC = JSON.parse(fs.readFileSync(A + 'scenes.json'));
 const al = {}; for (const s of SC) al[s.id] = JSON.parse(fs.readFileSync(A + `a_${s.id}.json`));
 let t = 0;
