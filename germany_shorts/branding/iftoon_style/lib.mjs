@@ -39,7 +39,7 @@ export function face(cx,cy,r,ex,dir=0){
 export function head(cx,cy,r,ex,dir=0){ return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${C.skin}" stroke="${C.ink}" stroke-width="${3.5*r/60}"/>`+face(cx,cy,r,ex,dir); }
 export function text(x,y,s,size,fill=C.white,anchor='middle',font='Patrick Hand',weight=400){ return `<text x="${x}" y="${y}" font-family="${font}" font-weight="${weight}" font-size="${size}" fill="${fill}" text-anchor="${anchor}">${s}</text>`; }
 export async function render(svg,w,h,out){
- const html=`<html><head><style>@font-face{font-family:'Patrick Hand';src:url(${b64('PatrickHand-Regular.ttf')})}@font-face{font-family:'Comic Neue';font-weight:700;src:url(${b64('ComicNeue-Bold.ttf')})}body{margin:0;background:#000}</style></head><body><svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${svg}</svg></body></html>`;
+ const html=`<html><head><style>@font-face{font-family:'Patrick Hand';src:url(${b64('PatrickHand-Regular.ttf')})}@font-face{font-family:'Comic Neue';font-weight:700;src:url(${b64('ComicNeue-Bold.ttf')})}@font-face{font-family:'Nunito';font-weight:200 1000;src:url(${b64('Nunito.ttf')})}body{margin:0;background:#000}</style></head><body><svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${svg}</svg></body></html>`;
  const b=await chromium.launch(); const p=await b.newPage({viewport:{width:w,height:h}});
  await p.setContent(html); await p.evaluate(()=>document.fonts.ready); await p.waitForTimeout(300);
  await p.screenshot({path:out,type:'jpeg',quality:92}); await b.close(); }
