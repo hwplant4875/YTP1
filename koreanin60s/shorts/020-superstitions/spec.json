@@ -1,0 +1,290 @@
+{
+ "label": "DON'T DO THIS 🚫",
+ "labelColor": "#E25B5B",
+ "pose0": "nervous_sweat",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Never do these five things in Korea.",
+   "pose": "nervous_sweat"
+  },
+  {
+   "k": "s1",
+   "say": "One. Write someone's name in red ink.",
+   "pose": "writing",
+   "gap": 0.45
+  },
+  {
+   "k": "s1e",
+   "say": "It's how names of the dead were written.",
+   "pose": "shocked"
+  },
+  {
+   "k": "s2",
+   "say": "Two. Look for floor four in an elevator.",
+   "pose": "magnifier",
+   "gap": 0.45
+  },
+  {
+   "k": "s2e",
+   "say": "Four sounds like the word for death, so it's often an F.",
+   "pose": "nervous_sweat"
+  },
+  {
+   "k": "s3",
+   "say": "Three. Eat seaweed soup before an exam.",
+   "pose": "rice_bowl",
+   "gap": 0.45
+  },
+  {
+   "k": "s3e",
+   "say": "It's slippery, so you'll slip and fail. In fact, I ate seaweed soup means",
+   "pose": "laugh_tears"
+  },
+  {
+   "k": "s3k",
+   "say": "미역국 먹었어.",
+   "pose": "crying",
+   "lang": "ko"
+  },
+  {
+   "k": "s3x",
+   "say": "I failed the test.",
+   "pose": "tissue_cry"
+  },
+  {
+   "k": "s4",
+   "say": "Four. Shake your legs.",
+   "pose": "jump",
+   "gap": 0.45
+  },
+  {
+   "k": "s4e",
+   "say": "Your luck shakes away.",
+   "pose": "confused"
+  },
+  {
+   "k": "s5",
+   "say": "Five. Sleep with a fan on in a closed room.",
+   "pose": "sleeping",
+   "gap": 0.45
+  },
+  {
+   "k": "s5e",
+   "say": "Yes, some Koreans still fear fan death.",
+   "pose": "cold_scarf"
+  },
+  {
+   "k": "e0",
+   "say": "Which one surprised you most? Comment below!",
+   "pose": "shrug",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🇰🇷🚫",
+     "size": 180,
+     "y": 440,
+     "at": "h1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Never do these<br><span class='c-p'>5 things</span> in Korea",
+     "size": 92,
+     "y": 760,
+     "at": "h1+0.3",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    }
+   ]
+  },
+  {
+   "from": "s1",
+   "els": [
+    {
+     "type": "chip",
+     "html": "#1",
+     "c": "p",
+     "y": 340,
+     "at": "s1"
+    },
+    {
+     "type": "emoji",
+     "e": "🖊️",
+     "size": 180,
+     "y": 500,
+     "at": "s1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Name in <span class='c-p'>RED</span> ink",
+     "size": 100,
+     "y": 760,
+     "at": "s1+0.6",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:54px;white-space:nowrap;line-height:1.35'>= names of the dead 💀</div>",
+     "w": 760,
+     "pad": 22,
+     "y": 980,
+     "at": "s1e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "s2",
+   "els": [
+    {
+     "type": "chip",
+     "html": "#2",
+     "c": "p",
+     "y": 340,
+     "at": "s2"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:50px;white-space:nowrap;line-height:1.35'><span style='font-size:90px'>1 · 2 · 3 · <span class='c-p'>F</span> · 5</span></div>",
+     "w": 760,
+     "pad": 22,
+     "y": 560,
+     "at": "s2",
+     "anim": "left"
+    },
+    {
+     "type": "word",
+     "ko": "사",
+     "rom": "sa",
+     "en": "four = death",
+     "c": "p",
+     "size": 170,
+     "w": 560,
+     "y": 860,
+     "at": "s2e+0.8"
+    }
+   ]
+  },
+  {
+   "from": "s3",
+   "els": [
+    {
+     "type": "chip",
+     "html": "#3",
+     "c": "p",
+     "y": 340,
+     "at": "s3"
+    },
+    {
+     "type": "emoji",
+     "e": "🍜📝",
+     "size": 170,
+     "y": 500,
+     "at": "s3",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "미역국 먹었어",
+     "rom": "mi-yeok-guk meo-geo-sseo",
+     "en": "I failed the test 😭",
+     "c": "b",
+     "size": 120,
+     "w": 960,
+     "y": 840,
+     "at": "s3k"
+    }
+   ]
+  },
+  {
+   "from": "s4",
+   "els": [
+    {
+     "type": "chip",
+     "html": "#4",
+     "c": "p",
+     "y": 340,
+     "at": "s4"
+    },
+    {
+     "type": "emoji",
+     "e": "🦵💨",
+     "size": 190,
+     "y": 520,
+     "at": "s4",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "luck <span class='c-y'>shakes away</span> 🍀",
+     "size": 90,
+     "y": 820,
+     "at": "s4e",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    }
+   ]
+  },
+  {
+   "from": "s5",
+   "els": [
+    {
+     "type": "chip",
+     "html": "#5",
+     "c": "p",
+     "y": 340,
+     "at": "s5"
+    },
+    {
+     "type": "emoji",
+     "e": "🌀",
+     "size": 200,
+     "y": 520,
+     "at": "s5",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "stamp",
+     "html": "FAN DEATH 😨",
+     "c": "k",
+     "size": 100,
+     "y": 820,
+     "at": "s5e",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Which one surprised you? 👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

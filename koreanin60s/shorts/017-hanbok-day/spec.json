@@ -1,0 +1,210 @@
+{
+ "label": "HANBOK WEEK 👘",
+ "labelColor": "#C2569B",
+ "pose0": "hanbok",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Wear this in Korea, and royal palaces let you in for free.",
+   "pose": "hanbok"
+  },
+  {
+   "k": "a1",
+   "say": "It's called",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "a1k",
+   "say": "한복.",
+   "pose": "hanbok",
+   "lang": "ko"
+  },
+  {
+   "k": "a2",
+   "say": "Korea's traditional clothes.",
+   "pose": "tilt_shy"
+  },
+  {
+   "k": "b1",
+   "say": "And right now it's Hanbok Culture Week, October nineteenth to twenty-fifth.",
+   "pose": "clap_confetti",
+   "gap": 0.45
+  },
+  {
+   "k": "b2",
+   "say": "Wear one, and Lotte World is half price, and N Seoul Tower is thirty-five percent off.",
+   "pose": "excited"
+  },
+  {
+   "k": "b3",
+   "say": "Wednesday, October twenty-first, is Hanbok Day.",
+   "pose": "party_cake"
+  },
+  {
+   "k": "c0",
+   "say": "And when people see you in one, they'll say",
+   "pose": "shy_cover",
+   "gap": 0.45
+  },
+  {
+   "k": "c0k",
+   "say": "한복 진짜 예뻐요!",
+   "pose": "love_heart",
+   "lang": "ko"
+  },
+  {
+   "k": "c1",
+   "say": "Your hanbok is really pretty!",
+   "pose": "finger_heart"
+  },
+  {
+   "k": "e0",
+   "say": "Would you wear one? Comment below!",
+   "pose": "hi_wave",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "emoji",
+     "e": "👘",
+     "size": 230,
+     "y": 470,
+     "at": "h1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Wear this =<br><span class='c-p'>FREE</span> palace entry 🏯",
+     "size": 92,
+     "y": 790,
+     "at": "h1+0.3",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    }
+   ]
+  },
+  {
+   "from": "a1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🎎",
+     "size": 200,
+     "y": 450,
+     "at": "a1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "한복",
+     "rom": "han-bok",
+     "en": "traditional Korean clothes",
+     "c": "p",
+     "size": 190,
+     "w": 760,
+     "y": 800,
+     "at": "a1k"
+    }
+   ]
+  },
+  {
+   "from": "b1",
+   "els": [
+    {
+     "type": "chip",
+     "html": "📅 HANBOK CULTURE WEEK",
+     "c": "p",
+     "y": 360,
+     "at": "b1"
+    },
+    {
+     "type": "txt",
+     "html": "Oct <span class='c-p'>19 – 25</span>",
+     "size": 120,
+     "y": 540,
+     "at": "b1+0.8",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:54px;white-space:nowrap;line-height:1.35'>🎢 Lotte World <span class='c-y'>50% off</span></div>",
+     "w": 760,
+     "pad": 22,
+     "y": 800,
+     "at": "b2+1.2",
+     "anim": "up"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:54px;white-space:nowrap;line-height:1.35'>🗼 N Seoul Tower <span class='c-m'>35% off</span></div>",
+     "w": 760,
+     "pad": 22,
+     "y": 960,
+     "at": "b2+3.2",
+     "anim": "up"
+    },
+    {
+     "type": "stamp",
+     "html": "OCT 21 = HANBOK DAY 🎉",
+     "c": "p",
+     "size": 64,
+     "y": 1130,
+     "at": "b3",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "c0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "😍",
+     "size": 200,
+     "y": 440,
+     "at": "c0",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "한복 진짜 예뻐요!",
+     "rom": "han-bok jin-jja ye-ppeo-yo",
+     "en": "your hanbok is really pretty!",
+     "c": "p",
+     "size": 112,
+     "w": 980,
+     "y": 790,
+     "at": "c0k"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Would you wear one? 👘👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

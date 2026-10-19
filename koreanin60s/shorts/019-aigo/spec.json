@@ -1,0 +1,283 @@
+{
+ "label": "ONE WORD 🤯",
+ "labelColor": "#E8833A",
+ "pose0": "mind_blown",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Koreans use this one word for everything.",
+   "pose": "mind_blown"
+  },
+  {
+   "k": "w0",
+   "say": "아이고!",
+   "pose": "facepalm",
+   "lang": "ko"
+  },
+  {
+   "k": "m1",
+   "say": "Stubbed your toe?",
+   "pose": "crying",
+   "gap": 0.45
+  },
+  {
+   "k": "m1k",
+   "say": "아이고, 아파라!",
+   "pose": "crying",
+   "lang": "ko"
+  },
+  {
+   "k": "m2",
+   "say": "Getting up from the sofa?",
+   "pose": "lying_flat",
+   "gap": 0.45
+  },
+  {
+   "k": "m2k",
+   "say": "아이고, 허리야.",
+   "pose": "yawn",
+   "lang": "ko"
+  },
+  {
+   "k": "m3",
+   "say": "A baby is too cute?",
+   "pose": "love_heart",
+   "gap": 0.45
+  },
+  {
+   "k": "m3k",
+   "say": "아이고, 귀여워!",
+   "pose": "love_heart",
+   "lang": "ko"
+  },
+  {
+   "k": "m4",
+   "say": "Your friend did something dumb?",
+   "pose": "facepalm",
+   "gap": 0.45
+  },
+  {
+   "k": "m4k",
+   "say": "아이고, 답답해.",
+   "pose": "steam_angry",
+   "lang": "ko"
+  },
+  {
+   "k": "m5",
+   "say": "Shocking news?",
+   "pose": "shocked",
+   "gap": 0.45
+  },
+  {
+   "k": "m5k",
+   "say": "아이고, 세상에!",
+   "pose": "shocked",
+   "lang": "ko"
+  },
+  {
+   "k": "x1",
+   "say": "Same word, five feelings. It's all in the tone.",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "e0",
+   "say": "Which one are you today? Comment below!",
+   "pose": "laugh_flap",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "chip",
+     "html": "1 WORD = 5 FEELINGS",
+     "c": "y",
+     "y": 360,
+     "at": "h1"
+    },
+    {
+     "type": "word",
+     "ko": "아이고!",
+     "rom": "a-i-go",
+     "en": "",
+     "c": "y",
+     "size": 220,
+     "w": 820,
+     "y": 700,
+     "at": "h1+0.3"
+    }
+   ]
+  },
+  {
+   "from": "m1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🦶💥",
+     "size": 180,
+     "y": 450,
+     "at": "m1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "아이고, 아파라!",
+     "rom": "a-i-go, a-pa-ra",
+     "en": "ouch, that hurts!",
+     "c": "p",
+     "size": 130,
+     "w": 960,
+     "y": 800,
+     "at": "m1k"
+    }
+   ]
+  },
+  {
+   "from": "m2",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🛋️",
+     "size": 190,
+     "y": 450,
+     "at": "m2",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "아이고, 허리야",
+     "rom": "a-i-go, heo-ri-ya",
+     "en": "oh, my back...",
+     "c": "b",
+     "size": 130,
+     "w": 960,
+     "y": 800,
+     "at": "m2k"
+    }
+   ]
+  },
+  {
+   "from": "m3",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "👶",
+     "size": 200,
+     "y": 450,
+     "at": "m3",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "아이고, 귀여워!",
+     "rom": "a-i-go, gwi-yeo-wo",
+     "en": "aww, so cute!",
+     "c": "m",
+     "size": 130,
+     "w": 960,
+     "y": 800,
+     "at": "m3k"
+    }
+   ]
+  },
+  {
+   "from": "m4",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🤦",
+     "size": 200,
+     "y": 450,
+     "at": "m4",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "아이고, 답답해",
+     "rom": "a-i-go, dap-dap-hae",
+     "en": "ugh, so frustrating",
+     "c": "k",
+     "size": 130,
+     "w": 960,
+     "y": 800,
+     "at": "m4k"
+    }
+   ]
+  },
+  {
+   "from": "m5",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "😱",
+     "size": 200,
+     "y": 450,
+     "at": "m5",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "아이고, 세상에!",
+     "rom": "a-i-go, se-sang-e",
+     "en": "oh my goodness!",
+     "c": "y",
+     "size": 130,
+     "w": 960,
+     "y": 800,
+     "at": "m5k"
+    }
+   ]
+  },
+  {
+   "from": "x1",
+   "els": [
+    {
+     "type": "txt",
+     "html": "same word<br><span class='c-y'>5 feelings</span>",
+     "size": 110,
+     "y": 600,
+     "at": "x1",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:56px;white-space:nowrap;line-height:1.35'>it's all in the <span class='c-p'>tone</span> 🎭</div>",
+     "w": 700,
+     "pad": 22,
+     "y": 900,
+     "at": "x1+1.4",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Which 아이고 are you today? 👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

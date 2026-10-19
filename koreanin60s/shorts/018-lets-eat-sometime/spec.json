@@ -1,0 +1,212 @@
+{
+ "label": "KOREAN CODE 🤫",
+ "labelColor": "#5A8FD8",
+ "pose0": "shocked",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "If a Korean says this to you, don't open your calendar.",
+   "pose": "shocked"
+  },
+  {
+   "k": "k1",
+   "say": "언제 밥 한번 먹자.",
+   "pose": "rice_bowl",
+   "lang": "ko"
+  },
+  {
+   "k": "k1e",
+   "say": "Let's grab a meal sometime.",
+   "pose": "talk"
+  },
+  {
+   "k": "t1",
+   "say": "Sounds like a plan, right? It's not.",
+   "pose": "smug",
+   "gap": 0.45
+  },
+  {
+   "k": "t2",
+   "say": "It just means, nice seeing you. Bye!",
+   "pose": "backpack_bye"
+  },
+  {
+   "k": "t3",
+   "say": "Koreans say it even to people they may never see again.",
+   "pose": "laugh_tears"
+  },
+  {
+   "k": "r0",
+   "say": "Want a real plan? Ask",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "r0k",
+   "say": "언제 시간 돼?",
+   "pose": "phone_chat",
+   "lang": "ko"
+  },
+  {
+   "k": "r1",
+   "say": "When are you free?",
+   "pose": "thinking"
+  },
+  {
+   "k": "r2",
+   "say": "Now they know you mean it.",
+   "pose": "thumbs_up"
+  },
+  {
+   "k": "e0",
+   "say": "Has a Korean ever said this to you? Comment below!",
+   "pose": "laugh_flap",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "emoji",
+     "e": "📅❌",
+     "size": 180,
+     "y": 450,
+     "at": "h1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "If a Korean<br>says <span class='c-b'>this</span>...",
+     "size": 100,
+     "y": 760,
+     "at": "h1+0.3",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    }
+   ]
+  },
+  {
+   "from": "k1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🍚",
+     "size": 200,
+     "y": 440,
+     "at": "k1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "언제 밥 한번 먹자",
+     "rom": "eon-je bap han-beon meok-ja",
+     "en": "let's grab a meal sometime",
+     "c": "b",
+     "size": 112,
+     "w": 980,
+     "y": 800,
+     "at": "k1"
+    }
+   ]
+  },
+  {
+   "from": "t1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🤝",
+     "size": 190,
+     "y": 430,
+     "at": "t1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "stamp",
+     "html": "NOT A PLAN ❌",
+     "c": "p",
+     "size": 96,
+     "y": 660,
+     "at": "t1+1.6",
+     "anim": "stamp"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:54px;white-space:nowrap;line-height:1.35'>= <span class='c-b'>nice seeing you, bye!</span> 👋</div>",
+     "w": 900,
+     "pad": 22,
+     "y": 900,
+     "at": "t2",
+     "anim": "up"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:44px;white-space:nowrap;line-height:1.35'>even to people they'll <span class='c-p'>never</span> see again 😂</div>",
+     "w": 980,
+     "pad": 22,
+     "y": 1060,
+     "at": "t3",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "r0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "📲",
+     "size": 190,
+     "y": 440,
+     "at": "r0",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "언제 시간 돼?",
+     "rom": "eon-je si-gan dwae",
+     "en": "when are you free?",
+     "c": "m",
+     "size": 140,
+     "w": 920,
+     "y": 800,
+     "at": "r0k"
+    },
+    {
+     "type": "stamp",
+     "html": "REAL PLAN ✅",
+     "c": "m",
+     "size": 80,
+     "y": 1100,
+     "at": "r2",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Has a Korean said this to you? 👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}
