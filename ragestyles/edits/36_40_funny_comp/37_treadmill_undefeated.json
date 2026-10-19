@@ -1,0 +1,206 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 80,
+ "title": {
+  "text": "Treadmills Are Undefeated 😭",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 40.0,
+  "vol": 0.6
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7442160036173860127.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 12.0,
+   "out": 14.3,
+   "circles": [
+    {
+     "from": 12.0,
+     "to": 12.7,
+     "rx": 0.16,
+     "ry": 0.4,
+     "track": [
+      [
+       12.0,
+       0.6,
+       0.42
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/fav_cat.png",
+   "dur": 0.75,
+   "cap": "He really did it 😭"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7442160036173860127.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 13.0,
+   "out": 15.5,
+   "speed": [
+    [
+     13.0,
+     1.0
+    ],
+    [
+     13.2,
+     0.4
+    ],
+    [
+     14.1,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 13.2,
+     "x": 0.55,
+     "y": 0.5,
+     "zoom": 1.25
+    },
+    {
+     "at": 14.1,
+     "x": 0.5,
+     "y": 0.6,
+     "zoom": 1.15,
+     "dur": 0.6
+    }
+   ],
+   "sfx": [
+    {
+     "at": 13.35,
+     "src": "/home/user/rs_work/sfx/whoosh_fast.mp3",
+     "vol": 0.7
+    },
+    {
+     "at": 13.85,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.9
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7488460918595144990.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 4.8,
+   "out": 7.1,
+   "circles": [
+    {
+     "from": 4.8,
+     "to": 5.45,
+     "rx": 0.14,
+     "ry": 0.35,
+     "track": [
+      [
+       4.8,
+       0.58,
+       0.5
+      ],
+      [
+       5.45,
+       0.5,
+       0.5
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/shocked-cat__keHPVm2ArXc__stellarnushu.mp4",
+   "dur": 0.75,
+   "cap": "Bro did a combat roll 💀"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7488460918595144990.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 5.6,
+   "out": 8.8,
+   "speed": [
+    [
+     5.6,
+     1.0
+    ],
+    [
+     5.8,
+     0.45
+    ],
+    [
+     6.9,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 5.8,
+     "x": 0.4,
+     "y": 0.6,
+     "zoom": 1.2
+    },
+    {
+     "at": 7.6,
+     "x": 0.55,
+     "y": 0.6,
+     "zoom": 1.1,
+     "dur": 0.6
+    }
+   ],
+   "sfx": [
+    {
+     "at": 6.3,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.8
+    }
+   ]
+  }
+ ]
+}

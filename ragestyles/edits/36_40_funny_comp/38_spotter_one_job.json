@@ -1,0 +1,255 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 80,
+ "title": {
+  "text": "The Spotter Had ONE Job 😭💀",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 1.0,
+  "vol": 0.6
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1rbl5dp.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 15.9,
+   "out": 18.9,
+   "circles": [
+    {
+     "from": 15.9,
+     "to": 16.9,
+     "rx": 0.075,
+     "ry": 0.15,
+     "track": [
+      [
+       15.9,
+       0.245,
+       0.655
+      ],
+      [
+       16.5,
+       0.24,
+       0.66
+      ],
+      [
+       16.9,
+       0.239,
+       0.664
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/fav_cat.png",
+   "dur": 0.75,
+   "cap": "Why was it standing??"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1rbl5dp.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 16.9,
+   "out": 20.2,
+   "speed": [
+    [
+     16.9,
+     1.0
+    ],
+    [
+     17.3,
+     0.5
+    ],
+    [
+     17.8,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 16.95,
+     "x": 0.32,
+     "y": 0.62,
+     "zoom": 1.35
+    },
+    {
+     "at": 17.8,
+     "x": 0.45,
+     "y": 0.56,
+     "zoom": 1.25,
+     "dur": 0.6
+    }
+   ],
+   "circles": [
+    {
+     "from": 17.0,
+     "to": 17.6,
+     "rx": 0.075,
+     "ry": 0.15,
+     "track": [
+      [
+       16.9,
+       0.239,
+       0.664
+      ],
+      [
+       17.1,
+       0.229,
+       0.664
+      ],
+      [
+       17.3,
+       0.215,
+       0.672
+      ],
+      [
+       17.45,
+       0.195,
+       0.68
+      ],
+      [
+       17.6,
+       0.17,
+       0.7
+      ]
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "at": 17.45,
+     "src": "/mnt/project-files/sfx/meme/bowling-pins-falling.mp3",
+     "ss": 0.92,
+     "vol": 0.9
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/a/7491886080573361454.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 1.2,
+   "out": 6.2,
+   "speed": [
+    [
+     1.2,
+     1.0
+    ],
+    [
+     2.4,
+     1.8
+    ],
+    [
+     4.6,
+     1.0
+    ]
+   ],
+   "circles": [
+    {
+     "from": 1.2,
+     "to": 2.1,
+     "rx": 0.12,
+     "ry": 0.22,
+     "track": [
+      [
+       1.2,
+       0.7,
+       0.3
+      ],
+      [
+       2.1,
+       0.83,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/cat-side-eye__LoTSdDHzoc0__cat-annoyed.mp4",
+   "dur": 0.75,
+   "cap": "Make up your mind bro 😭",
+   "hold": 0.55
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/a/7491886080573361454.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 4.8,
+   "out": 6.95,
+   "speed": [
+    [
+     4.8,
+     1.0
+    ],
+    [
+     5.1,
+     0.45
+    ],
+    [
+     6.1,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 5.1,
+     "x": 0.6,
+     "y": 0.4,
+     "zoom": 1.2
+    }
+   ],
+   "sfx": [
+    {
+     "at": 5.15,
+     "src": "/mnt/project-files/sfx/drive/021_노갓플리즈.mp3",
+     "ss": 0.4,
+     "dur": 1.9,
+     "vol": 0.9
+    }
+   ]
+  }
+ ]
+}

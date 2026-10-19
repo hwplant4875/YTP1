@@ -1,0 +1,189 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 80,
+ "title": {
+  "text": "Plates Have No Mercy 💀",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 26.0,
+  "vol": 0.6
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1ng2nwz.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 0.0,
+   "out": 2.6,
+   "circles": [
+    {
+     "from": 0.0,
+     "to": 0.7,
+     "rx": 0.16,
+     "ry": 0.1,
+     "track": [
+      [
+       0.0,
+       0.24,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/confused-cat__cuW62FiZhBw__cat-stare-blinking-loop-lopped.mp4",
+   "dur": 0.75,
+   "cap": "Bro forgot the clips 😭"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1ng2nwz.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 1.2,
+   "out": 3.25,
+   "speed": [
+    [
+     1.2,
+     1.0
+    ],
+    [
+     1.5,
+     0.45
+    ],
+    [
+     2.4,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 1.5,
+     "x": 0.4,
+     "y": 0.35,
+     "zoom": 1.2
+    }
+   ],
+   "sfx": [
+    {
+     "at": 1.85,
+     "src": "/mnt/project-files/sfx/meme/lego-breaking.mp3",
+     "ss": 0.08,
+     "vol": 0.9
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/a/7642939162378767629.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 8.6,
+   "out": 10.5,
+   "circles": [
+    {
+     "from": 8.6,
+     "to": 9.3,
+     "rx": 0.13,
+     "ry": 0.13,
+     "track": [
+      [
+       8.6,
+       0.22,
+       0.32
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/cat-side-eye__LoTSdDHzoc0__cat-annoyed.mp4",
+   "dur": 0.75,
+   "cap": "Bro was speedrunning 💀",
+   "hold": 0.55
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/a/7642939162378767629.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 9.2,
+   "out": 11.8,
+   "speed": [
+    [
+     9.2,
+     1.0
+    ],
+    [
+     9.45,
+     0.45
+    ],
+    [
+     10.4,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 9.45,
+     "x": 0.32,
+     "y": 0.38,
+     "zoom": 1.25
+    },
+    {
+     "at": 10.5,
+     "x": 0.55,
+     "y": 0.45,
+     "zoom": 1.15,
+     "dur": 0.6
+    }
+   ],
+   "sfx": [
+    {
+     "at": 9.95,
+     "src": "/home/user/rs_work/sfx/impact_metal.mp3",
+     "vol": 0.8
+    }
+   ]
+  }
+ ]
+}

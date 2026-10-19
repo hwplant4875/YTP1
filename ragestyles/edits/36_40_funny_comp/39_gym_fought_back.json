@@ -1,0 +1,204 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 80,
+ "title": {
+  "text": "The Gym Fought Back 💀",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 55.0,
+  "vol": 0.6
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7495415155396726059.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 1.6,
+   "out": 3.6,
+   "circles": [
+    {
+     "from": 1.6,
+     "to": 2.3,
+     "rx": 0.16,
+     "ry": 0.3,
+     "track": [
+      [
+       1.6,
+       0.3,
+       0.45
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/shocked-cat__btYkcmAPyCc__cat-flabbergasted.mp4",
+   "dur": 0.75,
+   "cap": "He kicked it OFF 💀",
+   "hold": 0.75
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7495415155396726059.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 2.4,
+   "out": 8.0,
+   "speed": [
+    [
+     2.4,
+     1.0
+    ],
+    [
+     2.6,
+     0.4
+    ],
+    [
+     3.5,
+     1.0
+    ],
+    [
+     4.0,
+     2.2
+    ],
+    [
+     7.2,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 2.6,
+     "x": 0.45,
+     "y": 0.5,
+     "zoom": 1.2
+    },
+    {
+     "at": 7.2,
+     "x": 0.55,
+     "y": 0.35,
+     "zoom": 1.2,
+     "dur": 0.6
+    }
+   ],
+   "sfx": [
+    {
+     "at": 2.85,
+     "src": "/home/user/rs_work/sfx/chain_rattle.mp3",
+     "vol": 0.8
+    },
+    {
+     "at": 3.1,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.9
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/a/7403775149666864414.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0.9,
+   "in": 3.4,
+   "out": 5.15,
+   "circles": [
+    {
+     "from": 3.4,
+     "to": 4.0,
+     "rx": 0.12,
+     "ry": 0.16,
+     "track": [
+      [
+       3.4,
+       0.3,
+       0.52
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/crying-cat__9a9g-pOTZHk__nsb14-meowl.mp4",
+   "dur": 0.75,
+   "cap": "Catch it with your HANDS 😭"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/a/7403775149666864414.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0.9,
+   "in": 4.0,
+   "out": 5.15,
+   "speed": [
+    [
+     4.0,
+     1.0
+    ],
+    [
+     4.3,
+     0.4
+    ]
+   ],
+   "hits": [
+    {
+     "at": 4.3,
+     "x": 0.33,
+     "y": 0.5,
+     "zoom": 1.35
+    }
+   ],
+   "sfx": [
+    {
+     "at": 4.8,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.9
+    },
+    {
+     "at": 4.82,
+     "src": "/home/user/rs_work/sfx/impact_metal.mp3",
+     "vol": 0.6
+    }
+   ]
+  }
+ ]
+}
