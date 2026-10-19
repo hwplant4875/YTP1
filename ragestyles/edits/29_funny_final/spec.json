@@ -20,9 +20,10 @@
   {
    "type": "meme",
    "src": "/home/user/rs_work/memes/t/cat-side-eye__LoTSdDHzoc0__cat-annoyed.mp4",
-   "ss": 0.7,
+   "ss": 0.0,
    "dur": 0.75,
-   "cap": "Did she just..."
+   "cap": "Did she just...",
+   "hold": 0.55
   },
   {
    "type": "clip",

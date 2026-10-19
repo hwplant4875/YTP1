@@ -11,8 +11,13 @@ spec:
      "track": [[t, x, y, zoom], ...], "hits": [{"at": t, "x", "y", "zoom", "dur"}],   times are source times;
      each hit eases from wherever the previous one left the frame
      "circles": [{"from", "to", "track": [[t, x, y], ...], "rx", "ry"}]   red ring on the source (x, y as fractions of the frame, radii of its width),
-     "sfx": [{"at", "src", "ss", "vol"}]},
-    {"type": "meme", "src" (video or still image), "ss", "dur", "cap", "boomVol"}]
+     "sfx": [{"at", "src", "ss", "vol"}],
+     "speed": [[t, factor], ...]   from source time t on, play at factor (0.5 = slow-mo, 1.6 = fast-forward);
+                                   slow parts are motion-interpolated}, audio follows with atempo
+    {"type": "meme", "src" (video or still image), "ss", "dur", "hold" (freeze after this many s), "cap",
+     "boomVol"}]
+  optional: "memeBg": "blur" | "black", "capSize", "title": {"text", "y", "size"} (fixed caption on every frame,
+  emoji allowed)
 """
 import json, os, subprocess, sys, tempfile
 import cv2
@@ -23,8 +28,32 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from catreact2 import W, H, FPS, compose, interp, sharpen, stream  # noqa: E402
 
 PUNCH = 0.5      # seconds for the zoom-in to settle (ease-out: steep start, flat finish)
-FLASH_IN = [0.2, 0.5, 0.8, 1.0]                # last frames before a cut: fade to white (matches the reference)
-FLASH_OUT = [1.0, 1.0, 0.8, 0.58, 0.37, 0.15]     # first frames after a cut: hold white, fade out
+FLASH_IN = [0.1, 0.4, 0.7, 1.0]                # last frames before a cut: fade to white (measured on POSTERlSED)
+FLASH_OUT = [1.0, 1.0, 0.78, 0.56, 0.36, 0.16]    # first frames after a cut: hold white, fade out
+EMOJI = '/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf'
+
+
+def speed_at(s, t):
+    f = 1.0
+    for k, v in s.get('speed', []):
+        if t >= k - 1e-6:
+            f = v
+    return f
+
+
+def src_times(s):
+    """source time of every output frame, following the clip's speed map"""
+    ts, t = [], s['in']
+    while t < s['out'] - 1e-6:
+        ts.append(t)
+        t += speed_at(s, t) / FPS
+    return ts
+
+
+def frame_count(s):
+    if s['type'] == 'clip':
+        return len(src_times(s)) if s.get('speed') else round((s['out'] - s['in']) * FPS)
+    return round(s['dur'] * FPS)
 
 
 def ease(u):
@@ -33,17 +62,40 @@ def ease(u):
     return 1 - (1 - u) ** 4
 
 
-def clip_frames(s, n):
-    x0, y0, cw, ch = s.get('crop', [0, 0, 0, 0])
+def timed_frames(s, n):
+    """frames resampled along the speed map; the clip is motion-interpolated to 60 fps first"""
+    w, h = map(int, subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v', '-show_entries',
+                                    'stream=width,height', '-of', 'csv=p=0', s['src']],
+                                   capture_output=True, text=True).stdout.split(',')[:2])
+    raw = subprocess.run(['ffmpeg', '-v', 'error', '-ss', f"{s['in']:.3f}", '-t', f"{s['out'] - s['in'] + 0.2:.3f}",
+                          '-i', s['src'], '-vf', 'minterpolate=fps=60:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1,'
+                          'format=rgb24', '-f', 'rawvideo', '-'], capture_output=True, check=True).stdout
+    fr = np.frombuffer(raw, np.uint8).reshape(-1, h, w, 3)
+    for t in src_times(s)[:n]:
+        u = (t - s['in']) * 60
+        i = min(int(u), len(fr) - 1)
+        k = u - int(u)
+        if k < 0.05 or i + 1 >= len(fr):
+            yield t, fr[i]
+        else:
+            yield t, cv2.addWeighted(fr[i], 1 - k, fr[i + 1], k, 0)
+
+
+def plain_frames(s, n):
     last = None
     frames = stream(s['src'], s['in'], s['out'] - s['in'] + 0.2)
     for j in range(n):
         fr = next(frames, None)
         fr = last if fr is None else fr
         last = fr
+        yield s['in'] + j / FPS, fr
+
+
+def clip_frames(s, n):
+    x0, y0, cw, ch = s.get('crop', [0, 0, 0, 0])
+    for t, fr in (timed_frames if s.get('speed') else plain_frames)(s, n):
         if cw:
             fr = fr[y0:y0 + ch, x0:x0 + cw]
-        t = s['in'] + j / FPS
         x, y, z = interp(s.get('track', [[0, 0.5, 0.5, 1.0]]), t)
         bz = z
         for h in sorted(s.get('hits', []), key=lambda h: h['at']):
@@ -71,16 +123,49 @@ def ring(fr, c, t):
     return fr
 
 
-def caption_rgba(font, text, y):
+def is_emoji(ch):
+    return ord(ch) >= 0x2190 and not ('\u3000' <= ch <= '\uffef')
+
+
+def caption_rgba(font, text, y, size=96):
+    """white text with black stroke, centred at y; emoji drawn from Noto Color Emoji"""
     im = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    size = 96
-    f = ImageFont.truetype(font, size)
-    while d.textlength(text, font=f) > 960 and size > 40:
-        size -= 4
+    runs = []
+    for ch in text:
+        e = is_emoji(ch) or ch in '\ufe0f\u200d'
+        if runs and runs[-1][0] == e:
+            runs[-1][1] += ch
+        else:
+            runs.append([e, ch])
+    while True:
         f = ImageFont.truetype(font, size)
-    d.text((W / 2, y), text, font=f, fill='white', stroke_width=8, stroke_fill='black', anchor='mm')
+        widths = [len([c for c in r if c not in '\ufe0f\u200d']) * size * 1.1 if e else d.textlength(r, font=f)
+                  for e, r in runs]
+        if sum(widths) <= 960 or size <= 36:
+            break
+        size -= 4
+    stroke = max(4, size // 12)
+    x = (W - sum(widths)) / 2
+    ef = ImageFont.truetype(EMOJI, 109)
+    for (e, r), w in zip(runs, widths):
+        if not e:
+            d.text((x, y), r, font=f, fill='white', stroke_width=stroke, stroke_fill='black', anchor='lm')
+        else:
+            for c in [c for c in r if c not in '\ufe0f\u200d']:
+                g = Image.new('RGBA', (136, 128), (0, 0, 0, 0))
+                ImageDraw.Draw(g).text((0, 0), c, font=ef, embedded_color=True)
+                g = g.crop(g.getbbox() or (0, 0, 1, 1)).resize((int(size * 1.0), int(size * 1.0)), Image.LANCZOS)
+                im.alpha_composite(g, (int(x + size * 0.05), int(y - size / 2)))
+                x += size * 1.1
+            continue
+        x += w
     return np.asarray(im)
+
+
+def over(img, rgba):
+    a = rgba[..., 3:4].astype(np.float32) / 255
+    return (img * (1 - a) + rgba[..., :3] * a).astype(np.uint8)
 
 
 def meme_frames(spec, s, n):
@@ -90,17 +175,24 @@ def meme_frames(spec, s, n):
         fr = np.asarray(im.resize((W, mh), Image.LANCZOS))[None]
     else:
         fr, mh = video_meme(s, n)
+    if s.get('hold'):
+        fr = fr[:max(1, int(s['hold'] * FPS))]           # freeze before the meme's own cut or zoom
     top = max(0, 860 - mh // 2)
-    cap = caption_rgba(spec['font'], s['cap'], min(top + mh + 70, 1480)) if s.get('cap') else None
+    cap = None
+    if s.get('cap'):
+        cs = spec.get('capSize', 96)
+        cap = caption_rgba(spec['font'], s['cap'], min(top + mh + cs * 0.8, 1480), cs)
     for j in range(n):
         m = fr[min(j, len(fr) - 1)]
-        bg = cv2.resize(m, (W // 8, H // 8), interpolation=cv2.INTER_AREA)
-        bg = cv2.GaussianBlur(bg, (0, 0), 6)
-        bg = (cv2.resize(bg, (W, H), interpolation=cv2.INTER_LINEAR).astype(np.float32) * 0.6).astype(np.uint8)
+        if spec.get('memeBg') == 'black':
+            bg = np.zeros((H, W, 3), np.uint8)
+        else:
+            bg = cv2.resize(m, (W // 8, H // 8), interpolation=cv2.INTER_AREA)
+            bg = cv2.GaussianBlur(bg, (0, 0), 6)
+            bg = (cv2.resize(bg, (W, H), interpolation=cv2.INTER_LINEAR).astype(np.float32) * 0.6).astype(np.uint8)
         bg[top:top + min(mh, H - top)] = m[:H - top]
         if cap is not None:
-            a = cap[..., 3:4].astype(np.float32) / 255
-            bg = (bg * (1 - a) + cap[..., :3] * a).astype(np.uint8)
+            bg = over(bg, cap)
         yield sharpen(bg)
 
 
@@ -118,7 +210,11 @@ def video_meme(s, n):
 def build(spec, out):
     tmp = tempfile.mkdtemp(prefix='rewind_')
     segs = spec['segments']
-    counts = [round(((s['out'] - s['in']) if s['type'] == 'clip' else s['dur']) * FPS) for s in segs]
+    counts = [frame_count(s) for s in segs]
+    title = None
+    if spec.get('title'):
+        tt = spec['title']
+        title = caption_rgba(spec['font'], tt['text'], tt.get('y', 250), tt.get('size', 64))
     starts = np.cumsum([0] + counts)
     white = np.zeros(int(starts[-1]), np.float32)
     for i, b in enumerate(starts[1:-1]):
@@ -138,13 +234,32 @@ def build(spec, out):
             a = white[starts[i] + j]
             if a:
                 img = (img.astype(np.float32) * (1 - a) + 255 * a).astype(np.uint8)
+            if title is not None:
+                img = over(img, title)
             enc.stdin.write(np.ascontiguousarray(img).tobytes())
         dur = n / FPS
         a = f'{tmp}/a{i}.wav'
         has_a = s['type'] == 'clip' and subprocess.run(
             ['ffprobe', '-v', 'error', '-select_streams', 'a', '-show_entries', 'stream=index', '-of', 'csv=p=0', s['src']],
             capture_output=True, text=True).stdout.strip()
-        if has_a:
+        if has_a and s.get('speed'):
+            # constant-speed pieces, each time-stretched with atempo (pitch kept), then joined
+            cuts = sorted({s['in'], s['out']} | {k for k, _ in s['speed'] if s['in'] < k < s['out']})
+            parts = []
+            for q, (p0, p1) in enumerate(zip(cuts, cuts[1:])):
+                f, pa = speed_at(s, p0), f'{tmp}/a{i}_{q}.wav'
+                tempo = []
+                while f < 0.5:
+                    tempo.append('atempo=0.5'); f /= 0.5
+                tempo.append(f'atempo={f:.4f}')
+                subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', f'{p0:.3f}', '-t', f'{p1 - p0:.3f}', '-i', s['src'],
+                                '-af', ','.join(tempo) + ',aresample=48000', '-ac', '2', pa], check=True)
+                parts.append(pa)
+            open(f'{tmp}/p{i}.txt', 'w').write(''.join(f"file '{x}'\n" for x in parts))
+            subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', f'{tmp}/p{i}.txt',
+                            '-af', f"volume={s.get('vol', 1.0)},afade=t=in:d=0.04,afade=t=out:st={dur - 0.1:.3f}:d=0.1,"
+                                   "apad", '-t', f'{dur:.3f}', a], check=True)
+        elif has_a:
             subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', f"{s['in']:.3f}", '-t', f'{dur:.3f}', '-i', s['src'],
                             '-af', f"volume={s.get('vol', 1.0)},aresample=48000,afade=t=in:d=0.04,"
                                    f"afade=t=out:st={dur - 0.1:.3f}:d=0.1,apad", '-t', f'{dur:.3f}', '-ac', '2', a], check=True)
@@ -154,7 +269,11 @@ def build(spec, out):
             if s['type'] == 'meme':
                 sfx.append((spec['boom'], 0, starts[i] / FPS - 0.05, s.get('boomVol', 0.6)))
         for e in s.get('sfx', []):
-            sfx.append((e['src'], e.get('ss', 0), starts[i] / FPS + e['at'] - s['in'], e.get('vol', 0.8)))
+            if s['type'] == 'clip' and s.get('speed'):
+                off = sum(1 for x in src_times(s) if x < e['at']) / FPS
+            else:
+                off = e['at'] - s.get('in', 0)
+            sfx.append((e['src'], e.get('ss', 0), starts[i] / FPS + off, e.get('vol', 0.8)))
         audio.append(a)
     enc.stdin.close(); enc.wait()
     total = starts[-1] / FPS
