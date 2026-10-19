@@ -9,6 +9,7 @@ kst = int(os.environ.get("KST_HOUR", "22"))  # user 2026-10-12: shorts go public
 pub = now.replace(hour=(kst - 9) % 24, minute=0, second=0, microsecond=0)
 if pub < now + datetime.timedelta(minutes=30): pub += datetime.timedelta(days=1)
 pub += datetime.timedelta(days=int(os.environ.get("DAY_OFFSET", "0")))
+if os.environ.get("PUBLISH_AT"): pub = datetime.datetime.fromisoformat(os.environ["PUBLISH_AT"].replace("Z", "+00:00"))  # exact time, e.g. 2026-10-20T10:00:00Z
 body = {"snippet": {k: m[k] for k in ("title", "description", "tags")} | {"categoryId": "27", "defaultLanguage": "en", "defaultAudioLanguage": "en"},
         "status": {"privacyStatus": "private", "publishAt": pub.isoformat().replace("+00:00", "Z"), "selfDeclaredMadeForKids": False}}
 size = os.path.getsize(video)
