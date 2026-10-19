@@ -1,0 +1,10 @@
+{"composition_plan":{
+ "positive_global_styles":["kids science show","curious and adventurous","orchestral percussion and playful synth","cinematic but fun","instrumental","clean mix"],
+ "negative_global_styles":["vocals","singing","lyrics","scary horror","EDM drop"],
+ "sections":[
+  {"section_name":"Curious intro","positive_local_styles":["mysterious plucked synth","low rumbling drums","curious","building"],"negative_local_styles":["loud"],"duration_ms":11000,"lines":[]},
+  {"section_name":"Bubbling","positive_local_styles":["playful bouncy pizzicato","marimba","light percussion","wonder"],"negative_local_styles":["heavy"],"duration_ms":7000,"lines":[]},
+  {"section_name":"Rising pressure","positive_local_styles":["rising tension","snare roll crescendo","string ostinato getting faster"],"negative_local_styles":["calm"],"duration_ms":3000,"lines":[]},
+  {"section_name":"Eruption","positive_local_styles":["huge cinematic hit","epic drums","brass stabs","exciting adventure"],"negative_local_styles":["sad"],"duration_ms":10000,"lines":[]},
+  {"section_name":"Outro","positive_local_styles":["warm wonder","light playful melody","gentle ending"],"negative_local_styles":["drums heavy"],"duration_ms":8000,"lines":[]}
+ ]},"model_id":"music_v1"}
