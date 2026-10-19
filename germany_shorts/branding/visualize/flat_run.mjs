@@ -119,7 +119,7 @@ const armR = '';
 // HUD in the reference style: thin lines, mono type, one dot
 const hud = `<g font-family="Mono" fill="#f4ecff">
  <text x="80" y="92" font-size="20" opacity=".75">DAY 037 / 365</text>
- <text x="80" y="124" font-size="20" opacity=".45">06:12 AM · Han River</text>
+ <text x="80" y="124" font-size="20" opacity=".45">06:12 AM · Riverside</text>
  <g transform="translate(1260 86)">
   <path d="M0 0 L560 0" stroke="#f4ecff" stroke-width="1.5" opacity=".45"/>
   ${[0, 1, 2, 3, 4, 5].map(k => `<path d="M${k * 112} -6 L${k * 112} 6" stroke="#f4ecff" stroke-width="1.5" opacity=".45"/><text x="${k * 112}" y="30" font-size="14" text-anchor="middle" opacity=".45">${k === 5 ? '5 km' : k}</text>`).join('')}
