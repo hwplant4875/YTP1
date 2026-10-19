@@ -1,0 +1,108 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/fails/7424792145137077537.mp4",
+   "in": 11.5,
+   "out": 14.0,
+   "crop": [
+    0,
+    96,
+    1080,
+    1724
+   ],
+   "track": [
+    [
+     0,
+     0.55,
+     0.5,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 13.62,
+     "x": 0.5,
+     "y": 0.47,
+     "zoom": 1.3
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/surprised-cat__aLoZNO7gRQo__shocked-cat-shocked.mp4",
+   "dur": 0.8,
+   "cap": "She good???"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/fails/7424792145137077537.mp4",
+   "in": 12.9,
+   "out": 17.0,
+   "crop": [
+    0,
+    96,
+    1080,
+    1724
+   ],
+   "track": [
+    [
+     0,
+     0.55,
+     0.5,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 16.0,
+     "x": 0.45,
+     "y": 0.6,
+     "zoom": 1.25
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/question-mark-meme__pNFqGBftNHE__nick-confused.mp4",
+   "dur": 0.8,
+   "cap": "Why is she rolling???"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/fails/7424792145137077537.mp4",
+   "in": 15.4,
+   "out": 16.7,
+   "crop": [
+    0,
+    96,
+    1080,
+    1724
+   ],
+   "track": [
+    [
+     0,
+     0.55,
+     0.5,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 16.0,
+     "x": 0.45,
+     "y": 0.58,
+     "zoom": 1.45
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/cat-laughing__aGdYBX9_DTg__cat-laugh-cat-laughing.mp4",
+   "dur": 1.2,
+   "cap": "The box won"
+  }
+ ]
+}
