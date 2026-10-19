@@ -80,7 +80,7 @@ ROLLK = {"crop": [0, 528, 1080, 1392], "ratio": "3:4", "vol": 0}   # drops the b
 TREAD_ROLL = beat(
     clip(DISMOUNT, **ROLLK, **{"in": 4.8, "out": 7.1,
          "circles": [{"from": 4.8, "to": 5.45, "rx": 0.14, "ry": 0.4,
-                      "track": [[4.8, 0.58, 0.31], [5.45, 0.5, 0.33]]}]}),
+                      "track": [[4.8, 0.36, 0.33], [5.1, 0.39, 0.33], [5.45, 0.46, 0.36]]}]}),
     SHOCKED, "Bro did a combat roll 💀",
     clip(DISMOUNT, **ROLLK, **{"in": 5.6, "out": 8.8, "speed": [[5.6, 1.0], [5.8, 0.45], [6.9, 1.0]],
          "hits": [{"at": 5.8, "x": 0.4, "y": 0.45, "zoom": 1.2},
