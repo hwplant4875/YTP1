@@ -1,7 +1,7 @@
 """German Rave 01 "Ich bin Nick": word-synced lyrics on the original Ich-bin-Nick song.
 
 python3 specs/rave/short01d_nick.py AUDIO.wav LINES.json OUT.mp4
-LINES.json: [{"words": [[WORD, t], ...], "en": "MY NAME IS NICK", "form": 0|null}, ...] on the edited track.
+LINES.json: [{"words": [[WORD, t], ...], "en": "I AM NICK" or "" for an English line, "lang": "en"|"de", "form": 0|null}, ...] on the edited track.
 """
 import json, os, subprocess, sys
 import numpy as np
@@ -40,13 +40,14 @@ def frame_text(t, L):
     line = L[i]
     ws = line["words"]
     if len(ws) > 3:  # long line: two rows so the words stay big
-        words_line(d, ws[:2], t, 540, 210, ACID, i == 0)
-        words_line(d, ws[2:], t, 760, 210, ACID, i == 0)
+        col = WHITE if line.get("lang") == "en" else ACID
+        words_line(d, ws[:2], t, 540, 210, col, i == 0)
+        words_line(d, ws[2:], t, 760, 210, col, i == 0)
     else:
-        words_line(d, ws, t, 600, 230, ACID, i == 0)
+        words_line(d, ws, t, 600, 230, WHITE if line.get("lang") == "en" else ACID, i == 0)
     t_en = ws[-1][1]
     if i == 0 and t < 0.05: t_en = -1
-    if t >= t_en:
+    if line["en"] and t >= t_en:
         en = "= " + line["en"]
         sz = min(110, int(110 * 900 / text_w(en, 110)))
         sc = 1.0 if t_en < 0 else pop(t - t_en)
