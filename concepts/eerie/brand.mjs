@@ -66,15 +66,20 @@ const profile = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800
 <rect width="800" height="800" fill="url(#scan)"/><rect width="800" height="800" fill="url(#vig)"/><rect width="800" height="800" filter="url(#grain)"/>
 </svg>`;
 
-// banner: name in the safe area, bed on the left and the knocking cat on the right inside the desktop strip
+// banner: pairs of red cat eyes watching from the dark around the channel name (not tied to any episode)
+const eyes = (cx, cy, k, gap = 46, blink = 1) => [-1, 1].map(d => `<g transform="translate(${cx + d * gap * k},${cy}) scale(${k},${k * blink})">
+  <path d="M-26,0 C-14,-15 14,-15 26,0 C14,15 -14,15 -26,0Z" fill="${C.red}" filter="url(#glow)"/>
+  <path d="M0,-12 C4,-5 4,5 0,12 C-4,5 -4,-5 0,-12Z" fill="#000"/></g>`).join('');
+const pairs = [[180, 610, 0.9], [360, 820, 1.1], [640, 880, 0.75], [300, 1000, 0.7], [120, 420, 0.6],
+  [2380, 640, 1.0], [2190, 860, 0.8], [2140, 470, 0.65], [2440, 980, 0.6], [2300, 420, 0.7]];
 const banner = `<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440">${defs}
 <rect width="2560" height="1440" fill="${C.bg}"/>
-<line x1="0" y1="922" x2="2560" y2="922" stroke="${C.floor}" stroke-width="4"/>
-<g transform="translate(250,404) scale(0.75)">${bed}</g>
-<g transform="translate(1530,404) scale(0.75)">${catDoor}</g>
-<text x="1280" y="690" text-anchor="middle" font-family="M" font-weight="900" font-size="120" letter-spacing="-2" fill="${C.txt}">${N1} <tspan fill="${C.red}">${N2}</tspan></text>
-<text x="1280" y="770" text-anchor="middle" font-family="Plex" font-size="40" fill="${C.txt}" opacity="0.85">THE CAMERA SAW IT. NOW YOU KNOW THE RULES.</text>
-<g font-family="Plex" font-size="36" fill="${C.txt}"><circle cx="533" cy="556" r="13" fill="${C.red}"/><text x="556" y="568">REC</text><text x="1960" y="568" text-anchor="end">03:12 AM</text></g>
+${pairs.map(p => eyes(...p)).join('')}
+<g fill="none" stroke="${C.txt}" stroke-width="6" opacity="0.8"><path d="M560,560 v-40 h40 M2000,560 v-40 h-40 M560,880 v40 h40 M2000,880 v40 h-40"/></g>
+<text x="1280" y="720" text-anchor="middle" font-family="M" font-weight="900" font-size="132" letter-spacing="-2" fill="${C.txt}">${N1} <tspan fill="${C.red}">${N2}</tspan></text>
+<text x="1280" y="800" text-anchor="middle" font-family="Plex" font-size="40" fill="${C.txt}" opacity="0.85">RULES FOR THINGS THAT SHOULD NEVER HAPPEN</text>
+<g font-family="Plex" font-size="34" fill="${C.txt}"><circle cx="612" cy="572" r="12" fill="${C.red}"/><text x="634" y="584">REC</text><text x="1948" y="584" text-anchor="end">03:12 AM</text>
+<text x="1948" y="900" text-anchor="end" opacity="0.7">ERROR: INSTRUCTION NOT FOUND</text></g>
 <rect width="2560" height="1440" fill="url(#scan)"/><rect width="2560" height="1440" fill="url(#vig)"/><rect width="2560" height="1440" filter="url(#grain)"/>
 </svg>`;
 
