@@ -26,18 +26,21 @@ const defs = `<defs>
 
 const title = (w, r, fill2 = RED) => `<text x="640" y="150" text-anchor="middle" font-family="M" font-size="132" letter-spacing="-2" fill="#fff">${w} <tspan fill="${fill2}">${r}</tspan></text>`;
 
-// side-view bed with a person lying awake, eye toward the door
+// side-view bed with a person who has just woken up: propped up, wide eye toward the door
 function bed(x = 0, dark = false) {
   const W = dark ? '#111' : '#fff', G = dark ? '#7a1010' : '#cfcfcf', G2 = dark ? '#5a0a0a' : '#9a9a9a';
   return `<g transform="translate(${x},0)">
   <rect x="70" y="420" width="36" height="270" rx="14" fill="${W}"/>
   <rect x="70" y="566" width="480" height="58" rx="16" fill="${G}"/>
   <rect x="96" y="620" width="24" height="66" rx="6" fill="${G2}"/><rect x="510" y="620" width="24" height="66" rx="6" fill="${G2}"/>
-  <ellipse cx="158" cy="556" rx="50" ry="15" fill="${G}"/>
-  <circle cx="168" cy="518" r="40" fill="${W}"/>
-  <circle cx="192" cy="508" r="7" fill="${dark ? '#fff' : '#000'}"/>
-  <path d="M188,568 C196,520 268,500 340,506 C420,512 480,524 552,546 L552,590 L188,590 Z" fill="${W}"/>
-  <path d="M230,452 C222,466 216,476 220,484 A9,9 0 0 0 238,482 C240,474 236,466 230,452Z" fill="${W}"/>
+  <ellipse cx="150" cy="556" rx="50" ry="15" fill="${G}"/>
+  <circle cx="204" cy="456" r="40" fill="${W}"/>
+  <path d="M150,568 C150,522 176,498 214,498 C262,498 300,506 340,510 C420,516 480,528 552,548 L552,590 L150,590 Z" fill="${W}"/>
+  <path d="M180,420 q6,-14 16,-6 q6,-14 16,-2" fill="none" stroke="${W}" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(${x},0)">
+  <circle cx="230" cy="450" r="9" fill="#000"/>
+  <g stroke="${W}" stroke-width="7" stroke-linecap="round"><line x1="204" y1="394" x2="204" y2="372"/><line x1="170" y1="404" x2="156" y2="388"/><line x1="238" y1="404" x2="252" y2="388"/></g>
   </g>`;
 }
 

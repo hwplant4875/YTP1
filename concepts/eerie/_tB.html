@@ -1,0 +1,57 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:M;font-weight:900;src:url(fonts/montserrat-900.woff2)}
+html,body{margin:0;background:#000}</style></head><body><svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720"><defs>
+<filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+  <feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="bloom" x="-10%" y="-10%" width="120%" height="120%">
+  <feGaussianBlur stdDeviation="14" result="b"/><feComponentTransfer in="b" result="c"><feFuncA type="linear" slope="0.45"/></feComponentTransfer>
+  <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="soft"><feGaussianBlur stdDeviation="3.2"/></filter>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4"/>
+  <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.07 0"/></filter>
+<radialGradient id="vig" cx="50%" cy="50%" r="75%"><stop offset="60%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity="0.55"/></radialGradient>
+<linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4cf"/><stop offset="1" stop-color="#e2cf8e"/></linearGradient>
+<clipPath id="gclip"><rect x="700" y="228" width="240" height="262" rx="8"/></clipPath>
+</defs>
+  <rect width="1280" height="720" fill="#000"/>
+  <text x="640" y="150" text-anchor="middle" font-family="M" font-weight="900" font-size="132" letter-spacing="-2" fill="#fff">DON'T <tspan fill="#ff2a2a">OPEN</tspan></text>
+  <line x1="0" y1="690" x2="1280" y2="690" stroke="#333" stroke-width="4"/>
+  <g filter="url(#bloom)"><g transform="translate(20,0)">
+  <rect x="70" y="420" width="36" height="270" rx="14" fill="#fff"/>
+  <rect x="70" y="566" width="480" height="58" rx="16" fill="#cfcfcf"/>
+  <rect x="96" y="620" width="24" height="66" rx="6" fill="#9a9a9a"/><rect x="510" y="620" width="24" height="66" rx="6" fill="#9a9a9a"/>
+  <ellipse cx="150" cy="556" rx="50" ry="15" fill="#cfcfcf"/>
+  <circle cx="204" cy="456" r="40" fill="#fff"/>
+  <path d="M150,568 C150,522 176,498 214,498 C262,498 300,506 340,510 C420,516 480,528 552,548 L552,590 L150,590 Z" fill="#fff"/>
+  <path d="M180,420 q6,-14 16,-6 q6,-14 16,-2" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(20,0)">
+  <circle cx="230" cy="450" r="9" fill="#000"/>
+  <g stroke="#fff" stroke-width="7" stroke-linecap="round"><line x1="204" y1="394" x2="204" y2="372"/><line x1="170" y1="404" x2="156" y2="388"/><line x1="238" y1="404" x2="252" y2="388"/></g>
+  </g></g>
+  <rect x="648" y="180" width="344" height="512" fill="none" stroke="#6d6d6d" stroke-width="8"/>
+  <rect x="664" y="196" width="312" height="486" rx="6" fill="#f4f4f4" filter="url(#bloom)"/>
+  <rect x="664" y="684" width="312" height="6" fill="#fff2b0" filter="url(#glow)"/>
+  <rect x="790" y="683" width="34" height="8" fill="#000"/><rect x="852" y="683" width="34" height="8" fill="#000"/>
+  <rect x="700" y="228" width="240" height="262" rx="8" fill="url(#glass)" filter="url(#glow)"/>
+  <g clip-path="url(#gclip)">
+    <g fill="#1b1410" filter="url(#soft)">
+      <path d="M786,300 L796,238 L830,286 Z"/><path d="M846,286 L884,240 L886,304 Z"/>
+      <ellipse cx="838" cy="318" rx="56" ry="48"/>
+      <rect x="806" y="350" width="64" height="40" rx="20"/>
+      <ellipse cx="842" cy="470" rx="74" ry="118"/>
+      <line x1="800" y1="410" x2="742" y2="330" stroke="#1b1410" stroke-width="30" stroke-linecap="round"/>
+    </g>
+    <g fill="#120c08"><circle cx="738" cy="324" r="19"/><circle cx="722" cy="304" r="7"/><circle cx="736" cy="298" r="7"/><circle cx="751" cy="303" r="7"/></g>
+    <g filter="url(#glow)"><ellipse cx="818" cy="316" rx="11" ry="8" fill="#ffd23a"/><ellipse cx="860" cy="316" rx="11" ry="8" fill="#ffd23a"/></g>
+    <rect x="816" y="309" width="4" height="14" rx="2" fill="#000"/><rect x="858" y="309" width="4" height="14" rx="2" fill="#000"/>
+  </g>
+  <rect x="700" y="228" width="240" height="262" rx="8" fill="none" stroke="#bdbdbd" stroke-width="6"/>
+  <rect x="704" y="528" width="104" height="128" rx="6" fill="none" stroke="#cfcfcf" stroke-width="6"/>
+  <rect x="832" y="528" width="104" height="128" rx="6" fill="none" stroke="#cfcfcf" stroke-width="6"/>
+  <rect x="680" y="540" width="14" height="44" rx="6" fill="#8d8d8d"/><circle cx="687" cy="562" r="13" fill="#7a7a7a"/>
+  <g stroke="#ffd23a" stroke-width="9" stroke-linecap="round" filter="url(#glow)">
+    <line x1="636" y1="292" x2="602" y2="272"/><line x1="632" y1="326" x2="592" y2="326"/><line x1="636" y1="360" x2="602" y2="380"/>
+  </g>
+  <rect width="1280" height="720" fill="url(#vig)"/><rect width="1280" height="720" filter="url(#grain)"/>
+  </svg></body></html>
