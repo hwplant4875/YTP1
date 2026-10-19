@@ -9,7 +9,7 @@ import path from 'path';
 
 const dir = path.dirname(new URL(import.meta.url).pathname);
 const [tlPath, mode, out, a, b, wk] = process.argv.slice(2);
-const FPS = 30;
+const FPS = parseInt(process.env.FPS || '30');
 const tl = readFileSync(tlPath, 'utf8');
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face{font-family:M;font-weight:900;src:url(../fonts/montserrat-900.woff2)}

@@ -11,15 +11,17 @@ LEAD = 2.3    # the opening knocks play before the first line
 EXTRA = {
     's01': (0.3, []),
     's03': (0.2, []),
+    's04': (1.3, [('riser', -0.1)]),      # music-only breaks before each step card, like the reference's [music] beats
     's09': (0.9, [('boom', 0.05)]),
+    's10': (1.3, [('riser', 0.0)]),
     's14': (0.2, []),
     's15': (2.1, [('meow1', 0.25)]),
-    's18': (1.9, [('meow2', 0.2)]),
+    's18': (2.9, [('meow2', 0.2), ('riser', 1.3)]),
     's20': (0.2, []),
     's21': (2.4, [('knock3', 0.5)]),
     's26': (0.3, []),
-    's30': (0.6, []),
-    's31': (1.6, [('error', 0.1)]),
+    's30': (1.5, [('riser', 0.1)]),
+    's31': (1.6, [('error', 0.1), ('tapestop', 0.0)]),
     's33': (2.8, [('knock3', 1.0)]),
 }
 
@@ -49,11 +51,34 @@ for s in segs:
     for name, off in sounds: events.append({'type': name, 't': speech_end + off})
     t = speech_end + GAP + extra
     if s['id'] == last: break
-# word-cued sounds
-for seg in tl:
-    if seg['id'] == 's07':
-        w = next((w for w in seg['words'] if w['w'].lower().startswith('scratch')), None)
-        if w: events.append({'type': 'scratch', 't': w['s']})
+# word-cued sounds and in-line shot cuts (engine.js reads 'cuts' for its glitch transitions)
+import re
+norm = lambda w: re.sub(r"[^a-z0-9']", '', w.lower())
+def wt(seg, word, nth=1):
+    n = 0
+    for w in seg['words']:
+        if norm(w['w']) == word:
+            n += 1
+            if n == nth: return w['s']
+    return seg['end']
+S = {seg['id']: seg for seg in tl}
+def cue(sid, word, nth=1, off=0.0):
+    return wt(S[sid], word, nth) + off if sid in S else None
+for sid, word, nth, snd, off in [('s07', 'scratch', 1, 'scratch', 0), ('s12', 'light', 1, 'hum', -0.1), ('s13', 'gap', 1, 'heartbeat', 0),
+                                 ('s14', 'count', 1, 'heartbeat', 0), ('s17', 'something', 1, 'breath', 0.2), ('s28', 'open', 1, 'creak', 0.1),
+                                 ('s09', 'height', 1, 'riser', 0.0), ('s15', 'meow', 1, 'staticlong', 0.3)]:
+    c = cue(sid, word, nth, off)
+    if c is not None: events.append({'type': snd, 't': c})
+for sid in ('s05', 's11', 's19', 's31'):
+    if sid in S: events.append({'type': 'stinger', 't': S[sid]['start'] - 0.05})
 cuts = [seg['start'] for seg in tl[1:]]
+for sid, word, nth, off in [('s04', 'there', 1, -0.1), ('s08', 'cats', 1, -0.05), ('s10', 'legs', 1, -0.1), ('s10', 'mind', 1, -0.6), ('s13', 'four', 1, -0.1),
+                            ('s16', 'meow', 2, -0.2), ('s23', 'footsteps', 1, -0.1), ('s25', 'tail', 1, -0.3), ('s26', 'sleep', 1, -0.9), ('s27', 'thought', 1, -0.1),
+                            ('s32', 'nobody', 1, -0.1), ('s33', 'this', 1, -0.1)]:
+    c = cue(sid, word, nth, off)
+    if c is not None: cuts.append(c)
+for e in events:
+    if e['type'] in ('boom', 'meow2', 'error'): cuts.append(e['t'] - (0.15 if e['type'] == 'meow2' else 0))
+cuts.sort()
 json.dump({'total': t + 0.4, 'segments': tl, 'events': events, 'cuts': cuts}, open(out, 'w'), indent=1)
 print('total', round(t, 2), 'segments', len(tl))
