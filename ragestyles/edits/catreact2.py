@@ -11,7 +11,7 @@ spec:
              "track": [[t, x, y, zoom], ...]   source time, focus point (0..1 of the source), zoom (1 = widest)
              "memes": [{"at": t, "src", "dur": 1.0}],    at = source time in the live part
              "replay": {"in", "out", "speed"},
-             "score": [["IMPACT", 8], ["FUNNY", 9]]}]
+             "score": 9.5}]          one big number stamped mid-screen (old rows form [["IMPACT", 8], ...] still works)
 """
 import json, subprocess, sys, tempfile
 import cv2
@@ -104,6 +104,35 @@ def score_rgba(font, rows, shown, pop):
     return np.asarray(im)
 
 
+def stamp_rgba(font, val):
+    """one big score number, yellow (low) to red (high), thick black stroke; tight RGBA crop"""
+    u = min(max((val - 5) / 5, 0), 1)
+    col = (255, int(212 * (1 - u) + 40 * u), int(0 * (1 - u) + 40 * u))
+    f = ImageFont.truetype(font, 330)
+    txt = f'{val:g}'
+    im = Image.new('RGBA', (W, 520), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.text((W / 2, 260), txt, font=f, fill=col, stroke_width=16, stroke_fill='black', anchor='mm')
+    return np.asarray(im.crop(im.getbbox()))
+
+
+def put_stamp(canvas, st, age):
+    """slam in: scale 1.9 -> 1 over 5 frames with a small overshoot, then hold"""
+    k = age * FPS
+    s = 1.9 - 0.95 * min(k / 5, 1) + (0.05 * max(0, 1 - (k - 5) / 4) if k >= 5 else 0)
+    h, w = st.shape[:2]
+    img = cv2.resize(st, (max(2, int(w * s)), max(2, int(h * s))), interpolation=cv2.INTER_LINEAR)
+    h, w = img.shape[:2]
+    cx, cy = W // 2, 1250
+    x0, y0 = cx - w // 2, cy - h // 2
+    xa, ya, xb, yb = max(x0, 0), max(y0, 0), min(x0 + w, W), min(y0 + h, H)
+    sub = img[ya - y0:yb - y0, xa - x0:xb - x0].astype(np.float32)
+    a = sub[..., 3:4] / 255 * min(1.0, k / 2 + 0.3)
+    roi = canvas[ya:yb, xa:xb].astype(np.float32)
+    canvas[ya:yb, xa:xb] = (roi * (1 - a) + sub[..., :3] * a).astype(np.uint8)
+    return canvas
+
+
 def blend(canvas, rgba):
     a = rgba[..., 3:4].astype(np.float32) / 255
     if a.max() == 0:
@@ -141,7 +170,11 @@ def build(spec, out):
             sfx.append((spec['boom'], t + (m['at'] - c['in']), 0.55))
         if ci:
             sfx.append((spec['whoosh'], t, 0.45))
-        rows = [list(x) for x in c['score']] + [['TOTAL', sum(v for _, v in c['score'])]]
+        single = not isinstance(c['score'], list)
+        if single:
+            st = stamp_rgba(spec['font'], c['score'])
+        else:
+            rows = [list(x) for x in c['score']] + [['TOTAL', sum(v for _, v in c['score'])]]
         i, n_live = 0, 0
         parts = [('live', stream(c['src'], c['in'], c['out'] - c['in'])),
                  ('slow', stream(c['src'], r['in'], r['out'] - r['in'], r['speed']))]
@@ -155,6 +188,12 @@ def build(spec, out):
                         age = ts - m['at']
                         if 0 <= age < m.get('dur', 1.0):
                             canvas = meme_on(canvas, mf, age, m.get('dur', 1.0), m.get('alpha', alpha))
+                elif single:
+                    at = 3
+                    if j == at:
+                        sfx.append((spec.get('stamp', spec['pop']), t + (n_live + at) / FPS, 0.6))
+                    if j >= at:
+                        canvas = put_stamp(canvas, st, (j - at) / FPS)
                 else:
                     pops = [4 + k * 8 for k in range(len(rows))]
                     if j == 0:
