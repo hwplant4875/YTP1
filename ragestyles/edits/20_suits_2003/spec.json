@@ -1,0 +1,317 @@
+{
+ "bg": "black",
+ "font": "/home/user/rs_work/fonts/TikTokSans-Black.ttf",
+ "box": {
+  "y": 266,
+  "h": 211,
+  "color": "#ffffff",
+  "text": "#000000",
+  "size": 84
+ },
+ "window": {
+  "y": 477,
+  "h": 810
+ },
+ "sfx": {
+  "boom": {
+   "file": "/mnt/project-files/sfx/user/sub_hit_warm.wav",
+   "peak": 0.032,
+   "gain": -4
+  }
+ },
+ "mute": true,
+ "src": {
+  "pc": "/home/user/rs_work/src/suit2/wf8rjH3M1vM.mp4"
+ },
+ "srcFilter": {
+  "pc": "crop=516:358:16:2,hqdn3d=1.5:1.5:3:3"
+ },
+ "titles": [
+  {
+   "from": 0,
+   "text": "Bodybuilders in a suit pt.2 🔥"
+  }
+ ],
+ "capFont": "/mnt/project-files/fonts/YouTubeSans-Black.otf",
+ "grade": {
+  "clarity": 0.35,
+  "contrast": 0.12,
+  "saturation": 0.08,
+  "sharpen": 0.7,
+  "structure": 0.35,
+  "exposure": 0.2,
+  "brightness": 0.12
+ },
+ "shots": [
+  {
+   "src": "pc",
+   "in": 113.0,
+   "out": 115.8,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.12,
+   "kb": 0.06,
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ],
+   "tr": "cut",
+   "zout": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "1st",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Lee Priest",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 5.3999999999999915
+    }
+   ]
+  },
+  {
+   "src": "pc",
+   "in": 101.2,
+   "out": 103.8,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.18,
+   "kb": -0.08,
+   "hits": [],
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "pc",
+   "in": 1152.5,
+   "out": 1155.5,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.12,
+   "kb": 0.06,
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ],
+   "tr": "cut",
+   "zout": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "2nd",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Dennis James",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 5.599999999999909
+    }
+   ]
+  },
+  {
+   "src": "pc",
+   "in": 1175.0,
+   "out": 1177.6,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.18,
+   "kb": -0.08,
+   "hits": [],
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "pc",
+   "in": 1300.6,
+   "out": 1303.6,
+   "cx": 0.55,
+   "cy": 0.45,
+   "zoom": 1.12,
+   "kb": 0.06,
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ],
+   "tr": "cut",
+   "zout": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "3rd",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Jay Cutler",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 5.599999999999909
+    }
+   ]
+  },
+  {
+   "src": "pc",
+   "in": 1330.0,
+   "out": 1332.6,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.18,
+   "kb": -0.08,
+   "hits": [],
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "pc",
+   "in": 1481.0,
+   "out": 1483.8,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.12,
+   "kb": 0.06,
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ],
+   "tr": "cut",
+   "zout": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "4th",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Melvin Anthony",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 5.399999999999864
+    }
+   ]
+  },
+  {
+   "src": "pc",
+   "in": 1495.0,
+   "out": 1497.6,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.18,
+   "kb": -0.08,
+   "hits": [],
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "pc",
+   "in": 468.0,
+   "out": 471.2,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.12,
+   "kb": 0.06,
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ],
+   "tr": "cut",
+   "zout": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "5th",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Ronnie Coleman",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 6.400000000000034
+    }
+   ]
+  },
+  {
+   "src": "pc",
+   "in": 1417.0,
+   "out": 1420.2,
+   "cx": 0.5,
+   "cy": 0.45,
+   "zoom": 1.18,
+   "kb": -0.08,
+   "hits": [],
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  }
+ ]
+}
