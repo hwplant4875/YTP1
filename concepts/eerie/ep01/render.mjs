@@ -1,6 +1,7 @@
 // Render EP01 frames with headless Chromium.
 // node render.mjs timeline.json still out.jpg t
 // node render.mjs timeline.json clip out.mp4 t0 t1 [workers]
+// node render.mjs timeline.json stills outdir t1,t2,...   (contact sheet frames named by time)
 import { chromium } from 'playwright';
 import { writeFileSync, readFileSync, rmSync, mkdirSync } from 'fs';
 import { execSync, spawn } from 'child_process';
@@ -29,6 +30,9 @@ const grab = async (p, t) => Buffer.from((await p.evaluate(tt => { window.draw(t
 const browser = await chromium.launch();
 if (mode === 'still') {
   const p = await openPage(browser); writeFileSync(out, await grab(p, parseFloat(a)));
+} else if (mode === 'stills') {
+  const p = await openPage(browser); mkdirSync(out, { recursive: true });
+  for (const v of a.split(',')) writeFileSync(path.join(out, `t${parseFloat(v).toFixed(2).padStart(7, '0')}.jpg`), await grab(p, parseFloat(v)));
 } else {
   const t0 = parseFloat(a), t1 = parseFloat(b), n = Math.round((t1 - t0) * FPS), workers = parseInt(wk || '4');
   const per = Math.ceil(n / workers), tmp = out + '_parts'; rmSync(tmp, { recursive: true, force: true }); mkdirSync(tmp);

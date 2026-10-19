@@ -1,47 +1,134 @@
 [
- {"id":"s01","text":"If your cat ever knocks on your bedroom door... do not open it."},
- {"id":"s02","text":"Do not get up. Do not turn on the light. Do not say its name."},
- {"id":"s03","text":"It is three twelve in the morning. It will knock three times. It always knocks three times."},
- {"id":"s04","text":"There are seven rules. You already follow two of them. You just don't know why."},
- {"id":"s05","text":"Rule one. Do not open the door."},
- {"id":"s06","text":"Listen to where the knock comes from. Not the bottom of the door. The middle."},
- {"id":"s07","text":"A cat that wants in will scratch. It will push. It will cry."},
- {"id":"s08","text":"It will not knock. Cats do not knock."},
- {"id":"s09","text":"This one knocks at the height of your hand."},
- {"id":"s10","text":"Rule two. Do not say its name."},
- {"id":"s11","text":"You will want to. Is that you? Do not."},
- {"id":"s12","text":"In twenty nineteen, researchers in Japan showed that cats know their own names. They hear it. They understand it."},
- {"id":"s13","text":"Your cat has heard you say its name every day for years."},
- {"id":"s14","text":"So has whatever is outside your door."},
- {"id":"s15","text":"Rule three. Do not look under the door."},
- {"id":"s16","text":"There is a light in the hallway. You did not leave it on."},
- {"id":"s17","text":"In the gap under the door, you will see the shadow of feet. Count them."},
- {"id":"s18","text":"A cat has four."},
- {"id":"s19","text":"Stop counting."},
- {"id":"s20","text":"Rule four. When it meows, do not answer."},
- {"id":"s21","text":"Here is something most people never notice. Grown cats almost never meow at each other."},
- {"id":"s22","text":"The meow is not cat language. It is a sound cats made for us."},
- {"id":"s23","text":"Something outside your door has been listening to that sound for a long time."},
- {"id":"s24","text":"It is close. It is not quite right yet. It sounds a little like your cat. It sounds a little like you."},
- {"id":"s25","text":"Rule five. Before you do anything else, look at the foot of your bed."},
- {"id":"s26","text":"Your cat is there. It has been there all night."},
- {"id":"s27","text":"Then what is knocking?"},
- {"id":"s28","text":"One moment."},
- {"id":"s29","text":"We may continue."},
- {"id":"s30","text":"Rule six. From now on, do not watch the door. Watch your cat."},
- {"id":"s31","text":"Cats hear sounds far higher than you can. Footsteps you will never hear. Breathing you will never hear."},
- {"id":"s32","text":"In twenty thirteen, a study found that cats know their owner's voice. When you call, they hear you. Most of them do not come. They only turn their ears."},
- {"id":"s33","text":"Tonight, your cat is not ignoring you. It is listening to something else."},
- {"id":"s34","text":"If its ears point at the door, do not move. If its tail gets big, do not breathe loudly."},
- {"id":"s35","text":"If it puts its head down and closes its eyes... it is gone."},
- {"id":"s36","text":"Your cat will tell you when. It always has. You thought it was just sleeping."},
- {"id":"s37","text":"Rule seven."},
- {"id":"s38","text":"We will come back to rule seven."},
- {"id":"s39","text":"In the morning, your cat will sit by the bedroom door and wait for you to open it. Open it. That one is safe."},
- {"id":"s40","text":"Look at the door before you go. Near the middle. At the height of your hand."},
- {"id":"s41","text":"Three marks. Like paw prints. Too far apart to be paws."},
- {"id":"s42","text":"Your cat did not sleep last night. It sat at the foot of your bed and watched the door until the light went out."},
- {"id":"s43","text":"It has done this before. You have never once thanked it."},
- {"id":"s44","text":"Rule eight is for the night your cat is not on the bed."},
- {"id":"s45","text":"Thank you for listening. Lock your door."}
+ {
+  "id": "s01",
+  "text": "If your cat ever knocks on your bedroom door... do not open it."
+ },
+ {
+  "id": "s02",
+  "text": "Do not get up. Do not turn on the light. Do not call out."
+ },
+ {
+  "id": "s03",
+  "text": "It is three twelve in the morning."
+ },
+ {
+  "id": "s04",
+  "text": "This is Instruction zero zero one. Follow every step, in order. There are four steps. You will only be given three."
+ },
+ {
+  "id": "s05",
+  "text": "Step one. Do not open the door."
+ },
+ {
+  "id": "s06",
+  "text": "Listen to where the knock comes from. Not the bottom of the door. The middle."
+ },
+ {
+  "id": "s07",
+  "text": "A cat that wants in will scratch. It will push. It will cry."
+ },
+ {
+  "id": "s08",
+  "text": "It will not knock. Cats do not knock."
+ },
+ {
+  "id": "s09",
+  "text": "This one knocks at the height of your hand."
+ },
+ {
+  "id": "s10",
+  "text": "It has been standing like that for a while. Its legs were not made for it. It does not seem to mind."
+ },
+ {
+  "id": "s11",
+  "text": "Step two. Do not look under the door."
+ },
+ {
+  "id": "s12",
+  "text": "There is a light on in the hallway. You did not leave it on."
+ },
+ {
+  "id": "s13",
+  "text": "In the gap under the door, there are two shadows. Your cat stands on four."
+ },
+ {
+  "id": "s14",
+  "text": "Do not count them again. The number will not change."
+ },
+ {
+  "id": "s15",
+  "text": "Then it will meow."
+ },
+ {
+  "id": "s16",
+  "text": "Grown cats almost never meow at each other. The meow is a sound cats made only for people."
+ },
+ {
+  "id": "s17",
+  "text": "Something outside your door has been studying that sound for a long time."
+ },
+ {
+  "id": "s18",
+  "text": "It is close. But it is too slow. It is too low. And it comes from too high up."
+ },
+ {
+  "id": "s19",
+  "text": "Step three. Look at the foot of your bed."
+ },
+ {
+  "id": "s20",
+  "text": "Your cat is there. It has been there all night."
+ },
+ {
+  "id": "s21",
+  "text": "Then what is knocking?"
+ },
+ {
+  "id": "s22",
+  "text": "Do not watch the door anymore. Watch your cat."
+ },
+ {
+  "id": "s23",
+  "text": "Cats hear sounds far higher than you can. Footsteps you will never hear. Breathing you will never hear."
+ },
+ {
+  "id": "s24",
+  "text": "Tonight, your cat is not asleep. It is listening."
+ },
+ {
+  "id": "s25",
+  "text": "If its ears turn to the door, do not move. If its tail gets big, hold your breath."
+ },
+ {
+  "id": "s26",
+  "text": "If it lies down and closes its eyes... it is gone. You can sleep now."
+ },
+ {
+  "id": "s27",
+  "text": "Your cat has done this before. Many nights. You thought it was just sleeping on your feet."
+ },
+ {
+  "id": "s28",
+  "text": "In the morning, your cat will sit by the bedroom door and wait. Open it. That one is safe."
+ },
+ {
+  "id": "s29",
+  "text": "Look at the door before you leave. Near the middle. At the height of your hand."
+ },
+ {
+  "id": "s30",
+  "text": "Three marks. Like paw prints. Too far apart to be paws."
+ },
+ {
+  "id": "s31",
+  "text": "Step four is for the night the knocking comes from inside your room."
+ },
+ {
+  "id": "s32",
+  "text": "Step four has never been written. Nobody who needed it was able to send it back."
+ },
+ {
+  "id": "s33",
+  "text": "Keep your cat on the bed. Keep your door closed. This was Instruction zero zero one."
+ }
 ]
