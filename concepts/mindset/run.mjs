@@ -8,15 +8,22 @@ import path from 'path';
 const dir = path.dirname(new URL(import.meta.url).pathname);
 const [mode, a1, a2, a3] = process.argv.slice(2);
 const W = +(process.env.RW || 1080), H = +(process.env.RH || 1920);
-const html = `<!doctype html><html><head><style>
+const html = `<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face{font-family:PatrickHand;src:url(fonts/patrick-hand.woff2)}
 @font-face{font-family:Caveat;font-weight:700;src:url(fonts/caveat700.woff2)}
 @font-face{font-family:Caveat;src:url(fonts/caveat700.woff2)}
 @font-face{font-family:PMarker;src:url(fonts/permanent-marker.woff2)}
 @font-face{font-family:Gaegu;src:url(fonts/gaegu.woff2)}
+@font-face{font-family:Plex;font-weight:500;src:url(fonts/ibm-plex-mono-400.woff2)}
+@font-face{font-family:Plex;font-weight:600;src:url(fonts/ibm-plex-mono-600.woff2)}
+@font-face{font-family:Serif;font-style:italic;src:url(fonts/instrument-serif-400i.woff2)}
+@font-face{font-family:Serif;font-style:normal;src:url(fonts/instrument-serif-400.woff2)}
+@font-face{font-family:Inter;font-weight:400 500;src:url(fonts/inter-400.woff2)}
+@font-face{font-family:Inter;font-weight:600 900;src:url(fonts/inter-600.woff2)}
+@font-face{font-family:Oswald;font-weight:600;src:url(fonts/oswald-600.woff2)}
 body{margin:0;background:#000}</style></head><body>
 <canvas id="c" width="${W}" height="${H}"></canvas>
-<script src="ink.js"></script><script src="scenes.js"></script><script src="scenes2.js"></script><script src="scenes3.js"></script><script src="stick.js"></script></body></html>`;
+<script src="ink.js"></script><script src="scenes.js"></script><script src="scenes2.js"></script><script src="scenes3.js"></script><script src="stick.js"></script><script src="motion.js"></script></body></html>`;
 writeFileSync(path.join(dir, 'page.html'), html);
 
 const browser = await chromium.launch();
@@ -25,7 +32,7 @@ const page = await browser.newPage({ viewport: { width: W, height: H } });
 page.on('pageerror', e => console.error('PAGEERR', e.message));
 await page.goto('file://' + path.join(dir, 'page.html'));
 await page.evaluate(async () => {
-  await document.fonts.load('80px PatrickHand'); await document.fonts.load('700 80px Caveat'); await document.fonts.load('80px PMarker'); await document.fonts.load('80px Gaegu'); await document.fonts.load('80px Caveat');
+  await document.fonts.load('80px PatrickHand'); await document.fonts.load('700 80px Caveat'); await document.fonts.load('80px PMarker'); await document.fonts.load('80px Gaegu'); await document.fonts.load('80px Caveat'); for (const f of ['500 30px Plex','600 30px Plex','italic 50px Serif','50px Serif','400 30px Inter','600 30px Inter','800 30px Inter','600 30px Oswald']) await document.fonts.load(f);
 });
 const grab = async (name, t, q = 0.92) => {
   const url = await page.evaluate(([n, tt, qq]) => { window.draw(n, tt); return document.getElementById('c').toDataURL('image/jpeg', qq); }, [name, t, q]);
