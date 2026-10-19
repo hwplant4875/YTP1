@@ -15,6 +15,7 @@ const P = {
   thermal: { bg: '#12002b', t1: '#fff', t2: '#ff3b1f', fig: 'url(#hot)', sec: 'url(#hot2)', obj: 'url(#cold)', head: 'url(#hot)', blanket: 'url(#warm)', bedG: '#3b2a8a', leg: '#2a1f66', wall: '#1f0f4a', floor: '#2a1660', knock: '#ffd23a', eye: '#fff', slit: '#000', glow: true, overlay: 'thermal' },
   ir:    { bg: '#151515', t1: '#fff', t2: '#ff2a2a', fig: '#b4b4b4', sec: '#7a7a7a', bedG: '#8a8a8a', leg: '#5a5a5a', wall: '#2a2a2a', floor: '#3a3a3a', knock: '#fff', eye: '#fff', slit: '#fff', glow: true, overlay: 'ir' },
   vhs:   { bg: '#0b0820', t1: '#f4f0ff', t2: '#ff2a2a', fig: '#f4f0ff', sec: '#b9b0dc', bedG: '#a99fd0', leg: '#6f679a', wall: '#231c4f', floor: '#2b2360', knock: '#ffd23a', eye: '#ffd23a', slit: '#000', glow: true, overlay: 'vhs' },
+  bwrec: { bg: '#141414', t1: '#f2f2f2', t2: '#ff2a2a', fig: '#c4c4c4', sec: '#858585', bedG: '#9a9a9a', leg: '#5e5e5e', wall: '#2c2c2c', floor: '#3a3a3a', knock: '#ff2a2a', eye: '#ff2a2a', slit: '#000', glow: true, cctv: true, shine: true },
   blood: { bg: '#3d0000', t1: '#fff', t2: '#ff2a2a', fig: '#fff', sec: '#e0bcbc', bedG: '#d4d4d4', leg: '#9a8a8a', wall: '#6a0b0b', floor: '#6a0b0b', knock: '#ff2a2a', eye: '#ff2a2a', slit: '#000', glow: true },
   moon:  { bg: '#0b1640', t1: '#fff', t2: '#ff2a2a', fig: '#eef2ff', sec: '#b8c4ee', bedG: '#c9d2f0', leg: '#8a96c4', wall: '#1b2a66', floor: '#22327a', knock: '#ffd23a', eye: '#ffd23a', slit: '#000', glow: true },
 };
@@ -71,13 +72,13 @@ ${p.overlay === 'vhs' ? `<g font-family="M" font-weight="900" font-size="132" le
   <circle cx="760" cy="324" r="17" fill="${W}"/>
 </g>
 <path d="M832,342 l8,0 l-4,6 z" fill="#000"/>
-<g ${p.eye === '#000' ? '' : (p.overlay === 'ir' ? 'filter="url(#eyeshine)"' : Gk)}><ellipse cx="860" cy="322" rx="${p.overlay === 'ir' ? 13 : 10}" ry="${p.overlay === 'ir' ? 12 : 9}" fill="${p.eye}"/></g>
+<g ${p.eye === '#000' ? '' : (p.overlay === 'ir' || p.shine ? 'filter="url(#eyeshine)"' : Gk)}><ellipse cx="860" cy="322" rx="${p.overlay === 'ir' ? 13 : 10}" ry="${p.overlay === 'ir' ? 12 : 9}" fill="${p.eye}"/></g>
 <rect x="858" y="314" width="4" height="16" rx="2" fill="${p.slit}"/>
 <g stroke="${p.knock}" stroke-width="9" stroke-linecap="round" ${Gk}>
   <line x1="664" y1="296" x2="630" y2="276"/><line x1="660" y1="330" x2="620" y2="330"/><line x1="664" y1="364" x2="630" y2="384"/>
 </g>
 ${p.cctv ? `<rect width="1280" height="720" fill="url(#scan)"/>
-<g font-family="Plex" font-size="30" fill="#eaffea"><circle cx="62" cy="214" r="11" fill="#ff2a2a"/><text x="82" y="225">REC</text><text x="1240" y="225" text-anchor="end">03:12 AM</text></g>` : ''}
+<g font-family="Plex" font-size="30" fill="${p.t1}"><circle cx="62" cy="214" r="11" fill="#ff2a2a"/><text x="82" y="225">REC</text><text x="1240" y="225" text-anchor="end">03:12 AM</text></g>` : ''}
 ${p.overlay === 'thermal' ? `<rect x="1196" y="230" width="26" height="380" rx="4" fill="url(#tscale)"/>
 <g font-family="Plex" font-size="24" fill="#fff"><text x="1209" y="216" text-anchor="middle">38.6°C</text><text x="1209" y="644" text-anchor="middle">12.1°C</text></g>
 <g fill="none" stroke="#fff" stroke-width="4"><path d="M800,226 h-24 v24 M968,226 h24 v24 M800,700 h-24 v-24 M968,700 h24 v-24"/></g>
