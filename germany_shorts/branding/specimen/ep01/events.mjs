@@ -1,0 +1,14 @@
+import { SC, at, LEAD, TOTAL } from './tl.mjs';
+import fs from 'fs';
+const st = id => SC.find(s => s.id === id).start;
+const ev = []; const E = (f, id, t, v) => ev.push([f, +(st(id) + t).toFixed(3), v]);
+const voice = SC.map(s => [`audio/v_${s.id}.mp3`, +(s.start + LEAD).toFixed(3), s.dur]);
+SC.forEach((s, i) => { if (i) ev.push(['mus/sfx_click.mp3', +s.start.toFixed(3), 0.35]); });
+E('mus/sfx_type.mp3', 's01', at('s01', "Let's open it") + 0.6, 0.35);
+E('mus/sfx_scan.mp3', 's04', 0.1, 0.3); E('mus/sfx_scan.mp3', 's13', 0.1, 0.25); E('mus/sfx_scan.mp3', 's21', 0.1, 0.3); E('mus/sfx_scan.mp3', 's03', at('s03', 'The spine is'), 0.25);
+E('mus/sfx_type.mp3', 's15', at('s15', 'scientists tagged'), 0.3);
+['No bones.', 'Teeth on its skin.', 'A liver that floats.', 'Muscles that run warm.', 'A sixth sense'].forEach(p => E('mus/sfx_type.mp3', 's23', at('s23', p), 0.18));
+E('mus/sfx_type.mp3', 's23', at('s23', "This is what's inside") + 2.4, 0.3);
+[['s02', 'Zero'], ['s03', 'Scientists count'], ['s07', 'Their estimate'], ['s08', 'about a quarter'], ['s10', 'forty'], ['s13', 'Parts of its body'], ['s16', 'These pores'], ['s15', 'About twenty'], ['s09', 'Speed.'], ['s19', 'For that split'], ['s19b', 'Scientists call it'], ['s21', 'No parents'], ['s21', 'No lessons']].forEach(([id, p]) => E('mus/sfx_blip.mp3', id, at(id, p), 0.3));
+fs.writeFileSync('mixplan.json', JSON.stringify({ total: TOTAL, voice, ev }));
+console.log(voice.length, ev.length, TOTAL);
