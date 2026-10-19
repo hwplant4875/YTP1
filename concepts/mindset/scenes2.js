@@ -315,4 +315,5 @@ function scene6(ctx, W, H, t) {
 const lerp = (a, b, k) => a + (b - a) * k;
 
 Object.assign(window.SCENES, { '4': scene4, '5': scene5, '6': scene6 });
+window.Toon = { limbStroke, blobOl, toonFace, toonFig, sweat, boldText, halftone };
 })();

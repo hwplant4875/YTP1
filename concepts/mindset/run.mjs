@@ -7,7 +7,7 @@ import path from 'path';
 
 const dir = path.dirname(new URL(import.meta.url).pathname);
 const [mode, a1, a2, a3] = process.argv.slice(2);
-const W = 1080, H = 1920;
+const W = +(process.env.RW || 1080), H = +(process.env.RH || 1920);
 const html = `<!doctype html><html><head><style>
 @font-face{font-family:PatrickHand;src:url(fonts/patrick-hand.woff2)}
 @font-face{font-family:Caveat;font-weight:700;src:url(fonts/caveat700.woff2)}
@@ -16,7 +16,7 @@ const html = `<!doctype html><html><head><style>
 @font-face{font-family:Gaegu;src:url(fonts/gaegu.woff2)}
 body{margin:0;background:#000}</style></head><body>
 <canvas id="c" width="${W}" height="${H}"></canvas>
-<script src="ink.js"></script><script src="scenes.js"></script><script src="scenes2.js"></script></body></html>`;
+<script src="ink.js"></script><script src="scenes.js"></script><script src="scenes2.js"></script><script src="scenes3.js"></script></body></html>`;
 writeFileSync(path.join(dir, 'page.html'), html);
 
 const browser = await chromium.launch();
