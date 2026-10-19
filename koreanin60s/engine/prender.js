@@ -3,7 +3,10 @@
 const { chromium } = require('playwright'); const { spawn, execFileSync } = require('child_process'); const fs = require('fs'); const path = require('path');
 (async () => {
   const dir = path.resolve(process.argv[2]); const FPS = +(process.argv[3] || 60); const W = +(process.argv[4] || 4);
-  const T = JSON.parse(fs.readFileSync(dir + '/timeline.json')); const n = Math.round((T.END + 0.3) * FPS);
+  const T = JSON.parse(fs.readFileSync(dir + '/timeline.json'));
+  // Cover-safe start (user rule 2026-10-19): Instagram/TikTok use frame 0 as the cover, so the first HOLD seconds show the fully
+  // revealed opening (pop-ins already finished) instead of animating in from an empty screen. COVER_HOLD=0 turns it off.
+  const HOLD = +(process.env.COVER_HOLD ?? T.COVER_HOLD ?? 0.9); const n = Math.round((T.END + 0.3) * FPS);
   const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--no-sandbox'] });
   const done = new Array(W).fill(0);
   const work = async (w) => {
@@ -13,7 +16,7 @@ const { chromium } = require('playwright'); const { spawn, execFileSync } = requ
     const p = await b.newPage({ viewport: { width: +(process.env.VW || 1080), height: +(process.env.VH || 1920) } });
     await p.goto('file://' + dir + '/short.html'); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(500); await p.evaluate(() => { window.fit && window.fit(); window.layout && window.layout(); });
     for (let i = a; i < z; i++) {
-      await p.evaluate(x => window.render(x), i / FPS); const buf = await p.screenshot({ type: 'jpeg', quality: 95 });
+      await p.evaluate(x => window.render(x), Math.max(i / FPS, HOLD)); const buf = await p.screenshot({ type: 'jpeg', quality: 95 });
       if (!ff.stdin.write(buf)) await new Promise(r => ff.stdin.once('drain', r));
       done[w] = i - a + 1; if (i % 60 == 0) fs.writeFileSync(dir + '/progress.txt', `${done.reduce((x, y) => x + y)}/${n}`);
     }
