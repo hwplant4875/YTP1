@@ -73,7 +73,7 @@
      "size": 180,
      "y": 450,
      "at": "h1",
-     "anim": "drop",
+     "anim": "up",
      "float": true
     },
     {

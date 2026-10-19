@@ -1,12 +1,12 @@
 {
- "label": "HANBOK WEEK 👘",
+ "label": "HANBOK WEEK 🇰🇷",
  "labelColor": "#C2569B",
- "pose0": "hanbok",
+ "pose0": "excited",
  "lines": [
   {
    "k": "h1",
    "say": "Wear this in Korea, and royal palaces let you in for free.",
-   "pose": "hanbok"
+   "pose": "excited"
   },
   {
    "k": "a1",
@@ -69,19 +69,17 @@
   {
    "els": [
     {
-     "type": "emoji",
-     "e": "👘",
-     "size": 230,
-     "y": 470,
-     "at": "h1",
-     "anim": "drop",
-     "float": true
+     "type": "sticker",
+     "name": "hanbok",
+     "w": 380,
+     "y": 520,
+     "at": "h1"
     },
     {
      "type": "txt",
-     "html": "Wear this =<br><span class='c-p'>FREE</span> palace entry 🏯",
+     "html": "Wear this =<br><span class='c-p'>FREE</span> palace entry 👑",
      "size": 92,
-     "y": 790,
+     "y": 870,
      "at": "h1+0.3",
      "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
     }
@@ -91,13 +89,11 @@
    "from": "a1",
    "els": [
     {
-     "type": "emoji",
-     "e": "🎎",
-     "size": 200,
-     "y": 450,
-     "at": "a1",
-     "anim": "drop",
-     "float": true
+     "type": "chip",
+     "html": "🇰🇷 TRADITIONAL CLOTHES",
+     "c": "p",
+     "y": 400,
+     "at": "a1"
     },
     {
      "type": "word",
@@ -141,7 +137,7 @@
     },
     {
      "type": "box",
-     "html": "<div class='txt' style='font-size:54px;white-space:nowrap;line-height:1.35'>🗼 N Seoul Tower <span class='c-m'>35% off</span></div>",
+     "html": "<div class='txt' style='font-size:54px;white-space:nowrap;line-height:1.35'>📍 N Seoul Tower <span class='c-m'>35% off</span></div>",
      "w": 760,
      "pad": 22,
      "y": 960,

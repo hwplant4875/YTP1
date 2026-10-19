@@ -1,0 +1,235 @@
+{
+ "label": "KOREA IN FALL 🍁",
+ "labelColor": "#D9622B",
+ "pose0": "excited",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Right now, Korea's mountains turn red, and the whole country goes hiking.",
+   "pose": "excited"
+  },
+  {
+   "k": "a1",
+   "say": "Autumn leaves are",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "a1k",
+   "say": "단풍.",
+   "pose": "excited",
+   "lang": "ko"
+  },
+  {
+   "k": "b1",
+   "say": "Seoraksan peaks around October twentieth. That's this week!",
+   "pose": "clap_confetti",
+   "gap": 0.45
+  },
+  {
+   "k": "b2",
+   "say": "Then the colors move south. Naejangsan peaks in early November.",
+   "pose": "map_lost"
+  },
+  {
+   "k": "c1",
+   "say": "And Korean hikers? Full pro gear, even for a small hill.",
+   "pose": "laugh_tears",
+   "gap": 0.45
+  },
+  {
+   "k": "c2",
+   "say": "Then a picnic with makgeolli at the top.",
+   "pose": "cheers"
+  },
+  {
+   "k": "d0",
+   "say": "Want to join? Say",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "d0k",
+   "say": "단풍 구경 가자!",
+   "pose": "hi_wave",
+   "lang": "ko"
+  },
+  {
+   "k": "d1",
+   "say": "Let's go see the autumn leaves!",
+   "pose": "love_heart"
+  },
+  {
+   "k": "e0",
+   "say": "Mountains or city for fall? Comment below!",
+   "pose": "thinking",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🍁⛰️",
+     "size": 190,
+     "y": 440,
+     "at": "h1",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Korea turns<br><span class='c-p'>RED</span> right now",
+     "size": 110,
+     "y": 760,
+     "at": "h1+0.3",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    }
+   ]
+  },
+  {
+   "from": "a1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🍂",
+     "size": 200,
+     "y": 450,
+     "at": "a1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "단풍",
+     "rom": "dan-pung",
+     "en": "autumn leaves",
+     "c": "p",
+     "size": 200,
+     "w": 700,
+     "y": 800,
+     "at": "a1k"
+    }
+   ]
+  },
+  {
+   "from": "b1",
+   "els": [
+    {
+     "type": "chip",
+     "html": "🗓️ PEAK 2026",
+     "c": "y",
+     "y": 360,
+     "at": "b1"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:58px;white-space:nowrap;line-height:1.35'>⛰️ Seoraksan · <span class='c-p'>~Oct 20</span></div>",
+     "w": 860,
+     "pad": 22,
+     "y": 570,
+     "at": "b1",
+     "anim": "left"
+    },
+    {
+     "type": "stamp",
+     "html": "THIS WEEK 🔥",
+     "c": "p",
+     "size": 66,
+     "y": 740,
+     "at": "b1+2.4",
+     "anim": "stamp",
+     "rot": -4
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:58px;white-space:nowrap;line-height:1.35'>⛰️ Naejangsan · <span class='c-y'>early Nov</span></div>",
+     "w": 860,
+     "pad": 22,
+     "y": 930,
+     "at": "b2+1.4",
+     "anim": "right"
+    }
+   ]
+  },
+  {
+   "from": "c1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🥾🎒",
+     "size": 180,
+     "y": 450,
+     "at": "c1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "full <span class='c-b'>pro gear</span><br>for a small hill",
+     "size": 96,
+     "y": 760,
+     "at": "c1+0.6",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:50px;white-space:nowrap;line-height:1.35'>then 🥣 막걸리 at the top</div>",
+     "w": 800,
+     "pad": 22,
+     "y": 1060,
+     "at": "c2",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "d0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "📸",
+     "size": 190,
+     "y": 440,
+     "at": "d0",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "단풍 구경 가자!",
+     "rom": "dan-pung gu-gyeong ga-ja",
+     "en": "let's go see the autumn leaves!",
+     "c": "y",
+     "size": 120,
+     "w": 980,
+     "y": 800,
+     "at": "d0k"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Mountains or city for fall? 🍁👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

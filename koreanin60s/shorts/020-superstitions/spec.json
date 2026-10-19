@@ -90,7 +90,7 @@
      "size": 180,
      "y": 440,
      "at": "h1",
-     "anim": "drop",
+     "anim": "up",
      "float": true
     },
     {

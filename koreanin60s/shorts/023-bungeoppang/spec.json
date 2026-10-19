@@ -1,0 +1,241 @@
+{
+ "label": "FALL SNACK 🐟",
+ "labelColor": "#C98A2E",
+ "pose0": "excited",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "When it gets cold, Koreans start hunting for this fish.",
+   "pose": "excited"
+  },
+  {
+   "k": "a1",
+   "say": "But there's no fish inside.",
+   "pose": "smug",
+   "gap": 0.45
+  },
+  {
+   "k": "a1k",
+   "say": "붕어빵.",
+   "pose": "excited",
+   "lang": "ko"
+  },
+  {
+   "k": "a2",
+   "say": "Fish bread, filled with sweet red beans.",
+   "pose": "love_heart"
+  },
+  {
+   "k": "b1",
+   "say": "Street stalls only appear in the cold months, so people use maps to find them.",
+   "pose": "map_lost",
+   "gap": 0.45
+  },
+  {
+   "k": "b2",
+   "say": "Living near one even has a name.",
+   "pose": "point_idea"
+  },
+  {
+   "k": "b2k",
+   "say": "붕세권.",
+   "pose": "laugh_flap",
+   "lang": "ko"
+  },
+  {
+   "k": "b3",
+   "say": "Like a prime location, but for fish bread.",
+   "pose": "laugh_tears"
+  },
+  {
+   "k": "c1",
+   "say": "And Korea's biggest debate: head first, or tail first?",
+   "pose": "thinking",
+   "gap": 0.45
+  },
+  {
+   "k": "d0",
+   "say": "To order, just say",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "d0k",
+   "say": "붕어빵 주세요!",
+   "pose": "pay_card",
+   "lang": "ko"
+  },
+  {
+   "k": "d1",
+   "say": "Fish bread, please!",
+   "pose": "thumbs_up"
+  },
+  {
+   "k": "e0",
+   "say": "Head or tail? Comment below!",
+   "pose": "laugh_flap",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🐟🔍",
+     "size": 190,
+     "y": 440,
+     "at": "h1",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Koreans hunt<br>this <span class='c-y'>fish</span> 🥶",
+     "size": 110,
+     "y": 760,
+     "at": "h1+0.3",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    }
+   ]
+  },
+  {
+   "from": "a1",
+   "els": [
+    {
+     "type": "stamp",
+     "html": "NO FISH INSIDE 🙅",
+     "c": "p",
+     "size": 72,
+     "y": 400,
+     "at": "a1",
+     "anim": "stamp",
+     "rot": -3
+    },
+    {
+     "type": "word",
+     "ko": "붕어빵",
+     "rom": "bung-eo-ppang",
+     "en": "fish-shaped bread",
+     "c": "y",
+     "size": 180,
+     "w": 800,
+     "y": 720,
+     "at": "a1k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:50px;white-space:nowrap;line-height:1.35'>filled with sweet <span class='c-p'>red beans</span> 🫘</div>",
+     "w": 840,
+     "pad": 22,
+     "y": 1030,
+     "at": "a2",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "b1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🗺️📍",
+     "size": 180,
+     "y": 430,
+     "at": "b1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:54px;white-space:nowrap;line-height:1.35'>❄️ cold months only</div>",
+     "w": 700,
+     "pad": 22,
+     "y": 660,
+     "at": "b1+1.2",
+     "anim": "up"
+    },
+    {
+     "type": "word",
+     "ko": "붕세권",
+     "rom": "bung-se-gwon",
+     "en": "living near a fish-bread stall",
+     "c": "m",
+     "size": 140,
+     "w": 900,
+     "y": 950,
+     "at": "b2k"
+    }
+   ]
+  },
+  {
+   "from": "c1",
+   "els": [
+    {
+     "type": "txt",
+     "html": "<span class='c-y'>HEAD</span> first<br>or <span class='c-p'>TAIL</span> first?",
+     "size": 110,
+     "y": 640,
+     "at": "c1",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "emoji",
+     "e": "🤔",
+     "size": 170,
+     "y": 940,
+     "at": "c1+1.4",
+     "anim": "drop",
+     "float": true
+    }
+   ]
+  },
+  {
+   "from": "d0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🛒",
+     "size": 190,
+     "y": 440,
+     "at": "d0",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "붕어빵 주세요!",
+     "rom": "bung-eo-ppang ju-se-yo",
+     "en": "fish bread, please!",
+     "c": "y",
+     "size": 130,
+     "w": 960,
+     "y": 800,
+     "at": "d0k"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Head or tail first? 🐟👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

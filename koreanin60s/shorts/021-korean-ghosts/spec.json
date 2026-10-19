@@ -1,0 +1,337 @@
+{
+ "label": "HALLOWEEN 🎃",
+ "labelColor": "#E8833A",
+ "pose0": "shocked",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Forget zombies. These are the scariest ghosts in Korea.",
+   "pose": "shocked"
+  },
+  {
+   "k": "g1",
+   "say": "Number one. The maiden ghost.",
+   "pose": "nervous_sweat",
+   "gap": 0.45
+  },
+  {
+   "k": "g1k",
+   "say": "처녀귀신.",
+   "pose": "shocked",
+   "lang": "ko"
+  },
+  {
+   "k": "g1e",
+   "say": "White dress, long black hair, and she floats.",
+   "pose": "curtain_peek"
+  },
+  {
+   "k": "g2",
+   "say": "Number two. The egg ghost.",
+   "pose": "confused",
+   "gap": 0.45
+  },
+  {
+   "k": "g2k",
+   "say": "달걀귀신.",
+   "pose": "confused",
+   "lang": "ko"
+  },
+  {
+   "k": "g2e",
+   "say": "No eyes, no nose, no mouth. Just a smooth face.",
+   "pose": "shocked"
+  },
+  {
+   "k": "g3",
+   "say": "Number three. The nine-tailed fox.",
+   "pose": "smug",
+   "gap": 0.45
+  },
+  {
+   "k": "g3k",
+   "say": "구미호.",
+   "pose": "smug",
+   "lang": "ko"
+  },
+  {
+   "k": "g3e",
+   "say": "She turns into a beautiful woman to steal your heart. Literally.",
+   "pose": "love_heart"
+  },
+  {
+   "k": "g4",
+   "say": "And number four. The goblin.",
+   "pose": "laugh_flap",
+   "gap": 0.45
+  },
+  {
+   "k": "g4k",
+   "say": "도깨비.",
+   "pose": "laugh_flap",
+   "lang": "ko"
+  },
+  {
+   "k": "g4e",
+   "say": "Not scary at all. He just loves to play tricks.",
+   "pose": "laugh_tears"
+  },
+  {
+   "k": "s0",
+   "say": "So if you see one this Halloween, scream",
+   "pose": "nervous_sweat",
+   "gap": 0.45
+  },
+  {
+   "k": "s0k",
+   "say": "무서워!",
+   "pose": "crying",
+   "lang": "ko"
+  },
+  {
+   "k": "s1",
+   "say": "I'm scared!",
+   "pose": "shy_cover"
+  },
+  {
+   "k": "e0",
+   "say": "Which ghost would you dress up as? Comment below!",
+   "pose": "excited",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🧟❌",
+     "size": 170,
+     "y": 440,
+     "at": "h1",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "txt",
+     "html": "Korea's <span class='c-p'>scariest</span><br>ghosts 👻",
+     "size": 110,
+     "y": 760,
+     "at": "h1+0.3",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    }
+   ]
+  },
+  {
+   "from": "g1",
+   "els": [
+    {
+     "type": "chip",
+     "html": "#1",
+     "c": "p",
+     "y": 340,
+     "at": "g1"
+    },
+    {
+     "type": "emoji",
+     "e": "👻",
+     "size": 200,
+     "y": 520,
+     "at": "g1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "처녀귀신",
+     "rom": "cheo-nyeo-gwi-sin",
+     "en": "the maiden ghost",
+     "c": "p",
+     "size": 140,
+     "w": 900,
+     "y": 820,
+     "at": "g1k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>white dress · long black hair 🤍🖤</div>",
+     "w": 900,
+     "pad": 22,
+     "y": 1080,
+     "at": "g1e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "g2",
+   "els": [
+    {
+     "type": "chip",
+     "html": "#2",
+     "c": "p",
+     "y": 340,
+     "at": "g2"
+    },
+    {
+     "type": "emoji",
+     "e": "🥚",
+     "size": 200,
+     "y": 520,
+     "at": "g2",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "달걀귀신",
+     "rom": "dal-gyal-gwi-sin",
+     "en": "the egg ghost",
+     "c": "y",
+     "size": 140,
+     "w": 900,
+     "y": 820,
+     "at": "g2k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>no eyes · no nose · no mouth 😶</div>",
+     "w": 900,
+     "pad": 22,
+     "y": 1080,
+     "at": "g2e",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "g3",
+   "els": [
+    {
+     "type": "chip",
+     "html": "#3",
+     "c": "p",
+     "y": 340,
+     "at": "g3"
+    },
+    {
+     "type": "emoji",
+     "e": "🦊",
+     "size": 200,
+     "y": 520,
+     "at": "g3",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "구미호",
+     "rom": "gu-mi-ho",
+     "en": "nine-tailed fox",
+     "c": "m",
+     "size": 150,
+     "w": 800,
+     "y": 820,
+     "at": "g3k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>steals your heart... <span class='c-p'>literally</span> 💔</div>",
+     "w": 900,
+     "pad": 22,
+     "y": 1080,
+     "at": "g3e+1.2",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "g4",
+   "els": [
+    {
+     "type": "chip",
+     "html": "#4",
+     "c": "b",
+     "y": 340,
+     "at": "g4"
+    },
+    {
+     "type": "emoji",
+     "e": "🪄✨",
+     "size": 180,
+     "y": 520,
+     "at": "g4",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "도깨비",
+     "rom": "do-kkae-bi",
+     "en": "Korean goblin",
+     "c": "b",
+     "size": 150,
+     "w": 800,
+     "y": 820,
+     "at": "g4k"
+    },
+    {
+     "type": "stamp",
+     "html": "JUST A PRANKSTER 😜",
+     "c": "b",
+     "size": 64,
+     "y": 1080,
+     "at": "g4e",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "s0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🎃😱",
+     "size": 190,
+     "y": 440,
+     "at": "s0",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "무서워!",
+     "rom": "mu-seo-wo",
+     "en": "I'm scared!",
+     "c": "p",
+     "size": 190,
+     "w": 800,
+     "y": 800,
+     "at": "s0k"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Which ghost would you be? 🎃👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}
