@@ -20,10 +20,10 @@ spec = {
             {"src": KIEN, "in": 36.0, "out": 38.4, "cap": "unc said watch this"},
             {"src": KIEN, "in": 36.9, "out": 38.4, "speed": 0.5, "push": 1.15, "cap": "full backflip. zero points tho"}]},
         {"rank": 2, "name": "WALKER WIPEOUT", "shots": [
-            {"src": WALK, "in": 73.4, "out": 76.3, "zoom": 1.3, "cy": 1, "cx": 0.4, "cap": "auntie is COOKING on this thing"},
-            {"src": WALK, "in": 76.3, "out": 79.0, "zoom": 1.3, "cy": 1, "cx": 0.4, "cap": "...until she wasn't"},
-            {"src": WALK, "in": 76.6, "out": 78.4, "zoom": 1.3, "cy": 1, "cx": 0.4, "speed": 0.5, "push": 1.12, "cap": "instant replay bc we HAVE to"},
-            {"src": WALK, "in": 81.4, "out": 82.8, "zoom": 1.3, "cy": 1, "cx": 0.6, "cap": "the kid is SO done"}]},
+            {"src": WALK, "in": 73.4, "out": 76.3, "zoom": 1.42, "cy": 1, "cx": 0.4, "cap": "auntie is COOKING on this thing"},
+            {"src": WALK, "in": 76.3, "out": 79.0, "zoom": 1.42, "cy": 1, "cx": 0.4, "cap": "...until she wasn't"},
+            {"src": WALK, "in": 76.6, "out": 78.4, "zoom": 1.42, "cy": 1, "cx": 0.4, "speed": 0.5, "push": 1.12, "cap": "instant replay bc we HAVE to"},
+            {"src": WALK, "in": 81.4, "out": 82.8, "zoom": 1.42, "cy": 1, "cx": 0.6, "cap": "the kid is SO done"}]},
         {"rank": 1, "name": "TREADMILL KO", "shots": [
             {"src": KID, "in": 0.0, "out": 2.9, "zoom": 1.15, "cy": 0, "cap": "lil bro is just chilling"},
             {"src": KID, "in": 2.9, "out": 5.0, "zoom": 1.15, "cy": 0, "cap": "then his boy walks in"},
