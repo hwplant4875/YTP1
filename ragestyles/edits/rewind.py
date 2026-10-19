@@ -19,14 +19,15 @@ from PIL import Image, ImageDraw, ImageFont
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from catreact2 import W, H, FPS, compose, interp, sharpen, stream  # noqa: E402
 
-PUNCH = 0.16     # seconds for the punch zoom to land
+PUNCH = 0.5      # seconds for the zoom-in to settle (ease-out: steep start, flat finish)
 FLASH_IN = [0.2, 0.5, 0.8, 1.0]                # last frames before a cut: fade to white (matches the reference)
 FLASH_OUT = [1.0, 1.0, 0.8, 0.58, 0.37, 0.15]     # first frames after a cut: hold white, fade out
 
 
 def ease(u):
+    """ease-out quart: concave curve, fast at first then flattening out"""
     u = min(max(u, 0.0), 1.0)
-    return 1 - (1 - u) ** 3
+    return 1 - (1 - u) ** 4
 
 
 def clip_frames(s, n):
@@ -44,7 +45,7 @@ def clip_frames(s, n):
         hits = [h for h in s.get('hits', []) if h['at'] <= t]
         if hits:
             h = hits[-1]
-            e = ease((t - h['at']) / PUNCH)
+            e = ease((t - h['at']) / h.get('dur', PUNCH))
             x, y = x + (h.get('x', x) - x) * e, y + (h.get('y', y) - y) * e
             z *= 1 + (h.get('zoom', 1.3) - 1) * e
         yield sharpen(compose(fr, {'ratio': s.get('ratio', '9:16'), 'track': [[0, x, y, z]], 'lift': 0}, t))
@@ -111,14 +112,18 @@ def build(spec, out):
             enc.stdin.write(np.ascontiguousarray(img).tobytes())
         dur = n / FPS
         a = f'{tmp}/a{i}.wav'
-        if s['type'] == 'clip':
+        has_a = s['type'] == 'clip' and subprocess.run(
+            ['ffprobe', '-v', 'error', '-select_streams', 'a', '-show_entries', 'stream=index', '-of', 'csv=p=0', s['src']],
+            capture_output=True, text=True).stdout.strip()
+        if has_a:
             subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', f"{s['in']:.3f}", '-t', f'{dur:.3f}', '-i', s['src'],
                             '-af', f"volume={s.get('vol', 1.0)},aresample=48000,afade=t=in:d=0.04,"
                                    f"afade=t=out:st={dur - 0.1:.3f}:d=0.1,apad", '-t', f'{dur:.3f}', '-ac', '2', a], check=True)
         else:
             subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo',
                             '-t', f'{dur:.3f}', a], check=True)
-            sfx.append((spec['boom'], starts[i] / FPS - 0.05, s.get('boomVol', 0.6)))
+            if s['type'] == 'meme':
+                sfx.append((spec['boom'], starts[i] / FPS - 0.05, s.get('boomVol', 0.6)))
         audio.append(a)
     enc.stdin.close(); enc.wait()
     total = starts[-1] / FPS
