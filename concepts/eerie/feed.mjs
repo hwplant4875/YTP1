@@ -4,14 +4,15 @@ import { chromium } from 'playwright';
 import { writeFileSync, rmSync } from 'fs';
 import path from 'path';
 const dir = path.dirname(new URL(import.meta.url).pathname);
-const [tdir, out, ...keys] = process.argv.slice(2);
+const [tdir, out, ...args] = process.argv.slice(2);
+const keys = args.map(a => a.split('=')[0]), labels = Object.fromEntries(args.map(a => [a.split('=')[0], a.split('=')[1] || a]));
 const TITLE = 'If Your Cat Ever Knocks On Your Bedroom Door… DO NOT OPEN IT';
 const card = (k, w) => `<div class="card" style="width:${w}px">
   <div class="th"><img src="file://${path.join(tdir, `thumb_${k}.jpg`)}"><span class="dur">5:08</span></div>
   <div class="meta"><div class="av"><span></span></div><div>
     <div class="ti" style="font-size:${w > 400 ? 18 : 14}px">${TITLE}</div>
     <div class="sub">Channel Name</div><div class="sub">조회수 0회 · 방금 전</div></div></div>
-  <div class="tag">${k}</div></div>`;
+  <div class="tag">${labels[k]}</div></div>`;
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face{font-family:R;font-weight:400;src:url(fonts/roboto-400.woff2)}
 @font-face{font-family:R;font-weight:500;src:url(fonts/roboto-500.woff2)}
@@ -23,7 +24,7 @@ body{margin:0;background:#0f0f0f;font-family:R;color:#f1f1f1;padding:36px 40px}
 .av span{width:14px;height:10px;border-radius:50%;background:#ffd23a;box-shadow:0 0 8px #ffd23a}
 .ti{font-weight:500;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:4px}
 .sub{color:#aaa;font-size:14px;line-height:1.45}
-.tag{position:absolute;left:-10px;top:-10px;background:#3ea6ff;color:#000;font-weight:500;font-size:16px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.tag{position:absolute;left:-10px;top:-10px;background:#3ea6ff;color:#000;font-weight:500;font-size:16px;min-width:30px;padding:0 10px;box-sizing:border-box;height:30px;border-radius:15px;display:flex;align-items:center;justify-content:center}
 h3{font-weight:500;color:#aaa;font-size:15px;margin:34px 0 14px}
 </style></head><body>
 <div class="row">${keys.map(k => card(k, 600)).join('')}</div>

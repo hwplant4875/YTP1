@@ -9,6 +9,7 @@ const out = process.argv[2] || path.join(dir, 'out');
 mkdirSync(out, { recursive: true });
 
 const P = {
+  black: { bg: '#000', t1: '#fff', t2: '#ff2a2a', fig: '#fff', sec: '#cfcfcf', bedG: '#cfcfcf', leg: '#9a9a9a', wall: '#2e2e2e', floor: '#333', knock: '#ffd23a', eye: '#ffd23a', slit: '#000', glow: true },
   red:   { bg: '#ff2a2a', t1: '#fff', t2: '#000', fig: '#fff', sec: '#ffd0d0', bedG: '#d9d9d9', leg: '#a8a8a8', wall: '#b31616', floor: '#b31616', knock: '#fff', eye: '#000', slit: '#ff2a2a', glow: false },
   cctv:  { bg: '#0c2e14', t1: '#eaffea', t2: '#ff2a2a', fig: '#d8ffdc', sec: '#8fd99a', bedG: '#a9e6b2', leg: '#6fb27a', wall: '#164a22', floor: '#1d5a2a', knock: '#ff2a2a', eye: '#ff2a2a', slit: '#000', glow: true, cctv: true },
   blood: { bg: '#3d0000', t1: '#fff', t2: '#ff2a2a', fig: '#fff', sec: '#e0bcbc', bedG: '#d4d4d4', leg: '#9a8a8a', wall: '#6a0b0b', floor: '#6a0b0b', knock: '#ff2a2a', eye: '#ff2a2a', slit: '#000', glow: true },
@@ -34,12 +35,11 @@ function svg(p) {
   <rect x="70" y="420" width="36" height="270" rx="14" fill="${W}"/>
   <rect x="70" y="566" width="480" height="58" rx="16" fill="${p.bedG}"/>
   <rect x="96" y="620" width="24" height="66" rx="6" fill="${p.leg}"/><rect x="510" y="620" width="24" height="66" rx="6" fill="${p.leg}"/>
-  <ellipse cx="158" cy="556" rx="50" ry="15" fill="${p.bedG}"/>
-  <circle cx="168" cy="522" r="40" fill="${W}"/>
-  <path d="M186,560 C196,522 268,504 340,510 C420,516 480,528 552,548 L552,590 L186,590 Z" fill="${W}"/>
+  <ellipse cx="150" cy="556" rx="50" ry="15" fill="${p.bedG}"/>
+  <circle cx="204" cy="456" r="40" fill="${W}"/>
+  <path d="M150,568 C150,522 176,498 214,498 C262,498 300,506 340,510 C420,516 480,528 552,548 L552,590 L150,590 Z" fill="${W}"/>
 </g>
-<path d="M178,516 q9,8 18,0" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/>
-<g font-family="M" font-weight="900" fill="${W}" ${G}><text x="214" y="470" font-size="30">z</text><text x="240" y="440" font-size="40">z</text><text x="272" y="400" font-size="52">Z</text></g>
+<circle cx="230" cy="450" r="9" fill="#000"/>
 <rect x="690" y="186" width="48" height="504" fill="${p.wall}"/>
 <g ${G}>
   <rect x="696" y="232" width="36" height="452" rx="4" fill="${W}"/>
@@ -67,7 +67,7 @@ function svg(p) {
   <line x1="664" y1="296" x2="630" y2="276"/><line x1="660" y1="330" x2="620" y2="330"/><line x1="664" y1="364" x2="630" y2="384"/>
 </g>
 ${p.cctv ? `<rect width="1280" height="720" fill="url(#scan)"/>
-<g font-family="Plex" font-size="30" fill="#eaffea"><circle cx="1110" cy="214" r="11" fill="#ff2a2a"/><text x="1130" y="225">REC</text><text x="1040" y="672">03:12 AM</text></g>` : ''}
+<g font-family="Plex" font-size="30" fill="#eaffea"><circle cx="62" cy="214" r="11" fill="#ff2a2a"/><text x="82" y="225">REC</text><text x="1240" y="225" text-anchor="end">03:12 AM</text></g>` : ''}
 ${p.glow ? '<rect width="1280" height="720" fill="url(#vig)"/>' : ''}<rect width="1280" height="720" filter="url(#grain)"/>
 </svg>`;
 }

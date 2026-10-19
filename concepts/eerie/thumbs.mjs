@@ -36,11 +36,9 @@ function bed(x = 0, dark = false) {
   <ellipse cx="150" cy="556" rx="50" ry="15" fill="${G}"/>
   <circle cx="204" cy="456" r="40" fill="${W}"/>
   <path d="M150,568 C150,522 176,498 214,498 C262,498 300,506 340,510 C420,516 480,528 552,548 L552,590 L150,590 Z" fill="${W}"/>
-  <path d="M180,420 q6,-14 16,-6 q6,-14 16,-2" fill="none" stroke="${W}" stroke-width="7" stroke-linecap="round"/>
   </g>
   <g transform="translate(${x},0)">
   <circle cx="230" cy="450" r="9" fill="#000"/>
-  <g stroke="${W}" stroke-width="7" stroke-linecap="round"><line x1="204" y1="394" x2="204" y2="372"/><line x1="170" y1="404" x2="156" y2="388"/><line x1="238" y1="404" x2="252" y2="388"/></g>
   </g>`;
 }
 
