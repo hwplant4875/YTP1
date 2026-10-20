@@ -206,8 +206,19 @@ def meme_frames(spec, s, n):
     top = max(0, 860 - mh // 2)
     cap = None
     cs = spec.get('capSize', 96)
-    if spec.get('capY'):
-        top = max(260, int(spec['capY'] - cs * 0.8 - mh)) if s.get('cap') else max(0, 960 - mh // 2)
+    if spec.get('capY') and s.get('cap'):
+        room = int(spec['capY'] - cs * 0.8) - 260          # meme sits between the title and the centred caption
+        if mh > room / 0.8:                                # tall meme: full size, caption laid over its centre
+            top = max(0, 960 - mh // 2)
+        elif mh > room:                                    # slightly too tall: shrink it a little, black sides
+            mw = int(W * room / mh) // 2 * 2
+            fr = np.stack([np.pad(cv2.resize(f, (mw, room), interpolation=cv2.INTER_AREA),
+                                  ((0, 0), ((W - mw) // 2, W - mw - (W - mw) // 2), (0, 0))) for f in fr])
+            mh = room
+        if mh <= room:
+            top = int(spec['capY'] - cs * 0.8 - mh)
+    elif spec.get('capY'):
+        top = max(0, 960 - mh // 2)
     if s.get('cap'):
         cap = caption_rgba(spec['font'], s['cap'], spec.get('capY') or min(top + mh + cs * 0.8, 1480), cs)
     for j in range(n):
