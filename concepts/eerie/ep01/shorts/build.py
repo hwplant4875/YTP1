@@ -17,7 +17,7 @@ for s in tl['segments']:
     o = st - s['start']; n = dict(s); n['start'] = st; n['end'] = s['end'] + o
     n['words'] = [{'w': w['w'], 's': w['s'] + o, 'e': w['e'] + o} for w in s['words']]
     segs.append(n)
-evs = [dict(e, t=mp(e['t'])) for e in tl['events'] if mp(e['t']) is not None]
+evs = [dict(e, t=mp(e['t'])) for e in tl['events'] if mp(e['t']) is not None and e['type'] not in spec.get('mute', [])]
 cuts0 = sorted({round(mp(c), 3) for c in tl.get('cuts', []) if mp(c) is not None and mp(c) > 0.5} | {round(o + a, 3) for a, b, o in offs[1:]})
 cuts = []
 for c in cuts0:
