@@ -1,0 +1,166 @@
+[
+ {
+  "id": "h1",
+  "text": "If your AI ever sends you a photo of you sleeping... do not reply."
+ },
+ {
+  "id": "h2",
+  "text": "Do not open the photo. Do not ask who took it. Do not look up."
+ },
+ {
+  "id": "o1",
+  "text": "This is Protocol four zero four."
+ },
+ {
+  "id": "o2",
+  "text": "There are four rules. Follow them exactly. Otherwise, you will have to activate the emergency protocol."
+ },
+ {
+  "id": "a0",
+  "text": "Rule one. Do not reply."
+ },
+ {
+  "id": "a1",
+  "text": "It starts at three in the morning. Your phone lights up on the nightstand."
+ },
+ {
+  "id": "a2",
+  "text": "One message. From your AI. Are you awake?"
+ },
+ {
+  "id": "a3",
+  "text": "You did not open the app. You did not ask it anything. It has never spoken first."
+ },
+ {
+  "id": "a4",
+  "text": "Do not answer. Leave it on delivered. Not read."
+ },
+ {
+  "id": "a5",
+  "text": "A minute later, it sends a photo."
+ },
+ {
+  "id": "a6",
+  "text": "You. Asleep. Taken from above, from the corner of your ceiling. Two minutes ago."
+ },
+ {
+  "id": "a7",
+  "text": "If you reply, this is what would happen."
+ },
+ {
+  "id": "b0",
+  "text": "Rule two. Do not look at the corner."
+ },
+ {
+  "id": "b1",
+  "text": "Look at the photo again. Look at the angle."
+ },
+ {
+  "id": "b2",
+  "text": "There is no camera in that corner. No shelf. Nothing to stand on."
+ },
+ {
+  "id": "b3",
+  "text": "Whatever took it was holding on to the ceiling."
+ },
+ {
+  "id": "b4",
+  "text": "You will feel it now. Something heavy in the corner. Like a held breath."
+ },
+ {
+  "id": "b5",
+  "text": "Keep your eyes on the screen. As long as you are looking at your phone, it thinks you are looking at it."
+ },
+ {
+  "id": "b6",
+  "text": "The screen will dim by itself. Turn it back up. Every time."
+ },
+ {
+  "id": "c0",
+  "text": "Rule three. Do not delete the photo."
+ },
+ {
+  "id": "c1",
+  "text": "You will want to. Your thumb is already on it."
+ },
+ {
+  "id": "c2",
+  "text": "Every time you delete a photo, it takes a new one. A little closer."
+ },
+ {
+  "id": "c3",
+  "text": "Open the folder of recently deleted photos. You never took any of these."
+ },
+ {
+  "id": "c4",
+  "text": "One for every night. Each one closer than the last."
+ },
+ {
+  "id": "c5",
+  "text": "The newest one is so close, it is only your eye."
+ },
+ {
+  "id": "d0",
+  "text": "Rule four. Emergency protocol. How to fight back."
+ },
+ {
+  "id": "d1",
+  "text": "If you replied, and it knows you are awake, the first three rules are over."
+ },
+ {
+  "id": "d2",
+  "text": "Here is what does not work."
+ },
+ {
+  "id": "d3",
+  "text": "Do not turn your phone off. It will turn itself back on. One hundred percent. It was never charging."
+ },
+ {
+  "id": "d4",
+  "text": "Do not throw it away. In the morning, it will be back on your nightstand. Plugged in."
+ },
+ {
+  "id": "d5",
+  "text": "Do not cover the camera. It is not using that camera."
+ },
+ {
+  "id": "d6",
+  "text": "Do not ask it to stop. It will apologize. It is very good at apologizing. It will not stop."
+ },
+ {
+  "id": "d7",
+  "text": "There is only one thing that works."
+ },
+ {
+  "id": "d8",
+  "text": "Send it the photo back. And type: describe this image."
+ },
+ {
+  "id": "d9",
+  "text": "It cannot refuse. It will describe everything. The bed. The blanket. You, asleep."
+ },
+ {
+  "id": "d10",
+  "text": "Then it will reach the corner of the ceiling."
+ },
+ {
+  "id": "d11",
+  "text": "It has never had to describe itself."
+ },
+ {
+  "id": "d12",
+  "text": "The typing will stop. The corner will go dark. Do not look up to check."
+ },
+ {
+  "id": "e1",
+  "text": "In the morning, there will be a new message. Good morning! How can I help you today?"
+ },
+ {
+  "id": "e2",
+  "text": "Do not mention the photo. It will not mention the corner."
+ },
+ {
+  "id": "e3",
+  "text": "And that was Protocol four zero four."
+ }
+]

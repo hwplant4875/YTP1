@@ -6,3 +6,6 @@ __pycache__/
 concepts/mindset/out/
 concepts/mindset/page.html
 concepts/eerie/ep01/_page.html
+concepts/eerie/ep02/_*.html
+concepts/eerie/ep02/engine_th.js
+concepts/eerie/ep01/engine_v.js
