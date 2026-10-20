@@ -21,7 +21,8 @@ spec:
      "boomVol"}]
   optional: "bgm": {"src", "ss", "vol"} (music bed under the whole short, fades out at the end),
   "memeBg": "blur" | "black", "capSize", "capY" (caption centre; the meme sits just above it), "title": {"text", "y", "size"} (fixed caption on every frame,
-  emoji allowed)
+  emoji allowed), "look": grade dict of animedit_py.Look (contrast, sat, black, glow, sharpen, grain, vignette) applied
+  to every footage frame (the anime-edit polish: crushed blacks, punchier colour, sharpen, light glow)
 """
 import json, os, subprocess, sys, tempfile
 import cv2
@@ -281,9 +282,15 @@ def build(spec, out):
                             '-r', str(FPS), '-i', '-', '-c:v', 'libx264', '-preset', 'medium', '-crf', '17',
                             '-pix_fmt', 'yuv420p', f'{tmp}/v.mp4'], stdin=subprocess.PIPE)
     audio, sfx = [], []
+    look = None
+    if spec.get('look'):
+        from animedit_py import Look
+        look = Look(spec['look'])
     for i, (s, n) in enumerate(zip(segs, counts)):
         gen = clip_frames(s, n) if s['type'] == 'clip' else meme_frames(spec, s, n)
         for j, img in enumerate(gen):
+            if look is not None and s['type'] == 'clip':
+                img = look(img, j)
             a = white[starts[i] + j]
             if a:
                 img = (img.astype(np.float32) * (1 - a) + 255 * a).astype(np.uint8)

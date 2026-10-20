@@ -1,0 +1,643 @@
+{
+ "name": "TR2_arnold_last_time",
+ "font": "fonts/YouTubeSans-Black.otf",
+ "grade": {
+  "warm": 0.0,
+  "contrast": 1.12,
+  "sat": 1.05,
+  "black": 10,
+  "glow": 0.15,
+  "sharpen": 0.6,
+  "grain": 0.012,
+  "vignette": "PI/5"
+ },
+ "shots": [
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 265.0,
+   "len": 1.8,
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.1
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 53.3,
+   "len": 1.0,
+   "x": 0.35,
+   "zoom": [
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 46.0,
+   "len": 1.2,
+   "x": 0.45,
+   "zoom": [
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 56.4,
+   "len": 1.3,
+   "x": 0.45,
+   "zoom": [
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 30.0,
+   "len": 2.1,
+   "x": 0.6,
+   "zoom": [
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 64.0,
+   "len": 1.0,
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 52.6,
+   "len": 0.6,
+   "x": 0.45
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 118.0,
+   "len": 1.2,
+   "x": 0.55,
+   "zoom": [
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 125.0,
+   "len": 1.3,
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 155.0,
+   "len": 2.0,
+   "speed": 0.8,
+   "x": 0.4,
+   "zoom": [
+    1.0,
+    1.08
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 183.0,
+   "len": 1.8,
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.08
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 189.5,
+   "len": 1.0,
+   "x": 0.45,
+   "zoom": [
+    1.0,
+    1.08
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 61.0,
+   "len": 0.9,
+   "x": 0.5
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 100.0,
+   "len": 1.0,
+   "x": 0.45
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 252.0,
+   "len": 0.8,
+   "x": 0.5
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 270.0,
+   "len": 0.5,
+   "x": 0.5,
+   "strobe": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 265.5,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "ease": "in",
+   "punch": 0.1
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 155.6,
+   "x": 0.4,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "ease": "in",
+   "shake": 12
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 98.5,
+   "x": 0.45,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "ease": "in",
+   "smear": 50
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 40.0,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "ease": "in",
+   "punch": 0.12,
+   "flash": "white"
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 183.8,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "ease": "in",
+   "punch": 0.1
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 46.6,
+   "x": 0.45,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "ease": "in",
+   "shake": 12
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 270.6,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "ease": "in",
+   "smear": 50
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 130.0,
+   "x": 0.4,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "ease": "in",
+   "punch": 0.12,
+   "flash": "white"
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 280.0,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "ease": "in",
+   "punch": 0.1
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 54.0,
+   "x": 0.4,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "ease": "in",
+   "shake": 12
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 61.5,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "ease": "in",
+   "smear": 50
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 275.0,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "ease": "in",
+   "punch": 0.12,
+   "flash": "white"
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 283.0,
+   "len": 1.5,
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "src/MA/my6IroYcyEI.mp4",
+   "in": 286.4,
+   "len": 2.2,
+   "speed": 0.7,
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.08
+   ],
+   "flash": "white"
+  }
+ ],
+ "voice": [
+  {
+   "src": "src/MA/p4KQbnpyLrY.mp4",
+   "in": 151.7,
+   "out": 157.1,
+   "at": 0.3
+  },
+  {
+   "src": "src/MA/p4KQbnpyLrY.mp4",
+   "in": 157.95,
+   "out": 160.05,
+   "at": 5.85
+  },
+  {
+   "src": "src/MA/p4KQbnpyLrY.mp4",
+   "in": 160.5,
+   "out": 163.5,
+   "at": 8.450000000000001
+  },
+  {
+   "src": "src/MA/p4KQbnpyLrY.mp4",
+   "in": 105.45,
+   "out": 108.45,
+   "at": 13.6
+  }
+ ],
+ "subs": [
+  {
+   "words": [
+    [
+     "ARNOLD",
+     0.38
+    ]
+   ],
+   "end": 1.95,
+   "y": 1105,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "SCHWARZENEGGER",
+     0.98,
+     "#FFD400"
+    ]
+   ],
+   "end": 1.95,
+   "y": 1240,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "28",
+     2.0,
+     "#FFD400"
+    ],
+    [
+     "YEARS",
+     2.4
+    ],
+    [
+     "OLD.",
+     2.66
+    ]
+   ],
+   "end": 3.32,
+   "y": 1240,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "6",
+     3.38
+    ],
+    [
+     "FOOT",
+     3.62
+    ],
+    [
+     "2.",
+     3.84
+    ]
+   ],
+   "end": 4.5,
+   "y": 1240,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "240",
+     4.56,
+     "#FFD400"
+    ],
+    [
+     "POUNDS.",
+     5.14
+    ]
+   ],
+   "end": 5.6,
+   "y": 1240,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "MR.",
+     5.9
+    ],
+    [
+     "OLYMPIA",
+     6.36,
+     "#FFD400"
+    ]
+   ],
+   "end": 6.66,
+   "y": 1240,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "FOR",
+     6.68
+    ],
+    [
+     "THE",
+     6.82
+    ],
+    [
+     "PAST",
+     6.92
+    ],
+    [
+     "FIVE",
+     7.22,
+     "#FFD400"
+    ],
+    [
+     "YEARS.",
+     7.5
+    ]
+   ],
+   "end": 7.95,
+   "y": 1240,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "HE",
+     8.53
+    ],
+    [
+     "IS",
+     8.65
+    ],
+    [
+     "PREPARING",
+     8.73
+    ]
+   ],
+   "end": 9.07,
+   "y": 1240,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "TO",
+     9.11
+    ],
+    [
+     "DEFEND",
+     9.27
+    ],
+    [
+     "HIS",
+     9.53
+    ],
+    [
+     "TITLE",
+     9.73,
+     "#FFD400"
+    ]
+   ],
+   "end": 9.95,
+   "y": 1240,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "THIS",
+     9.97
+    ],
+    [
+     "YEAR",
+     10.21
+    ]
+   ],
+   "end": 10.43,
+   "y": 1240,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "FOR",
+     10.45
+    ],
+    [
+     "THE",
+     10.65
+    ],
+    [
+     "LAST",
+     10.75,
+     "#FFD400"
+    ],
+    [
+     "TIME.",
+     11.01,
+     "#FFD400"
+    ]
+   ],
+   "end": 11.55,
+   "y": 1240,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "COME",
+     13.75
+    ],
+    [
+     "ON,",
+     13.99,
+     "#FFD400"
+    ],
+    [
+     "COME",
+     15.71
+    ],
+    [
+     "ON!",
+     16.29,
+     "#FFD400"
+    ]
+   ],
+   "end": 16.6,
+   "y": 1240,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "HE",
+     25.7
+    ],
+    [
+     "WON.",
+     25.7
+    ],
+    [
+     "AGAIN.",
+     25.7,
+     "#FFD400"
+    ]
+   ],
+   "end": 26.95,
+   "y": 1240,
+   "size": 108,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "NOW",
+     27.35
+    ],
+    [
+     "GO",
+     27.35
+    ],
+    [
+     "TRAIN.",
+     27.35,
+     "#FFD400"
+    ]
+   ],
+   "end": 29.2,
+   "y": 1240,
+   "size": 124,
+   "glow": "#000000"
+  }
+ ],
+ "fadeout": 0.3
+}

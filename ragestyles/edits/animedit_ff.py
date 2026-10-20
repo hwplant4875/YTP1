@@ -20,7 +20,8 @@ shot: "src", "in", "out" | "len"                  source seconds; len = output s
       "strobe": [t0, t1]                          bright/dark flicker every 2 frames
       "rgb": 0, "tint": "bw" | "red" | "blue", "freeze": 0.0
 voice: {"src", "in", "out", "at", "vol"}          original voice line placed at output second "at"
-subs:  {"words": [[word, at], ...], "end", "y", "size", "glow": "#ff2a2a"}   word-by-word line
+subs:  {"words": [[word, at(, fill)], ...], "end", "y", "size", "glow": "#ff2a2a", "fill": "white"}   word-by-word line
+       (per-word and line "fill" are drawn by animedit_py only; "glow": "#000000" gives a plain drop shadow)
 """
 import json, os, shlex, subprocess, sys
 from PIL import ImageFont
@@ -165,7 +166,7 @@ def sub_filters(spec):
     glow, crisp = [], []
     for l in spec.get('subs', []):
         size = l.get('size', 84)
-        words = [w for w, _ in l['words']]
+        words = [w[0] for w in l['words']]
         f = font.font_variant(size=size)
         while f.getlength(' '.join(words)) + size * 0.3 > W - 120:          # keep the line inside the frame
             size -= 2
@@ -174,7 +175,7 @@ def sub_filters(spec):
         x0 = (W - f.getlength(full)) / 2
         y = l.get('y', 1000)
         end = l['end']
-        for k, (w, at) in enumerate(l['words']):
+        for k, (w, at, *_) in enumerate(l['words']):
             x = x0 + f.getlength(' '.join(words[:k]) + (' ' if k else ''))
             pop = f'max(0,1-(t-{at})/0.1)'
             base = (f"fontfile={spec['font']}:expansion=none:text={esc_word(w)}:fontsize={size}:"

@@ -163,14 +163,14 @@ class Subs:
         fpath = os.path.join(root, spec['font'])
         for l in spec.get('subs', []):
             size = l.get('size', 100)
-            words = [w for w, _ in l['words']]
+            words = [w[0] for w in l['words']]
             f = ImageFont.truetype(fpath, size)
             while f.getlength(' '.join(words)) + size * 0.3 > W - 120:      # keep the line inside the frame
                 size -= 2
                 f = ImageFont.truetype(fpath, size)
             x0 = (W - f.getlength(' '.join(words))) / 2
             col = l.get('glow', '#ff2a2a')
-            for k, (w, at) in enumerate(l['words']):
+            for k, (w, at, *fill) in enumerate(l['words']):
                 x = x0 + f.getlength(' '.join(words[:k]) + (' ' if k else ''))
                 pad = size // 2
                 tw = int(f.getlength(w)) + 2 * pad
@@ -179,7 +179,7 @@ class Subs:
                 ImageDraw.Draw(glow).text((pad, pad), w, font=f, fill=col, stroke_width=size // 9, stroke_fill=col)
                 glow = glow.filter(ImageFilter.GaussianBlur(size / 6))
                 crisp = Image.new('RGBA', (tw, th), (0, 0, 0, 0))
-                ImageDraw.Draw(crisp).text((pad, pad), w, font=f, fill='white', stroke_width=max(3, size // 16),
+                ImageDraw.Draw(crisp).text((pad, pad), w, font=f, fill=(fill or [l.get('fill', 'white')])[0], stroke_width=max(3, size // 16),
                                            stroke_fill='black')
                 im = Image.alpha_composite(glow, glow)
                 im = Image.alpha_composite(im, crisp)
