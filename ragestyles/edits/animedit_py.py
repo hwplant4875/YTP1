@@ -163,8 +163,11 @@ class Subs:
         fpath = os.path.join(root, spec['font'])
         for l in spec.get('subs', []):
             size = l.get('size', 100)
-            f = ImageFont.truetype(fpath, size)
             words = [w for w, _ in l['words']]
+            f = ImageFont.truetype(fpath, size)
+            while f.getlength(' '.join(words)) + size * 0.3 > W - 120:      # keep the line inside the frame
+                size -= 2
+                f = ImageFont.truetype(fpath, size)
             x0 = (W - f.getlength(' '.join(words))) / 2
             col = l.get('glow', '#ff2a2a')
             for k, (w, at) in enumerate(l['words']):
@@ -208,8 +211,10 @@ def build(spec, root, nvenc=False):
     total = sum(frames_of(s) for s in spec['shots'])
     fo = int(round(spec.get('fadeout', 0.3) * FPS))
     tmp = tempfile.mkdtemp()
-    venc = ['-c:v', 'h264_nvenc', '-preset', 'p7', '-rc', 'vbr', '-cq', '17', '-b:v', '0'] if nvenc else \
-           ['-c:v', 'libx264', '-preset', 'slow', '-crf', '17']
+    venc = ['-c:v', 'libx264', '-preset', 'slow', '-crf', '17']
+    if nvenc and subprocess.run(['ffmpeg', '-v', 'error', '-f', 'lavfi', '-i', 'color=s=256x256:d=0.1', '-c:v', 'h264_nvenc',
+                                 '-f', 'null', '-'], capture_output=True).returncode == 0:
+        venc = ['-c:v', 'h264_nvenc', '-preset', 'p7', '-rc', 'vbr', '-cq', '17', '-b:v', '0']
     enc = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}',
                             '-r', str(FPS), '-i', '-', *venc, '-pix_fmt', 'yuv420p', f'{tmp}/v.mp4'], stdin=subprocess.PIPE)
     n = 0

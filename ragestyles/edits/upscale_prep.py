@@ -22,7 +22,7 @@ def main(spec_path, root, exe, model='realesr-animevideov3', scale='2'):
             os.makedirs(f'{tmp}/in'); os.makedirs(f'{tmp}/out')
             dur = s['out'] - s['in'] + 0.2
             subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', f"{s['in']:.3f}", '-t', f'{dur:.3f}',
-                            '-i', os.path.join(root, s['src']), '-vsync', '0', f'{tmp}/in/%05d.png'], check=True)
+                            '-i', os.path.join(root, s['src']), '-fps_mode', 'passthrough', f'{tmp}/in/%05d.png'], check=True)
             fps = subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v', '-show_entries', 'stream=r_frame_rate',
                                   '-of', 'csv=p=0', os.path.join(root, s['src'])], capture_output=True, text=True).stdout.strip()
             subprocess.run([exe, '-i', f'{tmp}/in', '-o', f'{tmp}/out', '-n', model, '-s', scale, '-f', 'png'], check=True)

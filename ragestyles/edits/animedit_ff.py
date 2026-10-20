@@ -165,8 +165,11 @@ def sub_filters(spec):
     glow, crisp = [], []
     for l in spec.get('subs', []):
         size = l.get('size', 84)
-        f = font.font_variant(size=size)
         words = [w for w, _ in l['words']]
+        f = font.font_variant(size=size)
+        while f.getlength(' '.join(words)) + size * 0.3 > W - 120:          # keep the line inside the frame
+            size -= 2
+            f = font.font_variant(size=size)
         full = ' '.join(words)
         x0 = (W - f.getlength(full)) / 2
         y = l.get('y', 1000)
