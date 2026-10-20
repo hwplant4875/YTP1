@@ -157,12 +157,12 @@ export function h17(t) {
   const cA = at0(A), cB = at0(B), u = t2 => sm(tn - 0.2, tn + 1.6, t2);
   const ctr = t2 => { const k = u(t2); return [lerp(cA[0], cB[0], k), lerp(cA[1], cB[1], k) - 110 * Math.sin(k * Math.PI)]; };
   const head = t2 => { const [x, y] = ctr(t2); return bptB(x, y, sc, phi, 724, 150); };
-  let s = meadowBack(t);
-  // background flowers growing out of the bushes, so no stem ever ends in mid air
-  const BGF = [[220, 640, -20, '#b26bff', '#7a3fd0'], [1020, 700, -30, '#ffd23a', '#d9a400'], [1760, 640, -10, '#ff5f87', '#c4305a']];
-  BGF.forEach(([x, y, r, c1, c2]) => { const [ex, ey] = fpt(x, y, 0.75, r, 0, 200); s += stemTo(ex, ey, ex + 10, 930, 11) + flowerT(x, y, 0.75, { rot: r, col: c1, col2: c2, stem: 0 }); });
-  [[420, 800, '#ff5f87'], [880, 820, '#ffffff'], [1180, 790, '#b26bff'], [1640, 800, '#ffd23a'], [120, 820, '#ffffff'], [1880, 810, '#ff7a3d']].forEach(([x, y, c]) => { s += `<path d="M${x} ${y} L${x + 6} 920" stroke="#2f9a4f" stroke-width="8"/>` + blossom(x, y, 34, c); });
-  for (const [m, c1, c2] of [[A, '#ff3d5e', '#c41f45'], [B, '#ff7a3d', '#c4501f']]) { const [ex, ey] = fpt(m[0], m[1], FS, FR, 0, 200); s += stemTo(ex, ey, ex - 20, 960, 15) + flowerT(m[0], m[1], FS, { rot: FR, col: c1, col2: c2, stem: 0 }); }
+  let s = '';
+  // the top of a flower field seen from the sky: every stem runs down past the bottom edge
+  const BGF = [[220, 700, -20, '#b26bff', '#7a3fd0'], [1060, 760, -30, '#ffd23a', '#d9a400'], [1780, 690, -10, '#ff5f87', '#c4305a']];
+  BGF.forEach(([x, y, r, c1, c2]) => { const [ex, ey] = fpt(x, y, 0.75, r, 0, 200); s += stemTo(ex, ey, ex + 20, 1130, 11) + flowerT(x, y, 0.75, { rot: r, col: c1, col2: c2, stem: 0 }); });
+  [[420, 880, '#ff5f87'], [880, 930, '#ffffff'], [1240, 900, '#b26bff'], [1620, 880, '#ffd23a'], [90, 900, '#ffffff'], [1880, 930, '#ff7a3d'], [600, 990, '#ffd23a'], [1400, 1000, '#ff5f87'], [300, 1010, '#b26bff']].forEach(([x, y, c]) => { s += `<path d="M${x} ${y} C${x + 10} ${y + 60} ${x - 6} ${y + 120} ${x + 4} 1130" stroke="${N}" stroke-width="16" fill="none"/><path d="M${x} ${y} C${x + 10} ${y + 60} ${x - 6} ${y + 120} ${x + 4} 1130" stroke="#2f9a4f" stroke-width="8" fill="none"/>` + blossom(x, y, 34, c); });
+  for (const [m, c1, c2] of [[A, '#ff3d5e', '#c41f45'], [B, '#ff7a3d', '#c4501f']]) { const [ex, ey] = fpt(m[0], m[1], FS, FR, 0, 200); s += stemTo(ex, ey, ex - 20, 1130, 15) + flowerT(m[0], m[1], FS, { rot: FR, col: c1, col2: c2, stem: 0 }); }
   // flower B gets dusty where the pollen lands
   const rub = sm(tr - 0.2, tr + 1.0, t);
   if (rub > 0) { seed(19); for (let i = 0; i < 26; i++) { const [px, py] = fpt(B[0], B[1], FS, FR, -30 + rnd() * 70, -90 + rnd() * 40); s += dust(px, py, 3 + rnd() * 4, rub * (0.6 + 0.4 * rnd())); } }
@@ -182,12 +182,11 @@ export function h17(t) {
   const sign = taxi > 0 ? `<g transform="translate(690 112) rotate(-6) scale(${f1(taxi * 140) / 100})"><rect x="-74" y="-58" width="148" height="58" rx="12" fill="${K.yellow}" stroke="${N}" stroke-width="7"/><text x="0" y="-14" font-family="Black" font-size="40" fill="${N}" text-anchor="middle">TAXI</text></g>` : '';
   const [bx, by] = ctr(t);
   s += placeB(bx, by + bobB(t, 4), sc, birdSolid() + pol + sign + wings(t, { rate: 7, amp: 50 }), { rot: phi });
-  s += meadowFront(t);
   // seeds drop from flower B and sprout in the grass
   if (t > ts - 0.2) { const k = eo(ts - 0.2, ts + 0.9, t), g = eo(ts + 0.8, ts + 2.0, t); const [fx, fy] = fpt(B[0], B[1], FS, FR, 0, 200);
     for (let i = 0; i < 5; i++) { const x = fx - 300 + i * 130, y0 = fy + 20, y = lerp(y0, 1030, k);
       if (g < 1) s += `<ellipse cx="${f1(lerp(fx, x, k))}" cy="${f1(y)}" rx="12" ry="16" fill="#8a5a2b" stroke="${N}" stroke-width="4"/>`;
-      if (g > 0) s += `<g transform="translate(${x} 1032) scale(${f1(1.7 * g * 100) / 100})"><path d="M0 0 Q-6 -40 4 -70" stroke="${N}" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M0 0 Q-6 -40 4 -70" stroke="#2f9a4f" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M4 -70 c-30 -10 -40 -30 -30 -40 c16 4 28 16 30 40Z M4 -70 c28 -14 44 -10 44 4 c-14 10 -30 6 -44 -4Z" fill="#4fd06a" stroke="${N}" stroke-width="4"/></g>`; }
+      if (g > 0) s += `<g transform="translate(${x} 1090) scale(${f1(1.7 * g * 100) / 100})"><path d="M0 0 Q-6 -40 4 -70" stroke="${N}" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M0 0 Q-6 -40 4 -70" stroke="#2f9a4f" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M4 -70 c-30 -10 -40 -30 -30 -40 c16 4 28 16 30 40Z M4 -70 c28 -14 44 -10 44 4 c-14 10 -30 6 -44 -4Z" fill="#4fd06a" stroke="${N}" stroke-width="4"/></g>`; }
     s += fade(fx - 470, 1010, 'SEEDS', t, ts + 0.2, { size: 72, fill: '#fff', stroke: N, sw: 12 }); }
   { const [px, py] = head(t); if (t < tx) s += tag(px, py - 10, px - 160, Math.max(120, py - 230), 'POLLEN', t, tp + 0.2, { col: '#ffe14a' }); }
   if (t > tx) s += big(960, 115, 'POLLEN TAXI', t, tx, { size: 130, fill: '#fff', stroke: N, sw: 18 });
