@@ -84,8 +84,8 @@ function check(cx, cy, r, p, col = C.fig) {
 
 // ---------- props ----------
 // World scale for the room cutaway: floor at y=860, 2.6 px per cm (door 200 cm = 520 px).
-const FY = 860, PX = 2.6, DOOR_H = 520, DOOR_X = 1080, KNOCK_Y = FY - DOOR_H * 0.56;   // knocks land in the middle of the door, just above the handle
-const BELL = '#d9d9d9', COLLAR = '#5a5a5a';
+const FY = 860, PX = 2.6, DOOR_H = 520, DOOR_X = 1080, KNOCK_Y = FY - DOOR_H * 0.70;   // knocks land on the upper half of the door, at the height a person knocks
+const COLLAR = '#5a5a5a';
 // glowing eye: white normally, red when red>0 (the scary moments)
 function eyeGlow(x, y, rx, ry, red = 0, slit = 1) {
   ctx.save();
@@ -139,7 +139,7 @@ function curledCat(x, y, s) {
   pth('M-70,-58 L-66,-86 L-50,-64 Z', C.fig); pth('M-46,-66 L-34,-90 L-28,-60 Z', C.fig);
   pthS('M60,-20 C70,6 10,10 -30,-4', C.sec, 12); noGlow();
   pthS('M-64,-44 q7,6 14,0', '#000', 3.5);
-  rr(-40, -26, 26, 7, 3, COLLAR); circ(-28, -18, 6, BELL);
+  rr(-40, -26, 26, 7, 3, COLLAR);
   ctx.restore();
 }
 // bedroom furniture and wall details left of the door (drawn behind the bed)
@@ -190,7 +190,7 @@ function doorEdge(x = DOOR_X, y = FY, open = 0) {
   if (open < 0.05) { rr(x - 34, y - h * 0.42 - 6, 18, 12, 4, C.sec); circ(x - 36, y - h * 0.42, 9, C.sec); rr(x + 16, y - h * 0.42 - 6, 18, 12, 4, C.sec); circ(x + 36, y - h * 0.42, 9, C.sec); }
 }
 // front view door with frame, panels, hinges and a lever handle. o.light: hallway light under the door; o.feet: shadows;
-// o.open: 0..1 swing; o.handle: lever rotation 0..1; o.marks: claw marks in the middle 0..1
+// o.open: 0..1 swing; o.handle: lever rotation 0..1; o.marks: claw marks where it knocked 0..1
 function doorFront(x, y, w, h, o = {}) {
   rr(x - 40, y - 40, w + 80, h + 40, 2, '#151515');                 // wall around the door
   ln(x - 300, y + h, x + w + 300, y + h, 4, C.dim);
@@ -207,15 +207,15 @@ function doorFront(x, y, w, h, o = {}) {
     rrS(w * 0.12, h * py, w * 0.76, h * ph, 6, C.mid, 5); rrS(w * 0.12 + 12, h * py + 12, w * 0.76 - 24, h * ph - 24, 4, C.dim, 2);
   }
   rr(-4, h * 0.1, 8, 34, 2, C.mid); rr(-4, h * 0.82, 8, 34, 2, C.mid);   // hinges
-  // lever handle at the middle of the door
+  // lever handle
   const hx = w * 0.88, hy = h * 0.58;
   glow(); circ(hx, hy, w * 0.04, C.sec); noGlow();
   ctx.save(); ctx.translate(hx, hy); ctx.rotate((o.handle || 0) * 38 * D2R); rr(-w * 0.17, -7, w * 0.17, 14, 7, C.fig); ctx.restore();
   rr(hx - 3, hy + 22, 6, 14, 3, '#000');
-  if (o.marks) { ctx.save(); redGlow(8); for (let i = 0; i < 3; i++) lnP(w * 0.36 + i * w * 0.14, h * 0.42, w * 0.38 + i * w * 0.14, h * 0.58, 9, '#b81f1f', clamp(o.marks * 3 - i)); ctx.restore(); }
+  if (o.marks) { ctx.save(); redGlow(8); for (let i = 0; i < 3; i++) lnP(w * 0.36 + i * w * 0.14, h * 0.2, w * 0.38 + i * w * 0.14, h * 0.36, 9, '#b81f1f', clamp(o.marks * 3 - i)); ctx.restore(); }
   ctx.restore();
 }
-// your cat, sitting, side view facing right; feet at (x,y). Always wears the collar with the bell.
+// your cat, sitting, side view facing right; feet at (x,y). Always wears its collar.
 function sitCat(x, y, s, o = {}) {
   ctx.save(); ctx.translate(x, y); ctx.scale(o.flip ? -s : s, s);
   glow('rgba(255,255,255,0.3)', 16);
@@ -233,9 +233,8 @@ function sitCat(x, y, s, o = {}) {
   if (o.closed) ln(hx + 6, hy - 4, hx + 20, hy - 4, 4, '#000'); else eyeGlow(hx + 13, hy - 5, 5.5, 5.5, o.red || 0, 0.8);
   pth(`M${hx + 29},${hy + 4} l5,0 l-2.5,4 z`, '#555');
   ctx.globalAlpha *= 0.6; for (let i = 0; i < 2; i++) ln(hx + 26, hy + 9 + i * 5, hx + 50, hy + 6 + i * 8, 1.5, C.mid); ctx.globalAlpha /= 0.6;
-  // collar + bell
+  // collar
   ctx.save(); ctx.translate(hx - 6, hy + 24); ctx.rotate(-0.5); rr(-20, -4, 40, 9, 4, COLLAR); ctx.restore();
-  circ(hx + 4, hy + 34, 6.5, BELL); ln(hx + 1, hy + 36, hx + 7, hy + 36, 1.5, '#555');
   ctx.restore();
 }
 // cat walking on four legs, facing left; feet at (x,y); ph = walk phase
@@ -247,54 +246,58 @@ function walkCat(x, y, s, ph = 0, o = {}) {
   ell(4, -58, 62, 28, 0, C.fig);
   ln(-30, -44, -30 - sw, 0, 12, C.fig); ln(46, -44, 46 + sw, 0, 12, C.fig);
   circ(-62, -78, 26, C.fig); pth('M-82,-92 L-80,-122 L-64,-98 Z', C.fig); pth('M-60,-100 L-46,-124 L-40,-92 Z', C.fig);
-  noGlow(); eyeGlow(-74, -82, 5, 5, o.red || 0, 0.8); rr(-70, -60, 22, 7, 3, COLLAR); circ(-62, -52, 5.5, BELL);
+  noGlow(); eyeGlow(-74, -82, 5, 5, o.red || 0, 0.8); rr(-70, -60, 22, 7, 3, COLLAR);
   ctx.restore();
 }
-// YOUR cat, standing upright at human height. Feet at (x,y), faces left toward the door.
-// o.k: knocking arm 0 (paw on the door) .. 1 (pulled back); o.red: red eye glow 0..1; o.tilt: head tilt; o.ears: flatten 0..1; o.reach: arm up 0/1
+// YOUR cat, standing upright at human height, drawn in the first version's flat geometric shapes. Feet at (x,y), faces left toward the door.
+// o.k: knocking arm 0 (paw on the door) .. 1 (pulled back); o.red: red eye 0..1; o.tilt: head tilt; o.ears: flatten 0..1; o.sway: lean
+const GEO = 'A';
+const CAT_S = GEO === 'A' ? 1.12 : 1, CAT_X = 1112 + 128 * CAT_S;
+// where the standing cat's eye sits in the hallway (for shots that show only the eye in the dark)
+const CAT_EYE = GEO === 'A' ? { x: CAT_X - 40 * CAT_S, y: FY - 360 * CAT_S } : { x: CAT_X - 30 * CAT_S, y: FY - 420 * CAT_S };
+function geoEye(x, y, red) {
+  if (red > 0) redGlow(24 * red);
+  ell(x, y, 10, 9, 0, red > 0.5 ? C.red : '#ffffff'); noGlow();
+  if (red <= 0.5) { ctx.beginPath(); ctx.ellipse(x, y, 11, 10, 0, 0, Math.PI * 2); ctx.strokeStyle = '#777'; ctx.lineWidth = 2; ctx.stroke(); }
+  rr(x - 2, y - 8, 4, 16, 2, '#000');
+}
+function geoHead(cx, cy, r, col, o) {
+  const ea = (o.ears || 0);
+  ctx.save(); ctx.translate(cx, cy); ctx.rotate((o.tilt || 0) * D2R); ctx.translate(-cx, -cy);
+  ctx.save(); ctx.translate(cx - 9, cy - 40); ctx.rotate(-ea * 1.1); pth('M-21,6 L-15,-58 L21,-4 Z', col); ctx.restore();
+  ctx.save(); ctx.translate(cx + 26, cy - 36); ctx.rotate(ea * 1.0); pth('M-20,-6 L18,-52 L20,12 Z', col); ctx.restore();
+  circ(cx, cy, r, col); ell(cx - 38, cy + 14, 14, 12, 0, col);
+  noGlow(); pth(`M${cx - 52},${cy + 8} l8,0 l-4,6 z`, '#000');
+  rr(cx - 30, cy + r - 8, 52, 9, 4, COLLAR);
+  geoEye(cx - 24, cy - 12, o.red || 0);
+  ctx.restore();
+}
 function standCat(x, y, s = 1, o = {}) {
-  const k = o.k ?? 1, tilt = o.tilt || 0, red = o.red || 0, sway = o.sway || 0, ears = o.ears || 0;
-  const col = o.col || '#ededed', col2 = o.col2 || '#bdbdbd', shade = '#d2d2d2';
-  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(sway * D2R);
-  glow('rgba(255,255,255,0.25)', 18);
-  // tail: long, hanging, tip curling and flicking
-  const fl = Math.sin((o.t || 0) * 2.1) * 10;
-  pthS(`M30,-200 C80,-180 96,-110 84,-60 C76,-28 96,${-12 + fl * 0.3} ${118 + fl},${-26 + fl * 0.4}`, col2, 20);
-  // far hind leg and paw
-  pth('M10,-210 C40,-200 52,-130 40,-70 C36,-40 40,-16 44,-10 L4,-10 C8,-40 0,-90 -6,-140 Z', col2); ell(30, -8, 36, 11, 0, col2);
-  // far arm hanging down the body
-  pth('M8,-330 C30,-320 34,-270 26,-226 C24,-214 8,-212 6,-226 C6,-262 -4,-300 8,-330 Z', col2); ell(16, -220, 15, 13, 0, col2);
-  // body: a cat's soft pear-shaped body, stretched upright
-  pth('M-44,-330 C-62,-290 -60,-230 -46,-190 C-36,-160 30,-158 42,-190 C56,-230 50,-300 30,-340 C14,-368 -28,-366 -44,-330 Z', col);
-  // near hind leg: cat thigh, standing flat on a long foot
-  pth('M-30,-220 C10,-226 22,-160 6,-100 C-2,-70 -8,-34 -6,-12 L-44,-12 C-42,-44 -38,-100 -40,-150 C-42,-180 -46,-210 -30,-220 Z', col);
-  ell(-36, -8, 40, 12, 0, col);
-  noGlow();
-  for (let i = 0; i < 3; i++) ln(-62 + i * 10, -12, -62 + i * 10, -2, 2, '#9a9a9a');       // toes
-  ctx.globalAlpha *= 0.35; pthS('M-30,-300 l8,10 l-8,8 l8,10 M-16,-296 l8,10 l-8,8', '#888', 2.5); ctx.globalAlpha /= 0.35;   // chest fluff
-  glow('rgba(255,255,255,0.25)', 18);
-  // knocking arm, ending in a cat paw (k=0 paw on the door)
-  const hx = lerp(-150, -118, k), hy = lerp(KNOCK_Y - FY, KNOCK_Y - FY - 14, k) / s;
-  const ay = o.reach ? -460 : hy;
-  pthS(`M-30,-322 Q-90,-300 ${hx + 10},${ay}`, col, 28);
-  ell(hx, ay, 17, 15, 0, col);
-  noGlow(); for (let i = 0; i < 3; i++) ln(hx - 14, ay - 7 + i * 7, hx - 8, ay - 7 + i * 7, 2, '#9a9a9a'); glow('rgba(255,255,255,0.25)', 18);
-  // head on the shoulders (no neck), tilted
-  ctx.save(); ctx.translate(-14, -386); ctx.rotate(tilt * D2R);
-  const ea = ears * 0.9;
-  ctx.save(); ctx.translate(-30, -34); ctx.rotate(-0.25 - ea); pth('M-22,10 L-6,-46 L22,4 Z', col); noGlow(); pth('M-12,4 L-4,-30 L12,2 Z', '#cfcfcf'); glow('rgba(255,255,255,0.25)', 18); ctx.restore();
-  ctx.save(); ctx.translate(18, -40); ctx.rotate(0.15 + ea); pth('M-22,8 L2,-46 L22,10 Z', col); ctx.restore();
-  ell(0, 0, 60, 54, 0, col); ell(-44, 16, 22, 17, 0, col);                                  // head + muzzle
-  noGlow();
-  // collar + bell under the chin
-  ctx.save(); ctx.rotate(-tilt * D2R); rr(-46, 46, 84, 12, 6, COLLAR); circ(-22, 66, 10, BELL); ln(-27, 69, -17, 69, 2, '#555'); circ(-22, 60, 2, '#555'); ctx.restore();
-  // face: two eyes in a 3/4 view toward the door
-  eyeGlow(-32, -6, 12, 11, red, 0.9); eyeGlow(4, -8, 10, 11, red, 0.9);
-  pth('M-62,10 l10,0 l-5,7 z', '#666');
-  pthS('M-56,22 q5,6 10,0 q5,6 10,0', '#777', 2.5);
-  ctx.globalAlpha *= 0.7; for (let i = 0; i < 3; i++) { ln(-58, 18 + i * 5, -96, 10 + i * 9, 1.5, C.mid); } ctx.globalAlpha /= 0.7;
-  ctx.restore();
-  ctx.restore();
+  const k = o.k ?? 1, col = o.col || '#eeeeee', col2 = o.col2 || '#a9a9a9', fl = Math.sin((o.t || 0) * 1.7) * 8;
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate((o.sway || 0) * D2R); glow('rgba(255,255,255,0.3)', 24);
+  let px = lerp(-128, -96, k), py = lerp(KNOCK_Y - FY, KNOCK_Y - FY - 18, k) / s;
+  if (o.arm === 'down') { px = GEO === 'A' ? -34 : -50; py = GEO === 'A' ? -166 : -176; }
+  if (GEO === 'A') {
+    // the first design: a tilted egg body on thin straight legs
+    pthS(`M48,-122 C112,-126 ${130 + fl},-194 ${104 + fl},-246`, col2, 18);
+    ln(28, -126, 46, -6, 24, col2); ell(58, 0, 26, 9, 0, col2);
+    ln(-4, -262, -16, -162, 22, col2);
+    ctx.save(); ctx.translate(4, -212); ctx.rotate(-6 * D2R); ell(0, 0, 54, 112, 0, col); ctx.restore();
+    ln(0, -126, -8, -6, 26, col); ell(-22, 0, 28, 10, 0, col);
+    glow('rgba(255,255,255,0.3)', 24); if (o.arm === 'down') poly([[-28, -278], [-40, -220], [px, py]], 24, col); else ln(-28, -278, px, py, 26, col); circ(px, py, 17, col);
+    geoHead(-16, -348, 50, col, o);
+  } else {
+    // the same flat shapes built like a person: square shoulders, a neck, long straight legs, elbows
+    pthS(`M30,-196 C96,-200 ${110 + fl},-260 ${92 + fl},-306`, col2, 14);
+    ln(16, -200, 22, -6, 22, col2); ell(34, 0, 24, 8, 0, col2);
+    poly([[30, -342], [44, -250], [38, -160]], 18, col2); circ(38, -152, 13, col2);
+    pth('M-46,-346 L42,-350 L30,-236 L34,-196 L-30,-196 L-26,-236 Z', col);
+    ln(-12, -200, -16, -6, 24, col); ell(-30, 0, 26, 9, 0, col);
+    rr(-16, -372, 26, 30, 4, col);
+    glow('rgba(255,255,255,0.3)', 24); poly([[-40, -336], [-86, -300], [px, py]], 22, col); circ(px, py, 16, col);
+    geoHead(-6, -408, 46, col, o);
+  }
+  noGlow(); ctx.restore();
 }
 function catFace(x, y, s, o = {}) {
   const ear = o.ear || 0, eyes = o.eyes ?? 1;
@@ -405,7 +408,6 @@ function room(t, o = {}) {
   doorEdge(DOOR_X, FY, o.open || 0);
   if (o.hall) o.hall();
 }
-const CAT_X = 1247, CAT_S = 0.9;
 // knock-synced standing cat in the hallway; eyes go red while knocks land (scary)
 function knocker(t, extra = {}) {
   const p = knockPulse(t);
@@ -415,13 +417,6 @@ function knockFx(t, t0 = -1) {
   const p = knockPulse(t), lk = lastKnock(t);
   knockLines(DOOR_X - 34, KNOCK_Y, p, C.red, 1);
   if (lk > t0) ripple(DOOR_X, KNOCK_Y, lk, t, C.red, 10, 110);
-}
-// bell ring marks next to a point
-function bellRing(x, y, t, t0, n = 3) {
-  const d = t - t0; if (d < 0) return;
-  for (let i = 0; i < n; i++) { const k = (d * 1.3 + i * 0.33) % 1; ctx.save(); ctx.globalAlpha *= (1 - k) * clamp(2 - d / 2);
-    ctx.beginPath(); ctx.arc(x, y, 18 + k * 60, -0.9, 0.9); ctx.strokeStyle = C.fig; ctx.lineWidth = 4; ctx.stroke();
-    ctx.beginPath(); ctx.arc(x, y, 18 + k * 60, Math.PI - 0.9, Math.PI + 0.9); ctx.stroke(); ctx.restore(); }
 }
 const S = {};
 S.s01 = (t, seg) => {
@@ -488,10 +483,10 @@ S.s05 = (t, seg) => {
   });
 };
 S.s06 = (t, seg) => ruleCard(t, seg, 1, 'DO NOT OPEN THE DOOR');
-const DF = { x: 760, y: 120, w: 400, h: 740 };   // standard front-view door; its middle is (960, 490)
-const DMID = { x: DF.x + DF.w / 2, y: DF.y + DF.h * 0.44 };
+const DF = { x: 760, y: 120, w: 400, h: 740 };   // standard front-view door; DMID is where the knocks land
+const DMID = { x: DF.x + DF.w / 2, y: DF.y + DF.h * 0.28 };
 S.s07 = (t, seg) => {
-  const tb = wt(seg, 'bottom'), tm = wt(seg, 'middle');
+  const tb = wt(seg, 'bottom'), tm = wt(seg, 'high');
   cam(t, seg.start, seg.end - seg.start + 0.6, 1, 1.05, 960, 500, () => {
     doorFront(DF.x, DF.y, DF.w, DF.h, {});
     pop(t, seg.start + 0.1, 420, 500, () => icon('ear', 420, 500, 1.2));
@@ -541,7 +536,7 @@ S.s09 = (t, seg) => {
   });
 };
 S.s10 = (t, seg) => {
-  // the knock is in the middle of the door, where a hand would knock; the reveal follows with the boom
+  // the knock is high on the door, where a hand would knock; the reveal follows with the boom
   const tw = wt(seg, 'where'), boom = evs('boom')[0];
   if (boom && t >= boom.t - 0.02) {
     const k = t - boom.t;
@@ -551,23 +546,23 @@ S.s10 = (t, seg) => {
   }
   cam(t, seg.start, seg.end - seg.start + 0.5, 1, 1.05, 1000, 560, () => {
     ln(0, FY, W, FY, 4, C.dim); doorEdge(DOOR_X, FY);
-    // door middle marker
+    // knocking-height marker
     ctx.setLineDash([12, 10]); ln(DOOR_X - 300, KNOCK_Y, DOOR_X - 40, KNOCK_Y, 4, C.red); ctx.setLineDash([]);
-    fadeIn(t, seg.start + 0.2, () => { redGlow(10); text('MIDDLE', DOOR_X - 310, KNOCK_Y + 10, '900 34px M', C.red, 'right'); noGlow(); });
+    fadeIn(t, seg.start + 0.2, () => { redGlow(10); text('HAND HEIGHT', DOOR_X - 310, KNOCK_Y + 10, '900 34px M', C.red, 'right'); noGlow(); });
     for (let i = 0; i < 3; i++) ripple(DOOR_X, KNOCK_Y, seg.start + 0.3 + i * 0.6, t, C.red, 10, 120);
     // a person's hand reaches exactly there
     if (t >= tw - 0.1) pop(t, tw - 0.1, 860, FY, () => person(820, FY, 1.0, C.mid, 0.55));
-    fadeIn(t, tw, () => { redGlow(26); eyeGlow(1210, 382, 9, 8, 1, 0.8); eyeGlow(1250, 380, 8, 8, 1, 0.8); noGlow(); }, 0.6);
+    fadeIn(t, tw, () => { redGlow(26); geoEye(CAT_EYE.x, CAT_EYE.y, 1); noGlow(); }, 0.6);
   });
 };
 S.s11 = (t, seg) => {
-  const tb = wt(seg, 'bell');
-  // close-up of the collar bell on the standing cat
-  const z = lerp(1.6, 2.6, ease((t - seg.start) / (seg.end - seg.start + 0.5)));
-  ctx.save(); ctx.translate(960, 540); ctx.scale(z, z); ctx.translate(-(CAT_X - 46 * CAT_S), -(FY - 320 * CAT_S));
-  room(t, { light: 0.5, hall: () => knocker(t, { red: 0 }) }); ctx.restore();
-  for (const kt of knockTimes()) if (kt > seg.start - 0.5) bellRing(1000, 560, t, kt, 2);
-  if (t >= tb) { bellRing(1000, 560, t, tb, 3); pop(t, tb, 1400, 300, () => tag('BELL', 1400, 310, C.fig, 46, 'center')); }
+  // between the knocks it just stands there, paw resting on the door, waiting
+  const tw = wt(seg, 'waits'), tn = wt(seg, 'night');
+  const z = lerp(1.5, 2.1, ease((t - seg.start) / (seg.end - seg.start + 0.5)));
+  ctx.save(); ctx.translate(960, 540); ctx.scale(z, z); ctx.translate(-(CAT_X - 60), -(FY - 300));
+  room(t, { light: 0.5, hall: () => knocker(t, { k: 0.15, red: 0, tilt: -6 + 2 * Math.sin(t * 0.6) }) }); ctx.restore();
+  if (t >= tw) pop(t, tw, 1450, 300, () => { tag('WAITING' + '.'.repeat(1 + Math.floor((t * 2) % 3)), 1360, 310, C.fig, 44, 'left'); });
+  if (t >= tn) pop(t, tn, 1450, 420, () => { icon('moon', 1400, 430, 0.6); text('ALL NIGHT', 1450, 446, '900 40px M', C.mid, 'left'); });
 };
 S.s12 = (t, seg) => ruleCard(t, seg, 2, 'DO NOT LOOK UNDER THE DOOR');
 S.s13 = (t, seg) => {
@@ -658,8 +653,8 @@ S.s19 = (t, seg) => {
     cam(t, m.t, 3, 1.0, 1.1, 1250, 420, () => {
       room(t, { person: 'woke', light: 0.3 });
       // only the eyes, high up in the dark hallway
-      for (let k = 0; k < 4; k++) ripple(1220, 380, m.t + k * 0.5, t, C.red, 20, 260);
-      eyeGlow(1210, 382, 9, 8, 1, 0.8); eyeGlow(1250, 380, 8, 8, 1, 0.8);
+      for (let k = 0; k < 4; k++) ripple(CAT_EYE.x, CAT_EYE.y, m.t + k * 0.5, t, C.red, 20, 260);
+      geoEye(CAT_EYE.x, CAT_EYE.y, 1);
     });
     return;
   }
@@ -703,43 +698,33 @@ S.s22 = (t, seg) => {
     fadeIn(t, t0 + 0.1, () => { rrS(40, 40, W - 80, H - 80, 6, C.dim, 3); spaced('11:48 PM', 120, 140, '600 34px Plex', C.mid, 4, 'left'); });
     return;
   }
-  // now: the hallway light is on, two feet under the door, and it knocks in the middle
+  // now: the hallway light is on, two feet under the door, and it knocks up high
   const p = knockPulse(t);
   cam(t, ts - 0.2, seg.end - ts + 2.4, 1, 1.08, 960, 520, () => {
     ctx.save(); if (p > 0.5) shake(3 * p, t);
     doorFront(DF.x, DF.y, DF.w, DF.h, { light: 0.9, feet: [{ x: 0.36 }, { x: 0.62 }] }); ctx.restore();
     const lk = lastKnock(t); if (lk > ts) ripple(DMID.x, DMID.y, lk, t, C.red, 20, 220);
     knockLines(DF.x - 40, DMID.y, p, C.red, 1);
-    if (lk > ts) bellRing(DMID.x + 40, DMID.y + 60, t, lk, 2);
   });
   if (t >= seg.end - 0.2) pop(t, seg.end - 0.2, 1480, 480, () => tag('WANTS BACK IN', 1480, 490, C.red, 44, 'center'));
 };
 S.s23 = (t, seg) => {
-  const tb = wt(seg, 'bought'), tp = wt(seg, 'put');
-  if (t < tb - 0.1) {
-    // the bell again, through the door
-    cam(t, seg.start, tb - seg.start, 1, 1.05, 960, 500, () => { doorFront(DF.x, DF.y, DF.w, DF.h, { light: 0.5 }); bellRing(DMID.x, DMID.y, t, seg.start, 3);
-      icon('ear', 420, 500, 1.2); });
-    return;
-  }
-  // memory: you put the collar on the little cat (soft, faded)
-  cam(t, tb, seg.end - tb + 0.6, 1, 1.06, W / 2, 560, () => {
-    ctx.save(); ctx.globalAlpha *= 0.85;
-    rrS(360, 160, 1200, 700, 10, C.dim, 4); spaced('MEMORY', 400, 210, '600 26px Plex', C.mid, 4, 'left');
-    sitCat(900, 760, 2.4, { collar: true });
-    // a hand holding the collar, then the collar is on
-    if (t < tp + 0.6) { const k = ease((t - tp) / 0.6); ctx.save(); ctx.translate(lerp(1300, 1040, k), lerp(420, 520, k)); rr(0, -20, 160, 40, 20, C.sec); rr(-60, -8, 70, 16, 6, COLLAR); circ(-30, 14, 9, BELL); ctx.restore(); }
-    bellRing(1000, 560, t, tp + 0.6, 3);
+  // memory: every night it sits at the foot of the bed and stares at you until you sleep
+  const tf = wt(seg, 'foot'), ta = wt(seg, 'asleep');
+  cam(t, seg.start, seg.end - seg.start + 0.6, 1.25, 1.5, 560, 640, () => {
+    ctx.save(); ctx.filter = 'grayscale(1) brightness(0.85)';
+    room(t, { person: t >= ta ? 'sleep' : 'woke', bedCat: 'sit' });
     ctx.restore();
-    if (t >= wt(seg, 'always')) pop(t, wt(seg, 'always'), 1300, 760, () => tag('ALWAYS FIND IT', 1300, 770, C.fig, 34, 'center'));
+    if (t >= tf - 0.3) { ctx.setLineDash([10, 10]); lnP(640, 560, 300, 520, 3, C.fig, prog(t, tf - 0.3, 0.6)); ctx.setLineDash([]); }
   });
+  fadeIn(t, seg.start, () => { rrS(40, 40, W - 80, H - 80, 6, C.dim, 3); spaced('EVERY NIGHT', 120, 140, '600 34px Plex', C.mid, 4, 'left'); });
+  if (t >= ta) pop(t, ta, 1400, 330, () => tag('WATCHING', 1400, 340, C.fig, 44, 'center'));
 };
 S.s24 = (t, seg) => {
-  // now you know where it is: the empty foot of the bed, the bell behind the door, red eyes
+  // now you know who is knocking: the empty foot of the bed, and your cat behind the door with red eyes
   cam(t, seg.start, 3.5, 1.0, 1.08, 1080, 560, () => {
     room(t, { person: 'woke', bedCat: 'empty', light: 0.5, hall: () => knocker(t, { red: prog(t, seg.start + 0.3, 0.6), k: 0.8, tilt: 10 }) });
-    bellRing(CAT_X - 20, FY - 330, t, seg.start + 0.2, 3);
-    ctx.setLineDash([12, 12]); lnP(640, 640, CAT_X - 30, FY - 320, 4, C.red, prog(t, seg.start + 0.4, 0.8)); ctx.setLineDash([]);
+    ctx.setLineDash([12, 12]); lnP(640, 640, CAT_EYE.x - 10, CAT_EYE.y, 4, C.red, prog(t, seg.start + 0.4, 0.8)); ctx.setLineDash([]);
   });
 };
 S.s25 = (t, seg) => {
@@ -758,7 +743,7 @@ S.s25 = (t, seg) => {
     pth('M-6,-168 L-2,-200 L12,-174 Z', C.fig); pth('M18,-174 L34,-198 L38,-164 Z', C.fig);
     ln(18, -110, 98, -150 - Math.sin(t * 4) * 6, 12, C.fig); ln(10, -90, 98, -120, 12, C.fig);
     ln(-14, -20, -18, 0, 12, C.fig); ln(12, -20, 16, 0, 12, C.fig); pthS('M-26,-30 C-70,-20 -70,10 -50,10', C.sec, 9); noGlow();
-    eyeGlow(30, -150, 5, 5, t >= tp ? 1 : 0, 0.8); rr(-4, -122, 36, 7, 3, COLLAR); circ(14, -114, 5, BELL);
+    eyeGlow(30, -150, 5, 5, t >= tp ? 1 : 0, 0.8); rr(-4, -122, 36, 7, 3, COLLAR);
     ctx.restore();
     if (t >= tl && t < tp) bubble(560, 380, 200, 90, 'HAHA', t, tl, C.fig, '#000', -1);
   });
@@ -768,7 +753,7 @@ S.s26 = (t, seg) => {
   cam(t, seg.start, seg.end - seg.start + 0.6, 1, 1.05, W / 2, 480, () => {
     pop(t, seg.start, 700, 480, () => { rrS(530, 310, 340, 340, 26, C.dim, 5); icon('mouth', 700, 480, 1.05); });
     redX(700, 480, 120, prog(t, seg.start + 0.4, 0.35));
-    if (t >= tw - 0.1) pop(t, tw - 0.1, 1260, 480, () => { ctx.save(); ctx.translate(1260, 760); ctx.scale(0.62, 0.62); standCat(0, 0, 1, { k: 1, red: 1, t }); ctx.restore(); });
+    if (t >= tw - 0.1) pop(t, tw - 0.1, 1260, 480, () => { ctx.save(); ctx.translate(1260, 760); ctx.scale(0.62, 0.62); standCat(0, 0, 1, { k: 1, arm: 'down', red: 1, t }); ctx.restore(); });
   });
 };
 S.s27 = (t, seg) => {
@@ -790,7 +775,7 @@ S.s28 = (t, seg) => {
   if (t >= tp) pop(t, tp, 1450, 420, () => { tag('PURRING', 1450, 430, C.fig, 40, 'center'); });
 };
 S.s29 = (t, seg) => {
-  const tm = wt(seg, 'middle');
+  const tm = wt(seg, 'high');
   cam(t, seg.start, seg.end - seg.start + 0.6, 1, 1.06, 960, 520, () => {
     pop(t, seg.start, 1500, 230, () => icon('sun', 1500, 230, 1.0));
     doorFront(DF.x, DF.y, DF.w, DF.h, { marks: prog(t, tm + 0.4, 0.8) });
@@ -844,7 +829,7 @@ S.s34 = (t, seg) => {
       const x = lerp(80, 1300, clamp(k)), y = FY - 360 + Math.sin(clamp(k) * Math.PI) * -60 + i * 30;
       if (k < 1.2) { ctx.save(); ctx.translate(x, y); ctx.rotate(k * 6); glow(); if (it === 'pillow') ell(0, 0, 50, 26, 0, C.sec); if (it === 'book') rr(-30, -40, 60, 80, 4, C.sec); if (it === 'lamp') { pth('M-30,-10 L30,-10 L18,-50 L-18,-50 Z', C.sec); rr(-4, -10, 8, 40, 2, C.sec); } noGlow(); ctx.restore(); }
       const d = Math.abs(k - 0.62); if (d < 0.25) lean = Math.max(lean, 1 - d / 0.25) * (i % 2 ? -1 : 1); });
-    standCat(820, FY, CAT_S, { k: 1, sway: lean * 14, red: t >= td ? 0.6 : 0, t });
+    standCat(820, FY, CAT_S, { k: 1, arm: 'down', sway: lean * 14, red: t >= td ? 0.6 : 0, t });
     if (t >= td) pop(t, td, 300, 260, () => { spaced('HITS', 300, 220, '900 32px M', C.mid, 6); text('0', 300, 340, '900 120px M', C.red); });
     if (t >= tk) pop(t, tk - 0.2, 420, 640, () => { ctx.save(); ctx.globalAlpha *= 0.8; rrS(330, 560, 180, 150, 10, C.dim, 4); sitCat(400, 700, 0.8, { paw: t }); ctx.restore(); });
     nopeList(t, 0);
@@ -884,7 +869,7 @@ S.s37 = (t, seg) => {
     // catnip leaves all over
     const n = Math.floor(clamp((t - seg.start - 0.3) / 1.2) * 12);
     for (let i = 0; i < n; i++) { const x = 470 + ((i * 37) % 100), y = FY - 420 + ((i * 53) % 330); ctx.save(); ctx.translate(x, y); ctx.rotate(i); ell(0, 0, 14, 7, 0, '#9a9a9a'); ln(-14, 0, 14, 0, 2, '#555'); ctx.restore(); }
-    if (t >= td) { ctx.save(); ctx.translate(960, FY); ctx.scale(0.75, 0.75); standCat(0, 0, 1, { k: 1, red: 0.3, t }); ctx.restore(); }
+    if (t >= td) { ctx.save(); ctx.translate(960, FY); ctx.scale(0.75, 0.75); standCat(0, 0, 1, { k: 1, arm: 'down', red: 0.3, t }); ctx.restore(); }
     if (t >= tb) pop(t, tb, 760, 260, () => { tag('TASTE +100%', 760, 270, C.red, 40, 'center'); });
     nopeList(t, 3);
   });
@@ -907,7 +892,7 @@ S.s40 = (t, seg) => {
     ctx.globalAlpha *= k; rr(-120, -170, 240, 60, 30, C.fig); circ(150, -170, 34, C.fig);
     ln(-100, -120, -110, 0, 20, C.fig); ln(-60, -120, -50, 0, 20, C.fig); ln(80, -140, 90, 0, 20, C.fig); ln(120, -140, 140, 0, 20, C.fig); noGlow();
     ctx.restore();
-    standCat(1330, FY, CAT_S, { k: 1, red: t < tb ? 1 : 0.4, t });
+    standCat(1330, FY, CAT_S, { k: 1, arm: 'down', red: t < tb ? 1 : 0.4, t });
     if (t >= te) { ctx.setLineDash([12, 12]); lnP(780, FY - 180, 1290, FY - 400, 4, C.fig, prog(t, te, 0.4)); ctx.setLineDash([]); }
     if (t >= tb) { const big = t >= tl ? 1.35 : 1; ctx.save(); ctx.translate(900, 380); ctx.scale(big, big); ctx.translate(-900, -380); bubble(900, 380, 360, 150, 'WOOF!', t, tb, C.fig, '#000', 1); ctx.restore(); }
   });
@@ -923,7 +908,7 @@ S.s42 = (t, seg) => {
   cam(t, seg.start, seg.end - seg.start + 0.6, 1.1, 1.0, 1100, 560, () => {
     ln(0, FY, W, FY, 4, C.dim); doorEdge(700, FY, 1);
     const back = ease((t - ts) / 0.8) * 120;
-    if (t < td + 0.2) standCat(1100 + back, FY, CAT_S, { k: 1, ears: ease((t - tf) / 0.4), red: lerp(0.8, 0, prog(t, tf, 1)), t });
+    if (t < td + 0.2) standCat(1100 + back, FY, CAT_S, { k: 1, arm: 'down', ears: ease((t - tf) / 0.4), red: lerp(0.8, 0, prog(t, tf, 1)), t });
     if (t >= td) { const k = (t - td); const x = 1220 + Math.max(0, k - 0.4) * 120; ctx.save(); ctx.globalAlpha *= prog(t, td, 0.25); walkCat(x, FY, 1.4, k * 8); ctx.restore(); }
     if (t >= tw) pop(t, tw, 760, 300, () => tag('AS IF NOTHING HAPPENED', 760, 310, C.fig, 34, 'center'));
   });
