@@ -65,6 +65,11 @@ def rocky():
         (496.8, 0.4), (505.9, 0.5), (513.6, 0.5), (520.2, 0.5), (524.0, 0.5), (486.0, 0.32)]])
     sh += [{'src': R, 'in': 527.0, 'len': 1.3, 'x': 0.65, 'zoom': [1.0, 1.06]},
            {'src': R, 'in': 528.3, 'len': 2.4, 'speed': 0.6, 'x': 0.6, 'zoom': [1.0, 1.08], 'flash': 'white'}]
+    for s in sh:                      # this upload carries a corner tag top-left: crop the top band off every shot
+        z = s.get('zoom', 1.0)
+        z0, z1 = (z, z) if not isinstance(z, list) else z
+        k = max(1.0, 1.15 / z0)
+        s.update({'y': max(s.get('y', 0.5), 0.56), 'zoom': [round(z0 * k, 3), round(z1 * k, 3)]})
     st, total = starts_of(sh)
     subs = [card('HE HAD MACHINES.', 0.15, st[4] - 0.05, yellow={'MACHINES'}),
             card('HE HAD STEROIDS.', st[4] + 0.1, st[6] - 0.05, yellow={'STEROIDS'}),
@@ -93,7 +98,7 @@ def arnold():
         {'src': A, 'in': 155.0, 'len': 2.0, 'speed': 0.8, 'x': 0.4, 'zoom': [1.0, 1.08]},   # 9 squat grind
         {'src': A, 'in': 183.0, 'len': 1.8, 'x': 0.5, 'zoom': [1.0, 1.08]},      # 10 bench, face
         {'src': A, 'in': 189.5, 'len': 1.0, 'x': 0.45, 'zoom': [1.0, 1.08]},     # 11 bench grind
-        {'src': A, 'in': 61.0, 'len': 0.9, 'x': 0.5},                            # 12 row scream
+        {'src': A, 'in': 61.1, 'len': 0.9, 'x': 0.5},                            # 12 row scream (61.0 is a cut)
         {'src': A, 'in': 100.0, 'len': 1.0, 'x': 0.45},                          # 13 row
         {'src': A, 'in': 252.0, 'len': 0.8, 'x': 0.5},                           # 14 row
         {'src': A, 'in': 270.0, 'len': 0.5, 'x': 0.5, 'strobe': [0.0, 0.5]},     # 15 pre-drop
@@ -108,6 +113,8 @@ def arnold():
     v1, v2, v3, v4 = 0.3, max(st[4] + 0.05, 5.85), st[6] + 0.05, st[10] + 0.1
     voice = [{'src': P, 'in': 151.7, 'out': 157.1, 'at': v1}, {'src': P, 'in': 157.95, 'out': 160.05, 'at': v2},
              {'src': P, 'in': 160.5, 'out': 163.5, 'at': v3}, {'src': P, 'in': 105.45, 'out': 108.45, 'at': v4}]
+    for v in voice:
+        v['vol'] = 1.8                 # the narrator sits ~5 dB under the other shorts
 
     def line(words, off, end, yellow=()):
         return {'words': [[w, round(t + off, 3)] + ([YEL] if w.strip('.,!?') in yellow else []) for w, t in words],

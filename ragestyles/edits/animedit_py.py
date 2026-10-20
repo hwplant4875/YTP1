@@ -245,7 +245,7 @@ def build(spec, root, nvenc=False):
                      f"volume={v.get('vol', 1.0)},afade=t=in:d=0.03,afade=t=out:st={v['out'] - v['in'] - 0.08:.3f}:d=0.08,"
                      f"adelay={d}|{d}[va{j}]")
         g.append(''.join(f'[va{j}]' for j in range(len(voices))) +
-                 f'amix=inputs={len(voices)}:normalize=0:duration=longest,apad,atrim=0:{dur:.3f}[a]')
+                 f'amix=inputs={len(voices)}:normalize=0:duration=longest,alimiter=limit=0.89:level=0,apad,atrim=0:{dur:.3f}[a]')
         args += ['-filter_complex', ';'.join(g), '-map', '0:v', '-map', '[a]']
     else:
         args += ['-f', 'lavfi', '-t', f'{dur:.3f}', '-i', 'anullsrc=r=48000:cl=stereo', '-map', '0:v', '-map', '1:a']
