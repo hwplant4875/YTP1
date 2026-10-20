@@ -12,12 +12,24 @@
   "text": "It is three in the morning."
  },
  {
-  "id": "s04",
-  "text": "This is Protocol zero zero one. There are four rules. Follow them, and you will see the morning."
+  "id": "o1",
+  "text": "This is Instruction four zero four."
  },
  {
-  "id": "s05",
-  "text": "If the rules stop working, there is one more page. It tells you how to fight back."
+  "id": "o2",
+  "text": "There are four rules. Follow them exactly."
+ },
+ {
+  "id": "o3",
+  "text": "Rule one is about the door. Rule two is about the gap under it. Rule three is about your eyes."
+ },
+ {
+  "id": "o4",
+  "text": "Rule four is the emergency protocol. How to fight back."
+ },
+ {
+  "id": "o5",
+  "text": "Break the first three, and rule four is all you have left."
  },
  {
   "id": "s06",
@@ -42,6 +54,10 @@
  {
   "id": "s11",
   "text": "If you open the door, it will not come in like a cat. One swipe. Its claws, across your throat. Faster than you can blink."
+ },
+ {
+  "id": "s11b",
+  "text": "It does not need you to open the door. It knows how. It only knocks to find out if you are awake."
  },
  {
   "id": "s12",
@@ -76,44 +92,16 @@
   "text": "But it is too slow. It is too low. And it comes from too high up."
  },
  {
-  "id": "s20",
-  "text": "Rule three. Look at the foot of your bed."
- },
- {
-  "id": "s21",
-  "text": "Your cat sleeps there every night."
- },
- {
-  "id": "s22",
-  "text": "Tonight, the blanket is flat. You let your cat out before bed. And now, something wants back in."
- },
- {
-  "id": "s24",
-  "text": "Now you know who is knocking."
- },
- {
-  "id": "s25",
-  "text": "You have watched it stretch up the door frame, on two legs, and you laughed. It was not stretching. It was practicing."
- },
- {
-  "id": "s26",
-  "text": "Do not call it. It will come."
- },
- {
-  "id": "s27",
-  "text": "Stay in bed. Breathe slowly. Cats get bored."
- },
- {
   "id": "r1",
-  "text": "Rule four. Pretend to be asleep."
+  "text": "Rule three. Pretend to be asleep."
  },
  {
   "id": "r2",
-  "text": "Sometimes, cats do not get bored."
+  "text": "The knocking will stop. Silence does not mean it left. It always comes in."
  },
  {
   "id": "r3",
-  "text": "The knocking will stop. Then you will hear the handle turn. It has been practicing that too."
+  "text": "You will hear the handle turn. Slowly. It has been practicing."
  },
  {
   "id": "r4",
@@ -121,7 +109,7 @@
  },
  {
   "id": "r5",
-  "text": "Lie on your side. Mouth a little open. Breathe slow, and deep."
+  "text": "Lie on your side. Breathe slow, and deep. Do not squeeze your eyes shut. It knows the difference."
  },
  {
   "id": "r6",
@@ -153,11 +141,11 @@
  },
  {
   "id": "s31",
-  "text": "Emergency protocol. How to fight back."
+  "text": "Rule four. Emergency protocol. How to fight back."
  },
  {
   "id": "s32",
-  "text": "If you closed your eyes too late, and it saw you, the rules are over."
+  "text": "If you closed your eyes too late, and it saw you, the first three rules are over."
  },
  {
   "id": "s33",
@@ -185,7 +173,7 @@
  },
  {
   "id": "s40",
-  "text": "Get down on all fours. Look it in the eyes. And bark. Like a dog. Loud."
+  "text": "Sit up on the bed, like a dog. Look it in the eyes. And bark. Loud."
  },
  {
   "id": "s41",
@@ -209,6 +197,6 @@
  },
  {
   "id": "s46",
-  "text": "This was Protocol zero zero one."
+  "text": "This was Instruction four zero four."
  }
 ]

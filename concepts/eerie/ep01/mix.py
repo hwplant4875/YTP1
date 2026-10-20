@@ -9,7 +9,7 @@ SOUND = {'knock3': ('knock_triple.wav', 1.0), 'meow1': ('meow_deep_fx.wav', 0.9)
          'riser': ('riser.mp3', 0.45), 'stinger': ('stinger.mp3', 0.55), 'hum': ('hum.mp3', 0.35), 'heartbeat': ('heartbeat.mp3', 0.5),
          'breath': ('breath.mp3', 0.55), 'creak': ('creak.mp3', 0.6), 'staticlong': ('staticlong.mp3', 0.22), 'tapestop': ('tapestop.mp3', 0.5),
          'bark': ('bark.mp3', 0.8), 'hiss': ('hiss.mp3', 0.5), 'handle': ('handle.mp3', 0.7),
-         'whoosh': ('whoosh.mp3', 0.45), 'chime': ('chime.mp3', 0.35)}
+         'whoosh': ('whoosh.mp3', 0.45), 'chime': ('chime.mp3', 0.35), 'morph': ('staticlong.mp3', 0.45), 'stamp': ('hit.wav', 0.7)}
 ins, flt, labels = [], [], []
 N = [0]
 def nxt():
