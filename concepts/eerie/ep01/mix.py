@@ -6,12 +6,12 @@ MV = float(sys.argv[6]) if len(sys.argv) > 6 else 0.35
 T = tl['total']
 G = 0.4   # every sound effect sits 8 dB lower than before (user, v10)
 # (file, volume); soft, low-passed takes only: no harsh booms, stingers or crackles
-SOUND = {'knock3': ('knock_triple.wav', 1.0), 'meow1': ('meow_low.wav', 2.2), 'meowsoft': ('meow_soft.wav', 0.5),
+SOUND = {'knock3': ('knock_triple.wav', 1.0), 'meow1': ('meow_low.wav', 4.4), 'meowsoft': ('meow_soft.wav', 0.5),
          'thud': ('thud.wav', 0.6), 'card': ('thud.wav', 0.45), 'stamp': ('hit.wav', 0.6), 'scratch': ('scratch.mp3', 0.8),
          'riser': ('riser.mp3', 0.45), 'hum': ('hum.mp3', 0.35), 'heartbeat': ('heartbeat.mp3', 0.5),
          'breath': ('breath.mp3', 0.55), 'creak': ('creak.mp3', 0.6), 'bark': ('bark.mp3', 0.8), 'hiss': ('hiss.mp3', 0.5), 'handle': ('handle.mp3', 0.7),
          'whoosh': ('whoosh.mp3', 0.45), 'chime': ('chime.mp3', 0.35), 'morph': ('staticlong.mp3', 0.3),
-         'dooropen': ('dooropen.wav', 0.8), 'growl': ('growl.wav', 0.9), 'swipe': ('swipe.wav', 0.9), 'scream': ('scream.wav', 1.0)}
+         'dooropen': ('dooropen.wav', 0.5), 'growl': ('growl.wav', 0.3), 'swipe': ('swipe.wav', 0.9), 'scream': ('scream.wav', 0.55)}
 SOFT = ',lowpass=f=6500'
 ins, flt, labels = [], [], []
 N = [0]
@@ -23,7 +23,9 @@ def add(path, t, vol, extra=''):
 for s in tl['segments']: add(f"{vdir}/{s['file']}", s['start'], 1.0, f",atrim=0:{s.get('cut', 99) + 0.12},afade=t=out:st={s.get('cut', 99)}:d=0.12")
 for e in tl['events']:
     if e['type'] not in SOUND: continue   # visual-only events (blackout)
-    f, v = SOUND[e['type']]; add(f'{sdir}/{f}', e['t'], v * G, SOFT + (',lowpass=f=3500' if e['type'] == 'morph' else ''))
+    f, v = SOUND[e['type']]
+    trim = ',atrim=0:1.7,afade=t=out:st=1.2:d=0.5' if e['type'] == 'growl' else ''   # the growl dies with the blackout
+    add(f'{sdir}/{f}', e['t'], v * G, SOFT + trim + (',lowpass=f=3500' if e['type'] == 'morph' else ''))
 # a quiet, muffled tape flicker on each cut (two soft takes)
 quiet = {s['start'] for s in tl['segments'] if s['id'] in ('o2',)}   # the file opening stays silent (user)
 for j, c in enumerate(c for c in tl.get('cuts', []) if c not in quiet): add(f'{sdir}/gsoft{j % 2 + 1}.wav', c - 0.03, 0.3 * G, ',atrim=0:0.4,afade=t=out:st=0.25:d=0.15')
