@@ -17,7 +17,7 @@ A=load('mus/mA.mp3'); B=load('mus/mB.mp3'); fa=int(202.5*SR); fb=int(205*SR); A=
 put(mu,A,0,1.0); put(mu,B,204.6,1.0)
 # duck: smooth speech mask (0.4 s ramps)
 k=int(0.4*SR); c=np.concatenate([[0],np.cumsum(speech,dtype=np.float64)]); idx=np.arange(N); lo=np.clip(idx-k//2,0,N); hi=np.clip(idx+k//2,0,N); sm=((c[hi]-c[lo])/k).astype(np.float32); env=0.42-0.27*np.clip(sm*1.6,0,1)
-mix=vo+sf+mu*env[:,None]
+mix=vo+0.6*sf+mu*env[:,None]  # SFX kept well under the voice
 # final fade
 fo=int(2.5*SR); mix[-fo:]*=np.linspace(1,0,fo)[:,None]
 mix.astype(np.float32).tofile('out/mix.f32')

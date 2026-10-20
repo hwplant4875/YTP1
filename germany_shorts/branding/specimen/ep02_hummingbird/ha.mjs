@@ -1,7 +1,8 @@
 // X-RAY ZOO EP02 hummingbird: shared helpers and props
 import { K, f1, clamp, sm, eo, pop, lerp, seed, rnd, esc } from '/tmp/claude-0/sp2/eng2.mjs';
-import { birdSolid, birdInside, wings, placeB, toB, PT, C, BIRD, BEAK, SHOULDER } from '/tmp/claude-0/hb/bird.mjs';
-export { birdSolid, birdInside, wings, placeB, toB, PT, C, BIRD, BEAK, SHOULDER };
+import { birdSolid, birdInside, wings, placeB, toB, PT, C, BIRD, BEAK, SHOULDER, prettyHeart, prettyBrain, brainWindow, standB, FOOT_Y, birdDefs, WING, PAL } from '/tmp/claude-0/hb/bird.mjs';
+export { PAL } from '/tmp/claude-0/hb/bird.mjs';
+export { birdSolid, birdInside, wings, placeB, toB, PT, C, BIRD, BEAK, SHOULDER, prettyHeart, prettyBrain, brainWindow, standB, FOOT_Y, birdDefs, WING };
 const N = K.navy;
 export const bobB = (t, a = 10, f = 2.2) => a * Math.sin(t * f);
 let _i = 0; const uid = p => p + (_i++ % 100000);
@@ -10,16 +11,41 @@ let _i = 0; const uid = p => p + (_i++ % 100000);
 export const fly = (cx, cy, sc, t, { rate = 7, amp = 55, blur = 3, rot = 0, flip = false, inside = null, body = null, still = null } = {}) =>
   placeB(cx, cy, sc, (body || (inside ? birdInside(inside) : birdSolid())) + wings(t, { rate, amp, blur, still, bones: inside ? 1 : 0 }), { rot, flip });
 // perched bird with folded wing
+export const perchedInner = ({ puff = 0, closed = 0, throat = 1, tailRot = 0, pal = 'ruby', beakD = null } = {}) => {
+  const pf = `translate(600 452) scale(${f1((1 + 0.12 * puff) * 100) / 100} ${f1((1 + 0.22 * puff) * 100) / 100}) translate(-600 -452)`, bk = PAL[pal].b;
+  let s = `<g transform="${pf}">${birdSolid({ throat, tailRot, pal, beakD })}${wings(0, { still: -76, blur: 0, fill: bk })}`;
+  if (closed) s += `<circle cx="711" cy="170" r="21" fill="${bk}"/><path d="M699 166 Q714 ${f1(166 + 12 * closed)} 729 166" stroke="${N}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+  return s + '</g>'; };
+// bird standing on a flat surface: toes on groundY, tail lifted clear of the ground
+export const standing = (cx, groundY, sc, o = {}) => standB(cx, groundY, sc, `<g transform="rotate(${o.lean ?? -14} 584 450)">${perchedInner({ tailRot: 30, ...o })}</g>`, { flip: o.flip });
+// bird perched on a branch drawn with branch(..., by, th): toes sit on the top of the bark
+export const onBranch = (cx, by, sc, o = {}) => standB(cx, by - (o.th ?? 22) * 0.5 - 4, sc, `<g transform="rotate(${o.lean ?? 0} 584 450)">${perchedInner(o)}</g>`, { flip: o.flip, rot: o.rot });
 export const perched = (cx, cy, sc, { puff = 0, closed = 0, rot = 0, throat = 1 } = {}) => {
-  const pf = `translate(600 330) scale(${f1((1 + 0.12 * puff) * 100) / 100} ${f1((1 + 0.22 * puff) * 100) / 100}) translate(-600 -330)`;
+  const pf = `translate(600 452) scale(${f1((1 + 0.12 * puff) * 100) / 100} ${f1((1 + 0.22 * puff) * 100) / 100}) translate(-600 -452)`;
   let s = `<g transform="${pf}">${birdSolid({ throat })}${wings(0, { still: -76, blur: 0, fill: C.back })}`;
-  if (closed) s += `<circle cx="714" cy="168" r="17" fill="${C.back}"/><path d="M699 166 Q714 ${f1(166 + 12 * closed)} 729 166" stroke="${N}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+  if (closed) s += `<circle cx="711" cy="170" r="21" fill="${C.back}"/><path d="M699 166 Q714 ${f1(166 + 12 * closed)} 729 166" stroke="${N}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
   s += '</g>';
   return placeB(cx, cy, sc, s, { rot });
 };
 // branch the perched bird holds (feet at box y≈446)
-export const branch = (x0, x1, y, th = 22) => { const d = `M${x0} ${y} C${(x0 + x1) / 2} ${y - 18} ${(x0 + x1) / 2} ${y + 14} ${x1} ${y - 6}`;
-  return `<path d="${d}" stroke="${N}" stroke-width="${th + 12}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="#8a5a2b" stroke-width="${th}" fill="none" stroke-linecap="round"/>`; };
+export const branch = (x0, x1, y, th = 22, { leaves = 1 } = {}) => { const d = `M${x0} ${y} C${(x0 + x1) / 2} ${y - 18} ${(x0 + x1) / 2} ${y + 14} ${x1} ${y - 6}`;
+  const L = x1 - x0, yb = x => { const u = (x - x0) / L; return y * (1 - u) ** 3 + 3 * (1 - u) ** 2 * u * (y - 18) + 3 * (1 - u) * u * u * (y + 14) + u ** 3 * (y - 6); };
+  let s = '';
+  // side twig with leaves (behind the branch)
+  if (leaves) for (const [u, dir] of [[0.18, -1], [0.78, 1]]) { const bx = x0 + L * u, by = yb(bx), tx = bx + dir * 90, ty = by - 120;
+    s += `<path d="M${f1(bx)} ${f1(by)} Q${f1(bx + dir * 20)} ${f1(by - 70)} ${f1(tx)} ${f1(ty)}" stroke="${N}" stroke-width="${f1(th * 0.55 + 10)}" fill="none" stroke-linecap="round"/><path d="M${f1(bx)} ${f1(by)} Q${f1(bx + dir * 20)} ${f1(by - 70)} ${f1(tx)} ${f1(ty)}" stroke="#8a5a2b" stroke-width="${f1(th * 0.55)}" fill="none" stroke-linecap="round"/>`;
+    for (const [lx, ly, a] of [[tx, ty, dir * 30 - 90], [bx + dir * 30, by - 60, dir * 70 - 90], [tx - dir * 10, ty + 30, dir * 110 - 90]]) s += leaf(lx, ly, a, th / 22); }
+  s += `<path d="${d}" stroke="${N}" stroke-width="${th + 12}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="#8a5a2b" stroke-width="${th}" fill="none" stroke-linecap="round"/>`;
+  s += `<path d="${d}" stroke="#b9854b" stroke-width="${f1(th * 0.28)}" fill="none" stroke-linecap="round" transform="translate(0 ${f1(-th * 0.22)})" opacity=".9"/>`;
+  seed(Math.round(x0 + y)); for (let i = 0; i < L / 60; i++) { const x = x0 + 30 + rnd() * (L - 60), yy = yb(x) + (rnd() - 0.3) * th * 0.4;
+    s += `<path d="M${f1(x)} ${f1(yy)} l${f1(18 + rnd() * 24)} ${f1((rnd() - 0.5) * 4)}" stroke="#5e3c1b" stroke-width="${f1(Math.max(2, th * 0.12))}" stroke-linecap="round" opacity=".7"/>`; }
+  return s; };
+export const leaf = (x, y, a, k = 1) => `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(a)}) scale(${f1(k * 100) / 100})"><path d="M0 0 C18 -14 52 -18 84 0 C52 18 18 14 0 0Z" fill="#4fbf5a" stroke="${N}" stroke-width="5" stroke-linejoin="round"/><path d="M4 0 L76 0" stroke="#2f8a3c" stroke-width="3"/></g>`;
+// flat ground with soil and a grassy edge; top at y
+export const ground = (y, t = 0) => { let s = `<path d="M-40 ${y} L1960 ${y} L1960 1120 L-40 1120Z" fill="#c99a62" stroke="${N}" stroke-width="8"/><path d="M-40 ${y + 26} L1960 ${y + 26}" stroke="#b5864f" stroke-width="10" opacity=".6"/>`;
+  seed(7); for (let i = 0; i < 26; i++) { const x = rnd() * 1920, yy = y + 50 + rnd() * 150; s += `<ellipse cx="${f1(x)}" cy="${f1(yy)}" rx="${f1(10 + rnd() * 16)}" ry="${f1(6 + rnd() * 6)}" fill="#a97a45" opacity=".7"/>`; }
+  for (let x = -20; x < 1960; x += 26) { const h = 22 + 14 * Math.sin(x * 0.37), sw = 4 * Math.sin(t * 2 + x * 0.05); s += `<path d="M${x} ${y + 4} Q${f1(x + 4 + sw)} ${f1(y - h * 0.5)} ${f1(x + 8 + sw)} ${f1(y - h)}" stroke="#3f9a45" stroke-width="7" fill="none" stroke-linecap="round"/>`; }
+  return s; };
 
 // red tubular flower (what hummingbirds love), mouth at (0,0) pointing up-left by default
 export const flowerT = (x, y, s, { rot = -30, col = '#ff3d5e', col2 = '#c41f45', stem = 1, glowUV = 0 } = {}) => {
@@ -47,10 +73,17 @@ export const bee = (x, y, s, t = 0) => { const w = 18 * Math.sin(t * 60);
   <ellipse cx="0" cy="0" rx="78" ry="46" fill="${K.yellow}" stroke="${N}" stroke-width="7"/><path d="M-30 -42 C-38 -10 -38 10 -30 42 M2 -46 C-6 -14 -6 14 2 46 M34 -40 C28 -12 28 12 34 40" stroke="${N}" stroke-width="16" fill="none"/>
   <circle cx="82" cy="-6" r="30" fill="${N}"/><circle cx="92" cy="-14" r="7" fill="#fff"/><path d="M100 -30 Q120 -60 140 -62 M92 -34 Q104 -66 118 -74" stroke="${N}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M-78 0 L-104 0" stroke="${N}" stroke-width="8" stroke-linecap="round"/></g>`; };
 // human heart outline (simple) for comparisons
-export const heartIcon = (x, y, s, col = K.red) => `<g transform="translate(${f1(x)} ${f1(y)}) scale(${f1(s * 1000) / 1000})"><path d="M0 70 C-90 10 -110 -50 -70 -80 C-40 -100 -10 -86 0 -60 C10 -86 40 -100 70 -80 C110 -50 90 10 0 70Z" fill="${col}" stroke="${N}" stroke-width="9" stroke-linejoin="round"/><path d="M-56 -50 C-66 -34 -64 -16 -54 -4" stroke="#fff" stroke-width="10" fill="none" opacity=".5" stroke-linecap="round"/></g>`;
+export const heartIcon = (x, y, s) => `<g transform="translate(${f1(x)} ${f1(y)}) scale(${f1(s * 1.45 * 1000) / 1000})">${birdDefs()}${prettyHeart(1, { sw: 4 })}</g>`;
 // anatomical bird heart big (same drawing as inside the bird)
-export const birdHeart = (x, y, s) => `<g transform="translate(${f1(x)} ${f1(y)}) scale(${f1(s * 1000) / 1000}) rotate(-20)"><path d="M-10 -34 C-12 -54 8 -64 24 -54 L20 -44 C10 -50 2 -46 2 -34Z" fill="#d63a46" stroke="${N}" stroke-width="2.4"/><path d="M8 -36 C14 -50 30 -50 34 -40 L28 -34Z" fill="#7a8fd6" stroke="${N}" stroke-width="2.4"/>
-  <path d="M-2 -36 C24 -40 38 -18 32 6 C26 28 10 44 -2 52 C-16 42 -32 22 -34 0 C-36 -20 -24 -34 -2 -36Z" fill="${C.heart}" stroke="${N}" stroke-width="2.6"/><path d="M2 -30 C8 -6 6 22 -2 48" stroke="#b8283a" stroke-width="3" fill="none"/><path d="M-22 -18 C-28 -6 -28 8 -22 20" stroke="#fff" stroke-width="5" fill="none" opacity=".45" stroke-linecap="round"/></g>`;
+export const birdHeart = (x, y, s, k = 1) => `<g transform="translate(${f1(x)} ${f1(y)}) scale(${f1(s * 0.72 * 1000) / 1000}) rotate(-12)">${birdDefs()}${prettyHeart(k, { sw: 3.2 })}</g>`;
+// real photo in a white frame that pops in (symbol P_<name> comes from photos.mjs, injected once per page)
+export const photo = (name, x, y, w, h, k, { rot = -2, cap = '' } = {}) => { if (k <= 0) return '';
+  const id = 'ph' + name.replace(/\W/g, '') + Math.round(x);
+  return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(rot * k)}) scale(${f1(k * 1000) / 1000})"><rect x="${f1(-w / 2 - 22 + 14)}" y="${f1(-h / 2 - 22 + 18)}" width="${f1(w + 44)}" height="${f1(h + 44 + (cap ? 90 : 0))}" rx="22" fill="#000" opacity=".22"/>
+    <rect x="${f1(-w / 2 - 22)}" y="${f1(-h / 2 - 22)}" width="${f1(w + 44)}" height="${f1(h + 44 + (cap ? 90 : 0))}" rx="22" fill="#ffffff" stroke="${N}" stroke-width="7"/>
+    <clipPath id="${id}"><rect x="${f1(-w / 2)}" y="${f1(-h / 2)}" width="${f1(w)}" height="${f1(h)}" rx="10"/></clipPath>
+    <g clip-path="url(#${id})"><rect x="${f1(-w / 2)}" y="${f1(-h / 2)}" width="${f1(w)}" height="${f1(h)}" fill="#dfe6f0"/><use href="#P_${name}" x="${f1(-w / 2)}" y="${f1(-h / 2)}" width="${f1(w)}" height="${f1(h)}"/></g>
+    ${cap ? `<text x="0" y="${f1(h / 2 + 74)}" font-family="Black" font-size="58" fill="${N}" text-anchor="middle">${esc(cap)}</text>` : ''}</g>`; };
 // person silhouette (simple, friendly) ~ 300 px tall, feet at (x,y)
 export const kid = (x, y, s, c = '#ffffff') => `<g transform="translate(${f1(x)} ${f1(y)}) scale(${f1(s * 100) / 100})"><circle cx="0" cy="-250" r="52" fill="#ffd9b8" stroke="${N}" stroke-width="8"/><path d="M-70 -180 Q0 -200 70 -180 L80 -60 L50 -60 L50 0 L10 0 L10 -60 L-10 -60 L-10 0 L-50 0 L-50 -60 L-80 -60Z" fill="${c}" stroke="${N}" stroke-width="8" stroke-linejoin="round"/><circle cx="18" cy="-258" r="6" fill="${N}"/><circle cx="-14" cy="-258" r="6" fill="${N}"/><path d="M-14 -228 Q2 -216 18 -228" stroke="${N}" stroke-width="5" fill="none" stroke-linecap="round"/></g>`;
 // round gauge: value 0..1 (needle), label under
@@ -87,3 +120,22 @@ export const speed = (x, y, n = 4, len = 160, o = 0.8) => { let s = ''; for (let
 export const arrow = (x1, y1, x2, y2, { col = '#fff', w = 16, head = 44, dash = '' } = {}) => { const a = Math.atan2(y2 - y1, x2 - x1), hx = x2 - Math.cos(a) * head * 0.8, hy = y2 - Math.sin(a) * head * 0.8;
   return `<path d="M${f1(x1)} ${f1(y1)} L${f1(hx)} ${f1(hy)}" stroke="${col}" stroke-width="${w}" stroke-linecap="round" ${dash ? `stroke-dasharray="${dash}"` : ''}/><path d="M${f1(x2)} ${f1(y2)} L${f1(x2 - Math.cos(a - 0.5) * head)} ${f1(y2 - Math.sin(a - 0.5) * head)} L${f1(x2 - Math.cos(a + 0.5) * head)} ${f1(y2 - Math.sin(a + 0.5) * head)}Z" fill="${col}" stroke="${N}" stroke-width="5" stroke-linejoin="round"/>`; };
 export { uid };
+// box point -> screen for placeB(cx, cy, sc, .., { rot })
+export const bptB = (cx, cy, sc, rot, x, y) => { const r = rot * Math.PI / 180, dx = (x - 600) * sc, dy = (y - 300) * sc; return [cx + dx * Math.cos(r) - dy * Math.sin(r), cy + dx * Math.sin(r) + dy * Math.cos(r)]; };
+// local flower point -> screen for flowerT(x, y, s, { rot })
+export const fpt = (x, y, s, rot, lx, ly) => { const r = rot * Math.PI / 180; return [x + (lx * Math.cos(r) - ly * Math.sin(r)) * s, y + (lx * Math.sin(r) + ly * Math.cos(r)) * s]; };
+// meadow: rolling grass hill + round bushes along the bottom (drawn in two layers so stems can tuck in between)
+export const meadowBack = (t = 0) => { let s = `<path d="M-60 900 C300 840 620 880 960 860 C1300 840 1620 870 1980 850 L1980 1140 L-60 1140Z" fill="#7fcf6a" stroke="${N}" stroke-width="7"/>`;
+  seed(41); for (let i = 0; i < 9; i++) { const x = -40 + i * 250 + rnd() * 60, y = 880 + rnd() * 30, r = 90 + rnd() * 50;
+    s += `<g fill="#3fae5a" stroke="${N}" stroke-width="7"><circle cx="${f1(x - r * 0.6)}" cy="${f1(y + 10)}" r="${f1(r * 0.7)}"/><circle cx="${f1(x + r * 0.6)}" cy="${f1(y + 14)}" r="${f1(r * 0.75)}"/><circle cx="${f1(x)}" cy="${f1(y - r * 0.25)}" r="${f1(r)}"/></g>
+      <path d="M${f1(x - r * 0.5)} ${f1(y - r * 0.5)} q${f1(r * 0.3)} -${f1(r * 0.2)} ${f1(r * 0.6)} 0" stroke="#7fe08f" stroke-width="7" fill="none" stroke-linecap="round" opacity=".7"/>`; }
+  return s; };
+export const meadowFront = (t = 0) => { let s = `<path d="M-60 1000 C400 960 800 1000 1200 980 C1500 966 1750 990 1980 975 L1980 1140 L-60 1140Z" fill="#5cbf5f" stroke="${N}" stroke-width="7"/>`;
+  seed(77); for (let i = 0; i < 46; i++) { const x = rnd() * 1960, y = 990 + rnd() * 70, h = 26 + rnd() * 30, sw = 5 * Math.sin(t * 1.5 + i);
+    s += `<path d="M${f1(x)} ${f1(y)} q${f1(4 + sw)} -${f1(h * 0.6)} ${f1(sw * 1.5 + 8)} -${f1(h)}" stroke="#2f8f4a" stroke-width="5" fill="none" stroke-linecap="round"/>`; }
+  return s; };
+// stem from a flower's tube end down into the bushes, with two leaves
+export const stemTo = (x0, y0, x1, y1, sw = 14) => { const mx = x0 + (x1 - x0) * 0.3, my = y0 + (y1 - y0) * 0.22;
+  return `<path d="M${f1(x0)} ${f1(y0)} C${f1(x0 + 30)} ${f1(my)} ${f1(x1 - 30)} ${f1(my)} ${f1(x1)} ${f1(y1)}" stroke="${N}" stroke-width="${sw + 10}" fill="none" stroke-linecap="round"/><path d="M${f1(x0)} ${f1(y0)} C${f1(x0 + 30)} ${f1(my)} ${f1(x1 - 30)} ${f1(my)} ${f1(x1)} ${f1(y1)}" stroke="#2f9a4f" stroke-width="${sw}" fill="none" stroke-linecap="round"/>
+  <path d="M${f1(mx)} ${f1(my + 20)} C${f1(mx + 60)} ${f1(my - 30)} ${f1(mx + 130)} ${f1(my - 10)} ${f1(mx + 150)} ${f1(my + 30)} C${f1(mx + 100)} ${f1(my + 50)} ${f1(mx + 40)} ${f1(my + 48)} ${f1(mx)} ${f1(my + 20)}Z" fill="#3fbf6a" stroke="${N}" stroke-width="6"/>
+  <path d="M${f1(mx - 4)} ${f1(my + 70)} C${f1(mx - 60)} ${f1(my + 30)} ${f1(mx - 120)} ${f1(my + 50)} ${f1(mx - 136)} ${f1(my + 86)} C${f1(mx - 90)} ${f1(my + 104)} ${f1(mx - 36)} ${f1(my + 98)} ${f1(mx - 4)} ${f1(my + 70)}Z" fill="#3fbf6a" stroke="${N}" stroke-width="6"/>`; };

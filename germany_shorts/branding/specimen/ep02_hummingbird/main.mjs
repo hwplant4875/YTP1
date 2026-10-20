@@ -3,6 +3,8 @@ import { sceneAt, TOTAL, SC } from './tl.mjs';
 import { W, H, f1, eo } from '/tmp/claude-0/sp2/eng2.mjs';
 import { bgAir } from '/tmp/claude-0/hb/bird.mjs';
 export { FONTS, W, H } from '/tmp/claude-0/sp2/eng2.mjs';
+import { PHOTO_DEFS } from './photos.mjs';
+export const EXTRA = PHOTO_DEFS();
 export { TOTAL };
 const F = { ...S1, ...S2, ...S3 };
 export const BG = { h20: 'night', h21: 'night' };

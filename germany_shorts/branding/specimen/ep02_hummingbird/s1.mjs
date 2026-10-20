@@ -1,26 +1,29 @@
 import { K, f1, clamp, sm, eo, pop, lerp, seed, rnd, big, tag, fade, xfade, count, cross, esc } from '/tmp/claude-0/sp2/eng2.mjs';
 import { at } from './tl.mjs';
-import { birdSolid, birdInside, wings, placeB, toB, PT, C, BIRD, fly, perched, branch, flowerT, blossom, coin, scale, bee, heartIcon, birdHeart, kid, gauge, readout, card, ecg, arrow, bobB, uid } from './ha.mjs';
+import { birdSolid, birdInside, wings, placeB, toB, PT, C, BIRD, fly, perched, perchedInner, standing, standB, FOOT_Y, branch, flowerT, blossom, coin, scale, bee, heartIcon, birdHeart, kid, gauge, readout, card, ecg, arrow, bobB, uid, photo, WING, SHOULDER } from './ha.mjs';
 import { landPath, proj } from './maps.mjs';
 const N = K.navy;
 
-// 01 opened hummingbird hovering, labels on from frame 0
+// 01 opened hummingbird hovering, labels on from frame 0; wings start as a 50/s blur and slow down to slow motion
+const r01 = (t, r0 = 50, r1 = 1.1, t0 = 0.5, tau = 0.6) => t < t0 ? r0 : r1 + (r0 - r1) * Math.exp(-(t - t0) / tau);
+const ph01 = (t, r0 = 50, r1 = 1.1, t0 = 0.5, tau = 0.6) => t < t0 ? r0 * t : r0 * t0 + r1 * (t - t0) + (r0 - r1) * tau * (1 - Math.exp(-(t - t0) / tau));
 export function h01(t) {
   const cx = 900, cy = 600 + bobB(t, 8, 1.6), sc = 1.5, P = n => toB(cx, cy, sc, ...PT[n]);
   const te = at('h01', 'powerful engines'), hb = t > te ? 1 + 0.18 * Math.max(0, Math.sin(t * 14)) : 1;
-  let s = placeB(cx, cy, sc, birdInside({ tongue: 1, heartK: hb, glow: t > te ? 'heart' : null }) + wings(t, { rate: 1.1, amp: 22, blur: 0, bones: 1 }));
-  s += tag(...P('hyoid'), 1500, 170, 'TONGUE', t, -1, { col: K.yellow }) + tag(...P('muscle'), 640, 990, 'MUSCLE', t, -1) + tag(...P('heart'), 1460, 930, 'HEART', t, -1, { col: K.red, txt: '#fff' });
+  const rate = r01(t), amp = lerp(26, 52, Math.min(1, (rate - 1.1) / 20));
+  let s = placeB(cx, cy, sc, birdInside({ tongue: 1, heartK: hb, glow: t > te ? 'heart' : null }) + wings(t, { rate, phase: ph01(t), amp, blur: rate > 3 ? 4 : 0, bones: 1 }));
+  s += tag(...P('beak'), 1500, 170, 'TONGUE', t, -1, { col: K.yellow }) + tag(...P('muscle'), 640, 990, 'MUSCLE', t, -1) + tag(...P('heart'), 1460, 930, 'HEART', t, -1, { col: K.red, txt: '#fff' });
   return s;
 }
 
-// 02 three grams: bird lands on a kitchen scale, then a coin weighs the same
+// 02 three grams: bird lands on a kitchen scale (toes on the pan), then a coin weighs the same
 export function h02(t) {
   const tg = at('h02', 'three grams'), tc = at('h02', 'single coin') - 0.3, tr = at('h02', 'ruby-throated');
-  const land = eo(0.2, 1.6, t), sx = 960, sy = 740;
-  const bx = lerp(1500, sx + 20, land), by = lerp(330, sy - 152, land);
-  const rd = t < tg - 0.6 ? (t > 1.6 ? '0.0 G' : '0.0 G') : `${(3 * eo(tg - 0.6, tg + 0.2, t)).toFixed(1)} G`;
+  const land = eo(0.2, 1.6, t), sx = 960, sy = 740, pan = sy + 9, bs = 0.42, gy = pan - (FOOT_Y - 300) * bs;
+  const bx = lerp(1500, sx + 20, land), by = lerp(330, gy, land);
+  const rd = t < tg - 0.6 ? '0.0 G' : `${(3 * eo(tg - 0.6, tg + 0.2, t)).toFixed(1)} G`;
   const A = (shift = 0) => { let s = scale(sx - shift, sy, rd);
-    s += land < 1 ? fly(bx - shift, by, 0.42, t, { rate: 7, amp: 50 }) : perched(bx - shift, by + 4, 0.42, {});
+    s += land < 1 ? fly(bx - shift, by, bs, t, { rate: 7, amp: 50 }) : standing(bx - shift, pan, bs, {});
     return s; };
   let s;
   if (t < tc) { s = A(); if (t < tg - 0.1) s += tag(bx + 40, by - 120, 960, 340, 'RUBY-THROATED', t, tr, { col: '#fff', line: false, size: 64 }); }
@@ -42,17 +45,22 @@ export function h03(t) {
     const [x, y] = P(-79.5, 21.8), k = pop(at('h03', 'lives in'), t);
     if (k > 0) s += `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(90 * k)}" fill="none" stroke="${K.red}" stroke-width="12"/>` + tag(x, y - 90, x, y - 250, 'CUBA', t, at('h03', 'lives in') + 0.1, { col: K.red, txt: '#fff', line: false });
     return s; };
-  const B = () => { const cx = 780, cy = 560, sc = 1.2;
-    // bee hummingbird: blue-green back, pink-red head
-    let s = placeB(cx, cy + bobB(t, 6), sc, birdSolid() + `<path d="M652 146 C668 126 712 122 734 140 C748 152 750 172 746 186 L740 210 C720 222 690 220 670 206 C652 192 644 166 652 146Z" fill="#ff3d6e" stroke="${N}" stroke-width="8"/><circle cx="714" cy="168" r="13" fill="${N}"/><circle cx="718" cy="164" r="4" fill="#fff"/>` + wings(t, { rate: 9, amp: 50, blur: 3 }));
-    s += bee(1560, 600, 1.0, t);
-    const x0 = cx + (214 - 600) * sc, x1 = cx + (990 - 600) * sc, ry = 930, rk = eo(tf - 0.2, tf + 0.6, t);
+  const B = () => { const cx = 780, cy = 640, sc = 1.15;
+    let s = placeB(cx, cy + bobB(t, 6), sc, birdSolid() + wings(t, { rate: 9, amp: 50, blur: 3 }));
+    s += bee(1560, 660, 1.0, t);
+    const x0 = cx + (214 - 600) * sc, x1 = cx + (990 - 600) * sc, ry = 925, rk = eo(tf - 0.2, tf + 0.6, t);
     if (rk > 0) { const xe = lerp(x0, x1, rk); s += `<path d="M${f1(x0)} ${ry} L${f1(xe)} ${ry}" stroke="#fff" stroke-width="10" stroke-linecap="round"/><path d="M${f1(x0)} ${ry - 26} L${f1(x0)} ${ry + 26} M${f1(xe)} ${ry - 26} L${f1(xe)} ${ry + 26}" stroke="#fff" stroke-width="10" stroke-linecap="round"/>`; }
-    s += big((x0 + x1) / 2, ry - 70, '5 CM', t, tf + 0.3, { size: 100, fill: N, stroke: '#fff', sw: 16 });
-    s += tag(1560, 560, 1560, 400, 'BEE', t, tb + 0.6, { col: K.yellow, line: false, size: 64 });
-    s += big(960, 150, 'SMALLEST BIRD', t, ts, { size: 150, fill: '#fff', stroke: N, sw: 18 });
+    s += big((x0 + x1) / 2, ry + 78, '5 CM', t, tf + 0.3, { size: 100, fill: N, stroke: '#fff', sw: 16 });
+    s += tag(1560, 620, 1560, 470, 'BEE', t, tf - 0.2, { col: K.yellow, line: false, size: 64 });
     return s; };
-  return t < tb - 0.3 ? A() : xfade(t, tb - 0.3, 0.5, A, B);
+  // photo popup from the name until the size: graphics shrink away behind it, words stay on top
+  const p0 = tb + 0.1, p1 = tf - 0.35, pk = t < p1 ? eo(p0, p0 + 0.45, t) : 1 - eo(p1, p1 + 0.35, t), zk = 1 - 0.35 * pk;
+  const G = t < tb - 0.3 ? A() : xfade(t, tb - 0.3, 0.5, A, B);
+  let s = pk > 0 ? `<g transform="translate(960 560) scale(${f1(zk * 1000) / 1000}) translate(-960 -560)" opacity="${f1(1 - 0.5 * pk)}">${G}</g>` : G;
+  s += photo('bee', 960, 540, 1100, 620, pk);
+  if (pk > 0) s += `<g opacity="${f1(pk)}">${big(960, 990, 'BEE HUMMINGBIRD', t, p0, { size: 100, fill: '#fff', stroke: N, sw: 16 })}</g>`;
+  s += big(960, 150, 'SMALLEST BIRD', t, ts, { size: 150, fill: '#fff', stroke: N, sw: 18 });
+  return s;
 }
 
 // 04 wingbeats: slow at first, counter to 50 and 80, then blur and a hum
@@ -73,26 +81,36 @@ export function h04(t) {
 
 // lemniscate point, u in [0,1)
 const lem = (u, cx, cy, a, b) => { const th = u * Math.PI * 2, d = 1 + Math.sin(th) ** 2; return [cx + a * Math.cos(th) / d, cy + b * Math.sin(th) * Math.cos(th) / d]; };
-// 05 figure eight traced by the wing tip
+// box point -> screen for placeB(cx, cy, sc, .., { rot })
+const bpt = (cx, cy, sc, rot, x, y) => { const r = rot * Math.PI / 180, dx = (x - 300 - 300) * sc, dy = (y - 300) * sc; return [cx + dx * Math.cos(r) - dy * Math.sin(r), cy + dx * Math.sin(r) + dy * Math.cos(r)]; };
+const WTIP = [-262, -222], WLEN = Math.hypot(...WTIP), WANG = Math.atan2(WTIP[1], WTIP[0]);
+// a wing drawn from shoulder S so its tip sits on P; flip in -1..1 mirrors it across its long axis (the twist)
+const wingTo = (S, P, flip, { top = C.wing2, under = '#eef7f1' } = {}) => {
+  const L = Math.hypot(P[0] - S[0], P[1] - S[1]), ang = Math.atan2(P[1] - S[1], P[0] - S[0]), fy = Math.sign(flip || 1) * Math.max(0.08, Math.abs(flip));
+  const col = flip >= 0 ? top : under;
+  return `<g transform="translate(${f1(S[0])} ${f1(S[1])}) rotate(${f1(ang * 180 / Math.PI)}) scale(${f1(L / WLEN * 1000) / 1000} ${f1(fy * 1000) / 1000}) rotate(${f1(-WANG * 180 / Math.PI)})">
+    <path d="${WING}" fill="${col}" stroke="${N}" stroke-width="7" stroke-linejoin="round"/>${flip >= 0 ? `<path d="M0 0 C4 -30 -10 -60 -40 -84 C-36 -50 -26 -24 -14 6Z" fill="${C.back}"/>` : ''}
+    ${[0, 1, 2, 3, 4, 5, 6].map(i => { const u = i / 6; return `<path d="M${f1(-40 - u * 150)} ${f1(-72 - u * 112)} L${f1(-96 - u * 166)} ${f1(-96 - u * 124)}" stroke="#5f678c" stroke-width="3" opacity=".5" stroke-linecap="round"/>`; }).join('')}</g>`; };
+// 05 figure eight: the wing tip really travels the sideways 8, flipping over at each end
 export function h05(t) {
   const tf = at('h05', 'The wings sweep'), t8 = at('h05', 'figure eight');
-  const cx = 1380, cy = 620, sc = 1.15;
+  const cx = 1010, cy = 650, sc = 1.1, rot = -28, S = bpt(cx, cy, sc, rot, ...SHOULDER);
   let s = '';
-  const per = 1.6, u = ((t - tf) / per) % 1;
-  // up-and-down arrow crossed out first
-  if (t < tf) { s += placeB(cx, cy, sc, birdSolid() + wings(t, { rate: 1.3, amp: 55, blur: 0 }), { rot: -20 });
-    s += arrow(500, 800, 500, 240, { w: 30, head: 70 }) + arrow(500, 240, 500, 800, { w: 30, head: 70 }) + fade(500, 900, 'UP + DOWN?', t, 0.2, { size: 70, fill: N }) + cross(500, 520, 190, t, 1.0); return s; }
-  const ex = 520, ey = 500, A = 360, B = 260;
-  // full trail drawn progressively
-  const prog = clamp((t - tf) / per); let d = '';
-  for (let i = 0; i <= 120 * prog; i++) { const [x, y] = lem(i / 120, ex, ey, A, B); d += (i ? 'L' : 'M') + f1(x) + ' ' + f1(y); }
+  if (t < tf - 0.2) { s += placeB(cx, cy, sc, birdSolid() + wings(t, { rate: 1.3, amp: 55, blur: 0 }), { rot });
+    s += arrow(1500, 800, 1500, 260, { w: 30, head: 70 }) + arrow(1500, 260, 1500, 800, { w: 30, head: 70 });
+    s += fade(1500, 900, 'UP + DOWN?', t, 0.2, { size: 70, fill: N }) + cross(1500, 530, 190, t, 1.0); return s; }
+  const ex = S[0] - 30, ey = S[1] - 300, A = 430, B = 180, per = 1.7, u = Math.max(0, t - tf) / per;
+  const prog = clamp(u); let d = '';
+  for (let i = 0; i <= 160 * prog; i++) { const [x, y] = lem(i / 160 + 0.25, ex, ey, A, B); d += (i ? 'L' : 'M') + f1(x) + ' ' + f1(y); }
   s += `<path d="${d}" stroke="#fff" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>`;
-  // wing angle follows the dot's horizontal swing
-  const [dx, dy] = lem(t > tf ? u : 0, ex, ey, A, B), wa = lerp(-40, 40, (dx - (ex - A)) / (2 * A));
-  s += placeB(cx, cy, sc, birdSolid() + wings(0, { still: wa, blur: 0 }), { rot: -20 });
-  s += `<circle cx="${f1(dx)}" cy="${f1(dy)}" r="26" fill="${K.yellow}" stroke="${N}" stroke-width="8"/>`;
-  s += fade(ex - A - 30, ey + 330, 'FORWARD', t, tf + 0.3, { size: 64, fill: N, anchor: 'start' }) + fade(ex + A + 30, ey + 330, 'BACK', t, tf + 0.6, { size: 64, fill: N, anchor: 'end' });
-  s += big(960, 140, 'FIGURE 8', t, t8, { size: 170, fill: '#fff', stroke: N, sw: 18 });
+  const P = lem(u + 0.25, ex, ey, A, B), Pn = lem(u + 0.25 + 0.004, ex, ey, A, B), vx = (Pn[0] - P[0]) / (A * 0.025);
+  const flip = clamp(vx * 1.6, -1, 1);
+  s += placeB(cx, cy, sc, birdSolid(), { rot }) + wingTo(S, P, flip);
+  s += `<circle cx="${f1(P[0])}" cy="${f1(P[1])}" r="24" fill="${K.yellow}" stroke="${N}" stroke-width="8"/>`;
+  s += arrow(ex + A + 60, ey + 60, ex + A + 230, ey + 60, { col: '#fff', w: 14, head: 40 }) + fade(ex + A + 60, ey - 10, 'FORWARD', t, tf + 0.2, { size: 64, fill: N, anchor: 'start' });
+  s += arrow(ex - A - 60, ey + 60, ex - A - 230, ey + 60, { col: '#fff', w: 14, head: 40 }) + fade(ex - A - 60, ey - 10, 'BACK', t, tf + 0.5, { size: 64, fill: N, anchor: 'end' });
+  if (Math.abs(flip) < 0.6 && t > tf + 0.3) s += `<g opacity="${f1(1 - Math.abs(flip) / 0.6)}">${big(P[0], P[1] - 75, 'FLIP!', t, -1, { size: 60, fill: K.yellow, stroke: N, sw: 10 })}</g>`;
+  s += big(960, 130, 'FIGURE 8', t, t8, { size: 170, fill: '#fff', stroke: N, sw: 18 });
   return s;
 }
 
@@ -113,12 +131,19 @@ export function h06(t) {
     s += fade(250, 360, 'BACK', t, tt, { size: 70, fill: N, anchor: 'start' }) + fade(1670, 360, 'FORWARD', t, tt, { size: 70, fill: N, anchor: 'end' });
     const tilt = -16 * Math.sign(fl || 1) * Math.min(1, Math.abs(fl) * 2), sy = Math.max(0.12, Math.abs(fl)) * Math.sign(fl || 1);
     const top = 'M-260 0 C-200 -70 180 -58 260 0 Z', bot = 'M-260 0 C-180 34 180 30 260 0 Z';
-    s += `<g transform="translate(${f1(x)} 520) rotate(${f1(tilt)}) scale(1 ${f1(sy * 100) / 100})"><path d="${top}" fill="#ffffff" stroke="${N}" stroke-width="9" stroke-linejoin="round"/><path d="${bot}" fill="${C.back}" stroke="${N}" stroke-width="9" stroke-linejoin="round"/></g>`;
+    s += `<g transform="translate(${f1(x)} 520) rotate(${f1(tilt)}) scale(1.3 ${f1(sy * 130) / 100})"><path d="${top}" fill="#ffffff" stroke="${N}" stroke-width="9" stroke-linejoin="round"/><path d="${bot}" fill="${C.back}" stroke="${N}" stroke-width="9" stroke-linejoin="round"/></g>`;
     // curved twist arrow while flipping
     if (t < tfw - 0.4 || (t > tbk - 0.8 && t < tbk + 0.2)) s += `<path d="M${f1(x - 120)} 400 A140 110 0 0 1 ${f1(x + 120)} 400" fill="none" stroke="${K.yellow}" stroke-width="14" stroke-linecap="round"/><path d="M${f1(x + 150)} 392 L${f1(x + 108)} 372 L${f1(x + 112)} 420Z" fill="${K.yellow}" stroke="${N}" stroke-width="4"/>`;
-    if (t > tfw - 0.4) for (let i = -1; i <= 1; i++) { const yy = 640 + ((t * 200 + i * 60) % 120); s += arrow(x + i * 150, yy, x + i * 150, yy + 170, { col: '#ffffff', w: 18, head: 50 }); }
+    // air arrives flat from the side the wing moves towards, hits the tilted blade and is thrown straight down
+    if (t > tfw - 0.4) { const dir = t > tbk - 0.4 ? -1 : 1, ak = sm(tfw - 0.4, tfw + 0.2, t) * (t > tbk - 0.7 && t < tbk - 0.2 ? 1 - sm(tbk - 0.7, tbk - 0.5, t) + sm(tbk - 0.4, tbk - 0.2, t) : 1);
+      for (let i = 0; i < 3; i++) { const yy = 556 + i * 46, xd = x + dir * (150 - i * 150), R = 80 + i * 36, x0 = x + dir * 980;
+        const d = `M${f1(x0)} ${yy} L${f1(xd + dir * R)} ${yy} Q${f1(xd)} ${yy} ${f1(xd)} ${yy + R} L${f1(xd)} 880`;
+        s += `<g opacity="${f1(ak)}"><path d="${d}" stroke="#ffffff" stroke-width="22" fill="none" opacity=".3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="${d}" stroke="#ffffff" stroke-width="22" fill="none" stroke-dasharray="50 50" stroke-dashoffset="${f1(-t * 260 - i * 30)}" stroke-linecap="round"/>
+          <path d="M${f1(xd - 32)} 856 L${f1(xd + 32)} 856 L${f1(xd)} 916Z" fill="#fff" stroke="${N}" stroke-width="5" stroke-linejoin="round"/></g>`; }
+    }
     s += t > tbk - 0.4 ? arrow(x + 300, 300, x + 80, 300, { w: 16, col: K.yellow }) : t > tfw - 0.4 ? arrow(x - 300, 300, x - 80, 300, { w: 16, col: K.yellow }) : '';
-    s += t < tbk ? fade(960, 960, 'AIR DOWN', t, tfw, { size: 110, fill: '#fff', stroke: N, sw: 14 }) : big(960, 960, 'AIR DOWN AGAIN', t, tbk, { size: 110, fill: '#fff', stroke: N, sw: 14 });
+    s += t < tbk ? fade(960, 1000, 'AIR DOWN', t, tfw, { size: 100, fill: '#fff', stroke: N, sw: 14 }) : big(960, 1000, 'AIR DOWN AGAIN', t, tbk, { size: 100, fill: '#fff', stroke: N, sw: 14 });
     s += big(960, 150, 'TWIST!', t, tt, { size: 150, fill: K.yellow, stroke: N, sw: 18 });
     return s; };
   return t < tt - 0.5 ? A() : xfade(t, tt - 0.5, 0.6, A, B);
@@ -162,9 +187,9 @@ export function h09(t) {
   const A = () => { const z = eo(0, 1.2, t), cx = lerp(960, 700, z), cy = lerp(560, 540, z), sc = lerp(1.4, 2.3, z);
     const hk = 1 + (t > th ? 0.5 * sm(th, th + 0.5, t) : 0) + 0.12 * Math.max(0, Math.sin(t * 12));
     const P = toB(cx, cy, sc, ...PT.heart);
-    return placeB(cx, cy, sc, birdInside({ heartK: hk, glow: 'heart' })) + tag(...P, 1560, 360, 'HEART', t, at('h09', 'the heart'), { col: K.red, txt: '#fff' }) + big(1560, 700, 'HUGE!', t, th, { size: 130, fill: '#fff', stroke: N, sw: 16 }); };
+    return placeB(cx, cy, sc, birdInside({ heartK: hk, glow: 'heart' })) + tag(...P, 1560, 500, 'HEART', t, at('h09', 'the heart'), { col: K.red, txt: '#fff' }) + big(1560, 720, 'HUGE!', t, th, { size: 130, fill: '#fff', stroke: N, sw: 16 }); };
   const B = () => { const beat = 1 + 0.16 * Math.pow(Math.max(0, Math.sin(t * Math.PI * 2 * 5)), 3);
-    let s = birdHeart(480, 470, 4.2 * beat);
+    let s = birdHeart(480, 450, 4.2, beat);
     s += ecg(120, 900, 800, t, 5, { amp: 90 });
     s += readout(480, 960, count(1200, t, t12, 1.4), 'BEATS A MINUTE', { size: 110 });
     if (t > ty - 0.3) { const k = sm(ty - 0.3, ty + 0.3, t), sb = 1 + 0.12 * Math.pow(Math.max(0, Math.sin(t * Math.PI * 2 * 1.17)), 3);

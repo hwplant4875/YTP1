@@ -12,7 +12,7 @@ const D = 'mus/sfx_ding.mp3', P = 'mus/sfx_pop.mp3';
  ['h18', 'memory'], ['h19', 'ultraviolet'], ['h19', 'patterns'], ['h22', 'tiny'], ['h22', 'it flies'], ['h23', 'no red paint'], ['h23', 'tiny layers'], ['h23', 'Turn the bird'], ['h25', 'doubles its weight'], ['h25', 'nonstop'],
  ['h27', 'half a walnut'], ['h27', 'soft plant fluff'], ['h27', 'spider silk'], ['h28', 'jelly bean'], ['h29', 'only in the Americas'], ['h30', 'beak longer'], ['h31', 'Wings that spin'], ['h31', 'A heart'], ['h31', 'A brushy tongue'], ['h31', 'super memory'], ['h31', 'switch off'], ['h31', 'What should we open']].forEach(([id, p]) => E(P, id, p, 0.28, 0.1));
 E('mus/sfx_hum.mp3', 'h04', 'blur', 0.22, -0.5); E('mus/sfx_hum.mp3', 'h04', 'humming sound', 0.28, -0.2);
-E('mus/sfx_heart.mp3', 'h09', 'twelve hundred', 0.22, -0.3); E('mus/sfx_lick.mp3', 'h14', 'And it does this', 0.25); E('mus/sfx_lick.mp3', 'h13', 'snap shut', 0.25);
-E('mus/sfx_zzz.mp3', 'h20', 'deep sleep', 0.2, 0.6); E('mus/sfx_chirp.mp3', 'h24', 'loud chirp', 0.3, 0.05); E('mus/sfx_whoosh.mp3', 'h24', 'dives straight down', 0.35, 0.2);
+E('mus/sfx_heart.mp3', 'h09', 'twelve hundred', 0.22, -0.3); E('mus/sfx_lick.mp3', 'h14', 'And it does this', 0.1); E('mus/sfx_lick.mp3', 'h13', 'snap shut', 0.1);
+E('mus/sfx_sleepy0.mp3', 'h20', 'deep sleep', 0.14, 0.6); E('mus/sfx_chirp.mp3', 'h24', 'loud chirp', 0.3, 0.05); E('mus/sfx_whoosh.mp3', 'h24', 'dives straight down', 0.35, 0.2);
 fs.writeFileSync('mixplan.json', JSON.stringify({ total: TOTAL, voice, ev }));
 console.log(voice.length, ev.length, TOTAL);

@@ -1,5 +1,6 @@
 import { K, W, H, f1, clamp, sm, eo, pop, lerp, seed, rnd, big, tag, place, toScr, sharkSolid, sharkInside, sharkXray, sharkOpen, bob, PT, icon, ICON, cross, count, SHARK, fade, xfade } from './eng2.mjs';
 import { at } from './tl2.mjs';
+import { track, bodyMap, topShark, topFish } from './topshark.mjs';
 
 // 01 opened shark, frame 0 complete
 export function n01(t) {
@@ -54,12 +55,23 @@ export function n03(t) {
   return t < tn - 0.6 ? A() : xfade(t, tn - 0.6, 0.6, A, B);
 }
 
-// 04 light + bendy: the shark makes a tight U-turn
+// 04 light + bendy: seen from above, the shark bends its whole body as it hunts a darting fish
+const TR4 = track([[-700, 780], [-200, 720], [300, 660], [700, 580], [1100, 590], [1300, 700], [1560, 740], [1710, 640], [1630, 510], [1380, 490], [1040, 545], [720, 620], [430, 680], [400, 760], [640, 790], [960, 730], [1250, 640], [1500, 600], [1900, 600]]);
 export function n04(t) {
-  const u = ((t * 0.3) % 1), a = Math.PI * 2 * u, R = 260, cx = 960, cy = 500;
-  let s = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#fff" stroke-width="6" stroke-dasharray="4 26" stroke-linecap="round" opacity=".6"/>`;
-  const x = cx + Math.cos(a) * R, y = cy + Math.sin(a) * R, rot = a * 180 / Math.PI + 90;
-  s += place(x, y, 0.62, sharkSolid('#ffffff', K.navy, 11), { rot });
+  const sc = 0.66, s0 = 1250, v = 540, tc = 6.25;
+  const lunge = 140 * eo(4.6, tc, t), sh = s0 + v * t + lunge;
+  const m = bodyMap(TR4, sh, sc, t * Math.PI * 2 * 1.9, 46 + 16 * sm(4.4, 5.2, t));
+  let s = '';
+  // wake ripples left behind the tail
+  for (let i = 1; i <= 6; i++) { const ss = sh - 1000 * sc - i * 60, p = TR4.at(ss), age = i / 6;
+    s += `<circle cx="${f1(p[0])}" cy="${f1(p[1])}" r="${f1(14 + age * 40)}" fill="none" stroke="#fff" stroke-width="4" opacity="${f1(0.35 * (1 - age))}"/>`; }
+  // fleeing fish: ahead on the same path, jinking side to side, caught at tc
+  if (t < tc) { const lead = 420 - 390 * eo(4.6, tc, t) + 30 * Math.sin(t * 3), fs = sh + lead, p = TR4.at(fs), d = TR4.dir(fs), j = 28 * Math.sin(t * 7);
+    s += topFish(p[0] - d[1] * j, p[1] + d[0] * j, d, t, 1.4); }
+  const bite = t > tc ? Math.exp(-(t - tc) * 4) : 0;
+  s += topShark(m, { sw: 6 / sc * 0.55, bite });
+  if (t > tc) { const p = TR4.at(sh); for (let i = 0; i < 7; i++) { const a = i * 0.9, r = (t - tc) * 160 + i * 6, o = clamp(1 - (t - tc) * 1.6, 0, 1);
+    s += `<circle cx="${f1(p[0] + Math.cos(a) * r)}" cy="${f1(p[1] + Math.sin(a) * r)}" r="${f1(6 + i % 3 * 4)}" fill="none" stroke="#fff" stroke-width="3" opacity="${f1(o)}"/>`; } }
   s += big(330, 250, 'LIGHT', t, at('n04', 'lighter'), { size: 150, fill: K.yellow, stroke: K.navy, sw: 14 });
   s += big(1590, 250, 'BENDY', t, at('n04', 'bend'), { size: 150, fill: K.yellow, stroke: K.navy, sw: 14, rot: -6 });
   s += big(960, 1010, 'FAST TURNS', t, at('n04', 'turn quickly'), { size: 110 });
