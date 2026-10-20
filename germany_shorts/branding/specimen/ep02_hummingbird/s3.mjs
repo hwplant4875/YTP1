@@ -140,7 +140,7 @@ export function h25(t) {
     const pk = t > tr - 0.2 && t < td - 0.6 ? pop(tr - 0.2, t) * (1 - sm(td - 1.0, td - 0.6, t)) : 0;
     const rk = sm(td - 1.2, td - 0.8, t);
     if (rk > 0) s += `<g opacity="${f1(rk)}">${readout(1600, 470, `${(3 + 3 * fat * 0.95).toFixed(1)} G`, '', { size: 130 })}</g>`;
-    s += big(1620, 880, 'ALMOST x2', t, td, { size: 100, fill: K.yellow, stroke: N, sw: 14 });
+    s += big(1660, 900, 'ALMOST x2', t, td, { size: 96, fill: K.yellow, stroke: N, sw: 14 });
     s += photo('ruby', 1420, 470, 760, 500, pk, { cap: 'RUBY-THROATED' });
     s += big(960, 130, 'FUEL UP!', t, 0.3, { size: 130, fill: '#fff', stroke: N, sw: 16 });
     return s; };
@@ -239,6 +239,8 @@ export function h28(t) {
     let eggs = ''; for (const [x, y, r] of [[-38, -66, -10], [40, -64, 12]]) eggs += `<ellipse cx="${x}" cy="${y}" rx="28" ry="38" transform="rotate(${r} ${x} ${y})" fill="#fffdf6" stroke="${N}" stroke-width="4"/><ellipse cx="${x - 8}" cy="${y - 14}" rx="7" ry="11" fill="#fff" transform="rotate(${r} ${x} ${y})"/>`;
     s += nest(640, 760, 2.1, { inner: eggs });
     s += `<text x="640" y="330" font-family="Black" font-size="120" fill="#fff" stroke="${N}" stroke-width="14" paint-order="stroke" text-anchor="middle">2 EGGS</text>`;
+    const nk = t < tj - 0.2 ? pop(0.3, t) * (1 - sm(tj - 0.6, tj - 0.2, t)) : 0;
+    s += photo('nest', 1420, 560, 520, 520, nk, { rot: 2, cap: 'REAL NEST' });
     if (t > tj - 0.3) { const k = pop(tj - 0.3, t); s += `<g transform="translate(1420 640) scale(${f1(k * 100) / 100})">${bean(-80, 0, -24, '#ff4f7b')}${bean(80, 6, 18, '#7a5bff')}</g>` + label(1420, 830, 'JELLY BEANS', 70) + big(1100, 690, '=', t, tj, { size: 160, fill: N }); }
     return s; };
   const B = () => { let s = branch(60, 1500, 900, 32, { leaves: 1 });

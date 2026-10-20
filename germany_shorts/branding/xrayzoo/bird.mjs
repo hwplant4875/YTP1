@@ -10,12 +10,14 @@ export const C = { back: '#2fbf71', back2: '#1f8f55', backHi: '#5fe39b', belly: 
 const N = K.navy;
 
 // air background: warm orange sky with soft drifting clouds
+// AIR (alt) pale sky blue is the default; SKY=orange restores the old orange sky
+const SKY = (typeof process !== 'undefined' && process.env.SKY === 'orange') ? ['#ffc46b', '#ff8f45'] : ['#e3f4ff', '#b9e1f7'];
 export const bgAir = (t, v = 'air') => {
-  const g = v === 'night' ? ['#1d2a5c', '#0b1433'] : v === 'dusk' ? ['#ffb36b', '#ff6f61'] : ['#ffc46b', '#ff8f45'];
+  const g = v === 'night' ? ['#1d2a5c', '#0b1433'] : v === 'dusk' ? ['#ffb36b', '#ff6f61'] : SKY;
   let s = `<defs><linearGradient id="bgA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${g[0]}"/><stop offset="1" stop-color="${g[1]}"/></linearGradient></defs><rect width="${W}" height="${H}" fill="url(#bgA)"/>`;
   if (v === 'night') { seed(9); for (let i = 0; i < 40; i++) { const x = rnd() * W, y = rnd() * H * 0.8, r = 2 + rnd() * 3; s += `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r)}" fill="#fff" opacity="${f1(0.3 + 0.5 * Math.abs(Math.sin(t + i)))}"/>`; } return s; }
   seed(31); for (let i = 0; i < 6; i++) { const w = 260 + rnd() * 220, y = 80 + rnd() * 880, x = ((rnd() * (W + 600) + t * (12 + rnd() * 10)) % (W + 600)) - 300;
-    s += `<g opacity="0.16" fill="#fff"><ellipse cx="${f1(x)}" cy="${f1(y)}" rx="${f1(w / 2)}" ry="${f1(w / 7)}"/><ellipse cx="${f1(x - w / 6)}" cy="${f1(y - w / 9)}" rx="${f1(w / 5)}" ry="${f1(w / 6)}"/><ellipse cx="${f1(x + w / 8)}" cy="${f1(y - w / 8)}" rx="${f1(w / 4.5)}" ry="${f1(w / 5)}"/></g>`; }
+    s += `<g opacity="${SKY[0] === '#e3f4ff' ? 0.75 : 0.16}" fill="#fff"><ellipse cx="${f1(x)}" cy="${f1(y)}" rx="${f1(w / 2)}" ry="${f1(w / 7)}"/><ellipse cx="${f1(x - w / 6)}" cy="${f1(y - w / 9)}" rx="${f1(w / 5)}" ry="${f1(w / 6)}"/><ellipse cx="${f1(x + w / 8)}" cy="${f1(y - w / 8)}" rx="${f1(w / 4.5)}" ry="${f1(w / 5)}"/></g>`; }
   return s;
 };
 
