@@ -1,0 +1,286 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 84,
+ "capY": 960,
+ "title": {
+  "text": "Nobody was ready 😭",
+  "y": 190,
+  "size": 60
+ },
+ "look": {
+  "contrast": 1.12,
+  "sat": 1.15,
+  "black": 10,
+  "glow": 0.15,
+  "sharpen": 0.6,
+  "vignette": "PI/5"
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7503648632537632031.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "crop": [
+    0,
+    630,
+    1080,
+    1290
+   ],
+   "in": 3.3,
+   "out": 6.27,
+   "sfx": [
+    {
+     "at": 4.12,
+     "src": "/home/user/rs_work/sfx/impact_metal.mp3",
+     "vol": 0.5
+    },
+    {
+     "at": 6.08,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.6
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/crying-cat__ufPsZFFomo4__crying-cat-sad-cat.mp4",
+   "dur": 0.75,
+   "cap": null
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7503648632537632031.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "crop": [
+    0,
+    630,
+    1080,
+    1290
+   ],
+   "in": 3.95,
+   "out": 6.27,
+   "reverse": 4.0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7503648632537632031.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "crop": [
+    0,
+    630,
+    1080,
+    1290
+   ],
+   "in": 3.95,
+   "out": 6.9,
+   "speed": [
+    [
+     3.95,
+     1.0
+    ],
+    [
+     4.05,
+     0.4
+    ],
+    [
+     4.7,
+     1.6
+    ],
+    [
+     6.1,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 4.05,
+     "x": 0.45,
+     "y": 0.52,
+     "zoom": 1.12
+    },
+    {
+     "at": 6.15,
+     "x": 0.42,
+     "y": 0.56,
+     "zoom": 1.2,
+     "dur": 0.6
+    }
+   ],
+   "sfx": [
+    {
+     "at": 4.0,
+     "src": "/home/user/rs_work/sfx/tape_stop.mp3",
+     "vol": 0.5
+    },
+    {
+     "at": 4.12,
+     "src": "/home/user/rs_work/sfx/impact_metal.mp3",
+     "vol": 0.45,
+     "rate": 0.7
+    },
+    {
+     "at": 6.08,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.6
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/a/7593692849833594134.mp4",
+   "ratio": "1:1",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 1.0,
+   "crop": [
+    0,
+    0,
+    1080,
+    850
+   ],
+   "in": 5.4,
+   "out": 7.35
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/suspicious-cat__T_pTpkyBlEY__judging-cat-side-eye.mp4",
+   "dur": 0.9,
+   "cap": null,
+   "boomVol": 0.45,
+   "sfx": [
+    {
+     "at": 0.0,
+     "src": "/home/user/rs_work/src/hd_bank/a/7593692849833594134.mp4",
+     "ss": 7.35,
+     "dur": 0.9,
+     "vol": 1.0
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/a/7593692849833594134.mp4",
+   "ratio": "1:1",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "crop": [
+    0,
+    0,
+    1080,
+    850
+   ],
+   "in": 6.5,
+   "out": 7.35,
+   "reverse": 3.0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/a/7593692849833594134.mp4",
+   "ratio": "1:1",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 1.0,
+   "crop": [
+    0,
+    0,
+    1080,
+    850
+   ],
+   "in": 6.5,
+   "out": 9.2,
+   "speed": [
+    [
+     6.5,
+     1.0
+    ],
+    [
+     6.75,
+     0.45
+    ],
+    [
+     7.3,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 6.75,
+     "x": 0.5,
+     "y": 0.45,
+     "zoom": 1.15
+    },
+    {
+     "at": 7.7,
+     "x": 0.55,
+     "y": 0.5,
+     "zoom": 1.05,
+     "dur": 0.6
+    }
+   ],
+   "sfx": [
+    {
+     "at": 6.72,
+     "src": "/home/user/rs_work/sfx/tape_stop.mp3",
+     "vol": 0.5
+    }
+   ]
+  }
+ ]
+}
