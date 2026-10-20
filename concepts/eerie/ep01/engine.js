@@ -705,7 +705,6 @@ S.s13 = (t, seg) => {
   cam(t, seg.start, seg.end - seg.start + 0.6, 1, 1.05, 960, 700, () => {
     doorFront(DF.x, DF.y, DF.w, DF.h, { light: fl });
     pop(t, tn, 480, 480, () => { rrS(400, 360, 160, 240, 16, C.mid, 5); rr(450, 410, 60, 140, 10, C.dark); rr(458, 480, 44, 62, 8, C.fig); text('OFF', 480, 650, '900 36px M', C.mid); });
-    pop(t, tn + 0.2, 1450, 480, () => { tag('HALLWAY: ON', 1360, 490, C.red, 40); });
   });
 };
 S.s14 = (t, seg) => {
@@ -1031,23 +1030,34 @@ S.s39 = (t, seg) => {
     fadeIn(t, seg.start + 0.3, () => spaced('ONLY ONE', 960, 680, '900 44px M', C.fig, 10));
   });
 };
-// you, sitting up on the bed like a sitting dog: haunches on the mattress, arms straight down in front, head up. (x,y) = rear on the mattress
-// you, sitting up on the bed like a sitting dog: rear down, knees up, arms straight down in front like front legs, head up. (x,y) = rear on the blanket
-// you, sitting up on the bed like a sitting dog: haunches down, chest up, arms straight down in front like front legs, head up. (x,y) = rear on the blanket
+// you, sitting up on the bed like a sitting dog: seat on the heels, knees up, arms straight down in front like front legs, head up. (x,y) = rear on the blanket
 function dogSit(x, y, s, bark = 0) {
-  // a person crouched like a sitting dog, facing the cat: seat on the heels, knees up high, arms straight down to the blanket
   ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
   const G = () => glow('rgba(255,255,255,0.25)', 14), hb = -bark * 10;
   const out = (x1, y1, x2, y2, w, c = C.fig) => { noGlow(); ln(x1, y1, x2, y2, w + 7, '#0b0b0b'); G(); ln(x1, y1, x2, y2, w, c); };
+  // a limb that is thick at the body and thinner at the joint
+  const limb = (x1, y1, r1, x2, y2, r2) => {
+    const a = Math.atan2(y2 - y1, x2 - x1), nx = Math.cos(a + Math.PI / 2), ny = Math.sin(a + Math.PI / 2);
+    ctx.beginPath(); ctx.moveTo(x1 + nx * r1, y1 + ny * r1); ctx.lineTo(x2 + nx * r2, y2 + ny * r2);
+    ctx.arc(x2, y2, r2, a + Math.PI / 2, a - Math.PI / 2, true); ctx.lineTo(x1 - nx * r1, y1 - ny * r1);
+    ctx.arc(x1, y1, r1, a - Math.PI / 2, a + Math.PI / 2, true); ctx.closePath();
+  };
+  const SEAT = [-8, -30, 42, 30];                                                                       // the haunches resting on the heels
   G();
   // far side, a shade darker and a little ahead
   ln(40, -170, 116, -12, 18, C.sec); ell(124, -7, 18, 7, 0, C.sec);                                     // far arm, palm flat like a paw
   ln(14, -40, 92, -124, 26, C.sec); ln(92, -124, 34, -14, 21, C.sec); ell(48, -7, 24, 8, 0, C.sec);   // far leg
-  // body: seat resting on the heels, chest upright
-  ln(0, -50, 22, -188, 52, C.fig); ell(-2, -32, 36, 26, 0, C.fig);
+  // body: chest upright over round haunches
+  ln(0, -56, 22, -188, 52, C.fig); ell(SEAT[0], SEAT[1], SEAT[2], SEAT[3], 0, C.fig);
   out(30, -174, 104, -12, 18); ell(112, -7, 18, 7, 0, C.fig);                                          // near arm, behind the knee
-  out(4, -40, 80, -120, 28); out(80, -120, 22, -14, 22); ell(36, -7, 24, 8, 0, C.fig);   // near leg: thigh up to a high knee, shin back down, foot flat
-  circ(80, -120, 15, C.fig);                                                                            // knee cap
+  // near thigh grows out of the haunches: its outline stops where it meets them, so the hip has no seam
+  ctx.save(); ctx.beginPath(); ctx.rect(-400, -400, 800, 800); ctx.ellipse(SEAT[0], SEAT[1], SEAT[2] - 2, SEAT[3] - 2, 0, 0, Math.PI * 2); ctx.clip('evenodd');
+  noGlow(); limb(-2, -34, 25, 80, -120, 15); ctx.lineWidth = 7; ctx.strokeStyle = '#0b0b0b'; ctx.lineJoin = 'round'; ctx.stroke(); ctx.restore();
+  G(); limb(-2, -34, 25, 80, -120, 15); ctx.fillStyle = C.fig; ctx.fill();
+  // shin folds back down in front of the haunches, foot flat under the seat
+  noGlow(); limb(80, -120, 15, 30, -16, 10); ctx.lineWidth = 7; ctx.strokeStyle = '#0b0b0b'; ctx.stroke();
+  G(); limb(80, -120, 15, 30, -16, 10); ctx.fillStyle = C.fig; ctx.fill();
+  ell(36, -7, 24, 8, 0, C.fig);
   ctx.save(); ctx.translate(34, -252 + hb); ctx.rotate(-bark * 0.12); circ(0, 0, 30, C.fig); noGlow(); circ(14, -6, 5.5, '#000'); ctx.restore();
   ctx.restore();
 }

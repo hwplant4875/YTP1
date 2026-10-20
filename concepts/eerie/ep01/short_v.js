@@ -35,7 +35,10 @@ window.drawV = function (t) {
   const st = srcT(t);
   oST(1, 0, 0, 1, 0, 0); X.globalAlpha = 1; X.fillStyle = '#000'; X.fillRect(0, 0, VW, VH);
   CAM = cam(st); const CAM0 = CAM;
+  // keep the engine inside its 16:9 rect: its screen-space overlays only cover that rect
+  oST(CAM); X.save(); X.beginPath(); X.rect(0, 0, 1920, 1080); X.clip();
   window.draw(st);
+  X.restore();
   CAM = new DOMMatrix(); oST(1, 0, 0, 1, 0, 0); X.globalAlpha = 1; X.globalCompositeOperation = 'source-over'; X.filter = 'none'; X.setLineDash([]); X.shadowBlur = 0;
   // soften the edges of the 16:9 scene so it melts into the black frame
   { const r = CAM0.transformPoint(new DOMPoint(0, 0)), q = CAM0.transformPoint(new DOMPoint(1920, 1080)), F = 160;
