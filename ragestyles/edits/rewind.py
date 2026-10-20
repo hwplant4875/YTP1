@@ -16,6 +16,7 @@ spec:
                                    slow parts are motion-interpolated}, audio follows with atempo
      "reverse": factor   play out -> in backwards at this speed (the rewind between a moment and its replay), silent
      "grade": {"b", "c", "s"}   "edit look": brightness offset (0-1), contrast and saturation gains, eased in
+     "blur": [{"box": [x, y, w, h], "from", "to"}]   heavy blur over a burned-in caption (fractions of the cropped source)
     {"type": "meme", "src" (video or still image), "ss", "dur", "hold" (freeze after this many s), "cap",
      "boomVol"}]
   optional: "bgm": {"src", "ss", "vol"} (music bed under the whole short, fades out at the end),
@@ -114,6 +115,16 @@ def grade(fr, g, k):
     return np.clip(f, 0, 255).astype(np.uint8)
 
 
+def blur_box(fr, box):
+    h, w = fr.shape[:2]
+    x0, y0 = int(box[0] * w), int(box[1] * h)
+    x1, y1 = int((box[0] + box[2]) * w), int((box[1] + box[3]) * h)
+    fr = fr.copy()
+    k = max(h // 12, 3) | 1
+    fr[y0:y1, x0:x1] = cv2.GaussianBlur(cv2.GaussianBlur(fr[y0:y1, x0:x1], (k, k), 0), (k, k), 0)
+    return fr
+
+
 def clip_frames(s, n):
     x0, y0, cw, ch = s.get('crop', [0, 0, 0, 0])
     gen = reverse_frames if s.get('reverse') else timed_frames if s.get('speed') else plain_frames
@@ -128,6 +139,9 @@ def clip_frames(s, n):
             e = ease((t - h['at']) / h.get('dur', PUNCH))
             x, y = x + (h.get('x', x) - x) * e, y + (h.get('y', y) - y) * e
             z += (bz * h.get('zoom', 1.3) - z) * e
+        for b in s.get('blur', []):
+            if b.get('from', -1) <= t <= b.get('to', 1e9):
+                fr = blur_box(fr, b['box'])
         for c in s.get('circles', []):
             if c['from'] <= t <= c['to']:
                 fr = ring(fr, c, t)

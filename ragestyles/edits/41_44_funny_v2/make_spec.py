@@ -9,7 +9,7 @@ A, B = '/home/user/rs_work/src/hd_bank/a/', '/home/user/rs_work/src/hd_bank/b/'
 M, G = '/home/user/rs_work/memes/t/', '/home/user/rs_work/memes/g/'
 FAV = '/home/user/rs_work/memes/fav_cat.png'
 SFX, LIB = '/mnt/project-files/sfx/meme/', '/home/user/rs_work/sfx/'
-BOOM, BOOM_UP = '/home/user/rs_work/memes/vine_boom.mp3', '/home/user/rs_work/memes/vine_boom_up.wav'
+BOOM, BOOM_UP = '/home/user/rs_work/memes/vine_boom.mp3', '/home/user/rs_work/memes/vine_boom_cute.wav'   # cute = x1.9 pitch + echo tail
 BGM = '/mnt/project-files/sfx/music/user_bgm_QKThr.mp3'
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -45,8 +45,9 @@ def replay(src, **kw):
 DISMOUNT = B + "7488460918595144990.mp4"
 ROLLK = {"crop": [0, 528, 1080, 1392], "ratio": "3:4", "vol": 0}   # crop drops the burned-in caption
 TREAD_ROLL = [
-    clip(DISMOUNT, **ROLLK, **{"in": 4.8, "out": 7.1}),
-    meme(SHOCKED, "Bro did a combat roll 💀"),
+    clip(DISMOUNT, **ROLLK, **{"in": 4.8, "out": 6.55,                      # cut as his back hits the floor
+         "sfx": [{"at": 5.62, "src": '/mnt/project-files/sfx/drive/002_휙(만화적).mp3', "ss": 0.25, "vol": 0.7}]}),
+    meme(SHOCKED, "Bro did a combat roll 💀", boomVol=0),
     replay(DISMOUNT, **ROLLK, **{"in": 5.6, "out": 8.8, "speed": [[5.6, 1.0], [5.8, 0.45], [6.9, 1.0]],
            "hits": [{"at": 5.8, "x": 0.4, "y": 0.45, "zoom": 1.2},
                     {"at": 7.6, "x": 0.55, "y": 0.45, "zoom": 1.1, "dur": 0.6}],
@@ -56,8 +57,9 @@ TREAD_ROLL = [
 KIDS = FL + "7531164171916856606.mp4"
 TREAD_KIDS = [
     clip(KIDS, vol=0, **{"in": 0.3, "out": 5.9, "track": [[0.3, 0.5, 0.42, 1.15]],
+         "blur": [{"box": [0.2, 0.665, 0.6, 0.115]}],             # burned-in "Wait for it" 
          "hits": [{"at": 3.55, "x": 0.45, "y": 0.5, "zoom": 1.3}],
-         "sfx": [{"at": 1.15, "src": BOOM, "vol": 0.6}, {"at": 3.6, "src": BOOM_UP, "vol": 0.6}]})]
+         "sfx": [{"at": 1.15, "src": BOOM, "vol": 0.6}, {"at": 3.6, "src": BOOM_UP, "vol": 0.55}]})]
 
 TREAD = B + "7442160036173860127.mp4"
 TREAD_LAUNCH = [
@@ -84,11 +86,11 @@ SPOTTER_PLATE = [
 # --- not ready -----------------------------------------------------------------------------------------------
 BAND = B + "7517757207409167671.mp4"
 BAND_SPRINT = [
-    clip(BAND, vol=0, **{"in": 2.6, "out": 5.0}),
+    clip(BAND, vol=0.8, **{"in": 2.6, "out": 5.0}),                         # real sound (user)
     meme(FAV, "Did he fly?? 😭"),
-    replay(BAND, vol=0, **{"in": 3.6, "out": 5.9, "speed": [[3.6, 1.0], [3.85, 0.4], [4.7, 1.0]],
+    replay(BAND, vol=0.8, **{"in": 3.6, "out": 5.9, "speed": [[3.6, 1.0], [3.85, 0.4], [4.7, 1.0]],
            "hits": [{"at": 3.85, "x": 0.3, "y": 0.35, "zoom": 1.2}],
-           "sfx": [{"at": 3.9, "src": LIB + "whoosh_fast.mp3", "vol": 0.44},     # -4 dB (user)
+           "sfx": [{"at": 3.78, "src": LIB + "tape_stop.mp3", "vol": 0.5},       # time slowing down, not a whoosh (user)
                    {"at": 4.55, "src": LIB + "thud_heavy.mp3", "vol": 0.9}]})]
 
 # box squat: he rolls back over the box, rewind, then the fall again in graded slow-mo with a slowed Lego crash
@@ -162,11 +164,9 @@ CAN_BAR = [
            "sfx": [{"at": 6.05, "src": BOOM, "vol": 0.6}]})]
 
 SHORTS = [
-    short("42_spotter_v2", "The Spotter Had ONE Job 😭💀", 1.0, SPOTTER_PLATE, SPOTTER_NOTOUCH),   # piggyback dropped: the plate hides the joke
-    short("44_plates_v2", "Plates Have No Mercy 💀", 26.0, CLIPS_BOTH, BAR_PHONE),
-    short("45_humbled", "Gym Bros Got HUMBLED 💀", 60.0, BENCH_FLIP, CAN_BAR),
-    short("41_treadmill_v2", "Treadmills Are Undefeated 😭", 40.0, TREAD_ROLL, TREAD_KIDS, TREAD_LAUNCH),
-    short("43_not_ready_v2", "Bro Was NOT Ready 😭", 12.0, BAND_SPRINT, BOX_SQUAT),
+    short("41_treadmill_v3", "Treadmills Are Undefeated 😭", 40.0, TREAD_ROLL, TREAD_KIDS),   # launch clip cut (user)
+    short("43_not_ready_v3", "Bro Was NOT Ready 😭", 12.0, BAND_SPRINT, BOX_SQUAT),
+    short("44_iphone_v3", "His Phone Never Stood a Chance 💀", 26.0, BAR_PHONE),
 ]
 
 if __name__ == '__main__':
