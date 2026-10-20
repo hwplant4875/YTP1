@@ -71,7 +71,8 @@ const wingDetail = () => {
 };
 const wingBones = (c = C.bone) => `<g stroke="${c}" stroke-linecap="round" fill="none"><path d="M-6 -10 L-14 -36" stroke-width="7"/><path d="M-14 -36 L-26 -90" stroke-width="5"/><path d="M-9 -34 L-20 -88" stroke-width="3.5"/><path d="M-26 -90 L-70 -128 L-120 -162" stroke-width="5"/>
   ${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => `<path d="M${-30 - i * 9} ${-86 - i * 7} L${-150 - i * 13} ${-122 - i * 10}" stroke-width="2.5" opacity=".5"/>`).join('')}</g>`;
-const wingOne = (a, o, { fill, sw, bones, oc, detail }) => `<g transform="translate(${SHOULDER[0]} ${SHOULDER[1]}) rotate(${f1(a)})" opacity="${f1(o)}"><path d="${WING}" fill="${bones ? '#ffffff' : fill}" ${bones ? 'fill-opacity=".28"' : ''} stroke="${oc}" stroke-width="${sw}" stroke-linejoin="round"/>${detail ? (bones ? wingBones() : wingDetail()) : ''}</g>`;
+// wings are always drawn solid (only the body gets the x-ray); bones is kept for callers but ignored
+const wingOne = (a, o, { fill, sw, oc, detail }) => `<g transform="translate(${SHOULDER[0]} ${SHOULDER[1]}) rotate(${f1(a)})" opacity="${f1(o)}"><path d="${WING}" fill="${fill}" stroke="${oc}" stroke-width="${sw}" stroke-linejoin="round"/>${detail ? wingDetail() : ''}</g>`;
 // wings: rate in beats/s; above ~9 beats/s the eye only sees a fan-shaped blur. phase (beats) overrides t*rate.
 export const wings = (t, { rate = 8, blur = 3, amp = 55, still = null, fill = C.wing2, sw = 7, bones = 0, oc = N, phase = null } = {}) => {
   const o = { fill, sw, bones, oc, detail: 1 };
@@ -79,9 +80,10 @@ export const wings = (t, { rate = 8, blur = 3, amp = 55, still = null, fill = C.
   const ph = phase != null ? phase : t * rate;
   const fan = Math.min(1, Math.max(0, (rate - 9) / 10));
   let s = '';
-  if (fan > 0) for (let i = 0; i <= 10; i++) { const a = -amp + 2 * amp * i / 10; s += wingOne(a, 0.13 * fan, { ...o, detail: 0, sw: sw * 0.6 }); }
-  const sol = 1 - fan * 0.85;
-  for (let i = blur; i >= 1; i--) s += wingOne(amp * Math.sin((ph - i * 0.012 * Math.min(rate, 9)) * 2 * Math.PI), sol * 0.22 / i, { ...o, detail: 0 });
+  // fast wings: a green see-through fan behind one solid wing (motion blur), never a ghost wing
+  if (fan > 0) for (let i = 0; i <= 10; i++) { const a = -amp + 2 * amp * i / 10; s += wingOne(a, 0.16 * fan, { ...o, fill: C.back, detail: 0, sw: 0 }); }
+  const sol = 1;
+  for (let i = blur; i >= 1; i--) s += wingOne(amp * Math.sin((ph - i * 0.012 * Math.min(rate, 9)) * 2 * Math.PI), sol * 0.22 / i, { ...o, fill: C.back, detail: 0, sw: 0 });
   s += wingOne(amp * Math.sin(ph * 2 * Math.PI), sol, o);
   return s;
 };
@@ -119,12 +121,12 @@ const chain = (p, n, w, h, col) => { let s = ''; for (let i = 0; i <= n; i++) { 
   const x = m * m * m * p[0] + 3 * m * m * t * p[2] + 3 * m * t * t * p[4] + t * t * t * p[6], y = m * m * m * p[1] + 3 * m * m * t * p[3] + 3 * m * t * t * p[5] + t * t * t * p[7];
   s += `<rect x="${f1(x - w / 2)}" y="${f1(y - h / 2)}" width="${w}" height="${h}" rx="3" fill="${col}"/>`; } return s; };
 
-// pretty anatomical heart, centred at 0,0, about 90 x 150 units; k scales the muscle (pulse)
-export const prettyHeart = (k = 1, { sw = 2.6, oc = N } = {}) => `<g>
+// pretty anatomical heart, centred at 0,0, about 90 x 150 units; k scales the whole heart incl. vessels (pulse)
+export const prettyHeart = (k = 1, { sw = 2.6, oc = N } = {}) => `<g transform="scale(${f1(k * 1000) / 1000})">
   <path d="M8 -72 L6 -90 M20 -75 L22 -93 M32 -72 L38 -88" stroke="${oc}" stroke-width="10" stroke-linecap="round"/><path d="M8 -72 L6 -90 M20 -75 L22 -93 M32 -72 L38 -88" stroke="#e0344a" stroke-width="6" stroke-linecap="round"/>
   <path d="M-6 -40 C-8 -66 10 -78 34 -72 C46 -68 52 -58 50 -48 L40 -46 C40 -54 34 -60 24 -60 C12 -60 6 -52 6 -40Z" fill="#e0344a" stroke="${oc}" stroke-width="${sw}"/>
   <path d="M-34 -30 C-46 -40 -48 -56 -40 -66 L-28 -62 C-32 -54 -30 -44 -22 -38Z" fill="#6f86e0" stroke="${oc}" stroke-width="${sw}"/>
-  <g transform="scale(${f1(k * 1000) / 1000})">
+  <g>
     <path d="M-36 -26 C-48 -36 -40 -50 -26 -46 C-20 -52 -10 -50 -6 -42 L-8 -30Z" fill="#c42a42" stroke="${oc}" stroke-width="${sw}"/>
     <path d="M30 -30 C44 -40 54 -30 48 -18 L36 -16Z" fill="#c42a42" stroke="${oc}" stroke-width="${sw}"/>
     <path d="M-2 -36 C26 -40 44 -18 38 8 C32 32 14 50 -2 58 C-18 48 -38 26 -40 2 C-42 -20 -26 -34 -2 -36Z" fill="url(#gHeart)" stroke="${oc}" stroke-width="${sw}"/>

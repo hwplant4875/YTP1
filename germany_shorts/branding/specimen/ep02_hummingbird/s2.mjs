@@ -148,7 +148,7 @@ const POL = (() => { seed(12); const p = []; for (let i = 0; i < 70; i++) { cons
   const [x, y] = zone === 0 ? [660 + rnd() * 80, 132 + rnd() * 30] : zone === 1 ? [720 + rnd() * 40, 150 + rnd() * 40] : [748 + rnd() * 90, 182 + rnd() * 16];
   p.push([x, y, 3 + rnd() * 5, rnd()]); } return p; })();
 const dust = (x, y, r, o) => `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r)}" fill="#ffe14a" stroke="#d99a00" stroke-width="${f1(Math.min(1.6, r * 0.3))}" opacity="${f1(o)}"/>`;
-// 17 pollen taxi: a meadow; drinks at flower A and gets dusted, flies to flower B, dust rubs off, seeds sprout
+// 17 pollen taxi: a meadow; drinks at flower A and gets dusted, flies to flower B, dust rubs off
 export function h17(t) {
   const tp = at('h17', 'Yellow pollen'), tn = at('h17', 'At the next flower'), tr = at('h17', 'rubs off'), ts = at('h17', 'make seeds'), tx = at('h17', 'tiny taxi');
   const FR = -60, FS = 1.5, A = [740, 520], B = [1450, 510], sc = 0.92, phi = 30, depth = 30;
@@ -182,12 +182,6 @@ export function h17(t) {
   const sign = taxi > 0 ? `<g transform="translate(690 112) rotate(-6) scale(${f1(taxi * 140) / 100})"><rect x="-74" y="-58" width="148" height="58" rx="12" fill="${K.yellow}" stroke="${N}" stroke-width="7"/><text x="0" y="-14" font-family="Black" font-size="40" fill="${N}" text-anchor="middle">TAXI</text></g>` : '';
   const [bx, by] = ctr(t);
   s += placeB(bx, by + bobB(t, 4), sc, birdSolid() + pol + sign + wings(t, { rate: 7, amp: 50 }), { rot: phi });
-  // seeds drop from flower B and sprout in the grass
-  if (t > ts - 0.2) { const k = eo(ts - 0.2, ts + 0.9, t), g = eo(ts + 0.8, ts + 2.0, t); const [fx, fy] = fpt(B[0], B[1], FS, FR, 0, 200);
-    for (let i = 0; i < 5; i++) { const x = fx - 300 + i * 130, y0 = fy + 20, y = lerp(y0, 1030, k);
-      if (g < 1) s += `<ellipse cx="${f1(lerp(fx, x, k))}" cy="${f1(y)}" rx="12" ry="16" fill="#8a5a2b" stroke="${N}" stroke-width="4"/>`;
-      if (g > 0) s += `<g transform="translate(${x} 1090) scale(${f1(1.7 * g * 100) / 100})"><path d="M0 0 Q-6 -40 4 -70" stroke="${N}" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M0 0 Q-6 -40 4 -70" stroke="#2f9a4f" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M4 -70 c-30 -10 -40 -30 -30 -40 c16 4 28 16 30 40Z M4 -70 c28 -14 44 -10 44 4 c-14 10 -30 6 -44 -4Z" fill="#4fd06a" stroke="${N}" stroke-width="4"/></g>`; }
-    s += fade(fx - 470, 1010, 'SEEDS', t, ts + 0.2, { size: 72, fill: '#fff', stroke: N, sw: 12 }); }
   { const [px, py] = head(t); if (t < tx) s += tag(px, py - 10, px - 160, Math.max(120, py - 230), 'POLLEN', t, tp + 0.2, { col: '#ffe14a' }); }
   if (t > tx) s += big(960, 115, 'POLLEN TAXI', t, tx, { size: 130, fill: '#fff', stroke: N, sw: 18 });
   return s;

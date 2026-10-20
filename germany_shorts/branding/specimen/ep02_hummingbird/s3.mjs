@@ -2,14 +2,16 @@ import { K, f1, clamp, sm, eo, pop, lerp, seed, rnd, big, tag, fade, xfade, coun
 import { at } from './tl.mjs';
 import { birdSolid, birdInside, wings, placeB, toB, PT, C, BIRD, PAL, fly, perched, perchedInner, onBranch, standing, ground, leaf, branch, flowerT, blossom, gauge, readout, card, arrow, bobB, speed, photo, bptB, fpt, stemTo } from './ha.mjs';
 import { landPath, proj } from './maps.mjs';
+import { bgAir } from '/tmp/claude-0/hb/bird.mjs';
+import { TW_DOG } from './twdog.mjs';
 const N = K.navy;
 const THROAT = 'M668 214 C700 206 732 202 752 198 L760 300 C730 290 700 262 668 214Z';
 // 22 tiny feet: grip a branch, can't walk, flies even a few centimetres
 export function h22(t) {
   const tt = at('h22', 'tiny'), tg = at('h22', 'holding on'), tw = at('h22', "can't really walk"), tf = at('h22', 'If it wants to move'), tfl = at('h22', 'it flies');
-  const A = () => { const z = eo(0.2, 1.4, t), sc = lerp(1.0, 1.6, z), cx = lerp(820, 900, z), by = lerp(800, 860, z), th = lerp(22, 34, z);
-    let s = branch(-100, 2020, by, th) + onBranch(cx, by, sc, { th });
-    const fx = cx + (570 - 600) * sc, fy = by - th / 2 - 4;
+  // A: camera zoom like a magnifying glass: sky, branch and bird all scale together around the feet
+  const A = () => { const z = eo(0.2, 1.4, t), Z = lerp(1.0, 1.6, z), f0 = [820 + (570 - 600), 800 - 11 - 4], fx = lerp(f0[0], 852, z), fy = lerp(f0[1], 839, z);
+    let s = `<g transform="translate(${f1(fx)} ${f1(fy)}) scale(${f1(Z * 1000) / 1000}) translate(${-f0[0]} ${-f0[1]})">${bgAir(t + 21)}${branch(-300, 2300, 800, 22)}${onBranch(820, 800, 1.0, { th: 22 })}</g>`;
     const k = pop(tt, t); if (k > 0) s += `<circle cx="${f1(fx)}" cy="${f1(fy - 10)}" r="${f1(110 * k)}" fill="none" stroke="${K.yellow}" stroke-width="12" stroke-dasharray="20 14"/>`;
     s += tag(fx + 60, fy + 30, 1450, 990, 'TINY FEET', t, tt + 0.1, { col: K.yellow });
     // close-up bubble: toes wrapped around the twig (cross-section)
@@ -130,13 +132,14 @@ export function h25(t) {
   const tr = at('h25', 'ruby-throated'), td = at('h25', 'doubles its weight'), tg = at('h25', 'Then it flies across'), tk = at('h25', 'eight hundred'), tn = at('h25', 'nonstop');
   const A = () => { const fat = sm(td - 1.2, td + 0.4, t), by = 840;
     let s = '';
-    // flowers on stems growing out of a bush, mouths toward the bird
-    for (const [fx, fy, r] of [[1060, 600, -70], [1160, 700, -58]]) { const [ex, ey] = fpt(fx, fy, 1.0, r, 0, 200); s += stemTo(ex, ey, 1180, 1000); }
-    s += bush(1180, 1040, 150);
-    for (const [fx, fy, r] of [[1060, 600, -70], [1160, 700, -58]]) s += flowerT(fx, fy, 1.0, { rot: r, stem: 0 });
-    s += branch(-60, 1000, by, 26) + onBranch(560, by, 0.95, { puff: 1.7 * fat, th: 26 });
-    // nectar sips flying from the flower to the beak
-    if (t < td + 0.4) for (let i = 0; i < 3; i++) { const k = ((t * 0.9 + i / 3) % 1); s += `<circle cx="${f1(lerp(1010, 960, k))}" cy="${f1(lerp(590, 575, k))}" r="${f1(9 * (1 - k) + 3)}" fill="#ffd23f" stroke="${N}" stroke-width="3" opacity="${f1(1 - k)}"/>`; }
+    // the beak stays dipped inside flower A while the bird fattens up; flower A follows the beak tip as the body puffs
+    const gy = by - 26 * 0.5 - 4, sc = 0.95, pp = 1.7 * fat, tipB = [600 + (992 - 600) * (1 + 0.12 * pp), 452 + (199 - 452) * (1 + 0.22 * pp)];
+    const [tx, ty] = toB(560, gy - (452 - 300) * sc, sc, ...tipB), ra = -84, [ox, oy] = fpt(0, 0, 1.0, ra, 0, 72), fa = [tx - ox, ty - oy];
+    { const [ex, ey] = fpt(1160, 700, 1.0, -58, 0, 200); s += stemTo(ex, ey, 1180, 1000); }
+    { const [ex, ey] = fpt(fa[0], fa[1], 1.0, ra, 0, 200); s += stemTo(ex, ey, 1180, 1000); }
+    s += bush(1180, 1040, 150) + flowerT(1160, 700, 1.0, { rot: -58, stem: 0 });
+    s += branch(-60, 1000, by, 26) + onBranch(560, by, sc, { puff: pp, th: 26 });
+    s += flowerT(fa[0], fa[1], 1.0, { rot: ra, stem: 0 });
     const pk = t > tr - 0.2 && t < td - 0.6 ? pop(tr - 0.2, t) * (1 - sm(td - 1.0, td - 0.6, t)) : 0;
     const rk = sm(td - 1.2, td - 0.8, t);
     if (rk > 0) s += `<g opacity="${f1(rk)}">${readout(1600, 470, `${(3 + 3 * fat * 0.95).toFixed(1)} G`, '', { size: 130 })}</g>`;
@@ -321,13 +324,12 @@ export function h31(t) {
     return s; };
   const B = () => { const k = pop(tq + 0.1, t, 0.6), cx = 960, cy = 560;
     let s = `<defs><radialGradient id="rb31"><stop offset="0" stop-color="#7fd0ff"/><stop offset="1" stop-color="#1f6fd1"/></radialGradient>
-      <filter id="paint31" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="3" seed="4"/><feDisplacementMap in="SourceGraphic" scale="16"/><feGaussianBlur stdDeviation="3.5"/></filter></defs>`;
+      <filter id="rim31" x="-10%" y="-10%" width="120%" height="120%"><feMorphology in="SourceAlpha" operator="dilate" radius="8" result="d"/><feFlood flood-color="#ffffff"/><feComposite in2="d" operator="in" result="o"/><feMerge><feMergeNode in="o"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
     // spinning ray burst behind (quiz-show style)
     let rays = ''; for (let i = 0; i < 24; i++) { const a0 = (i / 24) * Math.PI * 2 + t * 0.25, a1 = a0 + Math.PI / 24; rays += `<path d="M${cx} ${cy} L${f1(cx + Math.cos(a0) * 1400)} ${f1(cy + Math.sin(a0) * 1400)} L${f1(cx + Math.cos(a1) * 1400)} ${f1(cy + Math.sin(a1) * 1400)}Z" fill="#ffffff" opacity=".16"/>`; }
     s += `<rect x="0" y="0" width="1920" height="1080" fill="url(#rb31)" opacity="${f1(Math.min(1, k))}"/><g opacity="${f1(Math.min(1, k))}">${rays}</g>`;
-    if (k > 0) { s += `<g transform="translate(${cx} ${cy + 20}) scale(${f1(k * 100) / 100})"><g filter="url(#paint31)"><path d="${DOG}" fill="#0b0f1e"/>
-        <path d="M-330 250 C-200 236 200 240 380 256" stroke="#0b0f1e" stroke-width="22" fill="none" stroke-linecap="round" opacity=".7"/><circle cx="-320" cy="-40" r="14" fill="#0b0f1e" opacity=".8"/><circle cx="420" cy="20" r="10" fill="#0b0f1e" opacity=".8"/></g>
-        <text x="40" y="60" font-family="Black" font-size="300" fill="#ffffff" text-anchor="middle">?</text></g>`; }
+    if (k > 0) { s += `<g transform="translate(${cx} ${cy + 20}) scale(${f1(k * 100) / 100})"><g filter="url(#rim31)"><g transform="scale(-19 19) translate(-18 -18)">${TW_DOG.map(d => `<path d="${d}" fill="#0b0f1e" stroke="#0b0f1e" stroke-width=".25" stroke-linejoin="round"/>`).join('')}</g></g>
+        <text x="-70" y="120" font-family="Black" font-size="240" fill="#ffffff" text-anchor="middle">?</text></g>`; }
     s += big(960, 140, 'WHAT NEXT?', t, tq, { size: 150, fill: '#fff', stroke: N, sw: 18 });
     s += big(960, 990, 'TELL US IN THE COMMENTS', t, at('h31', 'Tell us'), { size: 80, fill: N, stroke: '#fff', sw: 12 });
     return s; };
