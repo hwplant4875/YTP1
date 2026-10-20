@@ -790,7 +790,9 @@ function bedside(t, o) {
 }
 // the cat leaning over the bed: same design, the whole body tips from the feet toward your face
 const OVER = { x: 470, sway: -17 };
-const overCat = (t, o = {}) => standCat(OVER.x, FY, CAT_S, { k: 1, arm: 'down', red: 0, sway: OVER.sway, tilt: -14, t, ...o });
+// clipped at the floor so the tilted body never pokes a foot out under the bed
+const floorClip = f => { ctx.save(); ctx.beginPath(); ctx.rect(-5000, -5000, 10000, 5000 + FY + 2); ctx.clip(); f(); ctx.restore(); };
+const overCat = (t, o = {}) => floorClip(() => standCat(OVER.x, FY, CAT_S, { k: 1, arm: 'down', red: 0, sway: OVER.sway, tilt: -14, t, ...o }));
 S.r1 = (t, seg) => ruleCard(t, seg, 3, 'PRETEND TO BE ASLEEP');
 S.r2 = (t, seg) => {
   const ts = wt(seg, 'stops'), tsi = wt(seg, 'cat') - 0.1, ta = wt(seg, 'always'), te = wt(seg, 'enter');
@@ -862,7 +864,7 @@ S.r6 = (t, seg) => {
   const x = lerp(CAT_X, OVER.x, k), bob = Math.abs(Math.sin((t - tw) * 7)) * 8 * (k > 0 && k < 1 ? 1 : 0);
   const sway = OVER.sway * ease((t - tl) / 0.9);
   cam(t, seg.start, seg.end - seg.start + 0.6, 1.05, 1.25, lerp(1000, 520, k), 560, () => {
-    bedside(t, { cat: () => standCat(x, FY - bob, CAT_S, { k: 1, arm: 'down', red: 0, sway, tilt: lerp(-4, -14, ease((t - tl) / 0.9)), t }) });
+    bedside(t, { cat: () => floorClip(() => standCat(x, FY - bob, CAT_S, { k: 1, arm: 'down', red: 0, sway, tilt: lerp(-4, -14, ease((t - tl) / 0.9)), t })) });
   });
 };
 S.r7 = (t, seg) => {
@@ -1033,14 +1035,20 @@ S.s39 = (t, seg) => {
 // you, sitting up on the bed like a sitting dog: rear down, knees up, arms straight down in front like front legs, head up. (x,y) = rear on the blanket
 // you, sitting up on the bed like a sitting dog: haunches down, chest up, arms straight down in front like front legs, head up. (x,y) = rear on the blanket
 function dogSit(x, y, s, bark = 0) {
-  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); glow('rgba(255,255,255,0.25)', 14);
-  const hb = -bark * 10;
-  ln(60, -182, 86, -10, 20, C.sec); ell(92, -6, 16, 7, 0, C.sec);    // far arm, a front leg
-  ell(0, -36, 48, 38, 0, C.fig); ell(40, -9, 46, 11, 0, C.fig);     // haunch, and the folded leg along the blanket
-  ln(10, -54, 44, -196, 58, C.fig);                                 // chest, upright
-  ln(44, -184, 66, -10, 21, C.fig); ell(72, -6, 16, 7, 0, C.fig);   // near arm straight down, hand flat like a paw
-  circ(60, -256 + hb, 32, C.fig);                                   // head up, toward the cat
-  noGlow(); circ(76, -262 + hb, 5.5, '#000');
+  // a person crouched like a sitting dog, facing the cat: seat on the heels, knees up high, arms straight down to the blanket
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  const G = () => glow('rgba(255,255,255,0.25)', 14), hb = -bark * 10;
+  const out = (x1, y1, x2, y2, w, c = C.fig) => { noGlow(); ln(x1, y1, x2, y2, w + 7, '#0b0b0b'); G(); ln(x1, y1, x2, y2, w, c); };
+  G();
+  // far side, a shade darker and a little ahead
+  ln(40, -170, 116, -12, 18, C.sec); ell(124, -7, 18, 7, 0, C.sec);                                     // far arm, palm flat like a paw
+  ln(14, -40, 92, -124, 26, C.sec); ln(92, -124, 34, -14, 21, C.sec); ell(48, -7, 24, 8, 0, C.sec);   // far leg
+  // body: seat resting on the heels, chest upright
+  ln(0, -50, 22, -188, 52, C.fig); ell(-2, -32, 36, 26, 0, C.fig);
+  out(30, -174, 104, -12, 18); ell(112, -7, 18, 7, 0, C.fig);                                          // near arm, behind the knee
+  out(4, -40, 80, -120, 28); out(80, -120, 22, -14, 22); ell(36, -7, 24, 8, 0, C.fig);   // near leg: thigh up to a high knee, shin back down, foot flat
+  circ(80, -120, 15, C.fig);                                                                            // knee cap
+  ctx.save(); ctx.translate(34, -252 + hb); ctx.rotate(-bark * 0.12); circ(0, 0, 30, C.fig); noGlow(); circ(14, -6, 5.5, '#000'); ctx.restore();
   ctx.restore();
 }
 S.s40 = (t, seg) => {
@@ -1055,7 +1063,7 @@ S.s40 = (t, seg) => {
     ctx.save(); ctx.globalAlpha *= 1 - k; bed(150, FY, 1.05, 'woke', { look: 1, cat: 'empty', t }); ctx.restore();
     ctx.save(); ctx.globalAlpha *= k; bed(150, FY, 1.05, 'flat', { cat: 'empty', t }); dogSit(330, MT + 6, 1.15, barkK); ctx.restore();
     standCat(1000, FY, CAT_S, { k: 1, arm: 'down', red: t < tb ? 1 : 0.4, t, sway: t >= tl ? 4 * ease((t - tl) / 0.4) : 0 });
-    if (t >= te) { ctx.setLineDash([12, 12]); lnP(330 + 80 * 1.15, MT + 6 - 262 * 1.15, 1000 - 40 * CAT_S - 14, FY - 360 * CAT_S, 4, C.fig, prog(t, te, 0.4)); ctx.setLineDash([]); }
+    if (t >= te) { ctx.setLineDash([12, 12]); lnP(330 + 48 * 1.15, MT + 6 - 256 * 1.15, 1000 - 40 * CAT_S - 14, FY - 360 * CAT_S, 4, C.fig, prog(t, te, 0.4)); ctx.setLineDash([]); }
     if (t >= td && t < te) pop(t, td, 1400, 260, () => tag('LIKE A DOG', 1400, 270, C.fig, 40, 'center'));
     if (t >= tb) { const big = t >= tl ? 1.25 : 1; ctx.save(); ctx.translate(700, 230); ctx.scale(big, big); ctx.translate(-700, -230); bubble(700, 230, 320, 130, 'WOOF!', t, tb, C.fig, '#000', 1); ctx.restore(); }
   });

@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 import fs from 'fs';
 const C = process.cwd(), PO = '/tmp/claude-0/-home-user-YTP1/db7b424d-ffe5-5abf-bc8b-b81061ddb974/scratchpad/eerie/ep01/post', OUT = '/tmp/claude-0/-home-user-YTP1/db7b424d-ffe5-5abf-bc8b-b81061ddb974/scratchpad/posts';
 // [name, frame, crop centre x, centre y, crop size, html overlay]
-const items = [
+const ONLY = process.argv[2]; const items0 = [
   ['p1_opt1_open', 't0052.95.jpg', 1000, 560, 1000, ''],
   ['p1_opt2_keyhole', 't0083.00.jpg', 980, 520, 900, ''],
   ['p1_opt3_asleep', 't0120.50.jpg', 560, 540, 1080, ''],
@@ -10,6 +10,7 @@ const items = [
   ['p2_rule4', 't0019.50.jpg', 950, 600, 1200, '<div class="band">READ RULE 4<br><span>BEFORE 3 AM</span></div>'],
 ];
 const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1080, height: 1080 } });
+const items = items0.filter(i => !ONLY || i[0] === ONLY);
 for (const [n, f, cx, cy, sz, ov] of items) {
   const s = 1080 / sz;
   fs.writeFileSync(C + '/_post.html', `<html><head><style>@font-face{font-family:M;font-weight:900;src:url(fonts/montserrat-900.woff2)}
