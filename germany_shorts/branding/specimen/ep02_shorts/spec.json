@@ -1,0 +1,241 @@
+[
+{
+"id": "b01",
+"hook": "This is a hummingbird's heart. For its size, it's huge.",
+"hh": "SUPER HEART",
+"parts": [
+[
+"h09",
+"A hummingbird's heart",
+null
+],
+[
+"h10",
+null,
+null
+]
+],
+"out": "Twenty times every second, all day long. How would you feel if your heart did that? Tell me below.",
+"op": [
+"20 TIMES",
+"EVERY SECOND"
+],
+"oq": [
+"HOW WOULD",
+"YOU FEEL?"
+],
+"oqs": "How would"
+},
+{
+"id": "b02",
+"hook": "Every night, this tiny bird almost shuts itself down.",
+"hh": "NIGHT MODE",
+"parts": [
+[
+"h20",
+"At night",
+null
+],
+[
+"h21",
+null,
+null
+]
+],
+"out": "Then every morning, it boots right back up. Would you trade your sleep for this? Tell me below.",
+"op": [
+"BACK",
+"ON!"
+],
+"oq": [
+"WOULD YOU",
+"SLEEP LIKE THIS?"
+],
+"oqs": "Would you"
+},
+{
+"id": "b03",
+"hook": "Did you know a hummingbird's tongue is split in two at the tip?",
+"hh": "FORKED TONGUE",
+"parts": [
+[
+"h13",
+"When it dips",
+null
+],
+[
+"h14",
+null,
+null
+]
+],
+"out": "So it's not a straw. It works more like a tiny mop. Did you know that? Tell me below.",
+"op": [
+"NOT A STRAW",
+"A TINY MOP!"
+],
+"oq": [
+"DID YOU",
+"KNOW?"
+],
+"oqs": "Did you"
+},
+{
+"id": "b04",
+"hook": "Why can a hummingbird fly backwards? The secret is in its shoulder.",
+"hh": "FLIES BACKWARDS",
+"parts": [
+[
+"h06",
+"A hummingbird can twist",
+null
+],
+[
+"h07",
+null,
+null
+]
+],
+"out": "Forwards, backwards, even upside down. If you could fly like this, where would you go first? Comment below.",
+"op": [
+"ANY",
+"DIRECTION"
+],
+"oq": [
+"WHERE WOULD",
+"YOU FLY?"
+],
+"oqs": "If you could"
+},
+{
+"id": "b05",
+"hook": "This red throat has no red color in it at all.",
+"hh": "NO RED?!",
+"parts": [
+[
+"h23",
+"The feathers are built",
+null
+],
+[
+"h24",
+null,
+null
+]
+],
+"out": "And that's just one of its tricks. See the rest in the full video.",
+"op": [
+"ONE OF",
+"ITS TRICKS"
+],
+"oq": [
+"WATCH THE",
+"FULL VIDEO"
+],
+"oqs": "See the rest",
+"pill": "video"
+},
+{
+"id": "b06",
+"hook": "How does a three-gram bird cross a whole sea without landing?",
+"hh": "NO LANDING",
+"parts": [
+[
+"h25",
+"Before its trip",
+null
+],
+[
+"h26",
+null,
+null
+]
+],
+"out": "Eight hundred kilometers, with no food and no rest. Could you go a whole day without a snack? Tell me below.",
+"op": [
+"800 KM",
+"NO STOPS"
+],
+"oq": [
+"COULD",
+"YOU?"
+],
+"oqs": "Could you"
+},
+{
+"id": "b07",
+"hook": "This bird builds its nest with spider silk.",
+"hh": "SILK NEST",
+"parts": [
+[
+"h27",
+"It's about the size",
+null
+],
+[
+"h28",
+null,
+null
+]
+],
+"out": "Stretchy silk, soft fluff, and a nest that grows with its babies. Which animal's home should we look inside next? Comment below.",
+"op": [
+"A NEST",
+"THAT GROWS"
+],
+"oq": [
+"WHOSE HOME",
+"NEXT?"
+],
+"oqs": "Which animal"
+},
+{
+"id": "b08",
+"hook": "How small can a bird get?",
+"hh": "TINIEST BIRD",
+"parts": [
+[
+"h02",
+"A ruby-throated",
+null
+],
+[
+"h03",
+null,
+null
+]
+],
+"out": "Lighter than a coin, smaller than your finger. What's the tiniest animal you've ever seen? Tell me below.",
+"op": [
+"LIGHTER",
+"THAN A COIN"
+],
+"oq": [
+"TINIEST ANIMAL",
+"YOU'VE SEEN?"
+],
+"oqs": "What's the"
+},
+{
+"id": "b09",
+"hook": "Did you know hummingbirds can't walk? Just look at their feet.",
+"hh": "CAN'T WALK",
+"parts": [
+[
+"h22",
+"They're tiny",
+null
+]
+],
+"out": "No walking, ever. Its wings do everything. Which animal should we X-ray next? Comment below.",
+"op": [
+"WINGS",
+"DO IT ALL"
+],
+"oq": [
+"X-RAY",
+"WHAT NEXT?"
+],
+"oqs": "Which animal"
+}
+]
