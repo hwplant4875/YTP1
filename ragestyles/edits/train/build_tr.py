@@ -34,7 +34,8 @@ def card(text, at, end, y=1240, size=108, yellow=(), step=0.0):
 
 def drop(shots):
     for k, s in enumerate(shots):
-        s.update({'len': 0.5, 'zoom': [1.0, 1.22], 'ease': 'in', **DROP[k % 4]})
+        z = s.pop('z', 1.0)
+        s.update({'len': 0.5, 'zoom': [z, z * 1.22], 'ease': 'in', **DROP[k % 4]})
     return shots
 
 
@@ -42,9 +43,9 @@ def rocky():
     R = 'src/MR/A_hLdPRsssE.mp4'
     sh = [
         {'src': R, 'in': 423.4, 'len': 1.4, 'x': 0.35, 'zoom': [1.0, 1.1]},                       # 0 Drago, gritted
-        {'src': R, 'in': 381.6, 'len': 0.5, 'ratio': '16:9', 'zoom': [1.1, 1.14]},                 # 1 1850 (zoom keeps the corner tag out)
-        {'src': R, 'in': 382.95, 'len': 0.5, 'ratio': '16:9', 'zoom': [1.1, 1.14]},                # 2 1990
-        {'src': R, 'in': 384.75, 'len': 0.6, 'ratio': '16:9', 'zoom': [1.1, 1.18], 'punch': 0.1, 'shake': 10},  # 3 2045
+        {'src': R, 'in': 381.6, 'len': 0.5, 'ratio': '16:9', 'y': 0.56, 'zoom': [1.15, 1.2]},     # 1 1850 (crop keeps the corner tag out)
+        {'src': R, 'in': 382.95, 'len': 0.5, 'ratio': '16:9', 'y': 0.56, 'zoom': [1.15, 1.2]},    # 2 1990
+        {'src': R, 'in': 384.75, 'len': 0.6, 'ratio': '16:9', 'y': 0.56, 'zoom': [1.15, 1.24], 'punch': 0.1, 'shake': 10},  # 3 2045
         {'src': R, 'in': 405.0, 'len': 0.5, 'x': 0.55, 'zoom': [1.0, 1.08]},                      # 4 syringe
         {'src': R, 'in': 406.95, 'len': 1.0, 'x': 0.5, 'zoom': [1.0, 1.15]},                      # 5 needle
         {'src': R, 'in': 50.7, 'len': 1.7, 'x': 0.55, 'zoom': [1.0, 1.1]},                        # 6 Rocky in the snow
@@ -59,7 +60,7 @@ def rocky():
         {'src': R, 'in': 434.8, 'len': 1.2, 'x': 0.45, 'zoom': [1.0, 1.08]},                      # 15 pull, face
         {'src': R, 'in': 455.55, 'len': 0.5, 'x': 0.5, 'strobe': [0.0, 0.5]},                     # 16 pre-drop
     ]
-    sh += drop([{'src': R, 'in': t, 'x': x} for t, x in [
+    sh += drop([{'src': R, 'in': t, 'x': x, **({'y': 0.56, 'z': 1.15} if x < 0.4 else {})} for t, x in [
         (456.0, 0.55), (463.2, 0.7), (484.6, 0.32), (485.8, 0.32), (486.7, 0.55), (493.2, 0.5),
         (496.8, 0.4), (505.9, 0.5), (513.6, 0.5), (520.2, 0.5), (524.0, 0.5), (486.0, 0.32)]])
     sh += [{'src': R, 'in': 527.0, 'len': 1.3, 'x': 0.65, 'zoom': [1.0, 1.06]},

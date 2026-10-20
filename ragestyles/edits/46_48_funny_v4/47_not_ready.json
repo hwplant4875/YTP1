@@ -37,13 +37,18 @@
     1080,
     1290
    ],
-   "in": 3.3,
+   "in": 3.75,
    "out": 6.27,
    "sfx": [
     {
      "at": 4.12,
      "src": "/home/user/rs_work/sfx/impact_metal.mp3",
      "vol": 0.5
+    },
+    {
+     "at": 4.5,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.4
     },
     {
      "at": 6.08,
@@ -151,6 +156,12 @@
      "src": "/home/user/rs_work/sfx/impact_metal.mp3",
      "vol": 0.45,
      "rate": 0.7
+    },
+    {
+     "at": 4.5,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.4,
+     "rate": 0.75
     },
     {
      "at": 6.08,

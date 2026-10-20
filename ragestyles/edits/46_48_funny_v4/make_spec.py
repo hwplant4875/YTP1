@@ -55,10 +55,10 @@ def replay(src, **kw):
 # chest-supported row on an incline bench: the back pad folds flat under him and he face-plants over the bench
 # toward the camera, legs flipping up. No audio track at all, so SFX carry it.
 FOLD = D + '7504420640007392543.mp4'
-FOLDK = {"vol": 0, "track": [[0, 0.5, 0.5, 1.06]],
-         "blur": [{"box": [0.08, 0.662, 0.87, 0.072]}]}          # burned-in "WHEN YOU FIND A NEW FEAR"
+FOLDK = {"vol": 0, "track": [[0, 0.5, 0.5, 1.06]]}   # its "WHEN YOU FIND A NEW FEAR" caption is not hype text and
+                                                    # his face dives right through it, so it is left unblurred
 BENCH_FOLD = [
-    clip(FOLD, **FOLDK, **{"in": 0.6, "out": 1.97,          # face hits the pad at 1.88, 3 frames before the cut (the white flash eats the last 3)
+    clip(FOLD, **FOLDK, **{"in": 0.9, "out": 1.97,          # face hits the pad at 1.88, 3 frames before the cut (the white flash eats the last 3)
          "hits": [{"at": 1.45, "x": 0.5, "y": 0.55, "zoom": 1.15}],
          "sfx": [{"at": 1.46, "src": METAL, "vol": 0.45}]}),
     meme(FAV),
@@ -72,14 +72,14 @@ BENCH_FOLD = [
 # partner wall balls (@leoniesolia, ESPN): his throw drops straight onto her face and she goes over backwards
 WALL = B + '7430827209637580063.mp4'
 WALL_FACE = [
-    clip(WALL, vol=2.0, **{"in": 18.95, "out": 20.44,                     # face contact 20.35, 3 frames before the cut
+    clip(WALL, vol=3.0, **{"in": 18.95, "out": 20.44,                     # face contact 20.35, 3 frames before the cut
          "track": [[18.95, 0.5, 0.45, 1.0], [19.9, 0.66, 0.4, 1.2]],
          "hits": [{"at": 20.05, "x": 0.86, "y": 0.36, "zoom": 1.3}]}),
     meme(M + 'shocked-cat__GINxa2zTfIM__omg.mp4', "Caught it with her FACE 💀"),
-    clip(WALL, **{"in": 19.4, "out": 20.44, "reverse": 3.0, "track": [[0, 0.8, 0.38, 1.45]]}),
-    replay(WALL, vol=2.0, **{"in": 19.4, "out": 22.35, "speed": [[19.4, 1.0], [20.15, 0.35], [20.75, 1.0]],
-           "track": [[0, 0.8, 0.38, 1.45]],
-           "hits": [{"at": 20.15, "x": 0.86, "y": 0.36, "zoom": 1.15},
+    clip(WALL, **{"in": 19.4, "out": 20.44, "reverse": 3.0, "track": [[0, 0.8, 0.38, 1.6]]}),
+    replay(WALL, vol=3.0, **{"in": 19.4, "out": 22.35, "speed": [[19.4, 1.0], [20.15, 0.35], [20.75, 1.0]],
+           "track": [[0, 0.8, 0.38, 1.6]],
+           "hits": [{"at": 20.15, "x": 0.86, "y": 0.36, "zoom": 1.2},
                     {"at": 20.9, "x": 0.72, "y": 0.42, "zoom": 0.8, "dur": 0.6}],
            "sfx": [{"at": 20.1, "src": TAPE, "vol": 0.5},
                    {"at": 20.35, "src": THUD, "vol": 0.9, "rate": 0.7}]})]
@@ -90,8 +90,9 @@ WALL_FACE = [
 CABLE = B + '7503648632537632031.mp4'
 CABK = {"vol": 0, "crop": [0, 630, 1080, 1290]}          # crop sits below the caption box, so zooms never show it
 CABLE_KNEES = [
-    clip(CABLE, **CABK, **{"in": 3.3, "out": 6.27,                         # knees reach the floor at 6.17
+    clip(CABLE, **CABK, **{"in": 3.75, "out": 6.27,                         # knees reach the floor at 6.17
          "sfx": [{"at": 4.12, "src": METAL, "vol": 0.5},
+                 {"at": 4.5, "src": THUD, "vol": 0.4},             # his stumble step
                  {"at": 6.08, "src": THUD, "vol": 0.6}]}),
     meme(M + 'crying-cat__ufPsZFFomo4__crying-cat-sad-cat.mp4'),
     clip(CABLE, **CABK, **{"in": 3.95, "out": 6.27, "reverse": 4.0}),
@@ -100,6 +101,7 @@ CABLE_KNEES = [
                     {"at": 6.15, "x": 0.42, "y": 0.56, "zoom": 1.2, "dur": 0.6}],
            "sfx": [{"at": 4.0, "src": TAPE, "vol": 0.5},
                    {"at": 4.12, "src": METAL, "vol": 0.45, "rate": 0.7},
+                   {"at": 4.5, "src": THUD, "vol": 0.4, "rate": 0.75},
                    {"at": 6.08, "src": THUD, "vol": 0.6}]})]
 
 # mid-set he bursts into an evil laugh, the spotter flinches back. Real audio (the laugh is the joke); the

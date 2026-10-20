@@ -54,7 +54,7 @@ def raul():
         {'src': GO, 'in': 13.4, 'len': 1.6, 'x': 0.5, 'zoom': [1.0, 1.08]},                 # 2 Thor roars
         {'src': WR, 'in': 133.0, 'len': 1.4, 'x': 0.5, 'zoom': [1.05, 1.15]},               # 3 walk-out
         {'src': WR, 'in': 136.0, 'len': 1.2, 'x': 0.5, 'zoom': [1.05, 1.15]},               # 4 flags
-        {'src': WR, 'in': 154.5, 'len': 1.5, 'x': 0.5, 'zoom': [1.35, 1.45]},               # 5 to the bar
+        {'src': WR, 'in': 145.0, 'len': 1.5, 'x': 0.5, 'zoom': [1.3, 1.4]},                 # 5 on stage, name graphic
         {'src': WR, 'in': 159.5, 'len': 1.2, 'x': 0.5, 'zoom': [1.0, 1.06]},                # 6 511 kg on the floor
         {'src': WR, 'in': 165.0, 'len': 1.3, 'x': 0.5, 'zoom': [1.35, 1.45]},               # 7 arms out to the crowd
         {'src': WR, 'in': 174.5, 'len': 1.1, 'x': 0.45, 'zoom': [1.0, 1.06]},               # 8 straps on the bar
@@ -67,13 +67,14 @@ def raul():
                  {'src': WR, 'in': 199.0, 'x': 0.5}, {'src': OU, 'in': 17.0, 'x': 0.5},
                  {'src': WR, 'in': 211.0, 'x': 0.5}, {'src': WR, 'in': 214.5, 'x': 0.5},
                  {'src': WR, 'in': 226.0, 'x': 0.5}, {'src': OU, 'in': 19.0, 'x': 0.5}])
-    sh += [{'src': WR, 'in': 211.6, 'len': 2.4, 'x': 0.5, 'zoom': [1.0, 1.08]}]              # end: arms wide
+    sh += [{'src': WR, 'in': 211.6, 'len': 3.0, 'x': 0.5, 'zoom': [1.0, 1.08]}]              # end: arms wide
     st, total = starts_of(sh)
     v_thor, v_mtn, v_call, v_wr = st[1] + 0.05, st[2] + 0.1, st[5] + 0.1, st[11] - 0.1
     voice = [{'src': GO, 'in': 3.2, 'out': 6.95, 'at': v_thor},          # "five hundred and ten kilograms"
              {'src': GO, 'in': 29.35, 'out': 31.3, 'at': v_mtn},         # "look upon the mountain"
              {'src': WR, 'in': 155.3, 'out': 161.0, 'at': v_call},       # "Raul Flores! 500 and 11 kilograms"
-             {'src': WR, 'in': 194.0, 'out': 202.3, 'at': v_wr}]         # "and Flores has a new ... world record"
+             {'src': WR, 'in': 194.0, 'out': 198.8, 'at': v_wr},         # "and Flores has a new"
+             {'src': WR, 'in': 199.85, 'out': 201.25, 'at': v_wr + 4.9}]  # "world record" (crowd gap cut)
     subs = [card('511 KG.', 0.1, st[1] - 0.05, size=170, yellow={'511'}),
             card('THE WORLD RECORD WAS', st[1] + 0.05, st[2] - 0.05, size=96),
             card('510 KG.', st[1] + 0.6, st[2] - 0.05, y=560, size=150, yellow={'510'}),
@@ -85,11 +86,11 @@ def raul():
                  y=1240, yellow={'11'}),
             card('1 KG MORE', st[10] + 0.2, st[11] - 0.05, yellow={'1', 'KG'}),
             card('THAN THE MOUNTAIN.', st[10] + 0.5, st[11] - 0.05, y=560),
-            said([('NEW', 197.98)], v_wr - 194.0, 199.85, y=1240),
-            said([('WORLD', 199.9), ('RECORD!', 200.62)], v_wr - 194.0, 202.3, y=1240, yellow={'RECORD'}),
+            said([('FLORES', 194.7), ('HAS', 196.02), ('A', 196.56), ('NEW', 197.98)], v_wr - 194.0, 198.8, y=1240),
+            said([('WORLD', 199.9), ('RECORD!', 200.62)], v_wr + 4.9 - 199.85, 201.25, y=1240, yellow={'RECORD'}),
             card('RECORDS ARE MADE', st[-1] + 0.1, total, size=100),
             card('TO BE BROKEN.', st[-1] + 0.4, total, y=560, size=100, yellow={'BROKEN'}),
-            card('NOW GO BREAK YOURS.', st[-1] + 1.1, total, y=1240, size=104, yellow={'YOURS'})]
+            card('NOW GO BREAK YOURS.', v_wr + 6.4, total, y=1240, size=104, yellow={'YOURS'})]
     return {'name': 'HV1_raul_511', 'font': FONT, 'grade': LIVE, 'shots': sh, 'voice': voice, 'subs': subs,
             'fadeout': 0.3}
 
@@ -108,8 +109,8 @@ def ronnie():
         {'src': LP, 'in': 57.0, 'out': 58.7, **BOX, 'zoom': [1.0, 1.08]},                  # 5 "time to break the record baby"
         {'src': LP, 'in': 88.0, 'len': 3.0, **BOX, 'zoom': [1.0, 1.1]},                    # 6 reps, "go go go"
         {'src': SQV, 'in': 141.0, 'len': 1.6, **BOX, 'zoom': [1.0, 1.08]},                 # 7 #1 the loaded bar
-        {'src': SQ, 'in': 6.0, 'out': 11.6, 'speed': [[6.0, 1.0], [8.4, 0.6], [10.2, 1.0]], **P},  # 8 rep 1, slow at the bottom
-        {'src': SQ, 'in': 16.4, 'out': 20.6, **P, 'flash': 'white'},                        # 9 rep 2
+        {'src': SQ, 'in': 6.6, 'out': 11.0, 'speed': [[6.6, 1.0], [8.4, 0.6], [9.8, 1.0]], **P},   # 8 rep 1, slow at the bottom
+        {'src': SQ, 'in': 18.4, 'out': 20.4, **P, 'flash': 'white'},                        # 9 rep 2
     ]
     sh += beats([{'src': SQ, 'in': 11.0, **BOX, 'z': 1.08}, {'src': DB, 'in': 27.0, **BOX, 'z': 1.08},
                  {'src': LP, 'in': 93.0, **BOX}, {'src': SQ, 'in': 19.0, **BOX, 'z': 1.08},
