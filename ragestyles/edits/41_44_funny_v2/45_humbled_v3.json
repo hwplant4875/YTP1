@@ -17,79 +17,6 @@
  "segments": [
   {
    "type": "clip",
-   "src": "/home/user/rs_work/src/hd_bank/c/7639254568102202637.mp4",
-   "ratio": "9:16",
-   "track": [
-    [
-     0,
-     0.52,
-     0.5,
-     1.2
-    ]
-   ],
-   "vol": 0,
-   "in": 5.5,
-   "out": 8.4
-  },
-  {
-   "type": "meme",
-   "src": "/home/user/rs_work/memes/t/shocked-cat__btYkcmAPyCc__cat-flabbergasted.mp4",
-   "dur": 0.75,
-   "cap": null,
-   "hold": 0.75
-  },
-  {
-   "type": "clip",
-   "src": "/home/user/rs_work/src/hd_bank/c/7639254568102202637.mp4",
-   "ratio": "9:16",
-   "track": [
-    [
-     0,
-     0.52,
-     0.5,
-     1.2
-    ]
-   ],
-   "grade": {
-    "b": 0.04,
-    "c": 1.12,
-    "s": 1.2
-   },
-   "vol": 0,
-   "in": 6.6,
-   "out": 9.2,
-   "speed": [
-    [
-     6.6,
-     1.0
-    ],
-    [
-     6.8,
-     0.4
-    ],
-    [
-     8.1,
-     1.0
-    ]
-   ],
-   "hits": [
-    {
-     "at": 6.8,
-     "x": 0.52,
-     "y": 0.5,
-     "zoom": 1.1
-    }
-   ],
-   "sfx": [
-    {
-     "at": 7.9,
-     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
-     "vol": 0.8
-    }
-   ]
-  },
-  {
-   "type": "clip",
    "src": "/home/user/rs_work/src/hd_bank/d/7424792145137077537.mp4",
    "ratio": "9:16",
    "track": [
@@ -266,6 +193,75 @@
      "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
      "vol": 0.8,
      "rate": 0.75
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7639254568102202637.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.52,
+     0.5,
+     1.2
+    ]
+   ],
+   "vol": 0,
+   "in": 5.5,
+   "out": 8.4
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/shocked-cat__btYkcmAPyCc__cat-flabbergasted.mp4",
+   "dur": 0.75,
+   "cap": null,
+   "hold": 0.75
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7639254568102202637.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.52,
+     0.5,
+     1.2
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 6.6,
+   "out": 10.6,
+   "speed": [
+    [
+     6.6,
+     1.0
+    ],
+    [
+     6.75,
+     1.8
+    ]
+   ],
+   "hits": [
+    {
+     "at": 6.8,
+     "x": 0.52,
+     "y": 0.5,
+     "zoom": 1.1
+    }
+   ],
+   "sfx": [
+    {
+     "at": 7.9,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.8
     }
    ]
   }

@@ -127,16 +127,19 @@ SPOTTER_PIGGY = [
 # bails a squat, the bar rolls straight over his phone, RIP iPhone
 ROLLBAR = '/home/user/rs_work/src/hd_bank/c/7294317549473238314.mp4'
 BAR_PHONE = [
+    # the plate clips the phone at 6.75: four looks at it, each with its own sound, Vine Boom first (user)
     clip(ROLLBAR, vol=0, **{"in": 4.3, "out": 7.3,
-         "sfx": [{"at": 5.05, "src": LIB + "thud_heavy.mp3", "vol": 0.8}]}),
-    clip(ROLLBAR, **{"in": 5.2, "out": 7.3, "reverse": 4.0}),
+         "sfx": [{"at": 5.05, "src": LIB + "thud_heavy.mp3", "vol": 0.6},
+                 {"at": 6.72, "src": BOOM, "vol": 0.6}]}),
+    clip(ROLLBAR, **{"in": 5.2, "out": 7.3, "reverse": 4.0,
+         "sfx": [{"at": 5.32, "src": SFX + "lego-breaking.mp3", "ss": 0.08, "vol": 0.7}]}),   # reverse passes 6.75 after 0.12 s
     replay(ROLLBAR, vol=0, **{"in": 5.2, "out": 7.3, "speed": [[5.2, 1.0], [6.4, 0.45]],
-           "hits": [{"at": 6.4, "x": 0.5, "y": 0.6, "zoom": 1.2}]}),
+           "hits": [{"at": 6.4, "x": 0.5, "y": 0.6, "zoom": 1.2}],
+           "sfx": [{"at": 6.72, "src": '/mnt/project-files/sfx/drive/018_접시깨지는소리.mp3', "vol": 0.7}]}),
     clip(ROLLBAR, vol=0, **{"in": 10.7, "out": 12.5,
-         "sfx": [{"at": 10.72, "src": '/mnt/project-files/sfx/drive/018_접시깨지는소리.mp3', "vol": 0.8}]}),
+         "sfx": [{"at": 10.72, "src": SFX + "bruh-sound-effect_WstdzdM.mp3", "vol": 0.7}]}),
     # the broken iPhone rises up the stairs into heaven (heaven/heaven.py, user's heaven image), no cat
-    meme('/home/user/rs_work/memes/heaven_iphone.mp4', dur=2.8, boomVol=0,
-         sfx=[{"at": 0.0, "src": LIB + "heaven_choir.mp3", "vol": 0.32}])]
+    meme('/home/user/rs_work/memes/heaven_iphone.png', dur=1.6, boomVol=0)]   # plain image cut, no animation or SFX (user)
 
 CLIPS_BOTH = [
     clip(R + "1ng2nwz.mp4", **{"in": 0.0, "out": 2.6,
@@ -152,7 +155,7 @@ FLIPK = {"track": [[0, 0.52, 0.5, 1.2]], "vol": 0}   # keeps the burned-in capti
 BENCH_FLIP = [
     clip(FLIP, **FLIPK, **{"in": 5.5, "out": 8.4}),
     meme(M + 'shocked-cat__btYkcmAPyCc__cat-flabbergasted.mp4', hold=0.75),
-    replay(FLIP, **FLIPK, **{"in": 6.6, "out": 9.2, "speed": [[6.6, 1.0], [6.8, 0.4], [8.1, 1.0]],
+    replay(FLIP, **FLIPK, **{"in": 6.6, "out": 10.6, "speed": [[6.6, 1.0], [6.75, 1.8]],   # fast-forward (user)
            "hits": [{"at": 6.8, "x": 0.52, "y": 0.5, "zoom": 1.1}],
            "sfx": [{"at": 7.9, "src": LIB + "thud_heavy.mp3", "vol": 0.8}]})]
 
@@ -201,10 +204,26 @@ TREAD_SPRINT = [
            "sfx": [{"at": 1.6, "src": LIB + "tape_stop.mp3", "vol": 0.5},
                    {"at": 2.95, "src": LIB + "thud_heavy.mp3", "vol": 0.7}]})]
 
+# CCTV domino: she launches off her treadmill, belly-flops, and the women next to her go down one after another.
+# audio on this copy is an added vocal loop, so muted
+DOMINO = '/home/user/rs_work/src/hd_bank/e/7555871094712880406.mp4'
+DOMK = {"vol": 0, "track": [[0, 0.45, 0.5, 1.0]]}
+TREAD_DOMINO = [
+    clip(DOMINO, **DOMK, **{"in": 0.9, "out": 2.55,
+         "sfx": [{"at": 2.45, "src": LIB + "thud_heavy.mp3", "vol": 0.8}]}),
+    clip(DOMINO, **DOMK, **{"in": 1.6, "out": 2.55, "reverse": 3.0}),
+    replay(DOMINO, **DOMK, **{"in": 1.6, "out": 5.6, "speed": [[1.6, 1.0], [1.75, 0.45], [2.7, 1.0]],
+           "hits": [{"at": 1.75, "x": 0.5, "y": 0.5, "zoom": 1.1},
+                    {"at": 3.0, "x": 0.4, "y": 0.55, "zoom": 1.1, "dur": 0.6}],
+           "sfx": [{"at": 1.7, "src": LIB + "tape_stop.mp3", "vol": 0.5},
+                   {"at": 2.45, "src": LIB + "thud_heavy.mp3", "vol": 0.8, "rate": 0.75},
+                   {"at": 3.1, "src": BOOM_UP, "vol": 0.5},
+                   {"at": 4.6, "src": LIB + "thud_heavy.mp3", "vol": 0.6}]})]
+
 SHORTS = [
-    short("41_treadmill_v3", "Treadmills Are Undefeated 😭", 40.0, TREAD_ROLL, TREAD_SPRINT),   # launch cut, kids swapped for the sprint fall (user)
+    short("41_treadmill_v3", "Treadmills Are Undefeated 😭", 40.0, TREAD_ROLL, TREAD_DOMINO),   # launch cut, kids swapped for the sprint fall (user)
     short("43_not_ready_v3", "Bro Was NOT Ready 😭", 12.0, BAND_SPRINT, BOX_SQUAT),
-    short("45_humbled_v3", "Gym Bros Got HUMBLED 💀", 60.0, BENCH_FLIP, BOX_TIP, BOX_ROLL),   # can bar cut (user)
+    short("45_humbled_v3", "Gym Bros Got HUMBLED 💀", 60.0, BOX_TIP, BOX_ROLL, BENCH_FLIP),   # bench flip is well known, so last   # can bar cut (user)
     short("44_iphone_v3", "His Phone Never Stood a Chance 💀", 26.0, BAR_PHONE),
 ]
 

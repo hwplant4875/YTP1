@@ -34,7 +34,12 @@
     {
      "at": 5.05,
      "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
-     "vol": 0.8
+     "vol": 0.6
+    },
+    {
+     "at": 6.72,
+     "src": "/home/user/rs_work/memes/vine_boom.mp3",
+     "vol": 0.6
     }
    ]
   },
@@ -52,7 +57,15 @@
    ],
    "in": 5.2,
    "out": 7.3,
-   "reverse": 4.0
+   "reverse": 4.0,
+   "sfx": [
+    {
+     "at": 5.32,
+     "src": "/mnt/project-files/sfx/meme/lego-breaking.mp3",
+     "ss": 0.08,
+     "vol": 0.7
+    }
+   ]
   },
   {
    "type": "clip",
@@ -91,6 +104,13 @@
      "y": 0.6,
      "zoom": 1.2
     }
+   ],
+   "sfx": [
+    {
+     "at": 6.72,
+     "src": "/mnt/project-files/sfx/drive/018_접시깨지는소리.mp3",
+     "vol": 0.7
+    }
    ]
   },
   {
@@ -111,24 +131,17 @@
    "sfx": [
     {
      "at": 10.72,
-     "src": "/mnt/project-files/sfx/drive/018_접시깨지는소리.mp3",
-     "vol": 0.8
+     "src": "/mnt/project-files/sfx/meme/bruh-sound-effect_WstdzdM.mp3",
+     "vol": 0.7
     }
    ]
   },
   {
    "type": "meme",
-   "src": "/home/user/rs_work/memes/heaven_iphone.mp4",
-   "dur": 2.8,
+   "src": "/home/user/rs_work/memes/heaven_iphone.png",
+   "dur": 1.6,
    "cap": null,
-   "boomVol": 0,
-   "sfx": [
-    {
-     "at": 0.0,
-     "src": "/home/user/rs_work/sfx/heaven_choir.mp3",
-     "vol": 0.32
-    }
-   ]
+   "boomVol": 0
   }
  ]
 }

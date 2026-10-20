@@ -1,5 +1,6 @@
 """'Gone to heaven' meme: a cut-out object rises up the stairs of the heaven image into the light, with a glow,
-a golden halo, twinkles and a caption.   python3 heaven.py cutout.png heaven.png out.mp4 [dur] [caption]"""
+a golden halo, twinkles and a caption.   python3 heaven.py cutout.png heaven.png out.mp4 [dur] [caption]
+An out.png writes one still instead: the object already up in the light, halo on, no twinkles."""
 import os, subprocess, sys
 import cv2
 import numpy as np
@@ -48,27 +49,28 @@ def main(cut, bgp, out, dur=2.8, cap='RIP iPhone 😭'):
     capr = caption_rgba(FONT, cap, 1470, 96)
     rng = np.random.default_rng(3)
     stars = [(rng.uniform(-330, 330), rng.uniform(-380, 380), rng.uniform(0, 2.4), rng.uniform(8, 18)) for _ in range(14)]
-    n = int(dur * FPS)
-    p = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS),
+    still = out.lower().endswith('.png')
+    n = 1 if still else int(dur * FPS)
+    p = None if still else subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS),
                           '-i', '-', '-c:v', 'libx264', '-crf', '16', '-pix_fmt', 'yuv420p', out], stdin=subprocess.PIPE)
     for j in range(n):
-        t = j / FPS
+        t = 2.0 if still else j / FPS
         z = 1 + 0.06 * t / dur
         bg = cv2.resize(bg0, None, fx=z, fy=z)
         oy, ox = (bg.shape[0] - H) // 2, (bg.shape[1] - W) // 2
         fr = bg[oy:oy + H, ox:ox + W].copy()
         e = ease(min(t / 2.0, 1))
-        cy = 1560 - 700 * e + 14 * np.sin(t * 3.2)
+        cy = 1560 - 700 * e + (0 if still else 14 * np.sin(t * 3.2))
         sc = 1.0 - 0.18 * e
-        ang = 5 * np.sin(t * 2.1)
+        ang = 0 if still else 5 * np.sin(t * 2.1)
         M = cv2.getRotationMatrix2D((obj.shape[1] / 2, obj.shape[0] / 2), ang, sc)
         o = cv2.warpAffine(obj, M, (obj.shape[1], obj.shape[0]), flags=cv2.INTER_LINEAR)
         g = cv2.warpAffine(glow, M, (obj.shape[1], obj.shape[0]), flags=cv2.INTER_LINEAR)
-        paste(fr, g, W / 2, cy, 0.75 + 0.2 * np.sin(t * 5))
+        paste(fr, g, W / 2, cy, 0.85 if still else 0.75 + 0.2 * np.sin(t * 5))
         paste(fr, o, W / 2, cy)
         ha = min(max((t - 0.5) / 0.4, 0), 1)
         paste(fr, halo, W / 2, cy - (obj.shape[0] / 2 - pad) * sc - 40, ha)
-        for sx, sy, t0, r in stars:
+        for sx, sy, t0, r in ([] if still else stars):
             k = np.sin(np.pi * ((t - t0) % 1.2) / 1.2) if t > t0 else 0
             if k > 0.05:
                 c = (int(W / 2 + sx), int(cy + sy))
@@ -78,6 +80,9 @@ def main(cut, bgp, out, dur=2.8, cap='RIP iPhone 😭'):
         fr = np.clip(fr, 0, 255).astype(np.uint8)
         if t > 0.35:
             fr = over(fr, capr)
+        if still:
+            Image.fromarray(fr).save(out)
+            return
         p.stdin.write(fr.tobytes())
     p.stdin.close(); p.wait()
 
