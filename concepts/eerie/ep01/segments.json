@@ -9,126 +9,174 @@
  },
  {
   "id": "s03",
-  "text": "It is three twelve in the morning."
+  "text": "It is three in the morning."
  },
  {
   "id": "s04",
-  "text": "This is Instruction zero zero one. Follow every step, in order. There are four steps. You will only be given three."
+  "text": "This is Instruction zero zero one. There are three rules. Follow them, and you will see the morning."
  },
  {
   "id": "s05",
-  "text": "Step one. Do not open the door."
+  "text": "If the rules stop working, there is one more page. It tells you how to fight back."
  },
  {
   "id": "s06",
-  "text": "Listen to where the knock comes from. Not the bottom of the door. The middle."
+  "text": "Rule one. Do not open the door."
  },
  {
   "id": "s07",
-  "text": "A cat that wants in will scratch. It will push. It will cry."
+  "text": "Listen to where the knock comes from. Not the bottom of the door. The middle."
  },
  {
   "id": "s08",
-  "text": "It will not knock. Cats do not knock."
+  "text": "A cat that wants in will scratch. It will push. It will cry."
  },
  {
   "id": "s09",
-  "text": "This one knocks at the height of your hand."
+  "text": "It will not knock. Cats do not knock."
  },
  {
   "id": "s10",
-  "text": "It has been standing like that for a while. Its legs were not made for it. It does not seem to mind."
+  "text": "This one knocks right in the middle. Where a hand would knock."
  },
  {
   "id": "s11",
-  "text": "Step two. Do not look under the door."
+  "text": "And every time it knocks, you hear something small. A bell."
  },
  {
   "id": "s12",
-  "text": "There is a light on in the hallway. You did not leave it on."
+  "text": "Rule two. Do not look under the door."
  },
  {
   "id": "s13",
-  "text": "In the gap under the door, there are two shadows. Your cat stands on four."
+  "text": "There is a light on in the hallway. You did not leave it on."
  },
  {
   "id": "s14",
-  "text": "Do not count them again. The number will not change."
+  "text": "In the gap under the door, there are two shadows. A cat stands on four."
  },
  {
   "id": "s15",
-  "text": "Then it will meow."
+  "text": "Do not count them again. The number will not change."
  },
  {
   "id": "s16",
-  "text": "Grown cats almost never meow at each other. The meow is a sound cats made only for people."
+  "text": "Then it will meow."
  },
  {
   "id": "s17",
-  "text": "Something outside your door has been studying that sound for a long time."
+  "text": "Grown cats almost never meow at each other. The meow is a sound cats made only for people."
  },
  {
   "id": "s18",
-  "text": "It is close. But it is too slow. It is too low. And it comes from too high up."
+  "text": "You know this meow. You have heard it every morning for years."
  },
  {
   "id": "s19",
-  "text": "Step three. Look at the foot of your bed."
+  "text": "But it is too slow. It is too low. And it comes from too high up."
  },
  {
   "id": "s20",
-  "text": "Your cat is there. It has been there all night."
+  "text": "Rule three. Look at the foot of your bed."
  },
  {
   "id": "s21",
-  "text": "Then what is knocking?"
+  "text": "Your cat sleeps there every night."
  },
  {
   "id": "s22",
-  "text": "Do not watch the door anymore. Watch your cat."
+  "text": "Tonight, the blanket is flat. You let your cat out before bed. And now, something wants back in."
  },
  {
   "id": "s23",
-  "text": "Cats hear sounds far higher than you can. Footsteps you will never hear. Breathing you will never hear."
+  "text": "Listen to the bell again. You bought that bell. You put it on its collar, so you would always know where it was."
  },
  {
   "id": "s24",
-  "text": "Tonight, your cat is not asleep. It is listening."
+  "text": "Now you know where it is."
  },
  {
   "id": "s25",
-  "text": "If its ears turn to the door, do not move. If its tail gets big, hold your breath."
+  "text": "You have watched it stretch up the door frame, on two legs, and you laughed. It was not stretching. It was practicing."
  },
  {
   "id": "s26",
-  "text": "If it lies down and closes its eyes... it is gone. You can sleep now."
+  "text": "Do not call it. It will come."
  },
  {
   "id": "s27",
-  "text": "Your cat has done this before. Many nights. You thought it was just sleeping on your feet."
+  "text": "Stay in bed. Breathe slowly. Cats get bored."
  },
  {
   "id": "s28",
-  "text": "In the morning, your cat will sit by the bedroom door and wait. Open it. That one is safe."
+  "text": "In the morning, it will be back on the bed. Four legs. Purring."
  },
  {
   "id": "s29",
-  "text": "Look at the door before you leave. Near the middle. At the height of your hand."
+  "text": "Look at the door before you leave. Right in the middle."
  },
  {
   "id": "s30",
-  "text": "Three marks. Like paw prints. Too far apart to be paws."
+  "text": "Three marks. Like claws. Too far apart to be claws."
  },
  {
   "id": "s31",
-  "text": "Step four is for the night the knocking comes from inside your room."
+  "text": "Emergency protocol. How to fight back."
  },
  {
   "id": "s32",
-  "text": "Step four has never been written. Nobody who needed it was able to send it back."
+  "text": "If the handle starts to turn, the rules are over."
  },
  {
   "id": "s33",
-  "text": "Keep your cat on the bed. Keep your door closed. This was Instruction zero zero one."
+  "text": "Here is what does not work."
+ },
+ {
+  "id": "s34",
+  "text": "Do not throw things at it. It will dodge every one. It has been practicing that since it was a kitten."
+ },
+ {
+  "id": "s35",
+  "text": "Do not run. A house cat can run nearly fifty kilometers an hour. This one has longer legs."
+ },
+ {
+  "id": "s36",
+  "text": "Do not offer it your arm to buy time. It will take the arm. You will not have enough blood left to need it back."
+ },
+ {
+  "id": "s37",
+  "text": "Do not cover yourself in catnip. It will not distract it. You will only taste better."
+ },
+ {
+  "id": "s39",
+  "text": "There is only one thing that works."
+ },
+ {
+  "id": "s40",
+  "text": "Get down on all fours. Look it in the eyes. And bark. Like a dog. Loud."
+ },
+ {
+  "id": "s41",
+  "text": "Do not stop."
+ },
+ {
+  "id": "s42",
+  "text": "It will flatten its ears. It will step back. It will drop to four legs and walk away, as if nothing happened."
+ },
+ {
+  "id": "s43",
+  "text": "Keep barking until the sun comes up. Your neighbors will complain. Let them."
+ },
+ {
+  "id": "s44",
+  "text": "In the morning, your cat will be on the bed, purring. Feed it. Pet it."
+ },
+ {
+  "id": "s45",
+  "text": "Do not mention the barking. It will not mention the knocking."
+ },
+ {
+  "id": "s46",
+  "text": "This was Instruction zero zero one."
  }
 ]
