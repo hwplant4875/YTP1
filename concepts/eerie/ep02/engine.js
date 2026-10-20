@@ -488,7 +488,7 @@ function pageIcon(name, x, y, col = '#111') {
   if (name === 'fist') { rr(-34, -34, 68, 64, 18, col); for (let i = 1; i < 4; i++) ln(-34 + i * 17, -34, -34 + i * 17, -10, 3, '#ff2b2b'); }
   ctx.restore();
 }
-const RULES = [['chat', 'THE MESSAGE', ''], ['corner', 'THE CORNER', ''], ['photo', 'THE PHOTO', ''], ['warn', 'EMERGENCY PROTOCOL', 'HOW TO FIGHT BACK']];
+const RULES = [['chat', 'DO NOT REPLY', ''], ['corner', 'DO NOT LOOK AT THE CORNER', '', ['DO NOT LOOK', 'AT THE CORNER']], ['photo', 'DO NOT DELETE THE PHOTO', '', ['DO NOT DELETE', 'THE PHOTO']], ['warn', 'EMERGENCY PROTOCOL', 'HOW TO FIGHT BACK']];
 // the index page. o.rowT[i]: when row i slides in; o.fillT[i]: when its content is written; o.hot: rule 4 armed 0..1; o.struck[i]; o.dim
 function rulePage(t, o) {
   const pc = '#ececec';
@@ -508,7 +508,10 @@ function rulePage(t, o) {
     const fill = o.fillT[i] ?? 1e9, fk = clamp((t - fill) / 0.3), ink = hot > 0.5 ? '#fff' : (four ? '#d61f1f' : '#111');
     if (t < fill) { for (let j = 0; j < 2; j++) rr(P.x + 200, y + 40 + j * 40, j ? 260 : 400, 20, 4, four ? '#111' : '#cfcfcf'); }   // redacted / blank until it is read out
     else { ctx.save(); ctx.globalAlpha *= fk; pageIcon(RULES[i][0], P.x + 240, y + 66, ink);
-      fitText(RULES[i][1], P.x + 310, y + (RULES[i][2] ? 62 : 82), P.w - 370, 50, ink);
+      if (four) fitText(RULES[i][1], P.x + 310, y + 62, P.w - 370, 50, ink);
+      else {   // the three "do not" rules: one size, the long ones on two lines
+        const ls = RULES[i][3] || [RULES[i][1]];
+        ls.forEach((l, j) => text(l, P.x + 310, y + 82 + (j - (ls.length - 1) / 2) * 46, '900 42px M', ink, 'left')); }
       if (RULES[i][2]) text(RULES[i][2], P.x + 310, y + 110, '900 32px M', hot > 0.5 ? '#111' : '#444', 'left'); ctx.restore(); }
     if (o.struck && o.struck[i] != null && t >= o.struck[i]) { ctx.save(); redGlow(12); lnP(P.x + 50, y + 74, P.x + P.w - 50, y + 58, 10, C.red, easeOut((t - o.struck[i]) / 0.18)); ctx.restore(); }
     ctx.restore();
@@ -604,8 +607,8 @@ function phoneInHand(t, lit = 1, o = {}) {
 function cornerThing(t, o = {}) {
   const vis = o.vis ?? 1; if (vis <= 0) return;
   const lit = o.lit ?? 0.3, br = Math.sin(t * 2.1) * (o.breath ?? 1);
-  const body = `rgb(${Math.round(lerp(26, 120, lit))},${Math.round(lerp(26, 120, lit))},${Math.round(lerp(28, 124, lit))})`;
-  const edge = `rgba(255,255,255,${0.1 + 0.32 * lit})`;
+  const body = o.body || `rgb(${Math.round(lerp(26, 120, lit))},${Math.round(lerp(26, 120, lit))},${Math.round(lerp(28, 124, lit))})`;
+  const edge = o.edge || `rgba(255,255,255,${0.1 + 0.32 * lit})`;
   ctx.save(); ctx.globalAlpha *= vis; ctx.translate(CORNER.x, CORNER.y);
   const s = o.s ?? TS; ctx.scale(s, s);
   // a limb: shoulder -> elbow -> hand, with long fingers splayed on the surface
@@ -640,7 +643,7 @@ function cornerThing(t, o = {}) {
   rr(-46, -70, 92, 140, 18, '#0a0a0a'); rrS(-46, -70, 92, 140, 18, edge, 3);
   if (face !== 'off') {
     const on = face === 'blank' ? 0.55 : 0.85;
-    ctx.save(); glow(red > 0.3 ? 'rgba(255,43,43,0.7)' : 'rgba(220,232,255,0.6)', 24); rr(-40, -64, 80, 128, 14, `rgba(${Math.round(lerp(210, 120, red))},${Math.round(lerp(222, 30, red))},${Math.round(lerp(240, 30, red))},${on * (0.35 + 0.15 * lit)})`); ctx.restore();
+    ctx.save(); glow(red > 0.3 ? 'rgba(255,43,43,0.7)' : 'rgba(220,232,255,0.6)', 24); rr(-40, -64, 80, 128, 14, o.faceFill || `rgba(${Math.round(lerp(210, 120, red))},${Math.round(lerp(222, 30, red))},${Math.round(lerp(240, 30, red))},${on * (0.35 + 0.15 * lit)})`); ctx.restore();
     if (face === 'lens') { circ(0, -38, 11, '#050505'); ctx.save(); if (red > 0) redGlow(16 * red); circ(0, -38, 5, red > 0 ? `rgba(255,43,43,${0.4 + 0.6 * red})` : '#6a6a6a'); ctx.restore(); }
     if (face === 'dots') for (let i = 0; i < 3; i++) circ(-20 + i * 20, 4 + Math.sin(t * 9 - i * 0.9) * 5, 6.5, '#f0f0f0');
   } else if (o.offLine) {   // the last line of light as the face switches off
@@ -692,7 +695,7 @@ function bubbleH(m) {
 }
 function chatBubble(m, y, t) {
   const font = `500 23px ${UI}`;
-  if (m.photo) { const w = 250, h = m.ph || 300, x = m.me ? SW - 16 - w : 64;
+  if (m.photo) { const w = m.pw || 250, h = m.ph || 300, x = m.me ? SW - 16 - w : 64;
     ctx.save(); ctx.beginPath(); ctx.roundRect(x, y, w, h, 20); ctx.clip(); m.photo(x, y, w, h); ctx.restore(); rrS(x, y, w, h, 20, '#333', 2); return h + 16; }
   if (m.dots) { rr(64, y, 92, 44, 22, '#262626'); for (let i = 0; i < 3; i++) circ(90 + i * 20, y + 22 + Math.sin(t * 9 - i * 0.9) * 4, 6, '#bdbdbd'); return 54; }
   let str = m.text; if (m.chars != null && m.chars < 1) str = str.slice(0, Math.floor(str.length * clamp(m.chars)));
@@ -786,9 +789,26 @@ function ceilPhoto(x, y, w, h, o = {}) {
   // you, from above: the back of your head and hair, shoulder, one arm out over the blanket
   ell(head.x, head.y, 62, 74, -0.3, '#d8d8d8');                                // face side
   pth(`M${head.x - 60},${head.y - 30} C${head.x - 40},${head.y - 96} ${head.x + 60},${head.y - 90} ${head.x + 66},${head.y - 4} C${head.x + 40},${head.y - 30} ${head.x - 20},${head.y - 34} ${head.x - 60},${head.y - 30} Z`, '#2a2a2a');   // hair
-  pthS(`M${head.x - 16},${head.y + 10} q10,7 20,0`, '#333', 4);                // closed eye
   pth('M260,370 C300,340 420,350 450,400 L450,420 L250,420 Z', '#e6e6e6');      // shoulder under the blanket edge
-  ctx.save(); ctx.translate(470, 430); ctx.rotate(0.5 + hash(n + 3) * 0.3); rr(0, -20, 200, 40, 20, '#dcdcdc'); circ(206, 0, 26, '#e2e2e2'); ctx.restore();   // arm over the blanket
+  if (o.awake) {
+    // you, awake: both arms up, holding the phone over your chest, its light on your face
+    ctx.save(); const gl = ctx.createRadialGradient(head.x + 20, head.y + 60, 10, head.x + 20, head.y + 60, 260);
+    gl.addColorStop(0, 'rgba(215,228,255,0.55)'); gl.addColorStop(1, 'rgba(215,228,255,0)'); ctx.fillStyle = gl; ctx.fillRect(head.x - 260, head.y - 200, 520, 520); ctx.restore();
+    ell(head.x - 14, head.y + 10, 11, 8, -0.3, '#f4f4f4'); circ(head.x - 10, head.y + 11, 5, '#111');   // open eye, looking at the screen
+    ctx.lineCap = 'round';
+    // sleeves out of the blanket, forearms up to the phone (outlined so they read against the sheet)
+    ctx.lineJoin = 'round';
+    for (const pts of [[[255, 405], [205, 560], [305, 540]], [[445, 415], [505, 575], [435, 520]]]) for (const [w, c] of [[50, '#8a8a8a'], [42, '#d6d6d6']]) {
+      ctx.beginPath(); ctx.moveTo(...pts[0]); ctx.lineTo(...pts[1]); ctx.lineTo(...pts[2]); ctx.strokeStyle = c; ctx.lineWidth = w; ctx.stroke(); }
+    ctx.save(); ctx.translate(370, 520); ctx.rotate(-0.25);
+    glow('rgba(215,228,255,0.7)', 30); rr(-62, -95, 124, 190, 18, '#161616'); noGlow();
+    rrS(-62, -95, 124, 190, 18, '#555', 4); rr(-40, -78, 34, 34, 8, '#2a2a2a'); circ(-30, -68, 7, '#0a0a0a'); circ(-16, -56, 7, '#0a0a0a');   // the phone, back to the camera, its lenses
+    for (const sx of [-1, 1]) { ctx.save(); ctx.translate(sx * 62, 10); rr(-16, -34, 32, 68, 14, '#8a8a8a'); rr(-12, -30, 24, 60, 11, '#dcdcdc'); ctx.restore(); }   // fingers round its edges
+    ctx.restore();
+  } else {
+    pthS(`M${head.x - 16},${head.y + 10} q10,7 20,0`, '#333', 4);                // closed eye
+    ctx.save(); ctx.translate(470, 430); ctx.rotate(0.5 + hash(n + 3) * 0.3); rr(0, -20, 200, 40, 20, '#dcdcdc'); circ(206, 0, 26, '#e2e2e2'); ctx.restore();   // arm over the blanket
+  }
   ctx.restore();
   // the flash: blown-out centre, harsh fall-off, a little noise
   ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
@@ -853,16 +873,9 @@ function icon2(name, x, y, s = 1) {
 
 // ---------- hook ----------
 S.h1 = (t, seg) => {
-  const tp = wt(seg, 'photo') - 0.1, tn = wt(seg, 'not');
-  if (t < tp) {
-    // 3 AM: you asleep, the phone on the nightstand lights up and buzzes. In the corner, a lens catches the light.
-    cam(t, 0, tp, 1.0, 1.14, 900, 500, () => {
-      room2(t); bed(BX, FY, 1.05, 'sleep', {}); phoneFlat(1, buzzK(t));
-      cornerThing(t, { vis: 0.26, lit: 0, face: 'lens', red: 0.6, breath: 0.6 }); lensGlint(0.9);
-    });
-    return;
-  }
-  phoneShot(t, { start: tp, end: seg.end }, () => chatScreen(t, [M_AWAKE, { ...M_PHOTO, at: tp + 0.05 }]), { z0: 1.12, z1: 1.0 });
+  const tn = wt(seg, 'not');
+  // the video opens on the phone: the photo has just arrived (frame 0 already shows it)
+  phoneShot(t, { start: 0, end: seg.end }, () => chatScreen(t, [M_AWAKE, M_PHOTO]), { z0: 1.55, z1: 1.7, cy: 480 });
   if (t >= tn) pop(t, tn, 1500, 300, () => tag('DO NOT REPLY', 1500, 310, C.red, 54, 'center'), 0.3);
 };
 S.h2 = (t, seg) => {
@@ -1071,13 +1084,13 @@ S.c1 = (t, seg) => {
 };
 S.c2 = (t, seg) => {
   const td = wt(seg, 'delete'), tn = wt(seg, 'new'), tc = wt(seg, 'closer');
-  const shots = [[seg.start - 1, 1, '03:00:41'], [tn, 1.9, '03:04:10'], [tc, 3.1, '03:06:52']];
+  const shots = [[seg.start - 1, 1, '03:00:41', false], [tn, 1.9, '03:04:10', true], [tc, 3.1, '03:06:52', true]];   // the new ones: you, awake, deleting it
   cam(t, seg.start, seg.end - seg.start + 0.8, 1.0, 1.05, 960, 520, () => {
-    shots.forEach(([t0, z, st], i) => { if (t < t0) return;
+    shots.forEach(([t0, z, st, awake], i) => { if (t < t0) return;
       const k = easeOut(prog(t, t0, 0.35)), nextT = shots[i + 1] ? shots[i + 1][0] : 1e9, gone = prog(t, nextT - 0.05, 0.3);
       ctx.save(); ctx.globalAlpha *= k * (1 - gone * 0.75); const x = 460 + i * 60 - gone * 40, y = 170 + i * 30;
       ctx.translate(x + 500, y + 350); ctx.rotate((i - 1) * 0.03); ctx.scale(lerp(1.1, 1, k) * (1 - gone * 0.1), lerp(1.1, 1, k) * (1 - gone * 0.1)); ctx.translate(-x - 500, -y - 350);
-      glow('rgba(0,0,0,0.9)', 40); rr(x - 6, y - 6, 1012, 712, 6, '#ddd'); noGlow(); ceilPhoto(x, y, 1000, 700, { stamp: st, zoom: z, n: i });
+      glow('rgba(0,0,0,0.9)', 40); rr(x - 6, y - 6, 1012, 712, 6, '#ddd'); noGlow(); ceilPhoto(x, y, 1000, 700, { stamp: st, zoom: z, n: i, awake });
       ctx.restore(); });
     // the white flash of each new one
     for (const t0 of [tn, tc]) { const fk = 1 - clamp((t - t0) / 0.3); if (t >= t0 && fk > 0) { ctx.save(); ctx.globalAlpha = fk * fk * 0.3; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H); ctx.restore(); } }
@@ -1195,7 +1208,8 @@ S.d5 = (t, seg) => {
   cam(t, seg.start, seg.end - seg.start + 0.8, 1.6, 1.75, 900, 250, () => {
     phone(900, 548, 1.1, () => lockScreen(t, {}));
     ctx.save(); ctx.translate(900 + 33 * 1.1, 548 - 1.1 * SH / 2 + 34 - (1 - k) * 160); ctx.rotate(0.12); glow('rgba(0,0,0,0.6)', 10); rr(-34, -24, 68, 48, 6, '#e8e2c8'); noGlow(); ctx.restore();
-    if (t >= tu) { sight(160, -40, 860, 180, C.red, prog(t, tu, 0.6), 6); ctx.save(); redGlow(18); circ(160, -40, 10, C.red); ctx.restore(); }
+    if (t >= tu) { const fx = 900 + 30 * 1.1, fy = 548 - 1.1 * (SH / 2 - 31);   // the front camera, under the sticker
+      sight(160, -40, fx, fy, C.red, prog(t, tu, 0.6), 6); ctx.save(); redGlow(18); circ(160, -40, 10, C.red); if (t >= tu + 0.6) circS(fx, fy, 46, C.red, 5); ctx.restore(); }
   });
   if (t >= tn) pop(t, tn, 340, 760, () => tag('NOT THAT CAMERA', 340, 770, C.red, 46, 'center'));
   nopeList2(t, 2);
@@ -1248,8 +1262,8 @@ function cornerReveal(t, o) {
 }
 S.d10 = (t, seg) => {
   const s9 = window.TL.segments.find(s => s.id === 'd9'), tc = wt(seg, 'corner');
-  const full = describeMsgs(1e9, D_PARTS(s9)), extra = 'In the upper left corner of the ceiling, there is';
-  const k = clamp((t - seg.start - 0.2) / 1.6), str = full + ' ' + extra.slice(0, Math.ceil(extra.length * k));
+  const full = describeMsgs(1e9, D_PARTS(s9)), extra = 'The photo was taken from the upper left corner of the ceiling. There is';
+  const k = clamp((t - seg.start - 0.2) / 2.4), str = full + ' ' + extra.slice(0, Math.ceil(extra.length * k));
   // left: the corner, waking up; right: the phone, still typing
   ctx.save(); ctx.beginPath(); ctx.rect(0, 0, 1180, H); ctx.clip();
   ctx.translate(-20, 0); cornerReveal(t, { t0: seg.start, d: seg.end - seg.start + 1, z0: 1.15, z1: 1.35, vis: lerp(0.4, 1, prog(t, tc - 0.3, 0.8)), lit: 0.45, face: t >= tc ? 'dots' : 'blank' });
@@ -1259,7 +1273,7 @@ S.d10 = (t, seg) => {
 };
 S.d11 = (t, seg) => {
   const s9 = window.TL.segments.find(s => s.id === 'd9');
-  const str = describeMsgs(1e9, D_PARTS(s9)) + ' In the upper left corner of the ceiling, there is';
+  const str = describeMsgs(1e9, D_PARTS(s9)) + ' The photo was taken from the upper left corner of the ceiling. There is';
   const glitchy = hash(Math.floor(t * 12)) < 0.35;
   ctx.save(); ctx.beginPath(); ctx.rect(0, 0, 1180, H); ctx.clip();
   ctx.translate(-20, 0); if (glitchy) shake(4, t);
@@ -1271,7 +1285,7 @@ S.d11 = (t, seg) => {
 S.d12 = (t, seg) => {
   const ts = wt(seg, 'stop'), td = wt(seg, 'dark'), tn = wt(seg, 'not');
   const s9 = window.TL.segments.find(s => s.id === 'd9');
-  const str = describeMsgs(1e9, D_PARTS(s9)) + ' In the upper left corner of the ceiling, there is';
+  const str = describeMsgs(1e9, D_PARTS(s9)) + ' The photo was taken from the upper left corner of the ceiling. There is';
   const off = t >= td ? clamp((t - td) / 0.35) : 0;
   if (t < td + 0.6) {
     ctx.save(); ctx.beginPath(); ctx.rect(0, 0, 1180, H); ctx.clip(); ctx.translate(-20, 0);
@@ -1320,6 +1334,18 @@ S.e3 = (t, seg) => {
       redGlow(8); text('RULE 4  EMERGENCY PROTOCOL  ✓', 960, 570, '600 32px Plex', C.red); noGlow();
     });
   });
+};
+// sign-off, every episode: back to the file. "If this ever happens to you... you know the protocol."
+// The stamp slams across the rules, then the picture sinks to half brightness and holds.
+S.e4 = (t, seg) => {
+  const ts = Math.max(...ev('stamp').map(e => e.t)), hit = t - ts;
+  cam(t, seg.start, seg.end - seg.start + 3, 1.0, 1.08, W / 2, 520, () => {
+    ctx.save(); if (hit > 0 && hit < 0.3) shake(8 * (1 - hit / 0.3), t);
+    rulePage(t, { rowT: [-9, -9, -9, -9], fillT: [-9, -9, -9, -9] });
+    if (t >= ts) stampMark(t, ts, 960, 560, [['FOLLOW THE RULES', 64]], -0.14, '#ececec');
+    ctx.restore();
+  });
+  const dk = ease(prog(t, ts + 0.45, 0.7)); if (dk > 0) { ctx.save(); ctx.globalAlpha = 0.5 * dk; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
 };
 // ---------- HUD, captions, texture ----------
 let grainC = null, vig = null;

@@ -48,5 +48,5 @@ if (mode === 'still') {
   execSync(`ffmpeg -y -loglevel error -f concat -safe 0 -i ${tmp}/list.txt -c copy ${out}`);
   rmSync(tmp, { recursive: true, force: true });
 }
-await browser.close(); rmSync(page_);
+await browser.close(); rmSync(page_, { force: true });
 console.log('done', out);
