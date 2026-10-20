@@ -44,7 +44,7 @@ const P = { x: 510, y: 110, w: 900, h: 800 };
 function fitText(str, x, y, maxW, size, col) { ctx.font = `900 ${size}px M`; const w = ctx.measureText(str).width; if (w > maxW) size = Math.floor(size * maxW / w); text(str, x, y, `900 ${size}px M`, col, 'left'); }
 const ROWY = i => P.y + 150 + i * 158;
 // rubber stamp: double red border, worn ink, slams down from above
-function stampMark(t, t0, x, y, lines, rot = -0.12, paper = '#e6e6e6') {
+function stampMark(t, t0, x, y, lines, rot = -0.12, paper = '#e6e6e6', wear = 70) {
   if (t < t0) return;
   const k = clamp((t - t0) / 0.13), s = lerp(1.8, 1, easeOut(k));
   ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); ctx.globalAlpha *= clamp(k * 4);
@@ -54,7 +54,7 @@ function stampMark(t, t0, x, y, lines, rot = -0.12, paper = '#e6e6e6') {
   let yy = -h / 2 + 22; for (const [str, sz] of lines) { yy += sz * 1.0; ctx.font = `900 ${sz}px M`; ctx.letterSpacing = sz * 0.08 + 'px'; text(str, 0, yy - sz * 0.08, `900 ${sz}px M`, C.red); }
   ctx.letterSpacing = '0px';
   // worn ink: paper-coloured specks knocked out of the stamp
-  for (let i = 0; i < 70; i++) { const px = (hash(i * 3.1) - 0.5) * w, py = (hash(i * 7.7) - 0.5) * h; circ(px, py, 1.5 + hash(i) * 3, paper); }
+  for (let i = 0; i < wear; i++) { const px = (hash(i * 3.1) - 0.5) * w, py = (hash(i * 7.7) - 0.5) * h; circ(px, py, 1.5 + hash(i) * 3, paper); }
   ctx.restore();
 }
 function paperclip(x, y, s = 1, col = C.mid) {

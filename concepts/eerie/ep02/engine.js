@@ -435,7 +435,7 @@ const P = { x: 510, y: 110, w: 900, h: 800 };
 function fitText(str, x, y, maxW, size, col) { ctx.font = `900 ${size}px M`; const w = ctx.measureText(str).width; if (w > maxW) size = Math.floor(size * maxW / w); text(str, x, y, `900 ${size}px M`, col, 'left'); }
 const ROWY = i => P.y + 150 + i * 158;
 // rubber stamp: double red border, worn ink, slams down from above
-function stampMark(t, t0, x, y, lines, rot = -0.12, paper = '#e6e6e6') {
+function stampMark(t, t0, x, y, lines, rot = -0.12, paper = '#e6e6e6', wear = 70) {
   if (t < t0) return;
   const k = clamp((t - t0) / 0.13), s = lerp(1.8, 1, easeOut(k));
   ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); ctx.globalAlpha *= clamp(k * 4);
@@ -445,7 +445,7 @@ function stampMark(t, t0, x, y, lines, rot = -0.12, paper = '#e6e6e6') {
   let yy = -h / 2 + 22; for (const [str, sz] of lines) { yy += sz * 1.0; ctx.font = `900 ${sz}px M`; ctx.letterSpacing = sz * 0.08 + 'px'; text(str, 0, yy - sz * 0.08, `900 ${sz}px M`, C.red); }
   ctx.letterSpacing = '0px';
   // worn ink: paper-coloured specks knocked out of the stamp
-  for (let i = 0; i < 70; i++) { const px = (hash(i * 3.1) - 0.5) * w, py = (hash(i * 7.7) - 0.5) * h; circ(px, py, 1.5 + hash(i) * 3, paper); }
+  for (let i = 0; i < wear; i++) { const px = (hash(i * 3.1) - 0.5) * w, py = (hash(i * 7.7) - 0.5) * h; circ(px, py, 1.5 + hash(i) * 3, paper); }
   ctx.restore();
 }
 function paperclip(x, y, s = 1, col = C.mid) {
@@ -629,7 +629,8 @@ function cornerThing(t, o = {}) {
   // arms along the ceiling; o.reach lets the near arm unfold down toward the bed
   limb([[sh.x, sh.y], [250, 30], [380, 8]], 15, 4, 0.1);
   const rk = ease(o.reach ?? 0);
-  limb([[sh.x + 10, sh.y + 16], [lerp(300, 260, rk), lerp(60, 260, rk)], [lerp(470, 300, rk), lerp(10, 460, rk)]], 15, 4, lerp(0.05, 1.2, rk));
+  const rt = o.reachTo ? { x: (o.reachTo.x - CORNER.x) / s, y: (o.reachTo.y - CORNER.y) / s } : { x: 300, y: 460 };   // o.reachTo: where the hand lands, in room coords
+  limb([[sh.x + 10, sh.y + 16], [lerp(300, lerp(sh.x, rt.x, 0.5) + 60, rk), lerp(60, lerp(sh.y, rt.y, 0.5) - 40, rk)], [lerp(470, rt.x, rk), lerp(10, rt.y, rk)]], 15, 4, lerp(0.05, Math.atan2(rt.y - sh.y, rt.x - sh.x), rk));
   // torso: a long hunched shape from the hips to the shoulders
   ctx.beginPath(); ctx.moveTo(hip.x - 22, hip.y + 10); ctx.quadraticCurveTo(10, 90, sh.x - 30, sh.y - 34); ctx.quadraticCurveTo(sh.x + 40, sh.y - 10, sh.x + 22, sh.y + 30);
   ctx.quadraticCurveTo(110, 170, hip.x + 30, hip.y + 26); ctx.closePath();
@@ -794,7 +795,7 @@ function ceilPhoto(x, y, w, h, o = {}) {
     // you, awake: both arms up, holding the phone over your chest, its light on your face
     ctx.save(); const gl = ctx.createRadialGradient(head.x + 20, head.y + 60, 10, head.x + 20, head.y + 60, 260);
     gl.addColorStop(0, 'rgba(215,228,255,0.55)'); gl.addColorStop(1, 'rgba(215,228,255,0)'); ctx.fillStyle = gl; ctx.fillRect(head.x - 260, head.y - 200, 520, 520); ctx.restore();
-    ell(head.x - 14, head.y + 10, 11, 8, -0.3, '#f4f4f4'); circ(head.x - 10, head.y + 11, 5, '#111');   // open eye, looking at the screen
+    for (const [dx, dy] of [[-34, 8], [8, 17]]) { ell(head.x + dx, head.y + dy, 11, 8, -0.3, '#f4f4f4'); circ(head.x + dx + 3, head.y + dy + 2, 5, '#111'); }   // both eyes open (the face is turned up to the camera), looking at the screen
     ctx.lineCap = 'round';
     // sleeves out of the blanket, forearms up to the phone (outlined so they read against the sheet)
     ctx.lineJoin = 'round';
@@ -806,7 +807,7 @@ function ceilPhoto(x, y, w, h, o = {}) {
     for (const sx of [-1, 1]) { ctx.save(); ctx.translate(sx * 62, 10); rr(-16, -34, 32, 68, 14, '#8a8a8a'); rr(-12, -30, 24, 60, 11, '#dcdcdc'); ctx.restore(); }   // fingers round its edges
     ctx.restore();
   } else {
-    pthS(`M${head.x - 16},${head.y + 10} q10,7 20,0`, '#333', 4);                // closed eye
+    for (const [dx, dy] of [[-34, 8], [8, 17]]) pthS(`M${head.x + dx - 10},${head.y + dy} q10,7 20,-3`, '#333', 4);   // both eyes closed
     ctx.save(); ctx.translate(470, 430); ctx.rotate(0.5 + hash(n + 3) * 0.3); rr(0, -20, 200, 40, 20, '#dcdcdc'); circ(206, 0, 26, '#e2e2e2'); ctx.restore();   // arm over the blanket
   }
   ctx.restore();
@@ -873,20 +874,72 @@ function icon2(name, x, y, s = 1) {
 
 // ---------- hook ----------
 S.h1 = (t, seg) => {
-  const tn = wt(seg, 'not');
-  // the video opens on the phone: the photo has just arrived (frame 0 already shows it)
-  phoneShot(t, { start: 0, end: seg.end }, () => chatScreen(t, [M_AWAKE, M_PHOTO]), { z0: 1.55, z1: 1.7, cy: 480 });
+  const tn = wt(seg, 'not'), n = ev('notif').filter(e => e.t < 2).map(e => e.t);
+  // the video opens on the open chat: the message and then the photo arrive, right now
+  const pop2 = n.length >= 2;   // the shorts' timeline has no arrival events: both already there
+  const msgs = [{ text: 'Are you awake?', at: pop2 ? n[0] : -1 }, { photo: PHOTO(), ph: 300, at: pop2 ? n[1] : -1 }];
+  phoneShot(t, { start: 0, end: seg.end }, () => chatScreen(t, msgs), { z0: 1.55, z1: 1.7, cy: 480 });
+  // the phone lights up with each arrival
+  for (const e of n) { const d = t - e; if (d >= 0 && d < 0.35) { ctx.save(); ctx.globalAlpha = 0.12 * (1 - d / 0.35); ctx.fillStyle = '#dfe8ff'; ctx.fillRect(0, 0, W, H); ctx.restore(); } }
   if (t >= tn) pop(t, tn, 1500, 300, () => tag('DO NOT REPLY', 1500, 310, C.red, 54, 'center'), 0.3);
 };
+// the three "do not"s as a teaser: each one is done anyway, and you see what happens, then black
+function h2Windows(seg) {
+  const nx = window.TL.segments.find(s => s.start > seg.start + 0.01), end = nx ? nx.start : seg.end + 0.7;
+  const a = seg.start, b = wt(seg, 'do', 2), c = wt(seg, 'do', 3);
+  return [[a, b, 'photo', 'open', 200], [b, c, 'ask', 'ask', 770], [c, end, 'up', 'look', 200]];
+}
+const H2_HIT = 0.62, H2_BLACK = 0.42;   // contact this long before the next line, black this long before it
+function teaserBox(t, seg, w0, ic, word, y) {
+  const x = 960, tx = wt(seg, word);
+  pop(t, w0, x, y, () => { ctx.save(); ctx.globalAlpha *= 0.82; rr(x - 140, y - 130, 280, 260, 22, '#000'); ctx.restore();
+    rrS(x - 140, y - 130, 280, 260, 22, C.fig, 5); icon2(ic, x, y, 0.95); }, 0.3);
+  redX(x, y, 105, prog(t, tx + 0.25, 0.3));
+}
 S.h2 = (t, seg) => {
-  const items = [['photo', 520, 'open'], ['ask', 960, 'ask'], ['up', 1400, 'look']];
-  cam(t, seg.start, seg.end - seg.start, 1, 1.04, W / 2, 470, () => {
-    items.forEach(([ic, x, w]) => {
-      const t0 = wt(seg, w) - 0.25;
-      pop(t, t0, x, 470, () => { rrS(x - 170, 300, 340, 340, 26, C.dim, 5); icon2(ic, x, 470, 1.05); });
-      redX(x, 470, 120, prog(t, wt(seg, w) + 0.35, 0.35));
+  const ws = h2Windows(seg); let i = 0; for (let k = 0; k < 3; k++) if (t >= ws[k][0]) i = k;
+  const [w0, w1, ic, word, by] = ws[i], hit = w1 - H2_HIT, blk = w1 - H2_BLACK;
+  if (t >= blk) { /* black: only the crossed-out box stays */ }
+  else if (i === 0) {
+    // you open the photo: zoom into the dark of it, and its face is right there
+    if (t < hit) {
+      const tap = w0 + 0.35, op = w0 + 0.6;
+      phoneShot(t, { start: w0, end: hit }, () => {
+        if (t < op) { chatScreen(t, [M_AWAKE, M_PHOTO]); thumb(lerp(330, 190, easeOut(prog(t, w0, 0.3))), lerp(900, 420, easeOut(prog(t, w0, 0.3))), t > tap ? 1 : 0); }
+        else photoViewer(t, { zoom: lerp(1, 3.2, ease(prog(t, op, hit - op))) });
+      }, { z0: 1.2, z1: 1.75, cy: 470 });
+    } else {
+      const d = t - hit;
+      cam(t, hit, 0.25, 2.3, 3.2, CORNER.x + 270, CORNER.y + 230, () => { room2(t); cornerThing(t, { vis: 1, lit: 0.5, face: 'lens', red: 1, reach: 1, breath: 0 }); lensGlint(1); });
+      if (d < 0.06) { ctx.save(); ctx.globalAlpha = 0.7; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+    }
+  } else if (i === 1) {
+    // you ask who took it. The corner answers: it turns red
+    const snd = Math.min(w0 + 0.75, ...ev('send').filter(e => e.t >= w0).map(e => e.t)), room = snd + 0.3;
+    if (t < room) {
+      const msg = 'who took it?', typed = clamp((t - w0) / (snd - w0 - 0.08));
+      const msgs = [M_AWAKE, M_PHOTO]; if (t >= snd) msgs.push({ me: true, text: msg, at: snd, status: 'Read' });
+      phoneShot(t, { start: w0, end: room }, () => chatScreen(t, msgs, { input: t >= snd ? '' : msg.slice(0, Math.round(msg.length * typed)) }), { z0: 1.25, z1: 1.4, cy: 640 });
+    } else {
+      const r = ease(prog(t, room, hit - room)), d = t - hit;
+      cam(t, room, blk - room, 1.25, 1.75, CORNER.x + 220, CORNER.y + 200, () => {
+        room2(t); bed(BX, FY, 1.05, 'woke', { look: -1 });
+        if (r > 0) { ctx.save(); const g = ctx.createRadialGradient(LENS.x, LENS.y, 10, LENS.x, LENS.y, 900); g.addColorStop(0, `rgba(255,30,30,${0.5 * r})`); g.addColorStop(1, 'rgba(255,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(-200, -200, W + 400, H + 400); ctx.restore(); }
+        cornerThing(t, { vis: 1, lit: r * 0.6, body: `rgb(${Math.round(lerp(40, 190, r))},${Math.round(lerp(40, 20, r))},${Math.round(lerp(42, 20, r))})`, edge: `rgba(255,${Math.round(lerp(255, 80, r))},${Math.round(lerp(255, 80, r))},0.45)`, face: 'lens', red: r, breath: 0.5 }); lensGlint(1);
+      });
+      if (d > 0) { ctx.save(); ctx.globalAlpha = 0.55 * clamp(d / 0.2); ctx.fillStyle = '#ff1a1a'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+    }
+  } else {
+    // you look up: it is already reaching down, and its hand closes over your face
+    const r = Math.pow(prog(t, w0 + 0.1, hit - w0 - 0.1), 1.7), d = t - hit;
+    cam(t, w0, blk - w0, 1.15, 2.3, lerp(560, HEAD_W.x, r), lerp(380, HEAD_W.y - 60, r), () => {
+      room2(t); bed(BX, FY, 1.05, 'woke', { look: -1 });
+      cornerThing(t, { vis: 1, lit: 0.35, face: 'lens', red: 0.6 + 0.4 * r, reach: r, reachTo: { x: HEAD_W.x - 10, y: HEAD_W.y - 30 }, breath: 0 }); lensGlint(1);
     });
-  });
+    if (d > 0.05) { ctx.save(); ctx.globalAlpha = 0.5 * (1 - clamp((d - 0.05) / 0.12)); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+  }
+  if (t >= blk) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); teaserBox(t, seg, w0, ic, word, by); ctx.restore();
 };
 
 // ---------- rule 1: do not reply ----------
@@ -1339,13 +1392,15 @@ S.e3 = (t, seg) => {
 // The stamp slams across the rules, then the picture sinks to half brightness and holds.
 S.e4 = (t, seg) => {
   const ts = Math.max(...ev('stamp').map(e => e.t)), hit = t - ts;
+  const dk = ease(prog(t, ts + 0.5, 1.0));
   cam(t, seg.start, seg.end - seg.start + 3, 1.0, 1.08, W / 2, 520, () => {
     ctx.save(); if (hit > 0 && hit < 0.3) shake(8 * (1 - hit / 0.3), t);
     rulePage(t, { rowT: [-9, -9, -9, -9], fillT: [-9, -9, -9, -9] });
-    if (t >= ts) stampMark(t, ts, 960, 560, [['FOLLOW THE RULES', 64]], -0.14, '#ececec');
+    // the page sinks into the dark (95%); the stamp stays lit on top of it
+    if (dk > 0) { ctx.save(); ctx.globalAlpha = 0.95 * dk; ctx.fillStyle = '#000'; ctx.fillRect(-200, -200, W + 400, H + 400); ctx.restore(); }
+    if (t >= ts) { ctx.save(); redGlow(lerp(0, 40, dk)); stampMark(t, ts, 960, 540, [['FOLLOW', 96], ['THE RULES', 96]], -0.12, dk > 0.02 ? 'rgba(0,0,0,0)' : '#ececec', 12); ctx.restore(); }
     ctx.restore();
   });
-  const dk = ease(prog(t, ts + 0.45, 0.7)); if (dk > 0) { ctx.save(); ctx.globalAlpha = 0.5 * dk; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
 };
 // ---------- HUD, captions, texture ----------
 let grainC = null, vig = null;

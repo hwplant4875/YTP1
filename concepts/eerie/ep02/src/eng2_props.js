@@ -76,7 +76,8 @@ function cornerThing(t, o = {}) {
   // arms along the ceiling; o.reach lets the near arm unfold down toward the bed
   limb([[sh.x, sh.y], [250, 30], [380, 8]], 15, 4, 0.1);
   const rk = ease(o.reach ?? 0);
-  limb([[sh.x + 10, sh.y + 16], [lerp(300, 260, rk), lerp(60, 260, rk)], [lerp(470, 300, rk), lerp(10, 460, rk)]], 15, 4, lerp(0.05, 1.2, rk));
+  const rt = o.reachTo ? { x: (o.reachTo.x - CORNER.x) / s, y: (o.reachTo.y - CORNER.y) / s } : { x: 300, y: 460 };   // o.reachTo: where the hand lands, in room coords
+  limb([[sh.x + 10, sh.y + 16], [lerp(300, lerp(sh.x, rt.x, 0.5) + 60, rk), lerp(60, lerp(sh.y, rt.y, 0.5) - 40, rk)], [lerp(470, rt.x, rk), lerp(10, rt.y, rk)]], 15, 4, lerp(0.05, Math.atan2(rt.y - sh.y, rt.x - sh.x), rk));
   // torso: a long hunched shape from the hips to the shoulders
   ctx.beginPath(); ctx.moveTo(hip.x - 22, hip.y + 10); ctx.quadraticCurveTo(10, 90, sh.x - 30, sh.y - 34); ctx.quadraticCurveTo(sh.x + 40, sh.y - 10, sh.x + 22, sh.y + 30);
   ctx.quadraticCurveTo(110, 170, hip.x + 30, hip.y + 26); ctx.closePath();
@@ -241,7 +242,7 @@ function ceilPhoto(x, y, w, h, o = {}) {
     // you, awake: both arms up, holding the phone over your chest, its light on your face
     ctx.save(); const gl = ctx.createRadialGradient(head.x + 20, head.y + 60, 10, head.x + 20, head.y + 60, 260);
     gl.addColorStop(0, 'rgba(215,228,255,0.55)'); gl.addColorStop(1, 'rgba(215,228,255,0)'); ctx.fillStyle = gl; ctx.fillRect(head.x - 260, head.y - 200, 520, 520); ctx.restore();
-    ell(head.x - 14, head.y + 10, 11, 8, -0.3, '#f4f4f4'); circ(head.x - 10, head.y + 11, 5, '#111');   // open eye, looking at the screen
+    for (const [dx, dy] of [[-34, 8], [8, 17]]) { ell(head.x + dx, head.y + dy, 11, 8, -0.3, '#f4f4f4'); circ(head.x + dx + 3, head.y + dy + 2, 5, '#111'); }   // both eyes open (the face is turned up to the camera), looking at the screen
     ctx.lineCap = 'round';
     // sleeves out of the blanket, forearms up to the phone (outlined so they read against the sheet)
     ctx.lineJoin = 'round';
@@ -253,7 +254,7 @@ function ceilPhoto(x, y, w, h, o = {}) {
     for (const sx of [-1, 1]) { ctx.save(); ctx.translate(sx * 62, 10); rr(-16, -34, 32, 68, 14, '#8a8a8a'); rr(-12, -30, 24, 60, 11, '#dcdcdc'); ctx.restore(); }   // fingers round its edges
     ctx.restore();
   } else {
-    pthS(`M${head.x - 16},${head.y + 10} q10,7 20,0`, '#333', 4);                // closed eye
+    for (const [dx, dy] of [[-34, 8], [8, 17]]) pthS(`M${head.x + dx - 10},${head.y + dy} q10,7 20,-3`, '#333', 4);   // both eyes closed
     ctx.save(); ctx.translate(470, 430); ctx.rotate(0.5 + hash(n + 3) * 0.3); rr(0, -20, 200, 40, 20, '#dcdcdc'); circ(206, 0, 26, '#e2e2e2'); ctx.restore();   // arm over the blanket
   }
   ctx.restore();

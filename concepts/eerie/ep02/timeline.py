@@ -29,7 +29,7 @@ def speech_bounds(mp3):
     on = np.where(20 * np.log10(e + 1e-6) > -40)[0]
     return on[0] * 0.01, (on[-1] + 1) * 0.01
 
-t = LEAD; tl = []; events = [{'type': 'notif', 't': 0.0}]
+t = LEAD; tl = []; events = [{'type': 'notif', 't': 0.12}, {'type': 'notif', 't': 0.62}]   # the message, then the photo, arrive
 for s in segs:
     mp3 = os.path.join(vdir, s['id'] + '.mp3')
     lead, tail = speech_bounds(mp3)
@@ -75,6 +75,12 @@ for sid in ('a0', 'b0', 'c0', 'd0'):   # rule cards land on a soft low thud
 for i, seg in enumerate(tl[:-1]):
     if seg['id'] in RISE: events.append({'type': 'riser', 't': tl[i + 1]['start'] - 2.04})
 cuts = [seg['start'] for seg in tl[1:]]
+# the hook teaser: three "do not"s, each done anyway; contact or red, then black before the next line
+if 'h2' in S and 'o1' in S:
+    b, c, e = cue('h2', 'do', 2), cue('h2', 'do', 3), S['o1']['start']
+    events.append({'type': 'send', 't': b + 0.75})
+    for w1 in (b, c, e): events.append({'type': 'thud', 't': w1 - 0.62})
+    cuts += [b, c, b + 0.75 + 0.3]
 for sid, word, nth, off in [('a6', 'taken', 1, -0.05), ('b4', 'something', 1, -0.05), ('c2', 'closer', 1, -0.05)]:
     c = cue(sid, word, nth, off)
     if c is not None: cuts.append(c)
