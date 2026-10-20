@@ -109,7 +109,8 @@ SPOTTER_NOTOUCH = [
          "sfx": [{"at": 15.85, "src": LIB + "impact_metal.mp3", "vol": 0.8}]}),
     clip(NOTOUCH, **{"in": 15.0, "out": 16.6, "reverse": 3.0}),
     replay(NOTOUCH, vol=0, **{"in": 15.0, "out": 17.2, "speed": [[15.0, 1.0], [15.15, 0.4], [16.4, 1.0]],
-           "hits": [{"at": 15.15, "x": 0.5, "y": 0.45, "zoom": 1.2}],
+           "track": [[0, 0.55, 0.72, 1.3]],              # framed below the burned-in caption from the first frame
+           "hits": [{"at": 15.15, "x": 0.55, "y": 0.72, "zoom": 1.08}],
            "sfx": [{"at": 15.85, "src": LIB + "impact_metal.mp3", "vol": 0.8, "rate": 0.7}]})]
 
 # "can you spot me bro": the spotter hugs in behind the squat, then rides him piggyback
@@ -142,12 +143,12 @@ CLIPS_BOTH = [
 
 # kicks the dumbbells up to lie back and the momentum flips him backwards off the bench
 FLIP = '/home/user/rs_work/src/hd_bank/c/7639254568102202637.mp4'
-FLIPK = {"track": [[0, 0.55, 0.5, 1.5]], "vol": 0}
+FLIPK = {"track": [[0, 0.52, 0.5, 1.2]], "vol": 0}   # keeps the burned-in caption whole
 BENCH_FLIP = [
     clip(FLIP, **FLIPK, **{"in": 5.5, "out": 8.4}),
     meme(M + 'shocked-cat__btYkcmAPyCc__cat-flabbergasted.mp4', hold=0.75),
     replay(FLIP, **FLIPK, **{"in": 6.6, "out": 9.2, "speed": [[6.6, 1.0], [6.8, 0.4], [8.1, 1.0]],
-           "hits": [{"at": 6.8, "x": 0.65, "y": 0.48, "zoom": 1.25}],
+           "hits": [{"at": 6.8, "x": 0.52, "y": 0.5, "zoom": 1.1}],
            "sfx": [{"at": 7.9, "src": LIB + "thud_heavy.mp3", "vol": 0.8}]})]
 
 # push-ups on a "bar" that turns out to be soda cans; rewind, slow-mo, land on her jaw-drop
@@ -161,7 +162,7 @@ CAN_BAR = [
            "sfx": [{"at": 6.05, "src": BOOM, "vol": 0.6}]})]
 
 SHORTS = [
-    short("42_spotter_v2", "The Spotter Had ONE Job 😭💀", 1.0, SPOTTER_PLATE, SPOTTER_NOTOUCH, SPOTTER_PIGGY),
+    short("42_spotter_v2", "The Spotter Had ONE Job 😭💀", 1.0, SPOTTER_PLATE, SPOTTER_NOTOUCH),   # piggyback dropped: the plate hides the joke
     short("44_plates_v2", "Plates Have No Mercy 💀", 26.0, CLIPS_BOTH, BAR_PHONE),
     short("45_humbled", "Gym Bros Got HUMBLED 💀", 60.0, BENCH_FLIP, CAN_BAR),
     short("41_treadmill_v2", "Treadmills Are Undefeated 😭", 40.0, TREAD_ROLL, TREAD_KIDS, TREAD_LAUNCH),
