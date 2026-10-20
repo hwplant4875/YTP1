@@ -8,7 +8,9 @@ function initTex() {
 function chunks(seg) {
   if (seg._ch) return seg._ch;
   const out = []; let cur = [];
-  seg.words.forEach(w => { cur.push(w); if (/[.?!]$/.test(w.w) || (cur.length >= 4 && /,$/.test(w.w)) || cur.length >= 10) { out.push(cur); cur = []; } });
+  const ws = seg.words;
+  ws.forEach((w, i) => { cur.push(w); const endsNext = ws[i + 1] && /[.?!]$/.test(ws[i + 1].w);   // never leave one word alone: a sentence that ends on the next word keeps it
+    if (/[.?!]$/.test(w.w) || (cur.length >= 4 && /,$/.test(w.w)) || (cur.length >= 10 && !endsNext)) { out.push(cur); cur = []; } });
   if (cur.length) out.push(cur);
   return (seg._ch = out);
 }

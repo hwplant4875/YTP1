@@ -6,7 +6,7 @@ window.drawThumb = (o = {}) => {
   const dy = 0.2, tip = [RUN_END[0], RUN_END[1] + dy, RUN_END[2]];   // letters raised above the reflection's face so the face stays readable
   const rp = writerPose(tip), me = poseOf({ x: -0.3, z: 1.05 });
   ctx.save(); ctx.translate(-230, 70);
-  bathroom(0, { cam: c, me, refl: rp, door: 1, thing: { x: 0.3, z: -3.0, t: 0, inDoor: true, col: '#c8c8ce', eyes: '#ff2a2a' }, fog: 0.8, run: [0, 0, 0], light: 1,
+  bathroom(0, { cam: c, me, refl: rp, door: 1, thing: { x: 0.25, z: -3.0, t: 0, inDoor: true, col: '#c8c8ce', eyes: '#ff2a2a' }, fog: 0.8, run: [0, 0, 0], light: 1,
     inMirror: () => reflFinger(rp, tip),
     glassFx: () => { },
     front: () => {} });

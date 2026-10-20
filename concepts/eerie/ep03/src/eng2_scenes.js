@@ -126,12 +126,14 @@ S.a3 = (t, seg) => {
     if (t >= tt) pop(t, tt, 960, 230, () => tag('JUST TIRED?', 960, 240, C.fig, 50, 'center'));
   });
 };
+// a crossed-out action: the label in its box with a red X beside it (never over the words)
+function xTag(s, x, y, size, p) { tag(s, x, y, C.fig, size, 'center'); ctx.font = `900 ${size}px M`; const w = ctx.measureText(s).width + 28; redX(x - w / 2 - size * 0.95, y - size * 0.2, size * 0.5, p); }
 S.a4 = (t, seg) => {
   const tw = wt(seg, 'wave'), tt = wt(seg, 'tilt'), lag = 0.9;
   const pose = u => poseOf({ ...wave(u, prog(u, tw - 0.2, 0.3) * (1 - prog(u, tt - 0.5, 0.3))), roll: Math.sin(clamp((u - tt) / 1.2) * Math.PI) * 1.0 });
   shot(t, seg.start, seg.end - seg.start + 0.8, 1.1, 1.3, [ME.x, 1.55, -ME.z], { me: pose(t), refl: pose(t - lag) });
-  if (t >= tw + 0.2) slideIn(t, tw + 0.2, 40, 0, () => { tag('DO NOT WAVE', 1440, 300, C.fig, 48, 'center'); redX(1440, 290, 50, prog(t, tw + 0.5, 0.3)); });
-  if (t >= tt + 0.2) slideIn(t, tt + 0.2, 40, 0, () => { tag('DO NOT TILT', 1440, 430, C.fig, 48, 'center'); redX(1440, 420, 50, prog(t, tt + 0.5, 0.3)); });
+  if (t >= tw + 0.2) slideIn(t, tw + 0.2, 40, 0, () => { xTag('DO NOT WAVE', 1460, 300, 48, prog(t, tw + 0.5, 0.3)); });
+  if (t >= tt + 0.2) slideIn(t, tt + 0.2, 40, 0, () => { xTag('DO NOT TILT', 1460, 430, 48, prog(t, tt + 0.5, 0.3)); });
 };
 // every test: it falls further behind
 const lagA5 = (t, seg) => { const t1 = wt(seg, 'one'), t2 = wt(seg, 'two'), t3 = wt(seg, 'three');
@@ -150,7 +152,7 @@ S.a6 = (t, seg) => {
   const frozen = poseOf({ ...wave(seg.start - 3, 1) });   // it has stopped
   shot(t, seg.start, seg.end - seg.start + 0.8, 1.3, 1.9, [ME.x, 1.5, -ME.z], { me: poseOf({}), refl: frozen,
     inMirror: () => heldBack(skeleton(frozen), prog(t, ts, 0.8)) });
-  if (t >= th) pop(t, th, 1480, 300, () => tag('HOLDING IT BACK', 1480, 310, C.red, 50, 'center'));
+  if (t >= th) pop(t, th, 1500, 800, () => tag('HOLDING IT BACK', 1500, 810, C.red, 50, 'center'));   // low on the dark door, clear of the frame and the raised arm
 };
 // what would happen: it stops, it is covered and pulled back into the dark, and the thing takes its place at the glass
 S.a7 = (t, seg) => {
@@ -244,7 +246,7 @@ S.b5 = (t, seg) => {
     if (t >= te) { const away = prog(t, tl, 0.3); ctx.save(); ctx.setLineDash([12, 10]);
       if (away < 1) lnP(px - 30, py, gx, gy, 5, C.fig, prog(t, te, 0.4) * (1 - away));
       if (away > 0) { redGlow(10); lnP(px + 30, py, px + 30 + 260 * away, py, 5, C.red, 1); } ctx.restore(); }
-    if (t >= ta) { const [rx, ry] = pl(ME.x, -ME.z); pop(t, ta, rx, ry - 110, () => tag('ALONE WITH IT', rx, ry - 100, C.red, 36, 'center')); }
+    if (t >= ta) { const [rx, ry] = pl(ME.x, -ME.z); pop(t, ta, rx, ry + 120, () => tag('ALONE WITH IT', rx, ry + 130, C.red, 36, 'center')); }   // under the labels, clear of the IT marker
   });
 };
 S.b6 = (t, seg) => {
@@ -314,7 +316,7 @@ S.c5 = (t, seg) => {
 S.c6 = (t, seg) => {
   // from the doorway: you turn and run. Your reflection does not follow. It watches you go
   const tl = wt(seg, 'look'), k = ease(prog(t, seg.start, 0.45)), run = prog(t, seg.start + 0.4, 1.6);
-  const me = poseOf({ yaw: Math.PI * k, x: lerp(ME.x, -0.95, ease(run)), z: lerp(ME.z, 2.6, run), walk: run > 0, step: t * 13, L: [-0.22, 1.0, 0.25 * Math.sin(t * 13)], R: [0.22, 1.0, -0.25 * Math.sin(t * 13)] });
+  const me = poseOf({ yaw: Math.PI * k, x: lerp(ME.x, -1.0, ease(run)), z: lerp(ME.z, 2.3, run), walk: run > 0, step: t * 13, L: [-0.24, 0.85, 0.3 * Math.sin(t * 13)], R: [0.24, 0.85, -0.3 * Math.sin(t * 13)] });   // out past the left of the doorway, arms swinging, never close enough to clip the lens
   shot(t, seg.start, seg.end - seg.start + 0.8, 1.35, 1.5, GLASS_C, { cam: CAMS.door, me, refl: poseOf({}), door: 0, fog: 0.75, run: [1, 1, 1], drip: 1 });
   if (t >= tl) pop(t, tl, 1500, 250, () => tag('DO NOT LOOK BACK', 1500, 260, C.red, 54, 'center'));
 };
@@ -354,7 +356,7 @@ S.d3 = (t, seg) => {
   ctx.save(); if (pull > 0 && pull < 1) shake(4, t);
   shot(t, seg.start, seg.end - seg.start + 0.8, 1.2, 1.3, wristOf(me), grabScene(t, me, 1));
   ctx.restore();
-  if (t >= tp) slideIn(t, tp, 40, 0, () => { tag('PULL', 1480, 300, C.fig, 56, 'center'); redX(1480, 288, 56, prog(t, tp + 0.3, 0.3)); });
+  if (t >= tp) slideIn(t, tp, 40, 0, () => { xTag('PULL', 1560, 300, 56, prog(t, tp + 0.3, 0.3)); });
   if (t >= ts) pop(t, ts, 1480, 450, () => tag('STRONGER THAN YOU', 1480, 460, C.red, 44, 'center'));
 };
 // the glass cracks from where your fist hits it, and every piece has something looking out of it
@@ -383,7 +385,7 @@ S.d4 = (t, seg) => {
   ctx.save(); const hb = t - tb; if (hb > 0 && hb < 0.25) shake(8 * (1 - hb / 0.25), t);
   shot(t, seg.start, seg.end - seg.start + 0.8, 1.15, 1.35, [0.05, 1.5, 0], grabScene(t, me, 1, { glassFx: () => cracks(t, ck, prog(t, tp, 1.2)) }));
   ctx.restore();
-  if (t >= tb) slideIn(t, tb, 40, 0, () => { tag('BREAK IT', 1500, 300, C.fig, 56, 'center'); redX(1500, 288, 60, prog(t, tb + 0.3, 0.3)); });
+  if (t >= tb) slideIn(t, tb, 40, 0, () => { xTag('BREAK IT', 1560, 300, 56, prog(t, tb + 0.3, 0.3)); });
   if (t >= tp + 0.6) pop(t, tp + 0.6, 1500, 450, () => tag('A NEW WINDOW', 1500, 460, C.red, 44, 'center'));
 };
 S.d5 = (t, seg) => {
@@ -392,7 +394,7 @@ S.d5 = (t, seg) => {
   const me = poseOf(GRAB), helper = poseOf({ x: -0.15, z: lerp(3.9, 3.05, come), yaw: 0 });
   shot(t, seg.start, seg.end - seg.start + 0.8, 1.15, 1.4, [-0.1, 1.4, -2.0], grabScene(t, me, 1, {
     inMirror: () => { if (come > 0) { body3(helper, { mirror: true, col: '#cfcfd2' }); const j = skeleton(helper); if (t >= tm) { ctx.save(); ctx.globalAlpha *= prog(t, tm, 0.5); for (const s of ['L', 'R']) fingers3(MIRROR(V3.add(j.sh[s], [0, 0.03, 0])), [0, -1, 0.3], '#9a9a9f', 0.13); ctx.restore(); } } } }));
-  if (t >= tc) slideIn(t, tc, 40, 0, () => { tag('CALL FOR HELP', 1480, 300, C.fig, 50, 'center'); redX(1480, 288, 60, prog(t, tc + 0.3, 0.3)); });
+  if (t >= tc) slideIn(t, tc, 40, 0, () => { xTag('CALL FOR HELP', 1540, 300, 50, prog(t, tc + 0.3, 0.3)); });
 };
 S.d6 = (t, seg) => {
   cam(t, seg.start, seg.end - seg.start + 0.6, 1, 1.06, W / 2, 470, () => {

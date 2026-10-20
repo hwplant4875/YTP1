@@ -59,6 +59,7 @@ function bubble(x, y, w, h, s, t, t0, col = C.fig, txtCol = '#000', tail = 1) {
 function tag(s, x, y, col = C.fig, size = 30, align = 'left') {
   ctx.font = `900 ${size}px M`; const w = ctx.measureText(s).width + 28;
   const x0 = align === 'left' ? x : align === 'right' ? x - w : x - w / 2;
+  ctx.save(); ctx.globalAlpha *= 0.82; rr(x0, y - size * 0.95, w, size * 1.5, 6, '#0b0b0b'); ctx.restore();   // dark fill so a frame edge behind the label never runs through it
   rrS(x0, y - size * 0.95, w, size * 1.5, 6, col, 4); text(s, x0 + w / 2, y + 2, `900 ${size}px M`, col);
 }
 function ruler(x, yFloor, pxPerCm, maxCm, col = C.dim, labelEvery = 40) {

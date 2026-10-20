@@ -9,12 +9,13 @@ function ruleCard(t, seg, n, line) {
     slideIn(t, t0 + 0.08, 60, 0, () => { spaced('RULE', 830, 360, '900 40px M', C.mid, 14, 'left'); });
     const ws = line.split(' '), tw = seg.words.slice(2); let shown = 0;
     for (let i = 0; i < ws.length; i++) if (t >= (tw[i] ? tw[i].s - 0.05 : seg.end)) shown = i + 1;
-    const lines = []; let cur = '';
-    for (const w of ws.slice(0, shown)) { if ((cur + ' ' + w).trim().length > 16) { lines.push(cur); cur = w; } else cur = (cur + ' ' + w).trim(); }
-    if (cur) lines.push(cur);
+    const wrap = list => { const out = []; let cur = '';
+      for (const w of list) { if ((cur + ' ' + w).trim().length > 16) { out.push(cur); cur = w; } else cur = (cur + ' ' + w).trim(); }
+      if (cur) out.push(cur); return out; };
+    const lines = wrap(ws.slice(0, shown)), dy = Math.max(0, wrap(ws).length - 2) * 74;   // a third line pushes the underline and the pips down
     lines.forEach((l, i) => text(l, 830, 446 + i * 74, '900 68px M', C.fig, 'left'));
-    lnP(560, 580, 1360, 580, 5, C.fig, easeOut(prog(t, t0 + 0.3, 0.6)));
-    for (let i = 0; i < 4; i++) { const x = 560 + i * 54, y = 618; ctx.save(); ctx.globalAlpha *= prog(t, t0 + 0.4 + i * 0.06, 0.2);
+    lnP(560, 580 + dy, 1360, 580 + dy, 5, C.fig, easeOut(prog(t, t0 + 0.3, 0.6)));
+    for (let i = 0; i < 4; i++) { const x = 560 + i * 54, y = 618 + dy; ctx.save(); ctx.globalAlpha *= prog(t, t0 + 0.4 + i * 0.06, 0.2);
       if (i + 1 <= n) rr(x, y, 38, 38, 5, i + 1 === n ? C.fig : C.mid); else rrS(x, y, 38, 38, 5, i === 3 ? C.red : C.mid, 3); ctx.restore(); }
   });
 }
