@@ -118,9 +118,17 @@
   },
   {
    "type": "meme",
-   "src": "/home/user/rs_work/memes/t/crying-cat__9a9g-pOTZHk__nsb14-meowl.mp4",
-   "dur": 0.75,
-   "cap": "RIP iPhone 😭"
+   "src": "/home/user/rs_work/memes/heaven_iphone.mp4",
+   "dur": 2.8,
+   "cap": null,
+   "boomVol": 0,
+   "sfx": [
+    {
+     "at": 0.0,
+     "src": "/home/user/rs_work/sfx/heaven_choir.mp3",
+     "vol": 0.32
+    }
+   ]
   }
  ]
 }

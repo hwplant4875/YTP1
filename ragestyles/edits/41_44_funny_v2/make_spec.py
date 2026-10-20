@@ -46,12 +46,13 @@ DISMOUNT = B + "7488460918595144990.mp4"
 ROLLK = {"crop": [0, 528, 1080, 1392], "ratio": "3:4", "vol": 0}   # crop drops the burned-in caption
 TREAD_ROLL = [
     clip(DISMOUNT, **ROLLK, **{"in": 4.8, "out": 6.55,                      # cut as his back hits the floor
-         "sfx": [{"at": 5.62, "src": '/mnt/project-files/sfx/drive/002_휙(만화적).mp3', "ss": 0.25, "vol": 0.7}]}),
+         "sfx": [{"at": 5.62, "src": '/mnt/project-files/sfx/drive/002_휙(만화적).mp3', "ss": 0.25, "vol": 0.7},
+                 {"at": 6.42, "src": BOOM, "vol": 0.6}]}),
     meme(SHOCKED, "Bro did a combat roll 💀", boomVol=0),
     replay(DISMOUNT, **ROLLK, **{"in": 5.6, "out": 8.8, "speed": [[5.6, 1.0], [5.8, 0.45], [6.9, 1.0]],
            "hits": [{"at": 5.8, "x": 0.4, "y": 0.45, "zoom": 1.2},
                     {"at": 7.6, "x": 0.55, "y": 0.45, "zoom": 1.1, "dur": 0.6}],
-           "sfx": [{"at": 6.3, "src": LIB + "thud_heavy.mp3", "vol": 0.8}]})]
+           "sfx": [{"at": 6.4, "src": BOOM, "vol": 0.6, "rate": 0.6}]})]          # stretched boom on the landing
 
 # kid lying on a treadmill is shot off, his friend walks on and goes down the same way; no meme, two booms
 KIDS = FL + "7531164171916856606.mp4"
@@ -133,7 +134,9 @@ BAR_PHONE = [
            "hits": [{"at": 6.4, "x": 0.5, "y": 0.6, "zoom": 1.2}]}),
     clip(ROLLBAR, vol=0, **{"in": 10.7, "out": 12.5,
          "sfx": [{"at": 10.72, "src": '/mnt/project-files/sfx/drive/018_접시깨지는소리.mp3', "vol": 0.8}]}),
-    meme(M + 'crying-cat__9a9g-pOTZHk__nsb14-meowl.mp4', "RIP iPhone 😭")]
+    # the broken iPhone rises up the stairs into heaven (heaven/heaven.py, user's heaven image), no cat
+    meme('/home/user/rs_work/memes/heaven_iphone.mp4', dur=2.8, boomVol=0,
+         sfx=[{"at": 0.0, "src": LIB + "heaven_choir.mp3", "vol": 0.32}])]
 
 CLIPS_BOTH = [
     clip(R + "1ng2nwz.mp4", **{"in": 0.0, "out": 2.6,
@@ -163,9 +166,32 @@ CAN_BAR = [
                     {"at": 6.0, "x": 0.62, "y": 0.45, "zoom": 1.45, "dur": 0.6}],
            "sfx": [{"at": 6.05, "src": BOOM, "vol": 0.6}]})]
 
+# box-jump compilation (@fitnesswithkien 7424792145137077537): its audio is music with bass drops, so muted
+BOXJ = '/home/user/rs_work/src/hd_bank/d/7424792145137077537.mp4'
+# red shirt lands the box jump, the box tips back under him and he slams flat with his legs in the air
+BOX_TIP = [
+    clip(BOXJ, vol=0, **{"in": 20.05, "out": 21.75,
+         "sfx": [{"at": 21.6, "src": LIB + "thud_heavy.mp3", "vol": 0.8}]}),
+    clip(BOXJ, **{"in": 20.9, "out": 21.75, "reverse": 3.0}),
+    replay(BOXJ, vol=0, **{"in": 20.9, "out": 22.35, "speed": [[20.9, 1.0], [21.05, 0.45], [21.9, 1.0]],
+           "hits": [{"at": 21.05, "x": 0.52, "y": 0.6, "zoom": 1.2}],
+           "sfx": [{"at": 21.0, "src": LIB + "tape_stop.mp3", "vol": 0.5},
+                   {"at": 21.6, "src": LIB + "thud_heavy.mp3", "vol": 0.8, "rate": 0.75}]})]
+
+# all black: the box tips as he lands and he goes over backwards onto his shoulders
+BOX_ROLL = [
+    clip(BOXJ, vol=0, **{"in": 36.1, "out": 37.95,
+         "sfx": [{"at": 37.15, "src": LIB + "impact_metal.mp3", "vol": 0.5},
+                 {"at": 37.8, "src": LIB + "thud_heavy.mp3", "vol": 0.8}]}),
+    meme(NICK, ss=2.6),
+    replay(BOXJ, vol=0, **{"in": 36.85, "out": 38.42, "speed": [[36.85, 1.0], [37.05, 0.45], [38.05, 1.0]],
+           "hits": [{"at": 37.05, "x": 0.5, "y": 0.55, "zoom": 1.2}],
+           "sfx": [{"at": 37.8, "src": LIB + "thud_heavy.mp3", "vol": 0.8, "rate": 0.75}]})]
+
 SHORTS = [
     short("41_treadmill_v3", "Treadmills Are Undefeated 😭", 40.0, TREAD_ROLL, TREAD_KIDS),   # launch clip cut (user)
     short("43_not_ready_v3", "Bro Was NOT Ready 😭", 12.0, BAND_SPRINT, BOX_SQUAT),
+    short("45_humbled_v3", "Gym Bros Got HUMBLED 💀", 60.0, BENCH_FLIP, BOX_TIP, BOX_ROLL),   # can bar cut (user)
     short("44_iphone_v3", "His Phone Never Stood a Chance 💀", 26.0, BAR_PHONE),
 ]
 

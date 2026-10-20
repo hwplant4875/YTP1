@@ -1,7 +1,8 @@
 """Upload a video to the RageStyles channel (private by default) via the YouTube Data API.
 usage: python3 yt_upload.py meta.json video.mp4        -> prints the video id
        python3 yt_upload.py --whoami                     -> prints the channel the token belongs to
-meta.json: {"title": ..., "description": ..., "tags": [...], "privacy": "private", "categoryId": "17"}
+meta.json: {"title": ..., "description": ..., "tags": [...], "privacy": "private", "categoryId": "17",
+           "publishAt": "2026-10-20T18:00:00Z" (optional: stays private, goes public at this UTC time)}
 Env: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN_RS (override with YT_TOKEN_VAR)."""
 import json, os, sys, urllib.request, urllib.parse
 
@@ -22,6 +23,8 @@ def upload(tok, meta, path):
     body = {'snippet': {'title': meta['title'][:100], 'description': meta.get('description', ''), 'tags': meta.get('tags', []),
                         'categoryId': meta.get('categoryId', '17')},
             'status': {'privacyStatus': meta.get('privacy', 'private'), 'selfDeclaredMadeForKids': False}}
+    if meta.get('publishAt'):
+        body['status'].update(privacyStatus='private', publishAt=meta['publishAt'])
     size = os.path.getsize(path)
     init = urllib.request.Request('https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status',
                                   data=json.dumps(body).encode(), method='POST',

@@ -1,0 +1,273 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 84,
+ "capY": 960,
+ "title": {
+  "text": "Gym Bros Got HUMBLED 💀",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 60.0,
+  "vol": 0.6
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7639254568102202637.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.52,
+     0.5,
+     1.2
+    ]
+   ],
+   "vol": 0,
+   "in": 5.5,
+   "out": 8.4
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/shocked-cat__btYkcmAPyCc__cat-flabbergasted.mp4",
+   "dur": 0.75,
+   "cap": null,
+   "hold": 0.75
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7639254568102202637.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.52,
+     0.5,
+     1.2
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 6.6,
+   "out": 9.2,
+   "speed": [
+    [
+     6.6,
+     1.0
+    ],
+    [
+     6.8,
+     0.4
+    ],
+    [
+     8.1,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 6.8,
+     "x": 0.52,
+     "y": 0.5,
+     "zoom": 1.1
+    }
+   ],
+   "sfx": [
+    {
+     "at": 7.9,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.8
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/d/7424792145137077537.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 20.05,
+   "out": 21.75,
+   "sfx": [
+    {
+     "at": 21.6,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.8
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/d/7424792145137077537.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 20.9,
+   "out": 21.75,
+   "reverse": 3.0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/d/7424792145137077537.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 20.9,
+   "out": 22.35,
+   "speed": [
+    [
+     20.9,
+     1.0
+    ],
+    [
+     21.05,
+     0.45
+    ],
+    [
+     21.9,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 21.05,
+     "x": 0.52,
+     "y": 0.6,
+     "zoom": 1.2
+    }
+   ],
+   "sfx": [
+    {
+     "at": 21.0,
+     "src": "/home/user/rs_work/sfx/tape_stop.mp3",
+     "vol": 0.5
+    },
+    {
+     "at": 21.6,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.8,
+     "rate": 0.75
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/d/7424792145137077537.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 36.1,
+   "out": 37.95,
+   "sfx": [
+    {
+     "at": 37.15,
+     "src": "/home/user/rs_work/sfx/impact_metal.mp3",
+     "vol": 0.5
+    },
+    {
+     "at": 37.8,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.8
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/g/q_nick-young.mp4",
+   "dur": 0.75,
+   "cap": null,
+   "ss": 2.6
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/d/7424792145137077537.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 36.85,
+   "out": 38.42,
+   "speed": [
+    [
+     36.85,
+     1.0
+    ],
+    [
+     37.05,
+     0.45
+    ],
+    [
+     38.05,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 37.05,
+     "x": 0.5,
+     "y": 0.55,
+     "zoom": 1.2
+    }
+   ],
+   "sfx": [
+    {
+     "at": 37.8,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.8,
+     "rate": 0.75
+    }
+   ]
+  }
+ ]
+}

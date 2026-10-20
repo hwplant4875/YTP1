@@ -24,6 +24,7 @@ PACK = {
   'rumble': ('low earthquake rumble building, deep', 2.0),
   'snap_zoom': ('fast zoom in swoosh with a click at the end, camera snap', 0.5),
   'grunt_crowd': ('gym crowd cheering and yelling in excitement, short burst', 2.0),
+  'heaven_choir': ('heavenly angelic choir singing a soft holy aaah chord with a bright harp glissando, gentle, short', 3.0),
 }
 key = os.environ['ELEVENLABS_API_KEY']
 os.makedirs(OUT, exist_ok=True)

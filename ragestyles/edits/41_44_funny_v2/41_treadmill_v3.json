@@ -42,6 +42,11 @@
      "src": "/mnt/project-files/sfx/drive/002_휙(만화적).mp3",
      "ss": 0.25,
      "vol": 0.7
+    },
+    {
+     "at": 6.42,
+     "src": "/home/user/rs_work/memes/vine_boom.mp3",
+     "vol": 0.6
     }
    ]
   },
@@ -109,9 +114,10 @@
    ],
    "sfx": [
     {
-     "at": 6.3,
-     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
-     "vol": 0.8
+     "at": 6.4,
+     "src": "/home/user/rs_work/memes/vine_boom.mp3",
+     "vol": 0.6,
+     "rate": 0.6
     }
    ]
   },
