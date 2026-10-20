@@ -5,6 +5,7 @@ import { K, f1, clamp, sm, eo, pop, lerp, seed, rnd, big, tag, place, toScr, sha
 import { at } from '/tmp/claude-0/sp2/tl2.mjs';
 import { track, bodyMap, topShark, topFish } from '/tmp/claude-0/sp2/topshark.mjs';
 import { splash } from '/tmp/claude-0/sp2/s2.mjs';
+const PHW = 'data:image/jpeg;base64,' + fs.readFileSync('/tmp/claude-0/shs/ph_white.jpg').toString('base64'), PHP = 'data:image/jpeg;base64,' + fs.readFileSync('/tmp/claude-0/shs/ph_pores.jpg').toString('base64');
 const MAP = JSON.parse(fs.readFileSync('/tmp/claude-0/sp/map.json'));
 const W = 1080, H = 1920, N = K.navy;
 // hook word timing (narration starts 0.05 s into the short)
@@ -86,7 +87,16 @@ const s02b = t => { let s = ''; seed(8);
 // ───────── s03 SKIN ─────────
 const strokeArrow = (cx, cy, sc, k, dir, col, jit = 0) => { const ax0 = cx + 380 * sc, ax1 = cx - 380 * sc, ay = cy - 30 * sc, a = dir > 0 ? ax1 : ax0, b = dir > 0 ? ax0 : ax1, e = lerp(a, b, k);
   return `<path d="M${f1(a)} ${f1(ay + jit)} L${f1(e)} ${f1(ay - jit)}" stroke="${col}" stroke-width="24" stroke-linecap="round"/><path d="M${f1(e + dir * 30)} ${f1(ay)} l${-dir * 55} -42 l0 84Z" fill="${col}"/>` + hand(e, ay - 20 + jit, dir); };
-const hand = (x, y, dir) => `<g transform="translate(${f1(x)} ${f1(y)}) scale(${dir > 0 ? 1.5 : -1.5} 1.5)"><path d="M-70 -20 Q-74 -60 -40 -62 L30 -62 Q46 -62 46 -50 Q46 -40 30 -40 L60 -40 Q74 -40 74 -28 Q74 -16 60 -16 L64 -16 Q76 -16 76 -4 Q76 8 62 8 L58 8 Q70 8 70 20 Q70 30 56 30 L-30 30 Q-70 30 -70 -20Z" fill="#ffd9b8" stroke="${N}" stroke-width="6" stroke-linejoin="round"/><path d="M-70 -30 L-130 -40 L-130 34 L-70 24" fill="#5b8bd9" stroke="${N}" stroke-width="6" stroke-linejoin="round"/></g>`;
+// detailed cartoon hand seen from above, palm down, fingers pointing along the stroke
+const SKIN = '#ffd3b4', SKD = '#eeae8a';
+const finger = (y, len, w, ang) => `<g transform="translate(18 ${y}) rotate(${ang})"><rect x="-10" y="${-w / 2}" width="${len + 10}" height="${w}" rx="${w / 2}" fill="${SKIN}" stroke="${N}" stroke-width="5"/><rect x="${len - 22}" y="${-w / 2 + 5}" width="18" height="${w - 10}" rx="6" fill="#ffe9dc" stroke="${SKD}" stroke-width="2.5"/><path d="M${f1(len * 0.42)} ${-w / 2 + 6} q-4 ${w / 2 - 6} 0 ${w - 12}" stroke="${SKD}" stroke-width="3" fill="none" stroke-linecap="round"/></g>`;
+const hand = (x, y, dir, press = 0) => `<g transform="translate(${f1(x)} ${f1(y)}) scale(${dir > 0 ? 1.55 : -1.55} 1.55)">
+  <ellipse cx="0" cy="${f1(56 - 6 * press)}" rx="120" ry="16" fill="${N}" opacity=".18"/>
+  ${finger(-33, 66, 23, -7)}${finger(-11, 80, 24, -2)}${finger(12, 76, 24, 2)}${finger(33, 60, 21, 7)}
+  <path d="M-88 -42 Q-60 -54 -10 -50 Q24 -48 30 -30 L32 30 Q26 50 -6 52 Q-60 56 -88 42Z" fill="${SKIN}" stroke="${N}" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M-34 -48 Q-8 -78 30 -80 Q48 -80 46 -66 Q42 -56 14 -50 Q-6 -44 -14 -36" fill="${SKIN}" stroke="${N}" stroke-width="5" stroke-linejoin="round"/><rect x="26" y="-79" width="15" height="12" rx="5" fill="#ffe9dc" stroke="${SKD}" stroke-width="2.5"/>
+  <path d="M6 -26 q6 4 0 8 M8 -4 q6 4 0 8 M6 18 q6 4 0 8" stroke="${SKD}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M-150 -40 L-86 -46 Q-80 0 -86 46 L-150 40Z" fill="#5b8bd9" stroke="${N}" stroke-width="5" stroke-linejoin="round"/><path d="M-100 -45 Q-94 0 -100 45" stroke="${N}" stroke-width="4" fill="none"/><path d="M-96 -45 L-90 45" stroke="#3f6fbd" stroke-width="8" opacity=".6"/></g>`;
 const s03h = t => { const cx = 540, cy = 1000, sc = 1.0, k = 0.35 + 0.65 * eo(0, 1.6, t), jit = 4 * Math.sin(t * 60), sx = shake(t, 1.6, 10);
   let s = place(cx + sx, cy + bob(t, 4), sc, sharkSolid('#dfe6f0', N, 6)) + strokeArrow(cx, cy, sc, k, 1, K.red, jit);
   s += big(540, 1400, 'OUCH!', t, 1.6, { size: 140, fill: K.red, stroke: '#fff', sw: 14 });
@@ -125,10 +135,18 @@ const s04a = t => { const cx = 540, cy = 980, sc = 1.0, y = cy + bob(t, 5), tl =
     s += big(400, 1460, '1/4 OF ITS', t, tq + 0.3, { size: 84, stroke: N, sw: 12, anchor: 'start' }) + big(400, 1550, 'WEIGHT', t, tq + 0.3, { size: 84, fill: K.yellow, stroke: N, sw: 12, anchor: 'start' }); }
   return s; };
 const s04b = t => { const tf = at('n11', 'so the liver'), tm = at('n11', 'Most fish'); let s = '';
-  if (t < tf - 0.15) { const gx = 540, gy = 1000, k = eo(at('n11', 'full of oil'), at('n11', 'full of oil') + 2.5, t);
-    s += `<path d="M${gx - 260} ${gy - 340} L${gx - 220} ${gy + 330} L${gx + 220} ${gy + 330} L${gx + 260} ${gy - 340}" fill="#bfe8ff" fill-opacity=".55" stroke="#fff" stroke-width="12" stroke-linejoin="round"/>`;
-    seed(11); for (let i = 0; i < 18; i++) { const x = gx - 180 + rnd() * 360, y0 = gy + 280 - rnd() * 100, y = lerp(y0, gy - 230 + rnd() * 40, clamp(k * 1.3 - rnd() * 0.3)); s += `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(14 + rnd() * 10)}" fill="${K.yellow}" stroke="${N}" stroke-width="3"/>`; }
-    if (k > 0.8) s += `<rect x="${gx - 250}" y="${gy - 300}" width="500" height="${f1(90 * sm(0.8, 1, k))}" fill="${K.yellow}" opacity=".9"/>`;
+  if (t < tf - 0.15) { const gx = 540, gy = 1000, t0 = at('n11', 'full of oil') - 0.4, k = eo(t0, t0 + 4.2, t), th = 24 + 110 * k, top = gy - 300;
+    const inner = `M${gx - 248} ${gy - 330} L${gx - 211} ${gy + 318} L${gx + 211} ${gy + 318} L${gx + 248} ${gy - 330}Z`;
+    s += `<defs><clipPath id="gl4"><path d="${inner}"/></clipPath><filter id="goo4" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="22"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 30 -13"/></filter></defs>`;
+    s += `<g clip-path="url(#gl4)"><rect x="${gx - 300}" y="${top}" width="600" height="700" fill="#7cc8f2" opacity=".75"/>`;
+    let goo = `<path d="M${gx - 300} ${top + th} L${gx - 300} ${top} ${Array.from({ length: 13 }, (_, j) => `L${gx - 300 + j * 50} ${f1(top + 7 * Math.sin(j * 0.9 + t * 2.4))}`).join(' ')} L${gx + 300} ${top + th}Z" fill="${K.yellow}"/>`;
+    goo += `<ellipse cx="${gx}" cy="${gy + 318}" rx="${f1(200 * (1 - k))}" ry="${f1(70 * (1 - k))}" fill="${K.yellow}"/>`;
+    // two big lava-lamp gulps of oil: a head blob with a trailing neck, merged into one smooth liquid by the goo filter
+    for (const [st, x0, r] of [[t0 + 0.3, gx - 30, 100], [t0 + 1.9, gx + 40, 80]]) for (const [lag, rr] of [[0, 1], [0.3, 0.5], [0.55, 0.32]]) {
+      const u = clamp((t - st - lag) / 2.3), y = lerp(gy + 300, top + th * 0.6, eo(0, 1, u)), x = x0 + 18 * Math.sin(t * 1.6 + lag * 4);
+      if (u > 0 && u < 1) goo += `<ellipse cx="${f1(x)}" cy="${f1(y)}" rx="${f1(r * rr * 0.85 * (1 - 0.08 * Math.sin(u * 7)))}" ry="${f1(r * rr * 1.2 * (1 + 0.1 * Math.sin(u * 7)))}" fill="${K.yellow}"/>`; }
+    s += `<g filter="url(#goo4)">${goo}</g><path d="${Array.from({ length: 13 }, (_, j) => `${j ? 'L' : 'M'}${gx - 300 + j * 50} ${f1(top + 6 + 7 * Math.sin(j * 0.9 + t * 2.4))}`).join(' ')}" stroke="#fff6c8" stroke-width="6" fill="none" opacity=".8"/></g>`;
+    s += `<path d="M${gx - 260} ${gy - 340} L${gx - 220} ${gy + 330} L${gx + 220} ${gy + 330} L${gx + 260} ${gy - 340}" fill="none" stroke="#fff" stroke-width="12" stroke-linejoin="round"/><path d="M${gx - 200} ${gy - 280} L${gx - 172} ${gy + 220}" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity=".45"/>`;
     s += tag(gx + 200, gy - 250, 760, 560, 'OIL', t, at('n11', 'Oil is lighter'), { col: K.yellow, size: 80 }) + tag(gx + 180, gy + 150, 700, 1480, 'WATER', t, at('n11', 'than water'), { col: '#fff', size: 80 });
   } else if (t < tm - 0.15) { const wl = 1000, cx = 540, sc = 1.0, y = wl - 20 + 10 * Math.sin(t * 1.8);
     s += `<rect x="0" y="${wl}" width="${W}" height="${H - wl}" fill="${K.deep}" opacity=".45"/>`;
@@ -217,9 +235,19 @@ const s07h = t => { const te = hat('s07', 'electricity'); let s = snout(t, 1, t 
   s += big(540, 1560, t > te - 0.2 ? 'ZAP!' : 'LOOK CLOSER', t, -1, { size: 120, fill: t > te - 0.2 ? K.yellow : '#fff', stroke: N, sw: 14 });
   return s; };
 const s07a = t => { const te = at('n20', 'Every living'); let s = '';
-  if (t < te - 0.15) { const td = at('n20', 'dots'), tf = at('n20', 'feel electricity');
+  if (t < te - 0.15) { const td = at('n20', 'dots'), tf = at('n20', 'feel electricity'), tp = at('n20', 'tiny pores') - 0.3, tg = tf - 0.25;
     s += snout(t, Math.max(0.35, sm(td, td + 0.6, t)), sm(tf, tf + 0.4, t));
-    s += tag(...toScr(HCX, HCY, HSC, 955, 205), 300, 640, 'PORES', t, at('n20', 'tiny pores'), { col: '#fff', size: 80 });
+    if (t < tg) { // real photos first: a great white, then its snout pores up close
+      const bw = 940, bh = 648, bx = 540, by = 1010, k = 0.9 + 0.1 * eo(at('n20', 'Look at the dots') - 0.15, at('n20', 'Look at the dots') + 0.2, t), first = t < tp;
+      const z = first ? 1 + 0.7 * eo(td - 0.3, tp, t) : 1 + 0.12 * eo(tp, tg, t), fx = first ? 181 : 550, fy = first ? 304 : 300;
+      s += `<rect width="${W}" height="${H}" fill="${N}" opacity=".35"/><g transform="translate(${bx} ${by}) scale(${f1(k * 1000) / 1000})"><rect x="${-bw / 2 - 18}" y="${-bh / 2 - 18}" width="${bw + 36}" height="${bh + 36}" rx="28" fill="#fff"/>
+        <defs><clipPath id="ph7"><rect x="${-bw / 2}" y="${-bh / 2}" width="${bw}" height="${bh}" rx="14"/></clipPath></defs><g clip-path="url(#ph7)"><g transform="scale(${f1(bw / 1100 * 1000) / 1000}) translate(-550 -379) translate(${f1(fx)} ${f1(fy)}) scale(${f1(z * 1000) / 1000}) translate(${-fx} ${-fy})"><image href="${first ? PHW : PHP}" width="1100" height="758" preserveAspectRatio="xMidYMid slice"/></g></g>`;
+      if (first && t > td) { const [cx0, cy0] = [(181 - 550) * bw / 1100, (304 - 379) * bw / 1100]; s += `<circle cx="${f1(cx0)}" cy="${f1(cy0)}" r="${f1(70 + 8 * Math.sin(t * 6))}" fill="none" stroke="${K.yellow}" stroke-width="10" stroke-dasharray="26 16" opacity="${f1(sm(td, td + 0.3, t))}"/>`; }
+      s += `</g>`;
+      if (!first) s += tag(bx + 120, by - 60, 300, 590, 'PORES', t, tp + 0.2, { col: K.yellow, size: 84 });
+      s += big(540, 1560, 'FULL OF JELLY', t, at('n20', 'filled with jelly'), { size: 110, fill: '#fff', stroke: N, sw: 14 });
+      return s; }
+    s += tag(...toScr(HCX, HCY, HSC, 955, 205), 300, 640, 'PORES', t, tg, { col: '#fff', size: 80 });
     s += big(540, 1560, 'FULL OF JELLY', t, at('n20', 'filled with jelly'), { size: 110, fill: '#fff', stroke: N, sw: 14 });
     if (t > tf) s = s.replace(/FULL OF JELLY/, 'ZAP SENSE!');
     if (t > tf) s += icon('bolt', 860, 640, 1.4, t, tf);
@@ -238,7 +266,7 @@ const s07b = t => { const st = [['SMELL', 'smell', at('n25', 'it smells'), K.cya
     if (k <= 0) { s += `<rect x="${x - 170}" y="${y - 170}" width="340" height="340" rx="40" fill="#fff" opacity=".14"/><text x="${x}" y="${y + 40}" font-family="Black" font-size="120" fill="#fff" opacity=".35" text-anchor="middle">${i + 1}</text>`; return; }
     s += `<g transform="translate(${x} ${y}) scale(${f1((on ? 1.08 : 0.92) * k * 100) / 100})"><rect x="-170" y="-170" width="340" height="340" rx="40" fill="${on ? N : '#2f6fa8'}" stroke="${on ? K.yellow : '#fff'}" stroke-width="10"/><g transform="translate(0 -30) scale(${ic === 'eye' ? 1.1 : 0.9})">${ICON[ic](c)}</g><text y="130" font-family="Black" font-size="64" fill="#fff" text-anchor="middle">${n}</text></g>`; });
   const u = eo(st[0][2] - 0.5, st[3][2] + 1, t), px = 800, tc = at('n25', 'aim the bite') - 0.5, ly = 1430;
-  const fx = px + 700 * Math.pow(clamp((t - tc) / 0.7), 1.6), fy = ly + (t > tc ? 24 * Math.sin((t - tc) * 30) : 0), sx = lerp(-80, px - 250, u) + 1000 * Math.pow(clamp((t - tc - 0.15) / 0.8), 1.7);
+  const fx = px + 120 + 900 * Math.pow(clamp((t - tc) / 0.7), 1.6), fy = ly + (t > tc ? 24 * Math.sin((t - tc) * 30) : 0), sx = Math.min(lerp(-80, px - 300, u) + 1000 * Math.pow(clamp((t - tc - 0.15) / 0.8), 1.7), fx - 175 - 150);
   s += place(sx, ly, 0.36, sharkSolid('#fff', N, 16)) + `<g transform="translate(${f1(fx)} ${f1(fy)}) rotate(${t > tc ? f1(12 * Math.sin((t - tc) * 30)) : 0}) scale(-.7 .7)">${ICON.fish()}</g>`;
   return s; };
 
@@ -276,22 +304,24 @@ const rotScr = (cx, cy, sc, x, y, rot) => { const a = rot * Math.PI / 180, dx = 
 const ring = (x, y, t, c = K.yellow) => { let s = ''; for (let i = 0; i < 3; i++) { const u = (t * 0.9 + i / 3) % 1; s += `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(40 + 140 * u)}" fill="none" stroke="${c}" stroke-width="8" opacity="${f1(1 - u)}"/>`; } return s; };
 
 // ───────── s09 SPIRAL VALVE ─────────
-const s09h = t => { const cx = 540, cy = 1060, sc = 1.15, [X, Y] = rotScr(cx, cy, sc, ...PT.valve, -90);
-  let s = place(cx, cy, sc, sharkInside({}, N, 5), { rot: -90 }) + ring(X, Y, t, K.purple) + `<circle cx="${f1(X)}" cy="${f1(Y)}" r="${f1(36 + 6 * Math.sin(t * 7))}" fill="${K.purple}" stroke="#fff" stroke-width="7"/>`;
-  return s + tag(X, Y, 850, Y - 160, '???', t, -1, { col: K.purple, txt: '#fff', size: 100 }); };
+const valve9 = (k, food) => { const vx = 540, y0 = 680, y1 = 1440, vw = 320, turns = 6, h = (y1 - y0 - 160) / turns; let back = '', front = '';
+  let s = `<rect x="${vx - vw / 2}" y="${y0}" width="${vw}" height="${y1 - y0}" rx="${vw / 2}" fill="#f3e8ff" stroke="${N}" stroke-width="10"/>`;
+  for (let i = 0; i < turns; i++) { const y = y0 + 80 + i * h;
+    back += `<path d="M${vx + vw / 2 - 22} ${f1(y)} C${vx} ${f1(y + h * 0.2)} ${vx - vw / 2 + 22} ${f1(y + h * 0.3)} ${vx - vw / 2 + 22} ${f1(y + h * 0.5)}" stroke="#c9b4ec" stroke-width="24" fill="none" stroke-linecap="round"/>`;
+    front += `<path d="M${vx - vw / 2 + 22} ${f1(y + h * 0.5)} C${vx - vw / 2 + 22} ${f1(y + h * 0.7)} ${vx} ${f1(y + h * 0.8)} ${vx + vw / 2 - 22} ${f1(y + h)}" stroke="${K.purple}" stroke-width="28" fill="none" stroke-linecap="round"/>`; }
+  s += `<defs><clipPath id="v9"><rect x="${vx - vw / 2 - 20}" y="${y0}" width="${vw + 40}" height="${f1((y1 - y0) * k)}"/></clipPath></defs><g clip-path="url(#v9)">${back}${front}</g>`;
+  if (food != null) { const u = food % 1, y = y0 + 80 + u * (y1 - y0 - 160), x = vx - Math.cos(u * turns * 2 * Math.PI) * (vw / 2 - 44); s += `<circle cx="${f1(x)}" cy="${f1(y)}" r="34" fill="${K.yellow}" stroke="${N}" stroke-width="7"/>`; }
+  return s; };
+const s09h = t => { const tc = hat('s09', 'called') - 0.35, cx = 540, cy = 1060, sc = 1.15, [X, Y] = rotScr(cx, cy, sc, ...PT.valve, -90);
+  const A = () => place(cx, cy, sc, sharkInside({}, N, 5), { rot: -90 }) + ring(X, Y, t, K.purple) + `<circle cx="${f1(X)}" cy="${f1(Y)}" r="${f1(36 + 6 * Math.sin(t * 7))}" fill="${K.purple}" stroke="#fff" stroke-width="7"/>` + tag(X, Y, 850, Y - 160, '???', t, -1, { col: K.purple, txt: '#fff', size: 100 });
+  const B = () => valve9(0.25 + 0.75 * eo(tc, tc + 1.3, t), null) + big(540, 600, 'SPIRAL VALVE', t, hat('s09', 'spiral') - 0.05, { size: 110, fill: '#fff', stroke: N, sw: 14 });
+  return t < tc ? A() : xfade(t, tc, 0.45, A, B); };
 const s09a = t => { const tg = at('n19', "And here's a gross"); let s = '';
-  if (t < tg - 0.15) { const tv = at('n19', 'something really weird'), vx = 540, y0 = 680, y1 = 1440, vw = 320, turns = 6, k = 0.3 + 0.7 * eo(tv - 0.4, tv + 1.4, t);
-    s += `<rect x="${vx - vw / 2}" y="${y0}" width="${vw}" height="${y1 - y0}" rx="${vw / 2}" fill="#f3e8ff" stroke="${N}" stroke-width="10"/>`;
-    let back = '', front = ''; const h = (y1 - y0 - 160) / turns;
-    for (let i = 0; i < turns; i++) { const y = y0 + 80 + i * h;
-      back += `<path d="M${vx + vw / 2 - 22} ${f1(y)} C${vx} ${f1(y + h * 0.2)} ${vx - vw / 2 + 22} ${f1(y + h * 0.3)} ${vx - vw / 2 + 22} ${f1(y + h * 0.5)}" stroke="#c9b4ec" stroke-width="24" fill="none" stroke-linecap="round"/>`;
-      front += `<path d="M${vx - vw / 2 + 22} ${f1(y + h * 0.5)} C${vx - vw / 2 + 22} ${f1(y + h * 0.7)} ${vx} ${f1(y + h * 0.8)} ${vx + vw / 2 - 22} ${f1(y + h)}" stroke="${K.purple}" stroke-width="28" fill="none" stroke-linecap="round"/>`; }
-    s += `<defs><clipPath id="v9"><rect x="${vx - vw / 2 - 20}" y="${y0}" width="${vw + 40}" height="${f1((y1 - y0) * k)}"/></clipPath></defs><g clip-path="url(#v9)">${back}${front}</g>`;
-    const tf = at('n19', 'so food spins');
-    if (t > tf - 0.3) { const u = ((t - tf + 0.3) * 0.16) % 1, y = y0 + 80 + u * (y1 - y0 - 160), x = vx - Math.cos(u * turns * 2 * Math.PI) * (vw / 2 - 44); s += `<circle cx="${f1(x)}" cy="${f1(y)}" r="34" fill="${K.yellow}" stroke="${N}" stroke-width="7"/>`; }
+  if (t < tg - 0.15) { const tf = at('n19', 'so food spins');
+    s += valve9(1, t > tf - 0.3 ? (t - tf + 0.3) * 0.16 : null);
     const to = at('n19', 'Instead of a long tube');
     if (t > to && t < tf + 0.5) { const k2 = pop(to, t); s += `<g transform="translate(870 1060) scale(${f1(k2 * 100) / 100})"><rect x="-50" y="-300" width="100" height="600" rx="50" fill="#ffd2c4" stroke="${N}" stroke-width="8"/></g>` + big(870, 1420, 'OURS', t, to, { size: 64, stroke: N, sw: 10 }); }
-    s += big(540, 600, 'SPIRAL VALVE', t, at('n19', 'spiral valve'), { size: 110, fill: '#fff', stroke: N, sw: 14 });
+    s += big(540, 600, 'SPIRAL VALVE', t, -1, { size: 110, fill: '#fff', stroke: N, sw: 14 });
     s += big(540, 1580, 'CORKSCREW!', t, at('n19', 'corkscrew'), { size: 120, fill: K.yellow, stroke: N, sw: 14 });
     return s; }
   const tp = at('n19', 'push their stomach'), out = sm(tp, tp + 1, t) * (1 - sm(at('n19', 'pull it back'), at('n19', 'pull it back') + 1, t));

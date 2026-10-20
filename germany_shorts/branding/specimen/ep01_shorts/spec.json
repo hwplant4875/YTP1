@@ -1,30 +1,284 @@
 [
- {"id":"s01","hook":"This shark has zero bones.","hv":["n03","None at all",0.2],"hh":"0 BONES",
-  "parts":[["n03","None at all",null,"CARTILAGE"],["n04",null,null,"BENDY + LIGHT"]]},
- {"id":"s02","hook":"This is what happens when a shark loses a tooth.","hv":["n07","conveyor belt",-0.6],"hh":"LOST TOOTH?",
-  "parts":[["n07","When a front tooth",null,"TOOTH CONVEYOR"],["n08",null,null,"1000s OF TEETH"]]},
- {"id":"s03","hook":"Never pet a shark the wrong way.","hv":["n06","sandpaper",0.2],"hh":"DON'T PET IT BACKWARDS",
-  "parts":[["n06","Stroke a shark",null,"SANDPAPER SKIN"]]},
- {"id":"s04","hook":"This is the biggest organ inside a shark.","hv":["n10","It's the liver",0.3],"hh":"BIGGEST ORGAN",
-  "parts":[["n10","It's not the heart",null,"NOT THE HEART"],["n11",null,null,"GIANT POOL FLOAT"]]},
- {"id":"s05","hook":"Here's how hard a great white can bite.","hv":["n09","eighteen times",0.3],"hh":"BITE FORCE",
-  "parts":[["n09","A big great white may bite",null,"18x STRONGER"],["n07b","And sharks don't chew",null,"NO CHEWING"]]},
- {"id":"s06","hook":"What happens when a two-ton shark goes full speed?","hv":["n15","fly right out",0.4],"hh":"2 TONS. FULL SPEED.",
-  "parts":[["n15",null,null,"FLYING SHARK"]]},
- {"id":"s07","hook":"This shark can feel electricity.","hv":["n20","feel electricity",0.3],"hh":"ELECTRIC SENSE",
-  "parts":[["n20","Look at the dots",null,"JELLY PORES"],["n25","First, it smells",null,"THE PERFECT HUNT"]]},
- {"id":"s08","hook":"Why does a great white roll its eyes back when it bites?","hv":["n23","rolls its eyes",0.3],"hh":"WHY THE EYES?",
-  "parts":[["n23",null,null,"BITES BLIND"]]},
- {"id":"s09","hook":"This is the weirdest thing inside a shark.","hv":["n19","corkscrew",0.2],"hh":"WEIRDEST ORGAN",
-  "parts":[["n19","Then it enters",null,"SPIRAL VALVE"]]},
- {"id":"s10","hook":"What happens if a great white stops swimming?","hv":["n16","If it stops",0.2],"hh":"IF IT STOPS?",
-  "parts":[["n16","Water goes in",null,"KEEP SWIMMING"]]},
- {"id":"s11","hook":"This shark is warmer than the ocean.","hv":["n18","fourteen degrees",0.3],"hh":"A WARM SHARK",
-  "parts":[["n18","Most fish are",null,"WARM = FAST"]]},
- {"id":"s12","hook":"Sharks were here before trees existed.","hv":["n27","older than trees",0.3],"hh":"OLDER THAN TREES",
-  "parts":[["n27",null,null,"400 MILLION YEARS"]]},
- {"id":"s13","hook":"Baby great whites are born ready to hunt.","hv":["n26","full set of teeth",0.3],"hh":"BORN READY",
-  "parts":[["n26","When they're born",null,"NO PARENTS"]]},
- {"id":"s14","hook":"This shark swam twenty thousand kilometers.","hv":["n13","twenty thousand",0.3],"hh":"20,000 KM",
-  "parts":[["n13","Scientists put a tracker",null,"NICOLE'S TRIP"]]}
+ {
+  "id": "s01",
+  "hook": "This shark has zero bones.",
+  "hv": [
+   "n03",
+   "None at all",
+   0.2
+  ],
+  "hh": "0 BONES",
+  "parts": [
+   [
+    "n03",
+    "None at all",
+    null,
+    "CARTILAGE"
+   ],
+   [
+    "n04",
+    null,
+    null,
+    "BENDY + LIGHT"
+   ]
+  ]
+ },
+ {
+  "id": "s02",
+  "hook": "This is what happens when a shark loses a tooth.",
+  "hv": [
+   "n07",
+   "conveyor belt",
+   -0.6
+  ],
+  "hh": "LOST TOOTH?",
+  "parts": [
+   [
+    "n07",
+    "When a front tooth",
+    null,
+    "TOOTH CONVEYOR"
+   ],
+   [
+    "n08",
+    null,
+    null,
+    "1000s OF TEETH"
+   ]
+  ]
+ },
+ {
+  "id": "s03",
+  "hook": "Never pet a shark the wrong way.",
+  "hv": [
+   "n06",
+   "sandpaper",
+   0.2
+  ],
+  "hh": "DON'T PET IT BACKWARDS",
+  "parts": [
+   [
+    "n06",
+    "Stroke a shark",
+    null,
+    "SANDPAPER SKIN"
+   ]
+  ]
+ },
+ {
+  "id": "s04",
+  "hook": "This is the biggest organ inside a shark.",
+  "hv": [
+   "n10",
+   "It's the liver",
+   0.3
+  ],
+  "hh": "BIGGEST ORGAN",
+  "parts": [
+   [
+    "n10",
+    "It's not the heart",
+    null,
+    "NOT THE HEART"
+   ],
+   [
+    "n11",
+    null,
+    null,
+    "GIANT POOL FLOAT"
+   ]
+  ]
+ },
+ {
+  "id": "s05",
+  "hook": "Here's how hard a great white can bite.",
+  "hv": [
+   "n09",
+   "eighteen times",
+   0.3
+  ],
+  "hh": "BITE FORCE",
+  "parts": [
+   [
+    "n09",
+    "A big great white may bite",
+    null,
+    "18x STRONGER"
+   ],
+   [
+    "n07b",
+    "And sharks don't chew",
+    null,
+    "NO CHEWING"
+   ]
+  ]
+ },
+ {
+  "id": "s06",
+  "hook": "What happens when a two-ton shark goes full speed?",
+  "hv": [
+   "n15",
+   "fly right out",
+   0.4
+  ],
+  "hh": "2 TONS. FULL SPEED.",
+  "parts": [
+   [
+    "n15",
+    null,
+    null,
+    "FLYING SHARK"
+   ]
+  ]
+ },
+ {
+  "id": "s07",
+  "hook": "This shark can feel electricity.",
+  "hv": [
+   "n20",
+   "feel electricity",
+   0.3
+  ],
+  "hh": "ELECTRIC SENSE",
+  "parts": [
+   [
+    "n20",
+    "Look at the dots",
+    null,
+    "JELLY PORES"
+   ],
+   [
+    "n25",
+    "First, it smells",
+    null,
+    "THE PERFECT HUNT"
+   ]
+  ]
+ },
+ {
+  "id": "s08",
+  "hook": "Why does a great white roll its eyes back when it bites?",
+  "hv": [
+   "n23",
+   "rolls its eyes",
+   0.3
+  ],
+  "hh": "WHY THE EYES?",
+  "parts": [
+   [
+    "n23",
+    null,
+    null,
+    "BITES BLIND"
+   ]
+  ]
+ },
+ {
+  "id": "s09",
+  "hook": "This is the weirdest thing inside a shark. It's called the spiral valve.",
+  "hv": [
+   "n19",
+   "corkscrew",
+   0.2
+  ],
+  "hh": "WEIRDEST ORGAN",
+  "parts": [
+   [
+    "n19",
+    "Instead of a long tube",
+    null,
+    "SPIRAL VALVE"
+   ]
+  ]
+ },
+ {
+  "id": "s10",
+  "hook": "What happens if a great white stops swimming?",
+  "hv": [
+   "n16",
+   "If it stops",
+   0.2
+  ],
+  "hh": "IF IT STOPS?",
+  "parts": [
+   [
+    "n16",
+    "Water goes in",
+    null,
+    "KEEP SWIMMING"
+   ]
+  ]
+ },
+ {
+  "id": "s11",
+  "hook": "This shark is warmer than the ocean.",
+  "hv": [
+   "n18",
+   "fourteen degrees",
+   0.3
+  ],
+  "hh": "A WARM SHARK",
+  "parts": [
+   [
+    "n18",
+    "Most fish are",
+    null,
+    "WARM = FAST"
+   ]
+  ]
+ },
+ {
+  "id": "s12",
+  "hook": "Sharks were here before trees existed.",
+  "hv": [
+   "n27",
+   "older than trees",
+   0.3
+  ],
+  "hh": "OLDER THAN TREES",
+  "parts": [
+   [
+    "n27",
+    null,
+    null,
+    "400 MILLION YEARS"
+   ]
+  ]
+ },
+ {
+  "id": "s13",
+  "hook": "Baby great whites are born ready to hunt.",
+  "hv": [
+   "n26",
+   "full set of teeth",
+   0.3
+  ],
+  "hh": "BORN READY",
+  "parts": [
+   [
+    "n26",
+    "When they're born",
+    null,
+    "NO PARENTS"
+   ]
+  ]
+ },
+ {
+  "id": "s14",
+  "hook": "This shark swam twenty thousand kilometers.",
+  "hv": [
+   "n13",
+   "twenty thousand",
+   0.3
+  ],
+  "hh": "20,000 KM",
+  "parts": [
+   [
+    "n13",
+    "Scientists put a tracker",
+    null,
+    "NICOLE'S TRIP"
+   ]
+  ]
+ }
 ]
