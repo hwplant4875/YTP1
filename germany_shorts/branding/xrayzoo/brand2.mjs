@@ -13,8 +13,7 @@ const bone = (len, w) => `<path d="M${-len / 2} ${-w * 0.35} L${len / 2} ${-w * 
 const P = {
   // 1 shark head close-up, x-ray body behind the dashed neck line (user idea)
   p1_shark_head: SQ(`${ocean}${sharkOpen(-1710, -90, 2.4, { cut: 812, id: 'p1', skin: '#ffffff', stroke: N, sw: 3.5 })}
-    <g transform="translate(-1710 -90) scale(2.4)" stroke="${N}" fill="none" stroke-linecap="round"><path d="M836 178 C842 200 842 224 834 246 M852 180 C858 202 858 224 850 244 M868 184 C873 204 873 222 866 240" stroke-width="3" opacity=".45"/>
-      <path d="M922 236 C944 240 962 236 976 226" stroke-width="3.5"/><circle cx="902" cy="186" r="3" fill="#fff" stroke="none"/></g>`),
+    <g transform="translate(-1710 -90) scale(2.4)"><circle cx="902" cy="186" r="3" fill="#fff"/></g>`),
   // 2 the whole x-ray shark from the EP01 thumbnail
   p2_shark_full: SQ(`${ocean}${sharkOpen(68, 262, 0.665, { cut: 812, id: 'p2', skin: '#ffffff', stroke: N, sw: 7 })}`),
   // 3 hummingbird close-up: cute head + x-ray body
