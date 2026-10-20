@@ -12,7 +12,7 @@ const sky = `<defs>${grad('sk', '#ffc46b', '#ff8f45')}</defs><rect width="800" h
 const bone = (len, w) => `<path d="M${-len / 2} ${-w * 0.35} L${len / 2} ${-w * 0.35} A${w * 0.42} ${w * 0.42} 0 1 1 ${len / 2 + w * 0.3} ${-w * 0.02} A${w * 0.42} ${w * 0.42} 0 1 1 ${len / 2} ${w * 0.35} L${-len / 2} ${w * 0.35} A${w * 0.42} ${w * 0.42} 0 1 1 ${-len / 2 - w * 0.3} ${w * 0.02} A${w * 0.42} ${w * 0.42} 0 1 1 ${-len / 2} ${-w * 0.35}Z" fill="#fff" stroke="${N}" stroke-width="14" stroke-linejoin="round"/>`;
 const P = {
   // 1 shark head close-up, x-ray body behind the dashed neck line (user idea)
-  p1_shark_head: SQ(`${ocean}${sharkOpen(-1710, -90, 2.4, { cut: 812, id: 'p1', skin: '#ffffff', stroke: N, sw: 3.5 })}
+  p1_shark_head: SQ(`<rect width="800" height="800" fill="#3a9fdc"/>${sharkOpen(-1710, -90, 2.4, { cut: 812, id: 'p1', skin: '#ffffff', stroke: N, sw: 3.5 })}
     <g transform="translate(-1710 -90) scale(2.4)"><circle cx="902" cy="186" r="3" fill="#fff"/></g>`),
   // 2 the whole x-ray shark from the EP01 thumbnail
   p2_shark_full: SQ(`${ocean}${sharkOpen(68, 262, 0.665, { cut: 812, id: 'p2', skin: '#ffffff', stroke: N, sw: 7 })}`),
