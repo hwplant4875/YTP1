@@ -8,28 +8,12 @@
   "text": "Do not get up. Do not turn on the light. Do not call out."
  },
  {
-  "id": "s03",
-  "text": "It is three in the morning."
- },
- {
   "id": "o1",
   "text": "This is Instruction four zero four."
  },
  {
   "id": "o2",
-  "text": "There are four rules. Follow them exactly."
- },
- {
-  "id": "o3",
-  "text": "Rule one is about the door. Rule two is about the gap under it. Rule three is about your eyes."
- },
- {
-  "id": "o4",
-  "text": "Rule four is the emergency protocol. How to fight back."
- },
- {
-  "id": "o5",
-  "text": "Break the first three, and rule four is all you have left."
+  "text": "There are four rules. Follow them exactly. Otherwise, you will have to activate the emergency protocol."
  },
  {
   "id": "s06",
@@ -53,11 +37,7 @@
  },
  {
   "id": "s11",
-  "text": "If you open the door, it will not come in like a cat. One swipe. Its claws, across your throat. Faster than you can blink."
- },
- {
-  "id": "s11b",
-  "text": "It does not need you to open the door. It knows how. It only knocks to find out if you are awake."
+  "text": "If you open the door, this is what would happen."
  },
  {
   "id": "s12",
@@ -80,16 +60,12 @@
   "text": "Then it will meow."
  },
  {
-  "id": "s17",
-  "text": "Grown cats almost never meow at each other. The meow is a sound cats made only for people."
+  "id": "k1",
+  "text": "If that sound pulls you to the door, and you look through the keyhole..."
  },
  {
-  "id": "s18",
-  "text": "You know this meow. You have heard it every morning for years."
- },
- {
-  "id": "s19",
-  "text": "But it is too slow. It is too low. And it comes from too high up."
+  "id": "k2",
+  "text": "it will already be looking back at you."
  },
  {
   "id": "r1",
@@ -97,7 +73,7 @@
  },
  {
   "id": "r2",
-  "text": "The knocking will stop. Silence does not mean it left. It always comes in."
+  "text": "After the knocking stops, the cat will always enter the room."
  },
  {
   "id": "r3",
@@ -109,7 +85,7 @@
  },
  {
   "id": "r5",
-  "text": "Lie on your side. Breathe slow, and deep. Do not squeeze your eyes shut. It knows the difference."
+  "text": "Lie on your side. Breathe slow, and deep."
  },
  {
   "id": "r6",
@@ -197,6 +173,6 @@
  },
  {
   "id": "s46",
-  "text": "This was Instruction four zero four."
+  "text": "And that was Instruction four zero four."
  }
 ]
