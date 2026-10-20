@@ -18,6 +18,8 @@ EXTRA = {
     's19': (2.9, [('meow2', 0.2), ('riser', 1.3)]),
     's22': (2.2, [('knock3', 0.3)]),
     's24': (0.6, [('boom', 0.0)]),
+    's27': (1.3, [('riser', 0.1)]),
+    'r8': (0.6, []),
     's30': (1.5, [('riser', 0.1)]),
     's31': (0.6, []),
     's32': (0.5, [('hiss', 0.1)]),
@@ -68,15 +70,16 @@ def cue(sid, word, nth=1, off=0.0):
     return wt(S[sid], word, nth) + off if sid in S else None
 for sid, word, nth, snd, off in [('s08', 'scratch', 1, 'scratch', 0), ('s13', 'light', 1, 'hum', -0.1),
                                  ('s14', 'two', 1, 'heartbeat', 0), ('s15', 'count', 1, 'heartbeat', 0), ('s16', 'meow', 1, 'staticlong', 0.3),
-                                 ('s19', 'high', 1, 'breath', 0.3), ('s24', 'who', 1, 'heartbeat', 0.0),
-                                 ('s32', 'turn', 1, 'handle', 0.0), ('s34', 'dodge', 1, 'whoosh', -0.5), ('s34', 'every', 1, 'whoosh', 0.1),
+                                 ('s19', 'high', 1, 'breath', 0.3), ('s24', 'who', 1, 'heartbeat', 0.0), ('s11', 'swipe', 1, 'scratch', -0.05), ('s11', 'swipe', 1, 'stinger', -0.05), ('s11', 'open', 1, 'creak', 0.0), ('r3', 'handle', 1, 'handle', 0.1), ('r6', 'walk', 1, 'creak', 0.0),
+                                 ('r7', 'breath', 1, 'breath', 0.0), ('r8', 'checking', 1, 'heartbeat', 0.0), ('s32', 'saw', 1, 'boom', 0.0),
+                                 ('s34', 'dodge', 1, 'whoosh', -0.5), ('s34', 'every', 1, 'whoosh', 0.1),
                                  ('s40', 'bark', 1, 'bark', 0.25), ('s42', 'flatten', 1, 'hiss', 0.0), ('s43', 'sun', 1, 'chime', 0.2)]:
     c = cue(sid, word, nth, off)
     if c is not None: events.append({'type': snd, 't': c})
-for sid in ('s06', 's12', 's20', 's31'):
+for sid in ('s06', 's12', 's20', 'r1', 's31'):
     if sid in S: events.append({'type': 'stinger', 't': S[sid]['start'] - 0.05})
 cuts = [seg['start'] for seg in tl[1:]]
-for sid, word, nth, off in [('s04', 'there', 1, -0.1), ('s09', 'cats', 1, -0.05), ('s14', 'cat', 1, -0.1), ('s17', 'meow', 2, -0.2),
+for sid, word, nth, off in [('s04', 'there', 1, -0.1), ('s09', 'cats', 1, -0.05), ('s14', 'cat', 1, -0.1), ('s17', 'meow', 2, -0.2), ('s11', 'swipe', 1, -0.05), ('s11', 'claws', 1, -0.1), ('r3', 'handle', 1, -0.2),
                             ('s22', 'let', 1, -0.3), ('s22', 'something', 1, -0.2)]:
     c = cue(sid, word, nth, off)
     if c is not None: cuts.append(c)

@@ -13,7 +13,7 @@
  },
  {
   "id": "s04",
-  "text": "This is Instruction zero zero one. There are three rules. Follow them, and you will see the morning."
+  "text": "This is Protocol zero zero one. There are four rules. Follow them, and you will see the morning."
  },
  {
   "id": "s05",
@@ -25,7 +25,7 @@
  },
  {
   "id": "s07",
-  "text": "Listen to where the knock comes from. Not the bottom of the door. Up high."
+  "text": "Listen to where the knock comes from. Not the bottom of the door. The middle."
  },
  {
   "id": "s08",
@@ -37,11 +37,11 @@
  },
  {
   "id": "s10",
-  "text": "This one knocks up high. Right where a hand would knock."
+  "text": "This one knocks right in the middle. Where a hand would knock."
  },
  {
   "id": "s11",
-  "text": "And between the knocks, it waits. Like it has all night."
+  "text": "If you open the door, it will not come in like a cat. One swipe. Its claws, across your throat. Faster than you can blink."
  },
  {
   "id": "s12",
@@ -88,10 +88,6 @@
   "text": "Tonight, the blanket is flat. You let your cat out before bed. And now, something wants back in."
  },
  {
-  "id": "s23",
-  "text": "Think about how it watches you. Every night, from the foot of the bed, until you fall asleep."
- },
- {
   "id": "s24",
   "text": "Now you know who is knocking."
  },
@@ -108,12 +104,48 @@
   "text": "Stay in bed. Breathe slowly. Cats get bored."
  },
  {
+  "id": "r1",
+  "text": "Rule four. Pretend to be asleep."
+ },
+ {
+  "id": "r2",
+  "text": "Sometimes, cats do not get bored."
+ },
+ {
+  "id": "r3",
+  "text": "The knocking will stop. Then you will hear the handle turn. It has been practicing that too."
+ },
+ {
+  "id": "r4",
+  "text": "Close your eyes before the door opens. Not after. It can see an eye closing."
+ },
+ {
+  "id": "r5",
+  "text": "Lie on your side. Mouth a little open. Breathe slow, and deep."
+ },
+ {
+  "id": "r6",
+  "text": "It will walk to the bed. It will stand over you, and lean down, close to your face."
+ },
+ {
+  "id": "r7",
+  "text": "You will feel its breath on your cheek. It smells like your cat."
+ },
+ {
+  "id": "r8",
+  "text": "It is checking. Do not move. Do not swallow."
+ },
+ {
+  "id": "r9",
+  "text": "If it believes you, it will drop to four legs, and curl up at the foot of the bed. Like it always does."
+ },
+ {
   "id": "s28",
   "text": "In the morning, it will be back on the bed. Four legs. Purring."
  },
  {
   "id": "s29",
-  "text": "Look at the door before you leave. Up high, where it knocked."
+  "text": "Look at the door before you leave. Right in the middle."
  },
  {
   "id": "s30",
@@ -125,7 +157,7 @@
  },
  {
   "id": "s32",
-  "text": "If the handle starts to turn, the rules are over."
+  "text": "If you closed your eyes too late, and it saw you, the rules are over."
  },
  {
   "id": "s33",
@@ -177,6 +209,6 @@
  },
  {
   "id": "s46",
-  "text": "This was Instruction zero zero one."
+  "text": "This was Protocol zero zero one."
  }
 ]
