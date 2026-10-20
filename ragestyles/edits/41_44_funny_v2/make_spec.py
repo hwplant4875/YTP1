@@ -188,8 +188,21 @@ BOX_ROLL = [
            "hits": [{"at": 37.05, "x": 0.5, "y": 0.55, "zoom": 1.2}],
            "sfx": [{"at": 37.8, "src": LIB + "thud_heavy.mp3", "vol": 0.8, "rate": 0.75}]})]
 
+# sprinting at full speed, the belt throws her off the back, backward roll, lands sitting stunned (real sound)
+SPRINT = '/home/user/rs_work/src/hd_bank/e/7420821555338317088.mp4'
+SPRINTK = {"blur": [{"box": [0.1, 0.15, 0.8, 0.12], "to": 1.4}]}
+SPRINTZ = {"track": [[0, 0.42, 0.6, 1.3]]}                            # she is small in the wide shot     # burned-in "sprinting on the treadmill when..."
+TREAD_SPRINT = [
+    clip(SPRINT, vol=1.0, **SPRINTK, **SPRINTZ, **{"in": 0.8, "out": 3.0}),
+    clip(SPRINT, **SPRINTZ, **{"in": 1.5, "out": 3.0, "reverse": 3.0}),
+    replay(SPRINT, vol=1.0, **SPRINTZ, **{"in": 1.5, "out": 4.6, "speed": [[1.5, 1.0], [1.65, 0.45], [3.05, 1.0]],
+           "hits": [{"at": 1.65, "x": 0.4, "y": 0.62, "zoom": 1.1},
+                    {"at": 3.3, "x": 0.45, "y": 0.68, "zoom": 1.25, "dur": 0.6}],
+           "sfx": [{"at": 1.6, "src": LIB + "tape_stop.mp3", "vol": 0.5},
+                   {"at": 2.95, "src": LIB + "thud_heavy.mp3", "vol": 0.7}]})]
+
 SHORTS = [
-    short("41_treadmill_v3", "Treadmills Are Undefeated 😭", 40.0, TREAD_ROLL, TREAD_KIDS),   # launch clip cut (user)
+    short("41_treadmill_v3", "Treadmills Are Undefeated 😭", 40.0, TREAD_ROLL, TREAD_SPRINT),   # launch cut, kids swapped for the sprint fall (user)
     short("43_not_ready_v3", "Bro Was NOT Ready 😭", 12.0, BAND_SPRINT, BOX_SQUAT),
     short("45_humbled_v3", "Gym Bros Got HUMBLED 💀", 60.0, BENCH_FLIP, BOX_TIP, BOX_ROLL),   # can bar cut (user)
     short("44_iphone_v3", "His Phone Never Stood a Chance 💀", 26.0, BAR_PHONE),
