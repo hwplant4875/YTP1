@@ -92,8 +92,8 @@ CABK = {"vol": 0, "crop": [0, 630, 1080, 1290]}          # crop sits below the c
 CABLE_KNEES = [
     clip(CABLE, **CABK, **{"in": 3.75, "out": 6.27,                         # knees reach the floor at 6.17
          "sfx": [{"at": 4.12, "src": METAL, "vol": 0.5},
-                 {"at": 4.5, "src": THUD, "vol": 0.4},             # his stumble step
-                 {"at": 6.08, "src": THUD, "vol": 0.6}]}),
+                 {"at": 4.5, "src": THUD, "vol": 0.8},             # his stumble step
+                 {"at": 6.08, "src": THUD, "vol": 0.9}]}),
     meme(M + 'crying-cat__ufPsZFFomo4__crying-cat-sad-cat.mp4'),
     clip(CABLE, **CABK, **{"in": 3.95, "out": 6.27, "reverse": 4.0}),
     replay(CABLE, **CABK, **{"in": 3.95, "out": 6.9, "speed": [[3.95, 1.0], [4.05, 0.4], [4.7, 1.6], [6.1, 1.0]],
@@ -101,8 +101,8 @@ CABLE_KNEES = [
                     {"at": 6.15, "x": 0.42, "y": 0.56, "zoom": 1.2, "dur": 0.6}],
            "sfx": [{"at": 4.0, "src": TAPE, "vol": 0.5},
                    {"at": 4.12, "src": METAL, "vol": 0.45, "rate": 0.7},
-                   {"at": 4.5, "src": THUD, "vol": 0.4, "rate": 0.75},
-                   {"at": 6.08, "src": THUD, "vol": 0.6}]})]
+                   {"at": 4.5, "src": THUD, "vol": 0.8, "rate": 0.75},
+                   {"at": 6.08, "src": THUD, "vol": 0.9}]})]
 
 # mid-set he bursts into an evil laugh, the spotter flinches back. Real audio (the laugh is the joke); the
 # laugh keeps playing under the meme. Burned-in setup caption (it gives the joke away) cropped off.

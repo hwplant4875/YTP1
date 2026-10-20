@@ -50,8 +50,8 @@ def raul():
     OU, GO, WR = 'src/HA/OuagHgC0RYw.mp4', 'src/HA/GoP5D_OHrvc.mp4', 'src/HA/4oHrTDCgVAs.mp4'
     sh = [
         {'src': OU, 'in': 6.0, 'len': 1.4, 'x': 0.5, 'zoom': [1.0, 1.08]},                  # 0 Raul mid-pull (cover)
-        {'src': GO, 'in': 7.4, 'len': 1.8, 'x': 0.5, 'zoom': [1.0, 1.06]},                  # 1 Thor 510 lockout
-        {'src': GO, 'in': 13.4, 'len': 1.6, 'x': 0.5, 'zoom': [1.0, 1.08]},                 # 2 Thor roars
+        {'src': GO, 'in': 6.8, 'len': 2.6, 'x': 0.5, 'zoom': [1.0, 1.06]},                  # 1 Thor 510 lockout
+        {'src': GO, 'in': 13.4, 'len': 2.2, 'x': 0.5, 'zoom': [1.0, 1.08]},                 # 2 Thor roars
         {'src': WR, 'in': 133.0, 'len': 1.4, 'x': 0.5, 'zoom': [1.05, 1.15]},               # 3 walk-out
         {'src': WR, 'in': 136.0, 'len': 1.2, 'x': 0.5, 'zoom': [1.05, 1.15]},               # 4 flags
         {'src': WR, 'in': 145.0, 'len': 1.5, 'x': 0.5, 'zoom': [1.3, 1.4]},                 # 5 on stage, name graphic
@@ -69,7 +69,7 @@ def raul():
                  {'src': WR, 'in': 226.0, 'x': 0.5}, {'src': OU, 'in': 19.0, 'x': 0.5}])
     sh += [{'src': WR, 'in': 211.6, 'len': 3.0, 'x': 0.5, 'zoom': [1.0, 1.08]}]              # end: arms wide
     st, total = starts_of(sh)
-    v_thor, v_mtn, v_call, v_wr = st[1] + 0.05, st[2] + 0.1, st[5] + 0.1, st[11] - 0.1
+    v_thor, v_mtn, v_call, v_wr = st[1] + 0.05, st[1] + 3.85, st[5] + 0.1, st[11] - 0.1   # Thor's call runs 3.7 s
     voice = [{'src': GO, 'in': 3.2, 'out': 6.95, 'at': v_thor},          # "five hundred and ten kilograms"
              {'src': GO, 'in': 29.35, 'out': 31.3, 'at': v_mtn},         # "look upon the mountain"
              {'src': WR, 'in': 155.3, 'out': 161.0, 'at': v_call},       # "Raul Flores! 500 and 11 kilograms"

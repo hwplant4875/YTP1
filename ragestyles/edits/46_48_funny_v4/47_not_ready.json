@@ -48,12 +48,12 @@
     {
      "at": 4.5,
      "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
-     "vol": 0.4
+     "vol": 0.8
     },
     {
      "at": 6.08,
      "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
-     "vol": 0.6
+     "vol": 0.9
     }
    ]
   },
@@ -160,13 +160,13 @@
     {
      "at": 4.5,
      "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
-     "vol": 0.4,
+     "vol": 0.8,
      "rate": 0.75
     },
     {
      "at": 6.08,
      "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
-     "vol": 0.6
+     "vol": 0.9
     }
    ]
   },
