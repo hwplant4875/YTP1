@@ -143,12 +143,14 @@ function curledCat(x, y, s) {
 }
 // bedroom furniture and wall details left of the door (drawn behind the bed)
 function bedroomDecor(t, o = {}) {
+  if (!o.noWindow) {
   // window with moon (or sun)
   rrS(330, 230, 220, 230, 6, C.mid, 6); ln(440, 236, 440, 454, 4, C.mid); ln(336, 345, 544, 345, 4, C.mid);
   if (o.sun) { ctx.save(); glow('rgba(255,255,255,0.6)', 30); circ(400, 290, 26, C.fig); ctx.restore(); }
   else { ctx.save(); glow('rgba(255,255,255,0.5)', 24); circ(500, 285, 22, C.fig); noGlow(); circ(510, 278, 20, '#000'); ctx.restore(); }
   pth('M316,222 C340,300 330,400 300,470 L316,470 Z', C.dim); pth('M564,222 C540,300 550,400 580,470 L564,470 Z', C.dim);
   rr(300, 216, 280, 10, 3, C.mid);
+  }
   // nightstand with a clock
   rr(800, FY - 150, 120, 150, 6, '#262626'); rrS(800, FY - 150, 120, 150, 6, C.mid, 3); ln(810, FY - 95, 910, FY - 95, 3, C.mid); circ(860, FY - 120, 5, C.mid);
   rr(816, FY - 196, 88, 44, 6, '#111'); rrS(816, FY - 196, 88, 44, 6, C.mid, 3);
@@ -1134,13 +1136,15 @@ S.s40 = (t, seg) => {
   const MT = FY - 196 * 1.05;                                 // mattress top
   const barkK = t >= tb ? Math.max(0, Math.sin((t - tb) * 14)) : 0;
   cam(t, seg.start, seg.end - seg.start + 0.6, 1.1, 1.2, 700, 560, () => {
-    bedroomDecor(t, {}); ln(0, FY, W, FY, 4, C.dim);
+    bedroomDecor(t, { noWindow: true }); ln(0, FY, W, FY, 4, C.dim);
+    // the window sits where your head comes up, so it moves to the left for this shot
+    ctx.save(); ctx.translate(-300, 0); rrS(330, 230, 220, 230, 6, C.mid, 6); ln(440, 236, 440, 454, 4, C.mid); ln(336, 345, 544, 345, 4, C.mid); glow('rgba(255,255,255,0.5)', 24); circ(500, 285, 22, C.fig); noGlow(); circ(510, 278, 20, '#000'); ctx.restore();
     ctx.save(); ctx.globalAlpha *= 1 - k; bed(150, FY, 1.05, 'woke', { look: 1, cat: 'empty', t }); ctx.restore();
     ctx.save(); ctx.globalAlpha *= k; bed(150, FY, 1.05, 'none', { cat: 'empty', t }); dogSit(330, MT + 6, 1.15, barkK); ctx.restore();
     standCat(1000, FY, CAT_S, { k: 1, arm: 'down', red: t < tb ? 1 : 0.4, t, sway: t >= tl ? 4 * ease((t - tl) / 0.4) : 0 });
     if (t >= te) { ctx.setLineDash([12, 12]); lnP(330 + 150 * 1.15, MT - 256 * 1.15, 1000 - 40 * CAT_S - 14, FY - 360 * CAT_S, 4, C.fig, prog(t, te, 0.4)); ctx.setLineDash([]); }
     if (t >= td && t < te) pop(t, td, 1400, 260, () => tag('LIKE A DOG', 1400, 270, C.fig, 40, 'center'));
-    if (t >= tb) { const big = t >= tl ? 1.3 : 1; ctx.save(); ctx.translate(560, 300); ctx.scale(big, big); ctx.translate(-560, -300); bubble(560, 300, 340, 140, 'WOOF!', t, tb, C.fig, '#000', 1); ctx.restore(); }
+    if (t >= tb) { const big = t >= tl ? 1.25 : 1; ctx.save(); ctx.translate(700, 230); ctx.scale(big, big); ctx.translate(-700, -230); bubble(700, 230, 320, 130, 'WOOF!', t, tb, C.fig, '#000', 1); ctx.restore(); }
   });
 };
 S.s41 = (t, seg) => {
