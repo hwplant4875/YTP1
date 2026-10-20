@@ -1,0 +1,212 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 84,
+ "capY": 960,
+ "title": {
+  "text": "Plates Have No Mercy 💀",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 26.0,
+  "vol": 0.6
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1ng2nwz.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 0.0,
+   "out": 2.6,
+   "circles": [
+    {
+     "from": 0.0,
+     "to": 0.7,
+     "rx": 0.16,
+     "ry": 0.1,
+     "track": [
+      [
+       0.0,
+       0.24,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/confused-cat__cuW62FiZhBw__cat-stare-blinking-loop-lopped.mp4",
+   "dur": 0.75,
+   "cap": "Bro forgot the clips 😭"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1ng2nwz.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "in": 1.2,
+   "out": 3.25,
+   "speed": [
+    [
+     1.2,
+     1.0
+    ],
+    [
+     1.5,
+     0.45
+    ],
+    [
+     2.4,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 1.5,
+     "x": 0.4,
+     "y": 0.35,
+     "zoom": 1.2
+    }
+   ],
+   "sfx": [
+    {
+     "at": 1.85,
+     "src": "/mnt/project-files/sfx/meme/lego-breaking.mp3",
+     "ss": 0.08,
+     "vol": 0.9
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7294317549473238314.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 4.3,
+   "out": 7.3,
+   "sfx": [
+    {
+     "at": 5.05,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.8
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7294317549473238314.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 5.2,
+   "out": 7.3,
+   "reverse": 4.0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7294317549473238314.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 5.2,
+   "out": 7.3,
+   "speed": [
+    [
+     5.2,
+     1.0
+    ],
+    [
+     6.4,
+     0.45
+    ]
+   ],
+   "hits": [
+    {
+     "at": 6.4,
+     "x": 0.5,
+     "y": 0.6,
+     "zoom": 1.2
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7294317549473238314.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 10.7,
+   "out": 12.5,
+   "sfx": [
+    {
+     "at": 10.72,
+     "src": "/mnt/project-files/sfx/drive/018_접시깨지는소리.mp3",
+     "vol": 0.8
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/crying-cat__9a9g-pOTZHk__nsb14-meowl.mp4",
+   "dur": 0.75,
+   "cap": "RIP iPhone 😭"
+  }
+ ]
+}

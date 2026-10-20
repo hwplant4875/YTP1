@@ -1,0 +1,181 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 84,
+ "capY": 960,
+ "title": {
+  "text": "Gym Bros Got HUMBLED 💀",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 60.0,
+  "vol": 0.6
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7639254568102202637.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.55,
+     0.5,
+     1.5
+    ]
+   ],
+   "vol": 0,
+   "in": 5.5,
+   "out": 8.4
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/shocked-cat__btYkcmAPyCc__cat-flabbergasted.mp4",
+   "dur": 0.75,
+   "cap": null,
+   "hold": 0.75
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7639254568102202637.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.55,
+     0.5,
+     1.5
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 6.6,
+   "out": 9.2,
+   "speed": [
+    [
+     6.6,
+     1.0
+    ],
+    [
+     6.8,
+     0.4
+    ],
+    [
+     8.1,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 6.8,
+     "x": 0.65,
+     "y": 0.48,
+     "zoom": 1.25
+    }
+   ],
+   "sfx": [
+    {
+     "at": 7.9,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.8
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7371135870272884011.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 1.0,
+   "in": 3.0,
+   "out": 5.6
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7371135870272884011.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 4.4,
+   "out": 5.6,
+   "reverse": 3.0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7371135870272884011.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 1.0,
+   "in": 4.4,
+   "out": 6.9,
+   "speed": [
+    [
+     4.4,
+     1.0
+    ],
+    [
+     4.7,
+     0.45
+    ],
+    [
+     5.6,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 4.7,
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.15
+    },
+    {
+     "at": 6.0,
+     "x": 0.62,
+     "y": 0.45,
+     "zoom": 1.45,
+     "dur": 0.6
+    }
+   ],
+   "sfx": [
+    {
+     "at": 6.05,
+     "src": "/home/user/rs_work/memes/vine_boom.mp3",
+     "vol": 0.6
+    }
+   ]
+  }
+ ]
+}

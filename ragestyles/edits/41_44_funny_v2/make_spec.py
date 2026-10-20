@@ -102,7 +102,68 @@ BOX_SQUAT = [
                     {"at": 6.3, "x": 0.5, "y": 0.45, "zoom": 1.1, "dur": 0.6}],
            "sfx": [{"at": 4.6, "src": SFX + "lego-breaking.mp3", "ss": 0.08, "vol": 1.0, "rate": 0.6}]})]
 
+# "today he didn't even touch the bar when I needed it": the spotter watches, the plates crash off one side
+NOTOUCH = '/home/user/rs_work/src/hd_bank/c/7066597956744482095.mp4'
+SPOTTER_NOTOUCH = [
+    clip(NOTOUCH, vol=0, **{"in": 13.5, "out": 16.6,
+         "sfx": [{"at": 15.85, "src": LIB + "impact_metal.mp3", "vol": 0.8}]}),
+    clip(NOTOUCH, **{"in": 15.0, "out": 16.6, "reverse": 3.0}),
+    replay(NOTOUCH, vol=0, **{"in": 15.0, "out": 17.2, "speed": [[15.0, 1.0], [15.15, 0.4], [16.4, 1.0]],
+           "hits": [{"at": 15.15, "x": 0.5, "y": 0.45, "zoom": 1.2}],
+           "sfx": [{"at": 15.85, "src": LIB + "impact_metal.mp3", "vol": 0.8, "rate": 0.7}]})]
+
+# "can you spot me bro": the spotter hugs in behind the squat, then rides him piggyback
+PIGGY = '/home/user/rs_work/src/hd_bank/c/7445003726793772331.mp4'
+SPOTTER_PIGGY = [
+    clip(PIGGY, vol=0, **{"in": 4.0, "out": 8.4, "speed": [[4.0, 1.0], [4.5, 1.6], [6.9, 1.0]]}),
+    meme(M + 'cat-side-eye__LoTSdDHzoc0__cat-annoyed.mp4', hold=0.55),
+    replay(PIGGY, vol=0, **{"in": 6.9, "out": 8.9, "speed": [[6.9, 1.0], [7.15, 0.45], [8.3, 1.0]],
+           "hits": [{"at": 7.15, "x": 0.6, "y": 0.42, "zoom": 1.2}]})]
+
+# bails a squat, the bar rolls straight over his phone, RIP iPhone
+ROLLBAR = '/home/user/rs_work/src/hd_bank/c/7294317549473238314.mp4'
+BAR_PHONE = [
+    clip(ROLLBAR, vol=0, **{"in": 4.3, "out": 7.3,
+         "sfx": [{"at": 5.05, "src": LIB + "thud_heavy.mp3", "vol": 0.8}]}),
+    clip(ROLLBAR, **{"in": 5.2, "out": 7.3, "reverse": 4.0}),
+    replay(ROLLBAR, vol=0, **{"in": 5.2, "out": 7.3, "speed": [[5.2, 1.0], [6.4, 0.45]],
+           "hits": [{"at": 6.4, "x": 0.5, "y": 0.6, "zoom": 1.2}]}),
+    clip(ROLLBAR, vol=0, **{"in": 10.7, "out": 12.5,
+         "sfx": [{"at": 10.72, "src": '/mnt/project-files/sfx/drive/018_접시깨지는소리.mp3', "vol": 0.8}]}),
+    meme(M + 'crying-cat__9a9g-pOTZHk__nsb14-meowl.mp4', "RIP iPhone 😭")]
+
+CLIPS_BOTH = [
+    clip(R + "1ng2nwz.mp4", **{"in": 0.0, "out": 2.6,
+         "circles": [{"from": 0.0, "to": 0.7, "rx": 0.16, "ry": 0.1, "track": [[0.0, 0.24, 0.3]]}]}),
+    meme(CONFUSED, "Bro forgot the clips 😭"),
+    replay(R + "1ng2nwz.mp4", **{"in": 1.2, "out": 3.25, "speed": [[1.2, 1.0], [1.5, 0.45], [2.4, 1.0]],
+           "hits": [{"at": 1.5, "x": 0.4, "y": 0.35, "zoom": 1.2}],
+           "sfx": [{"at": 1.85, "src": SFX + "lego-breaking.mp3", "ss": 0.08, "vol": 0.9}]})]
+
+# kicks the dumbbells up to lie back and the momentum flips him backwards off the bench
+FLIP = '/home/user/rs_work/src/hd_bank/c/7639254568102202637.mp4'
+FLIPK = {"track": [[0, 0.55, 0.5, 1.5]], "vol": 0}
+BENCH_FLIP = [
+    clip(FLIP, **FLIPK, **{"in": 5.5, "out": 8.4}),
+    meme(M + 'shocked-cat__btYkcmAPyCc__cat-flabbergasted.mp4', hold=0.75),
+    replay(FLIP, **FLIPK, **{"in": 6.6, "out": 9.2, "speed": [[6.6, 1.0], [6.8, 0.4], [8.1, 1.0]],
+           "hits": [{"at": 6.8, "x": 0.65, "y": 0.48, "zoom": 1.25}],
+           "sfx": [{"at": 7.9, "src": LIB + "thud_heavy.mp3", "vol": 0.8}]})]
+
+# push-ups on a "bar" that turns out to be soda cans; rewind, slow-mo, land on her jaw-drop
+CANS = '/home/user/rs_work/src/hd_bank/c/7371135870272884011.mp4'
+CAN_BAR = [
+    clip(CANS, vol=1.0, **{"in": 3.0, "out": 5.6}),
+    clip(CANS, **{"in": 4.4, "out": 5.6, "reverse": 3.0}),
+    replay(CANS, vol=1.0, **{"in": 4.4, "out": 6.9, "speed": [[4.4, 1.0], [4.7, 0.45], [5.6, 1.0]],
+           "hits": [{"at": 4.7, "x": 0.5, "y": 0.5, "zoom": 1.15},
+                    {"at": 6.0, "x": 0.62, "y": 0.45, "zoom": 1.45, "dur": 0.6}],
+           "sfx": [{"at": 6.05, "src": BOOM, "vol": 0.6}]})]
+
 SHORTS = [
+    short("42_spotter_v2", "The Spotter Had ONE Job 😭💀", 1.0, SPOTTER_PLATE, SPOTTER_NOTOUCH, SPOTTER_PIGGY),
+    short("44_plates_v2", "Plates Have No Mercy 💀", 26.0, CLIPS_BOTH, BAR_PHONE),
+    short("45_humbled", "Gym Bros Got HUMBLED 💀", 60.0, BENCH_FLIP, CAN_BAR),
     short("41_treadmill_v2", "Treadmills Are Undefeated 😭", 40.0, TREAD_ROLL, TREAD_KIDS, TREAD_LAUNCH),
     short("43_not_ready_v2", "Bro Was NOT Ready 😭", 12.0, BAND_SPRINT, BOX_SQUAT),
 ]

@@ -1,0 +1,293 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 84,
+ "capY": 960,
+ "title": {
+  "text": "The Spotter Had ONE Job 😭💀",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 1.0,
+  "vol": 0.6
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1rbl5dp.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 15.9,
+   "out": 18.9,
+   "circles": [
+    {
+     "from": 15.9,
+     "to": 16.9,
+     "rx": 0.075,
+     "ry": 0.15,
+     "track": [
+      [
+       15.9,
+       0.245,
+       0.655
+      ],
+      [
+       16.5,
+       0.24,
+       0.66
+      ],
+      [
+       16.9,
+       0.239,
+       0.664
+      ]
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "at": 17.65,
+     "src": "/mnt/project-files/sfx/meme/bowling-pins-falling.mp3",
+     "ss": 0.92,
+     "vol": 0.9
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/g/q_nick-young.mp4",
+   "dur": 0.75,
+   "cap": null,
+   "ss": 2.6
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1rbl5dp.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "in": 16.9,
+   "out": 20.2,
+   "speed": [
+    [
+     16.9,
+     1.0
+    ],
+    [
+     17.3,
+     0.5
+    ],
+    [
+     17.8,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 16.95,
+     "x": 0.32,
+     "y": 0.62,
+     "zoom": 1.35
+    },
+    {
+     "at": 17.8,
+     "x": 0.45,
+     "y": 0.56,
+     "zoom": 1.25,
+     "dur": 0.6
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7066597956744482095.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 13.5,
+   "out": 16.6,
+   "sfx": [
+    {
+     "at": 15.85,
+     "src": "/home/user/rs_work/sfx/impact_metal.mp3",
+     "vol": 0.8
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7066597956744482095.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 15.0,
+   "out": 16.6,
+   "reverse": 3.0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7066597956744482095.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 15.0,
+   "out": 17.2,
+   "speed": [
+    [
+     15.0,
+     1.0
+    ],
+    [
+     15.15,
+     0.4
+    ],
+    [
+     16.4,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 15.15,
+     "x": 0.5,
+     "y": 0.45,
+     "zoom": 1.2
+    }
+   ],
+   "sfx": [
+    {
+     "at": 15.85,
+     "src": "/home/user/rs_work/sfx/impact_metal.mp3",
+     "vol": 0.8,
+     "rate": 0.7
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7445003726793772331.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 4.0,
+   "out": 8.4,
+   "speed": [
+    [
+     4.0,
+     1.0
+    ],
+    [
+     4.5,
+     1.6
+    ],
+    [
+     6.9,
+     1.0
+    ]
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/cat-side-eye__LoTSdDHzoc0__cat-annoyed.mp4",
+   "dur": 0.75,
+   "cap": null,
+   "hold": 0.55
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/c/7445003726793772331.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 6.9,
+   "out": 8.9,
+   "speed": [
+    [
+     6.9,
+     1.0
+    ],
+    [
+     7.15,
+     0.45
+    ],
+    [
+     8.3,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 7.15,
+     "x": 0.6,
+     "y": 0.42,
+     "zoom": 1.2
+    }
+   ]
+  }
+ ]
+}
