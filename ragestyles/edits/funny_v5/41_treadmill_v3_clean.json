@@ -1,0 +1,181 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "memeBg": "black",
+ "capSize": 84,
+ "capY": 960,
+ "title": {
+  "text": "Treadmills Are Undefeated 😭",
+  "y": 190,
+  "size": 60
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7488460918595144990.mp4",
+   "ratio": "3:4",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "crop": [
+    0,
+    528,
+    1080,
+    1392
+   ],
+   "vol": 0,
+   "in": 4.8,
+   "out": 6.55
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/shocked-cat__keHPVm2ArXc__stellarnushu.mp4",
+   "dur": 0.75,
+   "cap": "Bro did a combat roll 💀",
+   "boomVol": 0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7488460918595144990.mp4",
+   "ratio": "3:4",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "crop": [
+    0,
+    528,
+    1080,
+    1392
+   ],
+   "vol": 0,
+   "in": 5.6,
+   "out": 8.8,
+   "speed": [
+    [
+     5.6,
+     1.0
+    ],
+    [
+     5.8,
+     0.45
+    ],
+    [
+     6.9,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 5.8,
+     "x": 0.4,
+     "y": 0.45,
+     "zoom": 1.2
+    },
+    {
+     "at": 7.6,
+     "x": 0.55,
+     "y": 0.45,
+     "zoom": 1.1,
+     "dur": 0.6
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/e/7555871094712880406.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.45,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 0.9,
+   "out": 2.55
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/e/7555871094712880406.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.45,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 1.6,
+   "out": 2.55,
+   "reverse": 3.0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/e/7555871094712880406.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.45,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 1.6,
+   "out": 5.6,
+   "speed": [
+    [
+     1.6,
+     1.0
+    ],
+    [
+     1.75,
+     0.45
+    ],
+    [
+     2.7,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 1.75,
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.1
+    },
+    {
+     "at": 3.0,
+     "x": 0.4,
+     "y": 0.55,
+     "zoom": 1.1,
+     "dur": 0.6
+    }
+   ]
+  }
+ ]
+}
