@@ -1,0 +1,285 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "memeBg": "black",
+ "capSize": 84,
+ "capY": 960,
+ "title": {
+  "text": "Gym Equipment Fights Back 😭",
+  "y": 190,
+  "size": 60
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/mnt/project-files/sources/ragestyles/funny_recent/01_2026-10-09_hurdle_uppercut_faceplant_7694656600287563038.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 1.0,
+   "in": 0.9,
+   "out": 2.75,
+   "hits": [
+    {
+     "at": 2.2,
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.15
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/fav_cat.png",
+   "dur": 0.75,
+   "cap": "The hurdle hit BACK 😭"
+  },
+  {
+   "type": "clip",
+   "src": "/mnt/project-files/sources/ragestyles/funny_recent/01_2026-10-09_hurdle_uppercut_faceplant_7694656600287563038.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 1.8,
+   "out": 2.75,
+   "reverse": 3.0
+  },
+  {
+   "type": "clip",
+   "src": "/mnt/project-files/sources/ragestyles/funny_recent/01_2026-10-09_hurdle_uppercut_faceplant_7694656600287563038.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 1.0,
+   "in": 1.8,
+   "out": 5.0,
+   "speed": [
+    [
+     1.8,
+     1.0
+    ],
+    [
+     2.0,
+     0.4
+    ],
+    [
+     3.4,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 2.0,
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.2
+    },
+    {
+     "at": 3.6,
+     "x": 0.5,
+     "y": 0.55,
+     "zoom": 1.1,
+     "dur": 0.6
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/mnt/project-files/sources/ragestyles/funny_recent/03_2026-10-01_four_gym_fails_cable_rack_collapse_7691767958514797856.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 3.0,
+   "out": 4.9,
+   "hits": [
+    {
+     "at": 4.35,
+     "x": 0.5,
+     "y": 0.45,
+     "zoom": 1.12
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/crying-cat__b8jzGatOpv8__noo.mp4",
+   "dur": 0.75,
+   "cap": null
+  },
+  {
+   "type": "clip",
+   "src": "/mnt/project-files/sources/ragestyles/funny_recent/03_2026-10-01_four_gym_fails_cable_rack_collapse_7691767958514797856.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 4.0,
+   "out": 4.9,
+   "reverse": 3.0
+  },
+  {
+   "type": "clip",
+   "src": "/mnt/project-files/sources/ragestyles/funny_recent/03_2026-10-01_four_gym_fails_cable_rack_collapse_7691767958514797856.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 4.0,
+   "out": 4.95,
+   "speed": [
+    [
+     4.0,
+     1.0
+    ],
+    [
+     4.2,
+     0.35
+    ]
+   ],
+   "hits": [
+    {
+     "at": 4.2,
+     "x": 0.5,
+     "y": 0.4,
+     "zoom": 1.15
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/mnt/project-files/sources/ragestyles/funny_recent/03_2026-10-01_four_gym_fails_cable_rack_collapse_7691767958514797856.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 7.6,
+   "out": 9.6,
+   "hits": [
+    {
+     "at": 8.6,
+     "x": 0.5,
+     "y": 0.45,
+     "zoom": 1.1
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/surprised-cat__ZuXnTDxIbjQ__shocked-shocked-cat.mp4",
+   "dur": 0.75,
+   "cap": "Bar said BYE 💀"
+  },
+  {
+   "type": "clip",
+   "src": "/mnt/project-files/sources/ragestyles/funny_recent/03_2026-10-01_four_gym_fails_cable_rack_collapse_7691767958514797856.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 8.0,
+   "out": 9.6,
+   "reverse": 3.0
+  },
+  {
+   "type": "clip",
+   "src": "/mnt/project-files/sources/ragestyles/funny_recent/03_2026-10-01_four_gym_fails_cable_rack_collapse_7691767958514797856.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 8.0,
+   "out": 9.95,
+   "speed": [
+    [
+     8.0,
+     1.0
+    ],
+    [
+     8.3,
+     0.45
+    ],
+    [
+     9.5,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 8.3,
+     "x": 0.5,
+     "y": 0.45,
+     "zoom": 1.15
+    }
+   ]
+  }
+ ]
+}

@@ -58,6 +58,42 @@ BENCH_ROLL = [
 
 SHORTS = [short("48_backflips", "Accidental Gym Backflips 😭", ASSIST_FLIP, BENCH_ROLL)]
 
+# --- 49: recent viral clips (funny_recent, posted 2026-10-01 / 10-09) -------------------------------------------
+REC = '/mnt/project-files/sources/ragestyles/funny_recent/'
+FAV = '/home/user/rs_work/memes/fav_cat.png'
+# ESPN 3.6M: his trail foot clips the hurdle, it flips up into him and he slams flat (real sound kept)
+HURDLE = REC + '01_2026-10-09_hurdle_uppercut_faceplant_7694656600287563038.mp4'
+HURDLE_SLAM = [
+    clip(HURDLE, vol=1.0, **{"in": 0.9, "out": 2.75,
+         "hits": [{"at": 2.2, "x": 0.5, "y": 0.5, "zoom": 1.15}]}),
+    meme(FAV, "The hurdle hit BACK 😭"),
+    clip(HURDLE, **{"in": 1.8, "out": 2.75, "reverse": 3.0}),
+    replay(HURDLE, vol=1.0, **{"in": 1.8, "out": 5.0, "speed": [[1.8, 1.0], [2.0, 0.4], [3.4, 1.0]],
+           "hits": [{"at": 2.0, "x": 0.5, "y": 0.5, "zoom": 1.2},
+                    {"at": 3.6, "x": 0.5, "y": 0.55, "zoom": 1.1, "dur": 0.6}]})]
+
+# swabyfitt "4 exercises" reposts (bed is a song: muted). Cable skullcrushers: the machine's top frame comes down
+FOUR = REC + '03_2026-10-01_four_gym_fails_cable_rack_collapse_7691767958514797856.mp4'
+FK = {"vol": 0}
+CABLE_FRAME = [
+    clip(FOUR, **FK, **{"in": 3.0, "out": 4.9,
+         "hits": [{"at": 4.35, "x": 0.5, "y": 0.45, "zoom": 1.12}]}),
+    meme(M + 'crying-cat__b8jzGatOpv8__noo.mp4'),
+    clip(FOUR, **FK, **{"in": 4.0, "out": 4.9, "reverse": 3.0}),
+    replay(FOUR, **FK, **{"in": 4.0, "out": 4.95, "speed": [[4.0, 1.0], [4.2, 0.35]],
+           "hits": [{"at": 4.2, "x": 0.5, "y": 0.4, "zoom": 1.15}]})]
+
+# "automatic unrack": the plates slide off one side and the barbell catapults up past him
+UNRACK = [
+    clip(FOUR, **FK, **{"in": 7.6, "out": 9.6,
+         "hits": [{"at": 8.6, "x": 0.5, "y": 0.45, "zoom": 1.1}]}),
+    meme(M + 'surprised-cat__ZuXnTDxIbjQ__shocked-shocked-cat.mp4', "Bar said BYE 💀"),
+    clip(FOUR, **FK, **{"in": 8.0, "out": 9.6, "reverse": 3.0}),
+    replay(FOUR, **FK, **{"in": 8.0, "out": 9.95, "speed": [[8.0, 1.0], [8.3, 0.45], [9.5, 1.0]],
+           "hits": [{"at": 8.3, "x": 0.5, "y": 0.45, "zoom": 1.15}]})]
+
+SHORTS.append(short("49_fights_back", "Gym Equipment Fights Back 😭", HURDLE_SLAM, CABLE_FRAME, UNRACK))
+
 if __name__ == '__main__':
     for name, spec in SHORTS:
         json.dump(spec, open(os.path.join(HERE, name + '.json'), 'w'), indent=1, ensure_ascii=False)
