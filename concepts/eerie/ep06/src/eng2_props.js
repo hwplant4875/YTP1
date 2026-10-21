@@ -1,7 +1,7 @@
 // ---------- EP06 props: Halloween night, the man in the white mask ----------
 // Flat 2D pictograms. Everything dark and white; warm amber only for lamps and pumpkin light; red only for danger.
 const NIGHT = { sky0: '#06080c', sky1: '#000', house: '#111214', houseHi: '#26272b', roof: '#0b0b0d', street: '#0c0c0e', walk: '#151517', grass: '#090b09',
-  amber: '#ffc36b', jump: '#3a3e45', jumpHi: '#5b6069', jumpLo: '#24272c', mask: '#ecebe4', maskSh: '#bdbcb4', hair: '#151515' };
+  amber: '#ffc36b', jump: '#2a323f', jumpHi: '#4a5568', jumpLo: '#1b212b', mask: '#eef0ed', maskSh: '#b7bbbb', hair: '#2b2119', hairHi: '#4b3b2c' };
 const amberGlow = (b = 24) => glow('rgba(255,180,90,0.85)', b);
 
 // ---------- the man ----------
@@ -18,14 +18,23 @@ function myers(x, y, s = 1, o = {}) {
     const lift = o.walk != null ? Math.max(0, d * sw) * 18 : 0, fx = d * 34 + (o.walk != null ? d * sw * 10 : 0);
     ctx.beginPath(); ctx.moveTo(d * 8, -300); ctx.lineTo(d * 62, -300); ctx.lineTo(fx + d * 24, -22 - lift); ctx.lineTo(fx - d * 22, -22 - lift); ctx.closePath();
     ctx.fillStyle = body; ctx.fill(); ctx.strokeStyle = edge; ctx.lineWidth = 3; ctx.stroke();
+    ln(d * 36 - 14, -150, d * 36 + 12, -144, 2, NIGHT.jumpLo); ln(d * 36 - 10, -136, d * 36 + 8, -132, 2, NIGHT.jumpLo);   // creases at the knee
     rr(fx - 30, -30 - lift, 60, 30, 10, '#121315');                                       // boots
   }
   // torso: work coveralls, wide shoulders
   const torso = new Path2D('M-78,-500 C-90,-470 -84,-380 -66,-290 L66,-290 C84,-380 90,-470 78,-500 C40,-512 -40,-512 -78,-500 Z');
   ctx.fillStyle = body; ctx.fill(torso); ctx.strokeStyle = edge; ctx.lineWidth = 3; ctx.stroke(torso);
-  if (!o.back) { ln(0, -500, 0, -300, 3, NIGHT.jumpLo); pthS('M-30,-505 L0,-470 L30,-505', NIGHT.jumpLo, 5); rr(-62, -455, 34, 26, 4, NIGHT.jumpLo); }
+  if (!o.back) {
+    ln(0, -470, 0, -300, 3, '#59627a'); rr(-4, -462, 8, 16, 2, '#7a8296');                                   // zip and its pull
+    for (const d of [-1, 1]) {
+      pth(`M${d * 4},-506 L${d * 46},-508 L${d * 40},-476 L${d * 2},-462 Z`, NIGHT.jumpHi);              // pointed collar
+      pthS(`M${d * 4},-506 L${d * 46},-508 L${d * 40},-476 L${d * 2},-462`, NIGHT.jumpLo, 2);
+      rr(d > 0 ? 18 : -60, -446, 42, 44, 4, NIGHT.jumpLo); rr(d > 0 ? 16 : -62, -450, 46, 14, 3, '#151a22');   // chest pockets with flaps
+      ln(d * 60, -340, d * 30, -330, 2, NIGHT.jumpLo);                                                  // a fold at the hip
+    }
+  }
   else ln(0, -505, 0, -300, 2, NIGHT.jumpLo);
-  rr(-68, -306, 136, 16, 4, NIGHT.jumpLo);                                                 // belt line
+  rr(-68, -304, 136, 10, 3, NIGHT.jumpLo); for (let i = -5; i <= 5; i++) ln(i * 12, -306, i * 12, -296, 1.5, '#151a22');   // elastic waist
   // arms: shoulder -> elbow -> hand; returns the knife hand position
   const arm = (d, hand, elbow) => { ctx.beginPath(); ctx.moveTo(d * 70, -492); ctx.lineTo(elbow[0], elbow[1]); ctx.lineTo(hand[0], hand[1]);
     ctx.lineWidth = 38; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = body; ctx.stroke();
@@ -54,28 +63,53 @@ function myers(x, y, s = 1, o = {}) {
   ctx.restore();
   ctx.restore();
 }
-// the mask, centred at (x,y): pale, smooth, hollow eyes, no mouth; dark hair over the top
+// the mask, centred at (x,y): the pale latex face from the film (long face, high cheekbones, thin straight nose,
+// hollow almond eyes under heavy lids, thin closed lips), the mask's neck tucked into the collar, messy brown hair swept back
 function maskHead(x, y, s = 1, o = {}) {
   ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
-  // hair behind and on top
-  pth('M-54,-14 C-62,-66 -40,-96 -4,-98 C40,-98 64,-70 56,-14 C54,-4 50,4 46,8 L-46,8 C-50,4 -54,-4 -54,-14 Z', NIGHT.hair);
-  if (o.back) { pth('M-52,-40 C-50,10 -40,40 0,58 C40,40 50,10 52,-40 C40,-80 -40,-80 -52,-40 Z', NIGHT.hair); ctx.restore(); return; }
+  const SH = a => `rgba(55,64,74,${a})`, HAIR = NIGHT.hair, HI = NIGHT.hairHi;
+  // hair behind: full, wavy
+  pth('M-62,-4 C-76,-40 -70,-94 -32,-112 C-6,-124 32,-122 54,-102 C74,-82 74,-36 64,-4 C62,8 56,16 50,20 L-50,20 C-58,14 -62,6 -62,-4 Z', HAIR);
+  if (o.back) { pth('M-58,-50 C-60,0 -48,40 0,60 C48,40 60,0 58,-50 C46,-96 -46,-96 -58,-50 Z', HAIR);
+    ctx.save(); ctx.globalAlpha *= 0.6; for (let i = 0; i < 7; i++) { const a = -44 + i * 15; pthS(`M${a},-80 C${a + 6},-40 ${a - 4},0 ${a + 2},40`, HI, 3); } ctx.restore(); ctx.restore(); return; }
+  // the mask's neck, going into the collar
+  rr(-25, 46, 50, 56, 12, '#c4c8c7');
+  // the face
   glow(`rgba(255,255,255,${o.glowA ?? 0.32})`, o.glowB ?? 28);
-  pth('M-44,-46 C-46,-74 -22,-84 0,-84 C22,-84 46,-74 44,-46 C46,-6 40,38 22,62 C12,74 -12,74 -22,62 C-40,38 -46,-6 -44,-46 Z', NIGHT.mask);
-  noGlow();
-  // hair line over the forehead
-  pth('M-50,-40 C-46,-82 -14,-96 6,-92 C34,-90 54,-74 50,-38 C46,-52 38,-58 30,-56 C24,-66 12,-64 2,-62 C-8,-70 -24,-64 -30,-58 C-38,-60 -46,-52 -50,-40 Z', NIGHT.hair);
-  // soft shading: brow ridge, cheek hollows, the nose
-  ctx.save(); ctx.globalAlpha *= 0.55;
-  pthS('M-34,-30 C-24,-38 -8,-36 -4,-30', NIGHT.maskSh, 4); pthS('M34,-30 C24,-38 8,-36 4,-30', NIGHT.maskSh, 4);
-  pthS('M0,-26 L-6,10 C-2,14 4,14 7,10', NIGHT.maskSh, 4);
-  ctx.restore();
-  // hollow eyes
+  const face = new Path2D('M0,-90 C26,-90 44,-76 45,-52 C47,-30 48,-12 46,4 C44,22 38,40 30,54 C24,66 16,78 0,82 C-16,78 -24,66 -30,54 C-38,40 -44,22 -46,4 C-48,-12 -47,-30 -45,-52 C-44,-76 -26,-90 0,-90 Z');
+  const g = ctx.createLinearGradient(-48, 0, 48, 0); g.addColorStop(0, '#c3c7c6'); g.addColorStop(0.22, '#e8eae7'); g.addColorStop(0.5, NIGHT.mask); g.addColorStop(0.78, '#e8eae7'); g.addColorStop(1, '#c3c7c6');
+  ctx.fillStyle = g; ctx.fill(face); noGlow();
+  // sculpted shading, soft, kept inside the face
+  ctx.save(); ctx.clip(face); ctx.filter = `blur(${Math.max(1, 5 * s)}px)`;
   for (const d of [-1, 1]) {
-    ell(d * 18, -18, 13, 7.5, d * 0.16, 'rgba(70,70,66,0.45)'); pth(`M${d * 7},-18 C${d * 10},-25 ${d * 24},-26 ${d * 30},-19 C${d * 25},-12 ${d * 12},-11 ${d * 7},-18 Z`, '#030303');
-    const r = o.red || 0;
-    if (r > 0) { ctx.save(); ctx.globalAlpha *= r; redGlow(16); circ(d * 18, -18, 3.2, C.red); noGlow(); ctx.restore(); }
+    ell(d * 32, 32, 12, 24, d * 0.35, SH(0.22));                 // cheek hollows under the cheekbones
+    ell(d * 44, -40, 9, 24, 0, SH(0.2));                         // temples
+    ell(d * 19, -22, 18, 12, d * 0.08, SH(0.32));                // eye sockets
+    ell(d * 9, 2, 5, 18, d * 0.1, SH(0.16));                     // sides of the nose
+    ell(d * 17, 40, 5, 12, d * -0.3, SH(0.14));                  // beside the mouth
+    ell(d * 30, -2, 12, 7, d * -0.4, 'rgba(255,255,255,0.5)');   // cheekbones catch the light
   }
+  ell(0, 86, 42, 16, 0, SH(0.26)); ell(0, 56, 9, 4, 0, SH(0.2)); ell(0, -62, 22, 10, 0, 'rgba(255,255,255,0.45)');
+  ctx.filter = 'none'; ctx.restore();
+  for (const d of [-1, 1]) {
+    pthS(`M${d * 34},-36 C${d * 26},-41 ${d * 13},-41 ${d * 6},-35`, SH(0.3), 3);            // brow ridge
+    pthS(`M${d * 7},-26 C${d * 14},-32 ${d * 26},-32 ${d * 33},-21`, SH(0.28), 2);           // heavy upper lid
+    pth(`M${d * 7},-20 C${d * 12},-28 ${d * 26},-28 ${d * 32},-16 C${d * 25},-12 ${d * 12},-12 ${d * 7},-20 Z`, '#040404');   // the eye hole, drooping at the outside
+    ell(d * 6, 22, 3.4, 1.8, 0, 'rgba(35,38,42,0.6)');                                      // nostrils
+    const r = o.red || 0;
+    if (r > 0) { ctx.save(); ctx.globalAlpha *= r; redGlow(16); circ(d * 19, -19, 3.2, C.red); noGlow(); ctx.restore(); }
+  }
+  ctx.save(); ctx.globalAlpha *= 0.6; ln(0, -34, 0, 12, 5, '#ffffff'); ctx.restore();         // the bridge catches the light
+  pthS('M-11,19 C-6,24 6,24 11,19', SH(0.3), 2);                                               // tip of the nose
+  pth('M-15,45 C-8,41 -3,42 0,43 C3,42 8,41 15,45 C8,46 -8,46 -15,45 Z', SH(0.28));            // thin upper lip
+  pthS('M-15,45 C-6,47 6,47 15,45', '#4a4e53', 1.8);                                           // closed
+  // hair over the top: high hairline, thick and messy, swept back, loose at the temples
+  pth('M-52,-40 C-60,-84 -36,-114 2,-114 C40,-114 64,-88 53,-40 C49,-56 42,-68 32,-73 C27,-81 16,-84 6,-81 C-4,-86 -18,-84 -25,-77 C-35,-75 -46,-62 -52,-40 Z', HAIR);
+  for (const d of [-1, 1]) pth(`M${d * 44},-60 C${d * 54},-46 ${d * 52},-26 ${d * 48},-14 C${d * 46},-28 ${d * 45},-42 ${d * 40},-54 Z`, HAIR);
+  ctx.save(); ctx.globalAlpha *= 0.8;
+  for (const [a, b] of [[-44, -92], [-30, -104], [-12, -110], [8, -110], [26, -104], [42, -92]]) pthS(`M${a},${b} C${a + 6},${b + 6} ${a + 4},${b + 14} ${a + 10},${b + 18}`, HI, 2.5);
+  ctx.restore();
+  ctx.restore();
   ctx.restore();
 }
 // a kitchen knife: handle at (x,y), blade pointing along ang
@@ -437,12 +471,16 @@ function myersSide(x, y, s = 1, o = {}) {
     if (o2.knife) knife(hand[0], hand[1], o2.knife === 2 ? -Math.PI / 2 + 0.25 : Math.PI / 2 - 0.1, 1);
     // head in profile
     ctx.save(); ctx.translate(6, -262);
-    pth('M-46,-30 C-50,-70 -20,-92 10,-90 C30,-88 40,-70 38,-40 L-20,40 C-46,30 -52,0 -46,-30 Z', NIGHT.hair);
+    pth('M-52,-30 C-58,-76 -24,-104 12,-100 C34,-98 46,-78 42,-44 L-20,44 C-50,34 -58,0 -52,-30 Z', NIGHT.hair);
     glow('rgba(255,255,255,0.3)', 24);
     pth('M-8,-74 C24,-82 44,-60 44,-34 C46,-24 56,-12 52,-4 C48,2 44,4 44,10 C46,36 34,58 12,62 C-6,60 -18,40 -20,10 C-24,-30 -24,-60 -8,-74 Z', NIGHT.mask); noGlow();
     pth('M-12,-72 C14,-84 40,-70 44,-44 C30,-58 10,-62 -14,-56 Z', NIGHT.hair);
-    ell(24, -26, 10, 7, 0.1, '#030303');
-    if (o2.red) { ctx.save(); ctx.globalAlpha *= o2.red; redGlow(16); circ(24, -26, 3, C.red); noGlow(); ctx.restore(); }
+    ctx.save(); ctx.filter = 'blur(3px)'; ell(22, -26, 16, 11, 0.1, 'rgba(55,64,74,0.35)'); ell(4, 18, 16, 22, 0, 'rgba(55,64,74,0.1)'); ell(30, 50, 14, 8, 0, 'rgba(55,64,74,0.2)'); ctx.filter = 'none'; ctx.restore();
+    pthS('M8,-40 C18,-46 32,-46 40,-38', 'rgba(55,64,74,0.4)', 3);                 // brow
+    pth('M16,-26 C20,-32 30,-32 34,-24 C30,-20 20,-20 16,-26 Z', '#030303');           // the eye hole
+    ell(46, 2, 3, 2, 0, 'rgba(35,38,42,0.6)');                                         // nostril
+    pthS('M38,22 L46,22', '#4a4e53', 2);                                               // closed lips
+    if (o2.red) { ctx.save(); ctx.globalAlpha *= o2.red; redGlow(16); circ(25, -26, 3, C.red); noGlow(); ctx.restore(); }
     ctx.restore();
   };
   if (o.floor) {

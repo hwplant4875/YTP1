@@ -43,7 +43,7 @@ S.h1 = (t, seg) => {
   lookOut(t, { cross: false, x0: 120, x1: 1800, y0: 30, y1: 1000, z: zk(t, 0, seg.end + 0.8, 2.15, 2.6), f: [1082, 470] });
   if (t >= ta - 0.3) pop(t, ta - 0.3, 960, 150, () => tag('DO NOT LOOK AWAY', 960, 160, C.red, 52, 'center'), 0.3);
 };
-function h2Windows(seg) { return [[seg.start, wt(seg, 'do', 2), 'eye', 'away', 250], [wt(seg, 'do', 2), wt(seg, 'and'), 'closet', 'closet', 250], [wt(seg, 'and'), nextStart(seg), 'rise', 'dead', 250]]; }
+function h2Windows(seg) { return [[seg.start, wt(seg, 'do'), 'knives', 'knives', 250], [wt(seg, 'do'), wt(seg, 'and'), 'closet', 'closet', 250], [wt(seg, 'and'), nextStart(seg), 'rise', 'dead', 250]]; }
 const H2_HIT = 0.6, H2_BLACK = 0.4;
 function teaserBox(t, seg, w0, ic, word, y) {
   const x = 1600, tx = wt(seg, word);
@@ -55,9 +55,9 @@ S.h2 = (t, seg) => {
   const [w0, w1, ic, word, by] = ws[i], hit = w1 - H2_HIT, blk = w1 - H2_BLACK, d = t - hit;
   if (t < blk) {
     if (i === 0) {
-      // you look away: the curtains close and open, and the streetlight is empty
-      const cl = t < w0 + 0.9 ? ease(prog(t, w0 + 0.35, 0.3)) : 1 - ease(prog(t, w0 + 0.95, 0.3));
-      lookOut(t, { z: zk(t, w0, blk - w0, 1.5, 1.9), f: [1080, 500], close: cl, him: t < w0 + 0.8 ? LIGHT : null });
+      // the knife block in the dark kitchen: one slot is empty, and it turns red
+      black(); rr(-200, 960, W + 400, 200, 0, '#121214');
+      cam(t, w0, blk - w0, 1.0, 1.25, 860, 760, () => blockClose(t, { x: 860, y: 1000, s: 1.7, missing: 0, red: t >= w0 + 0.5 }));
     } else if (i === 1) {
       // you hide in the closet: the mask comes right up to the slats
       const k = ease(prog(t, w0 + 0.2, hit - w0 - 0.2));

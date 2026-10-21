@@ -2,8 +2,8 @@
 // Black background, flat white pictograms, red only for what is wrong. Needs window.TL (timeline.json).
 (() => {
 const W = 1920, H = 1080;
-const NAME = 'PROTOCOL';   // the channel's name, as it appears on screen ("NAME NUM")
-const NUM = '404';
+const NAME = 'INSTRUCTION';   // the channel's name, as it appears on screen ("NAME NUM")
+const NUM = '444';
 const C = { bg: '#000', fig: '#f2f2f2', sec: '#bdbdbd', mid: '#7c7c7c', dim: '#3c3c3c', dark: '#1a1a1a', red: '#ff2b2b', txt: '#f4f4f4' };
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));

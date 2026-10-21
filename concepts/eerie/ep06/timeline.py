@@ -91,7 +91,7 @@ for i, seg in enumerate(tl[:-1]):
 cuts = [seg['start'] for seg in tl[1:]]
 # the hook teaser: three "do not"s, each done anyway; contact or red, then black before the next line
 if 'h2' in S and 'o1' in S:
-    b, c, e = cue('h2', 'do', 2), cue('h2', 'and', 1), S['o1']['start']
+    b, c, e = cue('h2', 'do', 1), cue('h2', 'and', 1), S['o1']['start']
     for w1 in (b, c, e): events.append({'type': 'thud', 't': w1 - 0.6})
     cuts += [b, c]
 for e in events:
