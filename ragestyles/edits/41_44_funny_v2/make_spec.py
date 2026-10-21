@@ -43,14 +43,14 @@ def replay(src, **kw):
 
 # --- treadmill beats -----------------------------------------------------------------------------------------
 DISMOUNT = B + "7488460918595144990.mp4"
-ROLLK = {"crop": [0, 528, 1080, 1392], "ratio": "3:4", "vol": 0}   # crop drops the burned-in caption
+ROLLK = {"crop": [0, 528, 1080, 1392], "ratio": "3:4", "vol": 1.0}   # crop drops the burned-in caption; its sound is the real gym (not music)
 TREAD_ROLL = [
     clip(DISMOUNT, **ROLLK, **{"in": 4.8, "out": 6.55,                      # cut as his back hits the floor
          "sfx": [{"at": 5.62, "src": '/mnt/project-files/sfx/drive/002_휙(만화적).mp3', "ss": 0.25, "vol": 0.7},
                  {"at": 6.42, "src": BOOM, "vol": 0.6}]}),
     meme(SHOCKED, "Bro did a combat roll 💀", boomVol=0),
-    # runs on through his confused walk to the camera (the caption's joke)
-    replay(DISMOUNT, **ROLLK, **{"in": 5.6, "out": 11.3, "speed": [[5.6, 1.0], [5.8, 0.45], [6.9, 1.0]],
+    # ends as he lands on the floor (owner: the confused walk-off after it is boring)
+    replay(DISMOUNT, **ROLLK, **{"in": 5.6, "out": 8.8, "speed": [[5.6, 1.0], [5.8, 0.45], [6.9, 1.0]],
            "hits": [{"at": 5.8, "x": 0.4, "y": 0.45, "zoom": 1.2},
                     {"at": 7.6, "x": 0.55, "y": 0.45, "zoom": 1.1, "dur": 0.6}],
            "sfx": [{"at": 6.4, "src": BOOM, "vol": 0.6, "rate": 0.6}]})]          # stretched boom on the landing
