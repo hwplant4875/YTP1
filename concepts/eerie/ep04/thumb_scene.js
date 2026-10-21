@@ -12,7 +12,7 @@ window.drawThumb4 = (o = {}) => {
   ctx.save(); ctx.globalAlpha = 0.9; polyW([[SOFA.x0 + 0.04, 0.003, SOFA.z1 - 0.02], [SOFA.x1 - 0.04, 0.003, SOFA.z1 - 0.02], [SOFA.x1 - 0.04, 0.003, SOFA.z1 + 0.1], [SOFA.x0 + 0.04, 0.003, SOFA.z1 + 0.1]], '#000', null); ctx.restore();
   body3(poseOf({ look: 0.5 }), { col: fig, top: fig, hood: true, glow: inv ? 'rgba(0,0,0,0)' : undefined });
   thingArm(0.4, { k: 1, to: ankle, grip: true, col: thing });
-  thingHead(0.4, THING_X, 1, { col: thing, size: o.size || 2.75 });
+  if (!o.noHead) thingHead(0.4, THING_X, 1, { col: thing, size: o.size || 2.75 });
   ctx.restore();
   // the security camera's marks: corners, REC, tomorrow's date
   const tx = look === 'red' ? '#111' : '#f2f2f2';
@@ -35,3 +35,4 @@ window.drawThumb4 = (o = {}) => {
 window.drawThumb4w = () => window.drawThumb4({ look: 'white' });
 window.drawThumb4c = () => window.drawThumb4({ look: 'cam' });
 window.drawThumb4r = () => window.drawThumb4({ look: 'red' });
+window.drawThumb4n = () => window.drawThumb4({ look: 'white', noHead: true });
