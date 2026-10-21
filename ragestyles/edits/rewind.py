@@ -5,7 +5,7 @@ and on to the next beat. One clip can carry several beats. Original audio only, 
     python3 rewind.py spec.json out.mp4
 
 spec:
-  "font": TTF, "boom": sfx path
+  "font": TTF, "boom": sfx path laid under each meme cut (optional; left out = memes stay silent)
   "segments": [
     {"type": "clip", "src", "in", "out", "ratio", "crop": [x, y, w, h] (source content box, drops letterbox bars),
      "track": [[t, x, y, zoom], ...], "hits": [{"at": t, "x", "y", "zoom", "dur"}],   times are source times;
@@ -19,7 +19,7 @@ spec:
      "blur": [{"box": [x, y, w, h], "from", "to"}]   heavy blur over a burned-in caption (fractions of the cropped source)
     {"type": "meme", "src" (video or still image), "ss", "dur", "hold" (freeze after this many s), "cap",
      "boomVol"}]
-  optional: "bgm": {"src", "ss", "vol"} (music bed under the whole short, fades out at the end),
+  optional: "flashAll": true (white flash on every cut, clip to clip too), "bgm": {"src", "ss", "vol"} (music bed under the whole short, fades out at the end),
   "memeBg": "blur" | "black", "capSize", "capY" (caption centre; the meme sits just above it), "title": {"text", "y", "size"} (fixed caption on every frame,
   emoji allowed), "look": grade dict of animedit_py.Look (contrast, sat, black, glow, sharpen, grain, vignette) applied
   to every footage frame (the anime-edit polish: crushed blacks, punchier colour, sharpen, light glow)
@@ -272,8 +272,8 @@ def build(spec, out):
     starts = np.cumsum([0] + counts)
     white = np.zeros(int(starts[-1]), np.float32)
     for i, b in enumerate(starts[1:-1]):
-        if 'meme' not in (segs[i]['type'], segs[i + 1]['type']):
-            continue                       # clip to clip: hard cut
+        if 'meme' not in (segs[i]['type'], segs[i + 1]['type']) and not spec.get('flashAll'):
+            continue                       # clip to clip: hard cut unless every cut flashes
         for k, a in enumerate(FLASH_IN):
             white[b - len(FLASH_IN) + k] = max(white[b - len(FLASH_IN) + k], a)
         for k, a in enumerate(FLASH_OUT):
@@ -326,7 +326,7 @@ def build(spec, out):
         else:
             subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo',
                             '-t', f'{dur:.3f}', a], check=True)
-            if s['type'] == 'meme':
+            if s['type'] == 'meme' and spec.get('boom'):
                 sfx.append((spec['boom'], 0, starts[i] / FPS - 0.05, s.get('boomVol', 0.6), None, None))
         for e in s.get('sfx', []):
             if s['type'] == 'clip' and s.get('speed'):
