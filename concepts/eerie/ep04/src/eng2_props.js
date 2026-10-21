@@ -164,22 +164,45 @@ function skeleton(ps) {
   j.knee = { L: V3.add(V3.lerp(j.hip.L, j.foot.L, 0.5), V3.mul(F, 0.03)), R: V3.add(V3.lerp(j.hip.R, j.foot.R, 0.5), V3.mul(F, 0.03)) };
   return j;
 }
-// o.col: skin/limbs, o.top: the torso and arms (the grey hoodie), o.hood: draw the hood behind the head
+// o.col: skin, o.top: the hoodie (torso and sleeves), o.legs: trousers, o.hood: a hoodie with its hood, strings, pocket and cuffs, o.mark: a red box round the hoodie
+const LEG_C = '#6a6a70', SHOE_C = '#2a2a2e', HOOD_EDGE = '#5e5e64';
 function body3(ps, o = {}) {
-  const j = skeleton(ps), col = o.col || C.fig, top = o.top || col;
-  const parts = [];
-  const cap = (a, b, w, c = col) => parts.push({ d: (toCam(a)[2] + toCam(b)[2]) / 2, f: () => { const p = prj(a), q = prj(b); if (p && q) ln(p[0], p[1], q[0], q[1], w * (p[3] + q[3]) / 2, c); } });
-  for (const s of ['L', 'R']) { cap(j.hip[s], j.knee[s], 0.13); cap(j.knee[s], j.foot[s], 0.12); }
-  parts.push({ d: toCam(j.chest)[2] + 0.02, f: () => { const p = prj(j.chest), q = prj(j.pelvis); if (!p || !q) return; ln(p[0], p[1], q[0], q[1], 0.29 * (p[3] + q[3]) / 2, top);
-    const sl = prj(j.sh.L), sr = prj(j.sh.R); if (sl && sr) ln(sl[0], sl[1], sr[0], sr[1], 0.1 * (sl[3] + sr[3]) / 2, top);
-    if (o.hood) { const n = prj(V3.add(j.neck, V3.mul(j.F, -0.07))); if (n) circ(n[0], n[1], 0.1 * n[3], top); }
-    if (o.mark) { const c = prj(V3.lerp(j.chest, j.pelvis, 0.4)); if (c) { ctx.save(); noGlow(); redGlow(16); rrS(c[0] - 0.24 * c[3], c[1] - 0.36 * c[3], 0.48 * c[3], 0.72 * c[3], 8, C.red, 4); ctx.restore(); } } } });
+  const j = skeleton(ps), col = o.col || C.fig, top = o.top || col, flat = !!o.flat, legs = flat ? col : (o.legs || LEG_C);
+  const fd = V3.dot(j.F, V3.norm(V3.sub(camPos(), j.chest)));   // > 0: facing the camera
+  const parts = [], P = q => prj(q);
+  const cap = (a, b, w, c = col, d) => parts.push({ d: d ?? (toCam(a)[2] + toCam(b)[2]) / 2, f: () => { const p = P(a), q = P(b); if (p && q) ln(p[0], p[1], q[0], q[1], w * (p[3] + q[3]) / 2, c); } });
+  const quad = (pts, fill, edge, d) => parts.push({ d, f: () => { const sp = pts.map(P); if (sp.some(x => !x)) return; ctx.beginPath(); ctx.moveTo(sp[0][0], sp[0][1]); for (const q of sp.slice(1)) ctx.lineTo(q[0], q[1]); ctx.closePath(); ctx.fillStyle = fill; ctx.fill(); if (edge) { ctx.lineJoin = 'round'; ctx.strokeStyle = edge; ctx.lineWidth = 2; ctx.stroke(); } } });
+  // legs (trousers) and shoes
+  for (const s of ['L', 'R']) { cap(j.hip[s], j.knee[s], 0.14, legs); cap(j.knee[s], j.foot[s], 0.12, legs);
+    if (!flat) parts.push({ d: toCam(j.foot[s])[2] - 0.01, f: () => { const f0 = P(j.foot[s]), f1 = P(V3.add(j.foot[s], V3.mul(j.F, 0.13))); if (!f0 || !f1) return;
+      ln(f0[0], f0[1], f1[0], f1[1], 0.1 * f0[3], SHOE_C); ln(f0[0], f0[1] + 0.03 * f0[3], f1[0], f1[1] + 0.03 * f0[3], 0.025 * f0[3], '#77777c'); } }); }
+  // the hoodie body: a real torso shape, wider at the shoulders, a ribbed band at the hem
+  const sw = 0.22, hw = 0.17, dc = toCam(j.chest)[2] + 0.02;
+  const shL = V3.add(j.sh.L, V3.mul(j.R, -0.03)), shR = V3.add(j.sh.R, V3.mul(j.R, 0.03)), hipL = V3.add(j.pelvis, V3.mul(j.R, -hw)), hipR = V3.add(j.pelvis, V3.mul(j.R, hw));
+  quad([V3.add(shL, [0, 0.03, 0]), V3.add(shR, [0, 0.03, 0]), V3.add(hipR, [0, -0.04, 0]), V3.add(hipL, [0, -0.04, 0])], top, flat ? null : HOOD_EDGE, dc);
+  if (!flat && o.hood) {
+    const band = (y0, y1) => quad([V3.add(hipL, [0, y0, 0]), V3.add(hipR, [0, y0, 0]), V3.add(hipR, [0, y1, 0]), V3.add(hipL, [0, y1, 0])], '#a4a4aa', null, dc - 0.001);
+    band(-0.04, 0.0);
+    if (fd > 0.15) {   // the front: the kangaroo pocket and the two strings
+      const pc = V3.add(V3.lerp(j.chest, j.pelvis, 0.72), V3.mul(j.F, 0.1));
+      quad([V3.add(pc, V3.add(V3.mul(j.R, -0.11), [0, 0.07, 0])), V3.add(pc, V3.add(V3.mul(j.R, 0.11), [0, 0.07, 0])), V3.add(pc, V3.add(V3.mul(j.R, 0.14), [0, -0.07, 0])), V3.add(pc, V3.add(V3.mul(j.R, -0.14), [0, -0.07, 0]))], '#8e8e94', HOOD_EDGE, dc - 0.002);
+      for (const sg of [-1, 1]) { const a = V3.add(j.neck, V3.add(V3.mul(j.R, sg * 0.04), V3.mul(j.F, 0.09))), b = V3.add(a, [sg * 0.005, -0.17, 0]);
+        parts.push({ d: dc - 0.003, f: () => { const p = P(a), q = P(b); if (p && q) { ln(p[0], p[1], q[0], q[1], 0.012 * p[3], '#e8e8ec'); circ(q[0], q[1], 0.012 * q[3], '#e8e8ec'); } } }); }
+    }
+    // the hood: lying on the back, seen from behind; a rim round the neck from the front
+    const hb = V3.add(j.neck, V3.add(V3.mul(j.F, -0.06), [0, -0.06, 0]));
+    parts.push({ d: fd > 0.15 ? toCam(j.head)[2] + 0.05 : toCam(j.chest)[2] - 0.05, f: () => { const p = P(hb); if (!p) return; const r = p[3];
+      ctx.save(); ctx.beginPath(); ctx.ellipse(p[0], p[1], 0.13 * r, 0.09 * r, 0, 0, Math.PI * 2); ctx.fillStyle = '#929298'; ctx.fill(); ctx.strokeStyle = HOOD_EDGE; ctx.lineWidth = 2; ctx.stroke();
+      ln(p[0] - 0.09 * r, p[1] - 0.02 * r, p[0] + 0.09 * r, p[1] - 0.02 * r, 2, HOOD_EDGE); ctx.restore(); } });
+  }
   cap(j.neck, j.chest, 0.08);
-  for (const s of ['L', 'R']) { cap(j.sh[s], j.elb[s], 0.095, top); cap(j.elb[s], j.hand[s], 0.085, top);
-    parts.push({ d: toCam(j.hand[s])[2] - 0.001, f: () => { const p = prj(j.hand[s]); if (p) circ(p[0], p[1], 0.05 * p[3], col); } }); }
+  for (const s of ['L', 'R']) { cap(j.sh[s], j.elb[s], 0.1, top); cap(j.elb[s], j.hand[s], 0.09, top);
+    if (!flat && o.hood) { const c0 = V3.lerp(j.elb[s], j.hand[s], 0.86); cap(c0, V3.lerp(j.elb[s], j.hand[s], 0.97), 0.095, '#8a8a90', toCam(c0)[2] - 0.003); }
+    parts.push({ d: toCam(j.hand[s])[2] - 0.004, f: () => { const p = P(j.hand[s]); if (p) circ(p[0], p[1], 0.05 * p[3], col); } }); }
   parts.push({ d: toCam(j.head)[2], f: () => head3(j, col, o) });
+  if (o.mark) parts.push({ d: -1, f: () => { const c = P(V3.lerp(j.chest, j.pelvis, 0.4)); if (c) { noGlow(); redGlow(16); rrS(c[0] - 0.26 * c[3], c[1] - 0.4 * c[3], 0.52 * c[3], 0.8 * c[3], 8, C.red, 4); noGlow(); } } });
   parts.sort((a, b) => b.d - a.d);
-  ctx.save(); glow(o.glow || 'rgba(255,255,255,0.22)', 14); for (const p of parts) p.f(); ctx.restore();
+  ctx.save(); glow(o.glow || 'rgba(255,255,255,0.22)', 14); for (const p of parts) { ctx.save(); p.f(); ctx.restore(); } ctx.restore();
   return j;
 }
 function head3(j, col, o) {
@@ -189,77 +212,135 @@ function head3(j, col, o) {
   ctx.save(); ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, Math.PI * 2); ctx.clip();
   const side = prj(V3.add(j.head, V3.mul(j.F, 0.05))), sx = side ? (side[0] - p[0]) : 0;
   const up = lerp(0.0, 0.78, (fd + 1) / 2) * r;
-  circ(p[0] - sx * 0.9 * (1 - fd * fd), p[1] - up, r * 1.02, o.hair || '#8e8e92'); ctx.restore();
+  circ(p[0] - sx * 0.9 * (1 - fd * fd), p[1] - up, r * 1.02, o.hair || '#4a4a50');
+  if (fd < 0.2) for (let i = -2; i <= 2; i++) ln(p[0] + i * r * 0.28, p[1] - r, p[0] + i * r * 0.34, p[1] + r * 0.2, 1.5, '#38383d');   // strands of hair from behind
+  ctx.restore();
   if (fd > 0.15) { const a = clamp((fd - 0.15) / 0.3);   // a face toward the camera always shows both eyes
     for (const sg of [-1, 1]) { const e = prj(V3.add(j.head, V3.add(V3.mul(j.F, 0.1), V3.add(V3.mul(j.R, sg * 0.042), [0, 0.005 - 0.05 * (j.look || 0), 0])))); if (!e) continue;
       ctx.save(); ctx.globalAlpha *= a; ell(e[0], e[1], 0.014 * e[3], (o.blink ? 0.003 : 0.018) * e[3], 0, o.eye || '#000'); ctx.restore(); } }
 }
-// someone lying on the floor, feet toward (fx, fz), head toward the direction a (radians in the floor plane)
+// someone lying on the floor, feet toward (fx, fz), head toward the direction a (radians in the floor plane).
+// o.clipZ: only what is in front of that z is drawn (the rest has gone under the sofa); o.reach 0..1 arms stretched past the head, clawing
 function lying3(fx, fz, a, o = {}) {
-  const col = o.col || C.fig, top = o.top || col, u = [Math.sin(a), 0, Math.cos(a)], r = [Math.cos(a), 0, -Math.sin(a)];
+  const col = o.col || C.fig, top = o.top || col, legs = o.flat ? col : (o.legs || LEG_C), u = [Math.sin(a), 0, Math.cos(a)], r = [Math.cos(a), 0, -Math.sin(a)];
   const P = (along, side, y = 0.08) => [fx + u[0] * along + r[0] * side, y, fz + u[2] * along + r[2] * side];
-  const cap = (a, b, w, c) => { const p = prj(a), q = prj(b); if (p && q) ln(p[0], p[1], q[0], q[1], w * (p[3] + q[3]) / 2, c); };
+  const cz = o.clipZ ?? -99;
+  const cut = (A, B) => { if (A[2] < cz && B[2] < cz) return null; if (A[2] >= cz && B[2] >= cz) return [A, B]; const k = (cz - A[2]) / (B[2] - A[2]), M = V3.lerp(A, B, k); return A[2] < cz ? [M, B] : [A, M]; };
+  const cap = (A, B, w, c) => { const ab = cut(A, B); if (!ab) return; const p = prj(ab[0]), q = prj(ab[1]); if (p && q) ln(p[0], p[1], q[0], q[1], w * (p[3] + q[3]) / 2, c); };
+  const wig = o.wig || 0, rc = o.reach ?? 0;
   ctx.save(); glow('rgba(255,255,255,0.2)', 12);
-  cap(P(0, -0.1), P(0.5, -0.09), 0.12, col); cap(P(0.02, 0.1), P(0.5, 0.09), 0.12, col);
-  cap(P(0.5, 0, 0.11), P(1.05, 0, 0.12), 0.29, top);
-  cap(P(1.0, -0.19, 0.1), P(1.4, -0.3, 0.06), 0.09, top); cap(P(1.0, 0.19, 0.1), P(1.42, 0.28, 0.06), 0.09, top);   // arms flung up past the head
-  const h = prj(P(1.27, 0, 0.11)); if (h) circ(h[0], h[1], 0.11 * h[3], col);
+  cap(P(0, -0.1), P(0.5, -0.09), 0.13, legs); cap(P(0.02, 0.1), P(0.5, 0.09), 0.13, legs);
+  if (!o.flat) for (const sd of [-0.1, 0.1]) cap(P(-0.04, sd, 0.06), P(0.06, sd, 0.06), 0.1, SHOE_C);
+  cap(P(0.5, 0, 0.11), P(1.05, 0, 0.12), 0.3, top);
+  if (!o.flat && o.hood !== false) cap(P(0.5, 0, 0.12), P(0.56, 0, 0.12), 0.31, '#8a8a90');
+  // arms flung up past the head, fingers clawing at the floor
+  for (const sg of [-1, 1]) { const s0 = P(1.0, sg * 0.19, 0.1), e = P(1.0 + 0.3 + 0.18 * rc, sg * (0.3 + 0.06 * Math.sin(wig + sg)), 0.06), h = P(1.0 + 0.48 + 0.25 * rc, sg * (0.28 + 0.08 * Math.sin(wig * 1.3 + sg)), 0.03);
+    cap(s0, e, 0.09, top); cap(e, h, 0.085, top); const ab = cut(h, h); if (ab) { const hp = prj(h); if (hp) circ(hp[0], hp[1], 0.05 * hp[3], col); } }
+  const hc = P(1.27, 0, 0.11); if (hc[2] >= cz) { const h = prj(hc); if (h) { circ(h[0], h[1], 0.11 * h[3], col); circ(h[0], h[1] - 0.03 * h[3], 0.1 * h[3], '#4a4a50'); } }
   ctx.restore();
 }
 
 // ---------- the thing under the sofa ----------
-// Flat and grey. One red eye. An arm with far too many joints. It only moves when the camera is not looking at it.
-const THING_C = '#c4c4ca', THING_X = 0.4;
-// o.eye 0..1 (the red eye glowing in the gap), o.ex: where along the sofa; o.arm {k 0..1, to [x,z], grip}, o.head 0..1 (it slides its head out and looks up at the camera)
+// Grey, thin, wrong. A long cracked skull with one red eye and one stitched-shut socket, wet black hair, a spine, and arms with far too many joints.
+// It only moves when the camera is not looking at it.
+const THING_C = '#b4b4ba', THING_EDGE = '#2a2a2e', THING_X = 0.4;
 function underThing(t, o = {}) {
-  const ex = o.ex ?? THING_X, ez = SOFA.z1 - 0.05;
-  if ((o.eye || 0) > 0 && !(o.head > 0)) { const p = prj([ex, 0.07, SOFA.z1 + 0.01]); if (p) { ctx.save(); ctx.globalAlpha *= o.eye; redGlow(26 + 10 * Math.sin(t * 5)); ell(p[0], p[1], 0.05 * p[3], 0.03 * p[3], 0, C.red); ctx.restore(); } }
+  const ex = o.ex ?? THING_X;
+  if ((o.eye || 0) > 0 && !(o.head > 0)) { const p = prj([ex, 0.07, SOFA.z1 + 0.01]); if (p) { ctx.save(); ctx.globalAlpha *= o.eye; redGlow(26 + 10 * Math.sin(t * 5)); ell(p[0], p[1], 0.05 * p[3], 0.03 * p[3], 0, C.red); noGlow(); ell(p[0], p[1], 0.008 * p[3], 0.026 * p[3], 0, '#1a0000'); ctx.restore(); } }
   if (o.head > 0) thingHead(t, ex, o.head, o);
 }
-// the arm: from under the front edge of the sofa out across the floor to `to`, k of the way; each joint knuckles up off the floor
+// the arm: from under the front edge of the sofa out across the floor to `to`, k of the way; every other joint knuckles high off the floor, like an insect's
 function armPath(from, to, n = 7) {
   const pts = []; for (let i = 0; i <= n; i++) { const u = i / n, wob = Math.sin(u * Math.PI * 3) * 0.08 * (1 - u);
     const dx = to[0] - from[0], dz = to[1] - from[1], L = Math.hypot(dx, dz) || 1;
-    pts.push([lerp(from[0], to[0], u) - dz / L * wob, i % 2 ? 0.11 : 0.04, lerp(from[1], to[1], u) + dx / L * wob]); }
+    pts.push([lerp(from[0], to[0], u) - dz / L * wob, i === n ? 0.05 : i % 2 ? 0.17 : 0.03, lerp(from[1], to[1], u) + dx / L * wob]); }
   return pts;
 }
+// one bone: thick at the joints, thin in the middle, a tendon down its length
+function bone3(a, b, col, edge, w = 0.045) {
+  const p = prj(a), q = prj(b); if (!p || !q) return;
+  const dx = q[0] - p[0], dy = q[1] - p[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L, w0 = w * p[3], w1 = w * q[3], wm = 0.55 * (w0 + w1) / 2;
+  const mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2;
+  ctx.beginPath(); ctx.moveTo(p[0] + nx * w0 / 2, p[1] + ny * w0 / 2); ctx.quadraticCurveTo(mx + nx * wm / 2, my + ny * wm / 2, q[0] + nx * w1 / 2, q[1] + ny * w1 / 2);
+  ctx.lineTo(q[0] - nx * w1 / 2, q[1] - ny * w1 / 2); ctx.quadraticCurveTo(mx - nx * wm / 2, my - ny * wm / 2, p[0] - nx * w0 / 2, p[1] - ny * w0 / 2); ctx.closePath();
+  ctx.fillStyle = col; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = edge; ctx.stroke();
+  ctx.save(); ctx.globalAlpha *= 0.5; ln(p[0] + nx * w0 * 0.15, p[1] + ny * w0 * 0.15, q[0] + nx * w1 * 0.15, q[1] + ny * w1 * 0.15, 1.5, edge); ctx.restore();
+}
+function knuckle3(c, col, edge, r = 0.035) { const p = prj(c); if (!p) return; ell(p[0], p[1], r * p[3], r * 0.8 * p[3], 0, col); ctx.lineWidth = 2; ctx.strokeStyle = edge; ctx.stroke();
+  ctx.beginPath(); ctx.arc(p[0], p[1] + r * 0.2 * p[3], r * 0.5 * p[3], 3.6, 5.8); ctx.stroke(); }
+// a hand: a narrow palm and five long fingers of three bones each, dark pointed nails. grip: curled shut (round an ankle)
+function claw2(x, y, a0, s, o = {}) {
+  const col = o.col || THING_C, edge = o.edge || THING_EDGE, grip = o.grip ? 1 : 0, t = o.t || 0;
+  ctx.save(); ctx.translate(x, y); ctx.rotate(a0);
+  ctx.beginPath(); ctx.ellipse(0.02 * s, 0, 0.05 * s, 0.035 * s, 0, 0, Math.PI * 2); ctx.fillStyle = col; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = edge; ctx.stroke();
+  for (let i = 0; i < 5; i++) { const thumb = i === 4, sp = thumb ? 1.25 : (i - 1.5) * 0.24, len = (thumb ? 0.65 : i === 1 || i === 2 ? 1.15 : 1) * 0.085 * s;
+    let px = 0.05 * s * Math.cos(sp), py = 0.04 * s * Math.sin(sp), ang = sp * (1 - 0.5 * grip);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for (let k = 0; k < 3; k++) { const bend = grip ? 0.85 : 0.22 + 0.08 * Math.sin(t * 5 + i + k); ang += bend * (thumb ? -1 : 1) * (k ? 1 : 0.4);
+      const nx = px + Math.cos(ang) * len * (1 - k * 0.18), ny = py + Math.sin(ang) * len * (1 - k * 0.18);
+      ln(px, py, nx, ny, 0.026 * s * (1 - k * 0.22) + 3, edge); ln(px, py, nx, ny, 0.026 * s * (1 - k * 0.22), col);
+      if (k < 2) circ(nx, ny, 0.016 * s, col);
+      else { const na = ang; pth(`M${nx + Math.cos(na + 1.6) * 0.012 * s},${ny + Math.sin(na + 1.6) * 0.012 * s} L${nx + Math.cos(na) * 0.04 * s},${ny + Math.sin(na) * 0.04 * s} L${nx + Math.cos(na - 1.6) * 0.012 * s},${ny + Math.sin(na - 1.6) * 0.012 * s} Z`, '#121214'); }
+      px = nx; py = ny; } }
+  ctx.restore();
+}
 function thingArm(t, o) {
-  const from = [(o.ex ?? THING_X) + 0.24, SOFA.z1 - 0.1], to = o.to || [SPOT.x, SPOT.z], k = clamp(o.k ?? 1);
-  const pts = armPath(from, to, o.n || 7), n = pts.length - 1, reach = k * n;
-  ctx.save(); glow('rgba(255,255,255,0.18)', 12);
-  let last = pts[0];
-  for (let i = 0; i < n; i++) { if (i >= reach) break; const a = pts[i], b = i + 1 <= reach ? pts[i + 1] : V3.lerp(pts[i], pts[i + 1], reach - i);
-    const p = prj(a), q = prj(b); if (p && q) { ln(p[0], p[1], q[0], q[1], 0.05 * (p[3] + q[3]) / 2, o.col || THING_C); if (i > 0) { circ(p[0], p[1], 0.038 * p[3], o.col || THING_C); circ(p[0], p[1], 0.016 * p[3], '#3a3a3e'); } }
-    last = b; }
-  // the hand: long fingers spread on the floor, or closed around an ankle
-  const hp = prj(last), pv = prj(pts[Math.max(0, Math.floor(reach) - 1)] || pts[0]);
-  if (hp && pv && k > 0.05) { const a0 = Math.atan2(hp[1] - pv[1], hp[0] - pv[0]), s = hp[3];
-    for (let i = 0; i < 5; i++) { const a = a0 + (i - 2) * 0.32 * (o.grip ? 0.5 : 1), L = 0.3 * s * (i === 2 ? 1.15 : 1), bend = o.grip ? 0.9 : 0.25 + 0.1 * Math.sin(t * 6 + i);
-      ctx.beginPath(); ctx.moveTo(hp[0], hp[1]); ctx.quadraticCurveTo(hp[0] + Math.cos(a) * L * 0.6, hp[1] + Math.sin(a) * L * 0.6, hp[0] + Math.cos(a + bend) * L, hp[1] + Math.sin(a + bend) * L);
-      ctx.lineWidth = Math.max(3, 0.018 * s); ctx.strokeStyle = o.col || THING_C; ctx.lineCap = 'round'; ctx.stroke(); } }
+  const ex = o.ex ?? THING_X, to = o.to || [SPOT.x, SPOT.z], from = [ex + 0.24 * (to[0] < ex ? -1 : 1), SOFA.z1 - 0.1], k = clamp(o.k ?? 1);
+  const pts = armPath(from, to, o.n || 7), n = pts.length - 1, reach = k * n, col = o.col || THING_C, edge = o.edge || THING_EDGE;
+  const segs = []; let last = pts[0];
+  for (let i = 0; i < n && i < reach; i++) { const a = pts[i], b = i + 1 <= reach ? pts[i + 1] : V3.lerp(pts[i], pts[i + 1], reach - i); segs.push([a, b]); last = b; }
+  ctx.save(); glow('rgba(255,255,255,0.14)', 10);
+  segs.forEach(([a, b], i) => bone3(a, b, col, edge, 0.05 - i * 0.002));
+  segs.forEach(([a], i) => { if (i > 0) knuckle3(a, col, edge, 0.034); });
+  noGlow();
+  const hp = prj(last), pv = prj(segs.length ? segs[segs.length - 1][0] : pts[0]);
+  if (hp && pv && k > 0.05) claw2(hp[0], hp[1], Math.atan2(hp[1] - pv[1], hp[0] - pv[0]), hp[3] * 1.5, { grip: o.grip, col, edge, t });
   ctx.restore();
   return last;
 }
-// its head sliding out from under the sofa: a long pale skull lying sideways, then lifting its one red eye to the camera
+// its head sliding out from under the sofa, lying on its side, then lifting its one red eye to the camera. o.size scales it; o.hands: two hands on the floor beside it
 function thingHead(t, ex, k, o = {}) {
   const out = ease(clamp(k * 1.6)), lift = ease(clamp(k * 1.6 - 0.6));
   const c = [ex, 0.08 + 0.1 * lift, SOFA.z1 - 0.15 + 0.32 * out], p = prj(c); if (!p) return;
-  const s = p[3] * (o.size || 1.4), col = o.col || THING_C;
-  ctx.save(); glow('rgba(255,255,255,0.2)', 16);
-  // fingers hooked on the floor either side: long, thin, three knuckles each
-  for (const sg of [-1, 1]) { const f0 = prj([ex + sg * 0.2, 0.02, SOFA.z1 + 0.02]); if (!f0) continue;
-    for (let i = 0; i < 3; i++) { const a = -Math.PI / 2 + sg * (0.5 + i * 0.35) + Math.sin(t * 2 + i) * 0.03; let x = f0[0] + sg * i * 0.03 * s, y = f0[1];
-      ctx.beginPath(); ctx.moveTo(x, y); for (let j = 1; j <= 3; j++) { x += Math.cos(a + j * sg * 0.5) * 0.07 * s; y += Math.sin(a + j * sg * 0.5) * 0.07 * s * 0.6 + 0.02 * s; ctx.lineTo(x, y); }
-      ctx.lineWidth = 0.022 * s; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = col; ctx.stroke(); } }
-  ctx.translate(p[0], p[1]); ctx.rotate(lerp(1.35, 0.15, lift) + Math.sin(t * 0.8) * 0.03);
-  // the head: a long smooth skull, wider at the top, no mouth
-  ctx.beginPath(); ctx.moveTo(0, -0.2 * s); ctx.bezierCurveTo(0.15 * s, -0.2 * s, 0.13 * s, 0.12 * s, 0.05 * s, 0.2 * s); ctx.bezierCurveTo(0, 0.24 * s, -0.05 * s, 0.24 * s, -0.08 * s, 0.18 * s);
-  ctx.bezierCurveTo(-0.15 * s, 0.05 * s, -0.15 * s, -0.2 * s, 0, -0.2 * s); ctx.fillStyle = col; ctx.fill(); noGlow();
-  ell(0, -0.05 * s, 0.07 * s, 0.05 * s, 0, '#111');
-  redGlow(26 + 12 * Math.sin(t * 5)); ell(0, -0.05 * s, 0.054 * s, 0.038 * s, 0, C.red); noGlow(); ell(0.004 * s, -0.05 * s, 0.009 * s, 0.032 * s, 0, '#1a0000');
-  // the skull narrows into the dark under the sofa
-  const g = ctx.createLinearGradient(0, -0.2 * s, 0, 0.24 * s); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.55, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.55)');
-  ctx.beginPath(); ctx.moveTo(0, -0.2 * s); ctx.bezierCurveTo(0.15 * s, -0.2 * s, 0.13 * s, 0.12 * s, 0.05 * s, 0.2 * s); ctx.bezierCurveTo(0, 0.24 * s, -0.05 * s, 0.24 * s, -0.08 * s, 0.18 * s); ctx.bezierCurveTo(-0.15 * s, 0.05 * s, -0.15 * s, -0.2 * s, 0, -0.2 * s); ctx.fillStyle = g; ctx.fill();
+  const s = p[3] * (o.size || 1.4), col = o.col || THING_C, edge = o.edge || THING_EDGE;
+  // the neck: a ridge of vertebrae running back into the dark under the sofa
+  const nb = prj([ex + 0.05, 0.05, SOFA.z1 - 0.25]); if (nb) { ctx.save(); ln(nb[0], nb[1], p[0], p[1], 0.07 * s, col); ctx.globalAlpha *= 0.9;
+    for (let i = 1; i < 6; i++) { const u = i / 6; circ(lerp(nb[0], p[0], u), lerp(nb[1], p[1], u) - 0.02 * s, 0.022 * s, '#8a8a90'); } ctx.restore(); }
+  // the hands, flat on the floor either side, fingers splayed toward you
+  if (o.hands !== false) for (const sg of [-1, 1]) { const h = prj([ex + sg * 0.3, 0.02, SOFA.z1 + 0.05 + 0.1 * out]), b = prj([ex + sg * 0.3, 0.02, SOFA.z1 - 0.1]); if (h && b) {
+    ctx.save(); ln(b[0], b[1], h[0], h[1], 0.04 * h[3], col); claw2(h[0], h[1], Math.atan2(h[1] - b[1], h[0] - b[0]) + sg * 0.25, h[3] * 1.3, { col, edge, t: t + sg }); ctx.restore(); } }
+  ctx.save(); glow('rgba(255,255,255,0.16)', 14);
+  ctx.translate(p[0], p[1]); ctx.rotate(lerp(1.35, 0.12, lift) + Math.sin(t * 0.8) * 0.03);
+  // long wet black hair hanging from the crown down both sides of the skull
+  const hair = (i, n, front) => { const u = i / (n - 1), ang = lerp(-2.7, -0.45, u), sx = Math.cos(ang) * 0.15 * s, sy = -0.04 * s + Math.sin(ang) * 0.18 * s, side = Math.sign(Math.cos(ang)) || 1, sway = Math.sin(t * 0.8 + i * 1.7) * 0.012 * s;
+    const len = (0.42 + 0.12 * ((i * 7) % 5) / 4) * s; ctx.beginPath(); ctx.moveTo(sx, sy);
+    ctx.bezierCurveTo(sx + side * 0.07 * s, sy + 0.05 * s, sx + side * (0.05 * s) + sway, sy + len * 0.5, sx + side * (0.02 * s + 0.03 * s * Math.sin(i)) + sway * 2, sy + len);
+    ctx.strokeStyle = front ? 'rgba(18,18,20,0.92)' : (i % 2 ? '#141416' : '#26262b'); ctx.lineWidth = (front ? 0.008 : 0.013) * s; ctx.lineCap = 'round'; ctx.stroke(); };
+  for (let i = 0; i < 26; i++) hair(i, 26, false);
+  // the skull: tall dome, long narrow jaw, slightly crooked; no mouth
+  const sk = () => { ctx.beginPath(); ctx.moveTo(-0.01 * s, -0.21 * s); ctx.bezierCurveTo(0.14 * s, -0.21 * s, 0.15 * s, 0.0, 0.08 * s, 0.14 * s); ctx.bezierCurveTo(0.05 * s, 0.22 * s, 0.01 * s, 0.27 * s, -0.025 * s, 0.26 * s);
+    ctx.bezierCurveTo(-0.07 * s, 0.24 * s, -0.11 * s, 0.12 * s, -0.12 * s, 0.02 * s); ctx.bezierCurveTo(-0.14 * s, -0.12 * s, -0.11 * s, -0.21 * s, -0.01 * s, -0.21 * s); };
+  sk(); ctx.fillStyle = col; ctx.fill(); noGlow(); ctx.lineWidth = 3; ctx.strokeStyle = edge; ctx.stroke();
+  ctx.save(); sk(); ctx.clip();
+  // hollow cheeks and a dark underside
+  ctx.globalAlpha = 0.45; ell(-0.085 * s, 0.09 * s, 0.035 * s, 0.09 * s, 0.15, '#4a4a50'); ell(0.085 * s, 0.07 * s, 0.03 * s, 0.08 * s, -0.2, '#4a4a50');
+  const g = ctx.createLinearGradient(0, -0.2 * s, 0, 0.27 * s); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.6, 'rgba(0,0,0,0.1)'); g.addColorStop(1, 'rgba(0,0,0,0.6)'); ctx.globalAlpha = 1; ctx.fillStyle = g; ctx.fillRect(-0.2 * s, -0.25 * s, 0.4 * s, 0.55 * s);
+  // cracks over the dome
+  ctx.strokeStyle = edge; ctx.lineWidth = 1.6; ctx.globalAlpha = 0.8;
+  ctx.beginPath(); ctx.moveTo(0.03 * s, -0.21 * s); ctx.lineTo(0.05 * s, -0.16 * s); ctx.lineTo(0.035 * s, -0.12 * s); ctx.lineTo(0.06 * s, -0.09 * s); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-0.1 * s, -0.12 * s); ctx.lineTo(-0.07 * s, -0.1 * s); ctx.lineTo(-0.075 * s, -0.06 * s); ctx.stroke();
+  // two slits where a nose should be
+  ctx.globalAlpha = 0.9; ell(-0.012 * s, 0.07 * s, 0.006 * s, 0.018 * s, 0.1, '#1a1a1c'); ell(0.012 * s, 0.07 * s, 0.006 * s, 0.018 * s, -0.1, '#1a1a1c');
+  ctx.restore();
+  // the left socket: stitched shut
+  ell(-0.06 * s, -0.04 * s, 0.035 * s, 0.022 * s, -0.15, '#3a3a3f'); ctx.lineWidth = 1.8; ctx.strokeStyle = '#121214';
+  ln(-0.088 * s, -0.035 * s, -0.032 * s, -0.045 * s, 2, '#121214'); for (let i = 0; i < 4; i++) { const x = (-0.082 + i * 0.016) * s; ln(x, -0.055 * s, x + 0.003 * s, -0.025 * s, 1.6, '#121214'); }
+  // the right one: wide open, the only red thing about it
+  ell(0.045 * s, -0.05 * s, 0.062 * s, 0.05 * s, 0.1, '#0c0c0d');
+  redGlow(28 + 12 * Math.sin(t * 5)); ell(0.045 * s, -0.05 * s, 0.046 * s, 0.037 * s, 0.1, C.red); noGlow();
+  ctx.strokeStyle = 'rgba(90,0,0,0.9)'; ctx.lineWidth = 1.2; for (let i = 0; i < 7; i++) { const a = i * 0.9; ctx.beginPath(); ctx.moveTo(0.045 * s + Math.cos(a) * 0.044 * s, -0.05 * s + Math.sin(a) * 0.035 * s); ctx.lineTo(0.045 * s + Math.cos(a + 0.2) * 0.026 * s, -0.05 * s + Math.sin(a + 0.2) * 0.02 * s); ctx.stroke(); }
+  ell(0.047 * s, -0.05 * s, 0.008 * s, 0.032 * s, 0.1, '#150000'); circ(0.06 * s, -0.064 * s, 0.006 * s, 'rgba(255,220,220,0.8)');
+  for (const i of [4, 6, 7, 9, 11]) hair(i, 26, true);
   ctx.restore();
 }
 

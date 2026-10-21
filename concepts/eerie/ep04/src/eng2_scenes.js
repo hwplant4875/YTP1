@@ -20,8 +20,8 @@ function living(t, o = {}) {
   // the dark gap under the front of the sofa
   { const sh = o.shift ? Math.sin(o.shift * 40) * 3 * o.shift : 0; ctx.save(); ctx.translate(sh, 0); ctx.globalAlpha *= 0.85; polyW([[SOFA.x0 + 0.04, 0.003, SOFA.z1 - 0.02], [SOFA.x1 - 0.04, 0.003, SOFA.z1 - 0.02], [SOFA.x1 - 0.04, 0.003, SOFA.z1 + 0.1], [SOFA.x0 + 0.04, 0.003, SOFA.z1 + 0.1]], '#050505', null); ctx.restore(); }
   if (o.thing) underThing(t, { ...o.thing, head: 0 });
-  if (o.thing && o.thing.head > 0) thingHead(t, o.thing.ex ?? THING_X, o.thing.head, o.thing);
   if (o.arm && !o.arm.over) thingArm(t, o.arm);
+  if (o.thing && o.thing.head > 0) thingHead(t, o.thing.ex ?? THING_X, o.thing.head, o.thing);
   chair4({ hoodie: o.hoodie });
   for (const L of (o.lying || [])) if (!L.under) lying3(L.x, L.z, L.a, L.o || {});
   const ps = (o.people || []).slice().sort((a, b) => V3.len(V3.sub(camPos(), [b.pose.x, 1, b.pose.z])) - V3.len(V3.sub(camPos(), [a.pose.x, 1, a.pose.z])));
@@ -249,15 +249,20 @@ S.a8 = (t, seg) => {
 };
 // if you watch to the end: the arm, the ankle, the fall, and you are pulled under the sofa
 S.a9 = (t, seg) => {
+  // the arm comes out, closes on your ankle and yanks it; you go down on your back and are pulled feet first into the dark under the sofa
   const gr = evAfter('grab', seg.end), dr = evAfter('drag', seg.end);
   const tg = gr ? gr.t : seg.end + 0.8, td = dr ? dr.t : seg.end + 1.5;
-  const reach = ease(prog(t, tg - 0.45, 0.45)), pull = ease(prog(t, td, 1.1)), fallen = t >= td;
-  const fz = lerp(SPOT.z - 0.05, SOFA.z0 + 0.1, pull);
-  feed(t, { z: zk(t, seg.start, td - seg.start + 1.2, 1.05, 1.3), focus: [SPOT.x, 0.4, SPOT.z - 0.4], clock: T302 + 236 + (t - seg.start), bar: lerp(0.97, 1, prog(t, seg.start, td - seg.start)),
-    people: fallen ? [] : [hoodieMe({ look: 0.2 })], thing: { eye: 1 },
-    arm: fallen ? { k: 1, to: [SPOT.x - 0.1, lerp(SPOT.z, SOFA.z1 - 0.05, pull)], grip: true, over: true } : { k: reach, to: ANKLE, grip: reach > 0.95, over: true },
-    lying: fallen && pull < 1 ? [{ x: SPOT.x - 0.1, z: fz, a: 0, under: false, o: { top: HOOD_C, clipZ: SOFA.z1 } }] : [],
-    front: () => { if (fallen) { ctx.save(); ctx.globalAlpha = 0.7; for (let i = 0; i < 4; i++) lnW([SPOT.x - 0.2 + i * 0.06, 0.006, SPOT.z + 0.1], [SPOT.x - 0.2 + i * 0.06, 0.006, lerp(SPOT.z, SOFA.z1, pull)], 3, '#8a8a90'); ctx.restore(); } } });
+  const reach = ease(prog(t, tg - 0.45, 0.45)), yank = easeOut(prog(t, tg, td - tg)), fallen = t >= td;
+  const p = prog(t, td + 0.12, 1.35), pull = p * p * (1.6 - 0.6 * p);   // slow at first, then it takes you all at once
+  const fx = SPOT.x - 0.1, fz = lerp(SPOT.z + 0.15, SOFA.z1 - 1.75, pull);
+  const standing = { pose: poseOf({ look: lerp(0.2, -0.6, yank), lean: -0.35 * yank, footL: [lerp(ANKLE[0], ANKLE[0] + 0.05, yank), 0.05 + 0.1 * yank, lerp(ANKLE[1], ANKLE[1] - 0.35, yank)],
+    L: [-0.3 - 0.1 * yank, 0.8 + 0.7 * yank, 0.1], R: [0.3 + 0.1 * yank, 0.8 + 0.75 * yank, 0.1] }), o: { top: HOOD_C, hood: true } };
+  const feetZ = fz, armOut = !fallen || feetZ > SOFA.z1 + 0.02;
+  feed(t, { z: zk(t, seg.start, td - seg.start + 1.4, 1.1, 1.45), focus: [SPOT.x, 0.35, (SPOT.z + SOFA.z1) / 2 + 0.2], clock: T302 + 236 + (t - seg.start), bar: lerp(0.97, 1, prog(t, seg.start, td - seg.start)),
+    shift: fallen ? 0.6 * (1 - p) : 0, people: fallen ? [] : [standing], thing: { eye: 1 },
+    arm: !armOut ? null : fallen ? { k: 1, to: [fx, feetZ], grip: true, over: false } : { k: reach, to: [standing.pose.footL ? standing.pose.footL[0] : ANKLE[0], standing.pose.footL ? standing.pose.footL[2] : ANKLE[1]], grip: reach > 0.95, over: true },
+    lying: fallen && pull < 1 ? [{ x: fx, z: fz, a: 0, under: false, o: { top: HOOD_C, clipZ: SOFA.z1 - 0.02, reach: 1, wig: t * 16 } }] : [],
+    front: () => { if (fallen) { ctx.save(); ctx.globalAlpha = 0.6; for (let i = 0; i < 4; i++) { const x = SPOT.x - 0.32 + i * 0.07 + (i > 1 ? 0.12 : 0); lnW([x, 0.006, Math.max(SOFA.z1, fz + 1.5)], [x, 0.006, SPOT.z + 1.5], 3, '#8a8a90'); } ctx.restore(); } } });
   redFlash(t, tg, 0.1);
 };
 
