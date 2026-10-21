@@ -115,7 +115,7 @@ CHAPTERS = [
   [("Number fourteen.", Q("한국", 14))], [("한국. Korea!", A("한국", "han-guk", "Korea", "🇰🇷"))],
   [("Last one. This is a city.", Q("서울", 15))], [("서울. Seoul!", A("서울", "seo-ul", "Seoul", "🏙️"))],
   [("If you read even half of those, you can already read Korean.", S("you can <em>read Korean</em> 🎉"))]]},
- {"q": "Bonus: texting", "pose": "phone_chat", "beats": [
+ {"q": "Bonus texting code", "pose": "phone_chat", "beats": [
   [("Bonus round. Koreans text with just consonants.", S("💬 texting =<br><em>consonants only</em>")),
    ("The K letter three times reads 크크크. That's laughing!", L("ㅋㅋㅋ", "kkk", "= LOL 🤣", "y")),
    ("The H letter twice, 흐흐, is a softer hehe.", L("ㅎㅎ", "hh", "= hehe 😊", "m")),
