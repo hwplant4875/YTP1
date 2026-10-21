@@ -1,0 +1,207 @@
+{
+ "label": "KOREAN 101 🇰🇷",
+ "labelColor": "#E8833A",
+ "pose0": "fired_up",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Koreans shout this English word all the time, but it has nothing to do with fighting.",
+   "pose": "fired_up"
+  },
+  {
+   "k": "k1",
+   "say": "화이팅!",
+   "pose": "fired_up",
+   "lang": "ko"
+  },
+  {
+   "k": "e1",
+   "say": "It means, you've got this! Good luck!",
+   "pose": "thumbs_up"
+  },
+  {
+   "k": "u1",
+   "say": "Before an exam, a big game, or a job interview.",
+   "pose": "glasses_study"
+  },
+  {
+   "k": "p0",
+   "say": "Want to sound even more Korean? Say",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "p0k",
+   "say": "힘내!",
+   "pose": "jump",
+   "lang": "ko"
+  },
+  {
+   "k": "p1",
+   "say": "Cheer up! Literally, put out your strength.",
+   "pose": "clap_confetti"
+  },
+  {
+   "k": "q0",
+   "say": "And when someone finishes a long day, say",
+   "pose": "yawn",
+   "gap": 0.45
+  },
+  {
+   "k": "q0k",
+   "say": "수고했어!",
+   "pose": "bow",
+   "lang": "ko"
+  },
+  {
+   "k": "q1",
+   "say": "You worked hard!",
+   "pose": "love_heart"
+  },
+  {
+   "k": "e0",
+   "say": "Tag a friend who needs a 화이팅 today!",
+   "pose": "finger_heart",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "chip",
+     "html": "NOT A FIGHT 🥊❌",
+     "c": "p",
+     "y": 360,
+     "at": "h1"
+    },
+    {
+     "type": "word",
+     "ko": "화이팅!",
+     "rom": "hwa-i-ting",
+     "en": "",
+     "c": "y",
+     "size": 200,
+     "w": 860,
+     "y": 700,
+     "at": "h1+0.3"
+    }
+   ]
+  },
+  {
+   "from": "k1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "💪✨",
+     "size": 190,
+     "y": 430,
+     "at": "k1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "화이팅!",
+     "rom": "hwa-i-ting",
+     "en": "you've got this!",
+     "c": "y",
+     "size": 160,
+     "w": 860,
+     "y": 760,
+     "at": "k1"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>📝 exams · ⚽ games · 💼 interviews</div>",
+     "w": 940,
+     "pad": 22,
+     "y": 1060,
+     "at": "u1",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "p0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🔋",
+     "size": 190,
+     "y": 430,
+     "at": "p0",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "힘내!",
+     "rom": "him-nae",
+     "en": "cheer up!",
+     "c": "m",
+     "size": 180,
+     "w": 640,
+     "y": 760,
+     "at": "p0k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>literally: <span class='c-m'>put out your strength</span></div>",
+     "w": 900,
+     "pad": 22,
+     "y": 1060,
+     "at": "p1+1.0",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "q0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🌙",
+     "size": 190,
+     "y": 430,
+     "at": "q0",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "수고했어!",
+     "rom": "su-go-hae-sseo",
+     "en": "you worked hard!",
+     "c": "p",
+     "size": 150,
+     "w": 860,
+     "y": 780,
+     "at": "q0k"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Tag a friend: 화이팅! 💪👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

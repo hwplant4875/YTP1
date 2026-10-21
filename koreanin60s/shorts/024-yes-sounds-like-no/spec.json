@@ -1,0 +1,247 @@
+{
+ "label": "KOREAN 101 🇰🇷",
+ "labelColor": "#5A8FD8",
+ "pose0": "confused",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "In Korean, this word means yes. But it sounds like no.",
+   "pose": "confused"
+  },
+  {
+   "k": "k1",
+   "say": "네!",
+   "pose": "correct_o",
+   "lang": "ko"
+  },
+  {
+   "k": "e1",
+   "say": "It sounds like nay, but it means yes!",
+   "pose": "laugh_tears"
+  },
+  {
+   "k": "k2",
+   "say": "And no is",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "k2k",
+   "say": "아니요.",
+   "pose": "wrong_x",
+   "lang": "ko"
+  },
+  {
+   "k": "t1",
+   "say": "Koreans also say 네 just to mean, I'm listening.",
+   "pose": "talk",
+   "gap": 0.45
+  },
+  {
+   "k": "t2",
+   "say": "So on the phone, you'll hear it nonstop.",
+   "pose": "phone"
+  },
+  {
+   "k": "t2k",
+   "say": "네, 네, 네, 네.",
+   "pose": "phone",
+   "lang": "ko"
+  },
+  {
+   "k": "c0",
+   "say": "With friends? Make it casual.",
+   "pose": "hi_wave",
+   "gap": 0.45
+  },
+  {
+   "k": "c0k",
+   "say": "응!",
+   "pose": "thumbs_up",
+   "lang": "ko"
+  },
+  {
+   "k": "c1",
+   "say": "Yeah!",
+   "pose": "excited"
+  },
+  {
+   "k": "c2k",
+   "say": "아니!",
+   "pose": "wrong_x",
+   "lang": "ko"
+  },
+  {
+   "k": "c3",
+   "say": "Nope!",
+   "pose": "smug"
+  },
+  {
+   "k": "e0",
+   "say": "Got it? Comment 네 below!",
+   "pose": "laugh_flap",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "txt",
+     "html": "YES 🙆 or NO 🙅?",
+     "size": 100,
+     "y": 520,
+     "at": "h1",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "word",
+     "ko": "네",
+     "rom": "ne",
+     "en": "",
+     "c": "b",
+     "size": 240,
+     "w": 520,
+     "y": 820,
+     "at": "h1+0.3"
+    }
+   ]
+  },
+  {
+   "from": "k1",
+   "els": [
+    {
+     "type": "word",
+     "ko": "네",
+     "rom": "ne",
+     "en": "YES ✅",
+     "c": "m",
+     "size": 220,
+     "w": 520,
+     "y": 520,
+     "at": "k1"
+    },
+    {
+     "type": "stamp",
+     "html": "sounds like NAY 🤯",
+     "c": "p",
+     "size": 70,
+     "y": 820,
+     "at": "e1",
+     "anim": "stamp",
+     "rot": -4
+    },
+    {
+     "type": "word",
+     "ko": "아니요",
+     "rom": "a-ni-yo",
+     "en": "NO ❌",
+     "c": "p",
+     "size": 130,
+     "w": 620,
+     "y": 1080,
+     "at": "k2k"
+    }
+   ]
+  },
+  {
+   "from": "t1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "👂",
+     "size": 190,
+     "y": 430,
+     "at": "t1",
+     "anim": "drop",
+     "float": true
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:56px;white-space:nowrap;line-height:1.35'>네 = <span class='c-b'>I'm listening</span> 👍</div>",
+     "w": 840,
+     "pad": 22,
+     "y": 660,
+     "at": "t1+1.2",
+     "anim": "up"
+    },
+    {
+     "type": "emoji",
+     "e": "📞",
+     "size": 150,
+     "y": 880,
+     "at": "t2",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "stamp",
+     "html": "네 네 네 네 네",
+     "c": "b",
+     "size": 80,
+     "y": 1080,
+     "at": "t2k",
+     "anim": "stamp"
+    }
+   ]
+  },
+  {
+   "from": "c0",
+   "els": [
+    {
+     "type": "chip",
+     "html": "👯 WITH FRIENDS",
+     "c": "y",
+     "y": 360,
+     "at": "c0"
+    },
+    {
+     "type": "word",
+     "ko": "응!",
+     "rom": "eung",
+     "en": "yeah!",
+     "c": "m",
+     "size": 170,
+     "w": 420,
+     "y": 640,
+     "at": "c0k",
+     "x": 290
+    },
+    {
+     "type": "word",
+     "ko": "아니!",
+     "rom": "a-ni",
+     "en": "nope!",
+     "c": "p",
+     "size": 170,
+     "w": 420,
+     "y": 640,
+     "at": "c2k",
+     "x": 790
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Comment 네 if you got it! 👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}
