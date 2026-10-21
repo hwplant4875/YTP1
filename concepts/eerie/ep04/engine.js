@@ -1011,7 +1011,7 @@ S.h2 = (t, seg) => {
       feed(t, { z: zk(t, w0, blk - w0, 1.1, 1.6), focus: [THING_X, 0.2, SOFA.z1], date: 'TODAY', clock: T302 + 300 + (t - w0), doorOpen: op, people: [{ pose: poseOf({ x: (FDOOR.x0 + FDOOR.x1) / 2, z: 0.35 + 0.4 * op, yaw: Math.PI, walk: true, step: t * 6 }) }], thing: { eye: 1, head: hd } });
       if (d > 0) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 0.45 * clamp(d / 0.2); ctx.fillStyle = '#ff1a1a'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
     }
-    if (i < 2) whiteFlash(t, hit, 0.5, 0.08);
+    if (i < 2) redFlash(t, hit, 0.12);
   }
   blackAfter(t, blk);
   ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); teaserBox(t, seg, w0, ic, word, by); ctx.restore();
@@ -1108,7 +1108,7 @@ S.a9 = (t, seg) => {
     arm: fallen ? { k: 1, to: [SPOT.x - 0.1, lerp(SPOT.z, SOFA.z1 - 0.05, pull)], grip: true, over: true } : { k: reach, to: ANKLE, grip: reach > 0.95, over: true },
     lying: fallen && pull < 1 ? [{ x: SPOT.x - 0.1, z: fz, a: 0, under: false, o: { top: HOOD_C, clipZ: SOFA.z1 } }] : [],
     front: () => { if (fallen) { ctx.save(); ctx.globalAlpha = 0.7; for (let i = 0; i < 4; i++) lnW([SPOT.x - 0.2 + i * 0.06, 0.006, SPOT.z + 0.1], [SPOT.x - 0.2 + i * 0.06, 0.006, lerp(SPOT.z, SOFA.z1, pull)], 3, '#8a8a90'); ctx.restore(); } } });
-  whiteFlash(t, tg, 0.4, 0.06);
+  redFlash(t, tg, 0.1);
 };
 
 // ---------- rule 2: do not wear what you wear in it ----------
