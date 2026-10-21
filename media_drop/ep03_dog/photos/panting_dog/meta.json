@@ -1,0 +1,74 @@
+﻿[
+    {
+        "file":  "00.jpg",
+        "title":  "File:2008-08-21 White German Shepherd portrait 1.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:2008-08-21_White_German_Shepherd_portrait_1.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Ildar Sagdejev (Specious)",
+        "w":  3888,
+        "h":  2592
+    },
+    {
+        "file":  "01.jpg",
+        "title":  "File:DSC 8677 Happy pup soaking up the sun with a big smile and wagging tail.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:DSC_8677_Happy_pup_soaking_up_the_sun_with_a_big_smile_and_wagging_tail.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "PattayaPatrol",
+        "w":  6048,
+        "h":  4024
+    },
+    {
+        "file":  "02.jpg",
+        "title":  "File:DSC 8684 Happy pup enjoying the outdoors with a big smile and wagging tail.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:DSC_8684_Happy_pup_enjoying_the_outdoors_with_a_big_smile_and_wagging_tail.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "PattayaPatrol",
+        "w":  6048,
+        "h":  4024
+    },
+    {
+        "file":  "03.jpg",
+        "title":  "File:Dog\u0027s Joy.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dog%27s_Joy.jpg",
+        "license":  "CC BY 2.0",
+        "artist":  "Naomi Ibuki",
+        "w":  2048,
+        "h":  1536
+    },
+    {
+        "file":  "04.jpg",
+        "title":  "File:Dog with visible tongue.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dog_with_visible_tongue.jpg",
+        "license":  "Public domain",
+        "artist":  "No machine-readable author provided. Foo12~commonswiki assumed (based on copyright claims).",
+        "w":  640,
+        "h":  480
+    },
+    {
+        "file":  "05.jpg",
+        "title":  "File:Flatcoated retriever with tongue.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Flatcoated_retriever_with_tongue.jpg",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Mennovic",
+        "w":  6000,
+        "h":  4000
+    },
+    {
+        "file":  "06.jpg",
+        "title":  "File:Sharpei tongue.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Sharpei_tongue.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Yerpo",
+        "w":  3072,
+        "h":  2347
+    },
+    {
+        "file":  "07.jpg",
+        "title":  "File:Training humans to master their rescue dogs Department of Homeland Security trains at Camp Atterbury DVIDS265020.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Training_humans_to_master_their_rescue_dogs_Department_of_Homeland_Security_trains_at_Camp_Atterbury_DVIDS265020.jpg",
+        "license":  "Public domain",
+        "artist":  "Sgt. John Crosby",
+        "w":  2490,
+        "h":  3514
+    }
+]

@@ -1,0 +1,65 @@
+﻿[
+    {
+        "file":  "00.jpg",
+        "title":  "File:Dog on a Leash, Wassenaarse Slag, Netherlands-DSC02431.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dog_on_a_Leash,_Wassenaarse_Slag,_Netherlands-DSC02431.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Arjuno3",
+        "w":  2145,
+        "h":  3046
+    },
+    {
+        "file":  "01.jpg",
+        "title":  "File:Dog on leash, walking in the Red Rocks Park, Morrison, Colorado 16.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dog_on_leash,_walking_in_the_Red_Rocks_Park,_Morrison,_Colorado_16.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Lovemedead",
+        "w":  4032,
+        "h":  3024
+    },
+    {
+        "file":  "02.jpg",
+        "title":  "File:Dog walking woman.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dog_walking_woman.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Amin",
+        "w":  2115,
+        "h":  1464
+    },
+    {
+        "file":  "03.jpg",
+        "title":  "File:Girl walking dog 001.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Girl_walking_dog_001.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Sardaka",
+        "w":  3376,
+        "h":  2923
+    },
+    {
+        "file":  "04.jpg",
+        "title":  "File:Girl walking dog 002.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Girl_walking_dog_002.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Sardaka",
+        "w":  2642,
+        "h":  3131
+    },
+    {
+        "file":  "05.jpg",
+        "title":  "File:Visitor walking dog leash rialto beach hikers c bubar march 06-2015 (17184427098).jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Visitor_walking_dog_leash_rialto_beach_hikers_c_bubar_march_06-2015_(17184427098).jpg",
+        "license":  "Public domain",
+        "artist":  "Olympic National Park",
+        "w":  2896,
+        "h":  1944
+    },
+    {
+        "file":  "06.jpg",
+        "title":  "File:Visitor walking happy dog leash hoh campground camping pets d archuleta march 05 2015 (16751947833).jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Visitor_walking_happy_dog_leash_hoh_campground_camping_pets_d_archuleta_march_05_2015_(16751947833).jpg",
+        "license":  "Public domain",
+        "artist":  "Olympic National Park",
+        "w":  2896,
+        "h":  1944
+    }
+]

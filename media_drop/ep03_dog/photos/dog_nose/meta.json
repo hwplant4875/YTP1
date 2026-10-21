@@ -1,0 +1,83 @@
+﻿[
+    {
+        "file":  "00.jpg",
+        "title":  "File:Brown street dog 01.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Brown_street_dog_01.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "A S M Jobaer",
+        "w":  9691,
+        "h":  7268
+    },
+    {
+        "file":  "01.jpg",
+        "title":  "File:Canine Nose Macro Photo.png",
+        "page":  "https://commons.wikimedia.org/wiki/File:Canine_Nose_Macro_Photo.png",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Metography",
+        "w":  3648,
+        "h":  3648
+    },
+    {
+        "file":  "02.jpg",
+        "title":  "File:Close-up of dog looking at photographer.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Close-up_of_dog_looking_at_photographer.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Pittigrilli",
+        "w":  3002,
+        "h":  2579
+    },
+    {
+        "file":  "03.jpg",
+        "title":  "File:Close-up portrait of dog.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Close-up_portrait_of_dog.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Pittigrilli",
+        "w":  2812,
+        "h":  2308
+    },
+    {
+        "file":  "04.jpg",
+        "title":  "File:Close up of blue and white rat terrier.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Close_up_of_blue_and_white_rat_terrier.jpg",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Laanme",
+        "w":  360,
+        "h":  371
+    },
+    {
+        "file":  "05.jpg",
+        "title":  "File:Connor the collies nose close up.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Connor_the_collies_nose_close_up.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Jobzboi",
+        "w":  1908,
+        "h":  4032
+    },
+    {
+        "file":  "06.jpg",
+        "title":  "File:Dog nose macro close up.JPG",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dog_nose_macro_close_up.JPG",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Stockimagery",
+        "w":  3456,
+        "h":  2304
+    },
+    {
+        "file":  "07.jpg",
+        "title":  "File:Igor\u0027s Nose - Explored - Flickr - Clint Budd.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Igor%27s_Nose_-_Explored_-_Flickr_-_Clint_Budd.jpg",
+        "license":  "CC BY 2.0",
+        "artist":  "Clint Budd from About 15 miles North of Swansea, Wales",
+        "w":  6000,
+        "h":  4000
+    },
+    {
+        "file":  "08.jpg",
+        "title":  "File:The nose of a dog.JPG",
+        "page":  "https://commons.wikimedia.org/wiki/File:The_nose_of_a_dog.JPG",
+        "license":  "Public domain",
+        "artist":  "HTO",
+        "w":  2816,
+        "h":  2112
+    }
+]

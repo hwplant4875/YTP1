@@ -1,0 +1,83 @@
+﻿[
+    {
+        "file":  "00.jpg",
+        "title":  "File:A dog holding something in its mouth.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:A_dog_holding_something_in_its_mouth.jpg",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "User:Batman6968",
+        "w":  2448,
+        "h":  3264
+    },
+    {
+        "file":  "01.jpg",
+        "title":  "File:BedbugSniffingDog.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:BedbugSniffingDog.jpg",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Elgaard",
+        "w":  3198,
+        "h":  2712
+    },
+    {
+        "file":  "02.jpg",
+        "title":  "File:DSC 8677 Happy pup soaking up the sun with a big smile and wagging tail.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:DSC_8677_Happy_pup_soaking_up_the_sun_with_a_big_smile_and_wagging_tail.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "PattayaPatrol",
+        "w":  6048,
+        "h":  4024
+    },
+    {
+        "file":  "03.jpg",
+        "title":  "File:DSC 8684 Happy pup enjoying the outdoors with a big smile and wagging tail.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:DSC_8684_Happy_pup_enjoying_the_outdoors_with_a_big_smile_and_wagging_tail.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "PattayaPatrol",
+        "w":  6048,
+        "h":  4024
+    },
+    {
+        "file":  "04.jpg",
+        "title":  "File:How Long Is the Tail To Continue To Wag the Dog - DPLA - 108491306b0baa0ae12ff9dafacb850d.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:How_Long_Is_the_Tail_To_Continue_To_Wag_the_Dog_-_DPLA_-_108491306b0baa0ae12ff9dafacb850d.jpg",
+        "license":  "Public domain",
+        "artist":  "Bartholomew, Charles Lewis \u0027Bart\u0027, 1869-1949",
+        "w":  5444,
+        "h":  3784
+    },
+    {
+        "file":  "05.jpg",
+        "title":  "File:Prayer house puppy.JPG",
+        "page":  "https://commons.wikimedia.org/wiki/File:Prayer_house_puppy.JPG",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Clementina",
+        "w":  2048,
+        "h":  1536
+    },
+    {
+        "file":  "06.jpg",
+        "title":  "File:The Tail That Wags the Dog - DPLA - 2170bbac29e0d2dcfc791ed03b06ec45.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:The_Tail_That_Wags_the_Dog_-_DPLA_-_2170bbac29e0d2dcfc791ed03b06ec45.jpg",
+        "license":  "Public domain",
+        "artist":  "Bartholomew, Charles Lewis \u0027Bart\u0027, 1869-1949",
+        "w":  5138,
+        "h":  3768
+    },
+    {
+        "file":  "07.jpg",
+        "title":  "File:The tail that wags the dog - geograph.org.uk - 4516017.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:The_tail_that_wags_the_dog_-_geograph.org.uk_-_4516017.jpg",
+        "license":  "CC BY-SA 2.0",
+        "artist":  "Peter Holmes ",
+        "w":  4608,
+        "h":  3456
+    },
+    {
+        "file":  "08.jpg",
+        "title":  "File:Vizsla (8109889181).jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Vizsla_(8109889181).jpg",
+        "license":  "CC BY 2.0",
+        "artist":  "Pets Adviser from Brooklyn, USA",
+        "w":  3648,
+        "h":  2736
+    }
+]

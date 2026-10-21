@@ -1,0 +1,65 @@
+﻿[
+    {
+        "file":  "00.jpg",
+        "title":  "File:Dog and Whistle (former Ram Inn), Fore St, Hertford.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dog_and_Whistle_(former_Ram_Inn),_Fore_St,_Hertford.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Paul the Archivist",
+        "w":  4608,
+        "h":  3456
+    },
+    {
+        "file":  "01.jpg",
+        "title":  "File:Dog whistle.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dog_whistle.jpg",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "TheRetroGuy",
+        "w":  263,
+        "h":  211
+    },
+    {
+        "file":  "02.jpg",
+        "title":  "File:Dog whistle politics.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dog_whistle_politics.jpg",
+        "license":  "CC BY 2.0",
+        "artist":  "Phil Venditti",
+        "w":  2991,
+        "h":  2174
+    },
+    {
+        "file":  "03.jpg",
+        "title":  "File:Hundepfeife01.JPG",
+        "page":  "https://commons.wikimedia.org/wiki/File:Hundepfeife01.JPG",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Sebastian Hartlaub",
+        "w":  2560,
+        "h":  1920
+    },
+    {
+        "file":  "04.jpg",
+        "title":  "File:Hundepfeife02.JPG",
+        "page":  "https://commons.wikimedia.org/wiki/File:Hundepfeife02.JPG",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Sebastian Hartlaub",
+        "w":  2560,
+        "h":  1920
+    },
+    {
+        "file":  "05.jpg",
+        "title":  "File:Hundepfeife04.JPG",
+        "page":  "https://commons.wikimedia.org/wiki/File:Hundepfeife04.JPG",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Sebastian Hartlaub",
+        "w":  2560,
+        "h":  1920
+    },
+    {
+        "file":  "06.jpg",
+        "title":  "File:Hundepfeife05.JPG",
+        "page":  "https://commons.wikimedia.org/wiki/File:Hundepfeife05.JPG",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Sebastian Hartlaub",
+        "w":  2560,
+        "h":  1920
+    }
+]

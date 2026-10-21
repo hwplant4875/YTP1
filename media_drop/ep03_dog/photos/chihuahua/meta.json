@@ -1,0 +1,56 @@
+﻿[
+    {
+        "file":  "00.jpg",
+        "title":  "File:Blubble Head English Chihuahua - Warhol.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Blubble_Head_English_Chihuahua_-_Warhol.jpg",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Carlos.ferreira.rejas",
+        "w":  2848,
+        "h":  4272
+    },
+    {
+        "file":  "01.jpg",
+        "title":  "File:Chihuahua1 bvdb.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Chihuahua1_bvdb.jpg",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Bonnie van den Born, http://www.bonfoto.nl. The original uploader was Cwazi at Dutch Wikipedia.",
+        "w":  370,
+        "h":  322
+    },
+    {
+        "file":  "02.jpg",
+        "title":  "File:Chihuahua (dog) 06.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Chihuahua_(dog)_06.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Zarate123",
+        "w":  3888,
+        "h":  5184
+    },
+    {
+        "file":  "03.jpg",
+        "title":  "File:Chihuahua (dog) 07.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Chihuahua_(dog)_07.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Zarate123",
+        "w":  5184,
+        "h":  3888
+    },
+    {
+        "file":  "04.jpg",
+        "title":  "File:Chihuahua pug mix dog.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Chihuahua_pug_mix_dog.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Ashdwf",
+        "w":  6144,
+        "h":  8192
+    },
+    {
+        "file":  "05.jpg",
+        "title":  "File:Chihuahua qui profite du soleil.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Chihuahua_qui_profite_du_soleil.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "JackyM59",
+        "w":  3000,
+        "h":  2002
+    }
+]

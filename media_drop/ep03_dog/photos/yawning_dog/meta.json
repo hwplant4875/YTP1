@@ -1,0 +1,92 @@
+﻿[
+    {
+        "file":  "00.jpg",
+        "title":  "File:A dog yawning.JPG",
+        "page":  "https://commons.wikimedia.org/wiki/File:A_dog_yawning.JPG",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Neslihan_Turan",
+        "w":  5184,
+        "h":  3456
+    },
+    {
+        "file":  "01.jpg",
+        "title":  "File:African Wild Dog (Lycaon pictus) male yawning ... (32491224607).jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:African_Wild_Dog_(Lycaon_pictus)_male_yawning_..._(32491224607).jpg",
+        "license":  "CC BY-SA 2.0",
+        "artist":  "Bernard DUPONT from FRANCE",
+        "w":  4474,
+        "h":  2896
+    },
+    {
+        "file":  "02.jpg",
+        "title":  "File:African Wild Dog (Lycaon pictus) male yawning ... (50667598172).jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:African_Wild_Dog_(Lycaon_pictus)_male_yawning_..._(50667598172).jpg",
+        "license":  "CC BY-SA 2.0",
+        "artist":  "Bernard DUPONT from FRANCE",
+        "w":  4000,
+        "h":  3000
+    },
+    {
+        "file":  "03.jpg",
+        "title":  "File:Beagle yawning.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Beagle_yawning.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Slyronit",
+        "w":  3024,
+        "h":  3024
+    },
+    {
+        "file":  "04.jpg",
+        "title":  "File:Beagle yawning 2.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Beagle_yawning_2.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Slyronit",
+        "w":  3024,
+        "h":  4032
+    },
+    {
+        "file":  "05.jpg",
+        "title":  "File:Dog Yawning in Valle De Angeles, Honduras (13441073744).jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dog_Yawning_in_Valle_De_Angeles,_Honduras_(13441073744).jpg",
+        "license":  "CC BY 2.0",
+        "artist":  "Nan Palmero from San Antonio, TX, USA",
+        "w":  5107,
+        "h":  3648
+    },
+    {
+        "file":  "06.jpg",
+        "title":  "File:Picography-dog-yawning-1.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Picography-dog-yawning-1.jpg",
+        "license":  "CC0",
+        "artist":  "Picography",
+        "w":  4896,
+        "h":  3264
+    },
+    {
+        "file":  "07.jpg",
+        "title":  "File:Stroking a yawning dog (Unsplash).jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Stroking_a_yawning_dog_(Unsplash).jpg",
+        "license":  "CC0",
+        "artist":  "nomao saeki saekinomao",
+        "w":  5755,
+        "h":  3836
+    },
+    {
+        "file":  "08.jpg",
+        "title":  "File:Wild Dog (Lycaon pictus) female yawning (16394634148).jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Wild_Dog_(Lycaon_pictus)_female_yawning_(16394634148).jpg",
+        "license":  "CC BY-SA 2.0",
+        "artist":  "Bernard DUPONT from FRANCE",
+        "w":  5127,
+        "h":  3392
+    },
+    {
+        "file":  "09.jpg",
+        "title":  "File:Yawning Dog (17837804805).jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Yawning_Dog_(17837804805).jpg",
+        "license":  "CC BY 2.0",
+        "artist":  "Eric Sonstroem from California, USA",
+        "w":  4009,
+        "h":  3956
+    }
+]

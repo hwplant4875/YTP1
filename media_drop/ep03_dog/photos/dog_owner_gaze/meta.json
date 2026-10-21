@@ -1,0 +1,38 @@
+﻿[
+    {
+        "file":  "00.jpg",
+        "title":  "File:Alone at last2.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Alone_at_last2.jpg",
+        "license":  "Public domain",
+        "artist":  "Adolphe Willette, 1857-1926",
+        "w":  2280,
+        "h":  2620
+    },
+    {
+        "file":  "01.jpg",
+        "title":  "File:Happy tattooed woman hugging her lovely black dog.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Happy_tattooed_woman_hugging_her_lovely_black_dog.jpg",
+        "license":  "CC BY 2.0",
+        "artist":  "Nenad Stojkovic",
+        "w":  4016,
+        "h":  6016
+    },
+    {
+        "file":  "02.jpg",
+        "title":  "File:Woman sits on floor of cozy room with dog in her lap.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Woman_sits_on_floor_of_cozy_room_with_dog_in_her_lap.jpg",
+        "license":  "CC BY 2.0",
+        "artist":  "Shixart1985",
+        "w":  3921,
+        "h":  5881
+    },
+    {
+        "file":  "03.jpg",
+        "title":  "File:Woman sits on the floor with a dog in a cozy indoor space while showing affection.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Woman_sits_on_the_floor_with_a_dog_in_a_cozy_indoor_space_while_showing_affection.jpg",
+        "license":  "CC BY 2.0",
+        "artist":  "Shixart1985",
+        "w":  3653,
+        "h":  5479
+    }
+]

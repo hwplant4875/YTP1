@@ -1,0 +1,20 @@
+﻿[
+    {
+        "file":  "00.jpg",
+        "title":  "File:Close up of dog\u0027s whiskers.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Close_up_of_dog%27s_whiskers.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Jami430",
+        "w":  2592,
+        "h":  1728
+    },
+    {
+        "file":  "01.jpg",
+        "title":  "File:Dog Mouth Close-up.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dog_Mouth_Close-up.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "Achat1999",
+        "w":  3024,
+        "h":  2472
+    }
+]

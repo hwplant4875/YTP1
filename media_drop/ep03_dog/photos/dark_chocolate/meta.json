@@ -1,0 +1,83 @@
+﻿[
+    {
+        "file":  "00.jpg",
+        "title":  "File:Chocolate (blue background).jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Chocolate_(blue_background).jpg",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "nagualdesign",
+        "w":  1000,
+        "h":  900
+    },
+    {
+        "file":  "01.jpg",
+        "title":  "File:Coco Dolce premium Dark chocolate Davao2.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Coco_Dolce_premium_Dark_chocolate_Davao2.jpg",
+        "license":  "CC BY-SA 4.0",
+        "artist":  "",
+        "w":  3127,
+        "h":  2960
+    },
+    {
+        "file":  "02.jpg",
+        "title":  "File:Dark chocolate Blanxart.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dark_chocolate_Blanxart.jpg",
+        "license":  "CC BY 2.0",
+        "artist":  "John Loo",
+        "w":  3264,
+        "h":  2448
+    },
+    {
+        "file":  "03.jpg",
+        "title":  "File:Dark chocolate bar.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dark_chocolate_bar.jpg",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Simon A. Eugster",
+        "w":  2056,
+        "h":  1372
+    },
+    {
+        "file":  "04.jpg",
+        "title":  "File:Dark chocolate cookie and revel bar.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Dark_chocolate_cookie_and_revel_bar.jpg",
+        "license":  "CC BY 4.0",
+        "artist":  "MichaellaaRubio",
+        "w":  3072,
+        "h":  4096
+    },
+    {
+        "file":  "05.jpg",
+        "title":  "File:Green and Black\u0027s dark chocolate bar 1.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Green_and_Black%27s_dark_chocolate_bar_1.jpg",
+        "license":  "CC0",
+        "artist":  "Mx. Granger",
+        "w":  2458,
+        "h":  3293
+    },
+    {
+        "file":  "06.jpg",
+        "title":  "File:Green and Black\u0027s dark chocolate bar 2.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Green_and_Black%27s_dark_chocolate_bar_2.jpg",
+        "license":  "CC0",
+        "artist":  "Mx. Granger",
+        "w":  3336,
+        "h":  2502
+    },
+    {
+        "file":  "07.jpg",
+        "title":  "File:Hershey\u0027s Special Dark Miniatures.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Hershey%27s_Special_Dark_Miniatures.jpg",
+        "license":  "Public domain",
+        "artist":  "MissingHailstone",
+        "w":  851,
+        "h":  616
+    },
+    {
+        "file":  "08.jpg",
+        "title":  "File:TCHO Dark Duo chocolate bar.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:TCHO_Dark_Duo_chocolate_bar.jpg",
+        "license":  "CC0",
+        "artist":  "Mx. Granger",
+        "w":  3668,
+        "h":  2034
+    }
+]

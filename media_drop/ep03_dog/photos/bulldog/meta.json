@@ -1,0 +1,56 @@
+﻿[
+    {
+        "file":  "00.jpg",
+        "title":  "File:Bulldog MET DP844719.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Bulldog_MET_DP844719.jpg",
+        "license":  "CC0",
+        "artist":  "Moriz Jung / Wiener Werkstätte",
+        "w":  1969,
+        "h":  3052
+    },
+    {
+        "file":  "01.jpg",
+        "title":  "File:English Bulldog Ouside.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:English_Bulldog_Ouside.jpg",
+        "license":  "CC0",
+        "artist":  "OtisGD",
+        "w":  2160,
+        "h":  2880
+    },
+    {
+        "file":  "02.jpg",
+        "title":  "File:French bulldog in life jacket.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:French_bulldog_in_life_jacket.jpg",
+        "license":  "CC0",
+        "artist":  "W.carter",
+        "w":  4378,
+        "h":  2919
+    },
+    {
+        "file":  "03.jpg",
+        "title":  "File:Mini Olde English Bulldog 1.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Mini_Olde_English_Bulldog_1.jpg",
+        "license":  "CC0",
+        "artist":  "Koala91",
+        "w":  3024,
+        "h":  4032
+    },
+    {
+        "file":  "04.jpg",
+        "title":  "File:Mini Olde English Bulldog 2.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Mini_Olde_English_Bulldog_2.jpg",
+        "license":  "CC0",
+        "artist":  "Koala91",
+        "w":  3024,
+        "h":  4032
+    },
+    {
+        "file":  "05.jpg",
+        "title":  "File:Racibórz 2007 082.jpg",
+        "page":  "https://commons.wikimedia.org/wiki/File:Racib%C3%B3rz_2007_082.jpg",
+        "license":  "CC BY-SA 3.0",
+        "artist":  "Pleple2000",
+        "w":  3456,
+        "h":  2304
+    }
+]
