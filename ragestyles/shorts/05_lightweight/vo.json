@@ -1,0 +1,11 @@
+{"voice": "bfGb7JTLUnZebZRiFYyq", "model": "eleven_multilingual_v2",
+ "settings": {"stability": 0.38, "similarity_boost": 0.82, "style": 0.5, "use_speaker_boost": true},
+ "lines": {
+  "l1": "His \"light weight\"... was eight hundred pounds.",
+  "l2": "That's three refrigerators. On his back. For two reps.",
+  "l3": "Leg press? Twenty-three hundred pounds.",
+  "l4": "That's a whole car. Eight times.",
+  "l5": "Five-eleven, almost three hundred pounds. By BMI, he's morbidly obese.",
+  "l6": "Except it was all muscle.",
+  "l7": "Eight Mr. Olympias... and he still called it..."
+ }}

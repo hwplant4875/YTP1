@@ -1,0 +1,159 @@
+{
+ "title": [
+  [
+   "MOST WORLD'S STRONGEST",
+   "#ffffff"
+  ],
+  [
+   "MAN TITLES",
+   "#ffd400"
+  ]
+ ],
+ "font": "/home/user/rs_work/gfonts/Kanit-BlackItalic.ttf",
+ "list": {
+  "x": 36,
+  "y": 110,
+  "gap": 86,
+  "size": 54,
+  "titleSize": 72
+ },
+ "reveal": {
+  "dur": 1.4,
+  "zoom": 1.22,
+  "bright": 0.3
+ },
+ "athletes": [
+  {
+   "rank": 5,
+   "name": "MAGNUSSON  4x",
+   "shots": [
+    {
+     "src": "/home/user/rs_work/src/wsm/UJqeN6Kv5V0.mkv",
+     "in": 193.0,
+     "out": 196.0,
+     "cx": 0.5
+    },
+    {
+     "src": "/home/user/rs_work/src/wsm/UJqeN6Kv5V0.mkv",
+     "in": 206.0,
+     "out": 208.5,
+     "cx": 0.5
+    },
+    {
+     "src": "/home/user/rs_work/src/wsm/UJqeN6Kv5V0.mkv",
+     "in": 217.0,
+     "out": 219.8,
+     "cx": 0.5
+    }
+   ]
+  },
+  {
+   "rank": 4,
+   "name": "SIGMARSSON  4x",
+   "shots": [
+    {
+     "src": "/home/user/rs_work/src/wsm/I1Hx7GZByxk.webm",
+     "in": 34.8,
+     "out": 36.8,
+     "cx": 0.5
+    },
+    {
+     "src": "/home/user/rs_work/src/wsm/I1Hx7GZByxk.webm",
+     "in": 21.8,
+     "out": 25.4,
+     "cx": 0.5
+    },
+    {
+     "src": "/home/user/rs_work/src/wsm/I1Hx7GZByxk.webm",
+     "in": 37.0,
+     "out": 40.8,
+     "cx": 0.5
+    }
+   ]
+  },
+  {
+   "rank": 3,
+   "name": "SHAW  4x",
+   "shots": [
+    {
+     "src": "/home/user/rs_work/src/wsm/FI3z2MSrBFQ.mkv",
+     "in": 157.4,
+     "out": 159.3,
+     "cx": 0.5
+    },
+    {
+     "src": "/home/user/rs_work/src/wsm/FI3z2MSrBFQ.mkv",
+     "in": 141.5,
+     "out": 142.4,
+     "cx": 0.5
+    },
+    {
+     "src": "/home/user/rs_work/src/wsm/FI3z2MSrBFQ.mkv",
+     "in": 146.0,
+     "out": 147.4,
+     "cx": 0.5
+    },
+    {
+     "src": "/home/user/rs_work/src/wsm/FI3z2MSrBFQ.mkv",
+     "in": 183.4,
+     "out": 188.0,
+     "cx": 0.5
+    }
+   ]
+  },
+  {
+   "rank": 2,
+   "name": "SAVICKAS  4x",
+   "shots": [
+    {
+     "src": "/home/user/rs_work/src/wsm/Ova-z04LRn8.mkv",
+     "in": 218.4,
+     "out": 222.8,
+     "cx": 0.5
+    },
+    {
+     "src": "/home/user/rs_work/src/wsm/Ova-z04LRn8.mkv",
+     "in": 201.2,
+     "out": 206.0,
+     "cx": 0.5
+    }
+   ]
+  },
+  {
+   "rank": 1,
+   "name": "PUDZIANOWSKI  5x",
+   "shots": [
+    {
+     "src": "/home/user/rs_work/src/wsm/eWbiMIsgJqk.mkv",
+     "in": 176.6,
+     "out": 179.8,
+     "cx": 0.5
+    },
+    {
+     "src": "/home/user/rs_work/src/wsm/eWbiMIsgJqk.mkv",
+     "in": 182.6,
+     "out": 184.1,
+     "cx": 0.5
+    },
+    {
+     "src": "/home/user/rs_work/src/wsm/eWbiMIsgJqk.mkv",
+     "in": 197.0,
+     "out": 201.0,
+     "cx": 0.5
+    },
+    {
+     "src": "/home/user/rs_work/src/wsm/eWbiMIsgJqk.mkv",
+     "in": 206.5,
+     "out": 208.4,
+     "cx": 0.5
+    },
+    {
+     "src": "/home/user/rs_work/src/wsm/eWbiMIsgJqk.mkv",
+     "in": 297.0,
+     "out": 300.5,
+     "cx": 0.5
+    }
+   ]
+  }
+ ]
+}

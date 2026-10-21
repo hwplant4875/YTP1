@@ -1,0 +1,248 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/fails/7481818733451709738.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 0.5,
+   "out": 3.7
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/cat-side-eye__LoTSdDHzoc0__cat-annoyed.mp4",
+   "ss": 0.0,
+   "dur": 0.75,
+   "cap": "Did she just...",
+   "hold": 0.55
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/fails/7481818733451709738.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 2.7,
+   "out": 6.3,
+   "hits": [
+    {
+     "at": 4.6,
+     "x": 0.68,
+     "y": 0.58,
+     "zoom": 1.3
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1v6asnx.mp4",
+   "ratio": "3:4",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "crop": [
+    0,
+    76,
+    478,
+    702
+   ],
+   "in": 32.0,
+   "out": 33.9
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/shocked-cat__keHPVm2ArXc__stellarnushu.mp4",
+   "ss": 0.0,
+   "dur": 0.75,
+   "cap": "What is bro doing???"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1v6asnx.mp4",
+   "ratio": "3:4",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "crop": [
+    0,
+    76,
+    478,
+    702
+   ],
+   "in": 32.9,
+   "out": 33.95,
+   "hits": [
+    {
+     "at": 33.2,
+     "x": 0.55,
+     "y": 0.45,
+     "zoom": 1.3
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1njr0k1.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 18.6,
+   "out": 20.5
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/confused-cat__cuW62FiZhBw__cat-stare-blinking-loop-lopped.mp4",
+   "ss": 0.0,
+   "dur": 0.75,
+   "cap": "Hello???"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1njr0k1.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 19.5,
+   "out": 21.2,
+   "hits": [
+    {
+     "at": 19.9,
+     "x": 0.5,
+     "y": 0.35,
+     "zoom": 1.2
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1rbl5dp.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 15.9,
+   "out": 18.9
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/fav_cat.png",
+   "dur": 0.75,
+   "cap": "Why was it standing??"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1rbl5dp.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 16.9,
+   "out": 20.2,
+   "hits": [
+    {
+     "at": 16.95,
+     "x": 0.32,
+     "y": 0.62,
+     "zoom": 1.35
+    },
+    {
+     "at": 17.75,
+     "x": 0.45,
+     "y": 0.56,
+     "zoom": 1.25,
+     "dur": 0.6
+    }
+   ],
+   "circles": [
+    {
+     "from": 17.0,
+     "to": 17.6,
+     "rx": 0.075,
+     "ry": 0.15,
+     "track": [
+      [
+       16.9,
+       0.239,
+       0.664
+      ],
+      [
+       17.1,
+       0.229,
+       0.664
+      ],
+      [
+       17.3,
+       0.215,
+       0.672
+      ],
+      [
+       17.45,
+       0.195,
+       0.68
+      ],
+      [
+       17.6,
+       0.17,
+       0.7
+      ]
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "at": 17.45,
+     "src": "/mnt/project-files/sfx/meme/bowling-pins-falling.mp3",
+     "ss": 0.92,
+     "vol": 0.9
+    }
+   ]
+  }
+ ]
+}

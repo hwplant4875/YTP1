@@ -1,0 +1,103 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 80,
+ "title": {
+  "text": "Bro Thought It Was A Ride 😭",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 14.0,
+  "vol": 0.35
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1v6asnx.mp4",
+   "ratio": "3:4",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "crop": [
+    0,
+    76,
+    478,
+    702
+   ],
+   "in": 32.0,
+   "out": 33.75,
+   "circles": [
+    {
+     "from": 32.0,
+     "to": 32.55,
+     "rx": 0.2,
+     "ry": 0.12,
+     "track": [
+      [
+       32.0,
+       0.56,
+       0.21
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/shocked-cat__keHPVm2ArXc__stellarnushu.mp4",
+   "dur": 0.75,
+   "cap": "What is bro doing???"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1v6asnx.mp4",
+   "ratio": "3:4",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "crop": [
+    0,
+    76,
+    478,
+    702
+   ],
+   "in": 32.75,
+   "out": 34.1,
+   "speed": [
+    [
+     32.75,
+     1.0
+    ],
+    [
+     32.95,
+     0.4
+    ],
+    [
+     33.9,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 33.0,
+     "x": 0.6,
+     "y": 0.4,
+     "zoom": 1.25
+    }
+   ]
+  }
+ ]
+}

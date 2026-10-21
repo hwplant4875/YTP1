@@ -3,3 +3,5 @@ germany_shorts/longform/.cache/
 germany_shorts/longform/node_modules
 germany_shorts/longform/_page*.html
 __pycache__/
+ragestyles/engine/node_modules/
+ragestyles/_page_*.html

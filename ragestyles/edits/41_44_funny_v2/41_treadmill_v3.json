@@ -1,0 +1,259 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 84,
+ "capY": 960,
+ "title": {
+  "text": "Treadmills Are Undefeated 😭",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 40.0,
+  "vol": 0.6
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7488460918595144990.mp4",
+   "ratio": "3:4",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "crop": [
+    0,
+    528,
+    1080,
+    1392
+   ],
+   "vol": 1.0,
+   "in": 4.8,
+   "out": 6.55,
+   "sfx": [
+    {
+     "at": 5.62,
+     "src": "/mnt/project-files/sfx/drive/002_휙(만화적).mp3",
+     "ss": 0.25,
+     "vol": 0.7
+    },
+    {
+     "at": 6.42,
+     "src": "/home/user/rs_work/memes/vine_boom.mp3",
+     "vol": 0.6
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/shocked-cat__keHPVm2ArXc__stellarnushu.mp4",
+   "dur": 0.75,
+   "cap": "Bro did a combat roll 💀",
+   "boomVol": 0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7488460918595144990.mp4",
+   "ratio": "3:4",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "crop": [
+    0,
+    528,
+    1080,
+    1392
+   ],
+   "vol": 1.0,
+   "in": 5.6,
+   "out": 8.8,
+   "speed": [
+    [
+     5.6,
+     1.0
+    ],
+    [
+     5.8,
+     0.45
+    ],
+    [
+     6.9,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 5.8,
+     "x": 0.4,
+     "y": 0.45,
+     "zoom": 1.2
+    },
+    {
+     "at": 7.6,
+     "x": 0.55,
+     "y": 0.45,
+     "zoom": 1.1,
+     "dur": 0.6
+    }
+   ],
+   "sfx": [
+    {
+     "at": 6.4,
+     "src": "/home/user/rs_work/memes/vine_boom.mp3",
+     "vol": 0.6,
+     "rate": 0.6
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/e/7555871094712880406.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.45,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 0.9,
+   "out": 2.55,
+   "sfx": [
+    {
+     "at": 2.45,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.8
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/e/7555871094712880406.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.45,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 1.6,
+   "out": 2.55,
+   "reverse": 3.0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/e/7555871094712880406.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.45,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 1.6,
+   "out": 9.0,
+   "speed": [
+    [
+     1.6,
+     1.0
+    ],
+    [
+     1.75,
+     0.45
+    ],
+    [
+     2.7,
+     1.0
+    ],
+    [
+     6.15,
+     0.45
+    ],
+    [
+     7.7,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 1.75,
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.1
+    },
+    {
+     "at": 3.0,
+     "x": 0.4,
+     "y": 0.55,
+     "zoom": 1.1,
+     "dur": 0.6
+    },
+    {
+     "at": 6.15,
+     "x": 0.62,
+     "y": 0.45,
+     "zoom": 1.3
+    },
+    {
+     "at": 7.9,
+     "x": 0.58,
+     "y": 0.52,
+     "zoom": 1.15,
+     "dur": 0.6
+    }
+   ],
+   "sfx": [
+    {
+     "at": 1.7,
+     "src": "/home/user/rs_work/sfx/tape_stop.mp3",
+     "vol": 0.5
+    },
+    {
+     "at": 2.45,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.8,
+     "rate": 0.75
+    },
+    {
+     "at": 3.1,
+     "src": "/home/user/rs_work/memes/vine_boom_cute.wav",
+     "vol": 0.5
+    },
+    {
+     "at": 4.6,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.6
+    }
+   ]
+  }
+ ]
+}

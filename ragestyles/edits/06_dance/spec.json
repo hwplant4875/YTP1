@@ -1,0 +1,170 @@
+{
+ "bg": "black",
+ "font": "/home/user/rs_work/fonts/TikTokSans-Black.ttf",
+ "box": {
+  "y": 266,
+  "h": 211,
+  "color": "#ffffff",
+  "text": "#000000",
+  "size": 84
+ },
+ "window": {
+  "y": 477,
+  "h": 810
+ },
+ "sfx": {
+  "boom": {
+   "file": "/mnt/project-files/sfx/user/sub_hit_warm.wav",
+   "peak": 0.032,
+   "gain": -4
+  }
+ },
+ "mute": true,
+ "src": {
+  "r": "/home/user/rs_work/src/hd/ronnie_2003_full.mp4"
+ },
+ "srcFilter": {
+  "r": "crop=944:712:168:4"
+ },
+ "titles": [
+  {
+   "from": 0,
+   "text": "bro was 300 lbs of aura 🗿"
+  },
+  {
+   "from": 4,
+   "text": "Leg Split 🤯"
+  },
+  {
+   "from": 7,
+   "text": "bro was 300 lbs of aura 🗿"
+  }
+ ],
+ "shots": [
+  {
+   "src": "r",
+   "in": 166.8,
+   "out": 172.6,
+   "cx": 0.48,
+   "cy": 0.45,
+   "zoom": 1.12,
+   "kb": 0.06,
+   "hits": [
+    {
+     "t": 0.35,
+     "zoom": 1.12,
+     "amount": 0.45,
+     "boom": -4
+    }
+   ]
+  },
+  {
+   "src": "r",
+   "in": 48.5,
+   "out": 54.6,
+   "cx": 0.5,
+   "cy": 0.52,
+   "zoom": 1.14,
+   "kb": -0.1
+  },
+  {
+   "src": "r",
+   "in": 38.5,
+   "out": 42.9,
+   "cx": 0.5,
+   "cy": 0.4,
+   "kb": 0.1,
+   "hits": [
+    {
+     "t": 0.8,
+     "zoom": 1.12,
+     "amount": 0.4
+    }
+   ]
+  },
+  {
+   "src": "r",
+   "in": 152.0,
+   "out": 157.2,
+   "cx": [
+    0.56,
+    0.68
+   ],
+   "cy": 0.4,
+   "zoom": 1.12,
+   "kb": 0.0
+  },
+  {
+   "src": "r",
+   "in": 213.6,
+   "out": 219.2,
+   "cx": 0.53,
+   "cy": 0.5,
+   "kb": 0.04,
+   "hits": [
+    {
+     "t": 2.4,
+     "zoom": 1.1,
+     "amount": 0.4
+    }
+   ]
+  },
+  {
+   "src": "r",
+   "in": 112.0,
+   "out": 117.3,
+   "cx": 0.5,
+   "cy": 0.4,
+   "zoom": 1.1,
+   "kb": -0.09
+  },
+  {
+   "src": "r",
+   "in": 117.5,
+   "out": 121.0,
+   "cx": [
+    0.42,
+    0.5
+   ],
+   "cy": 0.55,
+   "zoom": 1.05,
+   "kb": 0.05,
+   "hits": [
+    {
+     "t": 1.0,
+     "zoom": 1.12,
+     "amount": 0.4
+    }
+   ]
+  },
+  {
+   "src": "r",
+   "in": 158.0,
+   "out": 162.5,
+   "fit": "wide",
+   "kb": 0.04
+  },
+  {
+   "src": "r",
+   "in": 225.0,
+   "out": 230.5,
+   "cx": 0.5,
+   "cy": 0.35,
+   "kb": 0.12,
+   "hits": [
+    {
+     "t": 3.0,
+     "zoom": 1.12,
+     "amount": 0.4
+    }
+   ]
+  }
+ ],
+ "grade": {
+  "clarity": 0.35,
+  "contrast": 0.12,
+  "saturation": 0.08,
+  "sharpen": 0.7,
+  "structure": 0.35
+ }
+}

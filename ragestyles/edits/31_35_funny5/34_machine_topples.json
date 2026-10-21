@@ -1,0 +1,92 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 80,
+ "title": {
+  "text": "The Machine Said NO 💀",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 38.0,
+  "vol": 0.35
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1un5gsf.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 17.5,
+   "out": 20.3,
+   "circles": [
+    {
+     "from": 17.5,
+     "to": 18.1,
+     "rx": 0.18,
+     "ry": 0.12,
+     "track": [
+      [
+       17.5,
+       0.72,
+       0.78
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/shocked-cat__btYkcmAPyCc__cat-flabbergasted.mp4",
+   "dur": 0.75,
+   "cap": "Is he okay???",
+   "hold": 0.75
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/reddit/1un5gsf.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 19.0,
+   "out": 21.8,
+   "speed": [
+    [
+     19.0,
+     1.0
+    ],
+    [
+     19.4,
+     0.45
+    ],
+    [
+     20.2,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 19.4,
+     "x": 0.55,
+     "y": 0.6,
+     "zoom": 1.25
+    }
+   ]
+  }
+ ]
+}

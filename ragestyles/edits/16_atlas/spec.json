@@ -1,0 +1,275 @@
+{
+ "title": [
+  [
+   [
+    "Heaviest Atlas Stones",
+    "#ffffff"
+   ]
+  ],
+  [
+   [
+    "Ever Lifted",
+    "#ffd400"
+   ]
+  ]
+ ],
+ "titleSize": 76,
+ "list": {
+  "x": 44,
+  "y": 640,
+  "gap": 104,
+  "size": 64,
+  "items": [
+   {
+    "n": "1.",
+    "label": "STOLTMAN 300",
+    "at": 43.8
+   },
+   {
+    "n": "2.",
+    "label": "STOLTMAN 286",
+    "at": 31.8
+   },
+   {
+    "n": "3.",
+    "label": "STOLTMAN 273",
+    "at": 22.8
+   },
+   {
+    "n": "4.",
+    "label": "SHAW 254",
+    "at": 12.3
+   },
+   {
+    "n": "5.",
+    "label": "SHAW 252",
+    "at": 0.3
+   }
+  ]
+ },
+ "segs": [
+  {
+   "src": "/home/user/rs_work/src/atlas/69m9QvTogMg.mkv",
+   "in": 44.5,
+   "out": 56.5,
+   "zoom": [
+    0.5,
+    0.5,
+    1.25,
+    1.35
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/atlas/LFhZ5tPaCpc.webm",
+   "in": 90.5,
+   "out": 101.0,
+   "zoom": [
+    0.5,
+    0.5,
+    1.0,
+    1.1
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/atlas/AtjiOAlsEQM.webm",
+   "in": 8.5,
+   "out": 17.5,
+   "zoom": [
+    0.5,
+    0.5,
+    1.0,
+    1.08
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/atlas/99ilJlZHb9Y.webm",
+   "in": 3.0,
+   "out": 15.0,
+   "zoom": [
+    0.5,
+    0.5,
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/atlas/nQwo4gehqNw.webm",
+   "in": 2.5,
+   "out": 11.5,
+   "zoom": [
+    0.5,
+    0.55,
+    1.0,
+    1.08
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/atlas/nQwo4gehqNw.webm",
+   "in": 15.5,
+   "out": 18.6,
+   "zoom": [
+    0.5,
+    0.55,
+    1.08,
+    1.12
+   ]
+  }
+ ],
+ "caps": [
+  {
+   "t": [
+    [
+     "BRIAN SHAW, 2016",
+     "#ffffff"
+    ]
+   ],
+   "in": 0.0,
+   "out": 4.0,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "STONE OVER THE BAR",
+     "#ffffff"
+    ]
+   ],
+   "in": 4.0,
+   "out": 8.5,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "252 KG",
+     "#ffd400"
+    ]
+   ],
+   "in": 8.5,
+   "out": 12.0,
+   "y": 1430,
+   "size": 130
+  },
+  {
+   "t": [
+    [
+     "ONE YEAR LATER",
+     "#ffffff"
+    ]
+   ],
+   "in": 12.0,
+   "out": 18.5,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "254 KG",
+     "#ffd400"
+    ]
+   ],
+   "in": 18.5,
+   "out": 22.5,
+   "y": 1430,
+   "size": 130
+  },
+  {
+   "t": [
+    [
+     "TOM STOLTMAN, 2020",
+     "#ffffff"
+    ]
+   ],
+   "in": 22.5,
+   "out": 29.0,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "273 KG",
+     "#ffd400"
+    ]
+   ],
+   "in": 29.0,
+   "out": 31.5,
+   "y": 1430,
+   "size": 130
+  },
+  {
+   "t": [
+    [
+     "HEAVIER STILL",
+     "#ffffff"
+    ]
+   ],
+   "in": 31.5,
+   "out": 41.0,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "286 KG",
+     "#ffd400"
+    ]
+   ],
+   "in": 41.0,
+   "out": 43.5,
+   "y": 1430,
+   "size": 130
+  },
+  {
+   "t": [
+    [
+     "THEN THIS",
+     "#ffffff"
+    ]
+   ],
+   "in": 43.5,
+   "out": 49.0,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "300 KG",
+     "#ffd400"
+    ]
+   ],
+   "in": 49.0,
+   "out": 52.5,
+   "y": 1430,
+   "size": 140
+  },
+  {
+   "t": [
+    [
+     "TO THE LAP",
+     "#ffffff"
+    ]
+   ],
+   "in": 52.5,
+   "out": 53.9,
+   "y": 1430
+  },
+  {
+   "t": [
+    [
+     "NOT OVER A BAR",
+     "#ffd400"
+    ]
+   ],
+   "in": 53.9,
+   "out": 55.6,
+   "y": 1430
+  }
+ ],
+ "hits": [
+  8.5,
+  18.5,
+  29.0,
+  41.0,
+  49.0
+ ]
+}

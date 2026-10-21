@@ -1,0 +1,15 @@
+{"voice": "bfGb7JTLUnZebZRiFYyq", "model": "eleven_multilingual_v2",
+ "settings": {"stability": 0.4, "similarity_boost": 0.82, "style": 0.45, "use_speaker_boost": true},
+ "lines": {
+  "l1": "Four hundred pounds... in a suit.",
+  "l2": "Some men don't wear suits. They stretch them.",
+  "l3": "Arnold. Seven-time Mister Olympia.",
+  "l4": "Decades later, still the scariest man in a blazer.",
+  "l5": "Lou Ferrigno. The original Hulk.",
+  "l6": "Put him in red, and the jacket is begging for mercy.",
+  "l7": "Terry Crews.",
+  "l8": "In a suit? Same energy.",
+  "l9": "John Cena. In a suit, you still can't hide those shoulders.",
+  "l10": "And The Rock. Built like a vault, in pinstripes.",
+  "l11": "Who wears it best? One to five."
+ }}

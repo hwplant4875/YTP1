@@ -1,0 +1,225 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "memeBg": "black",
+ "capSize": 84,
+ "capY": 960,
+ "title": {
+  "text": "Accidental Gym Backflips 😭",
+  "y": 190,
+  "size": 60
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/new1/7685610049716210957.mp4",
+   "ratio": "1:1",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "crop": [
+    70,
+    286,
+    940,
+    940
+   ],
+   "in": 1.4,
+   "out": 4.6,
+   "hits": [
+    {
+     "at": 3.9,
+     "x": 0.35,
+     "y": 0.4,
+     "zoom": 1.15
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/shocked-cat__a8BssDCesmY__cat-meme-omg-cat.mp4",
+   "dur": 0.75,
+   "cap": "Spider-Woman unlocked 😭"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/new1/7685610049716210957.mp4",
+   "ratio": "1:1",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "crop": [
+    70,
+    286,
+    940,
+    940
+   ],
+   "in": 3.4,
+   "out": 4.6,
+   "reverse": 3.0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/new1/7685610049716210957.mp4",
+   "ratio": "1:1",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "crop": [
+    70,
+    286,
+    940,
+    940
+   ],
+   "in": 3.4,
+   "out": 6.6,
+   "speed": [
+    [
+     3.4,
+     1.0
+    ],
+    [
+     3.6,
+     0.4
+    ],
+    [
+     4.6,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 3.6,
+     "x": 0.32,
+     "y": 0.4,
+     "zoom": 1.2
+    },
+    {
+     "at": 5.0,
+     "x": 0.5,
+     "y": 0.45,
+     "zoom": 1.05,
+     "dur": 0.6
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/new1/7678461460221070605.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 4.6,
+   "out": 8.1,
+   "hits": [
+    {
+     "at": 6.6,
+     "x": 0.45,
+     "y": 0.45,
+     "zoom": 1.15
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/crying-cat__nlRnupio1IY__sobbing-cat.mp4",
+   "dur": 0.75,
+   "cap": "In front of EVERYONE 💀"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/new1/7678461460221070605.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "vol": 0,
+   "in": 6.4,
+   "out": 8.1,
+   "reverse": 3.0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/new1/7678461460221070605.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 6.4,
+   "out": 9.6,
+   "speed": [
+    [
+     6.4,
+     1.0
+    ],
+    [
+     6.6,
+     0.4
+    ],
+    [
+     8.2,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 6.6,
+     "x": 0.4,
+     "y": 0.45,
+     "zoom": 1.2
+    },
+    {
+     "at": 8.4,
+     "x": 0.4,
+     "y": 0.6,
+     "zoom": 1.1,
+     "dur": 0.6
+    }
+   ]
+  }
+ ]
+}

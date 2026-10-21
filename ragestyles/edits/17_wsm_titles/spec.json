@@ -1,0 +1,276 @@
+{
+ "title": [
+  [
+   [
+    "Most World's Strongest",
+    "#ffffff"
+   ]
+  ],
+  [
+   [
+    "Man Titles",
+    "#ffd400"
+   ]
+  ]
+ ],
+ "titleSize": 76,
+ "list": {
+  "x": 44,
+  "y": 640,
+  "gap": 104,
+  "size": 60,
+  "items": [
+   {
+    "n": "1.",
+    "label": "PUDZIANOWSKI",
+    "at": 30.3
+   },
+   {
+    "n": "2.",
+    "label": "SIGMARSSON",
+    "at": 22.4
+   },
+   {
+    "n": "3.",
+    "label": "MAGNUSSON",
+    "at": 14.4
+   },
+   {
+    "n": "4.",
+    "label": "SAVICKAS",
+    "at": 6.9
+   },
+   {
+    "n": "5.",
+    "label": "BRIAN SHAW",
+    "at": 0.3
+   }
+  ]
+ },
+ "segs": [
+  {
+   "src": "/home/user/rs_work/src/wsm/FI3z2MSrBFQ.mkv",
+   "in": 183.4,
+   "out": 190.0,
+   "zoom": [
+    0.55,
+    0.5,
+    1.0,
+    1.1
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/wsm/Ova-z04LRn8.mkv",
+   "in": 201.0,
+   "out": 208.5,
+   "zoom": [
+    0.5,
+    0.5,
+    1.0,
+    1.1
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/wsm/UJqeN6Kv5V0.mkv",
+   "in": 212.5,
+   "out": 220.5,
+   "zoom": [
+    0.5,
+    0.5,
+    1.0,
+    1.12
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/wsm/I1Hx7GZByxk.webm",
+   "in": 21.8,
+   "out": 25.4,
+   "zoom": [
+    0.5,
+    0.45,
+    1.0,
+    1.1
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/wsm/I1Hx7GZByxk.webm",
+   "in": 37.5,
+   "out": 41.8,
+   "zoom": [
+    0.5,
+    0.45,
+    1.0,
+    1.1
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/wsm/eWbiMIsgJqk.mkv",
+   "in": 214.0,
+   "out": 228.5,
+   "zoom": [
+    0.5,
+    0.48,
+    1.0,
+    1.15
+   ]
+  }
+ ],
+ "caps": [
+  {
+   "t": [
+    [
+     "BRIAN SHAW",
+     "#ffffff"
+    ]
+   ],
+   "in": 0.0,
+   "out": 1.0,
+   "y": 1320
+  },
+  {
+   "t": [
+    [
+     "4 TITLES",
+     "#ffd400"
+    ]
+   ],
+   "in": 1.0,
+   "out": 6.6,
+   "y": 1320,
+   "size": 130
+  },
+  {
+   "t": [
+    [
+     "ZYDRUNAS SAVICKAS",
+     "#ffffff"
+    ]
+   ],
+   "in": 6.6,
+   "out": 8.6,
+   "y": 1320
+  },
+  {
+   "t": [
+    [
+     "4 TITLES",
+     "#ffd400"
+    ]
+   ],
+   "in": 8.6,
+   "out": 14.1,
+   "y": 1320,
+   "size": 130
+  },
+  {
+   "t": [
+    [
+     "MAGNUS VER MAGNUSSON",
+     "#ffffff"
+    ]
+   ],
+   "in": 14.1,
+   "out": 18.4,
+   "y": 1320
+  },
+  {
+   "t": [
+    [
+     "4 TITLES",
+     "#ffd400"
+    ]
+   ],
+   "in": 18.4,
+   "out": 22.1,
+   "y": 1320,
+   "size": 130
+  },
+  {
+   "t": [
+    [
+     "\"I'M NOT AN ESKIMO!",
+     "#ffffff"
+    ]
+   ],
+   "in": 22.1,
+   "out": 23.9,
+   "y": 1320
+  },
+  {
+   "t": [
+    [
+     "I'M A VIKING!\"",
+     "#ffd400"
+    ]
+   ],
+   "in": 23.9,
+   "out": 25.7,
+   "y": 1320
+  },
+  {
+   "t": [
+    [
+     "JON PALL SIGMARSSON",
+     "#ffffff"
+    ]
+   ],
+   "in": 25.7,
+   "out": 27.3,
+   "y": 1320
+  },
+  {
+   "t": [
+    [
+     "4 TITLES",
+     "#ffd400"
+    ]
+   ],
+   "in": 27.3,
+   "out": 30.0,
+   "y": 1320,
+   "size": 130
+  },
+  {
+   "t": [
+    [
+     "MARIUSZ PUDZIANOWSKI",
+     "#ffffff"
+    ]
+   ],
+   "in": 30.0,
+   "out": 34.0,
+   "y": 1320
+  },
+  {
+   "t": [
+    [
+     "5 TITLES",
+     "#ffd400"
+    ]
+   ],
+   "in": 34.0,
+   "out": 42.3,
+   "y": 1320,
+   "size": 140
+  },
+  {
+   "t": [
+    [
+     "THE ONLY ONE",
+     "#ffffff"
+    ]
+   ],
+   "in": 42.3,
+   "out": 44.5,
+   "y": 1320
+  }
+ ],
+ "hits": [
+  1.0,
+  8.6,
+  18.4,
+  27.3,
+  34.0,
+  42.3
+ ]
+}

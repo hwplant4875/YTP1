@@ -1,0 +1,336 @@
+{
+ "bg": "black",
+ "font": "/home/user/rs_work/fonts/TikTokSans-Black.ttf",
+ "box": {
+  "y": 266,
+  "h": 211,
+  "color": "#ffffff",
+  "text": "#000000",
+  "size": 84
+ },
+ "window": {
+  "y": 477,
+  "h": 810
+ },
+ "sfx": {
+  "boom": {
+   "file": "/mnt/project-files/sfx/user/sub_hit_warm.wav",
+   "peak": 0.032,
+   "gain": -4
+  }
+ },
+ "mute": true,
+ "src": {
+  "pc": "/mnt/project-files/suits_getbig_hd.mp4"
+ },
+ "srcFilter": {
+  "pc": "crop=1380:1080:270:0,hqdn3d=1:1:2:2"
+ },
+ "titles": [
+  {
+   "from": 0,
+   "text": "Bodybuilders in a suit 🔥"
+  }
+ ],
+ "shots": [
+  {
+   "src": "pc",
+   "in": 53.0,
+   "out": 56.2,
+   "cx": 0.58,
+   "cy": 0.42,
+   "zoom": 1.25,
+   "kb": 0.08,
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ],
+   "tr": "cut",
+   "zout": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "1st",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Nasser El Sonbaty",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 5.799999999999997
+    }
+   ]
+  },
+  {
+   "src": "pc",
+   "in": 72.0,
+   "out": 74.6,
+   "cx": 0.5,
+   "cy": 0.41,
+   "zoom": 1.32,
+   "kb": -0.1,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "pc",
+   "in": 185.6,
+   "out": 187.0,
+   "cx": [
+    0.5,
+    0.6
+   ],
+   "cy": 0.42,
+   "zoom": 1.2,
+   "kb": 0.06,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ],
+   "caps": [
+    {
+     "parts": [
+      [
+       "2nd",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Markus Ruhl",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 3.1000000000000085
+    }
+   ]
+  },
+  {
+   "src": "pc",
+   "in": 88.1,
+   "out": 89.8,
+   "cx": 0.55,
+   "cy": 0.41,
+   "zoom": 1.32,
+   "kb": -0.08,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "pc",
+   "in": 112.5,
+   "out": 115.5,
+   "cx": [
+    0.44,
+    0.5
+   ],
+   "cy": 0.42,
+   "zoom": 1.2,
+   "kb": 0.0,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ],
+   "caps": [
+    {
+     "parts": [
+      [
+       "3rd",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Shawn Ray",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 5.599999999999994
+    }
+   ]
+  },
+  {
+   "src": "pc",
+   "in": 126.0,
+   "out": 128.6,
+   "cx": 0.4,
+   "cy": 0.42,
+   "zoom": 1.2,
+   "kb": 0.1,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "pc",
+   "in": 95.0,
+   "out": 97.6,
+   "cx": 0.5,
+   "cy": 0.41,
+   "zoom": 1.32,
+   "kb": -0.08,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ],
+   "caps": [
+    {
+     "parts": [
+      [
+       "4th",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Flex Wheeler",
+       "#FFD60A"
+      ]
+     ],
+     "in": 0.7,
+     "out": 5.299999999999983
+    }
+   ]
+  },
+  {
+   "src": "pc",
+   "in": 163.5,
+   "out": 166.2,
+   "cx": 0.5,
+   "cy": 0.42,
+   "zoom": 1.2,
+   "kb": 0.1,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "pc",
+   "in": 475.1,
+   "out": 476.5,
+   "cx": 0.5,
+   "cy": 0.42,
+   "zoom": 1.2,
+   "kb": 0.04,
+   "hits": [
+    {
+     "t": 0.7,
+     "zoom": 1.1,
+     "amount": 0.4,
+     "boom": -4
+    }
+   ],
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22,
+   "caps": [
+    {
+     "parts": [
+      [
+       "5th",
+       "#FFFFFF"
+      ]
+     ],
+     "in": 0,
+     "out": 0.7
+    },
+    {
+     "parts": [
+      [
+       "Ronnie Coleman",
+       "#FF3B30"
+      ]
+     ],
+     "in": 0.7,
+     "out": 99
+    }
+   ]
+  },
+  {
+   "src": "pc",
+   "in": 361.0,
+   "out": 364.6,
+   "cx": [
+    0.4,
+    0.46
+   ],
+   "cy": 0.42,
+   "zoom": 1.2,
+   "kb": 0.0,
+   "tr": "cut",
+   "zout": 1.22,
+   "zin": 1.22
+  },
+  {
+   "src": "pc",
+   "in": 386.0,
+   "out": 389.5,
+   "cx": 0.45,
+   "cy": 0.42,
+   "zoom": 1.25,
+   "kb": 0.12,
+   "tr": "cut",
+   "zin": 1.22
+  }
+ ],
+ "capFont": "/mnt/project-files/fonts/YouTubeSans-Black.otf",
+ "grade": {
+  "clarity": 0.35,
+  "contrast": 0.12,
+  "saturation": 0.08,
+  "sharpen": 0.7,
+  "structure": 0.35,
+  "exposure": 0.2,
+  "brightness": 0.12
+ }
+}

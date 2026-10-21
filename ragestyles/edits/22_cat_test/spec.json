@@ -1,0 +1,97 @@
+{
+ "font": "/home/user/rs_work/gfonts/Kanit-BlackItalic.ttf",
+ "pop": "/mnt/project-files/sfx/drive/001_뽁.wav",
+ "whoosh": "/mnt/project-files/sfx/drive/002_휙(만화적).mp3",
+ "clips": [
+  {
+   "src": "/home/user/rs_work/src/reddit/1ng2nwz.mp4",
+   "in": 0.0,
+   "hit": 1.65,
+   "out": 3.0,
+   "cy": 0.45,
+   "replay": {
+    "in": 1.5,
+    "out": 2.9,
+    "speed": 0.4
+   },
+   "watch": {
+    "src": "/home/user/rs_work/memes/t/suspicious-cat__hUBXfYvvOlU__sus-suspicious.mp4",
+    "cy": 0.25
+   },
+   "shock": {
+    "src": "/home/user/rs_work/memes/t/shocked-cat__btYkcmAPyCc__cat-flabbergasted.mp4",
+    "cy": 0.3
+   },
+   "score": [
+    [
+     "IMPACT",
+     7
+    ],
+    [
+     "FUNNY",
+     8
+    ]
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/reddit/1mi1aq3.mp4",
+   "in": 1.7,
+   "hit": 3.45,
+   "out": 4.7,
+   "replay": {
+    "in": 3.2,
+    "out": 4.4,
+    "speed": 0.4
+   },
+   "watch": {
+    "src": "/home/user/rs_work/memes/t/cat-thinking__IHkcQwK9lRA__hmmmmmmm-hmmmmmm.mp4",
+    "cy": 0.3
+   },
+   "shock": {
+    "src": "/home/user/rs_work/memes/t/shocked-cat__CNI1fSM1XSo__shocked-surprised.mp4",
+    "cy": 0.25
+   },
+   "score": [
+    [
+     "IMPACT",
+     9
+    ],
+    [
+     "FUNNY",
+     9
+    ]
+   ]
+  },
+  {
+   "src": "/home/user/rs_work/src/reddit/1pnl9yk.mp4",
+   "in": 3.0,
+   "hit": 4.6,
+   "out": 7.6,
+   "cy": 0.3,
+   "replay": {
+    "in": 4.3,
+    "out": 5.3,
+    "speed": 0.4
+   },
+   "watch": {
+    "src": "/home/user/rs_work/memes/t/suspicious-cat__zqSA5TmyIYU__sus-cat-2-suspicious-cat.mp4",
+    "cy": 0.3
+   },
+   "shock": {
+    "src": "/home/user/rs_work/memes/t/shocked-cat__cx-6vijuIsE__kyo-cat.mp4",
+    "cy": 0.25,
+    "ss": 2.5
+   },
+   "score": [
+    [
+     "IMPACT",
+     6
+    ],
+    [
+     "FUNNY",
+     10
+    ]
+   ]
+  }
+ ]
+}

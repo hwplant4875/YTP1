@@ -1,0 +1,386 @@
+{
+ "title": [
+  [
+   [
+    "Life as a 350 lb",
+    "#ffffff"
+   ]
+  ],
+  [
+   [
+    "Mr. Olympia",
+    "#ffd400"
+   ]
+  ]
+ ],
+ "titleSize": 76,
+ "segs": [
+  {
+   "src": "/home/user/rs_work/src/test5/bfIT_4vdZ7k.mp4",
+   "in": 542.0,
+   "out": 548.0,
+   "fit": "blur",
+   "pre": "1100:880:300:0",
+   "bandH": 864,
+   "bandY": 520
+  },
+  {
+   "src": "/home/user/rs_work/src/test5/bfIT_4vdZ7k.mp4",
+   "in": 304.6,
+   "out": 314.6,
+   "fit": "blur",
+   "pre": "1100:880:350:0",
+   "bandH": 864,
+   "bandY": 520
+  },
+  {
+   "src": "/home/user/rs_work/src/test5/bfIT_4vdZ7k.mp4",
+   "in": 285.0,
+   "out": 292.6,
+   "fit": "blur",
+   "pre": "1100:880:460:0",
+   "bandH": 864,
+   "bandY": 520
+  },
+  {
+   "src": "/home/user/rs_work/src/test5/bfIT_4vdZ7k.mp4",
+   "in": 449.3,
+   "out": 455.9,
+   "fit": "blur",
+   "pre": "1100:880:400:0",
+   "bandH": 864,
+   "bandY": 520
+  },
+  {
+   "src": "/home/user/rs_work/src/test5/bfIT_4vdZ7k.mp4",
+   "in": 684.0,
+   "out": 691.4,
+   "fit": "blur",
+   "pre": "1100:880:330:0",
+   "bandH": 864,
+   "bandY": 520
+  },
+  {
+   "src": "/home/user/rs_work/src/test5/bfIT_4vdZ7k.mp4",
+   "in": 818.0,
+   "out": 825.0,
+   "fit": "blur",
+   "pre": "1100:880:500:0",
+   "bandH": 864,
+   "bandY": 520
+  }
+ ],
+ "caps": [
+  {
+   "t": [
+    [
+     "HIS ARM",
+     "#ffffff"
+    ]
+   ],
+   "in": 0.0,
+   "out": 1.4,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "VS HIS HEAD",
+     "#ffffff"
+    ]
+   ],
+   "in": 1.4,
+   "out": 2.7,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "SAME SIZE",
+     "#ffd400"
+    ]
+   ],
+   "in": 2.7,
+   "out": 4.9,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "MAYBE BIGGER",
+     "#ffd400"
+    ]
+   ],
+   "in": 4.9,
+   "out": 6.0,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "AIRPLANE SEATS?",
+     "#ffffff"
+    ]
+   ],
+   "in": 6.0,
+   "out": 7.6,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "\"DEFINE ",
+     "#ffffff"
+    ],
+    [
+     "AIRPLANE SEATS\"",
+     "#ffd400"
+    ]
+   ],
+   "in": 7.6,
+   "out": 9.2,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "NORMAL ECONOMY?",
+     "#ffffff"
+    ]
+   ],
+   "in": 9.2,
+   "out": 11.8,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "NO.",
+     "#ff3b3b"
+    ]
+   ],
+   "in": 11.8,
+   "out": 12.4,
+   "y": 1500,
+   "size": 120
+  },
+  {
+   "t": [
+    [
+     "FAVORITE AIRLINE?",
+     "#ffffff"
+    ]
+   ],
+   "in": 12.4,
+   "out": 13.7,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "BRITISH AIRWAYS",
+     "#ffd400"
+    ]
+   ],
+   "in": 13.7,
+   "out": 14.8,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "BUSINESS CLASS",
+     "#ffd400"
+    ]
+   ],
+   "in": 14.8,
+   "out": 16.0,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "GYM MACHINES",
+     "#ffffff"
+    ]
+   ],
+   "in": 16.0,
+   "out": 18.2,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "HE CAN DO THE SET",
+     "#ffffff"
+    ]
+   ],
+   "in": 18.2,
+   "out": 21.8,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "BUT HAS TO ",
+     "#ffffff"
+    ],
+    [
+     "SLIP OUT",
+     "#ffd400"
+    ]
+   ],
+   "in": 21.8,
+   "out": 23.6,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "CALORIES A DAY?",
+     "#ffffff"
+    ]
+   ],
+   "in": 23.6,
+   "out": 25.4,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "7,500",
+     "#ffd400"
+    ]
+   ],
+   "in": 25.4,
+   "out": 26.6,
+   "y": 1500,
+   "size": 140
+  },
+  {
+   "t": [
+    [
+     "\"7,500?!\"",
+     "#ffffff"
+    ]
+   ],
+   "in": 26.6,
+   "out": 27.8,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "TO MAINTAIN ",
+     "#ffffff"
+    ],
+    [
+     "300+ LB",
+     "#ffd400"
+    ]
+   ],
+   "in": 27.8,
+   "out": 30.2,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "HIS ARM",
+     "#ffffff"
+    ]
+   ],
+   "in": 30.2,
+   "out": 31.6,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "RELAXED",
+     "#ffd400"
+    ]
+   ],
+   "in": 31.6,
+   "out": 33.8,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "\"CARRY ME AROUND\"",
+     "#ffffff"
+    ]
+   ],
+   "in": 33.8,
+   "out": 35.9,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "HE DOES. ",
+     "#ffffff"
+    ],
+    [
+     "ALL DAY",
+     "#ffd400"
+    ]
+   ],
+   "in": 35.9,
+   "out": 37.6,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "SIDE TRICEP POSE",
+     "#ffffff"
+    ]
+   ],
+   "in": 37.6,
+   "out": 39.1,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "MR. OLYMPIA TRIES",
+     "#ffffff"
+    ]
+   ],
+   "in": 39.1,
+   "out": 41.3,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "CAN'T REACH",
+     "#ffd400"
+    ]
+   ],
+   "in": 41.3,
+   "out": 42.8,
+   "y": 1500
+  },
+  {
+   "t": [
+    [
+     "LOSES BY DEFAULT",
+     "#ff3b3b"
+    ]
+   ],
+   "in": 42.8,
+   "out": 44.6,
+   "y": 1500
+  }
+ ],
+ "hits": [
+  2.7,
+  13.7,
+  25.4,
+  31.6,
+  41.3
+ ]
+}

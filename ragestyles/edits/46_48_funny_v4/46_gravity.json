@@ -1,0 +1,249 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 84,
+ "capY": 960,
+ "title": {
+  "text": "Gravity always wins 💀",
+  "y": 190,
+  "size": 60
+ },
+ "look": {
+  "contrast": 1.12,
+  "sat": 1.15,
+  "black": 10,
+  "glow": 0.15,
+  "sharpen": 0.6,
+  "vignette": "PI/5"
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/d/7504420640007392543.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.06
+    ]
+   ],
+   "vol": 0,
+   "in": 0.9,
+   "out": 1.97,
+   "hits": [
+    {
+     "at": 1.45,
+     "x": 0.5,
+     "y": 0.55,
+     "zoom": 1.15
+    }
+   ],
+   "sfx": [
+    {
+     "at": 1.46,
+     "src": "/home/user/rs_work/sfx/impact_metal.mp3",
+     "vol": 0.45
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/fav_cat.png",
+   "dur": 0.75,
+   "cap": null
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/d/7504420640007392543.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.06
+    ]
+   ],
+   "vol": 0,
+   "in": 1.3,
+   "out": 1.97,
+   "reverse": 2.5
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/d/7504420640007392543.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.06
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 0,
+   "in": 1.3,
+   "out": 2.28,
+   "speed": [
+    [
+     1.3,
+     1.0
+    ],
+    [
+     1.4,
+     0.4
+    ]
+   ],
+   "hits": [
+    {
+     "at": 1.4,
+     "x": 0.5,
+     "y": 0.56,
+     "zoom": 1.15
+    }
+   ],
+   "sfx": [
+    {
+     "at": 1.36,
+     "src": "/home/user/rs_work/sfx/tape_stop.mp3",
+     "vol": 0.5
+    },
+    {
+     "at": 1.47,
+     "src": "/home/user/rs_work/sfx/impact_metal.mp3",
+     "vol": 0.4,
+     "rate": 0.7
+    },
+    {
+     "at": 1.9,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.9,
+     "rate": 0.75
+    }
+   ]
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7430827209637580063.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     18.95,
+     0.5,
+     0.45,
+     1.0
+    ],
+    [
+     19.9,
+     0.66,
+     0.4,
+     1.2
+    ]
+   ],
+   "vol": 3.0,
+   "in": 18.95,
+   "out": 20.44,
+   "hits": [
+    {
+     "at": 20.05,
+     "x": 0.86,
+     "y": 0.36,
+     "zoom": 1.3
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/shocked-cat__GINxa2zTfIM__omg.mp4",
+   "dur": 0.75,
+   "cap": "Caught it with her FACE 💀"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7430827209637580063.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.8,
+     0.38,
+     1.6
+    ]
+   ],
+   "in": 19.4,
+   "out": 20.44,
+   "reverse": 3.0
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/hd_bank/b/7430827209637580063.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.8,
+     0.38,
+     1.6
+    ]
+   ],
+   "grade": {
+    "b": 0.04,
+    "c": 1.12,
+    "s": 1.2
+   },
+   "vol": 3.0,
+   "in": 19.4,
+   "out": 22.35,
+   "speed": [
+    [
+     19.4,
+     1.0
+    ],
+    [
+     20.15,
+     0.35
+    ],
+    [
+     20.75,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 20.15,
+     "x": 0.86,
+     "y": 0.36,
+     "zoom": 1.2
+    },
+    {
+     "at": 20.9,
+     "x": 0.72,
+     "y": 0.42,
+     "zoom": 0.8,
+     "dur": 0.6
+    }
+   ],
+   "sfx": [
+    {
+     "at": 20.1,
+     "src": "/home/user/rs_work/sfx/tape_stop.mp3",
+     "vol": 0.5
+    },
+    {
+     "at": 20.35,
+     "src": "/home/user/rs_work/sfx/thud_heavy.mp3",
+     "vol": 0.9,
+     "rate": 0.7
+    }
+   ]
+  }
+ ]
+}

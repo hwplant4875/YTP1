@@ -1,0 +1,606 @@
+{
+ "name": "HV1_raul_511",
+ "font": "fonts/YouTubeSans-Black.otf",
+ "grade": {
+  "warm": 0.0,
+  "contrast": 1.12,
+  "sat": 1.08,
+  "black": 10,
+  "glow": 0.12,
+  "sharpen": 0.6,
+  "grain": 0.01,
+  "vignette": "PI/5"
+ },
+ "shots": [
+  {
+   "src": "src/HA/OuagHgC0RYw.mp4",
+   "in": 6.0,
+   "len": 1.4,
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.08
+   ]
+  },
+  {
+   "src": "src/HA/GoP5D_OHrvc.mp4",
+   "in": 6.8,
+   "len": 2.6,
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "src/HA/GoP5D_OHrvc.mp4",
+   "in": 13.4,
+   "len": 2.2,
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.08
+   ]
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 133.0,
+   "len": 1.4,
+   "x": 0.5,
+   "zoom": [
+    1.05,
+    1.15
+   ]
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 136.0,
+   "len": 1.2,
+   "x": 0.5,
+   "zoom": [
+    1.05,
+    1.15
+   ]
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 145.0,
+   "len": 1.5,
+   "x": 0.5,
+   "zoom": [
+    1.3,
+    1.4
+   ]
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 159.5,
+   "len": 1.2,
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 165.0,
+   "len": 1.3,
+   "x": 0.5,
+   "zoom": [
+    1.35,
+    1.45
+   ]
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 174.5,
+   "len": 1.1,
+   "x": 0.45,
+   "zoom": [
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 178.0,
+   "len": 0.8,
+   "x": 0.6,
+   "zoom": [
+    1.0,
+    1.06
+   ]
+  },
+  {
+   "src": "src/HA/OuagHgC0RYw.mp4",
+   "in": 3.5,
+   "out": 9.0,
+   "speed": [
+    [
+     3.5,
+     1.0
+    ],
+    [
+     5.5,
+     0.6
+    ],
+    [
+     7.5,
+     1.0
+    ]
+   ],
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.12
+   ]
+  },
+  {
+   "src": "src/HA/OuagHgC0RYw.mp4",
+   "in": 9.0,
+   "len": 1.0,
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.06
+   ],
+   "flash": "white",
+   "punch": 0.1
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 196.0,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.3,
+    1.56
+   ],
+   "ease": "in",
+   "punch": 0.1
+  },
+  {
+   "src": "src/HA/OuagHgC0RYw.mp4",
+   "in": 16.0,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.2
+   ],
+   "ease": "in",
+   "shake": 12
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 199.0,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.2
+   ],
+   "ease": "in",
+   "smear": 40
+  },
+  {
+   "src": "src/HA/OuagHgC0RYw.mp4",
+   "in": 17.0,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.2
+   ],
+   "ease": "in",
+   "punch": 0.12,
+   "flash": "white"
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 211.0,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.2
+   ],
+   "ease": "in",
+   "punch": 0.1
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 214.5,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.2
+   ],
+   "ease": "in",
+   "shake": 12
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 226.0,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.2
+   ],
+   "ease": "in",
+   "smear": 40
+  },
+  {
+   "src": "src/HA/OuagHgC0RYw.mp4",
+   "in": 19.0,
+   "x": 0.5,
+   "len": 0.5,
+   "zoom": [
+    1.0,
+    1.2
+   ],
+   "ease": "in",
+   "punch": 0.12,
+   "flash": "white"
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 211.6,
+   "len": 3.0,
+   "x": 0.5,
+   "zoom": [
+    1.0,
+    1.08
+   ]
+  }
+ ],
+ "voice": [
+  {
+   "src": "src/HA/GoP5D_OHrvc.mp4",
+   "in": 3.2,
+   "out": 6.95,
+   "at": 1.45
+  },
+  {
+   "src": "src/HA/GoP5D_OHrvc.mp4",
+   "in": 29.35,
+   "out": 31.3,
+   "at": 5.25
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 155.3,
+   "out": 161.0,
+   "at": 8.899999999999999
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 194.0,
+   "out": 198.8,
+   "at": 21.43333333333333
+  },
+  {
+   "src": "src/HA/4oHrTDCgVAs.mp4",
+   "in": 199.85,
+   "out": 201.25,
+   "at": 26.33333333333333
+  }
+ ],
+ "subs": [
+  {
+   "words": [
+    [
+     "511",
+     0.1,
+     "#FFD400"
+    ],
+    [
+     "KG.",
+     0.1
+    ]
+   ],
+   "end": 1.35,
+   "y": 420,
+   "size": 170,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "THE",
+     1.45
+    ],
+    [
+     "WORLD",
+     1.45
+    ],
+    [
+     "RECORD",
+     1.45
+    ],
+    [
+     "WAS",
+     1.45
+    ]
+   ],
+   "end": 3.95,
+   "y": 420,
+   "size": 96,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "510",
+     2.0,
+     "#FFD400"
+    ],
+    [
+     "KG.",
+     2.0
+    ]
+   ],
+   "end": 3.95,
+   "y": 560,
+   "size": 150,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "HELD",
+     4.1
+    ],
+    [
+     "BY",
+     4.1
+    ],
+    [
+     "THE",
+     4.1
+    ],
+    [
+     "MOUNTAIN.",
+     4.1,
+     "#FFD400"
+    ]
+   ],
+   "end": 6.15,
+   "y": 420,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "THEN",
+     6.3
+    ],
+    [
+     "A",
+     6.3
+    ],
+    [
+     "26-YEAR-OLD",
+     6.3
+    ]
+   ],
+   "end": 8.75,
+   "y": 420,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "FROM",
+     7.65
+    ],
+    [
+     "MEXICO",
+     7.65,
+     "#FFD400"
+    ]
+   ],
+   "end": 8.75,
+   "y": 560,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "RAUL",
+     8.98
+    ],
+    [
+     "FLORES!",
+     9.78,
+     "#FFD400"
+    ]
+   ],
+   "end": 11.2,
+   "y": 1240,
+   "size": 100,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "500",
+     11.4
+    ],
+    [
+     "AND",
+     12.48
+    ],
+    [
+     "11",
+     13.34,
+     "#FFD400"
+    ],
+    [
+     "KILOGRAMS",
+     13.86
+    ]
+   ],
+   "end": 14.6,
+   "y": 1240,
+   "size": 100,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "1",
+     14.9,
+     "#FFD400"
+    ],
+    [
+     "KG",
+     14.9,
+     "#FFD400"
+    ],
+    [
+     "MORE",
+     14.9
+    ]
+   ],
+   "end": 21.483,
+   "y": 420,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "THAN",
+     15.2
+    ],
+    [
+     "THE",
+     15.2
+    ],
+    [
+     "MOUNTAIN.",
+     15.2
+    ]
+   ],
+   "end": 21.483,
+   "y": 560,
+   "size": 112,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "FLORES",
+     22.133
+    ],
+    [
+     "HAS",
+     23.453
+    ],
+    [
+     "A",
+     23.993
+    ],
+    [
+     "NEW",
+     25.413
+    ]
+   ],
+   "end": 26.233,
+   "y": 1240,
+   "size": 100,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "WORLD",
+     26.383
+    ],
+    [
+     "RECORD!",
+     27.103,
+     "#FFD400"
+    ]
+   ],
+   "end": 27.733,
+   "y": 1240,
+   "size": 100,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "RECORDS",
+     26.633
+    ],
+    [
+     "ARE",
+     26.633
+    ],
+    [
+     "MADE",
+     26.633
+    ]
+   ],
+   "end": 29.533,
+   "y": 420,
+   "size": 100,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "TO",
+     26.933
+    ],
+    [
+     "BE",
+     26.933
+    ],
+    [
+     "BROKEN.",
+     26.933,
+     "#FFD400"
+    ]
+   ],
+   "end": 29.533,
+   "y": 560,
+   "size": 100,
+   "glow": "#000000"
+  },
+  {
+   "words": [
+    [
+     "NOW",
+     27.833
+    ],
+    [
+     "GO",
+     27.833
+    ],
+    [
+     "BREAK",
+     27.833
+    ],
+    [
+     "YOURS.",
+     27.833,
+     "#FFD400"
+    ]
+   ],
+   "end": 29.533,
+   "y": 1240,
+   "size": 104,
+   "glow": "#000000"
+  }
+ ],
+ "fadeout": 0.3
+}

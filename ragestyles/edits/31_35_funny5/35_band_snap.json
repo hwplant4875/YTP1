@@ -1,0 +1,91 @@
+{
+ "font": "/home/user/rs_work/fonts/YOUTUBESANSBLACK.OTF",
+ "boom": "/home/user/rs_work/memes/vine_boom.mp3",
+ "memeBg": "black",
+ "capSize": 80,
+ "title": {
+  "text": "Never Trust The Band 😭💀",
+  "y": 190,
+  "size": 60
+ },
+ "bgm": {
+  "src": "/mnt/project-files/sfx/music/user_bgm_QKThr.mp3",
+  "ss": 50.0,
+  "vol": 0.35
+ },
+ "segments": [
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/tt2/7282914676806126894.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 0.0,
+   "out": 3.3,
+   "circles": [
+    {
+     "from": 0.0,
+     "to": 0.7,
+     "rx": 0.16,
+     "ry": 0.3,
+     "track": [
+      [
+       0.0,
+       0.42,
+       0.72
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "type": "meme",
+   "src": "/home/user/rs_work/memes/t/crying-cat__9a9g-pOTZHk__nsb14-meowl.mp4",
+   "dur": 0.75,
+   "cap": "Not the band 😭"
+  },
+  {
+   "type": "clip",
+   "src": "/home/user/rs_work/src/tt2/7282914676806126894.mp4",
+   "ratio": "9:16",
+   "track": [
+    [
+     0,
+     0.5,
+     0.5,
+     1.0
+    ]
+   ],
+   "in": 2.2,
+   "out": 4.8,
+   "speed": [
+    [
+     2.2,
+     1.0
+    ],
+    [
+     2.45,
+     0.45
+    ],
+    [
+     3.1,
+     1.0
+    ]
+   ],
+   "hits": [
+    {
+     "at": 2.45,
+     "x": 0.5,
+     "y": 0.55,
+     "zoom": 1.2
+    }
+   ]
+  }
+ ]
+}
