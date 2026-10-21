@@ -838,8 +838,9 @@ let fogC = null;
 // fog: amount 0..1 over the glass; p: letters written; drip: 0..1 how far the drops have run
 function fog3(t, amt, p = [0, 0, 0], drip = 0, wipe = null) {
   if (amt <= 0) return;
-  if (!fogC) { fogC = document.createElement('canvas'); fogC.width = W; fogC.height = H; }
-  const fx = fogC.getContext('2d'); fx.setTransform(1, 0, 0, 1, 0, 0); fx.globalCompositeOperation = 'source-over'; fx.clearRect(0, 0, W, H);
+  const cw = ctx.canvas.width, ch = ctx.canvas.height;   // the canvas may be a 9:16 wrapper with its own camera
+  if (!fogC || fogC.width !== cw || fogC.height !== ch) { fogC = document.createElement('canvas'); fogC.width = cw; fogC.height = ch; }
+  const fx = fogC.getContext('2d'); fx.setTransform(1, 0, 0, 1, 0, 0); fx.globalCompositeOperation = 'source-over'; fx.clearRect(0, 0, cw, ch);
   // the fog layer in screen space, built from the glass outline (the current canvas transform is the camera push; apply it too)
   fx.setTransform(ctx.getTransform());
   const sp = glassPts().map(prj); if (sp.some(q => !q)) return;
@@ -847,7 +848,7 @@ function fog3(t, amt, p = [0, 0, 0], drip = 0, wipe = null) {
   const cx = (sp[0][0] + sp[2][0]) / 2, cy = (sp[0][1] + sp[2][1]) / 2;
   const g = fx.createRadialGradient(cx, cy + 120, 40, cx, cy, 900); g.addColorStop(0, `rgba(205,214,220,${0.62 * amt})`); g.addColorStop(1, `rgba(190,200,206,${0.42 * amt})`);
   fx.fillStyle = g; fx.fill();
-  if (grainC) { fx.save(); fx.clip(); fx.globalAlpha = 0.18 * amt; fx.globalCompositeOperation = 'destination-out'; fx.drawImage(grainC[2], 0, 0, W, H); fx.restore(); }
+  if (grainC) { fx.save(); fx.clip(); fx.globalAlpha = 0.18 * amt; fx.globalCompositeOperation = 'destination-out'; fx.drawImage(grainC[2], 0, 0, cw, ch); fx.restore(); }
   // wipe the strokes out of the fog, as far as they are written
   fx.globalCompositeOperation = 'destination-out'; fx.lineCap = 'round'; fx.lineJoin = 'round'; fx.shadowColor = 'rgba(0,0,0,1)'; fx.shadowBlur = 6;
   for (let i = 0; i < 3; i++) { const ss = runStrokes().filter(s => s.ch === i), tot = ss.reduce((a, s) => a + s.L, 0); let left = clamp(p[i]) * tot;
@@ -862,7 +863,7 @@ function fog3(t, amt, p = [0, 0, 0], drip = 0, wipe = null) {
   // drops running down from the bottom of the letters
   if (drip > 0) for (let i = 0; i < 9; i++) { const x = RUN_BOX.x + 0.01 + hash(i * 4.3) * (3 * RUN_BOX.w + 2 * RUN_BOX.gap), y0 = RUN_BOX.y + 0.01, y1 = y0 - (0.04 + hash(i * 7.9) * 0.14) * clamp(drip * (0.6 + hash(i)));
     const a = prj([x, y0, 0]), b = prj([x, y1, 0]); fx.lineWidth = 0.009 * a[3]; fx.beginPath(); fx.moveTo(a[0], a[1]); fx.lineTo(b[0], b[1]); fx.stroke(); }
-  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(fogC, 0, 0); ctx.restore();
+  ctx.save(); (window.rawSetTransform || ctx.setTransform.bind(ctx))(1, 0, 0, 1, 0, 0); ctx.drawImage(fogC, 0, 0); ctx.restore();
 }
 // the towel over the mirror; bump 0..1 pushes it out from behind, at bx,by on the glass
 function towel3(t, k = 1, bump = 0, bx = 0, by = 1.5) {

@@ -24,3 +24,26 @@ window.drawThumb = (o = {}) => {
   const v = ctx.createRadialGradient(W / 2, H / 2, H * 0.45, W / 2, H / 2, H * 1.0); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,0.8)'); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
 };
 window.drawThumbRed = () => window.drawThumb({ red: true });
+// v2 (user 10/21: more eye-catching): close on the glass. Your reflection writes RUN while the tall thing stands right behind it,
+// red eyes over its head, long grey fingers on its shoulders. The back of your head in the lower left. Clean frame for the colour mapping in thumbs_v2.py.
+window.drawThumb2 = (o = {}) => {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  const c = { x: o.cx ?? 0.42, y: o.cy ?? 1.62, z: o.cz ?? 1.55, yaw: o.yaw ?? 0.12, pitch: o.pitch ?? 0.06, f: o.f ?? 1250 };
+  const dy = o.dy ?? 0.16, tip = [RUN_END[0], RUN_END[1] + dy, RUN_END[2]];
+  const rp = o.run === false ? poseOf({ x: o.rx ?? 0.05, z: o.rz ?? 0.6 }) : writerPose(tip), me = o.same ? rp : poseOf({ x: o.mx ?? -0.25, z: o.mz ?? 0.95 });
+  ctx.save(); ctx.translate(o.tx ?? 0, o.ty ?? 0);
+  bathroom(0, { cam: c, me, refl: rp, door: 0, thing: { x: o.thx ?? 0.2, z: o.thz ?? -1.15, t: 0, col: '#c8c8ce', eyes: '#ff2a2a', sc: o.thsc ?? 1.08 }, light: 1,
+    inMirror: () => { heldBack(skeleton(rp), 1); if (o.run !== false) reflFinger(rp, tip); }, glassFx: () => { }, front: () => {} });
+  if (o.run !== false) { ctx.save(); redGlow(30); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  for (const s of runStrokes()) { const sp = s.pts.map(p => prj([p[0], p[1] + dy, 0])); ctx.beginPath(); ctx.moveTo(sp[0][0], sp[0][1]); for (const q of sp.slice(1)) ctx.lineTo(q[0], q[1]);
+    ctx.strokeStyle = '#ff2030'; ctx.lineWidth = 0.03 * sp[0][3]; ctx.stroke(); } ctx.restore(); }
+  ctx.restore();
+};
+window.drawT2a = () => drawThumb2({ run: false, thx: 0.38, thsc: 0.98, cx: 0.3, cz: 1.9, f: 1350, yaw: 0.08, mx: -0.35, mz: 1.05 });
+window.drawT2b = () => drawThumb2({ run: false, thx: 0.0, thz: -1.0, thsc: 1.0, rx: 0.05, cx: 0.25, cz: 1.9, f: 1450, yaw: 0.06, pitch: 0.08, mx: -0.4, mz: 1.1 });
+window.drawT2c = () => drawThumb2({ thx: 0.45, thsc: 0.95, dy: 0.12, cx: 0.3, cz: 1.9, f: 1300, yaw: 0.08, mx: -0.35, mz: 1.05 });
+
+window.drawT2d = () => drawThumb2({ run: false, same: true, rx: 0.0, rz: 0.6, thx: 0.0, thz: -1.0, thsc: 1.0, cx: 0.32, cy: 1.75, cz: 1.55, f: 1500, yaw: 0.17, pitch: 0.02 });
+window.drawT2e = () => drawThumb2({ run: false, same: true, rx: 0.0, rz: 0.6, thx: 0.02, thz: -0.95, thsc: 1.0, cx: 0.42, cy: 1.8, cz: 1.75, f: 1750, yaw: 0.2, pitch: 0.0 });
+window.drawT2f = () => drawThumb2({ run: false, same: true, rx: 0.0, rz: 0.6, thx: 0.0, thz: -1.0, thsc: 1.0, cx: 0.25, cy: 1.72, cz: 1.4, f: 1300, yaw: 0.14, pitch: 0.05 });
+window.drawT2g = () => drawThumb2({ run: false, same: true, rx: 0.0, rz: 0.6, thx: 0.02, thz: -0.95, thsc: 1.0, cx: 0.42, cy: 1.8, cz: 1.75, f: 2050, yaw: 0.2, pitch: 0.0, tx: -260, ty: -60 });
