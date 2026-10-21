@@ -106,8 +106,8 @@ function maskHead(x, y, s = 1, o = {}) {
   // hair over the top: high hairline, thick and messy, swept back, loose at the temples
   pth('M-52,-40 C-60,-84 -36,-114 2,-114 C40,-114 64,-88 53,-40 C49,-56 42,-68 32,-73 C27,-81 16,-84 6,-81 C-4,-86 -18,-84 -25,-77 C-35,-75 -46,-62 -52,-40 Z', HAIR);
   for (const d of [-1, 1]) pth(`M${d * 44},-60 C${d * 54},-46 ${d * 52},-26 ${d * 48},-14 C${d * 46},-28 ${d * 45},-42 ${d * 40},-54 Z`, HAIR);
-  ctx.save(); ctx.globalAlpha *= 0.8;
-  for (const [a, b] of [[-44, -92], [-30, -104], [-12, -110], [8, -110], [26, -104], [42, -92]]) pthS(`M${a},${b} C${a + 6},${b + 6} ${a + 4},${b + 14} ${a + 10},${b + 18}`, HI, 2.5);
+  ctx.save(); ctx.globalAlpha *= 0.35;
+  for (const [a, b] of [[-40, -96], [-20, -108], [4, -110], [26, -104]]) pthS(`M${a},${b} C${a + 10},${b + 2} ${a + 18},${b + 8} ${a + 24},${b + 16}`, HI, 2);
   ctx.restore();
   ctx.restore();
   ctx.restore();

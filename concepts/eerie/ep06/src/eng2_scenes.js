@@ -151,7 +151,7 @@ S.a8 = (t, seg) => {
   // every time you look away (black), he is closer: the streetlight, the mailbox, your lawn
   const ts = wt(seg, 'streetlight'), tm = wt(seg, 'mailbox'), tl = wt(seg, 'lawn');
   const him = t < tm - 0.05 ? LIGHT : t < tl - 0.05 ? MAILBOX : LAWN;
-  const lab = t < tm - 0.05 ? (t >= ts ? ['STREETLIGHT', 1080, 330] : null) : t < tl - 0.05 ? ['MAILBOX', 900, 360] : ['YOUR LAWN', 1010, 140];
+  const lab = t < tm - 0.05 ? (t >= ts ? ['STREETLIGHT', 1400, 200] : null) : t < tl - 0.05 ? ['MAILBOX', 560, 800] : ['YOUR LAWN', 1440, 760];
   lookOut(t, { z: 1.25, f: [1000, 560], him });
   if (lab) pop(t, him === LIGHT ? ts : him === MAILBOX ? tm : tl, lab[1], lab[2], () => tag(lab[0], lab[1], lab[2], him === LAWN ? C.red : C.fig, 40, 'center'), 0.25);
   for (const b of [wt(seg, 'away'), ts, tm, tl]) if (t > b - 0.16 && t < b - 0.02) blackAfter(t, b - 0.16);   // the blink
