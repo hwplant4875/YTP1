@@ -33,7 +33,7 @@ def replay(src, **kw):
 
 # House of Highlights 24.7M: on the assisted dip machine the pad launches her upside down (bed is music: muted)
 ASSIST = N + '7685610049716210957.mp4'
-ASK = {"vol": 0, "crop": [0, 286, 1080, 1348], "ratio": "3:4"}
+ASK = {"vol": 0, "crop": [70, 286, 940, 940], "ratio": "1:1"}   # square above the burned-in caption, so zooms never slice it
 ASSIST_FLIP = [
     clip(ASSIST, **ASK, **{"in": 1.4, "out": 4.6,
          "hits": [{"at": 3.9, "x": 0.35, "y": 0.4, "zoom": 1.15}]}),
