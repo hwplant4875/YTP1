@@ -11,7 +11,8 @@ html,body{width:1920px;height:1080px;overflow:hidden;background:#FFF7EC;font-fam
 .ko,.big,.blk,.cell{font-family:"Jua",sans-serif;font-weight:400}
 em{font-style:normal;color:#E0457F}
 .pill{display:inline-block;padding:10px 40px 2px;border-radius:60px;background:#F7B8CA;color:#2B2236;font-size:54px;line-height:74px;white-space:nowrap}
-.S{font-size:104px;line-height:1.12}
+.S{font-size:128px;line-height:1.12}
+.row.many{gap:24px}.row.many .cell{font-size:170px;min-width:200px;padding:24px 26px 6px}
 .S .ko{font-size:230px;line-height:1.05;display:inline-block;margin-bottom:24px}
 .S .num{font-size:260px;line-height:.95;color:#E0457F}
 .S small{display:block;font-size:50px;color:#8A7A88;margin-top:26px}
@@ -31,6 +32,12 @@ em{font-style:normal;color:#E0457F}
 .ph{background:#fff;border-radius:34px;padding:20px;box-shadow:0 30px 80px rgba(120,80,100,.2);transform:rotate(-1.5deg)}
 .ph img{display:block;height:600px;max-width:820px;object-fit:cover;border-radius:18px}
 .I .S{text-align:left;white-space:nowrap;font-size:96px}
+.qw{font-size:250px}
+.emo{font-size:120px;line-height:1.1}
+.qn{font-size:64px;color:#E0457F;margin-bottom:20px}
+.ring{position:absolute;right:260px;top:430px;width:170px;height:170px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke:rgba(224,69,127,.15);stroke-width:9}
+.ring .rf{stroke:#E0457F;stroke-dasharray:276.5;stroke-linecap:round}
 #stk{position:absolute;right:40px;bottom:30px;width:230px;height:230px;background-size:contain;background-repeat:no-repeat;background-position:center bottom;filter:drop-shadow(0 12px 16px rgba(120,80,100,.25));transform-origin:50% 100%}
 #brand{position:absolute;left:44px;top:34px;font-size:40px;color:#2B2236;opacity:.55}
 #brand b{color:#E0457F}
@@ -47,19 +54,22 @@ E.forEach((v,i)=>{const d=document.createElement('div');d.className='lay';let h=
   if(v.k=='S') h=`<div class="S pp">${v.html}</div>`;
   if(v.k=='L') h=`<div class="card pp"><div class="big c-${v.c}">${v.big}</div>${v.rom?`<div class="rom">${v.rom}</div>`:''}${v.note?`<div class="note">${v.note}</div>`:''}</div>`;
   if(v.k=='I') h=`<div class="I"><div class="ph pp"><img src="img/${v.img}.jpg"></div><div class="S pp">${v.html}</div></div>`;
-  if(v.k=='R') h=`<div class="row">${v.items.map((s,j)=>`<div class="cell pp${v.hi===j?' hi':''}">${s}</div>`).join('')}</div>${v.note?`<div class="sub">${v.note}</div>`:''}`;
+  if(v.k=='Q') h=`<div class="qn">#${v.n}</div><div class="card pp"><div class="big qw">${v.word}</div></div><svg class="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44"/><circle class="rf" cx="50" cy="50" r="44"/></svg>`;
+  if(v.k=='A') h=`<div class="card pp"><div class="emo">${v.emo}</div><div class="big qw c-p">${v.word}</div><div class="rom">${v.rom}</div><div class="note">= ${v.mean}</div></div>`;
+  if(v.k=='R') h=`<div class="row${v.items.length>5?' many':''}">${v.items.map((s,j)=>`<div class="cell pp${v.hi===j?' hi':''}">${s}</div>`).join('')}</div>${v.note?`<div class="sub">${v.note}</div>`:''}`;
   if(v.k=='B') h=`<div class="row">${v.parts.map((s,j)=>(j?'<div class="op">+</div>':'')+`<div class="blk pp">${s}</div>`).join('')}<div class="op eq">=</div><div class="blk res">${v.res}</div></div><div class="sub">${v.rom}${v.note?' '+v.note:''}</div>`;
   d.innerHTML=h;v.el=d;v.pp=[...d.querySelectorAll('.pp')];v.res=d.querySelector('.res');v.eq=d.querySelector('.eq');v.sub=d.querySelector('.sub');st.appendChild(d);});
 const sk=document.getElementById('stk');
 window.render=function(t){
   let cur=0;for(let i=0;i<E.length;i++) if(E[i].t<=t) cur=i;
   E.forEach((v,i)=>{let o=0;
-    if(i==cur) o=ease((t-v.t)/0.35); else if(i==cur-1) o=1-ease((t-E[cur].t)/0.35);
+    if(i==cur) o=ease((t-v.t)/0.4); else if(i==cur-1) o=1-ease((t-E[cur].t)/0.4);
     const full=(i==0&&cur==0); if(full) o=1; // cover-safe first frame
     v.el.style.opacity=o; v.el.style.display=o>0?'flex':'none';
     if(o<=0) return; const dt=full?9:t-v.t;
-    v.pp.forEach((p,j)=>{const q=back((dt-0.12*j)/0.5);p.style.transform=`translateY(${(1-q)*50}px) scale(${0.8+0.2*q})`;p.style.opacity=clamp((dt-0.12*j)/0.2);});
-    if(v.res){const d0=0.12*v.pp.length+0.25,q=back((dt-d0)/0.55);v.res.style.transform=`scale(${0.4+0.6*q}) rotate(${(1-q)*-8}deg)`;v.res.style.opacity=clamp((dt-d0)/0.15);v.eq.style.opacity=clamp((dt-d0+0.1)/0.2);}
+    v.pp.forEach((p,j)=>{const q=ease((dt-0.1*j)/0.5);p.style.transform=`translateY(${(1-q)*24}px) scale(${0.96+0.04*q})`;p.style.opacity=clamp((dt-0.1*j)/0.35);});
+    if(v.res){const d0=0.1*v.pp.length+0.3,q=ease((dt-d0)/0.5);v.res.style.transform=`scale(${0.85+0.15*q})`;v.res.style.opacity=clamp((dt-d0)/0.35);v.eq.style.opacity=clamp((dt-d0+0.1)/0.2);}
+    if(v.k=='Q'){const rf=v.el.querySelector('.rf');rf.style.strokeDashoffset=276.5*clamp((t-v.t-0.6)/Math.max(0.5,v.t1-v.t-0.8));}
     if(v.sub){const d1=v.res?0.12*v.pp.length+0.6:0.5;v.sub.style.opacity=clamp((dt-d1)/0.3);}
   });
   const v=E[cur]; sk.style.backgroundImage=`url(img/st_${v.pose}.png)`;

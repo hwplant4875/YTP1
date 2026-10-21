@@ -61,7 +61,7 @@ def build(out, sample=False):
         for k, (s, v) in enumerate(segs):
             i = text.index(s, cur); cur = i + len(s); a = st[i]; e = st[cur] if cur < len(st) else len(y) / SR
             cues.append((t0 + a, t0 + e, s)); ev.append(dict(v, t=t0 + a - (0.15 if k else 0.25), ch=ch, pose=pose))
-        t = t0 + len(y) / SR + 0.45
+        t = t0 + len(y) / SR + 0.45 + (1.3 if segs[-1][1]["k"] == "Q" else 0)  # quiz: a short beat to read it yourself
 
     chapters = CHAPTERS[:2] if sample else CHAPTERS
     for ci, c in enumerate(chapters, 1):
@@ -76,11 +76,12 @@ def build(out, sample=False):
     N = int((END + 0.5) * SR); vo = np.zeros(N); sfx = np.zeros(N)
     for t_, x in clips: i = int(t_ * SR); vo[i:i + len(x)] += x[:N - i]
     for e in ev:  # soft pop when a block snaps together / a letter lands
-        if e["k"] in ("B", "L") and e["t"] > 0.5:
+        if e["k"] in ("B", "L", "A") and e["t"] > 0.5:
             p = load("pop", .5) * .12; i = int((e["t"] + (0.75 if e["k"] == "B" else 0.2)) * SR); sfx[i:i + len(p)] += p[:N - i]
-    raw = subprocess.check_output(["ffmpeg", "-v", "error", "-i", os.path.join(HERE, "..", "..", "assets", "sfx", "kpdh_bgm_user.mp3"), "-f", "f32le", "-ac", "2", "-ar", str(SR), "-"])
-    m2 = np.frombuffer(raw, np.float32).astype(np.float64).reshape(-1, 2); mus = np.tile(m2, (N // len(m2) + 1, 1))[:N]
-    k = int(1.0 * SR); mus[:k] *= np.linspace(0, 1, k)[:, None]; k = int(3.0 * SR); mus[-k:] *= np.linspace(1, 0, k)[:, None]
+    # music (user 2026-10-21): back to the channel's shorts bed (assets/sfx/music.mp3), looped with an equal-power crossfade so the seam never dips
+    from sound import music
+    mus = music(N, "music", xfade=3.0) / 0.6 * 0.5
+    k = int(1.0 * SR); mus[:k] *= np.linspace(0.6, 1, k)
     def w(name, x):
         x = np.clip(x, -1, 1); s = ((x if x.ndim == 2 else np.stack([x, x], 1)) * 32767).astype(np.int16)
         with wave.open(f"{out}/{name}", "wb") as f: f.setnchannels(2); f.setsampwidth(2); f.setframerate(SR); f.writeframes(s.tobytes())
