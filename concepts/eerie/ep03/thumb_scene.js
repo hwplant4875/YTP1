@@ -32,6 +32,15 @@ window.drawThumb2 = (o = {}) => {
   const dy = o.dy ?? 0.16, tip = [RUN_END[0], RUN_END[1] + dy, RUN_END[2]];
   const rp = o.run === false ? poseOf({ x: o.rx ?? 0.05, z: o.rz ?? 0.6 }) : writerPose(tip), me = o.same ? rp : poseOf({ x: o.mx ?? -0.25, z: o.mz ?? 0.95 });
   ctx.save(); ctx.translate(o.tx ?? 0, o.ty ?? 0);
+  if (o.layer) {   // one figure alone on black (for the flat white thumbnail): thing | refl | fingers | me
+    setCam(c); const th = { x: o.thx ?? 0.2, z: o.thz ?? -1.15, t: 0, col: '#ffffff', eyes: '#ff2a2a', sc: o.thsc ?? 1.08 };
+    if (o.layer === 'me') { if (me.z < CAM.z - 0.2) body3(me, {}); }
+    else { ctx.save(); if (clipGlass()) { ctx.fillStyle = '#000'; ctx.fillRect(-W, -H, 3 * W, 3 * H);
+      if (o.layer === 'thing') thing3(th.x, th.z, th);
+      if (o.layer === 'refl') body3(rp, { mirror: true, col: '#ffffff' });
+      if (o.layer === 'fingers') heldBack(skeleton(rp), 1); } ctx.restore(); }
+    ctx.restore(); return;
+  }
   bathroom(0, { cam: c, me, refl: rp, door: 0, thing: { x: o.thx ?? 0.2, z: o.thz ?? -1.15, t: 0, col: '#c8c8ce', eyes: '#ff2a2a', sc: o.thsc ?? 1.08 }, light: 1,
     inMirror: () => { heldBack(skeleton(rp), 1); if (o.run !== false) reflFinger(rp, tip); }, glassFx: () => { }, front: () => {} });
   if (o.run !== false) { ctx.save(); redGlow(30); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -47,3 +56,5 @@ window.drawT2d = () => drawThumb2({ run: false, same: true, rx: 0.0, rz: 0.6, th
 window.drawT2e = () => drawThumb2({ run: false, same: true, rx: 0.0, rz: 0.6, thx: 0.02, thz: -0.95, thsc: 1.0, cx: 0.42, cy: 1.8, cz: 1.75, f: 1750, yaw: 0.2, pitch: 0.0 });
 window.drawT2f = () => drawThumb2({ run: false, same: true, rx: 0.0, rz: 0.6, thx: 0.0, thz: -1.0, thsc: 1.0, cx: 0.25, cy: 1.72, cz: 1.4, f: 1300, yaw: 0.14, pitch: 0.05 });
 window.drawT2g = () => drawThumb2({ run: false, same: true, rx: 0.0, rz: 0.6, thx: 0.02, thz: -0.95, thsc: 1.0, cx: 0.42, cy: 1.8, cz: 1.75, f: 2050, yaw: 0.2, pitch: 0.0, tx: -260, ty: -60 });
+window.T2G = { run: false, same: true, rx: 0.0, rz: 0.6, thx: 0.02, thz: -0.95, thsc: 1.0, cx: 0.42, cy: 1.8, cz: 1.75, f: 2050, yaw: 0.2, pitch: 0.0, tx: -260, ty: -60 };
+for (const l of ['thing', 'refl', 'fingers', 'me']) window['drawT2g_' + l] = () => drawThumb2({ ...window.T2G, layer: l });

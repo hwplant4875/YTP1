@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
 const here = path.dirname(new URL(import.meta.url).pathname), out = process.argv[2];
-const V = { v2_bw_red: { bg: 'b_bw', rec: false, hot: '#ff1f2e' }, v2_green_rec: { bg: 'b_green', rec: true, hot: '#ff1f2e' }, v2_red: { bg: 'b_red', rec: false, hot: '#000' } };
+const V = process.env.V3 ? { v3_white: { bg: 'b_flat', rec: false, hot: '#ff1f2e' } } : { v2_bw_red: { bg: 'b_bw', rec: false, hot: '#ff1f2e' }, v2_green_rec: { bg: 'b_green', rec: true, hot: '#ff1f2e' }, v2_red: { bg: 'b_red', rec: false, hot: '#000' } };
 const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1280, height: 720 } });
 for (const [n, v] of Object.entries(V)) {
   fs.writeFileSync(here + '/_thw.html', `<html><head><style>
