@@ -1,7 +1,7 @@
 # EP03 thumbnails v3 (user 2026-10-21: black background, figures pure flat white, simple).
 # Each figure is rendered alone (TH=drawT2g_thing|refl|fingers|me node thumbstill.mjs L/<name>.png), then stacked back to front:
 # every figure is flat white with a black outline where it overlaps the one behind it; eyes stay (the thing's red, the reflection's black).
-# python3 thumbs_v3.py layerdir out.png
+# python3 thumbs_v3.py layerdir out.png [room.png]   (room.png: the full still; its room shows faintly behind the figures)
 import sys, numpy as np
 from PIL import Image, ImageFilter
 d, out = sys.argv[1], sys.argv[2]
@@ -26,6 +26,9 @@ eyes = shrink(grow(eyes, 9), 9)                                  # solid round e
 o *= (1 - np.clip(eyes * 1.4, 0, 1))
 glow = blur(union, 26) * 0.45 * (1 - union)
 rgb = np.stack([o + glow] * 3, -1)
+if len(sys.argv) > 3:                                            # the room, dim, for depth (POV)
+    R = np.asarray(Image.open(sys.argv[3]).convert('L')).astype(np.float32) / 255
+    rgb += (np.clip(R - 0.05, 0, 1) * 1.1 * (1 - grow(union, 15)))[..., None]
 rg = blur(redE, 14) * 1.3 + blur(redE, 40) * 0.9
 rgb += rg[..., None] * np.array([1, 0, 0.05]) * (1 - redE[..., None])
 rgb = rgb * (1 - redE[..., None]) + redE[..., None] * np.array([1, 0.1, 0.16])

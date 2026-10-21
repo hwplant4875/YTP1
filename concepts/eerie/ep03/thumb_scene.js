@@ -58,3 +58,7 @@ window.drawT2f = () => drawThumb2({ run: false, same: true, rx: 0.0, rz: 0.6, th
 window.drawT2g = () => drawThumb2({ run: false, same: true, rx: 0.0, rz: 0.6, thx: 0.02, thz: -0.95, thsc: 1.0, cx: 0.42, cy: 1.8, cz: 1.75, f: 2050, yaw: 0.2, pitch: 0.0, tx: -260, ty: -60 });
 window.T2G = { run: false, same: true, rx: 0.0, rz: 0.6, thx: 0.02, thz: -0.95, thsc: 1.0, cx: 0.42, cy: 1.8, cz: 1.75, f: 2050, yaw: 0.2, pitch: 0.0, tx: -260, ty: -60 };
 for (const l of ['thing', 'refl', 'fingers', 'me']) window['drawT2g_' + l] = () => drawThumb2({ ...window.T2G, layer: l });
+// POV: your own eyes in the mirror; you are not drawn, your reflection faces you, the thing stands right behind it
+window.T2P = { run: false, same: true, rx: 0.0, rz: 0.6, thx: 0.05, thz: -1.0, thsc: 1.0, cx: 0.0, cy: 1.66, cz: 0.62, f: 1500, yaw: 0.0, pitch: 0.06, tx: -230, ty: 0 };
+window.drawT2p = () => drawThumb2({ ...window.T2P });
+for (const l of ['thing', 'refl', 'fingers', 'me']) window['drawT2p_' + l] = () => drawThumb2({ ...window.T2P, layer: l });
