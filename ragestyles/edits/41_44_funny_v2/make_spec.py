@@ -49,7 +49,8 @@ TREAD_ROLL = [
          "sfx": [{"at": 5.62, "src": '/mnt/project-files/sfx/drive/002_휙(만화적).mp3', "ss": 0.25, "vol": 0.7},
                  {"at": 6.42, "src": BOOM, "vol": 0.6}]}),
     meme(SHOCKED, "Bro did a combat roll 💀", boomVol=0),
-    replay(DISMOUNT, **ROLLK, **{"in": 5.6, "out": 8.8, "speed": [[5.6, 1.0], [5.8, 0.45], [6.9, 1.0]],
+    # runs on through his confused walk to the camera (the caption's joke)
+    replay(DISMOUNT, **ROLLK, **{"in": 5.6, "out": 11.3, "speed": [[5.6, 1.0], [5.8, 0.45], [6.9, 1.0]],
            "hits": [{"at": 5.8, "x": 0.4, "y": 0.45, "zoom": 1.2},
                     {"at": 7.6, "x": 0.55, "y": 0.45, "zoom": 1.1, "dur": 0.6}],
            "sfx": [{"at": 6.4, "src": BOOM, "vol": 0.6, "rate": 0.6}]})]          # stretched boom on the landing
@@ -89,7 +90,8 @@ BAND = B + "7517757207409167671.mp4"
 BAND_SPRINT = [
     clip(BAND, vol=0.8, **{"in": 2.6, "out": 5.0}),                         # real sound (user)
     meme(FAV, "Did he fly?? 😭"),
-    replay(BAND, vol=0.8, **{"in": 3.6, "out": 5.9, "speed": [[3.6, 1.0], [3.85, 0.4], [4.7, 1.0]],
+    # held on the two of them sitting there after the flip
+    replay(BAND, vol=0.8, **{"in": 3.6, "out": 7.2, "speed": [[3.6, 1.0], [3.85, 0.4], [4.7, 1.0]],
            "hits": [{"at": 3.85, "x": 0.3, "y": 0.35, "zoom": 1.2}],
            "sfx": [{"at": 3.78, "src": LIB + "tape_stop.mp3", "vol": 0.5},       # time slowing down, not a whoosh (user)
                    {"at": 4.55, "src": LIB + "thud_heavy.mp3", "vol": 0.9}]})]
@@ -212,9 +214,14 @@ TREAD_DOMINO = [
     clip(DOMINO, **DOMK, **{"in": 0.9, "out": 2.55,
          "sfx": [{"at": 2.45, "src": LIB + "thud_heavy.mp3", "vol": 0.8}]}),
     clip(DOMINO, **DOMK, **{"in": 1.6, "out": 2.55, "reverse": 3.0}),
-    replay(DOMINO, **DOMK, **{"in": 1.6, "out": 5.6, "speed": [[1.6, 1.0], [1.75, 0.45], [2.7, 1.0]],
+    # the replay runs on to the punchline: the man in light blue steps on at 6.0 and goes down too (6.3-7.7,
+    # owner 2026-10-21: "that's the whole point"), slow-mo and a zoom on him, held until he lies sprawled
+    replay(DOMINO, **DOMK, **{"in": 1.6, "out": 9.0, "speed": [[1.6, 1.0], [1.75, 0.45], [2.7, 1.0], [6.15, 0.45],
+                                                              [7.7, 1.0]],
            "hits": [{"at": 1.75, "x": 0.5, "y": 0.5, "zoom": 1.1},
-                    {"at": 3.0, "x": 0.4, "y": 0.55, "zoom": 1.1, "dur": 0.6}],
+                    {"at": 3.0, "x": 0.4, "y": 0.55, "zoom": 1.1, "dur": 0.6},
+                    {"at": 6.15, "x": 0.62, "y": 0.45, "zoom": 1.3},
+                    {"at": 7.9, "x": 0.58, "y": 0.52, "zoom": 1.15, "dur": 0.6}],
            "sfx": [{"at": 1.7, "src": LIB + "tape_stop.mp3", "vol": 0.5},
                    {"at": 2.45, "src": LIB + "thud_heavy.mp3", "vol": 0.8, "rate": 0.75},
                    {"at": 3.1, "src": BOOM_UP, "vol": 0.5},
