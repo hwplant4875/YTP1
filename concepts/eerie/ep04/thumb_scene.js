@@ -5,14 +5,14 @@ window.drawThumb4 = (o = {}) => {
   const look = o.look || 'white';
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H); if (look !== 'red') { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); }
   const ankle = [SPOT.x - 0.1, SPOT.z + 0.03];
-  setCam(o.cam || { ...CAMS.cctv, yaw: 0.8, pitch: -0.5, f: 1550 });
+  setCam(o.cam || { ...CAMS.cctv, yaw: 0.8, pitch: -0.5, f: 1380 });
   const inv = look === 'red', fig = inv ? '#111' : '#f4f4f6', thing = inv ? '#1a1a1a' : '#8e8e95';
-  ctx.save(); ctx.translate(o.dx ?? -60, o.dy ?? 150);
+  ctx.save(); ctx.translate(o.dx ?? -190, o.dy ?? 215);
   if (inv) { sofa4(); } else living(0.4, { moon: 0 });
   ctx.save(); ctx.globalAlpha = 0.9; polyW([[SOFA.x0 + 0.04, 0.003, SOFA.z1 - 0.02], [SOFA.x1 - 0.04, 0.003, SOFA.z1 - 0.02], [SOFA.x1 - 0.04, 0.003, SOFA.z1 + 0.1], [SOFA.x0 + 0.04, 0.003, SOFA.z1 + 0.1]], '#000', null); ctx.restore();
   body3(poseOf({ look: 0.5 }), { col: fig, top: fig, hood: true, glow: inv ? 'rgba(0,0,0,0)' : undefined });
   thingArm(0.4, { k: 1, to: ankle, grip: true, col: thing });
-  thingHead(0.4, THING_X, 1, { col: thing, size: o.size || 2.3 });
+  thingHead(0.4, THING_X, 1, { col: thing, size: o.size || 2.75 });
   ctx.restore();
   // the security camera's marks: corners, REC, tomorrow's date
   const tx = look === 'red' ? '#111' : '#f2f2f2';

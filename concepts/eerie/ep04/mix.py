@@ -12,7 +12,8 @@ SOUND = {'tap': ('tap.mp3', 0.5), 'tapoff': ('tapoff.mp3', 0.6), 'fog': ('fog.mp
          'riser': ('riser.mp3', 0.45), 'hum': ('hum.mp3', 0.35), 'heartbeat': ('heartbeat.mp3', 0.5), 'notif': ('notif.mp3', 0.9),
          'breath': ('breath.mp3', 0.55), 'creak': ('creak.mp3', 0.6), 'whoosh': ('whoosh.mp3', 0.45), 'chime': ('chime.mp3', 0.35), 'morph': ('staticlong.mp3', 0.3),
          'drag': ('drag.mp3', 0.8), 'binlid': ('binlid.mp3', 0.6), 'keylock': ('keylock.mp3', 0.7), 'sofa': ('sofa.mp3', 0.8), 'joint': ('joint.mp3', 0.8),
-         'scrape': ('scrape.mp3', 0.7), 'poweroff': ('poweroff.mp3', 0.5), 'unplug': ('unplug.mp3', 0.7), 'servo': ('servo.mp3', 0.6)}
+         'scrape': ('scrape.mp3', 0.7), 'poweroff': ('poweroff.mp3', 0.5), 'unplug': ('unplug.mp3', 0.7), 'servo': ('servo.mp3', 0.6),
+         'cloth': ('cloth.mp3', 0.7), 'chop': ('chop.mp3', 0.8), 'knife': ('knife.mp3', 0.6)}
 SOFT = ',lowpass=f=6500'
 ins, flt, labels = [], [], []
 N = [0]

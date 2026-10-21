@@ -7,6 +7,7 @@ const WIN = { z0: 1.1, z1: 2.7, y0: 0.95, y1: 2.05 };            // the window, 
 const LAMP = { x: 0.98, z: 0.3 };
 const CHAIR = { x: -1.95, z: 3.35 };
 const SPOT = { x: -0.65, z: 2.0 };                               // where you stand in the clip, on the rug in front of the sofa
+const RUG = { x0: SPOT.x - 1.0, x1: SPOT.x + 0.95, z0: SPOT.z - 0.55, z1: SPOT.z + 0.75 };
 const UI = 'I';
 // the security camera: high in the front right corner, looking down across the room at the sofa
 const CCTV = { x: 2.22, y: 2.36, z: 4.02 };
@@ -90,7 +91,8 @@ function room4(t, o = {}) {
   const kp = prj([lerp(FDOOR.x1, ex, 0.88), 1.0, lerp(dz, ez, 0.88) + 0.02]); if (kp) circ(kp[0], kp[1], 0.03 * kp[3], '#77777c');
   polyW([[FDOOR.x0 - 0.06, 0, dz], [FDOOR.x0, 0, dz], [FDOOR.x0, FDOOR.h, dz], [FDOOR.x1, FDOOR.h, dz], [FDOOR.x1, 0, dz], [FDOOR.x1 + 0.06, 0, dz], [FDOOR.x1 + 0.06, FDOOR.h + 0.06, dz], [FDOOR.x0 - 0.06, FDOOR.h + 0.06, dz]], '#2a2a2d', '#55555a', 2);
   // the rug
-  polyW([[SPOT.x - 1.0, 0.004, SPOT.z - 0.55], [SPOT.x + 0.95, 0.004, SPOT.z - 0.55], [SPOT.x + 0.95, 0.004, SPOT.z + 0.75], [SPOT.x - 1.0, 0.004, SPOT.z + 0.75]], '#202022', '#38383c', 2);
+  const rg = o.rug ?? 1, rx0 = lerp(RUG.x1, RUG.x0, rg);   // o.rug: how much of it still lies flat (it rolls up from the left)
+  if (rg > 0.01) polyW([[rx0, 0.004, RUG.z0], [RUG.x1, 0.004, RUG.z0], [RUG.x1, 0.004, RUG.z1], [rx0, 0.004, RUG.z1]], '#202022', '#38383c', 2);
   lamp4(o.lamp ?? 0);
 }
 function lamp4(on) {
@@ -142,12 +144,14 @@ function cctv4(o = {}) {
 // ---------- people (from EP03: a 3D pictogram) ----------
 const HOOD_C = '#9b9ba1';
 const STAND = { L: [-0.22, 0.8, 0.02], R: [0.22, 0.8, 0.02] };
+// a hand at a world point, as the local [side, height, forward] that poseOf's L/R take
+function handAt(ps, w) { const yaw = ps.yaw || 0, F = [-Math.sin(yaw), 0, -Math.cos(yaw)], R = [Math.cos(yaw), 0, -Math.sin(yaw)], dx = w[0] - ps.x, dz = w[2] - ps.z; return [R[0] * dx + R[2] * dz, w[1], F[0] * dx + F[2] * dz]; }
 function poseOf(p) { return { x: SPOT.x, z: SPOT.z, yaw: 0, lean: 0, look: 0, roll: 0, ...STAND, ...p }; }
 function skeleton(ps) {
   const yaw = ps.yaw || 0, F = [-Math.sin(yaw), 0, -Math.cos(yaw)], R = [Math.cos(yaw), 0, -Math.sin(yaw)];
   const Wd = (lx, ly, lz) => [ps.x + R[0] * lx + F[0] * lz, ly, ps.z + R[2] * lx + F[2] * lz];
-  const hipY = 0.95, la = ps.lean || 0;
-  const up = (lx, ly, lz = 0) => { const dy = ly - hipY; return Wd(lx, hipY + dy * Math.cos(la) - lz * Math.sin(la), lz * Math.cos(la) + dy * Math.sin(la)); };
+  const hipY = 0.95, la = ps.lean || 0, cr = ps.crouch || 0, drop = 0.42 * cr;
+  const up = (lx, ly, lz = 0) => { const dy = ly - hipY; return Wd(lx, hipY - drop + dy * Math.cos(la) - lz * Math.sin(la), lz * Math.cos(la) + dy * Math.sin(la)); };
   const look = ps.look || 0, roll = ps.roll || 0;
   const head = up(0.05 * roll, 1.63 - 0.035 * look - 0.012 * Math.abs(roll), 0.045 * look);
   const j = { look, F, R, head, neck: up(0, 1.47), chest: up(0, 1.36), pelvis: up(0, 1.02), sh: { L: up(-0.19, 1.42), R: up(0.19, 1.42) } };
@@ -158,10 +162,11 @@ function skeleton(ps) {
     const dn = V3.norm(d); bend = V3.norm(V3.sub(bend, V3.mul(dn, V3.dot(bend, dn))));
     j.elb[s] = L >= 2 * B ? mid : V3.add(mid, V3.mul(bend, Math.sqrt(B * B - L * L / 4))); }
   const ph = ps.step || 0, sw = ps.walk ? 0.22 : 0;
-  j.hip = { L: Wd(-0.09, 0.95, 0), R: Wd(0.09, 0.95, 0) };
+  j.hip = { L: Wd(-0.09, 0.95 - drop, 0), R: Wd(0.09, 0.95 - drop, 0) };
   j.foot = { L: Wd(-0.1, 0.04 + Math.max(0, Math.sin(ph)) * 0.06 * (sw > 0), Math.cos(ph) * sw + 0.03), R: Wd(0.1, 0.04 + Math.max(0, -Math.sin(ph)) * 0.06 * (sw > 0), -Math.cos(ph) * sw + 0.03) };
   if (ps.footL) j.foot.L = ps.footL;
-  j.knee = { L: V3.add(V3.lerp(j.hip.L, j.foot.L, 0.5), V3.mul(F, 0.03)), R: V3.add(V3.lerp(j.hip.R, j.foot.R, 0.5), V3.mul(F, 0.03)) };
+  const kf = V3.add(V3.mul(F, 0.03 + 0.3 * cr), [0, 0.12 * cr, 0]);   // crouched: the knees come forward and up
+  j.knee = { L: V3.add(V3.lerp(j.hip.L, j.foot.L, 0.5), kf), R: V3.add(V3.lerp(j.hip.R, j.foot.R, 0.5), kf) };
   return j;
 }
 // o.col: skin, o.top: the hoodie (torso and sleeves), o.legs: trousers, o.hood: a hoodie with its hood, strings, pocket and cuffs, o.mark: a red box round the hoodie
@@ -200,6 +205,8 @@ function body3(ps, o = {}) {
     if (!flat && o.hood) { const c0 = V3.lerp(j.elb[s], j.hand[s], 0.86); cap(c0, V3.lerp(j.elb[s], j.hand[s], 0.97), 0.095, '#8a8a90', toCam(c0)[2] - 0.003); }
     parts.push({ d: toCam(j.hand[s])[2] - 0.004, f: () => { const p = P(j.hand[s]); if (p) circ(p[0], p[1], 0.05 * p[3], col); } }); }
   parts.push({ d: toCam(j.head)[2], f: () => head3(j, col, o) });
+  if (o.knife) { const dir = V3.norm(o.knifeDir || V3.sub(j.hand.R, j.elb.R)), h = j.hand.R;   // a kitchen knife in the right hand
+    parts.push({ d: toCam(h)[2] - 0.006, f: () => knife3(h, dir, o.knife) }); }
   if (o.mark) parts.push({ d: -1, f: () => { const c = P(V3.lerp(j.chest, j.pelvis, 0.4)); if (c) { noGlow(); redGlow(16); rrS(c[0] - 0.26 * c[3], c[1] - 0.4 * c[3], 0.52 * c[3], 0.8 * c[3], 8, C.red, 4); noGlow(); } } });
   parts.sort((a, b) => b.d - a.d);
   ctx.save(); glow(o.glow || 'rgba(255,255,255,0.22)', 14); for (const p of parts) { ctx.save(); p.f(); ctx.restore(); } ctx.restore();
@@ -238,6 +245,83 @@ function lying3(fx, fz, a, o = {}) {
     cap(s0, e, 0.09, top); cap(e, h, 0.085, top); const ab = cut(h, h); if (ab) { const hp = prj(h); if (hp) circ(hp[0], hp[1], 0.05 * hp[3], col); } }
   const hc = P(1.27, 0, 0.11); if (hc[2] >= cz) { const h = prj(hc); if (h) { circ(h[0], h[1], 0.11 * h[3], col); circ(h[0], h[1] - 0.03 * h[3], 0.1 * h[3], '#4a4a50'); } }
   ctx.restore();
+}
+
+// a kitchen knife held at h, the blade along dir; k: 0..1 it appears (a glint runs along the blade)
+function knife3(h, dir, k = 1) {
+  const a = V3.sub(h, V3.mul(dir, 0.07)), b = V3.add(h, V3.mul(dir, 0.04)), tip = V3.add(h, V3.mul(dir, 0.4));
+  const pa = prj(a), pb = prj(b), pt = prj(tip); if (!pa || !pb || !pt) return;
+  ctx.save(); ctx.globalAlpha *= clamp(k); noGlow();
+  ln(pa[0], pa[1], pb[0], pb[1], 0.032 * pb[3], '#1c1c1e');
+  const dx = pt[0] - pb[0], dy = pt[1] - pb[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L, w = 0.036 * pb[3];
+  glow('rgba(255,255,255,0.5)', 12);
+  pth(`M${pb[0] + nx * w},${pb[1] + ny * w} L${pt[0]},${pt[1]} L${pb[0] - nx * w * 0.3},${pb[1] - ny * w * 0.3} Z`, '#e4e4e8'); noGlow();
+  ln(pb[0] + nx * w * 0.3, pb[1] + ny * w * 0.3, lerp(pb[0], pt[0], 0.9), lerp(pb[1], pt[1], 0.9), 1.5, '#9a9aa0');
+  if (k < 1.6) { const g = clamp(k - 0.2); const gx = lerp(pb[0], pt[0], g), gy = lerp(pb[1], pt[1], g); ctx.globalAlpha *= 1 - clamp(k - 0.6); glow('rgba(255,255,255,0.9)', 18); circ(gx, gy, 5, '#fff'); }
+  ctx.restore();
+}
+// a solid cylinder between world points a and b (the rolled-up rug): its outline, and the round end that faces the camera, rolled up in a spiral
+function cyl3(a, b, r, col, edge, endCol) {
+  const d = V3.norm(V3.sub(b, a)); let u = [d[2], 0, -d[0]]; if (V3.len(u) < 0.1) u = [1, 0, 0]; u = V3.norm(u);
+  const v = [d[1] * u[2] - d[2] * u[1], d[2] * u[0] - d[0] * u[2], d[0] * u[1] - d[1] * u[0]];
+  const ra = ringPts(a, V3.mul(u, r), V3.mul(v, r), 20), rb = ringPts(b, V3.mul(u, r), V3.mul(v, r), 20);
+  const sp = [...ra, ...rb].map(prj); if (sp.some(q => !q)) return;
+  const pts = sp.map(q => [q[0], q[1]]).sort((p, q) => p[0] - q[0] || p[1] - q[1]), cr = (o, p, q) => (p[0] - o[0]) * (q[1] - o[1]) - (p[1] - o[1]) * (q[0] - o[0]);
+  const lo = [], hi = []; for (const p of pts) { while (lo.length > 1 && cr(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop(); lo.push(p); }
+  for (const p of pts.slice().reverse()) { while (hi.length > 1 && cr(hi[hi.length - 2], hi[hi.length - 1], p) <= 0) hi.pop(); hi.push(p); }
+  const hull = lo.slice(0, -1).concat(hi.slice(0, -1));
+  ctx.beginPath(); hull.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fillStyle = col; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = edge; ctx.stroke();
+  const c = V3.sub(camPos(), b), end = V3.dot(d, c) > 0 ? b : a, ring = end === b ? rb : ra;
+  polyW(ring, endCol || col, edge, 2);
+  for (const k of [0.68, 0.4, 0.15]) polyW(ringPts(end, V3.mul(u, r * k), V3.mul(v, r * k), 16), null, edge, 1.5);
+}
+// the bait: the rug rolled up (o.roll), stood up where you stood (o.stand) with the grey hoodie on it (o.hood); o.pos [x,z] its foot,
+// o.tilt: leans its top toward the sofa (+) or falls back on the floor (-1.5)
+const BAIT_H = RUG.z1 - RUG.z0, BAIT_R = 0.12;
+function baitTop(o) { const b = baitBase(o), d = baitDir(o); return V3.add(b, V3.mul(d, BAIT_H)); }
+function baitDir(o) { const st = ease(clamp(o.stand ?? 1)), tl = o.tilt || 0; return V3.norm(V3.lerp([0, 0, 1], [0, Math.cos(tl), -Math.sin(tl)], st)); }
+function baitBase(o) { const st = ease(clamp(o.stand ?? 1)), r = BAIT_R * Math.sqrt(clamp(o.roll ?? 1)) + 0.02, pos = o.pos || [SPOT.x, SPOT.z];
+  const lying = [lerp(RUG.x0, RUG.x1, clamp(o.roll ?? 1)), r, RUG.z0], up = [pos[0], Math.max(0, r * Math.abs(Math.sin(Math.min(0, o.tilt || 0)))), pos[1]];
+  return V3.lerp(lying, up, st); }
+function rugBait(o = {}) {
+  const roll = clamp(o.roll ?? 1); if (roll <= 0.001) return;
+  const r = BAIT_R * Math.sqrt(roll) + 0.02, a = baitBase(o), d = baitDir(o), b = V3.add(a, V3.mul(d, BAIT_H));
+  ctx.save(); glow('rgba(255,255,255,0.12)', 10); cyl3(a, b, r, '#36363b', '#5a5a60', '#2a2a2e'); noGlow(); ctx.restore();
+  const hk = clamp(o.hood || 0); if (hk <= 0) return;
+  // the hoodie, dropped over its top: a torso, two empty sleeves, the hood up with nothing inside it
+  const lift = V3.mul(d, 0.45 * (1 - easeOut(hk))), T = V3.add(b, lift), cp = camPos(), fw = V3.norm([cp[0] - T[0], 0, cp[2] - T[2]]), rg = [fw[2], 0, -fw[0]];
+  const at = (along, side) => V3.add(V3.add(T, V3.mul(d, -along)), V3.mul(rg, side));
+  ctx.save(); ctx.globalAlpha *= clamp(hk * 2); glow('rgba(255,255,255,0.2)', 12);
+  for (const sg of [-1, 1]) { const s0 = prj(at(0.08, sg * 0.21)), s1 = prj(at(0.6, sg * 0.27)); if (s0 && s1) { ln(s0[0], s0[1], s1[0], s1[1], 0.09 * s0[3], HOOD_C); circ(s1[0], s1[1], 0.045 * s1[3], '#8a8a90'); } }
+  const q = [at(0.05, -0.22), at(0.05, 0.22), at(0.62, 0.18), at(0.62, -0.18)].map(prj);
+  if (q.every(Boolean)) { ctx.beginPath(); q.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fillStyle = HOOD_C; ctx.fill(); noGlow(); ctx.lineWidth = 2; ctx.strokeStyle = HOOD_EDGE; ctx.stroke(); }
+  const band = [at(0.57, -0.18), at(0.57, 0.18), at(0.62, 0.18), at(0.62, -0.18)].map(prj); if (band.every(Boolean)) { ctx.beginPath(); band.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fillStyle = '#a4a4aa'; ctx.fill(); }
+  const pk = [at(0.38, -0.11), at(0.38, 0.11), at(0.52, 0.14), at(0.52, -0.14)].map(prj); if (pk.every(Boolean)) { ctx.beginPath(); pk.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fillStyle = '#8e8e94'; ctx.fill(); ctx.strokeStyle = HOOD_EDGE; ctx.lineWidth = 2; ctx.stroke(); }
+  for (const sg of [-1, 1]) { const s0 = prj(at(0.04, sg * 0.04)), s1 = prj(at(0.2, sg * 0.045)); if (s0 && s1) { ln(s0[0], s0[1], s1[0], s1[1], 0.012 * s0[3], '#e8e8ec'); circ(s1[0], s1[1], 0.012 * s1[3], '#e8e8ec'); } }
+  const h = prj(V3.add(T, V3.mul(d, 0.1))), pT = prj(V3.sub(T, V3.mul(d, 0.2))); if (h && pT) { const k = h[3];
+    ctx.save(); ctx.translate(h[0], h[1]); ctx.rotate(Math.atan2(h[0] - pT[0], pT[1] - h[1]));
+    ctx.beginPath(); ctx.ellipse(0, 0, 0.13 * k, 0.16 * k, 0, 0, Math.PI * 2); ctx.fillStyle = '#929298'; ctx.fill(); ctx.strokeStyle = HOOD_EDGE; ctx.lineWidth = 2; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(0, 0.02 * k, 0.075 * k, 0.1 * k, 0, 0, Math.PI * 2); ctx.fillStyle = '#121214'; ctx.fill(); ctx.restore(); }
+  ctx.restore();
+}
+// what the knife took off: one long grey joint, a knuckle and a dark nail, black ooze at the cut. c: floor point, a: its direction on the floor, tw: twitch
+function severed3(t, c, a, o = {}) {
+  const u = [Math.cos(a), 0, Math.sin(a)], tw = (o.tw || 0) * Math.sin(t * 23) * 0.04;
+  const p0 = [c[0], 0.03, c[2]], p1 = V3.add(p0, V3.add(V3.mul(u, 0.28), [0, 0.05 + tw, 0])), p2 = V3.add(p1, V3.add(V3.mul([Math.cos(a + 0.35), 0, Math.sin(a + 0.35)], 0.24), [0, -0.045, 0]));
+  const q0 = prj(p0); if (q0) { ctx.save(); ell(q0[0], q0[1] + 0.01 * q0[3], 0.06 * q0[3], 0.025 * q0[3], 0, '#030303'); ctx.strokeStyle = '#4a4a50'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore(); }
+  ctx.save(); glow('rgba(255,255,255,0.14)', 10); bone3(p0, p1, THING_C, THING_EDGE, 0.06); bone3(p1, p2, THING_C, THING_EDGE, 0.048); noGlow(); knuckle3(p1, THING_C, THING_EDGE, 0.04);
+  const a2 = prj(p2), tp = prj(V3.add(p2, V3.mul([Math.cos(a + 0.5), 0, Math.sin(a + 0.5)], 0.08))); if (a2 && tp) { const dx = tp[0] - a2[0], dy = tp[1] - a2[1], L = Math.hypot(dx, dy) || 1, w = 0.02 * a2[3];
+    pth(`M${a2[0] - dy / L * w},${a2[1] + dx / L * w} L${tp[0]},${tp[1]} L${a2[0] + dy / L * w},${a2[1] - dx / L * w} Z`, '#121214'); }
+  if (q0) { ctx.globalAlpha *= 0.9; circ(q0[0], q0[1], 0.022 * q0[3], '#050505'); }
+  ctx.restore();
+}
+// black liquid where the blade went in: a spurt of drops (k: seconds since the cut) and a pool that spreads
+function ooze3(c, k) {
+  if (k < 0) return; const pool = easeOut(clamp(k / 2.2));
+  const pts = []; for (let i = 0; i < 18; i++) { const an = i / 18 * Math.PI * 2, rr2 = (0.17 + 0.07 * Math.sin(i * 2.7) + 0.04 * Math.cos(i * 5.1)) * pool; pts.push([c[0] + Math.cos(an) * rr2 * 1.3, 0.005, c[2] + Math.sin(an) * rr2]); }
+  if (pool > 0.02) polyW(pts, '#040404', '#45454b', 1.5);
+  if (k < 0.7) for (let i = 0; i < 12; i++) { const an = i * 2.39, sp = 0.6 + (i % 4) * 0.25, vy = 1.2 + (i % 3) * 0.5, x = c[0] + Math.cos(an) * sp * k, z = c[2] + Math.sin(an) * sp * k * 0.7, y = Math.max(0.01, 0.17 + vy * k - 4.9 * k * k);
+    const q = prj([x, y, z]); if (q) { ctx.save(); ctx.globalAlpha *= 1 - k / 0.7; circ(q[0], q[1], (0.016 + 0.006 * (i % 3)) * q[3], '#050505'); ctx.lineWidth = 1; ctx.strokeStyle = '#6a6a70'; ctx.stroke(); ctx.restore(); } }
 }
 
 // ---------- the thing under the sofa ----------

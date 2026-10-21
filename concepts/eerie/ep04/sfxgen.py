@@ -10,6 +10,9 @@ REQ = {
  'joint': ('a single dry bony joint cracking, soft knuckle click, eerie, close, quiet', 0.5),
  'scrape': ('long fingers slowly feeling across a wooden floor, soft dry scratching and tapping, eerie, quiet', 3.0),
  'unplug': ('a power plug pulled out of a wall socket, small plastic click, quiet', 0.5),
+ 'cloth': ('a rolled-up rug and a cotton hoodie being stood up on a wooden floor, soft fabric rustle and thump, quiet', 1.2),
+ 'chop': ('a kitchen knife chopping down hard through something thin and bony onto a wooden floor, one dull crack and thud, not loud', 0.7),
+ 'knife': ('a kitchen knife slowly drawn from a wooden knife block, soft metallic slide, quiet', 1.0),
  'servo': ('a small security camera motor turning, soft electric whirr, quiet', 1.2),
 }
 for k, (p, d) in REQ.items():

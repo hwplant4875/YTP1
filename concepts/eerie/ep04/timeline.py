@@ -70,8 +70,7 @@ for sid, word, nth, snd, off in [('h1', 'three', 1, 'heartbeat', 0.0), ('o1', 'f
                                  ('a7', 'schedule', 1, 'card', -0.1), ('a8', 'close', 1, 'whoosh', 0.0), ('b2', 'one', 1, 'heartbeat', 0.0), ('b4', 'bin', 1, 'binlid', 0.1),
                                  ('b5', 'folded', 1, 'heartbeat', 0.0), ('c1', 'lock', 1, 'keylock', 0.0), ('c4', 'moves', 1, 'sofa', -0.05), ('c5', 'joint', 1, 'joint', 0.0),
                                  ('c5', 'joint', 2, 'joint', 0.0), ('c6', 'feels', 1, 'scrape', -0.2), ('c7', 'camera', 1, 'heartbeat', 0.0), ('c8', 'black', 1, 'poweroff', -0.15),
-                                 ('d1', 'tonight', 1, 'heartbeat', 0.0), ('d3', 'unplug', 1, 'unplug', 0.1), ('d4', 'second', 1, 'notif', 0.0), ('d8', 'turn', 1, 'servo', 0.0),
-                                 ('d10', 'move', 1, 'sofa', -0.05), ('d10', 'stop', 1, 'heartbeat', 0.0), ('d12', 'sunrise', 1, 'chime', 0.0), ('e1', 'notification', 1, 'notif', -0.15),
+                                 ('d1', 'tonight', 1, 'heartbeat', 0.0), ('d3', 'unplug', 1, 'unplug', 0.1), ('d4', 'second', 1, 'notif', 0.0),                                  ('d8', 'rug', 1, 'cloth', -0.1), ('d10', 'slides', 1, 'scrape', -0.1), ('d10', 'close', 1, 'grab', 0.0), ('d9', 'knife', 1, 'knife', -0.1), ('d11', 'strike', 1, 'whoosh', 0.1), ('d11', 'down', 1, 'chop', 0.0), ('d12', 'go', 1, 'thud', 0.05), ('d12', 'slips', 1, 'drag', 0.0), ('d12', 'dark', 1, 'sofa', -0.2), ('d8', 'hoodie', 1, 'cloth', -0.1), ('d9', 'off', 1, 'unplug', 0.0), ('e3', 'finger', 1, 'heartbeat', 0.0), ('e1', 'notification', 1, 'notif', -0.15),
                                  ('e2', 'tomorrow', 1, 'heartbeat', 0.0), ('e4', 'lens', 1, 'heartbeat', 0.0), ('e5', 'four', 1, 'stamp', 0.0)]:
     c = cue(sid, word, nth, off)
     if c is not None: events.append({'type': snd, 't': c})

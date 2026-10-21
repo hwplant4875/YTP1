@@ -19,11 +19,14 @@ function living(t, o = {}) {
   sofa4({ shift: o.shift || 0 });
   // the dark gap under the front of the sofa
   { const sh = o.shift ? Math.sin(o.shift * 40) * 3 * o.shift : 0; ctx.save(); ctx.translate(sh, 0); ctx.globalAlpha *= 0.85; polyW([[SOFA.x0 + 0.04, 0.003, SOFA.z1 - 0.02], [SOFA.x1 - 0.04, 0.003, SOFA.z1 - 0.02], [SOFA.x1 - 0.04, 0.003, SOFA.z1 + 0.1], [SOFA.x0 + 0.04, 0.003, SOFA.z1 + 0.1]], '#050505', null); ctx.restore(); }
+  if (o.ooze) ooze3(o.ooze.c, o.ooze.k);
   if (o.thing) underThing(t, { ...o.thing, head: 0 });
+  if (o.piece) severed3(t, o.piece.c, o.piece.a, o.piece);
   if (o.arm && !o.arm.over) thingArm(t, o.arm);
   if (o.thing && o.thing.head > 0) thingHead(t, o.thing.ex ?? THING_X, o.thing.head, o.thing);
   chair4({ hoodie: o.hoodie });
   for (const L of (o.lying || [])) if (!L.under) lying3(L.x, L.z, L.a, L.o || {});
+  if (o.bait) rugBait(o.bait);
   const ps = (o.people || []).slice().sort((a, b) => V3.len(V3.sub(camPos(), [b.pose.x, 1, b.pose.z])) - V3.len(V3.sub(camPos(), [a.pose.x, 1, a.pose.z])));
   for (const p of ps) body3(p.pose, p.o || {});
   if (o.arm && o.arm.over) thingArm(t, o.arm);   // the hand closes over the ankle, in front of the leg
@@ -51,6 +54,7 @@ function feed(t, o = {}) {
   ctx.save(); ctx.translate(fp[0], fp[1]); ctx.scale(z, z); ctx.translate(-fp[0], -fp[1]);
   if (!(o.off >= 1)) living(t, o);
   ctx.restore();
+  if (o.dark > 0) { ctx.save(); ctx.globalAlpha = clamp(o.dark); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); ctx.restore(); }   // the lights are off
   // the camera's own look: cold grey, scan lines, noise, a dark rim
   ctx.save(); ctx.globalCompositeOperation = 'color'; ctx.globalAlpha = 0.5; ctx.fillStyle = '#7a8a86'; ctx.fillRect(0, 0, W, H); ctx.restore();
   ctx.save(); ctx.globalAlpha = 0.09; for (let y = 0; y < H; y += 6) rr(0, y, W, 2, 0, '#000'); ctx.restore();
@@ -471,63 +475,95 @@ S.d6 = (t, seg) => {
     fadeIn(t, seg.start + 0.3, () => spaced('ONLY ONE', 960, 680, '900 44px M', C.fig, 10));
   });
 };
-// the floor plan from above: the camera's cone of view, and the thing waiting at its edge
+// ---------- the bait and the knife (the camera never moves: it sees the whole room, always) ----------
+const BAIT_AT = [SPOT.x, SPOT.z];
+const HIDE = { x: 1.08, z: 0.62, yaw: 1.75 };                                  // crouched past the end of the sofa, out of its reach, facing the rug
+const PIECE = { c: [0.12, 0, 1.36], a: 0.35 };                                     // where the cut-off joint ends up
+const bright = { top: '#f4f4f6', legs: '#d4d4d8', col: C.fig };
+const hider = (o = {}) => ({ pose: poseOf({ x: HIDE.x, z: HIDE.z, yaw: HIDE.yaw, crouch: 1, lean: 0.25, look: 0.2, L: [-0.2, 0.55, 0.25], R: [0.18, 0.62, 0.3], ...o.pose }), o: { ...bright, knife: o.knife ?? 1, knifeDir: o.knifeDir || [-0.3, 0.85, -0.2] } });
+const armFrom = to => [THING_X + 0.24 * (to[0] < THING_X ? -1 : 1), SOFA.z1 - 0.1];
+// it doesn't know your face, only the hoodie
 S.d7 = (t, seg) => {
-  const te = wt(seg, 'edge'), tl = wt(seg, 'looking');
-  cam(t, seg.start, seg.end - seg.start + 0.8, 1.0, 1.05, W / 2, 500, () => {
-    const X = x => 1000 + x * 190, Z = z => 120 + z * 175;
-    rrS(X(ROOM.x0), Z(0), (ROOM.x1 - ROOM.x0) * 190, ROOM.z1 * 175, 6, C.mid, 4);
-    ctx.save(); ctx.beginPath(); ctx.rect(X(ROOM.x0), Z(0), (ROOM.x1 - ROOM.x0) * 190, ROOM.z1 * 175); ctx.clip();
-    rr(X(SOFA.x0), Z(SOFA.z0), (SOFA.x1 - SOFA.x0) * 190, (SOFA.z1 - SOFA.z0) * 175, 10, '#3a3a3e'); text('SOFA', X((SOFA.x0 + SOFA.x1) / 2), Z(0.62), '900 34px M', C.sec);
-    // the cone: it sweeps a little; the thing (a red dot) moves only where the cone is not
-    const cx = X(CCTV.x), cz = Z(CCTV.z), dir = -2.3 + 0.35 * Math.sin((t - seg.start) * 1.2), half = 0.42;
-    ctx.save(); ctx.globalAlpha = 0.16; ctx.beginPath(); ctx.moveTo(cx, cz); ctx.arc(cx, cz, 1500, dir - half, dir + half); ctx.closePath(); ctx.fillStyle = C.fig; ctx.fill(); ctx.restore();
-    ln(cx, cz, cx + Math.cos(dir - half) * 1500, cz + Math.sin(dir - half) * 1500, 3, C.sec); ln(cx, cz, cx + Math.cos(dir + half) * 1500, cz + Math.sin(dir + half) * 1500, 3, C.sec);
-    ctx.restore(); ctx.save(); glow(); circ(cx, cz, 16, C.fig); ctx.restore();
-    const ang = (x, z) => Math.atan2(Z(z) - cz, X(x) - cx), inCone = (x, z) => Math.abs(((ang(x, z) - dir + Math.PI * 3) % (Math.PI * 2)) - Math.PI) < half;
-    const tx = -1.3 + 0.9 * ((t * 0.35) % 1), tz = SOFA.z1 + 0.25, seen = inCone(tx, tz);
-    ctx.save(); redGlow(seen ? 6 : 20); circ(X(tx), Z(tz), 18, seen ? '#7a2a2a' : C.red); ctx.restore();
-    if (seen) text('FROZEN', X(tx), Z(tz) - 34, '900 28px M', C.sec);
-  });
-  if (t >= tl) pop(t, tl, 300, 300, () => tag('NOT WATCHED = MOVES', 300, 310, C.red, 30, 'center'));
-  if (t >= te) pop(t, te, 300, 430, () => tag('THE EDGE', 300, 440, C.fig, 40, 'center'));
+  const tf = wt(seg, 'face'), th = wt(seg, 'hoodie');
+  feed(t, { z: zk(t, seg.start, seg.end - seg.start + 0.8, 1.3, 1.6), focus: [SPOT.x + 0.2, 1.0, SPOT.z - 0.2], clock: T302 + 31 + (t - seg.start), thing: { eye: 0.8 },
+    people: [{ pose: poseOf({}), o: { top: HOOD_C, hood: true, mark: t >= th } }] });
+  const hp = feedPt(skeleton(poseOf({})).head);
+  if (hp && t >= tf) pop(t, tf, hp[0], hp[1], () => { ctx.save(); ctx.globalAlpha *= 0.95; rr(hp[0] - 56, hp[1] - 56, 112, 112, 10, '#2a2a2e'); ctx.globalAlpha = 0.6; ctx.drawImage(grainC[Math.floor(t * 20) % 4], hp[0] - 56, hp[1] - 56, 112, 112); ctx.restore(); text('?', hp[0], hp[1] + 26, '900 76px M', C.fig); });
+  if (t >= tf) slideIn(t, tf, 40, 0, () => xTag('FACE', 1500, 330, 50, prog(t, tf + 0.3, 0.3)));
+  if (t >= th) pop(t, th, 1500, 470, () => tag('ONLY THE HOODIE', 1500, 480, C.red, 50, 'center'));
 };
-// you turn the camera; its picture swings to the sofa
+// roll the rug up, stand it where you stood, put the hoodie on it
 S.d8 = (t, seg) => {
-  const tt = wt(seg, 'turn'), tp = wt(seg, 'point'), k = ease(prog(t, tt, tp - tt + 0.6));
-  feed(t, { camObj: lerpCam(CAMS.cctv, CAMS.sofa, k), date: 'TONIGHT', clock: T302 - 1500 + (t - seg.start), lamp: 1, noise: Math.sin(k * Math.PI) * 0.3 });
-  if (t >= tp) pop(t, tp, 1420, 260, () => tag('AT THE SOFA', 1420, 270, C.fig, 54, 'center'));
+  const tr = wt(seg, 'roll'), ts = wt(seg, 'stand'), tw = wt(seg, 'where'), th = wt(seg, 'hoodie');
+  const roll = ease(prog(t, tr + 0.1, 1.1)), stand = prog(t, ts, 0.8), hood = prog(t, th - 0.15, 0.5), ghost = prog(t, tw, 0.4) * (1 - prog(t, th, 0.4));
+  const bait = { roll, stand, hood, pos: BAIT_AT };
+  feed(t, { z: zk(t, seg.start, seg.end - seg.start + 0.8, 1.2, 1.4), focus: [SPOT.x, 0.5, SPOT.z - 0.1], date: 'TONIGHT', clock: T302 - 1800 + (t - seg.start), lamp: 1, rug: 1 - roll, bait,
+    front: () => { if (ghost > 0) { ctx.save(); ctx.globalAlpha *= 0.7 * ghost; ctx.setLineDash([10, 10]); const j = skeleton(poseOf({}));
+      const a = prj(j.head), b = prj(j.foot.L), c = prj(j.foot.R); if (a && b && c) { circS(a[0], a[1], 0.11 * a[3], C.fig, 4); ln(a[0], a[1] + 0.12 * a[3], (b[0] + c[0]) / 2, b[1], 4, C.fig); ln(b[0], b[1], c[0], c[1], 4, C.fig); } ctx.restore(); } } });
+  if (t < th) feedTag(t, wt(seg, 'rug'), 'RUG', stand > 0 ? V3.add(baitBase(bait), V3.mul(baitDir(bait), 0.7)) : baitBase(bait), 'rel', [-330, -260], C.fig, 46);
+  else feedTag(t, th + 0.3, 'HOODIE', baitTop(bait), 'rel', [-340, -150], C.fig, 46);
+  if (t >= tw && t < th) pop(t, tw, 1450, 270, () => tag('WHERE YOU STOOD', 1450, 280, C.fig, 44, 'center'));
 };
+// lights off, something bright on, crouched at the end of the sofa with a kitchen knife
 S.d9 = (t, seg) => {
-  const ts = wt(seg, 'sit'), tl = wt(seg, 'look');
-  cam(t, seg.start, seg.end - seg.start + 0.8, 1.0, 1.06, 960, 520, () => {
-    phone(960, 520, 1.05, () => appScreen(t, { camObj: CAMS.sofa, date: 'LIVE', clock: T302 - 900 + (t - seg.start), bar: 1, title: 'Live', lamp: 1, thing: { eye: 0 } }));
-  });
-  if (t >= tl) pop(t, tl, 1500, 300, () => tag('DO NOT LOOK AWAY', 1500, 310, C.red, 48, 'center'));
+  const to = wt(seg, 'off'), tb = wt(seg, 'bright'), tw = wt(seg, 'wait'), tk = wt(seg, 'kitchen');
+  const lamp = 1 - prog(t, to, 0.12), dark = t < to ? 0 : 0.75 - 0.45 * ease(prog(t, to + 0.2, 0.7));   // black, then the camera's night mode finds the room
+  const appear = prog(t, tb - 0.4, 0.4), go = ease(prog(t, tw, 1.0));
+  const ps = { x: lerp(1.15, HIDE.x, go), z: lerp(1.55, HIDE.z, go), yaw: lerp(2.5, HIDE.yaw, go), crouch: go, lean: 0.25 * go, look: 0.2, L: [-0.25, lerp(0.8, 0.55, go), 0.1 + 0.15 * go], R: [lerp(0.25, 0.18, go), lerp(0.8, 0.62, go), 0.1 + 0.2 * go], walk: go > 0 && go < 1, step: (t - tw) * 9 };
+  feed(t, { z: zk(t, seg.start, seg.end - seg.start + 0.8, 1.15, 1.35), focus: [0.0, 0.6, 1.35], date: 'TONIGHT', clock: T302 - 600 + (t - seg.start), lamp, rug: 0, dark, noise: t >= to ? 0.5 * (1 - prog(t, to, 0.8)) : 0,
+    bait: { roll: 1, stand: 1, hood: 1, pos: BAIT_AT },
+    people: appear > 0 ? [{ pose: poseOf(ps), o: { ...bright, knife: t >= tk ? prog(t, tk, 1.4) : 0, knifeDir: [-0.3, 0.85, -0.2] } }] : [] });
+  if (appear > 0) { const j = skeleton(poseOf(ps)); feedTag(t, tb, 'BRIGHT', j.chest, 'rel', [300, -230], C.fig, 46);
+    if (t >= tk) feedTag(t, tk + 0.1, 'KNIFE', j.hand.R, 'rel', [320, 60], C.fig, 46); }
+  if (t >= to) slideIn(t, to, 40, 0, () => tag('LIGHTS OFF', 330, 270, C.fig, 44, 'center'));
 };
+// 3:02: the arm slides out and its fingers close around the rug
+const GRIP = [BAIT_AT[0] + 0.1, BAIT_AT[1] - 0.12];
 S.d10 = (t, seg) => {
-  const tm = wt(seg, 'move'), ts = wt(seg, 'stop'), sh = t >= tm && t < ts ? 0.6 + 0.4 * Math.sin((t - tm) * 9) : 0;
-  feed(t, { camObj: CAMS.sofa, z: zk(t, seg.start, seg.end - seg.start + 0.8, 1.0, 1.15), focus: [-0.4, 0.3, SOFA.z1], date: 'LIVE', clock: T302 + (t - seg.start), lamp: 1, shift: sh, thing: { eye: t >= tm ? 0.6 : 0 } });
-  if (t >= ts) pop(t, ts, 1420, 260, () => tag('IT STOPS', 1420, 270, C.fig, 54, 'center'));
+  const tt = wt(seg, 'two'), ts = wt(seg, 'slides'), tc = wt(seg, 'close');
+  const k = easeOut(prog(t, ts - 0.1, tc - ts + 0.1));
+  feed(t, { z: zk(t, seg.start, seg.end - seg.start + 1.0, 1.3, 1.75), focus: [-0.05, 0.4, 1.4], date: 'TONIGHT', clock: T302 + (t - seg.start), rug: 0, dark: 0.3,
+    thing: { eye: 0.4 + 0.6 * prog(t, seg.start + 0.4, 1.0) }, bait: { roll: 1, stand: 1, hood: 1, pos: BAIT_AT },
+    arm: k > 0 ? { k, to: GRIP, grip: t >= tc, over: true } : null, people: [hider({ pose: { look: 0.2 + 0.05 * Math.sin(t * 2) } })] });
+  if (t >= tt) pop(t, tt, 1450, 260, () => tag('03:02', 1450, 270, C.red, 64, 'center'));
 };
-// the blink: your eyes and the camera's light, two tracks; they must never close together
+// it pulls; you come up out of the corner and bring the knife down on the joint closest to the sofa
+const PULL = (t, t0) => ease(prog(t, t0, 2.4));
 S.d11 = (t, seg) => {
-  const tw = wt(seg, 'blink'), ts = wt(seg, 'same');
-  cam(t, seg.start, seg.end - seg.start + 0.8, 1, 1.04, W / 2, 470, () => {
-    const x0 = 520, x1 = 1600, ys = [380, 600];
-    icon('eye', 360, ys[0], 0.7); ctx.save(); glow('rgba(160,255,190,0.9)', 10); circ(360, ys[1], 26, '#9effc0'); ctx.restore(); text('CAMERA', 360, ys[1] + 70, '900 30px M', C.sec);
-    for (const y of ys) lnP(x0, y, x1, y, 5, C.dim, easeOut(prog(t, seg.start, 0.6)));
-    const run = (t - seg.start) * 240;
-    for (let i = 0; i < 6; i++) { const ex = x0 + ((i * 260 + run) % (x1 - x0)), cx2 = x0 + ((i * 260 + 130 + run) % (x1 - x0));
-      rr(ex - 10, ys[0] - 30, 20, 60, 6, C.fig); rr(cx2 - 10, ys[1] - 30, 20, 60, 6, '#9effc0'); }
-    if (t >= ts) { const x = 1060; ctx.save(); redGlow(16); rr(x - 12, ys[0] - 34, 24, 68, 6, C.red); rr(x - 12, ys[1] - 34, 24, 68, 6, C.red); ctx.restore();
-      ctx.save(); ctx.setLineDash([10, 9]); ln(x, ys[0] + 40, x, ys[1] - 40, 4, C.red); ctx.restore(); redX(x + 120, (ys[0] + ys[1]) / 2, 50, prog(t, ts + 0.2, 0.3)); }
-  });
-  if (t >= tw) pop(t, tw, 960, 200, () => tag('NEVER AT THE SAME TIME', 960, 210, C.fig, 44, 'center'));
+  const tp = wt(seg, 'pulls'), ts = wt(seg, 'strike'), td = wt(seg, 'down'), tj = wt(seg, 'joint');
+  const pl = PULL(t, tp), pos = [BAIT_AT[0] + 0.05 * pl, BAIT_AT[1] - 0.42 * pl], bait = { roll: 1, stand: 1, hood: 1, pos, tilt: 0.38 * pl + 0.04 * Math.sin(t * 13) * pl * (t < td ? 1 : 0) };
+  const cut = t - td, jit = cut > 0 ? Math.sin(t * 47) * 0.05 * Math.exp(-cut * 1.6) : 0;
+  const to = [GRIP[0] + pos[0] - BAIT_AT[0] + jit, GRIP[1] + pos[1] - BAIT_AT[1]], J = armPath(armFrom(to), to)[1];
+  // you: up from the corner (strike), the knife high, then down onto that joint
+  const lunge = ease(prog(t, ts, 0.6)), down = easeOut(prog(t, td - 0.12, 0.12)), back = ease(prog(t, td + 0.5, 0.8));
+  const stand = [J[0] + 0.5, J[2] + 0.02], x = lerp(lerp(HIDE.x, stand[0], lunge), stand[0] + 0.3, back), z = lerp(lerp(HIDE.z, stand[1], lunge), stand[1] + 0.05, back);
+  const yaw = lerp(HIDE.yaw, Math.atan2(-(J[0] - x), -(J[2] - z)), lunge);
+  const ps0 = { x, z, yaw, crouch: lerp(1, 0.15, lunge) + 0.45 * down * (1 - back), lean: lerp(0.25, -0.1, lunge) + 0.45 * down * (1 - back), look: 0.3 + 0.5 * down };
+  const hi = [x + (J[0] - x) * 0.35, 1.85, z + (J[2] - z) * 0.35], lo = [J[0] + 0.05, J[1] + 0.12, J[2] + 0.03], rest = [x - 0.1, 0.7, z - 0.05];
+  const hw = t < ts ? null : t < td - 0.12 ? hi : back > 0 ? V3.lerp(lo, rest, back) : V3.lerp(hi, lo, down);
+  const ps = { ...ps0, L: [-0.25, lerp(0.55, 1.1, lunge) - 0.4 * down, 0.2], R: hw ? handAt(ps0, hw) : [0.18, 0.62, 0.3] };
+  const kd = t < ts ? [-0.3, 0.85, -0.2] : t < td - 0.12 ? [0, 1, 0] : back > 0 ? [-0.2, 0.6, -0.3] : V3.norm(V3.lerp([0, 1, 0], [0, -1, 0.1], down));
+  const shake = cut > 0 && cut < 0.35 ? (1 - cut / 0.35) * 14 : 0;
+  feed(t, { rect: { x: FR.x + Math.sin(t * 90) * shake, y: FR.y + Math.cos(t * 77) * shake * 0.6, w: FR.w }, z: zk(t, seg.start, td - seg.start + 0.3, 1.35, 2.1), focus: [lerp(-0.2, J[0] + 0.2, 0.8), 0.4, lerp(1.45, J[2], 0.8)],
+    date: 'TONIGHT', clock: T302 + 5 + (t - seg.start), rug: 0, dark: 0.3, thing: { eye: 1 }, bait, ooze: cut > 0 ? { c: [J[0], 0, J[2] + 0.04], k: cut } : null,
+    piece: cut > 0 ? { c: V3.lerp([J[0], 0, J[2]], PIECE.c, easeOut(clamp(cut / 0.35))), a: PIECE.a, tw: Math.exp(-cut * 1.2) } : null,
+    arm: { k: 1, to, grip: true, over: true }, people: [{ pose: poseOf(ps), o: { ...bright, knife: 1, knifeDir: kd } }],
+    front: () => { if (cut > 0) { const q = prj(J); if (q) { ctx.save(); ell(q[0], q[1], 0.04 * q[3], 0.03 * q[3], 0, '#050505'); for (let i = 0; i < 3; i++) { const dy = ((cut * 0.6 + i * 0.33) % 1) * 0.15 * q[3]; circ(q[0] + (i - 1) * 0.015 * q[3], q[1] + dy, 0.009 * q[3], '#050505'); } ctx.restore(); } } } });
+  if (t >= ts && t < td + 0.1) feedTag(t, ts + 0.15, 'THIS JOINT', J, 'rel', [-380, -200], C.red, 44);
+  if (t >= tj) pop(t, tj, 1450, 260, () => tag('CLOSEST TO THE SOFA', 1450, 270, C.fig, 42, 'center'));
 };
+// it lets go; the arm goes back into the dark, one joint shorter
 S.d12 = (t, seg) => {
-  const ts = wt(seg, 'sunrise'), to = wt(seg, 'out'), sun = ease(prog(t, ts, to - ts + 0.6)), eye = 1 - prog(t, to - 0.2, 0.6);
-  feed(t, { camObj: CAMS.sofa, z: zk(t, seg.start, seg.end - seg.start + 0.8, 1.0, 1.2), focus: [THING_X, 0.1, SOFA.z1], date: 'TODAY', clock: 6 * 3600 + 41 * 60 + (t - seg.start) * 20, sun, moon: 1 - sun, thing: { eye } });
+  const tl = wt(seg, 'lets'), tsl = wt(seg, 'slips'), td = wt(seg, 'dark'), tsh = wt(seg, 'shorter');
+  const pos = [BAIT_AT[0] + 0.05, BAIT_AT[1] - 0.42], fall = easeOut(prog(t, tl, 0.55));
+  const to = [GRIP[0] + 0.05, GRIP[1] - 0.42], k = 1 - ease(prog(t, tsl, 0.9)), opn = t >= tl;
+  const J = armPath(armFrom(to), to)[1], sh = t >= td - 0.2 ? Math.max(0, 1 - (t - td + 0.2) / 0.8) : 0;
+  const me = poseOf({ x: J[0] + 0.8, z: J[2] + 0.07, yaw: Math.atan2(0.8, 0.07), crouch: 0.15, lean: -0.1, look: 0.3, L: [-0.25, 0.75, 0.15], R: [0.2, 0.7, 0.2] });
+  feed(t, { z: zk(t, seg.start, seg.end - seg.start + 0.8, 1.6, 1.9), focus: [lerp(J[0], PIECE.c[0], 0.5), 0.3, lerp(J[2], PIECE.c[2], 0.5) + 0.1], date: 'TONIGHT', clock: T302 + 12 + (t - seg.start), rug: 0, dark: 0.3,
+    thing: { eye: 1 - prog(t, td, 0.6) }, shift: sh, bait: { roll: 1, stand: 1, hood: 1, pos, tilt: lerp(0.38, -1.48, fall) },
+    ooze: { c: [J[0], 0, J[2] + 0.04], k: 3 + (t - seg.start) }, piece: { ...PIECE, tw: 0.15 },
+    arm: k > 0.01 ? { k, to, grip: !opn, over: true } : null, people: [{ pose: me, o: { ...bright, knife: 1, knifeDir: [-0.2, 0.6, -0.3] } }] });
+  if (t >= tsh) pop(t, tsh, 1450, 260, () => tag('ONE JOINT SHORTER', 1450, 270, C.fig, 46, 'center'));
 };
 
 // ---------- morning ----------
@@ -535,23 +571,25 @@ S.e1 = (t, seg) => {
   const tn = wt(seg, 'notification');
   cam(t, seg.start, seg.end - seg.start + 0.8, 1.0, 1.08, W / 2, 470, () => phone(960, 520, 0.95, () => lockScreen(t, { time: '7:00', morning: true, notif: tn - 0.2, sub: 'Living room · now' })));
 };
+const AFTER = { rug: 0, bait: { roll: 1, stand: 1, hood: 1, pos: [BAIT_AT[0] + 0.05, BAIT_AT[1] - 0.42], tilt: -1.48 }, piece: PIECE, ooze: { c: [0.06, 0, 1.06], k: 9 } };
 S.e2 = (t, seg) => {
   const tt = wt(seg, 'tomorrow'), z = ease(prog(t, seg.start + 0.3, 0.9));
   cam(t, seg.start, 0.01, 1, 1, W / 2, H / 2, () => {
     ctx.save(); ctx.translate(1600, 890); ctx.scale(lerp(1, 2.4, z), lerp(1, 2.4, z)); ctx.translate(-1600, -890);
-    feed(t, { camObj: CAMS.sofa, clock: T302 + (t - seg.start), date: 'TOMORROW', sun: 0.5, moon: 0 }); ctx.restore();
+    feed(t, { ...AFTER, clock: T302 + (t - seg.start), date: 'TOMORROW' }); ctx.restore();
   });
   if (t >= tt) { pop(t, tt, 760, 300, () => tag('AGAIN', 760, 310, C.red, 60, 'center')); redFlash(t, tt, 0.06); }
 };
 S.e3 = (t, seg) => {
-  const ts = wt(seg, 'sofa');
-  feed(t, { camObj: CAMS.sofa, z: zk(t, seg.start, seg.end - seg.start + 0.8, 1.0, 1.1), focus: [-0.4, 0.3, SOFA.z1], clock: T302 + 4 + (t - seg.start), date: 'TOMORROW', sun: 0.5, moon: 0 });
-  if (t >= ts) pop(t, ts, 1420, 260, () => tag('EMPTY', 1420, 270, C.fig, 54, 'center'));
+  const te = wt(seg, 'empty'), tf = wt(seg, 'finger');
+  feed(t, { ...AFTER, z: zk(t, seg.start, seg.end - seg.start + 0.8, 1.2, 2.4), focus: [PIECE.c[0] + 0.15, 0.1, PIECE.c[2] + 0.1], clock: T302 + 4 + (t - seg.start), date: 'TOMORROW' });
+  if (t >= te) pop(t, te, 1450, 260, () => tag('EMPTY', 1450, 270, C.fig, 54, 'center'));
+  feedTag(t, tf, 'A FINGER', [PIECE.c[0] + 0.2, 0.06, PIECE.c[2] + 0.08], 'rel', [-380, -260], C.fig, 46);
 };
 S.e4 = (t, seg) => {
   // very slowly its head comes out from under the sofa and turns up to the lens: to you, watching
   const tt = wt(seg, 'turns'), tl = wt(seg, 'lens'), hd = prog(t, tt - 0.3, tl - tt + 0.6);
-  feed(t, { camObj: CAMS.sofa, z: zk(t, seg.start, seg.end - seg.start + 1.6, 1.1, 3.2), focus: [THING_X, 0.12, SOFA.z1 + 0.2], clock: T302 + 9 + (t - seg.start), date: 'TOMORROW', sun: 0.5, moon: 0, thing: { eye: 1, head: hd } });
+  feed(t, { ...AFTER, z: zk(t, seg.start, seg.end - seg.start + 1.6, 1.3, 2.6), focus: [THING_X, 0.12, SOFA.z1 + 0.2], clock: T302 + 9 + (t - seg.start), date: 'TOMORROW', thing: { eye: 1, head: hd } });
   redFlash(t, tl, 0.06);
 };
 // the file closes
