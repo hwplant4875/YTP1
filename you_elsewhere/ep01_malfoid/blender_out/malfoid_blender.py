@@ -13,7 +13,7 @@ MODE = argv[2] if len(argv) > 2 else 'stills'
 FRAMES = [int(x) for x in argv[3].split(',')] if len(argv) > 3 else [91, 601]
 USE_SPECTRUM = True
 
-W, H, FPS, SECS = 1920, 1080, 30, 40
+W, H, FPS, SECS = 1920, 1080, 30, (62 if MODE == 'dust' else 40)   # dust overlay: 62 s -> seamless 60 s loop
 NF = FPS * SECS
 IW, IH = 1672, 941                      # source photo size
 PW, PH = 16.0, 16.0 * IH / IW           # plane size in world units (120 px per unit)
@@ -464,7 +464,25 @@ if MODE in ('stills', 'both'):
         sc.render.filepath = os.path.join(OUT, f'malfoid_still_f{f:04d}_t{t_of(f):05.2f}s.jpg')
         bpy.ops.render.render(write_still=True)
         print(f'STILL frame {f} rendered in {time.time() - t0:.2f}s')
-if MODE == 'loop':
+if MODE == 'dust':
+    # dust motes only (same motion, look and mask as the main render) on transparent black, for Screen blend in Resolve
+    plane.hide_render = True; leak.hide_render = True
+    sc.view_layers['WM'].use = False
+    sc.view_layers['SPEC'].use = False
+    cg.animation_data_clear(); fade.inputs['Exposure'].default_value = 0.0
+    sc.frame_start, sc.frame_end = 1, NF
+    sc.render.image_settings.media_type = 'IMAGE'
+    sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.color_mode = 'RGBA'
+    sc.render.image_settings.compression = 15
+    sc.render.use_overwrite = False; sc.render.use_placeholder = True
+    sc.render.filepath = os.path.join(OUT, 'frames_dust', 'f_')
+    t0 = time.time()
+    bpy.ops.render.render(animation=True)
+    print(f'DUST frames done in {time.time() - t0:.1f}s')
+if MODE in ('loop', 'loop_nomotes'):
+    if MODE == 'loop_nomotes':                       # owner asked for the plate without dust motes
+        for o in bpy.data.objects:
+            if o.name.startswith('Mote'): o.hide_render = True
     # background plate for the overlay pipeline: no watermark, spectrum or opening fade; 22 s so the last 2 s
     # can be crossfaded into the start (make_loop.py) for a seamless 20 s loop
     sc.view_layers['WM'].use = False
@@ -474,7 +492,7 @@ if MODE == 'loop':
     sc.render.image_settings.media_type = 'IMAGE'
     sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.compression = 15
     sc.render.use_overwrite = False; sc.render.use_placeholder = True
-    sc.render.filepath = os.path.join(OUT, 'frames_loop', 'f_')
+    sc.render.filepath = os.path.join(OUT, 'frames_' + MODE, 'f_')
     t0 = time.time()
     bpy.ops.render.render(animation=True)
     print(f'LOOP frames done in {time.time() - t0:.1f}s')

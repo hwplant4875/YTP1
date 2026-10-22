@@ -11,8 +11,8 @@ SFIZZ = r'C:\Users\hw549\Downloads\YTP1\_downloads\sfizz\x\bin\Release\sfizz_ren
 IR = r'C:\Users\hw549\Downloads\YTP1\YouElsewhere\ep01_malfoid\trio_sfz\ir_chamber_warm.wav'
 SFZ = {
     'piano': SAMPLES + r'\SalamanderGrandPiano-SFZ+FLAC-V3+20200602\SalamanderGrandPiano-V3+20200602.sfz',
-    'bass': SAMPLES + r'\dsmolken.double-bass-master\d_smolken_rubner_bass_pizz.sfz',
-    'kit': SAMPLES + r'\karoryfer.swirly-drums-main\Programs\Full_kit.sfz',
+    'bass': r'C:\Users\hw549\Downloads\YTP1\YouElsewhere\ep01_malfoid\trio_sfz\bass.sfz',          # v1: FL acoustic bass
+    'kit': r'C:\Users\hw549\Downloads\YTP1\YouElsewhere\ep01_malfoid\trio_sfz\brushless_kit.sfz',  # v1: HQ jazz ride + pedal hat
     'stir': SAMPLES + r'\karoryfer.swirly-drums-main\Programs\Full_kit.sfz',
     'rhodes': SAMPLES + r'\jlearman.jRhodes3c-master\jRhodes3c-looped-flac-sfz\_jRhodes-stereo-looped.sfz',
     'celesta': SAMPLES + r'\VirtualPlayingOrchestra\Virtual-Playing-Orchestra3\Keys\celesta.sfz',
@@ -142,11 +142,23 @@ def bars_of(theme):
         out.append(c.split('|'))
     return out
 
+FLATS = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
+
+def transpose(theme, semis):
+    def tc(sym):
+        r, _ = parse(sym); root = sym[:2] if len(sym) > 1 and sym[1] in '#b' else sym[:1]
+        return FLATS[(r + semis) % 12] + sym[len(root):]
+    t = dict(theme); t['tr'] = theme.get('tr', 0) + semis
+    t['chords'] = ['|'.join(tc(x) for x in c.split('|')) for c in theme['chords']]
+    return t
+
 def play_melody(s, part, theme, start, vel, octave=0, double=False, embellish=0.0, sustain=0.95):
     t = start - theme['pickup']
+    tr = theme.get('tr', 0)
+    tr = tr - 12 if tr > 6 else tr
     for n, b in theme['mel']:
         if n != '-':
-            nn = m(n) + 12 * octave
+            nn = m(n) + 12 * octave + tr
             sw = 0.14 if abs((t % 1) - 0.5) < 1e-6 else 0
             v = vel + (5 if b >= 2 else 0) + s.rng.randint(-4, 4)
             if embellish and b >= 2 and s.rng.random() < embellish:
@@ -181,6 +193,10 @@ def comp(s, part, theme, start, style, vel=38, prev=None):
             elif style == 'ballad':       # half-note chords with a soft root
                 s.add(part, t0, root_note(sym, 36, 48), vel + 2, half * 0.95)
                 for k, n in enumerate(v): s.add(part, t0 + 0.04 + 0.02 * k, n, vel - 4, half * 0.92)
+            elif style == 'charleston':
+                for off, dur in ((0, 1.2), (1.5, 0.45), (2, 1.2), (3.5, 0.4)):
+                    if off < half:
+                        for n in v: s.add(part, t0 + off + (0.16 if off % 1 else 0), n, vel - (5 if off % 1 else 0), dur)
             elif style == 'bossa':
                 for off, dur in ((0, 1.4), (1.5, 0.9), (3, 0.9)):
                     if off < half:
@@ -214,10 +230,14 @@ def brushes(s, start, nbars, style, vel=1.0):
     meter = s.meter
     for i in range(nbars):
         at = start + i * meter
-        for beat in range(meter):
-            # slow brush stir every beat (long swell), foot hat on 2 (waltz) or 2 and 4
-            s.add('stir', at + beat, 60 if beat % 2 == 0 else 64, 88 * vel + s.rng.randint(-6, 6), 1.6, 0.01)
-        if style == 'waltz':
+        if STIRS:
+            for beat in range(meter):
+                # slow brush stir every beat (long swell)
+                s.add('stir', at + beat, 60 if beat % 2 == 0 else 64, 88 * vel + s.rng.randint(-6, 6), 1.6, 0.01)
+        if style == 'swing':
+            for b_, v_ in ((0, 36), (1, 30), (1.66, 26), (2, 34), (3, 30), (3.66, 26)): s.add('kit', at + b_, 51, v_ * vel, 0.5)
+            s.add('kit', at + 1, 44, 32 * vel, 0.3); s.add('kit', at + 3, 44, 32 * vel, 0.3)
+        elif style == 'waltz':
             s.add('kit', at + 1, 44, 34 * vel, 0.3); s.add('kit', at, 51, 34 * vel, 0.5); s.add('kit', at + 2, 51, 28 * vel, 0.5)
         elif style == 'ballad':
             s.add('kit', at + 1, 44, 30 * vel, 0.3); s.add('kit', at + 3, 44, 30 * vel, 0.3)
@@ -226,6 +246,8 @@ def brushes(s, start, nbars, style, vel=1.0):
                 s.add('kit', at + 0.5 * k, 42 if k % 2 else 44, (30 if k % 2 else 26) * vel, 0.2)
 
 # ------------------------------------------------------------------ arrangements (one function per track)
+STIRS = False
+
 def trio_waltz(theme, bpm, seed, vel_shift=0):
     s = Song(bpm, 3, seed); L = len(theme['chords']) * 3; t = theme['pickup']
     # head 1: piano alone, pads under the melody
@@ -236,8 +258,23 @@ def trio_waltz(theme, bpm, seed, vel_shift=0):
     # head 3: variation, melody an octave up and decorated, walking bass
     comp(s, 'piano', theme, t, 'waltz', 36 + vel_shift); bassline(s, 'bass', theme, t, 'walk'); brushes(s, t, len(theme['chords']), 'waltz')
     play_melody(s, 'piano', theme, t, 60 + vel_shift, octave=1, embellish=0.5); t += L
-    # head 4: back to pads, quieter, drums out
+    # head 4: piano variation over the trio (melody decorated, waltz comping, walking bass)
+    comp(s, 'piano', theme, t, 'waltz', 37 + vel_shift); bassline(s, 'bass', theme, t, 'walk'); brushes(s, t, len(theme['chords']), 'waltz')
+    play_melody(s, 'piano', theme, t, 64 + vel_shift, embellish=0.8); t += L
+    # head 5: back to pads, quieter, drums out
     comp(s, 'piano', theme, t, 'pad', 33 + vel_shift); bassline(s, 'bass', theme, t, 'pedal', 70); play_melody(s, 'piano', theme, t, 56 + vel_shift); t += L
+    final(s, theme, t)
+    return s
+
+def trio_swing(theme, bpm, seed):
+    s = Song(bpm, 4, seed); n = len(theme['chords']); L = n * 4; t = theme['pickup']
+    comp(s, 'piano', theme, t, 'pad', 36); bassline(s, 'bass', theme, t, 'two', 74); play_melody(s, 'piano', theme, t, 62); t += L
+    comp(s, 'piano', theme, t, 'charleston', 38); bassline(s, 'bass', theme, t, 'walk'); brushes(s, t, n, 'swing')
+    play_melody(s, 'piano', theme, t, 66, double=True); t += L
+    comp(s, 'piano', theme, t, 'charleston', 36); bassline(s, 'bass', theme, t, 'walk'); brushes(s, t, n, 'swing')
+    play_melody(s, 'piano', theme, t, 62, octave=1, embellish=0.7); t += L
+    comp(s, 'piano', theme, t, 'charleston', 36); bassline(s, 'bass', theme, t, 'walk'); brushes(s, t, n, 'swing', 0.9)
+    play_melody(s, 'piano', theme, t, 64); t += L
     final(s, theme, t)
     return s
 
@@ -305,30 +342,27 @@ def final(s, theme, t, part='piano'):
     for k, n in enumerate(voicing(sym)): s.add(part, t + 0.06 * k, n, 42, 6.0)
     s.add(part, t + 0.5, voicing(sym)[-1] + 12, 40, 6.0)
 
-TRACKS = {
-    '02_common_room_waltz': lambda: trio_waltz(COMMON_ROOM, 88, 21),
-    '03_lake_window': lambda: rhodes_ballad(LAKE_WINDOW, 64, 31),
-    '04_hedwig_music_box': lambda: music_box(HEDWIG, 72, 41),
-    '05_green_scarf': lambda: trio_waltz(GREEN_SCARF, 96, 51, vel_shift=-2),
-    '06_fireside_letters': lambda: solo_ballad(FIRESIDE, 58, 61),
-    '07_hedwig_with_cellos': lambda: piano_cello(HEDWIG, 66, 71),
-    '08_rain_on_the_glass': lambda: bossa(RAIN, 74, 81),
-    '09_hedwig_ballad': lambda: solo_ballad(HEDWIG, 60, 91),
-    '10_lake_window_reprise': lambda: solo_ballad(LAKE_WINDOW, 60, 101, octave_last=False),
-    '11_common_room_solo': lambda: solo_ballad(COMMON_ROOM, 70, 111),
-    '12_green_scarf_rhodes': lambda: rhodes_ballad(GREEN_SCARF, 76, 121),
+TRACKS = {   # suite v2: everything continues the v1 trio sound at 86-96 BPM; variety from melody, key and form
+    '02_common_room_waltz': lambda: trio_waltz(COMMON_ROOM, 92, 21),
+    '03_lake_window_swing': lambda: trio_swing(LAKE_WINDOW, 96, 31),
+    '04_green_scarf': lambda: trio_waltz(GREEN_SCARF, 94, 51),
+    '05_fireside_letters_swing': lambda: trio_swing(FIRESIDE, 90, 61),
+    '06_hedwig_in_g_minor': lambda: trio_waltz(transpose(HEDWIG, 3), 90, 71),
+    '07_rain_on_the_glass_swing': lambda: trio_swing(RAIN, 94, 81),
+    '08_common_room_in_e_minor': lambda: trio_waltz(transpose(COMMON_ROOM, 2), 88, 91),
+    '09_lake_window_in_g': lambda: trio_swing(transpose(LAKE_WINDOW, 2), 92, 101),
+    '10_green_scarf_in_a_minor': lambda: trio_waltz(transpose(GREEN_SCARF, 2), 96, 111),
+    '11_hedwig_reprise': lambda: trio_waltz(HEDWIG, 86, 121),
 }
 
-ORDER = ['01_hedwig_trio', '02_common_room_waltz', '03_lake_window', '04_hedwig_music_box', '05_green_scarf',
-         '06_fireside_letters', '07_hedwig_with_cellos', '08_rain_on_the_glass', '11_common_room_solo',
-         '12_green_scarf_rhodes', '09_hedwig_ballad', '10_lake_window_reprise']
+ORDER = ['01_hedwig_trio_v1'] + list(TRACKS)
 
 # ------------------------------------------------------------------ rendering + mixing
-GAIN = {'piano': 16, 'rhodes': 14, 'bass': 9, 'kit': 15, 'stir': 22, 'celesta': 10, 'harp': 12, 'cello': 11}
+GAIN = {'piano': 16, 'rhodes': 14, 'bass': 7, 'kit': 13, 'stir': 22, 'celesta': 10, 'harp': 12, 'cello': 11}
 FILT = {
     'piano': 'highpass=f=40,equalizer=f=220:t=q:w=0.9:g=1.5,equalizer=f=3200:t=q:w=1.2:g=-1.5,highshelf=f=6000:g=-3',
     'rhodes': 'highpass=f=45,equalizer=f=250:t=q:w=1:g=1,highshelf=f=5000:g=-3',
-    'bass': 'pan=mono|c0=0.5*c0+0.5*c1,highpass=f=34,lowpass=f=2800,equalizer=f=90:t=q:w=1:g=1.5,pan=stereo|c0=c0|c1=c0',
+    'bass': 'pan=mono|c0=0.5*c0+0.5*c1,highpass=f=34,lowpass=f=2600,equalizer=f=90:t=q:w=1:g=1.5,pan=stereo|c0=c0|c1=c0',
     'kit': 'highshelf=f=6000:g=-4,lowpass=f=9500,pan=stereo|c0=0.85*c0+0.15*c1|c1=c1',
     'stir': 'highpass=f=150,highshelf=f=7000:g=-3,pan=stereo|c0=0.8*c0+0.2*c1|c1=c1',
     'celesta': 'highshelf=f=6000:g=-4',
@@ -386,7 +420,7 @@ def join(names):
     files = [os.path.join(HERE, 'tracks', n + '.wav') for n in names]
     ins = sum([['-i', f] for f in files], [])
     # match every track to the same loudness first, then crossfade them in order
-    fc = [f'[{i}:a]aresample=44100,volume={-20 - lufs(f):.2f}dB[n{i}]' for i, f in enumerate(files)]
+    fc = [f'[{i}:a]aresample=48000,volume={-20 - lufs(f):.2f}dB[n{i}]' for i, f in enumerate(files)]
     cur = '[n0]'
     for i in range(1, len(files)):
         fc.append(f'{cur}[n{i}]acrossfade=d=4:c1=tri:c2=tri[x{i}]'); cur = f'[x{i}]'
@@ -395,8 +429,8 @@ def join(names):
     r = subprocess.run(['ffmpeg', '-hide_banner', '-i', pre, '-af', 'loudnorm=I=-17:TP=-1.5:print_format=json', '-f', 'null', '-'], capture_output=True, text=True).stderr
     js = json.loads(r[r.rindex('{'):r.rindex('}') + 1])
     g = min(-17 - float(js['input_i']), -1.5 - float(js['input_tp']))
-    out = os.path.join(HERE, 'you_elsewhere_ep01_suite_v1')
-    run(['ffmpeg', '-y', '-loglevel', 'error', '-i', pre, '-af', f'volume={g:.2f}dB', '-ar', '44100', '-c:a', 'pcm_s24le', out + '.wav'])
+    out = os.path.join(HERE, 'you_elsewhere_ep01_suite_v2')
+    run(['ffmpeg', '-y', '-loglevel', 'error', '-i', pre, '-af', f'volume={g:.2f}dB', '-ar', '48000', '-c:a', 'pcm_s24le', out + '.wav'])
     run(['ffmpeg', '-y', '-loglevel', 'error', '-i', out + '.wav', '-c:a', 'libmp3lame', '-b:a', '256k', out + '.mp3'])
     print('joined', len(files), 'tracks, gain', round(g, 2))
 
