@@ -1,0 +1,98 @@
+{
+ "title": [
+  [
+   [
+    "Ranking ",
+    [
+     255,
+     255,
+     255
+    ]
+   ],
+   [
+    "Funniest",
+    [
+     255,
+     212,
+     0
+    ]
+   ]
+  ],
+  [
+   [
+    "Gym Bro",
+    [
+     255,
+     59,
+     59
+    ]
+   ],
+   [
+    " Moments",
+    [
+     255,
+     255,
+     255
+    ]
+   ]
+  ]
+ ],
+ "clips": [
+  {
+   "rank": 4,
+   "label": "accountability partner 🔨",
+   "file": "/mnt/project-files/sources/ragestyles/funny_pool/7509991979179101483_Get_you_a_gym_buddy_who_ll_support_your_goals_no_matter_wha.mp4",
+   "ranges": [
+    [
+     0.0,
+     7.15
+    ]
+   ]
+  },
+  {
+   "rank": 3,
+   "label": "spot fee: 20% tip 💸",
+   "file": "/mnt/project-files/sources/ragestyles/funny_pool/7481012039956057386_Here_s_a_quick_tip_for_gym_spotters.mp4",
+   "ranges": [
+    [
+     0.0,
+     7.28
+    ]
+   ]
+  },
+  {
+   "rank": 2,
+   "label": "took over the call 📞",
+   "file": "/mnt/project-files/sources/ragestyles/funny_pool/7535935859523210509_sometimes_you_have_to_let_your_gym_bro_have_a_turn.mp4",
+   "ranges": [
+    [
+     2.6,
+     17.6
+    ]
+   ]
+  },
+  {
+   "rank": 1,
+   "label": "+1000 bro points 🤝",
+   "file": "/mnt/project-files/sources/ragestyles/funny_pool/7486903320209050910_Now_THAT_is_a_good_gym_bro_gymbro_gymhumor.mp4",
+   "ranges": [
+    [
+     0.0,
+     4.45
+    ],
+    [
+     6.5,
+     10.3
+    ],
+    [
+     13.2,
+     15.0
+    ],
+    [
+     15.4,
+     20.3
+    ]
+   ]
+  }
+ ]
+}
