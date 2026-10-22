@@ -89,3 +89,23 @@ P['zoom'].update({'2018_burned_alive': 1.12, 'h20_final_confrontation': 1.12})
 P['gamma']['rz_2007_trailer'] = 1.25
 json.dump(P, open('edl_full.json', 'w'), indent=1)
 print(len(P['sections']), 'sections')
+# v2: survival rate + new instruction lines, timed from the re-recorded narration (voice_v2)
+V2 = '/mnt/project-files/instruction444/ep01_myers_ranked/voice_v2/'
+RATE = {'s02': 90, 's03': 85, 's04': 70, 's05': 62, 's06': 45, 's07': 41, 's09': 28, 's10': 17, 's11': 11, 's12': 5, 's13': 3, 's14': 1}
+INSTR = {'s02': 'Fight back. You can win.', 's03': "Don't hide. Hit first.", 's04': 'Set a trap.', 's05': 'Check the body.',
+         's06': 'Call every cop in town.', 's07': "Don't turn your back.", 's09': "Don't let him grab you.", 's10': "Fire won't stop him. Run.",
+         's11': 'Stay silent.', 's12': 'Leave town. Tonight.', 's13': "Run. Don't stop.", 's14': 'Just pray.'}
+def at(seg, word):
+    a = json.load(open(V2 + seg + '.json')); t = ''.join(a['characters']); i = t.rfind(word); assert i >= 0, (seg, word)
+    return round(a['character_start_times_seconds'][i], 2)
+for S in P['sections']:
+    v = S['voice']
+    if v in RATE:
+        to, ti = at(v, 'Survival rate'), at(v, 'Instruction')
+        for o in S['overlays']:
+            if o[0] == 'odds': o[1], o[2], o[3] = RATE[v], to, ti - 0.08
+            if o[0] == 'instr': o[1], o[2], o[3] = INSTR[v], ti, 999
+    if v == 's01':
+        for o in S['overlays']:
+            if o[0] == 'odds': o[2], o[3] = at('s01', 'survival rate'), 999
+json.dump(P, open('edl_full.json', 'w'), indent=1)
