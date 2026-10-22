@@ -18,3 +18,7 @@ If FL Studio cannot be driven at all, say so plainly and do not substitute a dif
 ## v2 changes (user, 10/22 09:42 UTC)
 - MIDI regenerated: the Hedwig melody starts at 0:00 (no intro), first head is solo piano, tempo 66 BPM (slower), softer velocities, ride only on beats 1 and 3.
 - Piano must be gentle on the ears: soft/felt-like tone (lower velocity curve, roll off highs ~5 kHz, no hard attacks), generous lush reverb (long hall/plate, ~2.5-3.5 s, wet clearly audible), slow, atmospheric, emotional. Export as hedwig_trio_fl_v2.
+
+## v3 changes (user, 10/22 ~10:00 UTC)
+- User: the ORIGINAL tempo was better (back to 88 BPM) and the v1 piano sound (hedwig_trio_sfz_v1) was "so good". Keep melody from 0:00 (no intro, solo piano first head).
+- Render with exactly the v1 piano chain/velocities (normal Salamander velocities, v1 EQ), not the v2 soft-layer trick. Reverb: v1 amount or slightly more. Export hedwig_trio_sfz_v3.
