@@ -316,20 +316,20 @@ hgt = bb[:, 1].max() - bb[:, 1].min()
 cu.size = (60 / PX) / hgt
 bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
 bb = np.array([wm.evaluated_get(dg).bound_box[i] for i in range(8)])
-wm.location = (-PW / 2 + 64 / PX - bb[:, 0].min(), -H / PX / 2 + 84 / PX - bb[:, 1].min(), 2.0)   # raised 20 px to clear the spectrum line
+wm.location = (-PW / 2 + 64 / PX - bb[:, 0].min(), -H / PX / 2 + 64 / PX - bb[:, 1].min(), 2.0)
 wm_right_px = (wm.location.x + bb[:, 0].max()) * PX + W / 2
 wm_mid_y = wm.location.y + (bb[:, 1].min() + bb[:, 1].max()) / 2
 
-# long, detailed audio spectrum along the bottom edge (35 % opacity, max ~20 px).
-# Filled polyline with sharp vertices (small pointed peaks); values baked into a float image
+# small, detailed audio spectrum right of the watermark (35 % opacity, max ~20 px, ~130 px wide), mirrored
+# around a centre line like the v1 bars. Filled polyline with sharp vertices (pointed peaks); values baked into a float image
 # (bands x frames) that a Geometry Nodes tree samples per frame, so the .blend animates on its own.
 if USE_SPECTRUM:
     snd = aud.Sound(os.path.join(ASSETS, 'music_60s.mp3'))
     sr = snd.specs[0]
     data = snd.data()
     mono = data.mean(axis=1) if data.ndim > 1 else data
-    NB, WIN = 180, 8192
-    centers = np.geomspace(60, 8000, NB)
+    NB, WIN = 64, 8192
+    centers = np.geomspace(40, 1500, NB)        # where the piano and bass live
     freqs = np.fft.rfftfreq(WIN, 1 / sr)
     hann = np.hanning(WIN)
     lo_e = centers / 2 ** (1 / 2 / (NB / 7.4)); hi_e = centers * 2 ** (1 / 2 / (NB / 7.4))
@@ -346,28 +346,28 @@ if USE_SPECTRUM:
     db = 20 * np.log10(mags + 1e-6)
     # partial tilt compensation (3/4 of each band's mean), then one global range -> rise and fall stays visible
     db = db - 0.75 * db.mean(axis=0, keepdims=True)
-    lo, hi = np.percentile(db, 25), np.percentile(db, 99.0)
-    v = np.clip((db - lo) / (hi - lo), 0, 1) ** 1.35
+    lo, hi = np.percentile(db, 30), np.percentile(db, 99.3)
+    v = np.clip((db - lo) / (hi - lo), 0, 1) ** 1.5
     att, rel = 1 - math_.exp(-1 / (0.05 * FPS)), 1 - math_.exp(-1 / (0.18 * FPS))
     sm = np.zeros_like(v); cur = np.zeros(NB)
     for i in range(NF):
         k = np.where(v[i] > cur, att, rel); cur = cur + (v[i] - cur) * k; sm[i] = cur
     env = np.array([min(1, t_of(f) / 3.0, max(0, (SECS - t_of(f)) / 4.0)) for f in range(1, NF + 1)])
     sm *= env[:, None]
-    taper = np.minimum(1, np.minimum(np.arange(NB) + 1, NB - np.arange(NB)) / 6.0)   # ends settle to the baseline
+    taper = np.minimum(1, np.minimum(np.arange(NB) + 1, NB - np.arange(NB)) / 3.0)   # ends settle to the baseline
     sm *= taper[None, :]
     spec_img = bpy.data.images.new('spectrum_bake', NB, NF, alpha=False, float_buffer=True)
     spec_img.colorspace_settings.name = 'Non-Color'
     px_ = np.zeros((NF, NB, 4), np.float32); px_[..., 0] = sm; px_[..., 3] = 1
     spec_img.pixels.foreach_set(px_.ravel()); spec_img.pack()
 
-    X0, X1, BASE_Y, HMAX = 64, W - 64, H - 34, 20.0          # output pixels (y down)
-    xs = np.linspace(X0, X1, NB)
+    X0, HMAX = wm_right_px + 26, 20.0                           # output pixels
+    xs = X0 + np.arange(NB) * 2.0
     verts, faces, uvals, tops = [], [], [], []
     for b, x in enumerate(xs):
-        wx, wy = (x - W / 2) / PX, (H / 2 - BASE_Y) / PX
-        verts += [(wx, wy, 0), (wx, wy + 1.0 / PX, 0)]               # 1 px minimum line
-        uvals += [(b + 0.5) / NB] * 2; tops += [0.0, 1.0]
+        wx, wy = (x - W / 2) / PX, wm_mid_y - 6 / PX
+        verts += [(wx, wy - 0.5 / PX, 0), (wx, wy + 0.5 / PX, 0)]   # 1 px minimum line
+        uvals += [(b + 0.5) / NB] * 2; tops += [-0.5, 0.5]
         if b: faces.append((2 * b - 2, 2 * b, 2 * b + 1, 2 * b - 1))
     me = bpy.data.meshes.new('Spectrum'); me.from_pydata(verts, [], faces); me.update()
     me.attributes.new('su', 'FLOAT', 'POINT').data.foreach_set('value', uvals)
@@ -454,7 +454,7 @@ for fc_owner in [cg]:
 
 # ---------------------------------------------------------------- save + render
 os.makedirs(OUT, exist_ok=True)
-bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, 'malfoid_blender_v2.blend'), compress=True)
+bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, 'malfoid_blender_v3.blend'), compress=True)
 import time
 if MODE in ('stills', 'both'):
     sc.render.image_settings.media_type = 'IMAGE'
@@ -469,7 +469,7 @@ if MODE == 'frames':
     sc.render.image_settings.media_type = 'IMAGE'
     sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.compression = 15
     sc.render.use_overwrite = False; sc.render.use_placeholder = True
-    sc.render.filepath = os.path.join(OUT, 'frames_v2', 'f_')
+    sc.render.filepath = os.path.join(OUT, 'frames_v3', 'f_')
     t0 = time.time()
     bpy.ops.render.render(animation=True)
     print(f'FRAMES done in {time.time() - t0:.1f}s')
@@ -480,7 +480,7 @@ if MODE in ('video', 'both'):
     sc.render.ffmpeg.constant_rate_factor = 'HIGH'
     sc.render.ffmpeg.ffmpeg_preset = 'GOOD'
     sc.render.ffmpeg.audio_codec = 'NONE'
-    sc.render.filepath = os.path.join(OUT, 'malfoid_blender_v2_noaudio.mp4')
+    sc.render.filepath = os.path.join(OUT, 'malfoid_blender_v3_noaudio.mp4')
     t0 = time.time()
     bpy.ops.render.render(animation=True)
     dt = time.time() - t0
