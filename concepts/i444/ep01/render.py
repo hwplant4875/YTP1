@@ -53,6 +53,8 @@ for si, S in enumerate(E['sections']):
         run(['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', ';'.join(fc) + f";{chain}null[v]", '-map', '[v]', '-map', '0:a', '-t', str(L), '-r', str(FPS), '-video_track_timescale', '15360',
              '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p', '-c:a', 'copy', sec])
     parts.append(sec); voice_items.append((vp, t_global)); t_global += L
+    if os.environ.get('LEAN') == '1':  # free disk: drop shot files once the section is built
+        for p in segs + [raw]: os.remove(p)
 lst = os.path.join(WORK, 'all.txt'); open(lst, 'w').write(''.join(f"file '{p}'\n" for p in parts))
 vid = os.path.join(WORK, 'video.mp4'); run(['ffmpeg', '-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', lst, '-c', 'copy', vid])
 # audio: clip audio + narration + quiet music (~-27 LUFS, gentle highshelf cut)
