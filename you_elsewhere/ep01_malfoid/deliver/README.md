@@ -9,7 +9,9 @@ Files on the laptop: `C:\Users\hw549\Downloads\YTP1\YouElsewhere\ep01_malfoid\de
 | ep01_music_plus_fire_preview.mp3 | 320k preview of the fire version | 71 MB |
 | ep01_spectrum_overlay_black.mp4 | 1920x1080, 30 fps, H.264 CRF 16, pure black + warm off-white (246,238,224) spectrum at 100 %, no audio; use Screen/Add and set opacity (35 % = Blender look) | 17 MB |
 | ep01_watermark_you_elsewhere.png | 1920x1080 transparent, Allura 60 px, 64 px margins, 80 % + soft shadow (in git) | 32 KB |
-| dust_overlay_60s_* | dust motes only, seamless 60 s loop on black (+ ProRes 4444 alpha) | see report |
+| ep01_spectrum_alpha_crop_408x96_prores4444.mov | transparent spectrum, cropped to the spectrum only, drawn at 3x (408x96), ProRes 4444 + alpha, 29:24, 52,924 frames; place/scale it yourself in Resolve | 256 MB |
+| dust_overlay_60s_black.mp4 | dust motes only (same motion/mask as the previews, nothing in the right half or window area), seamless 60 s loop, H.264 CRF 16 on black for Screen/Add | 0.6 MB |
+| dust_overlay_60s_alpha_png/dust_0000-1799.png | the same dust loop as an RGBA PNG sequence with alpha (Resolve imports it as one clip; set 30 fps). Full-frame ProRes 4444 would be several GB | 722 MB |
 
 The spectrum is driven by the music only (not the fire), with the same analysis as Blender v3: 64 mirrored sharp spikes, 40 Hz-1.5 kHz, 50/180 ms.
 It sits right of the watermark, exactly as in the v3 preview. No opening fade is baked into anything.
