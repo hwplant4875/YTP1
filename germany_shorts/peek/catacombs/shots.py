@@ -112,12 +112,17 @@ def sh_street(n):
     bpy.ops.object.select_all(action='DESELECT'); sh.select_set(True); bpy.context.view_layer.objects.active = sh
     bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.flip_normals(); bpy.ops.object.mode_set(mode='OBJECT')
     sh.data.materials[0].use_backface_culling = False
+    import bmesh
+    bmc = bmesh.new(); bmc.from_mesh(sh.data)
+    bmesh.ops.delete(bmc, geom=[f for f in bmc.faces if abs(f.normal.z) > 0.9], context='FACES')
+    bmc.to_mesh(sh.data); bmc.free()
+    cyl((1.2, 6, -5.9), 0.7, 0.05, emit_mat('holeglow', (1, 0.55, 0.25), 3.0), verts=32, name='holeglow')
     bpy.ops.mesh.primitive_torus_add(location=(1.2, 6, 0.03), major_radius=0.76, minor_radius=0.06); bpy.context.object.data.materials.append(IRON)
     for k in range(8):
         cyl((1.2, 6.62, -0.4 - k * 0.45), 0.025, 0.5, IRON, rot=(0, math.pi / 2, 0))
     cov = cyl((2.55, 5.0, 0.05), 0.78, 0.07, IRON, verts=32, name='cover')
     cov.rotation_euler = (0, math.radians(4), 0)
-    point((1.2, 6, -2.0), 1800, (1, 0.6, 0.3), 0.3)
+    point((1.2, 6, -1.2), 1800, (1, 0.6, 0.3), 0.3)
     point((1.2, 6, -4.5), 2400, (1, 0.6, 0.3), 0.3)
     fog((40, 220, 30), (0, 80, 14), 0.006, (0.8, 0.85, 1.0))
     sun((math.radians(60), 0, math.radians(30)), 0.35, (0.55, 0.65, 1.0))
@@ -248,10 +253,10 @@ def sh_cinema_dark(n):
 
 # ---------------------------------------------------------------- cross-section diorama
 LAYERS = [  # (top z, bottom z, c1, c2)
-    (0.0, -2.0, (0.30, 0.22, 0.15), (0.42, 0.32, 0.22)),     # soil
-    (-2.0, -5.5, (0.55, 0.50, 0.40), (0.70, 0.65, 0.55)),    # marl
-    (-5.5, -13.0, (0.72, 0.66, 0.52), (0.86, 0.80, 0.66)),   # Lutetian limestone (quarried)
-    (-13.0, -18.0, (0.45, 0.42, 0.38), (0.58, 0.55, 0.50)),  # clay / sand
+    (0.0, -2.0, (0.10, 0.06, 0.035), (0.18, 0.11, 0.06)),    # soil
+    (-2.0, -5.5, (0.30, 0.30, 0.24), (0.42, 0.42, 0.34)),    # marl
+    (-5.5, -13.0, (0.70, 0.56, 0.34), (0.86, 0.72, 0.48)),   # Lutetian limestone (quarried)
+    (-13.0, -18.0, (0.12, 0.13, 0.16), (0.2, 0.21, 0.25)),   # clay / sand
 ]
 GAL_Z = -9.2
 
@@ -268,14 +273,14 @@ def diorama(galleries=True, house_void=False, roots_growth=None, pillars=None, g
     if galleries:
         rng = random.Random(3)
         segs = []
+        segs.append(((0, -D / 2 + 1.5), (1.0, 0.0), W - 6, 5.0))  # the open corridor seen in cross-section
         for k in range(9):
-            x = -26 + k * 6.2 + rng.uniform(-1, 1)
-            segs.append(((x, 0), (0.0, 1.0)))  # along y (into the depth)
-        for k in range(5):
-            segs.append(((rng.uniform(-24, 24), rng.uniform(-8, 6)), (1.0, 0.0)))  # along x
-        for idx, ((x, y), (dx, dy)) in enumerate(segs):
-            L = 26 if dy else rng.uniform(10, 22)
-            cut = box((x if dy else x, y if dx else 0, GAL_Z), ((L if dx else 2.2), (L if dy else 2.2), 2.6), None, f'cut{idx}')
+            x = -24 + k * 6.0 + rng.uniform(-1, 1)
+            segs.append(((x, -D / 2 + 8), (0.0, 1.0), 12, 2.2))  # tunnels into the depth
+        for k in range(4):
+            segs.append(((rng.uniform(-20, 20), rng.uniform(-4, 4)), (1.0, 0.0), rng.uniform(10, 20), 2.2))
+        for idx, ((x, y), (dx, dy), L, wd) in enumerate(segs):
+            cut = box((x, y, GAL_Z), ((L if dx else wd), (L if dy else wd), 2.6), None, f'cut{idx}')
             cut.display_type = 'WIRE'; cut.hide_render = True
             cutters.append(cut)
             if roots_growth is not None:
@@ -289,7 +294,7 @@ def diorama(galleries=True, house_void=False, roots_growth=None, pillars=None, g
                 except Exception: pass
         # warm lamps inside the galleries at the cut face
         for k in range(6):
-            point((-25 + k * 10, -D / 2 + 0.8, GAL_Z), 30, (1, 0.6, 0.3), 0.3)
+            point((-25 + k * 10, -D / 2 + 2.5, GAL_Z + 0.6), 120, (1, 0.6, 0.3), 0.3)
     if house_void:
         cut = box((0, -D / 2 + 4, -7.5), (9, 8, 9), None, 'void'); cut.hide_render = True; cut.display_type = 'WIRE'
         for o in [bpy.data.objects[f'layer{i}'] for i in (1, 2)]:
@@ -304,12 +309,12 @@ def diorama(galleries=True, house_void=False, roots_growth=None, pillars=None, g
         a, b = pillars
         rng = random.Random(9)
         for k in range(14):
-            x = -26 + (k % 7) * 8.4 + rng.uniform(-0.6, 0.6); y = -D / 2 + 1.2 + (k // 7) * 2.6
+            x = -26 + (k % 7) * 8.4 + rng.uniform(-0.6, 0.6); y = -D / 2 + 1.0 + (k // 7) * 2.2
             p = box((x, y, GAL_Z), (0.9, 0.9, 2.6), stone('pillarstone', (0.62, 0.58, 0.5), (0.8, 0.75, 0.66), 3, 0.3), 'pillar')
             f0 = a + int((b - a) * k / 14)
             key(p, 'scale', [(0, (1, 1, 0.001)), (f0, (1, 1, 0.001)), (f0 + 10, (1, 1, 1))])
-    sun((math.radians(50), math.radians(10), math.radians(-35)), 2.2, (1, 0.93, 0.85))
-    area((0, -40, 5), 4000, 30, (0.85, 0.9, 1.0), rot=(math.radians(90), 0, 0))
+    sun((math.radians(50), math.radians(10), math.radians(-35)), 1.3, (1, 0.93, 0.85))
+    area((0, -40, 5), 1600, 30, (0.85, 0.9, 1.0), rot=(math.radians(90), 0, 0))
     return W, D
 
 
@@ -341,7 +346,7 @@ def wood_m():
 
 def sh_descent(n):
     W, D = diorama()
-    camera([(0, (22, -62, 34)), (int(n * 0.4), (10, -48, 12)), (n - 1, (2, -28, GAL_Z + 0.6))], lens=30,
+    camera([(0, (22, -62, 34)), (int(n * 0.4), (10, -50, 8)), (n - 1, (3, -34, GAL_Z + 0.8))], lens=30,
            target_keys=[(0, (0, 0, -3)), (int(n * 0.4), (0, 0, -6)), (n - 1, (0, 0, GAL_Z))])
 
 
@@ -358,8 +363,8 @@ def sh_roots(n):
 
 def sh_pillars(n):
     W, D = diorama(pillars=(12, int(n * 0.75)))
-    camera([(0, (-8, -30, GAL_Z + 1)), (n - 1, (8, -30, GAL_Z + 1.5))], lens=28,
-           target_keys=[(0, (-4, 0, GAL_Z)), (n - 1, (4, 0, GAL_Z))])
+    camera([(0, (-12, -20, GAL_Z + 0.4)), (n - 1, (6, -20, GAL_Z + 0.6))], lens=24,
+           target_keys=[(0, (-4, -8, GAL_Z - 0.2)), (n - 1, (14, -8, GAL_Z))])
 
 
 def sh_collapse(n):
@@ -386,6 +391,7 @@ def sh_collapse(n):
         key(d, 'location', [(f0, d.location.copy()), (int(f0 + 6 + ds * 30), d.location + __import__('mathutils').Vector((rng.uniform(-1, 1), 0, -8.5)))])
     camera([(0, (10, -30, 6)), (f0, (9, -29, 5)), (f1 + 10, (7, -27, 0)), (n - 1, (16, -46, 6))], lens=32,
            target_keys=[(0, (0, -7, 1)), (f0, (0, -7, 0)), (f1 + 10, (0, -7, -5)), (n - 1, (0, 0, -6))], shake=0.0)
+    from cat_lib import _fcurves
     camshake = bpy.context.scene.camera
     for fc in _fcurves(camshake.animation_data.action):
         mod = fc.modifiers.new('NOISE'); mod.scale = 3; mod.strength = 0.25
@@ -431,8 +437,8 @@ def sh_shaft(n):
     rope = cyl((0, 4, 8.5), 0.025, 15, mat('rope', (0.35, 0.27, 0.15), 0.9))
     key(hb, 'location', [(0, (0, 4, 0.6)), (int(n * 0.2), (0, 4, 0.6)), (n - 1, (0, 4, 11.0))])
     point((-0.8, -3, 1.8), 120, (1, 0.6, 0.3), 0.2)
-    camera([(0, (0.6, -1.5, 1.2)), (n - 1, (0.3, 2.6, 1.0))], lens=20,
-           target_keys=[(0, (0, 4, 1.5)), (n - 1, (0, 4, 10))])
+    camera([(0, (0.6, -1.5, 1.2)), (n - 1, (0.5, 0.3, 1.3))], lens=20,
+           target_keys=[(0, (0, 4, 1.5)), (n - 1, (0, 4, 3.2))])
 
 
 BUILDERS = {
@@ -451,6 +457,11 @@ if __name__ == '__main__':
     BUILDERS[name](n)
     frames = None
     if '--preview' in argv: preview(True)
+    if '--res' in argv:  # e.g. --res 1280x720:16 (width x height : eevee samples) for quick stills
+        wh, _, smp = argv[argv.index('--res') + 1].partition(':')
+        sc = bpy.context.scene
+        sc.render.resolution_x, sc.render.resolution_y = map(int, wh.split('x'))
+        if smp: sc.eevee.taa_render_samples = int(smp)
     if '--frames' in argv:
         fs = argv[argv.index('--frames') + 1]
         frames = [int(min(n - 1, max(0, float(v) * (n - 1)))) if '.' in v else int(v) for v in fs.split(',')]
