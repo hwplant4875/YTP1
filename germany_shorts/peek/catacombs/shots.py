@@ -117,8 +117,8 @@ def sh_street(n):
         cyl((1.2, 6.62, -0.4 - k * 0.45), 0.025, 0.5, IRON, rot=(0, math.pi / 2, 0))
     cov = cyl((2.55, 5.0, 0.05), 0.78, 0.07, IRON, verts=32, name='cover')
     cov.rotation_euler = (0, math.radians(4), 0)
-    point((1.2, 6, -2.0), 600, (1, 0.6, 0.3), 0.3)
-    point((1.2, 6, -4.5), 900, (1, 0.6, 0.3), 0.3)
+    point((1.2, 6, -2.0), 1800, (1, 0.6, 0.3), 0.3)
+    point((1.2, 6, -4.5), 2400, (1, 0.6, 0.3), 0.3)
     fog((40, 220, 30), (0, 80, 14), 0.006, (0.8, 0.85, 1.0))
     sun((math.radians(60), 0, math.radians(30)), 0.35, (0.55, 0.65, 1.0))
     area((0, 40, 40), 4000, 60, (0.6, 0.7, 1.0), rot=(0, 0, 0))
@@ -137,7 +137,7 @@ def tunnel(length, y0=0, width=2.4, height=2.6, m=None, name='tunnel'):
 
 
 def sh_tunnel_sign(n):
-    world_color((0, 0, 0), 0)
+    world_color((0.03, 0.022, 0.015), 1.0)
     tunnel(30, -2)
     # tarp across the tunnel with the sign
     tarp = plane((0, 20, 1.3), (2.6, 2.7), mat('tarp', (0.55, 0.12, 0.05), 0.7), rot=(math.pi / 2, 0, 0), name='tarp')
@@ -150,15 +150,15 @@ def sh_tunnel_sign(n):
     # flashlight on the camera + a faint warm glow leaking from behind the tarp
     c = camera([(0, (0.2, 2, 1.55)), (n - 1, (0, 15.2, 1.45))], lens=28,
                target_keys=[(0, (0, 20, 1.4)), (n - 1, (0, 20, 1.45))], shake=0.015)
-    fl = spot((0, 0, 0), 220, (1, 0.93, 0.8), 45, 0.5); fl.parent = c; fl.location = (0.25, 0.1, 0)
-    point((0, 21.5, 1.0), 300, (1, 0.55, 0.25), 0.5)
+    fl = spot((0, 0, 0), 420, (1, 0.93, 0.8), 55, 0.6); fl.parent = c; fl.location = (0.25, 0.1, 0)
+    point((0, 21.5, 1.0), 700, (1, 0.55, 0.25), 0.5)
     point((0, 21.5, 2.4), 120, (1, 0.55, 0.25), 0.5)
     fog((4, 30, 4), (0, 13, 1.3), 0.004)
 
 
 # ---------------------------------------------------------------- the cinema cave
 def cinema(dark=False):
-    world_color((0, 0, 0), 0)
+    world_color((0.03, 0.022, 0.015) if dark else (0, 0, 0), 1.0 if dark else 0)
     rock = ph_mat('caverock', 'rock_wall_02', 0.35, (1.45, 1.3, 1.05), 1.3)
     W, D, H = 18, 22, 6.5
     rocky(box((0, 0, -0.25), (W + 2, D + 2, 0.5), rock, 'floor'), 0.05, 2, 3)
@@ -242,7 +242,7 @@ def sh_cinema_dark(n):
     t = text3d('Ne cherchez pas\na nous trouver', (0.8, 6.2, 0.04), 0.05, ink, rot=(0, 0, math.radians(14)), font=hand_font())
     c = camera([(0, (2.0, -10.4, 2.0)), (int(n * 0.5), (0.6, -0.5, 1.9)), (n - 1, (0.75, 5.3, 0.95))], lens=26,
                target_keys=[(0, (0, 10, 2.5)), (int(n * 0.45), (0, 10, 2.2)), (n - 1, (0.8, 6.2, 0.03))], shake=0.012)
-    fl = spot((0, 0, 0), 350, (1, 0.93, 0.8), 40, 0.45); fl.parent = c; fl.location = (0.25, 0.1, 0)
+    fl = spot((0, 0, 0), 600, (1, 0.93, 0.8), 55, 0.6); fl.parent = c; fl.location = (0.25, 0.1, 0)
     fog((18, 22, 6.5), (0, 0, 3.25), 0.006)
 
 
