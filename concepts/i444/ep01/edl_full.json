@@ -651,12 +651,12 @@
     [
      13.0,
      "h5_trailer",
-     66.0
+     54.0
     ],
     [
      15.5,
      "h5_trailer",
-     60.0
+     7.5
     ],
     [
      18.28,
@@ -870,7 +870,7 @@
     [
      16.0,
      "rz2_2009_trailer",
-     90.0
+     93.0
     ],
     [
      17.28,
@@ -880,7 +880,7 @@
     [
      19.0,
      "rz2_2009_trailer",
-     24.0
+     52.5
     ],
     [
      21.84,
@@ -1089,7 +1089,7 @@
     [
      3.36,
      "rz_2007_trailer",
-     42.0
+     58.0
     ],
     [
      6.0,
@@ -1866,17 +1866,18 @@
  "zoom": {
   "h2_1981_why_wont_he_die": 1.2,
   "h20_final_confrontation": 1.12,
-  "2018_hit_and_run_hd": 1.2,
-  "h2_1981_ending": 1.2,
-  "kills_firefighters": 1.2,
+  "2018_hit_and_run_hd": 1.3,
+  "h2_1981_ending": 1.3,
+  "kills_firefighters": 1.3,
   "kills_crowd_end": 1.2,
   "kills_survives_fire": 1.2,
   "curse_tommy_defeats_michael_hd": 1.2,
   "curse_trailer_hd": 1.2,
-  "2018_burned_alive": 1.12
+  "2018_burned_alive": 1.3
  },
  "gamma": {
   "ends_final_trailer": 1.3,
-  "rz_2007_trailer": 1.25
+  "rz_2007_trailer": 1.25,
+  "h5_trailer": 1.25
  }
 }

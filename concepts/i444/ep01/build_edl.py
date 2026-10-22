@@ -18,7 +18,7 @@ X.append(sec('s03', [(0,'h20_laurie_vs_michael_final_fight_hd','0:15'),(3.32,'h2
   (23.32,'h20_final_confrontation','1:36'),(26.0,'h20_final_confrontation','1:06'),(28.8,'h20_final_confrontation','1:44'),(31.36,'h20_trailer','1:27')],
   [11,'Halloween H20',1998], 33, 'Do not hide. Hunt him first.', 28.8, 31.36))
 X.append(sec('s04', [(0,'h5_trailer','0:03'),(2.8,'h5_trailer','0:06'),(5.0,'h5_trailer','0:30'),(7.28,'h5_trailer','0:57'),(9.0,'h5_trailer','1:13.5'),
-  (10.88,'h5_trailer','0:33'),(13.0,'h5_trailer','1:06'),(15.5,'h5_trailer','1:00'),(18.28,'h5_extended_ending_hd','1:33'),(20.96,'h5_extended_ending_hd','1:51'),
+  (10.88,'h5_trailer','0:33'),(13.0,'h5_trailer','0:54'),(15.5,'h5_trailer','0:07.5'),(18.28,'h5_extended_ending_hd','1:33'),(20.96,'h5_extended_ending_hd','1:51'),
   (22.24,'h5_extended_ending_hd','2:06'),(24.56,'h5_extended_ending_hd','0:30'),(27.36,'h5_trailer','0:18')],
   [10,'Halloween 5',1989], 29, 'Bait him. Then net him.', 24.56, 27.36))
 X.append(sec('s05', [(0,'resurrection_busta_fight_hd','1:09'),(3.04,'resurrection_trailer_hd','0:06'),(5.0,'resurrection_trailer_hd','0:09'),(7.0,'resurrection_trailer_hd','0:39'),
@@ -27,7 +27,7 @@ X.append(sec('s05', [(0,'resurrection_busta_fight_hd','1:09'),(3.04,'resurrectio
   (22.56,'resurrection_ending','1:04'),(24.08,'resurrection_ending','1:06'),(26.64,'resurrection_ending','0:46')],
   [9,'Halloween Resurrection',2002], 22, 'Never trust a body bag.', 24.08, 26.64))
 X.append(sec('s06', [(0,'rz2_2009_trailer','1:03'),(3.6,'rz2_2009_trailer','0:16.5'),(6.0,'rz2_2009_trailer','0:51'),(8.5,'rz2_2009_trailer','1:06'),(11.36,'rz2_2009_trailer','1:55.5'),
-  (12.72,'rz2_2009_trailer','0:30'),(14.5,'rz2_2009_trailer','2:21'),(16.0,'rz2_2009_trailer','1:30'),(17.28,'rz2_2009_trailer','0:09'),(19.0,'rz2_2009_trailer','0:24'),
+  (12.72,'rz2_2009_trailer','0:30'),(14.5,'rz2_2009_trailer','2:21'),(16.0,'rz2_2009_trailer','1:33'),(17.28,'rz2_2009_trailer','0:09'),(19.0,'rz2_2009_trailer','0:52.5'),
   (21.84,'rz2_2009_trailer','1:48'),(24.8,'rz2_2009_trailer','0:42'),(27.44,'rz2_2009_trailer','1:03')],
   [8,"Rob Zombie's Halloween II",2009], 18, 'Call the police early. Bring many.', 24.8, 27.44))
 X.append(sec('s07', [(0,'1978_every_scene',548.8),(2.4,'1978_every_scene',30),(4.96,'1978_every_scene',112),(7.88,'1978_every_scene',129),(10.08,'1978_every_scene',509),
@@ -36,7 +36,7 @@ X.append(sec('s07', [(0,'1978_every_scene',548.8),(2.4,'1978_every_scene',30),(4
   [7,'Halloween',1978], 15, 'When he falls, do not look away.', 28.0, 30.72))
 X.append(sec('s08', [(0,'kills_survives_fire','6:16'),(3.0,'2018_killing_spree','2:09')], pad=0.5,
   extra=[('title', ['SUBSCRIBE', '!TO SURVIVE'], 5.75, 8.9)]))
-X.append(sec('s09', [(0,'rz_2007_trailer','0:54'),(3.36,'rz_2007_trailer','0:42'),(6.0,'rz_2007_trailer','1:00'),(8.0,'rz_2007_trailer','1:21'),(10.0,'rz_2007_trailer','1:39'),
+X.append(sec('s09', [(0,'rz_2007_trailer','0:54'),(3.36,'rz_2007_trailer','0:58'),(6.0,'rz_2007_trailer','1:00'),(8.0,'rz_2007_trailer','1:21'),(10.0,'rz_2007_trailer','1:39'),
   (12.24,'rz_2007_trailer','1:12'),(14.44,'rz_2007_trailer','1:16'),(16.5,'rz_2007_trailer','1:30'),(18.2,'rz_2007_trailer','1:33'),(19.48,'rz_2007_trailer','0:55'),
   (21.76,'rz_2007_trailer','1:07'),(24.4,'rz_2007_trailer','0:51')],
   [6,"Rob Zombie's Halloween",2007], 11, 'Do not let him get his hands on you.', 21.76, 24.4))
@@ -87,6 +87,8 @@ for S in P['sections']:
 P['zoom'].update({k: 1.2 for k in ['2018_hit_and_run_hd','h2_1981_ending','h2_1981_why_wont_he_die','kills_firefighters','kills_crowd_end','kills_survives_fire','curse_tommy_defeats_michael_hd','curse_trailer_hd']})
 P['zoom'].update({'2018_burned_alive': 1.12, 'h20_final_confrontation': 1.12})
 P['gamma']['rz_2007_trailer'] = 1.25
+P['gamma']['h5_trailer'] = 1.25
+P['zoom'].update({k: 1.3 for k in ['2018_hit_and_run_hd', 'h2_1981_ending', '2018_burned_alive', 'kills_firefighters']})
 json.dump(P, open('edl_full.json', 'w'), indent=1)
 print(len(P['sections']), 'sections')
 # v2: survival rate + new instruction lines, timed from the re-recorded narration (voice_v2)
