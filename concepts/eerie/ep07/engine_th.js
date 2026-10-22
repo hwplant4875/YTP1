@@ -1094,7 +1094,8 @@ function handshake(t, o = {}) {
   const ap = ease(o.apart || 0), sh = o.shake ? Math.sin(t * 60) * o.shake : 0;
   ctx.save(); ctx.translate(-260 * ap, 0);
   glow('rgba(255,255,255,0.3)', 20); poly([[-200, 760], [700, 580]], 120, C.fig); noGlow();
-  ell(820, 560, 110, 78, -0.15, C.fig);
+  ctx.save(); ctx.translate(780, 566); ctx.rotate(-0.2); const yh = 'M-70,-52 C30,-74 120,-46 134,-4 C126,40 40,62 -70,52 Z';
+  glow('rgba(255,255,255,0.25)', 14); pth(yh, C.fig); noGlow(); pthS(yh, '#000', 4); pthS('M-10,-58 C30,-40 50,-20 56,4', '#000', 4); ctx.restore();
   ctx.restore();
   ctx.save(); ctx.translate(260 * ap + sh, sh * 0.4);
   ctx.save(); ctx.lineCap = 'round'; poly([[2200, 380], [1150, 540]], 132, '#000'); poly([[2200, 380], [1150, 540]], 122, C.fig); ctx.restore();
@@ -1166,7 +1167,7 @@ S.a1 = (t, seg) => {
   }
   black();
   cam(t, tf - 0.2, segEnd(seg) - tf, 1.0, 1.1, 1150, 560, () => handshake(t, { apart: 1 - 0, long: ease(prog(t, tf, 1.2)) }));
-  if (t >= tf + 0.5) flatT(() => { ctx.save(); ctx.setLineDash([10, 10]); ln(620, 900, 1380, 900, 3, '#8a8a8a'); ctx.restore(); text('TOO LONG', 1000, 960, '900 40px M', C.red); });
+  if (t >= tf + 0.5) flatT(() => { ctx.save(); ctx.setLineDash([10, 10]); ln(620, 800, 1380, 800, 3, '#8a8a8a'); ctx.restore(); text('TOO LONG', 1000, 860, '900 48px M', C.red); });
 };
 S.a2 = (t, seg) => {
   // everyone's advice: a firm handshake, show them you are strong
@@ -1314,8 +1315,8 @@ S.b3 = (t, seg) => {
   cam(t, tw - 0.3, segEnd(seg) - tw + 1.2, 1.0, 1.2, 900, 520, () => {
     clipboard(900, 560, 4.4, -0.04, { lines: [['NO. 117', 0], ['AGE  29', 0], ['LIVES ALONE', up1 > 0.9 ? 1 : 0]], under: 2, up: up1 });
     ctx.save(); ctx.translate(900, 560); ctx.rotate(-0.04); ctx.scale(4.4, 4.4); ctx.font = '900 15px M'; const w = ctx.measureText('LIVES ALONE').width;
-    if (up2 > 0) lnP(-62, 59, -58 + w, 58, 3.5, '#d61f1f', up2);
-    pen(-62 + (w + 4) * (up2 > 0 ? up2 : up1), (up2 > 0 ? 6 : 0) - 24 + 2 * 28, 0.6, 2.0); ctx.restore();
+    if (up2 > 0) lnP(-62, 40, -58 + w, 39, 3.5, '#d61f1f', up2);
+    pen(-62 + (w + 4) * (up2 > 0 ? up2 : up1), (up2 > 0 ? 8 : 0) - 24 + 2 * 28, 0.6, 2.0); ctx.restore();
   });
 };
 S.b4 = (t, seg) => {
@@ -1690,34 +1691,31 @@ function thTitle(a, b, y, size, x = W / 2, align = 'center') {
   text(a, x0, y, `900 ${size}px M`, '#fff', 'left'); redGlow(26); text(b, x0 + wa, y, `900 ${size}px M`, C.red, 'left'); ctx.restore();
 }
 const thBg = () => { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); };
-// 1: the panel of three, big, the middle one's eyes red; the title over them
+// 1: the three agents at the desk, big; the middle one's lenses red; the title over them
 window.drawThumbA = () => {
   thBg();
-  const g = ctx.createRadialGradient(960, 600, 60, 960, 700, 900); g.addColorStop(0, 'rgba(255,255,255,0.10)'); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  ctx.save(); ctx.translate(960, 0); ctx.scale(1.55, 1.55); ctx.translate(-960, -30);
-  for (let i = 0; i < 3; i++) suit(560 + i * 400, 905, 1, { arms: i === 1 ? 'desk' : 'board', eyes: i === 1 ? 1 : 0 });
-  desk(160, 1760, 620, { n: 3 });
+  const g = ctx.createRadialGradient(960, 700, 60, 960, 760, 900); g.addColorStop(0, 'rgba(255,255,255,0.08)'); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.translate(960, 1080); ctx.scale(1.45, 1.45); ctx.translate(-960, -880);
+  agent('young', 560, 760, 1, { arms: 'desk' }); agent('hr', 960, 760, 1, { arms: 'desk', eyes: 1 }); agent('boss', 1360, 760, 1, { arms: 'desk' });
+  meetDesk(200, 1720, 760, { items: false });
   ctx.restore();
-  thTitle("DON'T TELL THE ", 'TRUTH', 190, 140);
+  thTitle("DON'T TELL THE ", 'TRUTH', 170, 140);
 };
-// 2: just the middle one, huge, leaning in; red eyes; title on the left
+// 2: just the middle one, huge, red lenses; the title on the left
 window.drawThumbB = () => {
   thBg();
-  ctx.save(); ctx.translate(1340, 0); ctx.scale(2.6, 2.6); ctx.translate(-960, -205);
-  suit(960, 905, 1, { arms: 'desk', eyes: 1, lean: 0.8 });
+  ctx.save(); ctx.translate(1400, 1080); ctx.scale(2.5, 2.5); ctx.translate(-960, -760);
+  agent('hr', 960, 760, 1, { arms: 'desk', eyes: 1, lean: 0.3 });
   ctx.restore();
-  ctx.save(); ctx.font = '900 170px M'; text("DON'T", 90, 380, '900 170px M', '#fff', 'left'); text('TELL THE', 90, 560, '900 170px M', '#fff', 'left'); redGlow(28); text('TRUTH', 90, 740, '900 170px M', C.red, 'left'); ctx.restore();
+  ctx.save(); text("DON'T", 90, 360, '900 170px M', '#fff', 'left'); text('TELL THE', 90, 550, '900 170px M', '#fff', 'left'); redGlow(28); text('TRUTH', 90, 740, '900 170px M', C.red, 'left'); ctx.restore();
 };
-// 3: the clipboard: GREATEST WEAKNESS with the answer underlined in red, a faceless interviewer behind
+// 3: the clipboard, LIVES ALONE underlined twice in red; the agent behind it
 window.drawThumbC = () => {
   thBg();
-  ctx.save(); ctx.translate(1380, 0); ctx.scale(1.9, 1.9); ctx.translate(-960, -108); ctx.globalAlpha = 0.9;
-  suit(960, 905, 1, { arms: 'desk', eyes: 1 }); ctx.restore();
-  ctx.save(); ctx.translate(620, 640); ctx.rotate(-0.06); ctx.scale(3.2, 3.2);
-  rr(-80, -88, 160, 180, 8, SUIT.board); rrS(-80, -88, 160, 180, 8, SUIT.line, 3); rr(-70, -70, 140, 154, 2, SUIT.paper);
-  rr(-26, -96, 52, 22, 6, '#2a2a2e'); text('GREATEST', -60, -38, '900 17px M', '#222', 'left'); text('WEAKNESS:', -60, -16, '900 17px M', '#222', 'left');
-  text('"I GET', -60, 22, '900 20px M', '#d61f1f', 'left'); text('NERVOUS"', -60, 46, '900 20px M', '#d61f1f', 'left');
-  ln(-62, 54, 44, 52, 3.5, '#d61f1f'); ctx.restore();
+  ctx.save(); ctx.translate(1420, 1080); ctx.scale(2.0, 2.0); ctx.translate(-960, -760); ctx.globalAlpha = 0.95;
+  agent('hr', 960, 760, 1, { arms: 'desk', eyes: 1 }); ctx.restore();
+  ctx.save(); ctx.translate(560, 660); ctx.rotate(-0.06); clipboard(0, 0, 3.4, 0, { lines: [['NO. 117', 0], ['AGE  29', 0], ['LIVES ALONE', 1]], under: 2, up: 1 });
+  ctx.scale(3.4, 3.4); ctx.font = '900 15px M'; const w = ctx.measureText('LIVES ALONE').width; ln(-62, 40, -58 + w, 39, 3.5, '#d61f1f'); ctx.restore();
   thTitle("DON'T TELL THE ", 'TRUTH', 170, 130);
 };
 // v2 design sketches

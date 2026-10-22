@@ -114,7 +114,8 @@ function handshake(t, o = {}) {
   const ap = ease(o.apart || 0), sh = o.shake ? Math.sin(t * 60) * o.shake : 0;
   ctx.save(); ctx.translate(-260 * ap, 0);
   glow('rgba(255,255,255,0.3)', 20); poly([[-200, 760], [700, 580]], 120, C.fig); noGlow();
-  ell(820, 560, 110, 78, -0.15, C.fig);
+  ctx.save(); ctx.translate(780, 566); ctx.rotate(-0.2); const yh = 'M-70,-52 C30,-74 120,-46 134,-4 C126,40 40,62 -70,52 Z';
+  glow('rgba(255,255,255,0.25)', 14); pth(yh, C.fig); noGlow(); pthS(yh, '#000', 4); pthS('M-10,-58 C30,-40 50,-20 56,4', '#000', 4); ctx.restore();
   ctx.restore();
   ctx.save(); ctx.translate(260 * ap + sh, sh * 0.4);
   ctx.save(); ctx.lineCap = 'round'; poly([[2200, 380], [1150, 540]], 132, '#000'); poly([[2200, 380], [1150, 540]], 122, C.fig); ctx.restore();
@@ -186,7 +187,7 @@ S.a1 = (t, seg) => {
   }
   black();
   cam(t, tf - 0.2, segEnd(seg) - tf, 1.0, 1.1, 1150, 560, () => handshake(t, { apart: 1 - 0, long: ease(prog(t, tf, 1.2)) }));
-  if (t >= tf + 0.5) flatT(() => { ctx.save(); ctx.setLineDash([10, 10]); ln(620, 900, 1380, 900, 3, '#8a8a8a'); ctx.restore(); text('TOO LONG', 1000, 960, '900 40px M', C.red); });
+  if (t >= tf + 0.5) flatT(() => { ctx.save(); ctx.setLineDash([10, 10]); ln(620, 800, 1380, 800, 3, '#8a8a8a'); ctx.restore(); text('TOO LONG', 1000, 860, '900 48px M', C.red); });
 };
 S.a2 = (t, seg) => {
   // everyone's advice: a firm handshake, show them you are strong
@@ -334,8 +335,8 @@ S.b3 = (t, seg) => {
   cam(t, tw - 0.3, segEnd(seg) - tw + 1.2, 1.0, 1.2, 900, 520, () => {
     clipboard(900, 560, 4.4, -0.04, { lines: [['NO. 117', 0], ['AGE  29', 0], ['LIVES ALONE', up1 > 0.9 ? 1 : 0]], under: 2, up: up1 });
     ctx.save(); ctx.translate(900, 560); ctx.rotate(-0.04); ctx.scale(4.4, 4.4); ctx.font = '900 15px M'; const w = ctx.measureText('LIVES ALONE').width;
-    if (up2 > 0) lnP(-62, 59, -58 + w, 58, 3.5, '#d61f1f', up2);
-    pen(-62 + (w + 4) * (up2 > 0 ? up2 : up1), (up2 > 0 ? 6 : 0) - 24 + 2 * 28, 0.6, 2.0); ctx.restore();
+    if (up2 > 0) lnP(-62, 40, -58 + w, 39, 3.5, '#d61f1f', up2);
+    pen(-62 + (w + 4) * (up2 > 0 ? up2 : up1), (up2 > 0 ? 8 : 0) - 24 + 2 * 28, 0.6, 2.0); ctx.restore();
   });
 };
 S.b4 = (t, seg) => {
