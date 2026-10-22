@@ -17,3 +17,6 @@ The samples themselves are not committed.
 - `v2/mix_v2.sh`: piano lowpassed at ~5 kHz with highshelf -2.5 dB, gentle transient taming (2.2:1, 1.5 ms attack),
   warm low-mid lift; FL "Evnt - Hall Warm" impulse (long hall) with 25 ms pre-delay, wet about 5 LU under the dry piano.
   Bass about 7 LU and ride/hat about 14 LU under the piano. -18.3 LUFS, peaks -1.5 dBFS, no limiter.
+
+## v3 (`hedwig_trio_sfz_v3.mp3`, 1:55, MIDI v3 at 88 BPM, melody from 0:00)
+- Exactly the v1 chain (normal Salamander velocities, v1 EQ and balance); Chamber Warm reverb send 2 dB higher than v1. -19.1 LUFS, peaks -1.5 dBFS.
