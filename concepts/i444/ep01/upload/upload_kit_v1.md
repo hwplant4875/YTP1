@@ -3,10 +3,10 @@
 영상: 노트북 `E:\YTP2\Instruction444\renders\ep01_full_v2.mp4` (약 8분 8초, 1080p 30fps)
 자막: `myers_ranked_en_v2.srt` (영어, 내레이션 단어 타이밍 기준)
 
-## 제목 (하나 고르기)
-1. Every Michael Myers Ranked by How Hard He Is to Kill (추천)
-2. Every Michael Myers Ranked From Easiest to Impossible to Survive
-3. Ranking Every Michael Myers by How Many Times He Should Have Died
+## 제목 (썸네일과 짝, A/B 테스트용)
+- A + myers_v2_a_three.jpg (90%→62%→1%): Every Michael Myers Ranked by Your Chance of Surviving Him (추천)
+- B + myers_v2_b_onepercent.jpg (1% SURVIVAL RATE): Only 1% Survive This Michael Myers
+- C + myers_v2_c_killhim.jpg (KILL HIM?): Every Michael Myers Ranked by How Hard He Is to Kill
 
 ## 설명
 He has been stabbed, shot, burned, blown up, electrocuted, run over and thrown down a mine shaft. And he kept walking.
@@ -35,5 +35,5 @@ michael myers, halloween, every michael myers ranked, michael myers ranked, hall
 - 카테고리: Film & Animation
 - 시청자층: 아동용 아님
 - 언어: 영어, 자막 파일 업로드
-- 썸네일: thumbs/myers_t1_fire.jpg (추천), myers_t2_lineup.jpg, myers_t3_mask.jpg
+- 썸네일: thumbs/myers_v2_a_three.jpg (추천, 90%→62%→1%), myers_v2_b_onepercent.jpg, myers_v2_c_killhim.jpg (공식 고화질 스틸 기반)
 - 공개 시간 제안: 할로윈 주간이라 빠를수록 좋음. 미국 저녁 기준 한국 시간 오전 8~10시.
