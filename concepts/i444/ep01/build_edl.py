@@ -17,7 +17,7 @@ X.append(sec('s03', [(0,'h20_laurie_vs_michael_final_fight_hd','0:15'),(3.32,'h2
   (14.6,'h20_final_confrontation','0:38'),(16.76,'h20_final_confrontation','0:16'),(18.2,'h20_final_confrontation','1:52'),(19.88,'h20_final_confrontation','1:19'),
   (23.32,'h20_final_confrontation','1:36'),(26.0,'h20_final_confrontation','1:06'),(28.8,'h20_final_confrontation','1:44'),(31.36,'h20_trailer','1:27')],
   [11,'Halloween H20',1998], 33, 'Do not hide. Hunt him first.', 28.8, 31.36))
-X.append(sec('s04', [(0,'h5_trailer','0:03'),(2.8,'h5_trailer','0:06'),(5.0,'h5_trailer','0:30'),(7.28,'h5_trailer','1:12'),(9.0,'h5_trailer','1:21'),
+X.append(sec('s04', [(0,'h5_trailer','0:03'),(2.8,'h5_trailer','0:06'),(5.0,'h5_trailer','0:30'),(7.28,'h5_trailer','0:57'),(9.0,'h5_trailer','1:13.5'),
   (10.88,'h5_trailer','0:33'),(13.0,'h5_trailer','1:06'),(15.5,'h5_trailer','1:00'),(18.28,'h5_extended_ending_hd','1:33'),(20.96,'h5_extended_ending_hd','1:51'),
   (22.24,'h5_extended_ending_hd','2:06'),(24.56,'h5_extended_ending_hd','0:30'),(27.36,'h5_trailer','0:18')],
   [10,'Halloween 5',1989], 29, 'Bait him. Then net him.', 24.56, 27.36))
@@ -26,8 +26,8 @@ X.append(sec('s05', [(0,'resurrection_busta_fight_hd','1:09'),(3.04,'resurrectio
   (16.0,'resurrection_busta_fight_hd','3:06'),(18.8,'resurrection_trailer_hd','1:06'),(20.48,'resurrection_ending','0:40'),(21.56,'resurrection_ending','0:58'),
   (22.56,'resurrection_ending','1:04'),(24.08,'resurrection_ending','1:06'),(26.64,'resurrection_ending','0:46')],
   [9,'Halloween Resurrection',2002], 22, 'Never trust a body bag.', 24.08, 26.64))
-X.append(sec('s06', [(0,'rz2_2009_trailer','1:03'),(3.6,'rz2_2009_trailer','0:21'),(6.0,'rz2_2009_trailer','0:51'),(8.5,'rz2_2009_trailer','1:06'),(11.36,'rz2_2009_trailer','2:03'),
-  (12.72,'rz2_2009_trailer','0:30'),(14.5,'rz2_2009_trailer','2:21'),(16.0,'rz2_2009_trailer','1:30'),(17.28,'rz2_2009_trailer','0:12'),(19.0,'rz2_2009_trailer','0:24'),
+X.append(sec('s06', [(0,'rz2_2009_trailer','1:03'),(3.6,'rz2_2009_trailer','0:16.5'),(6.0,'rz2_2009_trailer','0:51'),(8.5,'rz2_2009_trailer','1:06'),(11.36,'rz2_2009_trailer','1:55.5'),
+  (12.72,'rz2_2009_trailer','0:30'),(14.5,'rz2_2009_trailer','2:21'),(16.0,'rz2_2009_trailer','1:30'),(17.28,'rz2_2009_trailer','0:09'),(19.0,'rz2_2009_trailer','0:24'),
   (21.84,'rz2_2009_trailer','1:48'),(24.8,'rz2_2009_trailer','0:42'),(27.44,'rz2_2009_trailer','1:03')],
   [8,"Rob Zombie's Halloween II",2009], 18, 'Call the police early. Bring many.', 24.8, 27.44))
 X.append(sec('s07', [(0,'1978_every_scene',548.8),(2.4,'1978_every_scene',30),(4.96,'1978_every_scene',112),(7.88,'1978_every_scene',129),(10.08,'1978_every_scene',509),
@@ -65,6 +65,8 @@ X.append(sec('s14', [(0,'kills_firefighters','1:48'),(2.8,'kills_survives_fire',
 X.append(sec('s15', [(0,'kills_survives_fire','7:08'),(1.68,'1978_every_scene',548.8),(4.16,'h20_final_confrontation','1:19'),(6.32,'2018_killing_spree','2:09'),(8.6,'BLACK',0)], pad=1.5,
   extra=[('title', ['YOUR RANKING?'], 4.16, 8.5), ('title', ['INSTRUCTION', '!444'], 8.7, 14.3)]))
 P['sections'] = P['sections'][:3] + X
-P['zoom'].update({'2018_hit_and_run_hd': 1.12, '2018_burned_alive': 1.12, 'kills_firefighters': 1.12, 'h20_final_confrontation': 1.12})
+P['zoom'].update({k: 1.2 for k in ['2018_hit_and_run_hd','h2_1981_ending','h2_1981_why_wont_he_die','kills_firefighters','kills_crowd_end','kills_survives_fire','curse_tommy_defeats_michael_hd','curse_trailer_hd']})
+P['zoom'].update({'2018_burned_alive': 1.12, 'h20_final_confrontation': 1.12})
+P['gamma']['rz_2007_trailer'] = 1.25
 json.dump(P, open('edl_full.json', 'w'), indent=1)
 print(len(P['sections']), 'sections')
