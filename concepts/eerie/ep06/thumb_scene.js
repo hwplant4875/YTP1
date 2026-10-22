@@ -108,3 +108,36 @@ window.drawCctv4 = () => {
   cctvTitle("DON'T BE ", 'HOME', 210, 170);
   ctx.save(); redGlow(18); text('AT 3 AM', W / 2 + 120, 340, '900 90px M', C.red, 'center'); ctx.restore();
 };
+// Myers, pure white flat style (user 10/22: CTR low -> simple, clean, pure white like the CCTV thumbnails)
+function whiteNight(fn) {
+  const keep = { ...NIGHT };
+  Object.assign(NIGHT, { jump: '#f4f4f6', jumpHi: '#ffffff', jumpLo: '#a8a8b0', mask: '#ffffff', maskSh: '#c9c9cf', hair: '#101012', hairHi: '#2a2a2e' });
+  try { fn(); } finally { Object.assign(NIGHT, keep); }
+}
+function myersWhite(x, y, s, o = {}) { whiteNight(() => { ctx.save(); glow('rgba(255,255,255,0.45)', 40); myers(x, y, s, { bodyCol: '#f4f4f6', knife: 1, knifeRed: true, ...o }); noGlow(); ctx.restore(); }); }
+// W1: him alone, big and centred, red knife
+window.drawMyersW1 = () => {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.globalAlpha = 0.25; ell(960, 1062, 300, 28, 0, '#fff'); ctx.restore();
+  myersWhite(960, 1060, 1.08, { tilt: 0.08 });
+  cctvTitle("DON'T LOOK ", 'AWAY', 190, 160);
+};
+// W2: the streetlight across the street, him under it; your dark window frame in front
+window.drawMyersW2 = () => {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  const g = ctx.createLinearGradient(0, 330, 0, 1000); g.addColorStop(0, 'rgba(255,255,255,0.22)'); g.addColorStop(1, 'rgba(255,255,255,0.04)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(1180, 330); ctx.lineTo(1260, 330); ctx.lineTo(1520, 1000); ctx.lineTo(900, 1000); ctx.closePath(); ctx.fill();
+  rr(1440, 300, 16, 700, 6, '#f4f4f6'); rr(1210, 300, 246, 14, 6, '#f4f4f6'); rr(1196, 310, 40, 22, 6, '#f4f4f6');
+  ctx.save(); ctx.globalAlpha = 0.3; ell(1210, 1000, 300, 26, 0, '#fff'); ctx.restore();
+  myersWhite(1210, 1000, 1.05, { tilt: 0.12 });
+  // you, from behind, at the window (left)
+  rrS(80, 330, 640, 760, 6, '#f4f4f6', 14); ln(400, 330, 400, 1090, 10, '#f4f4f6');
+  me(560, 1300, 1.7, { face: 'back' });
+  cctvTitle("DON'T LOOK ", 'AWAY', 200, 150);
+};
+// W3: the mask, huge; red eyes in the holes
+window.drawMyersW3 = () => {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  whiteNight(() => { ctx.save(); glow('rgba(255,255,255,0.4)', 50); ctx.translate(1340, 1873); ctx.scale(2.6, 2.6); rr(-60, -470, 120, 300, 20, '#f4f4f6'); maskHead(0, -505, 1, { red: 1 }); noGlow(); ctx.restore(); });
+  ctx.save(); text("DON'T", 90, 400, '900 190px M', '#fff', 'left'); text('LOOK', 90, 600, '900 190px M', '#fff', 'left'); redGlow(28); text('AWAY', 90, 800, '900 190px M', C.red, 'left'); ctx.restore();
+};
