@@ -12,21 +12,13 @@ const AGENT_HEAD = 'M-50,-34 C-52,-78 -26,-94 0,-94 C26,-94 52,-78 50,-34 L49,14
 
 // a head, face centre at (0,0), the neck hanging below. o.eyes 0..1: the lenses glow red; o.look -1..1 turns the glint
 function ppHead(kind, o = {}) {
-  const K = PK[kind], F = PP.fig, L = PP.line, w = kind === 'boss' ? 1.06 : 1;
-  ctx.save(); ctx.scale(w, 1);
-  rr(-K.nw / 2 / w, 40, K.nw / w, K.neck + 30, 6, F);
-  glow('rgba(255,255,255,0.35)', 24); ell(-50, -6, 10, 18, 0, F); ell(50, -6, 10, 18, 0, F); pth(AGENT_HEAD, F); noGlow();
-  // the earpiece and its coiled wire running down into the collar
-  circ(-52, -2, 5, L); pthS('M-52,4 C-56,16 -48,24 -54,34 C-60,44 -50,52 -54,62 C-58,74 -48,84 -52,96', L, 2.5);
-  // sunglasses
-  const re = o.eyes || 0, lens = kind === 'young' ? [34, 18, 4] : kind === 'hr' ? [38, 22, 5] : [36, 22, 11];
-  const [lw, lh, lr] = [lens[0] + 4, lens[1] + 3, lens[2]], ly = -14;
-  ln(-50, ly - 2, 50, ly - 2, 4, L);
-  for (const d of [-1, 1]) {
-    const cx = d * 24;
-    ctx.save(); if (re > 0) redGlow(30 * re); rr(cx - lw / 2, ly - lh / 2, lw, lh, lr, re > 0 ? `rgb(${Math.round(255 * re)},${Math.round(43 * re)},${Math.round(43 * re)})` : L); noGlow(); ctx.restore();
-    if (re < 0.3) { ctx.save(); ctx.globalAlpha *= 0.6; ln(cx - lw * 0.3 + (o.look || 0) * 6, ly - lh * 0.25, cx - lw * 0.1 + (o.look || 0) * 6, ly - lh * 0.25, 2.5, '#fff'); ctx.restore(); }
-  }
+  // a plain round head: no face, no ears, no glasses. Danger: a red glow around it.
+  const K = PK[kind], F = PP.fig, re = o.eyes || 0, R = kind === 'boss' ? 66 : 62;
+  ctx.save();
+  rr(-K.nw / 2, 40, K.nw, K.neck + 30, 6, F);
+  if (re > 0) redGlow(40 * re); else glow('rgba(255,255,255,0.35)', 24);
+  circ(0, -16, R, F); noGlow();
+  if (re > 0) { ctx.save(); ctx.globalAlpha *= re; redGlow(24); circS(0, -16, R + 3, C.red, 5); ctx.restore(); }
   ctx.restore();
 }
 

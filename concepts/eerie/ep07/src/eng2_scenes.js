@@ -356,7 +356,7 @@ S.b4 = (t, seg) => {
   });
 };
 S.b5 = (t, seg) => {
-  const tl = wt(seg, 'leans'), tg = wt(seg, 'glasses'), tw = wt(seg, 'what'), lean = ease(prog(t, tl, 1.2));
+  const tl = wt(seg, 'leans'), tg = wt(seg, 'leans') + 0.6, tw = wt(seg, 'what'), lean = ease(prog(t, tl, 1.2));
   cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.6, 960, 420, () => room(t, { lean, eyes: prog(t, tg - 0.1, 0.4), lid: 0 }));
   say(t, tw - 0.1, 960, 120, 'WHAT IS YOUR GREATEST WEAKNESS?', 960, 230, 46);
 };
@@ -404,7 +404,7 @@ S.b8 = (t, seg) => {
 };
 S.b9 = (t, seg) => {
   // already in every file: a wall of identical files; then the red fades from his glasses
-  const tl = wt(seg, 'learn'), tr = wt(seg, 'red');
+  const tl = wt(seg, 'learn'), tr = wt(seg, 'new') + 0.3;
   if (t < tr - 0.4) {
     black();
     cam(t, seg.start, tr - seg.start, 1.15, 1.0, 960, 540, () => {
@@ -591,7 +591,7 @@ S.d9 = (t, seg) => {
 };
 S.d10 = (t, seg) => {
   // sit up, fold your hands, look the middle one in the eye: "Congratulations. You're hired."
-  const te = wt(seg, 'eye'), tc = wt(seg, 'congratulations');
+  const te = wt(seg, 'middle'), tc = wt(seg, 'congratulations');
   cam(t, seg.start, segEnd(seg) - seg.start, 1.0, t >= te ? 1.2 : 1.06, t >= te ? 1200 : 1000, 540, () => night(t, { sitUp: true }));
   if (t >= te && t < tc) flatT(() => brackets(1420, 900 - 0.78 * 640 + 60, 160, 160, prog(t, te, 0.3)));
   say(t, tc - 0.1, 760, 200, '"CONGRATULATIONS.\nYOU\'RE HIRED."', 620, 380, 50);
