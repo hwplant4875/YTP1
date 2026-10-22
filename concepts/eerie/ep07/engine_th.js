@@ -849,94 +849,81 @@ function resume(x, y, s = 1, rot = 0, o = {}) {
     ctx.restore(); }
   ctx.restore();
 }
-// ---------- EP07 v2: the three interviewers, drawn as real people ----------
-// Greyscale, lit from the upper left, crisp dark outlines. Faces have eyes, brows and a nose but never a mouth.
-// kinds: 'young' (slicked-back undercut, light grey slim suit, clipboard: the handshake one)
-//        'hr'    (sharp black bob with blunt bangs, dark blazer, lanyard: the one in the middle who asks the question)
-//        'boss'  (grey side part, glasses, charcoal three-piece: the silent one behind the laptop)
+// ---------- EP07 v3: the three interviewers ----------
+// Round bald heads with only eyes (sunken sockets, pinprick pupils, no nose, no mouth, no hair). Sickly mottled skin, lit from
+// the upper left. Suits that are worn, stained, wrinkled and torn: they have been wearing them for years. Red only for danger.
+// kinds: 'young' (tall, long thin neck, stitched head, beige-grey suit, clipboard: the handshake one)
+//        'hr'    (big head, cracked, eyes too wide, black blazer, lanyard: the one in the middle who asks the question)
+//        'boss'  (dented head, one eye half shut, charcoal three-piece: the silent one behind the laptop)
 const PP = {
-  skin: '#e6e2de', skinSh: '#b9b4af', skinDeep: '#8f8a85', line: '#121214', white: '#fbfbfc',
-  young: { hair: '#232327', hairHi: '#4c4c54', side: '#3c3c43', jacket: '#bdbdc4', jacketSh: '#93939b', edge: '#121214', shirt: '#f6f6f8', tie: '#141416' },
-  hr: { hair: '#0f0f12', hairHi: '#3c3c46', jacket: '#2c2c33', jacketSh: '#1b1b20', edge: '#6a6a72', shirt: '#f2f2f4', tie: null },
-  boss: { hair: '#a4a4aa', hairHi: '#d2d2d8', side: '#8a8a90', jacket: '#4a4a52', jacketSh: '#33333a', edge: '#8a8a92', shirt: '#eeeef0', tie: '#7a7a82', vest: '#3a3a41' },
+  skin: '#d6d2cb', skinHi: '#ece9e3', skinSh: '#8c8780', skinDeep: '#57524d', line: '#0d0d0f',
+  young: { R: 62, neck: 78, nw: 28, jacket: '#a6a59e', jacketSh: '#6c6b65', edge: '#0d0d0f', shirt: '#c6c2b7', tie: '#19191b' },
+  hr: { R: 76, neck: 38, nw: 40, jacket: '#26262b', jacketSh: '#121215', edge: '#5e5e65', shirt: '#bcb8af', tie: null },
+  boss: { R: 68, neck: 30, nw: 46, jacket: '#47464c', jacketSh: '#29292e', edge: '#7d7c83', shirt: '#c2bfb6', tie: '#5e5e64', vest: '#36353b' },
 };
-const FACE = 'M-56,-20 C-58,-70 -30,-88 0,-88 C30,-88 58,-70 56,-20 C55,6 50,28 36,46 C24,58 12,63 0,63 C-12,63 -24,58 -36,46 C-50,28 -55,6 -56,-20 Z';
+const ppHeadY = k => -222 - PP[k].neck - PP[k].R * 0.82;
 
-// a head, face centre at (0,0) in the current transform, ~165 tall. o.eyes 0..1 red irises; o.look -1..1 irises sideways
+// a head centred at (0,0); the neck hangs below it. o.eyes 0..1 red pupils; o.look -1..1
 function ppHead(kind, o = {}) {
-  const P = PP[kind], L = PP.line;
-  // hair behind the head (the bob)
-  if (kind === 'hr') pth('M-72,-36 C-80,-100 -40,-118 0,-118 C40,-118 80,-100 72,-36 L76,58 C66,72 46,70 34,60 L-34,60 C-46,70 -66,72 -76,58 Z', P.hair);
-  // neck, with the jaw's shadow on it
-  pth('M-22,30 L22,30 L26,120 L-26,120 Z', PP.skinSh); ctx.save(); ctx.globalAlpha *= 0.55; ell(0, 58, 26, 14, 0, PP.skinDeep); ctx.restore();
-  // ears (the bob covers them)
-  if (kind !== 'hr') for (const d of [-1, 1]) {
-    const e = `M${d * 52},-16 C${d * 68},-24 ${d * 74},-2 ${d * 68},14 C${d * 64},28 ${d * 58},32 ${d * 50},26 Z`;
-    pth(e, PP.skin); pthS(e, L, 2.5); pthS(`M${d * 56},-8 C${d * 64},-10 ${d * 66},4 ${d * 60},14`, PP.skinDeep, 2.5);
+  const P = PP[kind], R = P.R, L = PP.line;
+  // neck: thin, with tendons
+  const nTop = R * 0.6, nBot = R * 0.82 + P.neck + 2, w = P.nw / 2;
+  pth(`M${-w},${nTop} L${w},${nTop} L${w + 4},${nBot} L${-w - 4},${nBot} Z`, PP.skinSh);
+  ctx.save(); ctx.globalAlpha *= 0.5; ln(-w * 0.4, nTop + 10, -w * 0.7, nBot - 6, 3, PP.skinDeep); ln(w * 0.4, nTop + 10, w * 0.7, nBot - 6, 3, PP.skinDeep); ctx.restore();
+  ctx.save(); ctx.globalAlpha *= 0.6; ell(0, R * 0.86, w + 6, 10, 0, PP.skinDeep); ctx.restore();
+  // the skull: a ball, mottled, lit from the upper left
+  const g = ctx.createRadialGradient(-R * 0.35, -R * 0.4, R * 0.1, 0, 0, R * 1.05); g.addColorStop(0, PP.skinHi); g.addColorStop(0.55, PP.skin); g.addColorStop(1, PP.skinSh);
+  glow('rgba(0,0,0,0.7)', 26); circ(0, 0, R, g); noGlow();
+  ctx.save(); ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.clip(); ctx.filter = 'blur(6px)';
+  for (const [x, y, r, a] of [[-0.5, 0.35, 0.18, 0.25], [0.45, -0.5, 0.14, 0.2], [0.2, 0.55, 0.22, 0.22], [-0.2, -0.7, 0.12, 0.18], [0.65, 0.2, 0.16, 0.25]])
+    ell(x * R, y * R, r * R, r * R * 0.8, 0, `rgba(110,100,92,${a})`);
+  ell(R * 0.15, R * 1.1, R * 0.95, R * 0.32, 0, 'rgba(60,55,50,0.3)');
+  ctx.filter = 'none';
+  if (kind === 'young') {   // a stitched seam over the top of the skull
+    pthS(`M${-R * 0.95},${-R * 0.1} C${-R * 0.6},${-R * 0.95} ${R * 0.4},${-R * 1.0} ${R * 0.9},${-R * 0.45}`, PP.skinDeep, 3);
+    for (let i = 1; i < 12; i++) { const t = i / 12, x = (1 - t) ** 3 * -0.95 + 3 * (1 - t) ** 2 * t * -0.6 + 3 * (1 - t) * t * t * 0.4 + t ** 3 * 0.9, y = (1 - t) ** 3 * -0.1 + 3 * (1 - t) ** 2 * t * -0.95 + 3 * (1 - t) * t * t * -1.0 + t ** 3 * -0.45;
+      ln(x * R - 5, y * R - 6, x * R + 5, y * R + 6, 2.5, L); }
+  } else if (kind === 'hr') {   // hairline cracks running down from the crown
+    pthS(`M${R * 0.15},${-R} L${R * 0.1},${-R * 0.78} L${R * 0.22},${-R * 0.62} L${R * 0.12},${-R * 0.44} M${R * 0.22},${-R * 0.62} L${R * 0.4},${-R * 0.55} M${-R * 0.5},${-R * 0.9} L${-R * 0.42},${-R * 0.72} L${-R * 0.5},${-R * 0.6}`, PP.skinDeep, 2.5);
+  } else {   // a dent in the side of the skull, with veins
+    ctx.filter = 'blur(5px)'; ell(R * 0.62, -R * 0.42, R * 0.26, R * 0.2, -0.5, 'rgba(70,64,58,0.6)'); ctx.filter = 'none';
+    pthS(`M${R * 0.45},${-R * 0.3} q${-R * 0.15},${R * 0.1} ${-R * 0.12},${R * 0.3} M${R * 0.5},${-R * 0.62} q${-R * 0.2},${-R * 0.06} ${-R * 0.3},${-R * 0.2}`, 'rgba(80,74,68,0.7)', 2);
   }
-  // undercut: the shaved sides
-  if (kind === 'young') for (const d of [-1, 1]) { ctx.save(); ctx.globalAlpha *= 0.85; pth(`M${d * 56},-22 C${d * 58},-52 ${d * 50},-66 ${d * 40},-72 L${d * 34},-40 C${d * 44},-36 ${d * 52},-30 ${d * 56},-22 Z`, P.side); ctx.restore(); }
-  // the face, shaded from the upper left
-  const fg = ctx.createLinearGradient(-56, 0, 56, 0); fg.addColorStop(0, '#efebe7'); fg.addColorStop(0.5, PP.skin); fg.addColorStop(1, PP.skinSh);
-  pth(FACE, fg);
-  ctx.save(); ctx.clip(new Path2D(FACE)); ctx.filter = 'blur(12px)';
-  ell(0, 68, 56, 16, 0, 'rgba(150,145,140,0.55)'); ell(-24, 22, 14, 8, 0, 'rgba(255,255,255,0.3)'); ell(10, 30, 12, 8, 0, 'rgba(140,135,130,0.35)');
-  ell(-22, 8, 13, 5, 0, 'rgba(150,145,140,0.18)'); ell(22, 8, 13, 5, 0, 'rgba(150,145,140,0.22)');
-  ctx.filter = 'none'; ctx.restore();
-  pthS(FACE, L, 3);
-  // eyes: almond whites, dark irises, a heavy upper lid. Red when o.eyes.
-  const re = o.eyes || 0, lk = (o.look || 0) * 4;
-  for (const d of [-1, 1]) {
-    const ex = d * 22, ey = -4;
-    const a = `M${ex - 15},${ey} Q${ex - 2},${ey - 12} ${ex + 15},${ey - 1} Q${ex + 2},${ey + 7} ${ex - 15},${ey} Z`;
-    pth(a, PP.white);
-    ctx.save(); ctx.clip(new Path2D(a)); circ(ex + lk, ey - 2, 6.5, PP.line);
-    if (re > 0) { ctx.globalAlpha *= re; redGlow(18); circ(ex + lk, ey - 2, 6.5, C.red); noGlow(); }
+  ctx.restore();
+  ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.strokeStyle = L; ctx.lineWidth = 3.5; ctx.stroke();
+  // eyes: deep sockets, wet whites, pinprick pupils. Each head is off in its own way.
+  const re = o.eyes || 0, lk = (o.look || 0) * R * 0.05;
+  const eyes = kind === 'young' ? [[-1, 0, 1], [1, 0.07, 1.16]] : kind === 'hr' ? [[-1, 0, 1.12], [1, 0, 1.12]] : [[-1, 0, 1], [1, 0, 1]];
+  for (const [d, dy, k] of eyes) {
+    const ex = d * R * 0.36, ey = R * (-0.04 + dy), rx = R * 0.2 * k, ry = R * (kind === 'hr' ? 0.19 : 0.14) * k;
+    ctx.save(); ctx.filter = 'blur(7px)'; ell(ex, ey + 2, rx * 1.55, ry * 1.9, 0, 'rgba(38,34,31,0.85)'); ctx.filter = 'none'; ctx.restore();
+    const sc = `M${ex - rx},${ey} Q${ex},${ey - ry * 1.5} ${ex + rx},${ey} Q${ex},${ey + ry * 1.35} ${ex - rx},${ey} Z`;
+    pth(sc, re > 0 ? '#e9d9d6' : '#efece4');
+    ctx.save(); ctx.clip(new Path2D(sc));
+    ctx.globalAlpha *= 0.5; ctx.filter = 'blur(3px)'; ell(ex, ey - ry * 0.8, rx, ry * 0.5, 0, 'rgba(60,55,50,0.8)'); ctx.filter = 'none'; ctx.globalAlpha /= 0.5;
+    if (re > 0) { ctx.globalAlpha *= re; for (let i = 0; i < 4; i++) { const a = i / 4 * Math.PI * 2 + 0.4; ln(ex + Math.cos(a) * rx, ey + Math.sin(a) * ry, ex + Math.cos(a) * rx * 0.4, ey + Math.sin(a) * ry * 0.4, 1.5, '#b33'); } ctx.globalAlpha /= re; }
+    // boss: the left lid hangs half shut
+    if (kind === 'boss' && d < 0) pth(`M${ex - rx - 2},${ey + 1} Q${ex},${ey - ry * 0.2} ${ex + rx + 2},${ey + 1} L${ex + rx + 2},${ey - ry * 2} L${ex - rx - 2},${ey - ry * 2} Z`, '#9d978f');
     ctx.restore();
-    if (re > 0) { ctx.save(); ctx.globalAlpha *= re; redGlow(24); circ(ex + lk, ey - 2, 3, '#ffb0b0'); noGlow(); ctx.restore(); }
-    else circ(ex + lk - 2, ey - 4, 1.8, '#fff');
-    pthS(`M${ex - 16},${ey + 1} Q${ex - 2},${ey - 13} ${ex + 16},${ey - 1}`, L, 3.5);
-    if (kind === 'hr') pthS(`M${ex + d * 14},${ey - 2} l${d * 6},-5`, L, 2.5);   // lashes
-  }
-  // brows: stern, angled down to the nose
-  const bw = kind === 'boss' ? 6 : kind === 'young' ? 5.5 : 4.5, bc = kind === 'boss' ? '#6e6e74' : P.hair;
-  for (const d of [-1, 1]) pthS(`M${d * 38},-26 Q${d * 24},-30 ${d * 9},-21`, bc, bw);
-  // nose: a bridge line, the tip and nostrils (no mouth below it, ever)
-  pthS('M5,-14 C3,2 12,14 11,22', PP.skinDeep, 2.5); ell(-5, 26, 4, 2.4, 0.2, PP.skinDeep); ell(8, 26, 4, 2.4, -0.2, PP.skinDeep);
-  // hair on top
-  if (kind === 'young') {
-    const h = 'M-56,-26 C-68,-84 -44,-132 4,-136 C52,-138 76,-100 60,-28 C56,-50 46,-64 30,-70 C10,-76 -22,-76 -40,-66 C-50,-58 -54,-44 -56,-26 Z';
-    pth(h, P.hair); pthS(h, L, 2.5);
-    for (let i = 0; i < 5; i++) pthS(`M${-38 + i * 18},${-70 - i} C${-44 + i * 16},${-104} ${-24 + i * 14},${-126} ${10 + i * 10},${-130 + i * 3}`, P.hairHi, 2.5);
-  } else if (kind === 'hr') {
-    const bang = 'M-64,-30 C-68,-96 -32,-114 0,-114 C34,-114 68,-96 64,-30 L60,-38 C40,-44 20,-42 0,-40 C-20,-42 -40,-44 -60,-38 Z';
-    pth(bang, P.hair);
-    for (const d of [-1, 1]) pth(`M${d * 64},-32 L${d * 72},56 C${d * 64},66 ${d * 50},66 ${d * 44},58 L${d * 54},2 C${d * 56},-14 ${d * 58},-26 ${d * 60},-38 Z`, P.hair);
-    pthS('M-40,-108 C-20,-100 -6,-80 -4,-42', P.hairHi, 3); pthS('M30,-106 C42,-90 50,-60 50,-40', P.hairHi, 2.5); pthS('M-52,-60 C-58,-20 -60,20 -62,50', P.hairHi, 2.5);
-    pthS('M-60,-38 C-40,-44 -20,-42 0,-40 C20,-42 40,-44 60,-38', L, 2);
-  } else {
-    const h = 'M-57,-22 C-64,-82 -30,-110 4,-110 C44,-110 66,-82 57,-22 C54,-46 46,-60 34,-66 C10,-74 -14,-70 -30,-60 C-44,-52 -52,-40 -57,-22 Z';
-    pth(h, P.hair); pthS(h, L, 2.5); for (const d of [-1, 1]) ell(d * 55, -24, 5, 14, 0, P.side);
-    pthS('M-28,-62 C-30,-80 -28,-96 -20,-106', '#6a6a70', 3);
-    for (let i = 0; i < 4; i++) pthS(`M${-22 + i * 4},${-100 + i * 9} C${0 + i * 4},${-104 + i * 8} ${26 + i * 2},${-96 + i * 8} ${46 - i * 2},${-70 + i * 6}`, P.hairHi, 2.5);
-    ctx.save(); ctx.globalAlpha *= 0.35; pthS('M-24,-48 Q0,-52 24,-48 M-18,-40 Q0,-43 18,-40', PP.skinDeep, 2); ctx.restore();
-    // glasses
-    for (const d of [-1, 1]) { ctx.save(); ctx.globalAlpha *= 0.12; rr(d * 22 - 21, -17, 42, 26, 6, '#cfe0ff'); ctx.restore(); ctx.beginPath(); ctx.roundRect(d * 22 - 21, -17, 42, 26, 6); ctx.strokeStyle = L; ctx.lineWidth = 4; ctx.stroke(); }
-    ln(-1, -6, 1, -6, 4, L); ln(-43, -10, -54, -14, 3.5, L); ln(43, -10, 54, -14, 3.5, L);
-    ctx.save(); ctx.globalAlpha *= 0.5; ln(-34, -13, -26, -3, 3, '#fff'); ln(10, -13, 18, -3, 3, '#fff'); ctx.restore();
+    if (kind === 'boss' && d < 0) pthS(`M${ex - rx},${ey + 1} Q${ex},${ey - ry * 0.2} ${ex + rx},${ey + 1}`, L, 3.5);
+    const pr = R * 0.042 * (1 + re * 0.5), half = kind === 'boss' && d < 0, py = ey + (half ? ry * 0.45 : 0);
+    if (re > 0) { ctx.save(); redGlow(20); circ(ex + lk, py, pr, C.red); noGlow(); ctx.restore(); } else circ(ex + lk, py, pr, '#050505');
+    if (!half) pthS(`M${ex - rx},${ey} Q${ex},${ey - ry * 1.5} ${ex + rx},${ey}`, L, 3.5);
+    pthS(`M${ex - rx * 0.8},${ey + ry * 0.9} Q${ex},${ey + ry * 1.5} ${ex + rx * 0.8},${ey + ry * 0.9}`, 'rgba(50,45,40,0.6)', 2);
   }
 }
 
-// an interviewer, waist at (x,y) (the desk top), ~470 tall above it at s=1.
-// o.arms: 'desk' (hands clasped on the desk), 'board' (clipboard at the chest), 'write' (+ pen, o.wt), 'laptop' (an open laptop in front, o.lid 1 open -> 0 shut),
-//         'hand' (right hand reaching out to shake), 'down'
+// an interviewer, waist at (x,y) (the desk top), ~500 tall above it at s=1.
+// o.arms: 'desk' (long fingers spread on the desk), 'board' (clipboard at the chest), 'write' (+ pen, o.wt), 'laptop' (an open laptop in front, o.lid 1 open -> 0 shut),
+//         'hand' (right hand reaching out to shake, o.reach), 'down'
 // o.eyes, o.look, o.lean 0..1, o.tilt (rad), o.sink (px, slides down behind the laptop), o.shake, o.fold 0..1, o.dim 0..1, o.stand (draw legs; (x,y) = feet)
 function person(kind, x, y, s = 1, o = {}) {
   const P = PP[kind], L = PP.line, lean = o.lean || 0;
   ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
   if (o.stand) {
-    for (const d of [-1, 1]) { const g = `M${d * 8},-300 L${d * 70},-300 L${d * 58},-24 L${d * 16},-24 Z`; pth(g, kind === 'hr' ? '#24242a' : P.jacketSh); pthS(g, kind === 'hr' ? P.edge : L, 2.5); }
-    rr(10, -26, 54, 26, 10, '#0c0c0e'); rr(-64, -26, 54, 26, 10, '#0c0c0e'); rrS(10, -26, 54, 26, 10, '#5a5a60', 2); rrS(-64, -26, 54, 26, 10, '#5a5a60', 2);
+    for (const d of [-1, 1]) { const g = `M${d * 8},-300 L${d * 70},-300 L${d * 60},-20 L${d * 14},-20 Z`; pth(g, P.jacketSh); pthS(g, P.edge, 2.5);
+      ctx.save(); ctx.globalAlpha *= 0.4; pthS(`M${d * 22},-200 q${d * 14},10 ${d * 30},0 M${d * 24},-110 q${d * 14},8 ${d * 28},-2`, '#000', 2.5); ctx.restore(); }
+    rr(10, -24, 58, 24, 8, '#0c0c0e'); rr(-68, -24, 58, 24, 8, '#0c0c0e'); rrS(10, -24, 58, 24, 8, '#55555b', 2); rrS(-68, -24, 58, 24, 8, '#55555b', 2);
     ctx.translate(0, -300);
   }
   if (o.shake) ctx.translate(Math.sin((o.t || 0) * 83) * o.shake, Math.cos((o.t || 0) * 71) * o.shake * 0.5);
@@ -945,55 +932,79 @@ function person(kind, x, y, s = 1, o = {}) {
   if (o.dim) ctx.globalAlpha *= 1 - 0.6 * o.dim;
   if (o.sink) ctx.translate(0, o.sink);
   ctx.translate(0, lean * 18);
-  // jacket body
-  const J = 'M-122,-206 C-132,-200 -138,-178 -136,-150 L-124,10 L124,10 L136,-150 C138,-178 132,-200 122,-206 C84,-228 -84,-228 -122,-206 Z';
+  // jacket: slumped, one shoulder lower, worn
+  const J = 'M-124,-214 C-136,-206 -140,-180 -138,-150 L-126,10 L126,10 L134,-146 C136,-170 130,-192 120,-198 C84,-224 -84,-232 -124,-214 Z';
   glow('rgba(0,0,0,0.6)', 30); pth(J, P.jacket); noGlow();
-  ctx.save(); ctx.clip(new Path2D(J)); ctx.filter = 'blur(14px)'; ell(110, -80, 50, 170, 0, P.jacketSh); ctx.filter = 'none'; ctx.restore();
+  ctx.save(); ctx.clip(new Path2D(J)); ctx.filter = 'blur(14px)'; ell(110, -80, 50, 170, 0, P.jacketSh);
+  ctx.filter = 'blur(5px)'; for (const [sx, sy, r] of [[-70, -40, 26], [80, -130, 18], [30, 0, 22], [-96, -150, 14]]) ell(sx, sy, r, r * 0.8, 0.4, 'rgba(0,0,0,0.32)');
+  ctx.filter = 'none'; ctx.globalAlpha *= 0.55;
+  pthS('M-110,-120 q30,22 56,8 M-120,-60 q36,14 60,-8 M70,-70 q22,-14 50,6 M60,-20 q30,6 56,-10 M-100,-10 q20,-12 44,2', P.jacketSh === '#121215' ? '#3a3a40' : '#000', 3);
+  ctx.restore();
   pthS(J, P.edge, 3);
-  // shirt / blouse, tie, vest
+  // stitches along the right shoulder seam, a torn hole under the left lapel
+  for (let i = 0; i < 6; i++) { const sx = 72 + i * 9, sy = -212 + i * 3; ln(sx - 4, sy - 5, sx + 4, sy + 5, 2.2, kind === 'hr' ? '#8a8a90' : L); ln(sx + 4, sy - 5, sx - 4, sy + 5, 2.2, kind === 'hr' ? '#8a8a90' : L); }
+  pth('M-92,-92 L-80,-104 L-72,-94 L-60,-102 L-56,-84 L-66,-72 L-80,-76 L-90,-70 Z', '#070708'); pthS('M-92,-92 L-80,-104 L-72,-94 L-60,-102 L-56,-84 L-66,-72 L-80,-76 L-90,-70 Z', P.edge, 2);
+  ln(-74, -72, -70, -58, 1.5, P.edge); ln(-62, -76, -56, -64, 1.5, P.edge);
+  // shirt / blouse (yellowed, a stain at the collar), the tie (too long, crooked, frayed)
   if (kind === 'hr') {
-    pth('M-44,-220 C-30,-170 30,-170 44,-220 Z', P.shirt); pthS('M-44,-220 C-30,-170 30,-170 44,-220', L, 2.5);
-    pthS('M-30,-210 C-20,-150 20,-150 30,-210', '#8e8e96', 2); circ(0, -172, 5, '#d8d8de');   // a thin necklace
+    pth('M-44,-222 C-30,-172 30,-172 44,-222 Z', P.shirt); pthS('M-44,-222 C-30,-172 30,-172 44,-222', L, 2.5);
+    ctx.save(); ctx.filter = 'blur(3px)'; ell(14, -200, 12, 8, 0, 'rgba(70,60,50,0.5)'); ctx.filter = 'none'; ctx.restore();
   } else {
-    pth('M-34,-222 L34,-222 L0,-108 Z', P.shirt); pthS('M-34,-222 L34,-222 L0,-108 Z', L, 2.5);
-    if (kind === 'boss') { pth('M-30,-200 L30,-200 L46,-40 L0,-20 L-46,-40 Z', P.vest); pthS('M-30,-200 L-46,-40 L0,-20 L46,-40 L30,-200', P.edge, 2); for (let i = 0; i < 4; i++) circ(0, -150 + i * 30, 3.5, '#77777e'); }
-    pth('M-34,-222 L-8,-222 L-14,-198 Z', '#e4e4e8'); pth('M34,-222 L8,-222 L14,-198 Z', '#e4e4e8'); pthS('M-34,-222 L-14,-198 L-5,-219 M34,-222 L14,-198 L5,-219', L, 2.5);
-    pth('M-9,-216 L9,-216 L7,-198 L-7,-198 Z', P.tie);
-    const tie = kind === 'boss' ? 'M-7,-198 L7,-198 L12,-150 L0,-140 L-12,-150 Z' : 'M-6,-198 L6,-198 L10,-118 L0,-106 L-10,-118 Z';
+    pth('M-34,-224 L34,-224 L0,-108 Z', P.shirt); pthS('M-34,-224 L34,-224 L0,-108 Z', L, 2.5);
+    ctx.save(); ctx.filter = 'blur(3px)'; ell(-14, -206, 12, 7, 0, 'rgba(70,60,50,0.5)'); ctx.filter = 'none'; ctx.restore();
+    if (kind === 'boss') { pth('M-30,-200 L30,-200 L46,-40 L0,-20 L-46,-40 Z', P.vest); pthS('M-30,-200 L-46,-40 L0,-20 L46,-40 L30,-200', P.edge, 2); circ(0, -150, 3.5, '#77777e'); circ(0, -120, 5, '#8a8a90'); ln(0, -90, 4, -74, 1.5, '#8a8a90'); circ(5, -72, 3, '#77777e'); circ(0, -60, 3.5, '#77777e'); }
+    pth('M-34,-224 L-8,-224 L-16,-198 Z', '#d6d2c8'); pth('M34,-224 L8,-224 L22,-236 Z', '#d6d2c8'); pthS('M-34,-224 L-16,-198 L-5,-221 M34,-224 L22,-236 L5,-221', L, 2.5);
+    ctx.save(); ctx.translate(0, -212); ctx.rotate(0.12);
+    pth('M-9,-6 L9,-6 L7,12 L-7,12 Z', P.tie);
+    const tieLen = kind === 'young' ? 220 : 150;
+    const tie = `M-6,12 L6,12 L12,${tieLen - 10} L8,${tieLen} L4,${tieLen - 8} L0,${tieLen + 2} L-4,${tieLen - 8} L-8,${tieLen} L-12,${tieLen - 10} Z`;
     pth(tie, P.tie);
-    if (kind === 'boss') { ctx.save(); ctx.clip(new Path2D(tie)); for (let i = 0; i < 6; i++) ln(-14, -200 + i * 12, 14, -188 + i * 12, 3, '#55555c'); ctx.restore(); }
+    if (kind === 'boss') { ctx.save(); ctx.clip(new Path2D(tie)); for (let i = 0; i < 14; i++) ln(-14, i * 12, 14, 12 + i * 12, 3, '#48484e'); ctx.restore(); }
+    ctx.save(); ctx.globalAlpha *= 0.6; ctx.filter = 'blur(2px)'; ell(2, tieLen * 0.6, 7, 10, 0, 'rgba(0,0,0,0.6)'); ctx.filter = 'none'; ctx.restore();
+    ctx.restore();
   }
-  // lapels, buttons, pocket square
-  pthS('M-34,-222 L-62,-168 L-48,-158 L-66,-144 L-4,-60 M34,-222 L62,-168 L48,-158 L66,-144 L4,-60', P.edge, 4);
-  ln(0, -60, 0, 10, 3, P.edge); circ(-7, -36, 4.5, P.edge); circ(-7, -8, 4.5, P.edge);
-  if (kind !== 'young') { ln(56, -112, 92, -116, 3, P.edge); pth('M64,-114 L70,-128 L78,-114 Z', '#e8e8ec'); }
-  if (kind === 'hr') { pthS('M-26,-200 C-20,-140 -10,-110 -2,-92 M26,-200 C24,-150 28,-110 34,-92', '#9a9aa2', 3); rr(-6, -96, 56, 72, 6, '#e6e6ea'); rr(4, -84, 36, 30, 3, '#9a9aa2'); ln(4, -42, 40, -42, 3, '#9a9aa2'); }
-  // arms
-  const sleeve = (pts, cuff) => { ctx.save(); poly(pts, 46, P.edge); poly(pts, 40, P.jacket); ctx.restore(); if (cuff) { const [a, b] = pts.slice(-2); const ang = Math.atan2(b[1] - a[1], b[0] - a[0]); ctx.save(); ctx.translate(b[0], b[1]); ctx.rotate(ang); rr(-4, -16, 10, 32, 3, P.shirt); ctx.restore(); } };
-  const hand = (hx, hy, rot = 0, sx = 1) => { ctx.save(); ctx.translate(hx, hy); ctx.rotate(rot); ctx.scale(sx, 1);
-    const h = 'M-16,-14 C-4,-20 16,-18 24,-10 C30,-4 30,6 24,12 C14,18 -6,18 -16,12 Z'; pth(h, PP.skin); pthS(h, L, 2.5); pthS('M2,-14 C10,-12 16,-6 18,2', PP.skinDeep, 2); ctx.restore(); };
+  // lapels, mismatched buttons (one missing, a thread hanging)
+  pthS('M-34,-224 L-62,-170 L-48,-160 L-66,-146 L-4,-60 M34,-224 L62,-168 L48,-158 L66,-144 L4,-60', P.edge, 4);
+  ln(0, -60, 0, 10, 3, P.edge); circ(-7, -36, 6.5, P.edge); circ(-7, -36, 3, P.jacketSh); ln(-7, -12, -4, 6, 1.5, P.edge); circ(-3, 8, 2.5, P.edge);
+  if (kind === 'hr') {   // lanyard and a badge with the name scratched out
+    pthS('M-26,-202 C-20,-140 -10,-110 -2,-92 M26,-202 C24,-150 28,-110 34,-92', '#8a8a92', 3); rr(-6, -96, 56, 72, 6, '#d9d6cf'); rr(4, -84, 36, 30, 3, '#7a7a82');
+    pthS('M2,-42 l8,-6 l6,8 l8,-8 l6,8 l8,-6', '#222', 3); pthS('M2,-34 l10,-4 l8,6 l10,-6 l10,4', '#222', 2.5);
+  }
+  // arms: sleeves too short, bony wrists, long thin fingers
+  const sleeve = (pts) => { ctx.save(); poly(pts, 46, P.edge); poly(pts, 40, P.jacket); ctx.restore(); };
+  const hand = (hx, hy, rot = 0, sx = 1, curl = 1) => {
+    ctx.save(); ctx.translate(hx, hy); ctx.rotate(rot); ctx.scale(sx, 1);
+    poly([[-30, 0], [-6, 0]], 15, L); poly([[-30, 0], [-6, 0]], 10, PP.skinSh);   // wrist
+    const h = 'M-12,-12 C0,-16 14,-14 18,-6 C20,2 18,10 10,14 C0,16 -10,12 -12,4 Z'; pth(h, PP.skin); pthS(h, L, 2.5);
+    for (let i = 0; i < 4; i++) { const y0 = -8 + i * 6.5, pts = [[14, y0], [34, y0 + 1], [52, y0 + 6 * curl + i], [62, y0 + 16 * curl + i]];
+      poly(pts, 8, L); poly(pts, 4.5, PP.skin); circ(34, y0 + 1, 3, PP.skinSh); circ(52, y0 + 6 * curl + i, 2.6, PP.skinSh); }
+    poly([[4, -12], [18, -24], [30, -24]], 8, L); poly([[4, -12], [18, -24], [30, -24]], 4.5, PP.skin);
+    ctx.restore(); };
   const A = o.arms || 'desk';
-  if (A === 'desk') { sleeve([[-124, -196], [-148, -70], [-40, -4]], 1); sleeve([[124, -196], [148, -70], [40, -4]], 1); hand(-22, -2, 0); hand(18, -8, 0, -1); }
-  else if (A === 'down') { sleeve([[-124, -196], [-142, -60], [-136, 30]], 1); sleeve([[124, -196], [142, -60], [136, 30]], 1); hand(-136, 46, 1.5); hand(136, 46, 1.6, -1); }
-  else if (A === 'hand') { sleeve([[-124, -196], [-148, -70], [-40, -4]], 1); const r = o.reach ?? 1; sleeve([[124, -196], [150, -90], [150 + 120 * r, -60 - 30 * r]], 1); hand(-22, -2, 0); hand(170 + 120 * r, -60 - 30 * r, -0.2); }
-  else if (A === 'laptop') { sleeve([[-124, -196], [-150, -70], [-70, -20]], 1); sleeve([[124, -196], [150, -70], [70, -20]], 1); }
+  if (A === 'desk') { sleeve([[-124, -200], [-150, -70], [-76, -12]]); sleeve([[124, -194], [150, -70], [76, -12]]); hand(-52, -6, 0.15, 1, 0.6); hand(52, -6, -0.15, -1, 0.6); }
+  else if (A === 'down') { sleeve([[-124, -200], [-142, -60], [-136, 10]]); sleeve([[124, -194], [142, -60], [136, 10]]); hand(-136, 34, 1.5, 1); hand(136, 34, 1.6, -1); }
+  else if (A === 'hand') { sleeve([[-124, -200], [-150, -70], [-76, -12]]); hand(-52, -6, 0.15, 1, 0.6); const r = o.reach ?? 1; sleeve([[124, -194], [150, -90], [146 + 110 * r, -60 - 30 * r]]); hand(176 + 110 * r, -60 - 30 * r, -0.2, 1, 0.3); }
+  else if (A === 'laptop') { sleeve([[-124, -200], [-150, -70], [-70, -20]]); sleeve([[124, -194], [150, -70], [70, -20]]); }
   else {
-    sleeve([[-124, -196], [-146, -90], [-70, -84]], 1); hand(-60, -84, 0);
+    sleeve([[-124, -200], [-146, -90], [-84, -84]]);
     const wt = o.wt || 0, px = 24 + Math.sin(wt * 9) * 22 + ((wt * 40) % 40), py = -130 + Math.floor((wt * 1.2) % 3) * 22;
     clipboard(-6, -120, 1.05, -0.06, { lines: o.lines, under: o.under, up: o.up });
-    if (A === 'write') { sleeve([[124, -196], [150, -90], [px + 24, py + 30]], 1); pen(px, py, 0.8, -0.5); hand(px + 22, py + 26, 0, -1); }
-    else { sleeve([[124, -196], [146, -90], [70, -84]], 1); hand(62, -84, 0, -1); }
+    hand(-66, -84, 0, 1, 0.8);
+    if (A === 'write') { sleeve([[124, -194], [150, -90], [px + 34, py + 34]]); pen(px, py, 0.8, -0.5); hand(px + 22, py + 26, 0.3, -1, 0.8); }
+    else { sleeve([[124, -194], [146, -90], [84, -84]]); hand(66, -84, 0, -1, 0.8); }
   }
   // head on the neck
-  ctx.save(); ctx.translate(0, -318 + lean * 34); ctx.rotate(-lean * 0.06 + (o.tilt || 0)); ppHead(kind, o); ctx.restore();
+  ctx.save(); ctx.translate(0, ppHeadY(kind) + lean * 34); ctx.rotate(-lean * 0.06 + (o.tilt || 0)); ppHead(kind, o); ctx.restore();
   // the laptop goes in front of everything, its lid hiding the face when open
   if (A === 'laptop') {
-    const lid = o.lid ?? 1, hh = 300 * lid;
+    const lid = o.lid ?? 1, hh = 320 * lid;
     rr(-150, -14, 300, 18, 4, '#3a3a40'); rrS(-150, -14, 300, 18, 4, '#6a6a70', 2);
     if (hh > 4) { glow('rgba(0,0,0,0.6)', 20); rr(-140, -14 - hh, 280, hh, 10, '#2a2a30'); noGlow(); rrS(-140, -14 - hh, 280, hh, 10, '#6e6e76', 3); circ(0, -14 - hh / 2, 14 * lid, '#4a4a52'); }
+    if (lid < 0.98) { hand(-80, -14, 0, 1, 0.4); hand(80, -14, 0, -1, 0.4); }
   }
   ctx.restore();
 }
+
 
 // the new room: a dim grey meeting room under one pendant lamp, window blinds on the right, the clock on the left
 function meetRoom(o = {}) {
@@ -1592,7 +1603,7 @@ window.drawDesign1 = () => {
 };
 window.drawDesign2 = () => {
   thBg(); meetRoom({ clock: [9, 0, 0] });
-  for (const [k, x, o] of [['young', 330, {}], ['hr', 960, { eyes: 1 }], ['boss', 1590, {}]]) { ctx.save(); ctx.translate(x, 560); ctx.scale(2.6, 2.6); ppHead(k, o); ctx.restore(); }
+  for (const [k, x, o] of [['young', 330, {}], ['hr', 960, { eyes: 1 }], ['boss', 1590, {}]]) { ctx.save(); ctx.translate(x, 480); ctx.scale(2.4, 2.4); ppHead(k, o); ctx.restore(); }
 };
 // ---------- HUD, captions, texture ----------
 let grainC = null, vig = null;

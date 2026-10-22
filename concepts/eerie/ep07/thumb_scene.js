@@ -45,5 +45,5 @@ window.drawDesign1 = () => {
 };
 window.drawDesign2 = () => {
   thBg(); meetRoom({ clock: [9, 0, 0] });
-  for (const [k, x, o] of [['young', 330, {}], ['hr', 960, { eyes: 1 }], ['boss', 1590, {}]]) { ctx.save(); ctx.translate(x, 560); ctx.scale(2.6, 2.6); ppHead(k, o); ctx.restore(); }
+  for (const [k, x, o] of [['young', 330, {}], ['hr', 960, { eyes: 1 }], ['boss', 1590, {}]]) { ctx.save(); ctx.translate(x, 480); ctx.scale(2.4, 2.4); ppHead(k, o); ctx.restore(); }
 };
