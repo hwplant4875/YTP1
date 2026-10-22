@@ -316,58 +316,88 @@ hgt = bb[:, 1].max() - bb[:, 1].min()
 cu.size = (60 / PX) / hgt
 bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
 bb = np.array([wm.evaluated_get(dg).bound_box[i] for i in range(8)])
-wm.location = (-PW / 2 + 64 / PX - bb[:, 0].min(), -H / PX / 2 + 64 / PX - bb[:, 1].min(), 2.0)
+wm.location = (-PW / 2 + 64 / PX - bb[:, 0].min(), -H / PX / 2 + 84 / PX - bb[:, 1].min(), 2.0)   # raised 20 px to clear the spectrum line
 wm_right_px = (wm.location.x + bb[:, 0].max()) * PX + W / 2
 wm_mid_y = wm.location.y + (bb[:, 1].min() + bb[:, 1].max()) / 2
 
-# tiny, heavily smoothed audio spectrum next to the watermark (35 % opacity relative to the frame)
-spec_bars = []
+# long, detailed audio spectrum along the bottom edge (35 % opacity, max ~20 px).
+# Filled polyline with sharp vertices (small pointed peaks); values baked into a float image
+# (bands x frames) that a Geometry Nodes tree samples per frame, so the .blend animates on its own.
 if USE_SPECTRUM:
     snd = aud.Sound(os.path.join(ASSETS, 'music_60s.mp3'))
     sr = snd.specs[0]
     data = snd.data()
     mono = data.mean(axis=1) if data.ndim > 1 else data
-    NB, WIN = 20, 4096
-    edges = np.geomspace(60, 9000, NB + 1)
+    NB, WIN = 180, 8192
+    centers = np.geomspace(60, 8000, NB)
     freqs = np.fft.rfftfreq(WIN, 1 / sr)
     hann = np.hanning(WIN)
+    lo_e = centers / 2 ** (1 / 2 / (NB / 7.4)); hi_e = centers * 2 ** (1 / 2 / (NB / 7.4))
     mags = np.zeros((NF, NB))
     for i in range(NF):
         c0 = int(t_of(i + 1) * sr) - WIN // 2
         seg = mono[max(c0, 0):c0 + WIN]
         if len(seg) < WIN: seg = np.pad(seg, (WIN - len(seg), 0))
         sp = np.abs(np.fft.rfft(seg * hann))
+        interp = np.interp(centers, freqs, sp)
         for b in range(NB):
-            sel = (freqs >= edges[b]) & (freqs < edges[b + 1])
-            mags[i, b] = sp[sel].mean() if sel.any() else 0
+            sel = (freqs >= lo_e[b]) & (freqs < hi_e[b])
+            mags[i, b] = max(sp[sel].max(), interp[b]) if sel.any() else interp[b]
     db = 20 * np.log10(mags + 1e-6)
-    db = np.clip((db - np.percentile(db, 30)) / (np.percentile(db, 99) - np.percentile(db, 30)), 0, 1)
-    db = (db + np.roll(db, 1, 1) + np.roll(db, -1, 1)) / 3            # smooth across bands
-    att, rel = 1 - math_.exp(-1 / (0.35 * FPS)), 1 - math_.exp(-1 / (0.6 * FPS))
-    sm = np.zeros_like(db); cur = np.zeros(NB)
+    # partial tilt compensation (3/4 of each band's mean), then one global range -> rise and fall stays visible
+    db = db - 0.75 * db.mean(axis=0, keepdims=True)
+    lo, hi = np.percentile(db, 25), np.percentile(db, 99.0)
+    v = np.clip((db - lo) / (hi - lo), 0, 1) ** 1.35
+    att, rel = 1 - math_.exp(-1 / (0.05 * FPS)), 1 - math_.exp(-1 / (0.18 * FPS))
+    sm = np.zeros_like(v); cur = np.zeros(NB)
     for i in range(NF):
-        k = np.where(db[i] > cur, att, rel); cur = cur + (db[i] - cur) * k; sm[i] = cur
+        k = np.where(v[i] > cur, att, rel); cur = cur + (v[i] - cur) * k; sm[i] = cur
     env = np.array([min(1, t_of(f) / 3.0, max(0, (SECS - t_of(f)) / 4.0)) for f in range(1, NF + 1)])
     sm *= env[:, None]
-    bar_mat = bpy.data.materials.new('SpecBar'); bar_mat.surface_render_method = 'BLENDED'
+    taper = np.minimum(1, np.minimum(np.arange(NB) + 1, NB - np.arange(NB)) / 6.0)   # ends settle to the baseline
+    sm *= taper[None, :]
+    spec_img = bpy.data.images.new('spectrum_bake', NB, NF, alpha=False, float_buffer=True)
+    spec_img.colorspace_settings.name = 'Non-Color'
+    px_ = np.zeros((NF, NB, 4), np.float32); px_[..., 0] = sm; px_[..., 3] = 1
+    spec_img.pixels.foreach_set(px_.ravel()); spec_img.pack()
+
+    X0, X1, BASE_Y, HMAX = 64, W - 64, H - 34, 20.0          # output pixels (y down)
+    xs = np.linspace(X0, X1, NB)
+    verts, faces, uvals, tops = [], [], [], []
+    for b, x in enumerate(xs):
+        wx, wy = (x - W / 2) / PX, (H / 2 - BASE_Y) / PX
+        verts += [(wx, wy, 0), (wx, wy + 1.0 / PX, 0)]               # 1 px minimum line
+        uvals += [(b + 0.5) / NB] * 2; tops += [0.0, 1.0]
+        if b: faces.append((2 * b - 2, 2 * b, 2 * b + 1, 2 * b - 1))
+    me = bpy.data.meshes.new('Spectrum'); me.from_pydata(verts, [], faces); me.update()
+    me.attributes.new('su', 'FLOAT', 'POINT').data.foreach_set('value', uvals)
+    me.attributes.new('top', 'FLOAT', 'POINT').data.foreach_set('value', tops)
+    so = bpy.data.objects.new('Spectrum', me); col_spec.objects.link(so); so.location.z = 2.0
+    bar_mat = bpy.data.materials.new('SpecFill')
     bn = bar_mat.node_tree.nodes; [bn.remove(n) for n in list(bn)]
     be = bn.new('ShaderNodeEmission'); be.inputs['Color'].default_value = e_.inputs['Color'].default_value
-    bt = bn.new('ShaderNodeBsdfTransparent'); bm = bn.new('ShaderNodeMixShader'); bm.inputs[0].default_value = 1.0
-    bo = bn.new('ShaderNodeOutputMaterial')
-    bl = bar_mat.node_tree.links; bl.new(bt.outputs[0], bm.inputs[1]); bl.new(be.outputs[0], bm.inputs[2]); bl.new(bm.outputs[0], bo.inputs['Surface'])
-    x_start = wm_right_px + 26
-    for b in range(NB):
-        bpy.ops.mesh.primitive_plane_add(size=1)
-        o = bpy.context.object; o.name = f'Spec{b:02d}'
-        for c in o.users_collection: c.objects.unlink(o)
-        col_spec.objects.link(o); o.data.materials.append(bar_mat)
-        o.location = ((x_start + b * 6 - W / 2) / PX, wm_mid_y - 6 / PX, 2.0)
-        o.scale.x = 2.4 / PX
-        for f in range(1, NF + 1, 2):
-            o.scale.y = (2 + 18 * sm[f - 1, b]) / PX
-            o.keyframe_insert('scale', index=1, frame=f)
-        set_interp(o, 'LINEAR')
-        spec_bars.append(o)
+    bo = bn.new('ShaderNodeOutputMaterial'); bar_mat.node_tree.links.new(be.outputs[0], bo.inputs['Surface'])
+    me.materials.append(bar_mat)
+    gt = bpy.data.node_groups.new('SpectrumGN', 'GeometryNodeTree')
+    gt.interface.new_socket('Geometry', in_out='INPUT', socket_type='NodeSocketGeometry')
+    gt.interface.new_socket('Geometry', in_out='OUTPUT', socket_type='NodeSocketGeometry')
+    gn, gl = gt.nodes, gt.links
+    gi = gn.new('NodeGroupInput'); go_ = gn.new('NodeGroupOutput')
+    st = gn.new('GeometryNodeInputSceneTime')
+    a_su = gn.new('GeometryNodeInputNamedAttribute'); a_su.data_type = 'FLOAT'; a_su.inputs['Name'].default_value = 'su'
+    a_top = gn.new('GeometryNodeInputNamedAttribute'); a_top.data_type = 'FLOAT'; a_top.inputs['Name'].default_value = 'top'
+    fv = gn.new('ShaderNodeMath'); fv.operation = 'MULTIPLY_ADD'      # v = (frame - 0.5) / NF
+    gl.new(st.outputs['Frame'], fv.inputs[0]); fv.inputs[1].default_value = 1 / NF; fv.inputs[2].default_value = -0.5 / NF
+    cxyz = gn.new('ShaderNodeCombineXYZ'); gl.new(a_su.outputs['Attribute'], cxyz.inputs[0]); gl.new(fv.outputs[0], cxyz.inputs[1])
+    it = gn.new('GeometryNodeImageTexture'); it.inputs['Image'].default_value = spec_img
+    it.interpolation = 'Closest'; gl.new(cxyz.outputs[0], it.inputs['Vector'])
+    sepc = gn.new('FunctionNodeSeparateColor'); gl.new(it.outputs['Color'], sepc.inputs[0])
+    hm = gn.new('ShaderNodeMath'); hm.operation = 'MULTIPLY'; gl.new(sepc.outputs[0], hm.inputs[0]); hm.inputs[1].default_value = (HMAX - 1) / PX
+    hm2 = gn.new('ShaderNodeMath'); hm2.operation = 'MULTIPLY'; gl.new(hm.outputs[0], hm2.inputs[0]); gl.new(a_top.outputs['Attribute'], hm2.inputs[1])
+    off = gn.new('ShaderNodeCombineXYZ'); gl.new(hm2.outputs[0], off.inputs[1])
+    sp_ = gn.new('GeometryNodeSetPosition'); gl.new(gi.outputs[0], sp_.inputs['Geometry']); gl.new(off.outputs[0], sp_.inputs['Offset'])
+    gl.new(sp_.outputs[0], go_.inputs[0])
+    mod = so.modifiers.new('Spectrum', 'NODES'); mod.node_group = gt
 
 # ---------------------------------------------------------------- view layers
 vl_main = sc.view_layers[0]; vl_main.name = 'Main'
@@ -408,11 +438,11 @@ rs = cnode('CompositorNodeRLayers', 0, 6); rs.layer = 'SPEC'
 ao3 = cnode('CompositorNodeAlphaOver', 8, 1, Factor=0.35); cl.new(ao2.outputs['Image'], ao3.inputs['Background']); cl.new(rs.outputs['Image'], ao3.inputs['Foreground'])
 go = cn.new('NodeGroupOutput'); go.location = (9 * 240, -200); cl.new(ao3.outputs['Image'], go.inputs[0])
 
-# 20 % -> 100 % brightness over the first 6 s (smoothstep, display-referred), then constant
+# 60 % -> 100 % brightness over the first 5 s (smoothstep, display-referred), then constant
 def fade_k(t):
-    k = min(t / 6.0, 1.0); k = k * k * (3 - 2 * k)
-    return 2.2 * math_.log2(0.2 + 0.8 * k)
-for f in list(range(1, 6 * FPS + 2)):
+    k = min(t / 5.0, 1.0); k = k * k * (3 - 2 * k)
+    return 2.2 * math_.log2(0.6 + 0.4 * k)
+for f in list(range(1, 5 * FPS + 2)):
     fade.inputs['Exposure'].default_value = fade_k(t_of(f))
     fade.inputs['Exposure'].keyframe_insert('default_value', frame=f)
 set_interp(cg, 'LINEAR')
@@ -424,7 +454,7 @@ for fc_owner in [cg]:
 
 # ---------------------------------------------------------------- save + render
 os.makedirs(OUT, exist_ok=True)
-bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, 'malfoid_blender_v1.blend'), compress=True)
+bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, 'malfoid_blender_v2.blend'), compress=True)
 import time
 if MODE in ('stills', 'both'):
     sc.render.image_settings.media_type = 'IMAGE'
@@ -434,6 +464,15 @@ if MODE in ('stills', 'both'):
         sc.render.filepath = os.path.join(OUT, f'malfoid_still_f{f:04d}_t{t_of(f):05.2f}s.jpg')
         bpy.ops.render.render(write_still=True)
         print(f'STILL frame {f} rendered in {time.time() - t0:.2f}s')
+if MODE == 'frames':
+    # resumable PNG sequence (skips frames already on disk), encoded with ffmpeg afterwards
+    sc.render.image_settings.media_type = 'IMAGE'
+    sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.compression = 15
+    sc.render.use_overwrite = False; sc.render.use_placeholder = True
+    sc.render.filepath = os.path.join(OUT, 'frames_v2', 'f_')
+    t0 = time.time()
+    bpy.ops.render.render(animation=True)
+    print(f'FRAMES done in {time.time() - t0:.1f}s')
 if MODE in ('video', 'both'):
     sc.render.image_settings.media_type = 'VIDEO'
     sc.render.image_settings.file_format = 'FFMPEG'
@@ -441,7 +480,7 @@ if MODE in ('video', 'both'):
     sc.render.ffmpeg.constant_rate_factor = 'HIGH'
     sc.render.ffmpeg.ffmpeg_preset = 'GOOD'
     sc.render.ffmpeg.audio_codec = 'NONE'
-    sc.render.filepath = os.path.join(OUT, 'malfoid_blender_video_noaudio.mp4')
+    sc.render.filepath = os.path.join(OUT, 'malfoid_blender_v2_noaudio.mp4')
     t0 = time.time()
     bpy.ops.render.render(animation=True)
     dt = time.time() - t0
