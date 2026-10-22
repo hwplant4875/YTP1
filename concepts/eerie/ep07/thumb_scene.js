@@ -35,3 +35,15 @@ window.drawThumbC = () => {
   ln(-62, 54, 44, 52, 3.5, '#d61f1f'); ctx.restore();
   thTitle("DON'T TELL THE ", 'TRUTH', 170, 130);
 };
+// v2 design sketches
+window.drawDesign1 = () => {
+  thBg(); meetRoom({ clock: [9, 0, 0] });
+  person('young', 560, 700, 1, { arms: 'board' });
+  person('hr', 960, 700, 1, { arms: 'desk' });
+  person('boss', 1360, 700, 1, { arms: 'laptop', lid: 0 });
+  meetDesk(260, 1660, 700);
+};
+window.drawDesign2 = () => {
+  thBg(); meetRoom({ clock: [9, 0, 0] });
+  for (const [k, x, o] of [['young', 330, {}], ['hr', 960, { eyes: 1 }], ['boss', 1590, {}]]) { ctx.save(); ctx.translate(x, 560); ctx.scale(2.6, 2.6); ppHead(k, o); ctx.restore(); }
+};
