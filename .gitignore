@@ -3,3 +3,6 @@ germany_shorts/longform/.cache/
 germany_shorts/longform/node_modules
 germany_shorts/longform/_page*.html
 __pycache__/
+
+# Splice samples are licensed per user; keep them out of git
+music/splice/
