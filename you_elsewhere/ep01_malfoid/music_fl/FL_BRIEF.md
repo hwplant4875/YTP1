@@ -14,3 +14,7 @@ Goal: a warm, romantic late-night jazz piano trio that sounds like a real record
    Command-line render (once an .flp exists): `"<FL dir>\FL64.exe" /R /Ewav "<project>.flp"`. GUI export is fine too.
 5. Commit the mp3 + .flp to `you_elsewhere/ep01_malfoid/music_fl/out/` on branch claude/project-thread-uxub9k and push. Report which instruments/plugins you used.
 If FL Studio cannot be driven at all, say so plainly and do not substitute a different tool without reporting it.
+
+## v2 changes (user, 10/22 09:42 UTC)
+- MIDI regenerated: the Hedwig melody starts at 0:00 (no intro), first head is solo piano, tempo 66 BPM (slower), softer velocities, ride only on beats 1 and 3.
+- Piano must be gentle on the ears: soft/felt-like tone (lower velocity curve, roll off highs ~5 kHz, no hard attacks), generous lush reverb (long hall/plate, ~2.5-3.5 s, wet clearly audible), slow, atmospheric, emotional. Export as hedwig_trio_fl_v2.

@@ -2,7 +2,7 @@
 # Tracks: 1 Piano (melody + rootless comping), 2 Upright bass, 3 Brush drums (GM ch 10).
 import mido, random
 random.seed(4)
-TPB, BPM = 480, 88
+TPB, BPM = 480, 66
 names = {'C':0,'C#':1,'D':2,'D#':3,'E':4,'F':5,'F#':6,'G':7,'G#':8,'A':9,'A#':10,'B':11}
 def m(s): return 12*(int(s[-1])+1)+names[s[:-1]]
 mel = [('B4',1),('E5',1.5),('G5',.5),('F#5',1),('E5',2),('B5',1),('A5',3),('F#5',3),('E5',1.5),('G5',.5),('F#5',1),('D#5',2),('F5',1),('B4',3),('-',2),
@@ -22,10 +22,10 @@ def section(start, chords, comp_style, bass_style, drums):
         at = start + i*BAR
         vo = [m(x) for x in VO[c]]
         if comp_style == 'pad':
-            for k, n in enumerate(vo): add(0, at + 0.04*k, n, 38, 2.8)
+            for k, n in enumerate(vo): add(0, at + 0.06*k, n, 30, 2.9)
         elif comp_style == 'waltz':
             for beat in (1, 2):
-                for n in vo: add(0, at + beat, n, 40 if beat == 1 else 34, 0.7)
+                for n in vo: add(0, at + beat, n, 32 if beat == 1 else 27, 0.8)
         r, f = m(ROOT[c]), m(FIFTH[c])
         nxt = m(ROOT[chords[(i+1) % len(chords)]])
         if bass_style == 'two':
@@ -36,7 +36,7 @@ def section(start, chords, comp_style, bass_style, drums):
         if drums:
             # brush swirl (snare, soft) every beat, ride on 1 and swung 2&, hat foot on 2
             for beat in range(3): add(2, at + beat, 40, 26 + random.randint(0, 6), 0.9, 9)
-            add(2, at, 51, 52, 0.5, 9); add(2, at + 1.66, 51, 40, 0.3, 9); add(2, at + 2, 51, 46, 0.5, 9)
+            add(2, at, 51, 40, 0.5, 9); add(2, at + 2, 51, 34, 0.5, 9)
             add(2, at + 1, 44, 34, 0.3, 9)
 def melody(start, vel, octave_double=False):
     t = 0
@@ -48,16 +48,15 @@ def melody(start, vel, octave_double=False):
             if octave_double: add(0, start + t + sw, m(n) - 12, v - 20, b*0.9)
         t += b
     return t
-# layout: intro 4 bars, head 1 (sparse), head 2 (full trio), interlude 4 bars, head 3 (soft, octave), outro
-b = 0
-section(b, ['Em9','Am9','B7b9','Em9'], 'pad', 'two', False); b += 4*BAR
-pick = b - 1  # melody pickup on beat 3 of last intro bar
-L = melody(pick, 62)
-section(b, bars, 'pad', 'two', True); b += len(bars)*BAR
-melody(b - 1, 68, True)
+# layout (v2): no intro, melody at 0:00; head 1 (sparse), head 2 (full trio), interlude 4 bars, head 3 (soft, octave), outro
+# melody from the very first second (user): pickup at beat 0, solo piano head first
+b = 1
+L = melody(0, 52)
+section(b, bars, 'pad', None, False); b += len(bars)*BAR
+melody(b - 1, 56, True)
 section(b, bars, 'waltz', 'walk', True); b += len(bars)*BAR
 section(b, ['Gmaj7','Cmaj7','Am9','B7b9'], 'waltz', 'walk', True); b += 4*BAR
-melody(b - 1, 58)
+melody(b - 1, 48)
 section(b, bars, 'pad', 'two', True); b += len(bars)*BAR
 # outro: Em(add9) arpeggio + held chord
 for k, x in enumerate(['E2','B2','D3','G3','B3','D#4','F#4','B4']): add(0, b + k*0.25, m(x), 44 - k, 8)
