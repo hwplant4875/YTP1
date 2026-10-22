@@ -38,7 +38,7 @@ window.drawThumbC = () => {
 // v2 design sketches
 window.drawDesign1 = () => {
   thBg(); meetRoom({ clock: [9, 0, 0] });
-  person('young', 560, 700, 1, { arms: 'board' });
+  person('young', 560, 700, 1, { arms: 'desk' });
   person('hr', 960, 700, 1, { arms: 'desk' });
   person('boss', 1360, 700, 1, { arms: 'laptop', lid: 0 });
   meetDesk(260, 1660, 700);

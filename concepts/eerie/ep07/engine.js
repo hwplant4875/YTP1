@@ -849,33 +849,40 @@ function resume(x, y, s = 1, rot = 0, o = {}) {
     ctx.restore(); }
   ctx.restore();
 }
-// ---------- EP07 v4: the three interviewers, minimal vector ----------
+// ---------- EP07 v5: the three interviewers as Matrix-style agents ----------
 // Channel identity: analog horror. PURE BLACK background, PURE WHITE flat characters with thin black detail lines. Red only for danger.
-// Heads are perfect white circles with only eyes. The uncanny is in proportion, never texture:
-//   'young' long thin neck, small head, eyes too close together (the handshake one, clipboard)
-//   'hr'    big head, huge black eyes that turn red (the one in the middle who asks the question)
-//   'boss'  no neck, head sunk into the shoulders, both eyes half shut under flat lids (the silent one behind the laptop)
+// Three near-identical agents: short black hair, black sunglasses, an earpiece with a coiled wire, a narrow black tie. No nose, no mouth.
+// The heads are flat white (no outline) so the ears melt into the silhouette. Tiny differences only:
+//   'young' (left, the handshake one): side-parted hair, narrow rectangular lenses
+//   'hr'    (middle, asks the question; lenses glow red): slicked-back hair, wider lenses
+//   'boss'  (right, behind the laptop): flat-top crop, rounder lenses, slightly broader
 const PP = { fig: '#f4f4f4', line: '#000', eye: '#000' };
-const PK = { young: { R: 56, neck: 74, nw: 26 }, hr: { R: 78, neck: 26, nw: 40 }, boss: { R: 66, neck: 0, nw: 0 } };
-const ppHeadY = k => -222 - PK[k].neck - PK[k].R * 0.9;
+const PK = { young: { R: 60, neck: 22, nw: 40 }, hr: { R: 60, neck: 22, nw: 40 }, boss: { R: 62, neck: 18, nw: 46 } };
+const ppHeadY = k => -222 - PK[k].neck - 50;
+const AGENT_HEAD = 'M-50,-34 C-52,-78 -26,-94 0,-94 C26,-94 52,-78 50,-34 L49,14 C47,40 30,60 0,62 C-30,60 -47,40 -49,14 Z';
 
-// a head centred at (0,0), its neck hanging below. o.eyes 0..1 red; o.look -1..1 sideways
+// a head, face centre at (0,0), the neck hanging below. o.eyes 0..1: the lenses glow red; o.look -1..1 turns the glint
 function ppHead(kind, o = {}) {
-  const K = PK[kind], R = K.R, F = PP.fig, L = PP.line;
-  if (K.neck) rr(-K.nw / 2, R * 0.6, K.nw, K.neck + R * 0.32, 4, F);
-  glow('rgba(255,255,255,0.35)', 24); circ(0, 0, R, F); noGlow();
-  const re = o.eyes || 0, lk = (o.look || 0) * R * 0.06;
-  const eyeCol = re > 0 ? C.red : PP.eye;
-  const E = kind === 'young' ? { dx: 0.2, y: 0.02, rx: 0.12, ry: 0.19 } : kind === 'hr' ? { dx: 0.36, y: 0.0, rx: 0.2, ry: 0.27 } : { dx: 0.36, y: 0.04, rx: 0.15, ry: 0.15 };
+  const K = PK[kind], F = PP.fig, L = PP.line, w = kind === 'boss' ? 1.06 : 1;
+  ctx.save(); ctx.scale(w, 1);
+  rr(-K.nw / 2 / w, 40, K.nw / w, K.neck + 30, 6, F);
+  glow('rgba(255,255,255,0.35)', 24); ell(-50, -6, 10, 18, 0, F); ell(50, -6, 10, 18, 0, F); pth(AGENT_HEAD, F); noGlow();
+  // hair: short, black, a hard hairline
+  if (kind === 'young') pth('M-51,-34 C-54,-82 -26,-100 2,-100 C30,-100 54,-82 51,-34 C48,-50 42,-60 30,-64 C12,-68 -6,-66 -16,-58 L-22,-66 C-34,-62 -46,-52 -51,-34 Z', L);
+  else if (kind === 'hr') pth('M-51,-32 C-55,-84 -26,-102 0,-102 C26,-102 55,-84 51,-32 C48,-52 40,-64 24,-68 C8,-72 -8,-72 -24,-68 C-40,-64 -48,-52 -51,-32 Z', L);
+  else pth('M-52,-30 L-54,-84 C-40,-96 40,-96 54,-84 L52,-30 C48,-50 40,-60 26,-64 C8,-66 -8,-66 -26,-64 C-40,-60 -48,-50 -52,-30 Z', L);
+  // the earpiece and its coiled wire running down into the collar
+  circ(-52, -2, 5, L); pthS('M-52,4 C-56,16 -48,24 -54,34 C-60,44 -50,52 -54,62 C-58,74 -48,84 -52,96', L, 2.5);
+  // sunglasses
+  const re = o.eyes || 0, lens = kind === 'young' ? [34, 18, 4] : kind === 'hr' ? [38, 22, 5] : [36, 22, 11];
+  const [lw, lh, lr] = [lens[0] + 4, lens[1] + 3, lens[2]], ly = -14;
+  ln(-50, ly - 2, 50, ly - 2, 4, L);
   for (const d of [-1, 1]) {
-    const ex = d * R * E.dx + lk, ey = R * E.y, rx = R * E.rx, ry = R * E.ry;
-    ctx.save(); if (re > 0) { ctx.globalAlpha *= 0.5 + 0.5 * re; redGlow(26); }
-    if (kind === 'boss') {   // heavy lids: black half-discs under flat lids, a dead stare
-      ctx.beginPath(); ctx.ellipse(ex, ey, rx, ry, 0, 0, Math.PI); ctx.closePath(); ctx.fillStyle = eyeCol; ctx.fill(); noGlow(); ln(ex - rx - 6, ey, ex + rx + 6, ey, 4, L);
-    } else ell(ex, ey, rx, ry, 0, eyeCol);
-    ctx.restore();
-    if (kind === 'hr' && re < 0.5) circ(ex - rx * 0.3, ey - ry * 0.35, R * 0.035, '#fff');   // a pinpoint of light in the black
+    const cx = d * 24;
+    ctx.save(); if (re > 0) redGlow(30 * re); rr(cx - lw / 2, ly - lh / 2, lw, lh, lr, re > 0 ? `rgb(${Math.round(255 * re)},${Math.round(43 * re)},${Math.round(43 * re)})` : L); noGlow(); ctx.restore();
+    if (re < 0.3) { ctx.save(); ctx.globalAlpha *= 0.6; ln(cx - lw * 0.3 + (o.look || 0) * 6, ly - lh * 0.25, cx - lw * 0.1 + (o.look || 0) * 6, ly - lh * 0.25, 2.5, '#fff'); ctx.restore(); }
   }
+  ctx.restore();
 }
 
 // an interviewer, waist at (x,y) (the desk top). Flat white suit, black lines.
@@ -898,17 +905,17 @@ function person(kind, x, y, s = 1, o = {}) {
   if (o.sink) ctx.translate(0, o.sink);
   ctx.translate(0, lean * 18);
   // jacket
-  const J = kind === 'boss' ? 'M-132,-196 C-142,-190 -146,-170 -144,-140 L-130,10 L130,10 L144,-140 C146,-170 142,-190 132,-196 C90,-214 -90,-214 -132,-196 Z'
+  const J = false ? 'M-132,-196 C-142,-190 -146,-170 -144,-140 L-130,10 L130,10 L144,-140 C146,-170 142,-190 132,-196 C90,-214 -90,-214 -132,-196 Z'
                             : 'M-116,-206 C-126,-200 -132,-178 -130,-150 L-120,10 L120,10 L130,-150 C132,-178 126,-200 116,-206 C80,-226 -80,-226 -116,-206 Z';
   glow('rgba(255,255,255,0.28)', 20); pth(J, F); noGlow();
   // shirt, collar, tie (black); the hr one has a plain black blouse and a lanyard
-  if (kind === 'hr') { pth('M-40,-220 C-28,-176 28,-176 40,-220 Z', '#000'); pthS('M-24,-208 C-18,-150 -10,-110 -2,-92 M24,-208 C22,-150 26,-110 32,-92', L, 3); rr(-6, -96, 52, 66, 5, F); rrS(-6, -96, 52, 66, 5, L, 3); rr(4, -84, 32, 26, 3, L); ln(4, -46, 36, -46, 3, L); }
+  if (false) { pth('M-40,-220 C-28,-176 28,-176 40,-220 Z', '#000'); pthS('M-24,-208 C-18,-150 -10,-110 -2,-92 M24,-208 C22,-150 26,-110 32,-92', L, 3); rr(-6, -96, 52, 66, 5, F); rrS(-6, -96, 52, 66, 5, L, 3); rr(4, -84, 32, 26, 3, L); ln(4, -46, 36, -46, 3, L); }
   else {
-    const top = kind === 'boss' ? -212 : -222;
+    const top = -222;
     pthS(`M-32,${top} L0,-108 L32,${top}`, L, 3);
     pthS(`M-32,${top} L-12,${top + 24} L-4,${top + 4} M32,${top} L12,${top + 24} L4,${top + 4}`, L, 3);
     pth(`M-8,${top + 6} L8,${top + 6} L6,${top + 24} L-6,${top + 24} Z`, L);
-    const tl = kind === 'young' ? 128 : 96;
+    const tl = 108;
     pth(`M-6,${top + 24} L6,${top + 24} L11,${top + 24 + tl} L0,${top + 36 + tl} L-11,${top + 24 + tl} Z`, o.tieRed ? C.red : L);
   }
   // lapels, button line, buttons
@@ -921,7 +928,7 @@ function person(kind, x, y, s = 1, o = {}) {
     ell(0, 0, 16, 13, 0, F); ctx.beginPath(); ctx.ellipse(0, 0, 16, 13, 0, 0, Math.PI * 2); ctx.strokeStyle = L; ctx.lineWidth = 2.5; ctx.stroke();
     for (let i = 0; i < 4; i++) { const y0 = -8 + i * 5.5, pts = [[12, y0], [40, y0 + 2], [64, y0 + 10 * curl + i * 1.5]]; poly(pts, 7, L); poly(pts, 3.6, F); }
     ctx.restore(); };
-  const A = o.arms || 'desk', sh = kind === 'boss' ? 132 : 118, sy = kind === 'boss' ? -186 : -198;
+  const A = o.arms || 'desk', sh = 118, sy = -198;
   if (A === 'desk') { sleeve([[-sh, sy], [-sh - 24, -70], [-70, -12]]); sleeve([[sh, sy], [sh + 24, -70], [70, -12]]); hand(-52, -8, 0.1, 1); hand(52, -8, -0.1, -1); }
   else if (A === 'down') { sleeve([[-sh, sy], [-sh - 18, -60], [-sh - 12, 14]]); sleeve([[sh, sy], [sh + 18, -60], [sh + 12, 14]]); hand(-sh - 12, 34, 1.55, 1, 0.2); hand(sh + 12, 34, 1.55, -1, 0.2); }
   else if (A === 'hand') { sleeve([[-sh, sy], [-sh - 24, -70], [-70, -12]]); hand(-52, -8, 0.1, 1); const r = o.reach ?? 1; sleeve([[sh, sy], [sh + 26, -90], [sh + 26 + 110 * r, -60 - 30 * r]]); hand(sh + 50 + 110 * r, -60 - 30 * r, -0.2, 1, 0.15); }
@@ -935,7 +942,7 @@ function person(kind, x, y, s = 1, o = {}) {
     else { sleeve([[sh, sy], [sh + 22, -90], [84, -84]]); hand(70, -84, 0, -1, 0.6); }
   }
   // head
-  ctx.save(); ctx.translate(0, ppHeadY(kind) + lean * 34); ctx.rotate(-lean * 0.06 + (o.tilt || 0)); ppHead(kind, o); ctx.restore();
+  ctx.save(); ctx.translate(0, ppHeadY(kind) + lean * 34); ctx.rotate(-lean * 0.06 + (o.tilt || 0)); ctx.scale(1.25, 1.25); ppHead(kind, o); ctx.restore();
   // the laptop: a white lid seen from behind, in front of everything
   if (A === 'laptop') {
     const lid = o.lid ?? 1, hh = 320 * lid;
