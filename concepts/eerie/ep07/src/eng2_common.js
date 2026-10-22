@@ -98,10 +98,12 @@ function pageIcon(name, x, y, col = '#111') {
   if (name === 'warn') { const tri = () => { ctx.beginPath(); ctx.moveTo(0, -50); ctx.lineTo(50, 40); ctx.lineTo(-50, 40); ctx.closePath(); };
     ctx.lineJoin = 'round'; tri(); ctx.fillStyle = C.red; ctx.fill(); if (col === '#fff') { ctx.lineWidth = 6; ctx.strokeStyle = '#fff'; ctx.stroke(); }
     rr(-6, -22, 12, 38, 5, '#fff'); circ(0, 28, 7, '#fff'); }
+  if (name === 'hand') { ctx.lineJoin = 'round'; pth('M-50,-6 L-10,-24 L22,-24 L50,-6 L50,18 L16,28 L-20,28 L-50,18 Z', col); ln(-62, 6, -50, 6, 14, col); ln(50, 6, 62, 6, 14, col);
+    ln(-6, -24, 10, -6, 4, col === '#fff' ? '#000' : '#ececec'); ln(8, -24, 24, -6, 4, col === '#fff' ? '#000' : '#ececec'); }
   if (name === 'fist') { rr(-34, -34, 68, 64, 18, col); for (let i = 1; i < 4; i++) ln(-34 + i * 17, -34, -34 + i * 17, -10, 3, '#ff2b2b'); }
   ctx.restore();
 }
-const RULES = [['self', 'DO NOT TELL THEM ABOUT YOURSELF', '', ['DO NOT TELL THEM', 'ABOUT YOURSELF']], ['truth', 'DO NOT TELL THE TRUTH', '', ['DO NOT TELL', 'THE TRUTH']], ['ask', 'DO NOT SAY YOU HAVE NO QUESTIONS', '', ['DO NOT SAY YOU', 'HAVE NO QUESTIONS']], ['warn', 'EMERGENCY PROTOCOL', 'HOW TO FIGHT BACK']];
+const RULES = [['hand', 'DO NOT SHAKE TOO HARD', '', ['DO NOT SHAKE', 'TOO HARD']], ['truth', 'DO NOT TELL THE TRUTH', '', ['DO NOT TELL', 'THE TRUTH']], ['ask', 'NEVER SAY YOU HAVE NO QUESTIONS', '', ['NEVER SAY YOU', 'HAVE NO QUESTIONS']], ['warn', 'EMERGENCY PROTOCOL', 'HOW TO FIGHT BACK']];
 // the index page. o.rowT[i]: when row i slides in; o.fillT[i]: when its content is written; o.hot: rule 4 armed 0..1; o.struck[i]; o.dim
 function rulePage(t, o) {
   const pc = '#ececec';

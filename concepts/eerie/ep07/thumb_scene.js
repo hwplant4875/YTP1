@@ -38,12 +38,18 @@ window.drawThumbC = () => {
 // v2 design sketches
 window.drawDesign1 = () => {
   thBg(); meetRoom({ clock: [9, 0, 0] });
-  person('young', 560, 700, 1, { arms: 'desk' });
-  person('hr', 960, 700, 1, { arms: 'desk' });
-  person('boss', 1360, 700, 1, { arms: 'laptop', lid: 0 });
+  agent('young', 560, 700, 1, { arms: 'desk' });
+  agent('hr', 960, 700, 1, { arms: 'desk' });
+  agent('boss', 1360, 700, 1, { arms: 'laptop', lid: 0 });
   meetDesk(260, 1660, 700);
 };
 window.drawDesign2 = () => {
   thBg(); meetRoom({ clock: [9, 0, 0] });
   for (const [k, x, o] of [['young', 330, {}], ['hr', 960, { eyes: 1 }], ['boss', 1590, {}]]) { ctx.save(); ctx.translate(x, 480); ctx.scale(2.4, 2.4); ppHead(k, o); ctx.restore(); }
+};
+window.drawDesign3 = () => {
+  thBg(); meetRoom({ clockAt: false });
+  agent('young', 560, 1000, 0.8, { stand: 1, arms: 'down' });
+  agent('hr', 960, 1000, 0.8, { stand: 1, arms: 'hand', reach: 0.6, eyes: 1 });
+  agent('boss', 1360, 1000, 0.8, { stand: 1, arms: 'down' });
 };

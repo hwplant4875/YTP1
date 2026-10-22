@@ -11,23 +11,26 @@ LEAD = 0.35   # frame 0 is the hook image; the first line starts at once
 # extra time after a line, only where a sound or an action fills it: (seconds, [(sound, offset after speech end)])
 EXTRA = {
     'o2': (0.3, []),
-    'a2': (0.2, []),
-    # what happens if you break the rule: the line under LIVES ALONE turns red, then black
-    'a6': (1.4, [('heartbeat', 0.1), ('blackout', 1.0)]),
-    'b2': (0.4, []),
-    'b5': (0.3, []),
-    'b7': (1.4, [('heartbeat', 0.0), ('blackout', 1.0)]),
-    'c3': (0.3, []),
-    'c5': (1.4, [('heartbeat', 0.0), ('blackout', 1.0)]),
+    'a4': (0.6, []),             # the grip meter runs past the top
+    'a5': (0.5, []),
+    'b3': (0.6, []),             # underlined twice
+    'b4': (0.9, [('heartbeat', 0.0)]),
+    'b7': (0.9, [('heartbeat', 0.0)]),
+    'c3': (0.4, []),
+    'c6': (0.6, []),
+    'c8': (0.3, []),
+    'c9': (0.3, []),
     'd2': (0.3, []),
     'd3': (0.5, []),
-    'd7': (1.3, [('heartbeat', 0.0), ('blackout', 0.9)]),
+    'd7': (0.6, []),
     'd13': (0.4, []),
-    'd14': (0.7, []),
-    'f3': (1.0, [('heartbeat', 0.1)]),
-    'f5': (0.0, [('stamp', 0.2)]),       # the sign-off stamp
+    'd14': (0.5, []),
+    'd15': (1.0, []),            # they walk out one by one
+    'f3': (0.8, [('heartbeat', 0.1)]),
+    'f4': (0.6, []),
+    'f6': (0.0, [('stamp', 0.2)]),       # the sign-off stamp
 }
-RISE = ('o2', 'b6', 'c4', 'd8', 'd12')   # a riser that ends exactly on the next shot
+RISE = ('o2', 'a8', 'b9', 'c9', 'd9', 'f2')   # a riser that ends exactly on the next shot
 
 def speech_bounds(mp3):
     raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', mp3, '-ac', '1', '-ar', '16000', '-f', 's16le', '-'], capture_output=True).stdout
@@ -69,17 +72,20 @@ S = {seg['id']: seg for seg in tl}
 def cue(sid, word, nth=1, off=0.0):
     return wt(S[sid], word, nth) + off if sid in S else None
 for sid, word, nth, snd, off in [('h1', 'weakness', 1, 'heartbeat', 0.0), ('o1', 'four', 1, 'stamp', 0.0), ('o2', 'exactly', 1, 'stamp', 0.0), ('o2', 'emergency', 1, 'heartbeat', 0.0),
-                                 ('a1', 'three', 1, 'pen', 0.0), ('a5', 'wrote', 1, 'pen', -0.1), ('a6', 'underlined', 1, 'underline', -0.05),
-                                 ('b1', 'leans', 1, 'chair', -0.1), ('b1', 'weakness', 1, 'heartbeat', 0.0), ('b2', 'conditioner', 1, 'acoff', -0.3), ('b2', 'clock', 1, 'tick', 0.0),
-                                 ('b5', 'forever', 1, 'heartbeat', 0.0), ('b5', 'file', 1, 'stamp', 0.0), ('b7', 'nine', 1, 'heartbeat', 0.0),
-                                 ('c1', 'pens', 1, 'pens', -0.15), ('c3', 'nine', 1, 'tick', -0.1), ('c4', 'tilts', 1, 'heartbeat', 0.0), ('c5', 'monday', 1, 'heartbeat', 0.0),
-                                 ('d1', 'stand', 1, 'standup', -0.2), ('d2', 'three', 2, 'heartbeat', 0.0), ('d2', 'foot', 1, 'heartbeat', 0.0), ('d5', 'write', 1, 'pen', 0.0),
-                                 ('d6', 'visit', 1, 'heartbeat', 0.0), ('d7', 'email', 2, 'notif', 0.0), ('d7', 'inside', 1, 'heartbeat', 0.0), ('d9', 'sit', 1, 'situp', -0.2),
-                                 ('d9', 'weakness', 1, 'heartbeat', 0.0), ('d11', 'smaller', 1, 'cloth', -0.1), ('d12', 'shake', 1, 'chair', 0.0), ('d12', 'smaller', 1, 'cloth', -0.1),
-                                 ('d13', 'hire', 1, 'heartbeat', 0.0), ('d14', 'fold', 1, 'paper', -0.1), ('f1', 'email', 1, 'notif', 0.0), ('f3', 'chair', 1, 'heartbeat', 0.0),
-                                 ('f4', 'four', 1, 'stamp', 0.0)]:
+                                 ('a1', 'hand', 1, 'standup', -0.6), ('a1', 'fingers', 1, 'heartbeat', 0.0), ('a3', 'challenge', 1, 'heartbeat', 0.0),
+                                 ('a4', 'squeezes', 1, 'squeeze', -0.1), ('a4', 'harder', 2, 'squeeze', 0.0), ('a4', 'stop', 2, 'heartbeat', 0.0), ('a5', 'heard', 1, 'crack', -0.15),
+                                 ('a6', 'signs', 1, 'pen', 0.2), ('a8', 'writes', 1, 'pen', 0.0),
+                                 ('b1', 'map', 2, 'heartbeat', 0.0), ('b3', 'wrote', 1, 'pen', -0.1), ('b3', 'underlined', 1, 'underline', -0.05), ('b3', 'twice', 1, 'underline', -0.05),
+                                 ('b4', 'notice', 1, 'mailpile', 0.0), ('b5', 'leans', 1, 'chair', -0.1), ('b5', 'glasses', 1, 'heartbeat', 0.0), ('b7', 'power', 1, 'poweroff', -0.1),
+                                 ('c1', 'pens', 1, 'pens', -0.15), ('c2', 'ends', 1, 'keylock', 0.0), ('c3', 'clock', 1, 'tick', 0.0), ('c3', 'nine', 1, 'heartbeat', 0.0),
+                                 ('c4', 'stands', 1, 'standup', -0.2), ('c5', 'until', 1, 'heartbeat', 0.0), ('c6', 'monday', 1, 'tick', 0.0), ('c9', 'stand', 1, 'standup', -0.1),
+                                 ('d2', 'interviewers', 1, 'heartbeat', 0.0), ('d2', 'foot', 1, 'heartbeat', 0.0), ('d5', 'lacks', 1, 'pen', 0.0), ('d6', 'strong', 1, 'pen', 0.0),
+                                 ('d7', 'visit', 1, 'heartbeat', 0.0), ('d10', 'sit', 1, 'situp', -0.2), ('d10', 'congratulations', 1, 'heartbeat', 0.0), ('d12', 'drop', 1, 'drop', -0.1),
+                                 ('d14', 'appear', 1, 'boxes', -0.1), ('d15', 'walk', 1, 'steps', 0.0), ('f1', 'email', 1, 'notif', 0.0), ('f3', 'doorbell', 1, 'doorbell', 0.0),
+                                 ('f3', 'hand', 1, 'heartbeat', 0.0), ('f5', 'four', 1, 'stamp', 0.0)]:
     c = cue(sid, word, nth, off)
     if c is not None: events.append({'type': snd, 't': c})
+if 'c8' in S: events.append({'type': 'keylock', 't': S['c8']['end'] - 0.6})   # the lock opens
 for sid in ('a0', 'b0', 'c0', 'd0'):   # rule cards land on a soft low thud
     if sid in S: events.append({'type': 'card', 't': S[sid]['start'] - 0.05})
 for i, seg in enumerate(tl[:-1]):
@@ -87,7 +93,7 @@ for i, seg in enumerate(tl[:-1]):
 cuts = [seg['start'] for seg in tl[1:]]
 # the hook teaser: three "do not"s, each done anyway; contact or red, then black before the next line
 if 'h2' in S and 'o1' in S:
-    b, c, e = cue('h2', 'never', 1), cue('h2', 'and', 1), S['o1']['start']
+    b, c, e = cue('h2', 'do', 2), cue('h2', 'and', 1), S['o1']['start']
     for w1 in (b, c, e): events.append({'type': 'thud', 't': w1 - 0.6})
     cuts += [b, c]
 for e in events:

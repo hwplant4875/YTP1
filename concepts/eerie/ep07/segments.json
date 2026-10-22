@@ -5,11 +5,11 @@
  },
  {
   "id": "h2",
-  "text": "Do not tell them about yourself. Never say you have no questions. And never wait for them to get back to you."
+  "text": "Do not shake their hand too hard. Do not tell them where you live. And never say you have no questions."
  },
  {
   "id": "o1",
-  "text": "This is Instruction four four four."
+  "text": "This is Protocol four zero four."
  },
  {
   "id": "o2",
@@ -17,31 +17,39 @@
  },
  {
   "id": "a0",
-  "text": "Rule one. Do not tell them about yourself."
+  "text": "Rule one. Do not shake too hard."
  },
  {
   "id": "a1",
-  "text": "\"Tell me about yourself.\" They have already read your résumé. Three times. Every page."
+  "text": "The one on the left stands up and holds out his hand. His fingers are longer than they should be."
  },
  {
   "id": "a2",
-  "text": "They are not asking who you are. They are checking which version of you is safe to let out of the room."
+  "text": "Everyone told you the same thing. A firm handshake. Show them you are strong."
  },
  {
   "id": "a3",
-  "text": "Smile. Say your name. Say one sentence about your last job. Then stop."
+  "text": "Do not. In that room, a firm grip is a challenge. And they always answer a challenge."
  },
  {
   "id": "a4",
-  "text": "Do not mention your hobbies. Do not mention your family. Do not say where you live."
+  "text": "Squeeze, and he squeezes back. A little harder. Then harder. He does not stop when you stop."
  },
  {
   "id": "a5",
-  "text": "The last candidate said she lived alone. The interviewer wrote it down."
+  "text": "A candidate once gave him the firmest handshake of his life. They heard it from the waiting room."
  },
  {
   "id": "a6",
-  "text": "Then he underlined it."
+  "text": "He signs everything with his left hand now."
+ },
+ {
+  "id": "a7",
+  "text": "So keep your hand soft. Let him hold it. Count to three."
+ },
+ {
+  "id": "a8",
+  "text": "He loses interest, and lets go. He writes something down. \"Not a threat.\" That is a good sign."
  },
  {
   "id": "b0",
@@ -49,35 +57,43 @@
  },
  {
   "id": "b1",
-  "text": "Then the one in the middle leans forward. \"What is your greatest weakness?\""
+  "text": "Everything you say in that room goes into a file. And the file is a map. A map to you."
  },
  {
   "id": "b2",
-  "text": "The room goes quiet. The air conditioner stops. Even the clock waits."
+  "text": "\"Tell me about yourself.\" Say your name. Say one sentence about your last job. Then stop."
  },
  {
   "id": "b3",
-  "text": "Only two answers are allowed. \"I work too hard.\" \"I care too much.\""
+  "text": "Never say you live alone. A candidate once did. The one in the middle wrote it down. Then he underlined it. Twice."
  },
  {
   "id": "b4",
-  "text": "Do not say procrastination. Do not say public speaking. Do not say you get nervous."
+  "text": "Living alone means no one will notice when you stop coming home."
  },
  {
   "id": "b5",
-  "text": "Whatever you say becomes your weakness. Forever. It goes in your file, and the file follows you."
+  "text": "Then he leans forward. His glasses turn red. \"What is your greatest weakness?\""
  },
  {
   "id": "b6",
-  "text": "A candidate once said, \"I can't say no.\""
+  "text": "Do not tell the truth. Your real weakness is how they will come for you."
  },
  {
   "id": "b7",
-  "text": "He has worked there for nine years. He has never gone home."
+  "text": "One candidate said, \"I'm afraid of the dark.\" That night, the power went out in his building. Only his building."
+ },
+ {
+  "id": "b8",
+  "text": "Give them the answer everyone gives. \"I work too hard.\" \"I'm a perfectionist.\""
+ },
+ {
+  "id": "b9",
+  "text": "It is already in every file they have. They learn nothing new. The red fades from his glasses."
  },
  {
   "id": "c0",
-  "text": "Rule three. Do not say you have no questions."
+  "text": "Rule three. Never say you have no questions."
  },
  {
   "id": "c1",
@@ -85,27 +101,35 @@
  },
  {
   "id": "c2",
-  "text": "Never say no. In this room, the interview only ends when you ask something."
+  "text": "In this room, the interview only ends when you ask something."
  },
  {
   "id": "c3",
-  "text": "Say, \"No, I think you covered everything,\" and the clock on the wall goes back to nine."
+  "text": "Say, \"No, I think you covered everything,\" and look at the clock. It goes back to nine."
  },
  {
   "id": "c4",
-  "text": "The one in the middle tilts his head. \"Then let's start again. Tell me about yourself.\""
+  "text": "The one on the left stands up and holds out his hand again. \"Thanks for coming in.\" It starts over."
  },
  {
   "id": "c5",
-  "text": "One candidate said no three times. He is still in that room. For him, it is still Monday, nine A.M."
+  "text": "It will keep starting over. Every handshake. Every question. Until you ask one."
  },
  {
   "id": "c6",
-  "text": "Do not ask about the salary. Do not ask what happened to the last person in this role."
+  "text": "One candidate said no forty times. For him, it is still Monday, nine A.M."
  },
  {
   "id": "c7",
+  "text": "Do not ask about the salary. Do not ask what happened to the last person in this job."
+ },
+ {
+  "id": "c8",
   "text": "Ask only this. \"When will I hear back?\""
+ },
+ {
+  "id": "c9",
+  "text": "They stand up. \"We'll be in touch.\""
  },
  {
   "id": "d0",
@@ -113,11 +137,11 @@
  },
  {
   "id": "d1",
-  "text": "They stand up. \"We'll get back to you.\""
+  "text": "If you broke even one rule, they will be in touch. Exactly as promised."
  },
  {
   "id": "d2",
-  "text": "They mean it. At three A.M., you wake up. Three interviewers are standing at the foot of your bed."
+  "text": "Three A.M. You wake up. Three interviewers are standing at the foot of your bed, holding your file."
  },
  {
   "id": "d3",
@@ -133,58 +157,66 @@
  },
  {
   "id": "d6",
-  "text": "Saying you already took another offer. They ask for the company's name. Then they visit that company too."
+  "text": "Screaming. They write down, \"Strong communication skills.\""
  },
  {
   "id": "d7",
-  "text": "Blocking their email. The next email comes from inside your house."
+  "text": "Saying you already took another job. They ask for the company's name. Then they visit that company too."
  },
  {
   "id": "d8",
-  "text": "There is only one thing that works. Interview them."
+  "text": "There is only one thing that works. Remember what they really are. They are not monsters. They are employees."
  },
  {
   "id": "d9",
-  "text": "Sit up. Fold your hands. Look the middle one in the eye. \"So. What is your greatest weakness?\""
+  "text": "And every employee is afraid of the same thing."
  },
  {
   "id": "d10",
-  "text": "The rules of that room apply to them too. They cannot lie."
+  "text": "Sit up. Fold your hands. Look the middle one in the eye. \"Congratulations. You're hired.\""
  },
  {
   "id": "d11",
-  "text": "The first one says, \"Being asked questions.\" He gets smaller."
+  "text": "They freeze. In that room, whoever makes the offer is the boss. You just made the offer."
  },
  {
   "id": "d12",
-  "text": "\"Tell me about yourself.\" The second one starts to shake. There is nothing to tell. He gets smaller."
+  "text": "Their folders drop. They stand up straight. They are your employees now."
  },
  {
   "id": "d13",
-  "text": "And the last question. \"Why should I hire you?\""
+  "text": "Then say the words every employee fears. \"Unfortunately... we're letting you go. Effective immediately.\""
  },
  {
   "id": "d14",
-  "text": "Nobody has ever asked them that. They fold up like paper, and slide out under your door."
+  "text": "Three small cardboard boxes appear in their hands. Inside each one, a stapler and a sad little plant."
+ },
+ {
+  "id": "d15",
+  "text": "They walk out of your bedroom one by one, and you never give them a reference."
  },
  {
   "id": "f1",
-  "text": "One week later, an email."
+  "text": "The next morning, one new email. \"We are sorry to hear about the recent changes in our team.\""
  },
  {
   "id": "f2",
-  "text": "\"We regret to inform you that our interviewers have resigned. Would you like the position?\""
+  "text": "\"We have restructured our hiring process.\""
  },
  {
   "id": "f3",
-  "text": "Job title: Interviewer. Location: the chair."
+  "text": "Then the doorbell rings. Through the peephole, three new interviewers. One of them is already holding out his hand."
  },
  {
   "id": "f4",
-  "text": "And that was Instruction four four four."
+  "text": "\"Welcome to the second round.\""
  },
  {
   "id": "f5",
+  "text": "And that was Protocol four zero four."
+ },
+ {
+  "id": "f6",
   "text": "If this ever happens to you... you know the protocol."
  }
 ]

@@ -2,8 +2,8 @@
 // Black background, flat white pictograms, red only for what is wrong. Needs window.TL (timeline.json).
 (() => {
 const W = 1920, H = 1080;
-const NAME = 'INSTRUCTION';   // the channel's name, as it appears on screen ("NAME NUM")
-const NUM = '444';
+const NAME = 'PROTOCOL';   // the channel's name, as it appears on screen ("NAME NUM")
+const NUM = '404';
 const C = { bg: '#000', fig: '#f2f2f2', sec: '#bdbdbd', mid: '#7c7c7c', dim: '#3c3c3c', dark: '#1a1a1a', red: '#ff2b2b', txt: '#f4f4f4' };
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
@@ -491,10 +491,12 @@ function pageIcon(name, x, y, col = '#111') {
   if (name === 'warn') { const tri = () => { ctx.beginPath(); ctx.moveTo(0, -50); ctx.lineTo(50, 40); ctx.lineTo(-50, 40); ctx.closePath(); };
     ctx.lineJoin = 'round'; tri(); ctx.fillStyle = C.red; ctx.fill(); if (col === '#fff') { ctx.lineWidth = 6; ctx.strokeStyle = '#fff'; ctx.stroke(); }
     rr(-6, -22, 12, 38, 5, '#fff'); circ(0, 28, 7, '#fff'); }
+  if (name === 'hand') { ctx.lineJoin = 'round'; pth('M-50,-6 L-10,-24 L22,-24 L50,-6 L50,18 L16,28 L-20,28 L-50,18 Z', col); ln(-62, 6, -50, 6, 14, col); ln(50, 6, 62, 6, 14, col);
+    ln(-6, -24, 10, -6, 4, col === '#fff' ? '#000' : '#ececec'); ln(8, -24, 24, -6, 4, col === '#fff' ? '#000' : '#ececec'); }
   if (name === 'fist') { rr(-34, -34, 68, 64, 18, col); for (let i = 1; i < 4; i++) ln(-34 + i * 17, -34, -34 + i * 17, -10, 3, '#ff2b2b'); }
   ctx.restore();
 }
-const RULES = [['self', 'DO NOT TELL THEM ABOUT YOURSELF', '', ['DO NOT TELL THEM', 'ABOUT YOURSELF']], ['truth', 'DO NOT TELL THE TRUTH', '', ['DO NOT TELL', 'THE TRUTH']], ['ask', 'DO NOT SAY YOU HAVE NO QUESTIONS', '', ['DO NOT SAY YOU', 'HAVE NO QUESTIONS']], ['warn', 'EMERGENCY PROTOCOL', 'HOW TO FIGHT BACK']];
+const RULES = [['hand', 'DO NOT SHAKE TOO HARD', '', ['DO NOT SHAKE', 'TOO HARD']], ['truth', 'DO NOT TELL THE TRUTH', '', ['DO NOT TELL', 'THE TRUTH']], ['ask', 'NEVER SAY YOU HAVE NO QUESTIONS', '', ['NEVER SAY YOU', 'HAVE NO QUESTIONS']], ['warn', 'EMERGENCY PROTOCOL', 'HOW TO FIGHT BACK']];
 // the index page. o.rowT[i]: when row i slides in; o.fillT[i]: when its content is written; o.hot: rule 4 armed 0..1; o.struck[i]; o.dim
 function rulePage(t, o) {
   const pc = '#ececec';
@@ -851,11 +853,11 @@ function resume(x, y, s = 1, rot = 0, o = {}) {
 }
 // ---------- EP07 v5: the three interviewers as Matrix-style agents ----------
 // Channel identity: analog horror. PURE BLACK background, PURE WHITE flat characters with thin black detail lines. Red only for danger.
-// Three near-identical agents: short black hair, black sunglasses, an earpiece with a coiled wire, a narrow black tie. No nose, no mouth.
+// Three near-identical bald agents: black sunglasses, an earpiece with a coiled wire, a narrow black tie. No nose, no mouth.
 // The heads are flat white (no outline) so the ears melt into the silhouette. Tiny differences only:
-//   'young' (left, the handshake one): side-parted hair, narrow rectangular lenses
-//   'hr'    (middle, asks the question; lenses glow red): slicked-back hair, wider lenses
-//   'boss'  (right, behind the laptop): flat-top crop, rounder lenses, slightly broader
+//   'young' (left, the handshake one): narrow rectangular lenses
+//   'hr'    (middle, asks the question; lenses glow red): wider lenses
+//   'boss'  (right, behind the laptop): rounder lenses, slightly broader head
 const PP = { fig: '#f4f4f4', line: '#000', eye: '#000' };
 const PK = { young: { R: 60, neck: 22, nw: 40 }, hr: { R: 60, neck: 22, nw: 40 }, boss: { R: 62, neck: 18, nw: 46 } };
 const ppHeadY = k => -222 - PK[k].neck - 50;
@@ -867,10 +869,6 @@ function ppHead(kind, o = {}) {
   ctx.save(); ctx.scale(w, 1);
   rr(-K.nw / 2 / w, 40, K.nw / w, K.neck + 30, 6, F);
   glow('rgba(255,255,255,0.35)', 24); ell(-50, -6, 10, 18, 0, F); ell(50, -6, 10, 18, 0, F); pth(AGENT_HEAD, F); noGlow();
-  // hair: short, black, a hard hairline
-  if (kind === 'young') pth('M-51,-34 C-54,-82 -26,-100 2,-100 C30,-100 54,-82 51,-34 C48,-50 42,-60 30,-64 C12,-68 -6,-66 -16,-58 L-22,-66 C-34,-62 -46,-52 -51,-34 Z', L);
-  else if (kind === 'hr') pth('M-51,-32 C-55,-84 -26,-102 0,-102 C26,-102 55,-84 51,-32 C48,-52 40,-64 24,-68 C8,-72 -8,-72 -24,-68 C-40,-64 -48,-52 -51,-32 Z', L);
-  else pth('M-52,-30 L-54,-84 C-40,-96 40,-96 54,-84 L52,-30 C48,-50 40,-60 26,-64 C8,-66 -8,-66 -26,-64 C-40,-60 -48,-50 -52,-30 Z', L);
   // the earpiece and its coiled wire running down into the collar
   circ(-52, -2, 5, L); pthS('M-52,4 C-56,16 -48,24 -54,34 C-60,44 -50,52 -54,62 C-58,74 -48,84 -52,96', L, 2.5);
   // sunglasses
@@ -888,14 +886,14 @@ function ppHead(kind, o = {}) {
 // an interviewer, waist at (x,y) (the desk top). Flat white suit, black lines.
 // o.arms: 'desk' (long fingers flat on the desk), 'board' (clipboard), 'write' (+ pen, o.wt), 'laptop' (o.lid 1 open -> 0 shut), 'hand' (reaching to shake, o.reach), 'down'
 // o.eyes, o.look, o.lean 0..1, o.tilt, o.sink, o.shake, o.fold 0..1, o.dim 0..1, o.stand (draw legs; (x,y) = feet), o.tieRed
-function person(kind, x, y, s = 1, o = {}) {
+function agent(kind, x, y, s = 1, o = {}) {
   const F = PP.fig, L = PP.line, lean = o.lean || 0;
   ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
   if (o.stand) {
     glow('rgba(255,255,255,0.28)', 18);
-    for (const d of [-1, 1]) pth(`M${d * 8},-300 L${d * 70},-300 L${d * 58},-24 L${d * 14},-24 Z`, F);
-    noGlow(); ln(0, -300, 0, -40, 3, L);
-    rr(10, -26, 54, 26, 10, '#1c1c1f'); rr(-64, -26, 54, 26, 10, '#1c1c1f');
+    pth('M-104,-300 L104,-300 L88,-22 L12,-22 L3,-190 L-3,-190 L-12,-22 L-88,-22 Z', F);
+    noGlow(); pthS('M3,-190 L12,-22 M-3,-190 L-12,-22', L, 2.5);
+    for (const d of [-1, 1]) { const sp = `M${d * 10},-24 L${d * 92},-24 C${d * 106},-24 ${d * 108},0 ${d * 94},0 L${d * 10},0 Z`; pth(sp, '#0b0b0c'); pthS(sp, F, 2.5); }
     ctx.translate(0, -300);
   }
   if (o.shake) ctx.translate(Math.sin((o.t || 0) * 83) * o.shake, Math.cos((o.t || 0) * 71) * o.shake * 0.5);
@@ -904,42 +902,45 @@ function person(kind, x, y, s = 1, o = {}) {
   if (o.dim) ctx.globalAlpha *= 1 - 0.6 * o.dim;
   if (o.sink) ctx.translate(0, o.sink);
   ctx.translate(0, lean * 18);
-  // jacket
-  const J = false ? 'M-132,-196 C-142,-190 -146,-170 -144,-140 L-130,10 L130,10 L144,-140 C146,-170 142,-190 132,-196 C90,-214 -90,-214 -132,-196 Z'
-                            : 'M-116,-206 C-126,-200 -132,-178 -130,-150 L-120,10 L120,10 L130,-150 C132,-178 126,-200 116,-206 C80,-226 -80,-226 -116,-206 Z';
+  // jacket: natural shoulders, a slight taper at the waist
+  const J = 'M-114,-208 C-130,-202 -136,-182 -134,-150 C-130,-100 -120,-50 -116,10 L116,10 C120,-50 130,-100 134,-150 C136,-182 130,-202 114,-208 C78,-224 -78,-224 -114,-208 Z';
   glow('rgba(255,255,255,0.28)', 20); pth(J, F); noGlow();
-  // shirt, collar, tie (black); the hr one has a plain black blouse and a lanyard
-  if (false) { pth('M-40,-220 C-28,-176 28,-176 40,-220 Z', '#000'); pthS('M-24,-208 C-18,-150 -10,-110 -2,-92 M24,-208 C22,-150 26,-110 32,-92', L, 3); rr(-6, -96, 52, 66, 5, F); rrS(-6, -96, 52, 66, 5, L, 3); rr(4, -84, 32, 26, 3, L); ln(4, -46, 36, -46, 3, L); }
-  else {
-    const top = -222;
-    pthS(`M-32,${top} L0,-108 L32,${top}`, L, 3);
-    pthS(`M-32,${top} L-12,${top + 24} L-4,${top + 4} M32,${top} L12,${top + 24} L4,${top + 4}`, L, 3);
-    pth(`M-8,${top + 6} L8,${top + 6} L6,${top + 24} L-6,${top + 24} Z`, L);
-    const tl = 108;
-    pth(`M-6,${top + 24} L6,${top + 24} L11,${top + 24 + tl} L0,${top + 36 + tl} L-11,${top + 24 + tl} Z`, o.tieRed ? C.red : L);
-  }
-  // lapels, button line, buttons
-  pthS('M-32,-220 L-58,-168 L-44,-158 L-62,-144 L-4,-60 M32,-220 L58,-168 L44,-158 L62,-144 L4,-60', L, 3.5);
-  ln(0, -60, 0, 10, 3, L); circ(-7, -36, 4.5, L); circ(-7, -8, 4.5, L);
-  // arms and hands: plain white sleeves, hands with four long thin fingers
-  const sleeve = (pts) => { ctx.save(); poly(pts, 44, L); poly(pts, 38, F); ctx.restore(); };
-  const hand = (hx, hy, rot = 0, sx = 1, curl = 0.5) => {
+  // shirt collar around the neck, the open V, a narrow black tie
+  pthS('M-26,-230 L-30,-220 L-12,-196 L0,-214 L12,-196 L30,-220 L26,-230', L, 2.5);
+  pthS('M-30,-220 L0,-112 L30,-220', L, 2.5);
+  pth('M-7,-212 L7,-212 L5,-196 L-5,-196 Z', L);
+  pth('M-5,-196 L5,-196 L10,-128 L0,-116 L-10,-128 Z', o.tieRed ? C.red : L);
+  // notched lapels, the closure, two buttons, a breast pocket
+  pthS('M-30,-220 L-54,-170 L-42,-162 L-56,-148 L-4,-66 M30,-220 L54,-170 L42,-162 L56,-148 L4,-66', L, 3);
+  ln(0, -66, 0, 10, 2.5, L); circ(-6, -42, 4, L); circ(-6, -12, 4, L);
+  ln(-96, -118, -62, -120, 2.5, L); ln(68, -40, 100, -42, 2.5, L); ln(-100, -40, -68, -42, 2.5, L);
+  // arms: tapered sleeves with a shirt cuff, simple mitten hands (no fingers)
+  const limb = (pts, w0, w1) => {   // a sleeve: black outline strokes first, then white, so the joints stay seamless
+    ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for (const [col, add] of [[L, 5], [F, 0]]) for (let i = 0; i < pts.length - 1; i++) {
+      ctx.beginPath(); ctx.moveTo(...pts[i]); ctx.lineTo(...pts[i + 1]); ctx.lineWidth = lerp(w0, w1, i / Math.max(1, pts.length - 2)) + add; ctx.strokeStyle = col; ctx.stroke(); }
+    ctx.restore();
+    const [p, q] = pts.slice(-2), ang = Math.atan2(q[1] - p[1], q[0] - p[0]);
+    ctx.save(); ctx.translate(q[0], q[1]); ctx.rotate(ang); ln(-10, -w1 / 2 + 3, -10, w1 / 2 - 3, 2.5, L); ctx.restore();
+  };
+  const hand = (hx, hy, rot = 0, sx = 1) => {
     ctx.save(); ctx.translate(hx, hy); ctx.rotate(rot); ctx.scale(sx, 1);
-    ell(0, 0, 16, 13, 0, F); ctx.beginPath(); ctx.ellipse(0, 0, 16, 13, 0, 0, Math.PI * 2); ctx.strokeStyle = L; ctx.lineWidth = 2.5; ctx.stroke();
-    for (let i = 0; i < 4; i++) { const y0 = -8 + i * 5.5, pts = [[12, y0], [40, y0 + 2], [64, y0 + 10 * curl + i * 1.5]]; poly(pts, 7, L); poly(pts, 3.6, F); }
+    const h = 'M-6,-13 C8,-16 26,-12 32,-2 C35,6 30,14 18,15 C6,16 -4,12 -6,4 Z';
+    pth(h, F); pthS(h, L, 2.5); pthS('M4,-13 C10,-20 18,-20 20,-14', L, 2.5);
     ctx.restore(); };
-  const A = o.arms || 'desk', sh = 118, sy = -198;
-  if (A === 'desk') { sleeve([[-sh, sy], [-sh - 24, -70], [-70, -12]]); sleeve([[sh, sy], [sh + 24, -70], [70, -12]]); hand(-52, -8, 0.1, 1); hand(52, -8, -0.1, -1); }
-  else if (A === 'down') { sleeve([[-sh, sy], [-sh - 18, -60], [-sh - 12, 14]]); sleeve([[sh, sy], [sh + 18, -60], [sh + 12, 14]]); hand(-sh - 12, 34, 1.55, 1, 0.2); hand(sh + 12, 34, 1.55, -1, 0.2); }
-  else if (A === 'hand') { sleeve([[-sh, sy], [-sh - 24, -70], [-70, -12]]); hand(-52, -8, 0.1, 1); const r = o.reach ?? 1; sleeve([[sh, sy], [sh + 26, -90], [sh + 26 + 110 * r, -60 - 30 * r]]); hand(sh + 50 + 110 * r, -60 - 30 * r, -0.2, 1, 0.15); }
-  else if (A === 'laptop') { sleeve([[-sh, sy], [-sh - 26, -70], [-70, -20]]); sleeve([[sh, sy], [sh + 26, -70], [70, -20]]); }
+  const A = o.arms || 'desk', sh = 114, sy = -196;
+  if (A === 'desk') { limb([[-sh + 6, sy + 10], [-134, -76], [-58, -20]], 44, 36); limb([[sh - 6, sy + 10], [134, -76], [58, -20]], 44, 36); hand(-44, -20, 0, 1); hand(40, -16, 0.1, -1); }
+  else if (A === 'down') { limb([[-sh + 6, sy + 10], [-128, -90], [-124, -6]], 42, 36); limb([[sh - 6, sy + 10], [128, -90], [124, -6]], 42, 36); hand(-122, 12, 1.62, 1); hand(122, 12, 1.52, 1); }
+  else if (A === 'hand') { if (o.stand) { limb([[-sh + 6, sy + 10], [-128, -90], [-124, -6]], 42, 36); hand(-122, 12, 1.62, 1); } else { limb([[-sh + 6, sy + 10], [-134, -76], [-58, -20]], 44, 36); hand(-44, -20, 0, 1); }
+    const r = o.reach ?? 1; limb([[sh - 6, sy + 10], [140, -96], [110 + 40 * r, -40 - 10 * r]], 42, 36); hand(124 + 40 * r, -38 - 10 * r, 0.35, 1); }
+  else if (A === 'laptop') { limb([[-sh + 6, sy + 10], [-134, -76], [-76, -20]], 44, 36); limb([[sh - 6, sy + 10], [134, -76], [76, -20]], 44, 36); }
   else {
-    sleeve([[-sh, sy], [-sh - 22, -90], [-84, -84]]);
+    limb([[-sh, sy], [-138, -100], [-84, -84]], 44, 34);
     const wt = o.wt || 0, px = 24 + Math.sin(wt * 9) * 22 + ((wt * 40) % 40), py = -130 + Math.floor((wt * 1.2) % 3) * 22;
     clipboard(-6, -120, 1.05, -0.06, { lines: o.lines, under: o.under, up: o.up });
-    hand(-70, -84, 0, 1, 0.6);
-    if (A === 'write') { sleeve([[sh, sy], [sh + 26, -90], [px + 34, py + 34]]); pen(px, py, 0.8, -0.5); hand(px + 22, py + 26, 0.3, -1, 0.6); }
-    else { sleeve([[sh, sy], [sh + 22, -90], [84, -84]]); hand(70, -84, 0, -1, 0.6); }
+    hand(-70, -84, 0, 1);
+    if (A === 'write') { limb([[sh, sy], [140, -100], [px + 34, py + 34]], 44, 34); pen(px, py, 0.8, -0.5); hand(px + 22, py + 26, 0.3, -1); }
+    else { limb([[sh, sy], [138, -100], [84, -84]], 44, 34); hand(70, -84, 0, -1); }
   }
   // head
   ctx.save(); ctx.translate(0, ppHeadY(kind) + lean * 34); ctx.rotate(-lean * 0.06 + (o.tilt || 0)); ctx.scale(1.25, 1.25); ppHead(kind, o); ctx.restore();
@@ -948,7 +949,7 @@ function person(kind, x, y, s = 1, o = {}) {
     const lid = o.lid ?? 1, hh = 320 * lid;
     rr(-150, -12, 300, 14, 4, F); ln(-150, 2, 150, 2, 2, L);
     if (hh > 4) { glow('rgba(255,255,255,0.25)', 16); rr(-140, -12 - hh, 280, hh, 10, F); noGlow(); rrS(-140, -12 - hh, 280, hh, 10, L, 3); circ(0, -12 - hh / 2, 12 * lid, '#000'); }
-    if (lid < 0.98) { hand(-84, -16, 0, 1, 0.2); hand(84, -16, 0, -1, 0.2); }
+    if (lid < 0.98) { hand(-64, -16, 0, 1); hand(64, -16, 0, -1); }
   }
   ctx.restore();
 }
@@ -977,508 +978,702 @@ function meetDesk(x0, x1, y, o = {}) {
     }
   }
 }
-// ---------- EP07 scenes: "If Your Interviewer Ever Asks 'What Is Your Greatest Weakness?'" ----------
+// ---------- EP07 v4 scenes: "If Your Interviewer Ever Asks 'What Is Your Greatest Weakness?'" (Protocol 404) ----------
+// Pure black, pure white vector figures, red only for danger. The interviewers are three near-identical bald agents in sunglasses.
 const ev = type => window.TL.events.filter(e => e.type === type);
 const nextStart = seg => { const n = window.TL.segments.find(s => s.start > seg.start + 0.01); return n ? n.start : seg.end + 0.7; };
 const blackAfter = (t, t0) => { if (t >= t0) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); ctx.restore(); } };
 const zk = (t, t0, d, z0, z1) => lerp(z0, z1, ease((t - t0) / d));
 const black = () => { ctx.fillStyle = '#000'; ctx.fillRect(-200, -200, W + 400, H + 400); };
 const typed = (s, t, t0, cps = 28) => s.slice(0, Math.max(0, Math.floor((t - t0) * cps)));
+const segEnd = seg => seg.end + 0.7;
+const seg$ = id => window.TL.segments.find(s => s.id === id);
 // a close-up: (cx, cy) is brought to the centre of the screen at zoom z
 function focus(t, t0, d, z0, z1, cx, cy, fn) { const z = zk(t, t0, d, z0, z1); ctx.save(); ctx.translate(W / 2, H / 2 - 40); ctx.scale(z, z); ctx.translate(-cx, -cy); fn(); ctx.restore(); }
-const CLOCK = [1640, 260], AC = [220, 285];
-const segDur = seg => nextStart(seg) - seg.start;
+const flatT = fn => { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); fn(); ctx.restore(); };
 function brackets(x, y, w, h, a, col = C.fig) {
   if (a <= 0) return; ctx.save(); ctx.globalAlpha *= a; const L = 34;
   for (const [sx, sy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) { const cx = x + sx * w / 2, cy = y + sy * h / 2; poly([[cx, cy - sy * L], [cx, cy], [cx - sx * L, cy]], 6, col); }
   ctx.restore();
 }
+const KINDS = ['young', 'hr', 'boss'];
+
 // ---------- the interview room ----------
-// interviewers sit at x = 560 / 960 / 1360 behind the desk; their feet at FEET (hidden), desk top at DESK_Y
-const IX = [560, 960, 1360], FEET = 905, DESK_Y = 620;
-const HEAD = i => [IX[i], FEET - 300 - 276];
-// o.arms: one mode or an array of three; o.eyes (middle, 0..1); o.lean, o.tilt (middle); o.me: your back in the foreground; o.stand 0..1; o.who [bools]
+const IX = [560, 960, 1360], DESK_Y = 700, CLOCK = [300, 280];
+const HEADY = DESK_Y - 294;   // the agents' face centre when seated
+// o.arms: one mode or three; o.eyes (middle 0..1); o.lean/o.tilt (middle); o.stand 0..1 (they rise); o.me: your back in the foreground; o.who [bools]; o.reach (left one's hand)
 function room(t, o = {}) {
-  roomWall({ floor: 900, clock: o.clock, ac: o.ac, secRed: o.secRed, door: o.door });
-  // a soft overhead light on the desk
-  const g = ctx.createRadialGradient(960, 260, 40, 960, 520, 900); g.addColorStop(0, 'rgba(255,255,255,0.10)'); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(-200, -200, W + 400, H + 400);
+  meetRoom({ clock: o.clock, secRed: o.secRed, clockAt: o.clockAt ?? CLOCK });
   if (o.door) roomDoor(t, o.door);
-  const st = ease(o.stand || 0);
   for (let i = 0; i < 3; i++) {
-    if (o.who && !o.who[i]) { if (o.chairs) officeChair(IX[i], 905, 0.82); continue; }
-    const arms = Array.isArray(o.arms) ? o.arms[i] : (o.arms || 'board');
-    suit(IX[i], FEET - st * 110, 1, { arms, wt: t + i * 1.7, eyes: i === 1 ? (o.eyes ?? 1) : 0, lean: i === 1 ? o.lean : 0, tilt: i === 1 ? o.tilt : 0,
-      shake: o.shake ? o.shake[i] : 0, t, lines: o.lines, under: o.under, up: o.up });
+    if (o.who && !o.who[i]) continue;
+    const st = ease(o.standI ? o.standI[i] : (o.stand || 0));
+    const arms = Array.isArray(o.arms) ? o.arms[i] : (o.arms || 'desk');
+    agent(KINDS[i], IX[i], st > 0.01 ? DESK_Y + 300 - st * 120 : DESK_Y, 1, { stand: st > 0.01 ? 1 : 0, arms, eyes: i === 1 ? (o.eyes ?? 0) : 0, lean: i === 1 ? o.lean : 0, tilt: i === 1 ? o.tilt : 0,
+      shake: o.shake ? o.shake[i] : 0, t, reach: o.reach, lid: o.lid, look: o.look });
   }
-  desk(260, 1660, DESK_Y, { n: 3 });
-  if (o.me) meBack(o.meX ?? 960, 1330, 1.3);
+  meetDesk(260, 1660, DESK_Y, { n: 3 });
+  if (o.me) meBack(o.meX ?? 960, 1400, 1.3);
 }
-// a door in the right wall: o = { lock: 0..1 red padlock, open: 0..1 }
+// a door in the right of the room: white outline; o = { lock: 0..1 red padlock, open: 0..1 }
 function roomDoor(t, d) {
-  rr(1700, 360, 170, 540, 4, '#0d0d0f'); rrS(1700, 360, 170, 540, 4, '#55555c', 4); circ(1720, 640, 8, '#9a9aa0');
-  spaced('EXIT', 1785, 330, '900 30px M', '#6a6a72', 8);
+  rrS(1720, 330, 170, 430, 4, C.fig, 5); circ(1742, 560, 8, C.fig);
+  spaced('EXIT', 1805, 310, '900 30px M', '#8a8a8a', 8);
   if (d.lock > 0) { ctx.save(); ctx.globalAlpha *= d.lock; const red = d.open ? 1 - d.open : 1;
-    ctx.translate(1785, 620); ctx.beginPath(); ctx.arc(0, -30 - 30 * (d.open || 0), 26, Math.PI, 0); ctx.lineWidth = 10; ctx.strokeStyle = red > 0.5 ? C.red : C.fig; ctx.stroke();
+    ctx.translate(1805, 560); ctx.beginPath(); ctx.arc(0, -30 - 30 * (d.open || 0), 26, Math.PI, 0); ctx.lineWidth = 10; ctx.strokeStyle = red > 0.5 ? C.red : C.fig; ctx.stroke();
     red > 0.5 ? redGlow(20) : glow(); rr(-40, -30, 80, 66, 10, red > 0.5 ? C.red : C.fig); noGlow(); circ(0, 0, 8, '#000'); ctx.restore(); }
 }
 // a "does not work" header at the top left with a red X on the icon at tx
 function noHead(t, seg, ic, label, tx) {
-  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
-  slideIn(t, seg.start, -40, 0, () => { const w = 190 + label.length * 31; ctx.save(); ctx.globalAlpha *= 0.88; rr(60, 60, w, 130, 18, '#050505'); ctx.restore(); rrS(60, 60, w, 130, 18, '#2a2a2d', 3);
-    icon7(ic, 125, 125, 0.5); text(label, 200, 142, '900 46px M', C.fig, 'left'); redX(125, 125, 48, prog(t, tx, 0.3)); }, 0.35);
+  flatT(() => slideIn(t, seg.start, -40, 0, () => { const w = 190 + label.length * 31; ctx.save(); ctx.globalAlpha *= 0.88; rr(60, 60, w, 130, 18, '#050505'); ctx.restore(); rrS(60, 60, w, 130, 18, '#2a2a2d', 3);
+    icon7(ic, 125, 125, 0.5); text(label, 200, 142, '900 46px M', C.fig, 'left'); redX(125, 125, 48, prog(t, tx, 0.3)); }, 0.35));
+}
+// a small white note card (what they write down)
+function noteCard(t, t0, x, y, str, rot = -0.05, col = '#111') {
+  if (t < t0) return;
+  pop(t, t0, x, y, () => { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.font = '900 44px M'; const w = ctx.measureText(str).width + 80;
+    glow(); rr(-w / 2, -50, w, 100, 10, '#fbfbfb'); noGlow(); text(str, 0, 16, '900 44px M', col); ctx.restore(); }, 0.3);
+}
+
+// ---------- the night bedroom (rule 4) ----------
+const TRIO = [1130, 1350, 1570];
+// you sitting up in bed, facing right
+function sitUpInBed(s = 1.3) {
+  ctx.save(); ctx.translate(360, 900); ctx.scale(s, s);
+  glow('rgba(255,255,255,0.25)', 16); rr(110, -360, 90, 190, 36, C.fig); circ(156, -410, 46, C.fig); noGlow(); circ(186, -416, 9, '#000');
+  ctx.save(); glow('rgba(255,255,255,0.2)', 8); poly([[130, -320], [176, -250], [236, -236]], 26, C.fig); noGlow(); ctx.restore();
   ctx.restore();
 }
-const TRIO = [1310, 1530, 1750];
-function trio(t, o = {}) {   // the three standing in the dark (rule 4)
-  const xs = o.xs || TRIO, ss = o.ss || [0.8, 0.8, 0.8];
-  for (let i = 0; i < 3; i++) { if (o.who && !o.who[i]) continue;
-    if (o.fold && o.fold[i] > 0.97) continue;
-    suit(xs[i], o.y ?? 900, ss[i], { arms: o.arms || 'board', eyes: i === 1 ? (o.eyes ?? 1) : 0, wt: t + i, shake: o.shake ? o.shake[i] : 0, t, fold: o.fold ? o.fold[i] : 0, lines: o.lines, under: o.under, up: o.up }); }
+function nightRoom(o = {}) {
+  black(); ln(-200, 900, W + 200, 900, 3, '#262626');
+  if (o.door !== false) { const op = o.doorOpen || 0;
+    if (op > 0) { ctx.save(); ctx.globalAlpha *= 0.5 * op; rr(1700, 380, 180, 520, 2, '#1a1a1a'); ctx.restore(); }
+    rrS(1700, 380, 180 * (1 - op * 0.7), 520, 4, C.fig, 5); circ(1720 + 0 * op, 650, 8, C.fig); }
+  // the bedside clock: 3:00 in red
+  rrS(150, 760, 160, 140, 6, '#5a5a5a', 3); rrS(166, 690, 128, 60, 8, C.fig, 4); ctx.save(); redGlow(14); text(o.time || '3:00', 230, 736, '900 40px M', C.red); ctx.restore();
 }
-// the night bedroom with you in bed and them at the foot of it
+// the three standing at the foot of the bed. o.arms (one or three), o.eyes, o.xs, o.s, o.y, o.shake [3], o.who, o.boxes 0..1, o.badges 0..1, o.drop 0..1
+function trio(t, o = {}) {
+  const xs = o.xs || TRIO, s = o.s || 0.78, y = o.y ?? 900;
+  for (let i = 0; i < 3; i++) { if (o.who && !o.who[i]) continue;
+    const arms = Array.isArray(o.arms) ? o.arms[i] : (o.arms || 'board');
+    const x = xs[i] + (o.walk ? o.walk[i] : 0);
+    agent(KINDS[i], x, y, s, { stand: 1, arms, eyes: i === 1 ? (o.eyes ?? 1) : 0, shake: o.shake ? o.shake[i] : 0, t });
+    if (o.badges) { ctx.save(); ctx.globalAlpha *= o.badges; ctx.translate(x, y - 300 * s); ctx.scale(s, s); rr(30, -150, 72, 44, 5, C.fig); rrS(30, -150, 72, 44, 5, '#000', 3); text('STAFF', 66, -121, '900 17px M', '#000'); ctx.restore(); }
+    if (o.boxes) cardboardBox(x, y - 300 * s + 20 * s, s * 1.05, o.boxes);
+  }
+  if (o.drop) for (let i = 0; i < 3; i++) {   // their clipboards on the floor
+    const k = ease(o.drop), x = xs[i] - 20, yy = lerp(y - 420 * s, y - 10, k);
+    ctx.save(); ctx.translate(x, yy); ctx.rotate(lerp(-0.06, 1.45 + i * 0.1, k)); clipboard(0, 0, 0.8 * s / 0.78); ctx.restore(); }
+}
+// a cardboard box held at the waist: a stapler and a sad little plant inside
+function cardboardBox(x, y, s, a = 1) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.globalAlpha *= a;
+  // plant: drooping leaves
+  ln(20, -70, 20, -150, 5, '#000'); ln(20, -70, 20, -150, 3, C.fig);
+  for (const [dx, dy, r] of [[-26, -128, -0.9], [60, -120, 0.9], [-14, -160, -0.4], [50, -160, 0.6]]) { ctx.save(); ctx.translate(20 + dx * 0.5, dy + 10); ctx.rotate(r); ell(dx * 0.5, 0, 26, 11, 0, C.fig); ctx.beginPath(); ctx.ellipse(dx * 0.5, 0, 26, 11, 0, 0, Math.PI * 2); ctx.strokeStyle = '#000'; ctx.lineWidth = 2.5; ctx.stroke(); ctx.restore(); }
+  rr(-4, -96, 48, 34, 4, C.fig); rrS(-4, -96, 48, 34, 4, '#000', 3);   // the pot
+  // stapler
+  rr(-110, -92, 100, 22, 8, '#111'); rrS(-110, -92, 100, 22, 8, C.fig, 2.5); rr(-110, -72, 100, 10, 3, '#111'); rrS(-110, -72, 100, 10, 3, C.fig, 2.5);
+  // the box
+  glow('rgba(255,255,255,0.25)', 18); rr(-150, -70, 300, 170, 6, C.fig); noGlow(); rrS(-150, -70, 300, 170, 6, '#000', 3);
+  pth('M-150,-70 L-176,-104 L-130,-104 L-110,-70 Z', C.fig); pthS('M-150,-70 L-176,-104 L-130,-104 L-110,-70', '#000', 3);
+  pth('M150,-70 L176,-104 L130,-104 L110,-70 Z', C.fig); pthS('M150,-70 L176,-104 L130,-104 L110,-70', '#000', 3);
+  rr(-40, -40, 80, 26, 13, '#000');   // the hand hole
+  ctx.restore();
+}
 function night(t, o = {}) {
-  bedroomNight({ gapGlow: o.gapGlow, time: o.time });
-  bed(360, 900, 1.3, o.bed || 'woke', { look: 1 });
+  nightRoom(o);
+  if (o.sitUp) { bed(360, 900, 1.3, 'empty'); sitUpInBed(); } else bed(360, 900, 1.3, o.bed || 'woke', { look: 1 });
   if (o.trio !== false) trio(t, o);
+}
+
+// ---------- the handshake close-up ----------
+// your arm from the left (plain white), his from the right (sleeve, cuff, outline). o.sq 0..1 his grip; o.shake px; o.crack 0..1; o.apart 0..1; o.long 0..1 (his hand stretches)
+function handshake(t, o = {}) {
+  const ap = ease(o.apart || 0), sh = o.shake ? Math.sin(t * 60) * o.shake : 0;
+  ctx.save(); ctx.translate(-260 * ap, 0);
+  glow('rgba(255,255,255,0.3)', 20); poly([[-200, 760], [700, 580]], 120, C.fig); noGlow();
+  ell(820, 560, 110, 78, -0.15, C.fig);
+  ctx.restore();
+  ctx.save(); ctx.translate(260 * ap + sh, sh * 0.4);
+  ctx.save(); ctx.lineCap = 'round'; poly([[2200, 380], [1150, 540]], 132, '#000'); poly([[2200, 380], [1150, 540]], 122, C.fig); ctx.restore();
+  ctx.save(); ctx.translate(1150, 540); ctx.rotate(-0.15); ln(40, -58, 40, 58, 4, '#000'); ctx.restore();   // the shirt cuff
+  const L = 1 + 0.5 * (o.long || 0), sq = o.sq || 0;
+  // his hand wraps over yours: a long mitten
+  ctx.save(); ctx.translate(1080, 550); ctx.scale(1 - 0.06 * sq, 1 - 0.1 * sq);
+  const hp = `M60,-70 C${-120 * L},-96 ${-260 * L},-60 ${-270 * L},10 C${-268 * L},64 ${-150 * L},80 0,74 C40,72 70,40 70,0 Z`;
+  glow('rgba(255,255,255,0.25)', 16); pth(hp, C.fig); noGlow(); pthS(hp, '#000', 5);
+  pthS(`M${-60 * L},-62 C${-110 * L},-30 ${-150 * L},10 ${-160 * L},50`, '#000', 4);   // the thumb's edge
+  ctx.restore(); ctx.restore();
+  if (o.crack > 0) { ctx.save(); ctx.globalAlpha *= o.crack; redGlow(20);
+    for (const [a, l] of [[-2.4, 90], [-1.2, 110], [0.4, 80], [2.2, 100], [-0.3, 130]]) { const x0 = 860 + Math.cos(a) * 110, y0 = 560 + Math.sin(a) * 80;
+      poly([[x0, y0], [x0 + Math.cos(a) * l * 0.5 + 14, y0 + Math.sin(a) * l * 0.5 - 10], [x0 + Math.cos(a) * l, y0 + Math.sin(a) * l]], 6, C.red); }
+    noGlow(); ctx.restore(); }
+}
+// the grip meter: two bars, YOU and HIM. o.you, o.him 0..1.6 (over 1 = red, past the top)
+function gripMeter(t, o) {
+  flatT(() => {
+    const bars = [['YOU', o.you, 200], ['HIM', o.him, 380]];
+    for (const [lab, v, x] of bars) {
+      rrS(x - 45, 120, 90, 360, 10, '#5a5a5a', 4);
+      const h = 340 * Math.min(v, 1.3), red = v > 1.0;
+      ctx.save(); if (red) redGlow(24); rr(x - 35, 470 - h, 70, h, 6, red ? C.red : C.fig); noGlow(); ctx.restore();
+      text(lab, x, 540, '900 44px M', red ? C.red : C.fig);
+    }
+    ln(140, 130, 440, 130, 3, '#8a8a8a'); text('MAX', 290, 105, '600 24px Plex', '#8a8a8a');
+  });
 }
 
 // ---------- hook ----------
 S.h1 = (t, seg) => {
-  // frame 0: the panel, the question already asked; the middle one's eyes are red
+  // frame 0: the three agents, the question already asked; the middle one's lenses are red
   const td = wt(seg, 'do');
-  cam(t, 0, seg.end + 0.6, 1.0, 1.1, 960, 420, () => room(t, { me: true, arms: ['board', 'desk', 'board'] }));
-  if (t < td - 0.1) say(t, -1, 960, 130, 'WHAT IS YOUR GREATEST WEAKNESS?', 960, 250, 50);
+  cam(t, 0, seg.end + 0.6, 1.0, 1.12, 960, 470, () => room(t, { me: true, eyes: 1 }));
+  if (t < td - 0.1) say(t, -1, 960, 120, 'WHAT IS YOUR GREATEST WEAKNESS?', 960, 250, 50);
   else pop(t, td - 0.1, 960, 140, () => tag('DO NOT TELL THE TRUTH', 960, 150, C.red, 56, 'center'), 0.3);
 };
-function teaserBox(t, seg, w0, ic, word, y, x = 1600) {
-  const tx = wt(seg, word);
-  pop(t, w0, x, y, () => { ctx.save(); ctx.globalAlpha *= 0.85; rr(x - 140, y - 130, 280, 260, 22, '#000'); ctx.restore(); rrS(x - 140, y - 130, 280, 260, 22, C.fig, 5); icon7(ic, x, y, 1.0); }, 0.3);
+function teaserBox(t, seg, w0, draw, tx, y, x = 1600) {
+  pop(t, w0, x, y, () => { ctx.save(); ctx.globalAlpha *= 0.85; rr(x - 140, y - 130, 280, 260, 22, '#000'); ctx.restore(); rrS(x - 140, y - 130, 280, 260, 22, C.fig, 5); draw(x, y); }, 0.3);
   redX(x, y, 105, prog(t, tx + 0.25, 0.3));
 }
 const H2_HIT = 0.6, H2_BLACK = 0.4;
 S.h2 = (t, seg) => {
-  const ws = [[seg.start, wt(seg, 'never', 1), 'self', 'tell'], [wt(seg, 'never', 1), wt(seg, 'and'), 'ask', 'questions'], [wt(seg, 'and'), nextStart(seg), 'clock', 'back']];
+  // three quick "do not"s: the handshake, where you live, no questions
+  const ws = [[seg.start, wt(seg, 'do', 2), 'hard'], [wt(seg, 'do', 2), wt(seg, 'and'), 'live'], [wt(seg, 'and'), nextStart(seg), 'questions']];
   let i = 0; for (let k = 0; k < 3; k++) if (t >= ws[k][0]) i = k;
-  const [w0, w1, ic, word] = ws[i], hit = w1 - H2_HIT, blk = w1 - H2_BLACK, d = t - hit;
+  const [w0, w1, word] = ws[i], hit = w1 - H2_HIT, blk = w1 - H2_BLACK, d = t - hit;
   if (t < blk) {
-    if (i === 0) {   // the clipboard: LIVES ALONE, underlined
-      black(); cam(t, w0, blk - w0, 1.0, 1.2, 800, 520, () => clipboard(800, 540, 3.6, -0.05, { lines: [['NO. 117', 0], ['AGE  29', 0], ['LIVES ALONE', 0]], under: 2, up: prog(t, w0 + 0.6, 1.0) }));
-    } else if (i === 1) {   // the clock runs back to nine
-      black(); const k = ease(prog(t, w0 + 0.3, hit - w0 - 0.3)), m = lerp(47, -60 * 0, k);
-      focus(t, w0, blk - w0, 2.6, 3.0, ...CLOCK, () => roomWall({ clock: [9, lerp(47, 0, k), 30 * (1 - k)], secRed: true, floor: 2000 }));
-    } else {   // 3 AM: three of them at the foot of your bed
-      cam(t, w0, blk - w0, 1.0, 1.15, 1100, 600, () => night(t, { eyes: prog(t, hit - 0.3, 0.3) }));
-    }
-    if (d > 0) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 0.35 * clamp(d / 0.2); ctx.fillStyle = '#ff1a1a'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+    black();
+    if (i === 0) cam(t, w0, blk - w0, 1.0, 1.12, 960, 560, () => handshake(t, { sq: prog(t, w0 + 0.3, blk - w0 - 0.5), shake: 4 * prog(t, w0 + 0.6, 0.6), crack: prog(t, hit, 0.15) }));
+    else if (i === 1) cam(t, w0, blk - w0, 1.0, 1.2, 800, 520, () => clipboard(800, 540, 3.6, -0.05, { lines: [['NO. 117', 0], ['AGE  29', 0], ['LIVES ALONE', 0]], under: 2, up: prog(t, w0 + 0.6, 1.0) }));
+    else { const k = ease(prog(t, w0 + 0.3, hit - w0 - 0.3)); focus(t, w0, blk - w0, 2.6, 3.0, ...CLOCK, () => meetRoom({ clock: [9, lerp(47, 0, k), 30 * (1 - k)], secRed: true, floor: false })); }
+    if (d > 0) flatT(() => { ctx.globalAlpha = 0.35 * clamp(d / 0.2); ctx.fillStyle = '#ff1a1a'; ctx.fillRect(0, 0, W, H); });
   }
   blackAfter(t, blk);
-  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); teaserBox(t, seg, w0, ic, word, 250, i === 2 ? 300 : 1600); ctx.restore();
+  const draws = [(x, y) => pageIcon('hand', x, y, '#fff'), (x, y) => icon7('pin', x, y, 0.9), (x, y) => icon7('ask', x, y, 1.0)];
+  flatT(() => teaserBox(t, seg, w0, draws[i], wt(seg, word), 250, i === 2 ? 1600 : (i === 0 ? 1600 : 1600)));
 };
 
-// ---------- rule 1: do not tell them about yourself ----------
-S.a0 = (t, seg) => ruleCard(t, seg, 1, 'DO NOT TELL THEM ABOUT YOURSELF');
+// ---------- rule 1: do not shake too hard ----------
+S.a0 = (t, seg) => ruleCard(t, seg, 1, 'DO NOT SHAKE TOO HARD');
 S.a1 = (t, seg) => {
-  // "Tell me about yourself." They have already read your résumé. Three times. Every page.
-  const ta = wt(seg, 'already'), t3 = wt(seg, 'three'), te = wt(seg, 'every');
-  if (t < ta - 0.1) {
-    cam(t, seg.start, ta - seg.start, 1.25, 1.35, 700, 400, () => room(t, { arms: ['board', 'desk', 'desk'], eyes: 0.6 }));
-    say(t, seg.start, 1080, 250, 'TELL ME ABOUT\nYOURSELF.', 660, 330, 54);
+  // the one on the left stands and holds out his hand; his fingers are longer than they should be
+  const th = wt(seg, 'hand'), tf = wt(seg, 'fingers');
+  if (t < tf - 0.2) {
+    cam(t, seg.start, tf - seg.start, 1.0, 1.25, 700, 470, () => room(t, { arms: [t >= th - 0.6 ? 'hand' : 'desk', 'desk', 'laptop'], standI: [prog(t, seg.start + 0.3, 0.7), 0, 0], reach: ease(prog(t, th - 0.6, 0.8)), lid: 0, me: true, meX: 760 }));
     return;
   }
   black();
-  cam(t, ta, seg.end - ta + 0.7, 1.0, 1.08, 960, 480, () => {
-    const n = t >= te ? 4 : 1, fk = ease(prog(t, te, 0.5));
-    for (let i = n - 1; i >= 0; i--) resume(960 + (i - 1.5) * 150 * fk + (n === 1 ? 0 : 0), 520 + i * 6 * fk, 0.95, (i - 1.5) * 0.06 * fk, { marks: prog(t, ta + 0.2 + i * 0.1, 0.9) });
-    for (let k = 0; k < 3; k++) if (t >= t3 + k * 0.22) pop(t, t3 + k * 0.22, 1500 + k * 46, 180, () => { ctx.save(); redGlow(16); ln(1500 + k * 46, 130, 1500 + k * 46, 230, 12, C.red); ctx.restore(); }, 0.2);
-    if (t >= t3) pop(t, t3, 1300, 180, () => tag('READ', 1300, 196, C.fig, 40, 'right'), 0.25);
-  });
+  cam(t, tf - 0.2, segEnd(seg) - tf, 1.0, 1.1, 1150, 560, () => handshake(t, { apart: 1 - 0, long: ease(prog(t, tf, 1.2)) }));
+  if (t >= tf + 0.5) flatT(() => { ctx.save(); ctx.setLineDash([10, 10]); ln(620, 900, 1380, 900, 3, '#8a8a8a'); ctx.restore(); text('TOO LONG', 1000, 960, '900 40px M', C.red); });
 };
 S.a2 = (t, seg) => {
-  // three versions of you on the chart; only one may leave the room
-  const tc = wt(seg, 'checking'), ts = wt(seg, 'safe'), tr = wt(seg, 'room');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.06, 960, 520, () => {
-    black();
-    for (let i = 0; i <= 8; i++) { const y = 860 - i * 70; ln(260, y, 1660, y, 2, '#2a2a2e'); if (i % 2 === 0) text(`${150 + i * 10}`, 240, y + 8, '600 22px Plex', '#55555c', 'right'); }
-    const V = [['A', { face: 'front', arms: [0.15, 0.15] }], ['B', { face: 'front', arms: [0, 0] }], ['C', { face: 'left', arms: [0, 0.9] }]];
-    V.forEach(([lab, oo], i) => { const x = 560 + i * 400;
-      slideIn(t, seg.start + 0.2 + i * 0.25, 0, 40, () => { me(x, 860, 1.45, oo); rr(x - 50, 880, 100, 56, 8, '#1a1a1d'); text(lab, x, 924, '900 40px M', C.fig); }, 0.4); });
-    if (t >= tc) { const k = prog(t, tc, 0.4); brackets(960, 600, 300, 620, k); }
-    if (t >= ts) { redX(560, 520, 90, prog(t, ts, 0.3)); redX(1360, 520, 90, prog(t, ts + 0.15, 0.3)); }
-    if (t >= tr) pop(t, tr, 960, 150, () => { glow(); rr(810, 100, 300, 90, 14, C.fig); noGlow(); spaced('SAFE', 960, 165, '900 54px M', '#000', 10); }, 0.3);
+  // everyone's advice: a firm handshake, show them you are strong
+  const tf = wt(seg, 'firm'), ts = wt(seg, 'show');
+  black();
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.05, 960, 520, () => {
+    slideIn(t, seg.start, 0, -30, () => spaced('EVERYONE SAYS', 960, 260, '900 44px M', '#8a8a8a', 14), 0.4);
+    okRow(t, tf - 0.3, 480, 450, 'A FIRM HANDSHAKE.', 64);
+    okRow(t, ts - 0.3, 480, 650, 'SHOW THEM YOU ARE STRONG.', 56);
   });
 };
 S.a3 = (t, seg) => {
-  // the script: smile, your name, one sentence, stop
-  const W4 = [wt(seg, 'smile'), wt(seg, 'name'), wt(seg, 'sentence'), wt(seg, 'stop')];
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.05, 960, 520, () => {
-    black(); sitSide(520, 900, 1.35, { dir: 1 });
-    ['SMILE.', 'SAY YOUR NAME.', 'ONE SENTENCE.', 'THEN STOP.'].forEach((l, i) => okRow(t, W4[i] - 0.15, 900, 230 + i * 170, l, 56));
-  });
+  // "Do not." The advice is crossed out. A firm grip is a challenge, and they always answer one.
+  const tc = wt(seg, 'challenge'), ta = wt(seg, 'answer');
+  if (t < tc - 0.2) {
+    black();
+    cam(t, seg.start, tc - seg.start, 1.0, 1.04, 960, 520, () => {
+      spaced('EVERYONE SAYS', 960, 260, '900 44px M', '#5a5a5a', 14);
+      okRow(t, -9, 480, 450, 'A FIRM HANDSHAKE.', 64); okRow(t, -9, 480, 650, 'SHOW THEM YOU ARE STRONG.', 56);
+      ctx.save(); redGlow(12); lnP(460, 470, 1500, 430, 12, C.red, prog(t, seg.start + 0.1, 0.25)); lnP(460, 670, 1560, 630, 12, C.red, prog(t, seg.start + 0.3, 0.25)); ctx.restore();
+    });
+    return;
+  }
+  // close on the left agent: a glint in his lenses
+  focus(t, tc - 0.2, segEnd(seg) - tc, 2.2, 2.5, IX[0] - 200, HEADY + 20, () => room(t, { arms: 'desk', lid: 0, look: Math.sin(t * 2) }));
+  if (t >= ta) flatT(() => pop(t, ta, 520, 560, () => { tag('CHALLENGE', 520, 540, C.red, 64, 'center'); tag('ACCEPTED', 520, 650, C.red, 64, 'center'); }, 0.3));
 };
 S.a4 = (t, seg) => {
-  const th = wt(seg, 'hobbies'), tf = wt(seg, 'family'), tl = wt(seg, 'live');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.1, 1.18, 960, 420, () => room(t, { arms: 'write', eyes: 0.8 }));
-  listCard(420, 210, 1080, 600);
-  noRow(t, th - 0.25, th + 0.25, 480, 330, 'game', 'YOUR HOBBIES', 52);
-  noRow(t, tf - 0.25, tf + 0.25, 480, 510, 'family', 'YOUR FAMILY', 52);
-  noRow(t, tl - 0.25, tl + 0.25, 480, 690, 'pin', 'WHERE YOU LIVE', 52);
+  // squeeze, and he squeezes back; harder; he does not stop when you stop
+  const tq = wt(seg, 'squeezes'), th = wt(seg, 'harder', 1), th2 = wt(seg, 'harder', 2), ts = wt(seg, 'stop', 2);
+  const you = t < ts ? lerp(0.3, 0.85, ease(prog(t, seg.start, 1.0))) : lerp(0.85, 0.15, ease(prog(t, ts - 0.4, 0.5)));
+  const him = Math.max(0, lerp(0, 0.7, ease(prog(t, tq - 0.2, 0.6))) + 0.25 * ease(prog(t, th, 0.5)) + 0.35 * ease(prog(t, th2, 0.5)) + 0.4 * prog(t, ts, 1.5));
+  black();
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.08, 860, 560, () => handshake(t, { sq: clamp(him), shake: him > 1 ? 4 : him * 2 }));
+  gripMeter(t, { you, him });
 };
 S.a5 = (t, seg) => {
-  // the last candidate: "I live alone." He writes it down.
-  const tw = wt(seg, 'wrote');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.06, 960, 520, () => {
-    roomWall({ floor: 900, clockAt: [960, 150], acAt: [-600, 0] });
-    sitSide(470, 900, 1.25, { dir: 1, hair: true });
-    say(t, seg.start + 0.3, 520, 210, 'I LIVE ALONE.', 500, 330, 50);
-    suit(1380, 905, 1.0, { arms: t >= tw - 0.2 ? 'write' : 'board', wt: t, eyes: 0 });
-    desk(1080, 1680, DESK_Y, { n: 1 });
+  // the waiting room: a row of candidates; a crack through the door; every head turns
+  const th = wt(seg, 'heard'), tw = wt(seg, 'waiting');
+  black();
+  cam(t, seg.start, segEnd(seg) - seg.start + 1.2, 1.0, 1.08, 900, 560, () => {
+    ln(-200, 900, W + 200, 900, 3, '#262626');
+    rrS(1480, 360, 220, 540, 4, C.fig, 5); circ(1504, 640, 8, C.fig); spaced('INTERVIEW', 1590, 330, '900 30px M', '#8a8a8a', 6);
+    for (let i = 0; i < 4; i++) sitSide(260 + i * 290, 900, 0.95, { dir: 1, hair: i === 1 });
+    if (t >= th - 0.15) { const k = prog(t, th - 0.15, 0.2); ctx.save(); ctx.globalAlpha *= k; redGlow(24);
+      for (const [a, l] of [[-2.6, 120], [-3.0, 160], [2.7, 120], [-2.2, 90]]) { const x0 = 1470, y0 = 560; poly([[x0, y0], [x0 + Math.cos(a) * l * 0.5 + 10, y0 + Math.sin(a) * l * 0.5 + 12], [x0 + Math.cos(a) * l, y0 + Math.sin(a) * l]], 7, C.red); }
+      noGlow(); ctx.restore();
+      for (let i = 0; i < 4; i++) pop(t, th + 0.1 + i * 0.08, 260 + i * 290, 420, () => text('!', 260 + i * 290 + 10, 470 - 0 * 0.95, '900 60px M', C.fig), 0.2); }
+    if (t >= th + 0.1) pop(t, th + 0.1, 1590, 220, () => tag('CRACK.', 1590, 230, C.red, 60, 'center'), 0.25);
   });
 };
 S.a6 = (t, seg) => {
-  // then he underlined it
-  const tu = wt(seg, 'underlined'), up = prog(t, tu - 0.05, 0.7);
+  // he signs everything with his left hand now: a right arm in a cast and sling, the left hand writing
+  const tl = wt(seg, 'left');
   black();
-  cam(t, seg.start, seg.end - seg.start + 1.6, 1.0, 1.25, 900, 520, () => {
-    clipboard(900, 560, 4.4, -0.04, { lines: [['NO. 117', 0], ['AGE  29', 0], ['LIVES ALONE', up > 0.9 ? 1 : 0]], under: 2, up });
-    ctx.save(); ctx.translate(900, 560); ctx.rotate(-0.04); ctx.scale(4.4, 4.4); ctx.font = '900 15px M'; const w = ctx.measureText('LIVES ALONE').width;
-    pen(-62 + (w + 4) * up, -24 + 2 * 28, 0.6, 2.0); ctx.restore();
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.08, 960, 560, () => {
+    // the contract
+    glow(); rr(560, 380, 620, 560, 8, '#fbfbfb'); noGlow(); text('CONTRACT', 870, 460, '900 44px M', '#111');
+    for (let i = 0; i < 6; i++) rr(620, 510 + i * 44, i % 3 === 2 ? 300 : 500, 12, 3, '#c4c4c8');
+    ln(620, 860, 1000, 860, 3, '#111');
+    const k = prog(t, seg.start + 0.4, 2.2);
+    ctx.save(); ctx.beginPath(); for (let i = 0; i <= 40 * k; i++) { const x = 640 + i * 8.5, y = 836 + Math.sin(i * 0.9) * 18 * (1 - i / 50) + (i % 7 === 0 ? -14 : 0); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.strokeStyle = '#111'; ctx.lineWidth = 4; ctx.stroke(); ctx.restore();
+    // the left hand with the pen, shaky
+    const px = 640 + 340 * k, py = 836 + Math.sin(t * 30) * 4;
+    pen(px, py, 1.2, -0.5); ctx.save(); glow(); ell(px + 40, py - 60, 50, 36, -0.5, C.fig); noGlow(); ctx.beginPath(); ctx.ellipse(px + 40, py - 60, 50, 36, -0.5, 0, Math.PI * 2); ctx.strokeStyle = '#000'; ctx.lineWidth = 3; ctx.stroke(); ctx.restore();
+    // the right arm in a cast and a sling
+    ctx.save(); glow(); rr(1300, 300, 130, 420, 60, C.fig); noGlow(); rrS(1300, 300, 130, 420, 60, '#000', 3); for (let i = 0; i < 5; i++) ln(1310, 380 + i * 60, 1420, 400 + i * 60, 2, '#9a9a9a');
+    ln(1290, 260, 1440, 760, 10, '#5a5a5a'); ctx.restore();
   });
+  if (t >= tl) flatT(() => pop(t, tl, 960, 160, () => tag('LEFT HAND ONLY', 960, 170, C.red, 56, 'center'), 0.3));
+};
+S.a7 = (t, seg) => {
+  // keep your hand soft; let him hold it; count to three
+  const tc = wt(seg, 'count'), th = wt(seg, 'three');
+  black();
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.06, 860, 560, () => handshake(t, { sq: 0.15 }));
+  gripMeter(t, { you: 0.12, him: 0.18 });
+  if (t >= tc) flatT(() => { for (let k = 0; k < 3; k++) { const t0 = tc + 0.25 + k * ((th - tc) / 2.2); if (t >= t0) pop(t, t0, 360 + k * 220, 220, () => text(String(k + 1), 360 + k * 220, 260, '900 140px M', C.fig), 0.25); } });
+};
+S.a8 = (t, seg) => {
+  // he loses interest and lets go; he writes "NOT A THREAT"
+  const tl = wt(seg, 'lets'), tw = wt(seg, 'writes'), tg = wt(seg, 'good');
+  black();
+  if (t < tw - 0.2) { cam(t, seg.start, tw - seg.start, 1.0, 1.04, 960, 560, () => handshake(t, { apart: prog(t, tl - 0.2, 0.8) })); return; }
+  cam(t, tw - 0.2, segEnd(seg) - tw, 1.0, 1.06, 960, 520, () => {
+    clipboard(960, 540, 3.2, -0.04, { lines: [['CANDIDATE', 0], ['GRIP: SOFT', 0], ['NOT A THREAT', 0]], under: 2, up: prog(t, tw + 0.6, 0.8) });
+  });
+  if (t >= tg) flatT(() => { ctx.save(); ctx.translate(1480, 300); check(0, 0, 70, prog(t, tg, 0.3)); ctx.restore(); });
 };
 
 // ---------- rule 2: do not tell the truth ----------
 S.b0 = (t, seg) => ruleCard(t, seg, 2, 'DO NOT TELL THE TRUTH');
+function folder(x, y, s, o = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); glow('rgba(255,255,255,0.25)', 22);
+  rr(-260, -200, 200, 50, 10, '#d8d8d8'); rr(-260, -170, 520, 360, 12, '#ececec'); noGlow(); rrS(-260, -170, 520, 360, 12, '#000', 3);
+  text('CANDIDATE: YOU', -220, -100, '900 36px M', '#111', 'left'); ln(-220, -80, 220, -80, 3, '#9a9a9a');
+  (o.lines || []).forEach((l, i) => text(l, -220, -30 + i * 46, '900 30px M', l.startsWith('!') ? '#d61f1f' : '#333', 'left'));
+  if (!o.lines) for (let i = 0; i < 3; i++) rr(-220, -40 + i * 40, i === 2 ? 220 : 360, 14, 4, '#b9b9b9');
+  ctx.restore();
+}
+// a small house pictogram
+function house(x, y, s = 1, col = C.fig) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); glow('rgba(255,255,255,0.3)', 16); pth('M-70,0 L-70,-80 L0,-140 L70,-80 L70,0 Z', col); noGlow(); rr(-18, -60, 36, 60, 3, '#000'); ctx.restore(); }
 S.b1 = (t, seg) => {
-  const tl = wt(seg, 'leans'), tw = wt(seg, 'what'), lean = ease(prog(t, tl, 1.2));
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.55, 960, 380, () => room(t, { arms: ['board', 'desk', 'board'], lean, eyes: lerp(0.5, 1, lean) }));
-  say(t, tw - 0.1, 960, 120, 'WHAT IS YOUR GREATEST WEAKNESS?', 960, 230, 46);
+  // everything goes into a file; the file is a map to you
+  const tm = wt(seg, 'map', 1), tm2 = wt(seg, 'map', 2);
+  black();
+  if (t < tm - 0.2) { cam(t, seg.start, tm - seg.start, 1.0, 1.1, 960, 540, () => folder(960, 560, 1.4, { lines: ['NAME', 'LAST JOB', 'ADDRESS'] })); return; }
+  cam(t, tm - 0.2, segEnd(seg) - tm, 1.0, 1.08, 960, 540, () => {
+    // a street map: a grid, the office on the left, your house on the right, a red route drawn between them
+    for (let i = 0; i < 9; i++) { ln(160 + i * 200, 120, 160 + i * 200, 980, 3, '#262626'); ln(100, 140 + i * 110, 1820, 140 + i * 110, 3, '#262626'); }
+    glow(); rr(220, 420, 160, 200, 6, C.fig); noGlow(); for (let i = 0; i < 3; i++) for (let j = 0; j < 4; j++) rr(240 + i * 46, 440 + j * 44, 30, 26, 3, '#000'); text('ROOM 4B', 300, 670, '900 30px M', '#8a8a8a');
+    house(1580, 760, 1.2);
+    const route = [[380, 520], [760, 520], [760, 250], [1160, 250], [1160, 690], [1500, 690]], p = prog(t, tm + 0.1, 1.6);
+    ctx.save(); ctx.setLineDash([22, 16]); redGlow(14); let acc = 0; const segs = route.slice(1).map((q, i) => Math.hypot(q[0] - route[i][0], q[1] - route[i][1])), tot = segs.reduce((a, b) => a + b, 0);
+    ctx.beginPath(); ctx.moveTo(...route[0]); for (let i = 0; i < segs.length; i++) { const r = clamp((p * tot - acc) / segs[i]); if (r <= 0) break; ctx.lineTo(lerp(route[i][0], route[i + 1][0], r), lerp(route[i][1], route[i + 1][1], r)); acc += segs[i]; }
+    ctx.strokeStyle = C.red; ctx.lineWidth = 9; ctx.stroke(); ctx.restore();
+    if (t >= tm2) pop(t, tm2, 1580, 560, () => { ctx.save(); redGlow(20); icon7('pin', 1580, 540, 0.8, C.red); ctx.restore(); text('YOU', 1580, 900, '900 50px M', C.red); }, 0.3);
+  });
 };
 S.b2 = (t, seg) => {
-  // quiet: the air conditioner stops, the clock stops
-  const tc = wt(seg, 'conditioner'), tk = wt(seg, 'clock');
-  if (t < tc - 0.4) { cam(t, seg.start, 3, 1.0, 1.04, 960, 520, () => room(t, { arms: 'desk', me: true })); return; }
-  if (t < tk - 0.2) { focus(t, tc - 0.4, 3, 2.6, 2.8, ...AC, () => roomWall({ ac: 1 - prog(t, tc + 0.2, 0.8), floor: 2000 })); return; }
-  const sec = 40 + (t < tk + 0.4 ? (t - tk) * 0 : 0) + (Math.sin(t * 40) * 0.25 * (t > tk + 0.2 ? 1 : 0));
-  focus(t, tk - 0.2, 3, 3.0, 3.3, ...CLOCK, () => roomWall({ clock: [9, 13, sec], secRed: t > tk + 0.2, floor: 2000 }));
+  // "Tell me about yourself." Your name, one sentence, then stop.
+  const ts = wt(seg, 'say', 1), to = wt(seg, 'one'), tt = wt(seg, 'stop');
+  if (t < ts - 0.2) { cam(t, seg.start, ts - seg.start, 1.0, 1.08, 960, 470, () => room(t, { me: true, lid: 0 })); say(t, seg.start + 0.05, 960, 120, 'TELL ME ABOUT YOURSELF.', 960, 250, 50); return; }
+  black();
+  cam(t, ts - 0.2, segEnd(seg) - ts, 1.0, 1.05, 960, 520, () => {
+    sitSide(480, 900, 1.35, { dir: 1 });
+    [['SAY YOUR NAME.', ts], ['ONE SENTENCE.', to], ['THEN STOP.', tt]].forEach(([l, t0], i) => okRow(t, t0 - 0.15, 860, 300 + i * 190, l, 58));
+  });
 };
 S.b3 = (t, seg) => {
-  const tw = wt(seg, 'work'), tc = wt(seg, 'care');
+  // never say you live alone: she said it; the one in the middle wrote it down and underlined it twice
+  const tc = wt(seg, 'candidate'), tw = wt(seg, 'wrote'), tu = wt(seg, 'underlined'), t2 = wt(seg, 'twice');
+  if (t < tw - 0.3) {
+    black();
+    cam(t, seg.start, tw - seg.start, 1.0, 1.06, 760, 560, () => {
+      ln(-200, 900, W + 200, 900, 3, '#262626'); sitSide(560, 900, 1.3, { dir: 1, hair: true });
+      if (t < tc) { listCard(240, 90, 860, 190); noRow(t, seg.start, seg.start + 0.9, 290, 185, 'pin', 'I LIVE ALONE', 60); }
+      else say(t, tc, 700, 240, 'I LIVE ALONE.', 640, 360, 56);
+      agent('hr', 1500, 760, 0.9, { arms: 'desk' }); meetDesk(1150, 1850, 760, { items: false });
+    });
+    return;
+  }
   black();
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.05, 960, 520, () => {
-    slideIn(t, seg.start, 0, -30, () => spaced('ALLOWED ANSWERS', 960, 280, '900 44px M', C.mid, 14), 0.4);
-    lnP(560, 320, 1360, 320, 4, C.mid, prog(t, seg.start + 0.2, 0.5));
-    okRow(t, tw - 0.3, 480, 470, '"I WORK TOO HARD."', 64);
-    okRow(t, tc - 0.3, 480, 670, '"I CARE TOO MUCH."', 64);
+  const up1 = prog(t, tu - 0.05, 0.6), up2 = prog(t, t2 - 0.05, 0.5);
+  cam(t, tw - 0.3, segEnd(seg) - tw + 1.2, 1.0, 1.2, 900, 520, () => {
+    clipboard(900, 560, 4.4, -0.04, { lines: [['NO. 117', 0], ['AGE  29', 0], ['LIVES ALONE', up1 > 0.9 ? 1 : 0]], under: 2, up: up1 });
+    ctx.save(); ctx.translate(900, 560); ctx.rotate(-0.04); ctx.scale(4.4, 4.4); ctx.font = '900 15px M'; const w = ctx.measureText('LIVES ALONE').width;
+    if (up2 > 0) lnP(-62, 59, -58 + w, 58, 3.5, '#d61f1f', up2);
+    pen(-62 + (w + 4) * (up2 > 0 ? up2 : up1), (up2 > 0 ? 6 : 0) - 24 + 2 * 28, 0.6, 2.0); ctx.restore();
   });
 };
 S.b4 = (t, seg) => {
-  const tp = wt(seg, 'procrastination'), ts = wt(seg, 'public'), tn = wt(seg, 'nervous');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.1, 1.18, 960, 420, () => room(t, { arms: ['board', 'desk', 'board'], eyes: 1 }));
-  listCard(420, 210, 1080, 600);
-  noRow(t, tp - 0.25, tp + 0.35, 480, 330, 'clock', 'PROCRASTINATION', 52);
-  noRow(t, ts - 0.25, ts + 0.35, 480, 510, 'stage', 'PUBLIC SPEAKING', 52);
-  noRow(t, tn - 0.25, tn + 0.35, 480, 690, 'sweat', 'I GET NERVOUS', 52);
-};
-function folder(x, y, s, o = {}) {
-  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); glow('rgba(255,255,255,0.25)', 22);
-  rr(-260, -200, 200, 50, 10, '#cfcfd4'); rr(-260, -170, 520, 360, 12, '#e4e4e8'); noGlow(); rrS(-260, -170, 520, 360, 12, '#000', 3);
-  text('CANDIDATE: YOU', -220, -100, '900 36px M', '#111', 'left'); ln(-220, -80, 220, -80, 3, '#9a9aa0');
-  for (let i = 0; i < 3; i++) rr(-220, -40 + i * 40, i === 2 ? 220 : 360, 14, 4, '#b9b9bf');
-  ctx.restore();
-}
-S.b5 = (t, seg) => {
-  // whatever you say becomes your weakness. Forever. It goes in your file, and the file follows you.
-  const tf = wt(seg, 'forever'), tfi = wt(seg, 'file'), tfo = wt(seg, 'follows');
+  // living alone: no one notices when you stop coming home. Your window goes dark; the mail piles up; the days count.
+  const tn = wt(seg, 'notice'), ts = wt(seg, 'stop');
   black();
-  if (t < tfo - 0.15) {
-    cam(t, seg.start, tfo - seg.start, 1.0, 1.12, 960, 540, () => {
-      folder(960, 560, 1.4);
-      if (t >= tfi) stampMark(t, tfi, 1040, 680, [['WEAKNESS', 70], ['PERMANENT', 34]], -0.12, '#e4e4e8', 40);
-    });
-    if (t >= tf && t < tfi) pop(t, tf, 960, 150, () => tag('FOREVER', 960, 160, C.red, 60, 'center'), 0.3);
-    return;
-  }
-  // you walk away down the street; the file floats after you
-  const k = (t - tfo) / 3.2, x = lerp(700, 1300, k);
-  cam(t, tfo, 3.5, 1.0, 1.05, 960, 540, () => {
-    ln(-200, 860, W + 200, 860, 3, '#2a2a2e');
-    for (let i = 0; i < 6; i++) { const lx = ((i * 380 - (t - tfo) * 120) % 2300 + 2300) % 2300 - 200; rr(lx, 300, 12, 560, 4, '#1c1c20'); circ(lx + 6, 300, 14, '#2a2a2e'); }
-    me(x, 860, 1.25, { face: 'right', walk: t * 7 });
-    folder(x - 380, 470 + Math.sin(t * 3) * 14, 0.42);
-    ctx.save(); ctx.setLineDash([12, 12]); ln(x - 260, 480, x - 40, 470, 3, '#55555c'); ctx.restore();
+  cam(t, seg.start, segEnd(seg) - seg.start + 1.2, 1.0, 1.1, 960, 560, () => {
+    ln(-200, 940, W + 200, 940, 3, '#262626');
+    rrS(560, 140, 800, 800, 4, C.fig, 5);
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 5; c++) { const mine = r === 2 && c === 3, dark = mine && t >= ts - 0.2;
+      if (dark) rrS(620 + c * 150, 190 + r * 140, 90, 80, 3, '#5a5a5a', 3); else { glow('rgba(255,255,255,0.4)', 14); rr(620 + c * 150, 190 + r * 140, 90, 80, 3, C.fig); noGlow(); } }
+    // your door: the mail piles up
+    rrS(1460, 700, 150, 240, 4, C.fig, 4);
+    const n = Math.floor(lerp(0, 9, ease(prog(t, tn, 2.5))));
+    for (let i = 0; i < n; i++) { ctx.save(); ctx.translate(1535 + (hash(i) - 0.5) * 80, 930 - i * 14); ctx.rotate((hash(i * 3) - 0.5) * 0.5); rr(-50, -12, 100, 28, 3, '#fbfbfb'); rrS(-50, -12, 100, 28, 3, '#000', 2); ctx.restore(); }
+    if (t >= tn) { const d = Math.floor(lerp(1, 31, ease(prog(t, tn, 3.0)))); pop(t, tn, 360, 300, () => { listCard(170, 220, 380, 160); text('DAYS GONE', 360, 270, '600 26px Plex', '#8a8a8a'); text(String(d), 360, 350, '900 64px M', C.red); }, 0.3); }
   });
 };
+S.b5 = (t, seg) => {
+  const tl = wt(seg, 'leans'), tg = wt(seg, 'glasses'), tw = wt(seg, 'what'), lean = ease(prog(t, tl, 1.2));
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.6, 960, 420, () => room(t, { lean, eyes: prog(t, tg - 0.1, 0.4), lid: 0 }));
+  say(t, tw - 0.1, 960, 120, 'WHAT IS YOUR GREATEST WEAKNESS?', 960, 230, 46);
+};
 S.b6 = (t, seg) => {
-  const ts = wt(seg, 'said');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.08, 760, 560, () => {
-    roomWall({ floor: 900, clockAt: [1500, 200], acAt: [-600, 0] });
-    sitSide(620, 900, 1.3, { dir: 1 });
-    say(t, ts + 0.1, 760, 240, '"I CAN\'T SAY NO."', 680, 340, 56);
-    suit(1420, 905, 1.0, { arms: 'write', wt: t, eyes: 1 }); desk(1120, 1720, DESK_Y, { n: 1 });
+  // your real weakness is how they will come for you
+  const tr = wt(seg, 'real'), th = wt(seg, 'how');
+  black();
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.05, 960, 520, () => {
+    pop(t, seg.start, 960, 260, () => { glow(); spaced('DO NOT TELL THE TRUTH', 960, 290, '900 70px M', C.fig, 6); noGlow(); }, 0.3);
+    if (t >= tr - 0.1) slideIn(t, tr - 0.1, -40, 0, () => { glow(); rr(300, 480, 560, 150, 16, C.fig); noGlow(); text('YOUR REAL', 580, 545, '900 48px M', '#000'); text('WEAKNESS', 580, 600, '900 48px M', '#000'); }, 0.35);
+    if (t >= th - 0.3) { lnP(880, 555, 1040, 555, 10, C.red, prog(t, th - 0.3, 0.3)); pth('M1040,525 L1090,555 L1040,585 Z', t >= th ? C.red : 'rgba(0,0,0,0)'); }
+    if (t >= th) slideIn(t, th, 40, 0, () => { redGlow(26); rr(1100, 480, 560, 150, 16, C.red); noGlow(); text('HOW THEY', 1380, 545, '900 48px M', '#fff'); text('COME FOR YOU', 1380, 600, '900 48px M', '#fff'); }, 0.35);
   });
 };
 S.b7 = (t, seg) => {
-  // the office at night through the glass: he is still there. Nine years. He never went home.
-  const tn = wt(seg, 'nine'), th = wt(seg, 'home');
-  cam(t, seg.start, seg.end - seg.start + 1.4, 1.0, 1.2, 1000, 520, () => {
-    ctx.fillStyle = '#040406'; ctx.fillRect(-200, -200, W + 400, H + 400);
-    // the glass wall: frames and reflections
-    for (let i = 0; i < 4; i++) { rrS(200 + i * 400, 120, 400, 760, 0, '#2a2a30', 6); ctx.save(); ctx.globalAlpha = 0.06; pth(`M${260 + i * 400},120 L${330 + i * 400},120 L${230 + i * 400},880 L${200 + i * 400},880 Z`, '#fff'); ctx.restore(); }
-    // his desk + monitor glow
-    const g = ctx.createRadialGradient(1080, 520, 20, 1080, 560, 520); g.addColorStop(0, 'rgba(220,235,255,0.22)'); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    rr(840, 640, 520, 16, 4, '#d6d6da'); rr(860, 656, 16, 220, 3, '#55555c'); rr(1320, 656, 16, 220, 3, '#55555c');
-    glow('rgba(220,235,255,0.9)', 30); rr(1150, 450, 200, 130, 8, '#e8f0ff'); noGlow(); rr(1240, 580, 20, 60, 3, '#55555c');
-    for (let i = 0; i < 4; i++) rr(1170, 474 + i * 24, typed('████████████', t, seg.start + i * 0.6, 8).length * 12, 10, 2, '#7a8aa0');
-    sitSide(960, 880, 1.05, { dir: 1, eye: t >= th - 0.2 ? false : true });
-    if (t >= th - 0.2) { ctx.save(); const hx = 960 - 4 * 1.05, hy = 880 - 420 * 1.05; redGlow(18); circ(hx - 10, hy - 4, 6, C.red); circ(hx + 12, hy - 4, 6, C.red); ctx.restore(); }   // he turns to you
-    // the wall calendar
-    if (t >= tn) pop(t, tn, 560, 330, () => { rr(440, 220, 240, 250, 12, '#e6e6e6'); rr(440, 220, 240, 64, 12, '#d61f1f'); text('YEAR', 560, 266, '900 36px M', '#fff'); text('9', 560, 430, '900 140px M', '#111'); }, 0.3);
-  });
-};
-
-// ---------- rule 3: do not say you have no questions ----------
-S.c0 = (t, seg) => ruleCard(t, seg, 3, 'DO NOT SAY YOU HAVE NO QUESTIONS');
-S.c1 = (t, seg) => {
-  const tp = wt(seg, 'pens'), td = wt(seg, 'do');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.1, 960, 420, () => room(t, { arms: t < tp ? 'write' : 'desk', me: true }));
-  say(t, td - 0.1, 960, 130, 'DO YOU HAVE ANY QUESTIONS FOR US?', 960, 250, 46);
-};
-S.c2 = (t, seg) => {
-  // never say no: the door stays locked until you ask something
-  const tn = wt(seg, 'never'), ta = wt(seg, 'ask');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.08, 1300, 520, () => room(t, { arms: 'desk', door: { lock: prog(t, seg.start + 0.6, 0.3) }, me: true, meX: 900 }));
-  if (t >= tn) { say(t, tn - 0.05, 1230, 800, '"NO."', 990, 730, 70); redX(1230, 800, 70, prog(t, tn + 0.3, 0.3)); }
-  if (t >= ta) pop(t, ta, 1785, 720, () => { glow(); circ(1785, 760, 50, C.fig); noGlow(); text('?', 1785, 788, '900 76px M', '#000'); }, 0.3);
-};
-S.c3 = (t, seg) => {
-  // "No, I think you covered everything." The clock on the wall goes back to nine.
-  const tc = wt(seg, 'clock'), tn = wt(seg, 'nine');
-  if (t < tc - 0.2) {
-    cam(t, seg.start, 3, 1.0, 1.05, 960, 520, () => room(t, { arms: 'desk', me: true }));
-    say(t, seg.start + 0.2, 1420, 790, '"NO, I THINK YOU\nCOVERED EVERYTHING."', 1040, 730, 46);
+  // "I'm afraid of the dark." That night, the power goes out in his building. Only his building.
+  const tn = wt(seg, 'night'), tp = wt(seg, 'power'), to = wt(seg, 'only');
+  black();
+  if (t < tn - 0.2) {
+    cam(t, seg.start, tn - seg.start, 1.0, 1.06, 760, 560, () => { ln(-200, 900, W + 200, 900, 3, '#262626'); sitSide(560, 900, 1.3, { dir: 1 }); say(t, seg.start + 0.3, 760, 240, '"I\'M AFRAID OF THE DARK."', 640, 360, 50); agent('hr', 1500, 760, 0.9, { arms: 'desk', eyes: 1 }); meetDesk(1150, 1850, 760, { items: false }); });
     return;
   }
-  const k = ease(prog(t, tc + 0.1, tn - tc + 0.1)), m = lerp(58, 0, k) - (k < 1 ? 0 : 0), h = 9 + m / 60 * (k < 1 ? 1 : 0);
-  focus(t, tc - 0.2, 4, 3.0, 3.3, ...CLOCK, () => roomWall({ clock: [9, m, (t * 60) % 60 * (1 - k)], secRed: true, floor: 2000 }));
-  if (k >= 1) pop(t, tn, 960, 860, () => tag('9:00 AM', 960, 880, C.red, 60, 'center'), 0.3);
+  const off = t >= tp + 0.1;
+  cam(t, tn - 0.2, segEnd(seg) - tn + 1.4, 1.0, 1.14, 960, 560, () => {
+    ln(-200, 940, W + 200, 940, 3, '#262626');
+    const B = [[140, 520, 260], [440, 300, 300], [790, 420, 300], [1140, 260, 280], [1460, 480, 320]];
+    B.forEach(([x, top, w], bi) => { const his = bi === 2, dark = his && off;
+      rrS(x, top, w, 940 - top, 3, dark ? '#3a3a3a' : '#8a8a8a', 3);
+      for (let r = 0; r < Math.floor((900 - top) / 70); r++) for (let c = 0; c < Math.floor((w - 30) / 60); c++) {
+        const lit = hash(bi * 97 + r * 13 + c) > 0.35; if (!lit || dark) continue; rr(x + 24 + c * 60, top + 30 + r * 70, 34, 36, 2, C.fig); } });
+    // in the dark building, a window with three pairs of red lenses
+    if (off && t >= to) { ctx.save(); ctx.globalAlpha *= prog(t, to + 0.3, 0.5); redGlow(18); for (let k = 0; k < 3; k++) { rr(830 + k * 70, 650, 22, 10, 3, C.red); rr(856 + k * 70, 650, 22, 10, 3, C.red); } ctx.restore(); }
+  });
+  if (t >= to) flatT(() => pop(t, to, 960, 150, () => tag('ONLY HIS BUILDING', 960, 160, C.red, 56, 'center'), 0.3));
+};
+S.b8 = (t, seg) => {
+  // the answer everyone gives
+  const tw = wt(seg, 'work'), tp = wt(seg, "perfectionist");
+  black();
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.05, 960, 520, () => {
+    slideIn(t, seg.start, 0, -30, () => spaced('THE ANSWER EVERYONE GIVES', 960, 280, '900 44px M', '#8a8a8a', 12), 0.4);
+    okRow(t, tw - 0.4, 480, 470, '"I WORK TOO HARD."', 64);
+    okRow(t, tp - 0.5, 480, 670, '"I\'M A PERFECTIONIST."', 64);
+  });
+};
+S.b9 = (t, seg) => {
+  // already in every file: a wall of identical files; then the red fades from his glasses
+  const tl = wt(seg, 'learn'), tr = wt(seg, 'red');
+  if (t < tr - 0.4) {
+    black();
+    cam(t, seg.start, tr - seg.start, 1.15, 1.0, 960, 540, () => {
+      for (let r = 0; r < 4; r++) for (let c = 0; c < 6; c++) { const x = 230 + c * 292, y = 220 + r * 210, k = prog(t, seg.start + (r * 6 + c) * 0.04, 0.25);
+        ctx.save(); ctx.globalAlpha *= k; rr(x - 120, y - 80, 240, 160, 8, '#ececec'); rr(x - 120, y - 100, 90, 26, 6, '#d8d8d8'); text('"I WORK', x, y - 10, '900 26px M', '#333'); text('TOO HARD."', x, y + 26, '900 26px M', '#333'); ctx.restore(); }
+      if (t >= tl) pop(t, tl, 960, 540, () => { ctx.save(); glow(); rr(560, 470, 800, 140, 16, '#000'); rrS(560, 470, 800, 140, 16, C.fig, 4); noGlow(); text('NOTHING NEW', 960, 565, '900 70px M', C.fig); ctx.restore(); }, 0.3);
+    });
+    return;
+  }
+  focus(t, tr - 0.4, segEnd(seg) - tr, 2.6, 2.8, IX[1], HEADY + 10, () => room(t, { eyes: 1 - prog(t, tr + 0.1, 1.0), lid: 0 }));
+};
+
+// ---------- rule 3: never say you have no questions ----------
+S.c0 = (t, seg) => ruleCard(t, seg, 3, 'NEVER SAY YOU HAVE NO QUESTIONS');
+S.c1 = (t, seg) => {
+  const tp = wt(seg, 'pens'), td = wt(seg, 'do');
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.1, 960, 470, () => room(t, { arms: t < tp ? 'board' : 'desk', me: true, lid: 0 }));
+  say(t, td - 0.1, 960, 120, 'DO YOU HAVE ANY QUESTIONS FOR US?', 960, 240, 46);
+};
+S.c2 = (t, seg) => {
+  // the interview only ends when you ask: the exit is locked until a question unlocks it
+  const te = wt(seg, 'ends'), ta = wt(seg, 'ask');
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.08, 1300, 520, () => room(t, { door: { lock: prog(t, seg.start + 0.4, 0.3) }, me: true, meX: 900, lid: 0 }));
+  if (t >= ta) pop(t, ta, 1805, 700, () => { glow(); circ(1805, 690, 50, C.fig); noGlow(); text('?', 1805, 718, '900 76px M', '#000'); }, 0.3);
+};
+S.c3 = (t, seg) => {
+  // "No, I think you covered everything." The clock goes back to nine.
+  const tc = wt(seg, 'clock'), tn = wt(seg, 'nine');
+  if (t < tc - 0.3) {
+    cam(t, seg.start, 3, 1.0, 1.05, 960, 470, () => room(t, { me: true, lid: 0 }));
+    say(t, seg.start + 0.2, 1400, 830, '"NO, I THINK YOU\nCOVERED EVERYTHING."', 1040, 760, 46);
+    return;
+  }
+  const k = ease(prog(t, tc + 0.1, tn - tc + 0.1)), m = lerp(58, 0, k);
+  focus(t, tc - 0.3, 4, 3.0, 3.3, ...CLOCK, () => meetRoom({ clock: [9, m, (t * 60) % 60 * (1 - k)], secRed: true, floor: false }));
+  if (k >= 1) flatT(() => pop(t, tn, 960, 900, () => tag('9:00 AM', 960, 920, C.red, 60, 'center'), 0.3));
 };
 S.c4 = (t, seg) => {
-  // the middle one tilts his head: then let's start again
-  const tt = wt(seg, 'tilts'), tl = wt(seg, 'then'), tilt = -0.28 * ease(prog(t, tt, 1.2));
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.4, 1.75, 960, 380, () => room(t, { arms: ['board', 'desk', 'board'], tilt, eyes: 1, clock: [9, 0, 0] }));
-  say(t, tl - 0.1, 960, 110, "THEN LET'S START AGAIN.", 1000, 200, 44);
-  if (t >= wt(seg, 'tell')) say(t, wt(seg, 'tell') - 0.1, 960, 880, 'TELL ME ABOUT YOURSELF.', 960, 760, 44, { red: true });
+  // the one on the left stands and holds out his hand again: it starts over
+  const tg = wt(seg, 'again'), tt = wt(seg, 'thanks'), ts = wt(seg, 'starts');
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.2, 760, 470, () => room(t, { arms: ['hand', 'desk', 'laptop'], standI: [prog(t, seg.start + 0.1, 0.6), 0, 0], reach: ease(prog(t, seg.start + 0.3, 0.8)), lid: 0, clock: [9, 0, 0], me: true, meX: 760 }));
+  say(t, tt - 0.1, 760, 120, 'THANKS FOR COMING IN.', 620, 250, 46);
+  if (t >= ts) flatT(() => pop(t, ts, 1500, 900, () => tag('AGAIN.', 1500, 920, C.red, 60, 'center'), 0.3));
 };
 S.c5 = (t, seg) => {
-  // he said no three times. He is still in there. Monday, 9:00. His beard reaches the floor.
-  const ts = wt(seg, 'still'), tm = wt(seg, 'monday'), g = ease(prog(t, ts - 0.2, 3.5));
-  cam(t, seg.start, seg.end - seg.start + 1.6, 1.0, 1.18, 760, 560, () => {
-    roomWall({ floor: 900, clock: [9, 0, 0], clockAt: [1500, 200], acAt: [-600, 0], secRed: true });
-    sitSide(620, 900, 1.3, { dir: 1 });
-    // cobwebs between him and the chair; the day counter keeps going, the clock does not
-    if (g > 0) { ctx.save(); ctx.globalAlpha *= g * 0.8; const cx0 = 620 - 50 * 1.3, cy0 = 900 - 380 * 1.3;
-      for (let k = 0; k < 6; k++) { const a = k / 5 * Math.PI / 2; ln(cx0, cy0, cx0 + Math.cos(a) * 150, cy0 + Math.sin(a) * 150, 2, '#d6d6da'); }
-      for (let r = 1; r <= 4; r++) { ctx.beginPath(); for (let k = 0; k < 6; k++) { const a = k / 5 * Math.PI / 2, rr2 = r * 34 + (k % 2) * 4; k ? ctx.lineTo(cx0 + Math.cos(a) * rr2, cy0 + Math.sin(a) * rr2) : ctx.moveTo(cx0 + Math.cos(a) * rr2, cy0 + Math.sin(a) * rr2); } ctx.strokeStyle = '#d6d6da'; ctx.lineWidth = 2; ctx.stroke(); }
-      const fx = 620 + 140 * 1.3, fy = 900; for (let k = 0; k < 5; k++) { const a = Math.PI + k / 4 * Math.PI / 2; ln(fx, fy, fx + Math.cos(a) * 90, fy + Math.sin(a) * 90, 2, '#d6d6da'); }
-      ctx.restore();
-      const days = Math.floor(lerp(1, 4019, ease(g))); pop(t, ts - 0.2, 1320, 330, () => { listCard(1110, 250, 420, 150); text('DAYS IN THIS ROOM', 1320, 300, '600 24px Plex', '#8a8a92'); text(days.toLocaleString('en-US'), 1320, 370, '900 60px M', C.fig); }, 0.3); }
-    // three NOs
-    for (let k = 0; k < 3; k++) pop(t, seg.start + 0.4 + k * 0.3, 380 + k * 0, 300 + k * 110, () => { tag('NO.', 300, 320 + k * 110, C.fig, 54, 'center'); }, 0.25);
-    // the desk calendar: MONDAY
-    if (t >= tm) pop(t, tm, 1320, 640, () => { rr(1180, 560, 280, 200, 12, '#e6e6e6'); rr(1180, 560, 280, 60, 12, '#d61f1f'); text('MONDAY', 1320, 604, '900 34px M', '#fff'); text('9:00', 1320, 720, '900 80px M', '#111'); }, 0.3);
-    if (t >= tm) rr(1120, 760, 400, 16, 4, '#d6d6da');
+  // the loop: handshake, question, clock, around and around until you ask
+  const th = wt(seg, 'handshake'), tq = wt(seg, 'question'), tu = wt(seg, 'until');
+  black();
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.06, 960, 540, () => {
+    const R = 300, cx = 960, cy = 540, rot = t * 0.9;
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(rot);
+    for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.arc(0, 0, R, k * 2.09 + 0.25, k * 2.09 + 1.85); ctx.strokeStyle = '#5a5a5a'; ctx.lineWidth = 10; ctx.stroke();
+      const a = k * 2.09 + 1.85; ctx.save(); ctx.rotate(a); ctx.translate(R, 0); pth('M-22,-10 L0,30 L22,-10 Z', '#5a5a5a'); ctx.restore(); }
+    ctx.restore();
+    const icons = [(x, y) => pageIcon('hand', x, y, '#fff'), (x, y) => icon7('ask', x, y, 0.6), (x, y) => icon7('clock', x, y, 0.6)], times = [th, tq, seg.start];
+    for (let k = 0; k < 3; k++) { const a = rot + k * 2.09 - 1.57, x = cx + Math.cos(a) * R, y = cy + Math.sin(a) * R;
+      ctx.save(); glow(); circ(x, y, 74, '#000'); noGlow(); circS(x, y, 74, k === 0 && t >= th && t < tq ? C.red : C.fig, 5); icons[k](x, y); ctx.restore(); }
+    const loops = 1 + Math.floor((t - seg.start) * 1.6);
+    text('LOOP', cx, cy - 20, '600 30px Plex', '#8a8a8a'); text(String(loops), cx, cy + 60, '900 90px M', C.fig);
+    if (t >= tu) pop(t, tu, cx, cy + 420, () => tag('UNTIL YOU ASK', cx, cy + 440, C.red, 56, 'center'), 0.3);
   });
 };
 S.c6 = (t, seg) => {
-  const ts = wt(seg, 'salary'), tl = wt(seg, 'last');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.1, 1.18, 960, 420, () => room(t, { arms: 'desk', eyes: 1 }));
-  listCard(380, 280, 1160, 440);
-  noRow(t, ts - 0.4, ts + 0.3, 440, 400, 'money', 'THE SALARY', 52);
-  noRow(t, tl - 0.4, tl + 0.4, 440, 590, 'ask', 'THE LAST PERSON IN THIS ROLE', 46);
+  // one candidate said no forty times; for him it is still Monday, nine A.M.
+  const tf = wt(seg, 'forty'), tm = wt(seg, 'monday');
+  black();
+  cam(t, seg.start, segEnd(seg) - seg.start + 1.0, 1.0, 1.12, 760, 560, () => {
+    ln(-200, 900, W + 200, 900, 3, '#262626'); sitSide(620, 900, 1.3, { dir: 1 });
+    const n = Math.floor(lerp(1, 40, ease(prog(t, seg.start + 0.3, Math.max(0.5, tf - seg.start)))));
+    pop(t, seg.start + 0.3, 330, 330, () => { listCard(170, 240, 330, 170); text('"NO."', 335, 300, '900 40px M', '#8a8a8a'); text('×' + n, 335, 380, '900 70px M', t >= tf ? C.red : C.fig); }, 0.3);
+    if (t >= tm) pop(t, tm, 1320, 600, () => { glow(); rr(1180, 500, 280, 220, 12, '#ececec'); noGlow(); rr(1180, 500, 280, 64, 12, '#d61f1f'); text('MONDAY', 1320, 546, '900 34px M', '#fff'); text('9:00', 1320, 676, '900 86px M', '#111'); }, 0.3);
+  });
 };
 S.c7 = (t, seg) => {
+  const ts = wt(seg, 'salary'), tl = wt(seg, 'last');
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.1, 1.18, 960, 470, () => room(t, { eyes: 1, lid: 0 }));
+  listCard(380, 280, 1160, 440);
+  noRow(t, ts - 0.4, ts + 0.3, 440, 400, 'money', 'THE SALARY', 52);
+  noRow(t, tl - 0.4, tl + 0.4, 440, 590, 'ask', 'THE LAST PERSON IN THIS JOB', 46);
+};
+S.c8 = (t, seg) => {
   // the one question: when will I hear back? The lock opens.
   const tw = wt(seg, 'when');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.06, 1300, 520, () => room(t, { arms: 'desk', door: { lock: 1, open: prog(t, seg.end - 0.6, 0.4) }, me: true, meX: 900 }));
-  say(t, tw - 0.1, 1330, 800, '"WHEN WILL I\nHEAR BACK?"', 990, 730, 50);
-  if (t >= seg.end - 0.6) { ctx.save(); ctx.translate(1330, 640); check(0, 0, 40, prog(t, seg.end - 0.6, 0.3)); ctx.restore(); }
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.06, 1300, 520, () => room(t, { door: { lock: 1, open: prog(t, seg.end - 0.6, 0.4) }, me: true, meX: 900, lid: 0 }));
+  say(t, tw - 0.1, 1340, 860, '"WHEN WILL I\nHEAR BACK?"', 1000, 780, 50);
+  if (t >= seg.end - 0.6) flatT(() => { ctx.translate(1805, 420); check(0, 0, 40, prog(t, seg.end - 0.6, 0.3)); });
+};
+S.c9 = (t, seg) => {
+  const ts = wt(seg, 'stand'), tw = wt(seg, "we'll");
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.06, 960, 470, () => room(t, { stand: prog(t, ts - 0.1, 0.8), arms: 'down', lid: 0 }));
+  say(t, tw - 0.1, 960, 110, "WE'LL BE IN TOUCH.", 960, 210, 54);
 };
 
 // ---------- rule 4: emergency protocol ----------
 S.d0 = (t, seg) => emergencyCard(t, seg);
 S.d1 = (t, seg) => {
-  const ts = wt(seg, 'stand'), tw = wt(seg, "we'll");
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.06, 960, 420, () => room(t, { arms: 'board', stand: prog(t, ts - 0.1, 0.8) }));
-  say(t, tw - 0.1, 960, 110, "WE'LL GET BACK TO YOU.", 960, 200, 50);
+  // break even one rule, and they will be in touch, exactly as promised
+  const tb = wt(seg, 'broke'), tt = wt(seg, 'touch'), te = wt(seg, 'exactly');
+  black();
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.06, W / 2, 520, () => {
+    rulePage(t, { rowT: [-9, -9, -9, -9], fillT: [-9, -9, -9, -9], struck: [null, tb + 0.3, null, null], dim: prog(t, tt, 0.4) });
+  });
+  if (t >= tt) flatT(() => pop(t, tt, 960, 900, () => { ctx.save(); redGlow(24); rr(520, 830, 880, 130, 16, C.red); noGlow(); text("THEY'LL BE IN TOUCH", 960, 915, '900 60px M', '#fff'); ctx.restore(); }, 0.3));
 };
 S.d2 = (t, seg) => {
-  // 3 AM. You wake up. Three of them at the foot of your bed.
+  // 3 AM. You wake up. Three of them at the foot of your bed, holding your file.
   const tw = wt(seg, 'wake'), ti = wt(seg, 'interviewers'), tf = wt(seg, 'foot');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.1, 1100, 560, () => {
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.1, 1100, 560, () => {
     const on = t >= ti - 0.1;
-    night(t, { bed: t >= tw ? 'woke' : 'sleep', trio: on, eyes: prog(t, ti + 0.3, 0.3), arms: 'board' });
+    night(t, { bed: t >= tw ? 'woke' : 'sleep', trio: on, eyes: prog(t, ti + 0.3, 0.3) });
     if (on && t < ti + 0.25) { ctx.save(); ctx.globalAlpha = 0.25 * (1 - prog(t, ti - 0.1, 0.35)); ctx.fillStyle = '#fff'; ctx.fillRect(-200, -200, W + 400, H + 400); ctx.restore(); }
   });
-  if (t >= tf) pop(t, tf, 1530, 160, () => tag('3:00 AM', 1530, 170, C.red, 52, 'center'), 0.3);
+  if (t >= tf) flatT(() => pop(t, tf, 1420, 150, () => tag('3:00 AM', 1420, 160, C.red, 52, 'center'), 0.3));
 };
 S.d3 = (t, seg) => {
-  cam(t, seg.start, seg.end - seg.start + 1.0, 1.3, 1.4, 1820, 470, () => night(t, { arms: ['write', 'board', 'write'] }));
-  say(t, seg.start + 0.1, 1150, 170, 'WE HAVE A FEW\nMORE QUESTIONS.', 1480, 300, 34);
+  cam(t, seg.start, segEnd(seg) - seg.start + 0.3, 1.3, 1.4, 1440, 500, () => night(t, {}));
+  say(t, seg.start + 0.1, 1100, 190, 'WE HAVE A FEW\nMORE QUESTIONS.', 1420, 330, 40);
 };
 S.d4 = (t, seg) => {
   black();
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.06, 960, 520, () => {
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.06, 960, 520, () => {
     pop(t, seg.start, 960, 470, () => { ctx.save(); redGlow(24); spaced('DOES NOT WORK', 960, 500, '900 110px M', C.red, 8); ctx.restore(); }, 0.35);
     lnP(420, 560, 1500, 560, 6, C.red, prog(t, seg.start + 0.3, 0.5));
   });
 };
 S.d5 = (t, seg) => {
   // pretending to sleep: LACKS ENTHUSIASM
-  const tw = wt(seg, 'write'), tl = wt(seg, 'lacks');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.08, 1000, 560, () => night(t, { bed: 'sleep', arms: t >= tw - 0.3 ? ['board', 'write', 'board'] : 'board' }));
-  noHead(t, seg, 'sleep', 'PRETEND TO SLEEP', seg.start + 1.6);
-  if (t >= tl - 0.1) pop(t, tl - 0.1, 1300, 300, () => { ctx.save(); ctx.translate(1300, 300); ctx.rotate(-0.05); glow(); rr(-260, -50, 520, 100, 10, '#fbfbfb'); noGlow(); text('LACKS ENTHUSIASM', 0, 16, '900 44px M', '#d61f1f'); ctx.restore(); }, 0.3);
+  const tl = wt(seg, 'lacks');
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.08, 1000, 560, () => night(t, { bed: 'sleep' }));
+  noHead(t, seg, 'sleep', 'PRETEND TO SLEEP', seg.start + 1.5);
+  noteCard(t, tl - 0.1, 1300, 280, 'LACKS ENTHUSIASM', -0.05, '#d61f1f');
 };
 S.d6 = (t, seg) => {
-  // another offer: they ask for the name, and they go there too
-  const ta = wt(seg, 'ask'), tv = wt(seg, 'visit');
-  if (t < tv - 0.3) {
-    cam(t, seg.start, tv - seg.start, 1.0, 1.08, 1000, 560, () => night(t, {}));
-    noHead(t, seg, 'offer', 'ANOTHER OFFER', ta + 0.3);
-    say(t, ta - 0.1, 1230, 190, "WHAT'S THE\nCOMPANY'S NAME?", 1500, 320, 40);
-    return;
-  }
-  cam(t, tv - 0.3, 3.5, 1.0, 1.1, 960, 560, () => {
-    black();
-    // the other company's tower at night; one floor goes dark window by window
-    rr(620, 80, 680, 900, 4, '#0d0d10'); rrS(620, 80, 680, 900, 4, '#3a3a40', 4);
-    for (let r = 0; r < 12; r++) for (let c = 0; c < 6; c++) { const lit = hash(r * 7 + c) > 0.45; rr(660 + c * 104, 120 + r * 66, 76, 40, 3, lit ? '#8a8a92' : '#1a1a1e'); }
-    rr(840, 860, 240, 120, 4, '#2a2a30'); ln(-200, 980, W + 200, 980, 3, '#2a2a2e');
-    trio(t, { xs: [880, 960, 1040], ss: [0.3, 0.3, 0.3], y: 980, arms: 'board' });
+  // screaming: STRONG COMMUNICATION SKILLS
+  const tsc = wt(seg, 'screaming'), ts = wt(seg, 'strong');
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.06, 1000, 560, () => {
+    night(t, { sitUp: true });
+    // sound lines from your head (no mouth)
+    if (t >= tsc) { ctx.save(); ctx.globalAlpha *= 0.9; for (let k = 0; k < 3; k++) { const r = 60 + k * 40 + ((t * 120) % 40); ctx.beginPath(); ctx.arc(360 + 156 * 1.3, 900 - 410 * 1.3, r, -0.7, 0.7); ctx.strokeStyle = C.fig; ctx.lineWidth = 6; ctx.stroke(); } ctx.restore(); }
   });
-  noHead(t, seg, 'offer', 'ANOTHER OFFER', ta + 0.3);
+  noHead(t, seg, 'sweat', 'SCREAM', seg.start + 1.0);
+  noteCard(t, ts - 0.1, 1300, 280, 'STRONG COMMUNICATION SKILLS', -0.05, '#111');
 };
 S.d7 = (t, seg) => {
-  // blocking their email: the next one comes from inside your house
-  const tn = wt(seg, 'next'), ti = wt(seg, 'inside');
-  black();
-  cam(t, seg.start, seg.end - seg.start + 1.4, 1.0, 1.1, 960, 560, () => {
-    if (t < tn - 0.1) {
-      mailCard(560, 260, 800, 520, { from: 'INTERVIEWS', subj: 'A few more questions', body: ['We noticed you have not replied.', 'We will try again.'] });
-      if (t >= seg.start + 1.0) stampMark(t, seg.start + 1.0, 1140, 640, [['BLOCKED', 64]], -0.1, '#f4f4f6', 20);
-    } else {
-      mailCard(560, 260, 800, 520, { dot: true, from: 'YOUR LIVING ROOM', fromRed: true, subj: 'We are in the hallway.', body: ['Please come out.', 'We have a few more questions.'] });
-    }
+  // another job: they ask for the company's name, and they visit that company too
+  const ta = wt(seg, 'ask'), tv = wt(seg, 'visit');
+  if (t < tv - 0.3) {
+    cam(t, seg.start, tv - seg.start, 1.0, 1.08, 1000, 560, () => night(t, { sitUp: true }));
+    noHead(t, seg, 'offer', 'ANOTHER JOB', ta + 0.3);
+    say(t, ta - 0.1, 1150, 200, "WHAT'S THE\nCOMPANY'S NAME?", 1420, 330, 40);
+    return;
+  }
+  cam(t, tv - 0.3, segEnd(seg) - tv + 0.5, 1.0, 1.1, 960, 560, () => {
+    black();
+    rrS(620, 80, 680, 900, 4, '#8a8a8a', 4);
+    for (let r = 0; r < 12; r++) for (let c = 0; c < 6; c++) { const lit = hash(r * 7 + c) > 0.45; if (lit) rr(660 + c * 104, 120 + r * 66, 76, 40, 3, '#cfcfcf'); }
+    rr(840, 860, 240, 120, 4, '#000'); rrS(840, 860, 240, 120, 4, C.fig, 3); ln(-200, 980, W + 200, 980, 3, '#262626');
+    trio(t, { xs: [900, 960, 1020], s: 0.18, y: 980, arms: 'down' });
   });
-  noHead(t, seg, 'mail', 'BLOCK THEIR EMAIL', seg.start + 1.2);
+  noHead(t, seg, 'offer', 'ANOTHER JOB', ta + 0.3);
 };
 S.d8 = (t, seg) => {
-  // the only thing that works: interview them. The clipboard is yours now.
-  const ti = wt(seg, 'interview');
+  // only one thing works: remember what they are. Not monsters. Employees.
+  const tr = wt(seg, 'remember'), tm = wt(seg, 'monsters'), te = wt(seg, 'employees');
   black();
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.06, 960, 520, () => {
-    if (t >= ti - 0.1) {
-      pop(t, ti - 0.1, 960, 270, () => { glow(); spaced('INTERVIEW THEM.', 960, 300, '900 104px M', C.fig, 4); noGlow(); }, 0.35);
-      slideIn(t, ti + 0.2, 0, 60, () => { me(960, 960, 1.35, { face: 'front' }); clipboard(960, 640, 1.1, 0.05); }, 0.4);
-    } else pop(t, seg.start, 960, 520, () => { ctx.save(); glow(); spaced('ONLY ONE THING WORKS', 960, 540, '900 70px M', C.fig, 6); ctx.restore(); }, 0.35);
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.06, 960, 520, () => {
+    if (t < tr - 0.1) { pop(t, seg.start, 960, 520, () => { glow(); spaced('ONLY ONE THING WORKS', 960, 540, '900 70px M', C.fig, 6); noGlow(); }, 0.35); return; }
+    agent('hr', 960, 1000, 0.95, { stand: 1, arms: 'down', eyes: 0 });
+    if (t >= tm - 0.1) { pop(t, tm - 0.1, 420, 420, () => { text('MONSTER', 420, 440, '900 64px M', C.fig); }, 0.3); redX(420, 420, 110, prog(t, tm + 0.3, 0.3)); }
+    if (t >= te - 0.1) { pop(t, te - 0.1, 1500, 420, () => { glow(); rr(1240, 360, 520, 120, 14, C.fig); noGlow(); text('EMPLOYEE', 1500, 440, '900 64px M', '#000'); }, 0.3);
+      ctx.save(); ctx.globalAlpha *= prog(t, te, 0.3); ctx.translate(960, 1000 - 300 * 0.95); ctx.scale(0.95, 0.95); rr(30, -150, 72, 44, 5, C.fig); rrS(30, -150, 72, 44, 5, '#000', 3); text('STAFF', 66, -121, '900 17px M', '#000'); ctx.restore(); }
   });
 };
 S.d9 = (t, seg) => {
-  // sit up, fold your hands, look the middle one in the eye
-  const ts = wt(seg, 'so'), te = wt(seg, 'eye');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, t >= te ? 1.3 : 1.1, t >= te ? 1450 : 1000, 520, () => night(t, { bed: 'woke', arms: 'board' }));
-  if (t >= te) brackets(1530, 900 - 0.8 * 576, 150, 170, prog(t, te, 0.3), C.fig);
-  say(t, ts - 0.1, 760, 200, '"SO. WHAT IS YOUR\nGREATEST WEAKNESS?"', 600, 470, 44);
-};
-S.d10 = (t, seg) => {
-  // the rules of that room apply to them too: they cannot lie
-  const tl = wt(seg, 'lie');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.15, 1.25, 1530, 520, () => night(t, { arms: 'down' }));
-  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
-  slideIn(t, seg.start + 0.2, 0, -40, () => { rr(470, 70, 600, 150, 12, '#ececec'); rr(490, 103, 84, 84, 10, '#111'); text('2', 532, 169, '900 62px M', '#fff'); pageIcon('truth', 630, 145, '#111');
-    text('DO NOT TELL', 700, 136, '900 40px M', '#111', 'left'); text('THE TRUTH', 700, 178, '900 40px M', '#111', 'left'); }, 0.4);
-  if (t >= tl - 0.1) pop(t, tl - 0.1, 770, 300, () => { ctx.save(); redGlow(20); text('THEY CANNOT LIE', 770, 320, '900 58px M', C.red); ctx.restore(); }, 0.3);
-  ctx.restore();
-};
-const SHRINK = (t, t0) => lerp(0.8, 0.5, ease(prog(t, t0, 0.9)));
-S.d11 = (t, seg) => {
-  const tb = wt(seg, 'being'), ts = wt(seg, 'smaller');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.15, 1.22, 1460, 540, () => night(t, { arms: ['down', 'board', 'board'], ss: [SHRINK(t, ts - 0.2), 0.8, 0.8], shake: [t > tb ? 3 : 0, 0, 0] }));
-  say(t, tb - 0.15, 1080, 200, '"BEING ASKED\nQUESTIONS."', 1300, 330, 44);
-};
-S.d12 = (t, seg) => {
-  const tt = wt(seg, 'tell'), tsh = wt(seg, 'shake'), ts = wt(seg, 'smaller');
-  const d11 = window.TL.segments.find(s => s.id === 'd11'), s0 = SHRINK(t, wt(d11, 'smaller') - 0.2);
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.15, 1.22, 1460, 540, () => night(t, { arms: ['down', 'down', 'board'], ss: [s0, SHRINK(t, ts - 0.2), 0.8], shake: [0, t > tsh ? 6 : 0, 0] }));
-  say(t, tt - 0.1, 700, 200, '"TELL ME ABOUT\nYOURSELF."', 560, 450, 46);
-};
-S.d13 = (t, seg) => {
-  const th = wt(seg, 'why');
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.12, 1.22, 1700, 560, () => night(t, { arms: ['down', 'down', 'down'], ss: [0.5, 0.5, 0.8], shake: [5, 5, t > th + 0.6 ? 8 : 0], eyes: 0.6 + 0.4 * Math.abs(Math.sin(t * 9)) }));
-  say(t, th - 0.1, 700, 200, '"WHY SHOULD\nI HIRE YOU?"', 560, 450, 56);
-};
-S.d14 = (t, seg) => {
-  // they fold up like paper and slide out under your door
-  const tf = wt(seg, 'fold'), tsl = wt(seg, 'slide');
-  const f = prog(t, tf - 0.1, 1.1), sl = ease(prog(t, tsl - 0.2, 1.4));
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.15, 1.08, 1500, 600, () => {
-    night(t, { trio: false, gapGlow: sl > 0 ? 0.6 : 0 });
-    const xs = TRIO, ss = [0.5, 0.5, 0.8];
-    if (f < 0.97) {
-      const k = clamp((f - 0.2) / 0.6);
-      ctx.save(); ctx.globalAlpha *= 1 - k; trio(t, { xs, ss, arms: 'down', fold: [f * 0.6, f * 0.6, f * 0.6], shake: [2, 2, 2] }); ctx.restore();
-      // each one becomes a sheet of paper, folding in half and in half again down to the floor
-      for (let i = 0; i < 3; i++) { const h = lerp(560 * ss[i], 10, ease(f)), w = lerp(200 * ss[i], 170 * ss[i], f), x = xs[i];
-        ctx.save(); ctx.globalAlpha *= k; glow(); rr(x - w / 2, 900 - h, w, h, 3, '#fbfbfb'); noGlow();
-        if (h > 30) { ln(x - w / 2, 900 - h / 2, x + w / 2, 900 - h / 2, 2, '#9a9aa0'); ln(x - w / 2, 900 - h * 0.75, x + w / 2, 900 - h * 0.75, 1.5, '#c4c4c8'); for (let j = 0; j < 5; j++) ln(x - w / 2 + 16, 900 - h + 20 + j * h / 7, x + w / 2 - 16 - (j % 2) * 30, 900 - h + 20 + j * h / 7, 3, '#d6d6da'); }
-        ctx.restore(); }
-    }
-    else for (let i = 0; i < 3; i++) {   // three sheets on the floor, sliding to the gap under the door
-      const x = lerp(xs[i], 1700 + i * 40, sl), w = 170 * ss[i];
-      ctx.save(); ctx.globalAlpha *= 1 - clamp((sl - 0.6) / 0.4); glow(); rr(x - w / 2, 890, w, 10, 2, C.fig); noGlow(); ctx.restore();
-    }
-    // the door is drawn again over the sheets so they disappear under it
-    if (f >= 0.97) rr(1640, 380, 200, 510, 4, '#0e0e10');
-    if (f >= 0.97) rrS(1640, 380, 200, 510, 4, '#3a3a40', 4); circ(1660, 650, 8, '#55555c');
+  // every employee is afraid of the same thing: one empty cardboard box under a light
+  const ts = wt(seg, 'same');
+  black();
+  cam(t, seg.start, segEnd(seg) - seg.start + 0.4, 1.0, 1.15, 960, 600, () => {
+    const g = ctx.createRadialGradient(960, 300, 20, 960, 700, 520); g.addColorStop(0, 'rgba(255,255,255,0.16)'); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ln(400, 860, 1520, 860, 3, '#262626');
+    fadeIn(t, seg.start + 0.3, () => cardboardBox(960, 760, 1.6), 0.6);
+    if (t >= ts) { ctx.save(); ctx.globalAlpha *= prog(t, ts, 0.4); redGlow(16); spaced('THE BOX', 960, 960, '900 54px M', C.red, 10); ctx.restore(); }
   });
 };
-
-// ---------- one week later ----------
-S.f1 = (t, seg) => {
-  const te = wt(seg, 'email');
+S.d10 = (t, seg) => {
+  // sit up, fold your hands, look the middle one in the eye: "Congratulations. You're hired."
+  const te = wt(seg, 'eye'), tc = wt(seg, 'congratulations');
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, t >= te ? 1.2 : 1.06, t >= te ? 1200 : 1000, 540, () => night(t, { sitUp: true }));
+  if (t >= te && t < tc) flatT(() => brackets(1420, 900 - 0.78 * 640 + 60, 160, 160, prog(t, te, 0.3)));
+  say(t, tc - 0.1, 760, 200, '"CONGRATULATIONS.\nYOU\'RE HIRED."', 620, 380, 50);
+};
+S.d11 = (t, seg) => {
+  // they freeze. Whoever makes the offer is the boss. You just made the offer.
+  const tf = wt(seg, 'freeze'), tb = wt(seg, 'boss'), tm = wt(seg, 'made');
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.05, 1.12, 1000, 540, () => {
+    night(t, { sitUp: true, eyes: 1 - prog(t, tf, 0.3) });
+    if (t >= tf) { ctx.save(); ctx.globalAlpha *= prog(t, tf, 0.25); for (let i = 0; i < 3; i++) { rr(TRIO[i] - 26, 220, 18, 60, 4, C.fig); rr(TRIO[i] + 8, 220, 18, 60, 4, C.fig); } ctx.restore(); }
+  });
+  flatT(() => {
+    if (t >= tb - 0.1) slideIn(t, tb - 0.1, -40, 0, () => { listCard(70, 70, 700, 160); text('MAKES THE OFFER', 110, 136, '600 30px Plex', '#8a8a8a', 'left'); text('= THE BOSS', 110, 200, '900 54px M', C.fig, 'left'); }, 0.35);
+    if (t >= tm) pop(t, tm, 590, 330, () => { glow(); rr(470, 290, 240, 70, 12, C.fig); noGlow(); text('YOU', 590, 342, '900 48px M', '#000'); }, 0.3);
+  });
+};
+S.d12 = (t, seg) => {
+  // their clipboards drop; they stand up straight; they are your employees now
+  const td = wt(seg, 'drop'), ts = wt(seg, 'straight'), te = wt(seg, 'employees');
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.05, 1.1, 1100, 540, () => night(t, { sitUp: true, eyes: 0, arms: t >= td - 0.1 ? 'down' : 'board', drop: t >= td - 0.1 ? prog(t, td - 0.1, 0.6) : 0, badges: prog(t, te, 0.4) }));
+  if (t >= te) flatT(() => pop(t, te, 1420, 150, () => tag('YOUR EMPLOYEES', 1420, 160, C.fig, 52, 'center'), 0.3));
+};
+S.d13 = (t, seg) => {
+  // "Unfortunately... we're letting you go. Effective immediately."
+  const tu = wt(seg, 'unfortunately'), te = wt(seg, 'effective');
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.05, 1.12, 1000, 540, () => night(t, { sitUp: true, eyes: 0, arms: 'down', badges: 1, shake: t >= te ? [4, 4, 4] : [0, 0, 0] }));
+  say(t, tu - 0.1, 760, 200, t < te - 0.1 ? '"UNFORTUNATELY...\nWE\'RE LETTING YOU GO."' : '"UNFORTUNATELY...\nWE\'RE LETTING YOU GO.\nEFFECTIVE IMMEDIATELY."', 620, 380, 44, { red: t >= te });
+};
+S.d14 = (t, seg) => {
+  // three cardboard boxes appear in their hands: a stapler and a sad little plant in each
+  const ta = wt(seg, 'appear'), ts = wt(seg, 'stapler');
+  if (t < ts - 0.3) { cam(t, seg.start, ts - seg.start, 1.05, 1.15, 1300, 560, () => night(t, { sitUp: true, eyes: 0, arms: 'down', badges: 1, boxes: prog(t, ta - 0.1, 0.4) })); return; }
   black();
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.05, 960, 520, () => {
-    pop(t, seg.start, 960, 250, () => { ctx.save(); glow(); spaced('ONE WEEK LATER', 960, 270, '900 64px M', C.fig, 10); ctx.restore(); }, 0.35);
-    if (t >= te - 0.1) pop(t, te - 0.1, 960, 560, () => { glow(); rr(560, 470, 800, 180, 24, '#f4f4f6'); noGlow(); icon7('mail', 680, 560, 0.6, '#111'); text('1 NEW EMAIL', 780, 580, '900 54px M', '#111', 'left'); ctx.save(); redGlow(14); circ(1320, 500, 18, C.red); ctx.restore(); }, 0.35);
+  cam(t, ts - 0.3, segEnd(seg) - ts, 1.0, 1.1, 960, 560, () => {
+    cardboardBox(960, 700, 2.2);
+    if (t >= ts) { ctx.save(); ctx.globalAlpha *= prog(t, ts, 0.3); text('STAPLER', 600, 380, '900 40px M', C.fig); ln(620, 400, 760, 470, 3, '#8a8a8a'); ctx.restore(); }
+    if (t >= wt(seg, 'sad')) { ctx.save(); ctx.globalAlpha *= prog(t, wt(seg, 'sad'), 0.3); text('SAD LITTLE PLANT', 1360, 300, '900 40px M', C.fig); ln(1300, 320, 1080, 400, 3, '#8a8a8a'); ctx.restore(); }
+  });
+};
+S.d15 = (t, seg) => {
+  // they walk out one by one; you never give them a reference
+  const tw = wt(seg, 'walk'), tr = wt(seg, 'reference');
+  cam(t, seg.start, segEnd(seg) - seg.start + 0.6, 1.05, 1.0, 1100, 560, () => {
+    const walk = [0, 1, 2].map(i => 420 * ease(prog(t, tw + i * 0.5, 1.6))), who = walk.map(w => w < 400);
+    night(t, { sitUp: true, eyes: 0, arms: 'down', badges: 1, boxes: 1, walk, who, doorOpen: prog(t, tw - 0.3, 0.4) });
+  });
+  if (t >= tr) flatT(() => stampMark(t, tr, 1300, 260, [['NO REFERENCE', 70]], -0.1, '#000', 20));
+};
+
+// ---------- the next morning ----------
+S.f1 = (t, seg) => {
+  const te = wt(seg, 'email'), tw = wt(seg, 'we');
+  black();
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.0, 1.05, 960, 520, () => {
+    if (t < tw - 0.1) {
+      pop(t, seg.start, 960, 250, () => { glow(); spaced('THE NEXT MORNING', 960, 270, '900 64px M', C.fig, 10); noGlow(); }, 0.35);
+      if (t >= te - 0.1) pop(t, te - 0.1, 960, 560, () => { glow(); rr(560, 470, 800, 180, 24, '#f4f4f6'); noGlow(); icon7('mail', 680, 560, 0.6, '#111'); text('1 NEW EMAIL', 780, 580, '900 54px M', '#111', 'left'); ctx.save(); redGlow(14); circ(1320, 500, 18, C.red); ctx.restore(); }, 0.35);
+      return;
+    }
+    ctx.translate(960, 480); ctx.scale(1.3, 1.3); ctx.translate(-960, -480);
+    mailCard(460, 200, 1000, 560, { from: 'HR', subj: 'Changes in our team', body: [typed('We are sorry to hear about', t, tw, 30), typed('the recent changes in our team.', t, tw + 0.9, 30)] });
   });
 };
 S.f2 = (t, seg) => {
-  const tw = wt(seg, 'we'), tp = wt(seg, 'would');
+  const tw = wt(seg, 'we');
   black();
-  cam(t, seg.start, seg.end - seg.start + 0.7, 1.0, 1.06, 960, 520, () => {
-    const b1 = typed('We regret to inform you that our', t, tw, 30), b2 = typed('interviewers have resigned.', t, tw + 1.1, 30), b3 = typed('Would you like the position?', t, tp - 0.1, 30);
-    mailCard(460, 200, 1000, 560, { from: 'HR', subj: 'Your application', body: [b1, b2, '', b3] });
+  cam(t, seg.start, segEnd(seg) - seg.start, 1.05, 1.1, 960, 520, () => {
+    ctx.translate(960, 480); ctx.scale(1.3, 1.3); ctx.translate(-960, -480);
+    mailCard(460, 200, 1000, 560, { from: 'HR', subj: 'Changes in our team', body: ['We are sorry to hear about', 'the recent changes in our team.', '', typed('We have restructured our', t, tw, 30), typed('hiring process.', t, tw + 0.9, 30)] });
   });
 };
-S.f3 = (t, seg) => {
-  // job title: interviewer. Location: the chair.
-  const tj = wt(seg, 'job'), tl = wt(seg, 'location'), tc = wt(seg, 'chair');
-  cam(t, seg.start, seg.end - seg.start + 1.2, 1.0, 1.25, 960, 480, () => {
-    room(t, { who: [false, false, false], chairs: true });
-    if (t >= tc) { ctx.save(); redGlow(40); ctx.globalAlpha = prog(t, tc, 0.4); rrS(960 - 110 * 0.82, 905 - 560 * 0.82, 220 * 0.82, 280 * 0.82, 30, C.red, 6); ctx.restore(); }
-  });
-  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
-  if (t >= tj - 0.1) slideIn(t, tj - 0.1, -50, 0, () => { listCard(70, 70, 760, 230); text('JOB TITLE', 110, 140, '600 26px Plex', '#8a8a92', 'left'); text('INTERVIEWER', 110, 210, '900 62px M', C.fig, 'left');
-    if (t >= tl - 0.1) { text('LOCATION', 110, 256, '600 26px Plex', '#8a8a92', 'left'); text('THE CHAIR', 280, 262, '900 40px M', C.red, 'left'); } }, 0.35);
+// the peephole: a round fisheye view of the hallway with three new agents, one holding out his hand
+function peephole(t, z, o = {}) {
+  black();
+  ctx.save(); ctx.beginPath(); ctx.arc(960, 520, 400, 0, Math.PI * 2); ctx.clip();
+  ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0, 0, W, H);
+  ctx.translate(960, 520); ctx.scale(z, z); ctx.translate(-960, -520);
+  ln(300, 860, 1620, 860, 3, '#3a3a3a'); ln(560, 120, 560, 860, 3, '#262626'); ln(1360, 120, 1360, 860, 3, '#262626');
+  for (let i = 0; i < 3; i++) agent(KINDS[i], 760 + i * 200, 880, 0.62 + (i === 1 ? 0.06 : 0), { stand: 1, arms: i === 1 ? 'hand' : 'down', reach: 0.4, eyes: o.eyes && i === 1 ? o.eyes : 0, t });
   ctx.restore();
+  const g = ctx.createRadialGradient(960, 520, 250, 960, 520, 400); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.85)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(960, 520, 401, 0, Math.PI * 2); ctx.fill();
+  circS(960, 520, 404, C.fig, 8);
+}
+S.f3 = (t, seg) => {
+  // the doorbell; through the peephole, three new interviewers; one is already holding out his hand
+  const tp = wt(seg, 'peephole'), tb = wt(seg, 'doorbell');
+  if (t < tp - 0.2) { black(); cam(t, seg.start, tp - seg.start, 1.0, 1.06, 960, 520, () => { rrS(760, 160, 400, 760, 6, C.fig, 6); circ(1110, 560, 12, C.fig); circS(960, 360, 22, C.fig, 5);
+    if (t >= tb) for (let k = 0; k < 3; k++) { ctx.save(); ctx.globalAlpha *= 1 - prog(t, tb + k * 0.15, 0.8); circS(960, 360, 40 + 60 * prog(t, tb + k * 0.15, 0.8), C.fig, 4); ctx.restore(); }
+    text('DING DONG', 960, 1000, '900 40px M', '#8a8a8a'); }); return; }
+  peephole(t, lerp(1.0, 1.15, ease(prog(t, tp, 3))));
 };
 S.f4 = (t, seg) => {
+  peephole(t, lerp(1.15, 1.5, ease(prog(t, seg.start, 2.0))), { eyes: prog(t, seg.start + 0.4, 0.5) });
+  say(t, seg.start + 0.1, 1560, 230, 'WELCOME TO THE\nSECOND ROUND.', 1180, 380, 46, { red: true });
+};
+S.f5 = (t, seg) => {
   const ts = wt(seg, 'four'), hit = t - ts, k = easeOut((t - seg.start + 0.15) / 0.6);
   cam(t, seg.start, seg.end - seg.start + 1.2, 0.98, 1.06, W / 2, 520, () => {
     ctx.save(); ctx.translate(0, 300 * (1 - k)); if (hit > 0 && hit < 0.3) shake(7 * (1 - hit / 0.3), t);
     ctx.globalAlpha *= clamp(k * 1.6); fileCover(t); stampMark(t, ts, P.x + 300, P.y + 610, [[NAME, 38], [NUM, 150]], -0.1); ctx.restore();
   });
 };
-S.f5 = (t, seg) => {
+S.f6 = (t, seg) => {
   const ts = Math.max(...ev('stamp').map(e => e.t)), hit = t - ts, dk = ease(prog(t, ts + 0.5, 1.0));
   cam(t, seg.start, seg.end - seg.start + 3, 1.0, 1.08, W / 2, 520, () => {
     ctx.save(); if (hit > 0 && hit < 0.3) shake(8 * (1 - hit / 0.3), t);
@@ -1528,14 +1723,20 @@ window.drawThumbC = () => {
 // v2 design sketches
 window.drawDesign1 = () => {
   thBg(); meetRoom({ clock: [9, 0, 0] });
-  person('young', 560, 700, 1, { arms: 'desk' });
-  person('hr', 960, 700, 1, { arms: 'desk' });
-  person('boss', 1360, 700, 1, { arms: 'laptop', lid: 0 });
+  agent('young', 560, 700, 1, { arms: 'desk' });
+  agent('hr', 960, 700, 1, { arms: 'desk' });
+  agent('boss', 1360, 700, 1, { arms: 'laptop', lid: 0 });
   meetDesk(260, 1660, 700);
 };
 window.drawDesign2 = () => {
   thBg(); meetRoom({ clock: [9, 0, 0] });
   for (const [k, x, o] of [['young', 330, {}], ['hr', 960, { eyes: 1 }], ['boss', 1590, {}]]) { ctx.save(); ctx.translate(x, 480); ctx.scale(2.4, 2.4); ppHead(k, o); ctx.restore(); }
+};
+window.drawDesign3 = () => {
+  thBg(); meetRoom({ clockAt: false });
+  agent('young', 560, 1000, 0.8, { stand: 1, arms: 'down' });
+  agent('hr', 960, 1000, 0.8, { stand: 1, arms: 'hand', reach: 0.6, eyes: 1 });
+  agent('boss', 1360, 1000, 0.8, { stand: 1, arms: 'down' });
 };
 // ---------- HUD, captions, texture ----------
 let grainC = null, vig = null;
