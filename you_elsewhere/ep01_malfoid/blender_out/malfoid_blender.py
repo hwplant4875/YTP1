@@ -464,6 +464,20 @@ if MODE in ('stills', 'both'):
         sc.render.filepath = os.path.join(OUT, f'malfoid_still_f{f:04d}_t{t_of(f):05.2f}s.jpg')
         bpy.ops.render.render(write_still=True)
         print(f'STILL frame {f} rendered in {time.time() - t0:.2f}s')
+if MODE == 'loop':
+    # background plate for the overlay pipeline: no watermark, spectrum or opening fade; 22 s so the last 2 s
+    # can be crossfaded into the start (make_loop.py) for a seamless 20 s loop
+    sc.view_layers['WM'].use = False
+    sc.view_layers['SPEC'].use = False
+    cg.animation_data_clear(); fade.inputs['Exposure'].default_value = 0.0
+    sc.frame_start, sc.frame_end = 1, 22 * FPS
+    sc.render.image_settings.media_type = 'IMAGE'
+    sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.compression = 15
+    sc.render.use_overwrite = False; sc.render.use_placeholder = True
+    sc.render.filepath = os.path.join(OUT, 'frames_loop', 'f_')
+    t0 = time.time()
+    bpy.ops.render.render(animation=True)
+    print(f'LOOP frames done in {time.time() - t0:.1f}s')
 if MODE == 'frames':
     # resumable PNG sequence (skips frames already on disk), encoded with ffmpeg afterwards
     sc.render.image_settings.media_type = 'IMAGE'
