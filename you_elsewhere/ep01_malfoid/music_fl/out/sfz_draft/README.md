@@ -11,3 +11,9 @@
 
 FL's samples are Ogg Vorbis inside WAV; `convert_fl_samples.py` extracts and decodes them to FLAC locally.
 The samples themselves are not committed.
+
+## v2 (`hedwig_trio_sfz_v2.mp3`, 2:32, MIDI v2 at 66 BPM)
+- `v2/split_soften.py`: piano velocities compressed to 30-54 so Salamander plays its soft, mellow layers.
+- `v2/mix_v2.sh`: piano lowpassed at ~5 kHz with highshelf -2.5 dB, gentle transient taming (2.2:1, 1.5 ms attack),
+  warm low-mid lift; FL "Evnt - Hall Warm" impulse (long hall) with 25 ms pre-delay, wet about 5 LU under the dry piano.
+  Bass about 7 LU and ride/hat about 14 LU under the piano. -18.3 LUFS, peaks -1.5 dBFS, no limiter.
