@@ -32,13 +32,13 @@ X.append(sec('s06', [(0,'rz2_2009_trailer','1:03'),(3.6,'rz2_2009_trailer','0:16
   [8,"Rob Zombie's Halloween II",2009], 18, 'Call the police early. Bring many.', 24.8, 27.44))
 X.append(sec('s07', [(0,'1978_every_scene',548.8),(2.4,'1978_every_scene',30),(4.96,'1978_every_scene',112),(7.88,'1978_every_scene',129),(10.08,'1978_every_scene',509),
   (12.56,'1978_every_scene',467.5),(15.2,'1978_closet_attack_hd','0:18'),(17.84,'1978_closet_attack_hd','2:57'),(19.76,'1978_closet_attack_hd','3:12'),
-  (21.88,'1978_closet_attack_hd','3:27'),(24.35,'1978_closet_attack_hd','3:36'),(26.12,'1978_closet_attack_hd','3:39'),(28.0,'1978_closet_attack_hd','2:48'),(30.72,'1978_every_scene',591)],
+  (21.88,'1978_closet_attack_hd','3:27'),(24.35,'1978_closet_attack_hd','3:36'),(26.12,'1978_closet_attack_hd','3:39'),(28.0,'1978_closet_attack_hd','2:48'),(30.72,'1978_every_scene',586)],
   [7,'Halloween',1978], 15, 'When he falls, do not look away.', 28.0, 30.72))
 X.append(sec('s08', [(0,'kills_survives_fire','6:16'),(3.0,'2018_killing_spree','2:09')], pad=0.5,
-  extra=[('title', ['SUBSCRIBE', '!TO SURVIVE'], 6.16, 8.9)]))
+  extra=[('title', ['SUBSCRIBE', '!TO SURVIVE'], 5.75, 8.9)]))
 X.append(sec('s09', [(0,'rz_2007_trailer','0:54'),(3.36,'rz_2007_trailer','0:42'),(6.0,'rz_2007_trailer','1:00'),(8.0,'rz_2007_trailer','1:21'),(10.0,'rz_2007_trailer','1:39'),
-  (12.24,'rz_2007_trailer','1:12'),(14.44,'rz_2007_trailer','1:27'),(16.5,'rz_2007_trailer','1:30'),(18.2,'rz_2007_trailer','1:33'),(19.48,'rz_2007_trailer','0:06'),
-  (21.76,'rz_2007_trailer','1:24'),(24.4,'rz_2007_trailer','0:51')],
+  (12.24,'rz_2007_trailer','1:12'),(14.44,'rz_2007_trailer','1:16'),(16.5,'rz_2007_trailer','1:30'),(18.2,'rz_2007_trailer','1:33'),(19.48,'rz_2007_trailer','0:55'),
+  (21.76,'rz_2007_trailer','1:07'),(24.4,'rz_2007_trailer','0:51')],
   [6,"Rob Zombie's Halloween",2007], 11, 'Do not let him get his hands on you.', 21.76, 24.4))
 X.append(sec('s10', [(0,'2018_killing_spree','2:09'),(3.36,'2018_killing_spree','0:33'),(6.88,'2018_killing_spree','1:39'),(8.56,'2018_killing_spree','2:15'),(10.5,'2018_killing_spree','1:21'),
   (12.16,'2018_hit_and_run_hd','0:42'),(13.0,'2018_hit_and_run_hd','1:21'),(13.6,'2018_hit_and_run_hd','1:24'),(14.88,'2018_laurie_shoots_fingers_hd','1:39'),
@@ -65,6 +65,25 @@ X.append(sec('s14', [(0,'kills_firefighters','1:48'),(2.8,'kills_survives_fire',
 X.append(sec('s15', [(0,'kills_survives_fire','7:08'),(1.68,'1978_every_scene',548.8),(4.16,'h20_final_confrontation','1:19'),(6.32,'2018_killing_spree','2:09'),(8.6,'BLACK',0)], pad=1.5,
   extra=[('title', ['YOUR RANKING?'], 4.16, 8.5), ('title', ['INSTRUCTION', '!444'], 8.7, 14.3)]))
 P['sections'] = P['sections'][:3] + X
+s0 = P['sections'][0]; s0['shots'][0] = [0.0, '2018_killing_spree', 129.0]
+for S in (P['sections'][0], P['sections'][2]):
+    for sh in S['shots']:
+        if sh[1] == 'ends_final_trailer' and sh[2] == 94.0: sh[2] = 95.0
+for ov in s0['overlays']:
+    if ov[0] == 'word': ov[3] = min(ov[3], ov[2] + 0.9)
+FILM = [('1978', 'Halloween (1978)'), ('h2_1981', 'Halloween II (1981)'), ('h4', 'Halloween 4 (1988)'), ('h5', 'Halloween 5 (1989)'),
+        ('curse', 'The Curse of Michael Myers (1995)'), ('h20', 'Halloween H20 (1998)'), ('resurrection', 'Halloween Resurrection (2002)'),
+        ('rz_2007', 'Halloween (2007)'), ('rz2_2009', 'Halloween II (2009)'), ('2018', 'Halloween (2018)'), ('kills', 'Halloween Kills (2021)'), ('ends', 'Halloween Ends (2022)')]
+def film(n): return next((v for k, v in FILM if n.startswith(k)), None)
+for S in P['sections']:
+    S['overlays'] = [o for o in S['overlays'] if o[0] != 'film']
+    runs = []
+    for t, n, i in S['shots']:
+        f = film(n)
+        if runs and runs[-1][0] == f: continue
+        runs.append([f, t])
+    for k, (f, t) in enumerate(runs):
+        if f: S['overlays'].append(['film', f, t, runs[k + 1][1] if k + 1 < len(runs) else 999])
 P['zoom'].update({k: 1.2 for k in ['2018_hit_and_run_hd','h2_1981_ending','h2_1981_why_wont_he_die','kills_firefighters','kills_crowd_end','kills_survives_fire','curse_tommy_defeats_michael_hd','curse_trailer_hd']})
 P['zoom'].update({'2018_burned_alive': 1.12, 'h20_final_confrontation': 1.12})
 P['gamma']['rz_2007_trailer'] = 1.25

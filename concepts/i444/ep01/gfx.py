@@ -16,9 +16,12 @@ def shadow_text(im, xy, txt, font, fill, anchor='mm', blur=10, alpha=200, stroke
 
 def word_tag(word, out):
     im = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    fn = f(150); shadow_text(im, (W // 2, H - 230), word.upper(), fn, WHITE)
-    d = ImageDraw.Draw(im); tw = d.textlength(word.upper(), font=fn)
-    d.rectangle([W // 2 - tw / 2, H - 150, W // 2 + tw / 2, H - 136], fill=RED)
+    shadow_text(im, (W // 2, H // 2), word.upper(), f(170), WHITE, stroke=5)
+    im.save(out)
+
+def film_label(text, out):
+    im = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    shadow_text(im, (W - 70, 70), text.upper(), f(38), BONE, anchor='ra', blur=6, alpha=170, stroke=2)
     im.save(out)
 
 def rank_card(num, title, year, out):
@@ -32,29 +35,26 @@ def rank_card(num, title, year, out):
     im.save(out)
 
 def odds(pct, out, frac=None):
+    col = (60, 200, 90, 255) if pct >= 60 else (240, 190, 40, 255) if pct >= 30 else RED
     im = Image.new('RGBA', (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     x0, y0, bw, bh = 110, H - 250, 760, 46
     pnl = Image.new('RGBA', (W, H), (0, 0, 0, 0)); dp = ImageDraw.Draw(pnl)
     dp.rounded_rectangle([x0 - 40, y0 - 110, x0 + bw + 40, y0 + bh + 50], 26, fill=(0, 0, 0, 185))
     im.alpha_composite(pnl); d = ImageDraw.Draw(im)
-    d.text((x0, y0 - 30), 'SURVIVAL ODDS', font=f(54), fill=WHITE, anchor='ls')
-    d.text((x0 + bw, y0 - 22), f'{pct:g}%', font=f(96), fill=RED, anchor='rs')
+    d.text((x0, y0 - 30), 'SURVIVAL RATE', font=f(54), fill=WHITE, anchor='ls')
+    d.text((x0 + bw, y0 - 22), f'{pct:g}%', font=f(96), fill=col, anchor='rs')
     d.rounded_rectangle([x0, y0, x0 + bw, y0 + bh], 23, outline=(255, 255, 255, 140), width=4)
     v = pct if frac is None else frac
     fw = max(bh, bw * v / 100)
-    d.rounded_rectangle([x0, y0, x0 + fw, y0 + bh], 23, fill=RED)
+    d.rounded_rectangle([x0, y0, x0 + fw, y0 + bh], 23, fill=col)
     im.save(out)
 
 def instruction(text, out):
-    im = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    band = Image.new('RGBA', (W, H), (0, 0, 0, 0)); db = ImageDraw.Draw(band)
-    db.rectangle([0, H // 2 - 170, W, H // 2 + 170], fill=(0, 0, 0, 215)); im.alpha_composite(band)
-    d = ImageDraw.Draw(im)
-    d.text((W // 2, H // 2 - 70), 'INSTRUCTION', font=f(58), fill=RED, anchor='mm')
-    fn = f(104)
-    while d.textlength(text.upper(), font=fn) > W - 200: fn = f(fn.size - 6)
-    d.text((W // 2, H // 2 + 45), text.upper(), font=fn, fill=WHITE, anchor='mm')
-    d.rectangle([W // 2 - 60, H // 2 - 128, W // 2 + 60, H // 2 - 120], fill=RED)
+    im = Image.new('RGBA', (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    fn = f(130)
+    while d.textlength(text.upper(), font=fn) > W - 260: fn = f(fn.size - 6)
+    shadow_text(im, (W // 2, H // 2 - 95), 'INSTRUCTION', f(56), RED, stroke=3)
+    shadow_text(im, (W // 2, H // 2 + 20), text.upper(), fn, WHITE, stroke=7)
     im.save(out)
 
 def center_title(lines, out, big=150, color=WHITE):

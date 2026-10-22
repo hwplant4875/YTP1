@@ -1,7 +1,7 @@
 # Instruction 444 EP01 renderer: clips + Adam narration + overlay PNGs -> mp4
 # usage: python render.py <edl.json> <clips_dir> <voice_dir> <music.mp3> <out.mp4> [fps]
 import json, os, sys, subprocess, shutil
-from gfx import word_tag, rank_card, odds, instruction, center_title
+from gfx import word_tag, rank_card, odds, instruction, center_title, film_label
 edl, CLIPS, VOICE, MUSIC, OUT = sys.argv[1:6]
 FPS = int(sys.argv[6]) if len(sys.argv) > 6 else 30
 WORK = os.path.join(os.path.dirname(os.path.abspath(OUT)), 'work_' + os.path.splitext(os.path.basename(OUT))[0])
@@ -39,11 +39,13 @@ for si, S in enumerate(E['sections']):
         kind, arg, a, b = ov; png = os.path.join(WORK, f'ov{si:02d}_{j:02d}.png')
         if kind == 'word': word_tag(arg, png)
         elif kind == 'rank': rank_card(*arg, png)
-        elif kind == 'odds': odds(arg if isinstance(arg, (int, float)) else 0, png) if arg != '??' else center_title(['SURVIVAL ODDS', '!??%'], png, 130)
+        elif kind == 'odds': odds(arg if isinstance(arg, (int, float)) else 0, png) if arg != '??' else center_title(['SURVIVAL RATE', '!??%'], png, 130)
         elif kind == 'instr': instruction(arg, png)
         elif kind == 'title': center_title(arg, png)
+        elif kind == 'film': film_label(arg, png)
         ins += ['-loop', '1', '-framerate', str(FPS), '-t', str(L), '-i', png]
-        fc.append(f"[{n}:v]format=rgba,fade=t=in:st={a}:d=0.12:alpha=1,fade=t=out:st={max(a, b-0.12)}:d=0.12:alpha=1[o{n}]")
+        fd = '' if kind in ('word', 'film') else f",fade=t=in:st={a}:d=0.12:alpha=1,fade=t=out:st={max(a, b-0.12)}:d=0.12:alpha=1"
+        fc.append(f"[{n}:v]format=rgba{fd}[o{n}]")
         fc.append(f"{chain}[o{n}]overlay=0:0:enable='between(t,{a},{b})'[c{n}]"); chain = f'[c{n}]'; n += 1
     sec = os.path.join(WORK, f'sec{si:02d}.mp4')
     if n == 1: shutil.copy(raw, sec)

@@ -7,8 +7,8 @@
    "shots": [
     [
      0.0,
-     "1978_every_scene",
-     548.3
+     "2018_killing_spree",
+     129.0
     ],
     [
      0.56,
@@ -88,7 +88,7 @@
     [
      13.2,
      "ends_final_trailer",
-     94.0
+     95.0
     ],
     [
      15.76,
@@ -111,7 +111,7 @@
      "word",
      "Stabbed",
      0.56,
-     1.5
+     1.46
     ],
     [
      "word",
@@ -135,7 +135,7 @@
      "word",
      "Electrocuted",
      3.76,
-     4.68
+     4.66
     ],
     [
      "word",
@@ -147,7 +147,7 @@
      "word",
      "Mine shaft",
      5.52,
-     7.2
+     6.42
     ],
     [
      "title",
@@ -173,6 +173,90 @@
      ],
      20.6,
      24.5
+    ],
+    [
+     "film",
+     "Halloween (2018)",
+     0.0,
+     0.56
+    ],
+    [
+     "film",
+     "Halloween (1978)",
+     0.56,
+     2.24
+    ],
+    [
+     "film",
+     "Halloween II (1981)",
+     2.24,
+     3.76
+    ],
+    [
+     "film",
+     "Halloween Resurrection (2002)",
+     3.76,
+     4.72
+    ],
+    [
+     "film",
+     "Halloween H20 (1998)",
+     4.72,
+     5.52
+    ],
+    [
+     "film",
+     "Halloween 4 (1988)",
+     5.52,
+     7.28
+    ],
+    [
+     "film",
+     "Halloween Kills (2021)",
+     7.28,
+     9.2
+    ],
+    [
+     "film",
+     "Halloween H20 (1998)",
+     9.2,
+     9.9
+    ],
+    [
+     "film",
+     "Halloween Kills (2021)",
+     9.9,
+     10.88
+    ],
+    [
+     "film",
+     "Halloween Ends (2022)",
+     10.88,
+     11.52
+    ],
+    [
+     "film",
+     "Halloween II (1981)",
+     11.52,
+     12.1
+    ],
+    [
+     "film",
+     "Halloween (1978)",
+     12.1,
+     13.2
+    ],
+    [
+     "film",
+     "Halloween Ends (2022)",
+     13.2,
+     17.64
+    ],
+    [
+     "film",
+     "Halloween Kills (2021)",
+     17.64,
+     20.5
     ]
    ]
   },
@@ -250,6 +334,48 @@
      "??",
      16.4,
      22.5
+    ],
+    [
+     "film",
+     "Halloween (1978)",
+     0.0,
+     1.84
+    ],
+    [
+     "film",
+     "Halloween II (1981)",
+     1.84,
+     4.6
+    ],
+    [
+     "film",
+     "Halloween (1978)",
+     4.6,
+     6.88
+    ],
+    [
+     "film",
+     "Halloween II (1981)",
+     6.88,
+     8.72
+    ],
+    [
+     "film",
+     "Halloween Kills (2021)",
+     8.72,
+     12.0
+    ],
+    [
+     "film",
+     "Halloween 4 (1988)",
+     12.0,
+     13.84
+    ],
+    [
+     "film",
+     "Halloween Kills (2021)",
+     13.84,
+     999
     ]
    ]
   },
@@ -326,7 +452,7 @@
     [
      31.36,
      "ends_final_trailer",
-     94.0
+     95.0
     ],
     [
      34.88,
@@ -366,6 +492,12 @@
      "Fight back. This one can lose.",
      42.48,
      46.6
+    ],
+    [
+     "film",
+     "Halloween Ends (2022)",
+     0.0,
+     999
     ]
    ]
   },
@@ -472,6 +604,12 @@
      "Do not hide. Hunt him first.",
      31.36,
      99
+    ],
+    [
+     "film",
+     "Halloween H20 (1998)",
+     0,
+     999
     ]
    ]
   },
@@ -568,6 +706,12 @@
      "Bait him. Then net him.",
      27.36,
      99
+    ],
+    [
+     "film",
+     "Halloween 5 (1989)",
+     0,
+     999
     ]
    ]
   },
@@ -674,6 +818,12 @@
      "Never trust a body bag.",
      26.64,
      99
+    ],
+    [
+     "film",
+     "Halloween Resurrection (2002)",
+     0,
+     999
     ]
    ]
   },
@@ -770,6 +920,12 @@
      "Call the police early. Bring many.",
      27.44,
      99
+    ],
+    [
+     "film",
+     "Halloween II (2009)",
+     0,
+     999
     ]
    ]
   },
@@ -846,7 +1002,7 @@
     [
      30.72,
      "1978_every_scene",
-     591
+     586
     ]
    ],
    "overlays": [
@@ -871,6 +1027,12 @@
      "When he falls, do not look away.",
      30.72,
      99
+    ],
+    [
+     "film",
+     "Halloween (1978)",
+     0,
+     999
     ]
    ]
   },
@@ -897,8 +1059,20 @@
       "SUBSCRIBE",
       "!TO SURVIVE"
      ],
-     6.16,
+     5.75,
      8.9
+    ],
+    [
+     "film",
+     "Halloween Kills (2021)",
+     0,
+     3.0
+    ],
+    [
+     "film",
+     "Halloween (2018)",
+     3.0,
+     999
     ]
    ]
   },
@@ -940,7 +1114,7 @@
     [
      14.44,
      "rz_2007_trailer",
-     87.0
+     76.0
     ],
     [
      16.5,
@@ -955,12 +1129,12 @@
     [
      19.48,
      "rz_2007_trailer",
-     6.0
+     55.0
     ],
     [
      21.76,
      "rz_2007_trailer",
-     84.0
+     67.0
     ],
     [
      24.4,
@@ -990,6 +1164,12 @@
      "Do not let him get his hands on you.",
      24.4,
      99
+    ],
+    [
+     "film",
+     "Halloween (2007)",
+     0,
+     999
     ]
    ]
   },
@@ -1106,6 +1286,24 @@
      "Fire is not enough. Plan for after.",
      29.2,
      99
+    ],
+    [
+     "film",
+     "Halloween (2018)",
+     0,
+     23.92
+    ],
+    [
+     "film",
+     "Halloween Kills (2021)",
+     23.92,
+     26.8
+    ],
+    [
+     "film",
+     "Halloween (2018)",
+     26.8,
+     999
     ]
    ]
   },
@@ -1217,6 +1415,24 @@
      "If he cannot see you, stay silent.",
      30.64,
      99
+    ],
+    [
+     "film",
+     "Halloween II (1981)",
+     0,
+     3.96
+    ],
+    [
+     "film",
+     "Halloween (1978)",
+     3.96,
+     6.4
+    ],
+    [
+     "film",
+     "Halloween II (1981)",
+     6.4,
+     999
     ]
    ]
   },
@@ -1313,6 +1529,12 @@
      "You cannot kill a curse. Leave town.",
      28.24,
      99
+    ],
+    [
+     "film",
+     "The Curse of Michael Myers (1995)",
+     0,
+     999
     ]
    ]
   },
@@ -1424,6 +1646,12 @@
      "Do not get in the truck.",
      31.92,
      99
+    ],
+    [
+     "film",
+     "Halloween 4 (1988)",
+     0,
+     999
     ]
    ]
   },
@@ -1550,6 +1778,12 @@
      "If you hear the theme, you already lost.",
      36.44,
      99
+    ],
+    [
+     "film",
+     "Halloween Kills (2021)",
+     0,
+     999
     ]
    ]
   },
@@ -1601,6 +1835,30 @@
      ],
      8.7,
      14.3
+    ],
+    [
+     "film",
+     "Halloween Kills (2021)",
+     0,
+     1.68
+    ],
+    [
+     "film",
+     "Halloween (1978)",
+     1.68,
+     4.16
+    ],
+    [
+     "film",
+     "Halloween H20 (1998)",
+     4.16,
+     6.32
+    ],
+    [
+     "film",
+     "Halloween (2018)",
+     6.32,
+     8.6
     ]
    ]
   }
