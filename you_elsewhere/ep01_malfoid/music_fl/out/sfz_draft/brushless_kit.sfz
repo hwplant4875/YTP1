@@ -1,0 +1,21 @@
+// Soft jazz kit (FL Studio HQ Jazz Kit): ride (51) + pedal hat (44) only, round-robin; no brushes available
+<control> default_path=samples/jazzkit/
+<global> amp_veltrack=100 ampeg_release=0.6
+<group> key=51 ampeg_release=1.5
+<region> sample=Ride_HQ_Jazz_n1.flac lorand=0.000 hirand=0.125
+<region> sample=Ride_HQ_Jazz_n2.flac lorand=0.125 hirand=0.250
+<region> sample=Ride_HQ_Jazz_n3.flac lorand=0.250 hirand=0.375
+<region> sample=Ride_HQ_Jazz_n4.flac lorand=0.375 hirand=0.500
+<region> sample=Ride_HQ_Jazz_n5.flac lorand=0.500 hirand=0.625
+<region> sample=Ride_HQ_Jazz_n6.flac lorand=0.625 hirand=0.750
+<region> sample=Ride_HQ_Jazz_n7.flac lorand=0.750 hirand=0.875
+<region> sample=Ride_HQ_Jazz_n8.flac lorand=0.875 hirand=1.000
+<group> key=44 
+<region> sample=HH_Pedal_HQ_Jazz_n1.flac lorand=0.000 hirand=0.125
+<region> sample=HH_Pedal_HQ_Jazz_n2.flac lorand=0.125 hirand=0.250
+<region> sample=HH_Pedal_HQ_Jazz_n3.flac lorand=0.250 hirand=0.375
+<region> sample=HH_Pedal_HQ_Jazz_n4.flac lorand=0.375 hirand=0.500
+<region> sample=HH_Pedal_HQ_Jazz_n5.flac lorand=0.500 hirand=0.625
+<region> sample=HH_Pedal_HQ_Jazz_n6.flac lorand=0.625 hirand=0.750
+<region> sample=HH_Pedal_HQ_Jazz_n7.flac lorand=0.750 hirand=0.875
+<region> sample=HH_Pedal_HQ_Jazz_n8.flac lorand=0.875 hirand=1.000

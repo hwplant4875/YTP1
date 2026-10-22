@@ -1,0 +1,12 @@
+// Upright-ish acoustic bass from FL Studio "Acoustic Bass" samples (one sample per major third)
+<control> default_path=samples/bass/
+<global> amp_veltrack=85 ampeg_attack=0.004 ampeg_release=0.35 ampeg_decay=3.2 ampeg_sustain=35 fil_type=lpf_2p cutoff=1400 fil_veltrack=1500
+<region> sample=Acoustic_Bass_(1).flac pitch_keycenter=28 lokey=0 hikey=30
+<region> sample=Acoustic_Bass_(2).flac pitch_keycenter=32 lokey=31 hikey=34
+<region> sample=Acoustic_Bass_(3).flac pitch_keycenter=36 lokey=35 hikey=38
+<region> sample=Acoustic_Bass_(4).flac pitch_keycenter=40 lokey=39 hikey=42
+<region> sample=Acoustic_Bass_(5).flac pitch_keycenter=44 lokey=43 hikey=46
+<region> sample=Acoustic_Bass_(6).flac pitch_keycenter=48 lokey=47 hikey=50
+<region> sample=Acoustic_Bass_(7).flac pitch_keycenter=52 lokey=51 hikey=54
+<region> sample=Acoustic_Bass_(8).flac pitch_keycenter=56 lokey=55 hikey=58
+<region> sample=Acoustic_Bass_(9).flac pitch_keycenter=60 lokey=59 hikey=127
