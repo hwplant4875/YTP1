@@ -51,3 +51,9 @@ The shortlist is at /mnt/project-files/plans/3d_timelapse/assets/sketchfab_short
 4. Import into Blender, scale the Colossal to 60 m, and render the same wall-top thumbnail as colossal_thumb_test.jpg so it can be compared against our procedural one.
 Never put the token in the repo, logs or chat.
 - 22:40: Titan pack: use it directly in cast845 on the laptop, where the pack is local. Mix it with pure_titans.py presets. No need to push it to the repo, since its licence is unclear. Credit Freestorm-Dev in the description.
+
+## 22:24 UTC: user approved the ASSET route ("에셋 쓰는게 훨씬 좋겠다. 가자")
+- SKETCHFAB_TOKEN is now set in the user's cmd (setx). Open a NEW shell to pick it up.
+- Laptop: download the shortlist (assets/sketchfab_shortlist.md), Colossal Sidaivan first. Unzip with a script; the user does not open zips. Then make the Colossal wall-top thumbnail with the downloaded model and compare it with colossal.py round 4.
+- The cloud stopped the procedural Colossal (round 6). colossal.py round 4 stays as the fallback only.
+- Keep a CREDITS.md listing each used model, author, licence and URL, for the description.
