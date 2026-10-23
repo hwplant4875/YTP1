@@ -11,7 +11,7 @@ MODELS = ["GreenChair_01", "round_wooden_table_01", "book_encyclopedia_set_01",
 TEXTURES = {"decrepit_wallpaper": "2k", "old_wooden_floor_02": "2k", "dirty_carpet": "2k",
             "medieval_red_brick": "2k", "weathered_planks": "2k", "dark_wood": "2k",
             "bark_brown_01": "1k", "wood_cabinet_worn_long": "2k", "worn_plaster_wall": "2k",
-            "forest_floor": "1k"}
+            "forest_floor": "1k", "marble_01": "2k", "velour_velvet": "1k", "rough_linen": "1k"}
 HDRI = ("moonlit_golf", "2k")
 
 

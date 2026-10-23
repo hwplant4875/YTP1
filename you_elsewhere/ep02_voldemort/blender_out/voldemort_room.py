@@ -15,7 +15,7 @@ def arg(k, d):
     return type(d)(argv[argv.index(k) + 1]) if k in argv else d
 RES = arg("--res", 100)
 SAMPLES = arg("--samples", 256)
-OUT = arg("--out", "voldemort_room_look_v1")
+OUT = arg("--out", "voldemort_room_look_v2")
 SNAKE = "--snake" in argv
 NORENDER = "--norender" in argv
 rnd = random.Random(7)
@@ -165,7 +165,7 @@ def import_model(name, loc, rot_z=0.0, scale=(1, 1, 1), keep=None, dust=0.6):
     new = [o for o in bpy.data.objects if o not in before]
     if keep:
         for o in list(new):
-            if o.type == "MESH" and not keep(o.name):
+            if o.type == "MESH" and not keep(o.name.split(".")[0]):
                 new.remove(o); bpy.data.objects.remove(o)
     root = bpy.data.objects.new(name + "_root", None); scene.collection.objects.link(root)
     for o in new:
@@ -185,7 +185,7 @@ def look_at(ob, target):
 
 # ---------------------------------------------------------------- materials
 M = {}
-M["wall"] = pbr("wallpaper", "decrepit_wallpaper", 0.9, tint=(0.66, 0.68, 0.58), bump=0.6, sat=0.8)
+M["wall"] = pbr("wallpaper", "decrepit_wallpaper", 0.9, tint=(0.82, 0.82, 0.7), bump=0.6, sat=0.8)
 # peel the paper off in patches to show plaster underneath
 def peel(mat, under_folder):
     nt = mat.node_tree; p = nt.nodes["Principled BSDF"]
@@ -216,7 +216,7 @@ M["brick"] = pbr("firebrick", "medieval_red_brick", 1.4, tint=(0.55, 0.45, 0.38)
 M["hearth"] = pbr("hearthstone", "medieval_red_brick", 0.9, tint=(0.35, 0.33, 0.31), sat=0.25, rough_mul=1.0)
 M["rug"] = pbr("hearthrug", "dirty_carpet", 1.3, tint=(0.55, 0.16, 0.1), sat=1.3, rough_mul=1.0, box=False)
 M["bark"] = pbr("bark", "bark_brown_01", 2.5, tint=(0.55, 0.5, 0.45), bump=1.5)
-M["ground"] = pbr("ground", "forest_floor", 0.15, tint=(0.4, 0.4, 0.4), box=False)
+M["ground"] = pbr("ground", "forest_floor", 0.15, tint=(0.55, 0.55, 0.55), box=False)
 for k in ("wall", "floor", "darkwood", "paintwood", "boards", "hearth", "rug"):
     add_dust(M[k], {"floor": 0.4, "darkwood": 0.7, "hearth": 0.7, "rug": 0.1}.get(k, 0.45), scale=2.5 if k == "floor" else 6.0)
 
@@ -237,9 +237,13 @@ M["iron"] = simple("cast_iron", (0.025, 0.023, 0.022), 0.75, 0.9)
 add_dust(M["iron"], 0.3)
 M["gold"] = simple("locket_gold", (0.85, 0.62, 0.3), 0.32, 1.0)
 add_dust(M["gold"], 0.5, scale=60)
-M["web"] = simple("cobweb", (0.75, 0.74, 0.72), 0.6, **{"Transmission Weight": 0.3})
-M["stone"] = simple("gravestone", (0.18, 0.18, 0.18), 0.85)
-M["leaf"] = simple("ivy_leaf", (0.02, 0.05, 0.015), 0.25, **{"Subsurface Weight": 0.0})
+M["web"] = simple("cobweb", (0.5, 0.49, 0.47), 0.7, **{"Transmission Weight": 0.4})
+M["stone"] = simple("gravestone", (0.32, 0.32, 0.31), 0.85)
+M["leaf"] = simple("ivy_leaf", (0.03, 0.07, 0.025), 0.3)
+nt = M["leaf"].node_tree; pl = nt.nodes["Principled BSDF"]
+tl = nt.nodes.new("ShaderNodeBsdfTranslucent"); tl.inputs["Color"].default_value = (0.08, 0.2, 0.04, 1)
+mxl = nt.nodes.new("ShaderNodeMixShader"); mxl.inputs[0].default_value = 0.45
+link(nt, pl.outputs[0], mxl.inputs[1]); link(nt, tl.outputs[0], mxl.inputs[2]); link(nt, mxl.outputs[0], nt.nodes["Material Output"].inputs["Surface"])
 M["mote"] = simple("dust_mote", (0.9, 0.85, 0.8), 0.9)
 M["ash"] = simple("ash", (0.09, 0.085, 0.08), 0.95)
 
@@ -313,14 +317,60 @@ box("firebox_l", L, L + 0.05, BREAST, Y1, 0, OH, M["brick"])
 box("firebox_r", R - 0.05, R, BREAST, Y1, 0, OH, M["brick"])
 box("firebox_top", L, R, BREAST, Y1, OH - 0.04, OH, M["brick"])
 box("firebox_floor", L, R, BREAST, Y1, 0, 0.03, M["hearth"])
-# mantelpiece
-box("pilaster_l", FX - 0.78, L, BREAST - 0.09, BREAST, 0, 1.08, M["darkwood"])
-box("pilaster_r", R, FX + 0.78, BREAST - 0.09, BREAST, 0, 1.08, M["darkwood"])
-box("frieze", FX - 0.78, FX + 0.78, BREAST - 0.09, BREAST, OH, 1.15, M["darkwood"])
-box("mantel_shelf", FX - 0.88, FX + 0.88, BREAST - 0.24, BREAST + 0.01, 1.15, 1.21, M["darkwood"])
-box("mantel_mould", FX - 0.82, FX + 0.82, BREAST - 0.14, BREAST, 1.10, 1.15, M["darkwood"])
-box("plinth_l", FX - 0.8, L - 0.0, BREAST - 0.11, BREAST, 0, 0.16, M["darkwood"])
-box("plinth_r", R, FX + 0.8, BREAST - 0.11, BREAST, 0, 0.16, M["darkwood"])
+# carved marble Victorian surround with an arched cast-iron insert
+M["marble"] = pbr("marble", "marble_01", 1.5, tint=(0.5, 0.47, 0.42), rough_mul=1.8, bump=0.3, sat=0.4)
+nt = M["marble"].node_tree; p = nt.nodes["Principled BSDF"]
+tc = nt.nodes.new("ShaderNodeTexCoord"); sep = nt.nodes.new("ShaderNodeSeparateXYZ"); link(nt, tc.outputs["Object"], sep.inputs[0])
+dx = math_node(nt, "DIVIDE", math_node(nt, "SUBTRACT", sep.outputs["X"], FX), 0.6)
+dz = math_node(nt, "DIVIDE", math_node(nt, "SUBTRACT", sep.outputs["Z"], OH + 0.02), 0.32)
+dd = math_node(nt, "SQRT", math_node(nt, "ADD", math_node(nt, "MULTIPLY", dx, dx), math_node(nt, "MULTIPLY", dz, dz)))
+above = math_node(nt, "MULTIPLY", math_node(nt, "ADD", dz, 0.15), 6.0, True)
+sn = nt.nodes.new("ShaderNodeTexNoise"); sn.inputs["Scale"].default_value = 7; sn.inputs["Detail"].default_value = 8
+link(nt, tc.outputs["Object"], sn.inputs["Vector"])
+soot = math_node(nt, "MULTIPLY", math_node(nt, "MULTIPLY", math_node(nt, "SUBTRACT", 1.0, dd, True), above),
+                 math_node(nt, "ADD", sn.outputs["Fac"], 0.35))
+soot = math_node(nt, "MINIMUM", math_node(nt, "MULTIPLY", soot, 2.4), 0.95)
+link(nt, mixrgb(nt, soot, p.inputs["Base Color"].links[0].from_socket, (0.02, 0.018, 0.016, 1)), p.inputs["Base Color"])
+add_dust(M["marble"], 0.7)
+
+def bbox(name, x0, x1, y0, y1, z0, z1, mat, bev=0.004, seg=2):
+    o = box(name, x0, x1, y0, y1, z0, z1, mat); o.modifiers["bevel"].width = bev; o.modifiers["bevel"].segments = seg
+    return o
+
+def cut_with(ob, cutter):
+    b = ob.modifiers.new("cut", "BOOLEAN"); b.object = cutter; b.operation = "DIFFERENCE"; b.solver = "EXACT"
+    ob.modifiers.move(len(ob.modifiers) - 1, 0)
+    bpy.context.view_layer.objects.active = ob
+    bpy.ops.object.modifier_apply(modifier="cut")
+    bpy.data.objects.remove(cutter)
+
+FY0 = BREAST - 0.1                                   # front face of the surround
+SHELF = 1.2                                          # top of the mantel shelf
+ins = box("firebox_insert", L, R, BREAST - 0.035, BREAST - 0.01, 0, OH, M["iron"])
+AR = 0.32                                            # arch radius
+cut(ins, FX - AR, FX + AR, BREAST - 0.1, BREAST + 0.1, -0.1, 0.46)
+bpy.ops.mesh.primitive_cylinder_add(vertices=64, radius=AR, depth=0.3, location=(FX, BREAST - 0.02, 0.46), rotation=(math.radians(90), 0, 0))
+cut_with(ins, bpy.context.object)
+for side in (-1, 1):
+    xi = L if side < 0 else R
+    a, b = min(xi, xi + side * 0.3), max(xi, xi + side * 0.3)
+    j = bbox(f"jamb{side}", a, b, FY0, BREAST, 0.15, 0.95, M["marble"], 0.006, 2)
+    for k in range(3):                               # fluting
+        bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.011, depth=0.62, location=(a + 0.075 * (k + 1), FY0, 0.56))
+        cut_with(j, bpy.context.object)
+    bbox(f"plinth{side}", a - 0.02, b + 0.02, FY0 - 0.025, BREAST, 0, 0.15, M["marble"], 0.01, 3)
+    bbox(f"capital{side}", a - 0.015, b + 0.015, FY0 - 0.02, BREAST, 0.95, 0.99, M["marble"], 0.008, 3)
+    bbox(f"corbel{side}", a + 0.03, b - 0.03, FY0 - 0.07, BREAST, 0.99, 1.12, M["marble"], 0.035, 4)
+    bbox(f"bead{side}", min(xi, xi - side * 0.035), max(xi, xi - side * 0.035), FY0 - 0.01, BREAST, 0, OH, M["marble"], 0.015, 3)
+bbox("bead_top", L, R, FY0 - 0.01, BREAST, OH - 0.035, OH, M["marble"], 0.015, 3)
+bbox("frieze", L - 0.3, R + 0.3, FY0 + 0.025, BREAST, OH, 1.12, M["marble"])
+bbox("tablet", FX - 0.14, FX + 0.14, FY0 + 0.005, FY0 + 0.03, OH + 0.04, 1.08, M["marble"], 0.012, 3)
+bbox("mantel_shelf", FX - 0.98, FX + 0.98, BREAST - 0.3, BREAST + 0.005, 1.15, SHELF, M["marble"], 0.02, 4)
+bbox("mantel_mould", FX - 0.92, FX + 0.92, BREAST - 0.24, BREAST, 1.12, 1.15, M["marble"], 0.014, 3)
+for (x0, x1, y0, y1) in ((FX - 0.85, FX + 0.85, BREAST - 0.47, BREAST - 0.45),
+                         (FX - 0.85, FX - 0.83, BREAST - 0.47, BREAST - 0.1), (FX + 0.83, FX + 0.85, BREAST - 0.47, BREAST - 0.1)):
+    bbox("fender", x0, x1, y0, y1, 0.03, 0.12, M["iron"], 0.008, 3)
+
 box("hearth", FX - 0.9, FX + 0.9, BREAST - 0.5, BREAST, 0, 0.03, M["hearth"])
 # cast-iron grate
 for i, z in enumerate((0.08, 0.16, 0.24)):
@@ -446,7 +496,7 @@ def light(name, kind, loc, energy, color, size=0.1, rot=None):
 FIRE = (1.0, 0.42, 0.13)
 light("fire_a", "POINT", (FX - 0.1, BREAST - 0.06, 0.32), 80, FIRE, 0.12)
 light("fire_b", "POINT", (FX + 0.12, BREAST - 0.05, 0.4), 60, (1.0, 0.5, 0.18), 0.1)
-light("fire_glow", "AREA", (FX, BREAST - 0.02, 0.35), 90, (1.0, 0.45, 0.16), (0.6, 0.45), (math.radians(-90), 0, 0))
+light("fire_glow", "AREA", (FX, BREAST - 0.12, 0.35), 115, (1.0, 0.45, 0.16), (0.6, 0.45), (math.radians(-90), 0, 0))
 light("fire_floor", "POINT", (FX, BREAST + 0.2, 0.12), 12, (1.0, 0.35, 0.1), 0.1)
 
 # ---------------------------------------------------------------- window
@@ -514,7 +564,54 @@ for (yx, yy, ys) in ((15, 58, 4.5), (24, 66, 3.2), (6, 70, 3.0)):
 box("church_nave", 34, 46, 92, 98, -7, 0.5, M["stone"]); box("church_tower", 29, 33, 93, 97, -7, 6.5, M["stone"])
 
 # ---------------------------------------------------------------- furniture & props
-chair, _ = import_model("GreenChair_01", (FX + 0.72, 1.2, 0), 180 + 48, (1.08, 1.08, 1.22), dust=0.55)
+# tall wingback armchair in faded velvet (modelled here; front = -Y before placing)
+M["velvet"] = pbr("wingback_velvet", "velour_velvet", 3.0, tint=(0.13, 0.22, 0.11), sat=0.0, bump=0.4)
+pv = M["velvet"].node_tree.nodes["Principled BSDF"]
+pv.inputs["Sheen Weight"].default_value = 0.8; pv.inputs["Sheen Roughness"].default_value = 0.4
+add_dust(M["velvet"], 0.5)
+V = M["velvet"]
+chair = bpy.data.objects.new("wingback", None); scene.collection.objects.link(chair)
+def cpart(o, sub=2):
+    o.parent = chair
+    if sub:
+        s = o.modifiers.new("sub", "SUBSURF"); s.levels = s.render_levels = sub
+    return o
+cpart(bbox("wb_base", -0.42, 0.42, -0.4, 0.36, 0.13, 0.42, V, 0.05, 2))
+cpart(bbox("wb_cushion", -0.31, 0.31, -0.44, 0.22, 0.42, 0.56, V, 0.05, 2))
+T_back = Matrix.Translation((0, 0.3, 0.42)) @ Matrix.Rotation(math.radians(-9), 4, "X") @ Matrix.Translation((0, -0.3, -0.42))
+bk = bbox("wb_back", -0.37, 0.37, 0.2, 0.37, 0.42, 1.24, V, 0.06, 2); bk.data.transform(T_back); cpart(bk)
+wing_prof = [(0.33, 0.6), (0.33, 1.2), (0.16, 1.2), (-0.02, 1.13), (-0.13, 1.0), (-0.15, 0.86), (-0.08, 0.72), (0.0, 0.62)]
+for side in (-1, 1):
+    bm = bmesh.new()
+    f = bm.faces.new([bm.verts.new((0, y, z)) for (y, z) in wing_prof])
+    r_ = bmesh.ops.extrude_face_region(bm, geom=[f])
+    bmesh.ops.translate(bm, verts=[e for e in r_["geom"] if isinstance(e, bmesh.types.BMVert)], vec=(0.1, 0, 0))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    me = bpy.data.meshes.new("wing"); bm.to_mesh(me); bm.free()
+    w = bpy.data.objects.new("wb_wing", me); scene.collection.objects.link(w); me.materials.append(V)
+    w.data.transform(Matrix.Translation((0.33 if side > 0 else -0.43, 0, 0)))
+    w.data.transform(Matrix.Translation((side * 0.38, 0.33, 0)) @ Matrix.Rotation(side * math.radians(8), 4, "Z")
+                     @ Matrix.Translation((-side * 0.38, -0.33, 0)))
+    bv = w.modifiers.new("bevel", "BEVEL"); bv.width = 0.035; bv.segments = 3
+    cpart(w)
+    a, b = (0.32, 0.44) if side > 0 else (-0.44, -0.32)
+    cpart(bbox("wb_armside", a, b, -0.42, 0.3, 0.13, 0.63, V, 0.04, 2))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=0.068, depth=0.74, location=(side * 0.395, -0.07, 0.64), rotation=(math.radians(90), 0, 0))
+    ro_ = bpy.context.object; ro_.name = "wb_armroll"; ro_.data.materials.append(V)
+    bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+    bv = ro_.modifiers.new("bevel", "BEVEL"); bv.width = 0.03; bv.segments = 3
+    cpart(ro_, 1); bpy.ops.object.shade_smooth()
+for sx in (-0.36, 0.36):
+    for sy in (-0.34, 0.3):
+        bpy.ops.mesh.primitive_cone_add(vertices=16, radius1=0.022, radius2=0.03, depth=0.13, location=(sx, sy, 0.065))
+        lg = bpy.context.object; lg.data.materials.append(M["darkwood"]); cpart(lg, 0); bpy.ops.object.shade_smooth()
+bm = bmesh.new()                                     # diamond button tufting on the inside back
+for row, bz in enumerate((0.7, 0.84, 0.98, 1.12)):
+    for bx in ((-0.2, 0.0, 0.2) if row % 2 == 0 else (-0.1, 0.1)):
+        bmesh.ops.create_icosphere(bm, subdivisions=2, radius=0.012, matrix=T_back @ Matrix.Translation((bx, 0.2, bz)) @ Matrix.Diagonal((1, 0.6, 1, 1)))
+me = bpy.data.meshes.new("buttons"); bm.to_mesh(me); bm.free()
+btn = bpy.data.objects.new("wb_buttons", me); scene.collection.objects.link(btn); me.materials.append(V); cpart(btn, 0)
+chair.location = (FX + 0.88, 1.28, 0); chair.rotation_euler = (0, 0, math.radians(180 + 58))
 table, _ = import_model("round_wooden_table_01", (FX + 1.32, 0.95, 0), 15, (0.33, 0.33, 0.66), dust=0.8)
 TT = 1.004 * 0.66                                    # table top height
 books, bobs = import_model("book_encyclopedia_set_01", (0, 0, 0), 0, dust=0.9,
@@ -545,25 +642,213 @@ sp_ = cu.splines.new("POLY"); sp_.points.add(len(cpts) - 1)
 for i, c in enumerate(cpts): sp_.points[i].co = c + (1,)
 co_ = bpy.data.objects.new("chain", cu); scene.collection.objects.link(co_); cu.materials.append(M["gold"])
 
-# mantel dressing
-import_model("mantel_clock_01", (FX + 0.05, BREAST - 0.11, 1.21), 0, dust=0.9)
-ch, chobs = import_model("brass_candleholders", (0, 0, 0), 0, dust=0.9, keep=lambda n: n.endswith("_02"))
-bpy.context.view_layer.update()
-cm = [o for o in chobs if o.type == "MESH"]
-if cm:
-    bb_ = [cm[0].matrix_world @ Vector(c) for c in cm[0].bound_box]
-    cx = sum(p.x for p in bb_) / 8; cy = sum(p.y for p in bb_) / 8
-    ch.location = (FX - 0.6 - cx, BREAST - 0.11 - cy, 1.21)
-import_model("ornate_mirror_01", (FX, BREAST - 0.005, 1.95), 0, (1.75, 1.75, 1.75), dust=0.5)
-# old, half-desilvered mirror: darker and hazier than new glass
+# books: one merged mesh, spine on -Y, origin at bottom centre (x thickness, y depth, z height)
+COVER_COLS = [(0.17, 0.035, 0.03), (0.09, 0.06, 0.035), (0.04, 0.07, 0.045), (0.035, 0.03, 0.028),
+              (0.2, 0.12, 0.06), (0.11, 0.03, 0.045), (0.14, 0.1, 0.07)]
+BOOK_MATS = []
+for i, c in enumerate(COVER_COLS):
+    mm = simple(f"book_cover_{i}", c, 0.55)
+    nt_ = mm.node_tree; pp = nt_.nodes["Principled BSDF"]
+    wn = nt_.nodes.new("ShaderNodeTexNoise"); wn.inputs["Scale"].default_value = 60; wn.inputs["Detail"].default_value = 6
+    link(nt_, mixrgb(nt_, math_node(nt_, "MULTIPLY", wn.outputs["Fac"], 0.5), c + (1,),
+                     tuple(min(1, v * 1.8 + 0.04) for v in c) + (1,)), pp.inputs["Base Color"])
+    add_dust(mm, 0.8, scale=20)
+    BOOK_MATS.append(mm)
+M["pages"] = simple("book_pages", (0.5, 0.45, 0.34), 0.8); add_dust(M["pages"], 0.6, scale=30)
+book_bm = bmesh.new()
+def add_book(mtx, w, h, t, ci=None):
+    ci = rnd.randrange(len(COVER_COLS)) if ci is None else ci
+    parts = [((-t / 2, -t / 2 + 0.003), (-w / 2, w / 2), (0, h), ci), ((t / 2 - 0.003, t / 2), (-w / 2, w / 2), (0, h), ci),
+             ((-t / 2, t / 2), (-w / 2, -w / 2 + 0.004), (0, h), ci),
+             ((-t / 2 + 0.003, t / 2 - 0.003), (-w / 2 + 0.004, w / 2 - 0.004), (0.004, h - 0.004), len(COVER_COLS))]
+    for (x0, x1), (y0, y1), (z0, z1), mi in parts:
+        res = bmesh.ops.create_cube(book_bm, size=1.0, matrix=mtx @ Matrix.Translation(((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2))
+                                    @ Matrix.Diagonal((x1 - x0, y1 - y0, z1 - z0, 1)))
+        for f in {f for v in res["verts"] for f in v.link_faces}: f.material_index = mi
+def lying(x, y, z, w, h, t, rot, ci=None):
+    add_book(Matrix.Translation((x, y, z)) @ Matrix.Rotation(rot, 4, "Z") @ Matrix.Translation((-h / 2, 0, t / 2))
+             @ Matrix.Rotation(math.radians(90), 4, "Y"), w, h, t, ci)
+def stack(x, y, z, n, rot0):
+    for k in range(n):
+        w, h, t = rnd.uniform(0.16, 0.24), rnd.uniform(0.21, 0.3), rnd.uniform(0.028, 0.06)
+        lying(x + rnd.uniform(-0.02, 0.02), y + rnd.uniform(-0.02, 0.02), z, w, h, t, rot0 + rnd.uniform(-0.25, 0.25)); z += t
+
+# mantel dressing: tarnished clock, candlesticks, dusty jars, old books
+import_model("mantel_clock_01", (FX + 0.02, BREAST - 0.17, SHELF), 0, dust=0.9)
+nt = bpy.data.materials["mantel_clock_01"].node_tree; p = nt.nodes["Principled BSDF"]
+bc = p.inputs["Base Color"]; link(nt, mixrgb(nt, 1.0, bc.links[0].from_socket, (0.5, 0.44, 0.36, 1), "MULTIPLY"), bc)
+def place_centered(name, keep, x, y, z):
+    root, obs = import_model(name, (0, 0, 0), 0, dust=0.9, keep=keep)
+    bpy.context.view_layer.update()
+    pts = [o.matrix_world @ Vector(c) for o in obs if o.type == "MESH" for c in o.bound_box]
+    root.location = (x - sum(q.x for q in pts) / len(pts), y - sum(q.y for q in pts) / len(pts), z)
+    return root
+place_centered("brass_candleholders", lambda n: n.endswith("_02"), FX - 0.74, BREAST - 0.13, SHELF)
+place_centered("brass_candleholders", lambda n: n.endswith("_01"), FX + 0.84, BREAST - 0.12, SHELF)
+M["jarglass"] = simple("dusty_glass", (0.75, 0.78, 0.7), 0.25, **{"Transmission Weight": 1.0}); add_dust(M["jarglass"], 0.9)
+M["cork"] = simple("cork", (0.25, 0.17, 0.1), 0.85)
+M["murk"] = simple("jar_contents", (0.06, 0.04, 0.02), 0.6)
+for i, (jx, jr, jh, fill) in enumerate(((FX + 0.4, 0.04, 0.17, 0.5), (FX + 0.5, 0.032, 0.12, 0.3), (FX + 0.6, 0.045, 0.2, 0.7))):
+    jy = BREAST - 0.14 + (i % 2) * 0.05
+    bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=jr, depth=jh, location=(jx, jy, SHELF + jh / 2))
+    j = bpy.context.object; j.name = "jar"; j.data.materials.append(M["jarglass"])
+    j.modifiers.new("sol", "SOLIDIFY").thickness = 0.003; j.modifiers.new("bev", "BEVEL").width = 0.006; bpy.ops.object.shade_smooth()
+    bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=jr - 0.005, depth=jh * fill, location=(jx, jy, SHELF + 0.004 + jh * fill / 2))
+    bpy.context.object.data.materials.append(M["murk"])
+    bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=jr * 0.75, depth=0.025, location=(jx, jy, SHELF + jh + 0.008))
+    bpy.context.object.data.materials.append(M["cork"])
+stack(FX - 0.42, BREAST - 0.15, SHELF, 3, 0.15)
+
+# old silvered mirror, tilted forward over the mantel, foxed and desilvered in spots
+mr, _ = import_model("ornate_mirror_01", (FX, BREAST - 0.1, SHELF + 0.73), 0, (1.75, 1.75, 1.75), dust=0.5)
+mr.rotation_euler = (math.radians(7), 0, 0)
 nt = bpy.data.materials["ornate_mirror_01"].node_tree; p = nt.nodes["Principled BSDF"]
-bc = p.inputs["Base Color"]; link(nt, mixrgb(nt, 1.0, bc.links[0].from_socket, (0.42, 0.4, 0.37, 1), "MULTIPLY"), bc)
+mask = p.inputs["Metallic"].links[0].from_socket
+tc = nt.nodes.new("ShaderNodeTexCoord")
+fv = nt.nodes.new("ShaderNodeTexVoronoi"); fv.inputs["Scale"].default_value = 22; link(nt, tc.outputs["Object"], fv.inputs["Vector"])
+gate = nt.nodes.new("ShaderNodeSeparateColor"); link(nt, fv.outputs["Color"], gate.inputs[0])
+spots = math_node(nt, "MULTIPLY", math_node(nt, "SUBTRACT", 1.0, math_node(nt, "DIVIDE", fv.outputs["Distance"], 0.25), True),
+                  math_node(nt, "GREATER_THAN", gate.outputs[0], 0.55))
+bn = nt.nodes.new("ShaderNodeTexNoise"); bn.inputs["Scale"].default_value = 3; bn.inputs["Detail"].default_value = 8
+link(nt, tc.outputs["Object"], bn.inputs["Vector"])
+fox = math_node(nt, "ADD", spots, math_node(nt, "MULTIPLY", math_node(nt, "SUBTRACT", bn.outputs["Fac"], 0.55), 4.0, True), True)
+mf = math_node(nt, "MULTIPLY", mask, fox)
+bc = p.inputs["Base Color"]; link(nt, mixrgb(nt, mf, bc.links[0].from_socket, (0.06, 0.045, 0.03, 1)), bc)
 rc = p.inputs["Roughness"]
-if rc.links: link(nt, math_node(nt, "MAXIMUM", rc.links[0].from_socket, 0.22), rc)
-# left of the breast: commode with a picture above
-import_model("GothicCommode_01", (-2.05, Y1 - 0.3, 0), 0, dust=0.8)
-pic, _ = import_model("fancy_picture_frame_01", (-2.05, Y1 - 0.0, 1.85), 0, (1.15, 1.15, 1.15), dust=0.6)
-pic.rotation_euler = (0, math.radians(3.5), 0)
+rr = nt.nodes.new("ShaderNodeMix"); rr.data_type = "FLOAT"; link(nt, mf, sock(rr, "Factor"))
+link(nt, math_node(nt, "MAXIMUM", rc.links[0].from_socket, math_node(nt, "MULTIPLY", mask, 0.07)), sock(rr, "A"))
+sock(rr, "B").default_value = 0.5; link(nt, sock(rr, "Result", True), rc)
+link(nt, math_node(nt, "MULTIPLY", mask, math_node(nt, "SUBTRACT", 1.0, math_node(nt, "MULTIPLY", fox, 0.85))), p.inputs["Metallic"])
+
+# left of the breast: commode under a dust sheet, faded portrait above
+_, commode = import_model("GothicCommode_01", (-2.05, Y1 - 0.3, 0), 0, dust=0.8)
+pic, _ = import_model("fancy_picture_frame_01", (-2.05, Y1 - 0.005, 1.92), 0, (1.3, 1.3, 1.3), dust=0.6)
+pic.rotation_euler = (0, math.radians(90 + 2.5), 0)
+for n_ in bpy.data.materials["fancy_picture_frame_01_canvas"].node_tree.nodes:
+    if n_.type == "TEX_IMAGE" and "diff" in n_.image.name:
+        n_.image = bpy.data.images.load(os.path.join(A, "generated", "portrait_rot.png"))
+
+M["sheet"] = pbr("dust_sheet", "rough_linen", 2.0, tint=(0.62, 0.6, 0.55), sat=0.3, bump=0.5); add_dust(M["sheet"], 0.9)
+bpy.ops.mesh.primitive_grid_add(x_subdivisions=76, y_subdivisions=52, size=1, location=(-2.15, Y1 - 0.84, 1.245))
+sh = bpy.context.object; sh.name = "dust_sheet"; sh.scale = (1.18, 1.62, 1); sh.rotation_euler = (0, 0, 0.0)
+bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+vg = sh.vertex_groups.new(name="pin")             # back edge tucked against the wall, front drapes
+vg.add([v.index for v in sh.data.vertices if (sh.matrix_world @ v.co).y > Y1 - 0.08], 1.0, "REPLACE")
+cl = sh.modifiers.new("cloth", "CLOTH"); cs = cl.settings; cs.vertex_group_mass = "pin"
+cs.quality = 6; cs.mass = 0.25; cs.tension_stiffness = 12; cs.compression_stiffness = 12; cs.bending_stiffness = 0.4
+cl.collision_settings.distance_min = 0.006
+cl.point_cache.frame_start = 1; cl.point_cache.frame_end = 80
+cplane = mesh_obj("_collide_floor", [(-2.9, 1.0, 0.004), (-0.9, 1.0, 0.004), (-0.9, Y1, 0.004), (-2.9, Y1, 0.004)], [(0, 1, 2, 3)])
+cproxy = box("_collide_commode", -2.65, -1.45, Y1 - 0.59, Y1 - 0.01, 0, 1.21); cproxy.modifiers.clear()
+colliders = [cproxy, cplane] + [bpy.data.objects[n] for n in ("wall_back", "wall_left", "breast_l")]
+for o in colliders:
+    o.modifiers.new("collision", "COLLISION"); o.collision.thickness_outer = 0.008; o.collision.cloth_friction = 40
+scene.frame_start, scene.frame_end = 1, 80
+bpy.context.view_layer.update()
+for fr in range(1, 81): scene.frame_set(fr)
+bpy.context.view_layer.objects.active = sh
+bpy.ops.object.modifier_apply(modifier="cloth")
+for o in colliders:
+    for md in [md for md in o.modifiers if md.type == "COLLISION"]: o.modifiers.remove(md)
+bpy.data.objects.remove(cplane); bpy.data.objects.remove(cproxy); scene.frame_set(1)
+sh.data.materials.append(M["sheet"]); sh.modifiers.new("sol", "SOLIDIFY").thickness = 0.002
+ss = sh.modifiers.new("sub", "SUBSURF"); ss.levels = ss.render_levels = 1
+bpy.context.view_layer.objects.active = sh; bpy.ops.object.shade_smooth()
+
+# tall bookcase between the chimney breast and the window, full of old books
+BX0, BX1 = FX + 1.05, FX + 1.83
+BY0 = Y1 - 0.36
+bbox("bc_side_l", BX0, BX0 + 0.03, BY0, Y1 - 0.01, 0, 2.2, M["darkwood"])
+bbox("bc_side_r", BX1 - 0.03, BX1, BY0, Y1 - 0.01, 0, 2.2, M["darkwood"])
+bbox("bc_back", BX0, BX1, Y1 - 0.025, Y1 - 0.01, 0, 2.2, M["darkwood"])
+bbox("bc_base", BX0 - 0.015, BX1 + 0.015, BY0 - 0.02, Y1 - 0.01, 0, 0.1, M["darkwood"], 0.01, 3)
+bbox("bc_cornice", BX0 - 0.04, BX1 + 0.04, BY0 - 0.05, Y1 - 0.01, 2.2, 2.27, M["darkwood"], 0.015, 3)
+levels = [0.1, 0.52, 0.92, 1.32, 1.72, 2.2]
+for i, zl in enumerate(levels[:-1]):
+    if i > 0: bbox("bc_shelf", BX0 + 0.03, BX1 - 0.03, BY0, Y1 - 0.025, zl - 0.025, zl, M["darkwood"], 0.003, 2)
+    gap = levels[i + 1] - zl - 0.025
+    x = BX0 + 0.035
+    while x < BX1 - 0.06:
+        r_ = rnd.random()
+        if r_ < 0.06:
+            x += rnd.uniform(0.04, 0.12); continue
+        if r_ < 0.13 and x < BX1 - 0.34:
+            stack(x + 0.15, BY0 + 0.12, zl, rnd.randint(2, 4), rnd.uniform(-0.06, 0.06)); x += 0.31; continue
+        t = rnd.uniform(0.018, 0.055); h = min(gap - 0.02, rnd.uniform(0.17, 0.33)); w = rnd.uniform(0.14, 0.24)
+        lean = math.radians(rnd.uniform(8, 18)) if rnd.random() < 0.08 else 0.0
+        if x + t + h * math.sin(lean) > BX1 - 0.03: break
+        add_book(Matrix.Translation((x + t / 2 + h * math.sin(lean), BY0 + 0.012 + w / 2 + rnd.uniform(0, 0.02), zl))
+                 @ Matrix.Rotation(-lean, 4, "Y"), w, h, t)
+        x += t + h * math.sin(lean) + rnd.uniform(0.0, 0.004)
+stack(BX0 + 0.3, BY0 + 0.15, 2.27, 3, 0.1)
+
+# books piled on the floor and loose papers
+stack(FX + 1.6, 1.85, 0.006, 7, 0.3); stack(FX + 1.85, 1.5, 0.006, 4, -0.4); stack(-1.75, 1.5, 0.006, 5, 0.8)
+M["paper"] = simple("old_paper", (0.38, 0.33, 0.25), 0.75); add_dust(M["paper"], 0.5, scale=25)
+paper_bm = bmesh.new()
+def paper(x, y, z, rot, curl=0.02, w=0.21, l=0.297):
+    vs = []
+    for jj in range(9):
+        vs.append([paper_bm.verts.new(Matrix.Translation((x, y, z)) @ Matrix.Rotation(rot, 4, "Z")
+                   @ Vector(((ii / 6 - 0.5) * w, (jj / 8 - 0.5) * l, curl * (2 * (ii / 6 - 0.5)) ** 2 + 0.3 * curl * (2 * (jj / 8 - 0.5)) ** 2)))
+                   for ii in range(7)])
+    for jj in range(8):
+        for ii in range(6):
+            paper_bm.faces.new((vs[jj][ii], vs[jj][ii + 1], vs[jj + 1][ii + 1], vs[jj + 1][ii]))
+for k in range(8):
+    paper(rnd.uniform(FX + 0.95, FX + 2.0), rnd.uniform(1.2, 2.0), 0.009 + k * 0.0006, rnd.uniform(0, 6.28), rnd.uniform(0.0, 0.03))
+paper(-1.3, 1.3, 0.03, 0.4, 0.01); paper(-1.0, 1.4, 0.031, 1.9, 0.02)
+paper(FX + 1.27, 0.93, TT + 0.0015, 0.5, 0.004); paper(FX + 1.36, 1.0, TT + 0.002, 1.2, 0.006)
+me = bpy.data.meshes.new("papers"); paper_bm.to_mesh(me); paper_bm.free()
+po = bpy.data.objects.new("papers", me); scene.collection.objects.link(po); me.materials.append(M["paper"])
+po.modifiers.new("sol", "SOLIDIFY").thickness = 0.0004
+for f in me.polygons: f.use_smooth = True
+
+me = bpy.data.meshes.new("books"); book_bm.to_mesh(me); book_bm.free()
+bo = bpy.data.objects.new("books", me); scene.collection.objects.link(bo)
+for mm in BOOK_MATS + [M["pages"]]: me.materials.append(mm)
+bo.modifiers.new("bev", "BEVEL").width = 0.0015
+
+# heavy, torn velvet curtains
+M["curtain"] = pbr("velvet_curtain", "velour_velvet", 2.0, tint=(0.42, 0.12, 0.12), sat=0.5, bump=0.3)
+nt = M["curtain"].node_tree; pc = nt.nodes["Principled BSDF"]
+pc.inputs["Sheen Weight"].default_value = 0.6
+add_dust(M["curtain"], 0.6)
+hn = nt.nodes.new("ShaderNodeTexNoise"); hn.inputs["Scale"].default_value = 9; hn.inputs["Detail"].default_value = 10
+hn.inputs["Roughness"].default_value = 0.65
+link(nt, nt.nodes.new("ShaderNodeTexCoord").outputs["Object"], hn.inputs["Vector"])
+tr = nt.nodes.new("ShaderNodeBsdfTransparent"); mxs = nt.nodes.new("ShaderNodeMixShader")
+link(nt, math_node(nt, "GREATER_THAN", hn.outputs["Fac"], 0.71), mxs.inputs[0])
+link(nt, pc.outputs[0], mxs.inputs[1]); link(nt, tr.outputs[0], mxs.inputs[2])
+link(nt, mxs.outputs[0], nt.nodes["Material Output"].inputs["Surface"])
+CY_ = Y1 - 0.17
+def curtain(name, x0, x1, ztop, zbot, folds):
+    NX, NZ = 90, 60
+    bm = bmesh.new(); grid = []; ph = rnd.uniform(0, 6.28)
+    for jj in range(NZ + 1):
+        v = jj / NZ; row = []
+        for ii in range(NX + 1):
+            u = ii / NX
+            z = ztop - (ztop - zbot(u)) * v
+            amp = 0.028 + 0.03 * v
+            y = CY_ - amp * math.sin(2 * math.pi * folds * u + ph + 0.7 * math.sin(3 * u + 2 * v))
+            row.append(bm.verts.new((x0 + (x1 - x0) * u, y, z)))
+        grid.append(row)
+    for jj in range(NZ):
+        for ii in range(NX):
+            bm.faces.new((grid[jj][ii], grid[jj][ii + 1], grid[jj + 1][ii + 1], grid[jj + 1][ii]))
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    o = bpy.data.objects.new(name, me); scene.collection.objects.link(o); me.materials.append(M["curtain"])
+    o.modifiers.new("sol", "SOLIDIFY").thickness = 0.005
+    for f in me.polygons: f.use_smooth = True
+jag = [rnd.uniform(-0.08, 0.08) for _ in range(12)]
+def ragged(u): return 0.25 + 0.5 * u + jag[min(11, int(u * 12))] + 0.03 * math.sin(u * 40)
+curtain("curtain_l", WX0 - 0.34, WX0 + 0.2, WZ1 + 0.16, lambda u: 0.012 + 0.01 * math.sin(u * 9), 7)
+curtain("curtain_r", WX1 - 0.16, WX1 + 0.36, WZ1 + 0.16, ragged, 6)
+bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.013, depth=WX1 - WX0 + 0.85, location=(mx, CY_, WZ1 + 0.18), rotation=(0, math.radians(90), 0))
+bpy.context.object.data.materials.append(M["iron"])
+for fx_ in (WX0 - 0.43, WX1 + 0.43):
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.028, location=(fx_, CY_, WZ1 + 0.18)); bpy.context.object.data.materials.append(M["iron"])
 
 # hearthrug
 rug = mesh_obj("hearthrug", [(-0.8, -0.5, 0), (0.8, -0.5, 0), (0.8, 0.5, 0), (-0.8, 0.5, 0)], [(0, 1, 2, 3)], M["rug"])
@@ -576,29 +861,28 @@ tx2 = bpy.data.textures.new("rugwrinkle", "CLOUDS"); tx2.noise_scale = 0.25
 dsp = rug.modifiers.new("wr", "DISPLACE"); dsp.texture = tx2; dsp.strength = 0.012
 sol = rug.modifiers.new("sol", "SOLIDIFY"); sol.thickness = 0.008
 
-# ---------------------------------------------------------------- cobwebs
-def cobweb(corner, d1, d2, d3, n=14, reach=0.55):
-    pts = [Vector(corner)]
-    anchors = []
-    for d in (d1, d2, d3):
-        for k in range(4):
-            anchors.append(Vector(corner) + Vector(d) * rnd.uniform(0.08, reach))
-    cu = bpy.data.curves.new("web", "CURVE"); cu.dimensions = "3D"; cu.bevel_depth = 0.00045
+# ---------------------------------------------------------------- cobwebs (thin curved strands, corners only)
+def cobweb(corner, dirs, n_anchor=8, reach=0.5, hang=4):
+    c = Vector(corner)
+    cu = bpy.data.curves.new("web", "CURVE"); cu.dimensions = "3D"; cu.bevel_depth = 0.00028
+    anchors = [c + Vector(d) * rnd.uniform(0.1, reach) for d in dirs for _ in range(max(2, n_anchor // len(dirs)))]
     def strand(a, b, sag):
-        sp = cu.splines.new("POLY"); sp.points.add(7)
-        for i in range(8):
-            t = i / 7; p = a.lerp(b, t); p.z -= sag * 4 * t * (1 - t)
-            sp.points[i].co = (p.x, p.y, p.z, 1)
-    for a in anchors: strand(Vector(corner), a, 0.01)
-    for _ in range(n):
+        sp = cu.splines.new("NURBS"); sp.points.add(9)
+        for i in range(10):
+            t = i / 9; q = a.lerp(b, t); q.z -= sag * 4 * t * (1 - t); sp.points[i].co = (q.x, q.y, q.z, 1)
+        sp.use_endpoint_u = True; sp.order_u = 4
+    for a in anchors: strand(c, a, rnd.uniform(0.005, 0.025))
+    for _ in range(len(anchors) * 2):
         a, b = rnd.sample(anchors, 2)
-        strand(a, b, rnd.uniform(0.01, 0.06))
+        strand(c.lerp(a, rnd.uniform(0.3, 0.95)), c.lerp(b, rnd.uniform(0.3, 0.95)), rnd.uniform(0.02, 0.08))
+    for _ in range(hang):
+        a = rnd.choice(anchors)
+        strand(a, a + Vector((rnd.uniform(-0.03, 0.03), rnd.uniform(-0.03, 0.03), -rnd.uniform(0.12, 0.35))), 0.0)
     o = bpy.data.objects.new("cobweb", cu); scene.collection.objects.link(o); cu.materials.append(M["web"])
-cobweb((X0 + 0.01, Y1 - 0.01, H - 0.01), (1, 0, 0), (0, -1, 0), (0, 0, -1), 22, 0.7)
-cobweb((X1 - 0.01, Y1 - 0.01, H - 0.01), (-1, 0, 0), (0, -1, 0), (0, 0, -1), 22, 0.7)
-cobweb((FX - 0.95 + 0.01, BREAST + 0.01, H - 0.01), (-1, 0, 0), (0, 1, 0), (0, 0, -1), 10, 0.3)
-cobweb((WX1 - 0.01, Y1 - 0.06, WZ1 - 0.01), (-1, 0, 0), (0, 0, -1), (0, -1, 0), 12, 0.35)
-cobweb((FX + 0.88, BREAST - 0.2, 1.21), (0, 0, 1), (-1, 0, 0), (0, 1, 0), 8, 0.25)
+cobweb((X0 + 0.01, Y1 - 0.01, H - 0.01), [(1, 0, 0), (0, -1, 0), (0, 0, -1)], 10, 0.6)
+cobweb((X1 - 0.01, Y1 - 0.01, H - 0.01), [(-1, 0, 0), (0, -1, 0), (0, 0, -1)], 10, 0.6)
+cobweb((FX - 0.95 - 0.01, Y1 - 0.01, H - 0.01), [(-1, 0, 0), (0, -1, 0), (0, 0, -1)], 6, 0.35)
+cobweb((FX + 0.95 + 0.01, Y1 - 0.01, H - 0.01), [(1, 0, 0), (0, -1, 0), (0, 0, -1)], 6, 0.4)
 
 # ---------------------------------------------------------------- atmosphere
 m = bpy.data.materials.new("haze"); m.use_nodes = True; nt = m.node_tree
@@ -629,7 +913,9 @@ link(nt, nt.nodes.new("ShaderNodeTexCoord").outputs["Generated"], mpw.inputs["Ve
 link(nt, mpw.outputs["Vector"], env.inputs["Vector"])
 hsv = nt.nodes.new("ShaderNodeHueSaturation"); hsv.inputs["Saturation"].default_value = 0.6
 link(nt, env.outputs["Color"], hsv.inputs["Color"])
-bg = nt.nodes["Background"]; bg.inputs["Strength"].default_value = 0.32
+bg = nt.nodes["Background"]
+lp = nt.nodes.new("ShaderNodeLightPath")             # sky seen through the glass brighter than the light it casts
+link(nt, math_node(nt, "ADD", 0.3, math_node(nt, "MULTIPLY", math_node(nt, "SUBTRACT", 1.0, lp.outputs["Is Diffuse Ray"]), 0.55)), bg.inputs["Strength"])
 link(nt, mixrgb(nt, 1.0, hsv.outputs["Color"], (0.55, 0.65, 0.95, 1), "MULTIPLY"), bg.inputs["Color"])
 moon = light("moon", "SUN", (0, 0, 10), 0.5, (0.5, 0.64, 1.0))
 moon.data.angle = math.radians(0.8)
@@ -646,50 +932,82 @@ me = bpy.data.meshes.new("rain"); bm.to_mesh(me); bm.free()
 ro = bpy.data.objects.new("rain", me); scene.collection.objects.link(ro); me.materials.append(m)
 ro.visible_shadow = False
 
-# ---------------------------------------------------------------- optional: Nagini coiled on the rug
+# ---------------------------------------------------------------- optional: Nagini resting by the fire
 if SNAKE:
     m, nt, p = new_mat("snake_skin")
     tc = nt.nodes.new("ShaderNodeTexCoord")
-    sm = nt.nodes.new("ShaderNodeMapping"); sm.inputs["Scale"].default_value = (110, 110, 110)
-    link(nt, tc.outputs["Object"], sm.inputs["Vector"])
-    sc = nt.nodes.new("ShaderNodeTexVoronoi"); sc.feature = "DISTANCE_TO_EDGE"; sc.inputs["Scale"].default_value = 1
-    link(nt, sm.outputs["Vector"], sc.inputs["Vector"])
-    pat = nt.nodes.new("ShaderNodeTexNoise"); pat.inputs["Scale"].default_value = 4; pat.inputs["Detail"].default_value = 4
-    pm = nt.nodes.new("ShaderNodeMapping"); pm.inputs["Scale"].default_value = (2.5, 2.5, 2.5)
-    link(nt, tc.outputs["Object"], pm.inputs["Vector"]); link(nt, pm.outputs["Vector"], pat.inputs["Vector"])
-    ramp = nt.nodes.new("ShaderNodeValToRGB"); link(nt, pat.outputs["Fac"], ramp.inputs["Fac"])
-    ramp.color_ramp.elements[0].position = 0.42; ramp.color_ramp.elements[0].color = (0.008, 0.01, 0.006, 1)
-    ramp.color_ramp.elements[1].position = 0.55; ramp.color_ramp.elements[1].color = (0.05, 0.06, 0.03, 1)
-    edge = math_node(nt, "MULTIPLY", sc.outputs["Distance"], 5, True)
-    link(nt, mixrgb(nt, math_node(nt, "SUBTRACT", 1, edge, True), ramp.outputs["Color"], (0.01, 0.01, 0.008, 1)), p.inputs["Base Color"])
-    p.inputs["Roughness"].default_value = 0.32; p.inputs["Coat Weight"].default_value = 0.3
-    bmp = nt.nodes.new("ShaderNodeBump"); bmp.inputs["Distance"].default_value = 0.002
+    sv = nt.nodes.new("ShaderNodeTexVoronoi"); sv.feature = "DISTANCE_TO_EDGE"; sv.inputs["Scale"].default_value = 95
+    link(nt, tc.outputs["Object"], sv.inputs["Vector"])
+    edge = math_node(nt, "MULTIPLY", sv.outputs["Distance"], 6.0, True)              # 0 on the scale borders
+    bv = nt.nodes.new("ShaderNodeTexVoronoi"); bv.distance = "MANHATTAN"; bv.inputs["Scale"].default_value = 9
+    link(nt, tc.outputs["Object"], bv.inputs["Vector"])
+    blot = math_node(nt, "SUBTRACT", 1.0, math_node(nt, "MULTIPLY", math_node(nt, "SUBTRACT", bv.outputs["Distance"], 0.36), 7.0), True)
+    vn = nt.nodes.new("ShaderNodeTexNoise"); vn.inputs["Scale"].default_value = 3; vn.inputs["Detail"].default_value = 6
+    link(nt, tc.outputs["Object"], vn.inputs["Vector"])
+    col = mixrgb(nt, vn.outputs["Fac"], (0.035, 0.042, 0.026, 1), (0.075, 0.08, 0.05, 1))
+    col = mixrgb(nt, blot, col, (0.006, 0.007, 0.005, 1))
+    col = mixrgb(nt, math_node(nt, "SUBTRACT", 1.0, edge, True), col, (0.01, 0.01, 0.008, 1))
+    link(nt, col, p.inputs["Base Color"])
+    p.inputs["Roughness"].default_value = 0.5; p.inputs["Specular IOR Level"].default_value = 0.35; p.inputs["Coat Weight"].default_value = 0.0; p.inputs["Coat Roughness"].default_value = 0.25
+    bmp = nt.nodes.new("ShaderNodeBump"); bmp.inputs["Distance"].default_value = 0.003; bmp.inputs["Strength"].default_value = 0.6
     link(nt, edge, bmp.inputs["Height"]); link(nt, bmp.outputs["Normal"], p.inputs["Normal"])
+
+    def ground(x, y):
+        return 0.03 if (y > BREAST - 0.5 and abs(x - FX) < 0.9) else 0.024
+    CX, CY = FX - 0.05, 1.45
+    path = [(-0.85, 0.1), (-0.72, -0.06), (-0.47, -0.13), (-0.22, -0.05), (-0.06, 0.12), (0.14, 0.22), (0.34, 0.17),
+            (0.42, 0.0), (0.3, -0.14), (0.1, -0.17), (-0.05, -0.12), (-0.15, -0.02), (-0.21, 0.05)]
+    ctrl = [(CX + px, CY + py) for px, py in path]      # loose S-coil along the rug, head resting low at the front
+    ctrl = [ctrl[0]] + ctrl + [ctrl[-1]]
+    pts = []
+    for k in range(1, len(ctrl) - 2):                   # Catmull-Rom so the curve passes through every point
+        p0, p1, p2, p3 = (Vector(ctrl[k + o] + (0,)) for o in (-1, 0, 1, 2))
+        for st in range(10):
+            t = st / 10
+            q = 0.5 * (2 * p1 + (p2 - p0) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (3 * p1 - p0 - 3 * p2 + p3) * t ** 3)
+            pts.append((q.x, q.y))
+    pts.append(ctrl[-2])
+    n = len(pts)
     cu = bpy.data.curves.new("nagini", "CURVE"); cu.dimensions = "3D"; cu.bevel_depth = 1.0
-    cu.bevel_resolution = 6; cu.resolution_u = 24; cu.use_fill_caps = True
-    sp = cu.splines.new("NURBS"); n = 46
-    sp.points.add(n - 1)
-    cx, cy = FX - 0.12, 1.42
-    for i in range(n):
-        t = i / (n - 1)
-        if t < 0.78:                       # spiral coil
-            a = t / 0.78 * 2.2 * 2 * math.pi; r = 0.34 - 0.2 * (t / 0.78) + 0.03 * math.sin(3.0 * a)
-            x, y, z = cx + r * math.cos(a), cy + r * math.sin(a), 0.06 + 0.07 * (t / 0.78)
-        else:                              # head lifts off the coil, towards the fire
-            u = (t - 0.78) / 0.22
-            x, y, z = cx + 0.12 + 0.16 * u, cy - 0.02 + 0.2 * u, 0.12 + 0.22 * math.sin(u * 2.0)
-        rad = 0.055 * (0.35 + 0.65 * math.sin(math.pi * min(1, t * 1.25 + 0.06))) if t < 0.96 else 0.03
-        sp.points[i].co = (x, y, z, 1); sp.points[i].radius = rad
-    sp.use_endpoint_u = True; sp.order_u = 4
+    cu.bevel_resolution = 8; cu.resolution_u = 16; cu.use_fill_caps = True
+    sp = cu.splines.new("POLY"); sp.points.add(n - 1)
+    for i, (x, y) in enumerate(pts):
+        s = i / (n - 1)
+        rad = 0.007 + 0.055 * min(1.0, s / 0.4) ** 0.8
+        if s > 0.85: rad *= 1 - 0.3 * (s - 0.85) / 0.15
+        lift = 0.1 * min(1.0, max(0.0, (s - 0.88) / 0.08))   # neck climbs onto the rear coil, head rests on its body
+        sp.points[i].co = (x, y, ground(x, y) + rad * 0.92 + lift, 1); sp.points[i].radius = rad
     sn = bpy.data.objects.new("nagini", cu); scene.collection.objects.link(sn); cu.materials.append(m)
-    # tail starts outside: reverse so the tail end is thin
-    sp.points[0].radius = 0.004
-    # wedge-shaped head at the raised end, pointing along the body
-    hp = Vector(sp.points[n - 1].co[:3]); hd = (hp - Vector(sp.points[n - 3].co[:3])).normalized()
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1, location=hp + hd * 0.035)
-    hd_o = bpy.context.object; hd_o.name = "nagini_head"
-    hd_o.rotation_euler = hd.to_track_quat("X", "Z").to_euler(); hd_o.scale = (0.065, 0.04, 0.026)
-    hd_o.data.materials.append(m); bpy.ops.object.shade_smooth()
+    sn.scale = (1, 1, 1)
+    # diamond-shaped head, flat underside, eyes on the sides
+    hb = bmesh.new(); rings = []
+    prof = [(0.0, 0.052, 0.042), (0.03, 0.068, 0.045), (0.06, 0.074, 0.042), (0.09, 0.064, 0.036),
+            (0.12, 0.046, 0.029), (0.145, 0.028, 0.021), (0.165, 0.012, 0.012)]
+    for (hx, hw, hh) in prof:
+        ring = []
+        for k in range(20):
+            th = 2 * math.pi * k / 20; cy_, cz_ = math.cos(th), math.sin(th)
+            ring.append(hb.verts.new((hx, hw * cy_ * (1 - 0.15 * max(cz_, 0)), hh * (cz_ if cz_ > 0 else 0.55 * cz_))))
+        rings.append(ring)
+    for a_, b_ in zip(rings, rings[1:]):
+        for k in range(20):
+            hb.faces.new((a_[k], a_[(k + 1) % 20], b_[(k + 1) % 20], b_[k]))
+    hb.faces.new(rings[-1]); hb.faces.new(rings[0][::-1])
+    bmesh.ops.recalc_face_normals(hb, faces=hb.faces)
+    me = bpy.data.meshes.new("nagini_head"); hb.to_mesh(me); hb.free()
+    head = bpy.data.objects.new("nagini_head", me); scene.collection.objects.link(head); me.materials.append(m)
+    head.scale = (0.82, 0.82, 0.82)
+    for f in me.polygons: f.use_smooth = True
+    s_ = head.modifiers.new("sub", "SUBSURF"); s_.levels = s_.render_levels = 2
+    pe = Vector((pts[-1][0], pts[-1][1], 0)); d = (pe - Vector((pts[-2][0], pts[-2][1], 0))).normalized()
+    yaw = math.atan2(d.y, d.x)
+    head.location = pe - d * 0.01 + Vector((0, 0, ground(pe.x, pe.y) + 0.12))
+    head.rotation_euler = (0, math.radians(4), yaw)
+    eye = simple("snake_eye", (0.006, 0.005, 0.003), 0.05, **{"Coat Weight": 1.0})
+    for sgn in (-1, 1):
+        q = head.location + Matrix.Rotation(yaw, 4, "Z") @ (Vector((0.1, sgn * 0.056, 0.02)) * 0.82)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.009, location=q)
+        bpy.context.object.data.materials.append(eye); bpy.ops.object.shade_smooth()
 
 # ---------------------------------------------------------------- camera + render settings
 cam_d = bpy.data.cameras.new("cam"); cam_d.lens = 35; cam_d.sensor_width = 36
