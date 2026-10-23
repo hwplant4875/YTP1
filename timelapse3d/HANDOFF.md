@@ -57,3 +57,4 @@ Never put the token in the repo, logs or chat.
 - Laptop: download the shortlist (assets/sketchfab_shortlist.md), Colossal Sidaivan first. Unzip with a script; the user does not open zips. Then make the Colossal wall-top thumbnail with the downloaded model and compare it with colossal.py round 4.
 - The cloud stopped the procedural Colossal (round 6). colossal.py round 4 stays as the fallback only.
 - Keep a CREDITS.md listing each used model, author, licence and URL, for the description.
+- 22:24 user: they have ALREADY downloaded Sketchfab zip(s) into C:\Users\hw549\Downloads. COPY (do not move or delete) the *.zip files there into E:\YTP2\3D Timelapse\assets\sketchfab\, unzip them by script and use them. Fall back to the API token only for the models that are missing.
