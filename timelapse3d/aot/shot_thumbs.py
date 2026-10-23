@@ -73,7 +73,7 @@ SHOTS = {
                cam=((-30, 62, 4), (70, 0, 23), 22), cloud=(1.0, 0.72, 0.52), cloud_lo=0.58),
     "T4": dict(sun=(-12, 9, 4.6, (1.0, 0.84, 0.62)), sky=((0.90, 0.88, 0.84), (0.42, 0.60, 0.86)),
                amb=0.55, haze=((0.86, 0.87, 0.88), 900.0, 0.62), expo=-0.05, haze_e=0.55,
-               cam=((55, -1365, 4.5), (0, -1080, 26), 24), cloud=(0.98, 0.97, 0.95)),
+               cam=((55, -1365, 1.7), (0, -1080, 44), 24), cloud=(0.98, 0.97, 0.95)),
 }
 S = SHOTS[A.shot]
 if A.shot == "T3" and A.variant == "canal":
@@ -961,6 +961,7 @@ def materials():
         "gatewood": pmat("GateWood", lin("3B2A20"), 0.8),
         "iron": pmat("Iron", lin("4A4A50"), 0.5, 0.5),
         "keg": pmat("Keg", lin("53311B"), 0.8),
+        "window": pmat("Window", lin("2A2622"), 0.6),          # scene.house_mesh now expects mats["window"]
         "plaster": pmat("Plaster", lin("D8CDB4"), 0.9),
         "plaster_w": pmat("PlasterW", lin("E4DCCB"), 0.9),
         "plaster_o": pmat("PlasterO", lin("C9B48E"), 0.9),
@@ -1311,7 +1312,8 @@ def shot_T4(M):
     def at(dist, lat):
         return c0 + d * dist + rgt * lat
     # (preset, distance, lateral (+ right), height m, walk direction relative to 'toward camera' deg, cycle offset)
-    lay = [("smiling", 40, -3, 13.5, 6, 18), ("messy_gaper", 33, 14, 7.0, -20, 5), ("runt", 26, -12, 4.0, 25, 31),
+    lay = [("bald_grinner", 27, -3, 15.0, 10, 18), ("smiling", 60, 20, 13.0, -15, 7), ("messy_gaper", 50, -26, 7.0, 30, 5),
+           ("runt", 85, 6, 4.0, 25, 31),
            ("bald_grinner", 120, 34, 12, -60, 9), ("blond_sleeper", 150, -48, 10, 40, 27),
            ("ruddy_brute", 185, 8, 11, 120, 40), ("pale_starer", 210, -95, 8, -90, 2)]
     spots = []
@@ -1321,14 +1323,12 @@ def shot_T4(M):
         a = math.radians(-rel)
         w = Vector((tw.x * math.cos(a) - tw.y * math.sin(a), tw.x * math.sin(a) + tw.y * math.cos(a)))
         spots.append((pre, p.x, p.y, heading_to(p.x, p.y, p.x + w.x * 100, p.y + w.y * 100), hgt, off))
-    if not (A.no_titans or A.clay):
-        make_pures(spots, pale=True)
     r = random.Random(4)
     # tall grass in the foreground
     gm = noise_mat("GrassBlade", lin("5E8636"), lin("A9B860"), 0.8, rough=0.7)
     gc = proto_coll("GrassProtos")
     for k in range(4):
-        gc.objects.link(grass_clump_mesh(f"G{k}", gm, k, h=(0.5, 1.1) if k < 2 else (0.9, 1.7)))
+        gc.objects.link(grass_clump_mesh(f"G{k}", gm, k, h=(0.2, 0.4) if k < 2 else (0.3, 0.6)))
         bpy.context.scene.collection.objects.unlink(bpy.data.objects[f"G{k}"])
     pts = []
     for _ in range(9000):
@@ -1337,12 +1337,51 @@ def shot_T4(M):
         p = at(dist, lat)
         if noise.noise(Vector((p.x / 9, p.y / 9, 3))) < -0.25:
             continue
-        pts.append((p.x, p.y, height(p.x, p.y) - 0.05, r.uniform(0, 6.28), r.uniform(0.8, 1.4), r.randrange(4), -1e4, 1e5))
+        pts.append((p.x, p.y, height(p.x, p.y) - 0.05, r.uniform(0, 6.28), r.uniform(0.8, 1.15), r.randrange(4), -1e4, 1e5))
     SC.scatter("TallGrass", gc, pts, 845)
+    # human-scale cues: a split-rail fence, an abandoned hay cart, a small farmhouse
+    wood = pmat("FenceWood", lin("6B5040"), 0.85)
+    fb = bmesh.new()
+    for k in range(16):
+        p = at(9 + k * 0.9, -14 + k * 2.4)
+        box(fb, Vector((p.x, p.y, height(p.x, p.y) + 0.6)), (0.14, 0.14, 1.3), r.uniform(-.1, .1))
+        if k < 15:
+            q = at(9 + (k + 0.5) * 0.9, -14 + (k + 0.5) * 2.4)
+            ang = math.atan2((at(10, -11.6) - at(9, -14)).y, (at(10, -11.6) - at(9, -14)).x)
+            for zz in (0.55, 1.0):
+                box(fb, Vector((q.x, q.y, height(q.x, q.y) + zz)), (2.6, 0.08, 0.1), ang)
+    bm_ob("Fence", fb, [wood])
+    cb = bmesh.new()
+    cp = at(13, 5.0); ca = 0.6
+    gz = height(cp.x, cp.y)
+    box(cb, Vector((cp.x, cp.y, gz + 0.85)), (2.8, 1.4, 0.35), ca)                      # bed
+    for sy in (-0.68, 0.68):                                                           # side boards
+        o = Vector((-math.sin(ca), math.cos(ca))) * sy
+        box(cb, Vector((cp.x + o.x, cp.y + o.y, gz + 1.15)), (2.8, 0.08, 0.5), ca)
+    hay = bmesh.ops.create_icosphere(cb, subdivisions=2, radius=1.0)
+    for v in hay["verts"]:
+        v.co = Vector((v.co.x * 1.25, v.co.y * 0.7, max(v.co.z, -0.2) * 0.55))
+        v.co.rotate(Euler((0, 0, ca)))
+        v.co += Vector((cp.x, cp.y, gz + 1.25))
+    for f in {f for v in hay["verts"] for f in v.link_faces}:
+        f.material_index = 1
+    for sx in (-0.9, 0.9):
+        for sy in (-0.8, 0.8):
+            w_ = Vector((cp.x, cp.y)) + Vector((math.cos(ca), math.sin(ca))) * sx + Vector((-math.sin(ca), math.cos(ca))) * sy
+            wh = bmesh.ops.create_cone(cb, cap_ends=True, segments=16, radius1=0.6, radius2=0.6, depth=0.1)
+            R = Matrix.Rotation(ca, 3, "Z") @ Matrix.Rotation(math.pi / 2, 3, "X")
+            bmesh.ops.rotate(cb, cent=(0, 0, 0), matrix=R, verts=wh["verts"])
+            bmesh.ops.translate(cb, vec=(w_.x, w_.y, gz + 0.6), verts=wh["verts"])
+    pole = Vector((cp.x, cp.y)) + Vector((math.cos(ca), math.sin(ca))) * 2.4
+    box(cb, Vector((pole.x, pole.y, gz + 0.55)), (2.2, 0.08, 0.08), ca)
+    bm_ob("Cart", cb, [wood, pmat("Hay", lin("C2A35A"), 0.95)])
+    fh = link(bpy.data.objects.new("Farmhouse", SC.house_mesh("FarmhouseM", 7.0, 9.0, 4.2, 3.6, M, "plaster", "roof_b")))
+    hp = at(40, -13); fh.location = (hp.x, hp.y, height(hp.x, hp.y) - 0.3); fh.rotation_euler.z = 0.5
+    sh = link(bpy.data.objects.new("Shed", SC.house_mesh("ShedM", 4.0, 5.0, 2.6, 1.8, M, "timber", "roof_d")))
+    hp = at(36, -6.5); sh.location = (hp.x, hp.y, height(hp.x, hp.y) - 0.2); sh.rotation_euler.z = 0.3
     # rocks
     rk = bmesh.new()
-    for (dist, lat, sz) in ((9, -5.5, 1.3), (12, 6.5, 0.9), (22, -15, 2.4), (26, 21, 1.6), (40, 26, 3.0), (60, -34, 2.2),
-                            (14, 2.5, 0.6), (33, -4, 1.0)):
+    for (dist, lat, sz) in ((6, -3.0, 0.45), (8, 3.5, 0.3), (20, -9, 0.9), (24, 13, 0.7), (44, 20, 1.2), (14, 1.5, 0.25)):
         p = at(dist, lat)
         res = bmesh.ops.create_icosphere(rk, subdivisions=2, radius=sz)
         for v in res["verts"]:
@@ -1356,7 +1395,7 @@ def shot_T4(M):
     bark = pmat("SpruceBark", lin("3A2A1E"), 0.9)
     fc = proto_coll("SpruceProtos")
     for k in range(4):
-        ob = conifer_mesh(f"SP{k}", leaf, bark, k, h=r.uniform(16, 24))
+        ob = conifer_mesh(f"SP{k}", leaf, bark, k, h=18.0)
         bpy.context.scene.collection.objects.unlink(ob); fc.objects.link(ob)
     tp = []
     for _ in range(700):
@@ -1370,7 +1409,14 @@ def shot_T4(M):
         lat = -(0.5 * dist + r.uniform(0, 160))
         p = at(dist, lat)
         tp.append((p.x, p.y, height(p.x, p.y) - 0.3, r.uniform(0, 6.28), r.uniform(0.75, 1.2), r.randrange(4), -1e4, 1e5))
+    # scale trees right beside the titans: 15-20 m spruces (a 13-15 m titan ~ tree height, the 7 m one ~ half)
+    for (dist, lat, hgt) in ((70, 34, 18), (66, 40, 16), (74, 44, 20), (61, 8, 15), (54, -36, 15), (57, -40, 17),
+                             (52, -44, 14), (29, -21, 17), (34, -25, 19), (31, 15, 16), (90, -10, 18), (95, 18, 19)):
+        p = at(dist, lat)
+        tp.append((p.x, p.y, height(p.x, p.y) - 0.3, r.uniform(0, 6.28), hgt / 18.0, r.randrange(4), -1e4, 1e5))
     SC.scatter("ForestEdge", fc, tp, 845)
+    if not (A.no_titans or A.clay):                      # last: MPFB building purges unused materials
+        make_pures(spots, pale=True)
 
 def main():
     reset()
