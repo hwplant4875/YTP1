@@ -23,16 +23,19 @@ ap.add_argument("--save", default="")
 ap.add_argument("--clay", action="store_true", help="fast layout pass: no scatter, no characters")
 ap.add_argument("--no-chars", action="store_true")
 ap.add_argument("--lineart", action="store_true")
-ap.add_argument("--comp", action="store_true", help="add the compositor glare / sun-beam pass")
+ap.add_argument("--comp", action="store_true", help="add the compositor bloom / grade pass")
+ap.add_argument("--fstop", type=float, default=8.0, help="camera DOF f-stop (0 = off); focus on the kids")
 A = ap.parse_args(argv)
 
 ASSETS = "/tmp/claude-0/aot/assets/polyhaven"
+VIEW = os.environ.get("OPENING_VIEW", "Standard")      # Standard keeps the anime sky/flower saturation
 CAM_Z = 0.55
 LENS = 50.0
-SUN_DIR = Vector((0.55, -0.12, 0.83)).normalized()     # direction TO the sun: high, from the right, a touch in front
-GLOW_DIR = Vector((0.50, 0.72, 0.48)).normalized()     # sky glow / rays enter from the top right of frame
+SUN_DIR = Vector((0.45, 0.45, 0.77)).normalized()      # direction TO the sun: high, right and behind (the wall is backlit)
+GLOW_DIR = Vector((0.40, 0.88, 0.25)).normalized()     # sun glare just outside the top-right corner
+PAINT_LIGHT = Vector((0.55, -0.25, 0.80)).normalized() # 'painted' key direction for the crown banding (lit top-right)
 HAZE = (0.60, 0.74, 0.92)                              # linear haze colour (pale sky blue)
-TREE = Vector((-7.1, 30.0, 0.0))                       # trunk base (z filled from terrain)
+TREE = Vector((-7.55, 30.0, 0.0))                       # trunk base (z filled from terrain)
 rnd = random.Random(11)
 np_rng = np.random.default_rng(11)
 
@@ -198,8 +201,8 @@ def _grass_colour(N, L, extra_random=None):
         n.inputs["Distortion"].default_value = dist; n.inputs["W"].default_value = w
         L.new(g.outputs["Position"], n.inputs["Vector"])
         return n.outputs["Fac"]
-    big = noise_at(0.03, 2.0, 0.3, 1.0)
-    mid = noise_at(0.15, 2.0, 0.0, 4.0)
+    big = noise_at(0.022, 1.0, 0.6, 1.0)
+    mid = noise_at(0.09, 1.0, 0.3, 4.0)
     mix = N.new("ShaderNodeMix"); mix.data_type = "FLOAT"; mix.inputs["Factor"].default_value = 0.3
     L.new(big, mix.inputs[2]); L.new(mid, mix.inputs[3])
     fac = mix.outputs[0]
@@ -207,18 +210,41 @@ def _grass_colour(N, L, extra_random=None):
         mx = N.new("ShaderNodeMix"); mx.data_type = "FLOAT"; mx.inputs["Factor"].default_value = 0.22
         L.new(fac, mx.inputs[2]); L.new(extra_random, mx.inputs[3]); fac = mx.outputs[0]
     rp = N.new("ShaderNodeValToRGB"); rp.color_ramp.interpolation = "EASE"; e = rp.color_ramp.elements
-    e[0].position, e[0].color = 0.34, (0.045, 0.14, 0.022, 1)
-    e[1].position, e[1].color = 0.64, (0.36, 0.56, 0.08, 1)
-    el = e.new(0.48); el.color = (0.13, 0.34, 0.04, 1)
+    e[0].position, e[0].color = 0.40, (0.035, 0.13, 0.05, 1)     # cool blue-green shade
+    e[1].position, e[1].color = 0.60, (0.40, 0.60, 0.09, 1)      # sunny yellow-green
+    el = e.new(0.47); el.color = (0.12, 0.33, 0.045, 1)          # mid green
+    el = e.new(0.53); el.color = (0.22, 0.46, 0.06, 1)
     L.new(fac, rp.inputs["Fac"])
-    dry = noise_at(0.022, 1.5, 0.2, 7.0)
-    dr = N.new("ShaderNodeMapRange"); dr.inputs["From Min"].default_value = 0.55; dr.inputs["From Max"].default_value = 0.64
-    dr.inputs["To Max"].default_value = 0.4
+    dry = noise_at(0.022, 1.5, 0.2, 9.5)
+    dr = N.new("ShaderNodeMapRange"); dr.inputs["From Min"].default_value = 0.50; dr.inputs["From Max"].default_value = 0.60
+    dr.inputs["To Max"].default_value = 0.5
     L.new(dry, dr.inputs["Value"])
     mx2 = N.new("ShaderNodeMix"); mx2.data_type = "RGBA"
     L.new(dr.outputs["Result"], mx2.inputs["Factor"]); L.new(rp.outputs["Color"], mx2.inputs[6])
-    mx2.inputs[7].default_value = (0.58, 0.60, 0.22, 1)
-    return mx2.outputs[2]
+    mx2.inputs[7].default_value = (0.62, 0.62, 0.26, 1)
+    at = N.new("ShaderNodeAttribute"); at.attribute_name = "road"; at.attribute_type = "GEOMETRY"
+    mx3 = N.new("ShaderNodeMix"); mx3.data_type = "RGBA"
+    L.new(at.outputs["Fac"], mx3.inputs["Factor"]); L.new(mx2.outputs[2], mx3.inputs[6])
+    mx3.inputs[7].default_value = (0.70, 0.62, 0.42, 1)
+    # overall value down a step, and the strip right in front of the camera (under the flowers) darker still
+    cam = N.new("ShaderNodeCameraData")
+    near = N.new("ShaderNodeMapRange"); near.inputs["From Min"].default_value = 3.0; near.inputs["From Max"].default_value = 9.0
+    near.inputs["To Min"].default_value = 0.35; near.inputs["To Max"].default_value = 0.72
+    L.new(cam.outputs["View Distance"], near.inputs["Value"])
+    mul = N.new("ShaderNodeMix"); mul.data_type = "RGBA"; mul.blend_type = "MULTIPLY"; mul.inputs["Factor"].default_value = 1.0
+    L.new(mx3.outputs[2], mul.inputs[6])
+    cmb = N.new("ShaderNodeCombineXYZ")
+    for i in range(3):
+        L.new(near.outputs["Result"], cmb.inputs[i])
+    L.new(cmb.outputs[0], mul.inputs[7])
+    # valley floor and far slopes: warmer, paler yellow-green (as painted in the frame)
+    far = N.new("ShaderNodeMapRange"); far.inputs["From Min"].default_value = 45.0; far.inputs["From Max"].default_value = 220.0
+    far.inputs["To Max"].default_value = 0.55
+    L.new(cam.outputs["View Distance"], far.inputs["Value"])
+    warm = N.new("ShaderNodeMix"); warm.data_type = "RGBA"
+    L.new(far.outputs["Result"], warm.inputs["Factor"]); L.new(mul.outputs[2], warm.inputs[6])
+    warm.inputs[7].default_value = (0.42, 0.48, 0.17, 1)
+    return warm.outputs[2]
 
 def ground_mat():
     """Painted grass: large soft patches of sunny yellow-green and cooler deep green, dry pale straw patches."""
@@ -227,6 +253,8 @@ def ground_mat():
     b.inputs["Roughness"].default_value = 0.9; b.inputs["Specular IOR Level"].default_value = 0.15
     add_haze(m, 1100.0, 0.95)
     return m
+
+ROAD = ((-12.0, 70.0), (-8.5, 100.0), (-6.5, 140.0), (-5.0, 190.0), (-9.0, 250.0), (-20.0, 330.0), (-26.0, 360.0))
 
 # ------------------------------------------------------------------ terrain mesh (polar grid around the camera)
 def build_terrain(mat):
@@ -244,7 +272,16 @@ def build_terrain(mat):
     for i in range(nr - 1):
         for j in range(na - 1):
             bm.faces.new((vs[i][j], vs[i][j + 1], vs[i + 1][j + 1], vs[i + 1][j]))
-    return mesh_ob("Terrain", bm, [mat], smooth=True)
+    ob = mesh_ob("Terrain", bm, [mat], smooth=True)
+    # pale dirt road winding down the valley (soft 0..1 mask as a point attribute)
+    d = np.full(X.shape, 1e9)
+    for (ax, ay), (bx, by) in zip(ROAD[:-1], ROAD[1:]):
+        dx, dy = bx - ax, by - ay
+        t = np.clip(((X - ax) * dx + (Y - ay) * dy) / (dx * dx + dy * dy), 0, 1)
+        d = np.minimum(d, np.hypot(X - (ax + t * dx), Y - (ay + t * dy)))
+    road = np.clip(1.0 - (d - 1.6) / 2.2, 0, 1).astype(np.float32)
+    at = ob.data.attributes.new("road", "FLOAT", "POINT"); at.data.foreach_set("value", road.ravel())
+    return ob
 
 # ------------------------------------------------------------------ sky
 def build_world():
@@ -256,21 +293,21 @@ def build_world():
     sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs["Generated"], sep.inputs[0])
     # vertical gradient (the frame only covers ~0-12 degrees of elevation, so it is tight)
     grad = N.new("ShaderNodeValToRGB"); e = grad.color_ramp.elements; grad.color_ramp.interpolation = "EASE"
-    e[0].position, e[0].color = 0.0, (0.45, 0.62, 0.88, 1)
-    e[1].position, e[1].color = 0.30, (0.03, 0.14, 0.55, 1)
-    el = e.new(0.10); el.color = (0.14, 0.40, 0.86, 1)
+    e[0].position, e[0].color = 0.0, (0.34, 0.62, 0.95, 1)
+    e[1].position, e[1].color = 0.30, (0.01, 0.10, 0.62, 1)
+    el = e.new(0.10); el.color = (0.05, 0.30, 0.90, 1)
     L.new(sep.outputs["Z"], grad.inputs["Fac"])
     # sun glow
     dot = N.new("ShaderNodeVectorMath"); dot.operation = "DOT_PRODUCT"; dot.inputs[1].default_value = GLOW_DIR
     L.new(tc.outputs["Generated"], dot.inputs[0])
-    glow = N.new("ShaderNodeMapRange"); glow.inputs["From Min"].default_value = 0.66; glow.inputs["From Max"].default_value = 1.0
+    glow = N.new("ShaderNodeMapRange"); glow.inputs["From Min"].default_value = 0.78; glow.inputs["From Max"].default_value = 1.0
     glow.interpolation_type = "SMOOTHSTEP"
     L.new(dot.outputs["Value"], glow.inputs["Value"])
-    gp = N.new("ShaderNodeMath"); gp.operation = "POWER"; gp.inputs[1].default_value = 1.6
+    gp = N.new("ShaderNodeMath"); gp.operation = "POWER"; gp.inputs[1].default_value = 2.2
     L.new(glow.outputs["Result"], gp.inputs[0])
     sky = N.new("ShaderNodeMix"); sky.data_type = "RGBA"
     L.new(gp.outputs[0], sky.inputs["Factor"]); L.new(grad.outputs["Color"], sky.inputs[6])
-    sky.inputs[7].default_value = (0.88, 0.96, 1.0, 1)
+    sky.inputs[7].default_value = (1.2, 2.2, 2.6, 1)
     # painted clouds on a plane: uv = xy / z
     zc = N.new("ShaderNodeMath"); zc.operation = "MAXIMUM"; zc.inputs[1].default_value = 0.03
     L.new(sep.outputs["Z"], zc.inputs[0])
@@ -283,7 +320,7 @@ def build_world():
     cn = N.new("ShaderNodeTexNoise"); cn.inputs["Scale"].default_value = 1.0; cn.inputs["Detail"].default_value = 4.0
     cn.inputs["Roughness"].default_value = 0.55; cn.inputs["Distortion"].default_value = 0.25
     L.new(mp.outputs["Vector"], cn.inputs["Vector"])
-    cm = N.new("ShaderNodeMapRange"); cm.inputs["From Min"].default_value = 0.46; cm.inputs["From Max"].default_value = 0.56
+    cm = N.new("ShaderNodeMapRange"); cm.inputs["From Min"].default_value = 0.50; cm.inputs["From Max"].default_value = 0.535
     cm.interpolation_type = "SMOOTHSTEP"
     L.new(cn.outputs["Fac"], cm.inputs["Value"])
     # fewer clouds right at the wall line, more higher up
@@ -303,7 +340,7 @@ def build_world():
     L.new(shd.outputs[0], shr.inputs["Value"])
     ccol = N.new("ShaderNodeMix"); ccol.data_type = "RGBA"
     L.new(shr.outputs["Result"], ccol.inputs["Factor"])
-    ccol.inputs[6].default_value = (0.62, 0.70, 0.86, 1); ccol.inputs[7].default_value = (1.0, 1.0, 1.0, 1)
+    ccol.inputs[6].default_value = (0.85, 0.92, 1.05, 1); ccol.inputs[7].default_value = (1.35, 1.35, 1.35, 1)
     fin = N.new("ShaderNodeMix"); fin.data_type = "RGBA"
     L.new(cmask.outputs[0], fin.inputs["Factor"]); L.new(sky.outputs[2], fin.inputs[6]); L.new(ccol.outputs[2], fin.inputs[7])
     L.new(fin.outputs[2], bg.inputs["Color"])
@@ -319,10 +356,11 @@ def wall_point(t):
     return WALL_P0.lerp(WALL_P1, t)
 
 def build_wall():
-    stone = ramp_mat("WallStone", [(0.25, (0.22, 0.21, 0.19)), (0.5, (0.32, 0.30, 0.25)), (0.75, (0.40, 0.37, 0.30))], coord="Object",
+    stone = ramp_mat("WallStone", [(0.25, (0.13, 0.13, 0.13)), (0.5, (0.19, 0.19, 0.18)), (0.75, (0.25, 0.24, 0.22))], coord="Object",
                      noise_scale=0.6, detail=4.0, rough=0.92, bump=0.1)
     stone.node_tree.nodes["Mapping"].inputs["Scale"].default_value = (0.5, 0.5, 0.012)   # vertical weathering streaks
-    add_haze(stone, 650.0, 0.85, color=(0.45, 0.56, 0.78))
+    add_haze(stone, 650.0, 0.85, color=(0.20, 0.46, 0.76))
+    pil = flat("WallPilaster", (0.30, 0.30, 0.29), 0.85); add_haze(pil, 650.0, 0.75, color=(0.42, 0.52, 0.74))
     joint = flat("WallJoint", (0.02, 0.022, 0.03), 0.9); add_haze(joint, 650.0, 0.6, color=(0.30, 0.38, 0.55))
     d = (WALL_P1 - WALL_P0); length = d.length; d.normalize()
     ang = math.atan2(d.y, d.x)
@@ -334,7 +372,7 @@ def build_wall():
         bmesh.ops.transform(bm, matrix=M, verts=r["verts"])
         for f in {f for v in r["verts"] for f in v.link_faces}:
             f.material_index = mi
-    SL, PIER, SLOT = 13.5, 2.0, 0.9       # module, projecting pier, dark slot each side of the pier
+    SL, PIER, SLOT = 13.5, 1.2, 0.35       # module, projecting pier, dark slot each side of the pier
     t = -260.0
     z0 = WALL_BASE - 20.0
     while t < length + 260:
@@ -343,16 +381,16 @@ def build_wall():
         box(Vector((p.x, p.y, (top + z0) / 2)), (SL - PIER - 2 * SLOT, 7.0, top - z0), 0)               # panel
         q = p + d * (SL / 2)
         qq = q + nrm * 0.9
-        box(Vector((qq.x, qq.y, (WALL_H + 0.8 + z0) / 2)), (PIER, 8.8, WALL_H + 0.8 - z0), 0)            # pier, proud of the face
+        box(Vector((qq.x, qq.y, (WALL_H + 0.8 + z0) / 2)), (PIER, 8.8, WALL_H + 0.8 - z0), 2)            # pale pilaster, proud of the face
         t += SL
     # dark core behind the panels shows through the slots; plain capping course on top
     c = WALL_P0 + d * (length / 2) - nrm * 2.0
     box(Vector((c.x, c.y, (WALL_H - 0.5 + z0) / 2)), (length + 520, 5.0, WALL_H - 0.5 - z0), 1)
     c2 = WALL_P0 + d * (length / 2) + nrm * 0.3
     box(Vector((c2.x, c2.y, WALL_H + 0.35)), (length + 520, 7.8, 0.7), 0)
-    ob = mesh_ob("WallMaria", bm, [stone, joint])
+    ob = mesh_ob("WallMaria", bm, [stone, joint, pil])
     # watch tower on top, near the frame centre
-    tp = WALL_P0 + d * (length * 0.575)
+    tp = WALL_P0 + d * (length * 0.585)
     tb = bmesh.new()
     def tbox(c, size):
         r = bmesh.ops.create_cube(tb, size=1)
@@ -465,14 +503,16 @@ def build_valley():
     # cypress row on the right
     bm = bmesh.new()
     rr = random.Random(5)
-    for k in range(26):
-        x = 24 + k * 3.4 + rr.uniform(-1, 1); y = 150 + k * 2.4 + rr.uniform(-8, 8)
-        h = rr.uniform(9, 15); z = hz(x, y) - 0.5
-        spindle(bm, Vector((x, y, z)), h, rr.uniform(1.1, 1.6), seed=k)
-    for k in range(10):                                   # second, farther rank
-        x = 35 + k * 6 + rr.uniform(-2, 2); y = 205 + k * 3 + rr.uniform(-6, 6)
-        spindle(bm, Vector((x, y, hz(x, y) - 0.5)), rr.uniform(10, 16), 1.5, seed=100 + k)
-    mesh_ob("Cypresses", bm, [cyp], smooth=True)
+    k = 0
+    for g in range(9):                                    # irregular groves along the right
+        gx = 26 + g * 9 + rr.uniform(-3, 3); gy = 150 + g * 6 + rr.uniform(-10, 10)
+        for j in range(rr.randint(3, 6)):
+            x = gx + rr.uniform(-4, 4); y = gy + rr.uniform(-5, 5)
+            spindle(bm, Vector((x, y, hz(x, y) - 0.6)), rr.uniform(7, 12), rr.uniform(1.8, 2.6), seed=k, wob=0.18); k += 1
+    for j in range(14):                                   # farther, denser rank
+        x = 40 + j * 5 + rr.uniform(-2, 2); y = 215 + j * 2.5 + rr.uniform(-6, 6)
+        spindle(bm, Vector((x, y, hz(x, y) - 0.6)), rr.uniform(8, 13), rr.uniform(2.0, 2.8), seed=200 + j, wob=0.18)
+    cy = mesh_ob("Cypresses", bm, [cyp], smooth=True)
     # dark broad-leaved clump mid-valley, and woods at the wall foot on the right
     bm = bmesh.new()
     blob_cluster(bm, Vector((12, 125, hz(12, 125) - 1.0)), 30, 2.3, (8, 5, 6.5), 3, squash=0.9)
@@ -501,9 +541,8 @@ def build_valley():
         vv = [bm.verts.new(M @ p) for p in v]
         for f in ((0, 1, 5, 4), (2, 3, 4, 5), (0, 4, 3), (1, 2, 5), (0, 3, 2, 1)):
             ff = bm.faces.new([vv[i] for i in f]); ff.material_index = 1
-    for (x, y, r) in ((-23, 345, 0.3), (-15, 350, -0.2), (-30, 352, 0.1), (32, 300, 0.4), (45, 296, -0.3), (40, 310, 0.1),
-                      (58, 288, 0.5), (20, 315, 0.2), (68, 276, 0.2)):
-        house(x, y, r)
+    for (x, y, r) in ((-22, 345, 0.3), (-29, 352, 0.1), (34, 300, 0.4), (47, 296, -0.3), (60, 286, 0.5)):
+        house(x, y, r, w=5.0, dpt=3.6, hgt=2.6)
     def mill(x, y, rot, s=1.0):
         z = hz(x, y) - 0.3
         prev = None
@@ -643,15 +682,20 @@ def leafy(ob, protos, density, scale, name, coll="leaf"):
     print(name, len(pts))
     return scatter_object(name, pts, rots, sc, pick, protos[coll])
 
+CROWN_C = Vector((-0.3, 0.0, 5.2))       # crown centre relative to the trunk base
+
+def crown_world():
+    return Vector((TREE.x, TREE.y, hz(TREE.x, TREE.y) - 0.15)) + CROWN_C
+
 def build_tree(protos):
     base = Vector((TREE.x, TREE.y, hz(TREE.x, TREE.y) - 0.15))
     bark = bark_mat()
     bm = bmesh.new()
     # trunk: leans to the right, flared roots, forks at ~3.4 m
-    tpts = bez(Vector((0, 0, -0.6)), Vector((0.1, 0.05, 1.9)), Vector((0.8, 0.2, 3.9)), 10)
+    tpts = bez(Vector((0, 0, -0.6)), Vector((0.15, 0.05, 1.7)), Vector((1.0, 0.2, 4.0)), 10)
     trad = [1.05, 0.78, 0.64, 0.6, 0.58, 0.56, 0.54, 0.53, 0.52, 0.5]
     tube(bm, tpts, trad, seg=18, wob=0.12, seed=1)
-    for k, (dx, dy) in enumerate(((-1.0, 0.1), (0.3, -0.9), (0.8, 0.5), (-0.4, 0.9), (0.9, -0.3))):   # root flares
+    for k, (dx, dy) in enumerate(((-1.3, 0.1), (-1.0, -0.6), (0.3, -0.9), (0.8, 0.5), (-0.4, 0.9), (0.9, -0.3))):   # root flares, heavier on the left
         a = Vector((0, 0, 0.6)); c = Vector((dx * 1.5, dy * 1.5, -0.25))
         tube(bm, bez(a, (a + c) / 2 + Vector((0, 0, 0.1)), c, 5), [0.42, 0.33, 0.24, 0.16, 0.1], seg=8, seed=k + 3)
     fork = tpts[-1]
@@ -666,23 +710,23 @@ def build_tree(protos):
     trunk = mesh_ob("Tree_trunk", bm, [bark], smooth=True)
     trunk.location = base
     # crown: lumpy clumps on an envelope (wide, leaning right, drooping at the edges)
-    ctr = Vector((0.1, 0.3, 6.2))
+    # crown: ONE big rounded dome of large leaf masses; the underside is a shallow arch, high over the trunk
+    ctr = CROWN_C
     clumps = []
-    for (f, m, e) in limbs:
-        clumps.append((e + Vector((0, 0, 0.5)), 1.8))
-    k = 0
-    while len(clumps) < 150:
-        u = Vector((rr.uniform(-1, 1), rr.uniform(-1, 1), rr.uniform(-1, 1)))
-        if u.length > 1:
+    RX, RY, RZ = 4.1, 3.8, 4.4
+    tries = 0
+    while len(clumps) < 95 and tries < 20000:
+        tries += 1
+        u = Vector((rr.gauss(0, 1), rr.gauss(0, 1), rr.gauss(0, 1))).normalized()
+        if u.z < -0.55:
             continue
-        p = ctr + Vector((u.x * 5.4, u.y * 4.2, u.z * 3.2))
-        if p.z < 4.6 - 0.25 * abs(p.x):              # keep the underside open around the trunk
-            p.z = 4.6 - 0.25 * abs(p.x) + rr.uniform(0, 0.4)
-        r = rr.uniform(0.8, 1.35) * (1.2 - 0.3 * u.length)
-        clumps.append((p, r))
-    # drooping outer skirts (left and right-front)
-    for p in ((-4.6, -0.6, 2.6), (-3.8, -2.0, 2.5), (-4.2, 1.2, 2.6), (3.9, -1.0, 2.4), (3.2, -2.4, 2.3), (4.6, 0.6, 2.8)):
-        clumps.append((Vector(p), 1.25))
+        f = rr.uniform(0.72, 0.92)
+        p = ctr + Vector((u.x * RX * f, u.y * RY * f, u.z * RZ * f))
+        rh = math.hypot((p.x - ctr.x) / RX, (p.y - ctr.y) / RY)
+        under = 2.5 + 2.6 * max(0.0, 1 - rh * rh)            # arch: ~5 m over the trunk, ~2.5 m at the rim
+        if p.z < under:
+            p.z = under + rr.uniform(0, 0.3)
+        clumps.append((p, rr.uniform(1.5, 2.2)))
     inner = flat("CrownInner", (0.012, 0.04, 0.012), 0.9)
     cb = bmesh.new()
     pts, nrms = [], []
@@ -696,7 +740,7 @@ def build_tree(protos):
     # leaves: sample points on each clump surface, keep the ones not buried inside other clumps
     cen = np.array([c for c, r in clumps]); rad = np.array([r for c, r in clumps])
     for (c, r) in clumps:
-        n = int(4 * math.pi * r * r * 230)
+        n = int(4 * math.pi * r * r * 150)
         dirs = np_rng.normal(size=(n, 3)); dirs /= np.linalg.norm(dirs, axis=1)[:, None]
         p = np.array(c) + dirs * r * np.array([1, 1, 0.78]) * (0.95 + np_rng.exponential(0.12, (n, 1)))
         dd = np.linalg.norm(p[:, None, :] - cen[None, :, :] * np.array([1, 1, 1]), axis=2) / rad[None, :]
@@ -711,25 +755,44 @@ def build_tree(protos):
         e = (q @ Matrix.Rotation(rnd.uniform(0, 6.28), 3, "Z").to_quaternion()).to_euler()
         rots.append((e.x, e.y, e.z))
     pts = pts + np.array(base)
-    sc = np_rng.uniform(0.5, 0.75, len(pts))
+    sc = np_rng.uniform(0.6, 0.85, len(pts))
     pick = np_rng.integers(0, len(protos["leaf"].objects), len(pts))
     scatter_object("Tree_leaves", pts, rots, sc, pick, protos["leaf"])
     print("leaf sprigs", len(pts))
     return trunk, base
 
-def leaf_mat():
-    m = bpy.data.materials.new("Leaf"); N, L, b = _nodes(m)
+def leaf_mat(dome_centre=None, name="Leaf"):
+    """Painted crown: tone comes from the dome-level normal (point - centre) . key light, stepped into 3 bands,
+    broken up by a soft noise so the band edges follow leaf masses rather than a sphere."""
+    m = bpy.data.materials.new(name); N, L, b = _nodes(m)
+    g = N.new("ShaderNodeNewGeometry")
+    c = dome_centre or crown_world()
+    sub = N.new("ShaderNodeVectorMath"); sub.operation = "SUBTRACT"; sub.inputs[1].default_value = c
+    L.new(g.outputs["Position"], sub.inputs[0])
+    sc = N.new("ShaderNodeVectorMath"); sc.operation = "MULTIPLY"; sc.inputs[1].default_value = (1 / 4.1, 1 / 3.8, 1 / 4.4)
+    L.new(sub.outputs[0], sc.inputs[0])
+    nm = N.new("ShaderNodeVectorMath"); nm.operation = "NORMALIZE"; L.new(sc.outputs[0], nm.inputs[0])
+    dt = N.new("ShaderNodeVectorMath"); dt.operation = "DOT_PRODUCT"; dt.inputs[1].default_value = PAINT_LIGHT
+    L.new(nm.outputs[0], dt.inputs[0])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.45; nz.inputs["Detail"].default_value = 1.0
+    L.new(g.outputs["Position"], nz.inputs["Vector"])
+    nzc = N.new("ShaderNodeMath"); nzc.operation = "MULTIPLY_ADD"; nzc.inputs[1].default_value = 0.7; nzc.inputs[2].default_value = -0.35
+    L.new(nz.outputs["Fac"], nzc.inputs[0])
     oi = N.new("ShaderNodeObjectInfo")
-    rp = N.new("ShaderNodeValToRGB"); e = rp.color_ramp.elements
-    e[0].color = (0.06, 0.20, 0.04, 1); e[1].color = (0.42, 0.62, 0.10, 1)
-    el = e.new(0.5); el.color = (0.18, 0.40, 0.05, 1)
-    L.new(oi.outputs["Random"], rp.inputs["Fac"]); L.new(rp.outputs["Color"], b.inputs["Base Color"])
-    b.inputs["Roughness"].default_value = 0.8; b.inputs["Specular IOR Level"].default_value = 0.12
-    b.inputs["Subsurface Weight"].default_value = 0.0
-    tr = N.new("ShaderNodeBsdfTranslucent"); tr.inputs["Color"].default_value = (0.25, 0.45, 0.04, 1)
-    mx = N.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.18
-    out = N["Material Output"]
-    L.new(b.outputs[0], mx.inputs[1]); L.new(tr.outputs[0], mx.inputs[2]); L.new(mx.outputs[0], out.inputs["Surface"])
+    jit = N.new("ShaderNodeMath"); jit.operation = "MULTIPLY_ADD"; jit.inputs[1].default_value = 0.12; jit.inputs[2].default_value = -0.06
+    L.new(oi.outputs["Random"], jit.inputs[0])
+    ad = N.new("ShaderNodeMath"); ad.operation = "ADD"; L.new(dt.outputs["Value"], ad.inputs[0]); L.new(nzc.outputs[0], ad.inputs[1])
+    ad2 = N.new("ShaderNodeMath"); ad2.operation = "ADD"; L.new(ad.outputs[0], ad2.inputs[0]); L.new(jit.outputs[0], ad2.inputs[1])
+    rp = N.new("ShaderNodeValToRGB"); rp.color_ramp.interpolation = "CONSTANT"; e = rp.color_ramp.elements
+    e[0].position, e[0].color = 0.0, (0.018, 0.05, 0.085, 1)           # deep blue-teal shade
+    e[1].position, e[1].color = 0.82, (0.36, 0.52, 0.34, 1)            # sunlit pale yellow-green rim
+    el = e.new(0.38); el.color = (0.045, 0.13, 0.14, 1)                # mid teal
+    el = e.new(0.58); el.color = (0.13, 0.28, 0.20, 1)                 # lit
+    mr = N.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = -0.8; mr.inputs["From Max"].default_value = 1.0
+    L.new(ad2.outputs[0], mr.inputs["Value"]); L.new(mr.outputs["Result"], rp.inputs["Fac"])
+    L.new(rp.outputs["Color"], b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.85; b.inputs["Specular IOR Level"].default_value = 0.08
+    L.new(rp.outputs["Color"], b.inputs["Emission Color"]); b.inputs["Emission Strength"].default_value = 0.35
     return m
 
 # ------------------------------------------------------------------ grass blades
@@ -788,7 +851,7 @@ def in_frustum(x, y, z, margin=0.12):
 def scatter_grass(protos, avoid):
     """Blades on the terrain, density falling off with distance so screen density stays roughly even."""
     pts = []
-    for (d0, d1, n) in ((1.0, 6.0, 9000), (6.0, 18.0, 70000), (18.0, 34.0, 90000)):
+    for (d0, d1, n) in ((1.0, 6.0, 9000), (6.0, 9.0, 4000)):
         # sample uniformly in the frustum wedge area
         u = np_rng.uniform(0, 1, n)
         r = np.sqrt(d0 * d0 + u * (d1 * d1 - d0 * d0))
@@ -818,14 +881,14 @@ def flower_mats():
     vein = N.new("ShaderNodeMapRange"); vein.inputs["From Min"].default_value = 0.02; vein.inputs["From Max"].default_value = 0.2
     L.new(sep.outputs["Y"], vein.inputs["Value"])
     base_ramp = N.new("ShaderNodeValToRGB"); e = base_ramp.color_ramp.elements
-    e[0].position, e[0].color = 0.0, (0.75, 0.75, 0.98, 1)        # pale centre
-    e[1].position, e[1].color = 1.0, (0.50, 0.44, 0.95, 1)
-    el = e.new(0.30); el.color = (0.40, 0.33, 0.90, 1)
+    e[0].position, e[0].color = 0.0, (0.55, 0.57, 0.85, 1)        # pale centre
+    e[1].position, e[1].color = 1.0, (0.27, 0.30, 0.62, 1)
+    el = e.new(0.30); el.color = (0.17, 0.19, 0.50, 1)
     L.new(sep.outputs["X"], base_ramp.inputs["Fac"])
     var = N.new("ShaderNodeValToRGB"); e = var.color_ramp.elements       # per-flower tint: blue .. violet .. deep purple
-    e[0].color = (0.80, 0.92, 1.0, 1); e[1].color = (0.22, 0.12, 0.42, 1)
-    el = e.new(0.40); el.color = (1.0, 0.95, 1.0, 1)
-    el = e.new(0.68); el.color = (0.55, 0.38, 0.85, 1)
+    e[0].color = (1.2, 1.2, 1.1, 1); e[1].color = (0.32, 0.28, 0.58, 1)     # lavender .. periwinkle .. deep indigo
+    el = e.new(0.25); el.color = (1.0, 1.0, 1.0, 1)
+    el = e.new(0.6); el.color = (0.62, 0.45, 0.80, 1)
     L.new(oi.outputs["Random"], var.inputs["Fac"])
     tint = N.new("ShaderNodeMix"); tint.data_type = "RGBA"; tint.blend_type = "MULTIPLY"; tint.inputs["Factor"].default_value = 1.0
     L.new(base_ramp.outputs["Color"], tint.inputs[6]); L.new(var.outputs["Color"], tint.inputs[7])
@@ -839,8 +902,8 @@ def flower_mats():
     mx = N.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.25
     out = N["Material Output"]
     L.new(b.outputs[0], mx.inputs[1]); L.new(tr.outputs[0], mx.inputs[2]); L.new(mx.outputs[0], out.inputs["Surface"])
-    stem = flat("Stem", (0.07, 0.20, 0.03), 0.6, sss=0.0)
-    leafm = ramp_mat("FlowerLeaf", [(0.3, (0.04, 0.13, 0.02)), (0.7, (0.12, 0.30, 0.04))], coord="Object",
+    stem = flat("Stem", (0.04, 0.13, 0.025), 0.6, sss=0.0)
+    leafm = ramp_mat("FlowerLeaf", [(0.3, (0.02, 0.07, 0.02)), (0.7, (0.06, 0.18, 0.03))], coord="Object",
                      noise_scale=4.0, rough=0.55, random_mix=0.6)
     centre = flat("BellCentre", (0.85, 0.85, 0.7), 0.5)
     bud = flat("BellBud", (0.38, 0.40, 0.90), 0.45)
@@ -992,20 +1055,34 @@ def scatter_flowers(protos):
     # bed: 0.7 - 7 m, denser near the bottom of frame
     n = 1000
     u = np_rng.uniform(0, 1, n)
-    r = 1.05 + 4.8 * u ** 1.1
     a = np_rng.uniform(-0.5, 0.5, n)
+    rmax = np.interp(a, [-0.5, -0.3, -0.12, 0.5], [5.8, 5.6, 4.3, 4.4])     # bed reaches farther on the left
+    r = 1.05 + (rmax - 1.05) * u ** 1.1
     x = r * np.sin(a); y = r * np.cos(a); z = height(x, y)
     keep = in_frustum(x, y, z + 0.4, 0.05)
     x, y, z, r = x[keep], y[keep], z[keep], r[keep]
     nb = len(protos["bell"].objects); ny = len(protos["small"].objects)
-    is_yellow = np_rng.uniform(0, 1, len(x)) < 0.22
+    is_yellow = np_rng.uniform(0, 1, len(x)) < 0.09
     pick = np.where(is_yellow, nb + np_rng.integers(0, ny, len(x)), np_rng.integers(0, nb, len(x)))
-    scl = np_rng.uniform(0.8, 1.1, len(x))
+    scl = np_rng.uniform(0.7, 1.25, len(x)) * np.where(r < 2.0, 1.3, 1.0)
     rots = np.stack([np_rng.normal(0, 0.08, len(x)), np_rng.normal(0, 0.08, len(x)),
                      np.arctan2(x, y) * 0.8 + np_rng.normal(0, 0.35, len(x))], 1)   # turn blooms toward the camera
     pts = np.stack([x, y, z - 0.01], 1)
     print("bed plants", len(x))
     scatter_object("FlowerBed", pts, rots, scl, pick, protos["bed"])
+    # sparse yellow flowers and stray bellflowers just behind the bed (4-9 m), in clumps
+    n = 900
+    u = np_rng.uniform(0, 1, n); a = np_rng.uniform(-0.5, 0.5, n)
+    r = 4.0 + 5.0 * u
+    x = r * np.sin(a); y = r * np.cos(a); z = height(x, y)
+    clump = np.array([noise.noise(Vector((p / 1.5, q / 1.5, 7.7))) for p, q in zip(x, y)]) > 0.1
+    keep = in_frustum(x, y, z + 0.3, 0.05) & clump
+    x, y, z = x[keep], y[keep], z[keep]
+    is_y = np_rng.uniform(0, 1, len(x)) < 0.7
+    pick = np.where(is_y, nb + np_rng.integers(0, ny, len(x)), np_rng.integers(0, nb, len(x)))
+    rots = np.stack([np.zeros(len(x)), np.zeros(len(x)), np.arctan2(x, y) * 0.8 + np_rng.normal(0, 0.4, len(x))], 1)
+    print("behind-bed plants", len(x))
+    scatter_object("FlowerFringe", np.stack([x, y, z - 0.01], 1), rots, np_rng.uniform(0.8, 1.2, len(x)), pick, protos["bed"])
     # wildflower dots on the slopes (white and yellow), in patches
     n = 30000
     u = np_rng.uniform(0, 1, n); r = np.sqrt(64 + u * (110 ** 2 - 64)); a = np_rng.uniform(-0.45, 0.45, n)
@@ -1106,6 +1183,8 @@ def build_camera():
     cd.shift_y = 0.0
     cam = bpy.data.objects.new("Cam", cd); link(cam)
     cam.location = (0, 0, CAM_Z)
+    if A.fstop > 0:
+        cd.dof.use_dof = True; cd.dof.focus_distance = 29.0; cd.dof.aperture_fstop = A.fstop; cd.dof.aperture_blades = 6
     cam.rotation_euler = (math.radians(90.0), 0, 0)
     bpy.context.scene.camera = cam
     return cam
@@ -1125,33 +1204,35 @@ def render_setup():
         sc.cycles.transmission_bounces = 2; sc.cycles.transparent_max_bounces = 6
         sc.cycles.use_adaptive_sampling = True
         sc.render.threads_mode = "FIXED"; sc.render.threads = 4
-    sc.view_settings.view_transform = "AgX"
+    sc.view_settings.view_transform = VIEW
     try:
-        sc.view_settings.look = "AgX - Punchy"
+        sc.view_settings.look = "AgX - Punchy" if VIEW == "AgX" else "None"
     except Exception:
         pass
-    sc.view_settings.exposure = 0.0
+    sc.view_settings.exposure = -0.25 if VIEW == "Standard" else 0.0
     sc.render.image_settings.file_format = "PNG"
     sc.frame_set(A.frame)
 
 def compositor():
+    """Mild bloom on the sky glare and a small saturation lift (CPU compositor)."""
     sc = bpy.context.scene
     ng = bpy.data.node_groups.new("OpeningComp", "CompositorNodeTree")
     ng.interface.new_socket("Image", in_out="OUTPUT", socket_type="NodeSocketColor")
     N, L = ng.nodes, ng.links
     rl = N.new("CompositorNodeRLayers")
-    rays = N.new("CompositorNodeGlare"); rays.mute = True
-    rays.inputs["Type"].default_value = "Sun Beams"
-    rays.inputs["Sun Position"].default_value = (0.97, 1.05)
-    rays.inputs["Threshold"].default_value = 0.4; rays.inputs["Strength"].default_value = 0.8
-    rays.inputs["Size"].default_value = 0.6
-    L.new(rl.outputs["Image"], rays.inputs["Image"])
     bloom = N.new("CompositorNodeGlare")
     bloom.inputs["Type"].default_value = "Bloom"
-    bloom.inputs["Threshold"].default_value = 0.9; bloom.inputs["Strength"].default_value = 0.25; bloom.inputs["Size"].default_value = 0.5
-    L.new(rays.outputs["Image"], bloom.inputs["Image"])
+    bloom.inputs["Threshold"].default_value = 0.85; bloom.inputs["Strength"].default_value = 0.35; bloom.inputs["Size"].default_value = 0.6
+    L.new(rl.outputs["Image"], bloom.inputs["Image"])
+    last = bloom.outputs["Image"]
+    try:
+        hs = N.new("CompositorNodeHueSat")
+        hs.inputs["Saturation"].default_value = 1.0
+        L.new(last, hs.inputs["Image"]); last = hs.outputs["Image"]
+    except Exception as ex:
+        print("no huesat", ex)
     out = N.new("NodeGroupOutput")
-    L.new(bloom.outputs["Image"], out.inputs[0])
+    L.new(last, out.inputs[0])
     sc.compositing_node_group = ng
     try:
         sc.render.compositor_device = "CPU"          # the GPU compositor needs EGL, unavailable headless
@@ -1214,7 +1295,7 @@ def build_beams():
 def build_characters(trunk, base):
     sys.path.insert(0, HERE)
     import characters as C
-    facing = 0.75
+    facing = 1.05
     eren, mik, f1, f2 = C.place_opening(base, 0.6, facing, trunk=trunk, start=A.frame - 60)
     # place_opening assumes flat ground at the trunk base; drop them onto the slope
     bpy.context.view_layer.update()
@@ -1239,15 +1320,24 @@ def build_characters(trunk, base):
 
 # ------------------------------------------------------------------ line art (optional)
 def lineart():
-    gp = bpy.data.grease_pencils.new("LineArt") if hasattr(bpy.data, "grease_pencils") else None
-    try:
-        bpy.ops.object.grease_pencil_add(type="LINEART_SCENE")
-        ob = bpy.context.active_object
-        md = ob.modifiers[0] if ob.modifiers else None
-        if md:
-            md.thickness = 1
-    except Exception as ex:
-        print("line art failed", ex)
+    """Thin dark blue-grey Line Art on trunk, kids, wall and windmills only (Grease Pencil v3).
+    Needs a GPU/EGL context to render, so it cannot be previewed headless here."""
+    sc = bpy.context.scene
+    src = bpy.data.collections.new("LineArtSrc"); sc.collection.children.link(src)
+    for ob in bpy.data.objects:
+        if ob.name.startswith(("Tree_trunk", "Eren", "Mikasa", "Firewood", "WallMaria", "WallTower", "Farms")) and ob.type == "MESH":
+            src.objects.link(ob)
+    gpd = bpy.data.grease_pencils.new("LineArt")
+    ob = bpy.data.objects.new("LineArt", gpd); sc.collection.objects.link(ob)
+    gpd.layers.new("Lines")
+    mat = bpy.data.materials.new("LineArtInk"); bpy.data.materials.create_gpencil_data(mat)
+    mat.grease_pencil.color = (0.05, 0.07, 0.12, 0.85)
+    gpd.materials.append(mat)
+    md = ob.modifiers.new("lineart", "LINEART")
+    md.source_type = "COLLECTION"; md.source_collection = src
+    md.target_layer = "Lines"; md.target_material = mat
+    md.radius = 0.0015; md.opacity = 0.8
+    md.use_intersection = False; md.use_crease = False
 
 # ------------------------------------------------------------------ main
 def main():
@@ -1278,9 +1368,12 @@ def main():
         w = bpy.data.objects.get("ValleyWoods")
         if w:
             leafy(w, protos, 3.0, 2.0, "ValleyWoods_leaves", coll="leaf_dark")
+        cy = bpy.data.objects.get("Cypresses")
+        if cy:
+            leafy(cy, protos, 2.0, 1.8, "Conifer_leaves", coll="leaf_dark")
         if not A.no_chars:
             build_characters(trunk, base)
-        scatter_grass(protos, avoid=[(-0.25, 8.4, 1.0), (TREE.x, TREE.y, 1.0), (TREE.x + 1.4, TREE.y - 1.5, 1.4), (TREE.x + 2.8, TREE.y - 1.4, 1.0)])
+        scatter_grass(protos, avoid=[(-0.25, 8.4, 1.0)])
         scatter_flowers(protos)
     build_beams()
     if A.lineart:
