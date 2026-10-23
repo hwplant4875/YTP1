@@ -3,6 +3,7 @@
 import bpy, sys, os, math, random
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from cat_lib import *
+from cat_lib import _fcurves
 
 # shot: (start s, end s) on the narration timeline; each shot renders 0.5 s extra for the dissolve
 SHOTS = {
@@ -18,6 +19,10 @@ SHOTS = {
     'SH10_roots':        (73.7, 85.3),
     'SH11_collapse':     (85.3, 100.7),
     'SH12_pillars':      (100.7, 109.2),
+    # second half (lengths only; placed by assemble)
+    'SH13_candle':       (0.0, 13.8),
+    'SH14_keys':         (0.0, 8.0),
+    'SH15_map':          (0.0, 15.0),
 }
 
 
@@ -391,7 +396,6 @@ def sh_collapse(n):
         key(d, 'location', [(f0, d.location.copy()), (int(f0 + 6 + ds * 30), d.location + __import__('mathutils').Vector((rng.uniform(-1, 1), 0, -8.5)))])
     camera([(0, (10, -30, 6)), (f0, (9, -29, 5)), (f1 + 10, (7, -27, 0)), (n - 1, (16, -46, 6))], lens=32,
            target_keys=[(0, (0, -7, 1)), (f0, (0, -7, 0)), (f1 + 10, (0, -7, -5)), (n - 1, (0, 0, -6))], shake=0.0)
-    from cat_lib import _fcurves
     camshake = bpy.context.scene.camera
     for fc in _fcurves(camshake.animation_data.action):
         mod = fc.modifiers.new('NOISE'); mod.scale = 3; mod.strength = 0.25
@@ -441,10 +445,138 @@ def sh_shaft(n):
            target_keys=[(0, (0, 4, 1.5)), (n - 1, (0, 4, 3.2))])
 
 
+# ---------------------------------------------------------------- SH13 lost with a candle (Aspairt, 1793)
+def candle_rig(cam, n, out_frame):
+    wax = mat('wax', (0.92, 0.88, 0.78), 0.4)
+    c = cyl((0, 0, 0), 0.016, 0.12, wax, rot=(math.pi / 2, 0, 0), verts=16, name='candle'); c.parent = cam; c.location = (0.16, -0.27, -0.7)
+    flame = sphere((0, 0, 0), 0.008, emit_mat('flame', (1.0, 0.55, 0.15), 18), 12); flame.parent = cam
+    flame.location = (0.16, -0.2, -0.7); flame.scale = (1, 2.4, 1)
+    lt = point((0, 0, 0), 25, (1, 0.62, 0.3), 0.02); lt.parent = cam; lt.location = (0.16, -0.17, -0.66)
+    key(lt.data, 'energy', [(0, 25), (out_frame - 14, 22), (out_frame - 4, 6), (out_frame, 0), (n - 1, 0)])
+    key(flame, 'scale', [(0, (1, 2.4, 1)), (out_frame - 14, (1, 2.2, 1)), (out_frame, (0.01, 0.01, 0.01)), (n - 1, (0.01, 0.01, 0.01))])
+    for fc in _fcurves(lt.data.animation_data.action):
+        m = fc.modifiers.new('NOISE'); m.scale = 2; m.strength = 6
+        m.use_restricted_range = True; m.frame_start = 0; m.frame_end = out_frame - 14
+    return lt
+
+
+def sh_candle(n):
+    world_color((0, 0, 0), 0)
+    # a corridor with side passages vanishing into the dark
+    L = 34
+    LIME = ph_mat('rockpale', 'rock_wall_02', 0.5, (1.25, 1.15, 0.95))
+    box((0, L / 2, -0.1), (2.8, L, 0.2), ph_mat('gravel', 'gravel_floor', 0.6, (0.75, 0.7, 0.62)), 'floor')
+    rocky(box((0, L / 2, 2.4), (3.6, L, 0.6), LIME, 'ceil'), 0.12, 1.2, 3)
+    for side in (-1, 1):
+        y = 0
+        gaps = [9, 21] if side < 0 else [14, 27]
+        for g in gaps + [L]:
+            seg = g - y - (0 if g == L else 1.2)
+            if seg > 0:
+                rocky(box((side * 1.25, y + seg / 2, 1.05), (0.5, seg, 2.5), LIME, 'wall'), 0.15, 1.3, 3)
+            if g != L:
+                # side passage: two walls and a ceiling going off into black
+                for dy in (0, 1.2):
+                    rocky(box((side * 4.5, g - 1.2 + dy + (0.25 if dy else -0.25), 1.05), (6.5, 0.5, 2.5), LIME, 'pwall'), 0.15, 1.3, 3)
+                box((side * 4.5, g - 0.6, -0.1), (6.5, 1.4, 0.2), ph_mat('gravel', 'gravel_floor', 0.6, (0.75, 0.7, 0.62)), 'pfloor')
+            y = g
+    fog((3.2, L, 3), (0, L / 2, 1.2), 0.01, (1, 0.9, 0.8))
+    out = int(n - 1.5 * FPS)
+    cam = camera([(0, (0.1, 0.5, 1.45)), (int(n * 0.45), (0.0, 7.0, 1.42)), (out, (-0.1, 13.0, 1.4)), (n - 1, (-0.1, 13.8, 1.4))], lens=26,
+                 target_keys=[(0, (0.0, 10, 1.3)), (int(n * 0.3), (-1.5, 10, 1.3)), (int(n * 0.6), (0.3, 18, 1.2)), (n - 1, (2.0, 18, 1.1))])
+    for fc in _fcurves(cam.animation_data.action):
+        m = fc.modifiers.new('NOISE'); m.scale = 30; m.strength = 0.03
+    candle_rig(cam, n, out)
+
+
+# ---------------------------------------------------------------- SH14 the keys on his belt
+def old_key(loc, rot_z, iron):
+    o = []
+    bpy.ops.mesh.primitive_torus_add(location=(0, 0, 0), major_radius=0.014, minor_radius=0.003); o.append(bpy.context.object)
+    o.append(cyl((0.068, 0, 0), 0.0032, 0.11, None, rot=(0, math.pi / 2, 0), verts=10))
+    o.append(box((0.118, -0.012, 0), (0.014, 0.022, 0.008)))
+    o.append(box((0.098, -0.010, 0), (0.008, 0.018, 0.008)))
+    for ob in o:
+        ob.data.materials.clear(); ob.data.materials.append(iron)
+    bpy.ops.object.select_all(action='DESELECT')
+    for ob in o: ob.select_set(True)
+    bpy.context.view_layer.objects.active = o[0]; bpy.ops.object.join()
+    k = bpy.context.object; k.location = loc; k.rotation_euler = (math.radians(90) * 0, 0, rot_z)
+    return k
+
+
+def sh_keys(n):
+    world_color((0, 0, 0), 0)
+    iron = ph_mat('rustiron', 'rusty_metal_02', 6.0, (0.45, 0.36, 0.3), 1.0)
+    box((0, 0, -0.1), (6, 8, 0.2), ph_mat('finegravel', 'gravel_floor', 3.0, (0.55, 0.5, 0.44)), 'floor')
+    rocky(box((0.75, 0, 1.2), (0.5, 8, 2.6), LIME, 'wall'), 0.12, 1.2, 3)
+    bpy.ops.mesh.primitive_torus_add(location=(0, 0, 0.006), major_radius=0.04, minor_radius=0.003)
+    ring = bpy.context.object; ring.data.materials.append(iron); ring.rotation_euler = (0.06, 0.02, 0)
+    for i, a in enumerate((0.3, 1.5, 2.6)):
+        old_key((0.04 * math.cos(a), 0.04 * math.sin(a), 0.008 + i * 0.002), a, iron)
+    fog((3, 3, 1.5), (0, 0, 0.6), 0.04, (1, 0.95, 0.85))
+    cam = camera([(0, (-0.55, -0.7, 0.55)), (n - 1, (-0.22, -0.3, 0.26))], lens=50,
+                 target_keys=[(0, (-0.2, 0.1, 0.0)), (int(n * 0.35), (0.0, 0.0, 0.0)), (n - 1, (0.02, 0.0, 0.0))])
+    beam = spot((-1.6, -1.2, 1.3), 260, (1, 0.93, 0.8), 18, 0.5)
+    beam.constraints.new('TRACK_TO').target = bpy.data.objects['cam_target']
+    beam.constraints[0].track_axis = 'TRACK_NEGATIVE_Z'; beam.constraints[0].up_axis = 'UP_Y'
+    key(beam.data, 'energy', [(0, 0), (8, 0), (14, 260)])
+    point((0.3, 1.5, 1.8), 15, (1, 0.6, 0.3), 0.3)
+
+
+# ---------------------------------------------------------------- SH15 the network under Paris (map)
+def glow_curve(pts_list, name, m, depth, grow=None):
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = depth; cu.bevel_resolution = 2
+    for pts in pts_list:
+        sp = cu.splines.new('POLY'); sp.points.add(len(pts) - 1)
+        for i, (x, y) in enumerate(pts): sp.points[i].co = (x, y, 0.02, 1)
+    o = bpy.data.objects.new(name, cu); bpy.context.collection.objects.link(o); cu.materials.append(m)
+    if grow:
+        cu.bevel_factor_mapping_end = 'SPLINE'
+        key(cu, 'bevel_factor_end', [(0, 0.0), (grow[0], 0.0), (grow[1], 1.0)])
+    return o
+
+
+def sh_map(n):
+    world_color((0.01, 0.012, 0.018), 1.0)
+    box((0, 0, -0.05), (40, 40, 0.1), mat('mapground', (0.035, 0.04, 0.05), 0.9), 'ground')
+    # city limits (the Peripherique ring)
+    ring = [(5.6 * math.cos(t / 60 * 2 * math.pi), 4.4 * math.sin(t / 60 * 2 * math.pi) - 0.3) for t in range(61)]
+    glow_curve([ring], 'peri', emit_mat('peri', (0.6, 0.65, 0.75), 1.2), 0.02)
+    seine = [(-5.8, -1.3), (-4.6, -0.9), (-3.5, -0.2), (-2.4, 0.5), (-1.2, 0.85), (0.0, 0.7), (1.1, 0.2), (2.2, -0.4), (3.3, -1.1), (4.4, -1.8), (5.8, -2.6)]
+    glow_curve([seine], 'seine', emit_mat('seine', (0.15, 0.4, 1.0), 3.0), 0.07)
+    city = cyl((0, -0.3, -0.01), 1.0, 0.02, mat('cityfill', (0.07, 0.075, 0.09), 0.9), verts=64, name='cityfill')
+    city.scale = (5.6, 4.4, 1)
+    sphere((-2.0, 0.15, 0.05), 0.07, emit_mat('eiffeldot', (1, 0.75, 0.3), 6))
+    # quarry network south of the river: random walks, drawn in waves
+    net = emit_mat('tunnelnet', (1.0, 0.32, 0.03), 2.2)
+    rng = random.Random(5)
+    t0, t1 = int(n * 0.30), int(n * 0.85)
+    for g in range(14):
+        walks = []
+        for w in range(6):
+            x, y = rng.uniform(-3.8, 3.0), rng.uniform(-3.9, -0.9)
+            pts = [(x, y)]; ang = rng.uniform(0, 2 * math.pi)
+            for st in range(rng.randint(5, 12)):
+                ang += rng.uniform(-0.9, 0.9); step = rng.uniform(0.12, 0.3)
+                x = max(-4.6, min(4.0, x + step * math.cos(ang))); y = max(-4.3, min(-0.5, y + step * math.sin(ang)))
+                pts.append((x, y))
+            walks.append(pts)
+        a = t0 + int((t1 - t0) * g / 14)
+        glow_curve(walks, f'net{g}', net, 0.018, (a, a + 30))
+    # the tourist route at Denfert (about 1.5 km), first and brightest
+    tour = [(0.3, -2.2), (0.42, -2.3), (0.5, -2.45), (0.62, -2.5), (0.75, -2.62), (0.82, -2.78)]
+    glow_curve([tour], 'tour', emit_mat('tour', (1.0, 0.03, 0.02), 4.0), 0.04, (0, 30))
+    sphere((0.3, -2.2, 0.06), 0.06, emit_mat('denfert', (1, 1, 1), 8))
+    camera([(0, (0.55, -2.9, 2.2)), (int(n * 0.28), (0.5, -2.8, 3.0)), (n - 1, (-0.4, -2.0, 11.5))], lens=35,
+           target_keys=[(0, (0.55, -2.5, 0)), (int(n * 0.28), (0.5, -2.4, 0)), (n - 1, (-0.4, -1.1, 0))])
+
+
 BUILDERS = {
     'SH01_street': sh_street, 'SH02_tunnel_sign': sh_tunnel_sign, 'SH03_cinema': sh_cinema, 'SH04_screen': sh_screen,
     'SH05_cinema_dark': sh_cinema_dark, 'SH06_descent': sh_descent, 'SH07_stone': sh_stone, 'SH08_sea': sh_sea,
     'SH09_shaft': sh_shaft, 'SH10_roots': sh_roots, 'SH11_collapse': sh_collapse, 'SH12_pillars': sh_pillars,
+    'SH13_candle': sh_candle, 'SH14_keys': sh_keys, 'SH15_map': sh_map,
 }
 
 if __name__ == '__main__':
