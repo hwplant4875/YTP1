@@ -56,11 +56,11 @@ def _centroid(pts):
 
 # ---------------------------------------------------------------- 1. proportions (baked into rest pose)
 SCALES = {
-    "head": (0.95, 0.78, 0.86),
+    "head": (1.05, 0.80, 0.90),
     "upperleg01.L": (1.35, 0.93, 1.3), "upperleg01.R": (1.35, 0.93, 1.3), "upperleg02.L": (1.3, 0.93, 1.25), "upperleg02.R": (1.3, 0.93, 1.25),
     "lowerleg01.L": (1.2, 0.93, 1.2), "lowerleg01.R": (1.2, 0.93, 1.2), "lowerleg02.L": (1.1, 0.93, 1.1), "lowerleg02.R": (1.1, 0.93, 1.1),
     "spine03": (1.05, 1.0, 1.0), "pelvis.L": (1.1, 1.0, 1.0), "pelvis.R": (1.1, 1.0, 1.0),
-    "neck01": (1.62, 1.4, 1.4), "neck02": (1.52, 1.4, 1.32), "neck03": (1.32, 1.3, 1.2),
+    "neck01": (1.62, 2.1, 1.4), "neck02": (1.52, 2.1, 1.32), "neck03": (1.32, 1.9, 1.2),
     "spine01": (1.16, 1.06, 1.05), "spine02": (1.08, 1.04, 1.0),
     "spine04": (0.9, 1.04, 0.95), "spine05": (0.92, 1.0, 0.95),
     "clavicle.L": (1.15, 1.45, 1.15), "clavicle.R": (1.15, 1.45, 1.15),
@@ -148,7 +148,7 @@ def _sculpt(body, rig):
     lips_idx = body.vertex_groups["lips"].index if "lips" in body.vertex_groups else -1
     # trapezius: fill the neck-shoulder corner so the neck slopes into the shoulders
     zc = rig.data.bones["clavicle.L"].head_local.z
-    zn = rig.data.bones["neck02"].head_local.z
+    zn = rig.data.bones["neck03"].head_local.z
     shx = rig.data.bones["shoulder01.L"].tail_local.x
     for i, v in enumerate(me.vertices):
         p = v.co; n = nrm[i]
@@ -156,7 +156,7 @@ def _sculpt(body, rig):
             ax = abs(p.x)
             t = _cl(1 - abs(ax - 0.42 * shx) / (0.5 * shx))
             f = _ss(zn + 0.04, zc + 0.04, p.z) * _ss(zc - 0.02, zc + 0.02, p.z)
-            v.co = p + n * (0.05 * t * t * f) + Vector((0, 0, 0.022 * t * f))
+            v.co = p + n * (0.085 * t * t * f) + Vector((0, 0, 0.03 * t * f))
     for i, v in enumerate(me.vertices):
         h = hd[i]
         if h <= 0.001:
@@ -167,7 +167,9 @@ def _sculpt(body, rig):
         front = _ss(0.05, 0.45, -n.y)
         d = Vector((0, 0, 0))
         # long lower face: stretch everything below the cheekbones downward
-        d.z -= 0.42 * U * _ss(-0.2, -1.0, vv) + 0.80 * U * _ss(-1.0, -1.7, vv)
+        d.z -= 0.50 * U * _ss(-0.2, -1.0, vv) + 0.85 * U * _ss(-1.0, -1.7, vv)
+        # lower, smoother skull: compress everything above the brow
+        d.z -= 0.30 * U * max(0.0, vv - 0.45) / (1.0 + 0.3 * max(0.0, vv - 0.45))
         # heavy brow ridge (front band just above the eyes)
         brow = math.exp(-((vv - 0.36) / 0.16) ** 2) * _ss(1.45, 0.9, au) * front
         d.y -= 0.34 * U * brow
@@ -175,12 +177,15 @@ def _sculpt(body, rig):
         # deep-set eyes: push the socket area back
         for ec in (F.eyeL, F.eyeR):
             r = math.hypot((p.x - ec.x) / U, (p.z - ec.z) / U)
-            d.y += 0.20 * U * math.exp(-(r / 0.30) ** 2) * front
+            d.y += 0.26 * U * math.exp(-(r / 0.40) ** 2) * front
         # cheekbones out, cheeks hollow below them
         cb = math.exp(-((au - 0.95) / 0.30) ** 2 - ((vv + 0.30) / 0.16) ** 2)
         d += n * (0.07 * U * cb)
         hol = math.exp(-((au - 0.78) / 0.30) ** 2 - ((vv + 0.80) / 0.30) ** 2) * front
-        d -= n * (0.11 * U * hol)
+        d -= n * (0.05 * U * hol)
+        # masseter: big bulging cheek bundle from the cheekbone down to the jaw angle
+        mas = math.exp(-((au - 1.05) / 0.30) ** 2 - ((vv + 1.15) / 0.45) ** 2)
+        d += n * (0.12 * U * mas)
         # flatten the nose to a skull-like nasal area
         nose = _ss(0.42, 0.16, au) * _ss(0.15, -0.05, vv) * _ss(-0.95, -0.7, vv)
         if nose > 0 and w < -0.30:
@@ -190,29 +195,31 @@ def _sculpt(body, rig):
         d.y += 0.09 * U * lw
         # prognathic mouth: teeth and muzzle push forward (anime profile)
         muz = math.exp(-((vv + 1.05) / 0.45) ** 2) * _ss(0.95, 0.3, au) * front
-        d.y -= 0.32 * U * muz
+        d.y -= 0.22 * U * muz
         # strong prominent chin and wide jaw
-        chin = _ss(-1.15, -1.55, vv) * front * _ss(0.8, 0.2, au)
-        d.y -= 0.07 * U * chin
+        chin = _ss(-1.15, -1.55, vv) * front * _ss(1.0, 0.3, au)
+        d.y -= 0.20 * U * chin
         jaw = _ss(-0.7, -1.3, vv) * _ss(0.4, 0.9, au)
         d.x += sx * 0.22 * U * jaw
         # wide face: broad cheekbones and jaw (S1E1 front view)
         d.x += p.x * (0.12 + 0.30 * _ss(0.3, -0.4, vv) + 0.10 * _ss(-0.2, 0.6, vv))
         d.x += p.x * 0.16 * math.exp(-((vv + 0.55) / 0.40) ** 2)       # broad cheekbones
         # domed cranium: taper the top of the (rectangular) skull toward the vertical axis
-        tp = _ss(0.35, 2.3, vv) ** 1.4
-        d.x -= p.x * 0.38 * tp
-        d.y -= (p.y - (F.eye.y + 0.9 * U)) * 0.30 * tp
+        tp = _ss(0.15, 1.9, vv) ** 1.2
+        d.x -= p.x * 0.62 * tp
+        d.y -= (p.y - (F.eye.y + 0.9 * U)) * 0.38 * tp
+        # occiput: the back of the skull bulges back past the neck
+        A0 = math.atan2(abs(p.x), -(p.y - (F.eye.y + 0.9 * U)))
+        d.y += 0.22 * U * _ss(1.9, 2.6, A0) * math.exp(-((vv - 0.35) / 0.55) ** 2)
         # temporalis bulges on the sides of the dome
         A_ = math.atan2(abs(p.x), -(p.y - (F.eye.y + 0.9 * U)))
         d += n * (0.08 * U * math.exp(-((A_ - 1.3) / 0.55) ** 2 - ((vv - 0.6) / 0.6) ** 2))
         # tall bald cranium
-        d.z += 0.06 * U * _ss(0.6, 1.9, vv)
         # shrink ears toward their root
         if earw[i] > 0.0 and sx in earc:
             c = earc[sx]
             root = Vector((c.x * 0.86, c.y, c.z))
-            d += (root - p) * (0.38 * earw[i])
+            d += (root - p) * (0.62 * earw[i])
         v.co = p + d * h
 
 # ---------------------------------------------------------------- 4. teeth + eyes (added to the body mesh)
@@ -277,7 +284,7 @@ def _add_parts(body, rig):
     for sgn in (1, -1):
         a = 0.0; k = 0
         while k < len(WID):
-            wdt = WID[k] * U * 1.12
+            wdt = WID[k] * U * 1.35
             loc0, _ = surface(0.0 if k == 0 else a, mz)
             r_loc = (Vector((loc0.x, loc0.y - yc, 0)).length if loc0 else 1.1 * U)
             ac = a + (wdt / 2) / r_loc
@@ -285,7 +292,7 @@ def _add_parts(body, rig):
                 break
             curve = 0.08 * U * (ac / a_end) ** 2           # bite line rises slightly toward the back
             for row, grp in ((1, g_head), (-1, g_jaw)):
-                hgt = HGT[k] * U * 1.2 * (0.92 if row < 0 else 1.0)
+                hgt = HGT[k] * U * 1.6 * (0.92 if row < 0 else 1.0)
                 zc = mz + curve + row * (hgt / 2 + 0.004 * U)
                 loc, nr = surface(sgn * ac, zc)
                 if loc is None:
@@ -300,8 +307,8 @@ def _add_parts(body, rig):
     # eyeballs: small, deep in the sockets, no lids
     eye_pts = []
     for ec, gname in ((F.eyeL, "head"), (F.eyeR, "head")):
-        r = 0.105 * U
-        c = Vector((ec.x * 1.0, ec.y + 0.12 * U, ec.z - 0.01 * U))
+        r = 0.16 * U
+        c = Vector((ec.x * 1.0, ec.y + 0.10 * U, ec.z - 0.01 * U))
         res = bmesh.ops.create_uvsphere(bm, u_segments=16, v_segments=10, radius=r)
         for vt in res["verts"]:
             eye_pts.append((vt.co.copy().normalized(), c))
@@ -462,20 +469,21 @@ def _paint(body, rig):
             pale = 0.0
             # cranium dome + forehead/brow strip (temporalis fans cut into it from the sides)
             dome = _ss(0.12, 0.24, vv)
-            dt = ((A - 1.30) / 0.80) ** 2 + ((vv - 0.62) / 0.95) ** 2     # temporalis fan
+            dt = ((A - 1.50) / 0.50) ** 2 + ((vv - 0.45) / 0.80) ** 2     # temporalis fan
             dtb = ((A - 2.55) / 0.36) ** 2 + ((vv - 0.70) / 0.48) ** 2    # red patches on the back of the skull
             temporalis = max(_cl((1 - dt) * 4), _cl((1 - dtb) * 4))
             pale = max(pale, dome * (1 - temporalis))
             # nose-bridge strip down to the nasal cavity
-            pale = max(pale, _ss(0.15, 0.11, A) * _ss(-0.80, -0.72, vv) * _ss(0.25, 0.15, vv))
+            pale = max(pale, _ss(0.15, 0.11, A) * _ss(-0.62, -0.56, vv) * _ss(0.25, 0.15, vv))
             # cheekbone ridge (zygomatic arch), from beside the nose back to the ear
             zl = -0.58 - 0.20 * (A - 0.40)
-            pale = max(pale, _ss(0.065, 0.04, abs(vv - zl)) * _ss(0.20, 0.30, A) * _ss(a_ear + 0.1, a_ear - 0.05, A))
+            pale = max(pale, _ss(0.10, 0.07, abs(vv - zl)) * _ss(0.20, 0.30, A) * _ss(a_ear + 0.1, a_ear - 0.05, A))
             # nasolabial band: from the nose wing down around the mouth corner
-            pale = max(pale, _ss(0.06, 0.035, abs(A - (0.30 + 0.10 * _cl((-0.72 - vv) / 0.5)))) * _ss(-0.62, -0.70, vv) * _ss(-1.45, -1.32, vv))
+            pale = max(pale, _ss(0.09, 0.06, abs(A - (0.34 + 0.14 * _cl((-0.62 - vv) / 0.8)))) * _ss(-0.55, -0.62, vv) * _ss(-1.50, -1.40, vv))
             # upper-lip band (between nasal cavity and upper gum) and lower-lip roll (below lower gum)
-            pale = max(pale, _ss(0.42, 0.34, A) * _ss(-0.70, -0.74, vv) * _ss(-0.84, -0.80, vv))
-            pale = max(pale, _ss(0.48, 0.40, A) * _ss(-1.20, -1.24, vv) * _ss(-1.34, -1.30, vv))
+            # (red gum bands sit directly above / below the teeth: vv -0.69..-0.75 and -1.24..-1.31)
+            pale = max(pale, _ss(0.46, 0.38, A) * _ss(-0.56, -0.60, vv) * _ss(-0.70, -0.67, vv))
+            pale = max(pale, _ss(0.52, 0.44, A) * _ss(-1.29, -1.33, vv) * _ss(-1.45, -1.41, vv))
             # jaw rim: mandible edge from chin to ear
             pale = max(pale, _ss(0.07, 0.045, abs(vv - (jaw_l - 0.06))) * _ss(a_ear + 0.05, a_ear - 0.1, A))
             # ears
@@ -485,7 +493,7 @@ def _paint(body, rig):
             for ec in (F.eyeL, F.eyeR):
                 r = math.hypot((x - ec.x) / U / 1.2, (z - ec.z - 0.05 * U) / U)
                 cav = max(cav, _ss(0.30, 0.17, r) * _ss(-0.2, 0.3, fr))
-            nas = (u / 0.16) ** 2 + ((vv + 0.66) / 0.13) ** 2
+            nas = (u / 0.15) ** 2 + ((vv + 0.50) / 0.14) ** 2
             cav = max(cav, _ss(1.0, 0.55, nas) * _ss(0, 0.3, fr))
             if fr > 0.2:      # dark vertical crease and star furrow at the brow centre
                 cav = max(cav, 0.6 * _ss(0.035, 0.01, abs(u)) * _ss(0.25, 0.4, vv) * _ss(1.0, 0.7, vv))
@@ -512,9 +520,10 @@ def _paint(body, rig):
             cav *= h
         if i >= body.get("eye_start", 10 ** 9):
             ce = F.eyeL if x > 0 else F.eyeR
-            dn = (p - Vector((ce.x, ce.y + 0.12 * U, ce.z - 0.01 * U))).normalized()
+            dn = (p - Vector((ce.x, ce.y + 0.10 * U, ce.z - 0.01 * U))).normalized()
             hd[i] = 1.0
-            white, phase, cav = 0.0, 0.0, (1.0 if dn.dot(Vector((-0.12 * (1 if x > 0 else -1), -1, 0.05)).normalized()) > 0.88 else 0.0)
+            dd = dn.dot(Vector((-0.12 * (1 if x > 0 else -1), -1, 0.05)).normalized())
+            white, phase, cav = 0.0, 0.0, (1.0 if dd > 0.975 else 0.5 if dd > 0.90 else 0.0)
         out.append((white, phase, cav, hd[i]))
     at = me.color_attributes.get("cmask") or me.color_attributes.new("cmask", "FLOAT_COLOR", "POINT")
     for i, (a, b, c, h) in enumerate(out):
@@ -522,16 +531,18 @@ def _paint(body, rig):
 
 # ---------------------------------------------------------------- 6. materials
 def _mat_body(name):
+    """Anime cel-like muscle: flat saturated red bundles, darker toward bundle edges, thin dark-red seams
+    between bundles, a few long bright specular strokes along the fibres; fibres only as a faint bump.
+    Pale fascia: smooth off-white with soft grey shading and a thin dark outline. Principled + procedural."""
     m = bpy.data.materials.new(name); m.use_nodes = True
     nt = m.node_tree; N = nt.nodes; L = nt.links; b = N["Principled BSDF"]
     at = N.new("ShaderNodeAttribute"); at.attribute_name = "cmask"; at.attribute_type = "GEOMETRY"
     sep = N.new("ShaderNodeSeparateColor"); L.new(at.outputs["Color"], sep.inputs[0])
     tc = N.new("ShaderNodeAttribute"); tc.attribute_name = "crest"; tc.attribute_type = "GEOMETRY"   # rest position
-    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 30; nz.inputs["Detail"].default_value = 4
-    L.new(tc.outputs["Vector"], nz.inputs["Vector"])
-    nz2 = N.new("ShaderNodeTexNoise"); nz2.inputs["Scale"].default_value = 220; nz2.inputs["Detail"].default_value = 2
-    L.new(tc.outputs["Vector"], nz2.inputs["Vector"])
-    def math_(op, a, bb=None, v=None):
+    def noise(scale, detail=3):
+        n = N.new("ShaderNodeTexNoise"); n.inputs["Scale"].default_value = scale; n.inputs["Detail"].default_value = detail
+        L.new(tc.outputs["Vector"], n.inputs["Vector"]); return n.outputs["Fac"]
+    def math_(op, a, bb=None):
         n = N.new("ShaderNodeMath"); n.operation = op
         for k, x in enumerate((a, bb)):
             if x is None:
@@ -541,51 +552,55 @@ def _mat_body(name):
             else:
                 L.new(x, n.inputs[k])
         return n.outputs[0]
-    # stripes = 0.5 + 0.5 sin(2pi*phase + jitter)
-    ph = math_("MULTIPLY", sep.outputs["Green"], 2 * math.pi)
-    jit = math_("MULTIPLY", math_("SUBTRACT", nz.outputs["Fac"], 0.5), 7.0)
-    s = math_("SINE", math_("ADD", ph, jit))
-    fib0 = math_("ADD", math_("MULTIPLY", s, 0.5), 0.5)
-    # body: softer streaks (0.5..1), face: full-contrast fibre lines
-    fbody = math_("ADD", math_("MULTIPLY", fib0, 0.85), 0.1)
-    fmix = N.new("ShaderNodeMix"); fmix.data_type = "FLOAT"
-    L.new(at.outputs["Alpha"], fmix.inputs["Factor"]); L.new(fbody, fmix.inputs["A"]); L.new(fib0, fmix.inputs["B"])
-    fib = fmix.outputs["Result"]
-    rp = N.new("ShaderNodeValToRGB"); e = rp.color_ramp.elements
-    e[0].position, e[0].color = 0.0, (0.112, 0.010, 0.007, 1)
-    e.new(0.16).color = (0.478, 0.051, 0.025, 1)
-    e.new(0.75).color = (0.56, 0.075, 0.04, 1)
-    e[-1].position, e[-1].color = 1.0, (0.80, 0.22, 0.13, 1)
-    L.new(fib, rp.inputs["Fac"])
-    # pale tendon / fascia with a noisy crisp edge
-    wn = N.new("ShaderNodeTexNoise"); wn.inputs["Scale"].default_value = 30; wn.inputs["Detail"].default_value = 4
-    L.new(tc.outputs["Vector"], wn.inputs["Vector"])
-    wj = math_("ADD", sep.outputs["Red"], math_("MULTIPLY", math_("SUBTRACT", wn.outputs["Fac"], 0.5), 0.08))
-    wm = N.new("ShaderNodeMapRange"); wm.inputs["From Min"].default_value = 0.46; wm.inputs["From Max"].default_value = 0.54
-    L.new(wj, wm.inputs["Value"]); W = wm.outputs["Result"]
-    wc = N.new("ShaderNodeValToRGB"); e = wc.color_ramp.elements
-    e[0].position, e[0].color = 0.25, (0.56, 0.43, 0.33, 1)
-    e[1].position, e[1].color = 0.6, (0.716, 0.565, 0.445, 1)
-    L.new(nz2.outputs["Fac"], wc.inputs["Fac"])
-    mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"
-    L.new(W, mx.inputs["Factor"]); L.new(rp.outputs["Color"], mx.inputs["A"]); L.new(wc.outputs["Color"], mx.inputs["B"])
-    cm = N.new("ShaderNodeMapRange"); cm.inputs["From Min"].default_value = 0.2; cm.inputs["From Max"].default_value = 0.7
-    L.new(sep.outputs["Blue"], cm.inputs["Value"])
-    mc = N.new("ShaderNodeMix"); mc.data_type = "RGBA"; mc.inputs["B"].default_value = (0.035, 0.016, 0.013, 1)
-    L.new(cm.outputs["Result"], mc.inputs["Factor"]); L.new(mx.outputs["Result"], mc.inputs["A"])
-    L.new(mc.outputs["Result"], b.inputs["Base Color"])
-    ro = N.new("ShaderNodeMapRange"); ro.inputs["To Min"].default_value = 0.32; ro.inputs["To Max"].default_value = 0.6
-    L.new(W, ro.inputs["Value"]); L.new(ro.outputs["Result"], b.inputs["Roughness"])
-    cw = N.new("ShaderNodeMapRange"); cw.inputs["To Min"].default_value = 0.8; cw.inputs["To Max"].default_value = 0.1
-    L.new(W, cw.inputs["Value"]); L.new(cw.outputs["Result"], b.inputs["Coat Weight"])
-    b.inputs["Coat Roughness"].default_value = 0.07
-    b.inputs["Subsurface Weight"].default_value = 0.08; b.inputs["Subsurface Radius"].default_value = (1, 0.2, 0.1)
-    # bump: fibre grooves on muscle, faint pores on fascia
+    def mrange(x, a0, a1, b0=0.0, b1=1.0):
+        n = N.new("ShaderNodeMapRange"); n.inputs["From Min"].default_value = a0; n.inputs["From Max"].default_value = a1
+        n.inputs["To Min"].default_value = b0; n.inputs["To Max"].default_value = b1
+        L.new(x, n.inputs["Value"]); return n.outputs["Result"]
+    def mix(f, A, B):
+        n = N.new("ShaderNodeMix"); n.data_type = "RGBA"
+        L.new(f, n.inputs["Factor"])
+        for k, x in (("A", A), ("B", B)):
+            if isinstance(x, tuple):
+                n.inputs[k].default_value = (*x, 1)
+            else:
+                L.new(x, n.inputs[k])
+        return n.outputs["Result"]
+    G = sep.outputs["Green"]
+    n_lo = noise(4.0, 2); n_md = noise(12.0, 3); n_hi = noise(30.0, 4)
+    TAU = 2 * math.pi
+    # fine fibres (bump only)
+    fine = math_("SINE", math_("ADD", math_("MULTIPLY", G, TAU), math_("MULTIPLY", math_("SUBTRACT", n_hi, 0.5), 3.0)))
+    # muscle bundles: every ~6 fibres a seam
+    gph = math_("ADD", math_("MULTIPLY", G, TAU / 6.0), math_("MULTIPLY", math_("SUBTRACT", n_lo, 0.5), 2.5))
+    gc = math_("COSINE", gph)
+    seam = mrange(gc, 0.955, 0.995)                       # thin dark seam line
+    edge = mrange(gc, 0.15, 0.95)                         # soft darkening toward the seam
+    # sparse long specular strokes along fibres
+    sph = math_("SINE", math_("ADD", math_("MULTIPLY", G, TAU * 0.5), math_("MULTIPLY", math_("SUBTRACT", n_md, 0.5), 2.0)))
+    stroke = math_("MULTIPLY", mrange(sph, 0.975, 0.998), mrange(n_lo, 0.50, 0.62))
+    red = mix(mrange(n_md, 0.3, 0.7), (0.50, 0.045, 0.026), (0.62, 0.065, 0.035))
+    red = mix(math_("MULTIPLY", edge, 0.75), red, (0.20, 0.016, 0.010))
+    red = mix(seam, red, (0.075, 0.006, 0.004))
+    red = mix(math_("MULTIPLY", stroke, 0.85), red, (1.0, 0.86, 0.66))
+    # pale fascia mask with a crisp, slightly wobbly edge
+    wj = math_("ADD", sep.outputs["Red"], math_("MULTIPLY", math_("SUBTRACT", n_md, 0.5), 0.06))
+    W = mrange(wj, 0.47, 0.53)
+    pale = mix(mrange(n_lo, 0.35, 0.65), (0.60, 0.56, 0.50), (0.80, 0.75, 0.66))
+    col = mix(W, red, pale)
+    outline = mrange(math_("ABSOLUTE", math_("SUBTRACT", wj, 0.5)), 0.012, 0.035, 1.0, 0.0)
+    col = mix(outline, col, (0.16, 0.03, 0.025))
+    cav = mrange(sep.outputs["Blue"], 0.2, 0.7)
+    col = mix(cav, col, (0.035, 0.016, 0.013))
+    L.new(col, b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.42
+    L.new(mrange(W, 0, 1, 0.55, 0.12), b.inputs["Coat Weight"])
+    b.inputs["Coat Roughness"].default_value = 0.12
+    b.inputs["Subsurface Weight"].default_value = 0.05; b.inputs["Subsurface Radius"].default_value = (1, 0.2, 0.1)
     inv = math_("SUBTRACT", 1.0, W)
-    hgt = math_("ADD", math_("MULTIPLY", fib, inv), math_("MULTIPLY", W, math_("MULTIPLY", nz2.outputs["Fac"], 0.3)))
-    hgt = math_("ADD", hgt, math_("MULTIPLY", W, 0.35))     # fascia plates sit slightly proud
-    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.8; bp.inputs["Distance"].default_value = 0.03
-    L.new(hgt, bp.inputs["Height"]); L.new(bp.outputs["Normal"], b.inputs["Normal"]); L.new(bp.outputs["Normal"], b.inputs["Coat Normal"])
+    hgt = math_("ADD", math_("MULTIPLY", math_("ADD", math_("MULTIPLY", fine, 0.15), math_("MULTIPLY", seam, -0.6)), inv),
+                math_("MULTIPLY", W, 0.3))
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.45; bp.inputs["Distance"].default_value = 0.03
+    L.new(hgt, bp.inputs["Height"]); L.new(bp.outputs["Normal"], b.inputs["Normal"])
     return m
 
 def _mat_teeth(name):
@@ -600,11 +615,11 @@ def _mat_eye(name):
     nt = m.node_tree; N = nt.nodes; L = nt.links; b = N["Principled BSDF"]
     at = N.new("ShaderNodeAttribute"); at.attribute_name = "cmask"; at.attribute_type = "GEOMETRY"
     sp = N.new("ShaderNodeSeparateColor"); L.new(at.outputs["Color"], sp.inputs[0])
-    mr = N.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.45; mr.inputs["From Max"].default_value = 0.55
-    L.new(sp.outputs["Blue"], mr.inputs["Value"])
-    mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"
-    mx.inputs["A"].default_value = (0.62, 0.58, 0.48, 1); mx.inputs["B"].default_value = (0.05, 0.045, 0.03, 1)
-    L.new(mr.outputs["Result"], mx.inputs["Factor"]); L.new(mx.outputs["Result"], b.inputs["Base Color"])
+    rp = N.new("ShaderNodeValToRGB"); rp.color_ramp.interpolation = "CONSTANT"; e = rp.color_ramp.elements
+    e[0].position, e[0].color = 0.0, (0.42, 0.36, 0.26, 1)       # sclera (in socket shadow)
+    e[1].position, e[1].color = 0.25, (0.82, 0.82, 0.70, 1)      # pale iris
+    e.new(0.75).color = (0.015, 0.015, 0.015, 1)                 # pupil
+    L.new(sp.outputs["Blue"], rp.inputs["Fac"]); L.new(rp.outputs["Color"], b.inputs["Base Color"])
     b.inputs["Roughness"].default_value = 0.15
     return m
 
@@ -641,8 +656,14 @@ def stand_pose(rig):
     titans.relax_pose(rig, arm=0.70, back=-0.05)
     for s in "LR":
         rig.pose.bones[f"lowerarm01.{s}"].rotation_euler.x = 0.05
+    P = rig.pose.bones
+    for n in ("neck01", "neck02", "neck03", "head"):
+        P[n].rotation_mode = "XYZ"
+    P["neck01"].rotation_euler.x = -0.22     # hold the long neck upright
+    P["neck02"].rotation_euler.x = -0.08
+    P["head"].rotation_euler.x = 0.25        # face level
 
-def _steam_obj(name, center, size, density=0.5, noise_scale=2.0, glow=0.0, seed=0.0, tint=(0.95, 0.93, 0.90)):
+def _steam_obj(name, center, size, density=0.5, noise_scale=2.0, glow=0.0, seed=0.0, tint=(0.95, 0.93, 0.90), ambient=0.0):
     """Billowy steam volume: lumpy cumulus density (noise + falloff), warm glow at the bottom.
     Principled Volume + procedural noise only (Eevee and Cycles)."""
     me = bpy.data.meshes.new(name)
@@ -679,18 +700,27 @@ def _steam_obj(name, center, size, density=0.5, noise_scale=2.0, glow=0.0, seed=
             mth("MULTIPLY", mth("SUBTRACT", 0.36, ln.outputs["Value"]), 12.0))
     v = mth("MULTIPLY", mth("MINIMUM", mth("MAXIMUM", v, 0.0), 1.0), density)
     L.new(v, pv.inputs["Density"])
+    if ambient > 0:      # self-lit body of the cloud (anime steam stays bright even when backlit)
+        amb = mth("MULTIPLY", mth("MINIMUM", mth("MULTIPLY", v, 3.0 / max(density, 1e-3)), 1.0), ambient)
+        pv.inputs["Emission Color"].default_value = (*tint, 1)
+        L.new(amb, pv.inputs["Emission Strength"])
     if glow > 0:
         sz = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs["Generated"], sz.inputs[0])
         mr = N.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.55; mr.inputs["From Max"].default_value = 0.0
         mr.inputs["To Max"].default_value = glow
         L.new(sz.outputs["Z"], mr.inputs["Value"])
-        L.new(mth("MULTIPLY", mr.outputs["Result"], mth("MINIMUM", mth("MULTIPLY", v, 4.0 / max(density, 1e-3)), 1.0)), pv.inputs["Emission Strength"])
-        pv.inputs["Emission Color"].default_value = (1.0, 0.45, 0.18, 1)
+        gl = mth("MULTIPLY", mr.outputs["Result"], mth("MINIMUM", mth("MULTIPLY", v, 4.0 / max(density, 1e-3)), 1.0))
+        if ambient > 0:
+            L.new(mth("ADD", gl, amb), pv.inputs["Emission Strength"])
+            pv.inputs["Emission Color"].default_value = (tint[0], tint[1] * 0.85, tint[2] * 0.7, 1)
+        else:
+            L.new(gl, pv.inputs["Emission Strength"])
+            pv.inputs["Emission Color"].default_value = (1.0, 0.45, 0.18, 1)
     L.new(pv.outputs[0], N["Material Output"].inputs["Volume"])
     me.materials.append(m)
     return st
 
-def colossal_steam(rig, density=1.5, tint=(0.95, 0.93, 0.90), glow_scale=1.0):
+def colossal_steam(rig, density=1.5, tint=(0.95, 0.93, 0.90), glow_scale=1.0, ambient=0.0):
     """Steam clouds around the shoulders/neck and a tall plume rising from the body (bone-parented)."""
     s = rig.scale.x
     B = rig.data.bones
@@ -707,7 +737,7 @@ def colossal_steam(rig, density=1.5, tint=(0.95, 0.93, 0.90), glow_scale=1.0):
     for nm, bn, off, size, d, ns, glow in specs:
         c = world(bn, off)
         st = _steam_obj(f"{rig.name}_{nm}", c, tuple(x * s for x in size), density=d, noise_scale=ns, glow=glow * glow_scale,
-                        seed=len(out) * 3.1, tint=tint)
+                        seed=len(out) * 3.1, tint=tint, ambient=ambient)
         bpy.context.view_layer.update()
         mw = st.matrix_world.copy()
         st.parent = rig; st.parent_type = "BONE"; st.parent_bone = bn
