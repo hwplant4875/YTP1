@@ -64,11 +64,14 @@ TEXT = [
 # sound design: (file, start s, gain, fade in, fade out, max length)
 SFX = [
     ('city_night.wav', 0.0, 0.45, 0.0, 3.0, 13.0), ('whoosh_big.wav', 6.0, 0.5, 0.0, 0.5, 3.7),
-    ('metal_scrape.wav', 12.2, 0.3, 0.0, 0.5, 2.6), ('whoosh_cam.wav', 13.4, 0.5, 0.0, 0.2, 1.0),
+    ('metal_scrape.wav', 13.5, 0.3, 0.0, 0.5, 2.6), ('whoosh_cam.wav', 14.4, 0.5, 0.0, 0.2, 1.0),
     ('cave_amb.wav', 12.5, 0.55, 2.0, 1.5, 16.0), ('impact_big.wav', 20.9, 0.6, 0.0, 1.5, 6.8),
     ('impact_sub.wav', 26.0, 0.7, 0.0, 1.0, 4.1), ('cave_amb.wav', 210.6, 0.35, 1.5, 1.5, 14.0),
     ('impact_sub.wav', 222.4, 0.45, 0.0, 1.0, 4.1), ('cave_amb.wav', 330.6, 0.4, 1.5, 3.0, 6.6),
 ]
+
+
+TOP = {'TOURISTS', 'THE FULL NETWORK', '6,000,000 DEAD'}
 
 
 def text_png(i, lines, hi):
@@ -76,6 +79,7 @@ def text_png(i, lines, hi):
     size = 120 if max(len(l) for l in lines) <= 14 else 92
     f = ImageFont.truetype(FONT, size)
     lh = int(size * 1.08); y0 = H // 2 - lh * len(lines) // 2 + 40
+    if lines[0] in TOP: y0 = 90  # keep map routes visible
     sh = Image.new('RGBA', (W, H), (0, 0, 0, 0)); ds = ImageDraw.Draw(sh)
     for k, l in enumerate(lines):
         ds.text((W // 2, y0 + k * lh), l, font=f, anchor='ma', fill=(0, 0, 0, 200), stroke_width=12, stroke_fill=(0, 0, 0, 200))
