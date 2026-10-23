@@ -9,6 +9,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 HERE = os.path.dirname(os.path.abspath(__file__))
 F = lambda n: os.path.join(HERE, "fonts", n)
 FONTS = {  # title font, title weight, body font, body weight
+    "D": (F("Ditty.ttf"), None, F("PirataOne-Regular.ttf"), None),   # user pick 10/23: Ditty titles, Pirata One small text
     "A": (F("GrenzeGotisch-VF.ttf"), 800, F("GrenzeGotisch-VF.ttf"), 450),
     "B": (F("PirataOne-Regular.ttf"), None, F("GrenzeGotisch-VF.ttf"), 450),
     "C": (F("UnifrakturCook-Bold.ttf"), None, F("GrenzeGotisch-VF.ttf"), 450),
@@ -39,7 +40,7 @@ def draw(img, a):
     base = img.convert("RGBA")
     m = int(48 * s)
     # top-left: place
-    shadow_text(base, (m, m), a.place, font(bf, int(40 * s), 600), "la")
+    shadow_text(base, (m, m), a.place, font(bf, int(40 * s), bw), "la")
     # top-right: year + Eren's age
     shadow_text(base, (W - m, m - int(8 * s)), f"Year {a.year}", font(tf, int(78 * s), tw), "ra")
     if a.age:
@@ -54,7 +55,7 @@ def draw(img, a):
     # place labels with leader lines
     if a.labels and a.show:
         lab = json.load(open(a.labels))
-        lf = font(bf, int(34 * s), 650)
+        lf = font(bf, int(34 * s), bw)
         for name in a.show.split(","):
             if name not in lab:
                 continue
@@ -71,6 +72,6 @@ if __name__ == "__main__":
     ap.add_argument("inp"); ap.add_argument("out")
     for k in ("labels", "place", "year", "age", "title", "caption", "show"):
         ap.add_argument("--" + k, default="")
-    ap.add_argument("--font", default="A")
+    ap.add_argument("--font", default="D")
     a = ap.parse_args()
     draw(Image.open(a.inp), a).save(a.out, quality=92)

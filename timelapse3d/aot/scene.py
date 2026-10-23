@@ -17,6 +17,7 @@ ap.add_argument("--cam", default="overview")
 ap.add_argument("--engine", default="CYCLES")
 ap.add_argument("--save", default="")
 ap.add_argument("--labels", default="")
+ap.add_argument("--event", default="")
 A = ap.parse_args(argv)
 
 R = 520.0          # district radius
@@ -748,6 +749,7 @@ CAMS = {
     "overview": ((900, 900, 520), (-40, -320, 0), 30),
     "hill":     ((420, 980, 70), (0, -250, 20), 28),
     "opening":  ((520, 1060, 150), (-60, -300, 0), 32),
+    "colossal": ((160, -170, 120), (0, -R - 30, 52), 30),
     "town":     ((380, 60, 190), (0, -330, 0), 30),
     "outer":    ((-900, -1500, 380), (0, -200, 0), 30),
 }
@@ -773,6 +775,7 @@ def render_setup(engine, res, samples):
         sc.cycles.device = "CPU"
         sc.cycles.volume_step_rate = 4
         sc.cycles.max_bounces = 4
+        sc.cycles.volume_bounces = 2
     sc.view_settings.view_transform = __import__("os").environ.get("VT", "Standard")
     try:
         sc.view_settings.look = "AgX - Medium High Contrast"
@@ -780,8 +783,19 @@ def render_setup(engine, res, samples):
         pass
     sc.view_settings.exposure = float(__import__("os").environ.get("EXPO", "-1.5"))
 
+def event_colossal():
+    """845: the Colossal Titan's head and shoulders over the outer gate, wrapped in steam."""
+    import titans
+    r = titans.make_titan("colossal", seed=1)
+    r.location = (0, -R - 32, 0)
+    r.rotation_euler.z = 0.0          # faces north, into the district
+    titans.steam("ColossalSteam", (0, -R - 30, 58), (75, 45, 40), density=0.5)
+
 if __name__ == "__main__":
+    sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
     build(A.year)
+    if A.event == "colossal":
+        event_colossal()
     camera(A.cam)
     render_setup(A.engine, A.res, A.samples)
     if A.labels:
