@@ -103,10 +103,12 @@ def render():
     fc.append('[send]highpass=f=220,lowpass=f=5500[sendf]')
     fc.append(f'[sendf][{k}:a]afir=dry=10:wet=10:length=1,volume=-11dB[wet]')
     # old-record finish: soft tape saturation, roll-off above ~9.5 kHz, very slight wow
-    fc.append('[dry][wet]amix=inputs=2:normalize=0:duration=first,volume=-3dB,asoftclip=type=tanh,volume=3dB,'
-              'lowpass=f=9500,highshelf=f=7000:g=-1.5,vibrato=f=0.45:d=0.012')
-    pre = os.path.join(d, 'premaster.wav')
-    cs.run(['ffmpeg', '-y', '-loglevel', 'error'] + ins + ['-filter_complex', ';'.join(fc), '-ar', '48000', '-c:a', 'pcm_f32le', pre])
+    fc.append('[dry][wet]amix=inputs=2:normalize=0:duration=first')
+    mix = os.path.join(d, 'mix.wav'); pre = os.path.join(d, 'premaster.wav')
+    cs.run(['ffmpeg', '-y', '-loglevel', 'error'] + ins + ['-filter_complex', ';'.join(fc), '-ar', '48000', '-c:a', 'pcm_f32le', mix])
+    # separate pass: in one graph with the mix, asoftclip + vibrato produced NaN samples
+    cs.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', mix, '-af', 'volume=-3dB,asoftclip=type=tanh,volume=3dB,'
+            'lowpass=f=9500,highshelf=f=7000:g=-1.5,vibrato=f=0.45:d=0.012', '-c:a', 'pcm_f32le', pre])
     r = subprocess.run(['ffmpeg', '-hide_banner', '-i', pre, '-af', 'loudnorm=I=-16:TP=-1.5:print_format=json', '-f', 'null', '-'],
                        capture_output=True, text=True).stderr
     js = json.loads(r[r.rindex('{'):r.rindex('}') + 1])
@@ -118,6 +120,9 @@ def render():
             f'[0:a]volume={g:.2f}dB[m];[m][1:a]amix=inputs=2:normalize=0:duration=first,'
             f'alimiter=limit=0.82:attack=4:release=60:level=false,afade=t=out:st={dur - 5:.2f}:d=5',
             '-c:a', 'libmp3lame', '-b:a', '256k', out])
+    r = subprocess.run(['ffmpeg', '-hide_banner', '-i', out, '-af', 'astats=measure_perchannel=none', '-f', 'null', '-'],
+                       capture_output=True, text=True).stderr
+    assert 'Number of NaNs: 0.0' in r, 'NaN samples in output'
     print(name, f'{dur:.1f}s', 'gain', round(g, 2), 'parts', parts, flush=True)
 
 if __name__ == '__main__':
