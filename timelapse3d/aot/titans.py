@@ -6,7 +6,16 @@ Kinds: pure, colossal, armored, attack, female.
 import bpy, importlib, math, random
 from mathutils import Vector
 
-_mp = "bl_ext.user_default.mpfb"
+def _find_mpfb():
+    """MPFB lives in a different extension repo on the cloud box (user_default) and the laptop (blender_org)."""
+    for m in ("bl_ext.user_default.mpfb", "bl_ext.blender_org.mpfb"):
+        try:
+            importlib.import_module(m)
+            return m
+        except ImportError:
+            pass
+    return "bl_ext.user_default.mpfb"
+_mp = _find_mpfb()
 HS = importlib.import_module(_mp + ".services.humanservice").HumanService
 TS = importlib.import_module(_mp + ".services.targetservice").TargetService
 ASSET = importlib.import_module(_mp + ".services.assetservice").AssetService

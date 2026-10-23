@@ -27,7 +27,7 @@ ap.add_argument("--comp", action="store_true", help="add the compositor bloom / 
 ap.add_argument("--fstop", type=float, default=8.0, help="camera DOF f-stop (0 = off); focus on the kids")
 A = ap.parse_args(argv)
 
-ASSETS = "/tmp/claude-0/aot/assets/polyhaven"
+ASSETS = os.environ.get("AOT_POLYHAVEN", "E:/YTP2/3D Timelapse/assets/polyhaven" if os.name == "nt" else "/tmp/claude-0/aot/assets/polyhaven")
 VIEW = os.environ.get("OPENING_VIEW", "Standard")      # Standard keeps the anime sky/flower saturation
 CAM_Z = 0.55
 LENS = 50.0
