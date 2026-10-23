@@ -15,14 +15,14 @@ def sec(voice, shots, rank=None, rate=None, instr=None, extra=(), pad=0.7, clip_
     return S
 X = []
 # cold open: frame 0 = Jason's face; one word per way he has been "killed"
-X.append(sec('s00', [(0, 'p6_scenepack', 69), (0.6, 'p4_tricking_jason', 122.5), (1.3, 'p3_trailer', 109.55), (2.0, 'r09_scenepack', 465),
-  (2.9, 'p7_vs_tina', 102), (3.8, 'p9_opening_hd', 141), (5.0, 'jx_trailer', 48), (5.8, 'jx_ending', 150), (7.4, 'p6_scenepack', 30),
-  (9.5, 'p1_mrs_voorhees', 17), (11.4, 'p1_mrs_voorhees', 27), (13.8, 'p1_mrs_voorhees', 50), (15.2, 'p3_chris_escape', 33),
-  (16.2, 'p6_scenepack', 108), (17.2, 'p8_vs_newyork', 6), (18.2, 'jx_uber_scenepack', 9), (19.5, 'p7_vs_tina', 204),
-  (21.5, 'fvj_scenepack', 27), (22.4, 'p2_final_scene', 165), (23.0, 'jx_uber_scenepack', 132), (25.1, 'BLACK', 0)],
-  extra=[('word', 'Hacked', 0.6, 1.25), ('word', 'Hanged', 1.3, 1.95), ('word', 'Drowned', 2.0, 2.85), ('word', 'Electrocuted', 2.9, 3.75),
-         ('word', 'Blown to pieces', 3.8, 4.95), ('word', 'Frozen', 5.0, 5.75), ('word', 'Thrown into space', 5.8, 7.0),
-         ('title', ['IT WAS HIS MOTHER'], 13.8, 15.1), ('title', ['11 JASONS'], 18.2, 19.4), ('title', ['INSTRUCTION', '!444'], 25.2, 28.2)],
+X.append(sec('s00', [(0, 'p6_scenepack', 69), (0.56, 'p4_tricking_jason', 122.5), (1.28, 'p3_trailer', 109.55), (2.04, 'r09_scenepack', 465),
+  (2.96, 'p7_vs_tina', 102), (3.92, 'p9_opening_hd', 141), (5.28, 'jx_trailer', 48), (6.9, 'jx_uber_scenepack', 12), (8.28, 'jx_ending', 150), (9.73, 'p6_scenepack', 30),
+  (11.83, 'p1_mrs_voorhees', 17), (13.73, 'p1_mrs_voorhees', 27), (16.13, 'p1_mrs_voorhees', 50), (17.53, 'p3_chris_escape', 33),
+  (18.53, 'p6_scenepack', 108), (19.53, 'p8_vs_newyork', 6), (20.53, 'jx_uber_scenepack', 9), (21.83, 'p7_vs_tina', 204),
+  (23.83, 'fvj_scenepack', 27), (24.73, 'p2_final_scene', 165), (25.33, 'jx_uber_scenepack', 132), (27.43, 'BLACK', 0)],
+  extra=[('word', 'Hacked', 0.56, 1.22), ('word', 'Hanged', 1.28, 1.98), ('word', 'Drowned', 2.04, 2.9), ('word', 'Electrocuted', 2.96, 3.86),
+         ('word', 'Blown to pieces', 3.92, 5.2), ('word', 'Frozen', 5.28, 6.85), ('word', 'Umm...', 7.2, 8.2), ('word', 'Thrown into space?', 8.28, 9.6),
+         ('title', ['IT WAS HIS MOTHER'], 16.13, 17.43), ('title', ['11 JASONS'], 20.53, 21.73), ('title', ['INSTRUCTION', '!444'], 27.53, 30.53)],
   pad=0.5, clip_db=-20))
 X.append(sec('s01', [(0, 'p3_gets_mask', 246), (1.6, 'p8_trailer', 57), (3.0, 'p6_scenepack', 120), (5.0, 'r09_scenepack', 81),
   (7.4, 'p7_vs_tina', 165), (8.8, 'fvj_scenepack', 180), (10.1, 'jx_uber_scenepack', 60)],
