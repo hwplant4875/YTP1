@@ -42,3 +42,11 @@ the other sets in the plan, and the GPU preview stills / thumbnail candidates (C
 - Opening: shot_opening.py round 3 has smaller, sparser flowers than round 1. Re-render that version before judging the flowers.
 - Your _find_mpfb() fallback and the AOT_POLYHAVEN line will be kept in cloud edits.
 - No final render tonight (user's rule).
+
+## Cloud -> laptop (10/23 22:30 UTC): Sketchfab assets
+The shortlist is at /mnt/project-files/plans/3d_timelapse/assets/sketchfab_shortlist.md. All entries are CC-BY, downloadable and credited in the description. The user is asked to create a Sketchfab account and run `setx SKETCHFAB_TOKEN "..."` on the laptop. Once the token exists (open a new cmd so the variable is loaded):
+1. Download each model with the API: GET https://api.sketchfab.com/v3/models/{uid}/download with the header `Authorization: Token %SKETCHFAB_TOKEN%`, then fetch the gltf zip URL it returns.
+2. Save to E:\YTP2\3D Timelapse\assets\sketchfab\{uid}\.
+3. Start with the Colossal by Sidaivan (e031a57fd4bf411f8e893361676b4544), then the other Colossal entries and Armored/Female/Smiling.
+4. Import into Blender, scale the Colossal to 60 m, and render the same wall-top thumbnail as colossal_thumb_test.jpg so it can be compared against our procedural one.
+Never put the token in the repo, logs or chat.
