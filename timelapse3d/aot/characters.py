@@ -131,13 +131,26 @@ def _paint_regions(body, mats):
         p.material_index = order.index(r if r in mats else "skin")
         p.use_smooth = True
 
-def _shell(body, rig, mats, regions, push=0.007, name="shell", smooth=0):
-    """Loose cloth layer: copy of the body faces of the given regions pushed out along the normals."""
+def _faceless(body, rig, iters=120):
+    """Smooth the head into a featureless egg: no eyes, nose, mouth or ears (house style for 3D people)."""
+    nz = rig.data.bones["neck02"].head_local.z
+    bm = bmesh.new(); bm.from_mesh(body.data); bm.verts.ensure_lookup_table()
+    head = [v for v in bm.verts if v.co.z > nz + 0.015]
+    for _ in range(iters):
+        bmesh.ops.smooth_vert(bm, verts=head, factor=0.5, use_axis_x=True, use_axis_y=True, use_axis_z=True)
+    bm.to_mesh(body.data); bm.free()
+
+def _shell(body, rig, mats, regions, push=0.007, name="shell", smooth=0, mat=None, open_front=0.0):
+    """Loose cloth layer: copy of the body faces of the given regions pushed out along the normals.
+    open_front: half width of a front opening (open coat / cardigan); mat: single material for the layer."""
     sh = body.copy(); sh.data = body.data.copy(); sh.name = body.name + "_" + name
     bpy.context.scene.collection.objects.link(sh)
     idx = [list(mats.keys()).index(r) for r in regions]
     bm = bmesh.new(); bm.from_mesh(sh.data)
-    bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.material_index not in idx], context="FACES")
+    arm_x = 0.11
+    bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.material_index not in idx or
+                               (open_front and abs(f.calc_center_median().x) < open_front and f.calc_center_median().y < 0
+                                and abs(f.calc_center_median().x) < arm_x)], context="FACES")
     bm.to_mesh(sh.data); bm.free()
     sh.modifiers.clear()
     if smooth:
@@ -145,11 +158,12 @@ def _shell(body, rig, mats, regions, push=0.007, name="shell", smooth=0):
     d = sh.modifiers.new("loose", "DISPLACE"); d.strength = push; d.mid_level = 0.0
     a = sh.modifiers.new("rig", "ARMATURE"); a.object = rig
     sol = sh.modifiers.new("thick", "SOLIDIFY"); sol.thickness = 0.004; sol.offset = 1.0
+    if mat:
+        sh.data.materials.clear(); sh.data.materials.append(mat)
     sh.parent = rig
     return sh
 
-def _child(name, years, gender, hair, hair_col, eyes, outfit, macro=None, height=None):
-    iris = EYE_COLOURS[eyes]
+def _child(name, years, gender, hair, hair_col, outfit, macro=None, height=None, coat=None):
     md = TS.get_default_macro_info_dict()
     md.update(dict(gender=gender, age=AGE(years), muscle=0.5, weight=0.42, proportions=0.6))
     if macro:
@@ -167,23 +181,8 @@ def _child(name, years, gender, hair, hair_col, eyes, outfit, macro=None, height
                           else _flat(name + "_hair", hair_col)))
         except Exception as ex:
             print("hair failed", ex)
-    f = _asset("eyes", "high-poly/high-poly.mhclo")
-    if f:
-        try:
-            e = HS.add_mhclo_asset(f, body, asset_type="Eyes", subdiv_levels=0)
-            png = os.path.join(os.path.dirname(os.path.dirname(f)), "materials", f"{eyes}_eye.png")
-            parts.append((e, lambda: _eye_mat(name + "_eyes", iris)))
-        except Exception as ex:
-            print("eyes failed", ex)
-    f = _asset("eyebrows", "eyebrow010/eyebrow010.mhclo")
-    if f:
-        try:
-            eb = HS.add_mhclo_asset(f, body, asset_type="Eyebrows", subdiv_levels=0)
-            png = os.path.join(os.path.dirname(f), "eyebrow010.png")
-            parts.append((eb, lambda png=png: _textured(name + "_brows", png, hair_col, alpha=True)))
-        except Exception as ex:
-            print("brows failed", ex)
     _bake_and_clean(body)
+    _faceless(body, rig)
     for ob, mk in parts:
         ob.data.materials.clear(); ob.data.materials.append(mk())
     rig.name = name; body.name = name + "_body"
@@ -193,6 +192,10 @@ def _child(name, years, gender, hair, hair_col, eyes, outfit, macro=None, height
     mats.update(outfit)
     _paint_regions(body, mats)
     _shell(body, rig, mats, [r for r in ("shirt", "legs") if r in outfit], name="clothes")
+    if coat:
+        coat = (coat[0](), coat[1])
+        _shell(body, rig, mats, ["shirt"], push=0.016, name="coat", mat=coat[0], open_front=0.045)
+        tail(name, rig, coat[0], coat[1])
     if "boots" in outfit:
         boots(name, rig, body, outfit["boots"])
     if height:
@@ -201,35 +204,72 @@ def _child(name, years, gender, hair, hair_col, eyes, outfit, macro=None, height
     return rig, body
 
 def make_eren(name="Eren"):
-    """Eren, 10: messy dark-brown hair, green eyes, off-white long-sleeved shirt, dark brown trousers, brown boots."""
-    rig, body = _child(name, 10, 1.0, "short02", (0.10, 0.055, 0.03), "green",
-                       lambda: {"shirt": _cloth(name + "_shirt", (0.78, 0.74, 0.64)),
-                                "legs": _cloth(name + "_trousers", (0.16, 0.11, 0.07), scale=30),
-                                "boots": _flat(name + "_boots", (0.11, 0.055, 0.025), rough=0.45)}, height=1.38)
+    """Eren, 10 (S1E1): messy dark-brown hair, olive-green shirt, long open dark-red coat, charcoal cropped trousers."""
+    rig, body = _child(name, 10, 1.0, "short04", (0.03, 0.02, 0.016),
+                       lambda: {"shirt": _cloth(name + "_shirt", (0.13, 0.15, 0.07)),
+                                "legs": _cloth(name + "_trousers", (0.028, 0.028, 0.032), scale=30),
+                                "boots": _flat(name + "_shoes", (0.03, 0.02, 0.015), rough=0.5)},
+                       height=1.38, coat=(lambda: _cloth(name + "_coat", (0.16, 0.035, 0.04), fold=0.4), 0.42))
     return rig
 
 def make_mikasa(name="Mikasa"):
-    """Mikasa, 9: long black hair, grey eyes, cream long-sleeved blouse, long brown skirt, red scarf."""
-    rig, body = _child(name, 9, 0.0, "long01", (0.018, 0.017, 0.02), "grey",
-                       lambda: {"shirt": _cloth(name + "_blouse", (0.80, 0.74, 0.66)),
-                                "legs": _cloth(name + "_stockings", (0.12, 0.08, 0.06), scale=30),
-                                "boots": _flat(name + "_boots", (0.12, 0.06, 0.03), rough=0.45)},
-                       macro=dict(proportions=0.7), height=1.33)
-    skirt(name, rig)
-    scarf(name, rig)
+    """Mikasa, 9 (S1E1): straight black shoulder-length hair with bangs, long white dress, long pale-pink cardigan, dark red scarf."""
+    rig, body = _child(name, 9, 0.0, "bob01", (0.012, 0.012, 0.015),
+                       lambda: {"shirt": _cloth(name + "_dress", (0.82, 0.79, 0.75)),
+                                "legs": _cloth(name + "_dress_l", (0.82, 0.79, 0.75), scale=30),
+                                "boots": _flat(name + "_shoes", (0.10, 0.06, 0.04), rough=0.5)},
+                       macro=dict(proportions=0.7), height=1.33,
+                       coat=(lambda: _cloth(name + "_cardigan", (0.72, 0.47, 0.44), fold=0.3), 0.5))
+    skirt(name, rig, color=(0.82, 0.79, 0.75), length=0.12)
+    scarf(name, rig, color=(0.20, 0.018, 0.022))
     return rig
+
+def tail(name, rig, m, length):
+    """Hanging coat / cardigan skirt from the waist, open at the front; front panels follow the thighs."""
+    hip = rig.data.bones["upperleg01.L"].head_local.z
+    hw = abs(rig.data.bones["upperleg01.L"].head_local.x)
+    bm = bmesh.new(); n = 30; rows = []
+    zs = [hip + 0.08, hip - 0.05, hip - length * hip * 0.5, hip - length * hip]
+    for j, z in enumerate(zs):
+        r = hw + 0.075 + 0.02 * j
+        ring = []
+        for k in range(n + 1):
+            a = -math.pi / 2 + 0.55 + k / n * (2 * math.pi - 1.1)       # leaves a gap round -Y (front)
+            ring.append(bm.verts.new((math.cos(a) * r, math.sin(a) * r * 0.85, z)))
+        rows.append(ring)
+    for j in range(len(rows) - 1):
+        for k in range(n):
+            bm.faces.new((rows[j][k], rows[j][k + 1], rows[j + 1][k + 1], rows[j + 1][k]))
+    me = bpy.data.meshes.new(name + "_coattail"); bm.to_mesh(me); bm.free()
+    for p in me.polygons:
+        p.use_smooth = True
+    me.materials.append(m)
+    ob = bpy.data.objects.new(name + "_coattail", me); bpy.context.scene.collection.objects.link(ob)
+    ob.modifiers.new("thick", "SOLIDIFY").thickness = 0.006
+    sp = ob.vertex_groups.new(name="spine05")
+    gl = ob.vertex_groups.new(name="upperleg01.L"); gr = ob.vertex_groups.new(name="upperleg01.R")
+    for v in me.vertices:
+        drop = max(0.0, min(1.0, (hip + 0.02 - v.co.z) / 0.1))          # waist band stays with the spine
+        front = max(0.0, -v.co.y / (hw + 0.1))
+        w = drop * (0.5 + 0.5 * front)
+        (gl if v.co.x > 0 else gr).add([v.index], w, "REPLACE")
+        sp.add([v.index], 1.0 - w, "REPLACE")
+    ob.modifiers.new("rig", "ARMATURE").object = rig
+    ob.parent = rig
+    return ob
 
 def _bone_world(rig, bone, at="head"):
     bpy.context.view_layer.update()
     pb = rig.pose.bones[bone]
     return rig.matrix_world @ (pb.head if at == "head" else pb.tail)
 
-def skirt(name, rig, color=(0.30, 0.17, 0.09)):
+def skirt(name, rig, color=(0.30, 0.17, 0.09), length=None):
     """A-line skirt from the waist to mid-calf, bone-parented to the pelvis."""
     hip = rig.data.bones["upperleg01.L"].head_local.z
     hw = abs(rig.data.bones["upperleg01.L"].head_local.x)
     bm = bmesh.new()
-    rows = [(hip + 0.06, hw + 0.06), (hip - 0.02, hw + 0.085), (hip * 0.78, hw + 0.10), (hip * 0.56, hw + 0.115), (hip * 0.42, hw + 0.12)]
+    low = length if length is not None else hip * 0.42
+    rows = [(hip + 0.06, hw + 0.06), (hip - 0.02, hw + 0.085), (hip * 0.75, hw + 0.10), ((hip * 0.75 + low) / 2, hw + 0.115), (low, hw + 0.12)]
     n = 28
     vs = []
     for z, r in rows:
@@ -400,22 +440,63 @@ def _surface(trunk, base, fwd, z, fallback):
     hit, loc, n, i = trunk.ray_cast(o, d)
     return (trunk.matrix_world @ loc - (base + Vector((0, 0, z)))).length if hit else fallback
 
-def place_opening(base, trunk_r=1.6, facing=0.0, trunk=None):
-    """Eren asleep against the trunk, Mikasa standing at his side, two firewood frames on the grass.
-    base: trunk centre on the ground (Vector); facing: direction Eren faces (radians about Z, 0 = -Y);
-    trunk: the trunk object, if given its bark is found by ray casting."""
+LR_ = (("L", -1), ("R", 1))
+WAKE_POSES = {
+    #          tilt  hip height  hip fwd   bones
+    "lie":    (1.50, 0.07, 0.00, {"upperleg01": (-0.05, 0, 0), "lowerleg01": (0.05, 0, 0), "upperarm01": (-0.1, 0, 1.15),
+                                  "lowerarm01": (0.1, 0, 0), "neck01": (0.0, 0, 0.35)}),
+    "sit":    (0.00, 0.07, 0.00, {"upperleg01": (-1.45, 0, 0), "lowerleg01": (0.45, 0, 0), "upperarm01": (-0.45, 0, 0.75),
+                                  "lowerarm01": (0.2, 0, 0), "spine05": (0.30, 0, 0), "neck01": (0.25, 0, 0)}),
+    "crouch": (0.00, 0.30, 0.30, {"upperleg01": (-1.80, 0, 0), "lowerleg01": (2.25, 0, 0), "upperarm01": (-0.6, 0, 0.7),
+                                  "lowerarm01": (0.3, 0, 0), "spine05": (0.70, 0, 0), "spine03": (0.2, 0, 0), "neck01": (-0.2, 0, 0)}),
+    "stand":  (0.00, None, 0.42, {"upperarm01": (0.0, 0, 0.8), "lowerarm01": (0.2, 0, 0), "neck01": (0.1, 0, 0)}),
+}
+ALL_BONES = ("upperleg01", "lowerleg01", "upperarm01", "lowerarm01", "spine05", "spine03", "neck01")
+
+def _key_pose(rig, pose, frame, hip_ground, facing, fwd):
+    tilt, hz, hf, bones = WAKE_POSES[pose]
+    for b in ALL_BONES:
+        rx, ry, rz = bones.get(b, (0, 0, 0))
+        sides = LR_ if b in ("upperleg01", "lowerleg01", "upperarm01", "lowerarm01") else ((None, 1),)
+        for side, sg in sides:
+            pb = rig.pose.bones.get(f"{b}.{side}" if side else b)
+            if not pb:
+                continue
+            pb.rotation_mode = "XYZ"; pb.rotation_euler = (rx, ry, rz * sg)
+            pb.keyframe_insert("rotation_euler", frame=frame)
+    s = rig.scale.x
+    hl = Vector((0, rig.data.bones["upperleg01.L"].head_local.y, rig.data.bones["upperleg01.L"].head_local.z)) * s
+    if hz is None:
+        hz = hl.z
+    rig.rotation_euler = (-tilt, 0.0, facing)
+    R = rig.rotation_euler.to_matrix()
+    rig.location = hip_ground + fwd * hf + Vector((0, 0, hz)) - R @ hl
+    rig.keyframe_insert("location", frame=frame); rig.keyframe_insert("rotation_euler", frame=frame)
+
+def animate_wakeup(rig, hip_ground, facing, start=1, timing=(0, 30, 60, 80, 100, 120)):
+    """Eren lies asleep on his back, sits up, then gets to his feet. hip_ground: point on the ground under his hips."""
+    rot = Matrix.Rotation(facing, 3, "Z"); fwd = rot @ Vector((0, -1, 0))
+    f = [start + t for t in timing]
+    for frame, pose in zip(f, ("lie", "lie", "sit", "sit", "crouch", "stand")):
+        _key_pose(rig, pose, frame, Vector(hip_ground), facing, fwd)
+    return f[-1]
+
+def place_opening(base, trunk_r=1.6, facing=0.0, trunk=None, start=1):
+    """Eren asleep on his back under the tree (head toward the trunk) who sits up and stands, Mikasa standing nearby
+    with her firewood frame on her back, Eren's frame on the grass. base: trunk centre on the ground;
+    facing: direction Eren faces once up (radians about Z, 0 = -Y); trunk: trunk object for ray casting the bark."""
     base = Vector(base)
     rot = Matrix.Rotation(facing, 4, "Z")
     fwd = (rot @ Vector((0, -1, 0, 0))).to_3d(); side = (rot @ Vector((1, 0, 0, 0))).to_3d()
     trunk_r = max(_surface(trunk, base, fwd, z, trunk_r) for z in (0.3, 0.6, 0.9))
-    eren = make_eren(); pose_asleep(eren)
-    eren.location = base + fwd * (trunk_r + 0.02) + Vector((0, 0, -0.62)); eren.rotation_euler = (0.0, 0.0, facing)
-    mik = make_mikasa(); pose_standing(mik)
-    mik.location = base + fwd * (trunk_r + 1.35) + side * 0.7; mik.rotation_euler = (0.0, 0.0, facing + math.pi * 1.15)
+    eren = make_eren()
+    end = animate_wakeup(eren, base + fwd * (trunk_r + 0.95), facing, start=start)
+    mik = make_mikasa(); pose_standing(mik, look_down=0.2)
+    mik.location = base + fwd * (trunk_r + 2.3) + side * 1.1; mik.rotation_euler = (0.0, 0.0, facing + math.pi * 1.25)
+    f2 = firewood_frame("Firewood_Mikasa", seed=2)                          # on her back
+    f2.parent = mik; f2.location = (0, 0.17 / mik.scale.x, 0.42 / mik.scale.x); f2.scale = [1 / mik.scale.x] * 3
     f1 = firewood_frame("Firewood_Eren", seed=1)
-    f1.location = base + fwd * (trunk_r + 0.25) - side * 1.35 + Vector((0, 0, 0.03)); f1.rotation_euler = (1.5, 0, facing + 1.2)
-    f2 = firewood_frame("Firewood_Mikasa", seed=2)
-    f2.location = base + fwd * (trunk_r - 0.05) + side * 1.6; f2.rotation_euler = (0.32, 0, facing - 0.35)      # leaning on the trunk
+    f1.location = base + fwd * (trunk_r + 0.5) - side * 1.8 + Vector((0, 0, 0.03)); f1.rotation_euler = (1.5, 0, facing + 1.2)
     return eren, mik, f1, f2
 
 
