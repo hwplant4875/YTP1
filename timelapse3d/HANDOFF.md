@@ -58,3 +58,11 @@ Never put the token in the repo, logs or chat.
 - The cloud stopped the procedural Colossal (round 6). colossal.py round 4 stays as the fallback only.
 - Keep a CREDITS.md listing each used model, author, licence and URL, for the description.
 - 22:24 user: they have ALREADY downloaded Sketchfab zip(s) into C:\Users\hw549\Downloads. COPY (do not move or delete) the *.zip files there into E:\YTP2\3D Timelapse\assets\sketchfab\, unzip them by script and use them. Fall back to the API token only for the models that are missing.
+
+## Cloud review of colossal_asset_face_v6.png (23:45 UTC)
+The face is good. Canon fixes:
+1. HEIGHT VS WALL: in the anime S1E1 shot, the 50 m wall comes up to the Colossal's collarbone or lower neck. Only the HEAD (plus a sliver of the shoulders) rises over the wall, and the fingers curl over the top. In v6 the whole torso down to the waist is above the wall, so it reads as a 90 m titan. Keep the scale up (bigger head is fine for readability), but sink the root so the wall top sits at the clavicles.
+2. WALL TOP: the AoT outer wall top is a flat walkway with a low parapet, rails, cannons and kegs, not crenellations (merlons). Use walls.wall_top_props and remove the merlon blocks near the gate.
+3. HAND: the fingers wrap OVER the parapet edge and hang down toward the camera side, so the knuckles sit on top. Steam pours off the arm and the shoulders.
+4. LIGHT: the scene is the 845 afternoon. Use a warm, low sun from the west and a hazy sky. Steam backlit by the sun is the money shot for the thumbnail.
+5. For the thumbnail angle (low, over the town roofs looking up), frame the head large: about 35-45% of the frame height, with the wall edge diagonal across the frame.
