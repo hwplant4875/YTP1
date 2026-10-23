@@ -26,6 +26,7 @@ import titans
 HS, TS, ASSET = titans.HS, titans.TS, titans.ASSET
 TDIR = titans.TDIR
 HEIGHT = {"armored": 15.0, "female": 14.0, "attack": 15.0}
+OUTLINE = 0.0022          # toon outline width in rest units (x ~8.8 at canon height = ~2 cm)
 
 
 # ------------------------------------------------------------------ small helpers
@@ -240,6 +241,9 @@ def _relief(body, labels, plate_set, params, face_lab_extra=None):
     _set_attr(me, "sh_skin", skin)
     _set_attr(me, "sh_edge", edgev)
     _set_attr(me, "sh_rim", rim)
+    # optional Laplacian smoothing of the SIGNED field: turns stair-stepped skin/muscle borders into smooth curves
+    for _ in range(params.get("sd_smooth", 0)):
+        sd = [0.4 * sd[i] + 0.6 * sum(sd[j] for j in nb[i]) / len(nb[i]) if nb[i] else sd[i] for i in range(nv)]
     _set_attr(me, "sh_sd", sd)      # signed border distance in line widths: crisp iso-lines in the shader
     return vlab, dist
 
@@ -323,7 +327,7 @@ class _Ctx:
         return _limb_coords(p, h, t, out)
 
 
-def _label_faces(body, rig, eyes, rule):
+def _label_faces(body, rig, eyes, rule, smooth_iters=2):
     ctx = _Ctx(body, rig, eyes)
     me = body.data
     keys = {}
@@ -334,7 +338,7 @@ def _label_faces(body, rig, eyes, rule):
         if k not in keys:
             keys[k] = len(keys)
         labels.append(keys[k])
-    labels = _mode_filter(me, labels, iters=2)
+    labels = _mode_filter(me, labels, iters=smooth_iters)
     return labels, keys, ctx
 
 
@@ -413,13 +417,14 @@ def _math(N, L, op, a, b=None):
 
 def _mat_body(name, skin_col, muscle_col, edge_col, *, skin_rough=0.5, skin_var=0.12, plate_mode=False,
               hair_col=None, eye_col=(0.02, 0.01, 0.01), eye_amt=0.0, cav_amt=0.55, fib_scale=180.0,
-              harden=False, muscle_hi=(0.75, 0.25, 0.18), rim_col=None, alt_col=None):
+              harden=False, muscle_hi=(0.75, 0.25, 0.18), rim_col=None, alt_col=None, soft=0.3, edge_amt=1.0,
+              edge_w=(0.4, 0.7), toon=0.45, shade_col=None, bump=0.35, cav_col=None):
     """One material for the whole body, driven by the sh_* attributes."""
     m = bpy.data.materials.new(name)
     nt, N, L, b = _nodes(m)
     sdv = _attr(N, "sh_sd").outputs["Fac"]
-    skin = _mrange(N, L, sdv, -0.3, 0.3)
-    edge = _mrange(N, L, _math(N, L, "ABSOLUTE", sdv), 0.4, 0.7, 1.0, 0.0)
+    skin = _mrange(N, L, sdv, -soft, soft)
+    edge = _mrange(N, L, _math(N, L, "ABSOLUTE", sdv), edge_w[0], edge_w[1], edge_amt, 0.0)
     cav = _attr(N, "sh_cav").outputs["Fac"]
     rest = _attr(N, "sh_rest").outputs["Vector"]
     fib = _attr(N, "sh_fib").outputs["Vector"]
@@ -444,11 +449,11 @@ def _mat_body(name, skin_col, muscle_col, edge_col, *, skin_rough=0.5, skin_var=
         skc = _mix(N, L, _attr(N, "sh_alt").outputs["Fac"], skc, alt_col)
     if rim_col is not None:
         rimf = _math(N, L, "MULTIPLY", _mrange(N, L, sdv, 0.7, 1.0), _mrange(N, L, sdv, 1.2, 2.2, 1.0, 0.0))
-        skc = _mix(N, L, _math(N, L, "MULTIPLY", rimf, 0.45), skc, rim_col)
+        skc = _mix(N, L, _math(N, L, "MULTIPLY", rimf, 0.3), skc, rim_col)
     col = _mix(N, L, _mrange(N, L, skin, 0.35, 0.65), mus, skc)
     # --- outline at region borders and crease darkening
     col = _mix(N, L, edge, col, edge_col)
-    col = _mix(N, L, _math(N, L, "MULTIPLY", cav, cav_amt), col, tuple(c * 0.25 for c in skin_col), "MULTIPLY")
+    col = _mix(N, L, _math(N, L, "MULTIPLY", cav, cav_amt), col, cav_col or tuple(c * 0.25 for c in skin_col), "MULTIPLY")
     if hair_col is not None:
         col = _mix(N, L, _attr(N, "sh_hair").outputs["Fac"], col, hair_col)
     if eye_amt > 0:
@@ -473,9 +478,63 @@ def _mat_body(name, skin_col, muscle_col, edge_col, *, skin_rough=0.5, skin_var=
     b.inputs["Subsurface Scale"].default_value = 0.05
     # bump: muscle fibres + fine skin noise
     bump_h = _math(N, L, "MULTIPLY", wv.outputs["Fac"], _math(N, L, "SUBTRACT", 1.0, skin))
-    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.35; bp.inputs["Distance"].default_value = 0.002
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = bump; bp.inputs["Distance"].default_value = 0.002
     L.new(bump_h, bp.inputs["Height"]); L.new(bp.outputs["Normal"], b.inputs["Normal"])
+    if toon > 0:
+        # toon cue that works in Cycles and Eevee: a hard-stepped form-shadow band towards the silhouette
+        lw = N.new("ShaderNodeLayerWeight"); lw.inputs["Blend"].default_value = 0.5
+        L.new(bp.outputs["Normal"], lw.inputs["Normal"])
+        rp = N.new("ShaderNodeValToRGB"); rp.color_ramp.interpolation = "CONSTANT"
+        e = rp.color_ramp.elements
+        e[0].position, e[0].color = 0.0, (1, 1, 1, 1)
+        sc = shade_col or (0.55, 0.42, 0.42)
+        e[1].position, e[1].color = 0.62, (*sc, 1)
+        L.new(lw.outputs["Facing"], rp.inputs["Fac"])
+        tcol = _mix(N, L, toon, b.inputs["Base Color"].links[0].from_socket, rp.outputs["Color"], "MULTIPLY")
+        L.new(tcol, b.inputs["Base Color"])
     return m
+
+
+def _mat_outline(name, col=(0.02, 0.012, 0.01)):
+    """Inverted-hull outline: the hull's near side (backfacing after the normal flip) is transparent."""
+    m = bpy.data.materials.new(name)
+    nt = m.node_tree if m.node_tree else None
+    m.use_nodes = True
+    nt = m.node_tree; N = nt.nodes; L = nt.links
+    for n in list(N):
+        if n.type != "OUTPUT_MATERIAL":
+            N.remove(n)
+    out = next(n for n in N if n.type == "OUTPUT_MATERIAL")
+    em = N.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (*col, 1); em.inputs["Strength"].default_value = 0.4
+    tr = N.new("ShaderNodeBsdfTransparent")
+    geo = N.new("ShaderNodeNewGeometry")
+    mx = N.new("ShaderNodeMixShader")
+    # transparent for the hull's near side and for every non-camera ray (so the hull casts no shadow)
+    lp = N.new("ShaderNodeLightPath")
+    notcam = _math(N, L, "SUBTRACT", 1.0, lp.outputs["Is Camera Ray"])
+    fac = _math(N, L, "MAXIMUM", geo.outputs["Backfacing"], notcam)
+    L.new(fac, mx.inputs["Fac"]); L.new(em.outputs[0], mx.inputs[1]); L.new(tr.outputs[0], mx.inputs[2])
+    L.new(mx.outputs[0], out.inputs["Surface"])
+    m.use_backface_culling = True
+    for attr, val in (("use_transparent_shadow", True), ("use_backface_culling_shadow", True)):
+        if hasattr(m, attr):
+            setattr(m, attr, val)
+    try:
+        m.surface_render_method = "DITHERED"
+    except Exception:
+        pass
+    return m
+
+
+def _add_outline(ob, width, col=(0.02, 0.012, 0.01)):
+    """Thin dark toon outline (inverted hull) after the armature, so it follows the pose."""
+    me = ob.data
+    me.materials.append(_mat_outline(ob.name + "_outline", col))
+    sol = ob.modifiers.new("toon_outline", "SOLIDIFY")
+    sol.thickness = width; sol.offset = 1.0; sol.use_flip_normals = True; sol.use_rim = False
+    sol.material_offset = len(me.materials) - 1
+    sol.use_quality_normals = True
+    return sol
 
 
 def _mat_simple(name, col, rough=0.5, emit=None, strength=0.0):
@@ -554,6 +613,14 @@ def _fibre_coords(body, ctx):
             tt, ang, r = ctx.limb(bn, p)
             ax = (t - h).length
             out.append((math.radians(ang) * max(r, 0.02), tt * ax, 0.0))
+    # smooth the fibre coordinates so striations flow across bone borders instead of stepping
+    nb = [[] for _ in me.vertices]
+    for e in me.edges:
+        a, b2 = e.vertices
+        nb[a].append(b2); nb[b2].append(a)
+    for _ in range(6):
+        out = [tuple(0.5 * out[i][k] + 0.5 * sum(out[j][k] for j in nb[i]) / max(1, len(nb[i])) for k in range(3))
+               for i in range(len(out))]
     _set_attr(me, "sh_fib", out, "FLOAT_VECTOR")
     _set_attr(me, "sh_rest", [tuple(v.co) for v in me.vertices], "FLOAT_VECTOR")
 
@@ -780,6 +847,9 @@ def _finish(rig, body, kind, mats):
     rig.scale = (s, s, s)
     rig["shifter"] = kind
     rig["unit_scale"] = s
+    for ob in rig.children:
+        if ob.type == "MESH" and ob.name.endswith("_body"):
+            _add_outline(ob, OUTLINE)
     return s
 
 
@@ -806,7 +876,7 @@ def _armored_rule(ctx, bn, p, n):
             return "trap" + s
         return "M" if abs(p.x) < 0.035 else "pec" + s
     if b in _TORSO:
-        lat = abs(n.x) > 0.7
+        lat = abs(n.x) > 0.8
         if p.z > z["clavicle.L"] + 0.004 or (n.z > 0.55 and p.z > z["spine01"]):
             if abs(p.x) < 0.03 or (n.y < -0.2 and abs(p.x) < 0.07 and p.z > z["clavicle.L"] + 0.012):
                 return "M"                                # neck base / jugular notch
@@ -870,7 +940,7 @@ def _armored_rule(ctx, bn, p, n):
         return bn
     if b in _LEG:
         t, ang, r = ctx.limb(bn, p)
-        stripe = 62 < ang < 102
+        stripe = 68 < ang < 92 or -104 < ang < -80          # long red stripes: outer and inner leg
         if b == "upperleg01":
             if stripe:
                 return "M"
@@ -894,7 +964,7 @@ def _armored_rule(ctx, bn, p, n):
                 return "shin" + s
             return "calf" + s
         if b == "lowerleg02":
-            if stripe and t < 0.6:
+            if stripe and t < 0.85:
                 return "M"
             if t > 0.9:
                 return "M"
@@ -927,6 +997,8 @@ def _armored_head(ctx, p, n, s):
     front = p.y < ctx.lips.y + 0.075 and n.y < 0.1
     if dx > ctx.ear_x - 0.022 and abs(p.z - (e.z - 0.012)) < 0.045 and p.y > ctx.lips.y + 0.07:
         return "ear"
+    if front and dx < 0.062 and 0.007 < dz < 0.04:
+        return "browplate"                                 # one flat armoured brow plate over both sockets
     if front and dx < 0.072:
         # cheek side strip of exposed muscle between mask and ear, from the temple to the jaw corner
         if dx > 0.056 and -0.09 < dz < 0.0:
@@ -970,15 +1042,25 @@ def make_armored(name="ArmoredTitan"):
             per[i] = (0.003, 0.004, 0.002, 0.008)
         elif k.startswith(("finger", "toe")):
             per[i] = (0.0025, 0.003, 0.0015, 0.006)
-        elif k in ("fh", "browL", "browR", "nose", "lip", "chin", "chkL", "chkR", "chk2L", "chk2R", "jawL", "jawR",
-                   "tmpL", "tmpR"):
-            per[i] = (0.003, 0.004, 0.001, 0.015, 0.003)
+        elif k in ("fhL", "fhR", "browL", "browR", "nose", "lip", "chin", "chkL", "chkR", "jawL", "jawR", "browplate"):
+            per[i] = (0.0028, 0.0014, 0.0004, 0.01, 0.0022)
         elif k.startswith(("finger", "toe", "hand", "palm", "foot")):
-            per[i] = (0.003, 0.003, 0.002, 0.01, 0.004)
+            per[i] = (0.0022, 0.0012, 0.0004, 0.006, 0.0026)
         else:
-            per[i] = (0.008, 0.0045, 0.004, 0.03, 0.007)
-    params = dict(h=0.008, w=0.0045, pillow=0.004, pw=0.03, sink=0.003, sw=0.006, edge=0.0045, per_label=per)
+            # flat, hard-edged plates sitting in the body: short bevel, almost no pillow, tight seams
+            per[i] = (0.0045, 0.0016, 0.0008, 0.03, 0.005)
+    params = dict(h=0.0045, w=0.0016, pillow=0.0008, pw=0.03, sink=0.002, sw=0.004, edge=0.0032, per_label=per)
     vlab, dist = _relief(body, labels, plates, params)
+    bp = keys.get("browplate")
+    if bp is not None:
+        # flatten the brow plate into a near-planar visor
+        me = body.data
+        ids = [v.index for v in me.vertices if vlab[v.index] == bp and dist[v.index] > 0.001]
+        if ids:
+            y0 = min(me.vertices[i].co.y for i in ids)
+            for i in ids:
+                v = me.vertices[i]
+                v.co.y = v.co.y + (y0 + 2.2 * v.co.x ** 2 - v.co.y) * 0.75 * _ss(0.001, 0.004, dist[i])
     sock = keys.get("socket")
     if sock is not None:
         me = body.data
@@ -990,65 +1072,94 @@ def make_armored(name="ArmoredTitan"):
     _eye_mask(body, eyes, 0.022, 0.011, 0.25)
     _hair_mask(body, ctx, _hairline(ctx, 0.04, 0.0, nape=-0.02))
     # design bible 3.5: plates khaki-ochre #9C8660, seams #3A3024, muscle #8A3A24 (rim #C55C30), gold plate edges
-    body_mat = _mat_body(name + "_mat", (0.30, 0.215, 0.105), (0.25, 0.04, 0.018), (0.042, 0.030, 0.017),
-                         plate_mode=True, skin_rough=0.35, skin_var=0.2, hair_col=(0.45, 0.42, 0.33),
-                         eye_col=(0.0, 0.0, 0.0), eye_amt=1.0, cav_amt=0.7, fib_scale=260.0,
-                         rim_col=(0.62, 0.48, 0.2), muscle_hi=(0.56, 0.11, 0.03))
+    # darker bronze-tan with gold plate edges; deep olive-brown creases
+    body_mat = _mat_body(name + "_mat", (0.28, 0.2, 0.095), (0.45, 0.08, 0.03), (0.025, 0.016, 0.008),
+                         plate_mode=True, skin_rough=0.45, skin_var=0.32, hair_col=(0.45, 0.42, 0.33),
+                         eye_col=(0.0, 0.0, 0.0), eye_amt=1.0, cav_amt=0.85, fib_scale=260.0,
+                         rim_col=(0.42, 0.31, 0.14), muscle_hi=(0.75, 0.2, 0.06), cav_col=(0.05, 0.035, 0.015),
+                         shade_col=(0.45, 0.36, 0.3), toon=0.6)
     eye_mat = _mat_eye(name + "_eyes", (1, 0.94, 0.75), glow=6.0, white=(1, 0.94, 0.75), pupil=False)
     eobjs = _add_eyes(rig, body, eyes, eye_mat, scale=0.75, push=0.006, squash=0.38)
-    # very short, slightly spiky crew cut: a hair cap plus a dense brush of short spikes standing up
+    # short spiky crew cut: thin cap + a dense brush of upright spikes, longest on top, short at the sides
     rnd = random.Random(3)
     locks = []
-    for i in range(700):
+    for i in range(1300):
         u = rnd.random()
         el = math.degrees(math.acos(1 - u * 1.22))
         az = rnd.uniform(-180, 180)
-        locks.append(dict(az=az, el=el, len=rnd.uniform(0.008, 0.016), dir=(0, 0.35, 1.0),
-                          w=rnd.uniform(0.0032, 0.0045), droop=-0.2, out=0.5, cling=0.0, in_hairline=True,
-                          jitter=0.06, off=0.0015, vol=0.0, taper=1.0, thick=0.6, lift=0.0,
-                          layer=rnd.uniform(0, 0.4)))
-    hair = _make_hair(rig, body, ctx, name + "_hair", locks, cap=0.004, cap_noise=1.6, mat=
-                      _mat_hair(name + "_hairmat", (0.52, 0.49, 0.4), (0.8, 0.78, 0.7), root_dark=0.35, rough=0.65))
+        top = _ss(60, 20, el)
+        locks.append(dict(az=az, el=el, len=rnd.uniform(0.007, 0.011) + top * rnd.uniform(0.008, 0.016),
+                          dir=(0, 0.25, 1.0), w=rnd.uniform(0.0035, 0.005), droop=-0.4, out=0.45 + 0.3 * top,
+                          cling=0.0, in_hairline=True, jitter=0.07, off=0.001, vol=0.0, taper=1.0, thick=0.7,
+                          lift=0.0, layer=rnd.uniform(0, 0.5)))
+    hair = _make_hair(rig, body, ctx, name + "_hair", locks, cap=0.0025, cap_noise=0.6, mat=
+                      _mat_hair(name + "_hairmat", (0.58, 0.55, 0.45), (0.9, 0.88, 0.8), root_dark=0.3, rough=0.7))
     _finish(rig, body, "armored", [body_mat])
     relax(rig, arm=0.85, back=-0.15, elbow=0.2)
     return rig
 
 
 # ================================================================== FEMALE
+def _spindle(t, ang, c, w, p=0.8):
+    """Inside a spindle-shaped muscle belly centred on angle c, widest mid-bone, tapering to both ends."""
+    d = abs((ang - c + 180) % 360 - 180)
+    return d < w * max(0.0, math.sin(math.pi * max(0.0, min(1.0, t)))) ** p
+
+
 def _female_rule(ctx, bn, p, n):
-    """Design bible 3.7 muscle map: red sleeves on the arms, red flanks, red belly strip with a 6-pack,
-    red strips on the thighs, red outer shins; pale neck, chest, pelvis V, knees, hands, feet."""
+    """Design bible 3.7 muscle map, drawn as flowing muscle groups: red sleeves on the arms with pale
+    tendon strips, red serratus fingers along the ribs, red abdominal strip with a 6-pack, red flank bands,
+    spindle-shaped red quad / adductor / hamstring groups on the thighs, red outer calves; pale neck,
+    chest, pelvis V, knees, hands; exposed muscle lining on the cheeks."""
     b = _base(bn); s = "L" if p.x >= 0 else "R"
     z = ctx.z
     if _is_head_bone(bn) or b == "neck03":
         return _female_head(ctx, p, n, s)
-    if b in ("neck01", "neck02", "clavicle"):
+    if b in ("neck01", "neck02"):
         return "skin"
+    if b == "clavicle":
+        xs = ctx.B["clavicle.L"].tail_local.x
+        return "M" if abs(p.x) > xs * 1.02 - 0.25 * max(0.0, p.z - z["clavicle.L"]) else "skin"
+    hip = z["upperleg01.L"]
     if b in _TORSO:
-        lat = abs(n.x) > 0.45
+        ax = abs(p.x)
+        lat = abs(n.x) > 0.5
+        xs = ctx.B["clavicle.L"].tail_local.x
         if p.z > z["spine01"] + 0.05:
-            return "M" if lat and p.z < z["clavicle.L"] - 0.03 else "skin"
-        if lat and p.z > z["upperleg01.L"] - 0.01:
-            return "M"                                    # flanks: armpit to hip
+            if ax > xs * 1.02 - 0.25 * max(0.0, p.z - z["clavicle.L"]):
+                return "M"                                # deltoid cap, clean curved border
+            return "skin"
+        if n.y < 0.15 and lat and p.z > hip + 0.01:
+            return "M"                                    # flank band, armpit to hip
         if n.y < -0.1:
             if p.z > z["spine02"] + 0.045:
                 return "skin"                             # breasts / chest
-            z0 = z["upperleg01.L"] + 0.1                  # navel
-            if p.z > z0 and abs(p.x) < 0.034 + 0.12 * (p.z - z0):
-                # belly strip with a 6-pack: red blocks, thin pale tendon lines
-                if abs(p.x) < 0.0035:
-                    return "M"
-                return "M"
-            if abs(p.x) > 0.085 and p.z > z["upperleg01.L"] - 0.03:
+            ztop = z["spine02"] + 0.045
+            z0 = hip + 0.085                              # navel
+            # serratus / rib fingers: diagonal red strips between the breast and the flank
+            if ax > 0.058 and p.z > z["spine03"] - 0.01:
+                k = (p.z + 0.55 * ax) / 0.016
+                return "M" if (k % 1.0) < 0.55 else "skin"
+            if p.z > z0 and ax < 0.03 + 0.1 * (p.z - z0) and ax > 0.0025:
+                # 6-pack: red blocks split by thin pale tendon lines
+                rows = (ztop - p.z) / ((ztop - z0) / 3.2)
+                return "skin" if (rows % 1.0) < 0.12 and rows > 0.6 else "M"
+            if ax > 0.075 and p.z > hip - 0.03:
                 return "M"
             return "skin"
         if p.z > z["spine02"]:
-            return "skin"
-        return "M" if abs(p.x) > 0.04 and p.z > z["upperleg01.L"] + 0.02 else "skin"
+            return "M" if ax > 0.06 and lat else "skin"
+        return "M" if ax > 0.04 and p.z > hip + 0.02 else "skin"
     if b in _ARM:
+        t, ang, r = ctx.limb(bn, p)
         if b == "shoulder01":
-            t, ang, r = ctx.limb(bn, p)
-            return "skin" if (n.z > 0.75 and t < 0.25) else "M"
+            return "M" if abs(p.x) > ctx.B["clavicle.L"].tail_local.x * 1.02 - 0.25 * max(0.0, p.z - z["clavicle.L"]) else "skin"
+        if b in ("lowerarm01", "lowerarm02"):
+            tt = t * 0.5 + (0.5 if b == "lowerarm02" else 0.0)
+            if _spindle(tt, ang, 95, 30) or _spindle(tt, ang, -150, 18):
+                return "skin"                             # pale tendon strips along the forearm
+        if b == "upperarm02" and _spindle(t, ang, -100, 22):
+            return "skin"
         return "M"
     if b == "wrist" or b.startswith("metacarpal"):
         return "skin"
@@ -1059,48 +1170,53 @@ def _female_rule(ctx, bn, p, n):
         if b == "upperleg01":
             return "skin" if (abs(ang) < 100 and n.y < 0.2) or abs(p.x) < 0.07 else "M"
         if b == "upperleg02":
-            if t > 0.88:
+            if t > 0.9:
                 return "skin" if abs(ang) < 80 else "M"
-            if t < 0.12 and -60 < ang < 50:
-                return "skin"
-            # long red strips separated by pale gaps: outer quad, front centre, inner
-            if 32 < ang < 120 or -22 < ang < 16 or -112 < ang < -50:
-                return "M"
-            if abs(ang) >= 115:
+            # vastus lateralis, rectus femoris, adductors, hamstrings as spindles separated by pale gaps
+            if (_spindle(t, ang, 72, 32, 0.5) or _spindle(t * 0.9 + 0.08, ang, -2, 17, 0.5) or _spindle(t, ang, -82, 27, 0.5)
+                    or _spindle(t, ang, 170, 55, 0.4)):
                 return "M"
             return "skin"
-        if b == "lowerleg01":
-            if t < 0.12:
-                return "skin" if abs(ang) < 80 else "M"
-            return "M" if ang > 25 else "skin"            # outer shin / calf red, inner pale
-        if b == "lowerleg02":
-            if t > 0.86:
+        if b in ("lowerleg01", "lowerleg02"):
+            tt = t * 0.5 + (0.5 if b == "lowerleg02" else 0.0)
+            if tt < 0.05 or tt > 0.9:
                 return "skin"
-            return "M" if ang > 25 else "skin"
+            return "M" if _spindle(tt, ang, 110, 85, 0.5) else "skin"     # outer shin / calf red, inner pale
     if b == "foot" or b.startswith("toe"):
         return "skin" if p.x < 0 else ("M" if n.z > 0.5 or p.y > 0 else "skin")
     return "M"
 
 
 def _female_head(ctx, p, n, s):
+    # exposed muscle lining under the cheeks: a strip from below each eye down to the jaw
+    for c in (ctx.eyes["L"][0], ctx.eyes["R"][0]):
+        dz = p.z - c.z
+        if p.y < c.y + 0.03 and -0.052 < dz < -0.012:
+            f = (-dz - 0.012) / 0.04
+            w = 0.007 * math.sin(math.pi * min(1.0, f + 0.15)) ** 0.7
+            if abs(p.x - c.x * (1.0 + 0.25 * f)) < w:
+                return "M"
     return "skin"
 
 
 def make_female(name="FemaleTitan"):
-    macro = dict(gender=0.0, muscle=1.0, weight=0.42, proportions=1.0, height=0.8, age=0.45, cupsize=0.55, firmness=0.9)
-    face = ([("head/head-oval", 0.7), ("head/head-fat-decr", 0.6), ("chin/chin-prominent-incr", 0.4),
-             ("chin/chin-width-decr", 0.3), ("nose/nose-scale-vert-incr", 0.6), ("nose/nose-hump-incr", 0.5),
-             ("nose/nose-point-width-decr", 0.4), ("nose/nose-trans-up", 0.2),
+    macro = dict(gender=0.0, muscle=1.0, weight=0.32, proportions=1.0, height=0.8, age=0.45, cupsize=0.5, firmness=0.9)
+    face = ([("head/head-invertedtriangular", 0.5), ("head/head-fat-decr", 0.8), ("chin/chin-prominent-incr", 0.7),
+             ("chin/chin-width-decr", 0.5), ("chin/chin-bones-incr", 0.6), ("nose/nose-scale-vert-incr", 0.6),
+             ("nose/nose-hump-incr", 0.6), ("nose/nose-point-width-decr", 1.0), ("nose/nose-width1-decr", 0.6),
+             ("nose/nose-scale-depth-incr", 0.4), ("nose/nose-flaring-decr", 0.6), ("nose/nose-trans-up", 0.2),
              ("mouth/mouth-upperlip-volume-incr", 0.3), ("mouth/mouth-lowerlip-volume-incr", 0.3),
              ("mouth/mouth-scale-horiz-decr", 0.2), ("neck/neck-scale-horiz-decr", 0.2)]
             + _lr("eyes/{s}-eye-height2-incr", 0.7) + _lr("eyes/{s}-eye-height1-incr", 0.4)
             + _lr("eyes/{s}-eye-corner1-up", 0.3)
             + [("eyebrows/eyebrows-trans-down", 0.4)]
             + _lr("cheek/{s}-cheek-volume-decr", 0.8) + _lr("cheek/{s}-cheek-bones-incr", 0.6)
-            + [("torso/torso-scale-horiz-decr", 0.2), ("stomach/stomach-pregnant-decr", 1.0)]
+            + [("torso/measure-shoulder-dist-incr", 0.8), ("torso/torso-vshape-incr", 0.5),
+               ("stomach/stomach-pregnant-decr", 1.0), ("stomach/stomach-tone-incr", 0.6)]
+            + _lr("arms/{s}-upperarm-shoulder-muscle-incr", 0.6) + _lr("arms/{s}-upperarm-muscle-incr", 0.3)
             + _lr("legs/{s}-lowerleg-scale-vert-incr", 0.3) + _lr("legs/{s}-upperleg-scale-vert-incr", 0.2))
     rig, body, eyes = _build_body(name, macro, face)
-    labels, keys, ctx = _label_faces(body, rig, eyes, _female_rule)
+    labels, keys, ctx = _label_faces(body, rig, eyes, _female_rule, smooth_iters=5)
     plates = {i for k, i in keys.items() if k != "M"}
     bone_lab = keys.get("bone")
     per = {}
@@ -1109,7 +1225,8 @@ def make_female(name="FemaleTitan"):
             per[i] = (0.0012, 0.003, 0.0, 0.01)
         elif k.startswith("hand"):
             per[i] = (0.0015, 0.003, 0.0, 0.01)
-    params = dict(h=0.0025, w=0.006, pillow=0.002, pw=0.02, sink=0.0015, sw=0.006, edge=0.0025, per_label=per)
+    params = dict(h=0.0, w=0.008, pillow=0.0, pw=0.02, sink=0.0, sw=0.008, edge=0.0025, per_label=per,
+                  smooth=6, sd_smooth=5)
     vlab, dist = _relief(body, labels, plates, params)
     _cavity(body)
     _fibre_coords(body, ctx)
@@ -1128,8 +1245,9 @@ def make_female(name="FemaleTitan"):
     # design bible 3.7: skin #d9b49b, muscle #b8321f / fibres #e5734e, eye band #613f2d, bone fingers #ab9f8a
     body_mat = _mat_body(name + "_mat", (0.69, 0.46, 0.33), (0.48, 0.032, 0.014), (0.07, 0.015, 0.01),
                          skin_rough=0.5, skin_var=0.1, hair_col=(0.58, 0.44, 0.15), eye_col=(0.07, 0.025, 0.015),
-                         eye_amt=0.9, cav_amt=0.6, fib_scale=230.0, harden=True, muscle_hi=(0.78, 0.17, 0.075),
-                         alt_col=(0.6, 0.55, 0.45))
+                         eye_amt=0.9, cav_amt=0.6, fib_scale=300.0, harden=True, muscle_hi=(0.78, 0.17, 0.075),
+                         alt_col=(0.6, 0.55, 0.45), soft=1.1, edge_amt=0.45, edge_w=(0.0, 0.6), bump=0.6,
+                         shade_col=(0.72, 0.5, 0.48))
     eye_mat = _mat_eye(name + "_eyes", (0.12, 0.2, 0.3), glow=0.0, white=(0.75, 0.75, 0.72), iris_r=0.7)
     _add_eyes(rig, body, eyes, eye_mat, scale=1.05, push=-0.0035)
     # chin-length blond bob, long side-swept fringe over one eye (design bible 3.7)
@@ -1170,12 +1288,18 @@ def set_hardening(rig, amount=1.0):
 # ================================================================== ATTACK
 def _attack_rule(ctx, bn, p, n):
     if _is_head_bone(bn) or _base(bn) == "neck03":
-        for c in (ctx.eyes["L"][0], ctx.eyes["R"][0]):
-            pass
-        sl = _attack_slit(ctx, p)
-        if sl:
-            return "slit"
-    return "skin"
+        return "slit" if _attack_slit(ctx, p) else "skin"
+    # body: the same anatomical partition as the Armored plates (pecs, 3 ab pairs + lower block, serratus
+    # fingers, obliques, delts, biceps/triceps, forearms, quads, calves) -> bulging muscle groups with shadow lines
+    k = _armored_rule(ctx, bn, p, n)
+    b = _base(bn)
+    if k == "M" and b in ("neck01", "neck02"):
+        return "skin"
+    if k == "M" and b in _LEG:
+        return "g_leg" + ("L" if p.x >= 0 else "R")
+    if k.startswith("pec") or (k == "M" and b in _TORSO and n.y < -0.3 and p.z > ctx.z["spine02"] and abs(p.x) < 0.03):
+        return "g_pec"                                     # no dark sternum line
+    return "g_" + k
 
 
 def _attack_slit(ctx, p):
@@ -1285,40 +1409,51 @@ def make_attack(name="AttackTitan"):
             + _lr("legs/{s}-upperleg-muscle-incr", 0.6) + _lr("legs/{s}-lowerleg-muscle-incr", 0.5))
     rig, body, eyes = _build_body(name, macro, face, pre_sub=_elf_ears)
     labels, keys, ctx = _label_faces(body, rig, eyes, _attack_rule)
-    plates = {keys["skin"]}
-    params = dict(h=0.0, w=0.004, sink=0.008, sw=0.003, edge=0.0016)
+    plates = {i for k, i in keys.items() if k != "slit"}
+    per = {}
+    for k, i in keys.items():
+        if k == "skin":
+            per[i] = (0.0, 0.004, 0.0, 0.01, 0.0016)
+        elif k.startswith(("g_finger", "g_toe", "g_hand", "g_palm", "g_foot")):
+            per[i] = (0.0, 0.003, 0.001, 0.006, 0.0018)
+        else:
+            per[i] = (0.0, 0.004, 0.009, 0.03, 0.0032)      # bulging muscle bellies
+    params = dict(h=0.0, w=0.004, sink=0.008, sw=0.003, edge=0.0016, per_label=per, smooth=4)
     vlab, dist = _relief(body, labels, plates, params)
-    _cavity(body, gain=22.0)
+    _cavity(body, gain=9.0)
     _fibre_coords(body, ctx)
     _eye_mask(body, eyes, 0.024, 0.013, 0.5, below=0.006, outer=0.008)
     _hair_mask(body, ctx, lambda p, hc: _ss(ctx.eye.z + 0.04, ctx.eye.z + 0.055, p.z) + _ss(0.0, 0.03, p.y) * _ss(ctx.eye.z - 0.02, ctx.eye.z + 0.01, p.z))
     # design bible 3.6: skin albedo #a5806a (warm reddish), hair #2a2019, eyes glow #74a06a / core #b8e0a0
-    body_mat = _mat_body(name + "_mat", (0.36, 0.19, 0.12), (0.06, 0.01, 0.008), (0.03, 0.01, 0.007),
-                         skin_rough=0.62, skin_var=0.15, hair_col=(0.023, 0.014, 0.01), eye_col=(0.03, 0.01, 0.008),
-                         eye_amt=0.85, cav_amt=1.0)
+    body_mat = _mat_body(name + "_mat", (0.34, 0.16, 0.105), (0.06, 0.01, 0.008), (0.07, 0.018, 0.012),
+                         skin_rough=0.6, skin_var=0.2, hair_col=(0.023, 0.014, 0.01), eye_col=(0.03, 0.01, 0.008),
+                         eye_amt=0.85, cav_amt=0.8, edge_amt=0.5, edge_w=(0.0, 0.8), cav_col=(0.12, 0.03, 0.025),
+                         shade_col=(0.42, 0.25, 0.25), toon=0.65)
     eye_mat = _mat_eye(name + "_eyes", (0.17, 0.35, 0.14), glow=4.0, white=(0.45, 0.5, 0.4), iris_r=0.6)
     _add_eyes(rig, body, eyes, eye_mat)
     _attack_teeth(rig, body, ctx, name + "_teeth")
-    # messy black hair grazing the shoulders, heavy fringe and strands across the face (design bible 3.6)
+    # messy black hair to the shoulders, heavy fringe and strands across the face (design bible 3.6)
     rnd = random.Random(11)
     locks = []
-    for i in range(100):
-        az = -180 + 360 * (i + rnd.uniform(0, 1)) / 100
-        if abs(az) < 42:
+    for i in range(120):
+        az = -180 + 360 * (i + rnd.uniform(0, 1)) / 120
+        if abs(az) < 40:
             continue
-        locks.append(dict(az=az, el=rnd.uniform(26, 55), len=rnd.uniform(0.19, 0.26), w=rnd.uniform(0.016, 0.024),
-                          droop=1.0, out=0.08, jitter=0.05, off=0.007, vol=0.016, taper=1.5, thick=0.25, curl=0.04))
-    for i in range(60):
+        locks.append(dict(az=az, el=rnd.uniform(24, 58), len=rnd.uniform(0.24, 0.33), w=rnd.uniform(0.013, 0.024),
+                          droop=1.0, out=0.1, jitter=0.09, off=0.007, vol=0.02, taper=1.3, thick=0.25,
+                          curl=rnd.uniform(-0.05, 0.12), sweep=rnd.uniform(-0.2, 0.2)))
+    for i in range(70):
         az = rnd.uniform(-180, 180)
-        if abs(az) < 30:
+        if abs(az) < 28:
             continue
-        locks.append(dict(az=az, el=rnd.uniform(3, 28), len=rnd.uniform(0.2, 0.26), w=0.022, droop=1.0, out=0.08,
-                          jitter=0.05, off=0.011, vol=0.016, taper=1.5, thick=0.25, layer=0.25, curl=0.04))
-    for i in range(34):
-        az = rnd.uniform(-48, 48)
-        locks.append(dict(az=az, el=rnd.uniform(8, 38), len=rnd.uniform(0.11, 0.19), w=rnd.uniform(0.01, 0.017),
-                          droop=0.9, out=0.1, sweep=rnd.uniform(-0.35, 0.35), jitter=0.06, off=0.01, vol=0.012,
-                          taper=1.3, thick=0.25))
+        locks.append(dict(az=az, el=rnd.uniform(3, 28), len=rnd.uniform(0.24, 0.32), w=rnd.uniform(0.016, 0.024),
+                          droop=1.0, out=0.1, jitter=0.08, off=0.012, vol=0.02, taper=1.3, thick=0.25, layer=0.25,
+                          curl=rnd.uniform(-0.05, 0.1)))
+    for i in range(50):                      # fringe and long strands falling across the eyes and cheeks
+        az = rnd.uniform(-50, 50)
+        locks.append(dict(az=az, el=rnd.uniform(5, 36), len=rnd.uniform(0.14, 0.26), w=rnd.uniform(0.007, 0.016),
+                          droop=0.95, out=0.12, sweep=rnd.uniform(-0.45, 0.45), jitter=0.1, off=0.011, vol=0.014,
+                          taper=1.2, thick=0.25))
     _make_hair(rig, body, ctx, name + "_hair", locks,
                _mat_hair(name + "_hairmat", (0.023, 0.014, 0.01), (0.25, 0.22, 0.2), root_dark=0.5, rough=0.6),
                skip_ears=True)
