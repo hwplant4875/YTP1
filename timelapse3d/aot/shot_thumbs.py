@@ -70,14 +70,17 @@ SHOTS = {
                cam=((-520, 400, 780), (-30, -380, 0), 31)),
     "T3": dict(sun=(150, 7, 5.0, (1.0, 0.55, 0.26)), sky=((0.98, 0.62, 0.38), (0.22, 0.26, 0.50)),
                amb=0.45, haze=((0.86, 0.60, 0.42), 1800.0, 0.6), expo=-0.1, haze_e=0.5,
-               cam=((-28, 60, 10), (70, 0, 20), 22), cloud=(1.0, 0.72, 0.52), cloud_lo=0.58),
-    "T4": dict(sun=(-20, 16, 4.2, (1.0, 0.88, 0.70)), sky=((0.84, 0.88, 0.90), (0.38, 0.58, 0.88)),
-               amb=0.6, haze=((0.80, 0.86, 0.92), 2600.0, 0.6), expo=-0.1, haze_e=0.5,
-               cam=((80, -1580, 22), (-10, -1150, -30), 30), cloud=(0.97, 0.97, 0.97)),
+               cam=((-30, 62, 4), (70, 0, 23), 22), cloud=(1.0, 0.72, 0.52), cloud_lo=0.58),
+    "T4": dict(sun=(-12, 9, 4.6, (1.0, 0.84, 0.62)), sky=((0.90, 0.88, 0.84), (0.42, 0.60, 0.86)),
+               amb=0.55, haze=((0.86, 0.87, 0.88), 900.0, 0.62), expo=-0.05, haze_e=0.55,
+               cam=((55, -1365, 4.5), (0, -1080, 26), 24), cloud=(0.98, 0.97, 0.95)),
 }
 S = SHOTS[A.shot]
 if A.shot == "T3" and A.variant == "canal":
     S["cam"] = ((330, 640, 38), (40, 0, 20), 30)
+elif A.shot == "T3" and A.variant != "hero":
+    # round 2 default: low (3.5 m) from beyond the canal, looking west along Wall Maria to the breach
+    S["cam"] = ((560, 175, 16), (30, 40, 15), 60)
 CAM_LOC = Vector(S["cam"][0])
 if A.cam:
     v = [float(t) for t in A.cam.split(",")]
@@ -227,6 +230,86 @@ def wall_mat():
     L.new(gm.outputs["Result"], b.inputs["Base Color"])
     bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.15
     L.new(n1.outputs["Fac"], bp.inputs["Height"]); L.new(bp.outputs["Normal"], b.inputs["Normal"])
+    return m
+
+def wall_mat_courses(name="WallStoneCourses"):
+    """Round-2 wall surface: huge dressed stone in horizontal courses (2.4 m) with faint staggered vertical joints,
+    per-block tone variation, isotropic mottling (no vertical streaks), a dark weathered base and a lighter band
+    under the parapet. Object coords = world for walls.py meshes; u runs along x + y so it works on every wall."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N, L = m.node_tree.nodes, m.node_tree.links
+    b = N["Principled BSDF"]; b.inputs["Roughness"].default_value = 0.92; b.inputs["Specular IOR Level"].default_value = 0.15
+    def math_(op, a, bb=None, clamp=False):
+        n = N.new("ShaderNodeMath"); n.operation = op; n.use_clamp = clamp
+        for i, v in enumerate((a, bb)):
+            if v is None:
+                continue
+            if isinstance(v, (int, float)):
+                n.inputs[i].default_value = v
+            else:
+                L.new(v, n.inputs[i])
+        return n.outputs[0]
+    def mrange(v, a, bb, c, d):
+        n = N.new("ShaderNodeMapRange"); n.clamp = True
+        n.inputs["From Min"].default_value, n.inputs["From Max"].default_value = a, bb
+        n.inputs["To Min"].default_value, n.inputs["To Max"].default_value = c, d
+        L.new(v, n.inputs["Value"]); return n.outputs["Result"]
+    def mix(fac, a, bb, blend="MIX"):
+        n = N.new("ShaderNodeMix"); n.data_type = "RGBA"; n.blend_type = blend
+        for sock, v in (("Factor", fac), ("A", a), ("B", bb)):
+            if isinstance(v, tuple):
+                n.inputs[sock].default_value = v if len(v) == 4 else (*v, 1)
+            elif isinstance(v, (int, float)):
+                n.inputs[sock].default_value = v
+            else:
+                L.new(v, n.inputs[sock])
+        return n.outputs["Result"]
+    tc = N.new("ShaderNodeTexCoord")
+    xyz = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs["Object"], xyz.inputs[0])
+    X, Y, Z = xyz.outputs["X"], xyz.outputs["Y"], xyz.outputs["Z"]
+    H, Wb = 2.4, 6.5
+    zc = math_("DIVIDE", Z, H)
+    ci = math_("FLOOR", zc); fz = math_("FRACT", zc)
+    u = math_("DIVIDE", math_("ADD", X, Y), Wb)
+    stag = math_("MULTIPLY", math_("FRACT", math_("MULTIPLY", ci, 0.5)), 1.0)           # 0 or 0.5
+    bu = math_("ADD", u, stag)
+    bi = math_("FLOOR", bu); fu = math_("FRACT", bu)
+    # seams
+    seam_h = mrange(fz, 0.0, 0.03, 1.0, 0.0)
+    seam_v = math_("MAXIMUM", mrange(fu, 0.0, 0.012, 1.0, 0.0), mrange(fu, 0.988, 1.0, 0.0, 1.0))
+    seam = math_("MAXIMUM", seam_h, math_("MULTIPLY", seam_v, 0.45))
+    # per-block tone
+    cb = N.new("ShaderNodeCombineXYZ"); L.new(bi, cb.inputs["X"]); L.new(ci, cb.inputs["Y"])
+    wn = N.new("ShaderNodeTexWhiteNoise"); wn.noise_dimensions = "3D"; L.new(cb.outputs[0], wn.inputs["Vector"])
+    tone = mrange(wn.outputs["Value"], 0.0, 1.0, 0.9, 1.08)
+    # mottled stone (isotropic, two scales)
+    n1 = N.new("ShaderNodeTexNoise"); n1.inputs["Scale"].default_value = 0.09; n1.inputs["Detail"].default_value = 6
+    L.new(tc.outputs["Object"], n1.inputs["Vector"])
+    r = N.new("ShaderNodeValToRGB"); e = r.color_ramp.elements
+    e[0].position, e[0].color = 0.35, (*lin("9E9684"), 1); e[1].position, e[1].color = 0.65, (*lin("C4BCA8"), 1)
+    L.new(n1.outputs["Fac"], r.inputs["Fac"])
+    tone_rgb = N.new("ShaderNodeCombineColor")
+    for k in ("Red", "Green", "Blue"):
+        L.new(tone, tone_rgb.inputs[k])
+    col = mix(1.0, r.outputs["Color"], tone_rgb.outputs[0], "MULTIPLY")
+    # weathered base: darker, warm grime up to ~12 m with a ragged upper edge; faint stains higher up
+    n2 = N.new("ShaderNodeTexNoise"); n2.inputs["Scale"].default_value = 0.06; n2.inputs["Detail"].default_value = 5
+    L.new(tc.outputs["Object"], n2.inputs["Vector"])
+    zz = math_("ADD", Z, math_("MULTIPLY", math_("SUBTRACT", n2.outputs["Fac"], 0.5), 10.0))
+    grime = mrange(zz, 0.0, 13.0, 0.62, 0.0)
+    col = mix(grime, col, lin("4F4A3D"))
+    stain = mrange(n2.outputs["Fac"], 0.5, 0.85, 0.0, 0.10)
+    col = mix(stain, col, lin("7C7462"))
+    # lighter band under the parapet
+    top = mrange(Z, 45.6, 46.2, 0.0, 1.0)
+    col = mix(math_("MULTIPLY", top, 0.55), col, lin("DAD3C2"))
+    top_line = math_("MULTIPLY", mrange(Z, 45.5, 45.6, 0.0, 1.0), mrange(Z, 45.6, 45.75, 1.0, 0.0))
+    seam = math_("MAXIMUM", seam, top_line)
+    col = mix(math_("MULTIPLY", seam, 0.55), col, lin("3A362E"))
+    L.new(col, b.inputs["Base Color"])
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.35; bp.inputs["Distance"].default_value = 0.08
+    L.new(math_("SUBTRACT", math_("MULTIPLY", n1.outputs["Fac"], 0.3), seam), bp.inputs["Height"])
+    L.new(bp.outputs["Normal"], b.inputs["Normal"])
     return m
 
 def ground_mat():
@@ -489,7 +572,11 @@ def add_piers(name, pts, m, outward=1, skip=()):
         if skipped(q):
             continue
         c = q + n * 10.6
-        box(bm, Vector((c.x, c.y, (W.WALL_H + 1.8) / 2 - 2)), (2.8, 3.2, W.WALL_H + 1.8 + 4), ang)
+        if A.shot == "T2" or i % 2 == 1:
+            box(bm, Vector((c.x, c.y, (W.WALL_H + 1.8) / 2 - 2)), (2.8, 3.2, W.WALL_H + 1.8 + 4), ang)
+        else:                                                          # flush filler: only a faint seam
+            f = q + n * 8.7
+            box(bm, Vector((f.x, f.y, W.WALL_H / 2 - 2)), (1.6, 1.4, W.WALL_H + 4), ang)
         c = q - n * 5.5
         if i % 2 == 0:
             box(bm, Vector((c.x, c.y, (W.WALL_H + 0.8) / 2 - 2)), (2.6, 1.2, W.WALL_H + 0.8 + 4), ang)
@@ -731,13 +818,13 @@ def forest_points(bounds, density=0.012):
         dx, dy = x - CAM_LOC.x, y - CAM_LOC.y
         if math.hypot(dx, dy) < (330 if A.shot == "T4" else 160):    # low-poly trees never right at the lens
             continue
-        if A.shot == "T3" and A.variant == "canal":                    # view corridor to the breach
+        if A.shot == "T3" and A.variant != "hero":                     # view corridor to the breach
             ux, uy = -CAM_LOC.x, -CAM_LOC.y
             t = (dx * ux + dy * uy) / (ux * ux + uy * uy)
             if 0 < t < 1 and abs(dx * uy - dy * ux) / math.hypot(ux, uy) < 160 + 120 * t:
                 continue
         if A.shot == "T4":                                             # keep the titans' meadow open
-            if math.hypot(dx, dy) < 470 and abs(math.atan2(dx, dy) - math.atan2(-90, 430)) < 0.5:
+            if math.hypot(dx, dy) < 700:                              # foreground handled by shot_T4's spruces
                 continue
         f = noise.noise(Vector((x / 650, y / 650, 4.2))) + 0.45 * noise.noise(Vector((x / 170, y / 170, 1.1)))
         inside = y > 0
@@ -870,7 +957,7 @@ def render_setup():
 # ------------------------------------------------------------------ materials
 def materials():
     M = {
-        "stone": wall_mat(),
+        "stone": wall_mat() if A.shot == "T2" else wall_mat_courses(),
         "gatewood": pmat("GateWood", lin("3B2A20"), 0.8),
         "iron": pmat("Iron", lin("4A4A50"), 0.5, 0.5),
         "keg": pmat("Keg", lin("53311B"), 0.8),
@@ -1037,9 +1124,14 @@ def titan_on_ground(rig, x, y, heading, frame_offset=0, walk=True):
     rig.location = (x, y, height(x, y) - 0.2)
     rig.rotation_euler.z = heading
 
-def make_pures(spots):
+PALE_SKINS = [(0.80, 0.56, 0.45), (0.84, 0.62, 0.52), (0.78, 0.50, 0.44), (0.82, 0.60, 0.50), (0.76, 0.54, 0.46)]
+
+def make_pures(spots, pale=False):
     import pure_titans as PT
     out = []
+    if pale:                                             # round 2: pale beige / pink skins instead of orange
+        for k, key in enumerate(list(PT.PRESETS.keys())):
+            PT.PRESETS[key] = dict(PT.PRESETS[key], skin=PALE_SKINS[k % len(PALE_SKINS)])
     for i, (preset, x, y, heading, hgt, off) in enumerate(spots):
         kw = dict(preset=preset) if preset not in ("smiling",) else {}
         rig = PT.make_pure("smiling" if preset == "smiling" else "generic", seed=40 + i, height=hgt, **kw)
@@ -1080,13 +1172,45 @@ def shot_T3(M):
     dust_cloud("DustR", (36, 13, -2), 20, 12, dlit, 23, flat=0.2)
     dust_cloud("DustHigh", (2, 10, 14), 12, 8, dthin, 4, flat=0.5, up=8)
     dust_cloud("DustFeet", (-2, 26, -3), 10, 8, dthin, 5, flat=0.1)
-    if A.variant == "canal":
-        dust_cloud("Plume", (0, 20, 10), 40, 18, dlit, 9, flat=0.6, up=40)
+    if A.variant != "hero":
+        dust_cloud("Plume", (0, 18, 8), 46, 22, dlit, 9, flat=0.6, up=38)
+        dust_cloud("PlumeTop", (4, 12, 40), 34, 12, dthin, 19, flat=0.5, up=18)
+        dust_cloud("DustRoll", (-40, 30, -3), 70, 22, dlit, 29, flat=0.15)
+    else:
+        dust_cloud("HeroPlume", (14, 12, 12), 22, 14, dthin, 9, flat=0.5, up=22)
+        dust_cloud("HeroRollL", (-55, 22, -3), 30, 14, dlit, 39, flat=0.15)
+        dust_cloud("HeroRollR", (70, 20, -3), 30, 12, dthin, 49, flat=0.15)
+    if True:
+        # chunks thrown out of the breach, flying toward the camera
+        tc_ = Vector((CAM_LOC.x, CAM_LOC.y, 0)) - Vector((0, 10, 0))
+        dirn = Vector((tc_.x, tc_.y, 0)).normalized()
+        dirn.z = 0.12
+        reach = (CAM_LOC.to_2d() - Vector((0, 10))).length * 0.8
+        debris("Flying", (0, 14, 12), 160 if A.variant != "hero" else 70, M, 17,
+               spread=(150 if A.variant != "hero" else 30, reach, 30 if A.variant != "hero" else 16),
+               size=(1.0, 4.5) if A.variant != "hero" else (0.4, 1.6), dirn=dirn, air=0.85)
+        near = bmesh.new()
+        rn = random.Random(5)
+        for k in range(9):
+            dist = rn.uniform(45, 140) if A.variant != "hero" else rn.uniform(14, 40)
+            p = Vector((CAM_LOC.x, CAM_LOC.y, 0)) + (Vector((0, 10, 0)) - Vector((CAM_LOC.x, CAM_LOC.y, 0))).normalized() * dist
+            p += Vector((rn.uniform(-0.3, 0.3) * dist * 0.4, rn.uniform(-0.3, 0.3) * dist * 0.4, 0))
+            p.z = rn.uniform(4, 14) if A.variant != "hero" else rn.uniform(2, 9)
+            sz = rn.uniform(0.5, 1.4) if A.variant != "hero" else rn.uniform(0.25, 0.7)
+            res = bmesh.ops.create_icosphere(near, subdivisions=2, radius=sz)
+            rot = Euler((rn.uniform(0, 3), rn.uniform(0, 3), rn.uniform(0, 3))).to_matrix()
+            for v in res["verts"]:
+                q = Vector((v.co.x * 1.3, v.co.y, v.co.z * 0.7))
+                q += Vector((noise.noise(q * 1.5 + Vector((k, 0, 0))), noise.noise(q * 1.5 + Vector((0, k, 0))), 0)) * sz * 0.3
+                v.co = p + rot @ q
+        bm_ob("NearChunks", near, [M["stone"]])
     debris("Debris", (0, 8, 3), 240, M, 7, spread=(50, 60, 14), size=(0.4, 2.4), air=0.2)
     debris("DoorBits", (0, 9, 4), 30, M, 8, spread=(26, 44, 10), size=(1.2, 4), air=0.3)
     # ferry boats leaving through the water gate (and still loading inside)
     bm_mats(M)
     boat_s = (22, 48, 76, 105, 140, 178, 220, 265)
+    if A.variant not in ("hero", "canal"):
+        boat_s = (6, 20, 34, 48, 62, 78)
     if A.variant == "canal":
         boat_s = (30, 70, 115, 170, 230, 300, 370, 430, 480, 525, 565)
     for i, s_ in enumerate(boat_s):
@@ -1100,6 +1224,9 @@ def shot_T3(M):
         rig = shifters.make_armored()
         pose_armored(rig)
         rig.location = (-4, 30, 0.0); rig.rotation_euler = (0.22, 0.0, heading_to(-4, 30, 10, 200))
+        if A.variant != "hero":
+            rig.location = (46, 58, 0.0); rig.rotation_euler = (0.22, 0.0, heading_to(46, 58, 90, 300))
+            dust_cloud("ChargeTrail", (22, 34, -3), 26, 14, puff_mat("Trail", lin("D2C2A6"), alpha=0.7, emit=(0.8, 0.62, 0.48), estr=0.12), 33, flat=0.12)
         ground_rig(rig, 0.4)
         spots = [("smiling", 6, 4, heading_to(6, 4, 60, 200), 14, 21),
                  ("bald_grinner", 62, 58, heading_to(62, 58, -60, 400), 13, 3),
@@ -1109,7 +1236,16 @@ def shot_T3(M):
                  ("messy_gaper", 130, 210, heading_to(130, 210, 200, 500), 7, 37),
                  ("potbelly", 35, 50, heading_to(35, 50, 80, 300), 5, 11),
                  ("runt", 110, 85, heading_to(110, 85, 150, 300), 3.5, 41)]
-        make_pures(spots)
+        if A.variant != "hero":
+            spots = [("smiling", 4, 4, heading_to(4, 4, 80, 200), 14, 21),
+                     ("bald_grinner", 95, 70, heading_to(95, 70, 300, 200), 13, 3),
+                     ("ruddy_brute", 150, 40, heading_to(150, 40, 280, 120), 12, 17),
+                     ("blond_sleeper", 60, 120, heading_to(60, 120, 200, 300), 10, 29),
+                     ("pale_starer", 200, 95, heading_to(200, 95, 300, 160), 8, 9),
+                     ("messy_gaper", 125, 160, heading_to(125, 160, 300, 260), 7, 37),
+                     ("potbelly", 40, 60, heading_to(40, 60, 140, 140), 5, 11),
+                     ("runt", 230, 150, heading_to(230, 150, 330, 200), 3.5, 41)]
+        make_pures(spots, pale=True)
 
 def bm_mats(M):
     M["boat"] = pmat("Boat", lin("6B4E35"), 0.8)
@@ -1118,55 +1254,123 @@ def bm_mats(M):
         M[f"cloth{i + 1}"] = pmat(f"Cloth{i + 1}", lin(c), 0.9)
     M["skin"] = pmat("SkinH", lin("D8A888"), 0.7)
 
+def grass_clump_mesh(name, m, seed, blades=28, h=(0.6, 1.4)):
+    r = random.Random(seed)
+    bm = bmesh.new()
+    for _ in range(blades):
+        a = r.uniform(0, 6.28); rr = r.uniform(0, 0.35)
+        base = Vector((math.cos(a) * rr, math.sin(a) * rr, 0))
+        hh = r.uniform(*h); w = r.uniform(0.03, 0.06)
+        lean = Vector((math.cos(a), math.sin(a), 0)) * r.uniform(0.1, 0.45) * hh
+        side = Vector((-math.sin(a + 1.2), math.cos(a + 1.2), 0)) * w
+        prev = [bm.verts.new(base - side), bm.verts.new(base + side)]
+        for k in range(1, 4):
+            t = k / 3
+            c = base + lean * t * t + Vector((0, 0, hh * t))
+            sw = side * (1 - t * 0.85)
+            cur = [bm.verts.new(c - sw), bm.verts.new(c + sw)]
+            bm.faces.new((prev[0], prev[1], cur[1], cur[0]))
+            prev = cur
+    return bm_ob(name, bm, [m], None, smooth=True)
+
+def conifer_mesh(name, m_leaf, m_bark, seed, tiers=9, h=18.0):
+    """Anime-style spruce: stacked drooping tiers with jagged rims."""
+    r = random.Random(seed)
+    bm = bmesh.new()
+    tr = bmesh.ops.create_cone(bm, cap_ends=True, segments=6, radius1=0.4, radius2=0.2, depth=h * 0.3)
+    for v in tr["verts"]:
+        v.co.z += h * 0.15
+    for f in {f for v in tr["verts"] for f in v.link_faces}:
+        f.material_index = 1
+    for t in range(tiers):
+        z0 = h * (0.12 + 0.82 * t / tiers)
+        rad = (1 - t / tiers) * h * 0.2 + 0.4
+        seg = 14
+        ring = []
+        for k in range(seg):
+            a = 6.283 * k / seg + r.uniform(-0.1, 0.1)
+            rk = rad * (1.0 if k % 2 == 0 else 0.72) * r.uniform(0.85, 1.1)
+            ring.append(bm.verts.new((math.cos(a) * rk, math.sin(a) * rk, z0 - rad * 0.25)))
+        tip = bm.verts.new((r.uniform(-.1, .1), r.uniform(-.1, .1), z0 + rad * 0.9))
+        for k in range(seg):
+            bm.faces.new((ring[k], ring[(k + 1) % seg], tip))
+        bm.faces.new(list(reversed(ring)))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    return bm_ob(name, bm, [m_leaf, m_bark], None)
+
+def proto_coll(name):
+    c = bpy.data.collections.new(name); bpy.context.scene.collection.children.link(c)
+    bpy.context.view_layer.layer_collection.children[name].exclude = True
+    return c
+
 def shot_T4(M):
-    if A.no_titans or A.clay:
-        return
     loc, tgt, lens = S["cam"]
     d = Vector((tgt[0] - loc[0], tgt[1] - loc[1])).normalized()
     rgt = Vector((d.y, -d.x))
     c0 = Vector(loc[:2])
-    # (preset, distance along view, lateral offset (+ = right), height, walking direction: 0 = toward camera, + = turning right)
-    lay = [("smiling", 72, -24, 14, 15), ("bald_grinner", 88, 30, 13, -35), ("potbelly", 100, 4, 5, 10),
-           ("runt", 80, -52, 3.5, 40), ("ruddy_brute", 128, 58, 12, 70), ("messy_gaper", 115, -72, 7, 110),
-           ("blond_sleeper", 175, -4, 10, 160), ("pale_starer", 215, -115, 8, -60),
-           ("bald_grinner", 270, 80, 15, -120), ("ruddy_brute", 310, -25, 9, 90),
-           ("blond_sleeper", 340, -160, 11, 30), ("messy_gaper", 390, 130, 6, -150)]
+    def at(dist, lat):
+        return c0 + d * dist + rgt * lat
+    # (preset, distance, lateral (+ right), height m, walk direction relative to 'toward camera' deg, cycle offset)
+    lay = [("smiling", 40, -3, 13.5, 6, 18), ("messy_gaper", 33, 14, 7.0, -20, 5), ("runt", 26, -12, 4.0, 25, 31),
+           ("bald_grinner", 120, 34, 12, -60, 9), ("blond_sleeper", 150, -48, 10, 40, 27),
+           ("ruddy_brute", 185, 8, 11, 120, 40), ("pale_starer", 210, -95, 8, -90, 2)]
     spots = []
-    for i, (pre, dist, lat, hgt, rel) in enumerate(lay):
-        p = c0 + d * dist + rgt * lat
-        toward = (c0 - p).normalized()
-        w = Vector((toward.x * math.cos(math.radians(-rel)) - toward.y * math.sin(math.radians(-rel)),
-                    toward.x * math.sin(math.radians(-rel)) + toward.y * math.cos(math.radians(-rel))))
-        spots.append((pre, p.x, p.y, heading_to(p.x, p.y, p.x + w.x * 100, p.y + w.y * 100), hgt, (i * 13) % 48))
-    make_pures(spots)
-    # clumps of low shrubs across the near meadow
-    bc = bpy.data.collections.new("Bushes"); bpy.context.scene.collection.children.link(bc)
-    bpy.context.view_layer.layer_collection.children["Bushes"].exclude = True
-    for k in range(4):
-        rb = random.Random(90 + k)
-        bm = bmesh.new()
-        for j in range(rb.randint(3, 6)):
-            rad = rb.uniform(0.9, 1.6)
-            sp = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=rad)
-            off = Vector((rb.uniform(-1.6, 1.6), rb.uniform(-1.6, 1.6), rad * 0.55))
-            for v in sp["verts"]:
-                v.co.z *= 0.7
-                v.co += off + Vector((noise.noise(v.co * 0.9 + Vector((k, j, 0))), noise.noise(v.co * 0.9 + Vector((j, k, 5))), 0)) * 0.3
-        bob = bm_ob(f"Bush{k}", bm, [M[("leaf", "leaf2", "leaf3", "leaf_dark")[k]]], bc, smooth=True)
+    for pre, dist, lat, hgt, rel, off in lay:
+        p = at(dist, lat)
+        tw = (c0 - p).normalized()
+        a = math.radians(-rel)
+        w = Vector((tw.x * math.cos(a) - tw.y * math.sin(a), tw.x * math.sin(a) + tw.y * math.cos(a)))
+        spots.append((pre, p.x, p.y, heading_to(p.x, p.y, p.x + w.x * 100, p.y + w.y * 100), hgt, off))
+    if not (A.no_titans or A.clay):
+        make_pures(spots, pale=True)
     r = random.Random(4)
+    # tall grass in the foreground
+    gm = noise_mat("GrassBlade", lin("5E8636"), lin("A9B860"), 0.8, rough=0.7)
+    gc = proto_coll("GrassProtos")
+    for k in range(4):
+        gc.objects.link(grass_clump_mesh(f"G{k}", gm, k, h=(0.5, 1.1) if k < 2 else (0.9, 1.7)))
+        bpy.context.scene.collection.objects.unlink(bpy.data.objects[f"G{k}"])
     pts = []
-    centers = []
-    for _ in range(70):
-        dist = 30 + r.random() ** 0.8 * 480
-        lat = r.uniform(-0.8, 0.8) * dist
-        centers.append(c0 + d * dist + rgt * lat)
-    for c in centers:
-        for _ in range(r.randint(2, 9)):
-            p = c + Vector((r.gauss(0, 7), r.gauss(0, 4)))
-            if any((p.x - q[1]) ** 2 + (p.y - q[2]) ** 2 < 14 ** 2 for q in spots) or abs(p.x) < 12:
-                continue
-            pts.append((p.x, p.y, height(p.x, p.y) - 0.3, r.uniform(0, 6.28), r.uniform(0.5, 1.05), r.randrange(4), -1e4, 1e5))
-    SC.scatter("BushPts", bc, pts, 845)
+    for _ in range(9000):
+        dist = 2.5 + r.random() ** 1.8 * 70
+        lat = r.uniform(-0.75, 0.75) * dist
+        p = at(dist, lat)
+        if noise.noise(Vector((p.x / 9, p.y / 9, 3))) < -0.25:
+            continue
+        pts.append((p.x, p.y, height(p.x, p.y) - 0.05, r.uniform(0, 6.28), r.uniform(0.8, 1.4), r.randrange(4), -1e4, 1e5))
+    SC.scatter("TallGrass", gc, pts, 845)
+    # rocks
+    rk = bmesh.new()
+    for (dist, lat, sz) in ((9, -5.5, 1.3), (12, 6.5, 0.9), (22, -15, 2.4), (26, 21, 1.6), (40, 26, 3.0), (60, -34, 2.2),
+                            (14, 2.5, 0.6), (33, -4, 1.0)):
+        p = at(dist, lat)
+        res = bmesh.ops.create_icosphere(rk, subdivisions=2, radius=sz)
+        for v in res["verts"]:
+            v.co.z *= 0.62
+            v.co += Vector((noise.noise(v.co * 0.8 + Vector((dist, 0, 0))), noise.noise(v.co * 0.8 + Vector((0, lat, 0))),
+                            noise.noise(v.co * 0.8 + Vector((3, 3, dist))))) * sz * 0.28
+            v.co += Vector((p.x, p.y, height(p.x, p.y) + sz * 0.15))
+    bm_ob("Rocks", rk, [noise_mat("Rock", lin("6E6A5E"), lin("A39C88"), 0.6, rough=0.9, bump=0.4)], smooth=False)
+    # forest edge on the right (anime spruces) and a few on the far left
+    leaf = noise_mat("Spruce", lin("1F3F2E"), lin("3E6A42"), 0.35, rough=0.85)
+    bark = pmat("SpruceBark", lin("3A2A1E"), 0.9)
+    fc = proto_coll("SpruceProtos")
+    for k in range(4):
+        ob = conifer_mesh(f"SP{k}", leaf, bark, k, h=r.uniform(16, 24))
+        bpy.context.scene.collection.objects.unlink(ob); fc.objects.link(ob)
+    tp = []
+    for _ in range(700):
+        dist = r.uniform(25, 340)
+        edge = 0.42 * dist + 20 + noise.noise(Vector((dist / 60, 0, 1))) * 14
+        lat = edge + r.uniform(0, 140)
+        p = at(dist, lat)
+        tp.append((p.x, p.y, height(p.x, p.y) - 0.3, r.uniform(0, 6.28), r.uniform(0.75, 1.3), r.randrange(4), -1e4, 1e5))
+    for _ in range(160):
+        dist = r.uniform(240, 420)
+        lat = -(0.5 * dist + r.uniform(0, 160))
+        p = at(dist, lat)
+        tp.append((p.x, p.y, height(p.x, p.y) - 0.3, r.uniform(0, 6.28), r.uniform(0.75, 1.2), r.randrange(4), -1e4, 1e5))
+    SC.scatter("ForestEdge", fc, tp, 845)
 
 def main():
     reset()
