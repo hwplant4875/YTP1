@@ -1,0 +1,1737 @@
+{
+ "sections": [
+  {
+   "voice": "s00",
+   "pad": 0.5,
+   "clip_audio_db": -20,
+   "shots": [
+    [
+     0,
+     "p6_scenepack",
+     69
+    ],
+    [
+     0.6,
+     "p4_tricking_jason",
+     122.5
+    ],
+    [
+     1.3,
+     "p3_trailer",
+     109.55
+    ],
+    [
+     2.0,
+     "r09_scenepack",
+     465
+    ],
+    [
+     2.9,
+     "p7_vs_tina",
+     102
+    ],
+    [
+     3.8,
+     "p9_opening_hd",
+     141
+    ],
+    [
+     5.0,
+     "jx_trailer",
+     48
+    ],
+    [
+     5.8,
+     "jx_ending",
+     150
+    ],
+    [
+     7.4,
+     "p6_scenepack",
+     30
+    ],
+    [
+     9.5,
+     "p1_mrs_voorhees",
+     17
+    ],
+    [
+     11.4,
+     "p1_mrs_voorhees",
+     27
+    ],
+    [
+     13.8,
+     "p1_mrs_voorhees",
+     50
+    ],
+    [
+     15.2,
+     "p3_chris_escape",
+     33
+    ],
+    [
+     16.2,
+     "p6_scenepack",
+     108
+    ],
+    [
+     17.2,
+     "p8_vs_newyork",
+     6
+    ],
+    [
+     18.2,
+     "jx_uber_scenepack",
+     9
+    ],
+    [
+     19.5,
+     "p7_vs_tina",
+     204
+    ],
+    [
+     21.5,
+     "fvj_scenepack",
+     27
+    ],
+    [
+     22.4,
+     "p2_final_scene",
+     165
+    ],
+    [
+     23.0,
+     "jx_uber_scenepack",
+     132
+    ],
+    [
+     25.1,
+     "BLACK",
+     0
+    ]
+   ],
+   "overlays": [
+    [
+     "word",
+     "Hacked",
+     0.6,
+     1.25
+    ],
+    [
+     "word",
+     "Hanged",
+     1.3,
+     1.95
+    ],
+    [
+     "word",
+     "Drowned",
+     2.0,
+     2.85
+    ],
+    [
+     "word",
+     "Electrocuted",
+     2.9,
+     3.75
+    ],
+    [
+     "word",
+     "Blown to pieces",
+     3.8,
+     4.95
+    ],
+    [
+     "word",
+     "Frozen",
+     5.0,
+     5.75
+    ],
+    [
+     "word",
+     "Thrown into space",
+     5.8,
+     7.0
+    ],
+    [
+     "title",
+     [
+      "IT WAS HIS MOTHER"
+     ],
+     13.8,
+     15.1
+    ],
+    [
+     "title",
+     [
+      "11 JASONS"
+     ],
+     18.2,
+     19.4
+    ],
+    [
+     "title",
+     [
+      "INSTRUCTION",
+      "!444"
+     ],
+     25.2,
+     28.2
+    ],
+    [
+     "film",
+     "Jason Lives (1986)",
+     0,
+     0.6
+    ],
+    [
+     "film",
+     "The Final Chapter (1984)",
+     0.6,
+     1.3
+    ],
+    [
+     "film",
+     "Friday the 13th Part III (1982)",
+     1.3,
+     2.0
+    ],
+    [
+     "film",
+     "Friday the 13th (2009)",
+     2.0,
+     2.9
+    ],
+    [
+     "film",
+     "The New Blood (1988)",
+     2.9,
+     3.8
+    ],
+    [
+     "film",
+     "Jason Goes to Hell (1993)",
+     3.8,
+     5.0
+    ],
+    [
+     "film",
+     "Jason X (2001)",
+     5.0,
+     7.4
+    ],
+    [
+     "film",
+     "Jason Lives (1986)",
+     7.4,
+     9.5
+    ],
+    [
+     "film",
+     "Friday the 13th (1980)",
+     9.5,
+     15.2
+    ],
+    [
+     "film",
+     "Friday the 13th Part III (1982)",
+     15.2,
+     16.2
+    ],
+    [
+     "film",
+     "Jason Lives (1986)",
+     16.2,
+     17.2
+    ],
+    [
+     "film",
+     "Jason Takes Manhattan (1989)",
+     17.2,
+     18.2
+    ],
+    [
+     "film",
+     "Jason X (2001)",
+     18.2,
+     19.5
+    ],
+    [
+     "film",
+     "The New Blood (1988)",
+     19.5,
+     21.5
+    ],
+    [
+     "film",
+     "Freddy vs. Jason (2003)",
+     21.5,
+     22.4
+    ],
+    [
+     "film",
+     "Friday the 13th Part 2 (1981)",
+     22.4,
+     23.0
+    ],
+    [
+     "film",
+     "Jason X (2001)",
+     23.0,
+     25.1
+    ]
+   ]
+  },
+  {
+   "voice": "s01",
+   "pad": 0.5,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "p3_gets_mask",
+     246
+    ],
+    [
+     1.6,
+     "p8_trailer",
+     57
+    ],
+    [
+     3.0,
+     "p6_scenepack",
+     120
+    ],
+    [
+     5.0,
+     "r09_scenepack",
+     81
+    ],
+    [
+     7.4,
+     "p7_vs_tina",
+     165
+    ],
+    [
+     8.8,
+     "fvj_scenepack",
+     180
+    ],
+    [
+     10.1,
+     "jx_uber_scenepack",
+     60
+    ]
+   ],
+   "overlays": [
+    [
+     "title",
+     [
+      "NOT THE BEST MOVIE"
+     ],
+     1.6,
+     2.9
+    ],
+    [
+     "title",
+     [
+      "THE HARDEST",
+      "!TO KILL"
+     ],
+     3.0,
+     4.9
+    ],
+    [
+     "odds",
+     "??",
+     7.6,
+     999
+    ],
+    [
+     "film",
+     "Friday the 13th Part III (1982)",
+     0,
+     1.6
+    ],
+    [
+     "film",
+     "Jason Takes Manhattan (1989)",
+     1.6,
+     3.0
+    ],
+    [
+     "film",
+     "Jason Lives (1986)",
+     3.0,
+     5.0
+    ],
+    [
+     "film",
+     "Friday the 13th (2009)",
+     5.0,
+     7.4
+    ],
+    [
+     "film",
+     "The New Blood (1988)",
+     7.4,
+     8.8
+    ],
+    [
+     "film",
+     "Freddy vs. Jason (2003)",
+     8.8,
+     10.1
+    ],
+    [
+     "film",
+     "Jason X (2001)",
+     10.1,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s02",
+   "pad": 0.7,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "p2_still_window",
+     0
+    ],
+    [
+     3.8,
+     "p2_still_sack",
+     0
+    ],
+    [
+     7.0,
+     "p2_final_scene",
+     39
+    ],
+    [
+     9.4,
+     "p2_final_scene",
+     168
+    ],
+    [
+     11.0,
+     "p2_final_scene",
+     174
+    ],
+    [
+     12.2,
+     "p2_trailer",
+     93
+    ],
+    [
+     14.1,
+     "p2_final_scene",
+     99
+    ],
+    [
+     15.6,
+     "p2_trailer",
+     121.2
+    ],
+    [
+     17.1,
+     "p2_final_scene",
+     171
+    ],
+    [
+     18.2,
+     "p2_final_scene",
+     236
+    ],
+    [
+     20.8,
+     "p2_final_scene",
+     180
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      11,
+      "Friday the 13th Part 2",
+      1981
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "odds",
+     90,
+     18.16,
+     20.680000000000003
+    ],
+    [
+     "instr",
+     "Pretend to be his mom.",
+     20.76,
+     999
+    ],
+    [
+     "film",
+     "Friday the 13th Part 2 (1981)",
+     0,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s03",
+   "pad": 0.7,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "r09_scenepack",
+     81
+    ],
+    [
+     2.5,
+     "r09_scenepack",
+     135
+    ],
+    [
+     3.9,
+     "r09_scenepack",
+     84
+    ],
+    [
+     5.4,
+     "r09_final_death",
+     81
+    ],
+    [
+     7.6,
+     "r09_scenepack",
+     279
+    ],
+    [
+     10.2,
+     "r09_final_death",
+     186
+    ],
+    [
+     12.0,
+     "r09_final_death",
+     189
+    ],
+    [
+     13.8,
+     "r09_final_death",
+     236
+    ],
+    [
+     15.4,
+     "r09_final_death",
+     258
+    ],
+    [
+     18.0,
+     "r09_scenepack",
+     468
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      10,
+      "Friday the 13th",
+      2009
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "odds",
+     82,
+     15.36,
+     17.92
+    ],
+    [
+     "instr",
+     "Don't hide in the tunnels.",
+     18.0,
+     999
+    ],
+    [
+     "film",
+     "Friday the 13th (2009)",
+     0,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s04",
+   "pad": 0.7,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "p3_chris_escape",
+     33
+    ],
+    [
+     2.2,
+     "p3_gets_mask",
+     66
+    ],
+    [
+     4.0,
+     "p3_gets_mask",
+     246
+    ],
+    [
+     4.6,
+     "p3_trailer",
+     108
+    ],
+    [
+     6.5,
+     "p3_trailer",
+     107.5
+    ],
+    [
+     8.2,
+     "p3_chris_escape",
+     45
+    ],
+    [
+     9.4,
+     "p3_chris_escape",
+     27
+    ],
+    [
+     10.6,
+     "p3_chris_escape",
+     48
+    ],
+    [
+     11.8,
+     "p3_chris_escape",
+     54
+    ],
+    [
+     12.8,
+     "p3_chris_escape",
+     60
+    ],
+    [
+     15.4,
+     "p3_chris_escape",
+     36
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      9,
+      "Friday the 13th Part III",
+      1982
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "odds",
+     71,
+     12.8,
+     15.36
+    ],
+    [
+     "instr",
+     "Aim for the head. Twice.",
+     15.44,
+     999
+    ],
+    [
+     "film",
+     "Friday the 13th Part III (1982)",
+     0,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s05",
+   "pad": 0.7,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "p4_trailer",
+     84
+    ],
+    [
+     2.8,
+     "p4_trailer",
+     27
+    ],
+    [
+     4.6,
+     "p4_out_window",
+     18
+    ],
+    [
+     5.7,
+     "p4_out_window",
+     71
+    ],
+    [
+     7.2,
+     "p4_tricking_jason",
+     12
+    ],
+    [
+     8.9,
+     "p4_tricking_jason",
+     42
+    ],
+    [
+     10.5,
+     "p4_out_window",
+     75
+    ],
+    [
+     12.0,
+     "p4_tricking_jason",
+     51
+    ],
+    [
+     14.4,
+     "p4_tricking_jason",
+     60
+    ],
+    [
+     15.4,
+     "p4_tricking_jason",
+     87
+    ],
+    [
+     16.5,
+     "p4_tricking_jason",
+     96
+    ],
+    [
+     17.9,
+     "p4_tricking_jason",
+     120
+    ],
+    [
+     20.6,
+     "p4_tricking_jason",
+     57
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      8,
+      "The Final Chapter",
+      1984
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "odds",
+     60,
+     17.92,
+     20.48
+    ],
+    [
+     "instr",
+     "Shave your head. Trust me.",
+     20.56,
+     999
+    ],
+    [
+     "film",
+     "The Final Chapter (1984)",
+     0,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s06",
+   "pad": 0.5,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "p5_new_beginning",
+     0
+    ],
+    [
+     1.8,
+     "p5_new_beginning",
+     120
+    ],
+    [
+     3.2,
+     "p5_new_beginning",
+     183
+    ],
+    [
+     4.7,
+     "p5_new_beginning",
+     282
+    ],
+    [
+     6.9,
+     "p5_new_beginning",
+     306
+    ],
+    [
+     7.9,
+     "p5_new_beginning",
+     228
+    ]
+   ],
+   "overlays": [
+    [
+     "title",
+     [
+      "BONUS"
+     ],
+     0.0,
+     1.7
+    ],
+    [
+     "title",
+     [
+      "FAKE JASON"
+     ],
+     6.9,
+     9.6
+    ],
+    [
+     "film",
+     "A New Beginning (1985)",
+     0,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s07",
+   "pad": 0.7,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "p8_vs_newyork",
+     6
+    ],
+    [
+     1.2,
+     "p8_trailer",
+     39
+    ],
+    [
+     3.0,
+     "p8_trailer",
+     45
+    ],
+    [
+     5.1,
+     "p8_ending",
+     27
+    ],
+    [
+     6.3,
+     "p8_knockout",
+     12
+    ],
+    [
+     7.4,
+     "p8_knockout",
+     81
+    ],
+    [
+     9.2,
+     "p8_ending",
+     405
+    ],
+    [
+     10.6,
+     "p8_ending",
+     411
+    ],
+    [
+     12.1,
+     "p8_ending",
+     429
+    ],
+    [
+     13.2,
+     "p8_ending",
+     435
+    ],
+    [
+     14.5,
+     "p8_ending",
+     393
+    ],
+    [
+     15.6,
+     "p8_ending",
+     483
+    ],
+    [
+     16.7,
+     "p8_ending",
+     492
+    ],
+    [
+     19.5,
+     "p8_ending",
+     303
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      7,
+      "Jason Takes Manhattan",
+      1989
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "odds",
+     47,
+     16.68,
+     19.44
+    ],
+    [
+     "instr",
+     "Find the sewer.",
+     19.52,
+     999
+    ],
+    [
+     "film",
+     "Jason Takes Manhattan (1989)",
+     0,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s08",
+   "pad": 0.7,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "p7_vs_tina",
+     204
+    ],
+    [
+     1.2,
+     "p7_trailer",
+     30
+    ],
+    [
+     2.5,
+     "p7_vs_tina",
+     45
+    ],
+    [
+     4.4,
+     "p7_electrocution",
+     36
+    ],
+    [
+     5.8,
+     "p7_electrocution",
+     51
+    ],
+    [
+     7.4,
+     "p7_vs_tina",
+     165
+    ],
+    [
+     8.5,
+     "p7_vs_tina",
+     183
+    ],
+    [
+     10.2,
+     "p7_vs_tina",
+     258
+    ],
+    [
+     12.0,
+     "p7_resurrecting",
+     90
+    ],
+    [
+     13.6,
+     "p7_resurrecting",
+     96
+    ],
+    [
+     15.1,
+     "p7_resurrecting",
+     72
+    ],
+    [
+     16.0,
+     "p7_trailer",
+     54
+    ],
+    [
+     18.7,
+     "p7_vs_tina",
+     228
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      6,
+      "The New Blood",
+      1988
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "odds",
+     38,
+     16.04,
+     18.64
+    ],
+    [
+     "instr",
+     "Don't fight alone.",
+     18.72,
+     999
+    ],
+    [
+     "film",
+     "The New Blood (1988)",
+     0,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s09",
+   "pad": 0.5,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "p8_ending",
+     15
+    ],
+    [
+     1.9,
+     "fvj_scenepack",
+     36
+    ]
+   ],
+   "overlays": [
+    [
+     "title",
+     [
+      "SUBSCRIBE",
+      "!TO SURVIVE"
+     ],
+     1.92,
+     4.3
+    ],
+    [
+     "film",
+     "Jason Takes Manhattan (1989)",
+     0,
+     1.9
+    ],
+    [
+     "film",
+     "Freddy vs. Jason (2003)",
+     1.9,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s10",
+   "pad": 0.7,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "p9_goes_to_hell",
+     87
+    ],
+    [
+     1.3,
+     "p9_opening_hd",
+     99
+    ],
+    [
+     3.1,
+     "p9_opening_hd",
+     102
+    ],
+    [
+     4.9,
+     "p9_opening_hd",
+     138
+    ],
+    [
+     6.2,
+     "p9_opening_hd",
+     144
+    ],
+    [
+     7.2,
+     "p9_opening_hd",
+     159
+    ],
+    [
+     8.4,
+     "p9_goes_to_hell",
+     66
+    ],
+    [
+     9.1,
+     "p9_goes_to_hell",
+     27
+    ],
+    [
+     10.8,
+     "p9_goes_to_hell",
+     33
+    ],
+    [
+     12.4,
+     "p9_goes_to_hell",
+     75
+    ],
+    [
+     13.3,
+     "p9_trailer",
+     57
+    ],
+    [
+     14.9,
+     "p9_goes_to_hell",
+     96
+    ],
+    [
+     16.0,
+     "p9_goes_to_hell",
+     126
+    ],
+    [
+     17.6,
+     "p9_goes_to_hell",
+     141
+    ],
+    [
+     20.1,
+     "p9_goes_to_hell",
+     90
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      5,
+      "Jason Goes to Hell",
+      1993
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "odds",
+     26,
+     17.6,
+     20.0
+    ],
+    [
+     "instr",
+     "Don't touch the heart.",
+     20.08,
+     999
+    ],
+    [
+     "film",
+     "Jason Goes to Hell (1993)",
+     0,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s11",
+   "pad": 0.7,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "fvj_scenepack",
+     0
+    ],
+    [
+     1.2,
+     "fvj_final_fight",
+     0
+    ],
+    [
+     3.0,
+     "fvj_scenepack",
+     192
+    ],
+    [
+     4.8,
+     "fvj_final_fight",
+     66
+    ],
+    [
+     5.9,
+     "fvj_scenepack",
+     93
+    ],
+    [
+     7.0,
+     "fvj_final_fight",
+     114
+    ],
+    [
+     8.3,
+     "fvj_final_fight",
+     126
+    ],
+    [
+     9.1,
+     "fvj_final_fight",
+     147
+    ],
+    [
+     10.5,
+     "fvj_final_fight",
+     162
+    ],
+    [
+     11.9,
+     "fvj_final_fight",
+     258
+    ],
+    [
+     13.6,
+     "fvj_final_fight",
+     276
+    ],
+    [
+     15.3,
+     "fvj_final_fight",
+     285
+    ],
+    [
+     17.8,
+     "fvj_scenepack",
+     450
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      4,
+      "Freddy vs. Jason",
+      2003
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "odds",
+     15,
+     15.28,
+     17.76
+    ],
+    [
+     "instr",
+     "Let them fight.",
+     17.84,
+     999
+    ],
+    [
+     "film",
+     "Freddy vs. Jason (2003)",
+     0,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s12",
+   "pad": 0.7,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "p6_scenepack",
+     57
+    ],
+    [
+     2.7,
+     "p6_reborn",
+     21
+    ],
+    [
+     4.8,
+     "p6_scenepack",
+     0
+    ],
+    [
+     6.0,
+     "p6_scenepack",
+     6
+    ],
+    [
+     7.2,
+     "p6_scenepack",
+     9
+    ],
+    [
+     8.3,
+     "p6_scenepack",
+     27
+    ],
+    [
+     9.5,
+     "p6_scenepack",
+     393
+    ],
+    [
+     10.4,
+     "p6_scenepack",
+     402
+    ],
+    [
+     11.0,
+     "p6_scenepack",
+     408
+    ],
+    [
+     12.5,
+     "p6_bait",
+     57
+    ],
+    [
+     14.2,
+     "p6_bait",
+     63
+    ],
+    [
+     15.1,
+     "p6_scenepack",
+     456
+    ],
+    [
+     16.8,
+     "p6_scenepack",
+     471
+    ],
+    [
+     17.8,
+     "p6_scenepack",
+     462
+    ],
+    [
+     20.6,
+     "p6_scenepack",
+     474
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      3,
+      "Jason Lives",
+      1986
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "odds",
+     7,
+     17.84,
+     20.48
+    ],
+    [
+     "instr",
+     "Chain him. Don't kill him.",
+     20.56,
+     999
+    ],
+    [
+     "film",
+     "Jason Lives (1986)",
+     0,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s13",
+   "pad": 0.7,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "jx_trailer",
+     36
+    ],
+    [
+     1.2,
+     "jx_trailer",
+     27
+    ],
+    [
+     2.7,
+     "jx_trailer",
+     21
+    ],
+    [
+     4.6,
+     "jx_trailer",
+     15
+    ],
+    [
+     6.2,
+     "jx_trailer",
+     9
+    ],
+    [
+     7.7,
+     "jx_trailer",
+     51
+    ],
+    [
+     9.8,
+     "jx_trailer",
+     87
+    ],
+    [
+     11.1,
+     "jx_trailer",
+     90
+    ],
+    [
+     12.3,
+     "jx_uber_scenepack",
+     45
+    ],
+    [
+     13.5,
+     "jx_uber_scenepack",
+     27
+    ],
+    [
+     14.0,
+     "jx_trailer",
+     33
+    ],
+    [
+     16.9,
+     "jx_trailer",
+     45
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      2,
+      "Jason X",
+      2001
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "odds",
+     3,
+     13.99,
+     16.790000000000003
+    ],
+    [
+     "instr",
+     "Stay frozen.",
+     16.87,
+     999
+    ],
+    [
+     "film",
+     "Jason X (2001)",
+     0,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s14",
+   "pad": 0.7,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "jx_uber_scenepack",
+     9
+    ],
+    [
+     1.2,
+     "jx_uber_scenepack",
+     3
+    ],
+    [
+     2.7,
+     "jx_uber_scenepack",
+     21
+    ],
+    [
+     4.0,
+     "jx_trailer",
+     69
+    ],
+    [
+     5.0,
+     "jx_uber_scenepack",
+     15
+    ],
+    [
+     6.5,
+     "jx_uber_scenepack",
+     33
+    ],
+    [
+     7.4,
+     "jx_uber_scenepack",
+     60
+    ],
+    [
+     8.6,
+     "jx_uber_scenepack",
+     174
+    ],
+    [
+     9.6,
+     "jx_ending",
+     147
+    ],
+    [
+     10.9,
+     "jx_ending",
+     153
+    ],
+    [
+     11.8,
+     "jx_ending",
+     159
+    ],
+    [
+     12.7,
+     "jx_ending",
+     192
+    ],
+    [
+     14.3,
+     "jx_uber_scenepack",
+     198
+    ],
+    [
+     15.2,
+     "jx_uber_scenepack",
+     108
+    ],
+    [
+     16.6,
+     "jx_uber_scenepack",
+     168
+    ],
+    [
+     18.6,
+     "jx_uber_scenepack",
+     165
+    ],
+    [
+     20.7,
+     "jx_uber_scenepack",
+     72
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      1,
+      "Uber Jason, Jason X",
+      2001
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "odds",
+     1,
+     18.56,
+     20.64
+    ],
+    [
+     "instr",
+     "Leave the planet.",
+     20.72,
+     999
+    ],
+    [
+     "film",
+     "Jason X (2001)",
+     0,
+     999
+    ]
+   ]
+  },
+  {
+   "voice": "s15",
+   "pad": 1.5,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "fvj_scenepack",
+     21
+    ],
+    [
+     1.8,
+     "fvj_final_fight",
+     264
+    ],
+    [
+     3.0,
+     "r09_scenepack",
+     471
+    ],
+    [
+     4.4,
+     "p3_gets_mask",
+     264
+    ],
+    [
+     6.5,
+     "p6_scenepack",
+     363
+    ],
+    [
+     9.2,
+     "BLACK",
+     0
+    ]
+   ],
+   "overlays": [
+    [
+     "title",
+     [
+      "YOUR RANKING?"
+     ],
+     4.4,
+     9.0
+    ],
+    [
+     "title",
+     [
+      "INSTRUCTION",
+      "!444"
+     ],
+     9.3,
+     13.0
+    ],
+    [
+     "film",
+     "Freddy vs. Jason (2003)",
+     0,
+     3.0
+    ],
+    [
+     "film",
+     "Friday the 13th (2009)",
+     3.0,
+     4.4
+    ],
+    [
+     "film",
+     "Friday the 13th Part III (1982)",
+     4.4,
+     6.5
+    ],
+    [
+     "film",
+     "Jason Lives (1986)",
+     6.5,
+     9.2
+    ]
+   ]
+  }
+ ],
+ "zoom": {
+  "p1_mrs_voorhees": 1.2,
+  "p4_tricking_jason": 1.2,
+  "p4_out_window": 1.2,
+  "p7_electrocution": 1.2,
+  "p7_resurrecting": 1.2,
+  "p7_vs_tina": 1.2,
+  "p8_vs_newyork": 1.2,
+  "p8_knockout": 1.32,
+  "p6_reborn": 1.32,
+  "p9_opening_hd": 1.32,
+  "r09_final_death": 1.4,
+  "p3_chris_escape": 1.15,
+  "p6_bait": 1.15,
+  "fvj_scenepack": 1.08,
+  "r09_scenepack": 1.08
+ },
+ "gamma": {
+  "r09_scenepack": 1.3,
+  "r09_final_death": 1.3,
+  "p9_goes_to_hell": 1.22,
+  "p9_opening_hd": 1.22,
+  "p7_vs_tina": 1.22,
+  "p7_resurrecting": 1.22,
+  "p7_electrocution": 1.22,
+  "p8_ending": 1.22,
+  "p4_tricking_jason": 1.22,
+  "p4_out_window": 1.22,
+  "p6_bait": 1.22,
+  "p8_knockout": 1.22,
+  "jx_trailer": 1.22,
+  "p3_chris_escape": 1.22
+ }
+}
