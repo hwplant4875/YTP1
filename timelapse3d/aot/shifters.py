@@ -218,7 +218,7 @@ def _relief(body, labels, plate_set, params, face_lab_extra=None):
     sink, sw = params.get("sink", 0.0), params.get("sw", 0.01)
     edge = params.get("edge", 0.004)
     per = params.get("per_label", {})
-    skin, edgev, rim = [0.0] * nv, [0.0] * nv, [0.0] * nv
+    skin, edgev, rim, sd = [0.0] * nv, [0.0] * nv, [0.0] * nv, [0.0] * nv
     bm.normal_update()
     for v in bm.verts:
         i = v.index; d = dist[i]; lab = vlab[i]
@@ -232,6 +232,7 @@ def _relief(body, labels, plate_set, params, face_lab_extra=None):
             skin[i] = 0.0
         ed = per[lab][4] if lab in per and len(per[lab]) > 4 else edge
         edgev[i] = 1.0 - _ss(ed * 0.5, ed, d)
+        sd[i] = (d / ed) if lab in plate_set else -(d / ed)
         if lab in plate_set:
             rim[i] = _ss(ed * 0.9, ed * 1.4, d) * (1.0 - _ss(ed * 1.8, ed * 3.0, d))
         v.co += v.normal * off
@@ -239,10 +240,11 @@ def _relief(body, labels, plate_set, params, face_lab_extra=None):
     _set_attr(me, "sh_skin", skin)
     _set_attr(me, "sh_edge", edgev)
     _set_attr(me, "sh_rim", rim)
+    _set_attr(me, "sh_sd", sd)      # signed border distance in line widths: crisp iso-lines in the shader
     return vlab, dist
 
 
-def _cavity(body, iters=3):
+def _cavity(body, iters=3, gain=6.0):
     """Per-vertex concavity (anime-style shading in creases), smoothed; written to sh_cav (0..1)."""
     me = body.data
     bm = bmesh.new(); bm.from_mesh(me); bm.verts.ensure_lookup_table(); bm.normal_update()
@@ -259,7 +261,7 @@ def _cavity(body, iters=3):
     for _ in range(iters):
         c = [0.5 * c[i] + 0.5 * sum(c[j] for j in nb[i]) / max(1, len(nb[i])) for i in range(nv)]
     bm.free()
-    vals = [max(0.0, min(1.0, x * 4.0)) for x in c]
+    vals = [max(0.0, min(1.0, x * gain)) for x in c]
     _set_attr(me, "sh_cav", vals)
     return vals
 
@@ -415,8 +417,9 @@ def _mat_body(name, skin_col, muscle_col, edge_col, *, skin_rough=0.5, skin_var=
     """One material for the whole body, driven by the sh_* attributes."""
     m = bpy.data.materials.new(name)
     nt, N, L, b = _nodes(m)
-    skin = _attr(N, "sh_skin").outputs["Fac"]
-    edge = _attr(N, "sh_edge").outputs["Fac"]
+    sdv = _attr(N, "sh_sd").outputs["Fac"]
+    skin = _mrange(N, L, sdv, -0.3, 0.3)
+    edge = _mrange(N, L, _math(N, L, "ABSOLUTE", sdv), 0.4, 0.7, 1.0, 0.0)
     cav = _attr(N, "sh_cav").outputs["Fac"]
     rest = _attr(N, "sh_rest").outputs["Vector"]
     fib = _attr(N, "sh_fib").outputs["Vector"]
@@ -440,7 +443,8 @@ def _mat_body(name, skin_col, muscle_col, edge_col, *, skin_rough=0.5, skin_var=
     if alt_col is not None:
         skc = _mix(N, L, _attr(N, "sh_alt").outputs["Fac"], skc, alt_col)
     if rim_col is not None:
-        skc = _mix(N, L, _math(N, L, "MULTIPLY", _attr(N, "sh_rim").outputs["Fac"], 0.8), skc, rim_col)
+        rimf = _math(N, L, "MULTIPLY", _mrange(N, L, sdv, 0.7, 1.0), _mrange(N, L, sdv, 1.2, 2.2, 1.0, 0.0))
+        skc = _mix(N, L, _math(N, L, "MULTIPLY", rimf, 0.45), skc, rim_col)
     col = _mix(N, L, _mrange(N, L, skin, 0.35, 0.65), mus, skc)
     # --- outline at region borders and crease darkening
     col = _mix(N, L, edge, col, edge_col)
@@ -525,8 +529,8 @@ def _mat_hair(name, col, hi, root_dark=0.35, rough=0.4):
 def _mat_teeth(name):
     m = bpy.data.materials.new(name)
     nt, N, L, b = _nodes(m)
-    b.inputs["Base Color"].default_value = (0.78, 0.74, 0.62, 1)
-    b.inputs["Roughness"].default_value = 0.3
+    b.inputs["Base Color"].default_value = (0.66, 0.56, 0.43, 1)    # bible: teeth ~#d4c0ab
+    b.inputs["Roughness"].default_value = 0.35
     b.inputs["Coat Weight"].default_value = 0.3
     b.inputs["Subsurface Weight"].default_value = 0.1
     return m
@@ -624,22 +628,28 @@ def _add_eyes(rig, body, eyes, mat, scale=1.0, push=0.0, squash=1.0):
 
 
 # ------------------------------------------------------------------ anime lock hair
-def _head_bvh(body, ctx):
+def _head_bvh(body, ctx, skip_ears=False):
     """BVH of the head/neck part of the body (rest pose)."""
     me = body.data
     keep = set(i for i in range(len(me.vertices))
                if _is_head_bone(ctx.dom[i]) or _base(ctx.dom[i]) in ("neck01", "neck02", "neck03"))
+    if skip_ears and "ears" in body.vertex_groups:
+        gi = body.vertex_groups["ears"].index
+        keep -= {v.index for v in me.vertices for g in v.groups if g.group == gi and g.weight > 0.2}
     verts = [v.co.copy() for v in me.vertices]
     polys = [tuple(p.vertices) for p in me.polygons if all(i in keep for i in p.vertices)]
     return BVHTree.FromPolygons(verts, polys)
 
 
-def _make_hair(rig, body, ctx, name, locks, mat, seed=1, cap=0.0):
+def _make_hair(rig, body, ctx, name, locks, mat, seed=1, cap=0.0, skip_ears=False, cap_noise=0.0):
     """locks: list of dicts {az, el, len, w, droop, out, curl, sweep, thick}.
     az: azimuth (0 = front/-Y, +90 = character's left/+X), el: polar angle of the root from the crown (deg)."""
     rnd = random.Random(seed)
-    bvh = _head_bvh(body, ctx)
+    bvh = _head_bvh(body, ctx, skip_ears)
     hb = ctx.B["head"]
+    hm = body.data.attributes.get("sh_hair")
+    hmask = [d.value for d in hm.data] if hm else None
+    kd_bvh = BVHTree.FromPolygons([v.co.copy() for v in body.data.vertices], [tuple(p.vertices) for p in body.data.polygons])
     c = hb.head_local.lerp(hb.tail_local, 0.42) + Vector((0, 0.012, 0))
     verts, faces, tval, lval = [], [], [], []
     NS = 6
@@ -649,6 +659,10 @@ def _make_hair(rig, body, ctx, name, locks, mat, seed=1, cap=0.0):
         hit = bvh.ray_cast(c + d0 * 0.4, -d0, 0.8)
         if hit[0] is None:
             continue
+        if lk.get("in_hairline") and hmask is not None:
+            loc2, n2, pi, dd2 = kd_bvh.find_nearest(hit[0])
+            if pi is None or sum(hmask[i] for i in body.data.polygons[pi].vertices) / len(body.data.polygons[pi].vertices) < 0.6:
+                continue
         root = hit[0] + hit[1] * lk.get("lift", 0.002)
         # initial growth direction: tangent pointing away from the crown, blended with 'out'
         el2 = el + 0.2
@@ -662,29 +676,39 @@ def _make_hair(rig, body, ctx, name, locks, mat, seed=1, cap=0.0):
         if abs(sweep) > 1e-4:
             side = hit[1].cross(tang).normalized()
             tang = (tang + side * sweep).normalized()
-        dirv = (tang + hit[1] * lk.get("out", 0.3)).normalized()
-        L = lk["len"]; n = max(6, int(L / 0.012) + 4)
+        hn = hit[1] if hit[1].dot(hit[0] - c) > 0 else -hit[1]
+        dirv = (tang + hn * lk.get("out", 0.1)).normalized()
+        L = lk["len"]; n = max(6, int(L / 0.008) + 3)
         ds = L / n
         pts = [root]
         p = root.copy()
         offs = lk.get("off", 0.006)
         for k in range(1, n + 1):
             f = k / n
-            g = lk.get("droop", 1.0) * (0.4 + 1.2 * f)
-            dirv = (dirv + Vector((0, 0, -g * ds * 25))).normalized()
+            g = lk.get("droop", 1.0) * (0.3 + 1.0 * f)
+            dirv = (dirv + Vector((0, 0, -g * ds * 30))).normalized()
             if lk.get("curl", 0):
-                dirv = (dirv + hit[1] * lk["curl"] * f * ds * 30).normalized()
+                dirv = (dirv + hn * lk["curl"] * f * ds * 30).normalized()
             dirv += Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-1, 1))) * lk.get("jitter", 0.05)
             dirv.normalize()
-            p = p + dirv * ds
-            loc, nrm, idx, dd = bvh.find_nearest(p, 0.2)
-            want = offs + lk.get("vol", 0.004) * min(1.0, f * 3)
+            pn = p + dirv * ds
+            loc, nrm, idx, dd = bvh.find_nearest(pn, 0.2)
+            want = offs + lk.get("vol", 0.004) * f
             if loc is not None:
-                dv = p - loc
-                sgn = 1.0 if dv.dot(nrm) >= 0 else -1.0
-                if sgn < 0 or dv.length < want:
-                    p = loc + nrm * want
-                    dirv = (p - pts[-1]).normalized()
+                if nrm.dot(loc - c) < 0:
+                    nrm = -nrm
+                dv = pn - loc
+                hgt = dv.dot(nrm)
+                cl = lk.get("cling", 0.012)       # locks hug the skull up to this height, then hang free
+                tip = want + lk.get("tip", 0.0) * f ** 2
+                if hgt < want:
+                    pn = loc + nrm * want
+                    if dirv.dot(nrm) < 0:
+                        dirv = (dirv - nrm * dirv.dot(nrm)).normalized()
+                elif hgt > tip and hgt < tip + cl:
+                    pn = loc + nrm * tip
+                    dirv = (dirv - nrm * dirv.dot(nrm)).normalized()
+            p = pn
             pts.append(p.copy())
         # sweep a lens-shaped section
         w0 = lk["w"]; th = lk.get("thick", 0.35)
@@ -696,7 +720,7 @@ def _make_hair(rig, body, ctx, name, locks, mat, seed=1, cap=0.0):
             out = (q - loc).normalized() if loc is not None else (q - c).normalized()
             S = T.cross(out).normalized()
             Nn = S.cross(T).normalized()
-            wf = w0 * (min(1.0, 0.55 + f * 4) * (1 - f) ** lk.get("taper", 0.9)) if k < len(pts) - 1 else 0.0
+            wf = w0 * min(1.0, 0.6 + f * 4) * (1 - f ** lk.get("taper", 2.0)) if k < len(pts) - 1 else 0.0
             for j in range(NS):
                 a = 2 * math.pi * j / NS
                 verts.append(q + S * (math.cos(a) * wf) + Nn * (math.sin(a) * wf * th))
@@ -720,7 +744,9 @@ def _make_hair(rig, body, ctx, name, locks, mat, seed=1, cap=0.0):
                     if i not in remap:
                         v = me.vertices[i]
                         remap[i] = len(verts)
-                        verts.append(v.co + v.normal * cap); tval.append(0.25); lval.append(0.5)
+                        hh = cap * (0.6 + rnd.random() ** 2 * cap_noise)
+                        verts.append(v.co + v.normal * hh + Vector((0, 0, hh * 0.3)))
+                        tval.append(0.15 + 0.25 * rnd.random()); lval.append(0.5 * rnd.random())
                     ids.append(remap[i])
                 faces.append(tuple(ids))
     ob = _new_obj(name, verts, faces)
@@ -782,7 +808,7 @@ def _armored_rule(ctx, bn, p, n):
     if b in _TORSO:
         lat = abs(n.x) > 0.7
         if p.z > z["clavicle.L"] + 0.004 or (n.z > 0.55 and p.z > z["spine01"]):
-            if abs(p.x) < 0.045 or n.y < -0.2:
+            if abs(p.x) < 0.03 or (n.y < -0.2 and abs(p.x) < 0.07 and p.z > z["clavicle.L"] + 0.012):
                 return "M"                                # neck base / jugular notch
             return "trap" + s                             # trapezius plates
         if n.y < -0.15:                                   # front
@@ -946,12 +972,12 @@ def make_armored(name="ArmoredTitan"):
             per[i] = (0.0025, 0.003, 0.0015, 0.006)
         elif k in ("fh", "browL", "browR", "nose", "lip", "chin", "chkL", "chkR", "chk2L", "chk2R", "jawL", "jawR",
                    "tmpL", "tmpR"):
-            per[i] = (0.003, 0.004, 0.001, 0.015, 0.0028)
+            per[i] = (0.003, 0.004, 0.001, 0.015, 0.003)
         elif k.startswith(("finger", "toe", "hand", "palm", "foot")):
-            per[i] = (0.003, 0.003, 0.002, 0.01, 0.0035)
+            per[i] = (0.003, 0.003, 0.002, 0.01, 0.004)
         else:
-            per[i] = (0.008, 0.0045, 0.004, 0.03, 0.0065)
-    params = dict(h=0.008, w=0.0045, pillow=0.004, pw=0.03, sink=0.003, sw=0.006, edge=0.006, per_label=per)
+            per[i] = (0.008, 0.0045, 0.004, 0.03, 0.007)
+    params = dict(h=0.008, w=0.0045, pillow=0.004, pw=0.03, sink=0.003, sw=0.006, edge=0.0045, per_label=per)
     vlab, dist = _relief(body, labels, plates, params)
     sock = keys.get("socket")
     if sock is not None:
@@ -970,20 +996,18 @@ def make_armored(name="ArmoredTitan"):
                          rim_col=(0.62, 0.48, 0.2), muscle_hi=(0.56, 0.11, 0.03))
     eye_mat = _mat_eye(name + "_eyes", (1, 0.94, 0.75), glow=6.0, white=(1, 0.94, 0.75), pupil=False)
     eobjs = _add_eyes(rig, body, eyes, eye_mat, scale=0.75, push=0.006, squash=0.38)
-    # very short, slightly spiky crew cut, combed up at the front
+    # very short, slightly spiky crew cut: a hair cap plus a dense brush of short spikes standing up
     rnd = random.Random(3)
     locks = []
-    for i in range(520):
+    for i in range(700):
         u = rnd.random()
-        el = math.degrees(math.acos(1 - u * 1.2))
+        el = math.degrees(math.acos(1 - u * 1.22))
         az = rnd.uniform(-180, 180)
-        front = math.cos(math.radians(az))
-        # combed up and back: tufts point to the crown/back, tips lifting off the head
-        locks.append(dict(az=az, el=el, len=rnd.uniform(0.016, 0.026), dir=(0, 1.0, 0.9 if el > 50 else 0.2),
-                          w=rnd.uniform(0.008, 0.012), droop=0.0, out=0.05 + 0.2 * rnd.random() ** 2,
-                          jitter=0.04, off=0.004, vol=0.0, taper=1.2, thick=0.3, lift=0.0,
-                          layer=rnd.uniform(0, 0.35)))
-    hair = _make_hair(rig, body, ctx, name + "_hair", locks, cap=0.003, mat=
+        locks.append(dict(az=az, el=el, len=rnd.uniform(0.008, 0.016), dir=(0, 0.35, 1.0),
+                          w=rnd.uniform(0.0032, 0.0045), droop=-0.2, out=0.5, cling=0.0, in_hairline=True,
+                          jitter=0.06, off=0.0015, vol=0.0, taper=1.0, thick=0.6, lift=0.0,
+                          layer=rnd.uniform(0, 0.4)))
+    hair = _make_hair(rig, body, ctx, name + "_hair", locks, cap=0.004, cap_noise=1.6, mat=
                       _mat_hair(name + "_hairmat", (0.52, 0.49, 0.4), (0.8, 0.78, 0.7), root_dark=0.35, rough=0.65))
     _finish(rig, body, "armored", [body_mat])
     relax(rig, arm=0.85, back=-0.15, elbow=0.2)
@@ -1001,16 +1025,16 @@ def _female_rule(ctx, bn, p, n):
     if b in ("neck01", "neck02", "clavicle"):
         return "skin"
     if b in _TORSO:
-        lat = abs(n.x) > 0.6
+        lat = abs(n.x) > 0.45
         if p.z > z["spine01"] + 0.05:
             return "M" if lat and p.z < z["clavicle.L"] - 0.03 else "skin"
         if lat and p.z > z["upperleg01.L"] - 0.01:
             return "M"                                    # flanks: armpit to hip
         if n.y < -0.1:
-            if p.z > z["spine02"] + 0.025:
+            if p.z > z["spine02"] + 0.045:
                 return "skin"                             # breasts / chest
-            navel = z["spine03"] - 0.01
-            if p.z > navel - 0.01 and abs(p.x) < 0.052:
+            z0 = z["upperleg01.L"] + 0.1                  # navel
+            if p.z > z0 and abs(p.x) < 0.034 + 0.12 * (p.z - z0):
                 # belly strip with a 6-pack: red blocks, thin pale tendon lines
                 if abs(p.x) < 0.0035:
                     return "M"
@@ -1040,7 +1064,7 @@ def _female_rule(ctx, bn, p, n):
             if t < 0.12 and -60 < ang < 50:
                 return "skin"
             # long red strips separated by pale gaps: outer quad, front centre, inner
-            if 40 < ang < 115 or -18 < ang < 14 or -95 < ang < -55:
+            if 32 < ang < 120 or -22 < ang < 16 or -112 < ang < -50:
                 return "M"
             if abs(ang) >= 115:
                 return "M"
@@ -1059,20 +1083,19 @@ def _female_rule(ctx, bn, p, n):
 
 
 def _female_head(ctx, p, n, s):
-    if p.z < ctx.lips.z - 0.06 and p.y > ctx.lips.y + 0.03:
-        return "skin"
-    return "face"
+    return "skin"
 
 
 def make_female(name="FemaleTitan"):
-    macro = dict(gender=0.0, muscle=0.85, weight=0.3, proportions=1.0, height=0.8, age=0.45, cupsize=0.55, firmness=0.9)
+    macro = dict(gender=0.0, muscle=1.0, weight=0.42, proportions=1.0, height=0.8, age=0.45, cupsize=0.55, firmness=0.9)
     face = ([("head/head-oval", 0.7), ("head/head-fat-decr", 0.6), ("chin/chin-prominent-incr", 0.4),
              ("chin/chin-width-decr", 0.3), ("nose/nose-scale-vert-incr", 0.6), ("nose/nose-hump-incr", 0.5),
              ("nose/nose-point-width-decr", 0.4), ("nose/nose-trans-up", 0.2),
              ("mouth/mouth-upperlip-volume-incr", 0.3), ("mouth/mouth-lowerlip-volume-incr", 0.3),
              ("mouth/mouth-scale-horiz-decr", 0.2), ("neck/neck-scale-horiz-decr", 0.2)]
-            + _lr("eyes/{s}-eye-push1-in", 0.7) + _lr("eyes/{s}-eye-height2-decr", 0.4)
-            + _lr("eyes/{s}-eye-bag-height-incr", 0.6) + [("eyebrows/eyebrows-trans-down", 0.5)]
+            + _lr("eyes/{s}-eye-height2-incr", 0.7) + _lr("eyes/{s}-eye-height1-incr", 0.4)
+            + _lr("eyes/{s}-eye-corner1-up", 0.3)
+            + [("eyebrows/eyebrows-trans-down", 0.4)]
             + _lr("cheek/{s}-cheek-volume-decr", 0.8) + _lr("cheek/{s}-cheek-bones-incr", 0.6)
             + [("torso/torso-scale-horiz-decr", 0.2), ("stomach/stomach-pregnant-decr", 1.0)]
             + _lr("legs/{s}-lowerleg-scale-vert-incr", 0.3) + _lr("legs/{s}-upperleg-scale-vert-incr", 0.2))
@@ -1091,7 +1114,7 @@ def make_female(name="FemaleTitan"):
     _cavity(body)
     _fibre_coords(body, ctx)
     # dark exposed-muscle rings around the eyes ("eye bags")
-    _eye_mask(body, eyes, 0.02, 0.011, 0.45, below=0.03, outer=0.004)   # dark band under each eye, down the cheek
+    _eye_mask(body, eyes, 0.019, 0.010, 0.3, below=0.035, outer=0.003)   # dark band under each eye, down the cheek
     _set_attr(body.data, "sh_alt", [1.0 if bone_lab is not None and vlab[i] == bone_lab else 0.0
                                     for i in range(len(body.data.vertices))])
     _hair_mask(body, ctx, lambda p, hc: _ss(ctx.eye.z + 0.045, ctx.eye.z + 0.06, p.z) + _ss(0.0, 0.03, p.y) * _ss(ctx.eye.z - 0.03, ctx.eye.z, p.z))
@@ -1104,33 +1127,33 @@ def make_female(name="FemaleTitan"):
     _set_attr(me, "sh_hard", hv)
     # design bible 3.7: skin #d9b49b, muscle #b8321f / fibres #e5734e, eye band #613f2d, bone fingers #ab9f8a
     body_mat = _mat_body(name + "_mat", (0.69, 0.46, 0.33), (0.48, 0.032, 0.014), (0.07, 0.015, 0.01),
-                         skin_rough=0.5, skin_var=0.1, hair_col=(0.58, 0.44, 0.15), eye_col=(0.12, 0.05, 0.026),
+                         skin_rough=0.5, skin_var=0.1, hair_col=(0.58, 0.44, 0.15), eye_col=(0.07, 0.025, 0.015),
                          eye_amt=0.9, cav_amt=0.6, fib_scale=230.0, harden=True, muscle_hi=(0.78, 0.17, 0.075),
                          alt_col=(0.6, 0.55, 0.45))
-    eye_mat = _mat_eye(name + "_eyes", (0.36, 0.46, 0.56), glow=0.0, white=(0.85, 0.85, 0.8), iris_r=0.62)
-    _add_eyes(rig, body, eyes, eye_mat, scale=1.0)
-    # shoulder-length straight blond hair, heavy fringe swept to one side
+    eye_mat = _mat_eye(name + "_eyes", (0.12, 0.2, 0.3), glow=0.0, white=(0.75, 0.75, 0.72), iris_r=0.7)
+    _add_eyes(rig, body, eyes, eye_mat, scale=1.05, push=-0.0035)
+    # chin-length blond bob, long side-swept fringe over one eye (design bible 3.7)
     rnd = random.Random(7)
     locks = []
-    def L_side(az):
-        a = abs(az)
-        return 0.16 if a > 60 else 0.11 + 0.05 * a / 60
-    for i in range(64):                     # outer shell around the sides/back
-        az = -180 + 360 * (i + rnd.uniform(0, 1)) / 64
-        if abs(az) < 50:
+    for i in range(96):                     # outer shell: sides and back, falling to the jaw / nape
+        az = -180 + 360 * (i + rnd.uniform(0, 1)) / 96
+        if abs(az) < 42:
             continue
-        locks.append(dict(az=az, el=rnd.uniform(30, 55), len=L_side(az) * rnd.uniform(0.92, 1.08), w=rnd.uniform(0.014, 0.019),
-                          droop=1.0, out=0.2, jitter=0.02, off=0.006, vol=0.012, taper=1.1, thick=0.3))
-    for i in range(46):                     # crown layer
+        locks.append(dict(az=az, el=rnd.uniform(28, 52), len=rnd.uniform(0.16, 0.19), w=rnd.uniform(0.022, 0.028),
+                          droop=1.0, out=0.05, jitter=0.015, off=0.006, vol=0.012, taper=2.5, thick=0.25))
+    for i in range(60):                     # crown layer on top
         az = rnd.uniform(-180, 180)
-        locks.append(dict(az=az, el=rnd.uniform(5, 30), len=rnd.uniform(0.09, 0.14), w=0.016, droop=1.0, out=0.15,
-                          jitter=0.02, off=0.009, vol=0.012, taper=1.1, thick=0.3, layer=0.2))
-    for i in range(26):                     # fringe falling over the face, swept to her right
-        az = rnd.uniform(-48, 48)
-        locks.append(dict(az=az, el=rnd.uniform(14, 40), len=rnd.uniform(0.10, 0.15), w=rnd.uniform(0.010, 0.015),
-                          droop=0.9, out=0.25, sweep=-0.35, jitter=0.03, off=0.008, vol=0.01, taper=1.0, thick=0.28))
+        if abs(az) < 30:
+            continue
+        locks.append(dict(az=az, el=rnd.uniform(4, 30), len=rnd.uniform(0.18, 0.22), w=0.028, droop=1.0, out=0.05,
+                          jitter=0.015, off=0.01, vol=0.014, taper=2.5, thick=0.25, layer=0.25))
+    for i in range(48):                     # fringe: from the crown forward, swept across to her left
+        az = rnd.uniform(-50, 40)
+        locks.append(dict(az=az, el=rnd.uniform(4, 34), len=rnd.uniform(0.13, 0.19), w=rnd.uniform(0.018, 0.024),
+                          droop=0.8, out=0.08, sweep=0.45, jitter=0.03, off=0.009, vol=0.012, taper=1.6, thick=0.25))
     _make_hair(rig, body, ctx, name + "_hair", locks,
-               _mat_hair(name + "_hairmat", (0.58, 0.44, 0.15), (0.74, 0.62, 0.3), root_dark=0.45))
+               _mat_hair(name + "_hairmat", (0.58, 0.44, 0.15), (0.74, 0.62, 0.3), root_dark=0.45, rough=0.55),
+               skip_ears=True)
     _finish(rig, body, "female", [body_mat])
     relax(rig, arm=0.8, back=-0.2, elbow=0.3)
     return rig
@@ -1161,12 +1184,12 @@ def _attack_slit(ctx, p):
     dx = abs(p.x)
     if p.y > ctx.lips.y + 0.075:
         return False
-    x0, x1 = 0.012, ctx.ear_x - 0.022
+    x0, x1 = 0.0, ctx.ear_x - 0.022
     if not (x0 < dx < x1):
         return False
     f = (dx - x0) / (x1 - x0)
-    zc = lz + 0.002 + 0.008 * f
-    hh = 0.0115 * (1 - f) ** 0.6 + 0.003
+    zc = lz + 0.001 + 0.008 * f ** 1.5
+    hh = 0.0105 * (1 - f) ** 0.5 + 0.003
     return abs(p.z - zc) < hh
 
 
@@ -1198,24 +1221,26 @@ def _attack_teeth(rig, body, ctx, name):
             k = 0
             while x < x1:
                 f = x / x1
-                tw = 0.0062 * (1 - 0.35 * f)
-                th = 0.0105 * (1 - 0.45 * f)
-                zc = lz + 0.002 + 0.008 * max(0.0, (x - 0.012) / (x1 - 0.012)) + row * th * 0.5
+                tw = 0.0072 * (1 - 0.3 * f)
+                th = 0.0115 * (1 - 0.4 * f)
+                zc = lz + 0.001 + 0.008 * (x / (ctx.ear_x - 0.022)) ** 1.5 + row * th * 0.5
                 origin = Vector((sgn * (x + tw / 2), -0.3, zc))
                 hit = bvh.ray_cast(origin, Vector((0, 1, 0)), 0.5)
                 if hit[0] is None:
                     break
                 nrm = hit[1].copy(); nrm.z = 0; nrm.normalize()
+                if nrm.dot(Vector((hit[0].x, hit[0].y + 0.05, 0))) < 0:
+                    nrm = -nrm
                 Y = -nrm
                 X = Vector((0, 0, 1)).cross(Y).normalized()
-                c = hit[0] + nrm * 0.0008 - Y * 0.0
-                box(c, X, Y, Vector((0, 0, 1)), tw * 0.46, th * 0.5, 0.006)
+                c = hit[0] + nrm * 0.003
+                box(c, X, Y, Vector((0, 0, 1)), tw * 0.96, th * 0.97, 0.0065)
                 x += tw
                 k += 1
     ob = _new_obj(name, verts, faces)
     for p in ob.data.polygons:
         p.use_smooth = False
-    sub = ob.modifiers.new("round", "SUBSURF"); sub.levels = 1; sub.render_levels = 2
+    bv = ob.modifiers.new("round", "BEVEL"); bv.width = 0.0012; bv.segments = 2; bv.limit_method = "NONE"
     ob.data.materials.append(_mat_teeth(name + "_mat"))
     _skin_to_rig(ob, rig, {"head": 1.0})
     return ob
@@ -1241,7 +1266,7 @@ def _elf_ears(body, rig):
 
 
 def make_attack(name="AttackTitan"):
-    macro = dict(gender=1.0, muscle=1.0, weight=0.25, proportions=1.0, height=0.7, age=0.4)
+    macro = dict(gender=1.0, muscle=1.0, weight=0.5, proportions=1.0, height=0.7, age=0.4)
     face = ([("head/head-fat-decr", 0.8), ("head/head-oval", 0.4), ("chin/chin-prominent-incr", 0.5),
              ("chin/chin-width-incr", 0.4), ("nose/nose-scale-vert-incr", 0.4), ("nose/nose-hump-incr", 0.3),
              ("mouth/mouth-upperlip-volume-decr", 1.0), ("mouth/mouth-lowerlip-volume-decr", 1.0),
@@ -1253,46 +1278,50 @@ def make_attack(name="AttackTitan"):
             + [("eyebrows/eyebrows-trans-down", 0.8), ("eyebrows/eyebrows-angle-down", 0.8)]
             + _lr("ears/{s}-ear-shape-pointed", 1.0) + _lr("ears/{s}-ear-scale-vert-incr", 0.7)
             + _lr("ears/{s}-ear-rot-backward", 0.4) + _lr("ears/{s}-ear-flap-incr", 0.5)
-            + [("torso/torso-vshape-incr", 0.6)]
-            + _lr("arms/{s}-upperarm-muscle-incr", 0.3) + _lr("arms/{s}-lowerarm-scale-vert-incr", 0.2))
+            + [("torso/torso-vshape-incr", 0.8), ("torso/torso-muscle-pectoral-incr", 0.8),
+               ("torso/torso-muscle-dorsi-incr", 0.6), ("stomach/stomach-tone-incr", 1.0)]
+            + _lr("arms/{s}-upperarm-muscle-incr", 0.8) + _lr("arms/{s}-lowerarm-muscle-incr", 0.6)
+            + _lr("arms/{s}-upperarm-shoulder-muscle-incr", 0.7) + _lr("arms/{s}-lowerarm-scale-vert-incr", 0.2)
+            + _lr("legs/{s}-upperleg-muscle-incr", 0.6) + _lr("legs/{s}-lowerleg-muscle-incr", 0.5))
     rig, body, eyes = _build_body(name, macro, face, pre_sub=_elf_ears)
     labels, keys, ctx = _label_faces(body, rig, eyes, _attack_rule)
     plates = {keys["skin"]}
-    params = dict(h=0.0, w=0.004, sink=0.006, sw=0.003, edge=0.0018)
+    params = dict(h=0.0, w=0.004, sink=0.008, sw=0.003, edge=0.0016)
     vlab, dist = _relief(body, labels, plates, params)
-    _cavity(body)
+    _cavity(body, gain=22.0)
     _fibre_coords(body, ctx)
     _eye_mask(body, eyes, 0.024, 0.013, 0.5, below=0.006, outer=0.008)
     _hair_mask(body, ctx, lambda p, hc: _ss(ctx.eye.z + 0.04, ctx.eye.z + 0.055, p.z) + _ss(0.0, 0.03, p.y) * _ss(ctx.eye.z - 0.02, ctx.eye.z + 0.01, p.z))
     # design bible 3.6: skin albedo #a5806a (warm reddish), hair #2a2019, eyes glow #74a06a / core #b8e0a0
     body_mat = _mat_body(name + "_mat", (0.36, 0.19, 0.12), (0.06, 0.01, 0.008), (0.03, 0.01, 0.007),
-                         skin_rough=0.45, skin_var=0.15, hair_col=(0.023, 0.014, 0.01), eye_col=(0.03, 0.01, 0.008),
-                         eye_amt=0.85, cav_amt=0.75)
+                         skin_rough=0.62, skin_var=0.15, hair_col=(0.023, 0.014, 0.01), eye_col=(0.03, 0.01, 0.008),
+                         eye_amt=0.85, cav_amt=1.0)
     eye_mat = _mat_eye(name + "_eyes", (0.17, 0.35, 0.14), glow=4.0, white=(0.45, 0.5, 0.4), iris_r=0.6)
     _add_eyes(rig, body, eyes, eye_mat)
     _attack_teeth(rig, body, ctx, name + "_teeth")
-    # shoulder-length, messy black hair, strands over the face
+    # messy black hair grazing the shoulders, heavy fringe and strands across the face (design bible 3.6)
     rnd = random.Random(11)
     locks = []
-    for i in range(80):
-        az = -180 + 360 * (i + rnd.uniform(0, 1)) / 80
-        a = abs(az)
-        if a < 45:
+    for i in range(100):
+        az = -180 + 360 * (i + rnd.uniform(0, 1)) / 100
+        if abs(az) < 42:
             continue
-        ln = (0.15 if a > 70 else 0.11) * rnd.uniform(0.85, 1.15)
-        locks.append(dict(az=az, el=rnd.uniform(30, 60), len=ln, w=rnd.uniform(0.012, 0.018), droop=0.9, out=0.35,
-                          jitter=0.07, off=0.007, vol=0.013, taper=1.0, thick=0.3, curl=0.15))
-    for i in range(50):
+        locks.append(dict(az=az, el=rnd.uniform(26, 55), len=rnd.uniform(0.19, 0.26), w=rnd.uniform(0.016, 0.024),
+                          droop=1.0, out=0.08, jitter=0.05, off=0.007, vol=0.016, taper=1.5, thick=0.25, curl=0.04))
+    for i in range(60):
         az = rnd.uniform(-180, 180)
-        locks.append(dict(az=az, el=rnd.uniform(3, 32), len=rnd.uniform(0.09, 0.14), w=0.016, droop=0.9, out=0.3,
-                          jitter=0.06, off=0.011, vol=0.012, taper=1.0, thick=0.3, layer=0.25))
-    for i in range(22):
-        az = rnd.uniform(-45, 45)
-        locks.append(dict(az=az, el=rnd.uniform(15, 40), len=rnd.uniform(0.10, 0.16), w=rnd.uniform(0.008, 0.013),
-                          droop=0.9, out=0.3, sweep=rnd.uniform(-0.3, 0.3), jitter=0.06, off=0.009, vol=0.01, taper=1.0,
-                          thick=0.28))
+        if abs(az) < 30:
+            continue
+        locks.append(dict(az=az, el=rnd.uniform(3, 28), len=rnd.uniform(0.2, 0.26), w=0.022, droop=1.0, out=0.08,
+                          jitter=0.05, off=0.011, vol=0.016, taper=1.5, thick=0.25, layer=0.25, curl=0.04))
+    for i in range(34):
+        az = rnd.uniform(-48, 48)
+        locks.append(dict(az=az, el=rnd.uniform(8, 38), len=rnd.uniform(0.11, 0.19), w=rnd.uniform(0.01, 0.017),
+                          droop=0.9, out=0.1, sweep=rnd.uniform(-0.35, 0.35), jitter=0.06, off=0.01, vol=0.012,
+                          taper=1.3, thick=0.25))
     _make_hair(rig, body, ctx, name + "_hair", locks,
-               _mat_hair(name + "_hairmat", (0.023, 0.014, 0.01), (0.25, 0.22, 0.2), root_dark=0.5, rough=0.35))
+               _mat_hair(name + "_hairmat", (0.023, 0.014, 0.01), (0.25, 0.22, 0.2), root_dark=0.5, rough=0.6),
+               skip_ears=True)
     _finish(rig, body, "attack", [body_mat])
     relax(rig, arm=0.8, back=-0.25, elbow=0.35)
     return rig
