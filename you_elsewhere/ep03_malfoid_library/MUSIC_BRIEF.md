@@ -25,3 +25,19 @@ Save in C:\Users\hw549\Downloads\YTP1\YouElsewhere\ep03_malfoid_library\music\ a
 ~12 tracks x ~2.5 min crossfaded 4 s: 3-4 Hedwig variations (start at 0:00 with Hedwig), rest originals
 in the same brighter jazz trio style (jazz waltz 3/4 and swing 4/4 mixed). Output WAV 48 kHz 24-bit +
 mp3 preview + track list with timestamps.
+
+## User feedback 10/23 11:24 UTC (supersedes the style notes above)
+- Tempo = 120 BPM.
+- NO ride swing. Keep Hedwig's melody EXACTLY as written (same notes, same rhythm, no swung or reharmonised
+  melody, no octave-up "variation" that changes contour). Variation comes from instruments/texture only.
+- Upright bass MORE present and warm (louder, fuller low-mids ~100-250 Hz, clear note attack, no boom).
+- Make it feel original yet right for an ambience channel. Sound design to try (ambience/study-music research):
+  1. Signature colour: double the melody softly with a CELESTA or music box (VPO celesta) on the first head,
+     a nod to the film's celesta, then piano carries it. This is our recognisable "You, Elsewhere" sound.
+  2. Time: soft BRUSH swish on the snare (Swirly brushes) instead of ride, very quiet, or no drums in some passes.
+  3. Warm "old record in a library" finish: gentle tape saturation, slight low-pass ~9-10 kHz, very faint
+     vinyl/tape hiss under everything (-45 dB), tiny wow/flutter. No hard-panned elements, original stereo.
+  4. Steady energy: no sudden loud entries, no big endings mid-file; the listener should be able to forget it.
+  5. Piano comping soft and low (below melody), voicings simple, melody always on top and clear.
+  6. Optional very quiet room tone: distant clock (centred), occasional page turn, far rain. Keep under music.
+- Step 1b: ~90 s preview hedwig_library_120_preview.mp3 in this sound. Then wait for OK before the 30-min suite.
