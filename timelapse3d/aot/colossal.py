@@ -60,7 +60,7 @@ SCALES = {
     "upperleg01.L": (1.35, 0.93, 1.3), "upperleg01.R": (1.35, 0.93, 1.3), "upperleg02.L": (1.3, 0.93, 1.25), "upperleg02.R": (1.3, 0.93, 1.25),
     "lowerleg01.L": (1.2, 0.93, 1.2), "lowerleg01.R": (1.2, 0.93, 1.2), "lowerleg02.L": (1.1, 0.93, 1.1), "lowerleg02.R": (1.1, 0.93, 1.1),
     "spine03": (1.05, 1.0, 1.0), "pelvis.L": (1.1, 1.0, 1.0), "pelvis.R": (1.1, 1.0, 1.0),
-    "neck01": (1.62, 2.1, 1.4), "neck02": (1.52, 2.1, 1.32), "neck03": (1.32, 1.9, 1.2),
+    "neck01": (1.45, 2.1, 1.35), "neck02": (1.30, 2.1, 1.22), "neck03": (1.12, 1.9, 1.08),
     "spine01": (1.16, 1.06, 1.05), "spine02": (1.08, 1.04, 1.0),
     "spine04": (0.9, 1.04, 0.95), "spine05": (0.92, 1.0, 0.95),
     "clavicle.L": (1.15, 1.45, 1.15), "clavicle.R": (1.15, 1.45, 1.15),
@@ -157,6 +157,31 @@ def _sculpt(body, rig):
             t = _cl(1 - abs(ax - 0.42 * shx) / (0.5 * shx))
             f = _ss(zn + 0.04, zc + 0.04, p.z) * _ss(zc - 0.02, zc + 0.02, p.z)
             v.co = p + n * (0.085 * t * t * f) + Vector((0, 0, 0.03 * t * f))
+    # neck column: narrows just under the jaw; big sternocleidomastoid bands from behind the ear to the notch
+    z_notch = rig.data.bones["neck01"].head_local.z
+    z_top = rig.data.bones["head"].head_local.z
+    ny = [v.co.y for v in me.vertices if abs(v.co.x) < 0.01 and abs(v.co.z - z_notch) < 0.01]
+    notch_y = min(ny) if ny else rig.data.bones["neck01"].head_local.y - 0.05
+    ax_y = rig.data.bones["neck03"].head_local.y
+    for i, v in enumerate(me.vertices):
+        if hd[i] > 0.6:
+            continue
+        p = v.co.copy(); n = nrm[i]
+        if p.z < z_notch - 0.05 or p.z > z_top + 0.4 * U:
+            continue
+        k = (1 - hd[i]) * _ss(z_notch + 0.02, z_top - 0.1 * U, p.z) * _ss(z_top + 0.4 * U, z_top + 0.1 * U, p.z)
+        p.x -= p.x * 0.16 * k
+        p.y -= (p.y - ax_y) * 0.10 * k
+        for sg in (1, -1):
+            if sg not in earc:
+                continue
+            m0 = Vector((earc[sg].x * 0.8, earc[sg].y + 0.05 * U, earc[sg].z - 0.45 * U))
+            m1 = Vector((sg * 0.012, notch_y + 0.01, z_notch))
+            seg = m1 - m0; t = _cl((p - m0).dot(seg) / seg.length_squared)
+            dd = (p - (m0 + seg * t)).length
+            if p.x * sg > -0.005:
+                p += n * (0.10 * U * math.exp(-(dd / (0.17 * U)) ** 2) * _ss(0.0, 0.15, t) * (1 - hd[i]))
+        v.co = p
     for i, v in enumerate(me.vertices):
         h = hd[i]
         if h <= 0.001:
@@ -169,7 +194,7 @@ def _sculpt(body, rig):
         # long lower face: stretch everything below the cheekbones downward
         d.z -= 0.50 * U * _ss(-0.2, -1.0, vv) + 0.85 * U * _ss(-1.0, -1.7, vv)
         # lower, smoother skull: compress everything above the brow
-        d.z -= 0.30 * U * max(0.0, vv - 0.45) / (1.0 + 0.3 * max(0.0, vv - 0.45))
+        d.z -= 0.25 * U * max(0.0, vv - 0.40) / (1.0 + 0.3 * max(0.0, vv - 0.40))
         # heavy brow ridge (front band just above the eyes)
         brow = math.exp(-((vv - 0.36) / 0.16) ** 2) * _ss(1.45, 0.9, au) * front
         d.y -= 0.34 * U * brow
@@ -179,8 +204,8 @@ def _sculpt(body, rig):
             r = math.hypot((p.x - ec.x) / U, (p.z - ec.z) / U)
             d.y += 0.26 * U * math.exp(-(r / 0.40) ** 2) * front
         # cheekbones out, cheeks hollow below them
-        cb = math.exp(-((au - 0.95) / 0.30) ** 2 - ((vv + 0.30) / 0.16) ** 2)
-        d += n * (0.07 * U * cb)
+        cb = math.exp(-((au - 0.95) / 0.32) ** 2 - ((vv + 0.38) / 0.20) ** 2)
+        d += n * (0.14 * U * cb)
         hol = math.exp(-((au - 0.78) / 0.30) ** 2 - ((vv + 0.80) / 0.30) ** 2) * front
         d -= n * (0.05 * U * hol)
         # masseter: big bulging cheek bundle from the cheekbone down to the jaw angle
@@ -195,22 +220,25 @@ def _sculpt(body, rig):
         d.y += 0.09 * U * lw
         # prognathic mouth: teeth and muzzle push forward (anime profile)
         muz = math.exp(-((vv + 1.05) / 0.45) ** 2) * _ss(0.95, 0.3, au) * front
-        d.y -= 0.22 * U * muz
+        d.y -= 0.10 * U * muz
+        # teeth sit inside the face: recess the mouth band so the cheek panels run into the gums
+        d -= n * (0.03 * U * math.exp(-((vv + 0.98) / 0.32) ** 2) * _ss(1.25, 0.9, au) * front)
         # strong prominent chin and wide jaw
         chin = _ss(-1.15, -1.55, vv) * front * _ss(1.0, 0.3, au)
         d.y -= 0.20 * U * chin
         jaw = _ss(-0.7, -1.3, vv) * _ss(0.4, 0.9, au)
-        d.x += sx * 0.22 * U * jaw
+        d.x += sx * 0.06 * U * jaw
+        d.x -= p.x * 0.34 * _ss(-1.15, -2.1, vv)          # jaw narrows to the chin
         # wide face: broad cheekbones and jaw (S1E1 front view)
-        d.x += p.x * (0.12 + 0.30 * _ss(0.3, -0.4, vv) + 0.10 * _ss(-0.2, 0.6, vv))
-        d.x += p.x * 0.16 * math.exp(-((vv + 0.55) / 0.40) ** 2)       # broad cheekbones
+        d.x += p.x * (0.10 + 0.14 * _ss(0.3, -0.4, vv))
+        d.x += p.x * 0.24 * math.exp(-((vv + 0.45) / 0.40) ** 2)       # broad cheekbones: widest point
         # domed cranium: taper the top of the (rectangular) skull toward the vertical axis
-        tp = _ss(0.15, 1.9, vv) ** 1.2
+        tp = _ss(0.05, 1.8, vv) ** 1.5
         d.x -= p.x * 0.62 * tp
-        d.y -= (p.y - (F.eye.y + 0.9 * U)) * 0.38 * tp
+        d.y -= (p.y - (F.eye.y + 0.9 * U)) * 0.45 * tp
         # occiput: the back of the skull bulges back past the neck
         A0 = math.atan2(abs(p.x), -(p.y - (F.eye.y + 0.9 * U)))
-        d.y += 0.22 * U * _ss(1.9, 2.6, A0) * math.exp(-((vv - 0.35) / 0.55) ** 2)
+        d.y += 0.14 * U * _ss(1.9, 2.6, A0) * math.exp(-((vv - 0.25) / 0.45) ** 2)
         # temporalis bulges on the sides of the dome
         A_ = math.atan2(abs(p.x), -(p.y - (F.eye.y + 0.9 * U)))
         d += n * (0.08 * U * math.exp(-((A_ - 1.3) / 0.55) ** 2 - ((vv - 0.6) / 0.6) ** 2))
@@ -284,7 +312,7 @@ def _add_parts(body, rig):
     for sgn in (1, -1):
         a = 0.0; k = 0
         while k < len(WID):
-            wdt = WID[k] * U * 1.35
+            wdt = WID[k] * U * 1.25
             loc0, _ = surface(0.0 if k == 0 else a, mz)
             r_loc = (Vector((loc0.x, loc0.y - yc, 0)).length if loc0 else 1.1 * U)
             ac = a + (wdt / 2) / r_loc
@@ -292,7 +320,7 @@ def _add_parts(body, rig):
                 break
             curve = 0.08 * U * (ac / a_end) ** 2           # bite line rises slightly toward the back
             for row, grp in ((1, g_head), (-1, g_jaw)):
-                hgt = HGT[k] * U * 1.6 * (0.92 if row < 0 else 1.0)
+                hgt = HGT[k] * U * 1.5 * (0.92 if row < 0 else 1.0)
                 zc = mz + curve + row * (hgt / 2 + 0.004 * U)
                 loc, nr = surface(sgn * ac, zc)
                 if loc is None:
@@ -300,15 +328,15 @@ def _add_parts(body, rig):
                 nr = Vector((nr.x, nr.y, 0)).normalized() if abs(nr.z) < 0.95 else Vector((0, -1, 0))
                 tang = Vector((0, 0, 1)).cross(nr).normalized()
                 depth = 0.06 * U
-                c = loc - nr * (depth * 0.55)
+                c = loc - nr * (depth * (0.75 + 0.6 * ac / a_end))
                 tooth(Vector(c), (tang, -nr, Vector((0, 0, 1))), (wdt * 0.48, depth, hgt / 2), ti, grp, row, pointed=(k == 2))
-            a += wdt * 1.01 / r_loc; k += 1
+            a += wdt * 0.93 / r_loc; k += 1
         print("TEETH per side", k)
     # eyeballs: small, deep in the sockets, no lids
     eye_pts = []
     for ec, gname in ((F.eyeL, "head"), (F.eyeR, "head")):
         r = 0.16 * U
-        c = Vector((ec.x * 1.0, ec.y + 0.10 * U, ec.z - 0.01 * U))
+        c = Vector((ec.x * 1.0, ec.y + 0.0 * U, ec.z - 0.01 * U))
         res = bmesh.ops.create_uvsphere(bm, u_segments=16, v_segments=10, radius=r)
         for vt in res["verts"]:
             eye_pts.append((vt.co.copy().normalized(), c))
@@ -454,7 +482,7 @@ def _paint(body, rig):
             m0 = earc[sg] + Vector((0, 0.15 * U, -0.55 * U)); m1 = Vector((sg * 0.012, notch.y, z_notch))
             seg = m1 - m0; t = _cl((p - m0).dot(seg) / seg.length_squared)
             d = (p - (m0 + seg * t)).length
-            white = max(white, _ss(0.22 * U, 0.1 * U, d) * _ss(-0.2, 0.2, abs(n.x)))
+            pass   # SCM cords stay red (sculpted bands); no pale strap on the throat
         # ---------------- head / face
         h = hd[i]
         if h > 0.01:
@@ -467,32 +495,35 @@ def _paint(body, rig):
             # Explicit painted regions: everything on the head is red muscle EXCEPT these pale bands.
             jaw_l = (v_chin + 0.16) + (-0.95 - (v_chin + 0.16)) * _cl((A - 0.55) / max(0.1, a_ear - 0.55)) ** 1.5
             pale = 0.0
-            # cranium dome + forehead/brow strip (temporalis fans cut into it from the sides)
-            dome = _ss(0.12, 0.24, vv)
-            dt = ((A - 1.50) / 0.50) ** 2 + ((vv - 0.45) / 0.80) ** 2     # temporalis fan
-            dtb = ((A - 2.55) / 0.36) ** 2 + ((vv - 0.70) / 0.48) ** 2    # red patches on the back of the skull
-            temporalis = max(_cl((1 - dt) * 4), _cl((1 - dtb) * 4))
+            # Large smooth connected pale plates (anime layout); everything else on the head is red muscle.
+            # 1) scalp + forehead, with red temporalis fans cut in at the sides
+            dome = _ss(0.16, 0.26, vv)
+            dt = ((A - 1.45) / 0.42) ** 2 + ((vv - 0.30) / 0.75) ** 2
+            temporalis = _cl((1 - dt) * 3)
             pale = max(pale, dome * (1 - temporalis))
-            # nose-bridge strip down to the nasal cavity
-            pale = max(pale, _ss(0.15, 0.11, A) * _ss(-0.62, -0.56, vv) * _ss(0.25, 0.15, vv))
-            # cheekbone ridge (zygomatic arch), from beside the nose back to the ear
-            zl = -0.58 - 0.20 * (A - 0.40)
-            pale = max(pale, _ss(0.10, 0.07, abs(vv - zl)) * _ss(0.20, 0.30, A) * _ss(a_ear + 0.1, a_ear - 0.05, A))
-            # nasolabial band: from the nose wing down around the mouth corner
-            pale = max(pale, _ss(0.09, 0.06, abs(A - (0.34 + 0.14 * _cl((-0.62 - vv) / 0.8)))) * _ss(-0.55, -0.62, vv) * _ss(-1.50, -1.40, vv))
-            # upper-lip band (between nasal cavity and upper gum) and lower-lip roll (below lower gum)
-            # (red gum bands sit directly above / below the teeth: vv -0.69..-0.75 and -1.24..-1.31)
-            pale = max(pale, _ss(0.46, 0.38, A) * _ss(-0.56, -0.60, vv) * _ss(-0.70, -0.67, vv))
-            pale = max(pale, _ss(0.52, 0.44, A) * _ss(-1.29, -1.33, vv) * _ss(-1.45, -1.41, vv))
-            # jaw rim: mandible edge from chin to ear
-            pale = max(pale, _ss(0.07, 0.045, abs(vv - (jaw_l - 0.06))) * _ss(a_ear + 0.05, a_ear - 0.1, A))
-            # ears
-            pale = max(pale, _ss(0.22, 0.12, math.hypot(A - a_ear, (vv + 0.35) / 1.6)))
+            # 2) band around each eye socket
+            if fr > -0.1:
+                for ec in (F.eyeL, F.eyeR):
+                    re_ = math.hypot((x - ec.x) / U / 1.15, (z - ec.z) / U)
+                    pale = max(pale, _ss(0.26, 0.29, re_) * _ss(0.38, 0.35, re_))
+            # 3) nose bridge widening into the frame around the nasal cavity
+            nb = 0.085 + 0.08 * _ss(-0.25, -0.50, vv)
+            pale = max(pale, _ss(nb + 0.02, nb - 0.02, A) * _ss(-0.70, -0.64, vv) * _ss(0.30, 0.20, vv))
+            # 4) cheekbone ridge from the eye band back to the ear
+            zl = -0.42 - 0.10 * (A - 0.40)
+            pale = max(pale, _ss(0.075, 0.05, abs(vv - zl)) * _ss(0.25, 0.35, A) * _ss(a_ear + 0.1, a_ear - 0.05, A))
+            # 5) nasolabial strip from the nose wing down to the jaw line (front edge of the red cheek panel)
+            cA = 0.32 + 0.10 * _cl((-0.6 - vv) / 1.0)
+            pale = max(pale, _ss(0.06, 0.04, abs(A - cA)) * _ss(-0.45, -0.52, vv) * _ss(jaw_l - 0.06, jaw_l + 0.04, vv))
+            # 6) jaw / chin outline along the mandible from the ear to the chin
+            # jaw edge from the geometry: where the mandible surface turns under
+            pale = max(pale, _ss(v_chin + 0.36, v_chin + 0.28, vv) * _ss(v_chin + 0.02, v_chin + 0.10, vv) * _ss(0.62, 0.50, A) * _ss(-0.05, -0.30, n.y))
+            pale = max(pale, _ss(-0.55, -0.25, n.z) * _ss(0.12, 0.08, abs(vv - (jaw_l + 0.06))) * _ss(a_ear + 0.05, a_ear - 0.1, A))
             hw = pale
             # cavities: very dark deep eye pits, big nasal cavity
             for ec in (F.eyeL, F.eyeR):
                 r = math.hypot((x - ec.x) / U / 1.2, (z - ec.z - 0.05 * U) / U)
-                cav = max(cav, _ss(0.30, 0.17, r) * _ss(-0.2, 0.3, fr))
+                cav = max(cav, _ss(0.28, 0.21, r) * _ss(-0.2, 0.3, fr))
             nas = (u / 0.15) ** 2 + ((vv + 0.50) / 0.14) ** 2
             cav = max(cav, _ss(1.0, 0.55, nas) * _ss(0, 0.3, fr))
             if fr > 0.2:      # dark vertical crease and star furrow at the brow centre
@@ -520,11 +551,22 @@ def _paint(body, rig):
             cav *= h
         if i >= body.get("eye_start", 10 ** 9):
             ce = F.eyeL if x > 0 else F.eyeR
-            dn = (p - Vector((ce.x, ce.y + 0.10 * U, ce.z - 0.01 * U))).normalized()
+            dn = (p - Vector((ce.x, ce.y + 0.0 * U, ce.z - 0.01 * U))).normalized()
             hd[i] = 1.0
             dd = dn.dot(Vector((-0.12 * (1 if x > 0 else -1), -1, 0.05)).normalized())
             white, phase, cav = 0.0, 0.0, (1.0 if dd > 0.975 else 0.5 if dd > 0.90 else 0.0)
         out.append((white, phase, cav, hd[i]))
+    # smooth the pale mask over the mesh: merges plates into clean shapes and removes isolated specks
+    estart = body.get("eye_start", 10 ** 9)
+    nb_ = [[] for _ in me.vertices]
+    for e in me.edges:
+        i0, i1 = e.vertices
+        nb_[i0].append(i1); nb_[i1].append(i0)
+    wv = [o[0] for o in out]
+    for _ in range(3):
+        wv = [wv[i] if (i >= estart or not nb_[i]) else 0.4 * wv[i] + 0.6 * sum(wv[j] for j in nb_[i]) / len(nb_[i])
+              for i in range(len(wv))]
+    out = [((_cl((wv[i] - 0.25) / 0.5) if i < estart else wv[i]), o[1], o[2], o[3]) for i, o in enumerate(out)]
     at = me.color_attributes.get("cmask") or me.color_attributes.new("cmask", "FLOAT_COLOR", "POINT")
     for i, (a, b, c, h) in enumerate(out):
         at.data[i].color = (a, (b % 1000.0) + 1.0, c, h)     # keep the fibre phase positive
@@ -616,7 +658,7 @@ def _mat_eye(name):
     at = N.new("ShaderNodeAttribute"); at.attribute_name = "cmask"; at.attribute_type = "GEOMETRY"
     sp = N.new("ShaderNodeSeparateColor"); L.new(at.outputs["Color"], sp.inputs[0])
     rp = N.new("ShaderNodeValToRGB"); rp.color_ramp.interpolation = "CONSTANT"; e = rp.color_ramp.elements
-    e[0].position, e[0].color = 0.0, (0.42, 0.36, 0.26, 1)       # sclera (in socket shadow)
+    e[0].position, e[0].color = 0.0, (0.10, 0.085, 0.07, 1)       # sclera (deep in socket shadow)
     e[1].position, e[1].color = 0.25, (0.82, 0.82, 0.70, 1)      # pale iris
     e.new(0.75).color = (0.015, 0.015, 0.015, 1)                 # pupil
     L.new(sp.outputs["Blue"], rp.inputs["Fac"]); L.new(rp.outputs["Color"], b.inputs["Base Color"])
@@ -800,7 +842,7 @@ def _solve(rig, bones, cost, iters=80):
                 break
     return e
 
-def pose_wall_grip(rig, wall_top_z, wall_face_y, side="L", lean=0.22, hand_x=None, grip_depth=4.0):
+def pose_wall_grip(rig, wall_top_z, wall_face_y, side="L", lean=0.22, hand_x=None, grip_depth=4.0, elbow_out=7.0):
     """S1E1 pose: lean the head forward over a wall (top at wall_top_z, outer face at wall_face_y, world)
     and put one hand on the wall top with the fingers curled over the inner edge."""
     P = rig.pose.bones
@@ -816,13 +858,19 @@ def pose_wall_grip(rig, wall_top_z, wall_face_y, side="L", lean=0.22, hand_x=Non
     hx = hand_x if hand_x is not None else sh.x + sg * 6.0
     goal = Vector((hx, wall_face_y - grip_depth, wall_top_z + 2.0))
     W = rig.matrix_world
+    # elbow sticks out sideways and slightly forward/down: a clearly bent arm leaning on the wall
+    egoal = Vector((hx + sg * elbow_out, wall_face_y + 3.0, wall_top_z + 0.5))
     def cost():
         wr = W @ P[f"wrist.{side}"].head; tip = W @ P[f"metacarpal3.{side}"].tail
         m2 = W @ P[f"metacarpal2.{side}"].tail; m4 = W @ P[f"metacarpal4.{side}"].tail
         hd = (tip - wr).normalized()
         palm = (m4 - m2).cross(hd).normalized() * (1 if side == "L" else -1)
         want = Vector((0, -1, -0.15)).normalized()
-        return (tip - goal).length + 6.0 * (1 - hd.dot(want)) + 6.0 * (1 - palm.dot(Vector((0, 0, -1))))
+        c = (tip - goal).length + 6.0 * (1 - hd.dot(want)) + 6.0 * (1 - palm.dot(Vector((0, 0, -1))))
+        if elbow_out:
+            el = W @ P[f"lowerarm01.{side}"].head
+            c += 0.8 * (el - egoal).length
+        return c
     chans = [(f"upperarm01.{side}", 0), (f"upperarm01.{side}", 2), (f"upperarm01.{side}", 1),
              (f"lowerarm01.{side}", 0), (f"lowerarm01.{side}", 1), (f"wrist.{side}", 0), (f"wrist.{side}", 2), (f"wrist.{side}", 1)]
     e = _solve(rig, chans, cost, iters=120)
