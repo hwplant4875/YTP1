@@ -4,7 +4,7 @@
 # and the hedwig_trio_sfz_v1 sound (Salamander, FL acoustic bass, HQ jazz ride + pedal hat, Chamber Warm IR).
 # New here: walking bass, swung ride with hat on 2, short comping stabs, piano fills between phrases,
 # an improvised-style solo chorus, a G-major reharm chorus, ending on E6/9.
-# usage: python compose_bright_preview.py [160|120 ...]   (no args = both)
+# usage: python compose_bright_preview.py [160|120|160onefeel ...]   (no args = all three)
 import os, sys, subprocess, importlib.util
 
 SUITE = r'C:\Users\hw549\Downloads\YTP1\YouElsewhere\ep01_malfoid\suite\compose_suite.py'
@@ -206,10 +206,89 @@ def arrange(bpm, seed=303):
     ending(s, t)
     return s
 
-def render(bpm):
-    s = arrange(bpm)
-    name = f'hedwig_bright_{bpm}_preview'
-    d = os.path.join(OUT, 'stems_' + str(bpm)); os.makedirs(d, exist_ok=True)
+# ------------------------------------------------------------------ one-feel variant (160, felt as one beat per bar)
+def one_feel_bass(s, chords, start, vel=82, two=0.25):
+    """Dotted-half on beat 1; now and then a two-feel bar (1 and 3) or a pickup into the next bar."""
+    bars = cs.bars_of({'chords': chords})
+    for i, bar in enumerate(bars):
+        at = start + i * 3; r = cs.root_note(bar[0])
+        x = s.rng.random()
+        if len(bar) > 1 or x < two:
+            s.add('bass', at, r, vel, 1.9); s.add('bass', at + 2, cs.fifth_note(bar[-1]) if len(bar) == 1 else cs.root_note(bar[-1]), vel - 8, 0.9)
+        elif x < two + 0.15:
+            nxt = cs.root_note(bars[(i + 1) % len(bars)][0])
+            s.add('bass', at, r, vel, 1.9); s.add('bass', at + 2, nxt + (1 if r > nxt else -1), vel - 12, 0.9)
+        else:
+            s.add('bass', at, r, vel, 2.85)
+
+def light_ride(s, start, nbars, ratio, vel=1.0):
+    """Ride on 1 every bar, a soft 2-and/3 skip every other bar, pedal hat on 2 every other bar."""
+    for i in range(nbars):
+        at = start + i * 3
+        s.add('kit', at, 51, (40 + s.rng.randint(-3, 3)) * vel, 0.6, 0.006)
+        if i % 2:
+            s.add('kit', at + sw_pos(1.5, ratio), 51, 24 * vel, 0.4, 0.006); s.add('kit', at + 2, 51, 30 * vel, 0.5, 0.006)
+        else:
+            s.add('kit', at + 1, 44, 30 * vel, 0.3, 0.004)
+
+def sparse_comp(s, chords, start, vel=38):
+    """One chord per chord change: on 1 (held) or pushed on 2-and of the bar before."""
+    prev = None
+    for i, bar in enumerate(cs.bars_of({'chords': chords})):
+        at = start + i * 3; half = 3 / len(bar)
+        for j, sym in enumerate(bar):
+            v = cs.voicing(sym, prev, top_limit=69); prev = v; t0 = at + j * half
+            push = j == 0 and i > 0 and s.rng.random() < 0.3
+            t = t0 - 3 + sw_pos(1.5, s.ratio) if push else t0
+            for k, n in enumerate(v):
+                s.add('piano', t + 0.01 * k, n, vel + s.rng.randint(-3, 3), (half if not push else 1.4) * 0.9, 0.008)
+
+def sparse_solo(s, chords, start, vel=60):
+    """Solo chorus in the one feel: short phrases mostly in quarters with a few swung eighths, long breaths."""
+    L = len(chords) * 3; x = 0; n = 76
+    while x < L - 2:
+        phr = s.rng.choice([3, 4, 5]); end = min(L - 1, x + phr); d = s.rng.choice([-1, 1])
+        while x < end:
+            sym = chord_at(chords, x)
+            pool = pcs(sym, CT if abs(x % 1) < 1e-6 else SCALE)
+            sc = sorted(p for p in range(66, 86) if p % 12 in pool)
+            up = [p for p in sc if p > n]; dn = [p for p in sc if p < n]
+            n = up[0] if d > 0 and up else dn[-1] if dn else n
+            if n >= 82: d = -1
+            if n <= 68: d = 1
+            if s.rng.random() < 0.2: d = -d
+            step = 0.5 if s.rng.random() < 0.35 else 1.0
+            last = x + step >= end
+            s.add('piano', start + sw_pos(x, s.ratio), n, vel + s.rng.randint(-5, 5), (end - x + 0.5) * 0.9 if last else step * 0.85, 0.01)
+            x += step
+        x = end + s.rng.choice([1.5, 2, 3])
+
+def arrange_onefeel(bpm=160, seed=404):
+    s = cs.Song(bpm, 3, seed); s.ratio = 0.62
+    H = cs.HEDWIG; n = len(E_BRIGHT); L = n * 3; t = H['pickup']
+    # 1 piano + bass, no drums
+    sparse_comp(s, E_BRIGHT, t, 36); one_feel_bass(s, E_BRIGHT, t, 78, 0.1)
+    melody_with_fills(s, H, E_BRIGHT, t, 64); t += L
+    # 2 trio, light ride
+    sparse_comp(s, E_BRIGHT, t, 38); one_feel_bass(s, E_BRIGHT, t); light_ride(s, t, n, s.ratio, 0.9)
+    melody_with_fills(s, H, E_BRIGHT, t, 68, double=True); t += L
+    # 3 piano solo, still in one
+    sparse_comp(s, E_BRIGHT, t, 36); one_feel_bass(s, E_BRIGHT, t, 80, 0.35); light_ride(s, t, n, s.ratio)
+    sparse_solo(s, E_BRIGHT, t, 62); t += L
+    # 4 head in G-major reharm
+    sparse_comp(s, G_REHARM, t, 38); one_feel_bass(s, G_REHARM, t); light_ride(s, t, n, s.ratio)
+    melody_with_fills(s, H, G_REHARM, t, 66); t += L
+    # 5 out chorus: melody up an octave, drums thin out, E6/9 tag
+    sparse_comp(s, E_BRIGHT, t, 34); one_feel_bass(s, E_BRIGHT, t, 76, 0.1); light_ride(s, t, n, s.ratio, 0.75)
+    melody_with_fills(s, H, E_BRIGHT, t, 60, octave=1, fills=False); t += L
+    ending(s, t)
+    return s
+
+def render(bpm, variant=''):
+    s = arrange_onefeel(bpm) if variant == 'onefeel' else arrange(bpm)
+    tag = f'{bpm}_{variant}' if variant else str(bpm)
+    name = f'hedwig_bright_{tag}_preview'
+    d = os.path.join(OUT, 'stems_' + tag); os.makedirs(d, exist_ok=True)
     parts = sorted(s.ev)
     for p in parts:
         cs.write_midi(s, p, os.path.join(d, p + '.mid'))
@@ -238,4 +317,5 @@ def render(bpm):
     print(name, f'{dur:.1f}s', 'gain', round(g, 2), flush=True)
 
 if __name__ == '__main__':
-    for b in (sys.argv[1:] or ['160', '120']): render(int(b))
+    for b in (sys.argv[1:] or ['160', '120', '160onefeel']):
+        render(int(b[:3]), b[3:])
