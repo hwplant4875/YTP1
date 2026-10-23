@@ -36,112 +36,115 @@ LR = lambda t, w: [(t.format(s="l"), w), (t.format(s="r"), w)]
 def _ex(name, w):
     return ("@" + name, w)          # "@" = expression unit target (left/right handled by caller names)
 
+# shared face / body building blocks for the S1 "dopey" look
+WIDE_MOUTH = [("mouth/mouth-scale-horiz-incr", 1.0), ("mouth/mouth-upperlip-volume-decr", 1.0),
+              ("mouth/mouth-lowerlip-volume-decr", 1.0)]
+HEAVY_BROW = [("eyebrows/eyebrows-trans-forward", 1.0), ("eyebrows/eyebrows-trans-down", 0.6),
+              ("forehead/forehead-nubian-incr", 0.6)]
+WIDE_EYES = LR("eyes/{s}-eye-scale-incr", 1.0) + LR("eyes/{s}-eye-height2-incr", 1.0) + \
+            [("@eye-left-opened-up", 1.0), ("@eye-right-opened-up", 1.0)]
+LONG_ARMS = [("arms/measure-upperarm-length-incr", 1.0), ("arms/measure-lowerarm-length-incr", 1.0)]
+SHORT_LEGS = [("legs/measure-upperleg-height-decr", 1.0), ("legs/measure-lowerleg-height-decr", 1.0),
+              ("legs/lowerlegs-height-decr", 1.0)]
+SOFT_TORSO = [("torso/torso-scale-horiz-incr", 1.0), ("torso/torso-scale-depth-incr", 0.6),
+              ("stomach/stomach-pregnant-incr", 0.5), ("torso/torso-vshape-decr", 0.8), ("hip/hip-scale-horiz-incr", 0.5)]
+
 PRESETS = {
-    # Dina Fritz / "Smiling Titan" (S1E2, S2E12). Canon size listed as 15 m class.
     # Dina Fritz / "Smiling Titan" (S1E2). Design bible 3.3: very tall, male-looking, emaciated with visible
-    # ribs, unusually long neck, long thin arms, forward lean; chin-length centre-parted light-brown bob;
-    # lips pulled back showing both rows of ivory teeth + red gums; small deeply sunken grey eyes. 12-15 m [EST].
+    # ribs, unusually long neck, long thin arms, forward lean; chin-length light-brown bob (custom mesh, with
+    # bangs); lips pulled back showing both rows of ivory teeth + red gums; sunken grey eyes. 12-15 m [EST].
     "smiling": dict(
-        height=14.0, head=1.18, gender=0.9, age=0.5, muscle=0.35, weight=0.0, proportions=0.35, cupsize=0.0,
-        skin=(0.578, 0.323, 0.202), mottle=0.07,
-        hair=("bob02", (0.25, 0.15, 0.085), dict(scale=(1.05, 1.06, 1.0), part=True)),
-        mouth=dict(kind="grin", width=2.2, up=0.62, low=0.80, cu=0.05, cl=0.13, bite=0.04, teeth=16, gums=0.17),
-        eyes=dict(scale=0.78, iris=0.42, iris_col=(0.16, 0.16, 0.15), push=-0.006, socket=0.75), ribs=1.25,
-        lines=1.15, slouch=0.42, arms=1.00,
-        targets=[("mouth/mouth-scale-horiz-incr", 1.0), ("mouth/mouth-upperlip-volume-decr", 1.0),
-                 ("mouth/mouth-lowerlip-volume-decr", 1.0), ("mouth/mouth-angles-up", 0.6),
+        height=14.0, head=1.22, gender=0.9, age=0.5, muscle=0.35, weight=0.0, proportions=0.35, cupsize=0.0,
+        skin=(0.66, 0.30, 0.17), mottle=0.06,
+        hair=("custom_bob", (0.22, 0.125, 0.065), dict(bangs_h=2.4, length=1.0)),
+        mouth=dict(kind="grin", width=2.2, up=0.62, low=0.80, cu=0.05, cl=0.13, bite=0.04, teeth=16, gums=0.17,
+                   recess=0.2),
+        eyes=dict(scale=0.92, iris=0.40, iris_col=(0.22, 0.22, 0.21), push=0.0, socket=0.45), ribs=1.25,
+        lines=1.15, slouch=0.42, arms=1.00, brow=0.0,
+        targets=WIDE_MOUTH + [("mouth/mouth-angles-up", 0.6),
                  ("head/head-oval", 0.5), ("head/head-fat-decr", 1.0), ("chin/chin-prominent-incr", 0.5),
                  ("nose/nose-scale-vert-incr", 0.6), ("nose/nose-scale-depth-incr", 0.5),
                  ("neck/measure-neck-height-incr", 1.0), ("neck/neck-scale-vert-incr", 1.0),
-                 ("neck/measure-neck-circ-decr", 0.6),
-                 ("arms/measure-upperarm-length-incr", 1.0), ("arms/measure-lowerarm-length-incr", 1.0),
+                 ("neck/measure-neck-circ-decr", 0.6)] + LONG_ARMS + [
                  ("arms/measure-upperarm-circ-decr", 0.8), ("legs/measure-thigh-circ-decr", 0.6),
                  ("torso/measure-waist-circ-decr", 0.8), ("stomach/stomach-pregnant-decr", 0.6)]
-                + LR("eyes/{s}-eye-push1-in", 1.0) + LR("eyes/{s}-eye-push2-in", 0.8)
+                + LR("eyes/{s}-eye-push1-in", 0.5) + LR("eyes/{s}-eye-push2-in", 0.4)
                 + LR("cheek/{s}-cheek-bones-incr", 1.0) + LR("cheek/{s}-cheek-volume-decr", 1.0)
                 + [_ex("mouth-corner-puller", 0.6)],
         gait=dict(stride=0.58, knee=0.6, sway=0.022, bob=0.06, arm=0.22, limp=0.06)),
 }
+# Generic S1 pure titans (group still, S1E1-E5). Heads ~1/5-1/6 of height, soft broad torsos, short legs or
+# long dangling arms, wide dopey grins, blank wide eyes, heavy brows; 3 bald, the rest short messy hair.
 GENERIC = {
-    # centre of the group still: bald, lanky, ruddy, rotten-tooth open grin, deep sockets, long arms
+    # centre of the group still: bald, tall, ruddy, huge open grin full of teeth, long dangling arms
     "bald_grinner": dict(
-        height=13.0, head=1.35, gender=1.0, age=0.9, muscle=0.25, weight=0.10, proportions=0.2,
-        skin=(0.54, 0.20, 0.15), hair=None,
-        mouth=dict(kind="open_grin", width=1.55, up=0.55, low=0.85, cu=0.04, cl=0.10, bite=0.30, teeth=11),
-        eyes=dict(scale=0.95, iris=0.26, push=0.003), ribs=1.0, lines=1.2, slouch=0.35, arms=1.0,
-        targets=[("head/head-oval", 1.0), ("head/head-scale-vert-incr", 0.6), ("head/head-fat-decr", 0.8),
-                 ("mouth/mouth-scale-horiz-incr", 0.8), ("mouth/mouth-upperlip-volume-decr", 1.0),
-                 ("mouth/mouth-lowerlip-volume-decr", 1.0), ("neck/measure-neck-height-incr", 0.8),
-                 ("arms/measure-upperarm-length-incr", 1.0), ("arms/measure-lowerarm-length-incr", 1.0),
-                 ("legs/measure-upperleg-height-incr", 0.4)]
-                + LR("cheek/{s}-cheek-volume-decr", 1.0) + LR("eyes/{s}-eye-push1-in", 0.3)
-                + [_ex("mouth-open", 0.35)],
-        gait=dict(stride=0.54, knee=0.6, sway=0.028, bob=0.07, arm=0.3, limp=0.10)),
-    # left-centre: short blond hair, head hanging, eyes shut, mouth ajar
+        height=13.0, head=1.55, gender=1.0, age=0.85, muscle=0.15, weight=0.55, proportions=0.1,
+        skin=(0.66, 0.20, 0.11), hair=None,
+        mouth=dict(kind="open_grin", width=1.9, up=0.65, low=1.0, cu=0.04, cl=0.10, bite=0.30, teeth=13, recess=0.18),
+        eyes=dict(scale=1.05, iris=0.22, push=0.004), ribs=0.6, lines=1.2, slouch=0.30, arms=1.0, brow=1.0,
+        targets=WIDE_MOUTH + HEAVY_BROW + LONG_ARMS + [("head/head-oval", 1.0), ("head/head-scale-vert-incr", 0.8),
+                 ("neck/measure-neck-height-incr", 0.6), ("torso/torso-scale-horiz-incr", 0.4)]
+                + LR("cheek/{s}-cheek-volume-decr", 0.6) + [_ex("mouth-open", 0.4)],
+        gait=dict(stride=0.54, knee=0.6, sway=0.03, bob=0.07, arm=0.32, limp=0.10)),
+    # short messy blond hair, soft fat torso, short legs, sleepy half-shut eyes, dopey closed grin
     "blond_sleeper": dict(
-        height=10.0, head=1.45, gender=1.0, age=0.45, muscle=0.45, weight=0.55, proportions=0.4,
-        skin=(0.58, 0.32, 0.19), hair=("short02", (0.32, 0.17, 0.08), dict(scale=(1.0, 1.0, 1.0), drop=0.0)),
-        mouth=dict(kind="gape", width=0.55, up=0.18, low=0.30, cu=0.0, cl=0.0, bite=0.0, teeth=0),
-        eyes=dict(scale=1.0, iris=0.30, push=-0.004, closed=0.75), ribs=0.4, lines=0.9, slouch=0.45, arms=0.9,
-        targets=[("head/head-round", 0.6), ("head/head-fat-incr", 0.5), ("neck/neck-double-incr", 0.4)]
-                + [_ex("mouth-open", 0.3), _ex("eye-left-closure", 0.75), _ex("eye-right-closure", 0.75)],
-        gait=dict(stride=0.41, knee=0.45, sway=0.025, bob=0.05, arm=0.18, limp=0.04)),
-    # the pale "skull grin" one (dark short hair, white staring eyes, wide teeth)
+        height=10.0, head=1.6, gender=1.0, age=0.45, muscle=0.1, weight=0.9, proportions=0.2,
+        skin=(0.74, 0.33, 0.18), hair=("short02", (0.42, 0.24, 0.09), dict(messy=1.0)),
+        mouth=dict(kind="grin", width=1.8, up=0.40, low=0.55, cu=0.05, cl=0.14, bite=0.04, teeth=14, recess=0.18),
+        eyes=dict(scale=1.0, iris=0.30, push=-0.003, closed=0.6), ribs=0.0, lines=0.9, slouch=0.45, arms=0.85,
+        brow=0.7,
+        targets=WIDE_MOUTH + SOFT_TORSO + SHORT_LEGS[:2] + [("head/head-round", 0.8), ("head/head-fat-incr", 0.8),
+                 ("neck/neck-double-incr", 0.6)] + [_ex("eye-left-closure", 0.6), _ex("eye-right-closure", 0.6)],
+        gait=dict(stride=0.45, knee=0.45, sway=0.04, bob=0.05, arm=0.18, limp=0.04)),
+    # dark short messy hair, broad square body, white staring eyes, skull grin
     "pale_starer": dict(
-        height=8.0, head=1.5, gender=1.0, age=0.55, muscle=0.3, weight=0.45, proportions=0.3,
-        skin=(0.76, 0.52, 0.38), hair=("short04", (0.024, 0.019, 0.016), dict(scale=(1.0, 1.0, 1.0), drop=0.0)),
-        mouth=dict(kind="grin", width=1.65, up=0.45, low=0.55, cu=0.02, cl=0.09, bite=0.04, teeth=13),
-        eyes=dict(scale=1.25, iris=0.13, push=0.006), ribs=0.6, lines=1.0, slouch=0.15, arms=0.95,
-        targets=[("head/head-square", 0.5), ("mouth/mouth-scale-horiz-incr", 1.0),
-                 ("mouth/mouth-upperlip-volume-decr", 1.0), ("mouth/mouth-lowerlip-volume-decr", 1.0)]
-                + LR("eyes/{s}-eye-scale-incr", 1.0) + LR("eyes/{s}-eye-height2-incr", 1.0)
-                + LR("eyes/{s}-eye-height1-incr", 1.0) + LR("cheek/{s}-cheek-volume-decr", 0.8)
-                + [_ex("eye-left-opened-up", 1.0), _ex("eye-right-opened-up", 1.0)],
-        gait=dict(stride=0.43, knee=0.5, sway=0.02, bob=0.05, arm=0.25, limp=0.08)),
-    # small potbellied one: short legs, huge head, bowl cut, blank smile
+        height=8.0, head=1.65, gender=1.0, age=0.55, muscle=0.3, weight=0.7, proportions=0.2,
+        skin=(0.76, 0.38, 0.23), hair=("short04", (0.03, 0.022, 0.018), dict(messy=1.0)),
+        mouth=dict(kind="grin", width=2.0, up=0.50, low=0.62, cu=0.02, cl=0.09, bite=0.04, teeth=15, recess=0.18),
+        eyes=dict(scale=1.3, iris=0.12, push=0.007), ribs=0.3, lines=1.0, slouch=0.12, arms=0.95, brow=0.9,
+        targets=WIDE_MOUTH + WIDE_EYES + HEAVY_BROW + [("head/head-square", 0.7), ("torso/torso-scale-horiz-incr", 1.0),
+                 ("torso/torso-scale-depth-incr", 0.4)] + LR("cheek/{s}-cheek-volume-decr", 0.5),
+        gait=dict(stride=0.45, knee=0.5, sway=0.03, bob=0.05, arm=0.25, limp=0.08)),
+    # bald potbellied dwarf: very short legs, enormous head, dopey wide grin, wide eyes
     "potbelly": dict(
-        height=5.0, head=1.55, gender=1.0, age=0.6, muscle=0.0, weight=1.0, proportions=0.0,
-        skin=(0.40, 0.22, 0.11), hair=("short03", (0.024, 0.019, 0.016), dict(scale=(1.04, 1.04, 1.0), drop=0.0)),
-        mouth=dict(kind="smile_line", width=1.6, up=0.10, low=0.10, cu=0.10, cl=0.10, bite=0.0, teeth=0),
-        eyes=dict(scale=1.1, iris=0.22, push=0.004), ribs=0.0, lines=0.8, slouch=0.10, arms=0.75,
-        targets=[("stomach/stomach-pregnant-incr", 1.0), ("legs/measure-upperleg-height-decr", 1.0),
-                 ("legs/measure-lowerleg-height-decr", 1.0), ("legs/lowerlegs-height-decr", 1.0),
+        height=5.0, head=1.85, gender=1.0, age=0.6, muscle=0.0, weight=1.0, proportions=0.0,
+        skin=(0.75, 0.34, 0.19), hair=None,
+        mouth=dict(kind="grin", width=1.9, up=0.35, low=0.50, cu=0.08, cl=0.16, bite=0.04, teeth=14, recess=0.18),
+        eyes=dict(scale=1.25, iris=0.18, push=0.006), ribs=0.0, lines=0.8, slouch=0.08, arms=0.7, brow=0.8,
+        targets=WIDE_MOUTH + WIDE_EYES + SHORT_LEGS + [("stomach/stomach-pregnant-incr", 1.0),
                  ("head/head-round", 1.0), ("head/head-fat-incr", 1.0), ("neck/neck-double-incr", 1.0),
-                 ("arms/measure-upperarm-length-decr", 0.4), ("mouth/mouth-scale-horiz-incr", 0.6)]
-                + LR("eyes/{s}-eye-scale-incr", 0.8),
-        gait=dict(stride=0.57, knee=0.5, sway=0.045, bob=0.04, arm=0.18, limp=0.05)),
-    # long brown hair, gaunt, blank O-mouth stare (right side of the still)
-    "longhair_gaper": dict(
-        height=7.0, head=1.45, gender=0.6, age=0.5, muscle=0.2, weight=0.2, proportions=0.4, cupsize=0.0,
-        skin=(0.76, 0.52, 0.38), hair=("long01", (0.10, 0.054, 0.034), dict(scale=(1.02, 1.02, 1.0), drop=0.0)),
-        mouth=dict(kind="gape", width=0.55, up=0.45, low=0.75, cu=0.0, cl=0.0, bite=0.0, teeth=0),
-        eyes=dict(scale=1.2, iris=0.15, push=0.005), ribs=0.8, lines=1.0, slouch=0.25, arms=1.0,
-        targets=[("head/head-oval", 0.8), ("breast/BreastSize", 0.0)] + LR("cheek/{s}-cheek-volume-decr", 1.0)
-                + LR("eyes/{s}-eye-scale-incr", 1.0) + [_ex("mouth-open", 0.9), _ex("eye-left-opened-up", 0.8),
-                                                         _ex("eye-right-opened-up", 0.8)],
-        gait=dict(stride=0.46, knee=0.5, sway=0.02, bob=0.06, arm=0.28, limp=0.12)),
-    # brawny ruddy brown-haired one with a pained, gritted grin (right edge of the still)
+                 ("torso/torso-scale-horiz-incr", 0.6)],
+        gait=dict(stride=0.6, knee=0.5, sway=0.05, bob=0.04, arm=0.18, limp=0.05)),
+    # (was longhair_gaper) messy brown hair, gaunt chest + soft belly, gaping O mouth, very long arms, deep slouch
+    "messy_gaper": dict(
+        height=7.0, head=1.6, gender=1.0, age=0.5, muscle=0.1, weight=0.45, proportions=0.2,
+        skin=(0.70, 0.32, 0.18), hair=("short03", (0.13, 0.07, 0.035), dict(messy=1.0)),
+        mouth=dict(kind="gape", width=0.75, up=0.55, low=0.95, cu=0.0, cl=0.0, bite=0.0, teeth=0, recess=0.2),
+        eyes=dict(scale=1.25, iris=0.14, push=0.006), ribs=0.8, lines=1.0, slouch=0.55, arms=1.0, brow=0.8,
+        targets=WIDE_EYES + HEAVY_BROW + LONG_ARMS + [("head/head-oval", 0.6), ("stomach/stomach-pregnant-incr", 0.5)]
+                + LR("cheek/{s}-cheek-volume-decr", 1.0) + [_ex("mouth-open", 1.0)],
+        gait=dict(stride=0.46, knee=0.5, sway=0.02, bob=0.07, arm=0.34, limp=0.12)),
+    # wide ruddy brute: barrel torso, short legs, gritted open grin, small eyes under a heavy brow
     "ruddy_brute": dict(
-        height=12.0, head=1.3, gender=1.0, age=0.5, muscle=0.85, weight=0.65, proportions=0.5,
-        skin=(0.21, 0.10, 0.06), hair=("short01", (0.27, 0.10, 0.045), dict(scale=(1.0, 1.0, 1.0), drop=0.0)),
-        mouth=dict(kind="open_grin", width=1.35, up=0.35, low=0.55, cu=0.0, cl=0.06, bite=0.12, teeth=10),
-        eyes=dict(scale=0.8, iris=0.30, push=-0.004, closed=0.45), ribs=0.5, lines=1.3, slouch=0.3, arms=1.1,
-        targets=[("head/head-square", 0.8), ("chin/chin-width-incr", 0.8), ("mouth/mouth-scale-horiz-incr", 0.6),
-                 ("arms/measure-upperarm-length-incr", 0.6)]
-                + [_ex("eye-left-closure", 0.45), _ex("eye-right-closure", 0.45), _ex("mouth-retraction", 0.6)],
-        gait=dict(stride=0.51, knee=0.55, sway=0.03, bob=0.06, arm=0.22, limp=0.07)),
-    # 3-4 m runt: child-like proportions, giant round head, staring
+        height=12.0, head=1.45, gender=1.0, age=0.5, muscle=0.6, weight=1.0, proportions=0.3,
+        skin=(0.58, 0.17, 0.09), hair=("short01", (0.25, 0.10, 0.045), dict(messy=1.0)),
+        mouth=dict(kind="open_grin", width=1.8, up=0.45, low=0.70, cu=0.0, cl=0.06, bite=0.14, teeth=12, recess=0.18),
+        eyes=dict(scale=0.85, iris=0.30, push=-0.002), ribs=0.2, lines=1.3, slouch=0.3, arms=1.15, brow=1.3,
+        targets=WIDE_MOUTH + HEAVY_BROW + SOFT_TORSO + SHORT_LEGS[:1] + [("head/head-square", 0.8),
+                 ("chin/chin-width-incr", 0.8)] + [_ex("mouth-retraction", 0.6)],
+        gait=dict(stride=0.5, knee=0.55, sway=0.045, bob=0.06, arm=0.22, limp=0.07)),
+    # 3-4 m bald runt: child proportions, giant round head, staring grin
     "runt": dict(
-        height=3.5, head=1.6, gender=1.0, age=0.15, muscle=0.2, weight=0.5, proportions=0.1,
-        skin=(0.58, 0.32, 0.19), hair=None,
-        mouth=dict(kind="grin", width=1.35, up=0.25, low=0.40, cu=0.06, cl=0.15, bite=0.03, teeth=11),
-        eyes=dict(scale=1.3, iris=0.18, push=0.006), ribs=0.0, lines=0.8, slouch=0.05, arms=0.9,
-        targets=[("head/head-round", 1.0), ("legs/measure-upperleg-height-decr", 0.6)]
-                + LR("eyes/{s}-eye-scale-incr", 1.0) + [_ex("eye-left-opened-up", 1.0), _ex("eye-right-opened-up", 1.0)],
+        height=3.5, head=1.8, gender=1.0, age=0.15, muscle=0.2, weight=0.7, proportions=0.1,
+        skin=(0.76, 0.36, 0.21), hair=None,
+        mouth=dict(kind="grin", width=1.7, up=0.30, low=0.45, cu=0.06, cl=0.15, bite=0.03, teeth=12, recess=0.18),
+        eyes=dict(scale=1.35, iris=0.16, push=0.007), ribs=0.0, lines=0.8, slouch=0.05, arms=0.9, brow=0.6,
+        targets=WIDE_MOUTH + WIDE_EYES + [("head/head-round", 1.0), ("legs/measure-upperleg-height-decr", 0.6)],
         gait=dict(stride=0.54, knee=0.6, sway=0.03, bob=0.05, arm=0.3, limp=0.05)),
 }
 PRESETS.update(GENERIC)
 GENERIC_KEYS = list(GENERIC.keys())
+PRESETS["longhair_gaper"] = GENERIC["messy_gaper"]   # old name kept as an alias
 PART_TOP = 4.5   # centre part: strands below eye_z + PART_TOP * eye_radius are moved fully off the face
 
 # --------------------------------------------------------------------------------------------- shader helpers
@@ -227,14 +230,18 @@ def _mat_skin(name, P, rnd):
     rim = B.mul(B.step(B.sub(1.35, ed), 0.12), 0.9)
     col = B.mix(shade, col, line_col)
     col = B.mix(rim, col, (0.02, 0.008, 0.006, 1))
+    if P.get("brow", 0) > 0:
+        bw = B.attr("brow", "Fac")
+        brow = B.step(B.sub(0.08 + 0.20 * P["brow"], bw), 0.03)
+        col = B.mix(brow, col, (0.06, 0.025, 0.018, 1))
     # ---- painted mouth
     col = _mouth_nodes(B, col, P["mouth"], line_col)
     B.L.new(col, b.inputs["Base Color"])
-    b.inputs["Roughness"].default_value = 0.62
-    b.inputs["Subsurface Weight"].default_value = 0.08
-    b.inputs["Subsurface Radius"].default_value = (1.0, 0.35, 0.2)
-    b.inputs["Subsurface Scale"].default_value = 0.05
-    b.inputs["Specular IOR Level"].default_value = 0.35
+    # anime-ish: matte, almost no specular, shadows lifted by a little self-emission (soft "cel" shadow)
+    b.inputs["Roughness"].default_value = 0.85
+    b.inputs["Specular IOR Level"].default_value = 0.12
+    B.L.new(col, b.inputs["Emission Color"])
+    b.inputs["Emission Strength"].default_value = P.get("lift", 0.15)
     return mat
 
 
@@ -318,11 +325,14 @@ def _mat_eye(name, iris_r, iris_col=(0.03, 0.02, 0.015)):
 
 def _mat_flat(name, color, rough=0.7):
     mat = bpy.data.materials.new(name); B = _NB(mat); b = B.bsdf
-    tc = B.N.new("ShaderNodeTexCoord")
-    nz = B.N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 30.0
-    B.L.new(tc.outputs["Object"], nz.inputs["Vector"])
+    nz = B.N.new("ShaderNodeTexWave"); nz.wave_type = "BANDS"; nz.bands_direction = "X"
+    nz.inputs["Scale"].default_value = 60.0; nz.inputs["Distortion"].default_value = 3.0
+    B.L.new(B.attr("rest"), nz.inputs["Vector"])
+    b.inputs["Specular IOR Level"].default_value = 0.2
+    B.L.new(B.mix(0.0, (*color, 1), (*color, 1)), b.inputs["Emission Color"])
+    b.inputs["Emission Strength"].default_value = 0.15
     dk = tuple(c * 0.6 for c in color)
-    B.L.new(B.mix(B.m("MULTIPLY", B.sub(nz.outputs["Fac"], 0.45), 1.5, clamp=True), (*color, 1), (*dk, 1)),
+    B.L.new(B.mix(B.m("MULTIPLY", B.sub(nz.outputs["Fac"], 0.55), 0.55, clamp=True), (*color, 1), (*dk, 1)),
             b.inputs["Base Color"])
     b.inputs["Roughness"].default_value = rough
     return mat
@@ -346,7 +356,10 @@ def _mat_outline(name):
 
 # --------------------------------------------------------------------------------------------- geometry helpers
 def _load_targets(body, items):
+    best = {}
     for t, w in items:
+        best[t] = max(w, best.get(t, 0.0))
+    for t, w in best.items():
         if w <= 0:
             continue
         if t.startswith("@"):
@@ -430,6 +443,16 @@ def _bake_attrs(body, H, mouth_c, mouth_w, chin_z, eyes=()):
         fr = 1.0 if (v.co.y < mouth_c.y + 0.045 and v.co.z > chin_z and v.normal.y < -0.15) else 0.0
         face.append((u, w, fr))
     eyed = [min([((v.co - c).length / r) for c, r in eyes] or [99.0]) for v in bm.verts]
+    brw = []
+    for v in bm.verts:
+        best = 99.0
+        for c, r in eyes:
+            dx = (v.co.x - c.x) / (1.9 * r)
+            if abs(dx) < 1.0 and v.co.y < c.y + 1.2 * r and v.normal.y < -0.2:
+                zc = c.z + 1.75 * r + 0.45 * r * (1.0 - dx * dx) - (0.35 * r * dx if c.x > 0 else -0.35 * r * dx)
+                best = min(best, abs(v.co.z - zc) / r)
+        brw.append(best)
+    _set_attr(me, "brow", brw, "FLOAT")
     bm.free()
     _set_attr(me, "eyed", eyed, "FLOAT")
     _set_attr(me, "cav", cavn, "FLOAT")
@@ -467,6 +490,151 @@ def _add_eyes(body, eyes, mat_index, scale, push):
     _set_attr(me, "eye", vals)
 
 
+def _grin_depth(fu, fv, M):
+    """Signed depth (in lip half-widths) inside the painted mouth shape; >0 inside. Mirrors _mouth_nodes."""
+    if M["kind"] in ("grin", "open_grin"):
+        u = fu / M["width"]; u2 = u * u
+        vu = M["up"] + u2 * (M["cu"] - M["up"]); vl = -M["low"] + u2 * (M["cl"] * 4.0 + M["low"])
+        return min(vu - fv, fv - vl)
+    if M["kind"] == "gape":
+        ry = (M["up"] + M["low"]) * 0.5; cy = (M["up"] - M["low"]) * 0.5
+        r = (fu / M["width"]) ** 2 + ((fv - cy) / ry) ** 2
+        return (1.0 - r) * ry * 0.5
+    return -9.0
+
+
+def _recess_mouth(body, mc, mw, M):
+    """Model the grin a little: teeth set back behind the lip line, cheeks/lips bulging around it."""
+    k = M.get("recess", 0.0)
+    if not k:
+        return
+    me = body.data
+    for v in me.vertices:
+        if v.co.y > mc.y + 0.03 or v.normal.y > -0.1 or abs(v.co.z - mc.z) > mw * 3:
+            continue
+        d = _grin_depth((v.co.x - mc.x) / mw, (v.co.z - mc.z) / mw, M)
+        if d > 0:
+            t = min(1.0, d / 0.45); t = t * t * (3 - 2 * t)
+            v.co.y += k * mw * t
+        elif d > -0.5:
+            t = 1.0 - abs(d + 0.25) / 0.25
+            if t > 0:
+                v.co.y -= 0.18 * k * mw * t * t
+
+
+def _messy(hair, eyes, amt, seed):
+    """Short messy hair: noisy push along the head radius so the silhouette gets tufts."""
+    from mathutils import noise
+    ez = sum(c.z for c, _ in eyes) / len(eyes); er = eyes[0][1]
+    vs = hair.data.vertices
+    cy = sum(v.co.y for v in vs) / len(vs)
+    c = Vector((0.0, cy, ez + er * 1.5))
+    off = Vector((seed * 1.7, seed * 0.3, 0.0))
+    for v in vs:
+        d = v.co - c
+        n = noise.noise((v.co + off) * (9.0 / er))
+        n2 = noise.noise((v.co + off) * (2.5 / er))
+        v.co = v.co + d.normalized() * er * amt * (0.35 * max(0.0, n) + 0.25 * n2)
+
+
+def _custom_bob(body, eyes, mc, mw, H, opt, name):
+    """Smooth chin-length bob with straight-ish bangs, shrink-wrapped to this head (one shell, head-weighted)."""
+    from mathutils.bvhtree import BVHTree
+    me = body.data
+    bvh = BVHTree.FromPolygons([v.co for v in me.vertices], [tuple(p.vertices) for p in me.polygons])
+    ez = sum(c.z for c, _ in eyes) / len(eyes); er = eyes[0][1]; ey = min(c.y for c, _ in eyes)
+    ex = max(abs(c.x) for c, _ in eyes)
+    hv = [v.co for v in me.vertices if v.co.z > ez]
+    top = max(p.z for p in hv)
+    cy = (min(p.y for p in hv) + max(p.y for p in hv)) * 0.5
+    c = Vector((0.0, cy, ez + 0.2 * (top - ez)))
+    th = er * 1.3                                   # hair volume above the scalp
+    z_brow = ez + er * opt.get("bangs_h", 2.4)
+    z_chin = mc.z - mw * 1.3 * opt.get("length", 1.0)
+    fx = ex + er * 1.5
+    th_f = math.atan2(fx, max(1e-4, c.y - (ey - er)))   # half-angle of the bangs window
+    NT, NR = 72, 28
+    grid = []
+    for i in range(NT):
+        t = 2 * math.pi * i / NT
+        tt = (t + math.pi) % (2 * math.pi) - math.pi          # -pi..pi, 0 = front (-Y)
+        st, ct = math.sin(t), math.cos(t)
+        pts = []; prev = None
+        for k in range(41):
+            ph = (k / 40) * math.pi / 2
+            d = Vector((math.sin(ph) * st, -math.sin(ph) * ct, math.cos(ph)))
+            hit = bvh.ray_cast(c, d)
+            r = (hit[0] - c).length if hit[0] is not None else (prev or er * 6)
+            prev = r
+            pts.append(c + d * (r + th))
+        rh = Vector((pts[-1].x - c.x, pts[-1].y - c.y)).length
+        zl = z_chin - mw * 0.8
+        for j in range(1, 31):
+            z = c.z - j * (c.z - zl) / 30
+            o = Vector((c.x, c.y, z)); d = Vector((st, -ct, 0.0))
+            hit = bvh.ray_cast(o, d)
+            rh *= 0.988                                       # taper in under the ears, hug the jaw
+            if hit[0] is not None:
+                rh = max(rh, (hit[0] - o).length + th * 0.6)
+            rr = rh + th * 0.6 * (j / 30) ** 0.7             # fuller towards the ends
+            pts.append(Vector((c.x + rr * st, c.y - rr * ct, z)))
+        # where this column ends: bangs in front, chin length on the sides, a touch longer at the back
+        w = 1.0 - min(1.0, max(0.0, (abs(tt) - th_f) / 0.22))
+        w = w * w * (3 - 2 * w)
+        zb_side = z_chin - mw * 0.35 * (abs(tt) / math.pi)
+        zb = z_brow * w + zb_side * (1 - w)
+        zb += er * 0.25 * abs(math.sin(tt * 9.0)) * (0.6 + 0.4 * w)  # soft clumps along the cut
+        L = [0.0]
+        for a, b2 in zip(pts, pts[1:]):
+            L.append(L[-1] + (b2 - a).length)
+        end = L[-1]
+        for k in range(1, len(pts)):
+            if pts[k].z <= zb and k > 5:
+                a, b2 = pts[k - 1], pts[k]
+                f = (a.z - zb) / max(1e-6, a.z - b2.z)
+                end = L[k - 1] + f * (L[k] - L[k - 1]); break
+        col = []
+        for r_ in range(NR):
+            sl = end * r_ / (NR - 1)
+            for k in range(1, len(L)):
+                if L[k] >= sl:
+                    f = (sl - L[k - 1]) / max(1e-6, L[k] - L[k - 1])
+                    col.append(pts[k - 1].lerp(pts[k], f)); break
+            else:
+                col.append(pts[-1].copy())
+        grid.append(col)
+    for _ in range(3):   # smooth around the head (ears, nose rays)
+        grid = [[(grid[i - 1][r_] + grid[i][r_] * 2 + grid[(i + 1) % NT][r_]) / 4 for r_ in range(NR)]
+                for i in range(NT)]
+    # rounded, slightly turned-under tips (soft bob instead of a straight wig cut)
+    for i in range(NT):
+        col = grid[i]
+        for back, f in ((1, 0.55), (2, 0.25), (3, 0.08)):
+            p = col[NR - back]
+            rad = Vector((p.x - c.x, p.y - c.y, 0.0))
+            if rad.length > 1e-6:
+                col[NR - back] = p - rad.normalized() * th * f + Vector((0, 0, er * 0.35 * f))
+    hm = bpy.data.meshes.new(name + "_bob")
+    verts = [p for col in grid for p in col]
+    faces = []
+    for i in range(NT):
+        i2 = (i + 1) % NT
+        for r_ in range(NR - 1):
+            faces.append((i * NR + r_, i2 * NR + r_, i2 * NR + r_ + 1, i * NR + r_ + 1))
+    hm.from_pydata(verts, [], faces)
+    bm = bmesh.new(); bm.from_mesh(hm)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-5)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    # make sure normals point away from the head centre
+    f0 = max(bm.faces, key=lambda f: f.calc_center_median().z)
+    if f0.normal.z < 0:
+        bmesh.ops.reverse_faces(bm, faces=bm.faces)
+    bm.to_mesh(hm); bm.free()
+    ob = bpy.data.objects.new(name + "_bob", hm); bpy.context.scene.collection.objects.link(ob)
+    vg = ob.vertex_groups.new(name="head"); vg.add(list(range(len(hm.vertices))), 1.0, "REPLACE")
+    return ob
+
+
 # --------------------------------------------------------------------------------------------- builder
 def make_pure(kind="generic", seed=0, height=None, preset=None, lod=0.45, outline=True, name=None):
     """Build one pure Titan; returns the armature.
@@ -494,7 +662,7 @@ def make_pure(kind="generic", seed=0, height=None, preset=None, lod=0.45, outlin
     _load_targets(body, [t for t in P["targets"] if not t[0].startswith("breast/BreastSize")])
     rig = HS.add_builtin_rig(body, "default")
     hair = None
-    if P.get("hair"):
+    if P.get("hair") and P["hair"][0] != "custom_bob":
         hn, hcol, hopt = P["hair"]
         try:
             f = ASSET.find_asset_absolute_path(f"{hn}/{hn}.mhclo", asset_subdir="hair")
@@ -533,6 +701,9 @@ def make_pure(kind="generic", seed=0, height=None, preset=None, lod=0.45, outlin
             reg.append((c / len(pts), 0.035))
     if reg:
         _smooth_region(body, reg)
+    _recess_mouth(body, mouth_c, mouth_w, P["mouth"])
+    if P.get("hair") and P["hair"][0] == "custom_bob" and eyes:
+        hair = _custom_bob(body, eyes, mouth_c, mouth_w, H, P["hair"][2], name)
     # LOD
     if lod and lod < 1.0:
         dm = body.modifiers.new("lod", "DECIMATE"); dm.ratio = lod; dm.use_symmetry = True; dm.symmetry_axis = "X"
@@ -554,6 +725,9 @@ def make_pure(kind="generic", seed=0, height=None, preset=None, lod=0.45, outlin
         _add_eyes(body, eyes, 1, 0.97 if E.get("closed") else E.get("scale", 1.0) * 0.97 + 0.03,
                   E.get("push", 0.0) if not E.get("closed") else -0.002)
     if hair:
+        if P["hair"][2].get("messy") and eyes:
+            _messy(hair, eyes, P["hair"][2]["messy"], seed)
+        _set_attr(hair.data, "rest", [(v.co.x / H, v.co.y / H, v.co.z / H) for v in hair.data.vertices])
         if lod and lod < 1.0 and len(hair.data.polygons) > 3000:
             hm = hair.modifiers.new("lod", "DECIMATE"); hm.ratio = max(lod, 0.5)
             _apply_mod(hair, hm)
@@ -565,7 +739,9 @@ def make_pure(kind="generic", seed=0, height=None, preset=None, lod=0.45, outlin
             for v in hair.data.vertices:
                 d = v.co - hc
                 v.co = hc + Vector((d.x * hs[0], d.y * hs[1], d.z * hs[2]))
-        if eyes and P["hair"][2].get("part"):
+        if P["hair"][0] == "custom_bob":
+            pass
+        elif eyes and P["hair"][2].get("part"):
             # centre-parted curtain: cut a triangular opening out of the fringe so the face shows,
             # strands keep hanging over the cheeks at the sides
             ez = sum(c.z for c, _ in eyes) / len(eyes); er = eyes[0][1]; ey = min(c.y for c, _ in eyes)
@@ -604,7 +780,7 @@ def make_pure(kind="generic", seed=0, height=None, preset=None, lod=0.45, outlin
             body.modifiers.remove(m)
     if outline:
         so = body.modifiers.new("ink", "SOLIDIFY")
-        so.thickness = 0.0045 * H / 1.66 * (1.0 if height > 6 else 1.3)
+        so.thickness = 0.0065 * H / 1.66 * (1.0 if height > 6 else 1.3)
         so.offset = 1.0; so.use_flip_normals = True; so.use_rim = False
         so.material_offset = 3; so.material_offset_rim = 3; so.use_quality_normals = False
     rig.name = name; body.name = name + "_body"; rig.data.name = name + "_rig"
