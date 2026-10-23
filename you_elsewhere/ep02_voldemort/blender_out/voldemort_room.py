@@ -650,17 +650,17 @@ ro.visible_shadow = False
 if SNAKE:
     m, nt, p = new_mat("snake_skin")
     tc = nt.nodes.new("ShaderNodeTexCoord")
-    sm = nt.nodes.new("ShaderNodeMapping"); sm.inputs["Scale"].default_value = (90, 1400, 1)
-    link(nt, tc.outputs["UV"], sm.inputs["Vector"])
+    sm = nt.nodes.new("ShaderNodeMapping"); sm.inputs["Scale"].default_value = (110, 110, 110)
+    link(nt, tc.outputs["Object"], sm.inputs["Vector"])
     sc = nt.nodes.new("ShaderNodeTexVoronoi"); sc.feature = "DISTANCE_TO_EDGE"; sc.inputs["Scale"].default_value = 1
     link(nt, sm.outputs["Vector"], sc.inputs["Vector"])
     pat = nt.nodes.new("ShaderNodeTexNoise"); pat.inputs["Scale"].default_value = 4; pat.inputs["Detail"].default_value = 4
-    pm = nt.nodes.new("ShaderNodeMapping"); pm.inputs["Scale"].default_value = (3, 60, 1)
-    link(nt, tc.outputs["UV"], pm.inputs["Vector"]); link(nt, pm.outputs["Vector"], pat.inputs["Vector"])
+    pm = nt.nodes.new("ShaderNodeMapping"); pm.inputs["Scale"].default_value = (2.5, 2.5, 2.5)
+    link(nt, tc.outputs["Object"], pm.inputs["Vector"]); link(nt, pm.outputs["Vector"], pat.inputs["Vector"])
     ramp = nt.nodes.new("ShaderNodeValToRGB"); link(nt, pat.outputs["Fac"], ramp.inputs["Fac"])
-    ramp.color_ramp.elements[0].position = 0.45; ramp.color_ramp.elements[0].color = (0.02, 0.025, 0.015, 1)
-    ramp.color_ramp.elements[1].position = 0.6; ramp.color_ramp.elements[1].color = (0.11, 0.12, 0.07, 1)
-    edge = math_node(nt, "MULTIPLY", sc.outputs["Distance"], 8, True)
+    ramp.color_ramp.elements[0].position = 0.42; ramp.color_ramp.elements[0].color = (0.008, 0.01, 0.006, 1)
+    ramp.color_ramp.elements[1].position = 0.55; ramp.color_ramp.elements[1].color = (0.05, 0.06, 0.03, 1)
+    edge = math_node(nt, "MULTIPLY", sc.outputs["Distance"], 5, True)
     link(nt, mixrgb(nt, math_node(nt, "SUBTRACT", 1, edge, True), ramp.outputs["Color"], (0.01, 0.01, 0.008, 1)), p.inputs["Base Color"])
     p.inputs["Roughness"].default_value = 0.32; p.inputs["Coat Weight"].default_value = 0.3
     bmp = nt.nodes.new("ShaderNodeBump"); bmp.inputs["Distance"].default_value = 0.002
@@ -669,21 +669,27 @@ if SNAKE:
     cu.bevel_resolution = 6; cu.resolution_u = 24; cu.use_fill_caps = True
     sp = cu.splines.new("NURBS"); n = 46
     sp.points.add(n - 1)
-    cx, cy = FX + 0.0, 1.25
+    cx, cy = FX - 0.12, 1.42
     for i in range(n):
         t = i / (n - 1)
         if t < 0.78:                       # spiral coil
-            a = t / 0.78 * 2.6 * 2 * math.pi; r = 0.33 - 0.22 * (t / 0.78)
+            a = t / 0.78 * 2.2 * 2 * math.pi; r = 0.34 - 0.2 * (t / 0.78) + 0.03 * math.sin(3.0 * a)
             x, y, z = cx + r * math.cos(a), cy + r * math.sin(a), 0.06 + 0.07 * (t / 0.78)
         else:                              # head lifts off the coil, towards the fire
             u = (t - 0.78) / 0.22
-            x, y, z = cx + 0.11 + 0.1 * u, cy + 0.05 + 0.25 * u, 0.13 + 0.12 * math.sin(u * 2.4)
+            x, y, z = cx + 0.12 + 0.16 * u, cy - 0.02 + 0.2 * u, 0.12 + 0.22 * math.sin(u * 2.0)
         rad = 0.055 * (0.35 + 0.65 * math.sin(math.pi * min(1, t * 1.25 + 0.06))) if t < 0.96 else 0.03
         sp.points[i].co = (x, y, z, 1); sp.points[i].radius = rad
     sp.use_endpoint_u = True; sp.order_u = 4
     sn = bpy.data.objects.new("nagini", cu); scene.collection.objects.link(sn); cu.materials.append(m)
     # tail starts outside: reverse so the tail end is thin
     sp.points[0].radius = 0.004
+    # wedge-shaped head at the raised end, pointing along the body
+    hp = Vector(sp.points[n - 1].co[:3]); hd = (hp - Vector(sp.points[n - 3].co[:3])).normalized()
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1, location=hp + hd * 0.035)
+    hd_o = bpy.context.object; hd_o.name = "nagini_head"
+    hd_o.rotation_euler = hd.to_track_quat("X", "Z").to_euler(); hd_o.scale = (0.065, 0.04, 0.026)
+    hd_o.data.materials.append(m); bpy.ops.object.shade_smooth()
 
 # ---------------------------------------------------------------- camera + render settings
 cam_d = bpy.data.cameras.new("cam"); cam_d.lens = 35; cam_d.sensor_width = 36
