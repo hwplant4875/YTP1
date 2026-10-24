@@ -439,7 +439,7 @@ def build():
             if ix % 9 == 0 or abs(gx) < 18:
                 continue                                         # north-south lanes, road
             if iy % 4 == 3:
-                if ix % 9 == 4 and rnd.random() < 0.35:
+                if ix % 9 == 4 and rnd.random() < 0.7:
                     fires.append((X0 + gx, gy))                  # cooking fires in the east-west lanes
                 continue
             if abs(gx) < 150 and 120 < gy < 470:
@@ -457,9 +457,9 @@ def build():
     F = np.array(fires)
     te = []; pos = []
     for k, (fx_, fy_) in enumerate(F):
-        for j in range(int(9.0 / 0.45)):
-            te.append(-1.5 + j * 0.45 + (k % 5) * 0.09); pos.append((fx_, fy_, H(fx_, fy_) + 1.0))
-    cs.add_many(np.array(te), np.array(pos), None, 1.2, 9.0, 3.2, 9.0, kind="smoke", alpha=0.55)
+        for j in range(int(9.0 / 0.25)):
+            te.append(-1.5 + j * 0.25 + (k % 5) * 0.05); pos.append((fx_, fy_, H(fx_, fy_) + 1.0))
+    cs.add_many(np.array(te), np.array(pos), None, 1.6, 12.0, 3.4, 10.0, kind="smoke", alpha=0.85, color=(0.40, 0.36, 0.31))
     cs.build(None)
     st["smoke"] = [cs]
     st["n_fires"] = len(F)
@@ -870,11 +870,11 @@ def cam_keys():
         (3.8, (X0 - 130, -170, 300), (X0 + 20, 560, 0), 30),                           # over Wall Rose: the camps
         (5.9, (X0 - 380, 470, 310), (X0 - 120, 1250, 0), 30),                          # fields being cleared
         (7.7, (-1020, 1580, 360), (-1480, 2260, 0), 30),                               # flight to the camp
-        (9.6, (C.x + 60, C.y - 120, 95), (C.x - 5, C.y + 0, 0), 32),                   # rows of recruits (847)
+        (9.6, (C.x - 252, C.y + 140, 30), (C.x - 10, C.y - 10, 0), 30),                # reveal over the lookout tower: the rows
         (10.9, (RC.x + 17, RC.y - 21, 13), (RC.x, RC.y + 0.6, 1.9), 36),             # Eren upside down (hold)
         (12.6, (RC.x + 15, RC.y - 19, 12), (RC.x, RC.y + 0.6, 1.9), 36),
-        (14.9, (C.x + 300, C.y - 330, 170), (C.x - 20, C.y - 90, 0), 30),            # seasons: tower, paddock, titan cut-outs
-        (17.2, (C.x + 200, C.y - 40, 190), (C.x - 10, C.y + 10, 0), 30),
+        (14.9, (C.x + 30, C.y - 470, 125), (C.x - 10, C.y - 70, 0), 30),             # seasons: titan cut-outs in the lower third
+        (17.2, (C.x + 290, C.y - 400, 140), (C.x - 10, C.y - 40, 0), 30),            # paddock + horses lower third
         (20.5, (C.x + 46, C.y - 62, 34), (C.x, C.y + 14, 1.5), 32),                  # END: graduation night
     ]
 
@@ -1051,7 +1051,7 @@ if __name__ == "__main__":
     for i, t in enumerate(times):
         update(st, t)
         if sc.render.engine == "CYCLES":          # the torch-lit night needs a few more samples than daylight
-            sc.cycles.samples = B.samples if SI.night_at(t) < 0.3 else max(B.samples, int(os.environ.get("INT_NIGHT_SMP", "16")))
+            sc.cycles.samples = B.samples if SI.night_at(t) < 0.3 else max(B.samples, int(os.environ.get("INT_NIGHT_SMP", "12")))
         loc, rot, lens = cam_at(t)
         cam.location = loc; cam.rotation_euler = rot; cd.lens = lens
         for c in st["smoke"]:
