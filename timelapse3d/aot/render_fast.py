@@ -48,18 +48,26 @@ def bump(t, a, b, c, d):
 def keys():
     l0, t0, n0 = FL.flight_at(900) if FL else ((-480, 338, 6), (-300, 0, 10), 50)
     l0, t0 = Vector(l0), Vector(t0)
-    zk = float(os.environ.get("FAST_ZOOM0", "1.22"))                   # opening zoom factor, eased out over 2 s
+    # opening: start close on the kids (Eren dozing against the trunk, Mikasa walking up), pull back along the same
+    # line of sight to the loved tree framing by 2.0 s, a short beat (2.0-2.05 hold), then the whoosh
+    kids = [o.matrix_world.translation for o in (bpy.data.objects.get("Eren"), bpy.data.objects.get("Mikasa")) if o]
+    k0 = (sum(kids, Vector()) / len(kids) + Vector((0, 0, 0.7))) if kids else t0
+    near = float(os.environ.get("FAST_NEAR", "0.74"))                  # fraction of the way from the end camera to the kids
+    c0 = l0 + (k0 - l0) * near; c0.z = max(c0.z, k0.z + 1.0)
+    l1 = l0 + Vector((0, 0, 1.2))
     return [
-        (0.0, l0, t0, n0 * zk),
-        (2.0, l0 + Vector((0, 0, 1.2)), t0 + Vector((0, 0, 0.6)), n0),  # very slow zoom-out, slight rise
+        (0.0, c0, k0, n0 * 0.9),
+        (2.0, l1, t0 + Vector((0, 0, 0.6)), n0),
+        (2.05, l1, t0 + Vector((0, 0, 0.6)), n0),
         (2.6, (-430, 290, 28), (-150, 120, 14), 32),                   # leave the tree: up and toward the gate
-        (3.15, (-200, 170, 24), (0, 0, 12), 28),                       # over the meadow / road
-        (3.5, (-24, 118, 24), (0, -60, 12), 27),                       # above the hamlet roofs
-        (3.75, (-3, 30, 13), (0, -200, 13), 26),                       # lined up with the inner gate tunnel
-        (4.25, (0, -160, 17), (CDX, -600, 30), 30),                    # down the avenue
-        (4.9, (-11, -348, 19), (CDX, GY, 46), 46),                     # arriving over the plaza: the wall ahead
-        (5.3, (-11, -362, 19), (CDX, GY - 4, 52), 80),                 # the hand slams on the wall top
-        (8.0, (-11, -372, 20), tuple(HEAD + Vector((0, 2, -2.5))), float(os.environ.get("FAST_HEAD_LENS", "150"))),
+        (3.2, (-220, 170, 46), (0, 0, 45), 28),                        # over the meadow / road, climbing
+        (3.55, (-85, 85, 63), (0, -150, 40), 27),
+        (3.8, (-15, 18, 72), (-2, -450, 30), 27),                      # UP and OVER the inner wall top (+22 m)
+        (4.35, (-3, -200, 65), (CDX, -700, 42), 30),                   # gliding down along the avenue
+        (4.9, (-6, -385, 60), (CDX, GY, 52), 46),                      # past the plaza, down the gate street
+        # line of sight from ~58 m over the wall top reaches ~49 m at the head: it reads as soon as it rises
+        (5.45, (-6, -425, 58), (CDX, GY - 12, 56), 95),
+        (8.0, (-5, -450, 56), tuple(HEAD + Vector((0, 2, -3))), float(os.environ.get("FAST_HEAD_LENS", "210"))),   # face ~55% of frame height
         (10.0, (PLAZA.x + 40, PLAZA.y + 30, 120), (GX, GY + 30, 18), 40),   # lift: gate and wall in frame
         (11.0, (PLAZA.x + 45, PLAZA.y + 35, 128), (GX, GY + 40, 16), 40),
         (13.0, (PLAZA.x + 55, PLAZA.y + 50, 150), (GX, GY + 120, 0), 38),  # debris arcs into the town
@@ -138,6 +146,8 @@ def cam_at(t):
     if HOUSE_CAM and t >= HOUSE_CAM[0]:                          # optional cut: a house crushed by a gate block
         u = smooth(HOUSE_CAM[0], HOUSE_CAM[0] + 2.6, t)
         loc = Vector((-95, -405, 55)) + Vector((-6, -6, -4)) * u; tgt = Vector((-150, -458, 3)); lens = 32 + 4 * u
+    if t < 2.3:                                                    # opening push: never dip into the hill
+        loc.z = max(loc.z, L.height(loc.x, loc.y) + 0.9)
     rot = (tgt - loc).to_track_quat("-Z", "Y").to_euler()
     a = shake(t)
     if a:
@@ -150,7 +160,8 @@ def colossal_at(t):
     """(show, rise, kick, fade, hand_l, hand_r).  Left hand slams on the wall top right after the lightning, the head
     rises 5-8 s (unchanged speed), the right hand comes up from behind the wall ~5.9-6.7 s, wind-up 8.8-10.3, strike to 11."""
     show = 4.6 <= t < 13.5
-    rise = smooth(5.0, 8.0, t)
+    u = min(1.0, max(0.0, (t - 4.62) / (8.0 - 4.62)))             # ease-out: the head is readable from ~5.2 s,
+    rise = 1 - (1 - u) ** 3                                          # still rising slowly until 8 s (COL_RISE_DROP 14)
     if t < 8.8:
         kick = 0.0
     elif t < 10.3:
@@ -222,7 +233,8 @@ def fx_at(fx, t):
     dk = bump(t, 4.45, 4.6, 4.95, 5.6)
     bpy.context.scene.view_settings.exposure = fx["exp"] - float(os.environ.get("FAST_DARK_EV", "1.6")) * dk + (0.7 if on else 0.0)
     for o in fx["wisps"]:
-        o.hide_render = t < float(os.environ.get("FAST_WISPS_T", "8.2"))
+        if t < float(os.environ.get("FAST_WISPS_T", "4.72")):
+            o.hide_render = True
 
 def kids_frame(t):
     """Flight-module frame for the kids: F_KIDS + 30 fps * t over the 2 s opening (seated wake / Mikasa's walk)."""
@@ -252,11 +264,55 @@ sc = bpy.context.scene
 cam = sc.camera
 if sc.render.engine.startswith("BLENDER_EEVEE"):
     sc.eevee.taa_render_samples = B.fast_samples
+    if os.environ.get("FAST_PREVIEW") == "1":                    # preview: coarse volumes/shadows, no ray tracing
+        ev = sc.eevee
+        for k, v in (("use_raytracing", False), ("volumetric_tile_size", "16"), ("volumetric_samples", 32),
+                     ("shadow_resolution_scale", 0.5), ("shadow_ray_count", 1), ("shadow_step_count", 4)):
+            try:
+                setattr(ev, k, v)
+            except Exception:
+                pass
+        sc.render.use_persistent_data = True
+        print("[fast] preview mode (Eevee): taa", ev.taa_render_samples)
 else:
     sc.cycles.samples = B.fast_samples; sc.cycles.use_adaptive_sampling = True
+    if os.environ.get("FAST_PREVIEW") == "1":                    # preview: few samples + denoise, short paths, no fog
+        cy = sc.cycles
+        cy.use_denoising = True
+        try:
+            cy.denoiser = "OPENIMAGEDENOISE"; cy.denoising_use_gpu = True
+        except Exception:
+            pass
+        cy.max_bounces, cy.diffuse_bounces, cy.glossy_bounces, cy.transmission_bounces = 3, 1, 1, 2
+        cy.volume_bounces = 0; cy.transparent_max_bounces = 12; cy.caustics_reflective = cy.caustics_refractive = False
+        cy.volume_step_rate = 6; cy.volume_max_steps = 128
+        sc.render.use_persistent_data = True
+        sc.render.use_simplify = True; sc.render.simplify_subdivision_render = 0
+        cy.texture_limit_render = "1024"
+        for n in ("Haze",):
+            ob = bpy.data.objects.get(n)
+            if ob:
+                ob.hide_render = True
+        for ob in bpy.data.objects:
+            if ob.type == "MESH" and any(m and m.name.startswith("FL_Rays") for m in ob.data.materials):
+                ob.hide_render = True
+        print("[fast] preview mode: samples", cy.samples)
 sc.render.image_settings.file_format = "PNG"
 os.makedirs(B.fast_out, exist_ok=True)
-if not bpy.data.objects.get("PlazaCrowd") and os.environ.get("FAST_CROWD", "1") != "0":
+# crowd: swarm845 (same people as segment 2: plaza crowd + small groups along the streets, standing and watching
+# the wall while t < 11) unless FAST_SWARM=0, then the old cheap plaza-only crowd
+SW = None
+if os.environ.get("FAST_SWARM", "1") != "0":
+    try:
+        import swarm845 as SW
+        if not SW.STATE.get("people"):
+            t_sw = time.time()
+            SW.setup(t_end=float(os.environ.get("FAST_SWARM_TEND", "20")))
+            print(f"[fast] swarm845 setup {time.time() - t_sw:.0f}s", SW.info())
+    except Exception as ex:
+        import traceback; traceback.print_exc(); SW = None
+        print("[fast] swarm845 unavailable:", ex)
+if SW is None and not bpy.data.objects.get("PlazaCrowd") and os.environ.get("FAST_CROWD", "1") != "0":
     crowd()
 FX = build_fx()
 col_coll = bpy.data.collections.get("ColossalTitan")
@@ -276,20 +332,25 @@ else:
 i = B.index0
 t_start = time.time()
 for t in times:
+    t_fr = time.time()
     kf = kids_frame(t)
     sc.frame_set(int(kf), subframe=kf - int(kf))
     show, rise, kick, fade, hl, hr = colossal_at(t)
     if col_coll:
         col_coll.hide_render = not show
         if show and CA and CA.STATE:
-            CA.set_pose(kick, rise, fade, hand_l=hl, hand_r=hr)
+            CA.set_pose(kick, rise, fade, hand_l=hl, hand_r=hr, steam=smooth(4.72, 7.8, t))   # steam only after the strike
     fx_at(FX, t)
+    t_fx = time.time()
     if FX845:
         FX845.update(t - T_KICK)                                   # negative = intact gate; pure function of t
+    t_fx = time.time() - t_fx
+    if SW is not None:
+        SW.update(t - T_KICK)                                      # t < 11: standing in the plaza / streets, watching
     loc, rot, lens = cam_at(t)
     cam.location = loc; cam.rotation_euler = rot; cam.data.lens = lens
     name = f"{B.prefix}_{i:05d}.png" if not B.times else f"{B.prefix}_t{t:05.2f}.png"
     sc.render.filepath = os.path.join(B.fast_out, name)
     bpy.ops.render.render(write_still=True)
-    print(f"[fast] t={t:.2f}s -> {name} ({time.time() - t_start:.0f}s)")
+    print(f"[fast] t={t:.2f}s -> {name} ({time.time() - t_start:.0f}s total, fx845 {t_fx:.1f}s, frame {time.time() - t_fr:.1f}s)")
     i += 1

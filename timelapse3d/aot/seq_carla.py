@@ -15,7 +15,8 @@ finishes the scene after they have built:
   CARLA_F=2300 AOT_PLUGINS=seq_carla,flight,cast845,states845,seq_carla bash render.sh carla out.png 640x360 16
   bash carla_preview.sh "2200 2300 2560"           (preview strip, see carla_preview.sh)
 Frames continue seq_colossal's numbering (30 fps). Poses are pure functions of the frame (one process renders one
-frame), so any frame can be rendered on its own. No close-ups: every camera is a sky view at 25-60 m.
+frame), so any frame can be rendered on its own.  Per-frame use in ONE session (render_fall.py): CARLA_PERFRAME=1 makes
+build() call setup_carla() only; then pose_carla(f) (f may be fractional) before every render. No close-ups: every camera is a sky view at 25-60 m.
 """
 import math, os, random
 from mathutils import Vector, Matrix, Quaternion, noise
@@ -608,6 +609,11 @@ def build(M, year, ctx):
     b = beat(F)
     # the walk cycles of the inflow crowd keep going from seq_colossal (T_INFLOW = 1800)
     bpy.context.scene.frame_set(max(1, F - 1800 + 1))
+    if os.environ.get("CARLA_PERFRAME") == "1":     # render_fall.py: build once, it calls pose_carla(f) per frame
+        setup_carla(M, year, ctx, coll)               # (and blends the light itself)
+        pose_carla(F)
+        print(f"[seq_carla] per-frame setup done (F {F})")
+        return
     if b == "S18":
         build_s18(M, year, ctx, coll)
     else:
@@ -639,6 +645,14 @@ def _take_smiling():
 
 
 def build_carla(M, year, ctx, coll):
+    """One-process path (CARLA_F): build the set once, then pose it for frame F."""
+    setup_carla(M, year, ctx, coll)
+    pose_carla(F)
+
+
+def setup_carla(M, year, ctx, coll):
+    """Build once: beams, the Smiling Titan's grab geometry, cleared paths, Carla / kids / Hannes rigs.
+    Then call pose_carla(f) for every frame (one Blender session can render the whole beat, see render_fall.py)."""
     import bpy, aotlib as L
     for o in _armored_rigs():                       # the Armored belongs to the gate chapter
         for x in _all_obs(o):
@@ -665,6 +679,41 @@ def build_carla(M, year, ctx, coll):
     nr = clear_ruins([(C + fv * 3.0, 10.0), (C + fv * 2.0 + u * 14.0, 5.0), (C + fv * 2.0 + u * 26.0, 5.0), (T1, 6.0)])
     print(f"[seq_carla] removed {nr} ruin verts round Carla")
     print(f"[seq_carla] house yaw {math.degrees(ya):.0f} C {tuple(round(v, 1) for v in C)} cleared {n}")
+    STATE.update(g=g, grab=grab, yaw_t=yaw_t, coll=coll, tmp=[])
+    ca = make_carla("Carla")
+    er, mk = make_kids()
+    ha = make_hannes("Hannes")
+    STATE.update(carla=ca, eren=er, mikasa=mk, hannes=ha,
+                 carla_mats={o.name: list(o.data.materials) for o in _all_obs(ca) if o.type == "MESH"})
+    for o in _all_obs(ca) + _all_obs(er) + _all_obs(mk) + _all_obs(ha):
+        for c in list(o.users_collection):
+            c.objects.unlink(o)
+        coll.objects.link(o)
+
+
+def _clear_tmp():
+    """Remove the per-frame helper objects (blades, red mist) of the previous pose."""
+    import bpy
+    for o in STATE.get("tmp", []):
+        if o is None or o.name not in bpy.data.objects:
+            continue
+        me = o.data; mats = [m for m in me.materials] if me else []
+        bpy.data.objects.remove(o, do_unlink=True)
+        if me and me.users == 0:
+            bpy.data.meshes.remove(me)
+        for m in mats:
+            if m and m.users == 0:
+                bpy.data.materials.remove(m)
+    STATE["tmp"] = []
+
+
+def pose_carla(F):
+    """Pose the beat for seq_carla frame F (titan, Carla, Hannes, kids, blades, red mist, dust thinning).
+    Pure function of F once setup_carla() has run; call it after fx845.update() so the dust thinning sticks."""
+    import bpy, aotlib as L
+    _clear_tmp()
+    C, fv, u, g, grab, yaw_t, ti, coll = (STATE[k] for k in ("C", "f", "u", "g", "grab", "yaw_t", "titan", "coll"))
+    T1 = STATE["T1"]
     # titan pose for this frame
     if F < T_WALK[1]:
         pxy, d = titan_xy(F)
@@ -704,7 +753,12 @@ def build_carla(M, year, ctx, coll):
         err = solve_arm(ti, pose[0], toff, tgt, "R", iters=7)
         print(f"[seq_carla] titan arm IK error {err:.2f} m")
     # ---- Carla
-    ca = make_carla("Carla")
+    ca = STATE["carla"]
+    for o in _all_obs(ca):
+        o.hide_render = False
+        if o.type == "MESH" and o.name in STATE["carla_mats"]:
+            for i, m in enumerate(STATE["carla_mats"][o.name]):
+                o.data.materials[i] = m
     if F < T_LIFT[0] + 6:
         _pose(ca, *p_prone((F - S12[0]) / 40.0))
         # lying on her front, head toward the street (+f), face down: body Z -> f, body +Y -> up, hips at C
@@ -736,10 +790,9 @@ def build_carla(M, year, ctx, coll):
         hd, ht = _bone_w(ti, "head", "head"), _bone_w(ti, "head", "tail")
         tf = Vector((math.sin(yaw_t), -math.cos(yaw_t), 0))
         mouth = hd.lerp(ht, 0.2) + tf * (ht - hd).length * 0.55
-        red_mist(mouth, _ss(T_BITE[0] + 6, T_BITE[1] + 70, F), coll)
+        STATE["tmp"].append(red_mist(mouth, _ss(T_BITE[0] + 6, T_BITE[1] + 70, F), coll))
     # ---- kids + Hannes
-    er, mk = make_kids()
-    ha = make_hannes("Hannes")
+    er, mk, ha = STATE["eren"], STATE["mikasa"], STATE["hannes"]
     hp, hd_, mode = hannes_xy(F)
     yaw_h = _yaw_to(hd_) if hd_.length > 1e-3 else 0.0
     _place(ha, hp.x, hp.y, yaw_h, z=_ground_z(hp.x, hp.y))
@@ -773,7 +826,7 @@ def build_carla(M, year, ctx, coll):
     bpy.context.view_layer.update()
     blades = mode in ("run", "charge", "freeze", "stand") and F < H_FREEZE[1] - 6
     if blades:
-        hannes_blades(ha, coll)
+        STATE["tmp"].append(hannes_blades(ha, coll))
     carried = mode == "flee" or (mode == "scoop" and _ss(*H_SCOOP, F) > 0.55)
     if carried:
         reach = 1.0 if F >= H_RUN + 10 else _ss(H_RUN - 4, H_RUN + 10, F)
@@ -806,10 +859,6 @@ def build_carla(M, year, ctx, coll):
         for k in (er, mk):
             print("[seq_carla dbg]", k.name, "hip", fmt(_bone_w(k, "upperleg01.L")), "head", fmt(_bone_w(k, "head", "tail")),
                   "handR", fmt(_bone_w(k, "wrist.R", "tail")), "footL", fmt(_bone_w(k, "foot.L", "tail")))
-    for o in _all_obs(ca) + _all_obs(er) + _all_obs(mk) + _all_obs(ha):
-        for c in list(o.users_collection):
-            c.objects.unlink(o)
-        coll.objects.link(o)
 
 
 def report_view():
@@ -851,7 +900,7 @@ def hannes_blades(ha, coll):
         w0 = _bone_w(ha, f"wrist.{s}", "head"); w1 = _bone_w(ha, f"wrist.{s}", "tail")
         d = (w1 - w0).normalized()
         L.cyl(bm, w1, w1 + d * 1.0 + Vector((0, 0, -0.05)), 0.025, 0.012, seg=4, mi=0)
-    L.obj_from_bm("HannesBlades", bm, [m], coll)
+    return L.obj_from_bm("HannesBlades", bm, [m], coll)
 
 
 def attach_carried(ha, er, mk):

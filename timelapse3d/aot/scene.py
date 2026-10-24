@@ -1260,6 +1260,37 @@ def grass_patch(mats, center, radius, density):
     return ground
 
 # ---------------------------------------------------------------- roads & water
+def cobble_mat(name):
+    """Anime S1E1 street paving: warm grey-brown cobbles (voronoi cells, each stone a slightly different tone) with dark
+    joints, blended by a large noise into packed-earth patches (worn lanes, the plaza's dirt), slight bump.
+    Works in object coords = world coords (streets / plaza are built in place)."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree; N = nt.nodes; Lk = nt.links; b = N["Principled BSDF"]
+    b.inputs["Roughness"].default_value = 0.92
+    tc = N.new("ShaderNodeTexCoord")
+    vo = N.new("ShaderNodeTexVoronoi"); vo.inputs["Scale"].default_value = 2.3          # ~0.45 m stones
+    Lk.new(tc.outputs["Object"], vo.inputs["Vector"])
+    ve = N.new("ShaderNodeTexVoronoi"); ve.feature = "DISTANCE_TO_EDGE"; ve.inputs["Scale"].default_value = 2.3
+    Lk.new(tc.outputs["Object"], ve.inputs["Vector"])
+    st = N.new("ShaderNodeValToRGB"); e = st.color_ramp.elements               # per-stone tone
+    e[0].position, e[0].color = 0.0, (0.20, 0.16, 0.12, 1); e[1].position, e[1].color = 1.0, (0.36, 0.30, 0.23, 1)
+    sep = N.new("ShaderNodeSeparateColor"); Lk.new(vo.outputs["Color"], sep.inputs[0]); Lk.new(sep.outputs[0], st.inputs[0])
+    jn = N.new("ShaderNodeMapRange"); jn.inputs["From Min"].default_value = 0.02; jn.inputs["From Max"].default_value = 0.09
+    Lk.new(ve.outputs["Distance"], jn.inputs["Value"])                       # 0 in the joint .. 1 on the stone
+    jm = N.new("ShaderNodeMix"); jm.data_type = "RGBA"; jm.inputs["B"].default_value = (0.13, 0.11, 0.09, 1)
+    Lk.new(jn.outputs["Result"], jm.inputs["Factor"])
+    jm.inputs["A"].default_value = (0.09, 0.075, 0.06, 1); Lk.new(st.outputs["Color"], jm.inputs["B"])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.035; nz.inputs["Detail"].default_value = 4
+    Lk.new(tc.outputs["Object"], nz.inputs["Vector"])
+    dm = N.new("ShaderNodeMapRange"); dm.inputs["From Min"].default_value = 0.45; dm.inputs["From Max"].default_value = 0.6
+    Lk.new(nz.outputs["Fac"], dm.inputs["Value"])
+    dirt = N.new("ShaderNodeMix"); dirt.data_type = "RGBA"; dirt.inputs["B"].default_value = (0.30, 0.23, 0.15, 1)
+    Lk.new(dm.outputs["Result"], dirt.inputs["Factor"]); Lk.new(jm.outputs["Result"], dirt.inputs["A"])
+    Lk.new(dirt.outputs["Result"], b.inputs["Base Color"])
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.35
+    Lk.new(jn.outputs["Result"], bp.inputs["Height"]); Lk.new(bp.outputs["Normal"], b.inputs["Normal"])
+    return m
+
 def flat_strip(name, pts, width, m, z=0.15, absolute=False):
     """Ribbon along a polyline with shared vertices (no bow-ties at bends)."""
     bm = bmesh.new()
@@ -1337,7 +1368,7 @@ def build(year):
         "grass_close": mat("GrassClose", (0.16, 0.28, 0.05), 0.95, var=0.2, var_scale=0.3, color2=(0.26, 0.36, 0.08)),
         "grass_blade": mat("GrassBlade", (0.20, 0.36, 0.06), 0.7, var=0.25, var_scale=0.4, color2=(0.34, 0.44, 0.10)),
         "dirt": mat("Dirt", (0.20, 0.17, 0.11), 0.95, var=0.25, var_scale=0.05, color2=(0.27, 0.24, 0.15)),
-        "cobble": mat("Cobble", (0.42, 0.38, 0.32), 0.9, var=0.2, var_scale=0.2),
+        "cobble": cobble_mat("Cobble"),
         "water": mat("Water", (0.10, 0.17, 0.22), 0.06),
         "skin": mat("Skin", (0.80, 0.55, 0.42), 0.55, sss=0.15),
         "titan_skin": mat("TitanSkin", (0.72, 0.42, 0.31), 0.6, var=0.12, var_scale=0.15, color2=(0.80, 0.50, 0.38), sss=0.1),
@@ -1360,6 +1391,9 @@ def build(year):
         "scarf": mat("Scarf", (0.50, 0.025, 0.02), 0.85),
         "firewood": mat("Firewood", (0.30, 0.20, 0.12), 0.9),
     }
+    for _p in PLUGINS:
+        if hasattr(_p, "build_set"):            # AOT_SET district set builds the whole scene instead of Shiganshina
+            return _p.build_set(M, year)
     terrain = build_terrain(M)
     build_walls(M)
     hc = new_coll("HouseVariants")
@@ -1484,6 +1518,8 @@ CAMS = {
 sys.modules.setdefault("aotlib", sys.modules[__name__])
 import importlib
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+if os.environ.get("AOT_SET"):     # opt-in district set (AOT_SET=trost -> aot/trost.py), loaded before other plug-ins; build() calls its build_set()
+    PLUGINS.append(importlib.import_module(os.environ["AOT_SET"]))
 for _n in os.environ.get("AOT_PLUGINS", "").split(","):
     if _n and os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), _n + ".py")):
         try:

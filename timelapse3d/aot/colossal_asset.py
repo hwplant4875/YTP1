@@ -72,8 +72,8 @@ def _ik(arm, bone, target_loc, pole_loc, name):
 # (h=0) onto its grip (h=1); the fingers close over the last quarter of the move.
 FINGERS = ("Index", "Middle", "Ring", "Pinky")
 CURL = (0.12, 1.25, 0.95)                                # per finger segment (rad): flat on the walk, bent over the edge
-HAND_S = float(os.environ.get("COL_HAND_S", "1.6"))
-GRIP_DX = float(os.environ.get("COL_GRIP_DX", "25"))     # hands either side of the body axis, clear of the gatehouse
+HAND_S = float(os.environ.get("COL_HAND_S", "1.9"))
+GRIP_DX = float(os.environ.get("COL_GRIP_DX", "12.5"))   # hands at shoulder width either side of the head centre
 GRIP_Y = float(os.environ.get("COL_GRIP_Y", "-1.0"))     # wrist offset from the wall centre line (+ = north / town side)
 PALM_AXIS = os.environ.get("COL_PALM_AXIS", "TRACK_Z")   # hand-local axis pointing out of the palm
 CURL_SGN = float(os.environ.get("COL_CURL_SGN", "1"))
@@ -84,8 +84,18 @@ def _bone(arm, side, part):
 
 def _grip_points(side):
     sg = -1 if side == "L" else 1                                  # the Colossal faces north: its left is -x
-    x = FEET.x + sg * GRIP_DX
-    g = Vector((x, GY + GRIP_Y, L.WALL_H + 1.3))
+    x = FEET.x + sg * (float(os.environ.get("COL_GRIP_DX_L", "14")) if side == "L" else GRIP_DX)   # L clears the pilaster
+    # anime-style outer gate (scene.gatehouse): recessed panel |x| < 10 flush with the wall top but full thickness
+    # (town-side edge GY + 5.1), flat pilasters |x| 10..17 with tops at WALL_H + 3.5 (edge GY + 7.0); elsewhere the
+    # plain wall walk (parapet lip WALL_H + 0.8, inner edge GY + 3.8).  Fingers curl over the town-side edge.
+    dx = abs(x - GX)
+    if dx < 10.0:
+        top, edge = L.WALL_H, GY + 5.1
+    elif dx < 17.5:
+        top, edge = L.WALL_H + 3.5, GY + 7.0
+    else:
+        top, edge = L.WALL_H + 1.3, GY + 3.8          # palm clear above the parapet lips / rails (no clipping)
+    g = Vector((x, edge - 4.8 + GRIP_Y + 1.0, top + 0.5))
     a0 = Vector((x + sg * 3, GY - 18, L.WALL_H - 18))              # hanging behind the wall, out of sight
     c = Vector((x + sg * 1, GY - 11, L.WALL_H + 13))               # arcs up over the outer edge
     return a0, c, g
@@ -136,7 +146,7 @@ def leg_angles(k):
         return -back + (fwd + back) * k, knee * (1 - k) ** 2
     return 0.0, 0.0
 
-def set_pose(k=0.0, rise=1.0, fade=0.0, hand_l=1.0, hand_r=1.0):
+def set_pose(k=0.0, rise=1.0, fade=0.0, hand_l=1.0, hand_r=1.0, steam=1.0):
     """Per-frame pose (render_fast.py / render_intro.py), a pure function of its arguments: lean, right-leg kick
     (k -1 wind-up .. +1 impact), rise, fade, hands (0 = hanging behind the wall .. 1 = gripping the wall top)."""
     arm, root = STATE["arm"], STATE["root"]
@@ -156,7 +166,18 @@ def set_pose(k=0.0, rise=1.0, fade=0.0, hand_l=1.0, hand_r=1.0):
     arm.pose.bones["mixamorig_Head_06"].scale = (float(os.environ.get("COL_HEAD", "1.8")),) * 3
     _place_hand("L", hand_l); _place_hand("R", hand_r)
     root.location = STATE["base"].copy()
-    root.location.z -= (1 - rise) * float(os.environ.get("COL_RISE_DROP", "22")) + fade * 30
+    drop = (1 - rise) * float(os.environ.get("COL_RISE_DROP", "14"))
+    root.location.z -= drop + fade * 30
+    # steam follows the rise (not the fade-sink) and rolls outward, low and wide, as the body fades
+    # steam (0..1) builds the cloud up gradually after the arrival
+    g = min(1.0, max(0.0, steam))
+    for ob, loc0, sc0 in STATE.get("wisps", ()):
+        c = STATE["wisp_c"]
+        sp = (0.55 + 0.45 * g) * (1 + 0.9 * fade)
+        ob.hide_render = g < 0.02
+        k = (0.15 + 0.85 * g)
+        ob.location = (c.x + (loc0.x - c.x) * sp, c.y + (loc0.y - c.y) * sp, loc0.z - drop + 4 * fade - 3 * (1 - g))
+        ob.scale = (sc0.x * k * (1 + 0.8 * fade), sc0.y * k * (1 + 0.8 * fade), sc0.z * k * (1 + 0.35 * fade))
 
 def build(M, year, ctx):
     # shown when COL_SHOW=1, or by default for AOT_EVENT=colossal|kick (standalone use)
@@ -203,9 +224,9 @@ def _wisp_mat(name, density):
     N.remove(N["Principled BSDF"])
     tc = N.new("ShaderNodeTexCoord")
     # stretch the noise upward so it reads as rising strands
-    st = N.new("ShaderNodeMapping"); st.inputs["Scale"].default_value = (1.0, 1.0, 0.35)
+    st = N.new("ShaderNodeMapping"); st.inputs["Scale"].default_value = (1.0, 1.0, 1.8)   # flattened billows, not strands
     Lk.new(tc.outputs["Object"], st.inputs["Vector"])
-    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 4.0; nz.inputs["Detail"].default_value = 10
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 2.6; nz.inputs["Detail"].default_value = 10
     nz.inputs["Roughness"].default_value = 0.7; nz.inputs["Distortion"].default_value = 1.5
     Lk.new(st.outputs["Vector"], nz.inputs["Vector"])
     cr = N.new("ShaderNodeValToRGB"); e = cr.color_ramp.elements
@@ -236,23 +257,34 @@ def wisps(arm, fade=0.0):
     dens = float(os.environ.get("COL_WISP_DENS", "0.35")) * (1 + 2.5 * fade)
     mat = _wisp_mat("ColossalWisp", dens)
     pts = []
-    for bn in ("mixamorig_Head_06", "mixamorig_Neck_05", "mixamorig_LeftShoulder_08", "mixamorig_RightShoulder_032",
+    for bn in ("mixamorig_LeftShoulder_08", "mixamorig_RightShoulder_032",           # not the head: keep the face clear
                "mixamorig_LeftArm_09", "mixamorig_RightArm_033", "mixamorig_LeftForeArm_010", "mixamorig_RightForeArm_034",
                "mixamorig_Spine2_04", "mixamorig_Spine1_03"):
         pb = arm.pose.bones.get(bn)
         if pb:
             pts.append(arm.matrix_world @ pb.head)
-    for i, p in enumerate(pts):
+    # low, wide rolling steam: flattened puffs hugging the shoulders/head plus a ring spreading out at shoulder height
+    # (the old tall stretched strands read as a water fountain); set_pose spreads and grows them with the fade
+    cen = sum(pts, Vector()) / max(1, len(pts))
+    specs = []
+    for p in pts:
         for j in range(2):
-            h = rnd.uniform(14, 26) * (1 + fade)
-            bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=1,
-                                                 location=(p.x + rnd.uniform(-3, 3), p.y + rnd.uniform(-3, 3), p.z + h * 0.45))
-            o = bpy.context.active_object; o.name = f"ColossalWisp{i}_{j}"
-            o.scale = (rnd.uniform(4, 7) * (1 + fade), rnd.uniform(4, 7) * (1 + fade), h)
-            o.data.materials.append(mat)
-            for c in list(o.users_collection):
-                c.objects.unlink(o)
-            coll.objects.link(o)
+            specs.append(((p.x + rnd.uniform(-5, 5), p.y + rnd.uniform(-9, -2), p.z + rnd.uniform(-3, 2)),   # behind the body
+                          (rnd.uniform(6, 10), rnd.uniform(6, 10), rnd.uniform(3.5, 5.5))))
+    for k in range(10):
+        a = k / 10 * math.tau + rnd.uniform(-0.2, 0.2); r = rnd.uniform(13, 20)
+        specs.append(((cen.x + math.cos(a) * r, cen.y + math.sin(a) * r * 0.8 - 4, cen.z - rnd.uniform(4, 10)),
+                      (rnd.uniform(10, 15), rnd.uniform(9, 13), rnd.uniform(4, 6.5))))
+    STATE["wisps"] = []; STATE["wisp_c"] = cen.copy()
+    for i, (loc, scl) in enumerate(specs):
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=1, location=loc)
+        o = bpy.context.active_object; o.name = f"ColossalWisp{i}"
+        o.scale = scl
+        o.data.materials.append(mat)
+        for c in list(o.users_collection):
+            c.objects.unlink(o)
+        coll.objects.link(o)
+        STATE["wisps"].append((o, Vector(loc), Vector(scl)))
     # thin creeping mist at the feet / along the wall foot
     bpy.ops.mesh.primitive_cube_add(size=1, location=(FEET.x, FEET.y + 8, 6))
     g = bpy.context.active_object; g.name = "ColossalMist"; g.scale = (120, 60, 12)

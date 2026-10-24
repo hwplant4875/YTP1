@@ -1,0 +1,234 @@
+"""Segment 2: the fall (picks up where render_fast.py ends, video 13.0 s = 2.0 s after the kick), ONE Blender session.
+
+Segment time s (0 = video 13.0 s), ~15.5 s:
+  0-7.5 s   TIMELAPSE: sim time after the kick runs 2 -> 60 s on an S-curve (real speed at both ends).
+            Houses collapse under the stones with dust (fx845.update), the plaza crowd panics and runs, the
+            pure titans pour through the breach and start eating (swarm845.update).  Sky camera 85-150 m,
+            continuing from render_fast's last key, then flying north-west to the Yeager street.
+  7.5-15.5  the Carla beat (seq_carla.pose_carla(F), F mapped non-linearly): kids at the beam, Hannes arrives,
+            charges, freezes, scoops the kids, runs; the Smiling Titan lifts Carla; the "Yamero" hold (~2 s,
+            F 2515-2585, Eren facing back, arm over Hannes's shoulder); pull-away.  The light blends to sunset
+            over s 5-8.  Swarm keeps running at real speed (sim t = 60 + (s - 7.5)).
+Every frame is a pure function of s (camera, fx t, swarm t, carla F, light), so any frame or still renders alone.
+Run after scene.py (see render_fall.sh):
+  blender -b -P aot/scene.py -P aot/render_fall.py -- --cam seq... --fall-out DIR [--fps 15] [--times 1,5,9]
+Duplicate crowds / titans are simply not loaded (no seq_colossal, render_fast crowd, cast845); the swarm's own
+blocky Smiling Titan is hidden because seq_carla's MPFB Smiling Titan plays the beat.
+"""
+import bpy, math, os, sys, time, argparse
+from mathutils import Vector, noise
+
+argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+ap = argparse.ArgumentParser()
+ap.add_argument("--fall-out", required=True)
+ap.add_argument("--fps", type=float, default=30.0)
+ap.add_argument("--s0", type=float, default=0.0)
+ap.add_argument("--s1", type=float, default=15.5)
+ap.add_argument("--fall-samples", type=int, default=2)
+ap.add_argument("--times", default="", help="comma list of segment times (stills) instead of s0..s1")
+B, _ = ap.parse_known_args(argv)
+
+import aotlib as L
+SW = sys.modules.get("swarm845")
+FX = sys.modules.get("fx845")
+SC = sys.modules.get("seq_carla")
+A_END = 7.5                      # timelapse part ends, Carla beat begins
+SEG_END = 15.5
+T_SIM0, T_SIM1 = 2.0, 60.0       # sim time (s after the kick) over the timelapse part
+
+def smooth(a, b, t):
+    u = min(1.0, max(0.0, (t - a) / (b - a))); return u * u * (3 - 2 * u)
+
+# ---------------------------------------------------------------- time maps
+def sim_t(s):
+    """Seconds after the kick for segment time s: S-curve 2 -> 60 over 0-7.5 with real speed at both ends."""
+    if s <= 0:
+        return T_SIM0 + s
+    if s >= A_END:
+        return T_SIM1 + (s - A_END)
+    u = s / A_END; d = A_END / (T_SIM1 - T_SIM0)
+    h10, h01, h11 = u ** 3 - 2 * u ** 2 + u, -2 * u ** 3 + 3 * u ** 2, u ** 3 - u ** 2
+    return T_SIM0 + (T_SIM1 - T_SIM0) * (h10 * d + h01 + h11 * d)
+
+def _pchip_m(T, S):
+    D = [(S[i + 1] - S[i]) / (T[i + 1] - T[i]) for i in range(len(T) - 1)]
+    return [D[0]] + [0.0 if D[i - 1] * D[i] <= 0 else 2 * D[i - 1] * D[i] / (D[i - 1] + D[i]) for i in range(1, len(D))] + [D[-1]]
+
+def _pchip(T, S, m, t):
+    t = min(max(t, T[0]), T[-1])
+    i = min(len(T) - 2, max(j for j in range(len(T)) if T[j] <= t))
+    h = T[i + 1] - T[i]; s = (t - T[i]) / h
+    h00, h10, h01, h11 = 2 * s ** 3 - 3 * s ** 2 + 1, s ** 3 - 2 * s ** 2 + s, -2 * s ** 3 + 3 * s ** 2, s ** 3 - s ** 2
+    return h00 * S[i] + h10 * h * m[i] + h01 * S[i + 1] + h11 * h * m[i + 1]
+
+# segment time -> seq_carla frame (30 fps numbering). Brisk, except the Yamero hold (~1.2x real).
+F_KEYS = [(0.0, 2150), (A_END, 2290), (9.0, 2340), (11.0, 2440), (12.0, 2515), (14.0, 2585), (SEG_END, 2650)]
+_FM = _pchip_m([k[0] for k in F_KEYS], [k[1] for k in F_KEYS])
+def carla_f(s):
+    return _pchip([k[0] for k in F_KEYS], [k[1] for k in F_KEYS], _FM, s)
+
+# ---------------------------------------------------------------- camera
+PLZ = Vector(L.PLAZA[:2]); GX, GY = L.OUTER_GATE
+def _carla_cam(f):
+    if SC and SC.STATE.get("C") is not None:
+        l, t, n = SC.cam_at(f)
+        return tuple(l), tuple(t), n
+    return (-40.0, -60.0, 40.0), (-72.0, -118.0, 0.0), 32.0
+
+def a_keys():
+    """Timelapse-part keys (s, loc, look_at, lens); the first is render_fast.py's last key (video 13.0 s)."""
+    c_loc, c_tgt, c_lens = _carla_cam(F_KEYS[1][1])
+    return [
+        (-1.0, (PLZ.x + 50, PLZ.y + 45, 146), (GX, GY + 100, 0), 38),        # (extrapolation guide only)
+        (0.0, (PLZ.x + 55, PLZ.y + 50, 150), (GX, GY + 120, 0), 38),         # = render_fast keys()[-1]
+        (2.4, (PLZ.x + 32, PLZ.y + 70, 92), (PLZ.x, PLZ.y - 30, 0), 34),     # down over the panicking plaza
+        (4.8, (55, GY + 190, 112), (0, GY + 40, 0), 32),                     # titans pouring through the breach
+        (A_END, tuple(c_loc), tuple(c_tgt), c_lens),                         # = seq_carla camera at the beat start
+        (A_END + 1.5,) + _carla_cam(carla_f(A_END + 1.5)),                # (tangent guide into the beat)
+    ]
+
+def _cr(p0, p1, p2, p3, u, t0, t1, t2, t3):
+    """Non-uniform Catmull-Rom (time-parametrised) segment p1->p2."""
+    m1 = ((p2 - p1) / (t2 - t1) + (p1 - p0) / (t1 - t0)) * 0.5 * (t2 - t1)
+    m2 = ((p3 - p2) / (t3 - t2) + (p2 - p1) / (t2 - t1)) * 0.5 * (t2 - t1)
+    h00, h10, h01, h11 = 2 * u ** 3 - 3 * u ** 2 + 1, u ** 3 - 2 * u ** 2 + u, -2 * u ** 3 + 3 * u ** 2, u ** 3 - u ** 2
+    return p1 * h00 + m1 * h10 + p2 * h01 + m2 * h11
+
+_KS = []
+def cam_at(s):
+    if s >= A_END:
+        F = carla_f(s)
+        loc, tgt, lens = SC.cam_at(F)
+        loc, tgt = Vector(loc), Vector(tgt)
+        w = smooth(2415, 2465, F)
+        if w > 0:                                  # Yamero framing: in front of the titan (+u), Hannes running at us,
+            y_loc, y_tgt, y_lens = yamero_cam(F)   # Eren facing back over his shoulder, the titan lifting Carla behind
+            loc, tgt, lens = loc.lerp(y_loc, w), tgt.lerp(y_tgt, w), lens + (y_lens - lens) * w
+        return loc, tgt, lens
+    if not _KS:
+        _KS.extend(a_keys())
+    ks = _KS
+    i = max(j for j in range(1, len(ks) - 2) if ks[j][0] <= s) if s >= ks[1][0] else 1
+    q = [ks[j] for j in (i - 1, i, i + 1, i + 2)]
+    u = (s - q[1][0]) / (q[2][0] - q[1][0])
+    T = [k[0] for k in q]
+    loc = _cr(*[Vector(k[1]) for k in q], u, *T)
+    tgt = _cr(*[Vector(k[2]) for k in q], u, *T)
+    lens = math.exp(_cr(*[math.log(k[3]) for k in q], u, *T))
+    return loc, tgt, lens
+
+def yamero_cam(F):
+    """seq_carla's own S14 camera sits behind the ruined gable and hides Carla in the hand: look from the titan's
+    front (+u, the way Hannes runs) instead, slow pull-away."""
+    St = SC.STATE; u, fv = St["u"], St["f"]
+    g = L.height(St["C"].x, St["C"].y)
+    def mid(ff):
+        return (St["T1"] + SC.hannes_xy(ff)[0]) * 0.5
+    m = (mid(F - 15) + mid(F) * 2 + mid(F + 15)) / 4.0
+    pull = smooth(2560, 2650, F)
+    D = float(os.environ.get("FALL_YAM_D", "50")) + 22 * pull
+    el = math.radians(float(os.environ.get("FALL_YAM_EL", "54")) + 6 * pull)
+    tgt = Vector((m.x, m.y, g + 6.0))
+    side = u * 0.9 + fv * 0.44
+    loc = tgt + Vector((side.x, side.y, 0)).normalized() * D * math.cos(el) + Vector((0, 0, D * math.sin(el)))
+    return loc, tgt, 36.0
+
+def pscale(s):
+    return float(os.environ.get("FALL_PSCALE", "1.4")) * (1 - smooth(6.0, A_END, s)) + 1.0 * smooth(6.0, A_END, s)
+
+# ---------------------------------------------------------------- light: daylight (opening) -> sunset (Carla)
+def light_setup():
+    so = bpy.data.objects.get("Sun")
+    st = {"sun": so}
+    if so:
+        st["d0"] = so.matrix_world.to_3x3() @ Vector((0, 0, -1)); st["e0"] = so.data.energy; st["c0"] = Vector(so.data.color)
+        el = math.radians(float(os.environ.get("FALL_SUN_EL", "9")))
+        if SC and SC.STATE.get("u") is not None:
+            d = -SC.STATE["u"] - SC.STATE["f"] * 0.35; az = math.atan2(d.y, d.x)
+        else:
+            az = math.radians(200)
+        st["d1"] = Vector((-math.cos(el) * math.cos(az), -math.cos(el) * math.sin(az), -math.sin(el)))
+        st["e1"] = float(os.environ.get("CARLA_SUN_E", "3.4")); st["c1"] = Vector((1.0, 0.62, 0.38))
+    w = bpy.context.scene.world
+    st["ramp"] = []
+    if w and w.use_nodes:
+        for n in w.node_tree.nodes:
+            if n.type == "VALTORGB":
+                e = n.color_ramp.elements
+                st["ramp"].append((e[0], Vector(e[0].color), Vector((1.0, 0.46, 0.20, 1)), e[1], Vector(e[1].color), Vector((0.30, 0.30, 0.52, 1))))
+    return st
+
+def light_at(st, s):
+    k = smooth(5.0, 8.0, s)
+    so = st["sun"]
+    if so:
+        d = st["d0"].lerp(st["d1"], k).normalized()
+        so.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
+        so.data.energy = st["e0"] + (st["e1"] - st["e0"]) * k
+        so.data.color = tuple(st["c0"].lerp(st["c1"], k))
+    for e0, a0, b0, e1, a1, b1 in st["ramp"]:
+        e0.color = tuple(a0.lerp(b0, k)); e1.color = tuple(a1.lerp(b1, k))
+
+# ---------------------------------------------------------------- render settings (mirror render_fast's preview mode)
+sc = bpy.context.scene
+cam = sc.camera
+sc.cycles.samples = B.fall_samples; sc.cycles.use_adaptive_sampling = True
+if sc.render.engine.startswith("BLENDER_EEVEE"):
+    sc.eevee.taa_render_samples = int(os.environ.get("FALL_EEVEE_SAMPLES", "8"))
+elif os.environ.get("FAST_PREVIEW", "0") == "1":
+    cy = sc.cycles
+    cy.use_denoising = True
+    try:
+        cy.denoiser = "OPENIMAGEDENOISE"; cy.denoising_use_gpu = True
+    except Exception:
+        pass
+    cy.max_bounces, cy.diffuse_bounces, cy.glossy_bounces, cy.transmission_bounces = 3, 1, 1, 2
+    cy.volume_bounces = 0; cy.transparent_max_bounces = 12; cy.caustics_reflective = cy.caustics_refractive = False
+    cy.volume_step_rate = float(os.environ.get("FALL_VSTEP", "16")); cy.volume_max_steps = int(os.environ.get("FALL_VMAX", "48"))
+    sc.render.use_persistent_data = True
+    sc.render.use_simplify = True; sc.render.simplify_subdivision_render = 0
+    cy.texture_limit_render = "1024"
+    for ob in bpy.data.objects:
+        if ob.name == "Haze" or (ob.type == "MESH" and any(m and m.name.startswith("FL_Rays") for m in ob.data.materials)):
+            ob.hide_render = True
+sc.render.image_settings.file_format = "PNG"
+os.makedirs(B.fall_out, exist_ok=True)
+# duplicate crowds / titans (only present if someone loaded those plug-ins anyway)
+for n in ("PlazaCrowd",):
+    o = bpy.data.objects.get(n)
+    if o:
+        o.hide_render = True
+for c in ("PK_People",):
+    cc = bpy.data.collections.get(c)
+    if cc:
+        cc.hide_render = True
+col = bpy.data.collections.get("ColossalTitan")
+if col:
+    col.hide_render = True
+if SW:
+    SW.HIDE_TITANS = {"smiling"}
+LST = light_setup()
+print(f"[fall] swarm {'on' if SW and SW.STATE else 'off'}, fx845 {'on' if FX else 'off'}, carla {'on' if SC and SC.STATE.get('C') is not None else 'off'}")
+
+if B.times:
+    times = [float(x) for x in B.times.split(",") if x.strip()]
+else:
+    times = [B.s0 + j / B.fps for j in range(int(round((B.s1 - B.s0) * B.fps)))]
+t_start = time.time()
+for i, s in enumerate(times):
+    t0 = time.time()
+    ts = sim_t(s)
+    if FX:
+        FX.update(ts)
+    if SW and SW.STATE:
+        SW.update(ts, pscale=pscale(s))
+    if SC and SC.STATE.get("C") is not None:
+        SC.pose_carla(carla_f(s))
+    light_at(LST, s)
+    loc, tgt, lens = cam_at(s)
+    cam.location = loc; cam.rotation_euler = (tgt - loc).to_track_quat("-Z", "Y").to_euler(); cam.data.lens = lens
+    name = f"fall_{i:05d}.png" if not B.times else f"fall_s{s:05.2f}.png"
+    sc.render.filepath = os.path.join(B.fall_out, name)
+    tp = time.time() - t0
+    bpy.ops.render.render(write_still=True)
+    print(f"[fall] s={s:.2f} sim t={ts:.1f} F={carla_f(s):.0f} -> {name} (pose {tp:.1f}s, frame {time.time() - t0:.1f}s, total {time.time() - t_start:.0f}s)")

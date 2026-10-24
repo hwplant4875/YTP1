@@ -844,9 +844,9 @@ def build_tree_and_kids(M):
             ex = eren.matrix_world.translation
             away = Vector((end.x - ex.x, end.y - ex.y)).normalized()
             away = Matrix.Rotation(-0.5, 2) @ away                      # she comes in from the camera-left side
-            st = end.xy + away * float(os.environ.get("FL_MIK_WALK", "2.2"))
+            st = end.xy + away * float(os.environ.get("FL_MIK_WALK", "0.75"))   # a slow, tired walk
             start = Vector((st.x, st.y, L.height(st.x, st.y) - 0.04))
-            characters.animate_walk(mik, start, end, F_KIDS, F_KIDS + 60)
+            characters.animate_walk(mik, start, end, F_KIDS, F_KIDS + 60, step=20, swing=0.2)
     except Exception as ex:
         import traceback; traceback.print_exc()
         print("[flight] place_opening failed:", ex)

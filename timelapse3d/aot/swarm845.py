@@ -13,7 +13,8 @@ writes vertex positions of two deforming meshes (all people / all titans) + the 
 API (t = seconds after the kick impact, i.e. the moment the outer gate bursts; t < 0 = before it):
     import swarm845 as SW
     SW.setup(n_plaza=500, n_street=320, n_titans=30, seed=845, t_end=150.0)   # once per Blender session
-    SW.update(t)                       # every frame; same t -> same result; ~5-15 ms
+    SW.update(t, pscale=None)          # every frame; same t -> same result; ~15 ms (pscale: people size factor)
+    SW.HIDE_TITANS = {"smiling"}       # hide titans by name/index (a hero rig takes over)
     SW.info()                          # dict: counts, eaten, boats, timings
     SW.STATE                           # internals (objects, arrays) if a shot needs to look something up
     SW.titan_pos(name_or_index, t)     # (x, y, z, yaw) of a titan, e.g. "smiling", for camera tracking
@@ -50,6 +51,7 @@ BOAT_LANE_X = CX + 5.0                # sailing lane (east half)
 NB, SEATS = 5, 24
 EAT_DUR = 3.4
 PEOPLE_SCALE = float(os.environ.get("SWARM_PSCALE", "1.0"))   # >1 exaggerates people for very high shots (render-time only)
+HIDE_TITANS = set()          # titan names / indices update() hides (e.g. {"smiling"} when a hero titan replaces it)
 STATE = {}
 
 # ---------------------------------------------------------------- palettes (linear RGB)
@@ -389,7 +391,7 @@ def setup(n_plaza=None, n_street=None, n_titans=None, seed=None, t_end=None):
         dg = dist_gate[ci * ny + cj]
         dd = [d[ci * ny + cj] for d in dist_dock]
         kd = int(np.argmin(dd))
-        dock = dd[kd] < math.inf and (dd[kd] < 0.75 * dg or (rnd.random() < 0.25 and dd[kd] < 1.6 * dg))
+        dock = dd[kd] < math.inf and (dd[kd] < 0.45 * dg or (rnd.random() < 0.3 and dd[kd] < 1.3 * dg))
         if dg == math.inf and dd[kd] == math.inf:
             PX[:, i], PY[:, i] = x, y; PZ[:, i] = zg(x, y); continue
         if dock:
@@ -687,8 +689,12 @@ def _lerp_idx(t):
 def _alerp(a, b, f):
     return a + (((b - a) + np.pi) % (2 * np.pi) - np.pi) * f
 
-def update(t):
-    """Set every person, titan and boat for time t (seconds after the kick impact). Pure function of t."""
+def update(t, pscale=None):
+    """Set every person, titan and boat for time t (seconds after the kick impact). Pure function of t.
+    pscale overrides PEOPLE_SCALE for this call (people drawn larger than life for high shots)."""
+    global PEOPLE_SCALE
+    if pscale is not None:
+        PEOPLE_SCALE = float(pscale)
     S = STATE
     if not S:
         return
@@ -731,6 +737,9 @@ def update(t):
     bob = (0.5 - 0.5 * np.cos(2 * ph)) * 0.025 * H * mv
     tp = tpos.copy(); tp[:, 2] += bob
     tvisv = np.ones(nt)
+    for j, sp in enumerate(S["specs"]):
+        if j in HIDE_TITANS or sp["name"] in HIDE_TITANS:
+            tvisv[j] = 0.0
     co = _deform(S["RT"], Ar, Ae, lean, tvisv, tyaw, tp)
     S["tob"].data.vertices.foreach_set("co", co.astype(np.float32).ravel()); S["tob"].data.update()
     hand = _deform(S["RH"], Ar, Ae, lean, tvisv, tyaw, tp)
@@ -817,5 +826,5 @@ CAMS = {
     "swarm_gate":  ((40, OGY + 170, 110), (0, OGY + 40, 0), 32),
     "swarm_canal": ((120, -330, 120), (CX - 10, -250, 0), 32),
     "swarm_igate": ((60, -150, 110), (0, -20, 0), 32),
-    "swarm_mid":   ((90, OGY + 30, 150), (0, -520, 0), 30),
+    "swarm_mid":   ((110, -480, 150), (0, OGY + 60, 0), 30),
 }
