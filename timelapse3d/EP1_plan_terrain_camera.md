@@ -67,3 +67,25 @@ Designs are being made by separate design passes: colossal.py, pure_titans.py an
 - The tree's distance from the wall: the anime still suggests about 300-400 m; to be set when the scene is assembled.
 - Which ferry route and landing to show (the river runs north toward Trost; the landing site is not stated in canon).
 - Locations for Karanes and the forest are inferences (the forest about 20-30 km east of Karanes); label them loosely.
+
+## 6. MUST-HAVE key scenes (user 10/24 04:27 UTC)
+The video follows the anime, so these emotional and highlight beats are required. Each is shown from the sky at a moderate height and angle (no close-ups): the action is readable, the characters are faceless and recognisable by hair, outfit and colour. A beat can be a brief 4-8 s hover before the flight moves on. Canon chapter numbers refer to ep1_canon_events.json.
+
+| # | Beat | Ch. | Sky-view staging | Readability cues |
+|---|---|---|---|---|
+| K1 | Carla eaten by the Smiling (Dina) Titan; Eren carried off by Hannes, reaching back ("Yamero!") | 7 | Hover above the Yeager street at 25-35 m. The collapsed house is centre frame. The Smiling Titan lifts Carla out of the rubble. Hannes runs off with both kids on his shoulders, Eren's arm stretched back toward the house. | The Smiling Titan's grin and long hair; Carla's skirt; Eren's red coat and Mikasa's red scarf on Hannes's shoulders; the house still burning |
+| K2 | Armored Titan bursts the inner gate; ferries leave | 8 | Already in the plan (thumbnail T3) | |
+| K3 | Erwin's "Dedicate your hearts!" (Shinzou wo sasageyo) | 34 | Night torch-lit plaza at 15-20 m: Erwin on the stage, cadets below; when the salute lands, every cadet's right fist hits the chest at once. | Erwin's blond side-parted hair, Survey Corps jacket with the Wings of Freedom, green cloak; torches |
+| K4 | Eren swallowed, then the Attack Titan emerges and kills Titans | 19-22 | Rooftop height: the rogue 15 m Titan in the market street, steam and the first roar | Long dark hair, lean body, ears pointed |
+| K5 | Armin's supply-HQ plan: the lift drops, the cadets shoot the Titans' eyes, others drop from the ceiling and cut the napes | 23 | Cutaway: the HQ roof lifted off, or a high window view looking down into the hall. All 7 Titans are blinded at once, with muzzle flashes in a ring, then 7 cadets drop from the beams at the same moment. | A circle of gun flashes; synchronised drops |
+| K6 | Garrison cannon fires at Eren, Mikasa and Armin; Eren half-transforms (the skeleton shield) | 24 | Wall-top cannon in the foreground, the shot arcs, impact smoke, then the steaming ribcage dome protects the three | Smoke puff, the dome of steaming bones |
+| K7 | Eren lifts the boulder and seals Trost's gate; the escort squads hold off Titans | 27-29 | High orbit: the boulder carry down the street, green smoke signals, soldiers dying on the rooftops around him, the drop into the gate | The green smoke flare on success |
+| K8 | Long-Range Scouting Formation rides out; coloured smoke relays (red = Titan sighted, green = course, black = abnormal) | 36-37 | Very high shot: the crescent formation on the plains, smoke columns relayed along the chain in canon order | Accurate smoke colours and order |
+| K9 | The Female Titan tears through the right flank | 38 | Medium-high tracking shot: riders scatter, smoke turns black | Blonde short hair, exposed-muscle face pattern, hard sprint |
+| K10 | Forest of Giant Trees: the squads hold the forest edge; Eren's squad rides down the road while soldiers in the rear guard die | 39-40 | Above the canopy gaps, following the road; ODM wires flash between 80 m trunks | Horses on the forest road; green cloaks |
+| K11 | THE TRAP: the Female bound by hundreds of harpoon cables fired from the trees | 40 | Overhead at canopy height; the cable volleys fire in waves, then she stands pinned and hardens her nape | Built in Blender as curve cables on our Female asset (no ready-made bound-Female asset is usable) |
+| K12 | The scream; Titans swarm and eat her as the shifter escapes | 41 | High, wide shot: pure Titans converging from all sides | |
+| K13 | Squad Levi wiped out; Eren transforms in rage; Eren vs the Female and his defeat | 42-43 | Along the forest road: the squad's bodies on the trees, the lightning-strike transformation, the fight and the nape bite | Gold lightning, the steam explosion |
+| K14 | Stohess final battle: the rubble trench, the church collapse, the climb up Wall Sina, Mikasa cuts the fingers, the crystal, the Titan's face in the wall | 46-50 | The finale, given the most time (≥2 min). Large aerial orbits over the destroyed streets, then the slow push to the face in the Wall as the end frame | |
+
+Pacing: with these beats EP1 runs about 16-19 min. If it must be cut, compress training (ch. 13-15) and the trial/castle (31-35), never K1-K14.

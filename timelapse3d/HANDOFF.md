@@ -74,3 +74,6 @@ Plan (cloud proposed it to the user; the default is to skip chapters 3-5 unless 
 1. ONE-TAKE: start on the hill tree, glide down the hill and pass LOW through the Shiganshina inner (north) gate. Fly south along the main street at a moderate height. During the flight the light shifts from morning to afternoon (timelapse). At the outer south wall, the Colossal's HEAD rises above the wall top (reveal, with steam).
 2. Crane up to the sky view and orbit OVER the wall to BEHIND the Colossal (outside, south). On the KICK impact: the outer gate collapses, stone blocks fly into the town and smash roofs, and boulders roll down the streets (rigid-body sim). Steam explodes. The Colossal vanishes in steam. Then pure titans pour in through the breach up the main avenue.
 CONFIRMED by user 03:33: skip chapters 3-5 and go straight from the tree to the Colossal.
+
+## 04:27 UTC 10/24: user's MUST-HAVE scenes
+See section 6 of timelapse3d/EP1_plan_terrain_camera.md (K1-K14). Every beat is a sky view at a moderate height, with no close-ups. K1 (Carla eaten by the Smiling Titan, Eren reaching back on Hannes's shoulders) belongs right after the Colossal kick and the titans entering, before the Armored, so put it in the current one-take next.
