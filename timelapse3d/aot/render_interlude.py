@@ -77,7 +77,7 @@ def H(x, y):
     h = (noise.noise(Vector((x / 1800, y / 1800, 0.3))) * 16 + noise.noise(Vector((x / 420, y / 420, 1.7))) * 3
          + noise.noise(Vector((x / 260, y / 260, 4.2))) * 0.6) * flat
     r = math.hypot(x + 2500, y - 3000)                   # mountains north-west behind the camp, ridges far south
-    h += smooth(3200.0, 8000.0, r) * (y > -2000) * (noise.noise(Vector((x / 2600, y / 2600, 9.1))) * 0.5 + 0.6) ** 2 * 700
+    h += smooth(3200.0, 8000.0, r) * smooth(600.0, 2600.0, y) * (noise.noise(Vector((x / 2600, y / 2600, 9.1))) * 0.5 + 0.6) ** 2 * 700
     h += smooth(7000.0, 12000.0, -y) * (noise.noise(Vector((x / 3000, y / 3000, 3.3))) * 0.5 + 0.5) * 260
     return h
 
@@ -138,7 +138,7 @@ def season_rgb(pal, p):
     a, b = pal[i], pal[(i + 1) % 4]
     return tuple(a[k] * (1 - f) + b[k] * f for k in range(3))
 
-SNOW = (0.78, 0.80, 0.86)
+SNOW = (0.64, 0.66, 0.72)
 def build_mats():
     M = {
         "stone": L.wall_mat(),
@@ -150,8 +150,8 @@ def build_mats():
         "plank": L.mat("Plank", (0.30, 0.20, 0.12), 0.85, var=0.2, var_scale=0.6),
         "bark": L.mat("Bark", (0.16, 0.11, 0.075), 0.9),
         "terrain": smat("TerrainS", [(0.085, 0.19, 0.04), (0.22, 0.17, 0.055), SNOW, (0.12, 0.25, 0.045)], var=0.3, var_scale=0.004),
-        "dirt": smat("DirtS", [(0.24, 0.19, 0.12), (0.23, 0.18, 0.11), (0.70, 0.71, 0.76), (0.20, 0.15, 0.09)], var=0.2, var_scale=0.08),
-        "road": smat("RoadS", [(0.30, 0.25, 0.17), (0.29, 0.24, 0.16), (0.62, 0.63, 0.67), (0.27, 0.22, 0.15)], var=0.15, var_scale=0.1),
+        "dirt": smat("DirtS", [(0.36, 0.24, 0.12), (0.34, 0.23, 0.11), (0.60, 0.61, 0.66), (0.32, 0.21, 0.10)], var=0.2, var_scale=0.08),
+        "road": smat("RoadS", [(0.40, 0.31, 0.19), (0.38, 0.30, 0.18), (0.56, 0.57, 0.62), (0.37, 0.29, 0.17)], var=0.15, var_scale=0.1),
         "plot_a": smat("PlotA", [(0.16, 0.26, 0.05), (0.42, 0.32, 0.10), SNOW, (0.20, 0.14, 0.08)], var=0.2, var_scale=0.15),
         "plot_b": smat("PlotB", [(0.30, 0.30, 0.07), (0.30, 0.20, 0.10), SNOW, (0.13, 0.22, 0.05)], var=0.2, var_scale=0.15),
         "canvas": smat("CanvasS", [(0.66, 0.60, 0.48), (0.60, 0.54, 0.42), (0.80, 0.82, 0.86), (0.64, 0.58, 0.46)], var=0.12, var_scale=0.5, fog=False),
@@ -256,7 +256,13 @@ def instancer(name, protos, n, static=None):
         set_points(ob, *static)
     return ob
 
+_LAST = {}
 def set_points(ob, xyz, s=None, rz=None, vi=None):
+    """Write point positions / attrs; skipped when nothing changed (an unchanged mesh is not re-synced by Cycles)."""
+    key = hash(tuple(np.asarray(v, np.float32).tobytes() if v is not None else b"" for v in (xyz, s, rz, vi)))
+    if _LAST.get(ob.name) == key:
+        return
+    _LAST[ob.name] = key
     me = ob.data
     me.vertices.foreach_set("co", np.asarray(xyz, np.float32).ravel())
     if s is not None:
@@ -644,7 +650,7 @@ def world(st):
 def set_sun(st, el_deg, az_deg):
     el, az = math.radians(el_deg), math.radians(az_deg)
     d = Vector((-math.cos(el) * math.cos(az), -math.cos(el) * math.sin(az), -math.sin(el)))
-    st["sun_ob"].rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
+    _put(st["sun_ob"], "rotation_euler", d.to_track_quat("-Z", "Y").to_euler(), 2e-4)
 
 # ---------------------------------------------------------------- camera: chord-scaled Hermite + monotone retiming
 def _herm(p0, p1, p2, p3, u):
@@ -717,25 +723,35 @@ def cam_at(t):
     return loc, (tgt - loc).to_track_quat("-Z", "Y").to_euler(), lens
 
 # ---------------------------------------------------------------- per-frame state (pure function of t)
+def _put(owner, attr, val, tol=1e-4):
+    """Assign only when the value really changes: any write tags Cycles to re-sync (shader writes recompile)."""
+    cur = getattr(owner, attr)
+    try:
+        same = all(abs(a - b) <= tol for a, b in zip(cur, val))
+    except TypeError:
+        same = cur == val if isinstance(val, bool) else abs(cur - val) <= tol
+    if not same:
+        setattr(owner, attr, val)
+
 def update(st, t):
     sc = bpy.context.scene
     p = SI.season_at(t)
     for rgb, pal in SEASON_MATS:
-        rgb.outputs[0].default_value = (*season_rgb(pal, p), 1)
+        _put(rgb.outputs[0], "default_value", (*season_rgb(pal, p), 1), 2e-3)
     nite = SI.night_at(t)
-    st["sun"].energy = 3.6 * (1 - nite) + 0.06 * nite
-    st["sun"].color = (1.0, 0.97, 0.92) if nite < 0.5 else (0.55, 0.65, 1.0)
+    _put(st["sun"], "energy", 3.6 * (1 - nite) + 0.06 * nite)
+    _put(st["sun"], "color", (1.0, 0.97, 0.92) if nite < 0.5 else (0.55, 0.65, 1.0))
     winter = max(0.0, 1 - abs(((p - 2.0 + 2) % 4) - 2))         # 1 at mid winter
     set_sun(st, 40 - 14 * winter - 8 * nite, 25 + 20 * math.sin(t * 0.15))
     for n, v in st["bg"]:
-        n.inputs[1].default_value = v * (1 - 0.985 * nite) * (1 - 0.25 * winter)
+        _put(n.inputs[1], "default_value", v * (1 - 0.985 * nite) * (1 - 0.25 * winter), 2e-3)
     for s in FOG_NODES:
-        s.default_value = 0.9 * (1 - 0.97 * nite)
+        _put(s, "default_value", 0.9 * (1 - 0.97 * nite), 2e-3)
     for o in st["flames"]:
-        o.hide_render = nite < 0.3
+        _put(o, "hide_render", nite < 0.3)
     for ld in st["fire_lights"]:
-        ld.energy = 600.0 * nite
-    sc.view_settings.exposure = st["expo"] + 1.3 * nite
+        _put(ld, "energy", 600.0 * nite, 0.5)
+    _put(sc.view_settings, "exposure", st["expo"] + 1.3 * nite)
     # ---- camps (only drawn while the camera is near them)
     camps_on = t < SI.T_ENL
     tn = st["tents"]
@@ -743,7 +759,8 @@ def update(st, t):
     set_points(tn["ob"], tn["xyz"], grow * (1.0 if camps_on else 0.0))
     for ob, base, ta in st["barns"]:
         u = smooth(ta, ta + 0.6, t)
-        ob.location = (base.x, base.y, base.z - 9.0 * (1 - u))
+        if abs(ob.location.z - (base.z - 9.0 * (1 - u))) > 1e-4 or ob.location.x != base.x:
+            ob.location = (base.x, base.y, base.z - 9.0 * (1 - u))
     rf = st["ref"]
     a = rf["ph"] + t * rf["w"] * 1.4
     x = rf["x"] + 3.0 * np.sin(a); y = rf["y"] + 3.0 * np.cos(a * 0.8)
@@ -752,7 +769,8 @@ def update(st, t):
     cl = st["clear"]
     set_points(cl["ob"], cl["xyz"], np.where(t < cl["tc"], cl["sc"], 0.0))
     for ob, tp in st["plots"]:
-        ob.hide_render = t < tp
+        if ob.hide_render != (t < tp):
+            ob.hide_render = t < tp
     wk = st["work"]
     wv = (np.abs(t - wk["tc"]) < 0.9) & camps_on
     a = wk["ph"] + t * 2.0
@@ -762,12 +780,17 @@ def update(st, t):
     cy = 60 + u * 1640; cx = X0 + 18 * np.sin((cy - 8) / 120.0) * ((cy - 8) / 1200.0) + ca["lane"]
     set_points(ca["ob"], np.stack([cx, cy, np.full(40, 0.15)], 1), np.full(40, 1.3 if camps_on else 0.0),
                np.where(ca["lane"] > 0, 0.0, math.pi), np.zeros(40, int))
+    town = bpy.data.objects.get("Town")
+    if town and town.hide_render != (not camps_on):
+        town.hide_render = not camps_on
     # ---- training camp
     camp_on = t > SI.T_FLY
     rig_on = SI.T_RIG - 0.4 <= t < SI.T_SEA + 0.1
     for d in st["cadets"]:
         e = d["ob"]
-        e.hide_render = not camp_on or (d["pre"] in ("eren", "mikasa", "armin") and rig_on)
+        hid = not camp_on or (d["pre"] in ("eren", "mikasa", "armin") and rig_on)
+        if e.hide_render != hid:
+            e.hide_render = hid
         pose, pos, yaw = "stand", d["form"], 0.0
         if rig_on:                                                   # rig beat: watching the rigs
             pos, yaw = d["watch"], math.pi / 2
@@ -782,9 +805,11 @@ def update(st, t):
                 pose = "run"; yaw = -math.pi / 2 if math.cos(tt * 2.2) > 0 else math.pi / 2
         elif t >= SI.T_GRAD - 0.6:
             pose = "salute"
-        e.instance_collection = d["protos"][pose]
-        e.location = (pos.x, pos.y, H(pos.x, pos.y) + 0.12)
-        e.rotation_euler = (0.0, 0.0, yaw)
+        if e.instance_collection != d["protos"][pose]:
+            e.instance_collection = d["protos"][pose]
+        nl = Vector((pos.x, pos.y, H(pos.x, pos.y) + 0.12))
+        if (e.location - nl).length > 1e-4 or abs(e.rotation_euler.z - yaw) > 1e-5:
+            e.location = nl; e.rotation_euler = (0.0, 0.0, yaw)
     for piv, e, j in st["rigs"]:
         amp = 0.16 if j == ERIG else 0.05
         piv.rotation_euler = (0.0, amp * math.sin(t * 2.3 + j), 0.0) if j == ERIG else (amp * math.sin(t * 1.7 + j), 0.0, 0.0)
@@ -826,10 +851,17 @@ if __name__ == "__main__":
     if sc.render.engine == "CYCLES":
         cy = sc.cycles
         cy.samples = B.samples; cy.use_adaptive_sampling = False; cy.use_denoising = True
+        # OptiX denoiser: ~0.3 s/frame on the GTX 1060 vs ~2.5 s for OIDN (which dominated the frame time)
+        dn = os.environ.get("INT_DENOISER", "OPTIX")
         try:
-            cy.denoiser = "OPENIMAGEDENOISE"; cy.denoising_use_gpu = True
+            cy.denoiser = dn
+        except Exception:
+            cy.denoiser = "OPENIMAGEDENOISE"
+        try:
+            cy.denoising_use_gpu = True
         except Exception:
             pass
+        print("[int] denoiser", cy.denoiser, flush=True)
         cy.max_bounces, cy.diffuse_bounces, cy.glossy_bounces, cy.transmission_bounces = 3, 1, 1, 1
         cy.volume_bounces = 0; cy.transparent_max_bounces = 8
         cy.caustics_reflective = cy.caustics_refractive = False
@@ -849,6 +881,8 @@ if __name__ == "__main__":
     t_s = time.time()
     for i, t in enumerate(times):
         update(st, t)
+        if sc.render.engine == "CYCLES":          # the torch-lit night needs a few more samples than daylight
+            sc.cycles.samples = B.samples if SI.night_at(t) < 0.3 else max(B.samples, int(os.environ.get("INT_NIGHT_SMP", "8")))
         loc, rot, lens = cam_at(t)
         cam.location = loc; cam.rotation_euler = rot; cd.lens = lens
         bpy.context.view_layer.update()

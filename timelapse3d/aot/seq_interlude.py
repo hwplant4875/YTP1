@@ -33,8 +33,8 @@ def _smooth(a, b, t):
 
 def season_at(t):
     """Continuous season phase: 0 summer, 1 autumn, 2 winter (snow), 3 spring (wraps at 4)."""
-    if t < T_FLY:                                   # summer 846 -> spring 847
-        return 3.0 * _smooth(0.6, T_FLY - 0.3, t)
+    if t < T_FLY:                                   # summer 846 -> autumn -> a brief famine winter -> spring 847
+        return 1.3 * _smooth(0.6, 2.6, t) + 1.4 * _smooth(2.6, 3.7, t) + 0.3 * _smooth(3.7, T_FLY - 0.3, t)
     if t < T_SEA:                                   # spring 847 enlist -> summer on the rig
         return (3.0 + 1.0 * _smooth(T_ENL, T_RIG + 1.0, t)) % 4.0
     if t < T_GRAD:                                  # summer 847 -> spring 850 = 11 seasons
