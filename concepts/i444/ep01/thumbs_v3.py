@@ -1,4 +1,4 @@
-# EP01 thumbnail A v3: three Michaels with the same head size and eye line, 90% -> 62% -> 1%
+# EP01 thumbnail A v3: three Michaels with the same head size and eye line (90% = grey Ends profile so it reads apart from Kills), 90% -> 62% -> 1%
 import sys
 from PIL import Image, ImageDraw, ImageFilter
 sys.path.insert(0, '.')
@@ -17,12 +17,12 @@ def head(n, cx, ey, mask_w):
     im.putalpha(m.filter(ImageFilter.GaussianBlur(30)))
     p = Image.new('RGBA', (pw - 4, H), (0, 0, 0, 255)); p.alpha_composite(im, (int((pw - 4) / 2 - cx * s), int(EYE_Y - ey * s)))
     return p
-panels = [('eBK1p5HNdt24h1guJTtrivOZCXg', 1860, 626, 1900, '90%', GREEN),
+panels = [('1UlTowc5vfrgXUVT6OnlU0TOiij', 2330, 580, 1000, '90%', GREEN),
           ('aPTYPRVECq2spuLze93hTYSAeIF', 2669, 503, 650, '62%', YEL),
           ('fuuZFPc8x6gQ8mLGoBp9vrmcQMT', 1056, 526, 460, '1%', RED)]
 im = Image.new('RGBA', (W, H), (0, 0, 0, 255))
 for k, (n, cx, ey, mw, pct, col) in enumerate(panels):
-    im.paste(pop(head(n, cx, ey, mw)), (k * pw + 2 + (1 if k == 2 else 0), 0))
+    im.paste(pop(head(n, cx, ey, mw), 1.15, 1.6 if k == 0 else 1.05), (k * pw + 2 + (1 if k == 2 else 0), 0))
     g = Image.new('L', (W, H), 0); ImageDraw.Draw(g).rectangle([k * pw, H - 250, (k + 1) * pw, H], fill=200); g = g.filter(ImageFilter.GaussianBlur(60))
     im.paste((0, 0, 0, 255), (0, 0), g)
     shadow_text(im, (k * pw + pw // 2, H - 105), pct, f(170), col, stroke=8)
