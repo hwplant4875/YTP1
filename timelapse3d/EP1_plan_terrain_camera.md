@@ -124,3 +124,24 @@ Every row below is mandatory unless marked optional. They are staged like sectio
 Running order: after the opening one-take, go V1 → V2 → V3 → V4/V5 → V6 → V7 → V8 → K5 → K6/V9 → V10 → V11 → K7/V12 → V13 → V14 → V15 → V16 → K3 → K8 → K9/V17 → K10 → K11 → K12 → K13/V18 → V19 → V20 → V21 → K14/V22.
 
 Estimated runtime: 18-22 min. Hold every beat to 3-8 s from the sky. Use training and the trial as short montages.
+
+## 8. Dialogue overlay windows (user 10/24 04:37)
+In editing, the user will overlay the matching anime clip, blurred, with its original voice line, on top of our 3D shot. Rules for every beat with a spoken line:
+- HOLD WINDOW: keep the shot running for the line length + 1 s before any transition. The camera only drifts slowly; no fast moves or cuts during the window.
+- The action stays readable under a blurred overlay: put the subject near the frame centre, keep the background calm and high-contrast, and keep the HUD caption out of the window.
+- Never transition the moment an event lands. The default hold after the event is ≥2 s.
+- Every window is logged in a timing sheet (frame in/out, line) so the user can drop the clips straight in.
+
+| Beat | Line (anime) | 3D hold |
+|---|---|---|
+| K1 Carla | Eren reaching back on Hannes's shoulders, "Yamero!" | about 2 s of Eren's reaching arm clearly visible, THEN transition |
+| V1 Ferry vow | "I'll exterminate every last one of them" (駆逐してやる) | about 3 s hold on the ferry |
+| V2 Grisha's injection | (no line needed) | Syringe → Grisha puts the key necklace on Eren → a static/glitch blur transition (Eren doesn't remember it), then fade into the next scene |
+| V6 Eren vs the Colossal at Trost | Eren's line on the wall top | 2-3 s hold before the steam burst |
+| V7 Eren saves Armin, is swallowed | Eren's last words to Armin | 2-3 s hold on the closing jaw |
+| V9 Armin's salute | Armin's plea | 3-4 s hold |
+| V10 Pyxis's speech | Pyxis's lines | 4-6 s hold (slow orbit) |
+| K3 Erwin's recruitment salute | "Shinzou wo sasageyo!" | 3 s hold on the salute |
+| K13 Eren's rage transformation | Eren's scream | 2 s hold before the lightning |
+| V21 Stohess, under the rubble | Eren's line | 2-3 s hold |
+Lines the user adds later get the same treatment.
