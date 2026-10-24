@@ -26,9 +26,21 @@ def eye_align(n, el, er, mid=(640, 300), dist=260, size=(W, H)):
     c = cx - a * mid[0] - b * mid[1]; f_ = cy - d_ * mid[0] - e * mid[1]
     return im.transform(size, Image.AFFINE, (a, b, c, d_, e, f_), Image.BICUBIC, fillcolor=(0, 0, 0, 255))
 
+def place(n, pt, sc, at, size):
+    # scale the still by sc and crop so pt (scaled-1000 coords) lands at `at`
+    im = load(n); k = im.size[0] / 1000; im = im.resize((int(im.size[0] * sc), int(im.size[1] * sc)), Image.LANCZOS)
+    x0 = int(pt[0] * k * sc - at[0]); y0 = int(pt[1] * k * sc - at[1])
+    out = im.crop((x0, y0, x0 + size[0], y0 + size[1]))
+    bot = y0 + size[1] - im.size[1]  # rows past the still: fade the still's bottom into black
+    if bot > 0:
+        h0 = size[1] - bot; g = Image.new('L', size, 0); ImageDraw.Draw(g).rectangle([0, h0 - 4, size[0], size[1]], fill=255)
+        for i in range(160): ImageDraw.Draw(g).line([(0, h0 - 160 + i), (size[0], h0 - 160 + i)], fill=int(255 * (i / 160) ** 1.5))
+        out.paste((0, 0, 0, 255), (0, 0), g)
+    return out
+
 # A: three Jasons, faces centred and clear, 90% -> 60% -> 1%
 im = Image.new('RGBA', (W, H), (0, 0, 0, 255)); pw = W // 3
-cols = [(fit(load('5SJyE25gsRGa7edJSAKwd7ATkxd'), 0.6, 0.45, pw, H, 1.0), '90%', GREEN),
+cols = [(place('5SJyE25gsRGa7edJSAKwd7ATkxd', (600, 270), 0.38, (pw // 2 + 15, 200), (pw, H)), '90%', GREEN),
         (eye_align(P4, (466, 270), (560, 270), (pw // 2, 260), 120, (pw, H)), '60%', YEL),
         (eye_align(UBER, (455, 156), (545, 156), (pw // 2, 200), 120, (pw, H)), '1%', RED)]
 for k, (p, pct, col) in enumerate(cols):
