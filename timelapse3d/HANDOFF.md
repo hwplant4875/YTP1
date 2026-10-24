@@ -66,3 +66,4 @@ The face is good. Canon fixes:
 3. HAND: the fingers wrap OVER the parapet edge and hang down toward the camera side, so the knuckles sit on top. Steam pours off the arm and the shoulders.
 4. LIGHT: the scene is the 845 afternoon. Use a warm, low sun from the west and a hazy sky. Steam backlit by the sun is the money shot for the thumbnail.
 5. For the thumbnail angle (low, over the town roofs looking up), frame the head large: about 35-45% of the frame height, with the wall edge diagonal across the frame.
+- 00:0x UTC, v7/v8 check: the 23:45 review above still applies to both. v7: the torso is still above the wall and the merlons are still there. v8: the head is about 6% of the frame height and needs 35-45%. Use a longer lens (85-135 mm) from the main street so the wall compresses behind the roofs, and sink the Colossal so the wall line sits at its collarbones. Then add the warm backlight and steam.
