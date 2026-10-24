@@ -38,9 +38,15 @@ def place(n, pt, sc, at, size):
         out.paste((0, 0, 0, 255), (0, 0), g)
     return out
 
+def no_curtain(p):
+    # the plaid curtain right of the sack Jason: fade that edge into black
+    g = Image.new('L', p.size, 0); d = ImageDraw.Draw(g); x0 = p.size[0] - 70
+    for i in range(70): d.line([(x0 + i, 0), (x0 + i, p.size[1])], fill=min(255, int(255 * (i / 30))))
+    p.paste((0, 0, 0, 255), (0, 0), g.filter(ImageFilter.GaussianBlur(6))); return p
+
 # A: three Jasons, faces centred and clear, 90% -> 60% -> 1%
 im = Image.new('RGBA', (W, H), (0, 0, 0, 255)); pw = W // 3
-cols = [(place('5SJyE25gsRGa7edJSAKwd7ATkxd', (600, 270), 0.38, (pw // 2 + 15, 200), (pw, H)), '90%', GREEN),
+cols = [(no_curtain(place('5SJyE25gsRGa7edJSAKwd7ATkxd', (600, 270), 0.38, (pw // 2 + 15, 215), (pw, H))), '90%', GREEN),
         (eye_align(P4, (466, 270), (560, 270), (pw // 2, 260), 120, (pw, H)), '60%', YEL),
         (eye_align(UBER, (455, 156), (545, 156), (pw // 2, 200), 120, (pw, H)), '1%', RED)]
 for k, (p, pct, col) in enumerate(cols):
