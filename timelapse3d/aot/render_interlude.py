@@ -55,7 +55,7 @@ PSCALE = float(os.environ.get("INT_PSCALE", "1.7"))     # people drawn larger th
 CAMP = Vector((-1500.0, 2300.0))
 RIG0 = Vector((CAMP.x - 74.0, CAMP.y - 22.0))            # first balance rig; rigs run north in 9 m steps
 ERIG = 2                                                 # Eren's rig index
-FOG_D = float(os.environ.get("INT_FOG", "7000"))
+FOG_D = float(os.environ.get("INT_FOG", "22000"))     # light distance haze only (QA: no grey-blue wash)
 
 def smooth(a, b, t):
     u = min(1.0, max(0.0, (t - a) / (b - a))); return u * u * (3 - 2 * u)
@@ -76,6 +76,9 @@ def H(x, y):
     flat *= smooth(380.0, 900.0, math.hypot(x - CAMP.x, y - CAMP.y))
     h = (noise.noise(Vector((x / 1800, y / 1800, 0.3))) * 16 + noise.noise(Vector((x / 420, y / 420, 1.7))) * 3
          + noise.noise(Vector((x / 260, y / 260, 4.2))) * 0.6) * flat
+    dc = math.hypot(x - CAMP.x, y - CAMP.y)               # wooded hills round the training camp (N and W sides)
+    side = max(smooth(CAMP.y - 400, CAMP.y + 200, y), smooth(CAMP.x - 150, CAMP.x - 650, x))
+    h += smooth(380.0, 1100.0, dc) * (1 - smooth(2600.0, 3600.0, dc)) * side * (0.55 + 0.45 * noise.noise(Vector((x / 500, y / 500, 6.6)))) * 150
     r = math.hypot(x + 2500, y - 3000)                   # mountains north-west behind the camp, ridges far south
     h += smooth(3200.0, 8000.0, r) * smooth(600.0, 2600.0, y) * (noise.noise(Vector((x / 2600, y / 2600, 9.1))) * 0.5 + 0.6) ** 2 * 700
     h += smooth(7000.0, 12000.0, -y) * (noise.noise(Vector((x / 3000, y / 3000, 3.3))) * 0.5 + 0.5) * 260
@@ -86,7 +89,8 @@ L.height = H                 # people_kit.ground() / stage() / scene helpers rea
 # ---------------------------------------------------------------- materials
 SEASON_MATS = []             # (rgb node, palette[4])  palette order: summer, autumn, winter, spring
 FOG_NODES = []               # emission-strength sockets of the fog chain (scaled down at night)
-FOG_COL = (0.60, 0.68, 0.80, 1)
+FOG_COL = (0.70, 0.75, 0.82, 1)
+FOG_EMIT = float(os.environ.get("INT_FOG_EMIT", "0.3"))
 
 def _fog(nt, col_out, bsdf):
     N, Lk = nt.nodes, nt.links
@@ -99,7 +103,7 @@ def _fog(nt, col_out, bsdf):
     Lk.new(m3.outputs[0], mx.inputs["Factor"]); Lk.new(col_out, mx.inputs["A"]); mx.inputs["B"].default_value = FOG_COL
     Lk.new(mx.outputs["Result"], bsdf.inputs["Base Color"])
     bsdf.inputs["Emission Color"].default_value = FOG_COL
-    m4 = N.new("ShaderNodeMath"); m4.operation = "MULTIPLY"; m4.inputs[1].default_value = 0.9
+    m4 = N.new("ShaderNodeMath"); m4.operation = "MULTIPLY"; m4.inputs[1].default_value = FOG_EMIT
     Lk.new(m3.outputs[0], m4.inputs[0]); Lk.new(m4.outputs[0], bsdf.inputs["Emission Strength"])
     FOG_NODES.append(m4.inputs[1])
 
@@ -376,6 +380,7 @@ def build_trost(M):
         me = L.house_mesh(f"TH{i}", w, d, h, d * 0.5, M, walls[i % 4], roofs[(i // 4) % 5], chimney=i % 3 == 0, hip=i % 6 == 0)
         hc.objects.link(bpy.data.objects.new(f"TH{i}", me)); widths.append((w, d))
     pts, _trees = TR.town_points(len(widths), widths)
+    pts = [p for p in pts if p[1] < -12.0]               # no Trost houses north of Wall Rose (they sat in front of the camps)
     L.scatter("Town", hc, pts, 846)
     for o in hc.objects:
         o.location = (0.0, 0.0, -5000.0)
@@ -425,23 +430,39 @@ def build():
                                                     for k in range(1, 150)], 10.0, M["road"])
     rect("GatePlazaIn", X0, 60, 360, 90, M["dirt"], lift=0.12)
     rect("CampSquare", X0, 300, 300, 380, M["dirt"], lift=0.1)
-    # ---- refugee tents: grid with lanes; the outer ring is still going up in the first seconds
+    # ---- refugee tents: fewer, bigger tents in long rows (reads as a camp from the air), cooking-fire smoke in the lanes
     tents = []
-    for gx in np.arange(-700.0, 701.0, 8.0):
-        for gy in np.arange(45.0, 770.0, 8.0):
-            ix, iy = int(round(gx / 8)), int(round(gy / 8))
-            if ix % 7 == 0 or iy % 6 == 0 or abs(gx) < 16:
-                continue                                         # lanes, road
-            if abs(gx) < 160 and 110 < gy < 490 and (ix + iy) % 3:
-                continue                                         # the camp square: a few stalls only
-            x, y = X0 + gx + rnd.uniform(-1.2, 1.2), gy + rnd.uniform(-1.2, 1.2)
+    fires = []
+    for gx in np.arange(-690.0, 691.0, 9.0):
+        for gy in np.arange(50.0, 770.0, 15.0):
+            ix, iy = int(round(gx / 9)), int(round((gy - 50) / 15))
+            if ix % 9 == 0 or abs(gx) < 18:
+                continue                                         # north-south lanes, road
+            if iy % 4 == 3:
+                if ix % 9 == 4 and rnd.random() < 0.35:
+                    fires.append((X0 + gx, gy))                  # cooking fires in the east-west lanes
+                continue
+            if abs(gx) < 150 and 120 < gy < 470:
+                continue                                         # the camp square
+            x, y = X0 + gx + rnd.uniform(-0.6, 0.6), gy + rnd.uniform(-0.6, 0.6)
             dn = math.hypot(gx / 700, (gy - 40) / 730) / 1.42
-            tents.append((x, y, rnd.uniform(-0.15, 0.15) + (math.pi / 2 if rnd.random() < 0.5 else 0), 1 if rnd.random() < 0.18 else 0,
+            tents.append((x, y, math.pi / 2 + rnd.uniform(-0.04, 0.04), 1 if rnd.random() < 0.15 else 0,
                           -2.0 + 5.8 * min(1.0, dn) ** 1.6 + rnd.uniform(-0.25, 0.25)))
     T = np.array(tents)
     st["tents"] = dict(ob=instancer("Tents", [tent_proto(M, 0, "TentA"), tent_proto(M, 1, "TentB")], len(T)), T=T,
                        xyz=np.stack([T[:, 0], T[:, 1], Hv(T[:, 0], T[:, 1])], 1))
     set_points(st["tents"]["ob"], st["tents"]["xyz"], np.zeros(len(T)), T[:, 2], T[:, 3].astype(int))
+    import smokecards as SC
+    cs = SC.SmokeCards("CampSmoke")
+    F = np.array(fires)
+    te = []; pos = []
+    for k, (fx_, fy_) in enumerate(F):
+        for j in range(int(9.0 / 0.45)):
+            te.append(-1.5 + j * 0.45 + (k % 5) * 0.09); pos.append((fx_, fy_, H(fx_, fy_) + 1.0))
+    cs.add_many(np.array(te), np.array(pos), None, 1.2, 9.0, 3.2, 9.0, kind="smoke", alpha=0.55)
+    cs.build(None)
+    st["smoke"] = [cs]
+    st["n_fires"] = len(F)
     # ---- storehouses along the wall (rise 1.0-5.5 s)
     barns = []
     for k, x in enumerate([sx * v for v in np.arange(70.0, 700.0, 46.0) for sx in (-1, 1)]):
@@ -528,6 +549,136 @@ def build():
         e.location = (0, 0, -9000); st["track"][nm] = e
     return st
 
+def _seg_dist(px, py, a, b):
+    ax, ay = a; bx, by = b
+    vx, vy = bx - ax, by - ay
+    u = max(0.0, min(1.0, ((px - ax) * vx + (py - ay) * vy) / (vx * vx + vy * vy)))
+    return math.hypot(px - ax - u * vx, py - ay - u * vy)
+
+def dress_camp(M, st, rnd, PK):
+    """The 104th camp as a clearing in wooded hills: pine ring, fence, lookout tower, horse paddock with horses,
+    haystacks, carts, the cadet-corps flag, ODM training posts and wooden titan cut-outs with marked napes."""
+    sc = bpy.context.scene
+    C = CAMP
+    wood = M["plank"]
+    hay = smat("HayS", [(0.55, 0.42, 0.16), (0.50, 0.36, 0.12), SNOW, (0.48, 0.38, 0.15)], var=0.2, var_scale=0.8, fog=False)
+    board = L.mat("TitanBoard", (0.52, 0.38, 0.24), 0.85, var=0.2, var_scale=0.5)
+    nape = L.mat("NapeMark", (0.62, 0.06, 0.04), 0.7)
+    road = [(-950.0, 2150.0), (C.x + 100, C.y - 30)]
+    # ---- fence round the compound (gap where the camp road comes in on the east side)
+    x0, x1, y0, y1 = C.x - 240, C.x + 240, C.y - 160, C.y + 130
+    bm = bmesh.new()
+
+    def fence_line(a, b, gap=None):
+        a, b = Vector(a), Vector(b); n = max(1, int((b - a).length / 3.5))
+        prev = None
+        for k in range(n + 1):
+            p_ = a + (b - a) * (k / n)
+            if gap and gap[0] <= p_.y <= gap[1] and abs(p_.x - x1) < 1:
+                prev = None; continue
+            z = H(p_.x, p_.y)
+            L.cyl(bm, (p_.x, p_.y, z), (p_.x, p_.y, z + 1.5), 0.08, seg=5)
+            if prev is not None:
+                for hh in (0.65, 1.2):
+                    L.cyl(bm, (prev.x, prev.y, H(prev.x, prev.y) + hh), (p_.x, p_.y, z + hh), 0.045, seg=4)
+            prev = p_
+    fence_line((x0, y0), (x1, y0)); fence_line((x1, y0), (x1, y1), gap=(C.y - 88, C.y - 48))
+    fence_line((x1, y1), (x0, y1)); fence_line((x0, y1), (x0, y0))
+    # horse paddock (south-east corner) with horses
+    px0, px1, py0, py1 = C.x + 150, C.x + 215, C.y - 150, C.y - 105
+    fence_line((px0, py0), (px0, py1)); fence_line((px0, py1), (px1, py1))
+    for k in range(9):
+        hx, hy = rnd.uniform(px0 + 5, px1 - 5), rnd.uniform(py0 + 5, py1 - 5)
+        PK.horse_only((hx, hy, H(hx, hy)), rnd.uniform(0, 6.28), rnd.choice(["horse_bay", "horse_chestnut", "horse_grey"]))
+    # ---- lookout tower (north-west corner)
+    tx, ty = C.x - 222, C.y + 112; tz = H(tx, ty)
+    for sx in (-1.6, 1.6):
+        for sy in (-1.6, 1.6):
+            L.cyl(bm, (tx + sx * 1.3, ty + sy * 1.3, tz), (tx + sx * 0.9, ty + sy * 0.9, tz + 12.5), 0.14, seg=5)
+    for zz in (3.5, 7.5):
+        for (ax_, ay_), (bx_, by_) in (((-1, -1), (1, 1)), ((1, -1), (-1, 1))):
+            L.cyl(bm, (tx + ax_ * 1.9, ty + ay_ * 1.9, tz + zz), (tx + bx_ * 1.7, ty + by_ * 1.7, tz + zz + 3.5), 0.06, seg=4)
+    L.box(bm, (tx, ty, tz + 12.6), (4.2, 4.2, 0.3))
+    for sx, sy, w_, d_ in ((0, 2.0, 4.2, 0.15), (0, -2.0, 4.2, 0.15), (2.0, 0, 0.15, 4.2), (-2.0, 0, 0.15, 4.2)):
+        L.box(bm, (tx + sx, ty + sy, tz + 13.3), (w_, d_, 1.1))
+    v = [bm.verts.new(c) for c in [(tx - 2.6, ty - 2.6, tz + 15.0), (tx + 2.6, ty - 2.6, tz + 15.0), (tx + 2.6, ty + 2.6, tz + 15.0),
+                                   (tx - 2.6, ty + 2.6, tz + 15.0), (tx, ty, tz + 17.0)]]
+    for k in range(4):
+        bm.faces.new((v[k], v[(k + 1) % 4], v[4]))
+    for k in range(4):
+        cxp, cyp = tx + (1 if k % 2 else -1) * 1.9, ty + (1 if k // 2 else -1) * 1.9
+        L.cyl(bm, (cxp, cyp, tz + 12.6), (cxp, cyp, tz + 15.0), 0.07, seg=4)
+    # ---- ODM training posts (south-west of the field): tall poles with cross-arms
+    for k in range(10):
+        ox, oy = C.x - 190 + (k % 5) * 30 + rnd.uniform(-4, 4), C.y - 128 + (k // 5) * 18 + rnd.uniform(-3, 3)
+        oz = H(ox, oy)
+        L.cyl(bm, (ox, oy, oz), (ox, oy, oz + 14.0), 0.2, 0.15, seg=6)
+        a = rnd.uniform(0, math.pi)
+        L.cyl(bm, (ox - 2.2 * math.cos(a), oy - 2.2 * math.sin(a), oz + 12.0), (ox + 2.2 * math.cos(a), oy + 2.2 * math.sin(a), oz + 12.0), 0.1, seg=5)
+    # ---- carts by the mess hall
+    for k in range(3):
+        cxk, cyk = C.x + 140 + k * 7, C.y + 62
+        o = cart_proto(M, f"CampCart{k}"); o.location = (cxk, cyk, H(cxk, cyk)); o.rotation_euler.z = 0.3 * k - 0.2
+    # ---- flagpole with the training corps' crossed-swords flag (south of the HQ)
+    fx, fy = C.x - 150, C.y + 22; fz = H(fx, fy)
+    L.cyl(bm, (fx, fy, fz), (fx, fy, fz + 14.0), 0.1, 0.06, seg=6)
+    L.obj_from_bm("CampTimber", bm, [wood])
+    PK._emblem_mat("swords", N=128, field=PK.srgb("#7A1E22"))
+    dm = PK.Mesh()
+    for nrm in ((0, -1, 0), (0, 1, 0)):
+        dm.quad(Vector((fx + 1.45, fy, fz + 12.6)), nrm, (0, 0, 1), 2.6, "emb_swords_banner")
+    dm.finish("CampFlag", PK._root_coll(), ink=0)
+    # ---- haystacks
+    hb = bmesh.new()
+    for k in range(9):
+        if k < 5:
+            hx, hy = C.x + 150 + rnd.uniform(0, 60), C.y - 95 + rnd.uniform(0, 20)
+        else:
+            hx, hy = C.x + 200 + rnd.uniform(0, 25), C.y + 40 + rnd.uniform(0, 50)
+        hz = H(hx, hy); r_ = rnd.uniform(1.6, 2.4)
+        L.cyl(hb, (hx, hy, hz), (hx, hy, hz + 1.8), r_, r_ * 0.95, seg=10)
+        bmesh.ops.create_cone(hb, cap_ends=True, segments=10, radius1=r_ * 0.98, radius2=0.2, depth=1.8,
+                              matrix=Matrix.Translation((hx, hy, hz + 2.7)))
+    L.obj_from_bm("Haystacks", hb, [hay])
+    # ---- wooden titan cut-outs (the ODM course in the woods south of the fence): plank silhouettes, nape marked red
+    tb = bmesh.new(); cut = []
+    for k in range(9):
+        cx_, cy_ = C.x - 210 + k * 42 + rnd.uniform(-8, 8), C.y - 205 - rnd.uniform(0, 60)
+        Ht = rnd.uniform(6.5, 9.5); yaw = rnd.uniform(-0.6, 0.6); cz = H(cx_, cy_)
+        c, s_ = math.cos(yaw), math.sin(yaw)
+        u = Ht / 8.0
+
+        def B(lx, lz, w, h, mi=0, ly=0.0, d=0.35):
+            L.box(tb, (cx_ + lx * c - ly * s_, cy_ + lx * s_ + ly * c, cz + lz), (w, d, h), rot=yaw, mi=mi)
+        B(-0.9 * u, 1.9 * u, 0.9 * u, 3.8 * u); B(0.9 * u, 1.9 * u, 0.9 * u, 3.8 * u)            # legs
+        B(0, 5.0 * u, 2.6 * u, 2.6 * u)                                                         # torso
+        B(-1.8 * u, 4.6 * u, 0.7 * u, 2.8 * u); B(1.8 * u, 4.6 * u, 0.7 * u, 2.8 * u)            # arms
+        B(0, 6.9 * u, 1.5 * u, 1.4 * u)                                                         # head
+        B(0, 6.15 * u, 0.9 * u, 0.5 * u, mi=1, ly=0.22, d=0.12)                                 # the nape (back of the neck)
+        for sx in (-0.9, 0.9):
+            L.cyl(tb, (cx_ + sx * u * c + 1.2 * s_, cy_ + sx * u * s_ - 1.2 * c, cz), (cx_ + sx * u * c, cy_ + sx * u * s_, cz + 4.5 * u), 0.12, seg=4)
+        cut.append((cx_, cy_))
+    L.obj_from_bm("TitanCutouts", tb, [board, nape])
+    # ---- pine forest round the clearing (dense conifers on the hills)
+    pines = [bpy.data.objects.new(f"Pine{i}", L.tree_mesh(f"Pine{i}", "conifer", M, 20 + i)) for i in range(4)]
+    for o in pines:
+        sc.collection.objects.link(o)
+    px, py = [], []
+    for _ in range(16000):
+        a = rnd.uniform(0, 2 * math.pi); r_ = 240 + 1200 * rnd.random() ** 1.3
+        x, y = C.x + math.cos(a) * r_ * 1.15, C.y + math.sin(a) * r_
+        if abs(x - C.x) < 268 and abs(y - C.y) < 190:
+            continue
+        if _seg_dist(x, y, *road) < 14 or any(math.hypot(x - a_, y - b_) < 7 for a_, b_ in cut):
+            continue
+        if noise.noise(Vector((x / 260, y / 260, 3.3))) < -0.35:
+            continue
+        px.append(x); py.append(y)
+    px, py = np.array(px), np.array(py)
+    instancer("CampPines", pines, len(px), static=(np.stack([px, py, Hv(px, py) - 0.2], 1), np.array([rnd.uniform(0.9, 1.6) for _ in px]),
+                                                    np.array([rnd.uniform(0, 6.28) for _ in px]), np.array([rnd.randrange(4) for _ in px])))
+    print(f"[int] camp dressed: {len(px)} pines, {len(cut)} titan cut-outs", flush=True)
+
 def build_camp(M, st, rnd):
     import people_kit as PK
     PK._MATS.clear(); PK._PROTO.clear()
@@ -603,23 +754,40 @@ def build_camp(M, st, rnd):
         d["lap_ph"] = rnd.uniform(0, 2 * math.pi)
         d["drill"] = Vector((CAMP.x + 30 + (d["k"] % 8) * 2.2, CAMP.y - 20 + (d["k"] // 8 % 10) * 2.2))
     st["cadets"] = cad
-    # graduation: stage north of the formation (facing south), torches round the field
-    PK.stage((CAMP.x, CAMP.y + 26.0), yaw=math.pi, banner=False, torches=10)
-    fm = bmesh.new(); pm = bmesh.new(); lights = []
-    for k in range(16):
-        a = k / 16 * 2 * math.pi
+    dress_camp(M, st, rnd, PK)
+    # graduation: stage north of the formation (facing south), torches round the formation
+    PK.stage((CAMP.x, CAMP.y + 26.0), yaw=math.pi, banner=False, torches=6)
+    fm = bmesh.new(); pm = bmesh.new(); lights = []; tips = []
+    for k in range(14):
+        a = k / 14 * 2 * math.pi
         x, y = CAMP.x + 34 * math.cos(a), CAMP.y - 6 + 24 * math.sin(a)
         z = H(x, y)
         L.cyl(pm, (x, y, z), (x, y, z + 3.0), 0.06, seg=5)
-        bmesh.ops.create_cone(fm, cap_ends=True, segments=7, radius1=0.2, radius2=0.0, depth=0.7,
-                              matrix=Matrix.Translation((x, y, z + 3.35)))
-        if k % 3 == 0:
-            ld = bpy.data.lights.new(f"IntTorchL{k}", "POINT"); ld.color = (1.0, 0.55, 0.22); ld.shadow_soft_size = 0.4
-            lo = bpy.data.objects.new(f"IntTorchL{k}", ld); lo.location = (x, y, z + 3.8); sc.collection.objects.link(lo)
+        L.cyl(pm, (x, y, z + 2.95), (x, y, z + 3.25), 0.10, 0.13, seg=6)          # torch head
+        bmesh.ops.create_cone(fm, cap_ends=True, segments=7, radius1=0.22, radius2=0.0, depth=0.8,
+                              matrix=Matrix.Translation((x, y, z + 3.65)))
+        tips.append((x, y, z + 3.7))
+        if k % 7 == 0:                                   # few, big, soft lights (QA: smoother pools)
+            ld = bpy.data.lights.new(f"IntTorchL{k}", "POINT"); ld.color = (1.0, 0.55, 0.22); ld.shadow_soft_size = 3.0
+            lo = bpy.data.objects.new(f"IntTorchL{k}", ld); lo.location = (x, y, z + 6.0); sc.collection.objects.link(lo)
             lights.append(ld)
+    ld = bpy.data.lights.new("IntGradFill", "AREA"); ld.color = (1.0, 0.6, 0.3); ld.size = 40.0
+    lo = bpy.data.objects.new("IntGradFill", ld); lo.location = (CAMP.x, CAMP.y - 6, H(CAMP.x, CAMP.y) + 22.0)
+    sc.collection.objects.link(lo); st["grad_fill"] = ld
     L.obj_from_bm("IntTorchPoles", pm, [M["plank"]])
     st["flames"] = [L.obj_from_bm("IntTorchFlames", fm, [M["fire"]])] + [o for o in bpy.data.objects if o.name.startswith("PK_Fires")]
-    st["fire_lights"] = lights + [o.data for o in bpy.data.objects if o.name.startswith("PK_FireLight")]
+    for o in bpy.data.objects:                           # people_kit's stage lights: fewer, softer
+        if o.name.startswith("PK_FireLight"):
+            o.data.shadow_soft_size = 2.0
+    st["fire_lights"] = lights + [o.data for o in bpy.data.objects if o.name.startswith("PK_FireLight")][:4]
+    for o in bpy.data.objects:
+        if o.name.startswith("PK_FireLight") and o.data not in st["fire_lights"]:
+            o.hide_render = True
+    import smokecards as SC
+    gl = SC.SmokeCards("TorchGlow")                      # soft emissive halo round every torch head
+    gl.add_many(np.full(len(tips), SI.T_GRAD - 0.7), np.array(tips), None, 0.7, 0.8, 30.0, 0.0, kind="glow", alpha=0.12, fade_in=0.6, color=(1.0, 0.5, 0.18))
+    gl.build(None)
+    st["smoke"].append(gl)
 
 def world(st):
     sc = bpy.context.scene
@@ -705,7 +873,7 @@ def cam_keys():
         (9.6, (C.x + 60, C.y - 120, 95), (C.x - 5, C.y + 0, 0), 32),                   # rows of recruits (847)
         (10.9, (RC.x + 17, RC.y - 21, 13), (RC.x, RC.y + 0.6, 1.9), 36),             # Eren upside down (hold)
         (12.6, (RC.x + 15, RC.y - 19, 12), (RC.x, RC.y + 0.6, 1.9), 36),
-        (14.9, (C.x + 150, C.y - 230, 160), (C.x, C.y + 10, 0), 30),                 # seasons: orbit up
+        (14.9, (C.x + 300, C.y - 330, 170), (C.x - 20, C.y - 90, 0), 30),            # seasons: tower, paddock, titan cut-outs
         (17.2, (C.x + 200, C.y - 40, 190), (C.x - 10, C.y + 10, 0), 30),
         (20.5, (C.x + 46, C.y - 62, 34), (C.x, C.y + 14, 1.5), 32),                  # END: graduation night
     ]
@@ -746,17 +914,18 @@ def update(st, t):
     for n, v in st["bg"]:
         _put(n.inputs[1], "default_value", v * (1 - 0.985 * nite) * (1 - 0.25 * winter), 2e-3)
     for s in FOG_NODES:
-        _put(s, "default_value", 0.9 * (1 - 0.97 * nite), 2e-3)
+        _put(s, "default_value", FOG_EMIT * (1 - 0.97 * nite), 2e-3)
     for o in st["flames"]:
         _put(o, "hide_render", nite < 0.3)
     for ld in st["fire_lights"]:
-        _put(ld, "energy", 600.0 * nite, 0.5)
+        _put(ld, "energy", 900.0 * nite, 0.5)
+    _put(st["grad_fill"], "energy", 2500.0 * nite, 0.5)
     _put(sc.view_settings, "exposure", st["expo"] + 1.3 * nite)
     # ---- camps (only drawn while the camera is near them)
     camps_on = t < SI.T_ENL
     tn = st["tents"]
     grow = np.clip((t - tn["T"][:, 4]) / 0.3, 0, 1)
-    set_points(tn["ob"], tn["xyz"], grow * (1.0 if camps_on else 0.0))
+    set_points(tn["ob"], tn["xyz"], grow * (1.7 if camps_on else 0.0), tn["T"][:, 2], tn["T"][:, 3].astype(int))
     for ob, base, ta in st["barns"]:
         u = smooth(ta, ta + 0.6, t)
         if abs(ob.location.z - (base.z - 9.0 * (1 - u))) > 1e-4 or ob.location.x != base.x:
@@ -863,7 +1032,7 @@ if __name__ == "__main__":
             pass
         print("[int] denoiser", cy.denoiser, flush=True)
         cy.max_bounces, cy.diffuse_bounces, cy.glossy_bounces, cy.transmission_bounces = 3, 1, 1, 1
-        cy.volume_bounces = 0; cy.transparent_max_bounces = 8
+        cy.volume_bounces = 0; cy.transparent_max_bounces = 24
         cy.caustics_reflective = cy.caustics_refractive = False
         sc.render.use_persistent_data = True
     else:
@@ -882,9 +1051,11 @@ if __name__ == "__main__":
     for i, t in enumerate(times):
         update(st, t)
         if sc.render.engine == "CYCLES":          # the torch-lit night needs a few more samples than daylight
-            sc.cycles.samples = B.samples if SI.night_at(t) < 0.3 else max(B.samples, int(os.environ.get("INT_NIGHT_SMP", "8")))
+            sc.cycles.samples = B.samples if SI.night_at(t) < 0.3 else max(B.samples, int(os.environ.get("INT_NIGHT_SMP", "16")))
         loc, rot, lens = cam_at(t)
         cam.location = loc; cam.rotation_euler = rot; cd.lens = lens
+        for c in st["smoke"]:
+            c.update(t, cam)
         bpy.context.view_layer.update()
         name = f"{B.prefix}_{i:05d}.png" if not B.times else f"{B.prefix}_t{t:05.2f}.png"
         tags = anchors(st, t)
