@@ -194,3 +194,11 @@ Missing (build ourselves or kitbash from the soldier and kids): Erwin, Armin, Ha
 
 ## 11:43 USER: test renders must be FAST (≤20 min). The 1.5 h 480p test was too slow.
 - For every future preview: 15 fps (render every 2nd frame), Eevee lowest samples, cull off-screen houses/crowds/titans, use simple steam or none, 480p. If the estimate is over 20 min, simplify further before starting.
+
+## 14:38 Cloud QA of intro_test_480p.mp4 (52d19d6), 1 fps contact sheet. Fix before the next preview:
+1. ~6-8 s: the camera passes INSIDE geometry, so 2 seconds are dark/black (inside the wall or the ground). Keep the camera path clear of the wall and ground.
+2. Head reveal: at 5 s, the plaza shot shows the gate street, but the Colossal head isn't readable. Make the head plus both hands gripping the wall top clearly visible from the plaza at 5 s (larger in frame), rising until 8 s.
+3. From ~8 s, the Colossal is shown FULL BODY outside the wall, and it floats: its feet are off the ground and the legs dangle at 10-12 s. Canon: it stands on the ground and the wall reaches its clavicle. Snap the feet to the terrain, keep only the shoulders and head above the wall, and keep the left foot planted during the kick.
+4. The kick at ~11 s reads as a knee-up hop, not a right leg drawn far back and then swung forward. Fix the wind-up/swing.
+5. After the kick (12-17 s): good wide aerial of the district. Steam is off in this lite pass (fine for previews).
+Keep the ≤20 min preview settings.
