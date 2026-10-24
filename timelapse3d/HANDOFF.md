@@ -87,3 +87,4 @@ See section 6 of timelapse3d/EP1_plan_terrain_camera.md (K1-K14). Every beat is 
 
 ## 05:00 UTC: USER TRIMMED THE PLAN
 timelapse3d/EP1_beats_final.md (30 beats) now SUPERSEDES plan sections 6-7 and EP1_must_have_beats.md. The user said "too many unnecessary things; the earlier plan was better". Focus on the 3D TIMELAPSE: big-picture events from outside, maps, armies, destruction, and NUMBERS AS GRAPHICS (for example the 250,000 counter). Drop the private moments and dialogue scenes. Keep only the user-named emotional beats with their overlay holds. Do not build anything from the 137 list that isn't in the 30.
+- 05:05: EP1_plan_v2.md (laptop) is CANONICAL; EP1_beats_final.md just points to it. One canon check: for the 846 operation, use the anime/wiki figure for survivors (the wiki says "fewer than 200" / "about 100", so verify against Namu and use one number consistently on the counter).

@@ -1,4 +1,5 @@
 # EP1 final beat list v3 (user 10/24 04:57): 3D timelapse focus
+> **NOTE:** the laptop's timelapse3d/EP1_plan_v2.md is the canonical 30-shot plan, which this file mirrors. Edit that one.
 This list SUPERSEDES plan sections 6-7 and EP1_must_have_beats.md (the 137-beat list).
 
 Principle (user): this is a 3D TIMELAPSE seen from outside the anime, a high-up view that organises the events. Show the big picture: places changing, armies, destruction, numbers and maps. Put numbers on screen as graphics (counters, map overlays, labels) in the Ditty/Pirata One HUD style. Drop private moments and dialogue scenes. Keep only the emotional beats the user named, each as a short sky-view beat with its overlay hold.
