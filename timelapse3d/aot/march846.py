@@ -48,7 +48,8 @@ N_TITANS = int(E("MARCH_TITANS", "360"))
 N_SURV = 100
 TOTAL = 250000
 LIFT = 0.6                  # grabbed -> gone (video seconds)
-T_RET = 10.5                # stragglers turn back
+T_RET = 9.5                 # stragglers turn back
+HERO_S = 2150.0             # where the low flank pass meets the east wave (road metres from the gate)
 T_DOOM = 13.0               # whoever is still out there after this is taken by T_DOOM + 1.8
 STATE = {}
 
@@ -186,6 +187,7 @@ SHIRTS = [(0.80, 0.07, 0.05), (0.05, 0.18, 0.75), (0.92, 0.68, 0.04), (0.08, 0.4
           (0.60, 0.80, 0.10), (0.70, 0.12, 0.25), (0.55, 0.40, 0.22), (0.62, 0.55, 0.42), (0.35, 0.22, 0.12)]
 PANTS = [(0.10, 0.06, 0.03), (0.04, 0.05, 0.14), (0.20, 0.20, 0.22), (0.40, 0.30, 0.17), (0.30, 0.10, 0.06)]
 HAIRS = [(0.02, 0.016, 0.012), (0.12, 0.06, 0.03), (0.55, 0.40, 0.12), (0.45, 0.12, 0.04), (0.50, 0.50, 0.50)]
+T_PALE = [(0.70, 0.42, 0.31), (0.76, 0.48, 0.36), (0.64, 0.39, 0.29), (0.80, 0.54, 0.41), (0.60, 0.36, 0.27), (0.72, 0.46, 0.37)]
 CLOAK_SCOUT = (0.045, 0.16, 0.06)
 CLOAK_GARRISON = (0.03, 0.05, 0.11)       # dark navy cloak, red rose patch is too small to read from the sky
 
@@ -215,7 +217,7 @@ def simulate():
     hgt = np.where(rng.random(N) < 0.1, rng.uniform(1.05, 1.35, N), rng.uniform(1.55, 1.9, N))
     hgt[kind == 3] = 1.75
     # ---- stragglers who make it back: from the rear half of the column
-    cand = np.where((kind == 0) & (q > 0.62) & (q < 0.97))[0]
+    cand = np.where((kind == 0) & (q > 0.80) & (q < 0.88))[0]
     surv = np.zeros(N, bool); surv[rng.choice(cand, N_SURV, replace=False)] = True
     # ---- wagons
     wq = np.sort(rng.random(NW)); wu = rng.uniform(-0.8, 0.8, NW); wkind = (rng.random(NW) < 0.45).astype(np.int8)  # 1 = horse wagon
@@ -226,13 +228,16 @@ def simulate():
     NA, NB, NC = int(NT * 0.26), int(NT * 0.29), int(NT * 0.29)
     ND = NT - NA - NB - NC
     wave = np.array([0] * NA + [1] * NB + [2] * NC + [3] * ND)
-    H = np.clip(rng.gamma(5.0, 1.75, NT), 4.0, 15.0)
+    H = np.where(rng.random(NT) < 0.12, rng.uniform(3.0, 5.5, NT), np.clip(rng.normal(9.6, 2.2, NT), 6.0, 15.0))
     abn = rng.random(NT) < 0.1
     vt = np.where(abn, rng.uniform(300, 380, NT), rng.uniform(150, 250, NT))
     tst = np.select([wave == 0, wave == 1, wave == 2, wave == 3],
                     [rng.uniform(0.0, 1.5, NT), rng.uniform(1.0, 3.5, NT), rng.uniform(1.5, 4.0, NT), rng.uniform(3.0, 5.5, NT)])
     tcon = np.select([wave == 0, wave == 1, wave == 2, wave == 3],
                      [rng.uniform(6.0, 7.5, NT), rng.uniform(7.2, 9.5, NT), rng.uniform(7.6, 10.0, NT), rng.uniform(9.0, 11.0, NT)])
+    hero_e = np.where(wave == 1)[0][:16]; hero_w = np.where(wave == 2)[0][:9]
+    tcon[hero_e] = rng.uniform(7.9, 9.0, len(hero_e)); tcon[hero_w] = rng.uniform(8.5, 9.6, len(hero_w))
+    hero = np.zeros(NT, bool); hero[hero_e] = True; hero[hero_w] = True
     TXY = np.zeros((NT, 2))
     for j in range(NT):
         tc = tcon[j]
@@ -243,6 +248,8 @@ def simulate():
             s = rng.uniform(80, 1100); side = rng.choice([-1, 1])
         else:
             s = rng.uniform(stl + 100, sh); side = 1.0 if wave[j] == 1 else -1.0
+        if hero[j]:
+            s = HERO_S + rng.uniform(-220, 220)
         x, y, tx, ty = road(np.array([s]))
         p = np.array([x[0], y[0]])
         fw = np.array([tx[0], ty[0]]); nm = np.array([-ty[0], tx[0]])
@@ -270,7 +277,13 @@ def simulate():
     pos = np.zeros((N, 2)); fdir = np.zeros((N, 2)); vf = rng.uniform(22, 45, N)
     vr = rng.uniform(55, 95, N)
     rdir = rng.normal(0, 1, (N, 2)); rdir /= np.linalg.norm(rdir, axis=1, keepdims=True)
-    ret_goal = GATE[None, :] + FWD[None, :] * rng.uniform(30, 90, (N, 1)) + RGT[None, :] * rng.uniform(-35, 35, (N, 1))
+    ret_goal = GATE[None, :] + FWD[None, :] * 24.0 + RGT[None, :] * rng.uniform(-4, 4, (N, 1))       # stage 1: before the gate
+    din = rng.uniform(25, 120, N)
+    ix_, iy_, itx_, ity_ = road(-din)
+    lat_ = rng.uniform(-6, 6, N)
+    ret_in = np.stack([ix_ - ity_ * lat_, iy_ + itx_ * lat_], 1)                                          # stage 2: inside, on the avenue
+    stage = np.zeros(N, np.int8); vr_set = np.zeros(N, bool)
+    flashes = []                                        # (t, x, y): blade flashes of Scouts fighting
     grab = np.full(NT, -100.0)
     dust = []                                           # (t0, x, y, size, dur, alpha)
     foot_next = rng.uniform(0, 0.5, NT)
@@ -298,14 +311,14 @@ def simulate():
                 tgt = P[nn]; dist = np.sqrt(dd[np.arange(NT), nn])
             else:                                      # nobody left: wander toward the gate / mill around
                 ang = np.arange(NT) * 2.399 + 0.3
-                rad = 700 + (np.arange(NT) * 137 % 1600)
+                rad = 1300 + (np.arange(NT) * 137 % 2000)
                 tgt = GATE[None, :] + FWD[None, :] * (rad * np.abs(np.cos(ang)) + 300)[:, None] + RGT[None, :] * (rad * np.sin(ang))[:, None]
                 dist = np.hypot(*(tgt - TXY).T)
             dvec = tgt - TXY
             dn = dvec / (np.linalg.norm(dvec, axis=1, keepdims=True) + 1e-6)
             feeding = dist < Rk * 0.9
             sp = np.where(feeding, 0.22, 1.0) * vt
-            sp = np.where(len(cand_idx) == 0, 0.08 * vt, sp)
+            sp = np.where(len(cand_idx) == 0, 0.3 * vt, sp)
             sp = np.minimum(sp, dist / DT * 0.9 + 2.0)
             vel = dn * sp[:, None]
             # separation
@@ -314,6 +327,9 @@ def simulate():
             mind = 1.25 * (H[:, None] + H[None, :])
             push = np.clip((mind - dr) / mind, 0, 1)
             vel[:, 0] += (push * dx / dr).sum(1) * 110.0; vel[:, 1] += (push * dy / dr).sum(1) * 110.0
+            if t >= 11.0:                               # the end: the titans drift away from the gate
+                gv = TXY - GATE[None, :]; dg = np.linalg.norm(gv, axis=1) + 1e-6
+                vel += (gv / dg[:, None]) * (vt * 0.9 * np.clip((950 - dg) / 400, 0, 1.2) * min(1.0, (t - 11.0) / 1.5))[:, None]
             vel[~act] *= 0.0
             newp = TXY + vel * DT
             newp[:, 0], newp[:, 1] = push_out(newp[:, 0], newp[:, 1], 25.0)
@@ -375,6 +391,11 @@ def simulate():
                             fx = TXY[j] + np.array([-math.sin(tyaw[j]), math.cos(tyaw[j])]) * H[j] * 0.3
                             dust.append((t, fx[0], fx[1], 3.0 + 0.35 * H[j], 1.5, 0.22))
         TGR[k] = grab
+        fi = np.where((repn > 0.55) & (mode != 2) & (kind == 3))[0]
+        if len(fi):
+            fi = fi[rng.random(len(fi)) < 0.12]
+            for a in fi:
+                flashes.append((t + rng.uniform(0, DT), pos[a, 0], pos[a, 1]))
         # ---------------- panic: titans near, or contagion through the crowd
         scared = (repn > 0) & ((mode == 0) | (mode == 1))
         startle = scared & (mode == 0)
@@ -387,9 +408,10 @@ def simulate():
                 mk = np.floor(pos[mi, 0] / C).astype(np.int64) * 100003 + np.floor(pos[mi, 1] / C).astype(np.int64)
                 hit = mi[np.isin(mk, pk) & (rng.random(len(mi)) < 0.06)]
                 startle[hit] = True
+        startle &= ~surv                                # the stragglers keep marching until they turn back
         st = np.where(startle)[0]
         if len(st):
-            mode[st] = np.where(surv[st], 3, 1); tf[st] = t
+            mode[st] = 1; tf[st] = t                 # stragglers too: they only turn back at T_RET
             # break off sideways (away from the column axis), a bit backward
             sx, sy, stx, sty = road(slot_s(q[st], t, spd[st]))
             side = np.sign(u[st] + rng.normal(0, 0.3, len(st)))
@@ -427,6 +449,8 @@ def simulate():
             g = GATE[None, :] - pos[m1]; g /= np.linalg.norm(g, axis=1, keepdims=True) + 1e-6
             new += 0.12 * g + 0.15 * rdir[m1]
             new /= np.linalg.norm(new, axis=1, keepdims=True) + 1e-6
+            rid_ = (kind[m1] == 3) & has                  # mounted Scouts turn and charge instead
+            new[rid_] = -rv[rid_] / rn[rid_, None]
             fdir[m1] = new
             age = t - tf[m1]
             v = vf[m1] * np.where(has, 1.0, 0.55) * np.clip(0.4 + age * 2.0, 0.4, 1.0) * np.exp(-age / 3.5)
@@ -434,12 +458,21 @@ def simulate():
             pos[m1, 0], pos[m1, 1] = push_out(pos[m1, 0], pos[m1, 1], 6.0)
         m3 = np.where(mode == 3)[0]
         if len(m3):
-            g = ret_goal[m3] - pos[m3]; gd = np.linalg.norm(g, axis=1)
+            ns_ = m3[~vr_set[m3]]
+            if len(ns_):                                # pace so they reach the gate by ~17.5 s
+                dd_ = np.linalg.norm(ret_goal[ns_] - pos[ns_], axis=1)
+                vr[ns_] = np.clip(dd_ / (max(17.5 - t, 2.5) * 0.72), 20, 150); vr_set[ns_] = True
+            sw = m3[(stage[m3] == 0) & (np.linalg.norm(ret_goal[m3] - pos[m3], axis=1) < 10.0)]
+            stage[sw] = 1
+            goal = np.where((stage[m3] == 1)[:, None], ret_in[m3], ret_goal[m3])
+            g = goal - pos[m3]; gd = np.linalg.norm(g, axis=1)
             dirr = g / (gd[:, None] + 1e-6)
             zig = np.stack([-dirr[:, 1], dirr[:, 0]], 1) * (0.35 * np.sin(t * 2.3 + np.arange(len(m3)) * 1.3))[:, None]
+            zig *= (stage[m3] == 0)[:, None]
             stumble = 0.45 + 0.55 * np.abs(np.sin(t * 2.9 + m3 * 0.37))
-            v = vr[m3] * stumble * np.clip(gd / 40.0, 0.0, 1.0)
-            pos[m3] += (dirr + zig) * (v * DT)[:, None]
+            vv = np.where(stage[m3] == 1, np.minimum(vr[m3], 45.0), vr[m3])
+            v = vv * stumble * np.clip(gd / 15.0, 0.0, 1.0)
+            pos[m3] += (dirr + zig) * (np.minimum(v * DT, gd))[:, None]
         # ---------------- the end: nobody else gets away
         if t >= T_DOOM and doom_td is None:
             rest = np.where((mode != 2) & ~surv)[0]
@@ -471,7 +504,7 @@ def simulate():
           + "  ".join(f"t{a:.0f}:alive{b}/flee{c}" for a, b, c, _ in stats[::20]))
     STATE.update(K=K, N=N, NW=NW, NT=NT, q=q, u=u, spd=spd, wob=wob, kind=kind, hgt=hgt, surv=surv,
                  PX=PX, PY=PY, td=td, tf=tf, vj=vj, wq=wq, wu=wu, wspd=wspd, wkind=wkind, w_to=w_to, w_roll=w_roll,
-                 TX=TXk, TY=TYk, TYAW=TYAWk, TGR=TGR, TSPD=TSPD, H=H, abn=abn, dust=D_, alive_t=tt, alive_v=shown,
+                 TX=TXk, TY=TYk, TYAW=TYAWk, TGR=TGR, TSPD=TSPD, H=H, abn=abn, dust=D_, flashes=np.array(flashes, float).reshape(-1, 3), hero=hero, alive_t=tt, alive_v=shown,
                  sim_s=time.time() - t_start)
 
 def alive(t):
@@ -671,11 +704,11 @@ def build_titans(coll):
     specs = []
     for j in range(S["NT"]):
         H = float(S["H"][j])
-        g = rng.uniform(0.72, 1.05)
-        if rng.random() < 0.12:
-            g = rng.uniform(1.3, 1.75)                   # fat ones
+        g = rng.uniform(0.98, 1.3)                       # chunky silhouettes (thin ones read as sticks from the sky)
+        if rng.random() < 0.14:
+            g = rng.uniform(1.5, 1.9)                    # fat ones
         sp = dict(name=f"t{j}", H=H, g=g, al=rng.uniform(0.9, 1.25), hs=rng.uniform(0.85, 1.35),
-                  skin=rng.randrange(len(SW.T_SKINS)), hair=rng.choice([None, 0, 1, 1, 2, 3]))
+                  skin=rng.randrange(len(T_PALE)), hair=rng.choice([None, 0, 1, 1, 2, 3]))
         if S["abn"][j]:
             sp["al"] *= 1.2; sp["hs"] *= 1.15
         specs.append(sp)
@@ -684,10 +717,10 @@ def build_titans(coll):
         n0 = len(gt.fc)
         sx, sh, la, hip, hc, hr = SW.titan_geo(gt, j, sp)
         sp.update(sx=sx, sh=sh, la=la, hip=hip, hc=hc, hr=hr)
-        hb = len(SW.T_SKINS)
+        hb = len(T_PALE)
         base = [sp["skin"], hb + (sp["hair"] if sp.get("hair") is not None else 0), hb + len(SW.T_HAIRS)]
         tmat += [base[c] for c in gt.fc[n0:]]
-    tm = [L.mat(f"MR_tskin{i}", c, 0.65) for i, c in enumerate(SW.T_SKINS)] + [L.mat(f"MR_thair{i}", c, 0.7) for i, c in enumerate(SW.T_HAIRS)] \
+    tm = [L.mat(f"MR_tskin{i}", c, 0.6) for i, c in enumerate(T_PALE)] + [L.mat(f"MR_thair{i}", c, 0.7) for i, c in enumerate(SW.T_HAIRS)] \
         + [L.mat("MR_teeth", (0.85, 0.80, 0.70), 0.5)]
     RT = gt.finish()
     tob = SW._mesh("MarchTitans", RT, gt.f, tmat, tm, coll)
@@ -728,6 +761,156 @@ def build_dust(coll):
     ob.visible_shadow = False
     S.update(dob=ob, dcap=cap)
 
+
+# ---------------------------------------------------------------- 846 look: farmland, overcast, sombre
+def dress_fields(ra=3600.0, rb=2800.0, a0=2300.0):
+    """Abandoned Maria farmland on the march plain: strip fields (ochre / wheat / ploughed / fallow green) with dark
+    hedgerow edges and pale farm tracks, mixed into the shared Terrain material at runtime (scene.py untouched)."""
+    m = bpy.data.materials.get("Terrain")
+    if m is None or not m.use_nodes:
+        return
+    nt = m.node_tree; N, Lk = nt.nodes, nt.links
+    bsdf = next((n for n in N if n.type == "BSDF_PRINCIPLED"), None)
+    if bsdf is None or not bsdf.inputs["Base Color"].is_linked:
+        return
+    base = bsdf.inputs["Base Color"].links[0].from_socket
+    geo = N.new("ShaderNodeNewGeometry")
+    c = GATE + FWD * a0
+    sub = N.new("ShaderNodeVectorMath"); sub.operation = "SUBTRACT"; sub.inputs[1].default_value = (c[0], c[1], 0)
+    Lk.new(geo.outputs["Position"], sub.inputs[0])
+    da = N.new("ShaderNodeVectorMath"); da.operation = "DOT_PRODUCT"; da.inputs[1].default_value = (FWD[0], FWD[1], 0)
+    db = N.new("ShaderNodeVectorMath"); db.operation = "DOT_PRODUCT"; db.inputs[1].default_value = (RGT[0], RGT[1], 0)
+    Lk.new(sub.outputs[0], da.inputs[0]); Lk.new(sub.outputs[0], db.inputs[0])
+    def M_(op, a, b=None):
+        n = N.new("ShaderNodeMath"); n.operation = op
+        for k, x in enumerate((a, b)):
+            if x is None:
+                continue
+            if isinstance(x, (int, float)):
+                n.inputs[k].default_value = x
+            else:
+                Lk.new(x, n.inputs[k])
+        return n.outputs[0]
+    # strip fields: bands of BAND m along the road, cut across into strips of STRIP m with a per-band offset
+    BAND, STRIP = 260.0, 64.0
+    ia = M_("FLOOR", M_("DIVIDE", da.outputs["Value"], BAND))
+    wn1 = N.new("ShaderNodeTexWhiteNoise"); wn1.noise_dimensions = "1D"; Lk.new(ia, wn1.inputs["W"])
+    jb_f = M_("ADD", M_("DIVIDE", db.outputs["Value"], STRIP), M_("MULTIPLY", wn1.outputs["Value"], 7.0))
+    jb = M_("FLOOR", jb_f)
+    cmb = N.new("ShaderNodeCombineXYZ"); Lk.new(ia, cmb.inputs["X"]); Lk.new(jb, cmb.inputs["Y"])
+    wn2 = N.new("ShaderNodeTexWhiteNoise"); wn2.noise_dimensions = "3D"; Lk.new(cmb.outputs[0], wn2.inputs["Vector"])
+    pal = N.new("ShaderNodeValToRGB"); pal.color_ramp.interpolation = "CONSTANT"; pe = pal.color_ramp.elements
+    cols = [(0.0, (0.38, 0.31, 0.14)), (0.16, (0.18, 0.27, 0.07)), (0.30, (0.24, 0.17, 0.10)), (0.44, (0.46, 0.39, 0.20)),
+            (0.58, (0.21, 0.29, 0.09)), (0.72, (0.30, 0.30, 0.12)), (0.86, (0.15, 0.24, 0.06))]
+    pe[0].position, pe[0].color = cols[0][0], (*cols[0][1], 1)
+    pe[1].position, pe[1].color = cols[1][0], (*cols[1][1], 1)
+    for pp, cc in cols[2:]:
+        x = pal.color_ramp.elements.new(pp); x.color = (*cc, 1)
+    Lk.new(wn2.outputs["Value"], pal.inputs["Fac"])
+    # hedgerows on the band edges (~2.5 m), faint furrow lines between strips
+    fa = M_("FRACT", M_("DIVIDE", da.outputs["Value"], BAND))
+    ea = M_("MULTIPLY", M_("MINIMUM", fa, M_("SUBTRACT", 1.0, fa)), BAND)
+    hedge = N.new("ShaderNodeMapRange"); hedge.inputs["From Min"].default_value = 1.2; hedge.inputs["From Max"].default_value = 2.6
+    Lk.new(ea, hedge.inputs["Value"])
+    fb = M_("FRACT", jb_f)
+    eb = M_("MULTIPLY", M_("MINIMUM", fb, M_("SUBTRACT", 1.0, fb)), STRIP)
+    furrow = N.new("ShaderNodeMapRange"); furrow.inputs["From Min"].default_value = 0.4; furrow.inputs["From Max"].default_value = 1.0
+    furrow.inputs["To Min"].default_value = 0.82; furrow.inputs["To Max"].default_value = 1.0
+    Lk.new(eb, furrow.inputs["Value"])
+    fu = N.new("ShaderNodeMix"); fu.data_type = "RGBA"; fu.blend_type = "MULTIPLY"; fu.inputs["Factor"].default_value = 1.0
+    Lk.new(pal.outputs["Color"], fu.inputs["A"])
+    fcol = N.new("ShaderNodeCombineColor"); Lk.new(furrow.outputs["Result"], fcol.inputs[0]); Lk.new(furrow.outputs["Result"], fcol.inputs[1]); Lk.new(furrow.outputs["Result"], fcol.inputs[2])
+    Lk.new(fcol.outputs[0], fu.inputs["B"])
+    fm = N.new("ShaderNodeMix"); fm.data_type = "RGBA"; fm.inputs["A"].default_value = (0.05, 0.09, 0.03, 1)
+    Lk.new(hedge.outputs["Result"], fm.inputs["Factor"]); Lk.new(fu.outputs["Result"], fm.inputs["B"])
+    vt_ = N.new("ShaderNodeTexVoronoi"); vt_.feature = "DISTANCE_TO_EDGE"; vt_.inputs["Scale"].default_value = 1 / 1100
+    Lk.new(geo.outputs["Position"], vt_.inputs["Vector"])
+    trk = N.new("ShaderNodeMapRange"); trk.inputs["From Min"].default_value = 0.0018; trk.inputs["From Max"].default_value = 0.0032
+    trk.inputs["To Min"].default_value = 1.0; trk.inputs["To Max"].default_value = 0.0
+    Lk.new(vt_.outputs["Distance"], trk.inputs["Value"])
+    tm = N.new("ShaderNodeMix"); tm.data_type = "RGBA"; tm.inputs["B"].default_value = (0.36, 0.30, 0.20, 1)
+    Lk.new(trk.outputs["Result"], tm.inputs["Factor"]); Lk.new(fm.outputs["Result"], tm.inputs["A"])
+    terms = []
+    for axis, r in ((FWD, ra), (RGT, rb)):
+        dt = N.new("ShaderNodeVectorMath"); dt.operation = "DOT_PRODUCT"; dt.inputs[1].default_value = (axis[0] / r, axis[1] / r, 0)
+        Lk.new(sub.outputs[0], dt.inputs[0])
+        sq = N.new("ShaderNodeMath"); sq.operation = "MULTIPLY"
+        Lk.new(dt.outputs["Value"], sq.inputs[0]); Lk.new(dt.outputs["Value"], sq.inputs[1]); terms.append(sq)
+    add = N.new("ShaderNodeMath"); add.operation = "ADD"
+    Lk.new(terms[0].outputs[0], add.inputs[0]); Lk.new(terms[1].outputs[0], add.inputs[1])
+    me_ = N.new("ShaderNodeMapRange"); me_.inputs["From Min"].default_value = 1.0; me_.inputs["From Max"].default_value = 0.7
+    Lk.new(add.outputs[0], me_.inputs["Value"])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 1 / 1400; nz.inputs["Detail"].default_value = 3
+    Lk.new(geo.outputs["Position"], nz.inputs["Vector"])
+    mn = N.new("ShaderNodeMapRange"); mn.inputs["From Min"].default_value = 0.40; mn.inputs["From Max"].default_value = 0.46
+    mn.inputs["To Max"].default_value = 0.72
+    Lk.new(nz.outputs["Fac"], mn.inputs["Value"])
+    mk = N.new("ShaderNodeMath"); mk.operation = "MULTIPLY"
+    Lk.new(me_.outputs["Result"], mk.inputs[0]); Lk.new(mn.outputs["Result"], mk.inputs[1])
+    dry = N.new("ShaderNodeMix"); dry.data_type = "RGBA"; dry.blend_type = "MULTIPLY"; dry.inputs["Factor"].default_value = 0.35
+    dry.inputs["B"].default_value = (1.15, 1.0, 0.62, 1)
+    Lk.new(base, dry.inputs["A"])
+    fin = N.new("ShaderNodeMix"); fin.data_type = "RGBA"
+    Lk.new(mk.outputs[0], fin.inputs["Factor"]); Lk.new(dry.outputs["Result"], fin.inputs["A"]); Lk.new(tm.outputs["Result"], fin.inputs["B"])
+    Lk.new(fin.outputs["Result"], bsdf.inputs["Base Color"])
+
+MOOD = {}
+def mood_setup():
+    """Overcast, slightly desaturated 846 sky: grey camera-ray gradient, softer and weaker sun, more ambient."""
+    sc = bpy.context.scene
+    w = sc.world
+    if w is not None and w.use_nodes:
+        for n in w.node_tree.nodes:
+            if n.type == "VALTORGB":
+                e = n.color_ramp.elements
+                e[0].color = (0.62, 0.63, 0.64, 1); e[-1].color = (0.36, 0.40, 0.46, 1)
+        bgs = [n for n in w.node_tree.nodes if n.type == "BACKGROUND"]
+        for n in bgs:
+            if n.inputs[1].default_value < 1.0:
+                n.inputs[1].default_value *= 1.3
+        MOOD["bg"] = [(n, n.inputs[1].default_value) for n in bgs]
+    suns = [o.data for o in bpy.data.objects if o.type == "LIGHT" and o.data.type == "SUN"]
+    for d in suns:
+        d.energy *= 0.62; d.angle = math.radians(12.0); d.color = (1.0, 0.96, 0.90)
+    MOOD["suns"] = [(d, d.energy) for d in suns]
+    sc.view_settings.exposure -= 0.2
+    MOOD["exp"] = sc.view_settings.exposure
+
+def mood(t):
+    """Sombre drift as the column dies (t 7 -> 15): light dims ~30 %, a little cooler."""
+    if not MOOD:
+        return
+    f = float(_sm(7.0, 15.0, t))
+    for n, v in MOOD.get("bg", []):
+        n.inputs[1].default_value = v * (1 - 0.25 * f)
+    for d, v in MOOD.get("suns", []):
+        d.energy = v * (1 - 0.35 * f); d.color = (1.0, 0.96 - 0.03 * f, 0.90 + 0.03 * f)
+    bpy.context.scene.view_settings.exposure = MOOD["exp"] - 0.25 * f
+
+# ---------------------------------------------------------------- dust + blade flashes as soft smoke cards (smokecards.py)
+def build_cards(coll):
+    S = STATE
+    try:
+        import smokecards as SC
+    except Exception as ex:
+        print("[march846] smokecards unavailable, no dust:", ex); S["cards"] = None; return
+    cs = SC.SmokeCards("MarchDust")
+    D_ = S["dust"]
+    if len(D_):
+        size, dur = D_[:, 3], D_[:, 4]
+        gz = ground(D_[:, 1], D_[:, 2])
+        pos = np.stack([D_[:, 1], D_[:, 2], gz + size * 0.35], 1)
+        cs.add_many(D_[:, 0], pos, None, r0=size * 0.45, r1=size * 1.25, life=dur * 1.4, rise=size * 0.22 / dur,
+                    color=(0.60, 0.52, 0.38), kind="dust", alpha=np.clip(D_[:, 5] * 2.0, 0, 0.75), fade_in=0.15)
+    F = S["flashes"]
+    if len(F):
+        gz = ground(F[:, 1], F[:, 2])
+        pos = np.stack([F[:, 1], F[:, 2], gz + 2.8], 1)
+        cs.add_many(F[:, 0], pos, None, r0=0.3, r1=0.9, life=0.08, rise=0.0, color=(0.85, 0.92, 1.0), kind="glow",
+                    alpha=0.7, fade_in=0.02)
+    cs.build(coll)
+    S["cards"] = cs
+
 # ---------------------------------------------------------------- setup
 def setup():
     t0 = time.time()
@@ -755,10 +938,12 @@ def setup():
     wob_ = _point_cloud("MarchWagons", S["NW"], {"s": ("FLOAT", "POINT"), "lod": ("INT", "POINT"), "rot": ("FLOAT_VECTOR", "POINT")}, ngw, coll)
     wob_.data.attributes["lod"].data.foreach_set("value", S["wkind"].astype(np.int32))
     build_titans(coll)
-    build_dust(coll)
+    build_cards(coll)
     S.update(pob=pob, wob=wob_, coll=coll, phase=rng.random(N), panicp=rng.random(N) < 0.35)
     open_gate()
     clear_plain()
+    dress_fields()
+    mood_setup()
     update(0.0, Vector((0, 0, 1000)))
     print(f"[march846] setup {time.time() - t0:.1f}s (sim {S['sim_s']:.1f}s)")
     return STATE
@@ -814,7 +999,7 @@ def _lerp_idx(t):
 def _alerp(a, b, f):
     return a + (((b - a) + np.pi) % (2 * np.pi) - np.pi) * f
 
-LOD_NEAR, LOD_MID = 230.0, 750.0
+LOD_NEAR, LOD_MID = 320.0, 800.0
 
 def _dscale(d, d0, mx):
     return np.clip((d / d0) ** 0.72, 1.0, mx)
@@ -861,7 +1046,7 @@ def update(t, cam_loc):
     tp = np.stack([tx, ty, tz + bob], 1)
     import swarm845 as SW
     dcam = np.sqrt((tx - cam[0]) ** 2 + (ty - cam[1]) ** 2 + (tz - cam[2]) ** 2)
-    tsc = _dscale(dcam, 420.0, 2.2)                     # titans drawn larger far away (same idea as the people)
+    tsc = _dscale(dcam, 380.0, 2.6)                     # titans drawn larger far away (same idea as the people)
     co = SW._deform(S["RT"], Ar, Ae, lean, tsc, tyaw, tp)
     S["tob"].data.vertices.foreach_set("co", co.astype(np.float32).ravel()); S["tob"].data.update()
     # ---------------- people
@@ -906,7 +1091,7 @@ def update(t, cam_loc):
     lod = np.where(d > LOD_NEAR, np.where(kind == 3, 7, 5), lod)
     lod = np.where(d > LOD_MID, 6, lod)
     sc = _dscale(d, 150.0, 3.3) * (S["hgt"] / 1.7)
-    sc = np.where(S["surv"], sc * (1.0 + 0.8 * float(_sm(13.0, 16.0, t))), sc)     # the last ~100 must read
+    sc = np.where(S["surv"], sc * (1.0 + 1.6 * float(_sm(12.5, 15.5, t))), sc)     # the last ~100 must read
     sc = sc * vis
     tilt = np.where(fleeing & moving, -0.25, 0.0)
     rot = np.stack([tilt * 0, np.zeros(N), yaw], 1)
@@ -935,23 +1120,14 @@ def update(t, cam_loc):
     me.attributes["s"].data.foreach_set("value", wsc.astype(np.float32))
     me.attributes["rot"].data.foreach_set("vector", np.stack([np.zeros(NW), roll, wyaw], 1).astype(np.float32).ravel())
     me.update()
-    # ---------------- dust
-    Dd = S["dust"]; cap = S["dcap"]
-    sel = np.where((Dd[:, 0] <= t) & (Dd[:, 0] + Dd[:, 4] > t))[0][:cap] if len(Dd) else np.zeros(0, int)
-    n = len(sel)
-    co = np.zeros((cap, 3), np.float32); s_ = np.zeros(cap, np.float32); al = np.zeros(cap, np.float32)
-    if n:
-        ev = Dd[sel]; age = (t - ev[:, 0]) / ev[:, 4]
-        size = ev[:, 3] * (0.45 + 0.9 * np.sqrt(age))
-        gz = ground(ev[:, 1], ev[:, 2])
-        co[:n] = np.stack([ev[:, 1], ev[:, 2], gz + size * 0.25 + age * ev[:, 3] * 0.4], 1)
-        s_[:n] = size
-        al[:n] = ev[:, 5] * (1 - age) ** 1.5 * np.clip(age * 8, 0, 1)
-    me = S["dob"].data
-    me.vertices.foreach_set("co", co.ravel())
-    me.attributes["s"].data.foreach_set("value", s_)
-    me.attributes["a"].data.foreach_set("value", al)
-    me.update()
+    # ---------------- dust / blade flashes (soft cards) + mood + gate
+    if S.get("cards") is not None:
+        S["cards"].update(t)
+    mood(t)
+    door = bpy.data.objects.get("OuterGate_Door")
+    if door is not None:
+        door.location.z = 21.0 * (1.0 - float(_sm(17.45, 18.0, t)))      # closes behind the last of them
+    n = 0
     S["last"] = dict(t=t, visible=int((sc > 0.001).sum()), near=int(((d < LOD_NEAR) & (sc > 0.001)).sum()),
                      mid=int(((d >= LOD_NEAR) & (d < LOD_MID) & (sc > 0.001)).sum()), dust=n, alive=alive(t))
 
@@ -967,9 +1143,10 @@ CAM_KEYS = [
     (0.0,  _gp(-170, 170, 125),  _gp(60, -10, 0),    27),     # low, inside the outer gate: the avenue pours out
     (1.8,  _gp(-60, 200, 135),   _gp(260, -10, 0),   27),     # hold on the pour-out a moment, drifting to the gate
     (3.4,  _gp(260, 230, 175),   _gp(980, -20, 0),   27),     # over the wall, rising, along the column
-    (6.0,  _gp(1100, 420, 280),  _gp(2300, -40, 0),  28),     # the column stretches to the horizon; titans ahead
-    (9.0,  _gp(2000, 700, 230),  _gp(2300, -150, 0), 29),     # swing out to the east flank as the waves hit
-    (12.0, _gp(2100, 950, 380),  _gp(1700, -100, 0), 28),     # higher: islands, encirclement
+    (5.6,  _gp(1150, 380, 230),  _gp(2200, -40, 0),  28),     # the column stretches to the horizon; titans close in
+    (7.6,  _gp(1780, 260, 120),  _gp(2080, 0, 0),    31),     # dive to the east flank, slowing
+    (9.6,  _gp(2060, 190, 92),   _gp(2290, -15, 0),  33),     # LOW pass: grabs, wagons over, Scouts fight, a pocket closes
+    (12.2, _gp(2150, 950, 400),  _gp(1700, -100, 0), 28),     # rise back to the epic wide view: islands
     (15.0, _gp(1500, 650, 560),  _gp(700, 0, 0),     28),     # emptied plain
     (18.0, _gp(1050, 260, 640),  _gp(-150, 0, 40),   28),     # turning north: stragglers -> gate, Trost, Wall Rose
 ]
