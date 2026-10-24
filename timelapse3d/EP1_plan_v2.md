@@ -68,6 +68,8 @@
 - **Real-time, trackable movement:** in the forest advance especially, characters must move continuously, seen from the sky, and never teleport, so the viewer can track where they are. Teleporting is allowed only where it cannot be avoided.
 - **Survey Corps launches:** masses of Scouts launching and flying on ODM, visible from the air. Keep it cheap: green cloaks must read. Seen from afar they fight titans or get eaten.
 
+**Name tags (user approved, 06:00 UTC).** Keep floating name labels over the key characters and units: small text with a leader line, in the HUD fonts. Combined with continuous movement, they let viewers track who is where from the sky.
+
 **Implications for the build**
 - An agent system for crowds and Scouts: points that follow paths over time. Each one has a state (walk, run, queue, fly on ODM, fight, die), with cloak sprites or low-poly figures, and gas-trail lines for ODM.
 - The Trost crowd is a flow field to the north gate with a blocked choke point, released at Mikasa's frame.
