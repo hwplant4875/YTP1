@@ -1,6 +1,7 @@
 """Stylised 2D island map for the EP1 data graphics (title shot 1, territory loss 7, the 250,000 march 10, inserts).
 
-Pure numpy + PIL, no Blender, no GPU. World units are km, origin = the walls' centre (Mitras), +y = north.
+Used as SMALL INSETS over the running 3D frames (hud2 map mode "inset"); full-frame use is kept but UNUSED
+(user 17:41: one continuous camera take, graphics never replace the 3D shot). Pure numpy + PIL, no Blender, no GPU. World units are km, origin = the walls' centre (Mitras), +y = north.
 Everything is an analytic field (coast, wall rings with their four district bulges, lost territory), so any view
 (pan / zoom) renders crisp at any size; text and routes are drawn on a 2x supersampled PIL layer.
 
@@ -24,8 +25,8 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FONT_LABEL = os.path.join(HERE, "fonts", "PirataOne-Regular.ttf")
-FONT_NUM = os.path.join(HERE, "fonts", "GrenzeGotisch-VF.ttf")
+FONT_BIG = os.path.join(HERE, "fonts", "ShareTech-Regular.ttf")              # inset labels: Share Tech + dark stroke (user 17:49)
+FONT_SMALL = os.path.join(HERE, "fonts", "ShareTech-Regular.ttf")             # districts, radii, scale bar
 
 # ---------------------------------------------------------------- canon geometry (km)
 WALLS = {"maria": 480.0, "rose": 380.0, "sina": 250.0}
@@ -284,7 +285,7 @@ def render(W, H, t, spec=None):
             if ai <= 0 or (key in walls and walls[key] is None):
                 continue
             fs = int(14 * s * min(1.6, max(0.8, 1500 / hk)))
-            f1, f2 = _font(FONT_LABEL, fs), _font(FONT_NUM, int(fs * 0.8), 650)
+            f1, f2 = _font(FONT_BIG, fs), _font(FONT_SMALL, int(fs * 0.9))
             runs = [(ch, f1, col("cream", ai), 1.4 * s) for ch in WALL_NAMES[key]] + [(" ", f1, None, 0)] +                    [(ch, f2, col((226, 206, 160), ai), 0.4 * s) for ch in f"{int(WALLS[key])} km"]
             ox, oy = to_px(0, 0)
             _arc_text(lay, (ox, oy), rm / kpp * SS, math.radians(spec.get("wall_label_angle", 62)), runs,
@@ -307,17 +308,17 @@ def render(W, H, t, spec=None):
         fs = int(15 * s)
         side = (spec.get("district_side") or {}).get(name, "r")
         if side == "r":
-            d.text((x + 8 * s, y + 5 * s), name, font=_font(FONT_LABEL, fs), fill=col("cream", a), anchor="lm", stroke_width=int(1.6 * s), stroke_fill=col("dark", a * 0.6))
+            d.text((x + 8 * s, y + 5 * s), name, font=_font(FONT_SMALL, fs), fill=col("cream", a), anchor="lm", stroke_width=int(1.6 * s), stroke_fill=col("dark", a * 0.6))
         elif side == "l":
-            d.text((x - 7 * s, y), name, font=_font(FONT_LABEL, fs), fill=col("cream", a), anchor="rm", stroke_width=int(1.6 * s), stroke_fill=col("dark", a * 0.6))
+            d.text((x - 7 * s, y), name, font=_font(FONT_SMALL, fs), fill=col("cream", a), anchor="rm", stroke_width=int(1.6 * s), stroke_fill=col("dark", a * 0.6))
         else:
-            d.text((x, y + 7 * s), name, font=_font(FONT_LABEL, fs), fill=col("cream", a), anchor="mt", stroke_width=int(1.6 * s), stroke_fill=col("dark", a * 0.6))
+            d.text((x, y + 7 * s), name, font=_font(FONT_SMALL, fs), fill=col("cream", a), anchor="mt", stroke_width=int(1.6 * s), stroke_fill=col("dark", a * 0.6))
 
     # island name in the sea
     if spec.get("island_label") is not None:
         a = _fade(t, spec["island_label"], 1.0) * 0.8
         x, y = to_px(*spec.get("island_label_xy", (-830, -330)))
-        _spaced(d, (x, y), "PARADIS", _font(FONT_LABEL, int(15 * s)), col((205, 195, 170), a), "mm", track=4 * s)
+        _spaced(d, (x, y), "PARADIS", _font(FONT_BIG, int(15 * s)), col((205, 195, 170), a), "mm", track=4 * s)
 
     if spec.get("compass", True):
         _compass(d, (W * SS - 34 * s, 40 * s), s, col)
@@ -437,7 +438,7 @@ def _compass(d, c, s, col):
     x, y = c; r = 12 * s
     d.polygon([(x, y - r), (x + 3.2 * s, y), (x, y + r * 0.5), (x - 3.2 * s, y)], fill=col("cream", 0.75))
     d.polygon([(x, y - r), (x, y + r * 0.5), (x - 3.2 * s, y)], fill=col((150, 135, 110), 0.75))
-    d.text((x, y - r - 2 * s), "N", font=_font(FONT_LABEL, int(12 * s)), fill=col("cream", 0.8), anchor="ms")
+    d.text((x, y - r - 2 * s), "N", font=_font(FONT_BIG, int(12 * s)), fill=col("cream", 0.8), anchor="ms")
 
 
 def _scale_bar(d, p, s, kpp_ss, col):
@@ -449,7 +450,7 @@ def _scale_bar(d, p, s, kpp_ss, col):
     d.line([(x, y), (x + L, y)], fill=col("cream", 0.7), width=max(1, int(1.4 * s)))
     for xx in (x, x + L / 2, x + L):
         d.line([(xx, y - 3 * s), (xx, y)], fill=col("cream", 0.7), width=max(1, int(1.4 * s)))
-    d.text((x + L + 5 * s, y), f"{km} km", font=_font(FONT_NUM, int(11 * s), 500), fill=col("cream", 0.75), anchor="lm")
+    d.text((x + L + 5 * s, y), f"{km} km", font=_font(FONT_SMALL, int(12 * s)), fill=col("cream", 0.75), anchor="lm")
 
 
 # ---------------------------------------------------------------- presets (seconds are local to the map clip)

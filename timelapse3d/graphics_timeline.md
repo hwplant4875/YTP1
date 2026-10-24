@@ -1,14 +1,15 @@
 # EP1 graphics layer: timeline format and per-segment hook
 
-The graphics are composited onto the rendered PNG frames **after Blender**, in plain Python (PIL + numpy). No GPU, no lock.
-Cost at 854x480: about 0.25 s per frame for HUD, tags and counters; about 1.5 s per frame when a full-frame map is drawn.
+**Rule (user, 17:41): EP1 is ONE continuous camera take.** Graphics never replace or cut the 3D shot: they are text
+overlays, compact counters and small corner insets over the running frames. The full-frame map mode (`map` with
+`mode: "full"`) is still in the code but is **unused**. The earlier full-frame demos are in `renders/graphics/_unused_fullframe/`.
 
-| file | role |
-|---|---|
-| `hudcam.py` | `dump()` inside Blender writes the camera of each frame to JSON; `project()` outside Blender maps world to pixel (matches `world_to_camera_view` exactly) |
-| `hud2.py` | the compositor: reads a timeline JSON and draws the tracks onto the frames, then encodes the mp4 |
-| `maps.py` | stylised 2D island map with walls, territory loss and routes. Presets `title` (shot 1), `loss` (shot 7), `march` (shot 10) |
-| `hud.py` | the old one-off still HUD. Nobody imports it; it is left untouched |
+**Fonts (user, final 17:49; all OFL, in `fonts/` with their licence files):**
+- Russo One: ONLY name-tag names. Keep tags minimal: the name plus one short fact (`sub`, e.g. "Colossal Titan" + "60 m").
+- New Rocker: ONLY text at the bottom centre: the `caption` track (bottom) and the `title` line (defaults to y = 0.84).
+- Share Tech, always with a dark stroke: everything else (top-left place/year HUD, counter numbers and labels, notes,
+  tag facts, top captions, inset map labels).
+- Not used: Ditty, UnifrakturCook, Pirata One, Grenze Gotisch, Cinzel, Barlow Condensed. `hud.py` keeps only style "D".
 
 ## 1. Hook in a render script (one line per frame)
 
@@ -56,11 +57,11 @@ Draw order: full-frame maps, then inset maps, then plates, then text and lines w
 
 | type | keys | notes |
 |---|---|---|
-| `place` | `place`, `year`, `sub`, `pos` = `tl` or `tr` | Top corner HUD in the form "SHIGANSHINA · 845" (Pirata One, year in Grenze gold), a gold rule that draws in, and the sub line ("Eren, age 10") |
-| `caption` | `text`, `caps`, `top`, `y`, `size`, `color` | One line at the bottom centre (or at the top with `top: true`), with short gold rules on each side |
-| `title` | `text`, `sub`, `y` (fraction of H), `size` | Big title in UnifrakturCook Bold (OFL). Ditty is retired. Letter spacing widens slowly |
-| `tag` | `name`, `sub`, and the anchor: `world: [x,y,z]`, or `world_keys: [[t,x,y,z],...]`, or `obj: "Eren"` (from `dump(track=)`) plus `offset: [0,0,1.8]`, or `screen: [u,v]` | Dot, leader line, shelf and name in Pirata One. Optional `color` (dot), `len`, `lean` (+ right, - left; default auto), `dir` (`up` / `down` / `auto`), `size`. Hidden when the anchor is behind the camera or off screen. The line draws in from the dot |
-| `counter` | `from`, `to`, `run: [ta, tb]`, `mode` (`log` / `linear`), `ease` (`inout` / `out`), `round` (step while running), `label`, `label_end`, `prefix`, `suffix`, `approx_end` (adds "~"), `color`, `color_end`, `bar`, `bar_color`, `note`, `note_t`, `pos` (`br` `bl` `tr` `tl` `bc` or `[u,v]`), `size` | Digits sit in fixed-width cells so the number does not jitter. The bar shows value / max |
+| `place` | `place`, `year`, `sub`, `pos` = `tl` or `tr` | Top corner HUD in the form "SHIGANSHINA · 845" (Share Tech + stroke, year in gold), a gold rule that draws in, and the sub line ("Eren, age 10") |
+| `caption` | `text`, `caps`, `top`, `y`, `size`, `color` | One line at the bottom centre in New Rocker (or at the top with `top: true`, then in Share Tech), with short gold rules on each side |
+| `title` | `text`, `sub`, `y` (fraction of H), `size` | Title line in New Rocker at the bottom centre (default `y` 0.84); sub-line in Share Tech. Letter spacing widens slowly |
+| `tag` | `name`, `sub`, and the anchor: `world: [x,y,z]`, or `world_keys: [[t,x,y,z],...]`, or `obj: "Eren"` (from `dump(track=)`) plus `offset: [0,0,1.8]`, or `screen: [u,v]` | Dot, leader line, shelf; name in Russo One, one short fact as the sub-line in Share Tech. Optional `color` (dot), `len`, `lean` (+ right, - left; default auto), `dir` (`up` / `down` / `auto`), `size`. Hidden when the anchor is behind the camera or off screen. The line draws in from the dot |
+| `counter` | `scale` (0.75 = compact), `from`, `to`, `run: [ta, tb]`, `mode` (`log` / `linear`), `ease` (`inout` / `out`), `round` (step while running), `label`, `label_end`, `prefix`, `suffix`, `approx_end` (adds "~"), `color`, `color_end`, `bar`, `bar_color`, `note`, `note_t`, `pos` (`br` `bl` `tr` `tl` `bc` or `[u,v]`), `size` | Digits sit in fixed-width cells so the number does not jitter. The bar shows value / max |
 | `map` | `mode` (`full` / `inset`), `spec` (preset name, or a dict with `"preset"` plus overrides), `rect: [u,v,w,h]` (inset), `map_t0` | The map clock is `t - t0 + map_t0`. An inset is a dark card with a gold border and a drop shadow, rendered at 2x |
 | `glitch` | `t` (cut time), `dur` (default 0.6), `strength`, `flash` | RGB split, slice displacement, scanlines, a few inverted blocks, and a teal-white flash on the cut frame. Used for Grisha's injection (shot 8) |
 | `fade` | `in: [t0, t1]`, `out: [t0, t1]`, `color` | Fades from and to near-black |
@@ -79,12 +80,12 @@ Maria's south salient and Trost on Rose's south salient.
 
 | shot | tracks |
 |---|---|
-| 1 title | full map `title` (8 s), `title`, top `caption`, fade in |
+| 1 title | `title` text over the opening flight, small inset `title` map (rings draw in), top `caption` with the radii, then `place` (demo: `timelines/title_overlay.json`) |
 | 2-6 Shiganshina | `place` "Shiganshina · 845" + "Eren, age 10"; `caption` "Outer gate destroyed" / "Inner gate destroyed"; `tag` on Eren, Mikasa, Hannes, Carla, Colossal and Armored (`obj` via `dump(track=)`) |
 | 3 | `counter` "Survey Corps returning" (N set out, M return) |
-| 7 | inset map `loss` + `counter` land lost / refugees |
+| 7 | small lower-corner inset `loss` during the night sky view over burning Shiganshina + compact `counter` land lost ~33% (`scale: 0.75`) |
 | 8 | `glitch` at the injection cut |
-| 10 | full or inset map `march` + `counter` 250,000 → ~100 (`linear`, `bar`, `approx_end`, `label_end`) |
+| 10 | small inset `march` + compact `counter` 250,000 → ~100 (`linear`, `bar`, `approx_end`, `label_end`, `scale: 0.75`) (demo: `timelines/counter_overlay.json`) |
 | 13 | `counter` "Titans inside Trost" (`linear`, rising) + squads lost |
 | 20 | `counter` "Trost: soldiers dead" + `tag` Marco |
 

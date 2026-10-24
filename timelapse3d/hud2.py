@@ -11,8 +11,12 @@ Library:
     img = hud2.compose(tl, Image.open(frame_png), index=i)          # -> RGB PIL image
 
 Track types: place, caption, title, tag, counter, map, glitch, fade (see graphics_timeline.md).
-Fonts (theme, per the user's rule: never Pretendard / YouTube Sans): Pirata One = tags, places, labels;
-Grenze Gotisch (bold) = numbers (Pirata One digits read worse at 480p); UnifrakturCook Bold (OFL) = big titles.
+RULE (user 17:41): one continuous camera take. Graphics are overlays and small insets over the running 3D frames;
+map mode "full" is kept in the code but UNUSED.
+Fonts (user, final 17:49, all OFL): Russo One ONLY for name-tag names; New Rocker ONLY for bottom-centre text
+(caption track, and the title line, which defaults to the bottom centre); Share Tech with a dark stroke for everything
+else (top-left place/year HUD, counter numbers and labels, notes, tag facts, inset map labels).
+Not used: Ditty, UnifrakturCook, Pirata One, Grenze Gotisch, Cinzel, Barlow.
 """
 import argparse, glob, json, math, os, re, subprocess, sys
 import numpy as np
@@ -23,10 +27,15 @@ sys.path.insert(0, HERE)
 import hudcam, maps  # noqa: E402
 
 F = lambda n: os.path.join(HERE, "fonts", n)
-F_LABEL, F_NUM = F("PirataOne-Regular.ttf"), F("GrenzeGotisch-VF.ttf")
-# Title font (user 10/24): UnifrakturCook Bold, a free commercial-use (SIL OFL) blackletter. Ditty is retired.
-TITLE_MODE = "unifraktur"
-F_TITLE = F("UnifrakturCook-Bold.ttf")
+F_CAPTION = F_TITLE = F("NewRocker-Regular.ttf")     # ONLY bottom-centre text: caption and the title line
+F_TAG = F("RussoOne-Regular.ttf")                    # ONLY name-tag names
+F_SMALL = F_SMALL_B = F("ShareTech-Regular.ttf")       # everything else (place/year HUD, counters, notes, tag facts), dark stroke
+
+
+def stk(s, a):
+    """Dark stroke kwargs for small Share Tech text (readability on bright skies)."""
+    return dict(stroke_width=max(1, int(1.2 * s)), stroke_fill=(14, 11, 8, int(255 * 0.6 * max(0.0, min(1.0, a)))))
+
 COL = {
     "cream": (238, 228, 204), "ink": (238, 228, 204), "gold": (214, 176, 102), "red": (196, 52, 40),
     "green": (96, 150, 92), "blue": (112, 150, 190), "dark": (14, 11, 8), "grey": (150, 146, 138),
@@ -110,7 +119,7 @@ def el_place(c, e):
     right = e.get("pos", "tl") == "tr"
     m = 20 * s
     y = m + 22 * s - (1 - ain) * 6 * s
-    f1, fy, f2 = font(F_LABEL, 24 * s), font(F_NUM, 24 * s, 760), font(F_LABEL, 16 * s)
+    f1, fy, f2 = font(F_SMALL, 23 * s), font(F_SMALL, 23 * s), font(F_SMALL, 16 * s)
     place, year, sub = e.get("place", "").upper(), str(e.get("year", "")), e.get("sub", "")
     tr = 1.4 * s
     wp = spaced(c.d, (0, 0), place, f1, None, track=tr)
@@ -121,9 +130,9 @@ def el_place(c, e):
     x0 = W - m - wtot if right else m
     plate(c, (W - m - wtot - 70 * s, y - 34 * s, W, y + 34 * s) if right else (0, y - 34 * s, x0 + wtot + 70 * s, y + 34 * s),
           a, "r" if right else "l")
-    spaced(c.d, (x0, y), place, f1, col("cream", a), "ls", track=tr)
-    c.d.text((x0 + wp, y), sep, font=f1, fill=col("gold", a), anchor="ls")
-    c.d.text((x0 + wp + ws, y), year, font=fy, fill=col("gold", a), anchor="ls")
+    spaced(c.d, (x0, y), place, f1, col("cream", a), "ls", track=tr, **stk(s, a))
+    c.d.text((x0 + wp, y), sep, font=f1, fill=col("gold", a), anchor="ls", **stk(s, a))
+    c.d.text((x0 + wp + ws, y), year, font=fy, fill=col("gold", a), anchor="ls", **stk(s, a))
     rw = wtot * ease((c.t - e.get("t0", 0) - 0.1) / 0.7)
     ry = y + 6 * s
     if right:
@@ -132,7 +141,7 @@ def el_place(c, e):
         c.d.line([(x0, ry), (x0 + rw, ry)], fill=col("gold", a * 0.9), width=max(1, int(1.2 * s)))
     if sub:
         a2 = a * ease((c.t - e.get("t0", 0) - 0.3) / 0.5)
-        c.d.text((W - m if right else x0, ry + 5 * s), sub, font=f2, fill=col("cream", a2 * 0.9), anchor="ra" if right else "la")
+        c.d.text((W - m if right else x0, ry + 5 * s), sub, font=f2, fill=col("cream", a2 * 0.9), anchor="ra" if right else "la", **stk(s, a2))
 
 
 # ---------------------------------------------------------------- one caption line, bottom centre
@@ -142,14 +151,14 @@ def el_caption(c, e):
         return
     s, W, H = c.s, c.W * SS, c.H * SS
     y = (e.get("y", 40) * s) if e.get("top") else H - e.get("y", 34) * s
-    f = font(F_LABEL, e.get("size", 20) * s)
+    f = font(F_SMALL if e.get("top") else F_CAPTION, e.get("size", 20) * s)   # New Rocker only at the bottom centre
     text = e.get("text", "")
     caps = e.get("caps", False)
     if caps:
         text = text.upper()
     tw = spaced(c.d, (0, 0), text, f, None, track=(1.2 * s if caps else 0))
     plate(c, (W / 2 - tw / 2 - 80 * s, y - 30 * s, W / 2 + tw / 2 + 80 * s, y + 14 * s), a, "m")
-    spaced(c.d, (W / 2, y), text, f, col(e.get("color", "cream"), a), "ms", track=(1.2 * s if caps else 0))
+    spaced(c.d, (W / 2, y), text, f, col(e.get("color", "cream"), a), "ms", track=(1.2 * s if caps else 0), **stk(s, a))
     rl = 22 * s * ease((c.t - e.get("t0", 0)) / 0.6)
     yy = y - 6 * s
     for sgn in (-1, 1):
@@ -157,15 +166,15 @@ def el_caption(c, e):
         c.d.line([(xa, yy), (xa + sgn * rl, yy)], fill=col("gold", a * 0.9), width=max(1, int(1.2 * s)))
 
 
-# ---------------------------------------------------------------- big title (UnifrakturCook) + sub line
+# ---------------------------------------------------------------- big title (New Rocker) + sub line
 def el_title(c, e):
     a = env(c.t, e, 0.8, 0.6)
     if a <= 0:
         return
     s, W, H = c.s, c.W * SS, c.H * SS
     text = e.get("text", "")
-    ft = font(F_TITLE, e.get("size", 50) * s)
-    y = e.get("y", 0.40) * H
+    ft = font(F_TITLE, e.get("size", 42) * s)
+    y = e.get("y", 0.84) * H                                         # bottom centre (New Rocker rule)
     dur = max(0.1, e.get("t1", c.t + 1) - e.get("t0", 0))
     tr = (1.0 + 2.0 * ease((c.t - e.get("t0", 0)) / dur)) * s          # slow tracking widen
     tw = spaced(c.d, (0, 0), text, ft, None, track=tr)
@@ -173,10 +182,10 @@ def el_title(c, e):
     spaced(c.d, (W / 2, y), text, ft, col("cream", a), "ms", track=tr)
     if e.get("sub"):
         a2 = a * ease((c.t - e.get("t0", 0) - 0.5) / 0.6)
-        fs = font(F_LABEL, e.get("sub_size", 18) * s)
+        fs = font(F_SMALL, e.get("sub_size", 17) * s)
         sw = spaced(c.d, (0, 0), e["sub"], fs, None, track=1.0 * s)
         yy = y + 24 * s
-        spaced(c.d, (W / 2, yy), e["sub"], fs, col("gold", a2), "mm", track=1.0 * s)
+        spaced(c.d, (W / 2, yy), e["sub"], fs, col("gold", a2), "mm", track=1.0 * s, **stk(s, a2))
         rl = 30 * s * a2
         for sgn in (-1, 1):
             xa = W / 2 + sgn * (sw / 2 + 10 * s)
@@ -228,7 +237,7 @@ def el_tag(c, e):
     px, py = P[0] * SS, P[1] * SS
     W, H = c.W * SS, c.H * SS
     name, sub = e.get("name", ""), e.get("sub", "")
-    fn, fsb = font(F_LABEL, e.get("size", 19) * s), font(F_LABEL, 13 * s)
+    fn, fsb = font(F_TAG, e.get("size", 16) * s), font(F_SMALL, 13.5 * s)
     tw = max(c.d.textlength(name, font=fn), c.d.textlength(sub, font=fsb) if sub else 0)
     L = e.get("len", 34) * s
     lean = e.get("lean", None)
@@ -297,14 +306,14 @@ def fmt_count(e, v, u):
     return e.get("prefix", "") + s + e.get("suffix", "")
 
 
-def tabular(d, xy, text, fnt, fill, anchor="r"):
+def tabular(d, xy, text, fnt, fill, anchor="r", **kw):
     """Digits in fixed-width cells so a running counter doesn't jitter. anchor l/r; baseline y."""
     dw = max(d.textlength(ch, font=fnt) for ch in "0123456789")
     ws = [dw if ch.isdigit() else d.textlength(ch, font=fnt) for ch in text]
     x = xy[0] - (sum(ws) if anchor == "r" else (sum(ws) / 2 if anchor == "m" else 0))
     if fill is not None:
         for ch, w in zip(text, ws):
-            d.text((x + w / 2, xy[1]), ch, font=fnt, fill=fill, anchor="ms"); x += w
+            d.text((x + w / 2, xy[1]), ch, font=fnt, fill=fill, anchor="ms", **kw); x += w
     return sum(ws)
 
 
@@ -312,11 +321,11 @@ def el_counter(c, e):
     a = env(c.t, e, 0.4, 0.5)
     if a <= 0:
         return
-    s, W, H = c.s, c.W * SS, c.H * SS
+    s, W, H = c.s * e.get("scale", 1.0), c.W * SS, c.H * SS     # scale: 0.7 = compact overlay
     v, u = counter_value(e, c.t)
     text = fmt_count(e, v, u)
     label = e.get("label_end") if (u >= 1 and e.get("label_end")) else e.get("label", "")
-    fl, fnum, fnote = font(F_LABEL, 15 * s), font(F_NUM, e.get("size", 40) * s, 780), font(F_LABEL, 13 * s)
+    fl, fnum, fnote = font(F_SMALL, 15 * s), font(F_SMALL, e.get("size", 38) * s), font(F_SMALL, 13.5 * s)
     pos = e.get("pos", "br")
     m = 22 * s
     bw = e.get("bar_w", 150) * s
@@ -335,13 +344,13 @@ def el_counter(c, e):
     ax = {"r": x0 + bw, "l": x0, "m": x0 + bw / 2}[anc]
     plate(c, (x0 - 60 * s, y0 - 14 * s, x0 + bw + 60 * s, y0 + h + 10 * s), a,
           {"r": "r", "l": "l", "m": "m"}[anc])
-    spaced(c.d, (ax, y0 + 12 * s), label.upper(), fl, col("cream", a * 0.9), anc + "s", track=1.2 * s)
+    spaced(c.d, (ax, y0 + 12 * s), label.upper(), fl, col("cream", a * 0.9), anc + "s", track=1.2 * s, **stk(s, a))
     c.d.line([(x0 if anc != "r" else x0 + bw - lw, y0 + 17 * s), (x0 + lw if anc == "l" else (x0 + bw if anc == "r" else x0 + bw / 2 + lw / 2), y0 + 17 * s)],
              fill=col("gold", a * 0.8), width=max(1, int(1.1 * s)))
     ncol = e.get("color", "cream")
     if u >= 1 and e.get("color_end"):
         ncol = e["color_end"]
-    tabular(c.d, (ax, y0 + 56 * s), text, fnum, col(ncol, a), anc)
+    tabular(c.d, (ax, y0 + 56 * s), text, fnum, col(ncol, a), anc, **stk(s * 1.4, a))
     yb = y0 + 66 * s
     if e.get("bar"):
         frac = max(0.0, min(1.0, v / max(float(e["from"]), float(e["to"]))))
@@ -350,7 +359,7 @@ def el_counter(c, e):
         yb += 12 * s
     if e.get("note"):
         na = a * (ease((c.t - e.get("note_t", e.get("t0", 0))) / 0.4))
-        c.d.text((ax, yb + 2 * s), e["note"], font=fnote, fill=col("gold", na), anchor=anc + "a")
+        c.d.text((ax, yb + 2 * s), e["note"], font=fnote, fill=col("gold", na), anchor=anc + "a", **stk(s, na))
 
 
 # ---------------------------------------------------------------- map (full frame or inset card)
@@ -364,6 +373,8 @@ def _map_spec(e):
 
 
 def el_map(c, e, frame):
+    """mode "inset" is the one in use. mode "full" (map replaces the 3D frame) is kept but UNUSED: per the user
+    (17:41) EP1 is one continuous camera take and graphics must never replace or cut the 3D shot."""
     a = env(c.t, e, 0.5, 0.5)
     if a <= 0:
         return frame
@@ -372,7 +383,7 @@ def el_map(c, e, frame):
     if e.get("mode", "full") == "full":
         m = maps.render(c.W, c.H, tl, spec)
         return Image.blend(frame.convert("RGBA"), m, a) if a < 1 else m
-    u, v, w, h = e.get("rect", [0.03, 0.50, 0.34, 0.44])
+    u, v, w, h = e.get("rect", [0.02, 0.60, 0.27, 0.36])
     W, H = c.W, c.H
     mw, mh = int(w * W), int(h * H)
     spec.setdefault("compass", False); spec.setdefault("scale_bar", False)

@@ -1,6 +1,6 @@
 """HUD overlay for the 3D timelapse frames (place, year, Eren's age, chapter title, caption, place labels).
 
-python3 hud.py in.png out.png --labels lab.json --font A --place "SHIGANSHINA DISTRICT" --year 845 --age 10 \
+python3 hud.py in.png out.png --labels lab.json --font D --place "SHIGANSHINA DISTRICT" --year 845 --age 10 \
     --title "A Long Dream" --caption "..." --show "WALL MARIA,SHIGANSHINA DISTRICT"
 """
 import argparse, json, os
@@ -9,10 +9,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 HERE = os.path.dirname(os.path.abspath(__file__))
 F = lambda n: os.path.join(HERE, "fonts", n)
 FONTS = {  # title font, title weight, body font, body weight
-    "D": (F("UnifrakturCook-Bold.ttf"), None, F("PirataOne-Regular.ttf"), None),   # user 10/24: UnifrakturCook (OFL) titles replace Ditty; Pirata One small text
-    "A": (F("GrenzeGotisch-VF.ttf"), 800, F("GrenzeGotisch-VF.ttf"), 450),
-    "B": (F("PirataOne-Regular.ttf"), None, F("GrenzeGotisch-VF.ttf"), 450),
-    "C": (F("UnifrakturCook-Bold.ttf"), None, F("GrenzeGotisch-VF.ttf"), 450),
+    "D": (F("NewRocker-Regular.ttf"), None, F("ShareTech-Regular.ttf"), None),   # user 17:49: New Rocker = bottom-centre title/caption, Share Tech = everything else (OFL)
 }
 
 def font(path, size, wght=None):
