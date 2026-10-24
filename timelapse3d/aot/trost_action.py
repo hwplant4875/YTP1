@@ -339,14 +339,14 @@ class Titans:
             if not d:
                 continue
             td = d[0]; H = self.H[j]
-            n = int(18 + 2.2 * H)
+            n = int(10 + 1.2 * H)
             te = td + 0.6 + rnd.random(n) * 9.0
             k = np.clip((te / DT).astype(int), 0, self.K - 1)
             yaw = self.TYAW[k, j]; dirn = d[1]
             along = rnd.random(n) * H * 0.9
             P = np.stack([self.TX[k, j] - np.sin(yaw) * along * dirn, self.TY[k, j] + np.cos(yaw) * along * dirn,
                           self.TZ[k, j] + 0.25 * H * rnd.random(n)], 1)
-            self.steam.add_many(te, P, rnd.normal(0, 0.4, (n, 3)), r0=0.12 * H, r1=(0.35 + 0.2 * rnd.random(n)) * H,
+            self.steam.add_many(te, P, rnd.normal(0, 0.4, (n, 3)), r0=0.06 * H, r1=(0.16 + 0.1 * rnd.random(n)) * H,
                                 life=3.5 + 2.5 * rnd.random(n), rise=1.4 + 0.1 * H)
         self.steam.build(coll)
 
@@ -836,7 +836,7 @@ def choreograph(site, seed=850):
     TT.add("v0", H=9.0, keys=[(0, *v0_from), (24.0, *v0_from), (28.2, *v0_to), (90, *v0_to)], show=(20.0, 1e9), face=tuple(M))
     TT.ev[-1]["death"] = (28.55, -1)                     # punched: falls backward
     ATD.vis.append((26.9, 61.0))
-    ATD.shifts.append((float(A0[0]), float(A0[1]), 26.5, 2.2))
+    ATD.shifts.append((float(A0[0]), float(A0[1]), 26.4, 1.5))
     ATD.key(26.9, A0, "crouch", odm.yaw_of(np.append(v0_to - A0, 0)))
     ATD.key(27.6, A0, "roar", odm.yaw_of(np.append(v0_to - A0, 0)))
     pv = v0_to - (v0_to - A0) / np.linalg.norm(v0_to - A0) * 7.5
@@ -856,7 +856,7 @@ def choreograph(site, seed=850):
         ATD.key(t_k + 0.6, app, "roar" if k in (1, 4) else "stand", odm.yaw_of(np.append(P_k - app, 0)))
         cur = app
     # three of the HQ crowd fall to him while the cadets get in
-    kills = [(ring[0], 45.0), (ring[3], 48.5), (ring[6], 52.0)]
+    kills = [(ring[0], 45.0), (ring[1], 48.5), (ring[2], 52.0)]
     for nm, t_k in kills:
         TT.ev[TT.j(nm)]["death"] = (t_k + 0.05, 1)
     ATD._pending_kills = kills
@@ -942,7 +942,16 @@ def finish_choreography(C, site):
     for nm, t_k in ATD._pending_kills:
         P_k = TT.pos(nm, t_k)[:2]
         out = (P_k - hq) / max(1e-3, np.linalg.norm(P_k - hq))      # strike from the street side, never through the HQ
-        app = S.snap(P_k + out * 8.5)
+        app = P_k + out * 8.5
+        # walk around the HQ on an arc outside it (never through the building)
+        Rr = 0.5 * max(w, d_) + 16.0
+        a0 = math.atan2(cur[1] - hq[1], cur[0] - hq[0]); a1 = math.atan2(app[1] - hq[1], app[0] - hq[0])
+        da = (a1 - a0 + math.pi) % math.tau - math.pi
+        nst = max(1, int(abs(da) / 0.35))
+        t_s = ATD.keys[-1][0]
+        for q in range(1, nst):
+            aq = a0 + da * q / nst
+            ATD.key(t_s + (t_k - 1.6 - t_s) * q / nst, hq + Rr * np.array([math.cos(aq), math.sin(aq)]), "walk")
         ATD.key(t_k - 1.6, app, "walk")
         ATD.key(t_k - 0.05, app, "punch", odm.yaw_of(np.append(P_k - app, 0)))
         ATD.key(t_k + 0.7, app, "stand", odm.yaw_of(np.append(P_k - app, 0)))
@@ -1002,7 +1011,7 @@ def finish_choreography(C, site):
     seal = gate + inw * 7.0
     yaw_b = odm.yaw_of(np.append(Bxy - shift_pt, 0))
     ATD.vis.append((75.2, 140.0))
-    ATD.shifts.append((float(shift_pt[0]), float(shift_pt[1]), 74.7, 2.2))
+    ATD.shifts.append((float(shift_pt[0]), float(shift_pt[1]), 74.7, 1.5))
     ATD.key(75.2, shift_pt, "roar", yaw_b)
     ATD.key(77.3, shift_pt, "roar", yaw_b)
     ATD.key(77.9, shift_pt, "punch", yaw_b + 0.6)          # berserk: swings at Mikasa
@@ -1169,18 +1178,18 @@ def setup(site_dict, seed=850, light=False, coll_name="TrostAction"):
     cs.add_many(62.0 + rnd.random(n) * 0.35, muzzle + rnd.normal(0, 0.8, (n, 3)), np.column_stack([cdir[0] * 6 + rnd.normal(0, 2, n), cdir[1] * 6 + rnd.normal(0, 2, n), rnd.random(n) * 1.5]),
                 r0=0.8, r1=4.5, life=6.0 + 3 * rnd.random(n), rise=0.6)
     Qz = site.g(Q)
-    n = 160
-    hs.add_many(62.05 + rnd.random(n) ** 2 * 3.0, np.column_stack([Q[0] + rnd.normal(0, 4, n), Q[1] + rnd.normal(0, 4, n), Qz + rnd.random(n) * 10]),
-                rnd.normal(0, 2.5, (n, 3)), r0=1.5, r1=6.0, life=3.0 + 3 * rnd.random(n), rise=2.0)
+    n = 70
+    hs.add_many(62.3 + rnd.random(n) ** 2 * 3.0, np.column_stack([Q[0] + rnd.normal(0, 4, n), Q[1] + rnd.normal(0, 4, n), Qz + rnd.random(n) * 10]),
+                rnd.normal(0, 2.5, (n, 3)), r0=0.8, r1=3.6, life=2.5 + 2 * rnd.random(n), rise=2.5)
     # steam off the Attack Titan's collapsed body + at both shifts
     nape = C["ATD"].nape
-    n = 120
+    n = 45
     te = 55.0 + rnd.random(n) * 7.0
     P = np.array([nape(t) for t in te]) + rnd.normal(0, 3.0, (n, 3))
-    hs.add_many(te, P, rnd.normal(0, 1.0, (n, 3)), r0=1.2, r1=5.0, life=3.5, rise=2.5)
+    hs.add_many(te, P, rnd.normal(0, 1.0, (n, 3)), r0=0.6, r1=2.8, life=3.0, rise=3.0)
     te = 101.0 + rnd.random(n) * 10.0
     P = np.array([nape(t) for t in te]) + rnd.normal(0, 3.0, (n, 3))
-    hs.add_many(te, P, rnd.normal(0, 1.0, (n, 3)), r0=1.2, r1=5.0, life=3.5, rise=2.5)
+    hs.add_many(te, P, rnd.normal(0, 1.0, (n, 3)), r0=0.6, r1=2.8, life=3.0, rise=3.0)
     for p in C["pyre_pts"]:
         z = site.g(p)
         n = 160
@@ -1191,7 +1200,7 @@ def setup(site_dict, seed=850, light=False, coll_name="TrostAction"):
         st = f.state(49.6)
         tip = st["pos"] + np.array([math.cos(a) * 1.3, math.sin(a) * 1.3, 1.0])
         rs.add_many(49.6 + rnd.random(6) * 0.2, tip + rnd.normal(0, 0.2, (6, 3)), np.column_stack([np.full(6, math.cos(a) * 2), np.full(6, math.sin(a) * 2), np.zeros(6)]),
-                    r0=0.2, r1=1.1, life=2.5, rise=0.3)
+                    r0=0.12, r1=0.6, life=2.0, rise=0.3)
     for pf in (cs, hs, ps, rs):
         pf.build(coll)
     STATE.clear()

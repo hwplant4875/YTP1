@@ -141,10 +141,10 @@ def shots():
                                                     (P3(Cp + side * 38 - inw * 34, 42), P3(Q, 3), 32))))
     mid = (Q + cxy) / 2
     perp = np.array([C["cdir"][1], -C["cdir"][0]])
-    L_.append(("cannon", 61.5, 63.2, 1.5, lerp_cam((P3(mid + perp * 55, 38), P3(mid, 5), 30), (P3(mid + perp * 50, 34), P3(Q, 6), 32))))
-    L_.append(("salute", 64.3, 66.8, 1.0, lerp_cam((P3(Q + perp * 30 - C["cdir"] * 12, 24), P3(Q + C["cdir"] * 6, 2), 34),
-                                                    (P3(Q + perp * 26 - C["cdir"] * 10, 21), P3(Q + C["cdir"] * 6, 2), 38))))
-    L_.append(("boulder", 75.5, 104.0, 3.2, lambda u: (Vector(P3(at(75.5 + 28.5 * u) + side * 140 + inw * 30, 150)),
+    L_.append(("cannon", 61.5, 63.2, 1.5, lerp_cam((P3(mid + perp * 40, 62), P3(mid, 5), 32), (P3(mid + perp * 36, 58), P3(Q, 6), 34))))
+    L_.append(("salute", 64.3, 66.8, 1.0, lerp_cam((P3(Q + perp * 14 - C["cdir"] * 22, 52), P3(Q + C["cdir"] * 5, 2), 34),
+                                                    (P3(Q + perp * 12 - C["cdir"] * 18, 46), P3(Q + C["cdir"] * 5, 2), 40))))
+    L_.append(("boulder", 75.5, 104.0, 3.2, lambda u: (Vector(P3(at(75.5 + 28.5 * u) + side * 75 + inw * 45, 135)),
                                                         Vector(P3(at(75.5 + 28.5 * u) - inw * 20, 10)), 28)))
     L_.append(("levi", 105.0, 109.0, 1.4, lerp_cam((P3(stop - inw * -40 + side * 55, 55), P3(stop + inw * 22, 6), 32),
                                                     (P3(stop - inw * -36 + side * 45, 48), P3(stop + inw * 24, 4), 34))))
