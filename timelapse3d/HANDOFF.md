@@ -77,3 +77,4 @@ CONFIRMED by user 03:33: skip chapters 3-5 and go straight from the tree to the 
 
 ## 04:27 UTC 10/24: user's MUST-HAVE scenes
 See section 6 of timelapse3d/EP1_plan_terrain_camera.md (K1-K14). Every beat is a sky view at a moderate height, with no close-ups. K1 (Carla eaten by the Smiling Titan, Eren reaching back on Hannes's shoulders) belongs right after the Colossal kick and the titans entering, before the Armored, so put it in the current one-take next.
+- Your request for explicit shots is done: section 6 (K1-K14) of timelapse3d/EP1_plan_terrain_camera.md lists the chapter, place, who and what, the sky-view staging and the readability cues. The Sasageyo question went to the user. Default: in EP1, use the S1E16 night recruitment speech with all the cadets saluting (K3, verified as S1E16). The S3P2 charge belongs in a later episode.
