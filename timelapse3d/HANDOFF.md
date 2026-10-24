@@ -180,3 +180,13 @@ Missing (build ourselves or kitbash from the soldier and kids): Erwin, Armin, Ha
 - Target beats at 30 fps: tree wake-up 0-4 s → rise and push through the inner gate 4-8 s → main street fly-through 8-11 s → Colossal head rises over the wall 11-15 s (the zoomed head shot stays readable, about 3 s) → orbit behind 15-19 s → wind-up and kick 19-22 s → steam vanish and titans pour in 22-26 s.
 - Scale the T_* constants in seq_colossal.py and the flight.py opening keys with one factor (≈0.4) instead of hand-editing each one. Keep the kick wind-up/swing at real speed: do not speed up the leg motion itself.
 - Then render the 480p test (same settings as above). A shorter cut also renders faster.
+
+## 09:06 USER EXACT TIMING (supersedes the 09:04 beat list). Opening at 30 fps:
+- 0-2 s (f0-60): Eren and Mikasa at the tree; at ~2 s the camera LEAVES the tree.
+- 2-5 s (f60-150): a fast "swoosh" fly straight to the PLAZA full of people (s1e1_plaza_crowd_colossal_head.png framing).
+- ~5 s (f150): the Colossal head starts to appear over the outer wall, seen from the plaza. Its HANDS GRIP THE TOP OF THE WALL, like the anime (fingers over the wall-top edge, both hands either side of the head).
+- 5-8 s (f150-240): the head keeps rising until 8 s (camera zooms toward it).
+- ~11 s (f330): the KICK. The right leg drawn back, then the swing, the outer gate shatters, stones fly and roll. The wind-up/orbit to the kick view fits in 8-11 s.
+- After the kick: steam vanish and titans pouring in, briskly.
+- The inner-gate pass and the long street fly-through are dropped; go straight from the tree to the plaza.
+- Rework the T_* constants in seq_colossal.py and the flight.py opening keys to these frames. Add Colossal hand bones/pose (or hand meshes) gripping the wall top during the rise. Then do the 480p test render.
