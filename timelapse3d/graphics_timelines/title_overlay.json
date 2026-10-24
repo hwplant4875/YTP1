@@ -1,0 +1,61 @@
+{
+ "segment": "shot01_title_over_opening_flight",
+ "fps": 15,
+ "frames": "E:/YTP2/3D Timelapse/renders/opening_v3/fast_%05d.png",
+ "first": 0,
+ "last": 119,
+ "cams": "E:/YTP2/3D Timelapse/renders/graphics/opening_v3_cam",
+ "out": "E:/YTP2/3D Timelapse/renders/graphics/title_overlay_frames",
+ "mp4": "E:/YTP2/3D Timelapse/renders/graphics/title_overlay.mp4",
+ "tracks": [
+  {
+   "type": "title",
+   "t0": 0.4,
+   "t1": 3.6,
+   "text": "Attack on Titan",
+   "sub": "the world inside the walls"
+  },
+  {
+   "type": "map",
+   "mode": "inset",
+   "t0": 1.4,
+   "t1": 4.2,
+   "rect": [
+    0.02,
+    0.6,
+    0.27,
+    0.36
+   ],
+   "spec": {
+    "preset": "title",
+    "view": [
+     [
+      0,
+      0,
+      -60,
+      1120
+     ]
+    ],
+    "wall_labels": null,
+    "island_label": null
+   },
+   "fade_out": 0.4,
+   "map_t0": 1.0
+  },
+  {
+   "type": "place",
+   "t0": 4.2,
+   "t1": 7.9,
+   "place": "Shiganshina",
+   "year": 845,
+   "sub": "Eren, age 10"
+  },
+  {
+   "type": "fade",
+   "in": [
+    0,
+    0.5
+   ]
+  }
+ ]
+}

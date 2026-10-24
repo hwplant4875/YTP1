@@ -1,0 +1,15 @@
+{
+  "segment": "counter_demo_over_opening_v3 (shot 10 style: 250,000 -> ~100, compact)",
+  "fps": 15,
+  "frames": "E:/YTP2/3D Timelapse/renders/opening_v3/fast_%05d.png", "first": 90, "last": 194,
+  "cams": "E:/YTP2/3D Timelapse/renders/graphics/opening_v3_cam",
+  "out": "E:/YTP2/3D Timelapse/renders/graphics/counter_overlay_frames",
+  "mp4": "E:/YTP2/3D Timelapse/renders/graphics/counter_overlay.mp4",
+  "tracks": [
+    {"type": "place", "t0": 0.2, "t1": 6.9, "place": "Wall Rose", "year": 846, "sub": "Operation to retake Wall Maria"},
+    {"type": "map", "mode": "inset", "t0": 0.4, "t1": 6.9, "rect": [0.02, 0.60, 0.27, 0.36], "spec": "march", "map_t0": 0.3},
+    {"type": "counter", "t0": 0.6, "t1": 6.9, "from": 250000, "to": 100, "run": [1.0, 4.9], "mode": "linear", "round": 10,
+     "label": "Still marching", "label_end": "Came back", "approx_end": true, "color_end": "red",
+     "bar": true, "note": "about 20% of humanity", "note_t": 1.4, "pos": "br", "scale": 0.75}
+  ]
+}

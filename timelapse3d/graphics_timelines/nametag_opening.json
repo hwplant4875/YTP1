@@ -1,0 +1,53 @@
+{
+ "segment": "nametag_demo_on_opening_v3",
+ "fps": 15,
+ "frames": "E:/YTP2/3D Timelapse/renders/opening_v3/fast_%05d.png",
+ "first": 90,
+ "last": 194,
+ "cams": "E:/YTP2/3D Timelapse/renders/graphics/opening_v3_cam",
+ "out": "E:/YTP2/3D Timelapse/renders/graphics/nametag_frames",
+ "mp4": "E:/YTP2/3D Timelapse/renders/graphics/nametag_demo.mp4",
+ "tracks": [
+  {
+   "type": "place",
+   "t0": 0.2,
+   "t1": 6.9,
+   "place": "Shiganshina",
+   "year": 845,
+   "sub": "Eren, age 10"
+  },
+  {
+   "type": "tag",
+   "t0": 0.6,
+   "t1": 6.9,
+   "name": "Colossal Titan",
+   "sub": "60 m",
+   "world": [
+    -7.5,
+    -740,
+    66
+   ],
+   "color": "red"
+  },
+  {
+   "type": "tag",
+   "t0": 1.0,
+   "t1": 3.2,
+   "name": "Outer gate",
+   "world": [
+    0,
+    -720,
+    46
+   ],
+   "lean": -14
+  },
+  {
+   "type": "caption",
+   "t0": 3.6,
+   "t1": 6.9,
+   "text": "Outer gate destroyed",
+   "caps": true,
+   "color": "cream"
+  }
+ ]
+}

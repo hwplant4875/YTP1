@@ -1,0 +1,15 @@
+{
+  "segment": "inset_and_glitch_demo_on_opening_v3",
+  "fps": 15,
+  "frames": "E:/YTP2/3D Timelapse/renders/opening_v3/fast_%05d.png", "first": 120, "last": 194,
+  "cams": "E:/YTP2/3D Timelapse/renders/graphics/opening_v3_cam",
+  "out": "E:/YTP2/3D Timelapse/renders/graphics/inset_glitch_frames",
+  "mp4": "E:/YTP2/3D Timelapse/renders/graphics/inset_glitch_demo.mp4",
+  "tracks": [
+    {"type": "place", "t0": 0.0, "t1": 5.0, "fade_in": 0, "place": "Wall Maria", "year": 845},
+    {"type": "map", "mode": "inset", "t0": 0.3, "t1": 4.1, "rect": [0.02, 0.60, 0.27, 0.36], "spec": "loss"},
+    {"type": "counter", "t0": 0.6, "t1": 4.1, "from": 0, "to": 33, "mode": "linear", "run": [0.9, 3.3], "suffix": " %",
+     "label": "Land lost to the titans", "note": "about one third of humanity's territory", "note_t": 3.3, "approx_end": true, "color_end": "red", "bar": true, "bar_color": "grey", "pos": "br", "scale": 0.75},
+    {"type": "glitch", "t": 4.3, "dur": 0.7}
+  ]
+}
