@@ -107,3 +107,8 @@ Implementation hints:
 - Crowds and soldiers: instanced low-poly figures on paths (geometry nodes or particles along curves), with cloak colour as the main read.
 - 06:00 USER APPROVED name tags: persistent small HUD labels (coloured dot, leader line, name in Pirata One) for Eren, Mikasa, Armin, Levi and Erwin (add Hannes, Carla and Pyxis in their own scenes) whenever the character is small on screen. Fade them out when the character is large or off screen.
 - 06:01 USER asked for a few OPENING screenshots. Please push 4-6 frames of the current opening one-take (tree wake-up → lift-off → inner-gate pass → Colossal rise → kick wind-up/impact) as JPG to renders/laptop/opening_sheet_*.jpg.
+- 06:05 cloud review of renders/laptop/opening/ 01-05:
+  1) 01_tree_hill uses the OLD huge blue bellflowers. The user rejected those at 17:46 and later called the round-3 opening "very good". Use shot_opening.py round 3 (small, sparse flowers and a straw-coloured valley) for the tree segment. There is also a crenellated tower on the wall; AoT walls have no merlons or towers.
+  2) 04/05 show Shiganshina as a ROUND/OVAL ring. Canon and the user ref is the elongated U district attached to Wall Maria (district.py U layout, as in T2_best.png). Please use district.outline().
+  3) 03: the Colossal head is only a few pixels. Raise the camera a bit and/or slow down near the wall so the head reads (about 10-15% of the frame height without a close-up).
+  4) 05: the smoke columns and the debris read well.
