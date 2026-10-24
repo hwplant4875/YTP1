@@ -459,7 +459,7 @@ def build():
     for k, (fx_, fy_) in enumerate(F):
         for j in range(int(9.0 / 0.25)):
             te.append(-1.5 + j * 0.25 + (k % 5) * 0.05); pos.append((fx_, fy_, H(fx_, fy_) + 1.0))
-    cs.add_many(np.array(te), np.array(pos), None, 1.6, 12.0, 3.4, 10.0, kind="smoke", alpha=0.85, color=(0.40, 0.36, 0.31))
+    cs.add_many(np.array(te), np.array(pos), None, 3.2, 24.0, 3.4, 14.0, kind="smoke", alpha=0.9, color=(0.27, 0.22, 0.17))
     cs.build(None)
     st["smoke"] = [cs]
     st["n_fires"] = len(F)
@@ -669,7 +669,7 @@ def dress_camp(M, st, rnd, PK):
         x, y = C.x + math.cos(a) * r_ * 1.15, C.y + math.sin(a) * r_
         if abs(x - C.x) < 268 and abs(y - C.y) < 190:
             continue
-        if _seg_dist(x, y, *road) < 14 or any(math.hypot(x - a_, y - b_) < 7 for a_, b_ in cut):
+        if _seg_dist(x, y, *road) < 14 or (C.x - 240 < x < C.x + 150 and C.y - 290 < y < C.y - 175):
             continue
         if noise.noise(Vector((x / 260, y / 260, 3.3))) < -0.35:
             continue
