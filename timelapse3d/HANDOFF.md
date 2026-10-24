@@ -162,3 +162,15 @@ Missing (build ourselves or kitbash from the soldier and kids): Erwin, Armin, Ha
 - Cameras frame characters from behind, high above or in profile; never a front view of a face.
 - This replaces the Aotwa-kid plan for humans. Titan assets stay as they are. The Aotwa human models may still serve as proportion/hair references.
 - Show the user a low-poly test (845 Eren + Mikasa from behind/above, then the trio + Levi + Erwin) before using them in scenes.
+
+## 08:12 USER OVERRIDE: NO low-poly. Back to the existing (smooth) characters, faceless. PRIORITY: 480p INTRO TEST RENDER
+- Low-poly is CANCELLED. Keep the smooth MPFB characters (characters.py), but with NO eyes/nose/mouth. Done on the cloud in 9a87ecb: `_faceless` now replaces the head with a smooth egg mesh (`<name>_head`); `hair_cap()` builds procedural anime hair.
+  - Eren: shaggy schoolboy mop (학생머리, 더벅머리); a short maroon BLAZER (hip length), not a long coat.
+  - Mikasa: straight black hair to the shoulders with bangs, per ref/eren_mikasa_845_outfits_ref.png.
+  - `make_eren()`/`make_mikasa()` default to this. Preview: /mnt/project-files/plans/3d_timelapse/design/kids/kids_v2_faceless.jpg. Apply the same faceless and hair approach to every human (trio, Levi, Erwin, Carla...). If an Aotwa human is used, delete or cover its face the same way.
+- **PRIORITY NOW (the user is waiting):** pull, then render the CURRENT OPENING one-take (tree wake-up → inner gate → main street → Colossal head → orbit → kick) as a FAST LOW-QUALITY TEST:
+  - 854x480, Eevee, low samples (8-16), no motion blur, 24 fps; skip the anime-look pass if it is not ready.
+  - Use the new kids from characters.py.
+  - Encode H.264 (CRF 26) and push renders/laptop/intro_test_480p.mp4 (keep it under 50 MB). Also copy it to E:\YTP2\3D Timelapse\renders\.
+  - Do not spend long on fixes before this render: the user wants to see it soon. List the known gaps in this file after pushing.
+- The user says token usage is high: keep the work lean, with no extra exploration.
