@@ -174,3 +174,9 @@ Missing (build ourselves or kitbash from the soldier and kids): Erwin, Armin, Ha
   - Encode H.264 (CRF 26) and push renders/laptop/intro_test_480p.mp4 (keep it under 50 MB). Also copy it to E:\YTP2\3D Timelapse\renders\.
   - Do not spend long on fixes before this render: the user wants to see it soon. List the known gaps in this file after pushing.
 - The user says token usage is high: keep the work lean, with no extra exploration.
+
+## 09:04 USER: the opening is TOO SLOW ("발차기까지 1분?? 타임랩스가??"). RETIME before the 480p test render
+- The kick currently lands at seq frame ~1728 (~58 s). Compress the whole one-take so the KICK LANDS AT ~20-25 s. It is a timelapse: brisk drone moves, no lingering.
+- Target beats at 30 fps: tree wake-up 0-4 s → rise and push through the inner gate 4-8 s → main street fly-through 8-11 s → Colossal head rises over the wall 11-15 s (the zoomed head shot stays readable, about 3 s) → orbit behind 15-19 s → wind-up and kick 19-22 s → steam vanish and titans pour in 22-26 s.
+- Scale the T_* constants in seq_colossal.py and the flight.py opening keys with one factor (≈0.4) instead of hand-editing each one. Keep the kick wind-up/swing at real speed: do not speed up the leg motion itself.
+- Then render the 480p test (same settings as above). A shorter cut also renders faster.
