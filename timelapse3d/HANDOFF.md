@@ -137,3 +137,16 @@ The same frame is also a WALL-DETAIL reference:
 - s1e1_yeager_house_collapse.png = K1 Yeager house from a high top-down angle: a collapsed roof of terracotta BARREL tiles, broken beams; Eren and Mikasa pulling at the beams; Carla's red skirt under the rubble; a cobblestone lane, a rock, a timber-framed wall behind.
 - s1e1_smiling_titan_carla.png = the Smiling Titan (long dark-blond hair to the shoulders, wide grin, slim) lifting Carla against a dramatic golden-sunset sky. In our sky view, keep this silhouette and backlit sunset mood.
 - 06:40: the user asked about ready-made Paradis/Shiganshina/Trost assets. None usable: Sketchfab only has bare white wall shells (worse than ours). "Aot_4_shinganshina_stage_low_poly" (9169b1c3...) looks like a game rip, so DO NOT use it (licence risk). Plan told to the user: keep our terrain and walls; replace the town houses with free HALF-TIMBERED medieval house kits (CC0/CC-BY, commercial OK). Candidates: Quaternius Medieval Village pack (CC0), KayKit Medieval Builder pack (CC0), Sketchfab animau3d "Medieval House 1-4" (CC-BY, uids 0bbda345..., cf179aa6..., bc9272b7..., b4257899...). Retexture them toward ref/user/s1e1_plaza_aerial.png (cream plaster, dark timber, brown tile roofs, dormers, chimneys) and scatter/instance them in district.py blocks. Add them to CREDITS.
+
+## 06:45 USER: "use character assets" — Sketchfab character shortlist (downloadable, commercial-OK licences)
+Sheet: /mnt/project-files/plans/3d_timelapse/assets/sketchfab_characters_candidates.jpg
+LICENCE WARNING: models named "Aotwa ..." / "AoT 4 ..." / "AoT2" (ianadrielbravo, damr.optimus2008, higuys920, fccc...) are almost certainly GAME RIPS (Koei Tecmo AoT games), so their CC-BY label is not valid. Avoid them, and re-check the Female (ianadrielbravo) and Smiling Titan rig choices too. Prefer fan-made originals:
+- Survey Corps Soldier — yasirkhan98900.yk 1a80c768bed34443b275bcf0a33ae69a (Sketchfab Free Standard licence, commercial OK) → instance it for MASS soldiers (cloak read), recolour per regiment (Garrison/MP/Cadets).
+- Eren (human, Survey uniform) — thespider768 329af28f90f54c24b71d93717c8e2c87; alt medothegeek 76c5cb021be84223ace3c7567dc0e1cc
+- Levi — tksaet 41ba2beb495c423fa576580696994d63 (game-ready), alt philowang1999 854528a24d3447c5bc62cfe2eeb727a8
+- Hange — ansaldotoys2 85744a3f9d7e4caeb1b3da503f883b33
+- Mikasa — wanbeez 564f84b6c7644f6bb9753312c1c9a19f (Free Standard); check it's not a rip
+- Annie (human) — alekcpyzov 06b0e94541044c7bab6e5353e99f02b1
+- Attack Titan (Eren) — SHAIVS d1724e3f9d68424caeb23a1fd47b6468; animated alt valentinpelon777 7b69fee69bfc4351bb79625ffe128e29
+- Props — Flare gun AlanShu bd6942625eed46eba418e6d42a7dc4f4 / carlosbarrera_10 0796ca1d1ce747ccaf30082207116bc8; Eren's key Kiit0 a5849aab036a4c88903681fe1a1caa85; ODM gear (elhafiedz from the earlier list)
+Missing (build ourselves or kitbash from the soldier and kids): Erwin, Armin, Hannes, Carla, Grisha, Pyxis, the child trio (845). Characters are tiny in the sky view, so recolouring and re-haircutting the soldier base works for most of them.
