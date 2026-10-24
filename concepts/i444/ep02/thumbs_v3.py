@@ -51,7 +51,7 @@ cols = [(no_curtain(place('5SJyE25gsRGa7edJSAKwd7ATkxd', (600, 270), 0.38, (pw /
         (eye_align(UBER, (455, 156), (545, 156), (pw // 2, 200), 120, (pw, H)), '1%', RED)]
 for k, (p, pct, col) in enumerate(cols):
     im.paste(pop(p), (k * pw + 2 + (1 if k == 2 else 0), 0))
-    fade_bottom(im, k * pw, (k + 1) * pw)
+    fade_bottom(im, k * pw, (k + 1) * pw, 300 if k == 2 else 260, 250 if k == 2 else 210)
     shadow_text(im, (k * pw + pw // 2, H - 105), pct, f(170), col, stroke=8)
 im.convert('RGB').save(OUT + 'jason_v3_a_three.jpg', quality=93)
 
