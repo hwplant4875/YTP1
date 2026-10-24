@@ -63,6 +63,32 @@ def _ik(arm, bone, target_loc, pole_loc, name):
     c = pb.constraints.new("IK"); c.target = t; c.pole_target = p; c.chain_count = 2; c.pole_angle = math.radians(-90)
     return t
 
+STATE = {}
+
+def set_pose(k=0.0, rise=1.0, fade=0.0):
+    """Per-frame pose (also used by render_intro.py): lean, right-leg kick (k -1 wind-up .. +1 impact), rise, fade."""
+    arm, root = STATE["arm"], STATE["root"]
+    lean = float(os.environ.get("COL_LEAN", "0"))
+    for bn, deg in (("mixamorig_Spine_02", lean), ("mixamorig_Spine1_03", lean), ("mixamorig_Spine2_04", lean * 0.6),
+                    ("mixamorig_Neck_05", lean * 0.4), ("mixamorig_Head_06", lean * 0.8)):
+        pb = arm.pose.bones[bn]; pb.rotation_mode = "XYZ"; pb.rotation_euler = (math.radians(deg), 0, 0)
+    side = os.environ.get("COL_KICK_LEG", "Right")
+    ul = arm.pose.bones["mixamorig_RightUpLeg_060" if side == "Right" else "mixamorig_LeftUpLeg_056"]
+    ll = arm.pose.bones["mixamorig_RightLeg_061" if side == "Right" else "mixamorig_LeftLeg_057"]
+    ul.rotation_mode = ll.rotation_mode = "XYZ"
+    fwd = float(os.environ.get("COL_KICK_HIP", "-75")); back = float(os.environ.get("COL_KICK_BACK", "55"))   # +x = thigh back (heel up behind), -x = forward
+    knee = float(os.environ.get("COL_KICK_KNEE", "80"))
+    if k < 0:          # wind-up: thigh back, knee folded
+        ul.rotation_euler = (math.radians(back * -k), 0, 0); ll.rotation_euler = (math.radians(knee * -k), 0, 0)
+    elif k > 0:        # strike: thigh swings through, knee snaps straight at impact
+        ul.rotation_euler = (math.radians(back + (fwd - back) * k), 0, 0); ll.rotation_euler = (math.radians(knee * (1 - k) ** 2), 0, 0)
+    else:
+        ul.rotation_euler = (0, 0, 0); ll.rotation_euler = (0, 0, 0)
+    arm.pose.bones["mixamorig_Spine_02"].rotation_euler.x += math.radians(-8 * max(0.0, -k) + 6 * max(0.0, k))
+    arm.pose.bones["mixamorig_Head_06"].scale = (float(os.environ.get("COL_HEAD", "1.8")),) * 3
+    root.location = STATE["base"].copy()
+    root.location.z -= (1 - rise) * float(os.environ.get("COL_RISE_DROP", "22")) + fade * 30
+
 def build(M, year, ctx):
     # shown when COL_SHOW=1, or by default for AOT_EVENT=colossal|kick (standalone use)
     show = os.environ.get("COL_SHOW")
@@ -83,37 +109,11 @@ def build(M, year, ctx):
     print("[colossal_asset] placed bbox", tuple(round(v, 1) for v in mn), tuple(round(v, 1) for v in mx))
     # hands: right hand grips the wall top just east of the gate, left one rests lower on the outer face
     wall_y = GY                       # outer wall line at the gate (the wall runs east-west here)
-    _ik(arm, "mixamorig_RightForeArm_034", (GX + 17, wall_y - 3.5, L.WALL_H + 1.2), (GX + 40, wall_y - 40, 20), "ColossalHandR")
-    _ik(arm, "mixamorig_LeftForeArm_010", (GX - 19, wall_y - 7.0, L.WALL_H - 9), (GX - 40, wall_y - 40, 20), "ColossalHandL")
-    # lean over the wall top so the chin sits about at the parapet, glaring down into the town (S1E1)
-    lean = float(os.environ.get("COL_LEAN", "0"))
-    for bn, deg in (("mixamorig_Spine_02", lean), ("mixamorig_Spine1_03", lean), ("mixamorig_Spine2_04", lean * 0.6),
-                    ("mixamorig_Neck_05", lean * 0.4), ("mixamorig_Head_06", lean * 0.8)):
-        pb = arm.pose.bones[bn]; pb.rotation_mode = "XYZ"; pb.rotation_euler = (math.radians(deg), 0, 0)
-    # kick, as in the anime: the RIGHT leg is drawn far back (COL_KICK -1 = full wind-up), then swung forward
-    # through the gate (COL_KICK +1 = impact, leg straight)
-    k = float(os.environ.get("COL_KICK", "0"))
-    if k != 0:
-        side = os.environ.get("COL_KICK_LEG", "Right")
-        ul = arm.pose.bones["mixamorig_RightUpLeg_060" if side == "Right" else "mixamorig_LeftUpLeg_056"]
-        ll = arm.pose.bones["mixamorig_RightLeg_061" if side == "Right" else "mixamorig_LeftLeg_057"]
-        ul.rotation_mode = ll.rotation_mode = "XYZ"
-        fwd = float(os.environ.get("COL_KICK_HIP", "75")); back = float(os.environ.get("COL_KICK_BACK", "-50"))
-        if k < 0:      # wind-up: thigh back, knee folded
-            ul.rotation_euler = (math.radians(back * -k), 0, 0)
-            ll.rotation_euler = (math.radians(float(os.environ.get("COL_KICK_KNEE", "80")) * -k), 0, 0)
-        else:          # strike: thigh swings through, knee snaps straight at impact
-            ul.rotation_euler = (math.radians(back + (fwd - back) * k), 0, 0)
-            ll.rotation_euler = (math.radians(float(os.environ.get("COL_KICK_KNEE", "80")) * (1 - k) ** 2), 0, 0)
-        sp = arm.pose.bones["mixamorig_Spine_02"]; sp.rotation_mode = "XYZ"
-        sp.rotation_euler.x += math.radians(-8 * max(0.0, -k) + 6 * max(0.0, k))   # counter-lean
-    rise = float(os.environ.get("COL_RISE", "1"))
-    root.location.z -= (1 - rise) * float(os.environ.get("COL_RISE_DROP", "22"))
-    fade = float(os.environ.get("COL_FADE", "0"))          # 0..1: vanishing into steam after the kick
-    if fade > 0:
-        root.location.z -= fade * 30
-    # the model's head is ~1/11 of its height; the anime Colossal's is ~1/7.5
-    arm.pose.bones["mixamorig_Head_06"].scale = (float(os.environ.get("COL_HEAD", "1.8")),) * 3
+    # both hands grip the wall top either side of the head (anime S1E1)
+    _ik(arm, "mixamorig_RightForeArm_034", (FEET.x + 17, wall_y - 3.5, L.WALL_H + 1.2), (FEET.x + 40, wall_y - 40, 20), "ColossalHandR")
+    _ik(arm, "mixamorig_LeftForeArm_010", (FEET.x - 17, wall_y - 3.5, L.WALL_H + 1.2), (FEET.x - 40, wall_y - 40, 20), "ColossalHandL")
+    STATE.update(root=root, arm=arm, base=root.location.copy())
+    set_pose(float(os.environ.get("COL_KICK", "0")), float(os.environ.get("COL_RISE", "1")), float(os.environ.get("COL_FADE", "0")))
     bpy.context.view_layer.update()
     hb = arm.pose.bones["mixamorig_Head_06"]
     print("[colossal_asset] head world", tuple(round(v, 1) for v in (arm.matrix_world @ hb.head)), "scale", tuple(hb.scale))

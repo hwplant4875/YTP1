@@ -18,7 +18,7 @@ F = int(os.environ.get("SEQ_F", "900"))
 # ---------------------------------------------------------------- timeline (30 fps)
 # user's exact timing (10/24 09:06), video second v = (frame - 840) / 30: tree 0-2 s, swoosh to the plaza 2-5 s,
 # head rises 5-8 s, kick 11 s, then steam and the inflow, briskly
-T_RISE = (990, 1080)       # Colossal head comes up over the outer wall, hands on the wall top
+T_RISE = (968, 1060)       # Colossal head comes up over the outer wall, hands on the wall top
 T_WIND = (1092, 1142)      # right leg drawn far back (anime S1E1), real speed
 T_KICK = (1142, 1170)      # swing forward through the gate; impact at the end (11 s)
 T_FADE = (1200, 1260)      # vanishes into steam
@@ -57,6 +57,7 @@ if _FIRST:
         if k in ("SUN_AZ", "COL_DX") or k not in os.environ:
             os.environ[k] = v
     os.environ["SEQ_ENV_DONE"] = "1"
+    os.environ.setdefault("COL_H", "64")       # canon: the 50 m wall reaches the Colossal's clavicle
 
 # ---------------------------------------------------------------- camera keys: (frame, loc, look_at, lens)
 def keys():
@@ -65,9 +66,9 @@ def keys():
     return [
         (900, l0, t0, n0),
         (935, (-300, 250, 90), (-60, 0, 40), 30),         # swoosh up off the hill, over the inner wall
-        (965, (-40, -230, 60), (0, -620, 40), 30),
-        (990, (0, -462, 6), (-6, -738, 58), 35),          # down among the plaza crowd: the head appears
-        (1080, (-2, -520, 12), (-6, -738, 64), 75),       # zoom toward the head as it rises
+        (965, (-30, -260, 55), (0, -650, 45), 30),
+        (990, (0, -455, 30), (-6, -738, 58), 50),         # down among the plaza crowd: the head appears
+        (1080, (-2, -465, 32), (-6, -738, 60), 85),       # zoom toward the head as it rises
         (1110, (200, -700, 200), (0, -730, 40), 30),      # swoop up over the outer wall
         (1135, (110, -1000, 120), (-4, -730, 24), 45),    # behind the Colossal for the kick
         (1170, (95, -960, 80), (-2, -725, 22), 55),       # legs + gate fill the frame: wind-up, strike
@@ -90,6 +91,8 @@ def cam_at(f=F):
     u = (f - a[0]) / (b[0] - a[0])
     u = u * u * (3 - 2 * u) if i in (0, len(ks) - 2) else u      # ease only the first and last move
     P = [Vector(ks[max(0, min(len(ks) - 1, j))][1]) for j in (i - 1, i, i + 1, i + 2)]
+    if (P[2] - P[1]).length < 30:                                 # near-hold (plaza zoom): no spline overshoot into the houses
+        P = [P[1], P[1], P[2], P[2]]
     T = [Vector(ks[max(0, min(len(ks) - 1, j))][2]) for j in (i - 1, i, i + 1, i + 2)]
     loc = _cr(*P, u); tgt = _cr(*T, u)
     lens = a[3] + (b[3] - a[3]) * u

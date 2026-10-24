@@ -20,7 +20,7 @@ Design modules (titans.py, pure_titans.py, colossal.py, shifters.py) are only ca
 Every titan build is wrapped: a failure is logged and the rest of the cast still builds.
 """
 import bpy, bmesh, math, os, random, sys, time, traceback
-from mathutils import Vector, Matrix
+from mathutils import Vector, Matrix, Quaternion
 
 import aotlib as L
 
@@ -40,8 +40,98 @@ WALL_TOP = float(L.WALL_H)                 # 50 m
 STATE = {}                                 # filled by build(): rigs, key positions (read by the camera callables)
 
 
+LOGF = os.environ.get("CAST_LOG", "E:/YTP2/3D Timelapse/renders/cast845/cast845.log")
+
+
 def log(*a):
     print("[cast845]", *a, flush=True)
+    if LOGF:                                   # render.sh only shows the log tail: keep the full build log too
+        try:
+            with open(LOGF, "a", encoding="utf8") as fh:
+                fh.write(" ".join(str(x) for x in a) + chr(10))
+        except Exception:
+            pass
+
+
+def srgb(h):
+    """'#RRGGBB' -> linear RGB tuple."""
+    h = h.lstrip("#")
+    c = [int(h[i:i + 2], 16) / 255.0 for i in (0, 2, 4)]
+    return tuple(v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4 for v in c)
+
+
+# ------------------------------------------------------------------------------------------ steam puffs
+# Many small overlapping volume puffs instead of a few big boxes: each puff is an ellipsoid whose density is a
+# spherical falloff plus Object-space noise pushed through a narrow ColorRamp, so its edge is lumpy
+# (cauliflower) instead of a smooth soft ball.  Colour fades with world height (pink-tan base -> white top).
+_PUFF = {}
+
+
+def puff_mat(key, c_lo, c_hi, z_lo, z_hi, dens, noise=8.0, emis=0.3, amp=2.0, thr=(0.45, 0.6)):
+    if key in _PUFF:
+        return _PUFF[key]
+    m = bpy.data.materials.new("Puff_" + key); m.use_nodes = True
+    nt = m.node_tree; N = nt.nodes; Lk = nt.links
+    N.remove(N["Principled BSDF"])
+    pv = N.new("ShaderNodeVolumePrincipled"); pv.inputs["Anisotropy"].default_value = 0.35
+    tc = N.new("ShaderNodeTexCoord"); oi = N.new("ShaderNodeObjectInfo")
+    # 3D noise (4D costs ~2x per volume step) shifted per object by its random value; few octaves keep the
+    # per-step shader cheap, the lumps come from amp + the narrow ramp
+    nz = N.new("ShaderNodeTexNoise"); nz.noise_dimensions = "3D"
+    nz.inputs["Scale"].default_value = noise; nz.inputs["Detail"].default_value = float(os.environ.get("PUFF_DETAIL", "2"))
+    try:
+        nz.inputs["Roughness"].default_value = 0.6
+    except Exception:
+        pass
+    sh = N.new("ShaderNodeVectorMath"); sh.operation = "SCALE"; sh.inputs[0].default_value = (9.7, 5.3, 3.1)
+    Lk.new(oi.outputs["Random"], sh.inputs["Scale"])
+    ad = N.new("ShaderNodeVectorMath"); ad.operation = "ADD"
+    Lk.new(tc.outputs["Object"], ad.inputs[0]); Lk.new(sh.outputs[0], ad.inputs[1])
+    Lk.new(ad.outputs[0], nz.inputs["Vector"])
+    ln = N.new("ShaderNodeVectorMath"); ln.operation = "LENGTH"; Lk.new(tc.outputs["Object"], ln.inputs[0])
+    fall = N.new("ShaderNodeMapRange")
+    fall.inputs["From Min"].default_value = 0.5; fall.inputs["From Max"].default_value = 0.0
+    Lk.new(ln.outputs["Value"], fall.inputs["Value"])
+    nn = N.new("ShaderNodeMath"); nn.operation = "MULTIPLY_ADD"
+    nn.inputs[1].default_value = amp; nn.inputs[2].default_value = -0.5 * amp
+    Lk.new(nz.outputs["Fac"], nn.inputs[0])
+    v = N.new("ShaderNodeMath"); v.operation = "ADD"
+    Lk.new(fall.outputs["Result"], v.inputs[0]); Lk.new(nn.outputs[0], v.inputs[1])
+    rp = N.new("ShaderNodeValToRGB"); e = rp.color_ramp.elements
+    e[0].position = thr[0]; e[0].color = (0, 0, 0, 1); e[1].position = thr[1]; e[1].color = (1, 1, 1, 1)
+    Lk.new(v.outputs[0], rp.inputs["Fac"])
+    d = N.new("ShaderNodeMath"); d.operation = "MULTIPLY"; d.inputs[1].default_value = dens
+    Lk.new(rp.outputs["Color"], d.inputs[0]); Lk.new(d.outputs[0], pv.inputs["Density"])
+    geo = N.new("ShaderNodeNewGeometry"); sep = N.new("ShaderNodeSeparateXYZ")
+    Lk.new(geo.outputs["Position"], sep.inputs[0])
+    zr = N.new("ShaderNodeMapRange"); zr.inputs["From Min"].default_value = z_lo; zr.inputs["From Max"].default_value = z_hi
+    Lk.new(sep.outputs["Z"], zr.inputs["Value"])
+    mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"
+    ia = next(i for i in mx.inputs if i.name == "A" and i.type == "RGBA")
+    ib = next(i for i in mx.inputs if i.name == "B" and i.type == "RGBA")
+    ia.default_value = (*c_lo, 1); ib.default_value = (*c_hi, 1)
+    Lk.new(zr.outputs["Result"], mx.inputs["Factor"])
+    out = next(o for o in mx.outputs if o.type == "RGBA")
+    Lk.new(out, pv.inputs["Color"]); Lk.new(out, pv.inputs["Emission Color"])
+    es = N.new("ShaderNodeMath"); es.operation = "MULTIPLY"; es.inputs[1].default_value = emis
+    Lk.new(d.outputs[0], es.inputs[0]); Lk.new(es.outputs[0], pv.inputs["Emission Strength"])
+    Lk.new(pv.outputs[0], N["Material Output"].inputs["Volume"])
+    me = bpy.data.meshes.new("PuffMesh_" + key)
+    bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=2, radius=0.5); bm.to_mesh(me); bm.free()
+    me.materials.append(m)
+    _PUFF[key] = me
+    return me
+
+
+def puff(name, c, r, mesh, coll, squash=(1.0, 1.0, 1.0)):
+    """One steam puff of radius r (m) at c using a puff_mat() mesh."""
+    ob = bpy.data.objects.new(name, mesh)
+    ob.location = c
+    ob.scale = (2 * r * squash[0], 2 * r * squash[1], 2 * r * squash[2])
+    ob.rotation_euler = (0, 0, (hash(name) % 628) / 100.0)
+    ob.visible_shadow = False
+    coll.objects.link(ob)
+    return ob
 
 
 # ------------------------------------------------------------------------------------------ helpers
@@ -159,19 +249,23 @@ def pure_crowd(specs, coll, tag, unique=None):
 # Meadow outside the outer gate is kept free of forest within ~560 m of (0, -1100) by scene.py's gn_forest,
 # so "forest edge" titans sit near that radius.  (kind, preset, H, x, y, facing, seed, lod, cycle, offset)
 OUTSIDE = [
-    ("generic", "bald_grinner",   13.0,    8, -1178, (0.35, -1.0),  1, 0.45, 56, 0),
-    ("generic", "blond_sleeper",  10.0,  140, -1050, (-0.6, 0.8),   2, 0.40, 50, 17),
+    # composed for titans_outside (camera TO_CAM = (-30, -975), 3 m, 35 mm, looking at the outer gate)
+    ("generic", "bald_grinner",   15.0,  -36,  -912, (0.55, 1.0),   1, 0.50, 60, 0),    # foreground, 3/4 back, toward the wall
+    ("generic", "blond_sleeper",   8.5,  -47,  -890, (0.9, 0.25),   2, 0.45, 50, 17),   # left third
+    ("generic", "ruddy_brute",    11.0,    4,  -888, (-0.75, 0.6),  6, 0.45, 52, 40),   # right third
+    ("generic", "messy_gaper",     7.0,   22,  -800, (-0.3, 1.0),   5, 0.40, 48, 23),   # near the gate approach
     ("generic", "pale_starer",     8.0,  120, -1165, (-1.0, -0.35), 3, 0.40, 46, 31),
-    ("generic", "potbelly",        5.0,   28, -1196, (0.9, -0.5),   4, 0.40, 40, 9),
-    ("generic", "messy_gaper",     7.0,  -62, -1095, (0.7, 0.7),    5, 0.40, 48, 23),
-    ("generic", "ruddy_brute",    12.0,  455, -1290, (-0.5, 0.85),  6, 0.40, 52, 40),
     ("generic", "runt",            3.5,   78, -1220, (-0.4, -1.0),  7, 0.45, 36, 5),
+    ("generic", "ruddy_brute",    12.0,  455, -1290, (-0.5, 0.85),  6, 0.40, 52, 40),
     ("generic", "bald_grinner",   15.0, -470, -1420, (0.45, 0.9),   8, 0.40, 60, 12),
     ("generic", "ruddy_brute",     9.0,  170, -1540, (0.95, 0.3),   9, 0.35, 50, 27),
     ("generic", "pale_starer",    11.0, -235,  -820, (1.0, 0.1),   10, 0.40, 54, 44),
     ("generic", "messy_gaper",     6.0,  525,  -935, (-0.85, 0.5), 11, 0.35, 44, 19),
     ("generic", "potbelly",        4.0, -125,  -950, (-0.2, 1.0),  12, 0.35, 38, 33),
+    ("generic", "blond_sleeper",  10.0,  140, -1050, (-0.6, 0.8),  13, 0.40, 50, 17),
 ]
+# conifer clumps (x, y, count, radius) framing the meadow shots at 150-300 m from TO_CAM
+GROVES = [(-118, -835, 9, 22), (-160, -905, 6, 16), (78, -800, 8, 20), (120, -870, 6, 16)]
 
 
 def build_outside(coll, specs=OUTSIDE):
@@ -208,7 +302,9 @@ def golden_light(ctx):
         pv = next((n for n in nt.nodes if n.type == "PRINCIPLED_VOLUME"), None)
         if pv:
             pv.inputs["Color"].default_value = (1.0, 0.80, 0.56, 1)
-            pv.inputs["Density"].default_value *= float(os.environ.get("COL_HAZE", "3.0"))
+            cam = getattr(getattr(L, "A", None), "cam", "")
+            hz_def = {"colossal_closeup": "8.0", "colossal_side": "6.0"}.get(cam, "4.0")    # warm aerial haze sells the scale
+            pv.inputs["Density"].default_value *= float(os.environ.get("COL_HAZE", hz_def))
 
 
 def tint_steam(st, col, emis=None):
@@ -263,7 +359,7 @@ def wall_top_at(x, y):
     return best
 
 
-COLOSSAL_X = float(os.environ.get("COL_X", "-26"))   # just west of the outer gatehouse (cap spans x -15.5 .. 15.5)
+COLOSSAL_X = float(os.environ.get("COL_X", "-58"))   # west of the outer gatehouse (cap spans x -15.5 .. 15.5), clear of it in town views
 COLOSSAL_FEET_Y = -760.0                             # provisional; snapped so the chest touches the wall
 COLOSSAL_LEAN = float(os.environ.get("COL_LEAN", "0.10"))
 
@@ -275,11 +371,7 @@ def build_colossal(coll, ctx):
     place(rig, COLOSSAL_X, COLOSSAL_FEET_Y, yaw_towards(0, 1), sink=0.6)
     body = max((c for c in rig.children if c.type == "MESH"), key=lambda o: len(o.data.vertices))
     bpy.context.view_layer.update()
-    steam = []
-    try:
-        steam = list(C.colossal_steam(rig, density=0.5))
-    except Exception as ex:
-        log("colossal_steam failed", repr(ex))
+    # colossal.colossal_steam's bone-parented balls read as stuck-on cotton: replaced by colossal_fx()
     # 1) lean over (provisional grip), 2) slide it north until the chest touches the outer wall face,
     # 3) solve the real grip with the hand on the wall top beside it
     P = rig.pose.bones
@@ -325,38 +417,162 @@ def build_colossal(coll, ctx):
     top = max(p.z for p in pts)
     log(f"Colossal built {time.time() - t:.1f}s  head bone {tuple(round(v, 1) for v in hb)} .. {tuple(round(v, 1) for v in ht)}"
         f"  top z {top:.1f}  hand {tuple(round(v, 1) for v in hand) if hand else None}  goal ({hx:.1f}, {gy:.1f}, {zt:.1f})")
-    # extra steam: one continuous column rising behind it with a wide cap (mushroom plume), puffs rolling
-    # over the wall top, a low cloud at its feet.  Emission keeps the steam bright white like the anime.
+    measure_colossal(rig, body)
+    coll_link(tree_of(rig), coll)
+    STATE["colossal"] = rig
     try:
-        fy = rig.location.y
-        specs = [("ColossalColumn", (COLOSSAL_X + 2, fy - 30, 125), (80, 64, 210), 0.16, 4.5),
-                 ("ColossalCap", (COLOSSAL_X + 6, fy - 38, 225), (190, 160, 95), 0.10, 4.0),
-                 ("ColossalFootSteam", (COLOSSAL_X, fy - 14, 6), (120, 60, 16), 0.06, 6.0)]
-        for i, dx in enumerate((-46, -14, 18)):
-            specs.append((f"ColossalWallSteam{i}", (COLOSSAL_X + dx, L.district_ymin(COLOSSAL_X + dx) - 7, WALL_TOP + 3),
-                          (38, 24, 18), 0.14, 5.0))
-        for nm, c, sz, dn, ns in specs:
-            s = T.steam(nm, c, sz, density=dn, noise_scale=ns)
-            steam.append(s)
+        colossal_fx(rig, coll)
     except Exception as ex:
-        log("extra steam failed", repr(ex))
-    for s in steam:                       # brighten the bone-parented steam from colossal.py as well
-        try:
-            for n in s.data.materials[0].node_tree.nodes:      # finer billows than the cotton-ball default
-                if n.type == "TEX_NOISE" and n.inputs["Scale"].default_value < 3.0:
-                    n.inputs["Scale"].default_value = 4.5
-            tint_steam(s, (0.97, 0.93, 0.88), emis=((1.0, 0.93, 0.85), float(os.environ.get("STEAM_EMIS", "0.7"))))
-        except Exception:
-            pass
-    coll_link(tree_of(rig) + [s for s in steam if s.parent is None], coll)
+        traceback.print_exc(); log("colossal fx failed", repr(ex))
     if os.environ.get("COL_GOLD", "1") == "1":
         golden_light(ctx)
-    STATE["colossal"] = rig
     return rig
+
+
+def measure_colossal(rig, body):
+    """Scale check against design bible 3.4: head top ~61 m (~10 m over the 50 m wall), ~19 m across the
+    shoulders incl. arms.  Logged, and the head clearance is asserted."""
+    pts = eval_verts(body)
+    top = max(p.z for p in pts)
+    band = [p for p in pts if WALL_TOP - 14 < p.z < WALL_TOP - 2]
+    sw = (max(p.x for p in band) - min(p.x for p in band)) if band else 0.0
+    head = [p for p in pts if p.z > top - 6.2]
+    hw = (max(p.x for p in head) - min(p.x for p in head)) if head else 0.0
+    STATE["colossal_top"] = top
+    log(f"SCALE CHECK: top z {top:.1f} (wall {WALL_TOP:.0f}, clearance {top - WALL_TOP:.1f} m), "
+        f"width at chest/arms band {sw:.1f} m, head width {hw:.1f} m, rig scale {tuple(round(v, 3) for v in rig.scale)}")
+    assert top - WALL_TOP >= 8.0, f"Colossal head top z {top:.1f} is only {top - WALL_TOP:.1f} m over the wall (bible: ~10-11 m)"
+
+
+def colossal_fx(rig, coll):
+    """845 look (design bible 3.4 / 3.8): pink-tan mushroom column behind the wall, heavy white steam off the
+    face and shoulders, low puffs along the wall foot, orange embers round the head, optional lightning bolt."""
+    rnd = random.Random(int(os.environ.get("STEAM_SEED", "845")))
+    P = rig.pose.bones
+    mw = rig.matrix_world
+    hb = mw @ P["head"].head
+    fy = rig.location.y
+    em = float(os.environ.get("STEAM_EMIS", "1.6"))
+    tan, white = srgb("#C9A08A"), srgb("#E8E4DE")
+    obs = []
+    # --- mushroom column: random walk up to z ~400, radius 8 -> 25 m, then a cap spreading to ~250 m
+    base = Vector((rig.location.x + 6, fy - 34, 30.0))
+    m_col = puff_mat("column", tan, white, 40.0, 380.0, float(os.environ.get("PLUME_D", "0.28")), noise=7.0, emis=em)
+    m_cap = puff_mat("cap", tan, white, 40.0, 380.0, float(os.environ.get("PLUME_D", "0.28")) * 0.75, noise=6.0, emis=em)
+    p = base.copy()
+    n = int(os.environ.get("PLUME_N", "22"))
+    lean = Vector((0.05, -0.12, 0))
+    for i in range(n):
+        t = i / (n - 1)
+        r = (14 + 22 * t ** 0.8) * rnd.uniform(0.85, 1.15)
+        p = Vector((p.x + rnd.uniform(-0.45, 0.45) * r, p.y + rnd.uniform(-0.45, 0.45) * r, base.z + 345 * t)) + lean * (345 / n)
+        obs.append(puff(f"PlumeCol{i:02d}", p, r, m_col, coll, (rnd.uniform(0.9, 1.25), rnd.uniform(0.9, 1.25), rnd.uniform(0.8, 1.1))))
+        if i % 4 == 1:                        # side lobes so the column is not a string of beads
+            a = rnd.uniform(0, 6.28); d = r * rnd.uniform(0.6, 0.9)
+            obs.append(puff(f"PlumeLobe{i:02d}", p + Vector((math.cos(a) * d, math.sin(a) * d, rnd.uniform(-0.3, 0.3) * r)),
+                            r * rnd.uniform(0.55, 0.8), m_col, coll))
+    top = p.copy()
+    STATE["plume_top"] = top
+    for i in range(int(os.environ.get("CAP_N", "13"))):
+        a = rnd.uniform(0, 6.28); d = 125 * math.sqrt(rnd.uniform(0.02, 1.0))
+        r = rnd.uniform(28, 40)
+        c = top + Vector((math.cos(a) * d, math.sin(a) * d * 0.85, rnd.uniform(-12, 22) - d * 0.12))
+        obs.append(puff(f"PlumeCap{i:02d}", c, r, m_cap, coll, (1.25, 1.15, rnd.uniform(0.6, 0.8))))
+    # --- low puffs along the outer wall foot (replaces the flat ground oval)
+    m_gnd = puff_mat("ground", tan, white, 0.0, 60.0, 0.10, noise=8.0, emis=em * 0.8)
+    for i in range(10):
+        x = rig.location.x + (i - 4.5) * 13 + rnd.uniform(-4, 4)
+        y = L.district_ymin(x) - rnd.uniform(9, 20)
+        obs.append(puff(f"WallFootSteam{i}", (x, y, L.height(x, y) + rnd.uniform(6, 12)), 15 * rnd.uniform(0.8, 1.15), m_gnd, coll,
+                        (1.3, 1.0, 0.75)))
+    # --- heavy white steam pouring off the shoulders over the wall top
+    m_wall = puff_mat("walltop", white, white, 0.0, 1.0, 0.30, noise=9.0, emis=em)
+    for i, dx in enumerate((-30, -19, -9, 9, 19, 28)):
+        x = hb.x + dx + rnd.uniform(-3, 3)
+        obs.append(puff(f"WallTopSteam{i}", (x, L.district_ymin(x) - rnd.uniform(6, 12), WALL_TOP + rnd.uniform(1, 7)),
+                        rnd.uniform(6, 10), m_wall, coll, (1.3, 1.0, 0.9)))
+    # --- face / shoulder steam: 6 small dense puffs rising off the cheeks and shoulders
+    m_face = puff_mat("face", white, white, 0.0, 1.0, 0.8, noise=9.0, emis=float(os.environ.get("FACE_EMIS", "1.0")))
+    side = (mw.to_3x3() @ Vector((1, 0, 0))).normalized()
+    spots = [hb + side * 2.6 + Vector((0, -1.0, 2.5)), hb - side * 2.6 + Vector((0, -1.0, 2.0))]
+    for bn in ("shoulder01.L", "shoulder01.R", "upperarm01.L", "upperarm01.R"):
+        if bn in P:
+            spots.append(mw @ P[bn].head + Vector((0, -2.0, 4.0)))
+    while len(spots) < 6:
+        spots.append(hb + side * rnd.uniform(-8, 8) + Vector((0, -3, rnd.uniform(-4, 0))))
+    for i, c in enumerate(spots[:6]):
+        obs.append(puff(f"FaceSteam{i}", c + Vector((rnd.uniform(-1, 1), 0, rnd.uniform(0, 2))), rnd.uniform(3, 5), m_face, coll,
+                        (1.0, 1.0, 1.35)))
+    # --- embers: 300 small emissive icospheres in a 40 m sphere round the head
+    if os.environ.get("COL_EMBERS", "1") == "1":
+        ma = bpy.data.materials.new("Embers845"); ma.use_nodes = True
+        b = ma.node_tree.nodes["Principled BSDF"]
+        b.inputs["Base Color"].default_value = (*srgb("#FF9A40"), 1)
+        b.inputs["Emission Color"].default_value = (*srgb("#FF9A40"), 1)
+        b.inputs["Emission Strength"].default_value = float(os.environ.get("EMBER_E", "20"))
+        bm = bmesh.new()
+        for _ in range(300):
+            while True:
+                v = Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-1, 1)))
+                if v.length <= 1:
+                    break
+            c = hb + v * 40.0
+            c.z = max(c.z, WALL_TOP + 1)
+            g = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=0.15 * float(os.environ.get("EMBER_K", "1")))
+            for vv in g["verts"]:
+                vv.co += c
+        eo = L.obj_from_bm("ColossalEmbers", bm, [ma], coll)
+        eo.visible_shadow = False
+        obs.append(eo)
+    # --- lightning bolt down the plume's west edge (transformation frame only)
+    if os.environ.get("COL_BOLT", "0") == "1":
+        obs += lightning(coll, Vector((top.x - 70, top.y, top.z - 10)), Vector((base.x - 25, base.y + 4, 0.0)), rnd)
+    STATE["colossal_fx"] = obs
+    log(f"colossal fx: {len(obs)} objects, plume top {tuple(round(v) for v in top)}")
+
+
+def lightning(coll, a, b, rnd):
+    """Jagged emissive bolt (curve, bevel 0.8 m, #FFE680 x40) from a to b with two short forks."""
+    ma = bpy.data.materials.new("Bolt845"); ma.use_nodes = True
+    bs = ma.node_tree.nodes["Principled BSDF"]
+    bs.inputs["Base Color"].default_value = (1, 1, 1, 1)
+    bs.inputs["Emission Color"].default_value = (*srgb("#FFE680"), 1)
+    bs.inputs["Emission Strength"].default_value = 40.0
+
+    def path(p0, p1, n, jit):
+        pts = []
+        for i in range(n + 1):
+            q = p0.lerp(p1, i / n)
+            if 0 < i < n:
+                q = q + Vector((rnd.uniform(-1, 1) * jit, rnd.uniform(-0.4, 0.4) * jit, rnd.uniform(-0.3, 0.3) * jit))
+            pts.append(q)
+        return pts
+
+    main = path(a, b, 26, 11.0)
+    strokes = [(main, 0.8)]
+    for k in (7, 15):
+        f0 = main[k]
+        strokes.append((path(f0, f0 + Vector((rnd.choice((-1, 1)) * 40, 0, -70)), 7, 6.0), 0.45))
+    cu = bpy.data.curves.new("Bolt845", "CURVE"); cu.dimensions = "3D"
+    for pts, bev in strokes:
+        sp = cu.splines.new("POLY"); sp.points.add(len(pts) - 1)
+        for i, q in enumerate(pts):
+            sp.points[i].co = (q.x, q.y, q.z, 1)
+            sp.points[i].radius = bev / 0.8
+    cu.bevel_depth = 0.8; cu.bevel_resolution = 1
+    ob = bpy.data.objects.new("Bolt845", cu); ob.data.materials.append(ma); ob.visible_shadow = False
+    coll.objects.link(ob)
+    return [ob]
 
 
 # ------------------------------------------------------------------------------------------ after the kick
 def break_outer_gate(M, coll, year):
+    """Gate damage for the armored state.  states845 owns the breach (rubble, crushed houses, smoke) when it is
+    loaded or when AOT_STATE asks for a broken state: then cast845 adds titans only (no second debris style)."""
+    if bpy.data.collections.get("States845") or os.environ.get("AOT_STATE", "intact").strip().lower() != "intact" \
+            or "states845" in [p.strip() for p in os.environ.get("AOT_PLUGINS", "").split(",")]:
+        log("break_outer_gate: states845 owns the breach -> titans only")
+        return
     door = bpy.data.objects.get("OuterGate_Door")
     if door:
         door.hide_render = True; door.hide_viewport = True
@@ -378,8 +594,7 @@ def break_outer_gate(M, coll, year):
         s = rnd.uniform(3, 8)
         L.box(bm, (x, y, s * 0.35), (s * 1.3, s, s * 0.8), rnd.uniform(0, 3.14))
         thrown.append((x, y, s))
-    ob = L.obj_from_bm("GateRubble", bm, [M["stone"]], coll)
-    # flatten the houses around the breach and those hit by blocks
+    L.obj_from_bm("GateRubble", bm, [M["stone"]], coll)
     town = bpy.data.objects.get("Town")
     killed = 0
     if town and "dead" in town.data.attributes:
@@ -391,14 +606,10 @@ def break_outer_gate(M, coll, year):
             if hit:
                 dead[i].value = min(dead[i].value, float(year)); killed += 1
         town.data.update()
-    # dust over the breach
-    try:
-        import titans as T
-        d = T.steam("BreachDust", (0, OG.y + 40, 12), (70, 60, 26), density=0.22, noise_scale=2.2)
-        tint_steam(d, (0.62, 0.52, 0.40))
-        coll_link([d], coll)
-    except Exception as ex:
-        log("dust failed", repr(ex))
+    m = puff_mat("breach", srgb("#9C8A74"), srgb("#C8B497"), 0.0, 40.0, 0.25, noise=7.0, emis=0.1)
+    for i in range(9):
+        puff(f"BreachDust{i}", (rnd.gauss(0, 18), OG.y + 30 + rnd.uniform(-10, 40), rnd.uniform(6, 18)), rnd.uniform(9, 15), m, coll,
+             (1.3, 1.1, 0.8))
     log(f"outer gate broken: {killed} houses flattened, {len(thrown)} thrown blocks")
 
 
@@ -451,21 +662,80 @@ def charge_pose(rig):
         log("armored run action failed", repr(ex))
 
 
+def footfall_dust(rig, coll):
+    """A trail of 8 small dust puffs behind each foot (kicked up by the last strides), growing and thinning
+    with age, instead of one cloud in front of the Armored."""
+    bpy.context.scene.frame_set(1); bpy.context.view_layer.update()
+    P = rig.pose.bones; mw = rig.matrix_world
+    back = (mw.to_3x3() @ Vector((0, 1, 0)))          # MPFB front is local -Y: +Y is behind
+    back.z = 0; back.normalize()
+    m = puff_mat("footdust", srgb("#A89070"), srgb("#D2C2A6"), 0.0, 12.0, 0.55, noise=8.0, emis=0.15)
+    rnd = random.Random(15)
+    obs = []
+    for side, bn in (("L", "foot.L"), ("R", "foot.R")):
+        f = (mw @ P[bn].head) if bn in P else rig.location + Vector((2.0 if side == "L" else -2.0, 0, 0))
+        f.z = L.height(f.x, f.y)
+        for k in range(8):
+            c = f + back * (2.5 + k * 3.6) + Vector((rnd.uniform(-1, 1) * (0.5 + 0.25 * k), 0, 0.8 + 0.45 * k))
+            obs.append(puff(f"FootDust{side}{k}", c, 1.3 + 0.55 * k, m, coll, (1.2, 1.2, 0.85)))
+    return obs
+
+
+def fleeing_people(coll, p0, n=16):
+    """10-20 tiny townsfolk (1.7 m metaball figures, one-colour outfits) running north ahead of the Armored."""
+    rnd = random.Random(31)
+    cols = ["#6B4E3A", "#8C7A5B", "#3F4A5C", "#A39074", "#5E3B32", "#7A8270", "#D8CDB4"]
+    proto = []
+    for v in range(3):
+        sk = v == 1
+        lift = 0.25 if v != 2 else 0.18
+        parts = [("E", (0, 0.10, 1.57), (0.10, 0.11, 0.12)),
+                 ("E", (0, 0.05, 1.20), (0.18, 0.12, 0.26), (0.3, 0, 0)),
+                 ("E", (0, 0.0, 0.93), (0.16, 0.11, 0.11)),
+                 ("C", (0.09, 0, 0.9), (0.10, lift, 0.50), 0.07), ("C", (0.10, lift, 0.50), (0.10, lift - 0.05, 0.07), 0.06),
+                 ("C", (-0.09, 0, 0.9), (-0.10, -0.18, 0.52), 0.07), ("C", (-0.10, -0.18, 0.52), (-0.10, -0.42, 0.28), 0.06),
+                 ("C", (0.21, 0.06, 1.38), (0.24, -0.14, 1.14), 0.05), ("C", (0.24, -0.14, 1.14), (0.22, -0.12, 0.95), 0.045),
+                 ("C", (-0.21, 0.06, 1.38), (-0.24, 0.24, 1.20), 0.05), ("C", (-0.24, 0.24, 1.20), (-0.20, 0.38, 1.32), 0.045)]
+        if sk:
+            parts.append(("E", (0, 0.02, 0.72), (0.24, 0.22, 0.30)))
+        m = L.mat(f"Folk845_{v}", srgb(cols[v * 2]), 0.85)
+        ob = L.mb_figure(f"Folk845_proto{v}", parts, m, res=0.04)
+        proto.append(ob)
+    obs = []
+    for i in range(n):
+        src = proto[i % 3]
+        ob = src.copy() if i >= 3 else src
+        if i >= 3:
+            ob.data = src.data.copy()
+            ob.data.materials.clear(); ob.data.materials.append(L.mat(f"Folk845_c{i}", srgb(rnd.choice(cols)), 0.85))
+            bpy.context.scene.collection.objects.link(ob)
+        x = avenue_x(p0.y) + rnd.uniform(-5.5, 5.5)
+        y = p0.y + rnd.uniform(14, 75)
+        ob.location = (x, y, L.height(x, y) + 0.1)
+        ob.rotation_euler = (0, 0, rnd.uniform(-0.35, 0.35))
+        s = rnd.uniform(0.92, 1.08); ob.scale = (s, s, s)
+        obs.append(ob)
+    coll_link(obs, coll)
+    return obs
+
+
 def build_armored(coll):
-    import shifters as SH, titans as T
+    import shifters as SH
     t = time.time()
     rig = SH.make_armored("ArmoredTitan")
     place(rig, ARMORED_XY[0] + avenue_x(ARMORED_XY[1]), ARMORED_XY[1], yaw_towards(0, 1))
     charge_pose(rig)
     rig.rotation_euler.x = float(os.environ.get("ARM_TILT", "0.2"))     # whole-body forward lean of the charge
-    obs = tree_of(rig)
-    try:
-        d = T.steam("ArmoredDust", (rig.location.x, rig.location.y - 14, 3.5), (30, 44, 12), density=0.7, noise_scale=4.0)
-        tint_steam(d, (0.80, 0.72, 0.60), emis=((0.85, 0.76, 0.62), 0.5)); obs.append(d)
-    except Exception as ex:
-        log("armored dust failed", repr(ex))
-    coll_link(obs, coll)
+    coll_link(tree_of(rig), coll)
     STATE["armored"] = rig
+    try:
+        footfall_dust(rig, coll)
+    except Exception as ex:
+        traceback.print_exc(); log("armored dust failed", repr(ex))
+    try:
+        fleeing_people(coll, Vector(rig.location), int(os.environ.get("FOLK_N", "16")))
+    except Exception as ex:
+        traceback.print_exc(); log("fleeing people failed", repr(ex))
     log(f"Armored built {time.time() - t:.1f}s at {tuple(round(v, 1) for v in rig.location)}")
     return rig
 
@@ -489,6 +759,61 @@ def _copies_of(pool, specs, coll):
     return out
 
 
+# ------------------------------------------------------------------------------------------ skin + groves
+SKIN_TARGETS = ["#E2BFA6", "#C99A78", "#C27C6C", "#D2AA8C"]     # bible 3.2 pale peach / peach-tan / ruddy pink
+
+
+def calm_skins(rigs):
+    """Pull pure-titan skins from pure_titans' saturated orange toward the bible's peach range: a per-channel
+    multiply (target / preset skin) plus a mild desaturation inserted before Base Color, roughness 0.85."""
+    import pure_titans as PT
+    done = set()
+    for k, rig in enumerate(rigs):
+        pre = PT.PRESETS.get(rig.get("pure_preset") or "", {})
+        sk = pre.get("skin", (0.70, 0.32, 0.18))
+        tgt = srgb(SKIN_TARGETS[k % len(SKIN_TARGETS)])
+        for ch in rig.children:
+            for ma in (ch.data.materials if ch.type == "MESH" else []):
+                if not ma or "_skin" not in ma.name or ma.name in done or not ma.use_nodes:
+                    continue
+                done.add(ma.name)
+                nt = ma.node_tree
+                b = next((n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"), None)
+                if not b or not b.inputs["Base Color"].is_linked:
+                    continue
+                src = b.inputs["Base Color"].links[0].from_socket
+                mul = nt.nodes.new("ShaderNodeVectorMath"); mul.operation = "MULTIPLY"
+                mul.inputs[1].default_value = tuple(min(2.0, t / max(1e-3, s)) for t, s in zip(tgt, sk))
+                hs = nt.nodes.new("ShaderNodeHueSaturation"); hs.inputs["Saturation"].default_value = float(os.environ.get("SKIN_SAT", "0.85"))
+                nt.links.new(src, mul.inputs[0]); nt.links.new(mul.outputs[0], hs.inputs["Color"])
+                nt.links.new(hs.outputs["Color"], b.inputs["Base Color"])
+                b.inputs["Roughness"].default_value = 0.85
+                try:
+                    b.inputs["Specular IOR Level"].default_value = 0.25
+                except Exception:
+                    pass
+
+
+def conifer_groves(coll, spots, seed=5):
+    """Clumps of the scene's own conifer prototypes (TreeVariants T07..T12) to frame the meadow shots."""
+    rnd = random.Random(seed)
+    protos = [o.data for o in bpy.data.objects if o.name[:1] == "T" and o.name[1:].isdigit() and int(o.name[1:]) >= 7
+              and o.type == "MESH"]
+    if not protos:
+        log("no conifer prototypes found"); return []
+    obs = []
+    for gi, (cx, cy, n, rad) in enumerate(spots):
+        for i in range(n):
+            a = rnd.uniform(0, 6.28); d = rad * math.sqrt(rnd.random())
+            x, y = cx + math.cos(a) * d, cy + math.sin(a) * d
+            ob = bpy.data.objects.new(f"Grove{gi}_{i}", rnd.choice(protos))
+            s = rnd.uniform(1.2, 2.0)
+            ob.location = (x, y, L.height(x, y) - 0.3); ob.scale = (s, s, s * rnd.uniform(0.95, 1.2))
+            ob.rotation_euler = (0, 0, rnd.uniform(0, 6.28))
+            coll.objects.link(ob); obs.append(ob)
+    return obs
+
+
 # ------------------------------------------------------------------------------------------ entry point
 def build(M, year, ctx):
     t0 = time.time()
@@ -496,6 +821,7 @@ def build(M, year, ctx):
     log(f"event state: {EVENT}")
     if EVENT in ("intact", "colossal"):
         STATE["outside"] = build_outside(coll)
+        conifer_groves(coll, GROVES)
     if EVENT == "colossal":
         try:
             build_colossal(coll, ctx)
@@ -511,54 +837,118 @@ def build(M, year, ctx):
             build_armored(coll)
         except Exception as ex:
             traceback.print_exc(); log("Armored failed", repr(ex))
-        # a few still outside heading for the breach
         rest = [s[:5] + ((-s[3], OG.y - s[4]),) + s[6:] for s in OUTSIDE[:6]]
-        STATE["outside"] = pure_crowd(rest, coll, "Out", unique=0) if False else _copies_of(STATE.get("inflow", []), rest, coll)
+        STATE["outside"] = _copies_of(STATE.get("inflow", []), rest, coll)
+    try:
+        calm_skins(STATE.get("outside", []) + STATE.get("inflow", []))
+    except Exception as ex:
+        traceback.print_exc(); log("skin recolour failed", repr(ex))
     bpy.context.scene.frame_set(1)
+    if dutch_roll not in bpy.app.handlers.render_pre:
+        bpy.app.handlers.render_pre.append(dutch_roll)
     n = sum(1 for o in bpy.data.objects if o.type == "ARMATURE")
     log(f"{n} titan rigs in the scene")
     log(f"cast built in {time.time() - t0:.1f}s")
 
 
+def dutch_roll(scene, *a):
+    """Camera roll for cams that ask for it (scene.py's camera() takes only loc / look-at / lens)."""
+    r = STATE.pop("roll", 0.0)
+    cam = scene.camera
+    if cam and r:
+        cam.rotation_euler = (cam.matrix_world.to_quaternion() @ Quaternion((0, 0, 1), math.radians(r))).to_euler()
+        log(f"dutch roll {r} deg on {cam.name}")
+
+
 # ------------------------------------------------------------------------------------------ cameras
+def aim(loc, pt, u, v, lens):
+    """Look-at point so that world point pt lands at frame offset (u, v) in [-1, 1] (u right, v up; 16:9,
+    36 mm sensor width).  Small-angle composition helper for the fixed-roll camera."""
+    loc, pt = Vector(loc), Vector(pt)
+    d = pt - loc
+    yaw = math.atan2(d.y, d.x); pitch = math.atan2(d.z, d.xy.length)
+    yaw += math.atan(u * 18.0 / lens)
+    pitch -= math.atan(v * 10.125 / lens)
+    f = Vector((math.cos(pitch) * math.cos(yaw), math.cos(pitch) * math.sin(yaw), math.sin(pitch)))
+    return tuple(loc + f * 100.0)
+
+
+def _head():
+    return STATE.get("colossal_head") or Vector((COLOSSAL_X, -735.0, 55.0))
+
+
 def _cam_colossal_town():
-    h = STATE.get("colossal_head") or Vector((COLOSSAL_X, -735.0, 55.0))
-    off = [float(v) for v in os.environ.get("CT_OFF", "32,195,-33").split(",")]
-    loc = Vector((h.x + off[0], h.y + off[1], h.z + off[2]))
-    tgt = Vector((h.x - 6.0, h.y, h.z - float(os.environ.get("CT_DOWN", "9"))))
-    return tuple(loc), tuple(tgt), float(os.environ.get("CT_LENS", "45"))
+    """Timelapse 'from the streets' shot (not a thumbnail): street-level camera ~315 m north of the head on the
+    main avenue, 70 mm; roofs fill the lower ~30 %, the wall top line sits at ~45 % of the frame height and the
+    plume rises out of the top of the frame."""
+    h = _head()
+    back = float(os.environ.get("CT_BACK", "315"))
+    y = h.y + back
+    x = avenue_x(y) + float(os.environ.get("CT_DX", "4"))
+    loc = (x, y, L.height(x, y) + float(os.environ.get("CT_Z", "6")))
+    lens = float(os.environ.get("CT_LENS", "70"))
+    wt = (h.x, L.district_ymin(h.x), WALL_TOP)
+    return loc, aim(loc, wt, float(os.environ.get("CT_U", "0.12")), float(os.environ.get("CT_V", "-0.10")), lens), lens
 
 
 def _cam_colossal_closeup():
-    """Tight thumbnail variant: long lens from a rooftop deep in the town, head + hand + wall top fill the frame."""
-    h = STATE.get("colossal_head") or Vector((COLOSSAL_X, -735.0, 55.0))
-    return (h.x + 70.0, h.y + 420.0, h.z - 12.0), (h.x - 9.0, h.y, h.z - 1.5), 135
+    """Thumbnail: long lens from a rooftop deep in the town.  Wall top at ~30 % from the bottom, the head left
+    of centre so the gripping hand (west = frame right) is in frame; the gatehouse stays out of frame."""
+    h = _head()
+    lens = float(os.environ.get("CU_LENS", "135"))
+    off = [float(v) for v in os.environ.get("CU_OFF", "40,420,-12").split(",")]
+    loc = (h.x + off[0], h.y + off[1], h.z + off[2])
+    wt = (h.x, L.district_ymin(h.x), WALL_TOP)
+    return loc, aim(loc, wt, float(os.environ.get("CU_U", "-0.12")), float(os.environ.get("CU_V", "-0.40")), lens), lens
 
 
 def _cam_colossal_side():
-    return (COLOSSAL_X - 135.0, -880.0, 16.0), (COLOSSAL_X + 6, -738.0, 36.0), 26
+    """Outside, south-west, 60 mm, slightly raised: the 60 m figure fills ~half the frame height."""
+    h = _head()
+    d = float(os.environ.get("CS_DIST", "300"))
+    a = math.radians(float(os.environ.get("CS_AZ", "225")))
+    loc = (h.x + math.cos(a) * d, h.y + math.sin(a) * d, float(os.environ.get("CS_Z", "28")))
+    lens = float(os.environ.get("CS_LENS", "60"))
+    return loc, aim(loc, (h.x, h.y, 31.0), 0.0, float(os.environ.get("CS_V", "0.0")), lens), lens
 
 
 def _cam_armored_gate():
-    """From high behind the Armored, down the main avenue: it charges at the inner gate, Wall Maria beyond."""
+    """Street level 40 m behind the Armored, 6 m to the side, 24 mm: it fills ~40 % of the frame height,
+    charging at the inner gate."""
     r = STATE.get("armored")
     p = Vector(r.location) if r else Vector((0, ARMORED_XY[1], 0))
-    off = [float(v) for v in os.environ.get("AG_OFF", "12,-118,40").split(",")]
-    loc = (p.x + off[0], p.y + off[1], off[2])
-    tgt = (0.0, -10.0, float(os.environ.get("AG_TZ", "8")))
-    return loc, tgt, float(os.environ.get("AG_LENS", "38"))
+    back = float(os.environ.get("AG_BACK", "40")); dx = float(os.environ.get("AG_DX", "6"))
+    x, y = p.x + dx, p.y - back
+    loc = (x, y, L.height(x, y) + float(os.environ.get("AG_Z", "4")))
+    lens = float(os.environ.get("AG_LENS", "24"))
+    return loc, (avenue_x(-10.0) - 1.0, 0.0, float(os.environ.get("AG_TZ", "12"))), lens
 
 
 def _cam_armored_front():
-    """Looking south down the avenue from above the inner gate square: the Armored charging at the camera,
-    pure titans streaming in behind it from the broken outer gate."""
+    """Low (12 m) in front of the Armored looking south down the avenue, 28 mm, 6 deg Dutch tilt: townsfolk
+    fleeing toward the camera, the Armored charging behind them, pure titans streaming in further back."""
     r = STATE.get("armored")
     p = Vector(r.location) if r else Vector((0, ARMORED_XY[1], 0))
-    return (p.x + 6, -42.0, 40), (p.x - 4, p.y - 30, 6), 35
+    STATE["roll"] = float(os.environ.get("AF_ROLL", "6"))
+    y = p.y + float(os.environ.get("AF_DIST", "95"))
+    x = avenue_x(y) + 2.0
+    loc = (x, y, L.height(x, y) + float(os.environ.get("AF_Z", "12")))
+    return loc, (p.x - 1, p.y - 25, 7.0), float(os.environ.get("AF_LENS", "28"))
+
+
+TO_CAM = (-30.0, -975.0)
+
+
+def _cam_titans_outside():
+    """Low (3 m) on the meadow ~255 m south of the outer gate, 35 mm; a big pure titan walking away toward the
+    wall in the foreground, others in the thirds, conifer groves framing the sides."""
+    x, y = TO_CAM
+    loc = (x, y, L.height(x, y) + 3.0)
+    return loc, (0.0, -720.0, L.height(x, y) + 20.0), 35
 
 
 CAMS = {
-    "titans_outside": ((62.0, -1262.0, 4.5), (-12.0, -760.0, 30.0), 30),
+    "titans_outside": _cam_titans_outside,
     "colossal_town": _cam_colossal_town,
     "colossal_side": _cam_colossal_side,
     "colossal_closeup": _cam_colossal_closeup,
