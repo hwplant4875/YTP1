@@ -72,6 +72,13 @@
 - Figures are very small, but whoever knows the scene can recognise it.
 - Recognition comes from composition, place and grouping, and from one or two cues: a red scarf, green cloaks, blond hair, a name tag. Detail is not the cue.
 
+**Anime stills from the user (06:27 UTC), in `ref/user/`. Match these.**
+- `s1e1_carla_trapped_house.png`: Carla under the collapsed Yeager house; the kids heave at the beams. High oblique view, clay-tile roof caved in over a stone yard, warm sunset light.
+- `s1e1_plaza_crowd_colossal_head.png`: crowd in the plaza seen from behind, looking up at the Colossal's small head over the wall, with a steam column. Half-timbered houses, green dusk light.
+- `s1_aerial_plaza_crowd_halftimber.png`: a high aerial of a dirt plaza with a scattered crowd of tiny dark figures among half-timbered houses with clay-tile roofs and chimneys. This is the regional-timelapse look.
+- `s1e1_smiling_titan_carla_sunset.png`: the Smiling Titan holding Carla up against a sunset sky. Its hair is shoulder-length dark brown (not blonde), with a wide grin.
+- **House style:** half-timbered (Fachwerk) dark beams on cream plaster, a stone ground floor, clay-tile roofs in orange-brown, chimneys and dormers.
+
 **Name tags (user approved, 06:00 UTC).** Keep floating name labels over the key characters and units: small text with a leader line, in the HUD fonts. Combined with continuous movement, they let viewers track who is where from the sky.
 
 **Implications for the build**

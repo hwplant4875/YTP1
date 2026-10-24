@@ -90,13 +90,23 @@ def build(M, year, ctx):
     for bn, deg in (("mixamorig_Spine_02", lean), ("mixamorig_Spine1_03", lean), ("mixamorig_Spine2_04", lean * 0.6),
                     ("mixamorig_Neck_05", lean * 0.4), ("mixamorig_Head_06", lean * 0.8)):
         pb = arm.pose.bones[bn]; pb.rotation_mode = "XYZ"; pb.rotation_euler = (math.radians(deg), 0, 0)
-    # kick (COL_KICK 0..1): the left leg swings forward through the gate; rise (COL_RISE 0..1): head comes up over the wall
+    # kick, as in the anime: the RIGHT leg is drawn far back (COL_KICK -1 = full wind-up), then swung forward
+    # through the gate (COL_KICK +1 = impact, leg straight)
     k = float(os.environ.get("COL_KICK", "0"))
-    if k > 0:
-        ul = arm.pose.bones["mixamorig_LeftUpLeg_056"]; ll = arm.pose.bones["mixamorig_LeftLeg_057"]
+    if k != 0:
+        side = os.environ.get("COL_KICK_LEG", "Right")
+        ul = arm.pose.bones["mixamorig_RightUpLeg_060" if side == "Right" else "mixamorig_LeftUpLeg_056"]
+        ll = arm.pose.bones["mixamorig_RightLeg_061" if side == "Right" else "mixamorig_LeftLeg_057"]
         ul.rotation_mode = ll.rotation_mode = "XYZ"
-        ul.rotation_euler = (math.radians(float(os.environ.get("COL_KICK_HIP", "75")) * k), 0, 0)
-        ll.rotation_euler = (math.radians(float(os.environ.get("COL_KICK_KNEE", "35")) * (1 - abs(2 * k - 1))), 0, 0)
+        fwd = float(os.environ.get("COL_KICK_HIP", "75")); back = float(os.environ.get("COL_KICK_BACK", "-50"))
+        if k < 0:      # wind-up: thigh back, knee folded
+            ul.rotation_euler = (math.radians(back * -k), 0, 0)
+            ll.rotation_euler = (math.radians(float(os.environ.get("COL_KICK_KNEE", "80")) * -k), 0, 0)
+        else:          # strike: thigh swings through, knee snaps straight at impact
+            ul.rotation_euler = (math.radians(back + (fwd - back) * k), 0, 0)
+            ll.rotation_euler = (math.radians(float(os.environ.get("COL_KICK_KNEE", "80")) * (1 - k) ** 2), 0, 0)
+        sp = arm.pose.bones["mixamorig_Spine_02"]; sp.rotation_mode = "XYZ"
+        sp.rotation_euler.x += math.radians(-8 * max(0.0, -k) + 6 * max(0.0, k))   # counter-lean
     rise = float(os.environ.get("COL_RISE", "1"))
     root.location.z -= (1 - rise) * float(os.environ.get("COL_RISE_DROP", "22"))
     fade = float(os.environ.get("COL_FADE", "0"))          # 0..1: vanishing into steam after the kick
@@ -107,14 +117,80 @@ def build(M, year, ctx):
     bpy.context.view_layer.update()
     hb = arm.pose.bones["mixamorig_Head_06"]
     print("[colossal_asset] head world", tuple(round(v, 1) for v in (arm.matrix_world @ hb.head)), "scale", tuple(hb.scale))
-    # steam around the body
-    try:
-        import titans
+    # steam: thin wisps creeping off the shoulders, head and arms + a low ground mist (not a cloud box)
+    if os.environ.get("COL_STEAM", "wisps") == "wisps":
         fade = float(os.environ.get("COL_FADE", "0"))
-        titans.steam("ColossalSteam", (FEET.x, GY - BACK + 4, 46 + 10 * fade), (70 + 60 * fade, 40 + 40 * fade, 34 + 40 * fade),
-                     density=float(os.environ.get("STEAM", "0.35")) * (1 + 2 * fade))
-    except Exception as ex:
-        print("[colossal_asset] steam failed:", ex)
+        wisps(arm, fade)
+    elif os.environ.get("COL_STEAM") == "box":
+        try:
+            import titans
+            titans.steam("ColossalSteam", (FEET.x, GY - BACK + 4, 46), (70, 40, 34), density=float(os.environ.get("STEAM", "0.35")))
+        except Exception as ex:
+            print("[colossal_asset] steam failed:", ex)
+
+def _wisp_mat(name, density):
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree; N = nt.nodes; Lk = nt.links
+    N.remove(N["Principled BSDF"])
+    tc = N.new("ShaderNodeTexCoord")
+    # stretch the noise upward so it reads as rising strands
+    st = N.new("ShaderNodeMapping"); st.inputs["Scale"].default_value = (1.0, 1.0, 0.35)
+    Lk.new(tc.outputs["Object"], st.inputs["Vector"])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 4.0; nz.inputs["Detail"].default_value = 10
+    nz.inputs["Roughness"].default_value = 0.7; nz.inputs["Distortion"].default_value = 1.5
+    Lk.new(st.outputs["Vector"], nz.inputs["Vector"])
+    cr = N.new("ShaderNodeValToRGB"); e = cr.color_ramp.elements
+    e[0].position, e[0].color = 0.52, (0, 0, 0, 1); e[1].position, e[1].color = 0.75, (1, 1, 1, 1)
+    Lk.new(nz.outputs["Fac"], cr.inputs["Fac"])
+    # fade to nothing toward the shape's edge (generated coords 0..1 -> distance from centre)
+    gc = N.new("ShaderNodeVectorMath"); gc.operation = "SUBTRACT"; gc.inputs[1].default_value = (0.5, 0.5, 0.5)
+    Lk.new(tc.outputs["Generated"], gc.inputs[0])
+    ln = N.new("ShaderNodeVectorMath"); ln.operation = "LENGTH"; Lk.new(gc.outputs[0], ln.inputs[0])
+    fo = N.new("ShaderNodeMapRange"); fo.inputs["From Min"].default_value = 0.15; fo.inputs["From Max"].default_value = 0.5
+    fo.inputs["To Min"].default_value = 1.0; fo.inputs["To Max"].default_value = 0.0
+    Lk.new(ln.outputs["Value"], fo.inputs["Value"])
+    mul = N.new("ShaderNodeMath"); mul.operation = "MULTIPLY"
+    Lk.new(cr.outputs["Color"], mul.inputs[0]); Lk.new(fo.outputs["Result"], mul.inputs[1])
+    mul2 = N.new("ShaderNodeMath"); mul2.operation = "MULTIPLY"; mul2.inputs[1].default_value = density
+    Lk.new(mul.outputs[0], mul2.inputs[0])
+    pv = N.new("ShaderNodeVolumePrincipled"); pv.inputs["Color"].default_value = (0.95, 0.93, 0.9, 1)
+    pv.inputs["Anisotropy"].default_value = 0.4
+    Lk.new(mul2.outputs[0], pv.inputs["Density"])
+    Lk.new(pv.outputs[0], N["Material Output"].inputs["Volume"])
+    return m
+
+def wisps(arm, fade=0.0):
+    """Rising steam strands from body points (bone heads) and a thin ground mist; denser and taller when fading."""
+    import random
+    rnd = random.Random(5)
+    coll = arm.users_collection[0]
+    dens = float(os.environ.get("COL_WISP_DENS", "0.35")) * (1 + 2.5 * fade)
+    mat = _wisp_mat("ColossalWisp", dens)
+    pts = []
+    for bn in ("mixamorig_Head_06", "mixamorig_Neck_05", "mixamorig_LeftShoulder_08", "mixamorig_RightShoulder_032",
+               "mixamorig_LeftArm_09", "mixamorig_RightArm_033", "mixamorig_LeftForeArm_010", "mixamorig_RightForeArm_034",
+               "mixamorig_Spine2_04", "mixamorig_Spine1_03"):
+        pb = arm.pose.bones.get(bn)
+        if pb:
+            pts.append(arm.matrix_world @ pb.head)
+    for i, p in enumerate(pts):
+        for j in range(2):
+            h = rnd.uniform(14, 26) * (1 + fade)
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=1,
+                                                 location=(p.x + rnd.uniform(-3, 3), p.y + rnd.uniform(-3, 3), p.z + h * 0.45))
+            o = bpy.context.active_object; o.name = f"ColossalWisp{i}_{j}"
+            o.scale = (rnd.uniform(4, 7) * (1 + fade), rnd.uniform(4, 7) * (1 + fade), h)
+            o.data.materials.append(mat)
+            for c in list(o.users_collection):
+                c.objects.unlink(o)
+            coll.objects.link(o)
+    # thin creeping mist at the feet / along the wall foot
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(FEET.x, FEET.y + 8, 6))
+    g = bpy.context.active_object; g.name = "ColossalMist"; g.scale = (120, 60, 12)
+    g.data.materials.append(_wisp_mat("ColossalMist", dens * 0.5))
+    for c in list(g.users_collection):
+        c.objects.unlink(g)
+    coll.objects.link(g)
 
 CAMS = {
     # from the rooftops inside the town looking south: the iconic S1E1 view (thumbnail)

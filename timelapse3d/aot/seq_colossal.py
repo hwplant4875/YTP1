@@ -17,7 +17,8 @@ F = int(os.environ.get("SEQ_F", "900"))
 
 # ---------------------------------------------------------------- timeline (30 fps)
 T_RISE = (1170, 1290)      # Colossal head comes up over the outer wall
-T_KICK = (1680, 1728)      # hip swing; impact at the end
+T_WIND = (1650, 1700)      # right leg drawn far back (anime S1E1)
+T_KICK = (1700, 1728)      # swing forward through the gate; impact at the end
 T_FADE = (1760, 1840)      # vanishes into steam
 T_INFLOW = 1800            # pure titans start walking in
 
@@ -30,9 +31,15 @@ def flags(f=F):
     e = {}
     e["COL_SHOW"] = "1" if T_RISE[0] <= f < T_FADE[1] else "0"
     e["COL_RISE"] = f"{_ramp(*T_RISE, f):.3f}"
-    e["COL_KICK"] = f"{_ramp(*T_KICK, f) if f < T_FADE[0] else 1.0:.3f}"
+    if f < T_WIND[1]:
+        kick = -_ramp(*T_WIND, f)
+    elif f < T_FADE[0]:
+        kick = -1.0 + 2.0 * _ramp(*T_KICK, f)
+    else:
+        kick = 1.0
+    e["COL_KICK"] = f"{kick:.3f}"
     e["COL_FADE"] = f"{_ramp(*T_FADE, f):.3f}"
-    e["COL_DX"] = os.environ.get("COL_DX", "6")
+    e["COL_DX"] = os.environ.get("COL_DX", "-7")      # right foot lines up with the gate
     if f >= T_KICK[1]:
         e["AOT_STATE"] = "kicked"
         e["AOT_ARC_T"] = f"{min(1.0, (f - T_KICK[1]) / 55.0):.3f}"
@@ -60,12 +67,13 @@ def keys():
         (1112, (-4, 70, 12), (0, -40, 10), 28),
         (1140, (0, 14, 10), (0, -80, 11), 28),           # into the inner gate tunnel (14 m wide, 20 m high)
         (1162, (0, -16, 10.5), (0, -140, 16), 28),        # out on the gate square
-        (1270, (0, -225, 30), (4, -740, 60), 32),         # down the avenue; the head rises over the outer wall
-        (1380, (-6, -290, 36), (6, -740, 62), 34),
+        (1270, (0, -225, 30), (-6, -738, 62), 70),        # down the avenue; tight on the head rising over the wall
+        (1380, (-6, -290, 36), (-6, -738, 64), 85),
         (1500, (230, -380, 270), (0, -700, 30), 28),      # climb to the sky view
         (1620, (190, -1130, 240), (0, -720, 40), 28),     # swing round behind the Colossal, outside the wall
-        (1700, (130, -1060, 170), (0, -705, 32), 30),     # the kick
-        (1760, (130, -1060, 170), (0, -690, 30), 30),
+        (1650, (110, -1000, 120), (-4, -730, 24), 45),    # closing in from behind for the kick
+        (1700, (95, -960, 80), (-2, -725, 22), 55),       # legs + gate fill the frame: wind-up, strike
+        (1760, (95, -960, 80), (0, -715, 22), 55),
         (1900, (70, -930, 230), (0, -470, 0), 28),        # rise and look north over the breach: titans walk in
         (2100, (40, -840, 200), (0, -360, 0), 28),
     ]

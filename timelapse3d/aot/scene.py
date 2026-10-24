@@ -116,6 +116,66 @@ def wall_mat():
     L.new(br.outputs["Fac"], bp.inputs["Height"]); L.new(bp.outputs["Normal"], bsdf.inputs["Normal"])
     return m
 
+def _band(N, Lk, value_socket, period, width):
+    """1 inside a stripe of the given width repeating every period along a scalar coordinate."""
+    d = N.new("ShaderNodeMath"); d.operation = "DIVIDE"; d.inputs[1].default_value = period
+    Lk.new(value_socket, d.inputs[0])
+    fr = N.new("ShaderNodeMath"); fr.operation = "FRACT"; Lk.new(d.outputs[0], fr.inputs[0])
+    lt = N.new("ShaderNodeMath"); lt.operation = "LESS_THAN"; lt.inputs[1].default_value = width / period
+    Lk.new(fr.outputs[0], lt.inputs[0])
+    return lt.outputs[0]
+
+def fachwerk_mat(name, plaster, beam=(0.09, 0.055, 0.035), stone=(0.36, 0.33, 0.28)):
+    """Half-timbered wall (anime Shiganshina): dark beams in a grid with braces on cream plaster, stone ground floor."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree; N = nt.nodes; Lk = nt.links
+    bsdf = N["Principled BSDF"]; bsdf.inputs["Roughness"].default_value = 0.9
+    tc = N.new("ShaderNodeTexCoord"); xyz = N.new("ShaderNodeSeparateXYZ"); Lk.new(tc.outputs["Object"], xyz.inputs[0])
+    hz = _band(N, Lk, xyz.outputs["Z"], 2.9, 0.28)
+    vx = _band(N, Lk, xyz.outputs["X"], 1.7, 0.22)
+    vy = _band(N, Lk, xyz.outputs["Y"], 1.7, 0.22)
+    sxz = N.new("ShaderNodeMath"); sxz.operation = "ADD"; Lk.new(xyz.outputs["X"], sxz.inputs[0]); Lk.new(xyz.outputs["Z"], sxz.inputs[1])
+    br = _band(N, Lk, sxz.outputs[0], 3.4, 0.2)
+    acc = hz
+    for o in (vx, vy, br):
+        mx = N.new("ShaderNodeMath"); mx.operation = "MAXIMUM"; Lk.new(acc, mx.inputs[0]); Lk.new(o, mx.inputs[1]); acc = mx.outputs[0]
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.6; Lk.new(tc.outputs["Object"], nz.inputs["Vector"])
+    pl = N.new("ShaderNodeMix"); pl.data_type = "RGBA"; pl.inputs["Factor"].default_value = 0.25
+    pl.inputs["A"].default_value = (*plaster, 1); Lk.new(nz.outputs["Color"], pl.inputs["B"])
+    wall = N.new("ShaderNodeMix"); wall.data_type = "RGBA"; Lk.new(acc, wall.inputs["Factor"])
+    Lk.new(pl.outputs["Result"], wall.inputs["A"]); wall.inputs["B"].default_value = (*beam, 1)
+    gf = N.new("ShaderNodeMath"); gf.operation = "LESS_THAN"; gf.inputs[1].default_value = 2.6; Lk.new(xyz.outputs["Z"], gf.inputs[0])
+    st = N.new("ShaderNodeTexBrick"); st.inputs["Scale"].default_value = 1.2; st.inputs["Color1"].default_value = (*stone, 1)
+    st.inputs["Color2"].default_value = (*[c * 0.8 for c in stone], 1); st.inputs["Mortar"].default_value = (0.2, 0.19, 0.17, 1)
+    Lk.new(tc.outputs["Object"], st.inputs["Vector"])
+    fin = N.new("ShaderNodeMix"); fin.data_type = "RGBA"; Lk.new(gf.outputs[0], fin.inputs["Factor"])
+    Lk.new(wall.outputs["Result"], fin.inputs["A"]); Lk.new(st.outputs["Color"], fin.inputs["B"])
+    Lk.new(fin.outputs["Result"], bsdf.inputs["Base Color"])
+    return m
+
+def tile_roof_mat(name, col):
+    """Clay-tile roof: rows of rounded tiles with per-tile colour variation."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree; N = nt.nodes; Lk = nt.links
+    bsdf = N["Principled BSDF"]; bsdf.inputs["Roughness"].default_value = 0.75
+    tc = N.new("ShaderNodeTexCoord")
+    sc_ = N.new("ShaderNodeMapping"); sc_.inputs["Scale"].default_value = (2.8, 2.8, 2.2)
+    Lk.new(tc.outputs["Object"], sc_.inputs["Vector"])
+    vo = N.new("ShaderNodeTexVoronoi"); vo.inputs["Scale"].default_value = 1.0; vo.inputs["Randomness"].default_value = 0.15
+    Lk.new(sc_.outputs["Vector"], vo.inputs["Vector"])
+    rp = N.new("ShaderNodeValToRGB"); e = rp.color_ramp.elements
+    e[0].position, e[0].color = 0.0, (*[c * 0.6 for c in col], 1); e[1].position, e[1].color = 1.0, (*[min(1, c * 1.35) for c in col], 1)
+    Lk.new(vo.outputs["Color"], rp.inputs["Fac"])
+    xyz = N.new("ShaderNodeSeparateXYZ"); Lk.new(tc.outputs["Object"], xyz.inputs[0])
+    rows = _band(N, Lk, xyz.outputs["Z"], 0.42, 0.07)
+    dk = N.new("ShaderNodeMix"); dk.data_type = "RGBA"; dk.blend_type = "MULTIPLY"
+    mf = N.new("ShaderNodeMath"); mf.operation = "MULTIPLY"; mf.inputs[1].default_value = 0.55; Lk.new(rows, mf.inputs[0])
+    Lk.new(mf.outputs[0], dk.inputs["Factor"]); Lk.new(rp.outputs["Color"], dk.inputs["A"]); dk.inputs["B"].default_value = (0.25, 0.2, 0.18, 1)
+    Lk.new(dk.outputs["Result"], bsdf.inputs["Base Color"])
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.35
+    Lk.new(vo.outputs["Distance"], bp.inputs["Height"]); Lk.new(bp.outputs["Normal"], bsdf.inputs["Normal"])
+    return m
+
 def obj_from_bm(name, bm, mats=(), coll=None):
     me = bpy.data.meshes.new(name)
     bm.to_mesh(me)
@@ -1250,14 +1310,14 @@ def build(year):
         "iron": mat("Iron", (0.035, 0.035, 0.04), 0.45),
         "gate": mat("GateWood", (0.17, 0.11, 0.07), 0.7, var=0.2, var_scale=0.8),
         "window": mat("Window", (0.05, 0.04, 0.035), 0.6),
-        "plaster": mat("Plaster", (0.80, 0.74, 0.62), 0.9),
-        "plaster_w": mat("PlasterW", (0.86, 0.84, 0.78), 0.9),
-        "plaster_o": mat("PlasterO", (0.78, 0.62, 0.42), 0.9),
-        "timber": mat("Timber", (0.55, 0.42, 0.30), 0.9),
-        "roof_red": mat("RoofRed", (0.40, 0.14, 0.07), 0.7, var=0.18, var_scale=0.3, color2=(0.5, 0.2, 0.1)),
-        "roof_brown": mat("RoofBrown", (0.26, 0.13, 0.07), 0.7, var=0.18, var_scale=0.3),
-        "roof_dark": mat("RoofDark", (0.30, 0.09, 0.06), 0.7, var=0.18, var_scale=0.3),
-        "roof_orange": mat("RoofOrange", (0.48, 0.22, 0.08), 0.7, var=0.18, var_scale=0.3),
+        "plaster": fachwerk_mat("Plaster", (0.74, 0.66, 0.50)),
+        "plaster_w": fachwerk_mat("PlasterW", (0.80, 0.76, 0.64)),
+        "plaster_o": fachwerk_mat("PlasterO", (0.70, 0.56, 0.36)),
+        "timber": fachwerk_mat("Timber", (0.62, 0.50, 0.34), beam=(0.12, 0.07, 0.04)),
+        "roof_red": tile_roof_mat("RoofRed", (0.36, 0.14, 0.06)),
+        "roof_brown": tile_roof_mat("RoofBrown", (0.26, 0.13, 0.06)),
+        "roof_dark": tile_roof_mat("RoofDark", (0.24, 0.09, 0.05)),
+        "roof_orange": tile_roof_mat("RoofOrange", (0.42, 0.20, 0.07)),
         "roof_slate": mat("RoofSlate", (0.20, 0.22, 0.25), 0.6),
         "bark": mat("Bark", (0.16, 0.11, 0.075), 0.9, bump=0.4, scale=3.0, var=0.2, var_scale=2.0),
         "bark_giant": mat("BarkGiant", (0.20, 0.13, 0.08), 0.9, bump=0.6, scale=0.6, var=0.25, var_scale=0.3, color2=(0.30, 0.22, 0.14)),
@@ -1406,6 +1466,7 @@ CAMS = {
     "eren":     None,                                            # computed in camera()
     "eren_wide": None,
     "walltop":  ((-W - 14, -120, WALL_H + 16), (-W + 30, -700, WALL_H - 10), 30),
+    "plaza_aerial": ((PLAZA[0] + 40, PLAZA[1] + 95, 85), (PLAZA[0], PLAZA[1], 0), 35),   # ref/user/s1_aerial_plaza_crowd_halftimber.png
     "outer":    ((20, OUTER_GATE[1] - 640, 16), (-10, OUTER_GATE[1] - 80, 20), 40),
     "giants":   ((GF.x + 1250, GF.y - 650, 30), (GF.x + 400, GF.y - 200, 75), 26),
     "gate":     ((90, 260, 60), (0, 0, 22), 30),
@@ -1482,6 +1543,57 @@ def render_setup(engine, res, samples, device):
     except TypeError:
         pass
     sc.view_settings.exposure = float(os.environ.get("EXPO", "-1.5"))
+    if os.environ.get("LOOK") == "anime":
+        try:
+            anime_look(sc)
+        except Exception as ex:
+            print("[scene] anime look failed:", ex)
+
+def anime_look(sc):
+    """Cheap anime-background look in the compositor (env LOOK=anime): anisotropic Kuwahara paint, softened
+    saturation with cool shadows / warm highlights, and thin ink edges from depth discontinuities."""
+    w = sc.render.resolution_x
+    ng = bpy.data.node_groups.new("AnimeLook", "CompositorNodeTree")
+    ng.interface.new_socket("Image", in_out="OUTPUT", socket_type="NodeSocketColor")
+    N = ng.nodes; Lk = ng.links
+    bpy.context.view_layer.use_pass_z = True
+    rl = N.new("CompositorNodeRLayers")
+    kw = N.new("CompositorNodeKuwahara")
+    kw.inputs["Size"].default_value = max(2, int(float(os.environ.get("ANIME_PAINT", "5")) * w / 960))
+    try:
+        kw.inputs["Type"].default_value = "Anisotropic"
+    except Exception:
+        pass
+    kw.inputs["Uniformity"].default_value = 4; kw.inputs["Sharpness"].default_value = 0.6; kw.inputs["Eccentricity"].default_value = 1.0
+    Lk.new(rl.outputs["Image"], kw.inputs["Image"])
+    hs = N.new("CompositorNodeHueSat")
+    hs.inputs["Saturation"].default_value = float(os.environ.get("ANIME_SAT", "0.85")); hs.inputs["Value"].default_value = 1.04
+    Lk.new(kw.outputs[0], hs.inputs["Image"])
+    cb = N.new("CompositorNodeColorBalance")
+    try:
+        cb.inputs[3].default_value = (0.96, 1.0, 1.06, 1)      # lift: cool shadows
+        cb.inputs[7].default_value = (1.05, 1.02, 0.96, 1)     # gain: warm highlights
+    except Exception:
+        pass
+    Lk.new(hs.outputs[0], cb.inputs["Image"])
+    # ink edges from depth
+    nz = N.new("CompositorNodeNormalize"); Lk.new(rl.outputs["Depth"], nz.inputs[0])
+    sob = N.new("CompositorNodeFilter")
+    try:
+        sob.inputs["Type"].default_value = "Sobel"
+    except Exception:
+        pass
+    Lk.new(nz.outputs[0], sob.inputs["Image"])
+    mr = N.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = float(os.environ.get("ANIME_EDGE_LO", "0.015"))
+    mr.inputs["From Max"].default_value = float(os.environ.get("ANIME_EDGE_HI", "0.06"))
+    mr.inputs["To Max"].default_value = float(os.environ.get("ANIME_INK", "0.55"))
+    Lk.new(sob.outputs[0], mr.inputs["Value"])
+    mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MIX"
+    mx.inputs["B"].default_value = (0.10, 0.11, 0.14, 1)
+    Lk.new(mr.outputs["Result"], mx.inputs["Factor"]); Lk.new(cb.outputs[0], mx.inputs["A"])
+    out = N.new("NodeGroupOutput"); Lk.new(mx.outputs["Result"], out.inputs[0])
+    sc.compositing_node_group = ng
+    sc.render.use_compositing = True
 
 LABEL_ANCHORS = {"WALL MARIA": (-1100, 0, 50), "SHIGANSHINA DISTRICT": (60, -520, 20), "INNER GATE": (0, 0, 50),
                  "OUTER GATE": (0, -S - R, 50), "THE HILL": (HILL.x, HILL.y, None),
