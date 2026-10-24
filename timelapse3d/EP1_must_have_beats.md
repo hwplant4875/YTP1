@@ -1,5 +1,7 @@
 # EP1 must-have beats: "Attack on Titan Season 1 through Eren's eyes"
 
+> **SUPERSEDED (user, 2026-10-24): too detailed. The active plan is `EP1_plan_v2.md`, a 3D-timelapse cut built from world events and map data graphics. Keep this file only as a reference for beat details.**
+
 > **Binding user direction (2026-10-24), see `EP1_user_notes.md`:**
 > - Every beat where Eren (or another key character) speaks a line gets a dialogue-overlay hold: a slow camera, the frame centre fairly clear, and no instant transition. The user will overlay the faint anime clip and voice there.
 > - S14 "Yamero": about 2 s on Eren's outstretched arm, then transition.
