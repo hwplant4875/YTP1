@@ -155,3 +155,10 @@ Missing (build ourselves or kitbash from the soldier and kids): Erwin, Armin, Ha
 - 06:47 USER: "AoT 4" models = SEASON 4 (final season) designs. They're allowed, but only for the later Season 4 episode, NOT EP1. For EP1, use the Season 1-era models (Aotwa etc.).
 - 06:48 USER checked: the Aotwa Eren/Mikasa carry blades and ODM gear. For the 845 kids, REMOVE them: hide the separate gear objects, or delete those faces by material/vertex group, along with the uniform belts and jacket. The kids must show NO blades and NO ODM gear. Keep the gear for the 850 soldier scenes.
 - 06:48 USER WANTS A COMPARISON SCREENSHOT, PRIORITY: render young Eren and Mikasa side by side. LEFT = current characters.py kids (make_eren/make_mikasa); RIGHT = Aotwa Eren/Mikasa (8c37798e8cfc4527a1b820b53d0b03b4, 20d55c7c03a447e2876212ef34cccc1b) shrunk to child size, with blades, ODM gear and belts removed and recoloured to the 845 outfits. Same camera: a front 3/4 at medium distance, plus one inset at the tree-shot distance. Push renders/laptop/kids_compare.jpg.
+
+## 07:19 USER: the current kids look nothing like Eren/Mikasa. NEVER show a character's face to the camera. Agreed direction: LOW-POLY characters
+- All human characters become stylised LOW-POLY figures (flat-shaded facets, matching the low-poly town the user liked). The head is a smooth or faceted shape with NO eyes, nose or mouth at all.
+- Identity comes ONLY from the hair silhouette and colour, the outfit colours, and iconic items: Mikasa's red scarf, Eren's dark-red coat and brown hair, Armin's blond bob, Levi's undercut and cravat, Erwin's blond side part and green cloak, the Wings of Freedom on the back, the ODM gear in 850.
+- Cameras frame characters from behind, high above or in profile; never a front view of a face.
+- This replaces the Aotwa-kid plan for humans. Titan assets stay as they are. The Aotwa human models may still serve as proportion/hair references.
+- Show the user a low-poly test (845 Eren + Mikasa from behind/above, then the trio + Levi + Erwin) before using them in scenes.
