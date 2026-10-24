@@ -42,16 +42,19 @@ import flares as FX
 STATE = {}
 DT = 0.2
 PS = float(os.environ.get("TA_PSCALE", "2.0"))
+KEY = float(os.environ.get("TA_KEY_SCALE", "1.2"))             # key titans: bearded, the HQ seven, Levi's two, flood leaders
+EREN_ACCENT = (0.04, 0.80, 0.32)                                 # emerald collar + hem (emissive), Eren's unique cue
+EREN_CLOAK = (0.13, 0.19, 0.07)                                  # green-tinted brown cloak
 
 BEATS = {
     "evacuation":   (2.0, 22.0),    # crowd jammed at the inner gate behind the cargo wagon; Mikasa; the crowd floods out
-    "flood":        (2.0, 14.0),    # titans pour through the gate, squads deploy over the rooftops
+    "flood":        (2.0, 16.0),    # titans pour through the gate, squads deploy over the rooftops
     "eren_eaten":   (7.5, 14.0),    # squad 34: Thomas grabbed, Eren's leg bitten, Armin grabbed, Eren swallowed
     "squad_wiped":  (14.5, 17.5),   # a big titan sweeps a squad off a roof
     "hq_despair":   (17.0, 21.0),   # titans crowd the supply HQ; cadets stranded on the roofs around it
     "mikasa_falls": (21.0, 26.5),   # Mikasa's dash, out of gas, falls into a street; a titan closes in
     "attack_titan": (26.5, 44.0),   # the rogue titan appears (lightning) and kills titans on its way to the HQ
-    "bell_tower":   (33.0, 38.0),   # the rogue titan seen past the church bell tower (or killing at its foot)
+    "bell_tower":   (27.5, 35.0),   # the rogue titan appears by the church and slams a titan down at the bell tower's foot
     "hq_dash":      (42.0, 46.0),   # the cadets fly into the HQ while the rogue titan keeps the titans busy
     "lift_plan":    (46.0, 54.0),   # cutaway: lift with a ring of rifles, eye volley, seven blades on seven napes
     "at_collapse":  (53.0, 56.5),
@@ -208,6 +211,7 @@ class Titans:
         r = self.rnd
         if H is None:
             H = 3.0 + 12.0 * r.random() ** 1.25
+        H = H * float(sp.pop("scale", 1.0))          # per-titan scale (key titans), baked into the merged mesh at build
         spec = dict(name=name, H=H, g=sp.pop("g", r.uniform(0.8, 1.35)), al=sp.pop("al", r.uniform(0.9, 1.15)),
                     hs=sp.pop("hs", r.uniform(0.9, 1.3)), skin=sp.pop("skin", r.randrange(len(SW.T_SKINS))),
                     hair=sp.pop("hair", r.choice([None, 0, 1, 2, 3])), **sp)
@@ -507,13 +511,14 @@ class ATDriver:
             o.hide_render = o.hide_viewport = not on
         for (x, y, t0, dur) in self.shifts:
             u = (t - t0) / dur
-            if u < 0 or u > 1.4:
-                fx = AT.shift_fx(x, y, 0.0)              # everything off
-            else:
-                fx = AT.shift_fx(x, y, min(u, 1.0))
-                if u > 1.0:                              # the dome keeps thinning after the shift, then goes
-                    fx["dome_d"].default_value *= max(0.0, 1.0 - (u - 1.0) / 0.4)
-                    fx["dome"].hide_render = fx["dome_d"].default_value <= 0.001
+            # lightning column + a short small flash from attack_titan.shift_fx; its volume dome (one big opaque
+            # white blob) is never shown: the steam is a column of small cards (STATE fields, see setup)
+            fx = AT.shift_fx(x, y, min(max(u, 0.0), 1.0) if 0.0 <= u <= 1.0 else 0.0)
+            fx["dome"].hide_render = fx["dome"].hide_viewport = True
+            fx["dome_d"].default_value = 0.0
+            cs = min(fx["core"].scale[0], 3.5)
+            fx["core"].scale = (cs, cs, cs * 1.3)
+            fx["core"].hide_render = fx["core"].hide_render or not (0.0 <= u <= 0.3)
         if not on:
             return
         p, yaw, pose, walked = self.state(t)
@@ -692,11 +697,11 @@ def choreograph(site, seed=850):
     cand = np.array(cand)
     rel = (cand - gate) @ inw
     hubs_ok = cand[(rel > 50) & (rel < 330) & (np.hypot(cand[:, 0] - hq[0], cand[:, 1] - hq[1]) > 45)]
-    nflood = int(os.environ.get("TA_FLOOD", "26"))
+    nflood = int(os.environ.get("TA_FLOOD", "29"))      # pours through the hole ~2-18 s
     for k in range(nflood):
         ab = k in (5, 13, 21)
         name = f"f{k}"
-        TT.add(name, H=(7.0 if ab else None), abnormal=ab, show=(1.5, 1e9))
+        TT.add(name, H=(7.0 if ab else None), abnormal=ab, show=(1.5, 1e9), scale=KEY if k < 3 else 1.0)
         if ab:
             TT.specs[-1]["v"] *= 1.9
         hub = hubs_ok[rnd.randrange(len(hubs_ok))]
@@ -743,7 +748,7 @@ def choreograph(site, seed=850):
     # ------------------------------------------------ squad 34: Thomas grabbed, Eren's leg, Armin, Eren swallowed
     e_roof_i, e_roof = S.roof_near(gate + inw * 165 + side * 30, used); used.add(e_roof_i)
     a_roof_i, a_roof = S.roof_near(e_roof[:2] + side * 14, used); used.add(a_roof_i)
-    eren = SQ.flyer("eren", "cadet", "brown")
+    eren = SQ.flyer("eren", "cadet", "brown", accent=EREN_ACCENT, cloak=EREN_CLOAK)
     armin = SQ.flyer("armin", "cadet", "blond", H=1.63)
     thomas = SQ.flyer("thomas", "cadet", "ash")
     mina = SQ.flyer("mina", "cadet", "black")
@@ -761,7 +766,7 @@ def choreograph(site, seed=850):
     TT.ev[-1]["leap"] = (9.0, 1.4, 9.0)
     # the bearded titan that swallows Eren
     bd_spot = S.snap(a_roof[:2] + side * 10 - inw * 4)
-    TT.add("bearded", H=13.5, g=1.05, hs=1.1, beard=True, hair=1,
+    TT.add("bearded", H=13.5, g=1.05, hs=1.1, beard=True, hair=1, scale=KEY,
            keys=[(0, *(bd_spot + side * 80)), (9.5, *(bd_spot + side * 12)), (11.0, *bd_spot), (80, *bd_spot)], show=(4.0, 1e9),
            face=tuple(a_roof[:2]))
     TG = 10.6                                            # bearded grab: hand on Armin at TG+0.7, at the mouth by TG+2.0
@@ -813,6 +818,10 @@ def choreograph(site, seed=850):
 
     # ------------------------------------------------ Mikasa's dash, out of gas, falls (T 21-26)
     M = S.d.get("fall_pt")
+    tower = v2(S.d["bell_tower"]) if "bell_tower" in S.d else None
+    if M is None and tower is not None:              # Mikasa falls by the church: the rogue titan's first kills are at the tower
+        th = (hq - tower) / np.linalg.norm(hq - tower)
+        M = tower + th * 55.0
     M = S.snap(v2(M) if M is not None else hq - dir_hq * 85 + perp_hq * 30)
     mikasa = SQ.flyer("mikasa", "cadet", "black", scarf=True)
     connie = SQ.flyer("connie", "cadet", "grey", H=1.58)
@@ -847,7 +856,10 @@ def choreograph(site, seed=850):
     tk = [31.5, 34.0, 36.5, 39.0, 41.5]
     cur = pv
     for k, t_k in enumerate(tk):
-        P_k = S.snap(M + (route_end - M) * ((k + 1) / len(tk)) + perp_hq * (12 if k % 2 else -12))
+        fr = (0.04, 0.12, 0.42, 0.7, 0.95)[k] if tower is not None else (k + 1) / len(tk)
+        P_k = S.snap(M + (route_end - M) * fr + perp_hq * (12 if k % 2 else -12))
+        if tower is not None and k == 0:             # the first kill is slammed down at the foot of the bell tower
+            P_k = S.snap(tower + (M - tower) / np.linalg.norm(M - tower) * 12.0)
         come = S.snap(P_k + dir_hq * 35 + perp_hq * rnd.uniform(-20, 20))
         nm = f"v{k + 1}"
         TT.add(nm, H=rnd.uniform(7, 13), keys=[(0, *come), (t_k - 4.0, *come), (t_k - 0.2, *P_k), (90, *P_k)], show=(20.0, 1e9))
@@ -873,7 +885,7 @@ def choreograph(site, seed=850):
         spots = S.d.get("hq_titan_spots")
         p = v2(spots[k]) if spots else hq + np.array([math.cos(a) * w * 0.3, math.sin(a) * d_ * 0.3])
         nm = f"in{k}"
-        TT.add(nm, H=rnd.uniform(3.4, 5.0), keys=[(0, *p), (90, *p)], show=(14.0, 70.0), face=tuple(hq))
+        TT.add(nm, H=rnd.uniform(3.4, 5.0), keys=[(0, *p), (90, *p)], show=(14.0, 70.0), face=tuple(hq), scale=KEY)
         TT.ev[-1]["blind"] = 49.65
         TT.ev[-1]["death"] = (51.05 + 0.04 * k, 1 if k % 2 else -1)
         lift7.append(nm)
@@ -966,7 +978,7 @@ def finish_choreography(C, site):
     fwd = np.array([-math.sin(yawC), math.cos(yawC)])
     sideC = np.array([math.cos(yawC), math.sin(yawC)])
     # emerge: Eren rises out of the nape; Mikasa flies to him; Armin follows
-    eren2 = SQ.flyer("eren_nape", "cadet", "brown")
+    eren2 = SQ.flyer("eren_nape", "cadet", "brown", accent=EREN_ACCENT, cloak=EREN_CLOAK)
     eren2.follow(56.4, 58.0, lambda t: ATD.nape(t) + np.array([0, 0, -1.6 + 1.9 * _ss(56.4, 57.6, t)]), pose="flail",
                  vis_fn=lambda t: 1.0)
     mk = SQ.by_name["mikasa"]; cn = SQ.by_name["connie"]
@@ -1084,8 +1096,8 @@ def finish_choreography(C, site):
     FL.add(102.6, rico_wall + np.array([0, 0, 2.0]), "yellow", up=125.0, seed=3, width=1.2)
     FL.add(102.9, rico_wall + np.array([*(side * 8), 2.0]), "yellow", up=105.0, seed=4)
     # green / black: the morning advance (direction) and an abnormal sighting, early in the flood
-    FL.add(3.2, S.wall_pts[0] + np.array([0, 0, 2.0]), "black", up=100.0, seed=5)
-    FL.add(5.0, S.wall_pts[1 % len(S.wall_pts)] + np.array([0, 0, 2.0]), "green", up=90.0, seed=6)
+    FL.add(3.2, S.wall_pts[min(4, len(S.wall_pts) - 1)] + np.array([0, 0, 2.0]), "black", up=100.0, seed=5, life=10.0)   # away from the gate hole
+    FL.add(5.0, S.wall_pts[min(5, len(S.wall_pts) - 1)] + np.array([0, 0, 2.0]), "green", up=90.0, seed=6, life=10.0)
     rico = SQ.by_name["rico"]
     rico.seg = [s for s in rico.seg if s[2] <= 100.0]
     rico.hop(100.0, 101.8, rico.end_pos(), rico_wall).stand(101.8, 112.0, rico_wall, odm.yaw_of(np.append(inw, 0)), "wave")
@@ -1095,7 +1107,7 @@ def finish_choreography(C, site):
     l2_to = S.snap(stop + to_gate * -20 - side * 12)
     for nm, to, td_, dirn in (("lv1", l1_to, 107.75, 1), ("lv2", l2_to, 106.6, -1)):
         frm = S.snap(to - to_gate * 60)
-        TT.add(nm, H=rnd.uniform(9, 12), keys=[(0, *frm), (101.0, *frm), (td_ - 0.2, *to), (200, *to)], show=(98.0, 1e9))
+        TT.add(nm, H=rnd.uniform(9, 12), keys=[(0, *frm), (101.0, *frm), (td_ - 0.2, *to), (200, *to)], show=(98.0, 1e9), scale=KEY)
         TT.ev[-1]["death"] = (td_ + 0.05, dirn)
     levi = SQ.flyer("levi", "scout", "black", H=1.6, cravat=True)
     lw = min(S.wall_pts, key=lambda p: np.linalg.norm(p[:2] - (gate + side * 25)))
@@ -1104,7 +1116,7 @@ def finish_choreography(C, site):
     levi.spin(106.6, 107.75, lambda t: TT.nape("lv1", t), 6.0, 2.5, 0.2, turns=2.5)
     levi.follow(107.75, 112.0, lambda t: TT.crown("lv1", min(t, 109.0)) + np.array([0, 0, 0.1]), yaw_fn=lambda t: 0.0, pose="stand")
     # Armin pulls Eren from the nape; Mikasa joins
-    eren3 = SQ.flyer("eren_b", "cadet", "brown")
+    eren3 = SQ.flyer("eren_b", "cadet", "brown", accent=EREN_ACCENT, cloak=EREN_CLOAK)
     eren3.follow(102.8, 104.6, lambda t: ATD.nape(t) + np.array([0, 0, -1.2 + 1.2 * _ss(102.8, 104.2, t)]), pose="flail")
     eren3.stand(104.6, 112.0, eren3.end_pos(), 0.0, "lie")
     ar3.seg = [s for s in ar3.seg if s[1] < 104.0]
@@ -1190,9 +1202,9 @@ def setup(site_dict, seed=850, light=False, coll_name="TrostAction"):
     cs.add_many(62.0 + rnd.random(n) * 0.35, muzzle + rnd.normal(0, 0.8, (n, 3)), np.column_stack([cdir[0] * 6 + rnd.normal(0, 2, n), cdir[1] * 6 + rnd.normal(0, 2, n), rnd.random(n) * 1.5]),
                 r0=0.8, r1=4.5, life=6.0 + 3 * rnd.random(n), rise=0.6)
     Qz = site.g(Q)
-    n = 90
+    n = 170
     hs.add_many(62.3 + rnd.random(n) ** 2 * 1.4, np.column_stack([Q[0] + rnd.normal(0, 4, n), Q[1] + rnd.normal(0, 4, n), Qz + rnd.random(n) * 10]),
-                rnd.normal(0, 2.0, (n, 3)), r0=0.6, r1=2.6, life=1.6 + 1.2 * rnd.random(n), rise=3.0, alpha=0.4)
+                rnd.normal(0, 1.6, (n, 3)), r0=0.4, r1=1.8, life=1.2 + 1.0 * rnd.random(n), rise=4.0, alpha=0.35)
     # steam off the Attack Titan's collapsed body + at both shifts
     nape = C["ATD"].nape
     n = 45
@@ -1202,6 +1214,14 @@ def setup(site_dict, seed=850, light=False, coll_name="TrostAction"):
     te = 101.0 + rnd.random(n) * 10.0
     P = np.array([nape(t) for t in te]) + rnd.normal(0, 3.0, (n, 3))
     hs.add_many(te, P, rnd.normal(0, 1.0, (n, 3)), r0=0.6, r1=2.8, life=3.0, rise=3.0)
+    # shift steam: after the lightning, a rising column of many small semi-transparent cards that clears fast
+    for (sx, sy, st0, sdur) in C["ATD"].shifts:
+        z = site.g((sx, sy)); n = 220
+        te = st0 + 0.15 + rnd.random(n) ** 1.5 * 1.8
+        ang = rnd.random(n) * 6.283; rr = 2.0 + rnd.random(n) * 5.0
+        hs.add_many(te, np.column_stack([sx + np.cos(ang) * rr, sy + np.sin(ang) * rr, z + 1.0 + rnd.random(n) * 14.0]),
+                    np.column_stack([np.cos(ang) * 1.5, np.sin(ang) * 1.5, 2.0 + rnd.random(n) * 4.0]),
+                    r0=0.5, r1=2.0, life=0.9 + 0.9 * rnd.random(n), rise=5.0, alpha=0.3)
     for p in C["pyre_pts"]:
         z = site.g(p)
         n = 320

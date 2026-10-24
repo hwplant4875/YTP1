@@ -310,16 +310,17 @@ def _set_cards(t):
             for o in old.objects():
                 bpy.data.objects.remove(o, do_unlink=True)
         cs = SC.SmokeCards("FxDust")
+        DL = float(os.environ.get("FX_DUST_LIFE", "0.7"))   # card dust clears faster than the old puffs (1 = same life)
         A = rows
         te = np.array([r[0] for r in A]); P = np.array([r[1] for r in A]); V = np.array([r[2] for r in A])
         col = np.array([r[8] for r in A])
         # one card per old puff, a bit larger (soft falloff) + a smaller second card for detail
         cs.add_many(te, P, V, r0=np.array([r[5] for r in A]) * 1.5, r1=np.array([r[6] for r in A]) * 1.5,
-                    life=np.array([r[7] for r in A]), rise=np.array([r[4] for r in A]), color=col, kind="dust",
+                    life=np.array([r[7] for r in A]) * DL, rise=np.array([r[4] for r in A]), color=col, kind="dust",
                     alpha=np.array([r[9] for r in A]) * 0.85, tau=np.array([r[3] for r in A]), fade_in=0.07)
         rng = np.random.default_rng(3)
         cs.add_many(te + 0.05, P + rng.normal(0, 0.6, P.shape), V * 0.8, r0=np.array([r[5] for r in A]) * 0.9,
-                    r1=np.array([r[6] for r in A]) * 0.9, life=np.array([r[7] for r in A]) * 0.8, rise=np.array([r[4] for r in A]) * 1.2,
+                    r1=np.array([r[6] for r in A]) * 0.9, life=np.array([r[7] for r in A]) * 0.8 * DL, rise=np.array([r[4] for r in A]) * 1.2,
                     color=col * 0.85, kind="dust", alpha=np.array([r[9] for r in A]) * 0.6, tau=np.array([r[3] for r in A]), fade_in=0.07)
         cs.build(REG.get("cards_coll"))
         REG["cards"] = cs; REG["cards_n"] = len(rows)

@@ -175,10 +175,10 @@ def shots():
     if "bell_tower" in site.d:
         tw = np.array(site.d["bell_tower"], float); top = site.d.get("bell_tower_top", 50.0)
         def _bt(u, tw=tw, top=top):
-            a = at(33.0 + 4.5 * u)
-            d = (tw - a) / max(1e-3, np.linalg.norm(tw - a))
-            return (Vector(P3(tw + d * 75 + np.array([d[1], -d[0]]) * 18, top - 4)), Vector(P3(a, 10)), 30)
-        L_.append(("bell_tower", 33.0, 37.5, 1.4, _bt))
+            a = at(27.5 + 7.0 * u)
+            mid = (tw + a) / 2; d = (a - tw) / max(1e-3, np.linalg.norm(a - tw)); pp = np.array([d[1], -d[0]])
+            return (Vector(P3(mid + pp * (55 - 8 * u) - d * 6, 95 - 5 * u)), Vector(P3(mid, 8)), 32)   # steep: streets visible
+        L_.append(("bell_tower", 27.5, 35.0, 1.6, _bt))
     L_.append(("flood", 3.0, 12.0, 1.6, lerp_cam((P3(g - inw * 60 + side * 120, 190), P3(g + inw * 120, 0), 30),
                                                   (P3(g - inw * 10 + side * 110, 170), P3(g + inw * 170, 0), 30))))
     L_.append(("eaten", 7.6, 13.7, 2.4, lerp_cam((P3(eye - side * 55 - inw * 45, er[2] + 48), P3(eye + inw * 6, er[2] - 4), 34),
@@ -190,8 +190,8 @@ def shots():
                                                         (P3(hq - inw * 100 + side * 30, 115), P3(hq, 0), 32))))
     L_.append(("mikasa", 21.6, 27.0, 1.5, lerp_cam((P3(M + side * 80 - inw * 20, 90), P3((M + hq) / 2, 0), 30),
                                                     (P3(M + side * 60 - inw * 40, 70), P3(M, 2), 32))))
-    L_.append(("attack", 26.4, 30.0, 1.6, lerp_cam((P3(A0 + side * 70 - inw * 50, 60), P3(A0, 8), 30),
-                                                    (P3(A0 + side * 60 - inw * 60, 52), P3((A0 + M) / 2, 6), 30))))
+    L_.append(("attack", 26.4, 30.0, 1.6, lerp_cam((P3(A0 + side * 40 - inw * 30, 95), P3(A0, 6), 32),
+                                                    (P3(A0 + side * 34 - inw * 36, 88), P3((A0 + M) / 2, 4), 32))))
     L_.append(("at_kills", 33.0, 37.5, 1.0, lambda u: (Vector(P3(at(33 + 4.5 * u) + side * 70 - inw * 50, 75)),
                                                         Vector(P3(at(33 + 4.5 * u), 6)), 30)))
     L_.append(("lift", 46.4, 52.2, 2.0, lerp_cam((P3(hq - inw * 26 + side * 14, 58), P3(hq, 1), 30),

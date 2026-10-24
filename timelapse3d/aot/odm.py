@@ -63,11 +63,11 @@ KITS = {   # cloak colour, emblem colours (a, b)
     "scout":    dict(cloak=(0.045, 0.19, 0.08), em=("white", "blue")),
 }
 # Geo face categories -> material keys (per figure: hair / cloak picked per flyer)
-CATS = ["jacket", "trousers", "boots", "skin", "HAIR", "CLOAK", "EM_A", "EM_B", "steel", "scarf", "wood", "cravat"]
+CATS = ["jacket", "trousers", "boots", "skin", "HAIR", "CLOAK", "EM_A", "EM_B", "steel", "scarf", "wood", "cravat", "ACCENT"]
 
 # ---------------------------------------------------------------- figure geometry (rig: 0 body, 1/2 legs, 3/4 upper arms,
 # 5/6 forearms (5 = right, x>0), 7 cloak; pivots in local (y, z), model faces +y)
-def figure_geo(g, i, kit, scarf=False, rifle=False, cravat=False, H=1.7, moustache=False):
+def figure_geo(g, i, kit, scarf=False, rifle=False, cravat=False, H=1.7, moustache=False, accent=False):
     s = H / 1.7
     hip, sh = 0.82 * s, 1.36 * s
     for side, part in ((-1, 1), (1, 2)):
@@ -81,6 +81,9 @@ def figure_geo(g, i, kit, scarf=False, rifle=False, cravat=False, H=1.7, moustac
     if scarf:
         g.box((0, 0.0, 1.40 * s), (0.30 * s, 0.26 * s, 0.10 * s), 9, i, 0, hip=hip)
         g.box((0.06 * s, -0.16 * s, 1.22 * s), (0.08 * s, 0.05 * s, 0.32 * s), 9, i, 7, (-0.13 * s, sh), (0, 0), hip)
+    if accent:        # a bright collar + cloak hem (Eren's emerald cue among the brown cadet cloaks)
+        g.box((0, -0.03 * s, 1.37 * s), (0.34 * s, 0.26 * s, 0.07 * s), 12, i, 0, hip=hip)
+        g.box((0, -0.18 * s, 0.6 * s), (0.42 * s, 0.03 * s, 0.09 * s), 12, i, 7, (-0.155 * s, 1.36 * s), (0, 0), hip)
     if moustache:     # Pixis: a big white moustache, the one face cue allowed (it reads as a shape, not a face)
         g.box((0, 0.12 * s, 1.50 * s), (0.22 * s, 0.06 * s, 0.05 * s), 11, i, 0, hip=hip, taper=0.6)
     if cravat:
@@ -149,9 +152,10 @@ def yaw_of(d):
 
 # ---------------------------------------------------------------- tracks
 class Flyer:
-    def __init__(self, name, kit="cadet", hair="brown", scarf=False, rifle=False, cravat=False, H=1.7, scale=1.0, seed=0, moustache=False):
+    def __init__(self, name, kit="cadet", hair="brown", scarf=False, rifle=False, cravat=False, H=1.7, scale=1.0, seed=0, moustache=False,
+                 accent=None, cloak=None):
         self.name, self.kit, self.hair, self.scarf, self.rifle, self.cravat = name, kit, hair, scarf, rifle, cravat
-        self.moustache = moustache
+        self.moustache, self.accent, self.cloak = moustache, accent, cloak       # accent: emissive rgb; cloak: rgb override
         self.H, self.scale = H, scale
         self.seg = []
         self.seed = seed
@@ -367,14 +371,23 @@ class Squads:
         hips = np.zeros(n)
         for i, f in enumerate(self.flyers):
             n0 = len(g.fc)
-            hips[i] = figure_geo(g, i, f.kit, f.scarf, f.rifle, f.cravat, f.H, f.moustache)
+            hips[i] = figure_geo(g, i, f.kit, f.scarf, f.rifle, f.cravat, f.H, f.moustache, f.accent is not None)
             kit = KITS[f.kit]
             look = []
             for c in CATS:
                 if c == "HAIR":
                     look.append(mi("hair_" + f.hair, HAIRS[f.hair], 0.6))
                 elif c == "CLOAK":
-                    look.append(mi("cloak_" + f.kit, kit["cloak"], 0.9))
+                    look.append(mi("cloak_" + f.name, f.cloak, 0.9) if f.cloak else mi("cloak_" + f.kit, kit["cloak"], 0.9))
+                elif c == "ACCENT":
+                    rgb = f.accent or (0.05, 0.75, 0.3)
+                    key = "accent_%.2f_%.2f_%.2f" % tuple(rgb)
+                    if key not in mkey:
+                        m = L.mat(f"ODM_{key}", rgb, 0.5)
+                        b = m.node_tree.nodes["Principled BSDF"]
+                        b.inputs["Emission Color"].default_value = (*rgb, 1); b.inputs["Emission Strength"].default_value = 1.6
+                        mkey[key] = len(mats); mats.append(m)
+                    look.append(mkey[key])
                 elif c == "EM_A":
                     look.append(mi(kit["em"][0], BASE[kit["em"][0]], 0.7))
                 elif c == "EM_B":
