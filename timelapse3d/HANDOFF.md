@@ -105,3 +105,4 @@ Order and contents to change:
 Implementation hints:
 - Character tracking: persistent tiny HUD markers (a coloured dot plus a name in Pirata One with a leader line, the benchmark's label style) on Eren, Mikasa, Armin, Levi and Erwin whenever they are small.
 - Crowds and soldiers: instanced low-poly figures on paths (geometry nodes or particles along curves), with cloak colour as the main read.
+- 06:00 USER APPROVED name tags: persistent small HUD labels (coloured dot, leader line, name in Pirata One) for Eren, Mikasa, Armin, Levi and Erwin (add Hannes, Carla and Pyxis in their own scenes) whenever the character is small on screen. Fade them out when the character is large or off screen.
