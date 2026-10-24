@@ -66,7 +66,7 @@ def keys():
         (4.35, (-3, -200, 65), (CDX, -700, 42), 30),                   # gliding down along the avenue
         (4.9, (-6, -385, 60), (CDX, GY, 52), 46),                      # past the plaza, down the gate street
         # line of sight from ~58 m over the wall top reaches ~49 m at the head: it reads as soon as it rises
-        (5.45, (-6, -425, 58), (CDX, GY - 12, 56), 95),
+        (5.45, (-6, -425, 58), (CDX, GY - 12, 56), 74),               # gentle zoom ease-in toward the face
         (8.0, (-5, -450, 56), tuple(HEAD + Vector((0, 2, -3))), float(os.environ.get("FAST_HEAD_LENS", "210"))),   # face ~55% of frame height
         (10.0, (PLAZA.x + 40, PLAZA.y + 30, 120), (GX, GY + 30, 18), 40),   # lift: gate and wall in frame
         (11.0, (PLAZA.x + 45, PLAZA.y + 35, 128), (GX, GY + 40, 16), 40),

@@ -95,7 +95,7 @@ def _grip_points(side):
         top, edge = L.WALL_H + 3.5, GY + 7.0
     else:
         top, edge = L.WALL_H + 1.3, GY + 3.8          # palm clear above the parapet lips / rails (no clipping)
-    g = Vector((x, edge - 4.8 + GRIP_Y + 1.0, top + 0.5))
+    g = Vector((x, edge - 4.8 + GRIP_Y + 1.0 + 0.9, top + 0.5))   # +0.9: shorter fingers still reach the edge
     a0 = Vector((x + sg * 3, GY - 18, L.WALL_H - 18))              # hanging behind the wall, out of sight
     c = Vector((x + sg * 1, GY - 11, L.WALL_H + 13))               # arcs up over the outer edge
     return a0, c, g
@@ -115,6 +115,11 @@ def _hand_rig(arm, side, tgt):
     thumb = [_bone(arm, side, f"HandThumb{i}") for i in (1, 2, 3)]
     for pb in sum(fingers, []) + thumb:
         pb.rotation_mode = "XYZ"
+    # broad, muscular anime hands instead of long claws: base segments shorter (bone Y) and thicker (X/Z);
+    # the outer segments inherit it
+    fl, ft = float(os.environ.get("COL_FINGER_LEN", "0.7")), float(os.environ.get("COL_FINGER_THICK", "1.3"))
+    for pb in [f[0] for f in fingers] + [thumb[0]]:
+        pb.scale = (ft, fl, ft)
     STATE[f"hand{side}"] = dict(tgt=tgt, fingers=fingers, thumb=thumb, pts=_grip_points(side))
 
 def _place_hand(side, h):
