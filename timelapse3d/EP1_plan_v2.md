@@ -68,6 +68,10 @@
 - **Real-time, trackable movement:** in the forest advance especially, characters must move continuously, seen from the sky, and never teleport, so the viewer can track where they are. Teleporting is allowed only where it cannot be avoided.
 - **Survey Corps launches:** masses of Scouts launching and flying on ODM, visible from the air. Keep it cheap: green cloaks must read. Seen from afar they fight titans or get eaten.
 
+**Scale reference (user, 06:10 UTC): `ref/user/scale_ref_tiny_figures_on_wall.png`.** This is an S2 still: a high aerial over Wall Rose with the rails, people as tiny dark figures and a small cart. This is the target scale.
+- Figures are very small, but whoever knows the scene can recognise it.
+- Recognition comes from composition, place and grouping, and from one or two cues: a red scarf, green cloaks, blond hair, a name tag. Detail is not the cue.
+
 **Name tags (user approved, 06:00 UTC).** Keep floating name labels over the key characters and units: small text with a leader line, in the HUD fonts. Combined with continuous movement, they let viewers track who is where from the sky.
 
 **Implications for the build**
