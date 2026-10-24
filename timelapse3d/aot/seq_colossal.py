@@ -1,5 +1,5 @@
-"""Opening continuation (user, 2026-10-24): from the hill tree the camera flies through Shiganshina's inner gate, down the
-main avenue, and the Colossal's head rises over the outer wall; then the camera climbs to a sky view, swings round
+"""Opening continuation (user, 2026-10-24): from the hill tree the camera swooshes straight to the crowded plaza (no inner-gate pass),
+and the Colossal's head rises over the outer wall; then the camera climbs to a sky view, swings round
 behind the Colossal (outside the wall), the kick blows in the outer gate (blocks arc into the town), the Colossal
 vanishes into steam and the pure titans walk in through the breach.
 
@@ -16,11 +16,13 @@ from mathutils import Vector, noise
 F = int(os.environ.get("SEQ_F", "900"))
 
 # ---------------------------------------------------------------- timeline (30 fps)
-T_RISE = (1170, 1290)      # Colossal head comes up over the outer wall
-T_WIND = (1650, 1700)      # right leg drawn far back (anime S1E1)
-T_KICK = (1700, 1728)      # swing forward through the gate; impact at the end
-T_FADE = (1760, 1840)      # vanishes into steam
-T_INFLOW = 1800            # pure titans start walking in
+# user's exact timing (10/24 09:06), video second v = (frame - 840) / 30: tree 0-2 s, swoosh to the plaza 2-5 s,
+# head rises 5-8 s, kick 11 s, then steam and the inflow, briskly
+T_RISE = (990, 1080)       # Colossal head comes up over the outer wall, hands on the wall top
+T_WIND = (1092, 1142)      # right leg drawn far back (anime S1E1), real speed
+T_KICK = (1142, 1170)      # swing forward through the gate; impact at the end (11 s)
+T_FADE = (1200, 1260)      # vanishes into steam
+T_INFLOW = 1215            # pure titans start walking in
 
 def _ramp(a, b, f=F):
     t = min(1.0, max(0.0, (f - a) / (b - a)))
@@ -62,20 +64,16 @@ def keys():
     l0, t0, n0 = flight.flight_at(900)
     return [
         (900, l0, t0, n0),
-        (965, (-440, 300, 24), (-210, 120, 14), 32),
-        (1050, (-150, 190, 24), (0, 0, 10), 30),
-        (1112, (-4, 70, 12), (0, -40, 10), 28),
-        (1140, (0, 14, 10), (0, -80, 11), 28),           # into the inner gate tunnel (14 m wide, 20 m high)
-        (1162, (0, -16, 10.5), (0, -140, 16), 28),        # out on the gate square
-        (1270, (0, -225, 30), (-6, -738, 62), 70),        # down the avenue; tight on the head rising over the wall
-        (1380, (-6, -290, 36), (-6, -738, 64), 85),
-        (1500, (230, -380, 270), (0, -700, 30), 28),      # climb to the sky view
-        (1620, (190, -1130, 240), (0, -720, 40), 28),     # swing round behind the Colossal, outside the wall
-        (1650, (110, -1000, 120), (-4, -730, 24), 45),    # closing in from behind for the kick
-        (1700, (95, -960, 80), (-2, -725, 22), 55),       # legs + gate fill the frame: wind-up, strike
-        (1760, (95, -960, 80), (0, -715, 22), 55),
-        (1900, (70, -930, 230), (0, -470, 0), 28),        # rise and look north over the breach: titans walk in
-        (2100, (40, -840, 200), (0, -360, 0), 28),
+        (935, (-300, 250, 90), (-60, 0, 40), 30),         # swoosh up off the hill, over the inner wall
+        (965, (-40, -230, 60), (0, -620, 40), 30),
+        (990, (0, -462, 6), (-6, -738, 58), 35),          # down among the plaza crowd: the head appears
+        (1080, (-2, -520, 12), (-6, -738, 64), 75),       # zoom toward the head as it rises
+        (1110, (200, -700, 200), (0, -730, 40), 30),      # swoop up over the outer wall
+        (1135, (110, -1000, 120), (-4, -730, 24), 45),    # behind the Colossal for the kick
+        (1170, (95, -960, 80), (-2, -725, 22), 55),       # legs + gate fill the frame: wind-up, strike
+        (1200, (95, -960, 80), (0, -715, 22), 55),
+        (1290, (70, -930, 230), (0, -470, 0), 28),        # rise and look north over the breach: titans walk in
+        (1360, (40, -840, 200), (0, -360, 0), 28),
     ]
 
 def _cr(p0, p1, p2, p3, t):
@@ -109,28 +107,12 @@ def build(M, year, ctx):
     if _BUILDS[0] < 2:               # first listing: flags only
         return
     import bpy
-    # the inner gate stands open on the 845 morning so the camera can fly through it
-    for n in ("InnerGate_Door",):
-        o = bpy.data.objects.get(n)
-        if o:
-            o.hide_render = True
-    # keep the gate corridor clear (a few scattered houses sit in the tunnel and its mouths)
-    town = bpy.data.objects.get("Town")
-    if town:
-        me = town.data; dead = me.attributes["dead"].data
-        n = 0
-        path = [Vector(k[1]).to_2d() for k in keys()[1:6]]          # the low approach to and through the gate
-        def near_path(p, r=20.0):
-            for a, b in zip(path, path[1:]):
-                ab = b - a; t = max(0.0, min(1.0, (p - a).dot(ab) / ab.length_squared))
-                if (p - (a + ab * t)).length < r:
-                    return True
-            return False
-        for i, v in enumerate(me.vertices):
-            if (abs(v.co.x) < 16 and -24 < v.co.y < 40) or near_path(v.co.to_2d()):
-                dead[i].value = year - 1; n += 1
-        me.update()
-        print(f"[seq_colossal] cleared {n} houses from the gate corridor")
+    # the plaza crowd looking south at the head (s1e1_plaza_crowd_colossal_head framing)
+    try:
+        import people_kit as PK
+        PK.crowd(["civilian"], (0, -505, 14, 50), 160, "stand", yaw=math.pi, seed=7, jitter=0.6)
+    except Exception:
+        import traceback; traceback.print_exc()
     # the Armored Titan belongs to a later chapter: hide it during this sequence
     for o in bpy.data.objects:
         if "armored" in o.name.lower() and o.type in ("ARMATURE", "MESH", "EMPTY"):
