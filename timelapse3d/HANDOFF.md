@@ -218,3 +218,6 @@ New crowd/titan sky-view system (the same minimal style):
 - Before: a big crowd gathered in the plaza. After the houses are destroyed: people fleeing everywhere.
 - Then many minimal titans (simple, animation-friendly): they eat residents, residents flee to the BOATS (canal ferry) and to the inner gate, titans scatter and wander chaotically after eating. Built to read from the sky view.
 Scope: everything up to just before the Grisha injection scene (845 fall → ferry/vow → refugee camp/Maria evacuation as in EP1_plan_v2). Follow the pace rule, faceless characters, ≤20 min previews per segment; push previews and stills for review as segments finish.
+
+## 15:51 USER: total EP1 length 8-10 min MAX
+- The full EP1 cut (EP1_plan_v2, planned ~14 min) must land at 8-10 min. Trim the holds and data shots proportionally; keep the pace rule. The fall of Shiganshina up to just before the Grisha scene stays at about 50-60 s.
