@@ -38,11 +38,20 @@ def look(cam, loc, tgt, lens, roll=0.0):
     e = (Vector(tgt) - Vector(loc)).to_track_quat("-Z", "Y").to_euler()
     cam.rotation_euler = e; cam.data.lens = lens
 
+def _mono(a, b):
+    """Fritsch-Carlson tangent from two neighbouring slopes: 0 at a turn, harmonic mean otherwise (no overshoot)."""
+    return 0.0 if a * b <= 0 else 2 * a * b / (a + b)
+
 def _cr(p0, p1, p2, p3, u, t0, t1, t2, t3):
-    m1 = ((p2 - p1) / (t2 - t1) + (p1 - p0) / (t1 - t0)) * 0.5 * (t2 - t1)
-    m2 = ((p3 - p2) / (t3 - t2) + (p2 - p1) / (t2 - t1)) * 0.5 * (t2 - t1)
+    """Monotone (per component) cubic Hermite segment p1->p2, time-parametrised."""
     h00, h10, h01, h11 = 2 * u ** 3 - 3 * u ** 2 + 1, u ** 3 - 2 * u ** 2 + u, -2 * u ** 3 + 3 * u ** 2, u ** 3 - u ** 2
-    return p1 * h00 + m1 * h10 + p2 * h01 + m2 * h11
+    def one(a0, a1, a2, a3):
+        d0, d1, d2 = (a1 - a0) / (t1 - t0), (a2 - a1) / (t2 - t1), (a3 - a2) / (t3 - t2)
+        m1, m2 = _mono(d0, d1) * (t2 - t1), _mono(d1, d2) * (t2 - t1)
+        return a1 * h00 + m1 * h10 + a2 * h01 + m2 * h11
+    if isinstance(p1, (int, float)):
+        return one(p0, p1, p2, p3)
+    return Vector([one(p0[i], p1[i], p2[i], p3[i]) for i in range(len(p1))])
 
 def spline_cam(ks, s):
     """ks: [(s, loc, tgt, lens)] with a guide key at each end; time-parametrised Catmull-Rom, eased ends."""
@@ -182,15 +191,29 @@ def seg3_build():
     t0 = time.time()
     rig = SH.make_armored("ArmoredTitan")
     rig["gait"] = dict(stride=0.75, knee=1.0, sway=0.015, bob=0.04, arm=0.65, limp=0.0)
-    rig["slouch"] = 0.9; rig["arms_out"] = 0.85; rig["gait_seed"] = 3
+    rig["slouch"] = 0.5; rig["arms_out"] = 0.85; rig["gait_seed"] = 3
+    k = float(os.environ.get("FALL_ARM_SCALE", "1.3"))        # read from the sky over 8-17 m houses
+    rig.scale = tuple(v * k for v in rig.scale)
     if rig.animation_data:
         rig.animation_data.action = None
     S["arm"] = rig
     print(f"[fall2] Armored built {time.time() - t0:.0f}s")
     # inner gate pieces (states845 armored build): shown only from the impact on
     S["inner_mods"] = [m for m in bpy.data.objects["InnerGate"].modifiers if m.type == "BOOLEAN"] if bpy.data.objects.get("InnerGate") else []
-    S["inner_after"] = [o for o in bpy.data.objects if o.name.startswith(("InnerGate_Grime", "InnerHoleLight", "InnerDust"))]
-    S["inner_door"] = bpy.data.objects.get("InnerGate_Door")
+    S["inner_after"] = [o for o in bpy.data.objects if o.name.startswith(("InnerGate_Grime", "InnerDust"))]
+    hl = bpy.data.objects.get("InnerHoleLight")      # the light card reads as a white slab from the south side
+    if hl:
+        hl.hide_render = True
+        if FX:
+            FX.REG["appear"] = [a_ for a_ in FX.REG["appear"] if a_[0] is not hl]
+    S["inner_door"] = None                          # (states845's InnerGate_Door renders as a white slab: the base
+    if FX:                                          #  gatehouse door shows while the booleans are off)
+        FX.REG["mods"] = [m for m in FX.REG["mods"] if m not in S["inner_mods"]]     # we drive the inner breach
+    d0 = bpy.data.objects.get("InnerGate_Door")
+    if d0:
+        d0.hide_render = True
+        FX.REG["appear"] = [a for a in FX.REG["appear"] if a[0] is not d0] if FX else []
+    S["smoke"] = [o for o in bpy.data.objects if o.name.startswith(("FireSmoke", "FlameSmoke", "SmokeCanopy"))]
     # the burst: blocks + dust registered in fx845 at FXT + IMPACT
     if FX:
         rnd = random.Random(12)
@@ -261,22 +284,22 @@ def armored_y(s):
     return -9.0 + 17.0 * (1 - math.exp(-(s - IMPACT) / 0.6))
 
 def seg3_cam_keys(S):
-    def boatcam(s, back, up, side_, k_t):
+    def boatcam(s, ahead, up, side_, k_t, lens=34.0):
         ob, Lb, s0, sd = S["ferries"][1]
         p, d = SC.canal_at(s0 + FERRY_V * s)
-        boat = Vector((p.x, p.y, L.height(p.x, p.y) + 1.5))
-        gate = Vector((0.0, 0.0, 12.0))
-        away = (boat - gate).to_2d().normalized(); sd2 = Vector((-away.y, away.x))
-        loc = boat + Vector((away.x, away.y, 0)) * back + Vector((sd2.x, sd2.y, 0)) * side_ + Vector((0, 0, up))
-        tgt = boat.lerp(gate, k_t); tgt.z = 2.0
-        return (s, tuple(loc), tuple(tgt), 34.0)
+        nrm = Vector((-d.y, d.x)); p = p + nrm * sd
+        bow = Vector((p.x, p.y, L.height(p.x, p.y) + 2.5)) + Vector((d.x, d.y, 0)) * (Lb / 2 - 2.5)
+        gate = Vector((0.0, 0.0, 14.0))
+        loc = bow + Vector((d.x, d.y, 0)) * ahead + Vector((nrm.x, nrm.y, 0)) * side_ + Vector((0, 0, up))
+        tgt = bow.lerp(gate, k_t)
+        return (s, tuple(loc), tuple(tgt), lens)
     ks = [
-        (0.0, (70, -290, 100), (0, -40, 12), 30),          # behind and to the side of the charge, the gate ahead
-        (IMPACT, (42, -150, 74), (0, -6, 16), 32),          # closing on the impact
-        (5.6, (150, -30, 120), (120, 70, 0), 30),           # rising over the wall: refugees, canal, ferries
-        boatcam(8.0, 60, 34, 10, 0.13),                     # the vow hold at the lead ferry (8-11 s, slow crane)
-        boatcam(11.0, 66, 40, 12, 0.16),
-        boatcam(SEG3, 95, 110, 18, 0.28),                   # crane up over the ferries
+        (0.0, (48, -250, 62), (0, -95, 8), 30),            # behind and to the side of the charge, the gate ahead
+        (IMPACT, (36, -95, 48), (0, -4, 16), 30),           # closing on the impact
+        (5.8, (300, -70, 150), (215, 75, 0), 30),           # rising over the wall: the jammed bank, the ferries
+        boatcam(8.0, 17, 8, -9, 0.025),                     # the vow hold: ahead of the lead ferry, over the water on
+        boatcam(11.0, 19, 9.5, -10, 0.03),                  # the far side: the kids at the bow, the bank and the wall behind
+        boatcam(SEG3, 70, 90, 20, 0.3, 28.0),               # crane up over the ferries
     ]
     return guide(ks)
 
@@ -300,6 +323,17 @@ def seg3_pose(S, s):
     off, _, _ = PT._ground(rig, rots, off)
     PT._apply(rig, rots, off)
     rig.location = (0.0, y, L.height(0.0, y) - 0.1)
+    if os.environ.get("FALL_DEBUG"):
+        bpy.context.view_layer.update()
+        print("[fall2 dbg] armored", tuple(round(v, 1) for v in rig.location), rig.hide_render, tuple(round(v, 2) for v in rig.scale),
+              [(c.name, c.hide_render, tuple(round(v, 1) for v in c.dimensions)) for c in rig.children][:4], rig.rotation_mode)
+        dg = bpy.context.evaluated_depsgraph_get()
+        for c in rig.children[:1]:
+            ce = c.evaluated_get(dg); me = ce.to_mesh()
+            ws = [ce.matrix_world @ v.co for v in me.vertices]
+            print("[fall2 dbg] body world bbox", [round(min(w[i] for w in ws), 1) for i in range(3)], [round(max(w[i] for w in ws), 1) for i in range(3)],
+                  "users_collection", [cc.name for cc in c.users_collection], "visible_camera", c.visible_camera)
+            ce.to_mesh_clear()
     rig.rotation_euler = (0.2 if s < IMPACT + 0.4 else 0.2 * (1 - smooth(IMPACT + 0.4, IMPACT + 1.4, s)), 0.0, math.pi)
     # swarm: the district behind (titans keep wandering / eating); sim t continues from segment 2
     SW.update(68.0 + 1.5 * s, pscale=1.3)
@@ -335,7 +369,20 @@ def seg3_pose(S, s):
     if IMPACT <= s < IMPACT + 0.8:
         a = (1 - (s - IMPACT) / 0.8) * 1.6
         loc = loc + Vector((noise.noise(Vector((s * 40, 0, 0))), noise.noise(Vector((0, s * 40, 3))), noise.noise(Vector((5, 1, s * 40))))) * a
+    if os.environ.get("FALL_CAMDBG"):                # debug: a fixed camera "x,y,z,tx,ty,tz,lens"
+        v = [float(x) for x in os.environ["FALL_CAMDBG"].split(",")]
+        loc, tgt, lens = Vector(v[:3]), Vector(v[3:6]), v[6]
+    for o in S["smoke"]:                            # never fly the camera through a smoke column
+        near = (o.matrix_world.translation.to_2d() - loc.to_2d()).length < 55
+        if near and not o.hide_render:
+            o.hide_render = True
     look(cam, loc, tgt, lens)
+    if os.environ.get("FALL_DEBUG"):
+        bpy.context.view_layer.update()
+        dg = bpy.context.evaluated_depsgraph_get()
+        d = (tgt - loc).normalized()
+        hit, hp, nn, idx, ob, mtx = sc.ray_cast(dg, loc, d)
+        print(f"[fall2 dbg] s={s:.2f} cam {tuple(round(v, 1) for v in loc)} -> {tuple(round(v, 1) for v in tgt)} hit {ob.name if hit else None} at {round((hp - loc).length, 1) if hit else None}")
 
 # ================================================================ SEGMENT 4: night pull-up, the grey belt
 SEG4 = 12.0
@@ -370,7 +417,7 @@ def grey_belt():
     em = bsdf.inputs.get("Emission Color"); es = bsdf.inputs.get("Emission Strength")
     if em is not None and es is not None and not es.links:
         Lk.new(mix.outputs[2], em)
-        k = N.new("ShaderNodeMath"); k.operation = "MULTIPLY"; Lk.new(mul.outputs[0], k.inputs[0]); k.inputs[1].default_value = 0.35
+        k = N.new("ShaderNodeMath"); k.operation = "MULTIPLY"; Lk.new(mul.outputs[0], k.inputs[0]); k.inputs[1].default_value = 0.15
         Lk.new(k.outputs[0], es)
     return front
 
@@ -407,7 +454,19 @@ def seg4_pose(S, s):
         (4.0, (60, -620, 420), (0, 200, 0), 28),            # pull up and back: the wall, the burst gate, the titans
         (SEG4, (0, -1500, 1650), (0, 2600, 0), 26),          # the Maria belt turning grey to the north
     ])
-    look(cam, *spline_cam(ks, s))
+    loc, tgt, lens = spline_cam(ks, s)
+    can = bpy.data.objects.get("SmokeCanopy")       # the orange smoke canopy: lovely from inside the town, a blinding
+    if can:                                         # slab once the camera climbs through it
+        hide = loc.z > float(os.environ.get("FALL_CANOPY_Z", "130"))
+        if can.hide_render != hide:
+            can.hide_render = hide
+    near_smoke(S, loc)
+    look(cam, loc, tgt, lens)
+
+def near_smoke(S, loc):
+    for o in S.setdefault("smoke", [o for o in bpy.data.objects if o.name.startswith(("FireSmoke", "FlameSmoke"))]):
+        if (o.matrix_world.translation.to_2d() - loc.to_2d()).length < 55 and not o.hide_render:
+            o.hide_render = True
 
 def seg5_build():
     import people_kit as PK
@@ -419,10 +478,9 @@ def seg5_build():
         a = k * 2.399; r = 120 + (k % 20) * 25
         c = Vector((gf.x + math.cos(a) * r * 1.3, gf.y + math.sin(a) * r))
         dmin = min(((c - t).length for t in trees), default=99)
-        if best is None or dmin > best[0]:
-            best = (dmin, c)
-        if dmin > 30 and c.y < gf.y:
-            best = (dmin, c); break
+        sc_ = abs(dmin - 24.0)                         # a small clearing: giant trees ~24 m away frame the figures
+        if best is None or sc_ < best[0]:
+            best = (sc_, c)
     C = best[1]; G["C"] = C
     zc = L.height(C.x, C.y)
     PK._PROTO.clear()
@@ -455,6 +513,8 @@ def seg5_build():
 
 def seg5_pose(S, s):
     G = S["g"]; C = G["C"]; zc = G["z"] + 0.16
+    if S.get("front") is not None:
+        S["front"].outputs[0].default_value = -1000.0         # (845 night: the forest floor is not part of the grey belt)
     if FX:
         FX.update(FXT + 50.0)
     fwd = Vector((0.6, 0.8)).normalized()                     # they walk in along fwd, stop at the clearing centre
@@ -497,9 +557,9 @@ def seg5_pose(S, s):
     c3 = Vector((C.x, C.y, zc))
     side = Vector((-fwd.y, fwd.x, 0)); back = Vector((-fwd.x, -fwd.y, 0))
     ks = guide([
-        (0.0, c3 + back * 40 + side * 25 + Vector((0, 0, 95)), c3 + Vector((0, 0, 1)), 30),
-        (2.4, c3 + back * 22 + side * 16 + Vector((0, 0, 34)), c3 + Vector((0, 0, 1)), 34),
-        (SEG5, c3 + back * 16 + side * 12 + Vector((0, 0, 24)), c3 + Vector((0, 0, 1)), 40),
+        (0.0, c3 + back * 34 + side * 20 + Vector((0, 0, 70)), c3 + Vector((0, 0, 1)), 28),   # down through the canopy gap
+        (2.4, c3 + back * 18 + side * 12 + Vector((0, 0, 22)), c3 + Vector((0, 0, 1)), 32),
+        (SEG5, c3 + back * 13 + side * 9 + Vector((0, 0, 14)), c3 + Vector((0, 0, 1.2)), 36),
     ])
     look(cam, *spline_cam(ks, s))
 
