@@ -250,7 +250,7 @@ _hq = SUPPLY_HQ
 CAMS = {
     "trost_overview": ((-560, 520, 720), (80, -470, 0), 26),
     "trost_outer_gate": ((150, -610, 150), (0, OUTER_GATE[1], 20), 32),
-    "trost_boulder": ((40, -330, 105), (-40, -640, 0), 30),
+    "trost_boulder": ((-5, -360, 75), (-62, -500, 2), 30),     # boulder square, avenue on to the outer gate
     "trost_hq": ((_HQ_C[0] - 150, _HQ_C[1] + 70, 120), (_HQ_C[0], _HQ_C[1], 6), 34),
     "trost_hq_cut": ((_HQ_C[0] - 70, _HQ_C[1] + 35, 120), (_HQ_C[0], _HQ_C[1], 0), 34),
     "trost_belltower": ((PLAZA[0] + 70, PLAZA[1] - 90, 80), (BELL_TOWER["xy"][0], BELL_TOWER["xy"][1], 30), 34),
