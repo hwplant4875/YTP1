@@ -190,3 +190,4 @@ Missing (build ourselves or kitbash from the soldier and kids): Erwin, Armin, Ha
 - After the kick: steam vanish and titans pouring in, briskly.
 - The inner-gate pass and the long street fly-through are dropped; go straight from the tree to the plaza.
 - Rework the T_* constants in seq_colossal.py and the flight.py opening keys to these frames. Add Colossal hand bones/pose (or hand meshes) gripping the wall top during the rise. Then do the 480p test render.
+- 09:06 USER: "속도감은 생명이야" (pace is everything). Apply this to the WHOLE EP1, not just the opening: fast, snappy drone moves, short holds, no lingering. Holds only for the dialogue-overlay beats (Yamero ~2 s, vow ~3 s).
