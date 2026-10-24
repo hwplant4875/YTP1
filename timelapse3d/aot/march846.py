@@ -44,7 +44,7 @@ T_END = float(E("MARCH_TEND", "18.0"))
 DT = 0.1
 N_PEOPLE = int(E("MARCH_N", "60000"))
 N_WAGONS = int(E("MARCH_WAGONS", "1600"))
-N_TITANS = int(E("MARCH_TITANS", "420"))
+N_TITANS = int(E("MARCH_TITANS", "360"))
 N_SURV = 100
 TOTAL = 250000
 LIFT = 0.6                  # grabbed -> gone (video seconds)
@@ -230,7 +230,7 @@ def simulate():
     abn = rng.random(NT) < 0.1
     vt = np.where(abn, rng.uniform(300, 380, NT), rng.uniform(150, 250, NT))
     tst = np.select([wave == 0, wave == 1, wave == 2, wave == 3],
-                    [rng.uniform(0.5, 2.5, NT), rng.uniform(2.5, 5.0, NT), rng.uniform(3.0, 5.5, NT), rng.uniform(5.5, 8.0, NT)])
+                    [rng.uniform(0.0, 1.5, NT), rng.uniform(1.0, 3.5, NT), rng.uniform(1.5, 4.0, NT), rng.uniform(3.0, 5.5, NT)])
     tcon = np.select([wave == 0, wave == 1, wave == 2, wave == 3],
                      [rng.uniform(6.0, 7.5, NT), rng.uniform(7.2, 9.5, NT), rng.uniform(7.6, 10.0, NT), rng.uniform(9.0, 11.0, NT)])
     TXY = np.zeros((NT, 2))
@@ -246,7 +246,7 @@ def simulate():
         x, y, tx, ty = road(np.array([s]))
         p = np.array([x[0], y[0]])
         fw = np.array([tx[0], ty[0]]); nm = np.array([-ty[0], tx[0]])
-        dist = vt[j] * 0.55 * (tc - tst[j]) + rng.uniform(150, 600)
+        dist = vt[j] * 0.6 * (tc - tst[j]) + rng.uniform(300, 900)     # from beyond the horizon haze
         if wave[j] == 0:
             ang = side * 0.9
             d = fw * math.cos(ang) + nm * math.sin(ang)
@@ -258,7 +258,7 @@ def simulate():
     tyaw = np.arctan2(-(GATE[0] - TXY[:, 0]), GATE[1] - TXY[:, 1])         # facing roughly toward the column
     Rk = 6.0 + 1.4 * H
     Rf = 70.0 + 4.0 * H
-    rate = 14.0 + 3.0 * H                                # grabs per video second (timelapse: each agent ~ 4 people)
+    rate = 20.0 + 4.0 * H                                # grabs per video second (timelapse: each agent ~ 4 people)
 
     # ---- outputs
     PX = np.zeros((K, N), np.float32); PY = np.zeros((K, N), np.float32)
@@ -297,7 +297,9 @@ def simulate():
                 nn = np.argmin(dd, axis=1)
                 tgt = P[nn]; dist = np.sqrt(dd[np.arange(NT), nn])
             else:                                      # nobody left: wander toward the gate / mill around
-                tgt = GATE[None, :] + FWD[None, :] * 400 + RGT[None, :] * (np.sin(np.arange(NT) * 1.7) * 900)[:, None]
+                ang = np.arange(NT) * 2.399 + 0.3
+                rad = 700 + (np.arange(NT) * 137 % 1600)
+                tgt = GATE[None, :] + FWD[None, :] * (rad * np.abs(np.cos(ang)) + 300)[:, None] + RGT[None, :] * (rad * np.sin(ang))[:, None]
                 dist = np.hypot(*(tgt - TXY).T)
             dvec = tgt - TXY
             dn = dvec / (np.linalg.norm(dvec, axis=1, keepdims=True) + 1e-6)
@@ -309,9 +311,9 @@ def simulate():
             # separation
             dx = TXY[:, None, 0] - TXY[None, :, 0]; dy = TXY[:, None, 1] - TXY[None, :, 1]
             dr = np.hypot(dx, dy) + np.eye(NT) * 1e6
-            mind = 0.55 * (H[:, None] + H[None, :])
+            mind = 1.25 * (H[:, None] + H[None, :])
             push = np.clip((mind - dr) / mind, 0, 1)
-            vel[:, 0] += (push * dx / dr).sum(1) * 60.0; vel[:, 1] += (push * dy / dr).sum(1) * 60.0
+            vel[:, 0] += (push * dx / dr).sum(1) * 110.0; vel[:, 1] += (push * dy / dr).sum(1) * 110.0
             vel[~act] *= 0.0
             newp = TXY + vel * DT
             newp[:, 0], newp[:, 1] = push_out(newp[:, 0], newp[:, 1], 25.0)
@@ -323,9 +325,9 @@ def simulate():
             TXY = newp
             TSPD[k] = spd_t
             # footfall dust
-            for j in np.where(act & (spd_t > 20) & (t >= foot_next))[0]:
-                dust.append((t, TXY[j, 0], TXY[j, 1], 2.5 + 0.55 * H[j], 2.0, 0.45))
-                foot_next[j] = t + rng.uniform(0.35, 0.6)
+            for j in np.where(act & (spd_t > 60) & (t >= foot_next))[0]:
+                dust.append((t, TXY[j, 0], TXY[j, 1], 2.5 + 0.5 * H[j], 1.6, 0.18))
+                foot_next[j] = t + rng.uniform(0.7, 1.1)
         TXk[k] = TXY[:, 0]; TYk[k] = TXY[:, 1]; TYAWk[k] = tyaw
         # ---------------- fear + kills (agent grid)
         elig = np.where(alive & outside)[0]
@@ -371,7 +373,7 @@ def simulate():
                         if t - grab[j] > 1.1:
                             grab[j] = t
                             fx = TXY[j] + np.array([-math.sin(tyaw[j]), math.cos(tyaw[j])]) * H[j] * 0.3
-                            dust.append((t, fx[0], fx[1], 3.0 + 0.35 * H[j], 1.5, 0.35))
+                            dust.append((t, fx[0], fx[1], 3.0 + 0.35 * H[j], 1.5, 0.22))
         TGR[k] = grab
         # ---------------- panic: titans near, or contagion through the crowd
         scared = (repn > 0) & ((mode == 0) | (mode == 1))
@@ -414,7 +416,7 @@ def simulate():
                         w_to[fl] = t
                         for a in fl[:: max(1, len(fl) // 30)]:
                             xx, yy, _, _, _ = slot_xy(wq[a:a + 1], wu[a:a + 1], t, wspd[a:a + 1], np.zeros(1))
-                            dust.append((t, xx[0], yy[0], 9.0, 2.6, 0.5))
+                            dust.append((t, xx[0], yy[0], 9.0, 2.6, 0.35))
         # ---------------- move fleeing / retreating people
         m1 = np.where(mode == 1)[0]
         if len(m1):
@@ -456,8 +458,8 @@ def simulate():
         if t < 10.0:
             mi = np.where((mode == 0) & (s_all > 30))[0]
             if len(mi):
-                for a in rng.choice(mi, min(14, len(mi)), replace=False):
-                    dust.append((t, pos[a, 0], pos[a, 1], 11.0, 2.4, 0.11))
+                for a in rng.choice(mi, min(7, len(mi)), replace=False):
+                    dust.append((t, pos[a, 0], pos[a, 1], 10.0, 2.2, 0.07))
         stats.append((t, int((mode != 2).sum()), int((mode == 1).sum()), int((mode == 2).sum())))
     # ---- alive table for the counter
     tt = np.arange(K) * DT
@@ -698,6 +700,7 @@ def _dust_mat():
     b = N["Principled BSDF"]; b.inputs["Base Color"].default_value = (0.74, 0.66, 0.52, 1); b.inputs["Roughness"].default_value = 1.0
     a = N.new("ShaderNodeAttribute"); a.attribute_type = "INSTANCER"; a.attribute_name = "a"
     Lk.new(a.outputs["Fac"], b.inputs["Alpha"])
+    b.inputs["Emission Color"].default_value = (0.74, 0.66, 0.52, 1); b.inputs["Emission Strength"].default_value = 0.5
     for k, v in (("surface_render_method", "BLENDED"), ("use_transparent_shadow", False)):
         try:
             setattr(m, k, v)
@@ -709,7 +712,7 @@ def build_dust(coll):
     dc = bpy.data.collections.new("MarchDustProtos")
     bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=2, radius=1.0)
     for v in bm.verts:
-        v.co.z *= 0.55
+        v.co.z *= 0.8
     for f in bm.faces:
         f.smooth = True
     o = _bm_obj("D00_puff", bm, [_dust_mat()]); dc.objects.link(o)
@@ -858,7 +861,7 @@ def update(t, cam_loc):
     tp = np.stack([tx, ty, tz + bob], 1)
     import swarm845 as SW
     dcam = np.sqrt((tx - cam[0]) ** 2 + (ty - cam[1]) ** 2 + (tz - cam[2]) ** 2)
-    tsc = _dscale(dcam, 330.0, 2.6)                     # titans drawn larger far away (same idea as the people)
+    tsc = _dscale(dcam, 420.0, 2.2)                     # titans drawn larger far away (same idea as the people)
     co = SW._deform(S["RT"], Ar, Ae, lean, tsc, tyaw, tp)
     S["tob"].data.vertices.foreach_set("co", co.astype(np.float32).ravel()); S["tob"].data.update()
     # ---------------- people
@@ -903,7 +906,7 @@ def update(t, cam_loc):
     lod = np.where(d > LOD_NEAR, np.where(kind == 3, 7, 5), lod)
     lod = np.where(d > LOD_MID, 6, lod)
     sc = _dscale(d, 150.0, 3.3) * (S["hgt"] / 1.7)
-    sc = np.where(S["surv"] & (t > 14.0), sc * 1.25, sc)
+    sc = np.where(S["surv"], sc * (1.0 + 0.8 * float(_sm(13.0, 16.0, t))), sc)     # the last ~100 must read
     sc = sc * vis
     tilt = np.where(fleeing & moving, -0.25, 0.0)
     rot = np.stack([tilt * 0, np.zeros(N), yaw], 1)
@@ -962,7 +965,8 @@ def _gp(a, b, z):
 # (t, location, look-at, lens).  Outward = south for Trost; lateral +b = east.
 CAM_KEYS = [
     (0.0,  _gp(-170, 170, 125),  _gp(60, -10, 0),    27),     # low, inside the outer gate: the avenue pours out
-    (3.0,  _gp(200, 230, 170),   _gp(900, -20, 0),   27),     # over the wall, rising, along the column
+    (1.8,  _gp(-60, 200, 135),   _gp(260, -10, 0),   27),     # hold on the pour-out a moment, drifting to the gate
+    (3.4,  _gp(260, 230, 175),   _gp(980, -20, 0),   27),     # over the wall, rising, along the column
     (6.0,  _gp(1100, 420, 280),  _gp(2300, -40, 0),  28),     # the column stretches to the horizon; titans ahead
     (9.0,  _gp(2000, 700, 230),  _gp(2300, -150, 0), 29),     # swing out to the east flank as the waves hit
     (12.0, _gp(2100, 950, 380),  _gp(1700, -100, 0), 28),     # higher: islands, encirclement
