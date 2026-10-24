@@ -638,7 +638,7 @@ def _take_smiling():
     rig = next((o for o in bpy.data.objects if o.type == "ARMATURE" and "smiling" in o.name.lower()), None)
     if rig is None:
         import pure_titans as PT
-        rig = PT.make_pure("smiling", seed=1, height=14.0, lod=0.45, name="CarlaSmiling")
+        rig = PT.make_pure("smiling", seed=1, height=float(os.environ.get("CARLA_TITAN_H", "14.0")), lod=0.45, name="CarlaSmiling")
     if rig.animation_data:
         rig.animation_data.action = None
     return rig
@@ -742,7 +742,12 @@ def pose_carla(F):
         hb, ht = _bone_w(ti, "head", "head"), _bone_w(ti, "head", "tail")
         hs = (ht - hb).length
         G = Vector((grab.x, grab.y, g + 0.5))
-        hold = hb + tf * hs * 1.25 + tr * hs * 0.15 - Vector((0, 0, hs * 0.55))
+        if os.environ.get("CARLA_HOLD", "high") == "high":
+            # canon (S1E2 sunset): held HIGH in the fist, arm raised to the side above the head, against the sky;
+            # she only goes to the mouth at the bite (T_BITE)
+            hold = hb + tr * hs * 2.3 + tf * hs * 0.9 + Vector((0, 0, hs * 1.3))
+        else:
+            hold = hb + tf * hs * 1.25 + tr * hs * 0.15 - Vector((0, 0, hs * 0.55))
         bite = hb.lerp(ht, 0.2) + tf * hs * 0.45 - Vector((0, 0, hs * 0.75))
         if F < T_BITE[0]:
             tgt = G.lerp(hold, _ss(*T_LIFT, F))

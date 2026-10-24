@@ -23,7 +23,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--fall-out", required=True)
 ap.add_argument("--fps", type=float, default=30.0)
 ap.add_argument("--s0", type=float, default=0.0)
-ap.add_argument("--s1", type=float, default=15.5)
+ap.add_argument("--s1", type=float, default=13.2)
 ap.add_argument("--fall-samples", type=int, default=2)
 ap.add_argument("--times", default="", help="comma list of segment times (stills) instead of s0..s1")
 ap.add_argument("--index0", type=int, default=-1, help="first frame number (default round(s0 * fps))")
@@ -34,7 +34,7 @@ SW = sys.modules.get("swarm845")
 FX = sys.modules.get("fx845")
 SC = sys.modules.get("seq_carla")
 A_END = 7.5                      # timelapse part ends, Carla beat begins
-SEG_END = 15.5
+SEG_END = 13.2
 T_SIM0, T_SIM1 = 2.0, 60.0       # sim time (s after the kick) over the timelapse part
 
 def smooth(a, b, t):
@@ -63,7 +63,7 @@ def _pchip(T, S, m, t):
     return h00 * S[i] + h10 * h * m[i] + h01 * S[i + 1] + h11 * h * m[i + 1]
 
 # segment time -> seq_carla frame (30 fps numbering). Brisk, except the Yamero hold (~1.2x real).
-F_KEYS = [(0.0, 2150), (A_END, 2290), (9.0, 2340), (11.0, 2440), (12.0, 2515), (14.0, 2585), (SEG_END, 2650)]
+F_KEYS = [(0.0, 2150), (A_END, 2305), (8.4, 2345), (9.6, 2440), (10.6, 2520), (12.6, 2585), (SEG_END, 2622)]
 _FM = _pchip_m([k[0] for k in F_KEYS], [k[1] for k in F_KEYS])
 def carla_f(s):
     return _pchip([k[0] for k in F_KEYS], [k[1] for k in F_KEYS], _FM, s)
@@ -85,7 +85,8 @@ def a_keys():
         (2.4, (PLZ.x + 32, PLZ.y + 70, 92), (PLZ.x, PLZ.y - 30, 0), 34),     # down over the panicking plaza
         (4.8, (55, GY + 190, 112), (0, GY + 40, 0), 32),                     # titans pouring through the breach
         (A_END, tuple(c_loc), tuple(c_tgt), c_lens),                         # = seq_carla camera at the beat start
-        (A_END + 1.5,) + _carla_cam(carla_f(A_END + 1.5)),                # (tangent guide into the beat)
+        (A_END + 1.5,) + _carla_cam(carla_f(A_END + 1.5)),                # into the beat (blended, see cam_at)
+        (A_END + 3.0,) + _carla_cam(carla_f(A_END + 3.0)),                # (tangent guide)
     ]
 
 def _cr(p0, p1, p2, p3, u, t0, t1, t2, t3):
@@ -97,15 +98,26 @@ def _cr(p0, p1, p2, p3, u, t0, t1, t2, t3):
 
 _KS = []
 def cam_at(s):
+    if A_END - 0.7 < s < A_END + 0.7:              # blend the timelapse keys into seq_carla's camera over ~1.4 s
+        w = smooth(A_END - 0.7, A_END + 0.7, s)
+        l1, t1, n1 = _spline_a(s)
+        l2, t2, n2 = _carla_part(s)
+        return l1.lerp(l2, w), t1.lerp(t2, w), n1 + (n2 - n1) * w
     if s >= A_END:
-        F = carla_f(s)
-        loc, tgt, lens = SC.cam_at(F)
-        loc, tgt = Vector(loc), Vector(tgt)
-        w = smooth(2415, 2465, F)
-        if w > 0:                                  # Yamero framing: in front of the titan (+u), Hannes running at us,
-            y_loc, y_tgt, y_lens = yamero_cam(F)   # Eren facing back over his shoulder, the titan lifting Carla behind
-            loc, tgt, lens = loc.lerp(y_loc, w), tgt.lerp(y_tgt, w), lens + (y_lens - lens) * w
-        return loc, tgt, lens
+        return _carla_part(s)
+    return _spline_a(s)
+
+def _carla_part(s):
+    F = carla_f(s)
+    loc, tgt, lens = SC.cam_at(F)
+    loc, tgt = Vector(loc), Vector(tgt)
+    w = smooth(2415, 2465, F)
+    if w > 0:                                      # Yamero framing (see yamero_cam)
+        y_loc, y_tgt, y_lens = yamero_cam(F)
+        loc, tgt, lens = loc.lerp(y_loc, w), tgt.lerp(y_tgt, w), lens + (y_lens - lens) * w
+    return loc, tgt, lens
+
+def _spline_a(s):
     if not _KS:
         _KS.extend(a_keys())
     ks = _KS
@@ -119,20 +131,43 @@ def cam_at(s):
     return loc, tgt, lens
 
 def yamero_cam(F):
-    """seq_carla's own S14 camera sits behind the ruined gable and hides Carla in the hand: look from the titan's
-    front (+u, the way Hannes runs) instead, slow pull-away."""
+    """Yamero framing: low (~6 m up), ~20-30 m from Hannes as he runs at us (+u) with the kids (Eren facing back, arm
+    stretched toward Carla), the Smiling Titan behind lifting her against the golden sky; slow pull-away.
+    (seq_carla's own S14 camera sat behind the ruined gable and hid Carla.)"""
     St = SC.STATE; u, fv = St["u"], St["f"]
     g = L.height(St["C"].x, St["C"].y)
-    def mid(ff):
-        return (St["T1"] + SC.hannes_xy(ff)[0]) * 0.5
-    m = (mid(F - 15) + mid(F) * 2 + mid(F + 15)) / 4.0
-    pull = smooth(2560, 2650, F)
-    D = float(os.environ.get("FALL_YAM_D", "50")) + 22 * pull
-    el = math.radians(float(os.environ.get("FALL_YAM_EL", "54")) + 6 * pull)
-    tgt = Vector((m.x, m.y, g + 6.0))
-    side = u * 0.9 + fv * 0.44
-    loc = tgt + Vector((side.x, side.y, 0)).normalized() * D * math.cos(el) + Vector((0, 0, D * math.sin(el)))
-    return loc, tgt, 36.0
+    hp = lambda ff: SC.hannes_xy(ff)[0]
+    H = (hp(F - 8) + hp(F) * 2 + hp(F + 8)) / 4.0
+    pull = smooth(2585, 2625, F)
+    back = float(os.environ.get("FALL_YAM_BACK", "8")) + 4 * pull
+    up = float(os.environ.get("FALL_YAM_UP", "5")) + 2 * pull
+    T = St["T1"]
+    loc2 = H + u * back - fv * float(os.environ.get("FALL_YAM_SIDE", "5"))
+    loc = Vector((loc2.x, loc2.y, g + up))
+    d = (T - loc2).normalized()                      # look along the line to the titan, pitched ~4 deg down:
+    pitch = math.radians(float(os.environ.get("FALL_YAM_PITCH", "-1")))   # Hannes low in frame, Carla high
+    tgt = loc + Vector((d.x * math.cos(pitch), d.y * math.cos(pitch), math.sin(pitch))) * 20.0
+    return loc, tgt, float(os.environ.get("FALL_YAM_LENS", "16"))
+
+_FIRE = []
+_FIRE_OUT, _FIRE_BASE = {}, {}
+def fire_tune():
+    """The Yeager-house fire: flames x0.45, its smoke billows x1.5 (user: smaller and smokier)."""
+    if not _FIRE:
+        C = SC.STATE["C"]
+        for o in bpy.data.objects:
+            if o.name.startswith(("Flame", "FlameSmoke")) and (o.matrix_world.translation.to_2d() - C).length < 30:
+                _FIRE.append((o, 1.5 if o.name.startswith("FlameSmoke") else 0.45))
+        _FIRE.append(None)
+    for it in _FIRE:
+        if it:
+            o, k = it
+            cur = tuple(o.scale)
+            if _FIRE_OUT.get(o.name) == cur:          # fx845 did not reset it this frame: undo our last change
+                cur = _FIRE_BASE[o.name]
+            _FIRE_BASE[o.name] = cur
+            o.scale = tuple(v * k for v in cur)
+            _FIRE_OUT[o.name] = tuple(o.scale)
 
 def pscale(s):
     return float(os.environ.get("FALL_PSCALE", "1.4")) * (1 - smooth(6.0, A_END, s)) + 1.0 * smooth(6.0, A_END, s)
@@ -143,24 +178,24 @@ def light_setup():
     st = {"sun": so}
     if so:
         st["d0"] = so.matrix_world.to_3x3() @ Vector((0, 0, -1)); st["e0"] = so.data.energy; st["c0"] = Vector(so.data.color)
-        el = math.radians(float(os.environ.get("FALL_SUN_EL", "9")))
+        el = math.radians(float(os.environ.get("FALL_SUN_EL", "4")))
         if SC and SC.STATE.get("u") is not None:
             d = -SC.STATE["u"] - SC.STATE["f"] * 0.35; az = math.atan2(d.y, d.x)
         else:
             az = math.radians(200)
         st["d1"] = Vector((-math.cos(el) * math.cos(az), -math.cos(el) * math.sin(az), -math.sin(el)))
-        st["e1"] = float(os.environ.get("CARLA_SUN_E", "3.4")); st["c1"] = Vector((1.0, 0.62, 0.38))
+        st["e1"] = float(os.environ.get("CARLA_SUN_E", "4.2")); st["c1"] = Vector((1.0, 0.50, 0.20))
     w = bpy.context.scene.world
     st["ramp"] = []
     if w and w.use_nodes:
         for n in w.node_tree.nodes:
             if n.type == "VALTORGB":
                 e = n.color_ramp.elements
-                st["ramp"].append((e[0], Vector(e[0].color), Vector((1.0, 0.46, 0.20, 1)), e[1], Vector(e[1].color), Vector((0.30, 0.30, 0.52, 1))))
+                st["ramp"].append((e[0], Vector(e[0].color), Vector((1.0, 0.62, 0.22, 1)), e[1], Vector(e[1].color), Vector((0.95, 0.66, 0.38, 1))))
     return st
 
 def light_at(st, s):
-    k = smooth(5.0, 8.0, s)
+    k = smooth(6.8, 8.0, s)
     so = st["sun"]
     if so:
         d = st["d0"].lerp(st["d1"], k).normalized()
@@ -225,6 +260,7 @@ for i, s in enumerate(times):
         SW.update(ts, pscale=pscale(s))
     if SC and SC.STATE.get("C") is not None:
         SC.pose_carla(carla_f(s))
+        fire_tune()
     light_at(LST, s)
     loc, tgt, lens = cam_at(s)
     cam.location = loc; cam.rotation_euler = (tgt - loc).to_track_quat("-Z", "Y").to_euler(); cam.data.lens = lens
