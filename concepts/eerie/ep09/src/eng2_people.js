@@ -11,32 +11,6 @@ function limb2(a, c, w, col, b = 1, bend = 0.12) {
   poly([a, [mx - dy * bend * b, my + dx * bend * b], c], w, col);
 }
 
-// a dog's head in profile, centre (0,0), facing right. o.smile 0..1 (lips pull back over human teeth), o.eye red 0..1, o.close, o.snarl 0..1 (dog teeth)
-function dogHead(o = {}) {
-  const F = DOG.fig, L = DOG.line, k = o.smile || 0;
-  glow('rgba(255,255,255,0.32)', 22); circ(0, 0, 52, F); ell(54, 20, 48, 29, 0.1, F); noGlow();
-  ell(98, 10, 14, 11, 0, L);
-  if (k < 0.04) pthS('M98,30 C80,42 54,44 36,38', L, 3.5);
-  else {
-    // the mouth opens back along the jaw; human teeth top and bottom, red gums
-    const cx = lerp(40, -6, k), cy = lerp(38, 34, k);
-    const top = (u) => [lerp(96, cx, u), lerp(30, cy, u) + Math.sin(u * Math.PI) * 6];
-    const bot = (u) => [lerp(92, cx, u), lerp(32, cy, u) + Math.sin(u * Math.PI) * (6 + 26 * k)];
-    ctx.beginPath(); for (let i = 0; i <= 12; i++) ctx.lineTo(...top(i / 12)); for (let i = 12; i >= 0; i--) ctx.lineTo(...bot(i / 12)); ctx.closePath(); ctx.fillStyle = '#000'; ctx.fill();
-    ctx.save(); ctx.clip();
-    ctx.beginPath(); for (let i = 0; i <= 12; i++) ctx.lineTo(...top(i / 12)); ctx.lineWidth = 7; ctx.strokeStyle = C.red; ctx.stroke();
-    for (let i = 0; i < 7; i++) { const u = (i + 0.6) / 7.6, [tx, ty] = top(u), [bx, by] = bot(u);
-      rr(tx - 4.5, ty + 2, 9, 9 * k + 2, 2, DOG.tooth); rr(bx - 4.5, by - 9 * k - 3, 9, 9 * k + 1, 2, DOG.tooth); }
-    ctx.restore();
-    pthS(`M98,30 Q60,${36} ${cx},${cy}`, L, 3);
-  }
-  if (o.close) pthS('M6,-14 q10,7 20,0', L, 4.5);
-  else if ((o.eye || 0) > 0) { ctx.save(); redGlow(22 * o.eye); circ(16, -14, 8, C.red); ctx.restore(); }
-  else { circ(16, -14, 7.5, L); circ(18.5, -16.5, 2.2, '#fff'); }
-  pthS('M0,-30 q14,-8 28,-2', L, 3);
-  const ep = 'M14,-50 C-24,-58 -46,-30 -50,6 C-54,44 -46,74 -26,80 C-8,84 0,64 -2,40 C-4,10 4,-20 22,-40 C26,-46 22,-50 14,-50 Z';
-  glow('rgba(0,0,0,0.5)', 6); pth(ep, '#d2d2d2'); noGlow(); pthS('M14,-50 C-4,-30 -6,10 -2,40 C0,64 -8,84 -26,80', 'rgba(0,0,0,0.55)', 2.5);
-}
 
 // the dog in profile, facing right (o.dir -1: left). Paws on the floor at (x,y). About 400 long and 330 tall at s=1.
 // o.rear 0..1: the front of the body rises around the hips (1 = up on its back legs, taller than you)
@@ -90,59 +64,6 @@ function dog(x, y, s = 1, o = {}) {
   ctx.restore();
 }
 
-// the dog's face, front on: centre (x,y), about 460 wide at s=1.
-// o.smile 0..1: the lips pull back over a full set of flat human teeth (red gums); o.eye red 0..1; o.lost: teeth gone (count, from the outside in);
-// o.fang 0..1: sharp dog teeth slide in where they were; o.snarl 0..1: a dog's snarl (nose wrinkles)
-const TOOTH_ORDER = [0, 9, 1, 8, 2, 7, 3, 6, 4, 5];
-function dogFace(x, y, s = 1, o = {}) {
-  const F = DOG.fig, L = DOG.line, k = o.smile ?? 0;
-  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(o.tilt || 0);
-  for (const d of [-1, 1]) { const p = `M${d * 118},-160 C${d * 236},-160 ${d * 268},-24 ${d * 248},90 C${d * 236},152 ${d * 176},164 ${d * 154},114 C${d * 132},40 ${d * 118},-60 ${d * 118},-160 Z`;
-    glow('rgba(255,255,255,0.2)', 18); pth(p, DOG.ear); noGlow(); pthS(p, L, 4); }
-  const head = 'M-172,-64 C-172,-196 -92,-236 0,-236 C92,-236 172,-196 172,-64 C172,18 146,66 124,98 C104,196 54,240 0,240 C-54,240 -104,196 -124,98 C-146,66 -172,18 -172,-64 Z';
-  glow('rgba(255,255,255,0.32)', 34); pth(head, F); noGlow(); pthS(head, L, 4);
-  if (k < 0.03) pthS('M-112,62 C-100,22 -50,12 0,16 C50,12 100,22 112,62', 'rgba(0,0,0,0.45)', 3);
-  const er = o.eye || 0;
-  for (const d of [-1, 1]) {
-    if (er > 0) { ctx.save(); redGlow(30 * er); ell(d * 80, -52, 23, 25, 0, C.red); ctx.restore(); }
-    else { ell(d * 80, -52, 23, 25, 0, L); circ(d * 80 + 7, -61, 6.5, '#fff'); }
-    pthS(`M${d * 48},-96 q${d * 30},-16 ${d * 60},0`, L, 4);
-  }
-  if (o.snarl) { ctx.save(); ctx.globalAlpha *= o.snarl; for (let i = 0; i < 3; i++) pthS(`M-30,${-6 - i * 12} q30,-8 60,0`, L, 3); ctx.restore(); }
-  pth('M-48,30 C-48,4 48,4 48,30 C48,58 14,72 0,72 C-14,72 -48,58 -48,30 Z', L); ell(-14, 22, 11, 6, 0, '#5a5a5a');
-  ln(0, 72, 0, 98, 4, L);
-  if (k < 0.03) pthS('M-74,112 C-42,130 -14,120 0,98 C14,120 42,130 74,112', L, 4);
-  else mouthFront(k, o);
-  ctx.restore();
-}
-// the open mouth under the nose: a wide smile, red gums, ten flat human teeth top and bottom
-function mouthFront(k, o = {}) {
-  const L = DOG.line, wv = 112 + 26 * k, y0 = 96, up = 14, dn = 18 + 112 * k;
-  const yT = x => y0 + up * (1 - (x / wv) ** 2), yB = x => y0 + dn * (1 - (x / wv) ** 2);
-  ctx.beginPath(); ctx.moveTo(-wv, y0); ctx.quadraticCurveTo(0, y0 + 2 * up, wv, y0); ctx.quadraticCurveTo(0, y0 + 2 * dn, -wv, y0); ctx.closePath();
-  ctx.fillStyle = '#000'; ctx.fill(); ctx.save(); ctx.clip();
-  // gums
-  ctx.beginPath(); ctx.moveTo(-wv, y0); ctx.quadraticCurveTo(0, y0 + 2 * up, wv, y0); ctx.lineWidth = 22; ctx.strokeStyle = C.red; ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(-wv, y0); ctx.quadraticCurveTo(0, y0 + 2 * dn, wv, y0); ctx.lineWidth = 22; ctx.stroke();
-  const n = 10, lost = o.lost || 0, fang = o.fang || 0, gone = new Set(TOOTH_ORDER.slice(0, Math.floor(lost)));
-  for (let i = 0; i < n; i++) {
-    const u = (i + 0.5) / n, x = lerp(-wv * 0.84, wv * 0.84, u), w = (wv * 1.68 / n) - 3, c = 1 - Math.abs(u - 0.5) * 1.2;
-    const ht = (24 + 22 * c) * k, hb = (18 + 16 * c) * k;
-    if (!gone.has(i)) {
-      rr(x - w / 2, yT(x) + 8, w, ht, [2, 2, 8, 8], DOG.tooth); rrS(x - w / 2, yT(x) + 8, w, ht, [2, 2, 8, 8], L, 2.5);
-      rr(x - w / 2, yB(x) - 8 - hb, w, hb, [8, 8, 2, 2], DOG.tooth); rrS(x - w / 2, yB(x) - 8 - hb, w, hb, [8, 8, 2, 2], L, 2.5);
-    } else if (fang > 0) {   // a dog's tooth: sharp, the canines long
-      const can = i === 1 || i === 8, l = (can ? 70 : 34) * fang * k;
-      ctx.beginPath(); ctx.moveTo(x - w / 2 + 2, yT(x) + 6); ctx.lineTo(x + w / 2 - 2, yT(x) + 6); ctx.lineTo(x + (can ? 4 : 0), yT(x) + 6 + l); ctx.closePath(); ctx.fillStyle = DOG.tooth; ctx.fill();
-      ctx.beginPath(); ctx.moveTo(x - w / 2 + 2, yB(x) - 6); ctx.lineTo(x + w / 2 - 2, yB(x) - 6); ctx.lineTo(x, yB(x) - 6 - l * 0.7); ctx.closePath(); ctx.fill();
-    }
-  }
-  ctx.restore();
-  ctx.beginPath(); ctx.moveTo(-wv, y0); ctx.quadraticCurveTo(0, y0 + 2 * up, wv, y0); ctx.quadraticCurveTo(0, y0 + 2 * dn, -wv, y0); ctx.closePath(); ctx.lineWidth = 4; ctx.strokeStyle = L; ctx.stroke();
-}
-// where tooth i sits on the face at full smile (for teeth that fall): local coords
-function toothPos(i, row = 0) { const wv = 138, u = (i + 0.5) / 10, x = lerp(-wv * 0.84, wv * 0.84, u); return [x, row ? 96 + 130 * (1 - (x / wv) ** 2) - 26 : 96 + 14 * (1 - (x / wv) ** 2) + 26]; }
-function looseTooth(x, y, s = 1, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); glow('rgba(255,255,255,0.4)', 10); rr(-14, -20, 28, 40, [3, 3, 10, 10], DOG.tooth); noGlow(); rrS(-14, -20, 28, 40, [3, 3, 10, 10], '#000', 2.5); ctx.restore(); }
 
 // you, faceless, in profile facing right (o.dir -1: left). Feet (or knees, hands) on the floor at (x,y). 360 tall standing at s=1.
 // o.pose: 'stand' | 'sit' (chair seat at y-170) | 'fours' | 'curl' (asleep on your side) | 'back' (pinned on your back) | 'kneel'

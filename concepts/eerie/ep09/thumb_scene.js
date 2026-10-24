@@ -26,3 +26,11 @@ window.drawThumbC = () => {
   ctx.restore();
   ctx.save(); text("DON'T", 80, 330, '900 170px M', '#fff', 'left'); redGlow(30); text('SMILE', 80, 510, '900 170px M', C.red, 'left'); text('BACK', 80, 690, '900 170px M', C.red, 'left'); ctx.restore();
 };
+// design frames for the v2 teeth
+window.drawDesFront = () => { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); dogFace(960, 420, 1.9, { smile: 1 }); };
+window.drawDesMouth = () => { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); ctx.save(); ctx.translate(960, 300); ctx.scale(4.2, 4.2); ctx.translate(0, -90); dogFace(0, 0, 1, { smile: 1 }); ctx.restore(); };
+window.drawDesSide = () => { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); dogProfileBig(820, 470, 6.0, { smile: 1 }); };
+window.drawDesSteps = () => { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); [0, 0.35, 0.7, 1].forEach((k, i) => dogFace(240 + i * 480, 330, 0.85, { smile: k }));
+  [0, 0.4, 0.7, 1].forEach((k, i) => { ctx.save(); ctx.translate(150 + i * 480, 860); ctx.scale(2.2, 2.2); dogHead({ smile: k }); ctx.restore(); }); };
+window.drawDesMid = () => { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); floorLine(); dog(1100, FL, 1.3, { sit: 1, smile: 1, dir: -1 }); you(500, FL, 1, {}); };
+window.drawDesLost = () => { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); dogFace(500, 470, 1.1, { smile: 1, lost: 5, snarl: 1 }); dogFace(1420, 470, 1.1, { smile: 1, lost: 10, fang: 1, snarl: 1 }); };
