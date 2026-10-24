@@ -64,7 +64,9 @@ def _ik(arm, bone, target_loc, pole_loc, name):
     return t
 
 def build(M, year, ctx):
-    if os.environ.get("AOT_EVENT", "colossal") not in ("colossal", "kick"):
+    # shown when COL_SHOW=1, or by default for AOT_EVENT=colossal|kick (standalone use)
+    show = os.environ.get("COL_SHOW")
+    if (show == "0") or (show is None and os.environ.get("AOT_EVENT", "colossal") not in ("colossal", "kick")):
         return
     root, arm, meshes = _import()
     from mathutils import Matrix
@@ -88,6 +90,18 @@ def build(M, year, ctx):
     for bn, deg in (("mixamorig_Spine_02", lean), ("mixamorig_Spine1_03", lean), ("mixamorig_Spine2_04", lean * 0.6),
                     ("mixamorig_Neck_05", lean * 0.4), ("mixamorig_Head_06", lean * 0.8)):
         pb = arm.pose.bones[bn]; pb.rotation_mode = "XYZ"; pb.rotation_euler = (math.radians(deg), 0, 0)
+    # kick (COL_KICK 0..1): the left leg swings forward through the gate; rise (COL_RISE 0..1): head comes up over the wall
+    k = float(os.environ.get("COL_KICK", "0"))
+    if k > 0:
+        ul = arm.pose.bones["mixamorig_LeftUpLeg_056"]; ll = arm.pose.bones["mixamorig_LeftLeg_057"]
+        ul.rotation_mode = ll.rotation_mode = "XYZ"
+        ul.rotation_euler = (math.radians(float(os.environ.get("COL_KICK_HIP", "75")) * k), 0, 0)
+        ll.rotation_euler = (math.radians(float(os.environ.get("COL_KICK_KNEE", "35")) * (1 - abs(2 * k - 1))), 0, 0)
+    rise = float(os.environ.get("COL_RISE", "1"))
+    root.location.z -= (1 - rise) * float(os.environ.get("COL_RISE_DROP", "22"))
+    fade = float(os.environ.get("COL_FADE", "0"))          # 0..1: vanishing into steam after the kick
+    if fade > 0:
+        root.location.z -= fade * 30
     # the model's head is ~1/11 of its height; the anime Colossal's is ~1/7.5
     arm.pose.bones["mixamorig_Head_06"].scale = (float(os.environ.get("COL_HEAD", "1.8")),) * 3
     bpy.context.view_layer.update()
@@ -96,7 +110,9 @@ def build(M, year, ctx):
     # steam around the body
     try:
         import titans
-        titans.steam("ColossalSteam", (GX, GY - BACK + 4, 46), (70, 40, 34), density=float(os.environ.get("STEAM", "0.35")))
+        fade = float(os.environ.get("COL_FADE", "0"))
+        titans.steam("ColossalSteam", (FEET.x, GY - BACK + 4, 46 + 10 * fade), (70 + 60 * fade, 40 + 40 * fade, 34 + 40 * fade),
+                     density=float(os.environ.get("STEAM", "0.35")) * (1 + 2 * fade))
     except Exception as ex:
         print("[colossal_asset] steam failed:", ex)
 

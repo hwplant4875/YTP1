@@ -471,6 +471,10 @@ def build_walls(mats):
     # make sure Wall Maria meets the district walls exactly at x = +-W
     maria = [(x, 0.0) if abs(x) <= W + 1 else (x, y + (W ** 2) / (2 * 480000.0) * 30) for x, y in maria]
     m_gaps = [(0.0, 0.0, GATE_W / 2 + 0.5), (CX, 0.0, CANAL_W / 2 + 0.5)]
+    # vertices exactly at the gap edges (the 20 m spacing would otherwise leave the inner gate walled up)
+    for gx, gy, hw in m_gaps:
+        maria += [(gx - hw + 0.4, 0.0), (gx - hw * 0.5, 0.0), (gx, 0.0), (gx + hw * 0.5, 0.0), (gx + hw - 0.4, 0.0)]
+    maria = sorted(set(maria))
     wall_ring("WallMaria", maria, mats, gaps=m_gaps)
     dist = district_outline(6.0)
     d_gaps = [(OUTER_GATE[0], OUTER_GATE[1], GATE_W / 2 + 0.5), (CANAL_FAR[0], CANAL_FAR[1], CANAL_W / 2 + 0.5)]
@@ -1311,6 +1315,9 @@ def build(year):
         tc.objects.link(bpy.data.objects.new(f"T{i:02d}", tree_mesh(f"T{i:02d}", k, M, i)))
     gn_forest(terrain, tc)
     scatter("TownTrees", tc, ttrees, year)
+    # the prototypes themselves would render at the origin (= inside the inner gate); instancing resets their transforms
+    for o in list(hc.objects) + list(tc.objects):
+        o.location = (0.0, 0.0, -5000.0)
     giant_forest(M)
     if "hill" not in REPLACED:
         hill_tree(M)
