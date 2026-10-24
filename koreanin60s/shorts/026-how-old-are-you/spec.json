@@ -1,0 +1,202 @@
+{
+ "label": "KOREAN 101 🇰🇷",
+ "labelColor": "#5A8FD8",
+ "pose0": "confused",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "In Korea, people ask your age right after your name. Here's why.",
+   "pose": "confused"
+  },
+  {
+   "k": "k1",
+   "say": "몇 살이에요?",
+   "pose": "thinking",
+   "lang": "ko"
+  },
+  {
+   "k": "e1",
+   "say": "How old are you?",
+   "pose": "talk"
+  },
+  {
+   "k": "w1",
+   "say": "Your age decides how you talk to each other.",
+   "pose": "teacher"
+  },
+  {
+   "k": "w2",
+   "say": "Older? You speak politely, and you might call them",
+   "pose": "bow",
+   "gap": 0.45
+  },
+  {
+   "k": "w2k",
+   "say": "언니, 오빠.",
+   "pose": "finger_heart",
+   "lang": "ko"
+  },
+  {
+   "k": "s0",
+   "say": "And if you're the same age?",
+   "pose": "excited",
+   "gap": 0.45
+  },
+  {
+   "k": "s0k",
+   "say": "동갑!",
+   "pose": "jump",
+   "lang": "ko"
+  },
+  {
+   "k": "s1",
+   "say": "Same age! Now you can be real friends.",
+   "pose": "cheers"
+  },
+  {
+   "k": "e0",
+   "say": "How old are you? Answer in Korean below!",
+   "pose": "laugh_flap",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "chip",
+     "html": "ASKED IN 5 SECONDS 😳",
+     "c": "p",
+     "y": 360,
+     "at": "h1"
+    },
+    {
+     "type": "word",
+     "ko": "몇 살?",
+     "rom": "myeot sal",
+     "en": "",
+     "c": "b",
+     "size": 220,
+     "w": 700,
+     "y": 720,
+     "at": "h1+0.3"
+    }
+   ]
+  },
+  {
+   "from": "k1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🎂",
+     "size": 190,
+     "y": 430,
+     "at": "k1",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "몇 살이에요?",
+     "rom": "myeot sa-ri-e-yo",
+     "en": "how old are you?",
+     "c": "b",
+     "size": 140,
+     "w": 900,
+     "y": 760,
+     "at": "k1"
+    }
+   ]
+  },
+  {
+   "from": "w1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "⬆️👵",
+     "size": 170,
+     "y": 430,
+     "at": "w1",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:56px;white-space:nowrap;line-height:1.35'>older = <span class='c-p'>polite words</span> 🙇</div>",
+     "w": 840,
+     "pad": 22,
+     "y": 660,
+     "at": "w1+1.0",
+     "anim": "up"
+    },
+    {
+     "type": "word",
+     "ko": "언니 · 오빠",
+     "rom": "eon-ni · o-ppa",
+     "en": "big sis · big bro",
+     "c": "p",
+     "size": 130,
+     "w": 860,
+     "y": 940,
+     "at": "w2k"
+    }
+   ]
+  },
+  {
+   "from": "s0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🤝",
+     "size": 190,
+     "y": 430,
+     "at": "s0",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "동갑!",
+     "rom": "dong-gap",
+     "en": "same age!",
+     "c": "m",
+     "size": 190,
+     "w": 640,
+     "y": 760,
+     "at": "s0k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:52px;white-space:nowrap;line-height:1.35'>= <span class='c-m'>instant friends</span> 🥂</div>",
+     "w": 760,
+     "pad": 22,
+     "y": 1060,
+     "at": "s1",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Answer in Korean: 몇 살이에요? 👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

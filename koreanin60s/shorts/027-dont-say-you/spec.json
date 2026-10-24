@@ -1,0 +1,209 @@
+{
+ "label": "KOREAN 101 🇰🇷",
+ "labelColor": "#E05A5A",
+ "pose0": "shocked",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Never call a Korean stranger you. It can sound rude!",
+   "pose": "shocked"
+  },
+  {
+   "k": "k1",
+   "say": "너",
+   "pose": "wrong_x",
+   "lang": "ko"
+  },
+  {
+   "k": "e1",
+   "say": "This means you, but only for close friends or kids.",
+   "pose": "wrong_x"
+  },
+  {
+   "k": "n0",
+   "say": "Koreans use names instead. Add",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "n0k",
+   "say": "씨",
+   "pose": "teacher",
+   "lang": "ko"
+  },
+  {
+   "k": "n1",
+   "say": "after the name. Like Minji, plus 씨.",
+   "pose": "talk"
+  },
+  {
+   "k": "n1k",
+   "say": "민지 씨.",
+   "pose": "talk",
+   "lang": "ko"
+  },
+  {
+   "k": "x0",
+   "say": "Don't know their name? Just say",
+   "pose": "thinking",
+   "gap": 0.45
+  },
+  {
+   "k": "x0k",
+   "say": "저기요!",
+   "pose": "raise_hand",
+   "lang": "ko"
+  },
+  {
+   "k": "x1",
+   "say": "Excuse me! Perfect for waiters too.",
+   "pose": "thumbs_up"
+  },
+  {
+   "k": "e0",
+   "say": "Comment your name plus 씨 below!",
+   "pose": "laugh_flap",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "chip",
+     "html": "CAN SOUND RUDE ⚠️",
+     "c": "p",
+     "y": 360,
+     "at": "h1"
+    },
+    {
+     "type": "word",
+     "ko": "너",
+     "rom": "neo",
+     "en": "",
+     "c": "p",
+     "size": 260,
+     "w": 460,
+     "y": 720,
+     "at": "h1+0.3"
+    }
+   ]
+  },
+  {
+   "from": "k1",
+   "els": [
+    {
+     "type": "word",
+     "ko": "너",
+     "rom": "neo",
+     "en": "you 👉",
+     "c": "p",
+     "size": 220,
+     "w": 460,
+     "y": 560,
+     "at": "k1"
+    },
+    {
+     "type": "stamp",
+     "html": "friends & kids ONLY",
+     "c": "p",
+     "size": 70,
+     "y": 860,
+     "at": "e1+0.8",
+     "anim": "stamp",
+     "rot": -4
+    }
+   ]
+  },
+  {
+   "from": "n0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🏷️",
+     "size": 180,
+     "y": 430,
+     "at": "n0",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "민지 씨",
+     "rom": "min-ji ssi",
+     "en": "Minji (polite)",
+     "c": "b",
+     "size": 170,
+     "w": 760,
+     "y": 760,
+     "at": "n1+1.6"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:56px;white-space:nowrap;line-height:1.35'>name + <span class='c-b'>씨</span> ✅</div>",
+     "w": 600,
+     "pad": 22,
+     "y": 1060,
+     "at": "n1",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "x0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🙋",
+     "size": 190,
+     "y": 430,
+     "at": "x0",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "저기요!",
+     "rom": "jeo-gi-yo",
+     "en": "excuse me!",
+     "c": "m",
+     "size": 180,
+     "w": 760,
+     "y": 760,
+     "at": "x0k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:50px;white-space:nowrap;line-height:1.35'>🍴 calls the waiter too</div>",
+     "w": 700,
+     "pad": 22,
+     "y": 1060,
+     "at": "x1+0.8",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Comment: your name + 씨 👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

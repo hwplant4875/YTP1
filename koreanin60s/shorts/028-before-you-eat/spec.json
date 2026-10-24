@@ -1,0 +1,152 @@
+{
+ "label": "KOREAN 101 🇰🇷",
+ "labelColor": "#E8833A",
+ "pose0": "rice_bowl",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Koreans say this before every meal. And it's not a prayer.",
+   "pose": "rice_bowl"
+  },
+  {
+   "k": "k1",
+   "say": "잘 먹겠습니다!",
+   "pose": "bow",
+   "lang": "ko"
+  },
+  {
+   "k": "e1",
+   "say": "It means, I will eat well. Like a thank you for the food.",
+   "pose": "love_heart"
+  },
+  {
+   "k": "a0",
+   "say": "And after the meal, just change one part.",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "a0k",
+   "say": "잘 먹었습니다!",
+   "pose": "thumbs_up",
+   "lang": "ko"
+  },
+  {
+   "k": "a1",
+   "say": "I ate well! Thank you!",
+   "pose": "clap_confetti"
+  },
+  {
+   "k": "t1",
+   "say": "Someone paid for you? Say it to them. They'll love it.",
+   "pose": "pay_card"
+  },
+  {
+   "k": "e0",
+   "say": "Type 잘 먹겠습니다 before your next meal!",
+   "pose": "laugh_flap",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "chip",
+     "html": "NOT A PRAYER 🙏❌",
+     "c": "y",
+     "y": 360,
+     "at": "h1"
+    },
+    {
+     "type": "emoji",
+     "e": "🍚🥢",
+     "size": 230,
+     "y": 720,
+     "at": "h1+0.3",
+     "anim": "up",
+     "float": true
+    }
+   ]
+  },
+  {
+   "from": "k1",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🙇",
+     "size": 180,
+     "y": 430,
+     "at": "k1",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "잘 먹겠습니다!",
+     "rom": "jal meok-get-seum-ni-da",
+     "en": "I will eat well! 🍚",
+     "c": "y",
+     "size": 120,
+     "w": 940,
+     "y": 760,
+     "at": "k1"
+    }
+   ]
+  },
+  {
+   "from": "a0",
+   "els": [
+    {
+     "type": "chip",
+     "html": "AFTER THE MEAL 😋",
+     "c": "m",
+     "y": 380,
+     "at": "a0"
+    },
+    {
+     "type": "word",
+     "ko": "잘 먹었습니다!",
+     "rom": "jal meo-geot-seum-ni-da",
+     "en": "I ate well! thank you!",
+     "c": "m",
+     "size": 120,
+     "w": 940,
+     "y": 720,
+     "at": "a0k"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:48px;white-space:nowrap;line-height:1.35'>💳 someone paid? <span class='c-p'>say it to them!</span></div>",
+     "w": 900,
+     "pad": 22,
+     "y": 1060,
+     "at": "t1",
+     "anim": "up"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Say it before your next meal 🍚👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}

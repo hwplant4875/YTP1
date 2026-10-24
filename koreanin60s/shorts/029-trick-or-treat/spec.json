@@ -1,0 +1,187 @@
+{
+ "label": "HALLOWEEN 🎃",
+ "labelColor": "#E8833A",
+ "pose0": "excited",
+ "lines": [
+  {
+   "k": "h1",
+   "say": "Halloween in Korea! Here's what you'll hear on the streets.",
+   "pose": "excited"
+  },
+  {
+   "k": "k1",
+   "say": "해피 할로윈!",
+   "pose": "party_cake",
+   "lang": "ko"
+  },
+  {
+   "k": "e1",
+   "say": "Happy Halloween! Yes, Koreans just say it in English.",
+   "pose": "laugh_tears"
+  },
+  {
+   "k": "c0",
+   "say": "Want candy? Say",
+   "pose": "point_idea",
+   "gap": 0.45
+  },
+  {
+   "k": "c0k",
+   "say": "사탕 주세요!",
+   "pose": "pray_please",
+   "lang": "ko"
+  },
+  {
+   "k": "c1",
+   "say": "Candy, please!",
+   "pose": "excited"
+  },
+  {
+   "k": "s0",
+   "say": "Someone's costume is too good? Scream",
+   "pose": "shocked",
+   "gap": 0.45
+  },
+  {
+   "k": "s0k",
+   "say": "무서워!",
+   "pose": "nervous_sweat",
+   "lang": "ko"
+  },
+  {
+   "k": "s1",
+   "say": "So scary!",
+   "pose": "shocked"
+  },
+  {
+   "k": "e0",
+   "say": "What's your costume this year? Tell me below!",
+   "pose": "laugh_flap",
+   "gap": 0.45
+  }
+ ],
+ "scenes": [
+  {
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🎃",
+     "size": 260,
+     "y": 520,
+     "at": "h1",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "해피 할로윈!",
+     "rom": "hae-pi hal-lo-win",
+     "en": "",
+     "c": "y",
+     "size": 150,
+     "w": 900,
+     "y": 860,
+     "at": "h1+0.3"
+    }
+   ]
+  },
+  {
+   "from": "k1",
+   "els": [
+    {
+     "type": "word",
+     "ko": "해피 할로윈!",
+     "rom": "hae-pi hal-lo-win",
+     "en": "happy Halloween! 🎉",
+     "c": "y",
+     "size": 140,
+     "w": 900,
+     "y": 600,
+     "at": "k1"
+    },
+    {
+     "type": "stamp",
+     "html": "just English 😂",
+     "c": "p",
+     "size": 72,
+     "y": 900,
+     "at": "e1+1.0",
+     "anim": "stamp",
+     "rot": -4
+    }
+   ]
+  },
+  {
+   "from": "c0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🍬🍭",
+     "size": 180,
+     "y": 430,
+     "at": "c0",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "사탕 주세요!",
+     "rom": "sa-tang ju-se-yo",
+     "en": "candy, please!",
+     "c": "p",
+     "size": 150,
+     "w": 900,
+     "y": 760,
+     "at": "c0k"
+    }
+   ]
+  },
+  {
+   "from": "s0",
+   "els": [
+    {
+     "type": "emoji",
+     "e": "🧛‍♀️😱",
+     "size": 180,
+     "y": 430,
+     "at": "s0",
+     "anim": "up",
+     "float": true
+    },
+    {
+     "type": "word",
+     "ko": "무서워!",
+     "rom": "mu-seo-wo",
+     "en": "so scary!",
+     "c": "b",
+     "size": 190,
+     "w": 700,
+     "y": 760,
+     "at": "s0k"
+    }
+   ]
+  },
+  {
+   "from": "e0",
+   "els": [
+    {
+     "type": "txt",
+     "html": "Korean in <span class='c-p'>60s</span>",
+     "size": 110,
+     "y": 640,
+     "at": "e0",
+     "style": "font-family:YouTube Sans,Pretendard;font-weight:900;line-height:1.12"
+    },
+    {
+     "type": "box",
+     "html": "<div class='txt' style='font-size:46px;white-space:nowrap;line-height:1.35'>Your costume this year? 🎃👇</div>",
+     "w": 960,
+     "pad": 22,
+     "y": 830,
+     "at": "e0+0.7",
+     "anim": "up"
+    }
+   ]
+  }
+ ]
+}
