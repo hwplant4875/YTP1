@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 HERE = os.path.dirname(os.path.abspath(__file__))
 F = lambda n: os.path.join(HERE, "fonts", n)
 FONTS = {  # title font, title weight, body font, body weight
-    "D": (F("Ditty.ttf"), None, F("PirataOne-Regular.ttf"), None),   # user pick 10/23: Ditty titles, Pirata One small text
+    "D": (F("UnifrakturCook-Bold.ttf"), None, F("PirataOne-Regular.ttf"), None),   # user 10/24: UnifrakturCook (OFL) titles replace Ditty; Pirata One small text
     "A": (F("GrenzeGotisch-VF.ttf"), 800, F("GrenzeGotisch-VF.ttf"), 450),
     "B": (F("PirataOne-Regular.ttf"), None, F("GrenzeGotisch-VF.ttf"), 450),
     "C": (F("UnifrakturCook-Bold.ttf"), None, F("GrenzeGotisch-VF.ttf"), 450),

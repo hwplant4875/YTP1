@@ -12,8 +12,7 @@ Library:
 
 Track types: place, caption, title, tag, counter, map, glitch, fade (see graphics_timeline.md).
 Fonts (theme, per the user's rule: never Pretendard / YouTube Sans): Pirata One = tags, places, labels;
-Grenze Gotisch (bold) = numbers (Pirata One digits read worse at 480p); Ditty = big title words only
-(Ditty has no digits or punctuation: any title text with them falls back to Pirata One).
+Grenze Gotisch (bold) = numbers (Pirata One digits read worse at 480p); UnifrakturCook Bold (OFL) = big titles.
 """
 import argparse, glob, json, math, os, re, subprocess, sys
 import numpy as np
@@ -25,12 +24,9 @@ import hudcam, maps  # noqa: E402
 
 F = lambda n: os.path.join(HERE, "fonts", n)
 F_LABEL, F_NUM = F("PirataOne-Regular.ttf"), F("GrenzeGotisch-VF.ttf")
-# Title font switch: HUD_TITLE_FONT=ditty|fallback (default fallback). Ditty is a personal-use demo font (no digits);
-# the fallback is a free commercial-use (OFL) blackletter: UnifrakturMaguntia if present in fonts/, else UnifrakturCook.
-TITLE_MODE = os.environ.get("HUD_TITLE_FONT", "fallback").lower()
-_FALLBACK = next((F(n) for n in ("UnifrakturMaguntia-Book.ttf", "UnifrakturMaguntia-Regular.ttf", "UnifrakturCook-Bold.ttf")
-                  if os.path.exists(F(n))), F("PirataOne-Regular.ttf"))
-F_TITLE = F("Ditty.ttf") if TITLE_MODE == "ditty" else _FALLBACK
+# Title font (user 10/24): UnifrakturCook Bold, a free commercial-use (SIL OFL) blackletter. Ditty is retired.
+TITLE_MODE = "unifraktur"
+F_TITLE = F("UnifrakturCook-Bold.ttf")
 COL = {
     "cream": (238, 228, 204), "ink": (238, 228, 204), "gold": (214, 176, 102), "red": (196, 52, 40),
     "green": (96, 150, 92), "blue": (112, 150, 190), "dark": (14, 11, 8), "grey": (150, 146, 138),
@@ -161,15 +157,14 @@ def el_caption(c, e):
         c.d.line([(xa, yy), (xa + sgn * rl, yy)], fill=col("gold", a * 0.9), width=max(1, int(1.2 * s)))
 
 
-# ---------------------------------------------------------------- big title (Ditty) + sub line
+# ---------------------------------------------------------------- big title (UnifrakturCook) + sub line
 def el_title(c, e):
     a = env(c.t, e, 0.8, 0.6)
     if a <= 0:
         return
     s, W, H = c.s, c.W * SS, c.H * SS
     text = e.get("text", "")
-    ditty_ok = TITLE_MODE != "ditty" or all(ch.isalpha() or ch == " " for ch in text)
-    ft = font(F_TITLE if ditty_ok else F_LABEL, e.get("size", 62 if TITLE_MODE == "ditty" else 50) * s)
+    ft = font(F_TITLE, e.get("size", 50) * s)
     y = e.get("y", 0.40) * H
     dur = max(0.1, e.get("t1", c.t + 1) - e.get("t0", 0))
     tr = (1.0 + 2.0 * ease((c.t - e.get("t0", 0)) / dur)) * s          # slow tracking widen
