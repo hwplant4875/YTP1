@@ -73,4 +73,4 @@ The user is happy with the titan looks. Camera rule: avoid close-ups and keep a 
 Plan (cloud proposed it to the user; the default is to skip chapters 3-5 unless the user objects):
 1. ONE-TAKE: start on the hill tree, glide down the hill and pass LOW through the Shiganshina inner (north) gate. Fly south along the main street at a moderate height. During the flight the light shifts from morning to afternoon (timelapse). At the outer south wall, the Colossal's HEAD rises above the wall top (reveal, with steam).
 2. Crane up to the sky view and orbit OVER the wall to BEHIND the Colossal (outside, south). On the KICK impact: the outer gate collapses, stone blocks fly into the town and smash roofs, and boulders roll down the streets (rigid-body sim). Steam explodes. The Colossal vanishes in steam. Then pure titans pour in through the breach up the main avenue.
-Chapters 3-5 (scouts return, river) are skipped in this one-take unless the user says otherwise.
+CONFIRMED by user 03:33: skip chapters 3-5 and go straight from the tree to the Colossal.
