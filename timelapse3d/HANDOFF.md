@@ -225,3 +225,14 @@ Scope: everything up to just before the Grisha injection scene (845 fall → fer
 ## 16:58 USER: opening v3 "훌륭하다, 너무 훌륭하게 잘 해주었어". GATEHOUSE FIX (ref/user/s1e1_gatehouse_flat_ref.png)
 - The current gatehouse sticks out too much and has crenellations. Per the anime, the gate section is FLUSH with the wall: two shallow vertical pilasters/buttresses (barely projecting, ~1-2 m), rising slightly above the wall top as flat, square-topped stubs. Between them sits a flat recessed panel with a row of small rectangular vent slots near the top. NO merlons, NO battlements, NO tower block. The wall top elsewhere is plain and flat, with faint vertical segment lines.
 - This also fixes "the head is hidden behind the gatehouse".
+
+## 17:01 USER: BUILD STRAIGHT THROUGH TO THE END OF TROST in one go. "No slacking; focus on detail; manage the agents."
+Scope: EP1_plan_v2 beats 1-20 (title map → 845 fall → Grisha injection/key → refugee camps → 846 operation 250,000 → ~100 → 847-850 training/graduation → 850 Trost: Colossal returns → titans flood → Eren eaten → supply HQ → rogue titan → Armin's plan → Eren emerges, cannonball near-miss, Armin's salute → Pyxis → boulder operation → Levi, Marco, pyres). Budget for this part ≈ 4:30 of the 8-10 min EP (845 ≈ 55 s, 846-850 ≈ 35 s, Trost ≈ 2:45, title/bridges ≈ 15 s).
+User's 05:58 Trost storyline is canon for the order: Eren "I can do it" pose on Trost's wall → lightning → the Colossal behind him; Eren eaten → HQ despair → Mikasa falls → the Attack Titan kills titans → HQ lift plan → retaken → Eren out of the nape (quick) → cannon → partial titan blocks it → Armin's quick speech in salute pose; the Trost evacuation with crowds jammed at the gate by a cargo wagon until Mikasa clears it (crowd-flow aerial).
+Agent split (laptop):
+ A) Shiganshina 845 finish (segments 2-4 + Grisha forest glitch).
+ B) Interlude 846-850: refugee camps, the 250,000 march with counter, training camp seasons, balance rig (Eren upside down), graduation.
+ C) Trost district build: Trost's own layout (a square district on Wall Rose's south side, gates, the supply HQ, the bell tower, the boulder by the breach), reusing the gate/house kits.
+ D) Trost action: swarm titans, cadet squads with ODM (cloaks visible from the sky), the Attack Titan, flares (red/yellow), cannons, the boulder carry, pyres.
+ E) Graphics: HUD (place/year/'Eren, age N'), map/counters (250,000→~100; titans inside; Trost dead), name tags (dot + leader line + Pirata One).
+Rules: pace, faceless figures, minimal colourful crowds and titans for sky views, no camera behind the Colossal's back, flush gatehouses, ≤20-min 480p 15 fps previews per segment, push stills and a short note per segment. Integration agent: one continuous flight with eased transitions between segments.
