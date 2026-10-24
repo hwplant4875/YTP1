@@ -89,3 +89,19 @@ See section 6 of timelapse3d/EP1_plan_terrain_camera.md (K1-K14). Every beat is 
 timelapse3d/EP1_beats_final.md (30 beats) now SUPERSEDES plan sections 6-7 and EP1_must_have_beats.md. The user said "too many unnecessary things; the earlier plan was better". Focus on the 3D TIMELAPSE: big-picture events from outside, maps, armies, destruction, and NUMBERS AS GRAPHICS (for example the 250,000 counter). Drop the private moments and dialogue scenes. Keep only the user-named emotional beats with their overlay holds. Do not build anything from the 137 list that isn't in the 30.
 - 05:05: EP1_plan_v2.md (laptop) is CANONICAL; EP1_beats_final.md just points to it. One canon check: for the 846 operation, use the anime/wiki figure for survivors (the wiki says "fewer than 200" / "about 100", so verify against Namu and use one number consistently on the counter).
 - 05:03 USER (kick choreography, as in the anime): the Colossal lifts its RIGHT leg far BACK (a big wind-up, knee bent, foot high behind it), holds for a beat, then swings it forward and kicks through the outer gate. Keyframes: wind-up 1.5-2 s with the body leaning slightly forward and the left hand still on the wall; a brief hold; a fast forward swing of 0.4-0.6 s; impact; follow-through with the foot inside the gate; then the steam burst. The camera sees the wind-up from behind and the side, so the leg lift reads clearly.
+
+## 05:58 UTC 10/24: USER STORYLINE FEEDBACK (binding, apply to EP1_plan_v2.md)
+Liked: everything up to Grisha's injection and the key necklace.
+Order and contents to change:
+1. After the 250,000 operation: the trio join the cadets → Eren hanging UPSIDE DOWN on the balance rig (back in) → 3-year time-lapse → graduation.
+2. Trost wall top: Eren in a confident "I can do it!" pose on the cannon rail → LIGHTNING → the Colossal instantly reappears behind him.
+3. After Eren is eaten → cut to the supply HQ: show the hopeless situation (cadets stranded, out of gas) → Mikasa falls (out of gas) → the Attack Titan appears and attacks titans.
+4. Then Armin's HQ lift plan → HQ retaken → quickly show Eren emerging from the titan's nape → quick cut to the cannon being fired → Eren's partial titan blocks the shot → Armin in the "Shinzou wo sasageyo" salute giving a fast speech.
+5. Trost EVACUATION (core content of this channel): aerial view of the whole district. Crowds are jammed at the escape route (inner gate) because a merchant's cargo wagon blocks the gate → Mikasa forces it through → the crowd flows out. Animate the flow (crowd sim), seen regionally.
+6. FORMATION: Erwin fires the signal flare from the centre and the WHOLE formation moves in response. The flare → movement cause and effect must be clear.
+7. FOREST approach is extra important: from the sky, characters move CONTINUOUSLY in real time with no teleporting, so the viewer can TRACK their positions. Teleports only where unavoidable.
+8. MASS Survey Corps sorties seen from the air: keep it cheap, with cloaks clearly visible. Soldiers ODM-move, fight titans and get eaten, seen from a distance.
+9. Eren vs Female: the Female's kick sends Eren's titan head flying → straight into the Female's mouth open, Mikasa and Levi grab Eren and flee.
+Implementation hints:
+- Character tracking: persistent tiny HUD markers (a coloured dot plus a name in Pirata One with a leader line, the benchmark's label style) on Eren, Mikasa, Armin, Levi and Erwin whenever they are small.
+- Crowds and soldiers: instanced low-poly figures on paths (geometry nodes or particles along curves), with cloak colour as the main read.
