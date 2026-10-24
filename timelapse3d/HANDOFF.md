@@ -202,3 +202,19 @@ Missing (build ourselves or kitbash from the soldier and kids): Erwin, Armin, Ha
 4. The kick at ~11 s reads as a knee-up hop, not a right leg drawn far back and then swung forward. Fix the wind-up/swing.
 5. After the kick (12-17 s): good wide aerial of the district. Steam is off in this lite pass (fine for previews).
 Keep the ≤20 min preview settings.
+
+## 15:07 USER FEEDBACK (big). BASE = fast_test_prev.mp4, which the user loved, NOT intro_test_480p (v1). Keep its camera design: NO camera behind the Colossal's back ("너무 좋은 선택"). Then CONTINUE THROUGH TO JUST BEFORE THE GRISHA SCENE. Lore-accurate, fan-pleasing detail. Agents may be split.
+Opening fixes:
+1. Start: a VERY slow zoom-out (not a locked camera). Minimal animation. Eren does NOT stand up: he sleeps sitting against the tree, then slowly bends forward at the waist while seated (waking up). Mikasa walks slowly toward him.
+2. Tree → Shiganshina gate flight: the field is too empty. Add grass clumps, a dirt road, scattered trees and bushes, naturally placed.
+3. ~4 s: the camera move is unnatural. The speed jumps while it locks onto the Colossal. Ease in/out and keep a smooth velocity. ZOOM IN MORE on the head. The head's rise speed is GOOD; keep it.
+4. Colossal hands: its LEFT palm must GRIP the top of the wall (fingers over the wall-top edge). Its RIGHT hand grips the wall top a little later.
+5. Arrival: yellow-orange LIGHTNING strikes, the screen briefly darkens, and the camera SHAKES.
+6. Kick: OK ("낫밷"), but the foot goes far too high. The real kick lands at GATE height. Only the gate opening breaks, not the wall around it. Make the flying stones SMALLER and give them more in-between frames so they fly smoothly. Final renders at 30 fps; previews may stay at 15.
+7. Falling stones hitting houses: show dust/smoke bursts and the houses collapsing progressively, not a 1-frame swap from intact to ruined (that is how it works now).
+8. After the kick, the user says it's very well done (Carla being eaten included). Keep it from getting boring (pace rule).
+Loved (keep): the sunset with Shiganshina burning, and the plaza people as colourful, clearly visible, very MINIMAL simple figures.
+New crowd/titan sky-view system (the same minimal style):
+- Before: a big crowd gathered in the plaza. After the houses are destroyed: people fleeing everywhere.
+- Then many minimal titans (simple, animation-friendly): they eat residents, residents flee to the BOATS (canal ferry) and to the inner gate, titans scatter and wander chaotically after eating. Built to read from the sky view.
+Scope: everything up to just before the Grisha injection scene (845 fall → ferry/vow → refugee camp/Maria evacuation as in EP1_plan_v2). Follow the pace rule, faceless characters, ≤20 min previews per segment; push previews and stills for review as segments finish.
