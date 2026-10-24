@@ -102,7 +102,7 @@ def build(M, year, ctx):
 
 CAMS = {
     # from the rooftops inside the town looking south: the iconic S1E1 view (thumbnail)
-    "colossal_town": ((-30, GY + 115, 14), (10, GY - 16, 70), 24),
+    "colossal_town": ((3, GY + 125, 19), (12, GY - 16, 68), 24),     # on the main avenue, above the street
     "colossal_face": ((10, GY + 95, 66), (0, GY - 14, 60), 45),
     "colossal_wide": ((260, GY + 420, 70), (0, GY - 20, 45), 30),
 }
