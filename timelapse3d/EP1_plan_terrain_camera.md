@@ -89,3 +89,38 @@ The video follows the anime, so these emotional and highlight beats are required
 | K14 | Stohess final battle: the rubble trench, the church collapse, the climb up Wall Sina, Mikasa cuts the fingers, the crystal, the Titan's face in the wall | 46-50 | The finale, given the most time (≥2 min). Large aerial orbits over the destroyed streets, then the slow push to the face in the Wall as the end frame | |
 
 Pacing: with these beats EP1 runs about 16-19 min. If it must be cut, compress training (ch. 13-15) and the trial/castle (31-35), never K1-K14.
+
+## 7. Viewer must-not-miss audit (user 10/24 04:29: "check the story again; put in everything a viewer would miss")
+K3 is CONFIRMED as the S1E16 recruitment night, where Erwin's speech ends with the cadets saluting. Chapters 3-5 (scouts return, Grisha's promise, the river) stay skipped in the opening one-take, per the user at 03:33.
+
+Every row below is mandatory unless marked optional. They are staged like section 6: sky view, moderate height, 3-8 s, faceless characters recognised by hair, outfit and colour.
+
+| # | Beat (episode) | Ch. | Why a viewer would miss it | Sky-view staging |
+|---|---|---|---|---|
+| V1 | Eren on the ferry vows to exterminate every Titan (S1E2) | 9 | The core motive of the whole series | Crowded ferry on the dusk river, the burning town behind it; the boy in the red coat standing at the rail, fist clenched |
+| V2 | Grisha injects Eren in the dark forest (S1E2/E9) | 10 | The lore hook for the Attack Titan; the basement key | Lantern in a dark forest clearing, two figures; the key glints on Eren's neck |
+| V3 | The 846 "retake Wall Maria" operation sends 250,000 refugees out to die (S1E2) | 12 | The cruelty that defines the walls' politics | Very high shot: a long column of civilians marching out of a Rose gate across the grey Maria belt, then the column thins |
+| V4 | Training: Keith's initiation and Sasha eating the potato (S1E3) | 13 | A fan-favourite comic beat | Training yard from above: cadet rows, one girl in a ponytail eating at attention, later running laps at sunset |
+| V5 | Eren hangs upside down on the balance rig, then succeeds with new gear (S1E3) | 14 | The iconic "Eren can't use ODM" beat | Training yard: one rig with a flipped cadet, then upright |
+| V6 | 850: the Colossal reappears on Trost's wall; Eren alone faces it on the cannon rail, it vanishes (S1E4-5) | 17-18 | The "five years later" mirror of 845 | Wall-top rail shot, Colossal's head again, one small green-cloaked cadet flying at its nape, steam burst |
+| V7 | Squad 34 wiped out: Thomas eaten, Eren loses his leg saving Armin and is swallowed (S1E5) | 19 | The biggest shock of the first act | Rooftop height: a Titan bites Eren's leg; Armin thrown out of the mouth; the jaw closes |
+| V8 | Mikasa learns Eren is "dead", charges, runs out of gas and is saved by the Attack Titan (S1E6-7) | 21-22 | The Attack Titan's first appearance | Rooftops: a red scarf falling into the street, then the 15 m Titan's punch |
+| V9 | Armin salutes the Garrison and pleads for Eren (S1E10) | 25 | The emotional turning point | Wall foot: Garrison ring of rifles and swords, one small blond cadet saluting, a steaming ribcage behind him |
+| V10 | Pyxis's speech on the wall top before the boulder operation (S1E11) | 26 | The plan and its stakes | Wall top above the inner side, a bald old commander facing thousands of soldiers below |
+| V11 | Eren goes berserk and punches at Mikasa; Armin stabs the nape to wake him (S1E12-13) | 27-28 | The drama that makes the plug "earned" | Boulder site: the Titan swings at a red-scarfed figure, a small figure in the nape |
+| V12 | Ian's and Rico's squads die holding off Titans; red-to-green smoke at success (S1E13) | 29 | The sacrifice that pays for the victory | Already in K7; make the casualties readable |
+| V13 | Levi arrives and cuts down Titans in seconds (S1E13) | 30 | "Humanity's strongest" introduction | Wall top above the sealed gate, a fast spinning streak cutting two napes, Survey Corps cloaks landing |
+| V14 | Jean finds Marco's half-eaten body during the cleanup (S1E13) | 30 | The quiet grief beat | Cleanup street with body carts and smoke from the pyres, one cadet standing over a body |
+| V15 | Trial: Levi kicks Eren in court; Erwin takes custody (S1E14) | 31 | Changes Eren's fate | Courtroom with the roof cut away, a kneeling figure in chains, a short figure kicking |
+| V16 | Sawney and Beane killed at night (S1E15) | 33 | Plants the "enemy inside" mystery | Research grounds at night, two steaming carcasses in restraints |
+| V17 | The Female Titan peeks under Armin's hood and spares him (S1E17) | 38 | The clue that Armin uses later | Plains: a crouching Titan lifts a hood, then runs on |
+| V18 | The Female eats/kills Squad Levi; Petra pinned to a tree; Eren transforms in fury (S1E21) | 42 | Part of K13; keep Petra readable (copper hair) | Forest road |
+| V19 | Mikasa and Levi rescue Eren from her mouth; Levi hurts his leg (S1E22) | 43 | The rescue | Forest edge |
+| V20 | Retreat: the dead are thrown off the carts to outrun Titans; jeers at Karanes (S1E22) | 44 | The cost of the expedition | Plains: wagons, bodies tumbling off, a Titan chasing; then Karanes streets with crowds |
+| V21 | Stohess: Eren biting his hand again and again under the rubble; Annie's ring (S1E24) | 47 | The struggle to transform | Underground stairway caved in, then steam and lightning |
+| V22 | Annie seals herself in crystal; the Titan face in Wall Sina; Pastor Nick's panic (S1E25) | 50 | The cliffhanger ending | End frame (already the finale of K14) |
+| V23 (optional) | Hannes and Moses's arm returned to his mother (S1E1) | 3 | Skipped per user in the one-take | Only if a later recap needs it |
+
+Running order: after the opening one-take, go V1 → V2 → V3 → V4/V5 → V6 → V7 → V8 → K5 → K6/V9 → V10 → V11 → K7/V12 → V13 → V14 → V15 → V16 → K3 → K8 → K9/V17 → K10 → K11 → K12 → K13/V18 → V19 → V20 → V21 → K14/V22.
+
+Estimated runtime: 18-22 min. Hold every beat to 3-8 s from the sky. Use training and the trial as short montages.
