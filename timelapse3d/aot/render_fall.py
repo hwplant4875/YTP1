@@ -26,6 +26,7 @@ ap.add_argument("--s0", type=float, default=0.0)
 ap.add_argument("--s1", type=float, default=15.5)
 ap.add_argument("--fall-samples", type=int, default=2)
 ap.add_argument("--times", default="", help="comma list of segment times (stills) instead of s0..s1")
+ap.add_argument("--index0", type=int, default=-1, help="first frame number (default round(s0 * fps))")
 B, _ = ap.parse_known_args(argv)
 
 import aotlib as L
@@ -213,7 +214,7 @@ print(f"[fall] swarm {'on' if SW and SW.STATE else 'off'}, fx845 {'on' if FX els
 if B.times:
     times = [float(x) for x in B.times.split(",") if x.strip()]
 else:
-    times = [B.s0 + j / B.fps for j in range(int(round((B.s1 - B.s0) * B.fps)))]
+    times = [(int(round(B.s0 * B.fps)) + j) / B.fps for j in range(int(round((B.s1 - B.s0) * B.fps)))]
 t_start = time.time()
 for i, s in enumerate(times):
     t0 = time.time()
@@ -227,7 +228,8 @@ for i, s in enumerate(times):
     light_at(LST, s)
     loc, tgt, lens = cam_at(s)
     cam.location = loc; cam.rotation_euler = (tgt - loc).to_track_quat("-Z", "Y").to_euler(); cam.data.lens = lens
-    name = f"fall_{i:05d}.png" if not B.times else f"fall_s{s:05.2f}.png"
+    i0 = B.index0 if B.index0 >= 0 else int(round(B.s0 * B.fps))
+    name = f"fall_{i0 + i:05d}.png" if not B.times else f"fall_s{s:05.2f}.png"
     sc.render.filepath = os.path.join(B.fall_out, name)
     tp = time.time() - t0
     bpy.ops.render.render(write_still=True)
