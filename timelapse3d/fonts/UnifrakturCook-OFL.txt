@@ -1,0 +1,6 @@
+UnifrakturCook (UnifrakturCook-Bold.ttf)
+Copyright (c) 2010 j. 'mach' wust, http://unifraktur.sourceforge.net
+Licensed under the SIL Open Font License, Version 1.1 (free for commercial use, embedding and video).
+Full text: https://openfontlicense.org/open-font-license-official-text/
+Source: Google Fonts, https://fonts.google.com/specimen/UnifrakturCook
+Used by hud2.py as the default title font (HUD_TITLE_FONT=fallback).

@@ -24,7 +24,13 @@ sys.path.insert(0, HERE)
 import hudcam, maps  # noqa: E402
 
 F = lambda n: os.path.join(HERE, "fonts", n)
-F_TITLE, F_LABEL, F_NUM = F("Ditty.ttf"), F("PirataOne-Regular.ttf"), F("GrenzeGotisch-VF.ttf")
+F_LABEL, F_NUM = F("PirataOne-Regular.ttf"), F("GrenzeGotisch-VF.ttf")
+# Title font switch: HUD_TITLE_FONT=ditty|fallback (default fallback). Ditty is a personal-use demo font (no digits);
+# the fallback is a free commercial-use (OFL) blackletter: UnifrakturMaguntia if present in fonts/, else UnifrakturCook.
+TITLE_MODE = os.environ.get("HUD_TITLE_FONT", "fallback").lower()
+_FALLBACK = next((F(n) for n in ("UnifrakturMaguntia-Book.ttf", "UnifrakturMaguntia-Regular.ttf", "UnifrakturCook-Bold.ttf")
+                  if os.path.exists(F(n))), F("PirataOne-Regular.ttf"))
+F_TITLE = F("Ditty.ttf") if TITLE_MODE == "ditty" else _FALLBACK
 COL = {
     "cream": (238, 228, 204), "ink": (238, 228, 204), "gold": (214, 176, 102), "red": (196, 52, 40),
     "green": (96, 150, 92), "blue": (112, 150, 190), "dark": (14, 11, 8), "grey": (150, 146, 138),
@@ -162,8 +168,8 @@ def el_title(c, e):
         return
     s, W, H = c.s, c.W * SS, c.H * SS
     text = e.get("text", "")
-    ditty_ok = all(ch.isalpha() or ch == " " for ch in text)
-    ft = font(F_TITLE if ditty_ok else F_LABEL, e.get("size", 62) * s)
+    ditty_ok = TITLE_MODE != "ditty" or all(ch.isalpha() or ch == " " for ch in text)
+    ft = font(F_TITLE if ditty_ok else F_LABEL, e.get("size", 62 if TITLE_MODE == "ditty" else 50) * s)
     y = e.get("y", 0.40) * H
     dur = max(0.1, e.get("t1", c.t + 1) - e.get("t0", 0))
     tr = (1.0 + 2.0 * ease((c.t - e.get("t0", 0)) / dur)) * s          # slow tracking widen
