@@ -119,3 +119,5 @@ The same frame is also a WALL-DETAIL reference:
 - A wide flat wall top with TWO rail tracks running along it, a small rail cart, and cannons at the edge.
 - The wall face has large CURVED BUTTRESS ribs flaring at the base on that side, plus slab segments.
 - Pale grey stone, soft haze, conifer clumps scattered on the plain.
+- 06:11 USER: the Colossal's steam in 05_after_kick looks like a CLOUD (a flat puffy disc). They want thin, creeping, wispy steam/haze rising off the body ("스멀스멀한 안개"). If that can't be done well, REMOVE it.
+  Suggested method: a Mantaflow gas sim with the Colossal's mesh as a SURFACE emitter (low surface emission, high-frequency noise and vorticity, upward buoyancy, fast dissipation of about 20-40 frames, white with low density). Bake it at a low resolution, since the camera is far away. Alternative: animated Volume Scatter with 4D noise masked by distance to the body, scrolling upward. Show the user a 3-frame test before adding it to the sequence. If it still looks like a cloud, remove it.
