@@ -140,14 +140,75 @@ def _paint_regions(body, mats):
         p.material_index = order.index(r if r in mats else "skin")
         p.use_smooth = True
 
-def _faceless(body, rig, iters=120):
-    """Smooth the head into a featureless egg: no eyes, nose, mouth or ears (house style for 3D people)."""
+def _faceless(body, rig, name):
+    """Replace the head with a smooth egg: no eyes, nose, mouth or ears (house style for 3D people).
+    Smoothing the MakeHuman head left the mouth and eye openings visible, so the head faces are cut away."""
     nz = rig.data.bones["neck02"].head_local.z
-    bm = bmesh.new(); bm.from_mesh(body.data); bm.verts.ensure_lookup_table()
-    head = [v for v in bm.verts if v.co.z > nz + 0.015]
-    for _ in range(iters):
-        bmesh.ops.smooth_vert(bm, verts=head, factor=0.5, use_axis_x=True, use_axis_y=True, use_axis_z=True)
+    co = [v.co.copy() for v in body.data.vertices if v.co.z > nz + 0.015]
+    xs = sorted(abs(c.x) for c in co); ys = sorted(c.y for c in co); zs = sorted(c.z for c in co)
+    pick = lambda a, q: a[min(len(a) - 1, int(q * len(a)))]
+    rx = pick(xs, 0.90); y0, y1 = pick(ys, 0.01), pick(ys, 0.99); z0, z1 = zs[0], zs[-1]
+    bm = bmesh.new(); bm.from_mesh(body.data)
+    bmesh.ops.delete(bm, geom=[f for f in bm.faces if all(v.co.z > nz + 0.012 for v in f.verts)], context="FACES")
     bm.to_mesh(body.data); bm.free()
+    me = bpy.data.meshes.new(name + "_head"); bm = bmesh.new()
+    bmesh.ops.create_uvsphere(bm, u_segments=32, v_segments=20, radius=1.0)
+    cz = (z0 + z1) / 2 + 0.004; ry = (y1 - y0) / 2 * 0.98; rz = (z1 - z0) / 2 * 0.98
+    for v in bm.verts:
+        x, y, z = v.co
+        taper = 1.0 - 0.18 * max(0.0, -z) ** 2                         # narrower jaw, egg shape
+        v.co = Vector((x * rx * 1.02 * taper, (y0 + y1) / 2 + y * ry * taper, cz + z * rz))
+    bm.to_mesh(me); bm.free()
+    for p in me.polygons:
+        p.use_smooth = True
+    ob = bpy.data.objects.new(name + "_head", me); bpy.context.scene.collection.objects.link(ob)
+    ob["egg"] = (0.0, (y0 + y1) / 2, cz, rx * 1.02, ry, rz)
+    _bind(ob, rig, "head")
+    return ob
+
+def hair_cap(name, head, rig, color, front, side, back, spikes=14, spike_amp=0.18, mess=0.05, flare=1.0, part=0.0, seed=1):
+    """Anime hair as one shell over the egg head. front/side/back: hem height in head radii from the head centre
+    (1 = crown, 0 = equator, below 0 hangs straight down). The hem is cut into pointed clumps."""
+    cx, cy, cz, rx, ry, rz = head["egg"]
+    rnd = random.Random(seed)
+    n, rows = 48, 16
+    jit = [1.0 + rnd.uniform(-mess, mess) for _ in range(n)]
+    def hem(th):
+        sn = math.sin(th)
+        fr = max(0.0, -sn) ** 3                                   # narrow fringe at the face (-Y)
+        bk = max(0.0, sn)
+        return front * fr + back * bk + side * (1 - fr - bk)
+    bm = bmesh.new(); grid = []
+    for j in range(rows + 1):
+        t = j / rows; ring = []
+        for k in range(n):
+            th = k / n * 2 * math.pi
+            h = hem(th)
+            if j == rows:
+                h -= spike_amp if k % 2 == 0 else -spike_amp * 0.25
+            z = 1.0 - t * (1.0 - h)
+            if z >= 0:
+                c = math.sqrt(max(0.0, 1 - z * z)); r = 1.1
+            else:
+                c = 1.0 + flare * 0.1 * min(1.0, -z); r = 1.1
+            if j == rows:
+                r *= 0.97 if k % 2 == 0 else 1.0
+            r *= 1.0 + (jit[k] - 1.0) * t
+            dx = part * (1 - t) * 0.0
+            ring.append(bm.verts.new((cx + math.cos(th) * c * rx * r + dx, cy + math.sin(th) * c * ry * r, cz + max(z, -9) * rz * (1.1 if z > 0 else 1.0))))
+        grid.append(ring)
+    for j in range(rows):
+        for k in range(n):
+            bm.faces.new((grid[j][k], grid[j][(k + 1) % n], grid[j + 1][(k + 1) % n], grid[j + 1][k]))
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-5)
+    me = bpy.data.meshes.new(name + "_hair"); bm.to_mesh(me); bm.free()
+    for p in me.polygons:
+        p.use_smooth = True
+    me.materials.append(_flat(name + "_hair", color, rough=0.45))
+    ob = bpy.data.objects.new(name + "_hair", me); bpy.context.scene.collection.objects.link(ob)
+    sol = ob.modifiers.new("thick", "SOLIDIFY"); sol.thickness = 0.008; sol.offset = -1.0
+    _bind(ob, rig, "head")
+    return ob
 
 def _shell(body, rig, mats, regions, push=0.007, name="shell", smooth=0, mat=None, open_front=0.0):
     """Loose cloth layer: copy of the body faces of the given regions pushed out along the normals.
@@ -181,7 +242,7 @@ def _child(name, years, gender, hair, hair_col, outfit, macro=None, height=None,
     rig = HS.add_builtin_rig(body, "default")
     TS.bake_targets(body)
     parts = []
-    f = _asset("hair", f"{hair}/{hair}.mhclo")
+    f = hair and _asset("hair", f"{hair}/{hair}.mhclo")
     if f:
         try:
             h = HS.add_mhclo_asset(f, body, asset_type="Hair", subdiv_levels=0)
@@ -191,12 +252,13 @@ def _child(name, years, gender, hair, hair_col, outfit, macro=None, height=None,
         except Exception as ex:
             print("hair failed", ex)
     _bake_and_clean(body)
-    _faceless(body, rig)
+    head = _faceless(body, rig, name)
     for ob, mk in parts:
         ob.data.materials.clear(); ob.data.materials.append(mk())
     rig.name = name; body.name = name + "_body"
     body.data.materials.clear()
     mats = {"skin": _flat(name + "_skin", (0.66, 0.44, 0.33), rough=0.5, sss=0.15)}
+    head.data.materials.append(mats["skin"])
     outfit = outfit()                                  # built late: MPFB purges unused materials while building
     mats.update(outfit)
     _paint_regions(body, mats)
@@ -212,18 +274,21 @@ def _child(name, years, gender, hair, hair_col, outfit, macro=None, height=None,
         rig.scale = (s, s, s)
     return rig, body
 
-def make_eren(name="Eren"):
-    """Eren, 10 (S1E1): messy dark-brown hair, olive-green shirt, long open dark-red coat, charcoal cropped trousers."""
-    rig, body = _child(name, 10, 1.0, "short04", (0.03, 0.02, 0.016),
+def make_eren(name="Eren", hair=None):
+    """Eren, 10 (S1E1): shaggy schoolboy mop of dark-brown hair, olive-green shirt, open maroon blazer, charcoal cropped trousers."""
+    rig, body = _child(name, 10, 1.0, hair, (0.03, 0.02, 0.016),
                        lambda: {"shirt": _cloth(name + "_shirt", (0.13, 0.15, 0.07)),
                                 "legs": _cloth(name + "_trousers", (0.028, 0.028, 0.032), scale=30),
                                 "boots": _flat(name + "_shoes", (0.03, 0.02, 0.015), rough=0.5)},
-                       height=1.38, coat=(lambda: _cloth(name + "_coat", (0.16, 0.035, 0.04), fold=0.4), 0.42))
+                       height=1.38, coat=(lambda: _cloth(name + "_blazer", (0.11, 0.03, 0.028), fold=0.35), 0.2))
+    if not hair:
+        hair_cap(name, bpy.data.objects[name + "_head"], rig, (0.03, 0.02, 0.016), front=0.32, side=-0.35, back=-0.85,
+                 spike_amp=0.34, mess=0.13, flare=1.2, seed=3)
     return rig
 
-def make_mikasa(name="Mikasa"):
+def make_mikasa(name="Mikasa", hair=None):
     """Mikasa, 9 (S1E1): straight black shoulder-length hair with bangs, long white dress, long pale-pink cardigan, dark red scarf."""
-    rig, body = _child(name, 9, 0.0, "bob01", (0.012, 0.012, 0.015),
+    rig, body = _child(name, 9, 0.0, hair, (0.012, 0.012, 0.015),
                        lambda: {"shirt": _cloth(name + "_dress", (0.82, 0.79, 0.75)),
                                 "legs": _cloth(name + "_dress_l", (0.82, 0.79, 0.75), scale=30),
                                 "boots": _flat(name + "_shoes", (0.10, 0.06, 0.04), rough=0.5)},
@@ -231,6 +296,9 @@ def make_mikasa(name="Mikasa"):
                        coat=(lambda: _cloth(name + "_cardigan", (0.72, 0.47, 0.44), fold=0.3), 0.5))
     skirt(name, rig, color=(0.82, 0.79, 0.75), length=0.12)
     scarf(name, rig, color=(0.20, 0.018, 0.022))
+    if not hair:
+        hair_cap(name, bpy.data.objects[name + "_head"], rig, (0.012, 0.012, 0.015), front=0.12, side=-1.6, back=-1.75,
+                 spikes=20, spike_amp=0.08, mess=0.02, flare=0.6, seed=5)
     return rig
 
 def tail(name, rig, m, length):
@@ -240,7 +308,7 @@ def tail(name, rig, m, length):
     bm = bmesh.new(); n = 30; rows = []
     zs = [hip + 0.08, hip - 0.05, hip - length * hip * 0.5, hip - length * hip]
     for j, z in enumerate(zs):
-        r = hw + 0.075 + 0.02 * j
+        r = hw + (0.075 + 0.02 * j if length > 0.3 else 0.058 + 0.008 * j)    # short blazer hem stays close
         ring = []
         for k in range(n + 1):
             a = -math.pi / 2 + 0.55 + k / n * (2 * math.pi - 1.1)       # leaves a gap round -Y (front)
