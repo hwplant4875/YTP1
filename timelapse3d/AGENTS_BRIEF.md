@@ -15,6 +15,7 @@ Repo: `E:\YTP2\3D Timelapse\repo\timelapse3d`. Touch nothing on E: outside `E:\Y
   - `aot/characters.py`, `aot/seq_carla.py`, `hud.py`: HUD captions and counters.
 
 ## Rules (user, binding)
+- **ONE continuous camera take for the whole video.** Never cut to a full-frame graphic. Maps, counters and captions are small overlays on the running 3D shot, only where they fit.
 - **Pace is everything.** Brisk drone moves, short holds. Holds exist only for the overlay beats listed in the plan, at 2-3 s each.
 - **The whole EP1 is 8-10 min max.** Scale the plan's shot seconds by about 0.65 unless told otherwise.
 - **Timelapse of the world, seen from the sky** (40-400 m). Characters are tiny and **faceless** (no eyes, nose or mouth), readable only by hair colour, outfit and silhouette.
