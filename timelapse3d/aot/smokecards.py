@@ -28,11 +28,11 @@ KINDS = {
     "steam":       dict(col=(0.92, 0.92, 0.90), emit=0.40, thr=0.28, ns=1.8, lit=True),
     "dust":        dict(col=(0.46, 0.37, 0.25), emit=0.18, thr=0.30, ns=2.2, lit=True),
     "fire":        dict(col=(1.00, 0.42, 0.08), emit=9.0, thr=0.25, ns=2.6, lit=False),
-    "flare_trail": dict(col=(0.85, 0.05, 0.03), emit=0.6, thr=0.36, ns=2.4, lit=True),
+    "flare_trail": dict(col=(0.85, 0.05, 0.03), emit=0.6, thr=0.18, ns=1.4, lit=True),
     "glow":        dict(col=(1.00, 0.60, 0.30), emit=14.0, thr=None, ns=1.0, lit=False),
 }
 _ALL = []
-COLS = 20
+COLS = 24       # ... 20-22 stretch direction | 23 stretch factor (1 = round billboard)
 
 def _ss(a, b, x):
     u = np.clip((x - a) / (b - a), 0.0, 1.0)
@@ -153,7 +153,7 @@ class _Pool:
             fl = 0.75 + 0.25 * np.sin(t * 31.0 + B[:, 18] * 40.0) * np.sin(t * 17.0 + B[:, 18] * 13.0)
             a = a * fl; r = r * (0.9 + 0.1 * fl)
         rot = B[:, 16] + B[:, 17] * ag
-        self.state = (c, r, rot, a, B[:, 13:16], B[:, 18])
+        self.state = (c, r, rot, a, B[:, 13:16], B[:, 18], B[:, 20:23], B[:, 23])
 
     def orient(self, cam):
         if self.ob is None:
@@ -166,15 +166,25 @@ class _Pool:
         if getattr(self, "_auto_hidden", False):   # only undo our own hiding; callers may hide the object too
             self.ob.hide_render = self.ob.hide_viewport = False
             self._auto_hidden = False
-        c, r, rot, a, col, seed = self.state
+        c, r, rot, a, col, seed, dvec, stretch = self.state
         M = cam.matrix_world
         R = np.array(M.col[0][:3]); U = np.array(M.col[1][:3]); P = np.array(M.col[3][:3])
         order = np.argsort(-np.einsum("ij,ij->i", c - P, c - P))           # far first: Eevee blends back to front
-        c, r, rot, a, col, seed = c[order], r[order], rot[order], a[order], col[order], seed[order]
+        c, r, rot, a, col, seed, dvec, stretch = (c[order], r[order], rot[order], a[order], col[order], seed[order],
+                                                  dvec[order], stretch[order])
         m = len(c); n = self.n
         cs, sn = np.cos(rot), np.sin(rot)
         e1 = cs[:, None] * R + sn[:, None] * U
         e2 = -sn[:, None] * R + cs[:, None] * U
+        st = stretch > 1.001                                               # streak cards: long axis along dvec on screen
+        if st.any():
+            Vd = np.cross(R, U)
+            dp = dvec[st] - (dvec[st] @ Vd)[:, None] * Vd
+            ln = np.linalg.norm(dp, axis=1, keepdims=True)
+            ok = ln[:, 0] > 1e-6
+            dp = np.where(ok[:, None], dp / np.maximum(ln, 1e-9), U)
+            e1[st] = dp * stretch[st][:, None]
+            e2[st] = np.cross(Vd, dp)
         e1 *= r[:, None]; e2 *= r[:, None]
         V = np.zeros((n, 4, 3))
         V[:m, 0] = c - e1 - e2; V[:m, 1] = c + e1 - e2; V[:m, 2] = c + e1 + e2; V[:m, 3] = c - e1 + e2
@@ -207,7 +217,7 @@ class SmokeCards:
         self.add_many([te], [pos], [vel], r0, r1, life, rise, color, kind, alpha, tau, spin, fade_in)
 
     def add_many(self, te, pos, vel=None, r0=0.5, r1=2.0, life=3.0, rise=0.0, color=None, kind="smoke", alpha=0.8,
-                 tau=0.0, spin=None, fade_in=0.1):
+                 tau=0.0, spin=None, fade_in=0.1, dirs=None, stretch=1.0):
         te = np.asarray(te, float).reshape(-1); n = len(te)
         if n == 0:
             return
@@ -222,7 +232,9 @@ class SmokeCards:
         rot0 = rng.uniform(0, math.tau, n)
         sp = rng.uniform(-0.35, 0.35, n) if spin is None else bc(spin)
         seed = rng.uniform(0, 100, n)
-        rows = np.column_stack([te, pos, vel, bc(r0), bc(r1), bc(life), bc(rise), bc(tau), bc(alpha), col, rot0, sp, seed, bc(fade_in)])
+        dv = np.zeros((n, 3)) if dirs is None else np.asarray(dirs, float).reshape(n, 3)
+        rows = np.column_stack([te, pos, vel, bc(r0), bc(r1), bc(life), bc(rise), bc(tau), bc(alpha), col, rot0, sp, seed, bc(fade_in),
+                                dv, bc(stretch)])
         self._pool(kind).rows.extend(map(tuple, rows))
 
     def count(self):

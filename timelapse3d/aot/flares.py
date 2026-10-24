@@ -130,13 +130,19 @@ class FlareSet:
             smoke, glow = COLORS[f["color"]]
             kind = "smoke" if f["color"] == "black" else "flare_trail"
             w = f["width"]
-            # thin wispy trail: many small cards, slowly widening
-            dt = 0.03
+            # one continuous soft streak: dense, overlapping cards stretched along the path tangent, widening with age
+            dt = 0.012
             taus = np.arange(0.05, self.BURN + self.TOP_HOLD, dt)
             P = np.array([self.path(f, tau) for tau in taus]); n = len(taus)
-            self.cards.add_many(f["t0"] + taus, P + rnd.normal(0, 0.15, (n, 3)), rnd.normal(0, 0.25, (n, 3)),
-                                r0=0.9 * w, r1=(3.6 + 2.2 * rnd.random(n)) * w, life=f["life"] * (0.75 + 0.5 * rnd.random(n)),
-                                rise=0.15, color=smoke, kind=kind, alpha=0.8 if kind != "smoke" else 0.75, fade_in=0.06)
+            D = np.gradient(P, axis=0)
+            self.cards.add_many(f["t0"] + taus, P + rnd.normal(0, 0.06, (n, 3)), rnd.normal(0, 0.12, (n, 3)),
+                                r0=0.45 * w, r1=(2.2 + 1.2 * rnd.random(n)) * w, life=f["life"] * (0.8 + 0.4 * rnd.random(n)),
+                                rise=0.12, color=smoke, kind=kind, alpha=0.32 if kind != "smoke" else 0.38, fade_in=0.04,
+                                dirs=D, stretch=3.0, spin=0.0)
+            # a few round billows along it so the widened trail still has some body
+            k = slice(None, None, 9)
+            self.cards.add_many(f["t0"] + taus[k], P[k], rnd.normal(0, 0.3, (len(taus[k]), 3)), r0=0.6 * w, r1=3.4 * w,
+                                life=f["life"] * 0.9, rise=0.15, color=smoke, kind=kind, alpha=0.25, fade_in=0.08)
             # the burning head: a short-lived glow card re-emitted along the path (follows the head, pure in t)
             taus = np.arange(0.0, self.BURN + self.TOP_HOLD, 0.03); n = len(taus)
             P = np.array([self.path(f, tau) for tau in taus])

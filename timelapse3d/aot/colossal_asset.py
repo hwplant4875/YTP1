@@ -365,6 +365,8 @@ def _set_card_steam(g, fade, drop):
     zoff = STATE["root"].location.z + 30.0 * fade - STATE.get("cards_zb", STATE["root"].location.z)   # follows the rise, not the fade-sink
     A[:, 3] = P0[:, 2] + zoff + 4 * fade - 3 * (1 - g) + 0.6 * np.sin(fr * 0.7 + np.arange(len(P0)))
     A[:, 7] = A[:, 8] = R0 * k * (1 + 0.8 * fade)
-    A[:, 12] = A0 * 2.3 * (0.0 if g < 0.02 else 1.0)
+    # keep the steam above the wall line and behind the wall: nothing smears the wall face or the gate before the kick
+    keep = (A[:, 3] - A[:, 7] * 0.4 > L.WALL_H - 3.0) & (A[:, 2] + A[:, 7] * 0.5 < GY - 1.0)
+    A[:, 12] = A0 * 2.3 * (0.0 if g < 0.02 else 1.0) * keep
     A[:, 16] = np.arange(len(P0)) * 1.7 + 0.05 * fr
     cs.update(0.0)

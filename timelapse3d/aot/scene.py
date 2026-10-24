@@ -1591,6 +1591,49 @@ def render_setup(engine, res, samples, device):
             anime_look(sc)
         except Exception as ex:
             print("[scene] anime look failed:", ex)
+    # EEVEE_HAZE=0 (default on Eevee): Eevee's froxel volumes smear the giant "Haze" box over near walls; hide it and use
+    # a light mist-pass distance fade instead.  EEVEE_HAZE=1 keeps the volume.  Cycles is unchanged.
+    if engine != "CYCLES" and os.environ.get("EEVEE_HAZE", "0") == "0":
+        try:
+            eevee_haze(sc)
+        except Exception as ex:
+            print("[scene] eevee haze fix failed:", ex)
+
+def eevee_haze(sc):
+    """Hide every Haze volume and fade distant geometry toward the haze colour with the mist pass (compositor)."""
+    for o in bpy.data.objects:
+        if o.name.startswith("Haze"):
+            o.hide_render = o.hide_viewport = True
+    # the WallStone stains (30 m noise, dark-to-pale ramp) read as grey fog smears under Eevee's flatter light:
+    # EEVEE_WALL_STAIN (default 0.35) scales the stain contrast toward the pale stone (1 = as built)
+    k = float(os.environ.get("EEVEE_WALL_STAIN", "0.35"))
+    for m in bpy.data.materials:
+        if m.name.startswith("WallStone") and m.use_nodes:
+            for n in m.node_tree.nodes:
+                if n.type == "VALTORGB" and len(n.color_ramp.elements) == 2:
+                    hi = n.color_ramp.elements[1].color
+                    lo = n.color_ramp.elements[0]
+                    lo.color = tuple(hi[i] + (lo.color[i] - hi[i]) * k for i in range(3)) + (1.0,)
+    w = sc.world
+    if w is None or sc.compositing_node_group is not None:       # another look owns the compositor: just drop the volume
+        return
+    ms = w.mist_settings
+    ms.start = float(os.environ.get("EEVEE_MIST_START", "250")); ms.depth = float(os.environ.get("EEVEE_MIST_DEPTH", "5000"))
+    ms.falloff = "QUADRATIC"
+    bpy.context.view_layer.use_pass_mist = True
+    ng = bpy.data.node_groups.new("EeveeHaze", "CompositorNodeTree")
+    ng.interface.new_socket("Image", in_out="OUTPUT", socket_type="NodeSocketColor")
+    N = ng.nodes; Lk = ng.links
+    rl = N.new("CompositorNodeRLayers")
+    k = N.new("ShaderNodeMath"); k.operation = "MULTIPLY"; k.use_clamp = True
+    k.inputs[1].default_value = float(os.environ.get("EEVEE_MIST", "0.45"))
+    Lk.new(rl.outputs["Mist"], k.inputs[0])
+    mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MIX"
+    mx.inputs["B"].default_value = (0.62, 0.70, 0.82, 1)
+    Lk.new(k.outputs[0], mx.inputs["Factor"]); Lk.new(rl.outputs["Image"], mx.inputs["A"])
+    out = N.new("NodeGroupOutput"); Lk.new(mx.outputs["Result"], out.inputs[0])
+    sc.compositing_node_group = ng
+    sc.render.use_compositing = True
 
 def anime_look(sc):
     """Cheap anime-background look in the compositor (env LOOK=anime): anisotropic Kuwahara paint, softened
