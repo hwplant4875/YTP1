@@ -7,8 +7,14 @@ Everything is a pure function of the video time t (seconds, 0 .. T_END):
     update(t, cam)    every frame: interpolates the grid, picks LODs by camera distance and writes vertex positions /
                       point attributes of a few point-cloud meshes that geometry nodes instance (fast in Cycles/Eevee)
     alive(t)          number shown by the counter overlay (250,000 -> ~100); also written to a JSON sidecar
-    cam_at(t)         the one-take camera (loc, look-at, lens); CAM_IN / CAM_OUT = boundary keys + velocities for the
-                      flight bridges (in: after the Trost/Rose scenes of 846; out: rising north over Wall Rose)
+    cam_at(t)         the one-take camera (loc, look-at, lens); cam_velocity(t) its velocity (m/s)
+FLIGHT BRIDGE (for the integrator; segment-local t = 0 .. 18, positions in world metres, Trost frame):
+    CAM_IN  = dict(t=0, loc, look, lens=27, vel)   loc (170, -700, 125) = low over Trost just inside the outer gate,
+              look (-10, -930, 0) = south through the gate; vel (16.7, -61.1, 5.6) m/s = the Hermite start tangent
+              (= cam_velocity(0)): the bridge from the Trost/Rose scenes of 846 arrives drifting south-east to the gate.
+    CAM_OUT = dict(t=18, loc, look, lens=28, vel)  loc (260, -1920, 640) = high over the emptied plain, look (0, -720, 40)
+              = north at the gate / Trost / Wall Rose; vel (0, +95, +22) m/s = leaving north and rising (over Wall Rose).
+    The lens holds still at both ends (zero log-lens slope). All values follow GATE / FWD (MARCH_GATE overrides).
 
 Story (video seconds):
     0-3    camera low over Trost just inside the outer gate: the avenue is a packed river of people pouring out of the
@@ -393,7 +399,7 @@ def simulate():
         TGR[k] = grab
         fi = np.where((repn > 0.55) & (mode != 2) & (kind == 3))[0]
         if len(fi):
-            fi = fi[rng.random(len(fi)) < 0.12]
+            fi = fi[rng.random(len(fi)) < 0.06][:3]           # a few bright glints, Scouts only
             for a in fi:
                 flashes.append((t + rng.uniform(0, DT), pos[a, 0], pos[a, 1]))
         # ---------------- panic: titans near, or contagion through the crowd
@@ -459,9 +465,9 @@ def simulate():
         m3 = np.where(mode == 3)[0]
         if len(m3):
             ns_ = m3[~vr_set[m3]]
-            if len(ns_):                                # pace so they reach the gate by ~17.5 s
+            if len(ns_):                                # pace so they reach the gate by ~16.9 s
                 dd_ = np.linalg.norm(ret_goal[ns_] - pos[ns_], axis=1)
-                vr[ns_] = np.clip(dd_ / (max(17.5 - t, 2.5) * 0.72), 20, 150); vr_set[ns_] = True
+                vr[ns_] = np.clip(dd_ / (max(16.9 - t, 2.5) * 0.72), 20, 150); vr_set[ns_] = True
             sw = m3[(stage[m3] == 0) & (np.linalg.norm(ret_goal[m3] - pos[m3], axis=1) < 10.0)]
             stage[sw] = 1
             goal = np.where((stage[m3] == 1)[:, None], ret_in[m3], ret_goal[m3])
@@ -880,12 +886,12 @@ def mood(t):
     """Sombre drift as the column dies (t 7 -> 15): light dims ~30 %, a little cooler."""
     if not MOOD:
         return
-    f = float(_sm(7.0, 15.0, t))
+    f = float(_sm(7.0, 15.0, t)); f2 = float(_sm(15.0, 18.0, t))     # f2: the very end, a little darker still
     for n, v in MOOD.get("bg", []):
-        n.inputs[1].default_value = v * (1 - 0.25 * f)
+        n.inputs[1].default_value = v * (1 - 0.25 * f - 0.12 * f2)
     for d, v in MOOD.get("suns", []):
-        d.energy = v * (1 - 0.35 * f); d.color = (1.0, 0.96 - 0.03 * f, 0.90 + 0.03 * f)
-    bpy.context.scene.view_settings.exposure = MOOD["exp"] - 0.25 * f
+        d.energy = v * (1 - 0.35 * f - 0.2 * f2); d.color = (1.0, 0.96 - 0.03 * f, 0.90 + 0.03 * f)
+    bpy.context.scene.view_settings.exposure = MOOD["exp"] - 0.25 * f - 0.15 * f2
 
 # ---------------------------------------------------------------- dust + blade flashes as soft smoke cards (smokecards.py)
 def build_cards(coll):
@@ -1126,7 +1132,7 @@ def update(t, cam_loc):
     mood(t)
     door = bpy.data.objects.get("OuterGate_Door")
     if door is not None:
-        door.location.z = 21.0 * (1.0 - float(_sm(17.45, 18.0, t)))      # closes behind the last of them
+        door.location.z = 21.0 * (1.0 - float(_sm(17.6, 18.0, t)))      # all ~100 are inside by ~17.4 s      # closes behind the last of them
     n = 0
     S["last"] = dict(t=t, visible=int((sc > 0.001).sum()), near=int(((d < LOD_NEAR) & (sc > 0.001)).sum()),
                      mid=int(((d >= LOD_NEAR) & (d < LOD_MID) & (sc > 0.001)).sum()), dust=n, alive=alive(t))
@@ -1188,11 +1194,13 @@ def cam_at(t):
     lens = math.exp(float(_herm(c["T"], c["LN"], c["MN"], t)[0]))
     return Vector(loc), Vector(tgt), lens
 
-def cam_velocity(t, h=1 / 60):
-    a, _, _ = cam_at(t - h); b, _, _ = cam_at(t + h)
-    return (b - a) / (2 * h)
+def cam_velocity(t, h=1 / 120):
+    t0, t1 = max(0.0, t - h), min(T_END, t + h)          # one-sided at the segment ends (no clamping artefact)
+    a, _, _ = cam_at(t0); b, _, _ = cam_at(t1)
+    return (b - a) / (t1 - t0)
 
-CAM_IN = dict(t=0.0, loc=CAM_KEYS[0][1], look=CAM_KEYS[0][2], lens=CAM_KEYS[0][3])     # velocity: cam_velocity(0)
+CAM_IN = dict(t=0.0, loc=CAM_KEYS[0][1], look=CAM_KEYS[0][2], lens=CAM_KEYS[0][3],
+              vel=[round(float(v), 2) for v in (np.array(CAM_KEYS[1][1]) - np.array(CAM_KEYS[0][1])) / (CAM_KEYS[1][0] - CAM_KEYS[0][0])])
 CAM_OUT = dict(t=T_END, loc=CAM_KEYS[-1][1], look=CAM_KEYS[-1][2], lens=CAM_KEYS[-1][3], vel=CAM_OUT_VEL)
 
 # ---------------------------------------------------------------- placeholder set (AOT_SET=march846, no Trost)
