@@ -44,18 +44,21 @@ DT = 0.2
 PS = float(os.environ.get("TA_PSCALE", "2.0"))
 
 BEATS = {
+    "evacuation":   (2.0, 22.0),    # crowd jammed at the inner gate behind the cargo wagon; Mikasa; the crowd floods out
     "flood":        (2.0, 14.0),    # titans pour through the gate, squads deploy over the rooftops
     "eren_eaten":   (7.5, 14.0),    # squad 34: Thomas grabbed, Eren's leg bitten, Armin grabbed, Eren swallowed
     "squad_wiped":  (14.5, 17.5),   # a big titan sweeps a squad off a roof
     "hq_despair":   (17.0, 21.0),   # titans crowd the supply HQ; cadets stranded on the roofs around it
     "mikasa_falls": (21.0, 26.5),   # Mikasa's dash, out of gas, falls into a street; a titan closes in
     "attack_titan": (26.5, 44.0),   # the rogue titan appears (lightning) and kills titans on its way to the HQ
+    "bell_tower":   (33.0, 38.0),   # the rogue titan seen past the church bell tower (or killing at its foot)
     "hq_dash":      (42.0, 46.0),   # the cadets fly into the HQ while the rogue titan keeps the titans busy
     "lift_plan":    (46.0, 54.0),   # cutaway: lift with a ring of rifles, eye volley, seven blades on seven napes
     "at_collapse":  (53.0, 56.5),
     "emerge":       (56.5, 59.0),   # Eren out of the nape (quick), Mikasa pulls him free
     "cannon":       (59.0, 63.5),   # Garrison ring, the cannon fires, the half-shift skeleton blocks it in steam
     "salute":       (63.5, 68.0),   # Armin steps out of the steam in the Shinzou wo sasageyo salute
+    "pyxis":        (68.5, 74.5),   # Pixis on the wall top above the inner gate; deserters turn back
     "boulder_shift": (74.5, 79.0),  # Eren shifts by the boulder, goes berserk: RED flare
     "boulder_stab": (79.0, 82.0),   # Armin's blade in the nape: Eren wakes
     "boulder_carry": (82.0, 99.0),  # lift, the walk to the breach, the elite squad cutting down titans around him
@@ -331,15 +334,14 @@ class Titans:
         self.RX["up"] = np.isin(self.RX["part"], (0, 3, 4, 5, 6)).astype(float)
         self.H = np.array([sp["H"] for sp in self.specs])
         # steam of the dead (white puffs rising off the body for ~10 s, the body shrinking away)
-        sm = FX.smoke_mat("TA_Steam", (0.93, 0.93, 0.92), glow=0.3)
-        self.steam = FX.PuffField("TrostTitanSteam", sm, detail=1)
+        self.steam = FX.PuffField("TrostTitanSteam", kind="steam", alpha=0.55)
         rnd = np.random.default_rng(7)
         for j in range(nt):
             d = self.ev[j]["death"]
             if not d:
                 continue
             td = d[0]; H = self.H[j]
-            n = int(10 + 1.2 * H)
+            n = int(16 + 2.0 * H)
             te = td + 0.6 + rnd.random(n) * 9.0
             k = np.clip((te / DT).astype(int), 0, self.K - 1)
             yaw = self.TYAW[k, j]; dirn = d[1]
@@ -868,7 +870,8 @@ def choreograph(site, seed=850):
     lift7 = []
     for k in range(7):
         a = k / 7 * math.tau + 0.3
-        p = hq + np.array([math.cos(a) * w * 0.3, math.sin(a) * d_ * 0.3])
+        spots = S.d.get("hq_titan_spots")
+        p = v2(spots[k]) if spots else hq + np.array([math.cos(a) * w * 0.3, math.sin(a) * d_ * 0.3])
         nm = f"in{k}"
         TT.add(nm, H=rnd.uniform(3.4, 5.0), keys=[(0, *p), (90, *p)], show=(14.0, 70.0), face=tuple(hq))
         TT.ev[-1]["blind"] = 49.65
@@ -1141,6 +1144,12 @@ def setup(site_dict, seed=850, light=False, coll_name="TrostAction"):
     TT = C["TT"]
     TT.sim(140.0)
     finish_choreography(C, site)
+    EV = None
+    if "inner_gate" in site.d:
+        EV = Evac(site, n=int(os.environ.get("TA_EVAC", "650")))
+        EV.plan()
+        evac_flyers(C["SQ"], site, EV, C["used"])
+        pyxis_flyers(C["SQ"], site, C["rnd"])
     TT.sim(140.0)                     # late titans (escort / Levi) added in the second pass
     TT._cache_t = None
     TT.build(coll)
@@ -1151,7 +1160,9 @@ def setup(site_dict, seed=850, light=False, coll_name="TrostAction"):
     skel = build_skeleton(coll)
     cannon, ball, flash = build_cannon(coll)
     lift = build_lift(coll)
-    boulder = AT.make_boulder((0, 0, -500), 6.0, name="TrostBoulder")
+    boulder = site.d.get("boulder_obj") or AT.make_boulder((0, 0, -500), float(site.d.get("boulder_r", 6.0)), name="TA_Boulder")
+    if EV is not None:
+        EV.build(coll)
     pyres = [build_pyre(coll, f"TA_Pyre{k}", k) for k in range(3)]
     for (ob, flames, lo), p in zip(pyres, C["pyre_pts"]):
         z = site.g(p)
@@ -1167,10 +1178,11 @@ def setup(site_dict, seed=850, light=False, coll_name="TrostAction"):
         o = L.obj_from_bm(f"TA_RifleFlash{k}", bm.copy(), [fm], coll); o.visible_shadow = False; rflash.append(o)
     bm.free()
     # smoke / steam fields for the props
-    cs = FX.PuffField("TA_CannonSmoke", FX.smoke_mat("TA_GunSmoke", (0.55, 0.55, 0.53), 0.1), detail=1)
-    hs = FX.PuffField("TA_ShiftSteam", FX.smoke_mat("TA_SteamW", (0.95, 0.95, 0.94), 0.35), detail=1)
-    ps = FX.PuffField("TA_PyreSmoke", FX.smoke_mat("TA_PyreSmokeM", (0.06, 0.055, 0.05), 0.0), detail=1)
-    rs = FX.PuffField("TA_RifleSmoke", FX.smoke_mat("TA_GunSmoke2", (0.75, 0.75, 0.72), 0.15), detail=0)
+    cs = FX.PuffField("TA_CannonSmoke", kind="smoke", color=(0.62, 0.61, 0.58), alpha=0.7)
+    hs = FX.PuffField("TA_ShiftSteam", kind="steam", alpha=0.55)
+    ps = FX.PuffField("TA_PyreSmoke", kind="smoke", color=(0.30, 0.25, 0.20), alpha=0.6)
+    pf = FX.PuffField("TA_PyreFire", kind="fire", color=(1.0, 0.45, 0.1), alpha=0.9, grow=1.0)
+    rs = FX.PuffField("TA_RifleSmoke", kind="smoke", color=(0.8, 0.8, 0.77), alpha=0.6)
     rnd = np.random.default_rng(11)
     Q = C["Q"]; cxy = C["cannon_xy"]; cdir = C["cdir"]
     muzzle = np.array([cxy[0] + cdir[0] * 2.2, cxy[1] + cdir[1] * 2.2, site.g(cxy) + 1.35])
@@ -1178,9 +1190,9 @@ def setup(site_dict, seed=850, light=False, coll_name="TrostAction"):
     cs.add_many(62.0 + rnd.random(n) * 0.35, muzzle + rnd.normal(0, 0.8, (n, 3)), np.column_stack([cdir[0] * 6 + rnd.normal(0, 2, n), cdir[1] * 6 + rnd.normal(0, 2, n), rnd.random(n) * 1.5]),
                 r0=0.8, r1=4.5, life=6.0 + 3 * rnd.random(n), rise=0.6)
     Qz = site.g(Q)
-    n = 70
-    hs.add_many(62.3 + rnd.random(n) ** 2 * 3.0, np.column_stack([Q[0] + rnd.normal(0, 4, n), Q[1] + rnd.normal(0, 4, n), Qz + rnd.random(n) * 10]),
-                rnd.normal(0, 2.5, (n, 3)), r0=0.8, r1=3.6, life=2.5 + 2 * rnd.random(n), rise=2.5)
+    n = 90
+    hs.add_many(62.3 + rnd.random(n) ** 2 * 1.4, np.column_stack([Q[0] + rnd.normal(0, 4, n), Q[1] + rnd.normal(0, 4, n), Qz + rnd.random(n) * 10]),
+                rnd.normal(0, 2.0, (n, 3)), r0=0.6, r1=2.6, life=1.6 + 1.2 * rnd.random(n), rise=3.0, alpha=0.4)
     # steam off the Attack Titan's collapsed body + at both shifts
     nape = C["ATD"].nape
     n = 45
@@ -1192,21 +1204,24 @@ def setup(site_dict, seed=850, light=False, coll_name="TrostAction"):
     hs.add_many(te, P, rnd.normal(0, 1.0, (n, 3)), r0=0.6, r1=2.8, life=3.0, rise=3.0)
     for p in C["pyre_pts"]:
         z = site.g(p)
-        n = 160
+        n = 320
         te = 112.0 + rnd.random(n) * 14.0
         ps.add_many(te, np.column_stack([p[0] + rnd.normal(0, 1.2, n), p[1] + rnd.normal(0, 1.2, n), z + 5 + rnd.random(n)]),
                     np.column_stack([1.6 + rnd.normal(0, 0.4, n), 0.6 + rnd.normal(0, 0.4, n), np.zeros(n)]), r0=1.0, r1=5.0, life=7.0, rise=5.0)
+        te = np.arange(112.0, 126.0, 0.025); n = len(te)
+        pf.add_many(te, np.column_stack([p[0] + rnd.normal(0, 1.4, n), p[1] + rnd.normal(0, 1.4, n), z + 3.0 + rnd.random(n)]),
+                    rnd.normal(0, 0.3, (n, 3)), r0=1.5, r1=0.7, life=0.55 + 0.3 * rnd.random(n), rise=4.5, fade_in=0.05)
     for k, (f, a) in enumerate(C["riflemen"]):
         st = f.state(49.6)
         tip = st["pos"] + np.array([math.cos(a) * 1.3, math.sin(a) * 1.3, 1.0])
         rs.add_many(49.6 + rnd.random(6) * 0.2, tip + rnd.normal(0, 0.2, (6, 3)), np.column_stack([np.full(6, math.cos(a) * 2), np.full(6, math.sin(a) * 2), np.zeros(6)]),
                     r0=0.12, r1=0.6, life=2.0, rise=0.3)
-    for pf in (cs, hs, ps, rs):
-        pf.build(coll)
+    for f_ in (cs, hs, ps, pf, rs):
+        f_.build(coll)
     STATE.clear()
     STATE.update(site=site, C=C, coll=coll, TT=TT, SQ=C["SQ"], ATD=C["ATD"], FL=C["FL"], skel=skel, cannon=cannon, ball=ball,
-                 flash=flash, lift=lift, boulder=boulder, pyres=pyres, rflash=rflash, fields=(cs, hs, ps, rs), muzzle=muzzle,
-                 light=light, light0=None, timings=time.time() - t0)
+                 flash=flash, lift=lift, boulder=boulder, pyres=pyres, rflash=rflash, fields=(cs, hs, ps, pf, rs), muzzle=muzzle,
+                 light=light, light0=None, timings=time.time() - t0, EV=EV, cut_state=None)
     if light:
         _light_capture()
     # static placements
@@ -1237,7 +1252,7 @@ def dusk(amount):
 
 def update_boulder(t):
     S = STATE; site, ATD = S['site'], S['ATD']
-    b = S["boulder"]; r = 6.0
+    b = S["boulder"]; r = float(site.d.get("boulder_r", 6.0))
     bx, by = site.boulder
     rest = Vector((bx, by, site.g(site.boulder) + r * 0.8))
     if hasattr(ATD, "carry") and ATD.visible(t) and t >= ATD.carry[0]:
@@ -1255,6 +1270,8 @@ def update_boulder(t):
         seal = ATD.carry[5]; b.location = Vector((seal[0], seal[1], site.g(seal) + r * 0.8))
     else:
         b.location = rest
+    if site.d.get("boulder_origin") == "bottom":       # the set's boulder has its origin at the bottom centre
+        b.location = b.location - Vector((0, 0, r * 0.8))
 
 def update(t):
     S = STATE
@@ -1270,8 +1287,13 @@ def update(t):
     for pf in S["fields"]:
         pf.update(t)
     # HQ cutaway
+    cut = 45.0 <= t < 55.5
     for o in site.d.get("hq_roof", []) or []:
-        o.hide_render = o.hide_viewport = (45.0 <= t < 55.5)
+        o.hide_render = o.hide_viewport = cut
+    if site.d.get("hq_cutaway_fn") and S.get("cut_state") != cut:
+        site.d["hq_cutaway_fn"](cut); S["cut_state"] = cut
+    if S.get("EV") is not None:
+        S["EV"].update(t)
     # lift
     floor = site.g(site.hq); w, d_, h = site.hq_size
     lz = (floor + h - 2.0) + ((floor + 3.0) - (floor + h - 2.0)) * _ss(46.3, 49.2, t)
@@ -1328,7 +1350,8 @@ def update(t):
         ob.hide_render = not on
         lo.data.energy = 4000.0 * (0.85 + 0.15 * math.sin(t * 11)) if on else 0.0
         for fo, ph, r0, h0 in flames:
-            fo.hide_render = not on
+            fo.hide_render = True          # fire is drawn with emissive cards now
+            continue
             if on:
                 k = 1 + 0.25 * math.sin(t * 13 + ph) + 0.15 * math.sin(t * 29 + 2 * ph)
                 fo.scale = (r0 * (0.9 + 0.1 * k), r0 * (0.9 + 0.1 * k), h0 * k)
@@ -1343,7 +1366,7 @@ def hero_pos(name, t):
         update_boulder(t); return np.array(S["boulder"].location)
     SQ = S["SQ"]
     alias = {"eren": [("eren", 0, 14), ("eren_nape", 56, 70), ("eren_b", 102, 130)],
-             "mikasa": [("mikasa", 0, 74), ("mikasa_b", 74, 130)], "armin": [("armin", 0, 50), ("armin2", 50, 74), ("armin_b", 74, 130)],
+             "mikasa": [("mikasa_gate", 0, 16.9), ("mikasa", 16.9, 74), ("mikasa_b", 74, 130)], "armin": [("armin", 0, 50), ("armin2", 50, 74), ("armin_b", 74, 130)],
              "jean": [("jean", 0, 60), ("jean_dusk", 110, 130)], "marco": [("marco", 0, 60), ("marco_dead", 110, 130)]}
     for nm, a, b in alias.get(name, [(name, -1e9, 1e9)]):
         if a <= t < b and nm in SQ.by_name:
@@ -1353,3 +1376,258 @@ def hero_pos(name, t):
 def info():
     S = STATE
     return dict(titans=len(S["TT"].specs), flyers=len(S["SQ"].flyers), setup_s=S["timings"])
+
+
+# ====================================================================== the Trost evacuation (crowd flow at the inner gate)
+class Evac:
+    """Civilians stream to the inner gate, jam behind the stuck cargo wagon, Mikasa drops in, the merchant backs off,
+    the wagon is hauled through and the crowd floods out at a fixed throughput.  Pure function of t (0.2 s grid).
+    Figures: swarm845's minimal civilians (person_geo + its palettes), drawn at `ps` x life size."""
+    T0, T_MIK, T_PULL0, T_PULL1, T_END = 1.0, 10.6, 11.6, 13.4, 46.0
+    RATE = 22.0                 # people through the gate per second once it is clear (a flood)
+
+    def __init__(self, site, n=420, seed=846, ps=1.6):
+        self.site, self.n, self.ps = site, n, ps
+        self.rnd = np.random.default_rng(seed)
+        G = v2(site.d["inner_gate"]); out = v2(site.d.get("inner_out", (0, 1))); out = out / np.linalg.norm(out)
+        self.G, self.out, self.side = G, out, np.array([out[1], -out[0]])
+        self.front = G - out * 6.0                     # the wagon's back face
+
+    def plan(self):
+        S, rnd, G, out, side = self.site, self.rnd, self.G, self.out, self.side
+        front = self.front
+        sp = 1.05
+        pts = []                                       # jam slots: hex packing in a funnel, ranked by distance
+        for i in range(-40, 41):
+            for j in range(0, 60):
+                p = front + side * (i * sp + (j % 2) * sp / 2) - out * (j * sp * 0.87 + 1.5)
+                if abs(i * sp) > 6 + j * sp * 1.6:
+                    continue
+                if S.walkable(float(p[0]), float(p[1])):
+                    pts.append((float(np.linalg.norm(p - front)), p))
+        pts.sort(key=lambda q: q[0])
+        J = np.array([p for _, p in pts[:self.n]])
+        n = self.n = len(J)
+        Gd = S.nav()
+        cand = np.array([(Gd["xs"][i], Gd["ys"][j]) for i in range(Gd["nx"]) for j in range(Gd["ny"]) if Gd["W"][i, j]])
+        rel = (cand - G) @ (-out)
+        dd = np.hypot(*(cand - G).T)
+        cand = cand[(rel > 30) & (dd > 50) & (dd < 230)]
+        K = int(round(self.T_END / DT)) + 1
+        T = np.arange(K) * DT
+        PX = np.zeros((K, n)); PY = np.zeros((K, n))
+        t_arr = np.zeros(n)
+        exit_pts = G + out * rnd.uniform(25, 120, n)[:, None] + side * (rnd.normal(0, 1, n) * rnd.uniform(4, 40, n))[:, None]
+        polys = []
+        goal = front - out * 1.0
+        for k in range(n):
+            s0 = cand[rnd.integers(len(cand))]
+            P, s = path(S, s0, goal)
+            dJ = np.linalg.norm(J[k] - front)
+            dist_g = np.linalg.norm(P - front, axis=1)
+            near = dist_g < dJ + 3.0
+            cut = int(np.argmax(near)) if near.any() else len(P) - 1
+            Q = np.vstack([P[:max(cut, 1)], J[k]])
+            sq = np.concatenate([[0], np.cumsum(np.linalg.norm(np.diff(Q, axis=0), axis=1))])
+            v = rnd.uniform(3.2, 5.2)
+            t0 = self.T0 + rnd.random() * 4.5 + (0.0 if k < n * 0.7 else rnd.random() * 5)
+            t_arr[k] = t0 + sq[-1] / v
+            polys.append((Q, sq, v, t0))
+        t_gate = self.T_PULL1 + 0.3 + np.arange(n) / self.RATE
+        vf = 3.4
+        for k in range(n):
+            Q, sq, v, t0 = polys[k]
+            dJ = np.linalg.norm(J[k] - front)
+            t_go = max(t_gate[k] - dJ / vf, t_arr[k], self.T_PULL1)
+            F = np.vstack([J[k], front + side * rnd.uniform(-1.5, 1.5), G + side * rnd.uniform(-2.5, 2.5), G + out * 10, exit_pts[k]])
+            sf = np.concatenate([[0], np.cumsum(np.linalg.norm(np.diff(F, axis=0), axis=1))])
+            sk = np.clip(v * (T - t0), 0, sq[-1])
+            px = np.interp(sk, sq, Q[:, 0]); py = np.interp(sk, sq, Q[:, 1])
+            wait = (T > t_arr[k]) & (T < t_go)
+            jit = 0.25 * np.sin(T * 1.7 + k) * wait
+            px = px + side[0] * jit; py = py + side[1] * jit
+            m = T >= t_go
+            skf = np.clip(vf * (T[m] - t_go), 0, sf[-1])
+            px[m] = np.interp(skf, sf, F[:, 0]); py[m] = np.interp(skf, sf, F[:, 1])
+            PX[:, k], PY[:, k] = px, py
+        self.T, self.K, self.PX, self.PY = T, K, PX, PY
+        PD = np.zeros((K, n)); PD[1:] = np.cumsum(np.hypot(np.diff(PX, axis=0), np.diff(PY, axis=0)), axis=0)
+        face_gate = math.atan2(-out[0], out[1])
+        YAW = np.zeros((K, n)); yaw = np.full(n, face_gate)
+        for k in range(K):
+            if k:
+                dx, dy = PX[k] - PX[k - 1], PY[k] - PY[k - 1]
+                mv = dx * dx + dy * dy > 0.004
+                tgt = np.where(mv, np.arctan2(-dx, dy), face_gate)
+                d = (tgt - yaw + np.pi) % (2 * np.pi) - np.pi
+                yaw = yaw + np.clip(d, -0.6, 0.6)
+            YAW[k] = yaw
+        self.PD, self.YAW = PD, YAW
+        self.Z = S.g(front)
+
+    def build(self, coll):
+        rnd = random.Random(7)
+        g = SW.Geo(); fm = []
+        n = self.n
+        hg = np.array([rnd.uniform(1.5, 1.9) if rnd.random() > 0.12 else rnd.uniform(1.0, 1.3) for _ in range(n)])
+        for i in range(n):
+            n0 = len(g.fc)
+            SW.person_geo(g, i, hg[i], rnd.random() < 0.35, rnd)
+            base = [rnd.randrange(len(SW.SHIRTS)), len(SW.SHIRTS) + rnd.randrange(len(SW.PANTS)),
+                    len(SW.SHIRTS) + len(SW.PANTS) + rnd.randrange(len(SW.SKINS)),
+                    len(SW.SHIRTS) + len(SW.PANTS) + len(SW.SKINS) + rnd.choice([0, 0, 1, 1, 1, 2, 3, 4])]
+            fm += [base[c] for c in g.fc[n0:]]
+        mats = [L.mat(f"SW_shirt{i}", c, 0.75) for i, c in enumerate(SW.SHIRTS)] + [L.mat(f"SW_pants{i}", c, 0.85) for i, c in enumerate(SW.PANTS)] \
+            + [L.mat(f"SW_skin{i}", c, 0.6) for i, c in enumerate(SW.SKINS)] + [L.mat(f"SW_hair{i}", c, 0.7) for i, c in enumerate(SW.HAIRS)]
+        self.R = g.finish(); self.hg = hg
+        self.ob = SW._mesh("TrostEvacCrowd", self.R, g.f, fm, mats, coll)
+        wo = self.site.d.get("wagon_obj")            # the set's wagon (trost.py) if present, else a stand-in
+        if wo is None:
+            import bmesh
+            bm = bmesh.new()
+            L.box(bm, (0, 0, 1.6), (13.0, 4.6, 0.5), mi=0); L.box(bm, (0, 0, 3.6), (12.4, 4.4, 3.6), mi=1)
+            L.cyl(bm, (-6.2, 0, 5.4), (6.2, 0, 5.4), 2.2, seg=10, mi=1)
+            for sx in (-4.6, 4.6):
+                for sy in (-2.5, 2.5):
+                    L.cyl(bm, (sx, sy - 0.25, 1.15), (sx, sy + 0.25, 1.15), 1.15, seg=12, mi=2)
+            wo = L.obj_from_bm("TA_CargoWagon", bm, [L.mat("TA_wagonwood", (0.30, 0.17, 0.08), 0.85), L.mat("TA_tarp", (0.55, 0.48, 0.34), 0.9),
+                                                     L.mat("TA_wiron", (0.06, 0.06, 0.06), 0.4)], coll)
+        wo.hide_render = wo.hide_viewport = False
+        self.wagon = wo
+        self.w0 = self.G - self.out * 6.5
+        self.wyaw0 = math.atan2(self.side[1], self.side[0]) + math.radians(4)
+
+    def wagon_state(self, t):
+        u1 = _ss(self.T_PULL0, self.T_PULL0 + 0.8, t)                 # swing it lengthwise
+        u2 = _ss(self.T_PULL0 + 0.6, self.T_PULL1 + 0.8, t)           # haul it through and aside
+        p = self.w0 + self.out * 26 * u2 + self.side * 10 * _ss(self.T_PULL1, self.T_PULL1 + 1.5, t)
+        return p, self.wyaw0 + (math.pi / 2 - math.radians(4)) * u1
+
+    def update(self, t):
+        on = 0.0 <= t < self.T_END + 6
+        self.ob.hide_render = self.ob.hide_viewport = not on
+        p, yaw = self.wagon_state(t)
+        self.wagon.location = (p[0], p[1], self.site.g(p)); self.wagon.rotation_euler = (0, 0, yaw)
+        if not on:
+            return
+        tt = min(max(t, 0.0), self.T_END)
+        kf = tt / DT; k0 = min(int(kf), self.K - 1); k1 = min(k0 + 1, self.K - 1); f = kf - k0
+        n = self.n
+        pos = np.zeros((n, 3))
+        pos[:, 0] = self.PX[k0] * (1 - f) + self.PX[k1] * f; pos[:, 1] = self.PY[k0] * (1 - f) + self.PY[k1] * f
+        pos[:, 2] = self.Z
+        yaw = self.YAW[k0] + (((self.YAW[k1] - self.YAW[k0]) + np.pi) % (2 * np.pi) - np.pi) * f
+        pd = self.PD[k0] * (1 - f) + self.PD[k1] * f
+        spd = (self.PD[k1] - self.PD[k0]) / DT
+        pm = np.clip(spd / 1.6, 0, 1)
+        ph = 2 * np.pi * pd / (1.5 * self.hg)
+        Ar = np.zeros((n, 7)); Ae = np.zeros((n, 7))
+        s = np.sin(ph) * 0.75 * pm
+        Ar[:, 1] = s; Ar[:, 2] = -s; Ar[:, 3] = -0.8 * s; Ar[:, 4] = 0.8 * s
+        jam = pm < 0.1
+        Ar[jam, 3] = Ar[jam, 4] = 0.3 + 0.35 * np.sin(t * 3 + np.arange(n)[jam])      # arms up in the jam
+        lean = -0.2 * pm
+        vis = np.full(n, self.ps)
+        rel = pos[:, :2] - self.G
+        vis[(np.linalg.norm(rel, axis=1) > 150) & (rel @ self.out > 0)] = 0.0       # gone over the fields
+        co = SW._deform(self.R, Ar, Ae, lean, vis, yaw, pos)
+        self.ob.data.vertices.foreach_set("co", co.astype(np.float32).ravel()); self.ob.data.update()
+
+
+def evac_flyers(SQ, site, EV, used):
+    """Mikasa drops in front of the merchant (Dimo Reeves), who backs off; then she leaves for the front."""
+    G, out, side = EV.G, EV.out, EV.side
+    mk = SQ.flyer("mikasa_gate", "cadet", "black", scarf=True)
+    i, r0 = site.roof_near(G - out * 45 + side * 25, used); used.add(i)
+    land = site.P(EV.front - out * 3.0)
+    mk.stand(6.0, EV.T_MIK - 1.1, r0, 0.0).hop(EV.T_MIK - 1.1, EV.T_MIK, r0, land, apex=6.0)
+    mk.stand(EV.T_MIK, 14.5, land, odm.yaw_of(np.append(out, 0)), "crouch")
+    i2, r1 = site.roof_near(G - out * 90, used); used.add(i2)
+    mk.hop(14.5, 15.6, land, r1).gone(16.9)
+    dimo = SQ.flyer("dimo", "garrison", "grey", H=1.75, scale=1.2)
+    p0 = site.P(EV.front - out * 0.5 + side * 2.0)
+    dimo.stand(2.0, EV.T_MIK + 0.3, p0, odm.yaw_of(np.append(-out, 0)), "wave")
+    p1 = site.P(EV.front - out * 4.5 + side * 6.5)
+    dimo.walk(EV.T_MIK + 0.3, EV.T_MIK + 1.4, p0, p1, "run").stand(EV.T_MIK + 1.4, 30.0, p1, odm.yaw_of(np.append(-side, 0)), "stand")
+    return mk, dimo
+
+
+def pyxis_flyers(SQ, site, rnd):
+    """Pixis on the wall top above the inner gate (bald, white moustache, Garrison cloak), the ranks below, and the
+    deserters who walk off toward the gate, stop at the speech and turn back."""
+    out = v2(site.d.get("inner_out", (0, 1))); out = out / np.linalg.norm(out); side = np.array([out[1], -out[0]])
+    G = v2(site.d["inner_gate"])
+    P = v3(site.d.get("pyxis_pt", (G[0] - out[0] * 2, G[1] - out[1] * 2, site.wall_z)))
+    T0, T1 = BEATS["pyxis"]
+    face = odm.yaw_of(np.append(-out, 0))
+    px = SQ.flyer("pyxis", "garrison", "bald", moustache=True)
+    px.stand(T0 - 2.0, T0 + 1.0, P, face, "stand").stand(T0 + 1.0, T1 + 4, P, face, "wave")
+    for k, s in enumerate((-1, 1)):
+        SQ.flyer(f"aide{k}", "garrison", "dark").stand(T0 - 2.0, T1 + 4, P + np.array([*(side * s * 2.2 + out * 0.8), 0]), face, "salute")
+    base = G - out * 30
+    for k in range(36):
+        r, c = divmod(k, 9)
+        p = base + side * (c - 4) * 2.6 - out * r * 2.8
+        f = SQ.flyer(f"rank{k}", rnd.choice(["garrison", "garrison", "cadet"]), rnd.choice(["dark", "brown", "ash", "black", "blond"]))
+        f.stand(T0 - 2.0, T1 + 4, site.P(p), odm.yaw_of(np.append(out, 0)), "salute" if k % 3 == 0 else "stand")
+    for k in range(14):
+        p0 = base + side * rnd.uniform(-14, 14) - out * rnd.uniform(2, 10)
+        p_away = G - out * 8 + side * rnd.uniform(-5, 5)
+        p_mid = p0 + (p_away - p0) * 0.85
+        p_back = base + side * rnd.uniform(-12, 12) - out * (12 + rnd.uniform(0, 6))
+        f = SQ.flyer(f"deserter{k}", rnd.choice(["garrison", "cadet"]), rnd.choice(["dark", "brown", "ash", "auburn"]))
+        tA = T0 + rnd.uniform(0, 0.6)
+        f.walk(tA, tA + 2.4, site.P(p0), site.P(p_mid), "run")
+        f.stand(tA + 2.4, tA + 3.2, site.P(p_mid), face, "stand")
+        f.walk(tA + 3.2, tA + 5.6, site.P(p_mid), site.P(p_back), "run")
+        f.stand(tA + 5.6, T1 + 4, site.P(p_back), odm.yaw_of(np.append(out, 0)), "stand")
+
+
+# ====================================================================== site adapters
+def roofs_from_scatter(town="Town", variants="HouseVariants", margin_fn=None, ground=None):
+    """Roof-ridge perches (x, y, z) read back from scene.py's / trost.py's GN house scatter."""
+    ob = bpy.data.objects.get(town)
+    if ob is None:
+        return np.zeros((0, 3))
+    me = ob.data
+    n = len(me.vertices)
+    co = np.zeros(n * 3); me.vertices.foreach_get("co", co); co = co.reshape(n, 3)
+    var = np.zeros(n, np.int32); me.attributes["variant"].data.foreach_get("value", var)
+    scl = np.zeros(n * 3); me.attributes["scl"].data.foreach_get("vector", scl); scl = scl.reshape(n, 3)[:, 0]
+    tops = {}
+    for k, o in enumerate(bpy.data.collections[variants].objects):
+        if o.type == "MESH":
+            digits = "".join(ch for ch in o.name if ch.isdigit())
+            tops[int(digits) if digits else k] = max(v.co.z for v in o.data.vertices)
+    out = []
+    for i in range(n):
+        x, y = co[i, 0], co[i, 1]
+        if margin_fn and not margin_fn(x, y):
+            continue
+        z0 = ground(x, y) if ground else L.height(x, y)
+        out.append((x, y, z0 + tops.get(int(var[i]), 14.0) * scl[i] - 0.2))
+    return np.array(out)
+
+def site_from_trost(T=None):
+    """Fill the site dict from agent C's trost.py (after the set is built, i.e. from a render script):
+        site = TA.site_from_trost(); TA.setup(site)"""
+    import sys
+    T = T or sys.modules.get("trost")
+    hq = T.SUPPLY_HQ
+    w, d_ = hq["size"]; h = hq.get("store_z", (0, 10))[1] + 1.5
+    av = getattr(T, "AVENUE", None)
+    inw = np.array(av[1], float) - np.array(av[0], float) if av else np.array([0.0, 1.0])
+    gz = lambda x, y: T.ground_z(x, y) + (0.12 if T.in_district(x, y, 0.0) else 0.0)
+    in_hq = getattr(T, "_in_hq", lambda x, y, p: False)
+    roofs = roofs_from_scatter(ground=T.ground_z, margin_fn=lambda x, y: T.in_district(x, y, 20) and not in_hq(x, y, 4))
+    wall_pts = [(T.R * math.sin(a), -T.S - T.R * math.cos(a), L.WALL_H + 0.3) for a in (-0.06, 0.06, -0.1, 0.1, -0.14, 0.14, -0.18, 0.18)]
+    bt = T.BELL_TOWER
+    return dict(gate=T.OUTER_GATE, inward=tuple(inw / np.linalg.norm(inw)), wall_z=L.WALL_H,
+                hq=hq["center"], hq_size=(w, d_, h), hq_roof=[], hq_cutaway_fn=getattr(T, "set_hq_cutaway", None),
+                hq_titan_spots=hq.get("titan_spots"),
+                boulder=T.BOULDER[:2], boulder_obj=bpy.data.objects.get("TrostBoulder"), boulder_r=max(T.BOULDER_SIZE) / 2.3,
+                boulder_origin="bottom", roofs=roofs, ground=gz, walkable=T.walkable,
+                bounds=(-T.W, T.W, T.OUTER_GATE[1] - 140.0, 140.0), pyre=T.PLAZA[:2], wall_pts=wall_pts,
+                inner_gate=T.INNER_GATE, inner_out=(0.0, 1.0), pyxis_pt=T.WALLTOP_SPEECH,
+                bell_tower=bt["xy"], bell_tower_top=bt.get("top_z", 64.0),
+                wagon_obj=bpy.data.objects.get("TrostCargoWagon"))

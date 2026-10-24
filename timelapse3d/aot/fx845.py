@@ -22,6 +22,8 @@ Env (read by states845):
   AOT_ARC_T=0..1   old static scripts: the build ends with update(AOT_ARC_T * times_end()); unset = settled (t=60).
   AOT_FLIGHT_K     multiplies block flight durations (default 1.0; 0.7 = snappier, 1.4 = floatier).
   AOT_FX_PUFFS     multiplies puff counts (default 1; 0 = no puffs).
+  FX_PUFFS=cards   (default) puffs are soft camera-facing smoke cards (aot/smokecards.py, Eevee + Cycles);
+  FX_PUFFS=spheres the old per-puff icosphere objects.
 """
 import bpy, bmesh, math, os, random
 from mathutils import Vector, Matrix, Quaternion
@@ -83,7 +85,14 @@ def add_block(ob, launch, T, p0, p1, hmax, skid, seed, spin=(1.5, 4.0), trail=0,
                      rr.uniform(1.0, 1.6), col or (0.46, 0.35, 0.18), 0.55)
     return b
 
+def _cards_on():
+    return os.environ.get("FX_PUFFS", "cards") == "cards"
+
 def add_puff(coll, c, t0, v, tau, rise, r0, r1, life, col, a0=0.85):
+    if _cards_on():                     # soft smoke cards (one shared mesh), built lazily on the first update
+        REG.setdefault("cards_rows", []).append((t0, tuple(c), tuple(v), tau, rise, r0, r1, life, tuple(col), a0))
+        REG["cards_coll"] = coll
+        return None
     ob = bpy.data.objects.new("Puff", puff_mesh())
     ob.location = c
     for a in ("visible_shadow", "visible_diffuse", "visible_glossy", "visible_transmission", "visible_volume_scatter"):
@@ -289,7 +298,35 @@ def set_arc(t):
         if p is not None:
             b["ob"].location = p; b["ob"].rotation_quaternion = q
 
+def _set_cards(t):
+    rows = REG.get("cards_rows")
+    if not rows:
+        return
+    if REG.get("cards_n") != len(rows):
+        import smokecards as SC
+        import numpy as np
+        old = REG.get("cards")
+        if old:
+            for o in old.objects():
+                bpy.data.objects.remove(o, do_unlink=True)
+        cs = SC.SmokeCards("FxDust")
+        A = rows
+        te = np.array([r[0] for r in A]); P = np.array([r[1] for r in A]); V = np.array([r[2] for r in A])
+        col = np.array([r[8] for r in A])
+        # one card per old puff, a bit larger (soft falloff) + a smaller second card for detail
+        cs.add_many(te, P, V, r0=np.array([r[5] for r in A]) * 1.5, r1=np.array([r[6] for r in A]) * 1.5,
+                    life=np.array([r[7] for r in A]), rise=np.array([r[4] for r in A]), color=col, kind="dust",
+                    alpha=np.array([r[9] for r in A]) * 0.85, tau=np.array([r[3] for r in A]), fade_in=0.07)
+        rng = np.random.default_rng(3)
+        cs.add_many(te + 0.05, P + rng.normal(0, 0.6, P.shape), V * 0.8, r0=np.array([r[5] for r in A]) * 0.9,
+                    r1=np.array([r[6] for r in A]) * 0.9, life=np.array([r[7] for r in A]) * 0.8, rise=np.array([r[4] for r in A]) * 1.2,
+                    color=col * 0.85, kind="dust", alpha=np.array([r[9] for r in A]) * 0.6, tau=np.array([r[3] for r in A]), fade_in=0.07)
+        cs.build(REG.get("cards_coll"))
+        REG["cards"] = cs; REG["cards_n"] = len(rows)
+    REG["cards"].update(t)
+
 def _set_puffs(t):
+    _set_cards(t)
     for p in REG["puffs"]:
         tt = t - p["t0"]
         on = 0 <= tt < p["life"]

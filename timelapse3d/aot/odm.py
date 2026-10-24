@@ -67,7 +67,7 @@ CATS = ["jacket", "trousers", "boots", "skin", "HAIR", "CLOAK", "EM_A", "EM_B", 
 
 # ---------------------------------------------------------------- figure geometry (rig: 0 body, 1/2 legs, 3/4 upper arms,
 # 5/6 forearms (5 = right, x>0), 7 cloak; pivots in local (y, z), model faces +y)
-def figure_geo(g, i, kit, scarf=False, rifle=False, cravat=False, H=1.7):
+def figure_geo(g, i, kit, scarf=False, rifle=False, cravat=False, H=1.7, moustache=False):
     s = H / 1.7
     hip, sh = 0.82 * s, 1.36 * s
     for side, part in ((-1, 1), (1, 2)):
@@ -81,6 +81,8 @@ def figure_geo(g, i, kit, scarf=False, rifle=False, cravat=False, H=1.7):
     if scarf:
         g.box((0, 0.0, 1.40 * s), (0.30 * s, 0.26 * s, 0.10 * s), 9, i, 0, hip=hip)
         g.box((0.06 * s, -0.16 * s, 1.22 * s), (0.08 * s, 0.05 * s, 0.32 * s), 9, i, 7, (-0.13 * s, sh), (0, 0), hip)
+    if moustache:     # Pixis: a big white moustache, the one face cue allowed (it reads as a shape, not a face)
+        g.box((0, 0.12 * s, 1.50 * s), (0.22 * s, 0.06 * s, 0.05 * s), 11, i, 0, hip=hip, taper=0.6)
     if cravat:
         g.box((0, 0.11 * s, 1.33 * s), (0.1 * s, 0.05 * s, 0.12 * s), 11, i, 0, hip=hip)
     for side, pu, pf in ((-1, 3, 6), (1, 4, 5)):
@@ -147,8 +149,9 @@ def yaw_of(d):
 
 # ---------------------------------------------------------------- tracks
 class Flyer:
-    def __init__(self, name, kit="cadet", hair="brown", scarf=False, rifle=False, cravat=False, H=1.7, scale=1.0, seed=0):
+    def __init__(self, name, kit="cadet", hair="brown", scarf=False, rifle=False, cravat=False, H=1.7, scale=1.0, seed=0, moustache=False):
         self.name, self.kit, self.hair, self.scarf, self.rifle, self.cravat = name, kit, hair, scarf, rifle, cravat
+        self.moustache = moustache
         self.H, self.scale = H, scale
         self.seg = []
         self.seed = seed
@@ -364,7 +367,7 @@ class Squads:
         hips = np.zeros(n)
         for i, f in enumerate(self.flyers):
             n0 = len(g.fc)
-            hips[i] = figure_geo(g, i, f.kit, f.scarf, f.rifle, f.cravat, f.H)
+            hips[i] = figure_geo(g, i, f.kit, f.scarf, f.rifle, f.cravat, f.H, f.moustache)
             kit = KITS[f.kit]
             look = []
             for c in CATS:
@@ -391,8 +394,7 @@ class Squads:
         me.materials.append(wm); me.update()
         self.wob = bpy.data.objects.new(me.name, me); coll.objects.link(self.wob); self.wob.visible_shadow = False
         # gas puffs: precomputed from every gas-on stretch of every track
-        gm = FX.smoke_mat("ODM_Gas", (0.92, 0.93, 0.95), glow=0.25)
-        self.gas = FX.PuffField(self.name + "_Gas", gm, detail=0)
+        self.gas = FX.PuffField(self.name + "_Gas", kind="steam", color=(0.93, 0.94, 0.96), alpha=0.6, grow=1.3)
         ps = self.pscale
         for i, f in enumerate(self.flyers):
             rnd = np.random.default_rng(1000 + i)

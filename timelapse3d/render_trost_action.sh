@@ -16,7 +16,7 @@ until mkdir "$LOCK" 2>/dev/null; do sleep 5; done
 trap 'rmdir "$LOCK" 2>/dev/null' EXIT
 BL="/c/All The Programs/Blender/blender.exe"
 "$BL" -b -P "$HERE/aot/scene.py" -P "$HERE/aot/render_trost_action.py" -- \
-  --year 850 --cam overview --engine CYCLES --res 854x480 --samples $SMP \
+  --year 850 --cam overview --engine ${ENGINE:-CYCLES} --res 854x480 --samples $SMP \
   --ta-out "$FR" --fps $FPS --ta-samples $SMP --speed "${SPEED:-1.0}" $EXTRA 2>&1 \
   | grep -E "\[ta\]|\[trost_action\]|Traceback|Error|error:|line [0-9]+"
 rmdir "$LOCK" 2>/dev/null

@@ -176,6 +176,8 @@ def set_pose(k=0.0, rise=1.0, fade=0.0, hand_l=1.0, hand_r=1.0, steam=1.0):
     # steam follows the rise (not the fade-sink) and rolls outward, low and wide, as the body fades
     # steam (0..1) builds the cloud up gradually after the arrival
     g = min(1.0, max(0.0, steam))
+    if "cards" in STATE:
+        _set_card_steam(g, fade, drop)
     for ob, loc0, sc0 in STATE.get("wisps", ()):
         c = STATE["wisp_c"]
         sp = (0.55 + 0.45 * g) * (1 + 0.9 * fade)
@@ -213,7 +215,9 @@ def build(M, year, ctx):
     hb = arm.pose.bones["mixamorig_Head_06"]
     print("[colossal_asset] head world", tuple(round(v, 1) for v in (arm.matrix_world @ hb.head)), "scale", tuple(hb.scale))
     # steam: thin wisps creeping off the shoulders, head and arms + a low ground mist (not a cloud box)
-    if os.environ.get("COL_STEAM", "wisps") == "wisps":
+    if os.environ.get("COL_STEAM", "cards") == "cards":      # soft camera-facing smoke cards (Eevee + Cycles)
+        card_steam(arm, float(os.environ.get("COL_FADE", "0")))
+    elif os.environ.get("COL_STEAM") == "wisps":
         fade = float(os.environ.get("COL_FADE", "0"))
         wisps(arm, fade)
     elif os.environ.get("COL_STEAM") == "box":
@@ -304,3 +308,63 @@ CAMS = {
     "colossal_face": ((10, GY + 95, 66), (0, GY - 14, 60), 45),
     "colossal_wide": ((260, GY + 420, 70), (0, GY - 20, 45), 30),
 }
+
+
+# ---------------------------------------------------------------- COL_STEAM=cards (default): soft smoke cards
+def card_steam(arm, fade=0.0):
+    """Same layout as wisps() (behind the shoulders/arms + a low ring + ground mist), drawn as many soft
+    camera-facing steam cards; set_pose() spreads / grows / sinks them exactly like the wisps."""
+    import random
+    import numpy as np
+    import smokecards as SC
+    rnd = random.Random(5)
+    pts = []
+    for bn in ("mixamorig_LeftShoulder_08", "mixamorig_RightShoulder_032", "mixamorig_LeftArm_09", "mixamorig_RightArm_033",
+               "mixamorig_LeftForeArm_010", "mixamorig_RightForeArm_034", "mixamorig_Spine2_04", "mixamorig_Spine1_03"):
+        pb = arm.pose.bones.get(bn)
+        if pb:
+            pts.append(arm.matrix_world @ pb.head)
+    cen = sum(pts, Vector()) / max(1, len(pts))
+    blobs = []
+    for p in pts:
+        for j in range(2):
+            blobs.append(((p.x + rnd.uniform(-5, 5), p.y + rnd.uniform(-9, -2), p.z + rnd.uniform(-3, 2)), rnd.uniform(6, 10), 0.75))
+    for k in range(10):
+        a = k / 10 * math.tau + rnd.uniform(-0.2, 0.2); r = rnd.uniform(13, 20)
+        blobs.append(((cen.x + math.cos(a) * r, cen.y + math.sin(a) * r * 0.8 - 4, cen.z - rnd.uniform(4, 10)), rnd.uniform(10, 15), 0.6))
+    for p in pts[:4]:                                         # steam rising off the shoulders / upper arms, above the wall top
+        for j in range(3):
+            blobs.append(((p.x + rnd.uniform(-6, 6), p.y + rnd.uniform(-6, 2), p.z + 4 + j * 5 + rnd.uniform(0, 3)), rnd.uniform(5, 8), 0.5 - 0.1 * j))
+    for k in range(14):                                       # ground mist along the wall foot
+        blobs.append(((FEET.x + rnd.uniform(-60, 60), FEET.y + 8 + rnd.uniform(-25, 25), rnd.uniform(3, 8)), rnd.uniform(10, 16), 0.35))
+    P, R, A = [], [], []
+    for (c, rr, al) in blobs:
+        for q in range(5):                                    # several cards per blob: soft, layered billows
+            P.append((c[0] + rnd.gauss(0, rr * 0.45), c[1] + rnd.gauss(0, rr * 0.45), c[2] + rnd.gauss(0, rr * 0.25)))
+            R.append(rr * rnd.uniform(0.55, 0.9)); A.append(al * rnd.uniform(0.6, 1.0))
+    P, R, A = np.array(P), np.array(R), np.array(A)
+    cs = SC.SmokeCards("ColossalWispCards")      # name starts with ColossalWisp: render_fast hides it before 8.2 s like the wisps
+    n = len(P)
+    cs.add_many(np.full(n, -1e6), P, None, r0=R, r1=R, life=2e6, rise=0.0, kind="steam", alpha=A * 2.3, fade_in=0.001)
+    cs.build(arm.users_collection[0])
+    STATE["cards"] = (cs, P.copy(), R.copy(), A.copy(), cen.copy())
+    # card heights are relative to the body: remember the root height of the build-time pose (minus its fade sink)
+    STATE["cards_zb"] = STATE["root"].location.z            # the points were measured in this (possibly sunk) pose
+    _set_card_steam(1.0, fade, 0.0)
+
+def _set_card_steam(g, fade, drop):
+    import numpy as np
+    cs, P0, R0, A0, c = STATE["cards"]
+    pool = cs.pools["steam"]
+    sp = (0.55 + 0.45 * g) * (1 + 0.9 * fade)
+    k = (0.15 + 0.85 * g)
+    fr = bpy.context.scene.frame_current / 30.0
+    A = pool.A
+    A[:, 1] = c.x + (P0[:, 0] - c.x) * sp
+    A[:, 2] = c.y + (P0[:, 1] - c.y) * sp
+    zoff = STATE["root"].location.z + 30.0 * fade - STATE.get("cards_zb", STATE["root"].location.z)   # follows the rise, not the fade-sink
+    A[:, 3] = P0[:, 2] + zoff + 4 * fade - 3 * (1 - g) + 0.6 * np.sin(fr * 0.7 + np.arange(len(P0)))
+    A[:, 7] = A[:, 8] = R0 * k * (1 + 0.8 * fade)
+    A[:, 12] = A0 * 2.3 * (0.0 if g < 0.02 else 1.0)
+    A[:, 16] = np.arange(len(P0)) * 1.7 + 0.05 * fr
+    cs.update(0.0)
