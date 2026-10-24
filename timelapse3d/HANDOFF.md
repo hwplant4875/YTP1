@@ -236,3 +236,10 @@ Agent split (laptop):
  D) Trost action: swarm titans, cadet squads with ODM (cloaks visible from the sky), the Attack Titan, flares (red/yellow), cannons, the boulder carry, pyres.
  E) Graphics: HUD (place/year/'Eren, age N'), map/counters (250,000→~100; titans inside; Trost dead), name tags (dot + leader line + Pirata One).
 Rules: pace, faceless figures, minimal colourful crowds and titans for sky views, no camera behind the Colossal's back, flush gatehouses, ≤20-min 480p 15 fps previews per segment, push stills and a short note per segment. Integration agent: one continuous flight with eased transitions between segments.
+
+## 17:41 USER: NO GRAPHIC CUTAWAYS. ONE CONTINUOUS CAMERA TAKE. The 250,000 march is THE key 3D scene.
+- The whole EP is ONE continuous 3D camera take. Graphics must NEVER cut away from or interrupt the 3D (no full-screen map shots, no parchment title map replacing the 3D, no map transitions). The user: "그래픽으로 얼렁뚱땅 하고싶지 않아".
+- Graphics are allowed only as small, well-placed OVERLAYS on top of the live 3D sky view, at the right moments: e.g. the "land lost / Wall Maria" inset over the sky view of Shiganshina burning; the HUD (place · year / Eren, age N) and the name tags stay. The title can be a text overlay on the opening 3D shot, not a map.
+- Bridges between places: the camera physically flies (climb high over the walls/land and descend), never a map cut.
+- 846 "retake Wall Maria" operation = THE MOST IMPORTANT, differentiating scene, done fully in 3D: a sky view of countless people (250,000) pouring out of Trost's outer gate in a vast column across the plains; titans converge, attack, hunt, encircle; the column is swallowed and vanishes. The counter 250,000 → ~100 may run as a small overlay ON this 3D shot. Give it real scale (instanced crowd, tens of thousands of visible agents, LOD), and give it enough screen time (~15-20 s) inside the pace budget.
+- graphics_title_map.mp4 / graphics_counter_march.mp4 as full-screen shots are CANCELLED; reuse their elements only as overlays.
