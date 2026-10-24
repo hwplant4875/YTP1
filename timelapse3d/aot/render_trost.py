@@ -97,10 +97,26 @@ def site():
 
 # ====================================================================== time map v -> T (trost_action clock)
 # (T0, T1, video seconds) after the kick; pchip through the cumulative knots -> C1-smooth speed ramps
-SEGS = [(0, 2, 2.5), (2, 7.5, 6.0), (7.5, 14, 8.0), (14, 17.5, 3.5), (17.5, 21, 4.5), (21, 26.5, 6.0), (26.5, 44, 15.0),
-        (44, 46, 2.5), (46, 54, 10.0), (54, 56.5, 3.0), (56.5, 59, 3.5), (59, 63.5, 5.5), (63.5, 65.5, 2.5), (65.5, 68, 2.0),
-        (68, 74.5, 3.0), (74.5, 79, 5.0), (79, 82, 3.5), (82, 99, 16.0), (99, 104, 6.0), (104, 111, 8.0), (111, 113, 2.0),
-        (113, 117.5, 5.0), (117.5, 120.5, 2.5), (120.5, 125, 5.0)]
+# (T0, T1, video seconds): SET PIECES at ~1x (scaled by SET_K), quick TRANSITIONS (swoops) between them
+SET_K = float(os.environ.get("RT_SET_K", "1.25"))
+_SP = [  # (T0, T1, dv, is_set_piece)
+    (0, 2, 2.0, 0), (2, 6, 3.0, 1),                 # breach aftermath, FLOOD through the gate hole
+    (6, 7.6, 0.8, 0), (7.6, 12.4, 4.5, 1),          # swoop -> squad 34: Eren eaten
+    (12.4, 13.2, 1.5, 0), (13.2, 16, 3.5, 1),       # swoop -> inner gate: Mikasa clears the wagon, the crowd floods out
+    (16, 17.5, 1.2, 0), (17.5, 21, 3.0, 1),         # swoop -> supply HQ: titans around it, cadets stranded
+    (21, 22.5, 0.8, 0), (22.5, 26.5, 3.5, 1),       # Mikasa falls into the street
+    (26.5, 30, 3.5, 1), (30, 44, 7.0, 1),           # the rogue titan appears and kills titans
+    (44, 46, 1.5, 0), (46, 54, 7.5, 1),             # HQ dash -> lift plan (cutaway)
+    (54, 56.5, 1.5, 0), (56.5, 59, 2.5, 1),         # Eren out of the nape
+    (59, 61.5, 1.2, 0), (61.5, 63.5, 2.5, 1),       # the cannon and the half-shift
+    (63.5, 66, 2.0, 1),                             # Armin's salute (overlay hold 2.5 s after SET_K)
+    (66, 68.5, 1.0, 0), (68.5, 71.5, 2.4, 1),       # swoop -> Pyxis on the wall (hold 3 s)
+    (71.5, 74.5, 1.0, 0), (74.5, 79, 3.5, 1),       # swoop -> boulder: Eren shifts, red flare
+    (79, 82, 2.5, 1), (82, 99, 11.0, 1),            # Armin's stab, the carry
+    (99, 104, 4.0, 1), (104, 111, 5.5, 1),          # the seal + yellow flare, Levi
+    (111, 113, 1.0, 0), (113, 117.5, 3.0, 1),       # swoop -> dusk pyres
+    (117.5, 120.5, 2.0, 1), (120.5, 125, 3.0, 1)]   # Marco (hold 2.5 s), pull away
+SEGS = [(a, b, dv * (SET_K if sp else 1.0)) for a, b, dv, sp in _SP]
 KV = [V_KICK]; KT = [0.0]
 for a, b, dv in SEGS:
     KV.append(KV[-1] + dv); KT.append(float(b))
@@ -173,84 +189,96 @@ def P3(xy, z):
     return (float(xy[0]), float(xy[1]), float(z))
 
 def cam_keys():
+    """Set pieces: one clear subject per beat in an open space, camera 35-80 m on a steep oblique (low, 15-45 m up,
+    for wall top / squares / streets); between set pieces a quick rise-and-swoop (a high midpoint key is inserted
+    when the hop is long)."""
     S = TA.STATE; C = S["C"]; st = S["site"]
-    g, inw, side, hq = st.gate, st.inw, st.side, st.hq
+    hq = st.hq
+    M, A0, Q, cxy, Cp = C["M"], C["A0"], C["Q"], C["cannon_xy"], C["C_pt"]
     er, ar = C["e_roof"], C["a_roof"]
-    M, A0, Q, cxy = C["M"], C["A0"], C["Q"], C["cannon_xy"]
-    stop, P0, mp, Cp = C["stop"], st.pyre, C["mpos"], C["C_pt"]
-    eye = (er[:2] + ar[:2]) / 2
+    stop, mp, sp_ = C["stop"], C["mpos"], C["shift_pt"]
     at = lambda t: np.array(S["ATD"].state(t)[0][:2])
     K = []
-    def k(v, loc, tgt, lens):
-        K.append((float(v), Vector(loc), Vector(tgt), float(lens)))
+    def k(v, loc, tgt, lens, piece=True):
+        K.append((float(v), Vector(loc), Vector(tgt), float(lens), piece))
     def kt(T, loc, tgt, lens):
         k(Vmap(T), loc, tgt, lens)
+    def rel(c, dx, dy, z):
+        return (float(c[0]) + dx, float(c[1]) + dy, float(z))
     ex, ey = EREN_WALL
-    # ---- intro (video time)
-    k(0.0, (-560, 240, 560), (40, -560, 0), 26)
-    k(4.0, (-210, -600, 220), (-20, -850, 30), 30)
+    igx, igy = TR.INNER_GATE
+    # ---- intro (video time): dawn over the town, the wall top, the Colossal, the kick
+    k(0.0, (-250, -420, 170), (-40, -790, 25), 28)
+    k(3.6, (-120, -720, 110), (ex, ey, 45), 34)
     k(7.2, (ex - 18, ey + 44, 82), (ex, ey, L.WALL_H + 0.8), 58)
     k(9.0, (ex - 12, ey + 52, 82), (ex + 6, ey - 8, L.WALL_H + 5), 46)
-    k(11.4, (ex + 4, ey + 80, 78), (-14, GY - 14, 56), 34)          # Eren small on the wall, the head beyond
-    k(13.6, (60, GY + 150, 112), (0, GY + 15, 22), 32)                 # the gate in frame for the kick
-    # ---- action (trost_action time)
-    kt(2.0, (95, GY + 125, 150), (0, GY + 110, 0), 30)
-    kt(6.0, (110, GY + 150, 175), (0, GY + 210, 0), 30)
-    kt(7.6, P3(eye - side * 55 - inw * 45, er[2] + 48), P3(eye + inw * 6, er[2] - 4), 34)
-    kt(13.7, P3(eye - side * 45 - inw * 30, er[2] + 40), P3(eye, er[2] - 2), 40)
-    wr = S["SQ"].pos("w1", 15.0)
-    kt(14.9, P3(wr[:2] - inw * 50 + side * 30, wr[2] + 40), P3(wr[:2], wr[2] - 4), 36)
-    kt(16.6, P3(wr[:2] - inw * 42 + side * 22, wr[2] + 36), P3(wr[:2], wr[2] - 6), 36)
-    # evacuation at the inner gate (D's beat if present, else a placeholder pass over the jammed wagon)
-    ev = TA.BEATS.get("evac") or TA.BEATS.get("evacuation")
-    igx = TR.INNER_GATE[0]
-    if ev:
-        kt(17.9, (igx + 90, -190, 140), (igx, -15, 0), 32); kt(19.4, (igx + 75, -165, 120), (igx, 5, 0), 32)
-    else:
-        kt(18.0, (igx + 90, -190, 150), (igx, -15, 0), 32); kt(19.0, (igx + 80, -175, 140), (igx, -10, 0), 32)
-    kt(20.0, P3(hq - inw * 120 + side * 60, 140), P3(hq, 0), 32)
-    kt(21.0, P3(hq - inw * 100 + side * 30, 120), P3(hq, 0), 32)
-    kt(21.8, P3(M + side * 80 - inw * 20, 90), P3((M + hq) / 2, 0), 30)
-    kt(26.2, P3(M + side * 60 - inw * 40, 70), P3(M, 2), 32)
-    kt(27.5, P3(A0 + side * 70 - inw * 50, 62), P3(A0, 8), 30)
-    bell = [n for n in TA.BEATS if "bell" in n]
-    for T in ((31.0, 40.0, 43.0) if bell else (31.0, 35.0, 39.0, 43.0)):
+    k(11.4, (ex + 4, ey + 80, 78), (-14, GY - 14, 56), 34)
+    k(13.6, (50, GY + 130, 95), (0, GY + 12, 20), 32)
+    # ---- FLOOD: street level on the avenue, looking into the gate hole as the titans pour in
+    kt(2.2, (38, GY + 125, 48), (0, GY + 18, 6), 30)
+    kt(5.8, (34, GY + 140, 44), (-4, GY + 40, 6), 30)
+    # ---- Eren eaten: squad 34's roofs, steep oblique ~55 m
+    e = (er[:2] + ar[:2]) / 2
+    kt(7.8, rel(e, -42, -30, er[2] + 34), rel(e, 0, 4, er[2] - 4), 36)
+    kt(12.2, rel(e, -36, -22, er[2] + 30), rel(e, 0, 2, er[2] - 5), 40)
+    # ---- inner gate: the wagon jam released, crowd floods out (camera south-east of the gate, low)
+    kt(13.4, (igx + 48, igy - 62, 34), (igx, igy - 10, 4), 30)
+    kt(15.8, (igx + 40, igy - 52, 30), (igx, igy + 6, 4), 30)
+    # ---- HQ despair: from the yard side, titans ringing the building
+    kt(17.7, rel(hq, -45, -80, 78), rel(hq, 0, -4, 4), 30)
+    kt(20.8, rel(hq, -38, -70, 72), rel(hq, 4, 0, 4), 30)
+    # ---- Mikasa falls into the street at M
+    kt(22.7, rel(M, -16, 26, 58), rel(M, 0, 0, 1), 44)
+    kt(26.3, rel(M, -14, 22, 54), rel(M, 2, -4, 2), 46)
+    # ---- the rogue titan appears beside her and fights its way north
+    kt(28.0, rel(A0, -30, 40, 66), rel(A0, 0, 0, 7), 30)
+    for T in (32.0, 37.0, 42.0):
         a = at(T)
-        kt(T, P3(a + side * 70 - inw * 50, 78), P3(a, 6), 30)
-    if bell:
-        b0, b1 = TA.BEATS[bell[0]]
-        bx, by = TR.BELL_TOWER["xy"]
-        kt((b0 + b1) / 2, (bx + 60, by - 70, 85), (bx, by, 35), 34)
-    kt(45.0, P3(hq - inw * 60 + side * 30, 90), P3(hq, 4), 32)
-    kt(46.6, P3(hq - inw * 26 + side * 14, 60), P3(hq, 1), 30)
-    kt(52.6, P3(hq - inw * 22 + side * 10, 52), P3(hq, 1), 30)
-    kt(56.4, P3(Cp + side * 45 - inw * 40, 50), P3(Cp, 4), 32)
-    kt(58.8, P3(Cp + side * 38 - inw * 34, 44), P3(Q, 3), 32)
+        kt(T, rel(a, -38, -40, 72), rel(a, 0, 0, 6), 30)
+    # ---- lift plan: steep over the cutaway
+    kt(46.4, rel(hq, -22, -14, 58), rel(hq, 0, 0, 1), 30)
+    kt(53.6, rel(hq, -18, -10, 50), rel(hq, 0, 0, 1), 30)
+    # ---- Eren out of the nape, the cannon and the half-shift, Armin's salute
+    kt(56.7, rel(Cp, -16, 30, 58), rel(Cp, 0, 0, 3), 32)
+    kt(58.8, rel(Cp, -14, 30, 54), rel(Q, 0, 0, 2), 34)
+    cd = C["cdir"]; perp = np.array([cd[1], -cd[0]])
     mid = (Q + cxy) / 2
-    perp = np.array([C["cdir"][1], -C["cdir"][0]])
-    kt(61.4, P3(mid + perp * 40, 62), P3(mid, 5), 32)
-    kt(63.2, P3(mid + perp * 36, 58), P3(Q, 6), 34)
-    kt(64.4, P3(Q + perp * 14 - C["cdir"] * 22, 52), P3(Q + C["cdir"] * 5, 2), 34)
-    kt(66.6, P3(Q + perp * 12 - C["cdir"] * 18, 46), P3(Q + C["cdir"] * 5, 2), 40)     # salute hold
-    px = TA.BEATS.get("pyxis")
-    sp = TR.WALLTOP_SPEECH
-    p0, p1 = (px if px else (68.5, 74.0))
-    kt(p0 + 0.5, (sp[0] + 55, sp[1] - 95, 92), (sp[0], sp[1], sp[2]), 36)
-    kt(p1 - 0.5, (sp[0] + 45, sp[1] - 80, 84), (sp[0], sp[1], sp[2]), 40)              # Pyxis hold
-    for T in (75.5, 80.0, 84.0, 88.0, 92.0, 96.0, 100.0, 103.5):
+    kt(61.7, rel(mid, -6, 46, 50), rel(mid, 0, 0, 4), 32)
+    kt(63.4, rel(mid, -4, 42, 46), rel(Q, 0, 0, 5), 34)
+    kt(63.8, rel(Q, -8, 34, 50), rel(Q, 0, 0, 2), 46)
+    kt(65.9, rel(Q, -6, 30, 47), rel(Q, 0, 0, 2), 52)
+    # ---- Pyxis on the wall top above the inner gate (camera level with the wall walk, Trost side)
+    sx, sy, sz = TR.WALLTOP_SPEECH
+    kt(68.6, (sx + 30, sy - 40, sz + 14), (sx, sy, sz + 1), 55)
+    kt(71.4, (sx + 26, sy - 36, sz + 12), (sx, sy, sz + 1), 62)
+    # ---- boulder: shift by the rock (red flare), the stab, the carry down the avenue, the seal (yellow flare)
+    kt(74.7, rel(sp_, 46, 40, 40), rel(sp_, 0, 0, 8), 32)
+    kt(81.8, rel(sp_, 38, 34, 36), rel(sp_, 0, 0, 10), 34)
+    for T in (86.0, 91.0, 96.0):
         a = at(T)
-        kt(T, P3(a + side * 75 + inw * 45, 135), P3(a - inw * 20, 10), 28)
-    kt(105.2, P3(stop + inw * 40 + side * 55, 58), P3(stop + inw * 22, 6), 32)
-    kt(109.0, P3(stop + inw * 36 + side * 45, 50), P3(stop + inw * 24, 4), 34)
-    kt(114.5, P3(P0 - inw * 60 + side * 50, 64), P3(P0 + inw * 8, 0), 30)
-    kt(118.0, P3(mp - inw * 42 + side * 30, 60), P3(mp, 0), 40)
-    kt(120.4, P3(mp - inw * 38 + side * 27, 56), P3(mp, 0), 42)                         # Marco hold
-    kt(124.9, P3(P0 - inw * 140 + side * 90, 150), P3(P0 + inw * 10, 0), 28)            # pull up, dusk
+        kt(T, rel(a, 60, 40, 58), rel(a, 0, -20, 10), 30)
+    kt(99.5, (45, GY + 70, 48), (0, GY + 6, 12), 30)
+    kt(103.8, (40, GY + 62, 44), (0, GY + 4, 10), 30)
+    # ---- Levi's entrance
+    kt(104.5, rel(stop, 42, 46, 34), rel(stop, 0, 16, 8), 32)
+    kt(110.8, rel(stop, 36, 40, 30), rel(stop, 0, 20, 4), 34)
+    # ---- dusk pyres and Marco
+    pc = np.array(TR.PLAZA[:2])
+    kt(113.3, rel(pc, 60, -55, 50), rel(pc, 0, 0, 2), 30)
+    kt(117.3, rel(mp, 20, -18, 22), rel(mp, 0, 0, 0), 38)
+    kt(120.4, rel(mp, 17, -15, 19), rel(mp, 0, 0, 0), 44)
+    kt(124.9, rel(pc, 140, -150, 140), rel(pc, 0, 10, 0), 28)
     K.sort(key=lambda e: e[0])
     out = []
     for e in K:
-        if out and e[0] - out[-1][0] < 0.4:
+        if out and e[0] - out[-1][0] < 0.25:
             continue
+        if out:                                            # rise-and-swoop between distant set pieces
+            p_, q_ = out[-1], e
+            d = (q_[1] - p_[1]).length
+            if d > 160 and q_[0] - p_[0] > 0.5:
+                lm = (p_[1] + q_[1]) / 2; lm.z = max(p_[1].z, q_[1].z) + min(140.0, 0.22 * d)
+                out.append(((p_[0] + q_[0]) / 2, lm, (p_[2] + q_[2]) / 2, (p_[3] + q_[3]) / 2, False))
         out.append(e)
     return out
 
@@ -260,12 +288,14 @@ def cam_at(v):
         ks = cam_keys(); T = [e[0] for e in ks]
         lnl = [math.log(e[3]) for e in ks]
         _CAM.update(loc=Channel(T, [e[1] for e in ks]), tgt=Channel(T, [e[2] for e in ks]), T=T, lnl=lnl, ml=_pchip_m0(T, lnl))
+        for e in ks:
+            print(f"[trost] key v={e[0]:.2f} T={Tmap(e[0]):.2f} loc={tuple(round(c) for c in e[1])} lens={e[3]:.0f}" + ('' if e[4] else ' swoop'))
         print("[trost] camera keys:", len(ks))
     loc, tgt = _CAM["loc"].at(v), _CAM["tgt"].at(v)
     lens = math.exp(_pchip(_CAM["T"], _CAM["lnl"], _CAM["ml"], v))
     if v < 17.0:                                   # never behind the Colossal: stay north of the outer wall
         loc.y = max(loc.y, GY + 25)
-    loc.z = max(loc.z, L.height(loc.x, loc.y) + 25)
+    loc.z = max(loc.z, L.height(loc.x, loc.y) + 14)
     if V_KICK <= v < V_KICK + 1.0:
         kk = (V_KICK + 1.0 - v) * 2.5
         loc = loc + Vector((noise.noise(Vector((v * 40, 0, 0))), noise.noise(Vector((0, v * 40, 3))), noise.noise(Vector((5, 1, v * 40))))) * kk
@@ -345,7 +375,7 @@ def light_at(v):
     for k, ob in enumerate(FX["bolts"]):
         ob.hide_render = not (on and on[0] == k)
     FX["flash"].energy = 6e6 if on else 0.0
-    night = 1 - ss(0.3, 4.2, v)
+    night = 0.55 * (1 - ss(0.2, 3.6, v))
     dk = bump(v, V_LIGHT - 0.15, V_LIGHT, V_LIGHT + 0.35, V_LIGHT + 1.0)
     sc = bpy.context.scene
     sc.view_settings.exposure = FX["exp"] - 1.6 * dk - 1.4 * night + (0.7 if on else 0.0)
@@ -441,12 +471,24 @@ cam.data.clip_start = 0.5
 if sc.render.engine.startswith("BLENDER_EEVEE"):
     sc.eevee.taa_render_samples = max(1, B.rt_samples)
     ev = sc.eevee
-    for k_, v_ in (("use_raytracing", False), ("shadow_resolution_scale", 0.5), ("shadow_ray_count", 1), ("shadow_step_count", 4),
-                   ("use_shadows", True)):
+    # readable sky views: real sun shadows (bigger shadow pool, full resolution, soft), screen-space AO (fast GI)
+    for k_, v_ in (("use_shadows", True), ("shadow_pool_size", "1024"), ("shadow_resolution_scale", 1.0),
+                   ("shadow_ray_count", 1), ("shadow_step_count", 6), ("use_raytracing", True), ("ray_tracing_method", "SCREEN"),
+                   ("use_fast_gi", True), ("fast_gi_method", "AMBIENT_OCCLUSION_ONLY"), ("fast_gi_distance", 6.0),
+                   ("fast_gi_quality", 0.25), ("fast_gi_resolution", "4")):
         try:
             setattr(ev, k_, v_)
-        except Exception:
-            pass
+        except Exception as ex_:
+            print("[trost] eevee setting", k_, "failed:", ex_)
+    for o in bpy.data.objects:
+        if o.type == "LIGHT" and o.data.type == "SUN":
+            d = o.data
+            for k_, v_ in (("use_shadow", True), ("angle", math.radians(1.2)), ("shadow_maximum_resolution", 0.02),
+                           ("use_shadow_jitter", False), ("shadow_filter_radius", 1.5)):
+                try:
+                    setattr(d, k_, v_)
+                except Exception:
+                    pass
 else:
     cy = sc.cycles
     cy.samples = B.rt_samples; cy.use_adaptive_sampling = True; cy.use_denoising = True
@@ -477,6 +519,20 @@ if not SITE.get("boulder_obj"):
     adopt_boulder()
 print(f"[trost] TA setup {time.time() - t0:.1f}s", TA.info(), "beats:", sorted(TA.BEATS))
 build_intro(); build_fx(); build_breach()
+
+def hero_pop():
+    """Subtle emission boost so the hero colour cues pop against the roofs: Mikasa's scarf, Armin's blond hair,
+    the Scouts' green cloaks (Levi)."""
+    for name, col, strength in (("ODM_scarf", (0.9, 0.05, 0.04), 1.2), ("ODM_hair_blond", (0.95, 0.75, 0.3), 0.6),
+                                ("ODM_cloak_scout", (0.1, 0.45, 0.15), 0.5)):
+        m = bpy.data.materials.get(name)
+        if not m or not m.use_nodes:
+            continue
+        bs = m.node_tree.nodes.get("Principled BSDF")
+        if bs:
+            bs.inputs["Emission Color"].default_value = (*col, 1)
+            bs.inputs["Emission Strength"].default_value = strength
+hero_pop()
 col_coll = bpy.data.collections.get("ColossalTitan")
 print(f"[trost] setup total {time.time() - t0:.1f}s; video length {V_END:.1f}s; colossal {'on' if (CA and CA.STATE) else 'MISSING'}")
 
@@ -495,6 +551,21 @@ def frame_state(v):
     cam.location = loc; cam.rotation_euler = rot; cam.data.lens = lens
     return T
 
+if B.dry and os.environ.get("RT_PROBE"):
+    C = TA.STATE["C"]
+    print("[trost] probe C:", {k: (np.round(np.asarray(v, float), 1).tolist() if isinstance(v, (tuple, list, np.ndarray)) and np.asarray(v).dtype != object and np.asarray(v).size <= 6 else type(v).__name__) for k, v in C.items()})
+    for nm in ("eren", "armin", "thomas", "mikasa", "jean", "marco", "connie", "levi", "pyxis", "attack", "boulder", "w1", "w1_0"):
+        row = []
+        for T in (2, 5, 8, 10, 12, 14, 15.5, 17, 19, 21, 23, 25, 27, 30, 35, 40, 45, 48, 52, 57, 62, 65, 70, 76, 80, 85, 92, 100, 103, 106, 110, 116, 119):
+            try:
+                p_ = TA.hero_pos(nm, T)
+            except Exception:
+                p_ = None
+            row.append(None if p_ is None else (T, *[int(round(float(c))) for c in p_]))
+        print("[trost] hero", nm, [r for r in row if r])
+    for k, v in sorted(TA.BEATS.items(), key=lambda e: e[1]):
+        print("[trost] beat", k, v)
+    sys.exit(0)
 if B.dry:
     for v in np.arange(0, V_END, 2.0):
         T = frame_state(float(v)); print(f"[trost] v={v:.1f} T={T:.2f} cam={tuple(round(c) for c in cam.location)}")

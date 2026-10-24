@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # TROST SEGMENT (aot/render_trost.py on the aot/trost.py set + aot/trost_action.py), ONE Blender session per part.
-#   PART=1 bash render_trost.sh          parts: 1 = v 0-52, 2 = v 52-98, 3 = v 98-end  (15 fps, 854x480)
+#   PART=1 bash render_trost.sh          parts: 1 = v 0-44, 2 = v 44-86, 3 = v 86-end  (15 fps, 854x480)
 #   STILLS="8.5,14.2,30" bash render_trost.sh       stills only (video seconds) into OUT
 #   DRY=1 bash render_trost.sh           build + print the timeline / camera, no render
 # Env: ENGINE (CYCLES|BLENDER_EEVEE), SMP (samples), STEP (render every Nth frame; the encode repeats frames)
 FPS="${FPS:-15}"; SMP="${SMP:-1}"; STEP="${STEP:-2}"; PART="${PART:-1}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 OUT="${OUT:-E:/YTP2/3D Timelapse/renders/trost}"
-case "$PART" in 1) V0=0; V1=52;; 2) V0=52; V1=98;; 3) V0=98; V1=999;; esac
+case "$PART" in 1) V0=0; V1=44;; 2) V0=44; V1=86;; 3) V0=86; V1=999;; esac
 [ -n "$WIN" ] && V0=${WIN%,*} && V1=${WIN#*,}
 FR="$OUT/frames_p$PART"; mkdir -p "$OUT"
 EXTRA="--v0 $V0 --v1 $V1 --step $STEP"
@@ -17,7 +17,7 @@ LOCK="/e/YTP2/3D Timelapse/.gpu_lock"
 until mkdir "$LOCK" 2>/dev/null; do sleep 5; done
 trap 'rmdir "$LOCK" 2>/dev/null' EXIT
 BL="/c/All The Programs/Blender/blender.exe"
-TREE_DENS=${TREE_DENS:-0.005} COL_H=${COL_H:-64} COL_DX=${COL_DX:--7} AOT_SET=trost AOT_PLUGINS=colossal_asset \
+TA_PSCALE=${TA_PSCALE:-2.5} TREE_DENS=${TREE_DENS:-0.005} COL_H=${COL_H:-64} COL_DX=${COL_DX:--7} AOT_SET=trost AOT_PLUGINS=colossal_asset \
   "$BL" -b -P "$HERE/aot/scene.py" -P "$HERE/aot/render_trost.py" -- \
   --year 850 --cam trost_overview --engine ${ENGINE:-BLENDER_EEVEE} --res 854x480 --samples $SMP \
   --rt-out "$FR" --fps $FPS --rt-samples $SMP $EXTRA 2>&1 \
