@@ -110,7 +110,7 @@ Every row below is mandatory unless marked optional. They are staged like sectio
 | V11 | Eren goes berserk and punches at Mikasa; Armin stabs the nape to wake him (S1E12-13) | 27-28 | The drama that makes the plug "earned" | Boulder site: the Titan swings at a red-scarfed figure, a small figure in the nape |
 | V12 | Ian's and Rico's squads die holding off Titans; red-to-green smoke at success (S1E13) | 29 | The sacrifice that pays for the victory | Already in K7; make the casualties readable |
 | V13 | Levi arrives and cuts down Titans in seconds (S1E13) | 30 | "Humanity's strongest" introduction | Wall top above the sealed gate, a fast spinning streak cutting two napes, Survey Corps cloaks landing |
-| V14 | Jean finds Marco's half-eaten body during the cleanup (S1E13) | 30 | The quiet grief beat | Cleanup street with body carts and smoke from the pyres, one cadet standing over a body |
+| V14 | Jean finds Marco's half-eaten body during the cleanup (S1E13), then the cremation pyres (S1E16) | 30, 34 | The quiet grief beat | Cleanup street with body carts, one cadet standing over a body; later, a night field of pyres with the cadets standing around them (just before K3) |
 | V15 | Trial: Levi kicks Eren in court; Erwin takes custody (S1E14) | 31 | Changes Eren's fate | Courtroom with the roof cut away, a kneeling figure in chains, a short figure kicking |
 | V16 | Sawney and Beane killed at night (S1E15) | 33 | Plants the "enemy inside" mystery | Research grounds at night, two steaming carcasses in restraints |
 | V17 | The Female Titan peeks under Armin's hood and spares him (S1E17) | 38 | The clue that Armin uses later | Plains: a crouching Titan lifts a hood, then runs on |
@@ -142,6 +142,7 @@ In editing, the user will overlay the matching anime clip, blurred, with its ori
 | V9 Armin's salute | Armin's plea | 3-4 s hold |
 | V10 Pyxis's speech | Pyxis's lines | 4-6 s hold (slow orbit) |
 | K3 Erwin's recruitment salute | "Shinzou wo sasageyo!" | 3 s hold on the salute |
+| K10/V18 Petra: "Trust us" | Eren is told to keep riding | 2-3 s hold on the forest road |
 | K13 Eren's rage transformation | Eren's scream | 2 s hold before the lightning |
 | V21 Stohess, under the rubble | Eren's line | 2-3 s hold |
 Lines the user adds later get the same treatment.
