@@ -112,3 +112,10 @@ Implementation hints:
   2) 04/05 show Shiganshina as a ROUND/OVAL ring. Canon and the user ref is the elongated U district attached to Wall Maria (district.py U layout, as in T2_best.png). Please use district.outline().
   3) 03: the Colossal head is only a few pixels. Raise the camera a bit and/or slow down near the wall so the head reads (about 10-15% of the frame height without a close-up).
   4) 05: the smoke columns and the debris read well.
+
+## 06:10 USER STYLE REFERENCE: ref/user/style_tiny_figures_walltop_ref.png (S2 frame)
+THIS is the target staging for character beats: a high oblique aerial with people VERY small, yet a viewer who knows the scene can tell who and what from the composition (group shape, where they stand, props, the cloak colour, one distinctive element). Apply it to every character beat (with name tags when needed). No close-ups.
+The same frame is also a WALL-DETAIL reference:
+- A wide flat wall top with TWO rail tracks running along it, a small rail cart, and cannons at the edge.
+- The wall face has large CURVED BUTTRESS ribs flaring at the base on that side, plus slab segments.
+- Pale grey stone, soft haze, conifer clumps scattered on the plain.
