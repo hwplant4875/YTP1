@@ -67,3 +67,10 @@ The face is good. Canon fixes:
 4. LIGHT: the scene is the 845 afternoon. Use a warm, low sun from the west and a hazy sky. Steam backlit by the sun is the money shot for the thumbnail.
 5. For the thumbnail angle (low, over the town roofs looking up), frame the head large: about 35-45% of the frame height, with the wall edge diagonal across the frame.
 - 00:0x UTC, v7/v8 check: the 23:45 review above still applies to both. v7: the torso is still above the wall and the merlons are still there. v8: the head is about 6% of the frame height and needs 35-45%. Use a longer lens (85-135 mm) from the main street so the wall compresses behind the roofs, and sink the Colossal so the wall line sits at its collarbones. Then add the warm backlight and steam.
+
+## 03:31 UTC 10/24: user decision on the opening -> Colossal sequence
+The user is happy with the titan looks. Camera rule: avoid close-ups and keep a moderate high aerial angle looking down.
+Plan (cloud proposed it to the user; the default is to skip chapters 3-5 unless the user objects):
+1. ONE-TAKE: start on the hill tree, glide down the hill and pass LOW through the Shiganshina inner (north) gate. Fly south along the main street at a moderate height. During the flight the light shifts from morning to afternoon (timelapse). At the outer south wall, the Colossal's HEAD rises above the wall top (reveal, with steam).
+2. Crane up to the sky view and orbit OVER the wall to BEHIND the Colossal (outside, south). On the KICK impact: the outer gate collapses, stone blocks fly into the town and smash roofs, and boulders roll down the streets (rigid-body sim). Steam explodes. The Colossal vanishes in steam. Then pure titans pour in through the breach up the main avenue.
+Chapters 3-5 (scouts return, river) are skipped in this one-take unless the user says otherwise.
