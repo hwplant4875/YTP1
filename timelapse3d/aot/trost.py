@@ -26,7 +26,7 @@ API (module `trost`; read the constants after import, call the functions after b
   BELL_TOWER  dict(xy=(-160, -250), belfry_z=(34, 43), belfry_c=(-160, -250, 38.5), top_z=64)  open octagonal belfry
   SUPPLY_HQ   dict(center, rot, size=(70, 44), store_z=(0, 10), roof_z=22, lift_xy, lift_z=(0.3, 10), titan_spots[7],
                    door_xy, roof_xy)   storeroom = ground-floor hall; the lift drops from the 1st floor into it
-  BOULDER     (-68, -450, 0)     bottom centre of the boulder; BOULDER_SIZE (13, 11, 9); object "TrostBoulder"
+  BOULDER     (-68, -450, 0)     bottom centre of the boulder; BOULDER_SIZE (16, 15, 13); object "TrostBoulder"; boulder_mesh(origin="center") for carry
   BOULDER_SQUARE (-68, -450, 40); BOULDER_ROUTE  polyline boulder -> avenue -> outer gate (Eren's carry)
   AVENUE      polyline outer gate -> inner gate (straight main street, hw 8); EVAC_ROUTE plaza -> inner gate
   INNER_GATE_SQUARE (x0, y0, x1, y1); OUTER_GATE_SQUARE (x, y, r)
@@ -74,8 +74,8 @@ WATER_GATE_ROSE = (CANAL_X, 0.0)
 WATER_GATE_OUTER = (CANAL_X, district_ymin(CANAL_X))
 PLAZA = (-100.0, -250.0, 42.0)
 BOULDER = (-68.0, -450.0, 0.0)
-BOULDER_SIZE = (13.0, 11.0, 9.0)
-BOULDER_SQUARE = (-68.0, -450.0, 40.0)
+BOULDER_SIZE = (16.0, 15.0, 13.0)     # bigger than a house: the 15 m Attack Titan hunches under it
+BOULDER_SQUARE = (-68.0, -450.0, 44.0)
 INNER_GATE_SQUARE = (INNER_GATE[0] - 60, -70.0, INNER_GATE[0] + 60, -12.0)
 OUTER_GATE_SQUARE = (0.0, OUTER_GATE[1] + 38, 38.0)
 WALLTOP_SPEECH = (INNER_GATE[0], -2.0, L.WALL_H)
@@ -89,9 +89,9 @@ BOULDER_ROUTE = [(BOULDER[0], BOULDER[1])] + [(_avenue_x(y), float(y)) for y in 
     + [(0.0, OUTER_GATE[1] + 4)]
 EVAC_ROUTE = [(_avenue_x(y), float(y)) for y in range(int(PLAZA[1]), -11, 10)] + [(INNER_GATE[0], -6.0)]
 
-# supply HQ: mid-district, long side tangent to the rings around (0, -S), door facing outwards (SE)
+# supply HQ: mid-district, axis-aligned, main door facing south
 _HQ_C = (240.0, -380.0)
-_HQ_ROT = math.atan2(_HQ_C[1] + S, _HQ_C[0]) + math.pi / 2
+_HQ_ROT = 0.0          # axis-aligned (long side E-W, door south) so trost_action's (w, d) box matches the building
 HQ_L, HQ_D = 70.0, 44.0
 def hq_world(lx, ly):
     c, s = math.cos(_HQ_ROT), math.sin(_HQ_ROT)
@@ -250,7 +250,7 @@ _hq = SUPPLY_HQ
 CAMS = {
     "trost_overview": ((-560, 520, 720), (80, -470, 0), 26),
     "trost_outer_gate": ((150, -610, 150), (0, OUTER_GATE[1], 20), 32),
-    "trost_boulder": ((-5, -360, 75), (-62, -500, 2), 30),     # boulder square, avenue on to the outer gate
+    "trost_boulder": ((-22, -392, 46), (-66, -458, 5), 32),     # boulder square, avenue on to the outer gate
     "trost_hq": ((_HQ_C[0] - 150, _HQ_C[1] + 70, 120), (_HQ_C[0], _HQ_C[1], 6), 34),
     "trost_hq_cut": ((_HQ_C[0] - 70, _HQ_C[1] + 35, 120), (_HQ_C[0], _HQ_C[1], 0), 34),
     "trost_belltower": ((PLAZA[0] + 70, PLAZA[1] - 90, 80), (BELL_TOWER["xy"][0], BELL_TOWER["xy"][1], 30), 34),
@@ -540,32 +540,99 @@ def build_church(M):
     return ob
 
 # ---------------------------------------------------------------- the boulder
-def build_boulder(M):
+def rock_mat(name="TrostRock"):
+    """Rough boulder shading: grey-brown mottling, dark crevices along Voronoi cracks, moss on up-facing surfaces,
+    bump from the cracks + fine grain (design bible 3.6: albedo ~#7a706a, fracture faces lighter)."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree; N = nt.nodes; Lk = nt.links
+    bsdf = N["Principled BSDF"]; bsdf.inputs["Roughness"].default_value = 0.95
+    tc = N.new("ShaderNodeTexCoord")
+    n1 = N.new("ShaderNodeTexNoise"); n1.inputs["Scale"].default_value = 0.22; n1.inputs["Detail"].default_value = 10
+    n1.inputs["Roughness"].default_value = 0.62; Lk.new(tc.outputs["Object"], n1.inputs["Vector"])
+    r1 = N.new("ShaderNodeValToRGB"); e = r1.color_ramp.elements
+    e[0].position, e[0].color = 0.32, (0.105, 0.090, 0.080, 1)
+    e[1].position, e[1].color = 0.70, (0.30, 0.27, 0.24, 1)
+    Lk.new(n1.outputs["Fac"], r1.inputs["Fac"])
+    n2 = N.new("ShaderNodeTexNoise"); n2.inputs["Scale"].default_value = 2.5; n2.inputs["Detail"].default_value = 6
+    Lk.new(tc.outputs["Object"], n2.inputs["Vector"])
+    grain = N.new("ShaderNodeMix"); grain.data_type = "RGBA"; grain.blend_type = "OVERLAY"; grain.inputs["Factor"].default_value = 0.35
+    Lk.new(r1.outputs["Color"], grain.inputs["A"]); Lk.new(n2.outputs["Color"], grain.inputs["B"])
+    # cracks: Voronoi distance-to-edge, warped by noise
+    nw = N.new("ShaderNodeTexNoise"); nw.inputs["Scale"].default_value = 0.6; nw.inputs["Detail"].default_value = 4
+    Lk.new(tc.outputs["Object"], nw.inputs["Vector"])
+    wsc = N.new("ShaderNodeVectorMath"); wsc.operation = "SCALE"; wsc.inputs["Scale"].default_value = 3.5
+    Lk.new(nw.outputs["Color"], wsc.inputs[0])
+    wp = N.new("ShaderNodeVectorMath"); wp.operation = "ADD"
+    Lk.new(tc.outputs["Object"], wp.inputs[0]); Lk.new(wsc.outputs[0], wp.inputs[1])
+    vo = N.new("ShaderNodeTexVoronoi"); vo.feature = "DISTANCE_TO_EDGE"; vo.inputs["Scale"].default_value = 0.16; vo.inputs["Randomness"].default_value = 1.0
+    Lk.new(wp.outputs[0], vo.inputs["Vector"])
+    cr = N.new("ShaderNodeMapRange"); cr.inputs["From Min"].default_value = 0.0; cr.inputs["From Max"].default_value = 0.014
+    cr.inputs["To Min"].default_value = 0.75; cr.inputs["To Max"].default_value = 0.0
+    Lk.new(vo.outputs["Distance"], cr.inputs["Value"])
+    dk = N.new("ShaderNodeMix"); dk.data_type = "RGBA"
+    Lk.new(cr.outputs["Result"], dk.inputs["Factor"]); Lk.new(grain.outputs["Result"], dk.inputs["A"])
+    dk.inputs["B"].default_value = (0.025, 0.022, 0.02, 1)
+    # moss on up-facing surfaces, broken up by noise
+    geo = N.new("ShaderNodeNewGeometry"); sep = N.new("ShaderNodeSeparateXYZ"); Lk.new(geo.outputs["Normal"], sep.inputs[0])
+    n3 = N.new("ShaderNodeTexNoise"); n3.inputs["Scale"].default_value = 0.5; n3.inputs["Detail"].default_value = 5
+    Lk.new(tc.outputs["Object"], n3.inputs["Vector"])
+    ad = N.new("ShaderNodeMath"); ad.operation = "ADD"; Lk.new(sep.outputs["Z"], ad.inputs[0])
+    sc_ = N.new("ShaderNodeMath"); sc_.operation = "MULTIPLY"; sc_.inputs[1].default_value = 0.8
+    Lk.new(n3.outputs["Fac"], sc_.inputs[0]); Lk.new(sc_.outputs[0], ad.inputs[1])
+    mm = N.new("ShaderNodeMapRange"); mm.inputs["From Min"].default_value = 1.25; mm.inputs["From Max"].default_value = 1.55
+    Lk.new(ad.outputs[0], mm.inputs["Value"])
+    moss = N.new("ShaderNodeMix"); moss.data_type = "RGBA"
+    Lk.new(mm.outputs["Result"], moss.inputs["Factor"]); Lk.new(dk.outputs["Result"], moss.inputs["A"])
+    moss.inputs["B"].default_value = (0.07, 0.10, 0.03, 1)
+    Lk.new(moss.outputs["Result"], bsdf.inputs["Base Color"])
+    bh = N.new("ShaderNodeMath"); bh.operation = "SUBTRACT"; Lk.new(n2.outputs["Fac"], bh.inputs[0]); Lk.new(cr.outputs["Result"], bh.inputs[1])
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.6; bp.inputs["Distance"].default_value = 0.3
+    Lk.new(bh.outputs[0], bp.inputs["Height"]); Lk.new(bp.outputs["Normal"], bsdf.inputs["Normal"])
+    return m
+
+def boulder_mesh(name="TrostBoulderMesh", origin="bottom"):
+    """Lumpy flattened boulder of BOULDER_SIZE: multi-octave displacement plus a few planar fracture cuts
+    (flat facets) and a flat seat. origin = "bottom" (bottom centre) or "center"."""
     bm = bmesh.new()
-    bmesh.ops.create_icosphere(bm, subdivisions=3, radius=1.0)
+    bmesh.ops.create_icosphere(bm, subdivisions=4, radius=1.0)
     rx, ry, rz = BOULDER_SIZE[0] / 2, BOULDER_SIZE[1] / 2, BOULDER_SIZE[2] / 2
+    rnd = random.Random(17)
+    cuts = [(Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-0.3, 1))).normalized(), rnd.uniform(0.78, 0.9)) for _ in range(6)]
     for v in bm.verts:
         n = v.co.normalized()
-        d = 1.0 + 0.16 * noise.noise(n * 1.6 + Vector((3, 1, 7))) + 0.06 * noise.noise(n * 4.5 + Vector((1, 9, 2)))
-        v.co = Vector((n.x * rx * d, n.y * ry * d, n.z * rz * d))
-        if v.co.z < -rz * 0.7:
-            v.co.z = -rz * 0.7                                          # flat seat
+        d = (1.0 + 0.20 * noise.noise(n * 1.2 + Vector((3, 1, 7))) + 0.09 * noise.noise(n * 3.1 + Vector((1, 9, 2)))
+             + 0.04 * noise.noise(n * 7.5 + Vector((4, 2, 8))) + 0.015 * noise.noise(n * 18 + Vector((7, 3, 1))))
+        p = n * d
+        for cn, cd in cuts:                                   # fracture planes: clamp to flat facets
+            k = p.dot(cn)
+            if k > cd:
+                p -= cn * (k - cd) * 0.85
+        v.co = Vector((p.x * rx, p.y * ry, p.z * rz))
+        if v.co.z < -rz * 0.72:
+            v.co.z = -rz * 0.72 + 0.05 * noise.noise(v.co * 0.4)
+    zoff = rz * 0.72 - 0.4 if origin == "bottom" else -0.0
     for v in bm.verts:
-        v.co.z += rz * 0.7 - 0.3                                        # origin = bottom centre, sunk 0.3 m
+        v.co.z += zoff
     for f in bm.faces:
-        f.smooth = False
-    ob = L.obj_from_bm("TrostBoulder", bm, [M["rock"]])
+        f.smooth = True
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    return me
+
+def build_boulder(M):
+    me = boulder_mesh()
+    me.materials.append(M["rock"])
+    ob = bpy.data.objects.new("TrostBoulder", me); bpy.context.scene.collection.objects.link(ob)
     ob.location = (BOULDER[0], BOULDER[1], ground_z(BOULDER[0], BOULDER[1]))
     ob.rotation_euler.z = math.radians(28)
-    rb = bmesh.new()                                                    # rubble around its seat
+    rb = bmesh.new()                                                    # rubble and loose rocks around its seat
     rnd = random.Random(13)
-    for i in range(26):
-        a = rnd.uniform(0, math.tau); r = rnd.uniform(7.5, 12.5); s = rnd.uniform(0.4, 1.3)
+    for i in range(34):
+        a = rnd.uniform(0, math.tau); r = rnd.uniform(8.5, 14.0); s = rnd.uniform(0.4, 1.6)
         c = bmesh.ops.create_icosphere(rb, subdivisions=1, radius=s)
         for v in c["verts"]:
             v.co.z *= 0.6
             v.co += Vector((BOULDER[0] + math.cos(a) * r, BOULDER[1] + math.sin(a) * r, 0.1))
-    L.obj_from_bm("TrostBoulderRubble", rb, [M["rock"]])
+    L.obj_from_bm("TrostBoulderRubble", rb, [M["rubble"]])
     return ob
 
 # ---------------------------------------------------------------- cargo wagon (inner gate jam)
@@ -749,7 +816,8 @@ def build_set(M, year):
     M["crate"] = L.mat("Crate", (0.26, 0.15, 0.07), 0.85, var=0.2, var_scale=0.9)
     M["gas"] = L.mat("GasTank", (0.42, 0.45, 0.48), 0.35)
     M["roof_flat"] = L.mat("RoofFlat", (0.33, 0.29, 0.25), 0.9, var=0.15, var_scale=0.1)
-    M["rock"] = L.mat("BoulderRock", (0.19, 0.165, 0.15), 0.92, bump=0.5, scale=0.8, var=0.22, var_scale=0.25, color2=(0.27, 0.24, 0.21))
+    M["rock"] = rock_mat()
+    M["rubble"] = L.mat("Rubble", (0.20, 0.18, 0.16), 0.95, var=0.2, var_scale=0.5)
     M["tarp"] = L.mat("Tarp", (0.45, 0.40, 0.28), 0.9)
     M["church_w"] = L.mat("ChurchWhite", (0.80, 0.76, 0.66), 0.85, var=0.1, var_scale=0.2)
     M["bronze"] = L.mat("Bronze", (0.30, 0.20, 0.08), 0.4)

@@ -198,7 +198,24 @@ def titan_geo(g, j, sp):
     return (sx, sh, la, hip, hc, hr)
 
 # ---------------------------------------------------------------- nav grid
+WALK_FN = None               # opt-in override set by configure() (other district sets, e.g. Trost); None = Shiganshina
+
+def configure(walkable=None, bounds=None, gates=None):
+    """Opt-in hook for other district sets (default Shiganshina behaviour is unchanged unless this is called):
+    walkable=fn(x, y)->bool replaces _walk_people; bounds=(x0, x1, y0, y1) replaces the nav grid extent;
+    gates=dict(outer=(x, y)) moves the outer gate used by the titan entry / wander mask."""
+    global WALK_FN, X0, X1, Y0, Y1, OGX, OGY
+    if walkable is not None:
+        WALK_FN = walkable
+    if bounds is not None:
+        X0, X1, Y0, Y1 = map(float, bounds)
+    if gates and "outer" in gates:
+        OGX, OGY = map(float, gates["outer"])
+    STATE.pop("grid", None)
+
 def _walk_people(x, y):
+    if WALK_FN is not None:
+        return bool(WALK_FN(x, y))
     if abs(x - CX) < CW / 2 + 2.5:
         return False
     if abs(x - PXC) < 9.5 and abs(y - PYC) < 9.5:          # monument plinth
@@ -220,7 +237,7 @@ def build_grid():
     xs = X0 + (np.arange(nx) + 0.5) * G; ys = Y0 + (np.arange(ny) + 0.5) * G
     W = np.zeros((nx, ny), bool)
     for i, x in enumerate(xs):
-        if abs(x) > 300:
+        if WALK_FN is None and abs(x) > 300:
             continue
         for j, y in enumerate(ys):
             W[i, j] = _walk_people(float(x), float(y))
