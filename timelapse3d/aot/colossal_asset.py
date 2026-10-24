@@ -61,12 +61,84 @@ def _ik(arm, bone, target_loc, pole_loc, name):
         arm.users_collection[0].objects.link(e)
     pb = arm.pose.bones[bone]
     c = pb.constraints.new("IK"); c.target = t; c.pole_target = p; c.chain_count = 2; c.pole_angle = math.radians(-90)
+    c.use_stretch = True                       # the hand reaches the wall top while the body is still sunk (rise < 1);
+    for b in (pb, pb.parent):                  # the stretched arm stays hidden behind the wall from the town side
+        b.ik_stretch = float(os.environ.get("COL_IK_STRETCH", "0.12"))
     return t
+
+# ---------------------------------------------------------------- hands on the wall top (anime S1E1)
+# The wrist sits on the wall walk just inside the outer edge, the enlarged hand lies flat pointing north and the
+# fingers curl down over the town-side edge, so they read from the plaza.  A hand travels up from behind the wall
+# (h=0) onto its grip (h=1); the fingers close over the last quarter of the move.
+FINGERS = ("Index", "Middle", "Ring", "Pinky")
+CURL = (0.12, 1.25, 0.95)                                # per finger segment (rad): flat on the walk, bent over the edge
+HAND_S = float(os.environ.get("COL_HAND_S", "1.6"))
+GRIP_DX = float(os.environ.get("COL_GRIP_DX", "25"))     # hands either side of the body axis, clear of the gatehouse
+GRIP_Y = float(os.environ.get("COL_GRIP_Y", "-1.0"))     # wrist offset from the wall centre line (+ = north / town side)
+PALM_AXIS = os.environ.get("COL_PALM_AXIS", "TRACK_Z")   # hand-local axis pointing out of the palm
+CURL_SGN = float(os.environ.get("COL_CURL_SGN", "1"))
+
+def _bone(arm, side, part):
+    pre = f"mixamorig_{'Left' if side == 'L' else 'Right'}{part}_"
+    return arm.pose.bones[next(b.name for b in arm.data.bones if b.name.startswith(pre))]
+
+def _grip_points(side):
+    sg = -1 if side == "L" else 1                                  # the Colossal faces north: its left is -x
+    x = FEET.x + sg * GRIP_DX
+    g = Vector((x, GY + GRIP_Y, L.WALL_H + 1.3))
+    a0 = Vector((x + sg * 3, GY - 18, L.WALL_H - 18))              # hanging behind the wall, out of sight
+    c = Vector((x + sg * 1, GY - 11, L.WALL_H + 13))               # arcs up over the outer edge
+    return a0, c, g
+
+def _hand_rig(arm, side, tgt):
+    """Aim the hand north along the wall walk (damped track), palm down (locked track), enlarged."""
+    hb = _bone(arm, side, "Hand")
+    coll = arm.users_collection[0]
+    aim = bpy.data.objects.new(f"ColossalHand{side}_aim", None); aim.parent = tgt; aim.location = (0, 12, -1.2)
+    down = bpy.data.objects.new(f"ColossalHand{side}_down", None); down.parent = tgt; down.location = (0, 0, -12)
+    for e in (aim, down):
+        coll.objects.link(e)
+    c = hb.constraints.new("DAMPED_TRACK"); c.target = aim; c.track_axis = "TRACK_Y"
+    c = hb.constraints.new("LOCKED_TRACK"); c.target = down; c.lock_axis = "LOCK_Y"; c.track_axis = PALM_AXIS
+    hb.scale = (HAND_S,) * 3
+    fingers = [[_bone(arm, side, f"Hand{f}{i}") for i in (1, 2, 3)] for f in FINGERS]
+    thumb = [_bone(arm, side, f"HandThumb{i}") for i in (1, 2, 3)]
+    for pb in sum(fingers, []) + thumb:
+        pb.rotation_mode = "XYZ"
+    STATE[f"hand{side}"] = dict(tgt=tgt, fingers=fingers, thumb=thumb, pts=_grip_points(side))
+
+def _place_hand(side, h):
+    d = STATE.get(f"hand{side}")
+    if not d:
+        return
+    h = min(1.0, max(0.0, h))
+    a0, c, g = d["pts"]
+    d["tgt"].location = (1 - h) ** 2 * a0 + 2 * h * (1 - h) * c + h * h * g
+    cu = min(1.0, max(0.0, (h - 0.72) / 0.28)); cu = cu * cu * (3 - 2 * cu)
+    for segs in d["fingers"]:
+        for pb, a in zip(segs, CURL):
+            pb.rotation_euler = (CURL_SGN * a * (0.25 + 0.75 * cu), 0, 0)
+    for pb, a in zip(d["thumb"], (0.1, 0.5, 0.5)):
+        pb.rotation_euler = (CURL_SGN * a * cu, 0, 0)
 
 STATE = {}
 
-def set_pose(k=0.0, rise=1.0, fade=0.0):
-    """Per-frame pose (also used by render_intro.py): lean, right-leg kick (k -1 wind-up .. +1 impact), rise, fade."""
+def leg_angles(k):
+    """Right-leg kick, k -1 (wind-up) .. +1 (impact) -> (thigh, knee) degrees; thigh + = forward, knee + = flexed.
+    Env (same meaning as before): COL_KICK_BACK = wind-up thigh angle behind the body, COL_KICK_HIP = thigh angle at
+    impact (negative = forward; -42 puts the straight leg's ankle ~11 m up, in the 20 m gate opening, toes through the
+    wall), COL_KICK_KNEE = wind-up knee flex."""
+    fwd = -float(os.environ.get("COL_KICK_HIP", "-42")); back = float(os.environ.get("COL_KICK_BACK", "55"))
+    knee = float(os.environ.get("COL_KICK_KNEE", "80"))
+    if k < 0:                       # wind-up: thigh back, heel folds up behind
+        return -back * -k, knee * -k
+    if k > 0:                       # strike: thigh swings through, knee snaps straight at impact
+        return -back + (fwd + back) * k, knee * (1 - k) ** 2
+    return 0.0, 0.0
+
+def set_pose(k=0.0, rise=1.0, fade=0.0, hand_l=1.0, hand_r=1.0):
+    """Per-frame pose (render_fast.py / render_intro.py), a pure function of its arguments: lean, right-leg kick
+    (k -1 wind-up .. +1 impact), rise, fade, hands (0 = hanging behind the wall .. 1 = gripping the wall top)."""
     arm, root = STATE["arm"], STATE["root"]
     lean = float(os.environ.get("COL_LEAN", "0"))
     for bn, deg in (("mixamorig_Spine_02", lean), ("mixamorig_Spine1_03", lean), ("mixamorig_Spine2_04", lean * 0.6),
@@ -76,16 +148,13 @@ def set_pose(k=0.0, rise=1.0, fade=0.0):
     ul = arm.pose.bones["mixamorig_RightUpLeg_060" if side == "Right" else "mixamorig_LeftUpLeg_056"]
     ll = arm.pose.bones["mixamorig_RightLeg_061" if side == "Right" else "mixamorig_LeftLeg_057"]
     ul.rotation_mode = ll.rotation_mode = "XYZ"
-    fwd = float(os.environ.get("COL_KICK_HIP", "-75")); back = float(os.environ.get("COL_KICK_BACK", "55"))   # +x = thigh back (heel up behind), -x = forward
-    knee = float(os.environ.get("COL_KICK_KNEE", "80"))
-    if k < 0:          # wind-up: thigh back, knee folded
-        ul.rotation_euler = (math.radians(back * -k), 0, 0); ll.rotation_euler = (math.radians(knee * -k), 0, 0)
-    elif k > 0:        # strike: thigh swings through, knee snaps straight at impact
-        ul.rotation_euler = (math.radians(back + (fwd - back) * k), 0, 0); ll.rotation_euler = (math.radians(knee * (1 - k) ** 2), 0, 0)
-    else:
-        ul.rotation_euler = (0, 0, 0); ll.rotation_euler = (0, 0, 0)
+    # measured on this rig: +x on the thigh swings it FORWARD and +x on the shin hyper-extends the knee, so the old
+    # mapping (+back) produced a knee-up hop in front and a backward "kick"
+    thigh, knee = leg_angles(k)
+    ul.rotation_euler = (math.radians(thigh), 0, 0); ll.rotation_euler = (math.radians(-knee), 0, 0)
     arm.pose.bones["mixamorig_Spine_02"].rotation_euler.x += math.radians(-8 * max(0.0, -k) + 6 * max(0.0, k))
     arm.pose.bones["mixamorig_Head_06"].scale = (float(os.environ.get("COL_HEAD", "1.8")),) * 3
+    _place_hand("L", hand_l); _place_hand("R", hand_r)
     root.location = STATE["base"].copy()
     root.location.z -= (1 - rise) * float(os.environ.get("COL_RISE_DROP", "22")) + fade * 30
 
@@ -107,12 +176,12 @@ def build(M, year, ctx):
     bpy.context.view_layer.update()
     mn, mx = _bbox(meshes)
     print("[colossal_asset] placed bbox", tuple(round(v, 1) for v in mn), tuple(round(v, 1) for v in mx))
-    # hands: right hand grips the wall top just east of the gate, left one rests lower on the outer face
-    wall_y = GY                       # outer wall line at the gate (the wall runs east-west here)
-    # both hands grip the wall top either side of the head (anime S1E1)
-    _ik(arm, "mixamorig_RightForeArm_034", (FEET.x + 17, wall_y - 3.5, L.WALL_H + 1.2), (FEET.x + 40, wall_y - 40, 20), "ColossalHandR")
-    _ik(arm, "mixamorig_LeftForeArm_010", (FEET.x - 17, wall_y - 3.5, L.WALL_H + 1.2), (FEET.x - 40, wall_y - 40, 20), "ColossalHandL")
-    STATE.update(root=root, arm=arm, base=root.location.copy())
+    # both hands grip the wall top either side of the head (anime S1E1); see _grip_points / _hand_rig
+    STATE.update(root=root, arm=arm, base=root.location.copy(), meshes=meshes)
+    for side, bone in (("L", "mixamorig_LeftForeArm_010"), ("R", "mixamorig_RightForeArm_034")):
+        sg = -1 if side == "L" else 1
+        t = _ik(arm, bone, _grip_points(side)[2], (FEET.x + sg * 40, GY - 40, 20), f"ColossalHand{side}")
+        _hand_rig(arm, side, t)
     set_pose(float(os.environ.get("COL_KICK", "0")), float(os.environ.get("COL_RISE", "1")), float(os.environ.get("COL_FADE", "0")))
     bpy.context.view_layer.update()
     hb = arm.pose.bones["mixamorig_Head_06"]

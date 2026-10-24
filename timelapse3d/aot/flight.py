@@ -835,9 +835,18 @@ def build_tree_and_kids(M):
         fwd = (to_cam * 0.55 + R * 1.0).normalized()                 # Eren on the camera-right side of the trunk
         facing = math.atan2(fwd.x, -fwd.y)
         scn = bpy.context.scene
-        eren, mik, f1, f2 = characters.place_opening(base, trunk_r=0.5, facing=facing, trunk=trunk, start=F_KIDS)
+        mode = os.environ.get("FL_KIDS_MODE", "stand")             # "seated": render_fast opening (Eren dozes, bends forward)
+        eren, mik, f1, f2 = characters.place_opening(base, trunk_r=0.5, facing=facing, trunk=trunk, start=F_KIDS, mode=mode)
         mik.location = mik.location - Vector((R.x, R.y, 0)) * 0.9 + Vector((F.x, F.y, 0)) * 0.6
         mik.location.z = L.height(mik.location.x, mik.location.y) - 0.04
+        if mode == "seated":                                            # Mikasa walks slowly up to him over 2 s
+            end = mik.location.copy()
+            ex = eren.matrix_world.translation
+            away = Vector((end.x - ex.x, end.y - ex.y)).normalized()
+            away = Matrix.Rotation(-0.5, 2) @ away                      # she comes in from the camera-left side
+            st = end.xy + away * float(os.environ.get("FL_MIK_WALK", "2.2"))
+            start = Vector((st.x, st.y, L.height(st.x, st.y) - 0.04))
+            characters.animate_walk(mik, start, end, F_KIDS, F_KIDS + 60)
     except Exception as ex:
         import traceback; traceback.print_exc()
         print("[flight] place_opening failed:", ex)
@@ -1158,6 +1167,128 @@ def cluster_settlement(n_per=(10, 20), spacing=12.0, seed=8):
     me.update()
     return used
 
+# ---------------------------------------------------------------- field dressing along the tree -> inner gate flight
+# (render_fast.py whooshes from the hill to the inner gate at 2-4 s; FL_FIELD=1 adds a dirt road, grass clumps,
+# scattered trees and bushes so the meadow does not read empty.  All plain bmesh, ~0.5 M tris, no instancing.)
+FIELD_PATH = [(-480, 338), (-430, 290), (-300, 225), (-150, 150), (-40, 60), (0, 20)]   # camera ground track
+ROAD = [(-560, 262), (-470, 240), (-380, 214), (-300, 182), (-225, 146), (-150, 108), (-90, 72), (-40, 40), (-10, 18), (0, 4)]
+
+def _poly_dist(p, pts):
+    best = 1e9
+    for a, b in zip(pts, pts[1:]):
+        a, b = Vector(a), Vector(b); ab = b - a
+        t = max(0.0, min(1.0, (p - a).dot(ab) / ab.length_squared))
+        best = min(best, (p - (a + ab * t)).length)
+    return best
+
+def _road_pts(step=3.0):
+    """ROAD as a Catmull-Rom curve sampled every ~step m."""
+    P = [Vector(p) for p in ROAD]
+    out = []
+    for i in range(len(P) - 1):
+        p0, p1, p2, p3 = P[max(0, i - 1)], P[i], P[i + 1], P[min(len(P) - 1, i + 2)]
+        n = max(2, int((p2 - p1).length / step))
+        for k in range(n):
+            out.append(_cr(p0, p1, p2, p3, k / n))
+    out.append(P[-1])
+    return out
+
+def build_road(width=4.6):
+    pts = _road_pts()
+    bm = bmesh.new(); prev = None
+    for i, p in enumerate(pts):
+        t = (pts[min(i + 1, len(pts) - 1)] - pts[max(i - 1, 0)]).normalized()
+        n = Vector((-t.y, t.x))
+        w = width * (1 + 0.15 * noise.noise(Vector((p.x / 40, p.y / 40, 2.0))))
+        row = []
+        for s in (-0.62, -0.5, -0.2, 0.2, 0.5, 0.62):              # crowned dirt track with soft grassy verges
+            q = p + n * (s * w)
+            row.append(bm.verts.new((q.x, q.y, L.height(q.x, q.y) + (0.10 if abs(s) < 0.55 else 0.07))))
+        if prev:
+            for k in range(len(row) - 1):
+                f = bm.faces.new((prev[k], prev[k + 1], row[k + 1], row[k]))
+                f.material_index = 0 if 0 < k < len(row) - 2 else 1
+                f.smooth = True
+        prev = row
+    dirt = flat("FL_Road", (0.36, 0.27, 0.17), 0.95, var=0.25, col2=(0.50, 0.40, 0.27), scale=0.15)
+    verge = flat("FL_RoadVerge", (0.26, 0.30, 0.12), 0.95, var=0.3, col2=(0.40, 0.36, 0.18), scale=0.2)
+    return L.obj_from_bm("FL_Road", bm, [dirt, verge])
+
+def _clump(bm, base, h, wid, rnd, mi):
+    """A tuft of 9-14 blades leaning out from the centre (one tri each)."""
+    for k in range(rnd.randint(9, 14)):
+        a = rnd.uniform(0, math.tau); lean = rnd.uniform(0.15, 0.6); hh = h * rnd.uniform(0.55, 1.0)
+        d = Vector((math.cos(a), math.sin(a), 0)); s = Vector((-d.y, d.x, 0)) * wid * 0.5
+        root = base + d * rnd.uniform(0, wid * 0.8)
+        tip = root + d * (lean * hh) + Vector((0, 0, hh))
+        f = bm.faces.new((bm.verts.new(root - s), bm.verts.new(root + s), bm.verts.new(tip)))
+        f.material_index = mi
+
+def build_field(n_clumps=None, n_trees=None, n_bush=None, seed=21):
+    rnd = random.Random(seed)
+    n_clumps = int(os.environ.get("FL_FIELD_CLUMPS", "16000")) if n_clumps is None else n_clumps
+    n_trees = int(os.environ.get("FL_FIELD_TREES", "46")) if n_trees is None else n_trees
+    n_bush = int(os.environ.get("FL_FIELD_BUSH", "110")) if n_bush is None else n_bush
+    build_road()
+    rp = [Vector(p) for p in ROAD]
+    path = [Vector(p) for p in FIELD_PATH]
+    def free(p, road_gap, path_gap=0.0, cam_gap=40.0):
+        if p.y < 22 or (p - CAM_XY).length < cam_gap or _poly_dist(p, rp) < road_gap:
+            return False
+        if path_gap and _poly_dist(p, path) < path_gap:
+            return False
+        return all((p - Vector(h)).length > 34 for h in HAMLETS)
+    def sample(band):
+        """Random point within `band` m of the flight track (uniform along it), biased toward the road."""
+        i = rnd.randrange(len(path) - 1); a, b = path[i], path[i + 1]
+        q = a + (b - a) * rnd.random()
+        if rnd.random() < 0.35:                                          # hug the road
+            j = rnd.randrange(len(rp) - 1); q = rp[j] + (rp[j + 1] - rp[j]) * rnd.random()
+            band = 14.0
+        return q + Vector((rnd.uniform(-band, band), rnd.uniform(-band, band)))
+    # grass clumps: patchy (noise mask) so they read as natural tussocks, not a carpet
+    bm = bmesh.new(); placed = 0; tries = 0
+    while placed < n_clumps and tries < n_clumps * 4:
+        tries += 1
+        p = sample(110.0)
+        if not free(p, 3.2, cam_gap=30.0) or noise.noise(Vector((p.x / 35, p.y / 35, 4.2))) < -0.15 + rnd.uniform(-0.2, 0.2):
+            continue
+        z = L.height(p.x, p.y)
+        _clump(bm, Vector((p.x, p.y, z - 0.05)), rnd.uniform(0.6, 1.5), rnd.uniform(0.25, 0.45), rnd, rnd.randrange(3))
+        placed += 1
+    g1 = flat("FL_Clump1", (0.20, 0.32, 0.07), 0.8, var=0.3, col2=(0.32, 0.40, 0.10), scale=0.4)
+    g2 = flat("FL_Clump2", (0.11, 0.22, 0.05), 0.8, var=0.3, col2=(0.18, 0.30, 0.06), scale=0.4)
+    g3 = flat("FL_Clump3", (0.40, 0.42, 0.16), 0.85, var=0.3, col2=(0.30, 0.34, 0.10), scale=0.4)   # dry tussocks
+    clumps = L.obj_from_bm("FL_FieldClumps", bm, [g1, g2, g3])
+    # trees (single and in small groups) and bushes; keep the camera track itself clear
+    leaf = leaf_mat("FL_FieldLeaf", (0.012, 0.050, 0.018), (0.10, 0.20, 0.05), scale=0.9)
+    add_rim(leaf, (0.14, 0.28, 0.07), amt=0.6)
+    bark = flat("FL_FieldBark", (0.17, 0.11, 0.06), 0.9)
+    bm = bmesh.new(); t_n = 0; tries = 0
+    while t_n < n_trees and tries < n_trees * 40:
+        tries += 1
+        c = sample(150.0)
+        for g in range(rnd.choice((1, 1, 1, 2, 3))):
+            p = c + Vector((rnd.uniform(-9, 9), rnd.uniform(-9, 9))) if g else c
+            if not free(p, 7.0, path_gap=16.0, cam_gap=150.0):   # keep the loved opening frame clear
+                continue
+            z = L.height(p.x, p.y); h = rnd.uniform(4.0, 7.0); r = rnd.uniform(2.6, 3.8)
+            L.cyl(bm, (p.x, p.y, z - 0.5), (p.x + rnd.uniform(-0.4, 0.4), p.y + rnd.uniform(-0.4, 0.4), z + h), 0.42, 0.25, seg=7, mi=1)
+            blob_cluster(bm, Vector((p.x, p.y, z + h - 0.6)), rnd.randint(4, 6), r, (r * 0.9, r * 0.9, r * 0.8), 300 + t_n, squash=0.85)
+            t_n += 1
+    b_n = 0; tries = 0
+    while b_n < n_bush and tries < n_bush * 40:
+        tries += 1
+        p = sample(120.0)
+        if not free(p, 4.0, path_gap=8.0, cam_gap=100.0):
+            continue
+        z = L.height(p.x, p.y); r = rnd.uniform(0.9, 1.7)
+        blob_cluster(bm, Vector((p.x, p.y, z - 0.3)), rnd.randint(2, 4), r, (r * 1.2, r * 1.2, r * 0.4), 700 + b_n, squash=0.7)
+        b_n += 1
+    trees = L.obj_from_bm("FL_FieldTrees", bm, [leaf, bark])
+    print(f"[flight] field: {placed} clumps, {t_n} trees, {b_n} bushes")
+    return clumps, trees
+
 # ---------------------------------------------------------------- build
 def build(M, year, ctx):
     fr = _flight_frame()
@@ -1175,6 +1306,12 @@ def build(M, year, ctx):
         build_clouds()
     if not os.environ.get("FL_NOGRASS"):
         build_grass(M, CAM_XY + F * 14, 48.0, float(os.environ.get("FL_GRASS", "160")))
+    if _env_on("FL_FIELD", False):
+        try:
+            build_field()
+        except Exception as ex:
+            import traceback; traceback.print_exc()
+            print("[flight] field failed:", ex)
     build_tree_and_kids(M)
     try:
         build_rock()

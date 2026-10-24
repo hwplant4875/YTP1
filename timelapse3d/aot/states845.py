@@ -1,5 +1,11 @@
 """845 destruction states of Shiganshina (environment only, no titans) as a scene.py plug-in.
 
+PER-FRAME FX (2026-10-25): the kick is now animated in ONE session. Build once with AOT_STATE=kicked, then call
+    fx845.update(t)      # t = seconds after the kick (float, 30 fps -> t = frame_offset / 30); t < 0 = intact gate
+before every render. See aot/fx845.py for the full API (set_kick / set_arc / set_impacts, times(), env flags).
+Only the gate opening + arch breaks (hole ~17 m wide x 25 m, the opening is 14 x 20); thrown blocks are ~5-8 m
+and fly on smooth ballistic arcs; hit houses collapse over 0.5-1.4 s under dust puffs.
+
 Enable with AOT_PLUGINS=states845 (usually AOT_PLUGINS=cast845,states845) and pick the state with
 AOT_STATE = intact (default, adds nothing) | kicked | armored | night
   kicked  (S1E1-2): outer gate blown in (ragged hole with a chipped, stepped edge and a grime halo, rubble fan,
@@ -10,8 +16,9 @@ AOT_STATE = intact (default, adds nothing) | kicked | armored | night
   night   (S1E2 end): armored + night (dark blue sky, red horizon, moon), 15-20 big blazes, an orange-lit smoke
                     canopy over the town.
 Optional env:
-  AOT_ARC_T=0..1    put the thrown blocks part-way along their arcs (0.5 = mid-flight) for the kick shot.
-                    Blocks still in the air have not crushed anything yet. Unset / 1 = all landed.
+  AOT_ARC_T=0..1    static fallback: the build ends with fx845.update(AOT_ARC_T * last landing time).
+                    Unset = settled. Per-frame callers just call fx845.update(t) afterwards.
+  AOT_FLIGHT_K / AOT_FX_PUFFS   see fx845.py.
   AOT_FIRE_GAIN     multiplies fire light power and flame brightness (default 1).
   AOT_CANOPY_E      multiplies the night smoke-canopy glow (default 1).
   AOT_DUST          multiplies the density of the tan breach / impact dust (default 1).
@@ -22,6 +29,7 @@ Houses are hidden by lowering the Town point attribute "dead" to the current yea
 import bpy, bmesh, math, os, random
 from mathutils import Vector, Matrix, noise
 import aotlib as L
+import fx845 as FX
 
 STATES = ("intact", "kicked", "armored", "night")
 
@@ -38,7 +46,7 @@ YEAGER_HOUSE = (-72.0, -118.0)
 IMPACTS = [(-58, -585, 16, 1), (96, -625, 13, 2), (-150, -455, 19, 3), (62, -318, 15, 4),
            (-205, -265, 13, 5), (150, -250, 17, 6), (-30, -190, 12, 7), (YEAGER_HOUSE[0] + 1, YEAGER_HOUSE[1] - 2, 12, 8),
            (125, -480, 12, 9)]
-OUTER_HOLE = (0.0, L.OUTER_GATE[1], 13.0, 31.0)      # x, y, half width, height of the breach
+OUTER_HOLE = (0.0, L.OUTER_GATE[1], 8.6, 25.0)       # x, y, half width, height: just the gate opening (14 x 20) + arch
 INNER_HOLE = (0.0, 0.0, 12.5, 29.0)                  # about the Armored Titan's height
 
 LABELS = {}
@@ -213,15 +221,16 @@ def billow(name, coll, center, radii, col, dens, emit=0.0, ecol=(1.0, 0.33, 0.08
 def smoke_column(name, coll, x, y, R, H, col, dens, lean=(0.45, 0.12), emit=0.0, rnd=None, z0=0.0):
     """Billowing column: stacked puffs growing from 0.5 R to 1.2 R, leaning downwind (lean = metres per metre up)."""
     rnd = rnd or random.Random(hash(name) & 0xffff)
-    z, k = 0.0, 0
+    z, k, obs = 0.0, 0, []
     while z < H:
         f = z / H
         rk = R * (0.5 + 0.7 * f) * rnd.uniform(0.85, 1.15)
         c = (x + lean[0] * z + rnd.uniform(-0.2, 0.2) * rk, y + lean[1] * z + rnd.uniform(-0.2, 0.2) * rk, z0 + z + rk * 0.55)
         e = emit * max(0.0, 1.0 - z / (0.5 * H)) ** 2
-        billow(f"{name}_{k}", coll, c, (rk, rk * rnd.uniform(0.85, 1.1), rk * 0.8), col, dens * (1.0 - 0.45 * f), emit=e,
-               rot=(0, 0, rnd.uniform(0, 6.28)))
+        obs.append((z, billow(f"{name}_{k}", coll, c, (rk, rk * rnd.uniform(0.85, 1.1), rk * 0.8), col, dens * (1.0 - 0.45 * f),
+                              emit=e, rot=(0, 0, rnd.uniform(0, 6.28)))))
         z += rk * 0.95; k += 1
+    return obs
 
 class Fires:
     """Volume flames (one box each) + point lights + a small dark puff above the bigger ones."""
@@ -229,14 +238,14 @@ class Fires:
         self.rnd = random.Random(55)
         self.gain = gain
         self.items = []
-    def add(self, x, y, z, size, light=True, smoke=True, radius=None, nsc=1.0, lw=1.0):
-        self.items.append((x, y, z, size, light, smoke, radius or size * 0.45, nsc, lw))
+    def add(self, x, y, z, size, light=True, smoke=True, radius=None, nsc=1.0, lw=1.0, t_on=0.0):
+        self.items.append((x, y, z, size, light, smoke, radius or size * 0.45, nsc, lw, t_on))
     @property
     def pts(self):
         return [it for it in self.items if it[4]]
     def build(self, coll, strength, light_w, night=False):
         rnd = self.rnd
-        for k, (x, y, z, s, light, smk, rad, nsc, lw) in enumerate(self.items):
+        for k, (x, y, z, s, light, smk, rad, nsc, lw, t_on) in enumerate(self.items):
             if not nosmoke():
                 ob = bpy.data.objects.new(f"Flame{k}", _unit_mesh("flame"))
                 ob.location = (x, y, z - 0.3); ob.scale = (rad, rad * rnd.uniform(0.8, 1.1), s * 1.35)
@@ -244,9 +253,10 @@ class Fires:
                 ob["fstr"] = strength * self.gain * rnd.uniform(0.8, 1.2); ob["nsc"] = nsc
                 ob.visible_shadow = False
                 coll.objects.link(ob)
+                FX.add_appear(ob, t_on, 1.4, (0.4, 0.4, 0.08))
                 if smk:
-                    billow(f"FlameSmoke{k}", coll, (x + s * 0.4, y, z + s * 1.7), (rad * 2.2, rad * 2.0, s * 0.9),
-                           SMOKE, 0.12, emit=(0.6 if night else 0.15), ecol=(1.0, 0.3, 0.06))
+                    FX.add_appear(billow(f"FlameSmoke{k}", coll, (x + s * 0.4, y, z + s * 1.7), (rad * 2.2, rad * 2.0, s * 0.9),
+                                         SMOKE, 0.12, emit=(0.6 if night else 0.15), ecol=(1.0, 0.3, 0.06)), t_on + 0.6, 2.0, (0.2, 0.2, 0.2))
             if light:
                 ld = bpy.data.lights.new(f"FireL{k}", "POINT")
                 ld.energy = light_w * lw * self.gain * (s / 6.0) ** 2
@@ -254,6 +264,7 @@ class Fires:
                 lo = bpy.data.objects.new(f"FireL{k}", ld); lo.location = (x, y, z + s * 0.5)
                 lo.visible_volume_scatter = False      # smoke glow comes from its own emission (cheaper, controllable)
                 coll.objects.link(lo)
+                FX.add_appear(lo, t_on + 0.3)
 
 # ---------------------------------------------------------------- surface materials
 def stone_mat(M, name, k, scale=0.22):
@@ -489,6 +500,7 @@ class TownEdit:
             dead = [0.0] * n; me.attributes["dead"].data.foreach_get("value", dead)
             rot = [0.0] * (3 * n); me.attributes["rot"].data.foreach_get("vector", rot)
             self.data.append({"co": co, "born": born, "dead": dead, "rot": rot, "n": n})
+        self.kt = {}           # (k, i) -> (original dead value, kill time in s after the kick)
         self.grid = {}
         for k, d in enumerate(self.data):
             for i in range(d["n"]):
@@ -507,8 +519,9 @@ class TownEdit:
                     if (px - x) ** 2 + (py - y) ** 2 < r * r and (not only_alive or self.alive(k, i)):
                         out.append((k, i, px, py))
         return out
-    def kill(self, k, i):
+    def kill(self, k, i, t=0.0):
         if self.alive(k, i):
+            self.kt[(k, i)] = (self.data[k]["dead"][i], float(t))
             self.data[k]["dead"][i] = self.year
             return True
         return False
@@ -570,7 +583,7 @@ def _face_y(x, z, half_t, gate_half=15.0):
         return half_t - half_t * 0.2 * (z + 4) / 56
     return 5.0 - 1.2 * (z + 4) / 54
 
-def _hole_cutters(name, center, hw, ht, depth, seed, coll, half_t):
+def _hole_cutters(name, center, hw, ht, depth, seed, coll, half_t, chip=1.0):
     """1) prism with a ragged arch outline through the gatehouse; 2) a ring of overlapping boxes on both faces
     along the edge, cut 1-3 m deep, which bevels the hole into chipped, stepped masonry."""
     rnd = random.Random(seed)
@@ -595,9 +608,9 @@ def _hole_cutters(name, center, hw, ht, depth, seed, coll, half_t):
             o = _outward(x, z, zs)
             for side in (-1, 1):
                 for layer in range(2):          # two steps: a wide shallow one and a narrower deeper one
-                    reach = rnd.uniform(1.6, 3.2) if layer == 0 else rnd.uniform(0.6, 1.6)
+                    reach = (rnd.uniform(1.6, 3.2) if layer == 0 else rnd.uniform(0.6, 1.6)) * chip
                     dep = rnd.uniform(1.0, 2.0) if layer == 0 else rnd.uniform(2.2, 3.4)
-                    s = rnd.uniform(2.0, 4.0)
+                    s = rnd.uniform(2.0, 4.0) * chip
                     c = Vector((x + o.x * reach * 0.5, 0, z + o.y * reach * 0.5))
                     fy = side * _face_y(x, z, half_t)
                     r = bmesh.ops.create_cube(bm, size=1)
@@ -607,13 +620,13 @@ def _hole_cutters(name, center, hw, ht, depth, seed, coll, half_t):
     chip.location = (center[0], center[1], 0); chip.hide_render = True; chip.display_type = "WIRE"
     return cut, chip, ol, zs
 
-def grime_halo(name, hole, ol, zs, half_t, coll, seed):
+def grime_halo(name, hole, ol, zs, half_t, coll, seed, reach_k=1.0):
     """Decal rings on both faces of the gate, from just outside the chipped edge to 15-25 m out."""
     rnd = random.Random(seed)
     bm = bmesh.new()
     lay = bm.verts.layers.float.new("fade")
     pts = [(x, z) for x, z in ol if z > -0.5]
-    reach = [rnd.uniform(15, 25) for _ in pts]
+    reach = [rnd.uniform(15, 25) * reach_k for _ in pts]
     for k in range(2):                          # smooth the reach a little
         reach = [(reach[i - 1] + reach[i] * 2 + reach[(i + 1) % len(reach)]) / 4 for i in range(len(reach))]
     K = 6
@@ -642,23 +655,26 @@ def grime_halo(name, hole, ol, zs, half_t, coll, seed):
     ob.visible_shadow = False
     return ob
 
-def breach_gate(gname, hole, M, coll, inward, seed, ch, lm):
-    """Blow a ragged hole through gatehouse gname (chipped stepped edge, grime halo), remove its door."""
+def breach_gate(gname, hole, M, coll, inward, seed, ch, lm, chip=1.0, halo=1.0):
+    """Blow a ragged hole through gatehouse gname (chipped stepped edge, grime halo), remove its door.
+    The door is shown again and the booleans switched off by fx845.update(t < 0)."""
     g = bpy.data.objects.get(gname)
     d = bpy.data.objects.get(gname + "_Door")
     if d:
         d.hide_render = True; d.hide_viewport = True
+        FX.add_appear(d, -1e9, t_off=0.0)
     if not g:
         return None, 0
     half_t = g.dimensions.y / 2
-    cut, chip, ol, zs = _hole_cutters(gname + "_Cutter", (hole[0], hole[1]), hole[2], hole[3], 14.0, seed, coll, half_t)
-    for nm, ob in (("Breach", cut), ("BreachChips", chip)):
+    cut, chips, ol, zs = _hole_cutters(gname + "_Cutter", (hole[0], hole[1]), hole[2], hole[3], 14.0, seed, coll, half_t, chip)
+    for nm, ob in (("Breach", cut), ("BreachChips", chips)):
         mod = g.modifiers.new(nm, "BOOLEAN"); mod.operation = "DIFFERENCE"; mod.object = ob
+        FX.add_kick_modifier(mod)
         try:
             mod.solver = "EXACT"; mod.use_self = True
         except (TypeError, AttributeError):
             pass
-    grime_halo(gname + "_Grime", hole, ol, zs, half_t, coll, seed + 5)
+    grime_halo(gname + "_Grime", hole, ol, zs, half_t, coll, seed + 5, halo)
     # chipped blocks still clinging to the cut edge (boxes, partly sunk into the masonry)
     rnd = random.Random(seed + 10)
     for x, z in ol:
@@ -667,7 +683,7 @@ def breach_gate(gname, hole, M, coll, inward, seed, ch, lm):
         o = _outward(x, z, zs)
         for fy in (-0.75, -0.35, 0.0, 0.35, 0.75):
             if rnd.random() < 0.45:
-                s = rnd.uniform(1.2, 3.0)
+                s = rnd.uniform(1.2, 3.0) * chip
                 ch.box(Vector((hole[0] + x + o.x * rnd.uniform(0.5, 2.0), hole[1] + fy * half_t, z + o.y * rnd.uniform(0.5, 2.0))),
                        (s, s * rnd.uniform(0.8, 1.6), s * rnd.uniform(0.5, 0.9)),
                        rot=(rnd.uniform(-0.3, 0.3), rnd.uniform(-0.3, 0.3), rnd.uniform(-0.3, 0.3)), mi=lm["stone"])
@@ -687,7 +703,7 @@ def _rubble_size(rnd, big):
         return rnd.uniform(1.5, 2.5) * big
     return rnd.uniform(0.3, 0.9) * big
 
-def rubble_fan(ch, origin, inward, spread, length, count, big, seed, lm, edit, crush_frac=0.55, door=True):
+def rubble_fan(ch, origin, inward, spread, length, count, big, seed, lm, edit, crush_frac=0.55, door=True, pile=170, t0=0.0):
     """Debris thrown through a breach: chunks densest near the hole, thinning out over `length` metres inside
     a cone of half-angle `spread` around direction `inward` (unit 2D). Big chunks stay closer to the hole."""
     rnd = random.Random(seed)
@@ -707,11 +723,11 @@ def rubble_fan(ch, origin, inward, spread, length, count, big, seed, lm, edit, c
         mi = rnd.choice((lm["stone"], lm["stone"], lm["stone"], lm["dark"], lm["stone_l"]))
         ch.add(Vector((x, y, s * 0.15)), s, mi=mi)
     # big pile in and just inside the hole
-    for _ in range(170):
+    for _ in range(pile):
         a = base + rnd.gauss(0, 0.45); dist = rnd.uniform(-7, 40)
         x, y = origin[0] + math.cos(a) * dist + rnd.uniform(-9, 9) * abs(inward[1]), origin[1] + math.sin(a) * dist
         f = max(0.0, 1.0 - max(0, dist) / 45)
-        s = _rubble_size(rnd, 1.0) * (0.8 + 1.6 * f) + 0.5
+        s = _rubble_size(rnd, big) * (0.8 + 1.6 * f) + 0.5 * big
         ch.add(Vector((x, y, rnd.uniform(0, 6.0) * f)), s, mi=rnd.choice((lm["stone"], lm["stone"], lm["dark"])))
     # flatten houses in the fan core
     hit = []
@@ -720,7 +736,7 @@ def rubble_fan(ch, origin, inward, spread, length, count, big, seed, lm, edit, c
         dist = math.hypot(dx, dy)
         da = abs((math.atan2(dy, dx) - base + math.pi) % (2 * math.pi) - math.pi)
         p = (1 - dist / (length * crush_frac * 1.6)) * (1 - da / (spread * 1.4))
-        if p > rnd.random() * 0.45 and edit.kill(k, i):
+        if p > rnd.random() * 0.45 and edit.kill(k, i, t=t0 + dist / 180.0):
             hit.append((k, i))
     return hit
 
@@ -753,6 +769,20 @@ class Decals:
         ob = L.obj_from_bm(name, self.bm, [m], coll)
         ob.visible_shadow = False
         return ob
+
+def _sub(ch):
+    """Empty Chunks sharing ch's rock templates (one object per piece without regenerating hulls)."""
+    c = Chunks.__new__(Chunks); c.tmps = ch.tmps; c.rnd = ch.rnd; c.bm = bmesh.new()
+    return c
+
+def _reorigin(ob, origin):
+    o = Vector(origin)
+    ob.data.transform(Matrix.Translation(-o)); ob.location = o
+    return ob
+
+def _take(c, name, mats, coll, origin):
+    """Build Chunks c into an object whose origin is at `origin` (so fx845 can grow it from there)."""
+    return _reorigin(c.build(name, mats, coll), origin)
 
 def scar_ring(origin, inward, spread, length, seed):
     rnd = random.Random(seed)
@@ -984,7 +1014,7 @@ def build(M, year, ctx):
     gain = float(os.environ.get("AOT_FIRE_GAIN", "1"))
     dust_k = float(os.environ.get("AOT_DUST", "1"))
     arc_t = os.environ.get("AOT_ARC_T", "")
-    arc_t = min(1.0, max(0.0, float(arc_t))) if arc_t else 1.0
+    arc_t = min(1.0, max(0.0, float(arc_t))) if arc_t else None
 
     m_rock = stone_mat(M, "RubbleStone", 0.7)
     m_rock_l = stone_mat(M, "RubbleStoneL", 0.85)
@@ -1004,96 +1034,148 @@ def build(M, year, ctx):
     craters = Decals()
     scars = Decals()
     fires = Fires(gain)
-    burning = []           # ruin / house positions that may burn
+    burning = []           # (x, y, t) ruin / house positions that may burn, t = seconds after the kick it is a ruin
+    impact_t = []          # (x, y, landing time)
+    FX.reset()
 
-    # ---- outer gate breach (kick from the south, debris into the town)
-    breach_gate("OuterGate", OUTER_HOLE, M, coll, inward=1, seed=3, ch=ch, lm=lm)
-    hit = rubble_fan(ch, (OG.x, OG.y + 9), (0, 1), 0.55, 230, 3400, 1.15, 31, lm, edit)
-    scars.fan(OG.x, OG.y + 60, scar_ring((OG.x, OG.y + 8), (0, 1), 0.6, 215, 4), 0.22)
-    for k, i in hit:
+    # ---- outer gate breach (kick from the south, debris into the town). Only the opening + arch breaks.
+    fxc = L.new_coll("FX845")                      # puffs + collapse proxies (driven by fx845)
+    inst = FX.town_instances()
+    if night:
+        m_cr = ground_decal_mat("Crater845N", (0.01, 0.008, 0.007), (0.03, 0.025, 0.02), (0.06, 0.05, 0.04))
+    else:
+        m_cr = ground_decal_mat("Crater845", (0.035, 0.03, 0.025), (0.10, 0.08, 0.055), tuple(c * 0.55 for c in DUST))
+    stone_meshes = []
+    for j in range(6):                             # shared small-stone shapes (unit size)
+        c_ = _sub(blocks); c_.add(Vector((0, 0, 0)), 1.0, mi=j % 2, rot=(0, 0, 0), tmp=j % len(blocks.tmps))
+        o_ = c_.build(f"StoneProto{j}", [m_block, m_rock_l], coll); stone_meshes.append(o_.data); bpy.data.objects.remove(o_)
+    def stone(name, size):
+        o_ = bpy.data.objects.new(name, rnd.choice(stone_meshes)); o_.scale = (size, size, size * rnd.uniform(0.6, 1.0))
+        coll.objects.link(o_); return o_
+
+    def crush(k, i, t0, dur, rr, ruin=True, sc_=(0.8, 1.0), puffs=4):
+        """Progressive collapse of the Town house (k, i) (already killed with time t0) + ruin mound + dust."""
+        if k != 0:
+            return
         x, y, a = edit.pos(k, i)
-        if k == 0:
-            _ruin_pile(ruins, x, y, a, rnd, 3, 5, 7, 2, scale=rnd.uniform(0.8, 1.0))
-            burning.append((x, y))
-    # tan dust cloud bursting in through the hole right after the kick
-    dd = (0.05 if lv == 1 else 0.025) * dust_k
-    billow("BreachDust", coll, (OG.x + 4, OG.y + 36, 14), (40, 30, 22), DUST, dd, rot=(0, 0, 0.2))
-    billow("BreachDust2", coll, (OG.x - 26, OG.y + 22, 12), (24, 20, 15), DUST, dd * 0.9)
-    billow("BreachDust3", coll, (OG.x + 30, OG.y + 58, 14), (26, 22, 17), DUST, dd * 0.8)
-    if lv == 1:
-        billow("BreachDustHigh", coll, (OG.x + 18, OG.y + 30, 52), (30, 26, 22), DUST, dd * 0.55)
+        hit = FX.find_instance(inst, x, y)
+        parts, h = FX.house_proxy(fxc, hit[0], hit[1], f"Hx{i}") if hit else ([], 10.0)
+        rob = None
+        if ruin:
+            c_ = _sub(ruins)
+            _ruin_pile(c_, x, y, a, rr, 3, 5, 7, 2, scale=rr.uniform(*sc_))
+            rob = _take(c_, f"Ruin{i}", mats, coll, (x, y, 0.0))
+        FX.add_house(parts, rob, t0, dur, rr, h)
+        FX.add_burst(fxc, (x, y, h * 0.3), 4.0 + h * 0.12, t0 + 0.15 * dur, puffs, rr, col=(0.52, 0.45, 0.33),
+                     speed=(2, 7), life=(2.2, 3.8), rise=(0.8, 2.0), a0=0.75)
+        burning.append((x, y, t0 + dur))
 
-    # ---- thrown blocks
-    airborne = []
-    BS_AIR, BS_LAND = 1.5, 1.3
+    breach_gate("OuterGate", OUTER_HOLE, M, coll, inward=1, seed=3, ch=ch, lm=lm, chip=0.55, halo=0.4)
+    hit = rubble_fan(ch, (OG.x, OG.y + 9), (0, 1), 0.5, 190, 1800, 0.8, 31, lm, edit, pile=90, t0=0.05)
+    scars.fan(OG.x, OG.y + 50, scar_ring((OG.x, OG.y + 8), (0, 1), 0.5, 180, 4), 0.22)
+    for k, i in hit:
+        crush(k, i, edit.kt[(k, i)][1], rnd.uniform(0.7, 1.2), rnd, sc_=(0.8, 1.0), puffs=3)
+    # tan dust bursting in through the hole: fast puffs + the old volume billows growing behind them
+    FX.add_burst(fxc, (OG.x, OG.y + 6, 9), 6.5, 0.0, 24, rnd, col=DUST, dirv=(0, 1, 0.15), cone=0.45,
+                 speed=(15, 42), up=(0.2, 0.5), life=(4.0, 7.0), rise=(1.0, 2.5))
+    FX.add_burst(fxc, (OG.x, OG.y - 4, 8), 5.0, 0.0, 6, rnd, col=DUST, dirv=(0, -1, 0.2), cone=0.5,
+                 speed=(5, 14), life=(2.5, 4.0))
+    dd = (0.05 if lv == 1 else 0.025) * dust_k
+    bd = [("BreachDust", (OG.x + 4, OG.y + 36, 14), (40, 30, 22), 1.0), ("BreachDust2", (OG.x - 26, OG.y + 22, 12), (24, 20, 15), 0.9),
+          ("BreachDust3", (OG.x + 30, OG.y + 58, 14), (26, 22, 17), 0.8)]
+    if lv == 1:
+        bd.append(("BreachDustHigh", (OG.x + 18, OG.y + 30, 52), (30, 26, 22), 0.55))
+    for nm, c_, r_, k_ in bd:
+        FX.add_appear(billow(nm, coll, c_, r_, DUST, dd * k_), 0.35, 2.0, (0.2, 0.1, 0.2))
+    # door / arch debris spray: small stones landing 20-160 m into the town
+    for j in range(30):
+        d_ = 20 + 140 * rnd.random() ** 1.6; a_ = math.pi / 2 + rnd.gauss(0, 0.35)
+        sz = rnd.uniform(0.7, 2.2)
+        q1 = Vector((OG.x + math.cos(a_) * d_, OG.y + 9 + math.sin(a_) * d_, sz * 0.3))
+        p0 = Vector((OG.x + rnd.uniform(-6, 6), OG.y + 2, rnd.uniform(2, 18)))
+        FX.add_block(stone(f"Spray{j}", sz), rnd.uniform(0.0, 0.12), (0.35 + d_ / 200.0) * FX.flight_k(), p0, q1,
+                     3 + d_ * 0.12, Vector((math.cos(a_), math.sin(a_), 0)) * sz * 2, 900 + j, spin=(3, 9))
+
+    # ---- thrown blocks: smaller (~5-8 m), smooth ballistic arcs, impacts timed per block (fx845.set_arc / set_impacts)
+    BS = 0.42
+    yb_t = None
     for n, (x, y, s0, sd) in enumerate(IMPACTS):
-        tl = min(1.0, arc_t * (1.0 + n * 0.04))          # farther blocks land a moment later
-        if tl < 1.0:
-            s = s0 * BS_AIR
-            p = block_arc(x, y, tl)
-            rr = random.Random(sd)
-            blocks.rough_block(p, s, (rr.uniform(0, 6), rr.uniform(0, 6), rr.uniform(0, 6)), (1.0, 0.8, 0.75), sd, mi=0, disp=0.5)
-            airborne.append((p, s, x, y, tl))
-            continue
-        s = s0 * BS_LAND
         rr = random.Random(sd)
-        # incoming direction (from the gate): skid scar extends past the impact
-        dv = Vector((x - OG.x, y - OG.y)).normalized()
+        s = s0 * BS
+        dv = Vector((x - OG.x, y - OG.y)); dist = dv.length; dv.normalize()
+        launch = 0.02 + n * 0.025
+        T = (0.8 + dist / 240.0) * FX.flight_k()
+        hmax = 25 + dist * 0.16
+        t_land = launch + T
+        FX.add_flight(launch, t_land)
         yb = math.hypot(x - YEAGER_HOUSE[0], y - YEAGER_HOUSE[1]) < 5
-        bc = Vector((x + dv.x * (0 if yb else 4), y + dv.y * (0 if yb else 4), s * (0.36 if yb else 0.2)))
-        blocks.rough_block(bc, s, (rr.uniform(-0.35, 0.35), rr.uniform(-0.35, 0.35), math.atan2(dv.y, dv.x)),
-                           (1.15, 0.85, 0.85), sd, mi=0, disp=0.4)
-        for _ in range(40):      # mound of crushed masonry heaped against the block
+        if yb:
+            yb_t = (t_land, s)
+        p0 = Vector((OG.x + rr.uniform(-5, 5), OG.y + 4, rr.uniform(6, 17)))
+        c_ = _sub(blocks)
+        c_.rough_block(Vector((0, 0, 0)), s, (0, 0, 0), (1.15, 0.85, 0.8), sd, mi=0, disp=0.3)
+        bo = c_.build(f"ThrownBlock{n}", [m_block, m_rock_l], coll)
+        try:
+            L.outline(bo, 0.12)
+        except Exception as ex:
+            print(f"[states845] outline failed: {ex!r}")
+        skid = Vector((dv.x, dv.y, 0)) * (0.0 if yb else s * 0.8)
+        FX.add_block(bo, launch, T, p0, Vector((x, y, s * 0.3)), hmax, skid, sd, trail=6, coll=fxc, col=DUST)
+        for j in range(5):                         # companion stones breaking off in flight
+            sz = s * rr.uniform(0.12, 0.28)
+            q1 = Vector((x + rr.uniform(-14, 14) + dv.x * rr.uniform(0, 12), y + rr.uniform(-14, 14) + dv.y * rr.uniform(0, 12), sz * 0.3))
+            FX.add_block(stone(f"Stone{n}_{j}", sz), launch + rr.uniform(0, 0.05), T * rr.uniform(0.93, 1.07),
+                         p0 + Vector((rr.uniform(-3, 3), 0, rr.uniform(-3, 3))), q1, hmax * rr.uniform(0.85, 1.1),
+                         Vector((dv.x, dv.y, 0)) * sz * 2, sd * 31 + j, spin=(3, 8))
+        # impact rubble: mound + fragment ring + broken-off piece, splashing out at the landing
+        ci = _sub(ch)
+        for _ in range(18):
             a = rr.uniform(0, 6.28); d_ = rr.uniform(s * 0.3, s * 0.9)
-            ch.add(Vector((x + dv.x * 4 + math.cos(a) * d_, y + dv.y * 4 + math.sin(a) * d_, rr.uniform(0, s * 0.15))),
-                   rr.uniform(1.0, 3.5), mi=rr.choice((lm["dark"], lm["stone"], lm["roof"])))
-        # a broken-off second piece and a ring of fragments (power-law sizes)
-        blocks.rough_block(Vector((x + dv.x * (s + 6) + rr.uniform(-4, 4), y + dv.y * (s + 6) + rr.uniform(-4, 4), s * 0.1)),
-                           s * 0.42, (rr.uniform(0, 6), rr.uniform(-0.4, 0.4), rr.uniform(0, 6)), (1, 0.9, 0.7), sd + 50, mi=0, disp=0.3)
-        for _ in range(260):
+            ci.add(Vector((x + dv.x * 2 + math.cos(a) * d_, y + dv.y * 2 + math.sin(a) * d_, rr.uniform(0, s * 0.12))),
+                   rr.uniform(0.6, 2.0), mi=rr.choice((lm["dark"], lm["stone"], lm["roof"])))
+        for _ in range(140):
             a = rr.uniform(0, 6.28); d_ = s * (0.5 + 2.3 * rr.random() ** 1.5)
-            sz = _rubble_size(rr, 0.8) * (1.6 - d_ / (s * 2.8))
-            ch.add(Vector((x + math.cos(a) * d_ + dv.x * d_ * 0.6, y + math.sin(a) * d_ + dv.y * d_ * 0.6, 0.15)),
-                   max(0.3, sz), mi=rr.choice((lm["stone"], lm["stone"], lm["dark"], lm["roof"])))
-        craters.crater(x + dv.x * 6, y + dv.y * 6, s0 * 2.6, rr)
-        # crushed houses: around the impact plus a skid zone back along the arc
-        killed = []
-        for cx, cy, r in ((x, y, s0 * 2.1 + 8), (x - dv.x * s0 * 2.0, y - dv.y * s0 * 2.0, s0 * 1.3 + 5),
-                          (x + dv.x * s0 * 2.2, y + dv.y * s0 * 2.2, s0 * 1.5 + 5)):
+            sz = _rubble_size(rr, 0.55) * (1.6 - d_ / (s * 2.8))
+            ci.add(Vector((x + math.cos(a) * d_ + dv.x * d_ * 0.6, y + math.sin(a) * d_ + dv.y * d_ * 0.6, 0.15)),
+                   max(0.25, sz), mi=rr.choice((lm["stone"], lm["stone"], lm["dark"], lm["roof"])))
+        ci.rough_block(Vector((x + dv.x * (s + 4) + rr.uniform(-3, 3), y + dv.y * (s + 4) + rr.uniform(-3, 3), s * 0.1)),
+                       s * 0.42, (rr.uniform(0, 6), rr.uniform(-0.4, 0.4), rr.uniform(0, 6)), (1, 0.9, 0.7), sd + 50, mi=0, disp=0.2)
+        FX.add_appear(_take(ci, f"ImpactRubble{n}", mats, coll, (x, y, 0.0)), t_land, 0.3, (0.35, 0.35, 0.5))
+        cr = Decals(); cr.crater(x + dv.x * 3, y + dv.y * 3, s * 2.6, rr)
+        co = cr.build(f"Crater{n}", m_cr, coll); _reorigin(co, (x, y, 0.0))
+        FX.add_appear(co, t_land, 0.25, (0.3, 0.3, 1.0))
+        # crushed houses: the one under the block goes at once, neighbours a beat later and slower
+        cand = {}
+        for cx, cy, r in ((x, y, s + 5), (x + dv.x * s * 1.6, y + dv.y * s * 1.6, s * 0.6 + 3)):
             for k, i, px, py in edit.near(cx, cy, r):
-                if edit.kill(k, i) and k == 0:
-                    killed.append((px, py))
-        for k, i, px, py in edit.near(x, y, s0 * 1.8 + 6, only_alive=False):
-            if k == 1:
-                edit.kill(k, i)
-        for px, py in killed:
-            if math.hypot(px - YEAGER_HOUSE[0], py - YEAGER_HOUSE[1]) < 7:
-                continue
-            _ruin_pile(ruins, px, py, rr.uniform(0, 6.28), rr, 3, 5, 7, 2, scale=rr.uniform(0.8, 1.05))
-            burning.append((px, py))
+                cand[(k, i)] = math.hypot(px - x, py - y)
+        for (k, i), d_ in sorted(cand.items(), key=lambda kv: kv[1]):
+            px, py, _a = edit.pos(k, i)
+            if math.hypot(px - YEAGER_HOUSE[0], py - YEAGER_HOUSE[1]) < 10:
+                continue                           # the Yeager house is handled below
+            t0 = t_land + (0.0 if d_ < s else 0.04 + d_ / 90.0)
+            if edit.kill(k, i, t0):
+                crush(k, i, t0, rr.uniform(0.5, 0.8) if d_ < s + 3 else rr.uniform(0.8, 1.4), rr)
+        FX.add_burst(fxc, (x + dv.x * 3, y + dv.y * 3, 1.5), s * 1.5, t_land, 14, rr, col=DUST, speed=(6, 18),
+                     life=(2.8, 5.0))
         if lv >= 1 and n in (0, 2, 5, 7) or lv >= 2:
-            fires.add(x - dv.x * s0, y - dv.y * s0, 0.4, 5.0 + rr.uniform(0, 2.5), smoke=False)
-        # tan dust over the impact
-        if lv <= 1 or n % 2 == 0:
-            billow(f"ImpactDust{n}", coll, (x + dv.x * 8, y + dv.y * 8, s * 0.7), (s * 2.2, s * 1.9, s * 1.3), DUST,
-                   (0.035 if lv == 1 else 0.02) * dust_k, rot=(0, 0, math.atan2(dv.y, dv.x)))
-    for p, s, x, y, tl in airborne:
-        # 20 m tan dust streak + small debris trailing each flying block
-        q0 = block_arc(x, y, max(0.0, tl - 0.02)); tang = (p - q0).normalized()
-        c = p - tang * (s * 0.5 + 10)
-        billow(f"BlockTrail{x}_{y}", coll, c, (s * 0.45, 10.0 + s * 0.3, s * 0.45), DUST, 0.06 * dust_k,
-               rot=tang.to_track_quat("Y", "Z").to_euler())
-        for k in range(14):
-            q = block_arc(x, y, max(0.0, tl - k * 0.006 - rnd.uniform(0, 0.006)))
-            ch.add(q + Vector((rnd.gauss(0, s * 0.3), rnd.gauss(0, s * 0.3), rnd.gauss(0, s * 0.3))), rnd.uniform(0.6, 2.2) * (1 - k / 16), mi=lm["stone"])
+            fires.add(x - dv.x * s0 * 0.5, y - dv.y * s0 * 0.5, 0.4, 5.0 + rr.uniform(0, 2.5), smoke=False, t_on=t_land + 0.5)
+        if lv <= 1 or n % 2 == 0:                  # lingering tan haze (volume), grows in behind the puffs
+            FX.add_appear(billow(f"ImpactDust{n}", coll, (x + dv.x * 6, y + dv.y * 6, s * 1.2), (s * 3.0, s * 2.6, s * 1.8), DUST,
+                                 (0.022 if lv == 1 else 0.014) * dust_k, rot=(0, 0, math.atan2(dv.y, dv.x))),
+                          t_land + 0.6, 2.5, (0.25, 0.25, 0.2))
+        impact_t.append((x, y, t_land))
 
     # ---- the Yeager house under a block
-    yk = [(k, i, px, py) for k, i, px, py in edit.near(YEAGER_HOUSE[0], YEAGER_HOUSE[1], 14, only_alive=False) if k == 0]
-    ya = edit.pos(yk[0][0], yk[0][1])[2] if yk else 0.0
+    t_y, s_y = yb_t or (2.0, 5.0)
     for k, i, px, py in edit.near(YEAGER_HOUSE[0], YEAGER_HOUSE[1], 10):
-        edit.kill(k, i)
-    if arc_t >= 1.0:
-        yeager_house(ch, YEAGER_HOUSE[0], YEAGER_HOUSE[1], ya, lm, rnd, 12 * BS_LAND)
+        if edit.kill(k, i, t_y):
+            crush(k, i, t_y, 0.6, rnd, ruin=False)
+    yk = [(k, i) for (k, i) in edit.kt if k == 0 and math.hypot(edit.pos(k, i)[0] - YEAGER_HOUSE[0], edit.pos(k, i)[1] - YEAGER_HOUSE[1]) < 10]
+    ya = edit.pos(*yk[0])[2] if yk else 0.0
+    cy_ = _sub(ch)
+    yeager_house(cy_, YEAGER_HOUSE[0], YEAGER_HOUSE[1], ya, lm, rnd, s_y * 1.9)
+    FX.add_appear(_take(cy_, "YeagerRuin", mats, coll, (YEAGER_HOUSE[0], YEAGER_HOUSE[1], 0.0)), t_y + 0.25, 0.5, (0.9, 0.9, 0.3))
 
     # ---- inner gate burst (Armored Titan, S1E2), debris fanning north into the Wall Maria settlement
     if lv >= 2:
@@ -1106,7 +1188,7 @@ def build(M, year, ctx):
             if k == 0:
                 _ruin_pile(ruins, x, y, a, rnd, 3, 5, 7, 2, scale=rnd.uniform(0.75, 0.95))
                 if y > 0:
-                    burning.append((x, y))
+                    burning.append((x, y, 0.0))
         if not night:
             # the hole full of bright daylight (bible 1.4): a warm-white card behind it, seen only by the camera
             bmc = bmesh.new()
@@ -1131,9 +1213,9 @@ def build(M, year, ctx):
     if not night:
         n_ruin_fires = {1: 6, 2: 18}[lv]
         rnd_f.shuffle(burning)
-        for x, y in burning[:n_ruin_fires]:
+        for x, y, tb in burning[:n_ruin_fires]:
             fires.add(x + rnd_f.uniform(-2, 2), y + rnd_f.uniform(-2, 2), 0.5, rnd_f.uniform(3.0, 5.5),
-                      light=rnd_f.random() < 0.4, smoke=rnd_f.random() < 0.5)
+                      light=rnd_f.random() < 0.4, smoke=rnd_f.random() < 0.5, t_on=tb + 0.4)
         if lv >= 2:
             cand = []
             for x, y, s, sd in IMPACTS:
@@ -1164,44 +1246,44 @@ def build(M, year, ctx):
                     fires.add(px, py, rnd_f.uniform(9, 14), rnd_f.uniform(4, 7), light=False, smoke=False)
             fires.add(bx, by, 0.0, br * 0.9, light=True, smoke=False, radius=br * 0.75, nsc=br / 5.0, lw=0.6)
             fires.add(bx + br * 0.5, by - br * 0.3, 0.0, br * 0.5, light=True, smoke=False, radius=br * 0.4, nsc=br / 7.0, lw=0.6)
-        for x, y in burning[:12]:           # a few scattered smaller fires
+        for x, y, tb in burning[:12]:       # a few scattered smaller fires
             fires.add(x, y, 0.5, rnd_f.uniform(3, 5), light=False, smoke=False)
 
     # ---- smoke columns (dark, billowing), lit from below at night
-    flying = {(a[2], a[3]) for a in airborne}
     if night:
-        cols = [(bx, by, br) for bx, by, br in blazes][:12]
-        cols += [(rnd_f.uniform(-120, 120), rnd_f.uniform(40, 160), 20) for _ in range(2)]
+        cols = [(bx, by, br, 0.0) for bx, by, br in blazes][:12]
+        cols += [(rnd_f.uniform(-120, 120), rnd_f.uniform(40, 160), 20, 0.0) for _ in range(2)]
     else:
-        cols = [(x, y, 0) for x, y, s, sd in IMPACTS if (x, y) not in flying]
+        cols = [(x, y, 0, tl + 0.7) for x, y, tl in impact_t]
         if lv >= 2:
-            cols += [(rnd_f.uniform(-220, 180), rnd_f.uniform(-650, -200), 0) for _ in range(2)]
-            cols += [(rnd_f.uniform(-120, 120), rnd_f.uniform(40, 160), 0)]
+            cols += [(rnd_f.uniform(-220, 180), rnd_f.uniform(-650, -200), 0, 0.0) for _ in range(2)]
+            cols += [(rnd_f.uniform(-120, 120), rnd_f.uniform(40, 160), 0, 0.0)]
         cols = cols[:{1: 4, 2: 9}[lv]]
-    for n, (x, y, br) in enumerate(cols):
+    for n, (x, y, br, tc) in enumerate(cols):
         R = rnd_f.uniform(25, 40) if not night else max(25.0, br * 1.3)
         Hc = rnd_f.uniform(170, 230) if not night else 170.0
-        smoke_column(f"FireSmoke{n}", coll, x, y, R, Hc, SMOKE, 0.12 if not night else 0.09,
-                     lean=(0.45 + rnd_f.uniform(-0.1, 0.15), 0.12 + rnd_f.uniform(-0.1, 0.1)),
-                     emit=(0.35 * gain if night else 0.0), rnd=rnd_f)
+        for zc, ob in smoke_column(f"FireSmoke{n}", coll, x, y, R, Hc, SMOKE, 0.12 if not night else 0.09,
+                                   lean=(0.45 + rnd_f.uniform(-0.1, 0.15), 0.12 + rnd_f.uniform(-0.1, 0.1)),
+                                   emit=(0.35 * gain if night else 0.0), rnd=rnd_f):
+            FX.add_appear(ob, tc + zc / 18.0, 2.5, (0.25, 0.25, 0.25))     # the column climbs ~18 m/s
 
     edit.commit()
-    ch.build("Rubble845", mats, coll)
+    for (k, i), (orig, tk) in edit.kt.items():
+        FX.add_town(edit.obs[k], i, orig, edit.year, tk)
+    rb = _take(ch, "Rubble845", mats, coll, (OG.x, OG.y, 0.0))        # gate rubble sweeps in from the hole
+    FX.add_appear(rb, 0.0, 0.5, (0.7, 0.08, 0.3))
     ruins.build("Ruins845", mats, coll)
-    bo = blocks.build("ThrownBlocks", [m_block, m_rock_l], coll)
-    try:
-        L.outline(bo, 0.22)
-    except Exception as ex:
-        print(f"[states845] outline failed: {ex!r}")
-    earth_dark = tuple(c * 0.55 for c in DUST)
-    if night:
-        m_cr = ground_decal_mat("Crater845N", (0.01, 0.008, 0.007), (0.03, 0.025, 0.02), (0.06, 0.05, 0.04))
-    else:
-        m_cr = ground_decal_mat("Crater845", (0.035, 0.03, 0.025), (0.10, 0.08, 0.055), earth_dark)
-    craters.build("Craters845", m_cr, coll)
     scars.build("Scars845", ground_decal_mat("Scar845", (0.07, 0.062, 0.052), (0.13, 0.115, 0.09), tuple(c * 0.55 for c in DUST), 2.2), coll)
     fires.build(coll, strength=(14.0 if not night else 22.0), light_w=(6000.0 if not night else 3500.0), night=night)
     if night:
         smoke_canopy(coll, blazes, gain)
         night_world(ctx)
-    print(f"[states845] state={st} arc_t={arc_t} flames={len(fires.items)} lights={len(fires.pts)} blazes={len(blazes)}")
+    # everything else in States845 belongs to "after the kick" (hidden for fx845.update(t < 0))
+    known = {id(a[0]) for a in FX.REG["appear"]} | {id(b["ob"]) for b in FX.REG["blocks"]}
+    for ob in list(coll.all_objects):
+        if id(ob) not in known and not ob.hide_render:
+            FX.add_appear(ob, 0.0)
+    t_static = 60.0 if arc_t is None else arc_t * FX.times_end()
+    FX.update(t_static)
+    print(f"[states845] state={st} t_static={t_static:.2f}s flames={len(fires.items)} lights={len(fires.pts)} "
+          f"blazes={len(blazes)} houses={len(FX.REG['houses'])} puffs={len(FX.REG['puffs'])} flights={FX.times()}")

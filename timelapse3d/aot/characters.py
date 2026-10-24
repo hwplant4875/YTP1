@@ -527,6 +527,12 @@ WAKE_POSES = {
     "crouch": (0.00, 0.30, 0.30, {"upperleg01": (-1.80, 0, 0), "lowerleg01": (2.25, 0, 0), "upperarm01": (-0.6, 0, 0.7),
                                   "lowerarm01": (0.3, 0, 0), "spine05": (0.70, 0, 0), "spine03": (0.2, 0, 0), "neck01": (-0.2, 0, 0)}),
     "stand":  (0.00, None, 0.42, {"upperarm01": (0.0, 0, 0.8), "lowerarm01": (0.2, 0, 0), "neck01": (0.1, 0, 0)}),
+    # seated wake-up (render_fast opening): asleep sitting with the back against the trunk, then bending forward at the
+    # waist while staying seated.  thigh = -1.45 + tilt keeps the legs flat on the grass.
+    "doze":   (0.30, 0.07, -0.55, {"upperleg01": (-1.15, 0, 0.10), "lowerleg01": (0.30, 0, 0), "upperarm01": (-0.25, 0, 0.85),
+                                   "lowerarm01": (0.55, 0, 0), "spine05": (-0.12, 0, 0), "neck01": (0.55, 0, 0.30)}),
+    "wake":   (-0.05, 0.07, -0.55, {"upperleg01": (-1.50, 0, 0.10), "lowerleg01": (0.35, 0, 0), "upperarm01": (-0.60, 0, 0.70),
+                                   "lowerarm01": (0.45, 0, 0), "spine05": (0.45, 0, 0), "spine03": (0.25, 0, 0), "neck01": (0.05, 0, 0.05)}),
 }
 ALL_BONES = ("upperleg01", "lowerleg01", "upperarm01", "lowerarm01", "spine05", "spine03", "neck01")
 
@@ -558,16 +564,49 @@ def animate_wakeup(rig, hip_ground, facing, start=1, timing=(0, 30, 60, 80, 100,
         _key_pose(rig, pose, frame, Vector(hip_ground), facing, fwd)
     return f[-1]
 
-def place_opening(base, trunk_r=1.6, facing=0.0, trunk=None, start=1):
+def animate_wake_seated(rig, hip_ground, facing, start=1, timing=(0, 18, 60)):
+    """Eren asleep sitting against the trunk; from start+timing[1] he slowly bends forward at the waist (stays seated)."""
+    rot = Matrix.Rotation(facing, 3, "Z"); fwd = rot @ Vector((0, -1, 0))
+    f = [start + t for t in timing]
+    for frame, pose in zip(f, ("doze", "doze", "wake")):
+        _key_pose(rig, pose, frame, Vector(hip_ground), facing, fwd)
+    return f[-1]
+
+def animate_walk(rig, p0, p1, f0, f1, step=8, swing=0.32):
+    """Slow walk from p0 to p1 (world points, z already on the ground) over frames f0..f1: eased location keys, facing
+    the walking direction, alternating thigh swing with a bent trailing knee, settling to a stand at f1."""
+    p0, p1 = Vector(p0), Vector(p1); d = p1 - p0
+    rig.rotation_euler = (0.0, 0.0, math.atan2(d.x, -d.y))
+    rig.keyframe_insert("rotation_euler", frame=f0)
+    rig.location = p0; rig.keyframe_insert("location", frame=f0)
+    rig.location = p1; rig.keyframe_insert("location", frame=f1)
+    n = max(1, int((f1 - f0) / step))
+    for i in range(n + 1):
+        fr = f0 + i * step
+        amp = swing * (0.0 if i == n else (1.0 if 0 < i < n - 1 else 0.6))
+        for s, sg in LR_:
+            ph = sg * (1 if i % 2 else -1)
+            for bone, val in ((f"upperleg01.{s}", (-amp * ph, 0, 0)), (f"lowerleg01.{s}", (amp * 0.9 * max(0, -ph), 0, 0))):
+                pb = rig.pose.bones.get(bone)
+                if pb:
+                    pb.rotation_mode = "XYZ"; pb.rotation_euler = val; pb.keyframe_insert("rotation_euler", frame=fr)
+    return f1
+
+def place_opening(base, trunk_r=1.6, facing=0.0, trunk=None, start=1, mode="stand"):
     """Eren asleep on his back under the tree (head toward the trunk) who sits up and stands, Mikasa standing nearby
     with her firewood frame on her back, Eren's frame on the grass. base: trunk centre on the ground;
-    facing: direction Eren faces once up (radians about Z, 0 = -Y); trunk: trunk object for ray casting the bark."""
+    facing: direction Eren faces once up (radians about Z, 0 = -Y); trunk: trunk object for ray casting the bark.
+    mode="seated": Eren sleeps sitting against the trunk and only bends forward (animate_wake_seated); the caller
+    animates Mikasa's approach with animate_walk."""
     base = Vector(base)
     rot = Matrix.Rotation(facing, 4, "Z")
     fwd = (rot @ Vector((0, -1, 0, 0))).to_3d(); side = (rot @ Vector((1, 0, 0, 0))).to_3d()
     trunk_r = max(_surface(trunk, base, fwd, z, trunk_r) for z in (0.3, 0.6, 0.9))
     eren = make_eren()
-    end = animate_wakeup(eren, base + fwd * (trunk_r + 0.95), facing, start=start)
+    if mode == "seated":
+        end = animate_wake_seated(eren, base + fwd * (trunk_r + 0.95), facing, start=start)
+    else:
+        end = animate_wakeup(eren, base + fwd * (trunk_r + 0.95), facing, start=start)
     mik = make_mikasa(); pose_standing(mik, look_down=0.2)
     mik.location = base + fwd * (trunk_r + 2.3) + side * 1.1; mik.rotation_euler = (0.0, 0.0, facing + math.pi * 1.25)
     f2 = firewood_frame("Firewood_Mikasa", seed=2)                          # on her back
