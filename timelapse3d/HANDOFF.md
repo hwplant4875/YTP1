@@ -221,3 +221,7 @@ Scope: everything up to just before the Grisha injection scene (845 fall → fer
 
 ## 15:51 USER: total EP1 length 8-10 min MAX
 - The full EP1 cut (EP1_plan_v2, planned ~14 min) must land at 8-10 min. Trim the holds and data shots proportionally; keep the pace rule. The fall of Shiganshina up to just before the Grisha scene stays at about 50-60 s.
+
+## 16:58 USER: opening v3 "훌륭하다, 너무 훌륭하게 잘 해주었어". GATEHOUSE FIX (ref/user/s1e1_gatehouse_flat_ref.png)
+- The current gatehouse sticks out too much and has crenellations. Per the anime, the gate section is FLUSH with the wall: two shallow vertical pilasters/buttresses (barely projecting, ~1-2 m), rising slightly above the wall top as flat, square-topped stubs. Between them sits a flat recessed panel with a row of small rectangular vent slots near the top. NO merlons, NO battlements, NO tower block. The wall top elsewhere is plain and flat, with faint vertical segment lines.
+- This also fixes "the head is hidden behind the gatehouse".
