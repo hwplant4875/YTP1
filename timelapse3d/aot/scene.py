@@ -449,27 +449,34 @@ def wall_top(name, pts, gaps, mats, every_cross=42.0):
     return obj_from_bm(name, bm, [mats["stone"], mats["iron"], mats["gate"]])
 
 def gatehouse(name, center, angle, mats, w=GATE_W, h=GATE_H, deep=6.0, door=True):
-    """Thickened block over a gap in the wall, with an arched opening, a heavy banded door and a lintel."""
+    """Gate in the wall, anime S1E1 style (user ref s1e1_gatehouse_flat_ref.png): flush with the wall, two shallow flat
+    pilasters with square tops just above the wall top, a recessed panel between them with small vent slots, and an
+    arched opening with a heavy banded door. No crenellations or tower block. `deep` is kept for callers (unused)."""
     bm = bmesh.new()
-    bw = w + 16
-    T = WALL_T + deep
-    # side piers
+    T = WALL_T + 0.8                                  # body barely proud of the wall faces
+    pw = 7.0                                          # pilaster width
+    px = w / 2 + 3 + pw / 2
+    # side piers / pilasters: project 1.6 m from both faces, square tops 3.5 m above the wall top
     for sx in (-1, 1):
-        box(bm, (sx * (w / 2 + 4), 0, (WALL_H + 2 - 4) / 2 - 4 + 1), (8, T, WALL_H + 6), taper=(1, 0.8))
-    # mass above the opening, arch approximated with stepped blocks
-    box(bm, (0, 0, (h + WALL_H + 2) / 2), (w + 0.2, T, WALL_H + 2 - h), taper=(1, 0.8))
-    for i in range(1, 6):
+        box(bm, (sx * px, 0, (WALL_H + 3.5 + 4) / 2 - 4), (pw, T + 3.2, WALL_H + 3.5 + 4))
+    # recessed panel between the pilasters, flush with the wall top
+    box(bm, (0, 0, (h + WALL_H) / 2), (2 * px - pw + 0.2, T - 0.6, WALL_H - h))
+    for i in range(1, 6):                             # arch approximated with stepped blocks
         a = i / 6 * math.pi / 2
         hw = w / 2 * math.cos(a)
         z0 = h - 3.5 + 3.5 * math.sin(a)
-        box(bm, (w / 2 - (w / 2 - hw) / 2, 0, (z0 + h) / 2), (w / 2 - hw, T, h - z0 + 0.01))
-        box(bm, (-w / 2 + (w / 2 - hw) / 2, 0, (z0 + h) / 2), (w / 2 - hw, T, h - z0 + 0.01))
-    # crenellated cap and a cornice band
-    box(bm, (0, 0, WALL_H + 2.6), (bw + 1, T * 0.82, 1.2))
-    for i in range(-4, 5):
-        box(bm, (i * bw / 9, 0, WALL_H + 4), (bw / 18, T * 0.82, 1.6))
-    box(bm, (0, 0, h + 2.5), (w + 2, T + 0.6, 1.2), mi=0)
-    ob = obj_from_bm(name, bm, [mats["stone"]])
+        box(bm, (w / 2 - (w / 2 - hw) / 2, 0, (z0 + h) / 2), (w / 2 - hw, T - 0.6, h - z0 + 0.01))
+        box(bm, (-w / 2 + (w / 2 - hw) / 2, 0, (z0 + h) / 2), (w / 2 - hw, T - 0.6, h - z0 + 0.01))
+    # a thin band over the arch and a slightly raised band under the panel's top edge
+    box(bm, (0, 0, h + 2.5), (w + 2, T + 0.4, 1.2))
+    box(bm, (0, 0, WALL_H - 1.2), (2 * px - pw + 0.2, T + 0.2, 0.8))
+    # small dark vent slots in a row near the panel top, both faces
+    nv = 6
+    for s in (-1, 1):
+        for k in range(nv):
+            x = (k - (nv - 1) / 2) * (w * 0.7 / nv) + (1.2 if k >= nv // 2 else -1.2)
+            box(bm, (x, s * ((T - 0.6) / 2 + 0.05), WALL_H - 4.0), (0.8, 0.3, 1.6), mi=1)
+    ob = obj_from_bm(name, bm, [mats["stone"], mats["iron"]])
     ob.location = (center[0], center[1], 0); ob.rotation_euler.z = angle
     if door:
         d = bmesh.new()
