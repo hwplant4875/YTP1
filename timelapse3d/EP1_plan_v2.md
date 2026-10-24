@@ -35,6 +35,45 @@
    - "I'm free"
 5. **Cut** everything else that is personal or conversational: Sasha's potato, the balance rig, sparring, the mess hall, the night under the stars, drunk guards, Armin bullied, the family dinner, the trial details, cleaning the castle, the gear inspection, Annie and Armin's talk, the Stohess convoy/disguise/alley scenes, Hitch and Marlo, and similar.
 
+
+## User storyline feedback (2026-10-24 05:58 UTC). Binding; overrides the table where they differ
+
+**What the user likes**
+- Everything up to and including Grisha's injection and the key necklace.
+
+**Changes to the story order and content**
+1. **After the 250,000 shot:**
+   - The trio become cadets.
+   - Eren hangs upside down on the balance rig (keep this one).
+   - Three years pass as a timelapse, then graduation.
+   - On Trost's wall, Eren strikes an "I can do this!" pose. Lightning strikes and the Colossal appears behind him at once.
+2. **After Eren is swallowed:**
+   - Switch to the supply HQ to show how hopeless things are.
+   - Mikasa falls (out of gas).
+   - The titan Eren appears and attacks the titans.
+   - Then the HQ lift plan.
+3. **After Trost is retaken:**
+   - Show Eren coming out of the nape, quickly.
+   - Move fast to the cannon firing; Eren's half-shift blocks the shot.
+   - Armin stands in front in the "Shinzou wo sasageyo" salute pose for his quick speech.
+4. **Formation:** Erwin, in the centre, fires the signal flare and the whole formation visibly moves in response. Show this signal → movement relationship clearly.
+5. **Forest:** after Eren's head is kicked off, go straight to the Female Titan with her mouth open, then Mikasa and Levi escaping with Eren.
+
+**The core of the video: a regional timelapse.** These shots are the content.
+- **Trost evacuation:**
+  - An aerial view of the whole district with the crowds of people trying to get out.
+  - Their escape route is jammed by the merchant's cart at the north gate.
+  - Mikasa clears it and the crowd flows out.
+  - This needs a crowd-flow animation: people pile up at the choke point, then stream out.
+- **Real-time, trackable movement:** in the forest advance especially, characters must move continuously, seen from the sky, and never teleport, so the viewer can track where they are. Teleporting is allowed only where it cannot be avoided.
+- **Survey Corps launches:** masses of Scouts launching and flying on ODM, visible from the air. Keep it cheap: green cloaks must read. Seen from afar they fight titans or get eaten.
+
+**Implications for the build**
+- An agent system for crowds and Scouts: points that follow paths over time. Each one has a state (walk, run, queue, fly on ODM, fight, die), with cloak sprites or low-poly figures, and gas-trail lines for ODM.
+- The Trost crowd is a flow field to the north gate with a blocked choke point, released at Mikasa's frame.
+- The formation is about 40 rider groups on splines across the plain. Erwin's flare is the trigger, and the groups re-path with a short relay delay.
+- Persistent tracks across a sequence instead of per-shot staging, so positions are continuous between shots.
+
 ## The cut, about 14 min (30 fps), one continuous flight
 
 | # | Year | Place | World event shown from above | Map / data graphic | Hold (overlay) | ~s |
