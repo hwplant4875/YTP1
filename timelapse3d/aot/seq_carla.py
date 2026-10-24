@@ -436,6 +436,26 @@ def _flat_red(rig):
                 o.data.materials[i] = m
 
 
+def _rim_warm(rig):
+    """Held against the sunset: a dusty-rose dress silhouette with a warm orange Fresnel rim (emission), so the figure
+    reads against the golden sky. pose_carla restores her own materials every frame before this."""
+    import bpy
+    m = bpy.data.materials.get("CarlaRimWarm")
+    if m is None:
+        m = bpy.data.materials.new("CarlaRimWarm"); m.use_nodes = True
+        N = m.node_tree.nodes; Lk = m.node_tree.links
+        b = N["Principled BSDF"]; b.inputs["Base Color"].default_value = (*_srgb("7A4E42"), 1); b.inputs["Roughness"].default_value = 0.8
+        lw = N.new("ShaderNodeLayerWeight"); lw.inputs["Blend"].default_value = 0.35
+        em = N.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (1.0, 0.55, 0.22, 1); em.inputs["Strength"].default_value = 6.0
+        mx = N.new("ShaderNodeMixShader")
+        Lk.new(lw.outputs["Fresnel"], mx.inputs[0]); Lk.new(b.outputs[0], mx.inputs[1]); Lk.new(em.outputs[0], mx.inputs[2])
+        Lk.new(mx.outputs[0], N["Material Output"].inputs["Surface"])
+    for o in _all_obs(rig):
+        if o.type == "MESH":
+            for i in range(len(o.data.materials)):
+                o.data.materials[i] = m
+
+
 def red_mist(center, k, coll, seed=3):
     """Stylised blood mist: a few soft red volume puffs, k 0..1 grows and fades."""
     import bpy, bmesh, aotlib as L
@@ -683,6 +703,7 @@ def setup_carla(M, year, ctx, coll):
     ca = make_carla("Carla")
     er, mk = make_kids()
     ha = make_hannes("Hannes")
+    STATE["carla_s"] = ca.scale.x
     STATE.update(carla=ca, eren=er, mikasa=mk, hannes=ha,
                  carla_mats={o.name: list(o.data.materials) for o in _all_obs(ca) if o.type == "MESH"})
     for o in _all_obs(ca) + _all_obs(er) + _all_obs(mk) + _all_obs(ha):
@@ -770,7 +791,7 @@ def pose_carla(F):
         Zb = Vector((fv.x, fv.y, 0.0)).normalized(); Yb = Vector((0, 0, 1.0)); Xb = Yb.cross(Zb)
         R = Matrix((Xb, Yb, Zb)).transposed()
         hip_l = ca.data.bones["upperleg01.L"].head_local.copy(); hip_l.x = 0.0
-        s = ca.scale.x
+        s = STATE.get("carla_s", ca.scale.x)
         want = Vector((C.x, C.y, g + 0.16 + float(os.environ.get("CARLA_DZ", "0"))))
         ca.matrix_world = Matrix.Translation(want - R @ (hip_l * s)) @ R.to_4x4() @ Matrix.Scale(s, 4)
     else:
@@ -779,7 +800,10 @@ def pose_carla(F):
         hand = _bone_w(ti, "wrist.R", "tail")
         tf = Vector((math.sin(yaw_t), -math.cos(yaw_t), 0))          # titan front (world)
         yaw_c = yaw_t + math.pi * 0.5                                   # held side-on: Carla in profile too
-        s = ca.scale.x
+        # readability while she is held up against the sky: grow ~1.8x through the lift, warm rim-lit silhouette
+        s = STATE.get("carla_s", ca.scale.x) * (1.0 + (float(os.environ.get("CARLA_HELD_SCALE", "1.8")) - 1.0) * _ss(T_LIFT[0], T_LIFT[0] + 20, F))
+        if F < T_BITE[0] + 8:
+            _rim_warm(ca)
         ca.matrix_world = Matrix.Translation(Vector((0, 0, 0))) @ Matrix.Rotation(yaw_c, 4, "Z") @ Matrix.Scale(s, 4)
         bpy.context.view_layer.update()
         waist = _bone_w(ca, "spine04", "head")
