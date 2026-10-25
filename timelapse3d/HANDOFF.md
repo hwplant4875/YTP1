@@ -258,3 +258,36 @@ Rules now in force: AGENTS_BRIEF.md, true-scale people (04:53), Trost aerial str
 - E, graphics (hud2.py, hudcam.py, maps.py): done.
 - F, march846: done (v2); true-scale change asked at 04:53 (remove far 3.3x / stragglers 2.6x / titans 2.6x), code state uncommitted at pause, unverified. NEXT: 3 check stills; lower the high camera keys if the column vanishes.
 - G, integrator (master_timeline.py, render_bridge.py/.sh, assemble_master.py, master_overlay.json): first master preview 3:15 (renders/laptop/master_preview.mp4). NEXT: when segments are final, re-run render_bridge.sh (if seam keys moved) then assemble_master.py; moonlit fill for B4's dark climb; check the Trost dead figures (207/897) before the final.
+
+## 09:37 (10/25) RESUME — big user review of master_preview (all of it is binding)
+User: "진격거 계속 진행해." Work resumes on the subscription (not the API session). Run at most 2 agents at a time.
+Refs added: ref/user/walls_map_ref.png, remove_red_cape_giant.png, trost_cannon_canal_ref.png, trost_armin_salute_steps_ref.png, eren_halfshift_skeleton_ref.png.
+
+CORE PHILOSOPHY: a neutral third-party observer watching calmly from the sky, as if not knowing the protagonist. Sky view at a moderate height, NO dynamic chase cams. "That's the charm of a timelapse."
+
+ONE TAKE, STRICTLY: NO cloud transitions, no wipes, no cuts. Separate renders are fine ONLY if the camera position/velocity match exactly at each seam. The camera physically flies Shiganshina -> north across Wall Maria territory -> Wall Rose / Trost. The GRISHA forest scene is CUT.
+
+WORLD MAP (walls_map_ref.png): three concentric walls, each with 4 semicircular districts bulging outward (N/E/S/W), a river running N-S through all, grass/forest. Shiganshina = south bulge of Maria; Trost = south bulge of Rose. ONLY Shiganshina and Trost get buildings; the other districts are empty wall bulges (save memory). NO mountains behind the Colossal; far beyond the walls (south) the SEA should be visible at the horizon.
+
+OPENING / SHIGANSHINA:
+- Remove the bottom-left 3-walls graphic at the start.
+- Lightning a bit EARLIER.
+- Eren's house: near the broken gate, placed to the RIGHT of the outer gate so the titans pouring in are visible.
+- Carla: REMOVE Hannes carrying Eren & Mikasa (harness, Eren, Mikasa gone from this beat). Smiling Titan grabs and eats Carla FASTER. Show it small from the aerial view.
+- ARMORED TITAN: the inner gate must be INTACT first (it currently looks already broken). Model a real gate; the Armored Titan rams it with its SHOULDER; show the gate exploding vividly.
+- Boats: Eren on the boat looks awkward -> high aerial view of boats and refugees fleeing north toward Trost, and the camera moves on toward Trost with them (this replaces the vow close-up).
+- KEEP: refugees clearing fields (food shortage).
+
+250,000 MARCH: user's favourite ("너무나도 좋았어"). Keep it, but remove the transition into/out of it: connect by matched camera.
+
+TRAINING CAMP: good, but place it RIGHT NEXT TO the Trost district so the one-take move is easy.
+
+TROST:
+- Remove EVERY custom red-cape giant figure (remove_red_cape_giant.png): use ONLY downloaded asset models (small true-scale ones are fine, keep those). Same for the oversized Scout figures at the evacuation.
+- Outer gate smashed, titans pour in FAST (show clearly).
+- SKIP Eren being swallowed and similar close beats.
+- Aerial: people evacuating, crowd concentrating at the inner gate, the huge cargo cart blocking it; Mikasa flies in, (brief exchange), the cart gets shoved aside, people escape out through the gate. Make the inner gate an OPEN passage (no closed door visible).
+- Aerial: Mikasa falling seen a little; a titan approaches; the Attack Titan appears, runs in and beats the titan. Follow Eren HIGH, aerial, spectator style.
+- HQ: rebuild the supply HQ to match the anime (stone multi-storey building with a tall bell/clock tower, orange tile roofs, dormers, half-timbered wings; see trost_armin_salute_steps_ref.png background; search wiki stills "Trost District Headquarters / supply depot"). The lift operation: titans slowly gather to the centre, cadets ring them, FIRE the guns, then cut the napes. Then show Eren emerging from the Attack Titan's nape (use the asset; remove his ODM gear and blades if possible).
+- CANNON (big camera move across the district): in a sunken canal/river-side stone basin inside Trost (trost_cannon_canal_ref.png): Garrison soldiers on stepped stone banks surrounding Eren/Mikasa/Armin; the cannon fires; Eren half-shifts (skeleton ribcage + arm + skull, eren_halfshift_skeleton_ref.png) and blocks it; LOTS of steam/smoke afterwards. Caption: "Eren blocks the cannonball" (not "Armin vouches"). Armin's salute staging per trost_armin_salute_steps_ref.png (steps, soldiers around).
+- Then Pyxis's speech, then THE MOST IMPORTANT: Eren carries the boulder and seals the broken outer gate. Spend the most effort here.
