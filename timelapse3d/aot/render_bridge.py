@@ -1,24 +1,21 @@
-"""BRIDGE FLIGHTS between EP1 segments that do not share a scene (agent G, integrator).  ONE Blender session per WORLD.
+"""CONNECTOR FLIGHTS between EP1 segments (agent G, integrator).  ONE Blender session per scene ("world").
 
-A bridge (master_timeline.SEGMENTS, kind bridge) = climb half rendered in the outgoing segment's world -> apex inside a
-cloud bank -> descend half rendered in the incoming segment's world.  Each half is a cubic Hermite in time between the
-segment's camera key (evaluated HERE, with that world's own camera function: position, velocity, look direction and
-its rate, log-lens and its rate) and the shared apex (position + velocity), so the camera is C1 at both seams.  The
-world swap at the apex is hidden by assemble_master.py's cloud whiteout.  The world state is frozen at the segment's
-key time (seasons / light / crowd), the camera moves; frames are a pure function of the bridge time.
+STRICT ONE TAKE (HANDOFF 10/25 09:37): no clouds, wipes or dissolves.  A connector (master_timeline.SEGMENTS, bridge
+entries) is one or two spans; each span is a cubic Hermite in time between two keys - a segment key evaluated HERE
+with that segment's own camera function (position, velocity, look direction + rate, log-lens + rate), or an explicit
+SEAM key (master_timeline.SEAMS, world coordinates converted to this scene's set frame).  Where a connector changes
+scene mid-flight the seam is a world-only frame (aot/world.py content only), so both scenes render the same image.
+World state is frozen at the segment key time (crowds, seasons); C1 animates the sun (sunset -> night -> day).
 
-Worlds (see render_bridge.sh for the exact environment of each):
-  interlude  blender -b -P aot/render_bridge.py -- --world interlude --halves B1b,B2a,B3b,B4a --out <tmp>
-             render_interlude.py imported as a library (its build() / update() / cam_at(); Trost + Wall Rose + camps)
-  march      blender -b -P aot/scene.py -P aot/render_bridge.py -- --world march --halves B2b,B3a ...   (AOT_SET=trost)
-             march846.setup() / update(t, cam) / cam_at(t)
-  trost      blender -b -P aot/scene.py -P aot/render_bridge.py -- --world trost --halves B4b --rt-out <tmp> ...
-             render_trost.py executed up to its render loop (frame_state(v), cam_at(v))
-  shig       blender -b -P aot/scene.py -P aot/render_bridge.py -- --world shig --halves B1a --seg 45 --fall-out <tmp>
-             render_fall2.py executed up to its main block (seg45_build(), seg5_pose(S, s))
-Options: --br-fps 15 (30 final) --br-keys-only (evaluate + cache the segment keys, no render) --br-js 3,10 (only these
-bridge frames).  Output: renders/master/bridges/<id>/br_<j>.png (+ _cam/<j>.json hudcam dumps); the evaluated keys go
-to renders/master/bridges/keys/<state>_<t>.json, which master_timeline.py prefers over everything else.
+Scenes (see render_bridge.sh for the exact environment of each; every one loads aot/world.py):
+  shig       scene.py + render_fall2.py executed up to its main block (seg3_build / seg3_pose: A's segment 3)
+  interlude  render_interlude.py imported as a library (build / update / cam_at)
+  march      scene.py (AOT_SET=trost) + march846.setup / update / cam_at
+  trost      scene.py (AOT_SET=trost) + render_trost.py executed up to its render loop (frame_state / cam_at)
+  base       whatever scene.py built: --stills only
+Options: --halves C2b,C3a  --br-fps 15 (30 final)  --br-keys-only  --br-js 3,10  --stills "name:x,y,z:lx,ly,lz:lens;..."
+Output: renders/master/bridges/<id>/br_<j>.png (+ _cam/<j>.json), bridges/keys/<state>_<t>.json (preferred by
+master_timeline.py), renders/master/world_stills/<name>__<scene>_<frame>.png.
 """
 import bpy, json, math, os, sys, time, argparse
 from mathutils import Vector
@@ -30,8 +27,10 @@ import hudcam
 
 argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 ap = argparse.ArgumentParser(allow_abbrev=False)
-ap.add_argument("--world", required=True, choices=["interlude", "march", "trost", "shig"])
-ap.add_argument("--halves", required=True, help="comma list like B2a,B3b")
+ap.add_argument("--world", required=True, choices=["interlude", "march", "trost", "shig", "base"])
+ap.add_argument("--halves", default="", help="comma list like C2a,C3b")
+ap.add_argument("--stills", default="", help="name:x,y,z:lx,ly,lz:lens;...  WORLD coordinates (world.py); rendered into renders/master/world_stills")
+ap.add_argument("--still-frame", default="", help="frame of the scene for --stills (shig | trost; default world.active_frame())")
 ap.add_argument("--br-fps", type=float, default=15.0)
 ap.add_argument("--br-samples", type=int, default=4)
 ap.add_argument("--br-engine", default="")
@@ -121,15 +120,48 @@ elif G.world == "trost":
         loc, rot, lens = g["cam_at"](v)
         return Vector(loc), rot.to_matrix() @ Vector((0, 0, -1)), lens
     W.update(state=lambda v: g["frame_state"](v), cam=_cam, per_frame=None, ground=lambda x, y: g["L"].height(x, y))
+elif G.world == "base":                  # whatever scene.py built (with AOT_PLUGINS=...,world): stills only
+    cam = sc.camera
+    W.update(state=lambda t: None, cam=None, per_frame=None, ground=lambda x, y: 0.0)
 elif G.world == "shig":
     g = _exec_until(os.path.join(HERE, "render_fall2.py"), "# ================================================================ main")
     cam = g["cam"]
-    S45 = g["seg45_build"]()
+    S3 = g["seg3_build"]()
     def _cam(s):
-        g["seg5_pose"](S45, s); bpy.context.view_layer.update()
+        g["seg3_pose"](S3, s); bpy.context.view_layer.update()
         m = cam.matrix_world
         return m.translation.copy(), (m.to_3x3() @ Vector((0, 0, -1))).normalized(), cam.data.lens
-    W.update(state=lambda s: g["seg5_pose"](S45, s), cam=_cam, per_frame=None, ground=lambda x, y: g["L"].height(x, y))
+    W.update(state=lambda s: g["seg3_pose"](S3, s), cam=_cam, per_frame=None, ground=lambda x, y: g["L"].height(x, y),
+             light=g.get("SEG3_END_LIGHT"))
+    L0 = g.get("SEG3_END_LIGHT") or dict(sun_elevation_deg=4, sun_azimuth_deg=245, sun_color=(1.0, 0.5, 0.2), sun_energy=4.2,
+                                         exposure=-1.5)
+    DAY = dict(el=float(os.environ.get("C1_DAY_EL", "40")), az=float(os.environ.get("C1_DAY_AZ", "160")),
+               col=(1.0, 0.97, 0.92), e=3.6, expo=float(os.environ.get("C1_DAY_EXPO", "-1.5")))
+    def _light_at(br, tb):
+        """C1 timelapse over the flight: segment 3's sunset -> a short blue night -> morning -> the interlude's daylight
+        (sun 40 deg, white 3.6) by the S3 seam.  The sun keeps turning the same way (west -> under -> east -> south)."""
+        T = MT.bridge_total(br); u = min(1.0, max(0.0, tb / T))
+        so = bpy.data.objects.get("Sun")
+        if not so:
+            return
+        az = L0["sun_azimuth_deg"] + (DAY["az"] + 360.0 - L0["sun_azimuth_deg"]) * u
+        el = L0["sun_elevation_deg"] + (DAY["el"] - L0["sun_elevation_deg"]) * MT.herm(0.0, 0.0, 1.0, 0.0, 1.0, u) \
+            - 22.0 * math.sin(math.pi * min(1.0, u / 0.7))            # dips below the horizon (night) mid-flight
+        night = max(0.0, min(1.0, -el / 8.0))
+        e_ = math.radians(el); a_ = math.radians(az)
+        d = Vector((-math.cos(e_) * math.cos(a_), -math.cos(e_) * math.sin(a_), -math.sin(e_)))
+        so.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
+        warm = max(0.0, 1.0 - max(0.0, el) / 25.0)
+        c0 = Vector(L0["sun_color"]); c1 = Vector(DAY["col"])
+        so.data.color = tuple(c1.lerp(c0, warm))
+        so.data.energy = (L0["sun_energy"] * (1 - u) + DAY["e"] * u) * (1.0 - night)
+        bg = sc.world.node_tree.nodes.get("Background") if sc.world and sc.world.node_tree else None
+        if bg:
+            if "_c1_bg" not in W:
+                W["_c1_bg"] = bg.inputs[1].default_value
+            bg.inputs[1].default_value = W["_c1_bg"] * (1.0 - 0.9 * night)
+        sc.view_settings.exposure = L0.get("exposure", -1.5) * (1 - u) + DAY["expo"] * u + 1.2 * night
+    W["light_at"] = _light_at
 sc = bpy.context.scene
 sc.render.image_settings.file_format = "PNG"
 print(f"[bridge] world {G.world} built in {time.time() - t_b:.0f}s, engine {sc.render.engine}", flush=True)
@@ -153,12 +185,30 @@ def eval_key(state, side):
           f"lens {n0:.1f}", flush=True)
     return k
 
+if G.stills:                              # world stills (world coordinates -> this scene's set frame)
+    WD = sys.modules.get("world") or __import__("world")
+    fr = G.still_frame or WD.active_frame()
+    od = os.path.join(MT.MASTER, "world_stills"); os.makedirs(od, exist_ok=True)
+    cam.data.clip_end = 250000.0
+    for spec in [x for x in G.stills.split(";") if x.strip()]:
+        nm, a, b, ln = spec.split(":")
+        loc = Vector(WD.to_set(tuple(float(v) for v in a.split(",")), fr))
+        tgt = Vector(WD.to_set(tuple(float(v) for v in b.split(",")), fr))
+        cam.location = loc; cam.rotation_euler = (tgt - loc).to_track_quat("-Z", "Y").to_euler(); cam.data.lens = float(ln)
+        bpy.context.view_layer.update()
+        sc.render.filepath = os.path.join(od, f"{nm}__{G.world}_{fr}.png")
+        bpy.ops.render.render(write_still=True)
+        print(f"[bridge] still {nm} ({fr} frame) -> {sc.render.filepath}", flush=True)
+
 js_only = {int(x) for x in G.br_js.split(",") if x.strip()}
 t_r = time.time(); n_done = 0
+FR = "shig" if G.world == "shig" else "trost"
+def resolve(k, side):
+    return MT.seam_key(k["seam"], FR) if "seam" in k else eval_key(k["state"], side)
 for bid, half in HALVES:
     br = MT.SEG[bid]
     hd = br["halves"][half]
-    key = eval_key(hd["state"], "out" if half == "a" else "in")
+    k0, k1 = resolve(hd["k0"], "out"), resolve(hd["k1"], "in")
     if G.br_keys_only:
         continue
     W["state"](hd["state"][1])
@@ -166,7 +216,9 @@ for bid, half in HALVES:
     for j, tb, hh in MT.bridge_frames(br, FPS):
         if hh != half or (js_only and j not in js_only):
             continue
-        loc, d, lens = MT.bridge_eval(br, half, key, tb)
+        if W.get("light_at"):
+            W["light_at"](br, tb)
+        loc, d, lens = MT.bridge_eval(br, half, k0, k1, tb)
         loc = Vector(loc)
         try:
             loc.z = max(loc.z, W["ground"](loc.x, loc.y) + 12.0)

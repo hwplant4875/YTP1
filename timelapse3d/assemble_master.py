@@ -8,10 +8,9 @@
 CPU only (PIL / numpy / ffmpeg).  Steps:
   1. extracts each segment's preview mp4 into renders/master/cache/ (used only where the PNG frames are missing,
      e.g. while the owning agent re-renders);
-  2. master_timeline.build(): trims every segment to its master window, slots the bridges, dark cards for missing parts;
+  2. master_timeline.build(): trims every segment to its master window, slots the connectors, dark cards for missing parts;
   3. resolves master_overlay.json (segment-local times -> master seconds; tracks of missing segments are dropped);
-  4. per frame: source frame (or card) -> cloud whiteout across each bridge apex (the world swap is hidden there) ->
-     hud2.compose with the master overlay and that frame's hudcam dump (name tags) -> ffmpeg stdin.
+  4. per frame: source frame (or card) -> hud2.compose with the master overlay and that frame's hudcam dump (name tags) -> ffmpeg stdin.
 """
 import argparse, json, math, os, subprocess, sys
 import numpy as np
@@ -96,8 +95,7 @@ for r in rows:
             ok = os.path.exists(p)
             FR.append(dict(src=p if ok else None, card=None if ok else [f"[ {s['label']} ]",
                            f"bridge half '{half}' ({s['halves'][half]['world']} world) not rendered yet", "bash render_bridge.sh"],
-                           cams=(MT.bridge_dir(s), j) if ok else None, seg=r["id"], lt=tb,
-                           cloud=dict(tb=tb, Ta=s["Ta"], half=half, id=s["id"])))
+                           cams=(MT.bridge_dir(s), j) if ok else None, seg=r["id"], lt=tb))
 for k, f in enumerate(FR):
     f["m"] = k / FPS
 TOTAL = len(FR) / FPS
@@ -193,58 +191,7 @@ def tracks_at(t):
         act.append(e)
     return act
 
-# ---------------------------------------------------------------- 4. clouds across each bridge apex
-rng = np.random.default_rng(846)
-def _fbm(w, h, oct_=5):
-    acc = np.zeros((h, w), np.float32); amp, tot = 1.0, 0.0
-    for o in range(oct_):
-        cw, ch = max(2, int(w / 2 ** (oct_ - o + 1))), max(2, int(h / 2 ** (oct_ - o + 1)))
-        a = Image.fromarray((rng.random((ch, cw)) * 255).astype(np.uint8)).resize((w, h), Image.BICUBIC)
-        acc += amp * np.asarray(a, np.float32) / 255; tot += amp; amp *= 0.55
-    acc /= tot
-    return (acc - acc.min()) / (acc.max() - acc.min())
-NOISE = [Image.fromarray((_fbm(1280, 720) * 255).astype(np.uint8)) for _ in range(2)]
-_MEAN = {}
-def frame_mean(path):
-    if path not in _MEAN:
-        _MEAN[path] = np.asarray(Image.open(path).convert("RGB").resize((32, 18)), np.float32).reshape(-1, 3).mean(0) if path else np.array([30, 30, 36.0])
-    return _MEAN[path]
-
-def cloud_tone(bid, half):
-    """Cloud colour on one side of the apex: the material's mean colour pulled toward overcast white (day) or a dark
-    blue-grey (night), so the whiteout matches the time of day on each side and the colour turns inside the cloud."""
-    fs = [f for f in FR if f.get("cloud") and f["cloud"]["id"] == bid and f["cloud"]["half"] == half and f.get("src")]
-    ref = fs[0]["src"] if (fs and half == "a") else (fs[-1]["src"] if fs else None)
-    m = frame_mean(ref)
-    lum = 0.3 * m[0] + 0.59 * m[1] + 0.11 * m[2]
-    base = np.array([226, 229, 234.0]) if lum > 70 else np.array([38, 44, 60.0])
-    return 0.3 * m + 0.7 * base
-TONES = {}
-
-def cloudify(img, c):
-    tb, Ta = c["tb"], c["Ta"]
-    d = abs(tb - Ta)
-    alpha = 1.0 if d <= 0.27 else max(0.0, 1.0 - hud2.ease((d - 0.27) / 0.85))
-    if alpha <= 0:
-        return img
-    key = (c["id"], "a"), (c["id"], "b")
-    for k in key:
-        if k not in TONES:
-            TONES[k] = cloud_tone(*k)
-    w = hud2.ease((tb - (Ta - 0.27)) / 0.54)
-    tone = TONES[key[0]] * (1 - w) + TONES[key[1]] * w
-    layers = []
-    for li, (nz, rate) in enumerate(zip(NOISE, (0.32, 0.55))):   # flying forward: the cloud texture grows from the centre
-        z = math.exp(rate * (tb - Ta)) * (1.25 + 0.4 * li)
-        W0, H0 = nz.size; cw, ch = W0 / z, H0 / z
-        x0, y0 = (W0 - cw) / 2 + 60 * li, (H0 - ch) / 2
-        layers.append(np.asarray(nz.crop((int(x0), int(y0), int(x0 + cw), int(y0 + ch))).resize((WW, HH), Image.BILINEAR), np.float32) / 255)
-    n = 0.6 * layers[0] + 0.4 * layers[1]
-    cov = np.clip(alpha * 1.9 - 0.9 + 0.9 * n, 0, 1)[..., None]
-    shade = (0.9 + 0.2 * n)[..., None]
-    a = np.asarray(img, np.float32)
-    out = a * (1 - cov) + (tone[None, None, :] * shade) * cov
-    return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8))
+# (4. the cloud whiteout was removed: STRICT ONE TAKE, HANDOFF 10/25 09:37 - seams are matched cameras)
 
 # ---------------------------------------------------------------- 5. encode
 r0, r1 = (0.0, TOTAL)
@@ -267,8 +214,6 @@ for k, f in enumerate(FR):
             img = img.resize((WW, HH), Image.LANCZOS)
     else:
         img = card_frame(f["card"], k)
-    if f.get("cloud") and f.get("src"):
-        img = cloudify(img, f["cloud"])
     act = tracks_at(f["m"]) if f.get("src") else []
     if act:
         cam = hudcam.load(*f["cams"]) if f.get("cams") else None

@@ -13,12 +13,14 @@ SEGMENTS is the canon order.  Each entry is either
   * a rendered SEGMENT owned by another agent: frames on disk, a source window [src_in, src_out] in the segment's own
     seconds (both ends inclusive: the frame at src_out is the bridge's start key, the frame at src_in the previous
     bridge's end key), its render command and its camera keys; or
-  * a BRIDGE (agent G, aot/render_bridge.py): a physical flight between two segments that do not share a scene.
-    climb half (rendered in the outgoing segment's world) -> APEX inside a cloud bank -> descend half (rendered in
-    the incoming segment's world).  Both halves are cubic Hermite curves in time with matched position, velocity,
-    look direction (+ its rate) and log-lens (+ its rate) at the segment keys, and a shared apex position/velocity, so
-    the camera is C1 through both seams.  The world swap happens at the apex under a 2D cloud whiteout
-    (assemble_master.py) - no hard cut, no visible dissolve.
+  * a CONNECTOR (agent G, aot/render_bridge.py): a flight between two segments, rendered in one or two spans.
+    STRICT ONE TAKE (HANDOFF 10/25 09:37): no clouds, wipes or dissolves.  Every seam is a matched camera: identical
+    position, direction, lens and velocity on both sides.  A span is a cubic Hermite in time between two keys (a
+    segment key evaluated inside Blender with that segment's own camera function, or an explicit SEAM key in world
+    coordinates).  Where the flight changes Blender scene, the seam is a WORLD-ONLY frame (moderate sky height,
+    looking down ~55 deg) where only aot/world.py content, identical in every scene, is in frame.
+World coordinates (aot/world.py, factor WORLD_K = 0.05): the Shiganshina / scene.py frame; the Trost frame is offset
+by TROST_DY = 5000 m (p_world = p_trost + (0, TROST_DY)).
 Video seconds = 30 fps final; previews run at 15 fps (frame index = round(t * fps)).  Bridge durations are multiples
 of 0.2 s so the keys land on frames at both 15 and 30 fps.
 Missing segments become short dark placeholder cards in the preview (PLACEHOLDER_S), but the budget always counts
@@ -151,55 +153,76 @@ def _const(path, name, default):
 
 # ======================================================================= the segments, canon order
 REPO_SH = "cd 'E:/YTP2/3D Timelapse/repo/timelapse3d' && "
+WORLD_K = float(os.environ.get("WORLD_K", "0.05"))
+TROST_DY = (480000.0 - 380000.0) * WORLD_K          # = world.SET_ORIGIN["trost"][1]
+def frame_of(world):
+    return "shig" if world in ("shig", "base_shig") else "trost"
+def w2f(p, frame):
+    return [p[0], p[1] - (TROST_DY if frame == "trost" else 0.0)] + list(p[2:])
+
+def _seam(loc, heading_deg, pitch_deg, speed, vz=0.0, lens=30.0, note=""):
+    h = math.radians(heading_deg); pch = math.radians(pitch_deg)
+    d = [math.cos(h) * math.cos(pch), math.sin(h) * math.cos(pch), math.sin(pch)]
+    t = -loc[2] / d[2] if d[2] < 0 else 300.0
+    return dict(loc=list(loc), look=[loc[0] + d[0] * t, loc[1] + d[1] * t, 0.0], lens=lens,
+                vel=[math.cos(h) * speed, math.sin(h) * speed, vz], ddir=[0, 0, 0], dlnlens=0.0, note=note)
+
+# SEAM KEYS in WORLD coordinates (Trost frame: y - TROST_DY).  Headings: 90 = north, 0 = east.
+SEAMS = {
+    "S0": dict(note="opening -> fall: same scene, render_fast keys()[-1] = render_fall first key (lead / A)"),
+    "S1": dict(loc=[8, -534, 94], look=[-34, -648, 0], lens=32.0, vel=[0, 0, 0], ddir=[0, 0, 0], dlnlens=0.0,
+               note="fall (seg 2) end = fall3 start, at rest (agent A, same scene)"),
+    "S2": dict(loc=[180, 165, 215], look=[232, 340, 0], lens=28.0, vel=[4, 42, 10], ddir=[0, 0, 0], dlnlens=0.0,
+               note="fall3 end (A, s 12.0, sunset; SEG3_END_LIGHT) = C1 start, same scene; exact key evaluated in Blender"),
+    "S3": _seam([150, 2300, 380], 90, -55, 350, note="C1 (scene.py+world) -> camps (interlude+world): WORLD-ONLY frame "
+                                                    "over Maria territory, 2.45 km from both towns; day light"),
+    "S5": _seam([1900, 0 + TROST_DY, 450], 210, -55, 300, vz=-40,
+                note="C2a (interlude) -> C2b (march scene): over Wall Rose 1.9 km east of Trost, looking SW; world-only frame"),
+    "S7": _seam([-2700, 900 + TROST_DY, 500], -11.5, -55, 306, vz=-40,
+                note="C3 (march scene) -> training (interlude): inside Rose, west of the training camp, world-only frame"),
+    "S8": _seam([-1000, 450 + TROST_DY, 320], -40, -60, 196, vz=-15,
+                note="training end (interlude, graduation night) -> Trost v=0 (render_trost, night -> dawn): steep look SE at "
+                     "world ground between the camp (behind) and Trost (just above the frame); world-only frame"),
+}
+TRAINING_CAMP_TROST = (-1450.0, 650.0)   # agent B's new CAMP centre (Trost frame): beside Trost, inside Rose
+
 INT_FRAMES = R + "/interlude/raw/int_%05d.png"
 SEGMENTS = [
-    dict(id="opening", label="1 Opening: tree -> Colossal -> kick (LOCKED)", owner="lead/opening", world="shiganshina",
-         frames=[R + "/opening_v4/fast_%05d.png"], cams=None, src_in=0.0, src_out=13.0 - 1 / 15, planned=13.0,
-         cmd=REPO_SH + "FPS=15 OUT='E:/YTP2/3D Timelapse/renders/opening_v4' bash render_fast.sh",
-         note="render_fast.py writes no hudcam dumps; renders/graphics/opening_v3_cam (v3 camera) is used for tags"),
-    dict(id="fall", label="2 The fall: houses, swarm, Carla", owner="A", world="shiganshina",
-         frames=[R + "/fall_frames/fall_%05d.png"], cams=None, src_in=0.0, src_out=13.2 - 1 / 15, planned=13.2,
-         cmd=REPO_SH + "FPS=15 bash render_fall.sh", note="continues render_fast's last key (fall a_keys()[0])"),
-    dict(id="fall3", label="3 Armored Titan, ferries, the vow", owner="A", world="shiganshina",
-         frames=[R + "/fall_frames3/fall3_%05d.png"], cams=None, src_in=0.0, src_out=None, planned=12.0,
-         cmd=REPO_SH + "SEG=3 FPS=15 bash render_fall2.sh"),
-    dict(id="fall4", label="4 Night pull-up, burning Shiganshina, grey belt", owner="A", world="shiganshina",
-         frames=[R + "/fall_frames45/seg4/fall4_%05d.png"], cams=None, src_in=0.0, src_out=None, planned=12.0,
-         cmd=REPO_SH + "SEG=45 FPS=15 bash render_fall2.sh"),
-    dict(id="fall5", label="5 Grisha in the forest (glitch at s 4.7)", owner="A", world="shiganshina",
-         frames=[R + "/fall_frames45/seg5/fall5_%05d.png"], cams=None, src_in=0.0, src_out=None, planned=5.0,
-         cmd=REPO_SH + "SEG=45 FPS=15 bash render_fall2.sh"),
-    dict(id="B1", bridge=True, label="Bridge 1: Grisha's forest (night) -> clouds -> plains south of Trost (846 day)",
-         a="fall5", b="camps", Ta=2.6, Tb=2.6,
-         halves=dict(a=dict(world="shig", state=("fall5", 5.0), apex=dict(rel=[0.0, 520.0, 880.0])),
-                     b=dict(world="interlude", state=("interlude", 0.4), apex=dict(rel=[60.0, -1320.0, 830.0]))),
-         apex_vel=[0.0, 560.0, 0.0], apex_lens=28.0),
-    dict(id="camps", label="6 Refugee camps 846 (interlude 0.4-5.2)", owner="B", world="interlude",
-         frames=[INT_FRAMES], cams=R + "/interlude/raw", src_in=0.4, src_out=5.2, planned=4.8,
-         cmd=REPO_SH + "bash render_interlude.sh", seg_time="interlude"),
-    dict(id="B2", bridge=True, label="Bridge 2: camps -> climb, turn over Wall Rose -> down to Trost's outer gate",
-         a="camps", b="march", Ta=2.4, Tb=2.6,
-         halves=dict(a=dict(world="interlude", state=("interlude", 5.2)), b=dict(world="march", state=("march", 0.0))),
-         apex=[-260.0, -60.0, 820.0], apex_vel=[160.0, -330.0, 0.0], apex_lens=28.0),
+    dict(id="opening", label="1 Opening: tree -> Colossal -> kick (LOCKED; re-render with ,world = no mountains)",
+         owner="lead/A", world="shig", frames=[R + "/opening_v4/fast_%05d.png"], cams=None, src_in=0.0,
+         src_out=13.0 - 1 / 15, planned=13.0, seam_out="S0",
+         cmd=REPO_SH + "FPS=15 OUT='E:/YTP2/3D Timelapse/renders/opening_v4' bash render_fast.sh"),
+    dict(id="fall", label="2 The fall: houses, swarm, Carla eaten (small, aerial)", owner="A", world="shig",
+         frames=[R + "/fall_frames/fall_%05d.png"], cams=None, src_in=0.0, src_out=None, planned=10.6, seam_out="S1",
+         cmd=REPO_SH + "FPS=15 bash render_fall.sh"),
+    dict(id="fall3", label="3 Armored rams the inner gate; aerial of ferries/refugees going north", owner="A",
+         world="shig", frames=[R + "/fall_frames3/fall3_%05d.png"], cams=None, src_in=0.0, src_out=None, planned=12.0,
+         seam_out="S2", cmd=REPO_SH + "SEG=3 FPS=15 bash render_fall2.sh"),
+    dict(id="C1", bridge=True, label="C1 long flight north across Wall Maria territory (sunset -> night -> day)",
+         halves=dict(a=dict(world="shig", T=7.0, k0=dict(state=("fall3", 12.0)), k1=dict(seam="S3"),
+                            state=("fall3", 12.0)))),
+    dict(id="camps", label="6 Over Trost to the refugee camps; fields cleared, food runs short (846)", owner="B",
+         world="interlude", frames=[INT_FRAMES], cams=R + "/interlude/raw", src_in=0.0, src_out=5.2, planned=5.2,
+         seam_in="S3 (B re-keys its start)", cmd=REPO_SH + "bash render_interlude.sh", seg_time="interlude"),
+    dict(id="C2", bridge=True, label="C2 camps -> over Wall Rose east of Trost -> down to Trost's outer gate",
+         halves=dict(a=dict(world="interlude", T=4.6, k0=dict(state=("interlude", 5.2)), k1=dict(seam="S5"),
+                            state=("interlude", 5.2)),
+                     b=dict(world="march", T=3.6, k0=dict(seam="S5"), k1=dict(state=("march", 0.0)),
+                            state=("march", 0.0)))),
     dict(id="march", label="7 The 250,000 march (THE key scene)", owner="F", world="march",
          frames=[R + "/march846/frames/march_%05d.png"], cams=R + "/march846/frames", src_in=0.0, src_out=18.0,
-         planned=18.0, cmd=REPO_SH + "bash render_march846.sh"),
-    dict(id="B3", bridge=True, label="Bridge 3: over the emptied plain -> north over Trost and Wall Rose -> the fields",
-         a="march", b="training", Ta=3.0, Tb=2.2,
-         halves=dict(a=dict(world="march", state=("march", 18.0)), b=dict(world="interlude", state=("interlude", 7.0))),
-         apex=[-260.0, -420.0, 960.0], apex_vel=[-200.0, 700.0, 0.0], apex_lens=28.0),
-    dict(id="training", label="8 Training camp 847-850, graduation (interlude 7.0-20.47)", owner="B", world="interlude",
+         planned=18.0, cmd=REPO_SH + "AOT_PLUGINS=world bash render_march846.sh"),
+    dict(id="C3", bridge=True, label="C3 high over the emptied plain -> north over Wall Rose -> beside the training camp",
+         halves=dict(a=dict(world="march", T=7.0, k0=dict(state=("march", 18.0)), k1=dict(seam="S7"),
+                            state=("march", 18.0)))),
+    dict(id="training", label="8 Training camp beside Trost 847-850, graduation night", owner="B", world="interlude",
          frames=[INT_FRAMES], cams=R + "/interlude/raw", src_in=7.0, src_out=307 / 15, planned=307 / 15 - 7.0,
-         cmd=REPO_SH + "bash render_interlude.sh", seg_time="interlude"),
-    dict(id="B4", bridge=True, label="Bridge 4: graduation night -> climb into cloud -> dawn over Trost (850)",
-         a="training", b="trost", Ta=3.0, Tb=3.0,
-         halves=dict(a=dict(world="interlude", state=("interlude", 307 / 15)), b=dict(world="trost", state=("trost", 0.8))),
-         apex=[-880.0, 880.0, 900.0], apex_vel=[260.0, -640.0, 0.0], apex_lens=28.0),
-    dict(id="trost", label="9 Trost 850 (v 0.8 -> end)", owner="C/D", world="trost",
+         seam_in="S7 (B re-keys)", seam_out="S8 (B re-keys)", cmd=REPO_SH + "bash render_interlude.sh",
+         seg_time="interlude"),
+    dict(id="trost", label="9 Trost 850 (from S8 at night; dawn over Trost)", owner="C/D", world="trost",
          frames=[R + "/trost/frames_p1/rt_%05d.png", R + "/trost/frames_p2/rt_%05d.png", R + "/trost/frames_p3/rt_%05d.png"],
-         cams=None, src_in=0.8, src_out=None, planned=None,
-         cmd=REPO_SH + "PART=1 bash render_trost.sh; PART=2 bash render_trost.sh; PART=3 bash render_trost.sh",
-         note="frames are rt_<global index>; parts 1-3 cover v 0-52, 52-98, 98-end"),
+         cams=None, src_in=0.0, src_out=None, planned=None, seam_in="S8 (C re-keys v=0)",
+         cmd=REPO_SH + "PART=1 bash render_trost.sh; PART=2 bash render_trost.sh; PART=3 bash render_trost.sh"),
 ]
 SEG = {s["id"]: s for s in SEGMENTS}
 
@@ -264,70 +287,83 @@ def seg_key(seg_id, t, fps=15):
         return key_static((260, -1920, 640), (0, -720, 40), 28, (0, 95, 22), "march846.CAM_OUT")
     return None
 
-# ======================================================================= bridges: path evaluation (shared with Blender)
+# ======================================================================= connectors: path evaluation (shared with Blender)
 D_LOOK = 300.0       # look point distance used to blend the look direction with a matched rate
 
-def bridge_apex(br, half, anchor):
-    """Apex (pos, vel, dir, lens) of one half in that half's world frame."""
-    h = br["halves"][half]
-    if "apex" in h:                      # cross-world bridge: apex relative to this half's own key
-        pos = add(anchor["loc"], h["apex"]["rel"])
-    else:
-        pos = list(br["apex"])
-    vel = list(br["apex_vel"])
-    hd = unit([vel[0], vel[1], 0.0])
-    d = unit([hd[0], hd[1], -0.62])      # forward and down: the cloud deck below / the land ahead
-    return dict(loc=pos, vel=vel, dir=d, ddir=[0, 0, 0], lens=br.get("apex_lens", 28.0), dlnlens=0.0)
+def seam_key(name, frame):
+    """Explicit seam key, converted to the given set frame ("shig" | "trost")."""
+    k = dict(SEAMS[name]); k["loc"] = w2f(k["loc"], frame); k["look"] = w2f(k["look"], frame)
+    k["dir"] = unit(sub(k["look"], k["loc"])); k["look_at"] = k["look"]; k["src"] = "seam " + name
+    return k
 
-def bridge_eval(br, half, anchor, tb):
-    """Camera (loc, dir, lens) at bridge time tb (0 = outgoing key, Ta = apex, Ta+Tb = incoming key) for one half.
-    anchor = the segment key of that half (outgoing key for 'a', incoming key for 'b'), in that world's frame."""
-    Ta, Tb = br["Ta"], br["Tb"]
-    ap = bridge_apex(br, half, anchor)
-    if half == "a":
-        p0, p1, T, t = anchor, ap, Ta, tb
-    else:
-        p0, p1, T, t = ap, anchor, Tb, tb - Ta
-    loc = herm(p0["loc"], p0["vel"], p1["loc"], p1["vel"], T, t)
-    l0 = add(p0["loc"], mul(p0["dir"], D_LOOK)); l1 = add(p1["loc"], mul(p1["dir"], D_LOOK))
-    m0 = add(p0["vel"], mul(p0.get("ddir", [0, 0, 0]), D_LOOK)); m1 = add(p1["vel"], mul(p1.get("ddir", [0, 0, 0]), D_LOOK))
+def span_start(br, half):
+    t = 0.0
+    for h in sorted(br["halves"]):
+        if h == half:
+            return t
+        t += br["halves"][h]["T"]
+    return t
+
+def bridge_total(br):
+    return sum(h["T"] for h in br["halves"].values())
+
+def bridge_eval(br, half, k0, k1, tb):
+    """Camera (loc, dir, lens) at connector time tb inside span `half`, between its keys k0 -> k1 (in that span's frame).
+    Position, look point (loc + D_LOOK * dir) and log-lens are Hermites with the keys' rates: C1 at both ends."""
+    T = br["halves"][half]["T"]; t = tb - span_start(br, half)
+    loc = herm(k0["loc"], k0["vel"], k1["loc"], k1["vel"], T, t)
+    l0 = add(k0["loc"], mul(k0["dir"], D_LOOK)); l1 = add(k1["loc"], mul(k1["dir"], D_LOOK))
+    m0 = add(k0["vel"], mul(k0.get("ddir", [0, 0, 0]), D_LOOK)); m1 = add(k1["vel"], mul(k1.get("ddir", [0, 0, 0]), D_LOOK))
     look = herm(l0, m0, l1, m1, T, t)
-    lens = math.exp(herm(math.log(p0["lens"]), p0.get("dlnlens", 0.0), math.log(p1["lens"]), p1.get("dlnlens", 0.0), T, t))
+    lens = math.exp(herm(math.log(k0["lens"]), k0.get("dlnlens", 0.0), math.log(k1["lens"]), k1.get("dlnlens", 0.0), T, t))
     return loc, unit(sub(look, loc)), lens
 
 def bridge_frames(br, fps):
-    """[(j, tb, half)]: bridge-local frames j = 1 .. N (the keys at tb = 0 and Ta+Tb belong to the segments)."""
-    n = int(round((br["Ta"] + br["Tb"]) * fps))
-    return [(j, j / fps, "a" if j / fps < br["Ta"] - 1e-9 else "b") for j in range(1, n)]
+    """[(j, tb, half)]: connector frames j = 1 .. N-1 (tb = 0 and the end belong to the segments).  A frame exactly on a
+    mid-connector seam belongs to the later span (both scenes render the same world-only image there)."""
+    n = int(round(bridge_total(br) * fps)); out = []
+    for j in range(1, n):
+        tb = j / fps; half = sorted(br["halves"])[0]
+        for h in sorted(br["halves"]):
+            if tb >= span_start(br, h) - 1e-9:
+                half = h
+        out.append((j, tb, half))
+    return out
 
 def bridge_dir(br):
     return f"{BRIDGES}/{br['id']}"
 
 def state_key(state):
-    """Key of a half's anchor: ("interlude" | "march" | "trost" | "fall5", segment time)."""
+    """Segment key for ("interlude" | "march" | "trost" | "fall3", segment time): Blender cache, dumps, constants."""
     k = key_cached(f"{state[0]}_{state[1]:.3f}")
     if k:
         return k
+    if state[0] == "fall3" and abs(state[1] - 12.0) < 1e-6:
+        return seam_key("S2", "shig")
     return seg_key("camps" if state[0] == "interlude" else state[0], state[1])
 
+def half_keys(br, half):
+    fr = frame_of(br["halves"][half]["world"])
+    def res(k):
+        return seam_key(k["seam"], fr) if "seam" in k else state_key(k["state"])
+    hd = br["halves"][half]
+    return res(hd["k0"]), res(hd["k1"])
+
 def bridge_check(br, fps=60):
-    """Speeds along both halves with the best available keys (for the report)."""
-    ka = seg_key(*br["halves"]["a"]["state"]) if br["halves"]["a"]["state"][0] != "interlude" else \
-        seg_key("camps" if br["a"] == "camps" else "training", br["halves"]["a"]["state"][1])
-    kb = seg_key(*br["halves"]["b"]["state"]) if br["halves"]["b"]["state"][0] != "interlude" else \
-        seg_key("camps" if br["b"] == "camps" else "training", br["halves"]["b"]["state"][1])
-    out = dict(id=br["id"], key_a=ka, key_b=kb)
-    if not ka or not kb:
-        return out
-    sp, zs, prev, ph = [], [], None, None
-    for j in range(0, int(round((br["Ta"] + br["Tb"]) * fps)) + 1):
-        tb = j / fps; half = "a" if tb < br["Ta"] else "b"
-        loc, d, lens = bridge_eval(br, half, ka if half == "a" else kb, tb)
-        if prev is not None and half == ph:          # the halves may live in different world frames (B1)
-            sp.append(norm(sub(loc, prev)) * fps)
-        prev, ph = loc, half; zs.append(loc[2])
-    out.update(v_max=max(sp), v_min=min(sp), z_max=max(zs), z_min=min(zs),
-               v_a=norm(ka["vel"]), v_b=norm(kb["vel"]), v_apex=norm(br["apex_vel"]))
+    out = dict(id=br["id"], spans=[])
+    for half in sorted(br["halves"]):
+        k0, k1 = half_keys(br, half)
+        if not k0 or not k1:
+            out["spans"].append(dict(half=half, missing=True)); continue
+        sp, zs, prev = [], [], None
+        t0 = span_start(br, half); T = br["halves"][half]["T"]
+        for j in range(int(round(T * fps)) + 1):
+            loc, d, lens = bridge_eval(br, half, k0, k1, t0 + j / fps)
+            if prev is not None:
+                sp.append(norm(sub(loc, prev)) * fps)
+            prev = loc; zs.append(loc[2])
+        out["spans"].append(dict(half=half, world=br["halves"][half]["world"], T=T, v0=norm(k0["vel"]),
+                                 v1=norm(k1["vel"]), v_max=max(sp), z_min=min(zs), z_max=max(zs)))
     return out
 
 # ======================================================================= master build
@@ -338,9 +374,9 @@ def build(fps=15):
         if s.get("bridge"):
             frs = bridge_frames(s, fps)
             have = sum(1 for j, _, _ in frs if os.path.exists(f"{bridge_dir(s)}/br_{j:05d}.png"))
-            planned = s["Ta"] + s["Tb"] - 1 / fps
-            r = dict(id=s["id"], kind="bridge", label=s["label"], n=len(frs), have=have, planned=planned,
-                     dur=len(frs) / fps, Ta=s["Ta"], Tb=s["Tb"],
+            planned = bridge_total(s) - 1 / fps
+            r = dict(id=s["id"], kind="connector", label=s["label"], n=len(frs), have=have, planned=planned,
+                     dur=len(frs) / fps, spans={h: (v["world"], v["T"]) for h, v in s["halves"].items()},
                      status="rendered" if have == len(frs) else ("partial %d/%d" % (have, len(frs)) if have else "not rendered"))
         else:
             i_in, i_out_p, i_out_a = seg_window(s, fps)
@@ -395,20 +431,28 @@ def report(fps=15, write=True):
     print("\nKEYS (first / last of each segment)")
     for sid, k in keys.items():
         print(f"  {sid:9s} first {_fmt_key(k['first'])}\n  {'':9s} last  {_fmt_key(k['last'])}")
-    print("\nBRIDGES")
+    print("\nSEAMS (world coordinates; Trost frame y - %.0f)" % TROST_DY)
+    for nm, k in SEAMS.items():
+        if "loc" in k:
+            print(f"  {nm}: loc {tuple(round(c) for c in k['loc'])} look {tuple(round(c) for c in k['look'])} lens {k['lens']:.0f} "
+                  f"vel {tuple(round(c) for c in k['vel'])} |v| {norm(k['vel']):.0f}  - {k['note']}")
+        else:
+            print(f"  {nm}: {k['note']}")
+    print("\nCONNECTORS")
     checks = []
     for s in SEGMENTS:
         if s.get("bridge"):
             c = bridge_check(s); checks.append(c)
-            if "v_max" in c:
-                print(f"  {s['id']}: {s['Ta'] + s['Tb']:.1f}s apex at {s['Ta']:.1f}s, |v| key {c['v_a']:.0f} -> apex {c['v_apex']:.0f} -> key {c['v_b']:.0f} m/s, "
-                      f"max {c['v_max']:.0f}, z {c['z_min']:.0f}..{c['z_max']:.0f} m  ({s['label']})")
-            else:
-                print(f"  {s['id']}: keys incomplete (a={'ok' if c['key_a'] else 'eval in Blender'}, b={'ok' if c['key_b'] else 'eval in Blender'})  ({s['label']})")
+            for sp in c["spans"]:
+                if sp.get("missing"):
+                    print(f"  {s['id']}{sp['half']}: keys need the Blender evaluation  ({s['label']})")
+                else:
+                    print(f"  {s['id']}{sp['half']} [{sp['world']}] {sp['T']:.1f}s |v| {sp['v0']:.0f} -> {sp['v1']:.0f} m/s, "
+                          f"max {sp['v_max']:.0f}, z {sp['z_min']:.0f}..{sp['z_max']:.0f} m  ({s['label']})")
     if write:
         os.makedirs(MASTER, exist_ok=True)
         json.dump(dict(fps=fps, rows=rows, keys=keys, planned_total=planned_total,
-                       bridges=[{k: v for k, v in c.items()} for c in checks]),
+                       connectors=checks, seams=SEAMS),
                   open(MASTER + "/master_timeline.json", "w"), indent=1, default=str)
     return rows, planned_total
 
