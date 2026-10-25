@@ -49,8 +49,6 @@ EREN_CLOAK = (0.13, 0.19, 0.07)                                  # green-tinted 
 BEATS = {
     "evacuation":   (2.0, 22.0),    # crowd jammed at the inner gate behind the cargo wagon; Mikasa; the crowd floods out
     "flood":        (2.0, 16.0),    # titans pour through the gate, squads deploy over the rooftops
-    "eren_eaten":   (7.5, 14.0),    # squad 34: Thomas grabbed, Eren's leg bitten, Armin grabbed, Eren swallowed
-    "squad_wiped":  (14.5, 17.5),   # a big titan sweeps a squad off a roof
     "hq_despair":   (17.0, 21.0),   # titans crowd the supply HQ; cadets stranded on the roofs around it
     "mikasa_falls": (21.0, 26.5),   # Mikasa's dash, out of gas, falls into a street; a titan closes in
     "attack_titan": (26.5, 44.0),   # the rogue titan appears (lightning) and kills titans on its way to the HQ
@@ -464,6 +462,12 @@ AT.POSES.setdefault("stride_a", dict(AT.POSES["stand"], feet={"R": (AT.V(1.4, 2.
 AT.POSES.setdefault("stride_b", dict(AT.POSES["stand"], feet={"R": (AT.V(1.4, -1.9, 0), -6), "L": (AT.V(-1.4, 2.3, 0), 6)},
                                        hands={"R": (AT.V(0.9, 1.9, -4.2), AT.V(0.4, -1, 0), "sh"), "L": (AT.V(-0.9, -1.4, -4.4), AT.V(-0.4, -1, 0), "sh")}))
 
+_HUNCH = [("spine.001_59", 22, 0, 0), ("spine.002_58", 20, 0, 0), ("spine.003_57", 14, 0, 0), ("spine.004_10", 4, 0, 0), ("Head_9", -18, 0, 0)]
+AT.POSES.setdefault("carry_a", dict(AT.POSES["carry"], hips=7.3, bend=_HUNCH,
+                                    feet={"R": (AT.V(1.6, 2.0, 0), -6), "L": (AT.V(-1.6, -1.6, 0), 6)}))
+AT.POSES.setdefault("carry_b", dict(AT.POSES["carry"], hips=7.3, bend=_HUNCH,
+                                    feet={"R": (AT.V(1.6, -1.6, 0), -6), "L": (AT.V(-1.6, 2.0, 0), 6)}))
+
 class ATDriver:
     """keys: (t, x, y, yaw or None (= face the motion), pose) - position eases between keys; pose 'walk' alternates the
     stride poses with the distance walked.  lie: (t0, t1) windows lying face down; vis windows; shifts (x, y, t0, dur)."""
@@ -475,19 +479,29 @@ class ATDriver:
     def key(self, t, xy, pose="stand", yaw=None):
         self.keys.append((t, float(xy[0]), float(xy[1]), yaw, pose)); self.keys.sort(key=lambda k: k[0])
 
+    def _cumd(self):
+        if getattr(self, "_cum_n", -1) != len(self.keys):
+            c = [0.0]
+            for a, b in zip(self.keys, self.keys[1:]):
+                c.append(c[-1] + math.hypot(b[1] - a[1], b[2] - a[2]))
+            self._cum, self._cum_n = c, len(self.keys)
+        return self._cum
+
     def state(self, t):
         ks = self.keys
+        cum = self._cumd()
         if t <= ks[0][0]:
             k = ks[0]; return np.array([k[1], k[2]]), k[3] if k[3] is not None else 0.0, k[4], 0.0
-        for a, b in zip(ks, ks[1:]):
+        for i_, (a, b) in enumerate(zip(ks, ks[1:])):
             if a[0] <= t < b[0]:
-                u = _ss(a[0], b[0], t) if b[4] != "walk" else (t - a[0]) / (b[0] - a[0])
+                u = _ss(a[0], b[0], t) if b[4] not in ("walk", "carrywalk") else (t - a[0]) / (b[0] - a[0])
                 p = np.array([a[1] + (b[1] - a[1]) * u, a[2] + (b[2] - a[2]) * u])
                 d = np.array([b[1] - a[1], b[2] - a[2]])
                 moving = np.linalg.norm(d) > 1.0
                 yaw = b[3] if b[3] is not None else (math.atan2(-d[0], d[1]) if moving else (a[3] or 0.0))
-                walked = np.linalg.norm(d) * u
-                return p, yaw, (b[4] if b[4] != "walk" or moving else "stand"), walked
+                walked = cum[i_] + np.linalg.norm(d) * u
+                still = {"walk": "stand", "carrywalk": "carry"}
+                return p, yaw, (b[4] if (b[4] not in still or moving) else still[b[4]]), walked
         k = ks[-1]
         return np.array([k[1], k[2]]), k[3] if k[3] is not None else 0.0, k[4], 0.0
 
@@ -524,6 +538,8 @@ class ATDriver:
         p, yaw, pose, walked = self.state(t)
         if pose == "walk":
             pose = "stride_a" if int(walked / 7.0) % 2 == 0 else "stride_b"
+        elif pose == "carrywalk":                        # hunched under the boulder, one heavy step per ~6 m
+            pose = "carry_a" if int(walked / 6.0) % 2 == 0 else "carry_b"
         lying = next(((a, b) for a, b in self.lie if a <= t < b), None)
         if lying:
             pose = "crouch"
@@ -697,15 +713,14 @@ def choreograph(site, seed=850):
     cand = np.array(cand)
     rel = (cand - gate) @ inw
     hubs_ok = cand[(rel > 50) & (rel < 330) & (np.hypot(cand[:, 0] - hq[0], cand[:, 1] - hq[1]) > 45)]
-    nflood = int(os.environ.get("TA_FLOOD", "29"))      # pours through the hole ~2-18 s
+    nflood = int(os.environ.get("TA_FLOOD", "32"))      # pour through the smashed gate FAST: ~2-12 s
     for k in range(nflood):
         ab = k in (5, 13, 21)
         name = f"f{k}"
         TT.add(name, H=(7.0 if ab else None), abnormal=ab, show=(1.5, 1e9), scale=KEY if k < 3 else 1.0)
-        if ab:
-            TT.specs[-1]["v"] *= 1.9
+        TT.specs[-1]["v"] *= 1.35 * (1.9 if ab else 1.0)       # they run in
         hub = hubs_ok[rnd.randrange(len(hubs_ok))]
-        t_in = 2.0 + 0.55 * k + rnd.uniform(-0.3, 0.3)
+        t_in = 2.0 + 0.31 * k + rnd.uniform(-0.15, 0.15)
         TT.leg(name, t_in, out_pt + side * rnd.uniform(-12, 12), hub)
     # titans crowding the supply HQ (already deep in the district when the camera gets there)
     ring = []
@@ -744,77 +759,6 @@ def choreograph(site, seed=850):
     for k, wp in enumerate(S.wall_pts[:8]):
         f = SQ.flyer(f"g{k}", "garrison", rnd.choice(["dark", "brown", "grey"]), rifle=True)
         f.stand(0.0, 74.0, wp, odm.yaw_of(np.append(-inw, 0)), "rifle")
-
-    # ------------------------------------------------ squad 34: Thomas grabbed, Eren's leg, Armin, Eren swallowed
-    e_roof_i, e_roof = S.roof_near(gate + inw * 165 + side * 30, used); used.add(e_roof_i)
-    a_roof_i, a_roof = S.roof_near(e_roof[:2] + side * 14, used); used.add(a_roof_i)
-    eren = SQ.flyer("eren", "cadet", "brown", accent=EREN_ACCENT, cloak=EREN_CLOAK)
-    armin = SQ.flyer("armin", "cadet", "blond", H=1.63)
-    thomas = SQ.flyer("thomas", "cadet", "ash")
-    mina = SQ.flyer("mina", "cadet", "black")
-    s34_start = [S.roof_near(e_roof[:2] + inw * k + side * s, used) for k, s in ((95, 0), (80, 10), (70, -8), (88, -14))]
-    for (_i, _r) in s34_start:
-        used.add(_i)
-    # titan that grabs Thomas: stands in a street beside the route
-    th_spot = S.snap(e_roof[:2] + inw * 40 + side * 18)
-    TT.add("thomas_t", H=11.0, keys=[(0, *(th_spot - inw * 90)), (6.0, *(th_spot - inw * 25)), (8.0, *th_spot), (60, *th_spot)], show=(3.0, 1e9))
-    TT.ev[-1]["grab"].append(8.6)
-    # the abnormal that leaps and bites off Eren's leg
-    ab_spot = S.snap(e_roof[:2] + inw * 12 + side * 6)
-    TT.add("biter", H=7.5, keys=[(0, *(ab_spot - inw * 100)), (7.6, *(ab_spot - inw * 6)), (9.2, *ab_spot), (60, *ab_spot)],
-           show=(4.0, 1e9), abnormal=True, skin=4, hair=0)
-    TT.ev[-1]["leap"] = (9.0, 1.4, 9.0)
-    # the bearded titan that swallows Eren
-    bd_spot = S.snap(a_roof[:2] + side * 10 - inw * 4)
-    TT.add("bearded", H=13.5, g=1.05, hs=1.1, beard=True, hair=1, scale=KEY,
-           keys=[(0, *(bd_spot + side * 80)), (9.5, *(bd_spot + side * 12)), (11.0, *bd_spot), (80, *bd_spot)], show=(4.0, 1e9),
-           face=tuple(a_roof[:2]))
-    TG = 10.6                                            # bearded grab: hand on Armin at TG+0.7, at the mouth by TG+2.0
-    TT.ev[-1]["grab"].append(TG)
-    # flights
-    for f, (_i, r0) in zip((eren, armin, thomas, mina), s34_start):
-        f.stand(3.0, 6.8, r0, odm.yaw_of(np.append(inw, 0)))
-    mid = S.roof_near(e_roof[:2] + inw * 35, used)[1]
-    eren.hop(6.8, 8.1, s34_start[0][1], mid).stand(8.1, 8.75, mid, odm.yaw_of(np.append(inw, 0)))
-    leg_pt = v3(mid) + np.array([*(inw * 18 + side * 4), 6.0])
-    eren.hop(8.75, 9.55, mid, leg_pt, apex=2.0)
-    eren.fall(9.55, 10.45, leg_pt, e_roof, spin=0.6)
-    eren.stand(10.45, 12.0, e_roof, odm.yaw_of(np.append(-side, 0)), "lie")
-    thomas.hop(6.9, 8.2, s34_start[2][1], v3(S.P(th_spot, 11.5)) - np.append(inw * 4, 0), apex=4.0)
-    thomas.follow(8.6 + 0.85, 8.6 + 2.35, lambda t: TT.hand("thomas_t", t) - np.array([0, 0, 1.6]), pose="flail")
-    thomas.gone(8.6 + 2.35)
-    mina.hop(7.0, 8.6, s34_start[3][1], S.roof_near(a_roof[:2] - side * 20, used)[1]).stand(8.6, 60.0, mina.end_pos(), 0.0, "kneel")
-    # Armin: perched -> grabbed (hand) -> lifted to the mouth -> thrown out by Eren -> back on the roof
-    armin.hop(6.9, 8.4, s34_start[1][1], a_roof).stand(8.4, TG + 0.7, a_roof, odm.yaw_of(np.append(side, 0)), "kneel")
-    armin.follow(TG + 0.7, TG + 2.05, lambda t: TT.hand("bearded", t) - np.array([0, 0, 1.4]), pose="flail")
-    armin.fall(TG + 2.15, TG + 2.95, np.zeros(3), a_roof, spin=1.0)    # start point patched after the sim (the mouth)
-    armin.stand(TG + 2.95, 20.0, a_roof, odm.yaw_of(np.append(side, 0)), "kneel")
-    # Eren: scrambles into the mouth (12.0-12.5), shoves Armin out, swallowed at 13.45
-    eren.follow(12.0, 13.45, lambda t: (v3(e_roof) * (1 - _ss(12.0, 12.5, t)) + TT.mouth("bearded", t) * _ss(12.0, 12.5, t))
-                - np.array([0, 0, 1.2]), pose="flail",
-                vis_fn=lambda t: 1.0 - 0.9 * _ss(13.0, 13.45, t))
-    eren.gone(13.45)
-
-    # ------------------------------------------------ a squad wiped off a roof (T 15.6)
-    w_i, w_roof = S.roof_near(gate + inw * 140 - side * 70, used); used.add(w_i)
-    sw_spot = S.snap(w_roof[:2] + side * 12)
-    TT.add("swatter", H=14.5, g=0.7, al=1.25, hs=0.8, skin=6, hair=None,
-           keys=[(0, *(sw_spot - inw * 80)), (12.5, *(sw_spot - inw * 14)), (14.6, *sw_spot), (80, *sw_spot)], show=(3.0, 1e9),
-           face=tuple(w_roof[:2]))
-    TT.ev[-1]["swat"].append(15.6)
-    TT.ev[-1]["grab"].append(16.2)
-    for m in range(3):
-        f = SQ.flyer(f"w{m}", "cadet", ["dark", "brown", "ash"][m])
-        p = v3(w_roof) + np.array([*(side * (m - 1) * 1.6), 0])
-        st = S.roof_near(w_roof[:2] - inw * 60, used); used.add(st[0])
-        f.stand(4.0, 9.0, st[1], 0.0).hop(9.0 + m * 0.2, 10.6 + m * 0.2, st[1], p)
-        f.stand(10.6 + m * 0.2, 15.65, p, odm.yaw_of(np.append(-side, 0)), "stand")
-        if m < 2:
-            land = S.P(w_roof[:2] - side * (14 + 6 * m) + inw * (m * 5 - 3))
-            f.fall(15.65, 16.6 + 0.2 * m, p, land, spin=1.2).gone(19.0)
-        else:
-            f.stand(15.65, 16.9, p, 0.0, "kneel")
-            f.follow(16.9, 18.6, lambda t: TT.hand("swatter", t) - np.array([0, 0, 1.6]), pose="flail").gone(18.6)
 
     # ------------------------------------------------ Mikasa's dash, out of gas, falls (T 21-26)
     M = S.d.get("fall_pt")
@@ -885,7 +829,9 @@ def choreograph(site, seed=850):
         spots = S.d.get("hq_titan_spots")
         p = v2(spots[k]) if spots else hq + np.array([math.cos(a) * w * 0.3, math.sin(a) * d_ * 0.3])
         nm = f"in{k}"
-        TT.add(nm, H=rnd.uniform(3.4, 5.0), keys=[(0, *p), (90, *p)], show=(14.0, 70.0), face=tuple(hq), scale=KEY)
+        pc = hq + (p - hq) / max(1e-3, np.linalg.norm(p - hq)) * rnd.uniform(5.0, 7.0)    # slowly gather under the lift
+        TT.add(nm, H=rnd.uniform(3.4, 5.0), keys=[(0, *p), (44.0, *p), (49.4, *pc), (90, *pc)], show=(14.0, 70.0), face=tuple(hq),
+               scale=KEY, v=1.2)
         TT.ev[-1]["blind"] = 49.65
         TT.ev[-1]["death"] = (51.05 + 0.04 * k, 1 if k % 2 else -1)
         lift7.append(nm)
@@ -925,8 +871,7 @@ def choreograph(site, seed=850):
     # ------------------------------------------------ flares
     FL_specs = []
     return dict(TT=TT, SQ=SQ, ATD=ATD, FL=FL, M=M, A0=A0, ring=ring, lift7=lift7, droppers=droppers, riflemen=riflemen,
-                e_roof=e_roof, a_roof=a_roof, used=used, rnd=rnd, dir_hq=dir_hq, perp_hq=perp_hq, route_end=route_end,
-                armin=armin)
+                used=used, rnd=rnd, dir_hq=dir_hq, perp_hq=perp_hq, route_end=route_end)
 
 
 def finish_choreography(C, site):
@@ -937,11 +882,6 @@ def finish_choreography(C, site):
     used = C["used"]
     w, d_, h = S.hq_size
     floor = S.g(hq)
-    # Armin thrown out of the mouth: patch the fall's start point
-    arm = C["armin"]
-    for k, s in enumerate(arm.seg):
-        if s[0] == "fall" and s[1] > 12.0 and s[1] < 13.5:
-            arm.seg[k] = ("fall", s[1], s[2], TT.mouth("bearded", s[1]) - np.array([0, 0, 1.0]), s[4], s[5])
     # droppers: rafters above each lift titan, dive on the nape at 50.4, ride it down
     for k, f in enumerate(C["droppers"]):
         s = f.seg.pop()
@@ -978,7 +918,7 @@ def finish_choreography(C, site):
     fwd = np.array([-math.sin(yawC), math.cos(yawC)])
     sideC = np.array([math.cos(yawC), math.sin(yawC)])
     # emerge: Eren rises out of the nape; Mikasa flies to him; Armin follows
-    eren2 = SQ.flyer("eren_nape", "cadet", "brown", accent=EREN_ACCENT, cloak=EREN_CLOAK)
+    eren2 = SQ.flyer("eren_nape", "cadet", "brown", accent=EREN_ACCENT, cloak=EREN_CLOAK, gear=False)
     eren2.follow(56.4, 58.0, lambda t: ATD.nape(t) + np.array([0, 0, -1.6 + 1.9 * _ss(56.4, 57.6, t)]), pose="flail",
                  vis_fn=lambda t: 1.0)
     mk = SQ.by_name["mikasa"]; cn = SQ.by_name["connie"]
@@ -988,8 +928,12 @@ def finish_choreography(C, site):
     mk.hop(30.0, 31.2, mk.end_pos(), mroof[1]).stand(31.2, 56.2, mroof[1], 0.0, "crouch")
     mk.hop(56.2, 57.3, mroof[1], ATD.nape(57.3)).stand(57.3, 58.0, ATD.nape(57.3), 0.0, "carry")
     # site key cannon_square: the Garrison corners the trio in an open square (a time cut after the emerge)
-    jump = "cannon_square" in S.d
-    Q = S.snap(v2(S.d["cannon_square"])) if jump else S.snap(C_pt + sideC * 13 - fwd * 3)
+    basin = S.d.get("basin")
+    jump = basin is not None or "cannon_square" in S.d
+    if basin is not None:                            # trost.CANNON_BASIN: the trio on the sunken floor
+        Q = v2(basin["trio"][:2])
+    else:
+        Q = S.snap(v2(S.d["cannon_square"])) if jump else S.snap(C_pt + sideC * 13 - fwd * 3)
     Qp = S.P(Q)
     to_q = lambda t, a: None
     if jump:   # hold on the corpse, then cut: the trio is already in the square
@@ -1008,13 +952,28 @@ def finish_choreography(C, site):
     else:
         armin2.stand(52.0, 57.6, ar_roof[1], 0.0, "stand").hop(57.6, 58.8, ar_roof[1], Qp + np.append(fwd * 0.9, 0))
     # Garrison ring + the cannon
-    cdir = np.array([math.cos(1.1), math.sin(1.1)])
-    cannon_xy = S.snap(Q + cdir * 34)
+    if basin is not None:
+        cannon_xy = v2(basin["cannon"][:2])
+    else:
+        cdir = np.array([math.cos(1.1), math.sin(1.1)])
+        cannon_xy = S.snap(Q + cdir * 34)
     cdir = (Q - cannon_xy) / np.linalg.norm(Q - cannon_xy)
     yaw_c = odm.yaw_of(np.append(cdir, 0))
     mk.stand(58.9, 68.0, Qp + np.append(sideC * 0.9, 0), yaw_c + math.pi, "crouch")
     armin2.stand(58.8, 63.9, Qp + np.append(fwd * 0.9, 0), yaw_c + math.pi, "crouch")
-    ring_n = 18
+    ring_n = 0 if basin is not None else 18
+    if basin is not None:                            # Garrison on the stepped banks, rifles on the trio
+        spots = []
+        for rows in (basin["steps_n"], basin["steps_s"]):
+            for ri, row in enumerate(rows):
+                if ri in (2, 4, 6):
+                    spots += row[(ri // 2) % 2::3]
+        for k, sp in enumerate(spots[:44]):
+            f = SQ.flyer(f"gr{k}", "garrison", rnd.choice(["dark", "brown", "grey", "ash"]), rifle=True)
+            pin = np.array([sp[0], sp[1], S.g(sp)])
+            pout = pin + np.array([0, 3.0 if sp[1] > Q[1] else -3.0, 1.5])
+            f.walk(58.6 + rnd.uniform(0, 0.6), 60.0, pout, pin, "run")
+            f.stand(60.0, 70.0, pin, odm.yaw_of(np.append(Q - pin[:2], 0)), "rifle")
     for k in range(ring_n):
         a = k / ring_n * math.tau
         p_out = Q + np.array([math.cos(a), math.sin(a)]) * 42
@@ -1026,8 +985,8 @@ def finish_choreography(C, site):
     kitz = SQ.flyer("kitz", "garrison", "bald", H=1.8)
     kitz.walk(59.0, 60.6, S.P(cannon_xy + cdir * -12 + np.array([cdir[1], -cdir[0]]) * 4), S.P(cannon_xy - cdir * 4 + np.array([cdir[1], -cdir[0]]) * 3))
     kitz.stand(60.6, 68.0, kitz.end_pos(), yaw_c, "wave")
-    # Armin's salute: out of the steam toward the guns
-    sal = Qp + np.append(cdir * 6.5, 0)
+    # Armin's salute: out of the steam toward the guns (on the stone landing in the basin)
+    sal = v3((basin["landing"][0], basin["landing"][1], S.g(basin["landing"]))) if basin is not None else Qp + np.append(cdir * 6.5, 0)
     armin2.walk(63.9, 64.8, Qp + np.append(fwd * 0.9, 0), sal, "run")
     armin2.stand(64.8, 70.0, sal, yaw_c + math.pi, "salute")
 
@@ -1042,14 +1001,29 @@ def finish_choreography(C, site):
     ATD.key(77.3, shift_pt, "roar", yaw_b)
     ATD.key(77.9, shift_pt, "punch", yaw_b + 0.6)          # berserk: swings at Mikasa
     ATD.key(78.8, shift_pt, "stand", yaw_b + 0.4)
+    route = [v2(p) for p in S.d.get("boulder_route", [])]
     near_b = Bxy - (Bxy - shift_pt) / np.linalg.norm(Bxy - shift_pt) * 7.0
     ATD.key(82.0, near_b, "walk")
     ATD.key(83.4, near_b, "crouch", yaw_b)
-    to_gate = (seal - near_b) / np.linalg.norm(seal - near_b)
+    if len(route) >= 2:                              # trost.BOULDER_ROUTE: boulder square -> avenue -> broken gate
+        last = route[-1] - route[-2]
+        to_gate = last / np.linalg.norm(last)
+        stop = seal - to_gate * 9.0
+        pts = [near_b] + [p for p in route[1:-1]] + [stop]
+    else:
+        to_gate = (seal - near_b) / np.linalg.norm(seal - near_b)
+        stop = seal - to_gate * 9.0
+        pts = [near_b, stop]
     yaw_g = odm.yaw_of(np.append(to_gate, 0))
-    ATD.key(84.4, near_b, "carry", yaw_g)
-    stop = seal - to_gate * 9.0
-    ATD.key(98.6, stop, "walk")
+    ATD.key(84.4, near_b, "carry", odm.yaw_of(np.append(pts[1] - pts[0], 0)))
+    # resample the route at ~10 m and walk it at a steady pace (stride poses alternate with the distance walked)
+    P = [pts[0]]
+    for a_, b_ in zip(pts, pts[1:]):
+        n_ = max(1, int(np.linalg.norm(b_ - a_) / 10.0))
+        P += [a_ + (b_ - a_) * (q / n_) for q in range(1, n_ + 1)]
+    P = np.array(P); seg = np.linalg.norm(np.diff(P, axis=0), axis=1); cum = np.concatenate([[0], np.cumsum(seg)])
+    for q in range(1, len(P)):
+        ATD.key(84.6 + (98.6 - 84.6) * cum[q] / cum[-1], P[q], "carrywalk")
     ATD.key(99.1, stop, "carry", yaw_g)
     ATD.key(100.6, stop, "crouch", yaw_g)
     ATD.key(140.0, stop, "crouch", yaw_g)
@@ -1066,7 +1040,7 @@ def finish_choreography(C, site):
     mk3.hop(84.0, 85.2, r2[1], S.roof_near(near_b + to_gate * 40 + side * 20, used)[1])
     # elite squad (Ian, Rico, Mitabi + 3) escorting, killing titans that close in
     elite = [SQ.flyer(n, "garrison", hc, scarf=False) for n, hc in (("ian", "dark"), ("rico", "grey"), ("mitabi", "brown"),
-                                                                     ("e3", "ash"), ("e4", "dark"), ("e5", "auburn"))]
+                                                                     ("e3", "ash"), ("e4", "dark"), ("e5", "auburn"), ("e6", "black"), ("e7", "brown"))]
     def at_xy(t):
         return ATD.state(t)[0]
     for k, f in enumerate(elite):
@@ -1082,7 +1056,7 @@ def finish_choreography(C, site):
             p = q; t += 2.2
         f.stand(t, 104.0, p, yaw_g, "stand")
     # titans closing in on the carry, cut down by the elite squad (dives on the napes)
-    esc_t = (88.0, 92.5, 96.0)
+    esc_t = (86.5, 89.0, 91.5, 94.0, 96.5)
     for k, t_d in enumerate(esc_t):
         tgt = at_xy(t_d) + side * (22 if k % 2 else -22) + to_gate * 10
         tgt = S.snap(tgt); frm = S.snap(tgt + side * (40 if k % 2 else -40) - to_gate * 20)
@@ -1091,7 +1065,7 @@ def finish_choreography(C, site):
     TT.sim(140.0)                         # the new titans must exist before their napes are sampled
     for k, t_d in enumerate(esc_t):
         nm = f"esc{k}"
-        f = elite[k]
+        f = elite[k if k != 1 else 6]                 # Rico keeps her flare for the seal
         # replace the hop that covers t_d with a dive onto this titan's nape
         f.seg = [s for s in f.seg if s[2] <= t_d - 0.8]
         p0 = f.end_pos()
@@ -1109,6 +1083,12 @@ def finish_choreography(C, site):
     # green / black: the morning advance (direction) and an abnormal sighting, early in the flood
     FL.add(3.2, S.wall_pts[min(4, len(S.wall_pts) - 1)] + np.array([0, 0, 2.0]), "black", up=100.0, seed=5, life=10.0)   # away from the gate hole
     FL.add(5.0, S.wall_pts[min(5, len(S.wall_pts) - 1)] + np.array([0, 0, 2.0]), "green", up=90.0, seed=6, life=10.0)
+    for k, wp in enumerate(sorted(S.wall_pts, key=lambda p: np.linalg.norm(p[:2] - gate))[:10]):
+        for q, off in enumerate((-4.0, 4.0)):
+            p = wp + np.array([*(side * off), 0.0])
+            f = SQ.flyer(f"cheer{k}_{q}", "garrison", rnd.choice(["dark", "brown", "grey", "ash"]))
+            f.stand(90.0, 102.7 + rnd.uniform(0, 0.6), p, odm.yaw_of(np.append(inw, 0)), "stand")
+            f.stand(102.7 + rnd.uniform(0.6, 1.2), 125.0, p, odm.yaw_of(np.append(inw, 0)), "wave")
     rico = SQ.by_name["rico"]
     rico.seg = [s for s in rico.seg if s[2] <= 100.0]
     rico.hop(100.0, 101.8, rico.end_pos(), rico_wall).stand(101.8, 112.0, rico_wall, odm.yaw_of(np.append(inw, 0)), "wave")
@@ -1127,7 +1107,7 @@ def finish_choreography(C, site):
     levi.spin(106.6, 107.75, lambda t: TT.nape("lv1", t), 6.0, 2.5, 0.2, turns=2.5)
     levi.follow(107.75, 112.0, lambda t: TT.crown("lv1", min(t, 109.0)) + np.array([0, 0, 0.1]), yaw_fn=lambda t: 0.0, pose="stand")
     # Armin pulls Eren from the nape; Mikasa joins
-    eren3 = SQ.flyer("eren_b", "cadet", "brown", accent=EREN_ACCENT, cloak=EREN_CLOAK)
+    eren3 = SQ.flyer("eren_b", "cadet", "brown", accent=EREN_ACCENT, cloak=EREN_CLOAK, gear=False)
     eren3.follow(102.8, 104.6, lambda t: ATD.nape(t) + np.array([0, 0, -1.2 + 1.2 * _ss(102.8, 104.2, t)]), pose="flail")
     eren3.stand(104.6, 112.0, eren3.end_pos(), 0.0, "lie")
     ar3.seg = [s for s in ar3.seg if s[1] < 104.0]
@@ -1213,9 +1193,9 @@ def setup(site_dict, seed=850, light=False, coll_name="TrostAction"):
     cs.add_many(62.0 + rnd.random(n) * 0.35, muzzle + rnd.normal(0, 0.8, (n, 3)), np.column_stack([cdir[0] * 6 + rnd.normal(0, 2, n), cdir[1] * 6 + rnd.normal(0, 2, n), rnd.random(n) * 1.5]),
                 r0=0.8, r1=4.5, life=6.0 + 3 * rnd.random(n), rise=0.6)
     Qz = site.g(Q)
-    n = 170
-    hs.add_many(62.3 + rnd.random(n) ** 2 * 1.4, np.column_stack([Q[0] + rnd.normal(0, 4, n), Q[1] + rnd.normal(0, 4, n), Qz + rnd.random(n) * 10]),
-                rnd.normal(0, 1.6, (n, 3)), r0=0.4, r1=1.8, life=1.2 + 1.0 * rnd.random(n), rise=4.0, alpha=0.35)
+    n = 420                                                           # LOTS of steam after the half-shift
+    hs.add_many(62.3 + rnd.random(n) ** 2 * 1.8, np.column_stack([Q[0] + rnd.normal(0, 4, n), Q[1] + rnd.normal(0, 4, n), Qz + rnd.random(n) * 10]),
+                rnd.normal(0, 2.2, (n, 3)), r0=0.6, r1=2.6, life=1.6 + 1.4 * rnd.random(n), rise=4.5, alpha=0.45)
     # steam off the Attack Titan's collapsed body + at both shifts
     nape = C["ATD"].nape
     n = 45
@@ -1233,6 +1213,13 @@ def setup(site_dict, seed=850, light=False, coll_name="TrostAction"):
         hs.add_many(te, np.column_stack([sx + np.cos(ang) * rr, sy + np.sin(ang) * rr, z + 1.0 + rnd.random(n) * 14.0]),
                     np.column_stack([np.cos(ang) * 1.5, np.sin(ang) * 1.5, 2.0 + rnd.random(n) * 4.0]),
                     r0=0.5, r1=2.0, life=0.9 + 0.9 * rnd.random(n), rise=5.0, alpha=0.3)
+    # the boulder drops into the breach: a big dust impact
+    dust = FX.PuffField("TA_SealDust", kind="dust", color=(0.52, 0.45, 0.34), alpha=0.75)
+    sx_, sy_ = C["seal"]; sz_ = site.g(C["seal"]); n = 300
+    ang = rnd.random(n) * 6.283; rr = 3.0 + rnd.random(n) * 7.0
+    dust.add_many(101.15 + rnd.random(n) ** 2 * 0.8, np.column_stack([sx_ + np.cos(ang) * rr, sy_ + np.sin(ang) * rr, sz_ + rnd.random(n) * 6.0]),
+                  np.column_stack([np.cos(ang) * (3 + 6 * rnd.random(n)), np.sin(ang) * (3 + 6 * rnd.random(n)), 1.0 + 3.0 * rnd.random(n)]),
+                  r0=1.5, r1=6.5, life=3.5 + 3.0 * rnd.random(n), rise=0.8)
     for p in C["pyre_pts"]:
         z = site.g(p)
         n = 320
@@ -1247,11 +1234,11 @@ def setup(site_dict, seed=850, light=False, coll_name="TrostAction"):
         tip = st["pos"] + np.array([math.cos(a) * 1.3, math.sin(a) * 1.3, 1.0])
         rs.add_many(49.6 + rnd.random(6) * 0.2, tip + rnd.normal(0, 0.2, (6, 3)), np.column_stack([np.full(6, math.cos(a) * 2), np.full(6, math.sin(a) * 2), np.zeros(6)]),
                     r0=0.12, r1=0.6, life=2.0, rise=0.3)
-    for f_ in (cs, hs, ps, pf, rs):
+    for f_ in (cs, hs, ps, pf, rs, dust):
         f_.build(coll)
     STATE.clear()
     STATE.update(site=site, C=C, coll=coll, TT=TT, SQ=C["SQ"], ATD=C["ATD"], FL=C["FL"], skel=skel, cannon=cannon, ball=ball,
-                 flash=flash, lift=lift, boulder=boulder, pyres=pyres, rflash=rflash, fields=(cs, hs, ps, pf, rs), muzzle=muzzle,
+                 flash=flash, lift=lift, boulder=boulder, pyres=pyres, rflash=rflash, fields=(cs, hs, ps, pf, rs, dust), muzzle=muzzle,
                  light=light, light0=None, timings=time.time() - t0, EV=EV, cut_state=None)
     if light:
         _light_capture()
@@ -1396,8 +1383,8 @@ def hero_pos(name, t):
     if name == "boulder":
         update_boulder(t); return np.array(S["boulder"].location)
     SQ = S["SQ"]
-    alias = {"eren": [("eren", 0, 14), ("eren_nape", 56, 70), ("eren_b", 102, 130)],
-             "mikasa": [("mikasa_gate", 0, 16.9), ("mikasa", 16.9, 74), ("mikasa_b", 74, 130)], "armin": [("armin", 0, 50), ("armin2", 50, 74), ("armin_b", 74, 130)],
+    alias = {"eren": [("eren_nape", 56, 70), ("eren_b", 102, 130)],
+             "mikasa": [("mikasa_gate", 0, 16.9), ("mikasa", 16.9, 74), ("mikasa_b", 74, 130)], "armin": [("armin2", 50, 74), ("armin_b", 74, 130)],
              "jean": [("jean", 0, 60), ("jean_dusk", 110, 130)], "marco": [("marco", 0, 60), ("marco_dead", 110, 130)]}
     for nm, a, b in alias.get(name, [(name, -1e9, 1e9)]):
         if a <= t < b and nm in SQ.by_name:
@@ -1415,7 +1402,7 @@ class Evac:
     the wagon is hauled through and the crowd floods out at a fixed throughput.  Pure function of t (0.2 s grid).
     Figures: swarm845's minimal civilians (person_geo + its palettes), drawn at `ps` x life size."""
     T0, T_MIK, T_PULL0, T_PULL1, T_END = 1.0, 10.6, 11.6, 13.4, 46.0
-    RATE = 22.0                 # people through the gate per second once it is clear (a flood)
+    RATE = 45.0                 # people through the gate per second once it is clear (a flood)
 
     def __init__(self, site, n=420, seed=846, ps=1.0):
         self.site, self.n, self.ps = site, n, ps
@@ -1443,7 +1430,7 @@ class Evac:
         cand = np.array([(Gd["xs"][i], Gd["ys"][j]) for i in range(Gd["nx"]) for j in range(Gd["ny"]) if Gd["W"][i, j]])
         rel = (cand - G) @ (-out)
         dd = np.hypot(*(cand - G).T)
-        cand = cand[(rel > 30) & (dd > 50) & (dd < 230)]
+        cand = cand[(rel > 25) & (dd > 35) & (dd < 170)]
         K = int(round(self.T_END / DT)) + 1
         T = np.arange(K) * DT
         PX = np.zeros((K, n)); PY = np.zeros((K, n))
@@ -1461,11 +1448,11 @@ class Evac:
             Q = np.vstack([P[:max(cut, 1)], J[k]])
             sq = np.concatenate([[0], np.cumsum(np.linalg.norm(np.diff(Q, axis=0), axis=1))])
             v = rnd.uniform(3.2, 5.2)
-            t0 = self.T0 + rnd.random() * 4.5 + (0.0 if k < n * 0.7 else rnd.random() * 5)
+            t0 = -rnd.uniform(0, 30) if k < n * 0.75 else rnd.uniform(0, 6)     # most were already on the way
             t_arr[k] = t0 + sq[-1] / v
             polys.append((Q, sq, v, t0))
         t_gate = self.T_PULL1 + 0.3 + np.arange(n) / self.RATE
-        vf = 3.4
+        vf = 4.8
         for k in range(n):
             Q, sq, v, t0 = polys[k]
             dJ = np.linalg.norm(J[k] - front)
@@ -1651,15 +1638,16 @@ def site_from_trost(T=None):
     gz = lambda x, y: T.ground_z(x, y) + (0.12 if T.in_district(x, y, 0.0) else 0.0)
     in_hq = getattr(T, "_in_hq", lambda x, y, p: False)
     roofs = roofs_from_scatter(ground=T.ground_z, margin_fn=lambda x, y: T.in_district(x, y, 20) and not in_hq(x, y, 4))
-    wall_pts = [(T.R * math.sin(a), -T.S - T.R * math.cos(a), L.WALL_H + 0.3) for a in (-0.06, 0.06, -0.1, 0.1, -0.14, 0.14, -0.18, 0.18)]
+    wall_pts = [(T.R * math.sin(a), -T.S - T.R * math.cos(a), L.WALL_H + 0.3) for a in np.linspace(-0.2, 0.2, 21) if abs(a) > 0.025]
     bt = T.BELL_TOWER
     return dict(gate=T.OUTER_GATE, inward=tuple(inw / np.linalg.norm(inw)), wall_z=L.WALL_H,
                 hq=hq["center"], hq_size=(w, d_, h), hq_roof=[], hq_cutaway_fn=getattr(T, "set_hq_cutaway", None),
                 hq_titan_spots=hq.get("titan_spots"),
-                boulder=T.BOULDER[:2], boulder_obj=bpy.data.objects.get("TrostBoulder"), boulder_r=max(T.BOULDER_SIZE) / 2.3,
+                boulder=T.BOULDER[:2], boulder_obj=bpy.data.objects.get("TrostBoulder"), boulder_r=max(T.BOULDER_SIZE) / 2.0 * 0.95,
                 boulder_origin="bottom", roofs=roofs, ground=gz, walkable=T.walkable,
                 bounds=(-T.W, T.W, T.OUTER_GATE[1] - 140.0, 140.0), pyre=T.PLAZA[:2], wall_pts=wall_pts,
                 inner_gate=T.INNER_GATE, inner_out=(0.0, 1.0), pyxis_pt=T.WALLTOP_SPEECH,
                 bell_tower=bt["xy"], bell_tower_top=bt.get("top_z", 64.0),
                 wagon_obj=bpy.data.objects.get("TrostCargoWagon"),
-                cannon_square=(T.INNER_GATE[0], -40.0))   # canon: the Garrison corners the trio near the wall
+                cannon_square=(T.INNER_GATE[0], -40.0),   # fallback when the set has no basin
+                basin=getattr(T, "CANNON_BASIN", None), boulder_route=getattr(T, "BOULDER_ROUTE", None))

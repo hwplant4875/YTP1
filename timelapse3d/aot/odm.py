@@ -67,7 +67,7 @@ CATS = ["jacket", "trousers", "boots", "skin", "HAIR", "CLOAK", "EM_A", "EM_B", 
 
 # ---------------------------------------------------------------- figure geometry (rig: 0 body, 1/2 legs, 3/4 upper arms,
 # 5/6 forearms (5 = right, x>0), 7 cloak; pivots in local (y, z), model faces +y)
-def figure_geo(g, i, kit, scarf=False, rifle=False, cravat=False, H=1.7, moustache=False, accent=False):
+def figure_geo(g, i, kit, scarf=False, rifle=False, cravat=False, H=1.7, moustache=False, accent=False, gear=True):
     s = H / 1.7
     hip, sh = 0.82 * s, 1.36 * s
     for side, part in ((-1, 1), (1, 2)):
@@ -75,9 +75,10 @@ def figure_geo(g, i, kit, scarf=False, rifle=False, cravat=False, H=1.7, moustac
         g.box((0.09 * s * side, 0.02 * s, hip * 0.17), (0.15 * s, 0.2 * s, hip * 0.34), 2, i, part, (0, hip), (0, 0), hip)
     g.box((0, 0, 1.08 * s), (0.36 * s, 0.22 * s, 0.6 * s), 0, i, 0, hip=hip, taper=0.92)           # jacket
     g.box((0, 0, 0.86 * s), (0.33 * s, 0.2 * s, 0.14 * s), 1, i, 0, hip=hip)                       # trousers top
-    for side in (-1, 1):                                                                         # ODM hip units
-        g.box((0.25 * s * side, -0.02 * s, 0.86 * s), (0.11 * s, 0.34 * s, 0.13 * s), 8, i, 0, hip=hip)
-    g.box((0, -0.15 * s, 0.95 * s), (0.28 * s, 0.08 * s, 0.12 * s), 8, i, 0, hip=hip)              # back housing
+    if gear:
+        for side in (-1, 1):                                                                     # ODM hip units
+            g.box((0.25 * s * side, -0.02 * s, 0.86 * s), (0.11 * s, 0.34 * s, 0.13 * s), 8, i, 0, hip=hip)
+        g.box((0, -0.15 * s, 0.95 * s), (0.28 * s, 0.08 * s, 0.12 * s), 8, i, 0, hip=hip)          # back housing
     if scarf:
         g.box((0, 0.0, 1.40 * s), (0.30 * s, 0.26 * s, 0.10 * s), 9, i, 0, hip=hip)
         g.box((0.06 * s, -0.16 * s, 1.22 * s), (0.08 * s, 0.05 * s, 0.32 * s), 9, i, 7, (-0.13 * s, sh), (0, 0), hip)
@@ -92,7 +93,7 @@ def figure_geo(g, i, kit, scarf=False, rifle=False, cravat=False, H=1.7, moustac
         g.box((0.23 * s * side, 0, sh - 0.15 * s), (0.09 * s, 0.10 * s, 0.32 * s), 0, i, pu, (0, sh), (0, 0), hip)
         g.box((0.23 * s * side, 0, sh - 0.45 * s), (0.08 * s, 0.09 * s, 0.30 * s), 0, i, pf, (0, sh), (0, sh - 0.3 * s), hip)
         g.box((0.23 * s * side, 0.01 * s, sh - 0.63 * s), (0.07 * s, 0.08 * s, 0.07 * s), 3, i, pf, (0, sh), (0, sh - 0.3 * s), hip)
-        if not rifle:   # blades: thin grey strips along the forearm, pointing back
+        if not rifle and gear:   # blades: thin grey strips along the forearm, pointing back
             g.box((0.23 * s * side, -0.12 * s, sh - 0.6 * s), (0.025 * s, 0.4 * s, 0.05 * s), 8, i, pf, (0, sh), (0, sh - 0.3 * s), hip)
     if rifle:
         g.box((0.17 * s, 0.05 * s, sh - 0.6 * s), (0.05 * s, 0.06 * s, 0.95 * s), 10, i, 5, (0, sh), (0, sh - 0.3 * s), hip)
@@ -153,9 +154,10 @@ def yaw_of(d):
 # ---------------------------------------------------------------- tracks
 class Flyer:
     def __init__(self, name, kit="cadet", hair="brown", scarf=False, rifle=False, cravat=False, H=1.7, scale=1.0, seed=0, moustache=False,
-                 accent=None, cloak=None):
+                 accent=None, cloak=None, gear=True):
         self.name, self.kit, self.hair, self.scarf, self.rifle, self.cravat = name, kit, hair, scarf, rifle, cravat
         self.moustache, self.accent, self.cloak = moustache, accent, cloak       # accent: emissive rgb; cloak: rgb override
+        self.gear = gear                                                          # False: no ODM units / blades (Eren out of the nape)
         self.H, self.scale = H, scale
         self.seg = []
         self.seed = seed
@@ -371,7 +373,7 @@ class Squads:
         hips = np.zeros(n)
         for i, f in enumerate(self.flyers):
             n0 = len(g.fc)
-            hips[i] = figure_geo(g, i, f.kit, f.scarf, f.rifle, f.cravat, f.H, f.moustache, f.accent is not None)
+            hips[i] = figure_geo(g, i, f.kit, f.scarf, f.rifle, f.cravat, f.H, f.moustache, f.accent is not None, f.gear)
             kit = KITS[f.kit]
             look = []
             for c in CATS:

@@ -159,10 +159,8 @@ def P3(xy, z=0.0):
 def shots():
     S = TA.STATE; C = S["C"]; site = S["site"]
     g, inw, side, hq = site.gate, site.inw, site.side, site.hq
-    er, ar = C["e_roof"], C["a_roof"]
     M, A0, Q, cxy = C["M"], C["A0"], C["Q"], C["cannon_xy"]
     stop, sp, P0 = C["stop"], C["shift_pt"], site.pyre
-    eye = (er[:2] + ar[:2]) / 2
     at = lambda t: S["ATD"].state(t)[0]
     L_ = []
     if "inner_gate" in site.d:
@@ -181,11 +179,6 @@ def shots():
         L_.append(("bell_tower", 27.5, 35.0, 1.6, _bt))
     L_.append(("flood", 3.0, 12.0, 1.6, lerp_cam((P3(g - inw * 60 + side * 120, 190), P3(g + inw * 120, 0), 30),
                                                   (P3(g - inw * 10 + side * 110, 170), P3(g + inw * 170, 0), 30))))
-    L_.append(("eaten", 7.6, 13.7, 2.4, lerp_cam((P3(eye - side * 55 - inw * 45, er[2] + 48), P3(eye + inw * 6, er[2] - 4), 34),
-                                                  (P3(eye - side * 45 - inw * 30, er[2] + 40), P3(eye, er[2] - 2), 40))))
-    wr = TA.STATE["SQ"].pos("w1", 15.0)
-    L_.append(("wiped", 14.9, 17.4, 1.1, lerp_cam((P3(wr[:2] - inw * 50 + side * 30, wr[2] + 40), P3(wr[:2], wr[2] - 4), 36),
-                                                   (P3(wr[:2] - inw * 42 + side * 22, wr[2] + 36), P3(wr[:2], wr[2] - 6), 36))))
     L_.append(("hq_despair", 17.0, 21.0, 1.1, lerp_cam((P3(hq - inw * 120 + side * 60, 130), P3(hq, 0), 32),
                                                         (P3(hq - inw * 100 + side * 30, 115), P3(hq, 0), 32))))
     L_.append(("mikasa", 21.6, 27.0, 1.5, lerp_cam((P3(M + side * 80 - inw * 20, 90), P3((M + hq) / 2, 0), 30),
@@ -244,7 +237,15 @@ sc.render.image_settings.file_format = "PNG"
 os.makedirs(B.ta_out, exist_ok=True)
 
 t0 = time.time()
-TA.setup(site(), light=True)
+if os.environ.get("TA_SITE") == "trost":            # agent C's Trost set (AOT_SET=trost): site from trost.py
+    import trost as TRS
+    TRS.set_hq_cutaway(False); TRS.set_wagon(True)
+    _hl = bpy.data.objects.get("TrostHQ_Lift")
+    if _hl:
+        _hl.hide_render = _hl.hide_viewport = True
+    TA.setup(TA.site_from_trost(TRS), light=True)
+else:
+    TA.setup(site(), light=True)
 print(f"[ta] setup {time.time() - t0:.1f}s", TA.info())
 cam = sc.camera
 if B.dry:
