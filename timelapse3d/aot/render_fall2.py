@@ -128,6 +128,9 @@ os.makedirs(OUT, exist_ok=True)
 sc.render.image_settings.file_format = "PNG"
 if sc.render.engine.startswith("BLENDER_EEVEE"):
     sc.eevee.taa_render_samples = int(os.environ.get("FALL_EEVEE_SAMPLES", "8"))
+    for o in bpy.data.objects:                       # dozens of fire lights overflow Eevee's shadow pool: no shadows
+        if o.type == "LIGHT" and o.name.startswith(("FireL", "FX_Flash")):
+            o.data.use_shadow = False
 else:
     cy = sc.cycles; cy.samples = B.fall_samples; cy.use_adaptive_sampling = True
     if os.environ.get("FAST_PREVIEW", "0") == "1":
@@ -153,6 +156,13 @@ def render(path):
         return
     bpy.ops.render.render(write_still=True)
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+try:
+    import hudcam
+except Exception as ex:
+    hudcam = None; print("[fall2] hudcam unavailable:", ex)
+TAGS = {}                      # label -> object name (name tags for hud2.py), set per segment
+
 def run(frames, pose, prefix, sub=""):
     """frames: list of s; pose(s) sets the scene. Writes <OUT>/<sub>/<prefix>_#####.png or stills."""
     od = os.path.join(OUT, sub) if sub else OUT
@@ -160,32 +170,44 @@ def run(frames, pose, prefix, sub=""):
     t_start = time.time()
     for i, s in enumerate(frames):
         t0 = time.time(); pose(s); tp = time.time() - t0
+        i = int(round(s * B.fps)) if not B.times else i
         name = f"{prefix}_{i:05d}.png" if not B.times else f"{prefix}_s{s:05.2f}.png"
+        if hudcam:                                   # camera + name-tag anchors for hud2.py (rig origin = feet)
+            tr = [v for v in TAGS.values() if bpy.data.objects.get(v)]
+            hudcam.dump(sc, i, od, t=s, track=tr, name=None if not B.times else name[:-4],
+                        extra={"segment": prefix, "labels": {k: v for k, v in TAGS.items() if v in tr}, "anchor": "rig origin = feet"})
         render(os.path.join(od, name))
         print(f"[fall2] {prefix} s={s:.2f} -> {name} (pose {tp:.1f}s, frame {time.time() - t0:.1f}s, total {time.time() - t_start:.0f}s)")
 
 def frame_list(s1):
     if B.times:
         return [float(x) for x in B.times.split(",") if x.strip()]
-    return [j / B.fps for j in range(int(round(s1 * B.fps)))]
+    j0 = int(round(float(os.environ.get("FALL2_S0", "0")) * B.fps))      # FALL2_S0: re-render a tail only
+    return [j / B.fps for j in range(j0, int(round(s1 * B.fps)))]
 
 # ================================================================ SEGMENT 3: the Armored, ferries, the vow
 SEG3 = 12.0
-IMPACT = 3.4
+# light at segment 3's end (constant over the segment): agent G's long flight starts from exactly this
+SEG3_END_LIGHT = dict(sun_elevation_deg=float(os.environ.get("FALL_SUN_EL", "4")), sun_azimuth_deg=float(os.environ.get("FALL_SUN_AZ", "245")),
+                      sun_color=(1.0, 0.50, 0.20), sun_energy=float(os.environ.get("CARLA_SUN_E", "4.2")),
+                      exposure=float(os.environ.get("EXPO", "-1.5")),
+                      sky_ramp=((1.0, 0.62, 0.22, 1.0), (0.95, 0.66, 0.38, 1.0)), view_transform="scene.py default (VT env)")
+IMPACT = 5.0
 FXT = 100.0              # fx845 time base: the kick FX are long settled; the inner burst is registered at FXT + IMPACT
-FERRY_V = 2.2
+FERRY_V = 6.0              # timelapse
 LEAD_S0 = 30.0
 
 def seg3_build():
     S = {}
-    # light: dusk (continues the sunset of the Carla beat)
-    set_sun(6.0, 200.0, (1.0, 0.54, 0.32), 3.2)
+    # light: the golden low sun of render_fall's end (same values: the seam must match)
+    set_sun(float(os.environ.get("FALL_SUN_EL", "4")), float(os.environ.get("FALL_SUN_AZ", "245")), (1.0, 0.50, 0.20),
+            float(os.environ.get("CARLA_SUN_E", "4.2")))
     w = sc.world
     if w and w.use_nodes:
         for nd in w.node_tree.nodes:
             if nd.type == "VALTORGB":
                 e = nd.color_ramp.elements
-                e[0].color = (1.0, 0.46, 0.20, 1); e[1].color = (0.30, 0.30, 0.52, 1)
+                e[0].color = (1.0, 0.62, 0.22, 1); e[1].color = (0.95, 0.66, 0.38, 1)
     # the Armored Titan
     import shifters as SH
     t0 = time.time()
@@ -201,7 +223,8 @@ def seg3_build():
     # inner gate pieces (states845 armored build): shown only from the impact on
     S["inner_mods"] = [m for m in bpy.data.objects["InnerGate"].modifiers if m.type == "BOOLEAN"] if bpy.data.objects.get("InnerGate") else []
     S["inner_after"] = [o for o in bpy.data.objects if o.name.startswith(("InnerGate_Grime", "InnerDust"))]
-    hl = bpy.data.objects.get("InnerHoleLight")      # the light card reads as a white slab from the south side
+    hl = bpy.data.objects.get("InnerHoleLight")      # the hole full of light (anime ep02 10:22): shown only once the dust
+    S["hole_light"] = hl                             # of the ram thins (before that it reads as a white slab)
     if hl:
         hl.hide_render = True
         if FX:
@@ -240,29 +263,11 @@ def seg3_build():
         rb = random.Random(30 + i); rb.uniform(14, 17); Bb = rb.uniform(3.6, 4.1)
         S["ferries"].append((ob, Lb, s0, side))
         S.setdefault("bb", []).append(Bb)
-    ob, Lb, s0, side = S["ferries"][1]
-    ferry_place(ob, s0, side, 0.0)
-    bpy.context.view_layer.update()
-    er, mk = SC.make_kids("Boat")
-    mw = ob.matrix_world; d = Vector((math.cos(ob.rotation_euler.z), math.sin(ob.rotation_euler.z), 0))
-    ks = float(os.environ.get("FALL_KIDS_SCALE", "2.0"))     # read from the sky: kids ~2x (like the swarm's pscale)
-    for kid, lx, ly, yo in ((er, Lb / 2 - 2.0, 0.2, 0.0), (mk, Lb / 2 - 3.3, -0.7, -0.5)):
-        p = mw @ Vector((lx, ly, 0.95))
-        SC._place(kid, p.x, p.y, SC._yaw_to(-d) + yo, z=p.z)  # facing back toward the burning town
-        kid.scale = tuple(v * ks for v in kid.scale)
-        r, o = SC.p_stand(0.0)
-        if kid is er:                                   # fist clenched at his side, head down: the vow
-            r["upperarm01.R"] = SC._Ra(x=-0.25, y=-(SC.LOWER - 0.1)); r["lowerarm01.R"] = SC._R(x=-1.2)
-            r["neck01"] = SC._R(x=-0.15)
-        SC._pose(kid, r, o, ground=True)
-        bpy.context.view_layer.update()
-        kid.parent = ob; kid.matrix_parent_inverse = ob.matrix_world.inverted()
-    S["kids"] = (er, mk)
     # refugees on every ferry (minimal swarm figures riding the ferry transforms; a gap at the lead bow for the kids)
     slots = []
     rnd = random.Random(17)
     for fi, (ob, Lb, s0, side) in enumerate(S["ferries"]):
-        Bb = S["bb"][fi]; gap = 4.5 if fi == 1 else 0.0
+        Bb = S["bb"][fi]; gap = 0.0
         nx_, ny_ = int((Lb - 3.2 - gap) / 0.75), int((Bb - 0.9) / 0.7)
         for a in range(nx_):
             for b in range(ny_):
@@ -289,6 +294,58 @@ def seg3_build():
     S["gate"] = MiniCrowd("GateRun", 140, 9, coll)
     S["G"] = np.array([(rnd.uniform(-5, 5), rnd.uniform(-90, -12), rnd.uniform(-60, 60), rnd.uniform(30, 120), rnd.uniform(3.0, 4.5), rnd.uniform(0, 2.5))
                        for _ in range(140)])
+    # a REAL gate in the flat gatehouse before the ram: plank door + iron portcullis bars (user 10/25)
+    import bmesh
+    wood = L.mat("Gate_wood", (0.20, 0.12, 0.06), 0.85); iron = L.mat("Gate_iron", (0.07, 0.07, 0.08), 0.5)
+    bm = bmesh.new()
+    gw, gh = L.GATE_W - 0.4, L.GATE_H - 0.3
+    for k in range(9):                               # vertical planks
+        L.box(bm, (-gw / 2 + gw * (k + 0.5) / 9, -4.2, gh / 2), (gw / 9 - 0.08, 0.5, gh), mi=0)
+    for z in (2.5, 7.5, 12.5, 17.5):                 # iron bands
+        L.box(bm, (0, -4.55, z), (gw, 0.2, 0.5), mi=1)
+    for k in range(7):                               # portcullis bars in front
+        L.box(bm, (-gw / 2 + gw * (k + 0.5) / 7, -5.0, gh / 2), (0.3, 0.3, gh), mi=1)
+    door = L.obj_from_bm("InnerGateDoorReal", bm, [wood, iron], coll)
+    door.location.z = L.height(0, -4) + 0.05
+    S["door"] = door
+    if FX:                                           # the door explodes: planks and bars thrown north with the stones
+        rnd = random.Random(44)
+        for k in range(22):
+            bm = bmesh.new()
+            if k % 3 == 2:
+                L.box(bm, (0, 0, 0), (0.3, 0.3, rnd.uniform(3, 8)), mi=1)
+            else:
+                L.box(bm, (0, 0, 0), (rnd.uniform(1.0, 1.6), 0.5, rnd.uniform(2.5, 7)), mi=0)
+            ob = L.obj_from_bm(f"DoorPlank{k}", bm, [wood, iron], coll)
+            p0 = Vector((rnd.uniform(-6, 6), -4.0, rnd.uniform(2, 17)))
+            dd = rnd.uniform(25, 120); a = rnd.uniform(-0.9, 0.9)
+            p1 = Vector((p0.x + math.sin(a) * dd, p0.y + math.cos(a) * dd, 0.0)); p1.z = L.height(p1.x, p1.y) + 0.3
+            FX.add_block(ob, FXT + IMPACT + rnd.uniform(0, 0.08), 0.7 + dd / 120, p0, p1, rnd.uniform(6, 22),
+                         Vector((math.sin(a), math.cos(a), 0)) * rnd.uniform(2, 8), 400 + k, spin=(3.0, 8.0))
+    try:                                             # dust CARDS bursting out of both sides of the hole
+        import smokecards as SMK
+        dc = SMK.SmokeCards("BreachDust")
+        rnd = np.random.default_rng(5)
+        n = 160
+        te = IMPACT + rnd.uniform(0, 0.5, n)
+        pos = np.c_[rnd.uniform(-8, 8, n), rnd.uniform(-8, 8, n), rnd.uniform(1, 20, n)]
+        vel = np.c_[rnd.uniform(-14, 14, n), np.where(rnd.random(n) < 0.75, rnd.uniform(6, 30, n), rnd.uniform(-18, -4, n)), rnd.uniform(0, 7, n)]
+        dc.add_many(te, pos, vel, 3.0, 16.0, 6.0, 1.5, kind="dust", alpha=0.85, tau=0.8)
+        dc.build(coll); S["dustcards"] = dc
+    except Exception as ex:
+        print("[fall2] dust cards failed:", ex)
+    # refugees fleeing north over Wall Maria's land: the road north of the gate and along the canal (true scale)
+    n = int(os.environ.get("FALL_REF_N", "420"))
+    S["ref"] = MiniCrowd("Refugees", n, 31, coll)
+    rnd = random.Random(29)
+    R = []
+    for i in range(n):
+        if i % 3:
+            y0 = rnd.uniform(40, 520); x0 = math.sin(((y0 - 6) / 120) / 9) * 120 * ((y0 - 6) / 120 / 40) + rnd.uniform(-9, 9)
+        else:
+            y0 = rnd.uniform(30, 480); x0 = SC.canal_at(max(0.0, y0 - 8))[0].x - L.CANAL_W / 2 - rnd.uniform(3, 16)
+        R.append((x0, y0, rnd.uniform(1.1, 1.7), rnd.uniform(-0.15, 0.15)))
+    S["R"] = np.array(R)
     S["cam"] = seg3_cam_keys(S)
     return S
 
@@ -302,28 +359,26 @@ def ferry_place(ob, s0, side, s):
 def armored_y(s):
     if s < IMPACT:
         u = s / IMPACT
-        return -170.0 + 161.0 * (0.35 * u + 0.65 * u * u)
+        return -190.0 + 181.0 * (0.4 * u + 0.6 * u * u)
     return -9.0 + 17.0 * (1 - math.exp(-(s - IMPACT) / 0.6))
 
+SEAM_IN = ((8.0, L.OUTER_GATE[1] + 186, 94.0), (-34.0, L.OUTER_GATE[1] + 72, 0.0), 32.0)   # = render_fall's last key (at rest)
+
 def seg3_cam_keys(S):
-    def boatcam(s, ahead, up, side_, k_t, lens=34.0):
-        ob, Lb, s0, sd = S["ferries"][1]
-        p, d = SC.canal_at(s0 + FERRY_V * s)
-        nrm = Vector((-d.y, d.x)); p = p + nrm * sd
-        bow = Vector((p.x, p.y, L.height(p.x, p.y) + 2.5)) + Vector((d.x, d.y, 0)) * (Lb / 2 - 2.5)
-        gate = Vector((0.0, 0.0, 14.0))
-        loc = bow + Vector((d.x, d.y, 0)) * ahead + Vector((nrm.x, nrm.y, 0)) * side_ + Vector((0, 0, up))
-        tgt = bow.lerp(gate, k_t)
-        return (s, tuple(loc), tuple(tgt), lens)
+    """Sky observer at a moderate height, one take: from render_fall's last pose up the avenue behind the charge,
+    the ram, over the wall, then north with the boats and the refugees (ends moving north ~40 m/s: hand-off to G)."""
+    l0, t0, n0 = SEAM_IN
     ks = [
-        (0.0, (48, -250, 62), (0, -95, 8), 30),            # behind and to the side of the charge, the gate ahead
-        (IMPACT, (36, -95, 48), (0, -4, 16), 30),           # closing on the impact
-        (5.8, (300, -70, 150), (215, 75, 0), 30),           # rising over the wall: the jammed bank, the ferries
-        boatcam(8.0, 13, 6.5, -6, 0.02),                    # the vow hold (3 s, slow drift): just ahead of the lead
-        boatcam(11.0, 15.5, 8.0, -9, 0.035),                # ferry over the water, the kids at the bow facing the burning town
-        boatcam(SEG3, 70, 90, 20, 0.3, 28.0),               # crane up over the ferries
+        (-1.0, l0, t0, n0),                                  # (guide: at rest at the seam)
+        (0.0, l0, t0, n0),
+        (3.0, (60, -300, 120), (0, -90, 0), 32),             # flying north up the avenue, the Armored charging ahead
+        (IMPACT, (55, -170, 110), (0, -10, 10), 32),         # the shoulder ram into the intact gate
+        (7.0, (60, -40, 165), (20, 120, 0), 30),             # rising over the wall
+        (9.5, (165, 60, 190), (226, 230, 0), 28),            # north over the canal: ferries, the jammed bank, refugees
+        (SEG3, (180, 165, 215), (232, 340, 0), 28),
+        (SEG3 + 1.0, (184, 207, 225), (234, 384, 0), 28),    # (guide: keeps moving north ~42 m/s for the hand-off)
     ]
-    return guide(ks)
+    return ks
 
 def seg3_pose(S, s):
     if FX:
@@ -335,11 +390,16 @@ def seg3_pose(S, s):
     for o in S["inner_after"]:
         if o.hide_render != (not burst):
             o.hide_render = not burst
-    if S["inner_door"] and S["inner_door"].hide_render != burst:
-        S["inner_door"].hide_render = burst
+    if S["door"].hide_render != burst:
+        S["door"].hide_render = burst
+    hl = S.get("hole_light")
+    if hl and hl.hide_render != (s < IMPACT + 0.7):
+        hl.hide_render = s < IMPACT + 0.7
+    if S.get("dustcards"):
+        S["dustcards"].update(s)
     # the Armored: charge (head down, shoulder first), then stands in the burst gate
     rig = S["arm"]; y = armored_y(s)
-    dist = (y + 170.0)
+    dist = (y + 190.0)
     p = (dist / 26.0) % 1.0 if s < IMPACT + 0.8 else 0.22
     rots, off = PT._gait(rig, p, amp=1.0 if s < IMPACT + 0.5 else max(0.0, 1 - (s - IMPACT - 0.5) / 0.5))
     off, _, _ = PT._ground(rig, rots, off)
@@ -356,9 +416,11 @@ def seg3_pose(S, s):
             print("[fall2 dbg] body world bbox", [round(min(w[i] for w in ws), 1) for i in range(3)], [round(max(w[i] for w in ws), 1) for i in range(3)],
                   "users_collection", [cc.name for cc in c.users_collection], "visible_camera", c.visible_camera)
             ce.to_mesh_clear()
-    rig.rotation_euler = (0.2 if s < IMPACT + 0.4 else 0.2 * (1 - smooth(IMPACT + 0.4, IMPACT + 1.4, s)), 0.0, math.pi)
+    ram = smooth(IMPACT - 1.2, IMPACT - 0.3, s) * (1 - smooth(IMPACT + 0.6, IMPACT + 1.6, s))   # lowered-shoulder ram
+    lean = 0.2 if s < IMPACT + 0.4 else 0.2 * (1 - smooth(IMPACT + 0.4, IMPACT + 1.4, s))
+    rig.rotation_euler = (lean + 0.15 * ram, 0.28 * ram, math.pi + 0.75 * ram)
     # swarm: the district behind (titans keep wandering / eating); sim t continues from segment 2
-    SW.update(68.0 + 1.5 * s, pscale=1.3)
+    SW.update(68.0 + 1.5 * s, pscale=1.0)          # user rule: true scale
     # ferries + their refugees
     for ob, Lb, s0, side in S["ferries"]:
         ferry_place(ob, s0, side, s)
@@ -391,11 +453,16 @@ def seg3_pose(S, s):
     l1 = np.linalg.norm(gatep - start, axis=1); l2 = np.linalg.norm(goal - gatep, axis=1)
     u1 = np.clip(d / l1, 0, 1)[:, None]; u2 = np.clip((d - l1) / l2, 0, 1)[:, None]
     P = np.where((d < l1)[:, None], start + (gatep - start) * u1, gatep + (goal - gatep) * u2)
-    vis = np.where(s >= IMPACT + 0.8, 1.3, 0.0) * np.ones(m)
+    vis = np.where(s >= IMPACT + 0.8, 1.0, 0.0) * np.ones(m)
     dirv = np.where((d < l1)[:, None], gatep - start, goal - gatep)
     yaw = np.arctan2(-dirv[:, 0], dirv[:, 1])
     mvg = np.where((d > 0) & (d < l1 + l2), 1.0, 0.0)
     S["gate"].set(np.c_[P, np.full(m, 0.2)], yaw, d, mvg, vis=vis)
+    # refugees walking north (timelapse x3)
+    R = S["R"]; nr = len(R)
+    yr = R[:, 1] + R[:, 2] * 3.0 * s; xr = R[:, 0] + R[:, 3] * 3.0 * s
+    zr = np.array([L.height(a, b) + 0.05 for a, b in zip(xr, yr)])
+    S["ref"].set(np.c_[xr, yr, zr], np.full(nr, 0.0) - R[:, 3], R[:, 2] * 3.0 * s, np.ones(nr), stride=1.5 * S["ref"].h * 3.0)
     # camera (+ impact shake)
     loc, tgt, lens = spline_cam(S["cam"], s)
     if IMPACT <= s < IMPACT + 0.8:
@@ -491,7 +558,7 @@ def seg4_pose(S, s):
         FX.update(FXT + 30.0 + s)
     for c in S.get("cards", ()):
         c.update(s, wind=(1.5, 3.0))
-    SW.update(120.0 + 3.0 * s, pscale=1.4)
+    SW.update(120.0 + 3.0 * s, pscale=1.0)
     if S["front"] is not None:
         S["front"].outputs[0].default_value = -400.0 + 7200.0 * smooth(2.5, SEG4, s) ** 1.3
     T = S["T"]; n = len(T)
@@ -619,6 +686,7 @@ def seg5_pose(S, s):
 # ================================================================ main
 if B.seg == "3":
     S3 = seg3_build()
+    TAGS.update({"Armored Titan": "ArmoredTitan"})
     run(frame_list(SEG3), lambda s: seg3_pose(S3, s), "fall3")
 else:
     # night: the moon from states845 night_world; keep it

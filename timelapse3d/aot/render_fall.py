@@ -23,7 +23,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--fall-out", required=True)
 ap.add_argument("--fps", type=float, default=30.0)
 ap.add_argument("--s0", type=float, default=0.0)
-ap.add_argument("--s1", type=float, default=13.2)
+ap.add_argument("--s1", type=float, default=10.6)
 ap.add_argument("--fall-samples", type=int, default=2)
 ap.add_argument("--times", default="", help="comma list of segment times (stills) instead of s0..s1")
 ap.add_argument("--index0", type=int, default=-1, help="first frame number (default round(s0 * fps))")
@@ -34,7 +34,7 @@ SW = sys.modules.get("swarm845")
 FX = sys.modules.get("fx845")
 SC = sys.modules.get("seq_carla")
 A_END = 7.5                      # timelapse part ends, Carla beat begins
-SEG_END = 13.2
+SEG_END = 10.6
 T_SIM0, T_SIM1 = 2.0, 60.0       # sim time (s after the kick) over the timelapse part
 
 def smooth(a, b, t):
@@ -63,7 +63,7 @@ def _pchip(T, S, m, t):
     return h00 * S[i] + h10 * h * m[i] + h01 * S[i + 1] + h11 * h * m[i + 1]
 
 # segment time -> seq_carla frame (30 fps numbering). Brisk, except the Yamero hold (~1.2x real).
-F_KEYS = [(0.0, 2150), (A_END, 2305), (8.4, 2345), (9.6, 2440), (10.6, 2520), (12.6, 2585), (SEG_END, 2622)]
+F_KEYS = [(0.0, 2150), (A_END, 2330), (A_END + 1.0, 2440), (A_END + 1.7, 2515), (A_END + 2.5, 2575), (SEG_END, 2610)]   # Carla fast (user 10/25)
 _FM = _pchip_m([k[0] for k in F_KEYS], [k[1] for k in F_KEYS])
 def carla_f(s):
     return _pchip([k[0] for k in F_KEYS], [k[1] for k in F_KEYS], _FM, s)
@@ -78,15 +78,16 @@ def _carla_cam(f):
 
 def a_keys():
     """Timelapse-part keys (s, loc, look_at, lens); the first is render_fast.py's last key (video 13.0 s)."""
-    c_loc, c_tgt, c_lens = _carla_cam(F_KEYS[1][1])
     return [
         (-1.0, (PLZ.x + 50, PLZ.y + 45, 146), (GX, GY + 100, 0), 38),        # (extrapolation guide only)
         (0.0, (PLZ.x + 55, PLZ.y + 50, 150), (GX, GY + 120, 0), 38),         # = render_fast keys()[-1]
         (2.4, (PLZ.x + 32, PLZ.y + 70, 92), (PLZ.x, PLZ.y - 30, 0), 34),     # down over the panicking plaza
-        (4.8, (55, GY + 190, 112), (0, GY + 40, 0), 32),                     # titans pouring through the breach
-        (A_END, tuple(c_loc), tuple(c_tgt), c_lens),                         # = seq_carla camera at the beat start
-        (A_END + 1.5,) + _carla_cam(carla_f(A_END + 1.5)),                # into the beat (blended, see cam_at)
-        (A_END + 3.0,) + _carla_cam(carla_f(A_END + 3.0)),                # (tangent guide)
+        (4.8, (40, GY + 200, 108), (-14, GY + 60, 0), 32),                   # titans pouring through the breach
+        # the Carla beat (Yeager house right of the outer gate, AOT_YEAGER_XY): neutral sky observer, slow drift,
+        # the gate and the titans pouring in stay in frame; no close-up, no Hannes / kids (user 10/25)
+        (A_END, (22, GY + 192, 98), (-26, GY + 70, 0), 32),
+        (SEG_END, (8, GY + 186, 94), (-34, GY + 72, 0), 32),
+        (SEG_END + 1.0, (8, GY + 186, 94), (-34, GY + 72, 0), 32),        # (guide: the seam into render_fall2 is at rest)
     ]
 
 def _cr(p0, p1, p2, p3, u, t0, t1, t2, t3):
@@ -98,13 +99,7 @@ def _cr(p0, p1, p2, p3, u, t0, t1, t2, t3):
 
 _KS = []
 def cam_at(s):
-    if A_END - 0.7 < s < A_END + 0.7:              # blend the timelapse keys into seq_carla's camera over ~1.4 s
-        w = smooth(A_END - 0.7, A_END + 0.7, s)
-        l1, t1, n1 = _spline_a(s)
-        l2, t2, n2 = _carla_part(s)
-        return l1.lerp(l2, w), t1.lerp(t2, w), n1 + (n2 - n1) * w
-    if s >= A_END:
-        return _carla_part(s)
+    """One spline for the whole segment (sky observer); ends at rest = render_fall2's first key."""
     return _spline_a(s)
 
 def _carla_part(s):
@@ -170,7 +165,7 @@ def fire_tune():
             _FIRE_OUT[o.name] = tuple(o.scale)
 
 def pscale(s):
-    return float(os.environ.get("FALL_PSCALE", "1.4")) * (1 - smooth(6.0, A_END, s)) + 1.0 * smooth(6.0, A_END, s)
+    return float(os.environ.get("FALL_PSCALE", "1.0"))          # user rule: every human at true scale
 
 # ---------------------------------------------------------------- light: daylight (opening) -> sunset (Carla)
 def light_setup():
@@ -179,10 +174,7 @@ def light_setup():
     if so:
         st["d0"] = so.matrix_world.to_3x3() @ Vector((0, 0, -1)); st["e0"] = so.data.energy; st["c0"] = Vector(so.data.color)
         el = math.radians(float(os.environ.get("FALL_SUN_EL", "4")))
-        if SC and SC.STATE.get("u") is not None:
-            d = -SC.STATE["u"] - SC.STATE["f"] * 0.35; az = math.atan2(d.y, d.x)
-        else:
-            az = math.radians(200)
+        az = math.radians(float(os.environ.get("FALL_SUN_AZ", "245")))   # shared with render_fall2 (seam match)
         st["d1"] = Vector((-math.cos(el) * math.cos(az), -math.cos(el) * math.sin(az), -math.sin(el)))
         st["e1"] = float(os.environ.get("CARLA_SUN_E", "4.2")); st["c1"] = Vector((1.0, 0.50, 0.20))
     w = bpy.context.scene.world
@@ -211,6 +203,9 @@ cam = sc.camera
 sc.cycles.samples = B.fall_samples; sc.cycles.use_adaptive_sampling = True
 if sc.render.engine.startswith("BLENDER_EEVEE"):
     sc.eevee.taa_render_samples = int(os.environ.get("FALL_EEVEE_SAMPLES", "8"))
+    for o in bpy.data.objects:                       # dozens of fire lights overflow Eevee's shadow pool: no shadows
+        if o.type == "LIGHT" and o.name.startswith(("FireL", "FX_Flash")):
+            o.data.use_shadow = False
 elif os.environ.get("FAST_PREVIEW", "0") == "1":
     cy = sc.cycles
     cy.use_denoising = True
@@ -246,6 +241,20 @@ if SW:
 LST = light_setup()
 print(f"[fall] swarm {'on' if SW and SW.STATE else 'off'}, fx845 {'on' if FX else 'off'}, carla {'on' if SC and SC.STATE.get('C') is not None else 'off'}")
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+try:
+    import hudcam
+except Exception as ex:
+    hudcam = None; print("[fall] hudcam unavailable:", ex)
+TAGS = {"Carla": "Carla", "Smiling Titan": "CarlaSmiling"}
+def hud_dump(key, s):
+    """Camera + name-tag anchors for hud2.py (<out>/_cam/<frame>.json); tags during the Carla beat (rig origin = feet)."""
+    if not hudcam:
+        return
+    tr = [v for v in TAGS.values() if bpy.data.objects.get(v)] if s >= A_END - 1.0 else []
+    hudcam.dump(sc, key if isinstance(key, int) else 0, B.fall_out, t=s, track=tr, name=None if isinstance(key, int) else key,
+                extra={"segment": "fall", "labels": {k: v for k, v in TAGS.items() if v in tr}, "anchor": "rig origin = feet"})
+
 if B.times:
     times = [float(x) for x in B.times.split(",") if x.strip()]
 else:
@@ -268,5 +277,6 @@ for i, s in enumerate(times):
     name = f"fall_{i0 + i:05d}.png" if not B.times else f"fall_s{s:05.2f}.png"
     sc.render.filepath = os.path.join(B.fall_out, name)
     tp = time.time() - t0
+    hud_dump(i0 + i if not B.times else name[:-4], s)
     bpy.ops.render.render(write_still=True)
     print(f"[fall] s={s:.2f} sim t={ts:.1f} F={carla_f(s):.0f} -> {name} (pose {tp:.1f}s, frame {time.time() - t0:.1f}s, total {time.time() - t_start:.0f}s)")

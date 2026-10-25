@@ -42,6 +42,8 @@ def level():
 
 OG = Vector((L.OUTER_GATE[0], L.OUTER_GATE[1]))
 YEAGER_HOUSE = (-72.0, -118.0)
+if os.environ.get("AOT_YEAGER_XY"):        # opt-in (render_fall.sh, user 10/25): the Yeager house near the broken outer gate
+    YEAGER_HOUSE = tuple(float(v) for v in os.environ["AOT_YEAGER_XY"].split(","))
 # thrown blocks: (x, y, size m, seed). Arcs start at the gate top.
 IMPACTS = [(-58, -585, 16, 1), (96, -625, 13, 2), (-150, -455, 19, 3), (62, -318, 15, 4),
            (-205, -265, 13, 5), (150, -250, 17, 6), (-30, -190, 12, 7), (YEAGER_HOUSE[0] + 1, YEAGER_HOUSE[1] - 2, 12, 8),

@@ -10,7 +10,7 @@ export FAST_PREVIEW
 [ "$FAST_PREVIEW" = 1 ] && export AOT_FX_PUFFS="${AOT_FX_PUFFS:-0.6}"
 HERE="$(cd "$(dirname "$0")" && pwd)"; FALL="E:/YTP2/3D Timelapse/renders/fall"
 OUT="${OUT:-E:/YTP2/3D Timelapse/renders/fall_frames$SEG}"
-[ -z "$TIMES" ] && rm -rf "$OUT"; mkdir -p "$OUT" "$FALL"
+[ -z "$TIMES" ] && [ -z "$FALL2_S0" ] && rm -rf "$OUT"; mkdir -p "$OUT" "$FALL"   # FALL2_S0=t: re-render a tail into OUT
 if [ "$SEG" = 3 ]; then ST=armored; else ST=night; fi
 # segments 4-5 (night): Eevee + no smoke volumes; render_fall2 adds fire / smoke CARDS (smokecards) instead
 if [ "$SEG" != 3 ]; then export AOT_NOSMOKE=1; ENGINE="${ENGINE:-EEVEE}"; fi
@@ -19,10 +19,10 @@ until mkdir "$LOCK" 2>/dev/null; do sleep 5; done
 trap 'rmdir "$LOCK" 2>/dev/null' EXIT
 BL="/c/All The Programs/Blender/blender.exe"
 EXTRA=""; [ -n "$TIMES" ] && EXTRA="--times $TIMES"
-CARLA_ENV_DONE=1 SWARM=1 SUN_AZ=-102 EXPO="${EXPO:--1.3}" TREE_DENS=0.006 FL_NOKIDS=1 COL_SHOW=0 \
-AOT_STATE=$ST AOT_ARC_T=1 AOT_EVENT=intact AOT_PLUGINS=flight,states845,swarm845 \
+CARLA_ENV_DONE=1 SWARM=1 SUN_AZ=-102 EXPO="${EXPO:--1.5}" TREE_DENS=0.006 FL_NOKIDS=1 COL_SHOW=0 \
+AOT_STATE=$ST AOT_ARC_T=1 AOT_EVENT=intact AOT_PLUGINS=flight,states845,swarm845,world \
   "$BL" -b -P "$HERE/aot/scene.py" -P "$HERE/aot/render_fall2.py" -- \
-  --cam overview --engine ${ENGINE:-CYCLES} --res 854x480 --samples $SAMPLES --seg $SEG --fall-out "$OUT" --fps $FPS \
+  --cam overview --engine ${ENGINE:-EEVEE} --res 854x480 --samples $SAMPLES --seg $SEG --fall-out "$OUT" --fps $FPS \
   --fall-samples $SAMPLES $EXTRA 2>&1 | grep -E "\[fall2\]|\[swarm845\]|Traceback|Error|line [0-9]+"
 [ -n "$TIMES" ] && exit 0
 enc() { ffmpeg -hide_banner -loglevel error -y -framerate $FPS -i "$1" -c:v libx264 -crf 26 -pix_fmt yuv420p "$2"; ls -la "$2"; }

@@ -22,6 +22,7 @@ import math, os, random
 from mathutils import Vector, Matrix, Quaternion, noise
 
 F = int(os.environ.get("CARLA_F", "2200"))
+NOKIDS = os.environ.get("CARLA_NOKIDS") == "1"     # user 10/25: the Carla beat without Hannes / Eren / Mikasa
 
 # ---------------------------------------------------------------- timeline (30 fps, continues seq_colossal)
 T_FLY = (2100, 2190)       # from the breach view (seq_colossal end) down to the Yeager street
@@ -701,12 +702,15 @@ def setup_carla(M, year, ctx, coll):
     print(f"[seq_carla] house yaw {math.degrees(ya):.0f} C {tuple(round(v, 1) for v in C)} cleared {n}")
     STATE.update(g=g, grab=grab, yaw_t=yaw_t, coll=coll, tmp=[])
     ca = make_carla("Carla")
-    er, mk = make_kids()
-    ha = make_hannes("Hannes")
+    if NOKIDS:                                       # user 10/25: no Hannes / Eren / Mikasa in this beat
+        er = mk = ha = None
+    else:
+        er, mk = make_kids()
+        ha = make_hannes("Hannes")
     STATE["carla_s"] = ca.scale.x
     STATE.update(carla=ca, eren=er, mikasa=mk, hannes=ha,
                  carla_mats={o.name: list(o.data.materials) for o in _all_obs(ca) if o.type == "MESH"})
-    for o in _all_obs(ca) + _all_obs(er) + _all_obs(mk) + _all_obs(ha):
+    for o in sum((_all_obs(r) for r in (ca, er, mk, ha) if r is not None), []):
         for c in list(o.users_collection):
             c.objects.unlink(o)
         coll.objects.link(o)
@@ -800,8 +804,8 @@ def pose_carla(F):
         hand = _bone_w(ti, "wrist.R", "tail")
         tf = Vector((math.sin(yaw_t), -math.cos(yaw_t), 0))          # titan front (world)
         yaw_c = yaw_t + math.pi * 0.5                                   # held side-on: Carla in profile too
-        # readability while she is held up against the sky: grow ~1.8x through the lift, warm rim-lit silhouette
-        s = STATE.get("carla_s", ca.scale.x) * (1.0 + (float(os.environ.get("CARLA_HELD_SCALE", "1.8")) - 1.0) * _ss(T_LIFT[0], T_LIFT[0] + 20, F))
+        # held up against the sky: true scale (user rule; CARLA_HELD_SCALE overrides), warm rim-lit silhouette
+        s = STATE.get("carla_s", ca.scale.x) * (1.0 + (float(os.environ.get("CARLA_HELD_SCALE", "1.0")) - 1.0) * _ss(T_LIFT[0], T_LIFT[0] + 20, F))
         if F < T_BITE[0] + 8:
             _rim_warm(ca)
         ca.matrix_world = Matrix.Translation(Vector((0, 0, 0))) @ Matrix.Rotation(yaw_c, 4, "Z") @ Matrix.Scale(s, 4)
@@ -822,6 +826,13 @@ def pose_carla(F):
         STATE["tmp"].append(red_mist(mouth, _ss(T_BITE[0] + 6, T_BITE[1] + 70, F), coll))
     # ---- kids + Hannes
     er, mk, ha = STATE["eren"], STATE["mikasa"], STATE["hannes"]
+    if ha is None:                                   # CARLA_NOKIDS: only the titan and Carla
+        for o in bpy.data.objects:
+            if o.name.startswith(("ImpactDust", "BlockTrail", "FireSmoke", "FlameSmoke")) and o.type == "MESH":
+                if (o.matrix_world.translation.to_2d() - C).length < float(os.environ.get("CARLA_CLEAR_R", "32")):
+                    o.hide_render = True
+        STATE["figs"] = {"carla": (ca, "head"), "titan_head": (ti, "head"), "titan_hand": (ti, "wrist.R")}
+        return
     hp, hd_, mode = hannes_xy(F)
     yaw_h = _yaw_to(hd_) if hd_.length > 1e-3 else 0.0
     _place(ha, hp.x, hp.y, yaw_h, z=_ground_z(hp.x, hp.y))

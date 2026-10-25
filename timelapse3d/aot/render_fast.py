@@ -131,7 +131,7 @@ HOUSE_CAM = (float(os.environ["FAST_HOUSE_CAM"]),) if os.environ.get("FAST_HOUSE
 
 def shake(t):
     """Rotational shake amplitude (rad): the arrival (lightning) and the kick impact."""
-    a = 0.011 * bump(t, 4.6, 4.66, 4.75, 5.7) + 0.006 * bump(t, 10.98, 11.02, 11.1, 12.0)
+    a = 0.011 * bump(t, 4.6 - ARR_D, 4.66 - ARR_D, 4.75 - ARR_D, 5.7 - ARR_D) + 0.006 * bump(t, 10.98, 11.02, 11.1, 12.0)
     if HOUSE_CAM:
         a += 0.005 * bump(t, T_KICK + 2.1, T_KICK + 2.16, T_KICK + 2.25, T_KICK + 2.9)
     return a
@@ -159,8 +159,8 @@ def cam_at(t):
 def colossal_at(t):
     """(show, rise, kick, fade, hand_l, hand_r).  Left hand slams on the wall top right after the lightning, the head
     rises 5-8 s (unchanged speed), the right hand comes up from behind the wall ~5.9-6.7 s, wind-up 8.8-10.3, strike to 11."""
-    show = 4.6 <= t < 13.5
-    u = min(1.0, max(0.0, (t - 4.62) / (8.0 - 4.62)))             # ease-out: the head is readable from ~5.2 s,
+    show = 4.6 - ARR_D <= t < 13.5
+    u = min(1.0, max(0.0, (t - 4.62 + ARR_D) / (8.0 - 4.62 + ARR_D)))             # ease-out: the head is readable from ~5.2 s,
     rise = 1 - (1 - u) ** 3                                          # still rising slowly until 8 s (COL_RISE_DROP 14)
     if t < 8.8:
         kick = 0.0
@@ -169,12 +169,13 @@ def colossal_at(t):
     else:
         kick = -1.0 + 2.0 * smooth(10.3, 11.0, t)
     fade = smooth(11.6, 13.0, t)
-    hand_l = smooth(4.8, 5.12, t)
+    hand_l = smooth(4.8 - ARR_D, 5.12 - ARR_D, t)
     hand_r = smooth(5.9, 6.7, t)
     return show, rise, kick, fade, hand_l, hand_r
 
 # ---------------------------------------------------------------- arrival FX: lightning, darkening, flash
-FLICKER = ((4.62, 4.70, 0), (4.74, 4.79, 1), (4.84, 4.95, 0))      # (on, off, bolt variant)
+ARR_D = float(os.environ.get("FAST_ARRIVE_EARLIER", "0.45"))   # user 10/25: the lightning (arrival) a bit earlier
+FLICKER = tuple((a - ARR_D, b - ARR_D, v) for a, b, v in ((4.62, 4.70, 0), (4.74, 4.79, 1), (4.84, 4.95, 0)))      # (on, off, bolt variant)
 
 def _bolt(name, seed, top=720.0):
     rnd = random.Random(seed)
@@ -224,13 +225,13 @@ def fx_at(fx, t):
     on = [v for a, b, v in FLICKER if a <= t < b]
     for k, ob in enumerate(fx["bolts"]):
         ob.hide_render = not (on and on[0] == k)
-    dark = 1.0 - float(os.environ.get("FAST_DARK", "0.72")) * bump(t, 4.45, 4.6, 4.95, 5.6)
+    dark = 1.0 - float(os.environ.get("FAST_DARK", "0.72")) * bump(t, 4.45 - ARR_D, 4.6 - ARR_D, 4.95 - ARR_D, 5.6 - ARR_D)
     for n, v in fx["bg"]:
         n.inputs[1].default_value = v * dark
     for d, v in fx["suns"]:
         d.energy = v * dark
     fx["flash"].energy = float(os.environ.get("FAST_FLASH_W", "6e6")) if on else 0.0
-    dk = bump(t, 4.45, 4.6, 4.95, 5.6)
+    dk = bump(t, 4.45 - ARR_D, 4.6 - ARR_D, 4.95 - ARR_D, 5.6 - ARR_D)
     bpy.context.scene.view_settings.exposure = fx["exp"] - float(os.environ.get("FAST_DARK_EV", "1.6")) * dk + (0.7 if on else 0.0)
     for o in fx["wisps"]:
         if t < float(os.environ.get("FAST_WISPS_T", "4.72")):
