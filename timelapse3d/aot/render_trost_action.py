@@ -201,12 +201,12 @@ def shots():
     sal = Q + C["cdir"] * 6.5
     L_.append(("salute", 64.3, 67.3, 2.0, lerp_cam((P3(sal + perp * 5 + C["cdir"] * 7, Qz + 30), P3(sal - C["cdir"] * 2, Qz + 0.5), 45),
                                                     (P3(sal + perp * 4 + C["cdir"] * 6, Qz + 26), P3(sal - C["cdir"] * 2, Qz + 0.5), 52))))
-    L_.append(("boulder", 75.5, 104.0, 3.2, lambda u: (Vector(P3(at(75.5 + 28.5 * u) + side * 75 + inw * 45, 135)),
-                                                        Vector(P3(at(75.5 + 28.5 * u) - inw * 20, 10)), 28)))
-    L_.append(("levi", 105.0, 109.0, 1.4, lerp_cam((P3(stop - inw * -40 + side * 55, 55), P3(stop + inw * 22, 6), 32),
+    L_.append(("boulder", 75.5, 115.0, 3.2, lambda u: (Vector(P3(at(75.5 + 39.5 * u) + side * 75 + inw * 45, 135)),
+                                                        Vector(P3(at(75.5 + 39.5 * u) - inw * 20, 10)), 28)))
+    L_.append(("levi", 116.0, 120.0, 1.4, lerp_cam((P3(stop - inw * -40 + side * 55, 55), P3(stop + inw * 22, 6), 32),
                                                     (P3(stop - inw * -36 + side * 45, 48), P3(stop + inw * 24, 4), 34))))
     mp = C["mpos"]
-    L_.append(("pyres", 116.0, 120.6, 1.6, lerp_cam((P3(P0 - inw * 60 + side * 50, 60), P3(P0 + inw * 8, 0), 30),
+    L_.append(("pyres", 127.0, 131.6, 1.6, lerp_cam((P3(P0 - inw * 60 + side * 50, 60), P3(P0 + inw * 8, 0), 30),
                                                      (P3(mp - inw * 30 + side * 22, 30), P3(mp, 0), 34))))
     return L_
 
@@ -253,6 +253,10 @@ if B.dry:
     for T in np.arange(0.0, 126.0, 0.5):
         TA.update(float(T))
     print(f"[ta] dry: 252 updates {time.time() - tq:.1f}s")
+    TT_ = TA.STATE["TT"]; gy_ = TA.STATE["site"].gate[1]
+    for T_ in (3.0, 5.0, 7.0, 9.0, 11.0):
+        ys = [float(TT_.pos(f"f{k}", T_)[1]) - gy_ for k in range(len([s_ for s_ in TT_.specs if s_["name"].startswith("f")]))]
+        print(f"[ta] flood T={T_}: inside(>5m) {sum(1 for y in ys if y > 5)}/{len(ys)}  depth max {max(ys):.0f} m")
     SH = shots()
     for nm, T0, T1, dur, cf in SH:
         print("[ta] shot", nm, T0, T1, [round(v, 1) for v in cf(0.0)[0]])

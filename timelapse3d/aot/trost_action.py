@@ -731,11 +731,11 @@ def choreograph(site, seed=850):
         ab = k in (5, 13, 21)
         name = f"f{k}"
         TT.add(name, H=(7.0 if ab else None), abnormal=ab, show=(1.5, 1e9), scale=KEY if k < 3 else 1.0)
-        TT.specs[-1]["v"] *= 1.35 * (1.9 if ab else 1.0)       # they run in
+        TT.specs[-1]["v"] = 11.0 if ab else min(9.5, max(6.5, TT.specs[-1]["v"] * 1.35))   # they run in (6.5-9.5 m/s)
         hub = hubs_ok[rnd.randrange(len(hubs_ok))]
         gap = float(os.environ.get("TA_FLOOD_GAP", "0.31"))                 # entry spacing (s) through the breach
         t_in = 2.0 + (max(gap, 0.55) if ab else gap) * k + rnd.uniform(-0.15, 0.15) * min(1.0, gap / 0.31)
-        TT.leg(name, t_in, out_pt + side * rnd.uniform(-12, 12), hub)
+        TT.leg(name, t_in, gate - inw * 5.0 + side * rnd.uniform(-4, 4), hub)     # enter right at the breach (no queue behind the wall)
     # titans crowding the supply HQ (already deep in the district when the camera gets there)
     ring = []
     for k in range(9):
