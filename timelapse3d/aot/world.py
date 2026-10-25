@@ -555,8 +555,15 @@ def _proto(name, kind, col, coll):
     ob = bpy.data.objects.new(name, me); coll.objects.link(ob); ob.location = (0, 0, -20000.0)
     return ob
 
+# Vegetation level of detail, the SAME in every scene so seam frames still match:
+#   WORLD_LOD=preview (default for 15 fps previews): trees thinned by distance from the active camera (full density
+#   within WORLD_LOD_NEAR = 3500 m, none beyond WORLD_LOD_FAR = 6000 m; the forest-floor tint carries the far woods)
+#   WORLD_LOD=final   (default when FPS >= 24 is exported): every tree.
+LOD = os.environ.get("WORLD_LOD") or ("final" if float(os.environ.get("FPS", "15") or 15) >= 24 else "preview")
+LOD_NEAR = float(os.environ.get("WORLD_LOD_NEAR", "3500")); LOD_FAR = float(os.environ.get("WORLD_LOD_FAR", "6000"))
+
 def _scatter_gn(proto):
-    nm = "WD_Scatter_" + proto.name
+    nm = "WD_Scatter_" + proto.name + "_" + LOD
     ng = bpy.data.node_groups.get(nm)
     if ng:
         return ng
@@ -568,7 +575,25 @@ def _scatter_gn(proto):
     oi = N.new("GeometryNodeObjectInfo"); oi.transform_space = "ORIGINAL"
     oi.inputs["Object"].default_value = proto
     m2p = N.new("GeometryNodeMeshToPoints"); Ln.new(gi.outputs["Geometry"], m2p.inputs["Mesh"])
-    iop = N.new("GeometryNodeInstanceOnPoints"); Ln.new(m2p.outputs["Points"], iop.inputs["Points"])
+    pts = m2p.outputs["Points"]
+    if LOD == "preview":
+        # distance thinning from the ACTIVE camera (same rule in every scene -> seam frames still match): full density
+        # within LOD_NEAR, thinning to 0 by LOD_FAR (the darker forest-floor patches carry the far woods)
+        ac = N.new("GeometryNodeInputActiveCamera")
+        ci = N.new("GeometryNodeObjectInfo"); ci.transform_space = "RELATIVE"; Ln.new(ac.outputs[0], ci.inputs["Object"])
+        pos = N.new("GeometryNodeInputPosition")
+        dist = N.new("ShaderNodeVectorMath"); dist.operation = "DISTANCE"
+        Ln.new(pos.outputs[0], dist.inputs[0]); Ln.new(ci.outputs["Location"], dist.inputs[1])
+        keep = N.new("ShaderNodeMapRange"); keep.inputs["From Min"].default_value = LOD_NEAR; keep.inputs["From Max"].default_value = LOD_FAR
+        keep.inputs["To Min"].default_value = 1.0; keep.inputs["To Max"].default_value = 0.0
+        Ln.new(dist.outputs["Value"], keep.inputs["Value"])
+        rnd = N.new("FunctionNodeRandomValue"); rnd.data_type = "FLOAT"; rnd.inputs["Seed"].default_value = 846
+        cmp_ = N.new("FunctionNodeCompare"); cmp_.data_type = "FLOAT"; cmp_.operation = "GREATER_THAN"
+        Ln.new(rnd.outputs[0], cmp_.inputs[0]); Ln.new(keep.outputs["Result"], cmp_.inputs[1])
+        dg = N.new("GeometryNodeDeleteGeometry"); dg.domain = "POINT"
+        Ln.new(pts, dg.inputs["Geometry"]); Ln.new(cmp_.outputs["Result"], dg.inputs["Selection"])
+        pts = dg.outputs["Geometry"]
+    iop = N.new("GeometryNodeInstanceOnPoints"); Ln.new(pts, iop.inputs["Points"])
     Ln.new(oi.outputs["Geometry"], iop.inputs["Instance"])
     sa = N.new("GeometryNodeInputNamedAttribute"); sa.data_type = "FLOAT_VECTOR"; sa.inputs["Name"].default_value = "wd_s"
     ra = N.new("GeometryNodeInputNamedAttribute"); ra.data_type = "FLOAT"; ra.inputs["Name"].default_value = "wd_r"
