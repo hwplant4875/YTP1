@@ -30,7 +30,7 @@ ap = argparse.ArgumentParser(allow_abbrev=False)
 ap.add_argument("--world", required=True, choices=["interlude", "march", "trost", "shig", "base"])
 ap.add_argument("--halves", default="", help="comma list like C2a,C3b")
 ap.add_argument("--stills", default="", help="name:x,y,z:lx,ly,lz:lens;...  WORLD coordinates (world.py); rendered into renders/master/world_stills")
-ap.add_argument("--still-sun", default="", help="el,az (deg): override the Sun for --stills (a low sun shows the relief)")
+ap.add_argument("--still-light", default="", help="world.light_rig preset for --stills (day | low_sun | sunset | night)")
 ap.add_argument("--still-frame", default="", help="frame of the scene for --stills (shig | trost; default world.active_frame())")
 ap.add_argument("--br-fps", type=float, default=15.0)
 ap.add_argument("--br-samples", type=int, default=4)
@@ -139,29 +139,19 @@ elif G.world == "shig":
     DAY = dict(el=float(os.environ.get("C1_DAY_EL", "40")), az=float(os.environ.get("C1_DAY_AZ", "160")),
                col=(1.0, 0.97, 0.92), e=3.6, expo=float(os.environ.get("C1_DAY_EXPO", "-1.5")))
     def _light_at(br, tb):
-        """C1 timelapse over the flight: segment 3's sunset -> a short blue night -> morning -> the interlude's daylight
-        (sun 40 deg, white 3.6) by the S3 seam.  The sun keeps turning the same way (west -> under -> east -> south)."""
-        T = MT.bridge_total(br); u = min(1.0, max(0.0, tb / T))
-        so = bpy.data.objects.get("Sun")
-        if not so:
-            return
-        az = L0["sun_azimuth_deg"] + (DAY["az"] + 360.0 - L0["sun_azimuth_deg"]) * u
-        el = L0["sun_elevation_deg"] + (DAY["el"] - L0["sun_elevation_deg"]) * MT.herm(0.0, 0.0, 1.0, 0.0, 1.0, u) \
-            - 22.0 * math.sin(math.pi * min(1.0, u / 0.7))            # dips below the horizon (night) mid-flight
-        night = max(0.0, min(1.0, -el / 8.0))
-        e_ = math.radians(el); a_ = math.radians(az)
-        d = Vector((-math.cos(e_) * math.cos(a_), -math.cos(e_) * math.sin(a_), -math.sin(e_)))
-        so.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
-        warm = max(0.0, 1.0 - max(0.0, el) / 25.0)
-        c0 = Vector(L0["sun_color"]); c1 = Vector(DAY["col"])
-        so.data.color = tuple(c1.lerp(c0, warm))
-        so.data.energy = (L0["sun_energy"] * (1 - u) + DAY["e"] * u) * (1.0 - night)
-        bg = sc.world.node_tree.nodes.get("Background") if sc.world and sc.world.node_tree else None
-        if bg:
-            if "_c1_bg" not in W:
-                W["_c1_bg"] = bg.inputs[1].default_value
-            bg.inputs[1].default_value = W["_c1_bg"] * (1.0 - 0.9 * night)
-        sc.view_settings.exposure = L0.get("exposure", -1.5) * (1 - u) + DAY["expo"] * u + 1.2 * night
+        """C1 timelapse with the SHARED rig (world.light_rig): A's SEG3_END_LIGHT (sunset) -> night -> the "day" preset
+        that agent B's interlude uses at S3.  Re-reads SEG3_END_LIGHT from render_fall2 at build, so A's changes follow."""
+        WD = sys.modules.get("world") or __import__("world")
+        L0_ = dict(el=L0["sun_elevation_deg"], az=L0["sun_azimuth_deg"], col=tuple(L0["sun_color"]), e=L0["sun_energy"],
+                   amb=0.18, expo=L0.get("exposure", -1.5))
+        u = min(1.0, max(0.0, tb / MT.bridge_total(br)))
+        if u < 0.35:
+            spec = WD.light_blend(L0_, "night", u / 0.35)
+        elif u < 0.55:
+            spec = WD.light_blend("night", "night", 0.0)
+        else:
+            spec = WD.light_blend("night", "day", (u - 0.55) / 0.45)
+        WD.light_rig(spec)
     W["light_at"] = _light_at
 sc = bpy.context.scene
 sc.render.image_settings.file_format = "PNG"
@@ -191,10 +181,8 @@ if G.stills:                              # world stills (world coordinates -> t
     fr = G.still_frame or WD.active_frame()
     od = os.path.join(MT.MASTER, "world_stills"); os.makedirs(od, exist_ok=True)
     cam.data.clip_end = 250000.0
-    so = bpy.data.objects.get("Sun")
-    if G.still_sun and so:
-        el_, az_ = (math.radians(float(v)) for v in G.still_sun.split(","))
-        so.rotation_euler = Vector((-math.cos(el_) * math.cos(az_), -math.cos(el_) * math.sin(az_), -math.sin(el_))).to_track_quat("-Z", "Y").to_euler()
+    if G.still_light:                        # the shared rig: identical light in every scene
+        print("[bridge] light_rig", WD.light_rig(G.still_light), flush=True)
     for spec in [x for x in G.stills.split(";") if x.strip()]:
         nm, a, b, ln = spec.split(":")
         loc = Vector(WD.to_set(tuple(float(v) for v in a.split(",")), fr))

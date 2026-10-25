@@ -86,7 +86,8 @@ def height_patch(x, y, h):                        # scene.py plug-in hook (coord
 
 # ---------------------------------------------------------------- relief (WORLD coordinates)
 # Rolling hills 20-120 m with a few higher wooded ridges (to ~200 m) only in the open land far between the walls
-# (relief capped at 30 m within ~2.3-4 km of walls, towns and the valley, so the 50 m walls stay the landmark); FLAT (0) under the walls
+# (rolling hills <= ~58 m from ~1.2-1.5 km off the walls, plus wooded knolls; the 100-200 m relief only 2.3-4 km+
+# away from walls, towns and the valley, so the 50 m walls stay the landmark); FLAT (0) under the walls
 # and their districts, inside and round both town cores and Mitras, along the river valley (river + road on its floor)
 # and along the coast.  Precomputed once on a GRID_M grid (bilinear lookup), so it is cheap for every caller.
 GRID_M = float(os.environ.get("WORLD_GRID_M", "100"))
@@ -97,7 +98,7 @@ def _flat_mask(x, y):
     d = math.hypot(x - MITRAS[0], y - MITRAS[1])
     m = 1.0
     for r in (R_MARIA, R_ROSE, R_SINA):                       # walls and their district bulges (720 m outward)
-        m = min(m, _smooth(950.0, 1900.0, abs(d - r)))
+        m = min(m, _smooth(780.0, 1450.0, abs(d - r)))      # walls + bulges flat; hills from ~1.2-1.5 km
     m = min(m, _smooth(1800.0, 3200.0, d))                    # Mitras
     for f in CORES:
         for (cx, cy), r in CORES[f]:
@@ -139,6 +140,23 @@ def _relief_raw(x, y):
     h += 95.0 * sel * _smooth(0.84, 0.98, rg)                                     # ridges to ~200 m
     return max(10.0, h)
 
+NEAR_K = float(os.environ.get("WORLD_NEAR_K", "0.6"))       # near walls/towns/valley: relief x0.6 (~12-70 m rolling)
+KNOLLS = []
+
+def _knolls():
+    """Wooded knolls: local steep bumps (8-15 deg flanks, 25-45 m) in the open land, deterministic."""
+    if KNOLLS:
+        return KNOLLS
+    rk = random.Random(1847)
+    for _ in range(int(os.environ.get("WORLD_KNOLLS", "260"))):
+        a = rk.uniform(0, math.tau); rr = math.sqrt(rk.random()) * (R_MARIA + 9000)
+        x, y = MITRAS[0] + math.cos(a) * rr, MITRAS[1] + math.sin(a) * rr
+        if _flat_mask(x, y) < 0.95:
+            continue
+        h = rk.uniform(25.0, 45.0); r = h / math.tan(math.radians(rk.uniform(8.0, 15.0))) * 1.25
+        KNOLLS.append((x, y, h, r, rk.uniform(0.6, 1.0)))
+    return KNOLLS
+
 def _build_grid():
     import numpy as np
     x0, x1 = -R_MARIA - 17000.0, R_MARIA + 17000.0
@@ -152,7 +170,17 @@ def _build_grid():
             m = _flat_mask(x, y)
             if m > 0:
                 raw = _relief_raw(x, y)
-                G[i, j] = m * (min(raw, 30.0) + max(0.0, raw - 30.0) * _big_mask(x, y))
+                near = raw * NEAR_K                             # scaled (not clipped: clipping made plateaus)
+                G[i, j] = m * (near + (raw - near) * _big_mask(x, y))
+    import numpy as np
+    for kx, ky, kh, kr, el in _knolls():                   # stamp the knolls (gaussian-ish, slightly elongated)
+        i0, i1 = max(0, int((kx - 2.2 * kr - x0) / GRID_M)), min(nx, int((kx + 2.2 * kr - x0) / GRID_M) + 2)
+        j0, j1 = max(0, int((ky - 2.2 * kr - y0) / GRID_M)), min(ny, int((ky + 2.2 * kr - y0) / GRID_M) + 2)
+        if i0 >= i1 or j0 >= j1:
+            continue
+        X = x0 + np.arange(i0, i1)[:, None] * GRID_M; Y = y0 + np.arange(j0, j1)[None, :] * GRID_M
+        q = ((X - kx) / kr) ** 2 + ((Y - ky) / (kr * el)) ** 2
+        G[i0:i1, j0:j1] += (kh * np.exp(-q * 1.6)).astype(np.float32)
     _HG.update(G=G, x0=x0, y0=y0, nx=nx, ny=ny)
 
 def world_height(x, y):
@@ -290,11 +318,38 @@ def ground_mat():
     # very fine grain
     n5 = N.new("ShaderNodeTexNoise"); n5.inputs["Scale"].default_value = 1 / 15.0
     Ln.new(P, n5.inputs["Vector"])
+    # height tint (object Z = metres): darker, cooler valleys, lighter dry crests
+    sepz = N.new("ShaderNodeSeparateXYZ"); Ln.new(P, sepz.inputs[0])
+    col = _mix(N, Ln, _mr(N, Ln, sepz.outputs["Z"], 12.0, 0.0, 0.0, 0.32), col, (0.07, 0.15, 0.06, 1))
+    col = _mix(N, Ln, _mr(N, Ln, sepz.outputs["Z"], 35.0, 140.0, 0.0, 0.38), col, (0.42, 0.45, 0.22, 1))
     geo = N.new("ShaderNodeNewGeometry"); sz_ = N.new("ShaderNodeSeparateXYZ"); Ln.new(geo.outputs["Normal"], sz_.inputs[0])
     col = _mix(N, Ln, _mr(N, Ln, sz_.outputs["Z"], 0.9993, 0.975, 0.0, 0.55), col, (0.035, 0.07, 0.025, 1))   # darker slopes
     bc = N.new("ShaderNodeBrightContrast"); Ln.new(col, bc.inputs["Color"])
     Ln.new(_mr(N, Ln, n5.outputs["Fac"], 0.0, 1.0, -0.035, 0.035), bc.inputs["Bright"])
-    Ln.new(bc.outputs["Color"], b.inputs["Base Color"])
+    Ln.new(_aerial(N, Ln, bc.outputs["Color"]), b.inputs["Base Color"])
+    return m
+
+HAZE_RGB = tuple(float(v) for v in os.environ.get("WORLD_AERIAL_RGB", "0.60,0.70,0.84").split(","))
+def _aerial(N, Ln, col):
+    """Gentle aerial perspective: blend toward the haze colour with camera distance (helps the far hills read)."""
+    cd = N.new("ShaderNodeCameraData")
+    f = _mr(N, Ln, cd.outputs["View Distance"], float(os.environ.get("WORLD_AERIAL_NEAR", "1500")),
+            float(os.environ.get("WORLD_AERIAL_FAR", "70000")), 0.0, float(os.environ.get("WORLD_AERIAL_MAX", "0.35")))
+    geo = N.new("ShaderNodeNewGeometry"); sp = N.new("ShaderNodeSeparateXYZ"); Ln.new(geo.outputs["Incoming"], sp.inputs[0])
+    az_ = N.new("ShaderNodeMath"); az_.operation = "ABSOLUTE"; Ln.new(sp.outputs["Z"], az_.inputs[0])
+    slant = _mr(N, Ln, az_.outputs[0], 0.55, 0.12, 0.0, 1.0)          # steep (top-down) rays cross little air
+    f = _math(N, Ln, "MULTIPLY", f, slant)
+    return _mix(N, Ln, f, col, (*HAZE_RGB, 1))
+
+def add_aerial(m):
+    """Put the distance haze into a Principled material's base colour (vegetation, farmsteads)."""
+    nt = m.node_tree; N = nt.nodes; Ln = nt.links; b = N.get("Principled BSDF")
+    if b is None:
+        return m
+    src = b.inputs["Base Color"].links[0].from_socket if b.inputs["Base Color"].links else None
+    if src is None:
+        rgb = N.new("ShaderNodeRGB"); rgb.outputs[0].default_value = tuple(b.inputs["Base Color"].default_value); src = rgb.outputs[0]
+    Ln.new(_aerial(N, Ln, src), b.inputs["Base Color"])
     return m
 
 def _blended(m):
@@ -489,7 +544,7 @@ def _proto(name, kind, col, coll):
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
     for f in me.polygons:
         f.use_smooth = kind != "conifer"
-    me.materials.append(_mat(name + "M", col, 0.85))
+    me.materials.append(add_aerial(_mat(name + "M", col, 0.85)))
     ob = bpy.data.objects.new(name, me); coll.objects.link(ob); ob.location = (0, 0, -20000.0)
     return ob
 
@@ -582,6 +637,9 @@ def build_vegetation(coll, root, allc, mycores, river, road, M=None):
     pkeep = 0.10 + 0.90 * np.clip(hgt / 90.0, 0, 1)
     sel = ok(CX, CY, 300) & (rng.uniform(0, 1, len(CX)) < pkeep)
     CX, CY, hgt = CX[sel][:nc], CY[sel][:nc], hgt[sel][:nc]
+    kn = np.array([(k[0], k[1]) for k in _knolls()]) if _knolls() else np.zeros((0, 2))
+    if len(kn):
+        CX = np.concatenate([CX, kn[:, 0]]); CY = np.concatenate([CY, kn[:, 1]]); hgt = np.concatenate([hgt, world_height_np(kn[:, 0], kn[:, 1])])
     sizes = np.exp(rng.normal(np.log(260), 0.55, len(CX))) * (1 + hgt / 90.0)
     floors = []
     for cx, cy, sz, hh in zip(CX, CY, sizes, hgt):
@@ -635,7 +693,7 @@ def build_vegetation(coll, root, allc, mycores, river, road, M=None):
             x, y = cx + math.cos(an) * rr_ * 1.05, cy + math.sin(an) * rr_ * 0.8
             ring.append(bm.verts.new((x, y, world_height(x, y) - 0.15)))
         bm.faces.new(ring)
-    me = bpy.data.meshes.new("WD_ForestFloor"); bm.to_mesh(me); bm.free(); me.materials.append(_mat("WD_ForestFloorM", (0.07, 0.14, 0.045), 0.95))
+    me = bpy.data.meshes.new("WD_ForestFloor"); bm.to_mesh(me); bm.free(); me.materials.append(add_aerial(_mat("WD_ForestFloorM", (0.07, 0.14, 0.045), 0.95)))
     ob = bpy.data.objects.new("WD_ForestFloor", me); coll.objects.link(ob); ob.parent = root
     # 5) farmsteads near the strip bands + dirt tracks to the road
     rb = random.Random(1846)
@@ -843,6 +901,65 @@ def attach(frame=None, M=None, terrain=None, cores=None, trim=True):
     print(f"[world] frame {frame}, K {K}: Maria {R_MARIA / 1000:.1f} km, Rose {R_ROSE / 1000:.1f}, Sina {R_SINA / 1000:.1f}; "
           f"Trost frame at world y {SET_ORIGIN['trost'][1]:.0f}; cores {cores}", flush=True)
     return root
+
+# ---------------------------------------------------------------- the SHARED LIGHT RIG (identical light at every seam)
+LIGHT_PRESETS = {
+    # name: sun elevation, azimuth (deg, scene.py convention: direction the light comes FROM, 0 = east, 90 = north),
+    #       sun colour, sun energy, sky-light strength (world Background for non-camera rays), exposure
+    "day":      dict(el=40.0, az=160.0, col=(1.0, 0.97, 0.92), e=3.6, amb=0.25, expo=-1.5),
+    "low_sun":  dict(el=20.0, az=235.0, col=(1.0, 0.90, 0.76), e=3.8, amb=0.22, expo=-1.4),
+    "sunset":   dict(el=4.0, az=245.0, col=(1.0, 0.50, 0.20), e=4.2, amb=0.18, expo=-1.5),
+    "night":    dict(el=-12.0, az=245.0, col=(0.55, 0.65, 1.0), e=0.06, amb=0.03, expo=-0.3),
+}
+
+def light_rig(spec="day", exclusive=True, **over):
+    """Set THE light of the scene from a preset (or a dict) + overrides; call it in every scene at a seam with the
+    same arguments and the light matches.  Drives: the object "Sun" (created if missing; it is what scene.py,
+    flight.py and the agents' scripts use), the world's Sky Texture sun angles, the lighting-sky Background strength,
+    and the view exposure.  exclusive=True turns off every other SUN light (e.g. flight.py's FL_Fill, set rigs), which
+    otherwise make scenes differ.  A time-of-day ramp is just light_rig(blend(a, b, u)) - see light_blend().
+    Returns the dict that was applied."""
+    P = dict(LIGHT_PRESETS[spec]) if isinstance(spec, str) else dict(spec)
+    P.update(over)
+    sc = bpy.context.scene
+    so = bpy.data.objects.get("Sun")
+    if so is None or so.type != "LIGHT":
+        ld = bpy.data.lights.new("Sun", "SUN"); so = bpy.data.objects.new("Sun", ld); sc.collection.objects.link(so)
+    so.animation_data_clear(); so.constraints.clear() if hasattr(so, "constraints") else None
+    el, az = math.radians(P["el"]), math.radians(P["az"])
+    d = Vector((-math.cos(el) * math.cos(az), -math.cos(el) * math.sin(az), -math.sin(el)))
+    so.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
+    so.data.color = tuple(P["col"]); so.data.energy = P["e"]
+    so.hide_render = False
+    if exclusive:
+        for o in bpy.data.objects:
+            if o.type == "LIGHT" and o.data.type == "SUN" and o is not so:
+                o.hide_render = True
+    w = sc.world
+    if w and w.use_nodes:
+        for n in w.node_tree.nodes:
+            if n.type == "TEX_SKY":
+                try:
+                    n.sun_elevation = max(0.0, el); n.sun_rotation = az          # flight.py convention
+                except Exception:
+                    pass
+            if n.type == "BACKGROUND" and n.inputs[1].default_value < 1.0:     # the lighting sky (not the camera one)
+                n.inputs[1].default_value = P["amb"]
+    sc.view_settings.exposure = P["expo"]
+    STATE["light"] = P
+    return P
+
+def light_blend(a, b, u):
+    """Interpolate two light specs (names or dicts) for time-of-day ramps across a flight."""
+    A = dict(LIGHT_PRESETS[a]) if isinstance(a, str) else dict(a)
+    B = dict(LIGHT_PRESETS[b]) if isinstance(b, str) else dict(b)
+    out = {}
+    for k in A:
+        if isinstance(A[k], tuple):
+            out[k] = tuple(x + (y - x) * u for x, y in zip(A[k], B[k]))
+        else:
+            out[k] = A[k] + (B[k] - A[k]) * u
+    return out
 
 def build(M, year, ctx=None):                     # scene.py plug-in hook (runs after the base scene / set is built)
     if STATE.get("root"):                         # trost.build_set may call plug-in builds itself: attach only once
