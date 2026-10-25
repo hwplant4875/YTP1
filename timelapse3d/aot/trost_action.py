@@ -1322,11 +1322,11 @@ def update_boulder(t):
         elif t < td0:
             b.location = anchor
         else:
-            sp = Vector((seal[0], seal[1], site.g(seal) + r * 0.8))
+            sp = Vector((seal[0], seal[1], site.g(seal) + r * 0.97))
             u = _ss(td0, td1, t)
             b.location = AT.boulder_anchor(ATD.t, r).lerp(sp, u) if u < 1 else sp
     elif t >= 112.4:
-        seal = ATD.carry[5]; b.location = Vector((seal[0], seal[1], site.g(seal) + r * 0.8))
+        seal = ATD.carry[5]; b.location = Vector((seal[0], seal[1], site.g(seal) + r * 0.97))
     else:
         b.location = rest
     if site.d.get("boulder_origin") == "bottom":       # the set's boulder has its origin at the bottom centre
