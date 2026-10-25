@@ -243,3 +243,7 @@ Rules: pace, faceless figures, minimal colourful crowds and titans for sky views
 - Bridges between places: the camera physically flies (climb high over the walls/land and descend), never a map cut.
 - 846 "retake Wall Maria" operation = THE MOST IMPORTANT, differentiating scene, done fully in 3D: a sky view of countless people (250,000) pouring out of Trost's outer gate in a vast column across the plains; titans converge, attack, hunt, encircle; the column is swallowed and vanishes. The counter 250,000 → ~100 may run as a small overlay ON this 3D shot. Give it real scale (instanced crowd, tens of thousands of visible agents, LOD), and give it enough screen time (~15-20 s) inside the pace budget.
 - graphics_title_map.mp4 / graphics_counter_march.mp4 as full-screen shots are CANCELLED; reuse their elements only as overlays.
+
+## 04:53 (10/25) USER: all people TRUE scale; aerial view from the Colossal to Eren's titan in Trost
+- Every human is true scale (~1.6-1.7 m), the same size in every frame. No readability upscaling of people (the 2.5x Trost figures on the wall top looked absurd). Titans keep true heights. Readability = camera distance, colour cues, lighting, name-tag overlays.
+- Trost: after the Colossal appears/kicks, the camera goes AERIAL (sky view) and stays aerial through the flood, Eren eaten, the evacuation, HQ and Mikasa, until the Attack Titan's lightning arrival.
