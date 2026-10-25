@@ -155,6 +155,13 @@ def _knolls():
             continue
         h = rk.uniform(25.0, 45.0); r = h / math.tan(math.radians(rk.uniform(8.0, 15.0))) * 1.25
         KNOLLS.append((x, y, h, r, rk.uniform(0.6, 1.0)))
+    # depth along the low stretch of the Shiganshina -> Trost flight (mid-gap, away from the walls and the valley floor):
+    # forested knolls either side of the valley, and two gentle background ridgelines running N-S further out
+    for x, y, h, sl in ((-2300, 1900, 34, 12), (2500, 2200, 30, 10), (-2700, 2900, 38, 13), (2900, 3200, 32, 11),
+                        (-2100, 3700, 28, 9), (2300, 3900, 30, 10), (-3200, 2300, 36, 14), (3400, 2700, 34, 12)):
+        KNOLLS.append((float(x), float(y), float(h), h / math.tan(math.radians(sl)) * 1.25, rk.uniform(0.7, 1.0)))
+    for x, y in ((-4300.0, 2700.0), (4600.0, 3000.0)):              # ridgelines: ~45 m, long N-S (elongation 4)
+        KNOLLS.append((x, y, 45.0, 420.0, 4.0))
     return KNOLLS
 
 def _build_grid():
