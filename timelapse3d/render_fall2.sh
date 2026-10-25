@@ -12,8 +12,8 @@ HERE="$(cd "$(dirname "$0")" && pwd)"; FALL="E:/YTP2/3D Timelapse/renders/fall"
 OUT="${OUT:-E:/YTP2/3D Timelapse/renders/fall_frames$SEG}"
 [ -z "$TIMES" ] && rm -rf "$OUT"; mkdir -p "$OUT" "$FALL"
 if [ "$SEG" = 3 ]; then ST=armored; else ST=night; fi
-# segment 5 alone (FALL2_ONLY=5): no smoke volumes at all (the forest is far from the town), much faster
-[ "$FALL2_ONLY" = 5 ] && export AOT_NOSMOKE=1
+# segments 4-5 (night): Eevee + no smoke volumes; render_fall2 adds fire / smoke CARDS (smokecards) instead
+if [ "$SEG" != 3 ]; then export AOT_NOSMOKE=1; ENGINE="${ENGINE:-EEVEE}"; fi
 LOCK="/e/YTP2/3D Timelapse/.gpu_lock"
 until mkdir "$LOCK" 2>/dev/null; do sleep 5; done
 trap 'rmdir "$LOCK" 2>/dev/null' EXIT

@@ -2,7 +2,7 @@
 wires with gas puffs, falling, grabbed and eaten, diving onto napes, Levi's spin.  A pure function of time.
 
 Style: the minimal, colourful, faceless figures of swarm845 (same Geo builder and rig), drawn ~2x life size
-(PSCALE) so they read from 60-250 m.  What reads from the sky: the CLOAK (cadets brown, Garrison dark red-brown,
+at TRUE scale (PSCALE 1.0, user rule).  What reads from the sky: the CLOAK (cadets brown, Garrison dark red-brown,
 Scouts green) with its emblem patch on the back (cadet crossed swords, Garrison twin roses, Scouts' blue/white
 Wings of Freedom), hair colour (Mikasa black + red scarf, Armin blond, Levi black undercut, Jean two-tone,
 Eren brown), the two dark wires and the white gas.
@@ -22,7 +22,7 @@ Before the first segment the flyer is hidden; between segments it holds the prev
 
 API
     import odm
-    sq = odm.Squads("Trost", pscale=2.0)
+    sq = odm.Squads("Trost")                  # pscale 1.0 = true scale (user rule)
     f = sq.flyer("mikasa", kit="cadet", hair="black", scarf=True)        # or sq.flyer("c12", kit="garrison")
     f.stand(0, 5, (x, y, z), yaw); f.hop(5, 6.2, p0, p1); ...            # or odm.roof_route(f, t0, roofs, ...)
     sq.build(coll)                    # once: meshes for bodies, wires, gas puffs
@@ -38,7 +38,7 @@ import aotlib as L
 import swarm845 as SW
 import flares as FX
 
-PSCALE = 2.0
+PSCALE = float(__import__("os").environ.get("ODM_PSCALE", "1.0"))   # true scale; readability from colour cues + emissive accents
 G = 9.81
 
 def _ss(u):

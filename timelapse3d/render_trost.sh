@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 # TROST SEGMENT (aot/render_trost.py on the aot/trost.py set + aot/trost_action.py), ONE Blender session per part.
-#   PART=1 bash render_trost.sh          parts: 1 = v 0-44, 2 = v 44-86, 3 = v 86-end  (15 fps, 854x480)
+#   PART=1 bash render_trost.sh          parts: 1 = v 0-40, 2 = v 40-80, 3 = v 80-end (118.8 s)  (15 fps, 854x480)
 #   STILLS="8.5,14.2,30" bash render_trost.sh       stills only (video seconds) into OUT
 #   DRY=1 bash render_trost.sh           build + print the timeline / camera, no render
 # Env: ENGINE (CYCLES|BLENDER_EEVEE), SMP (samples), STEP (render every Nth frame; the encode repeats frames)
 FPS="${FPS:-15}"; SMP="${SMP:-1}"; STEP="${STEP:-2}"; PART="${PART:-1}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 OUT="${OUT:-E:/YTP2/3D Timelapse/renders/trost}"
-case "$PART" in 1) V0=0; V1=44;; 2) V0=44; V1=86;; 3) V0=86; V1=999;; esac
+case "$PART" in 1) V0=0; V1=40;; 2) V0=40; V1=80;; 3) V0=80; V1=999;; esac
 [ -n "$WIN" ] && V0=${WIN%,*} && V1=${WIN#*,}
-FR="$OUT/frames_p$PART"; mkdir -p "$OUT"
+FR="$OUT/frames_p$PART"; mkdir -p "$OUT"; rm -f "$FR/_done"
 EXTRA="--v0 $V0 --v1 $V1 --step $STEP"
 if [ -n "$STILLS" ]; then EXTRA="--stills $STILLS"; FR="$OUT"; elif [ -z "$DRY" ] && [ -z "$WIN" ]; then rm -rf "$FR"; mkdir -p "$FR"; fi
 [ -n "$DRY" ] && EXTRA="$EXTRA --dry"
@@ -17,11 +17,16 @@ LOCK="/e/YTP2/3D Timelapse/.gpu_lock"
 until mkdir "$LOCK" 2>/dev/null; do sleep 5; done
 trap 'rmdir "$LOCK" 2>/dev/null' EXIT
 BL="/c/All The Programs/Blender/blender.exe"
-TA_PSCALE=${TA_PSCALE:-2.5} TREE_DENS=${TREE_DENS:-0.005} COL_H=${COL_H:-64} COL_DX=${COL_DX:--7} AOT_SET=trost AOT_PLUGINS=colossal_asset \
+for TRY in 1 2 3; do
+TA_PSCALE=${TA_PSCALE:-1.0} TREE_DENS=${TREE_DENS:-0.005} COL_H=${COL_H:-64} COL_DX=${COL_DX:--7} AOT_SET=trost AOT_PLUGINS=colossal_asset \
   "$BL" -b -P "$HERE/aot/scene.py" -P "$HERE/aot/render_trost.py" -- \
   --year 850 --cam trost_overview --engine ${ENGINE:-BLENDER_EEVEE} --res 854x480 --samples $SMP \
   --rt-out "$FR" --fps $FPS --rt-samples $SMP $EXTRA 2>&1 \
   | grep --line-buffered -E "\[trost\]|\[trost_action\]|\[plugin|Traceback|Error|error:|line [0-9]+"
+[ -n "$STILLS" ] || [ -n "$DRY" ] && break
+[ -f "$FR/_done" ] && break
+echo "[trost] blender exited early (try $TRY), resuming"
+done
 rmdir "$LOCK" 2>/dev/null
 [ -n "$STILLS" ] || [ -n "$DRY" ] && exit 0
 # frames are rt_<global index>; STEP > 1 leaves gaps -> repeat the last rendered frame
@@ -37,6 +42,6 @@ if fs and step > 1:
         if os.path.exists(p): last = p
         else: shutil.copyfile(last, p)
 PY
-FIRST=$(ls "$FR" | head -1 | sed 's/rt_0*\([0-9]\)/\1/; s/\.png//'); [ -z "$FIRST" ] && FIRST=0
+FIRST=$(ls "$FR" | grep "^rt_" | head -1 | sed 's/rt_0*\([0-9]\)/\1/; s/\.png//'); [ -z "$FIRST" ] && FIRST=0
 ffmpeg -hide_banner -loglevel error -y -framerate $FPS -start_number $FIRST -i "$FR/rt_%05d.png" -c:v libx264 -crf 26 -pix_fmt yuv420p "$OUT/trost_part$PART.mp4"
 ls -la "$OUT/trost_part$PART.mp4"

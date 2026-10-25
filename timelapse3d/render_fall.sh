@@ -4,7 +4,7 @@
 #   FPS=15 bash render_fall.sh             preview (FPS<=15 -> FAST_PREVIEW=1: 2 samples + OIDN, short paths) -> fall_preview.mp4
 #   bash render_fall.sh                    FPS=30 final (8 samples, full light paths)
 #   TIMES="0,3,8,12.5" bash render_fall.sh                   stills only (fall_sSS.ss.png in OUT)
-FPS="${FPS:-30}"; S0="${S0:-0}"; S1="${S1:-15.5}"
+FPS="${FPS:-30}"; S0="${S0:-0}"; S1="${S1:-13.2}"
 if [ -z "$FAST_PREVIEW" ]; then [ "${FPS%.*}" -le 15 ] && FAST_PREVIEW=1 || FAST_PREVIEW=0; fi
 if [ "$FAST_PREVIEW" = 1 ]; then SAMPLES="${SAMPLES:-2}"; else SAMPLES="${SAMPLES:-8}"; fi
 export FAST_PREVIEW
@@ -19,7 +19,7 @@ BL="/c/All The Programs/Blender/blender.exe"
 P=seq_carla,flight,states845,swarm845,seq_carla
 EXTRA=""; [ -n "$TIMES" ] && EXTRA="--times $TIMES"
 # CARLA_PERFRAME: seq_carla builds once, render_fall poses it per frame; SUN_AZ/EXPO as the opening (render_fast.sh)
-CARLA_PERFRAME=1 CARLA_F=2290 SWARM=1 SUN_AZ=-102 EXPO=-1.5 TREE_DENS=0.006 FL_NOKIDS=1 COL_SHOW=0 \
+CARLA_PERFRAME=1 CARLA_F=2305 CARLA_TITAN_H=${CARLA_TITAN_H:-16} SWARM=1 SUN_AZ=-102 EXPO=-1.5 TREE_DENS=0.006 FL_NOKIDS=1 COL_SHOW=0 \
 AOT_STATE=kicked AOT_ARC_T=1 AOT_EVENT=intact AOT_PLUGINS=$P \
   "$BL" -b -P "$HERE/aot/scene.py" -P "$HERE/aot/render_fall.py" -- \
   --cam overview --engine ${ENGINE:-CYCLES} --res 854x480 --samples $SAMPLES --fall-out "$OUT" --s0 $S0 --s1 $S1 --fps $FPS \

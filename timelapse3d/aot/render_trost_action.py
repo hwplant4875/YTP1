@@ -139,7 +139,7 @@ def site():
                 boulder=(2.0, -560.0), roofs=roofs, ground=ground, walkable=walk, bounds=(-290.0, 290.0, OGY - 140.0, -8.0),
                 pyre=(60.0, -110.0), wall_pts=wall_pts,
                 inner_gate=(0.0, 0.0), inner_out=(0.0, 1.0), pyxis_pt=(0.0, -2.5, L.WALL_H + 0.2),
-                bell_tower=(110.0, -180.0), bell_tower_top=52.0)
+                bell_tower=(110.0, -180.0), bell_tower_top=52.0, cannon_square=(22.0, -40.0))
 
 # ---------------------------------------------------------------- shots: name, T0, T1, video seconds, cam(u) -> (loc, tgt, lens)
 def _ease(u):

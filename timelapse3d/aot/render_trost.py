@@ -104,11 +104,13 @@ _SP = [  # (T0, T1, dv, is_set_piece)
     (6, 7.6, 0.8, 0), (7.6, 12.4, 4.5, 1),          # swoop -> squad 34: Eren eaten
     (12.4, 13.2, 1.5, 0), (13.2, 16, 3.5, 1),       # swoop -> inner gate: Mikasa clears the wagon, the crowd floods out
     (16, 17.5, 1.2, 0), (17.5, 21, 3.0, 1),         # swoop -> supply HQ: titans around it, cadets stranded
-    (21, 22.5, 0.8, 0), (22.5, 26.5, 3.5, 1),       # Mikasa falls into the street
-    (26.5, 30, 3.5, 1), (30, 44, 7.0, 1),           # the rogue titan appears and kills titans
-    (44, 46, 1.5, 0), (46, 54, 7.5, 1),             # HQ dash -> lift plan (cutaway)
+    (21, 26.5, 2.2, 0),                             # Mikasa's dash west over the roofs (followed, fast)
+    (26.5, 31, 3.5, 1),                             # she falls into the street by the church; the rogue titan appears
+    (31, 35, 2.6, 1),                               # its first kill at the bell tower's foot
+    (35, 44, 3.5, 0), (44, 46, 1.4, 0),             # it fights its way to the HQ (fast), the HQ dash
+    (46, 54, 5.2, 1),                               # lift plan (cutaway), ~6.5 s
     (54, 56.5, 1.5, 0), (56.5, 59, 2.5, 1),         # Eren out of the nape
-    (59, 61.5, 1.2, 0), (61.5, 63.5, 2.5, 1),       # the cannon and the half-shift
+    (59, 61.5, 1.2, 0), (61.5, 63.5, 2.5, 1),       # swoop -> cannon square: the Garrison ring, the cannon, the half-shift
     (63.5, 66, 2.0, 1),                             # Armin's salute (overlay hold 2.5 s after SET_K)
     (66, 68.5, 1.0, 0), (68.5, 71.5, 2.4, 1),       # swoop -> Pyxis on the wall (hold 3 s)
     (71.5, 74.5, 1.0, 0), (74.5, 79, 3.5, 1),       # swoop -> boulder: Eren shifts, red flare
@@ -214,39 +216,40 @@ def cam_keys():
     k(9.0, (ex - 12, ey + 52, 82), (ex + 6, ey - 8, L.WALL_H + 5), 46)
     k(11.4, (ex + 4, ey + 80, 78), (-14, GY - 14, 56), 34)
     k(13.6, (50, GY + 130, 95), (0, GY + 12, 20), 32)
-    # ---- FLOOD: street level on the avenue, looking into the gate hole as the titans pour in
-    kt(2.2, (38, GY + 125, 48), (0, GY + 18, 6), 30)
-    kt(5.8, (34, GY + 140, 44), (-4, GY + 40, 6), 30)
-    # ---- Eren eaten: squad 34's roofs, steep oblique ~55 m
+    # ---- AERIAL HOLD (user 10/25): from the kick to the Attack Titan's lightning arrival one continuous sky view,
+    # 120-300 m up, reading the beats from the air (name tags point out the heroes): the flood through the gate,
+    # squad 34 / Eren eaten, the evacuation at the inner gate, the titans around the HQ, Mikasa's dash and fall
     e = (er[:2] + ar[:2]) / 2
-    kt(7.8, rel(e, -42, -30, er[2] + 34), rel(e, 0, 4, er[2] - 4), 36)
-    kt(12.2, rel(e, -36, -22, er[2] + 30), rel(e, 0, 2, er[2] - 5), 40)
-    # ---- inner gate: the wagon jam released, crowd floods out (camera south-east of the gate, low)
-    kt(13.4, (igx + 48, igy - 62, 34), (igx, igy - 10, 4), 30)
-    kt(15.8, (igx + 40, igy - 52, 30), (igx, igy + 6, 4), 30)
-    # ---- HQ despair: from the yard side, titans ringing the building
-    kt(17.7, rel(hq, -45, -80, 78), rel(hq, 0, -4, 4), 30)
-    kt(20.8, rel(hq, -38, -70, 72), rel(hq, 4, 0, 4), 30)
-    # ---- Mikasa falls into the street at M
-    kt(22.7, rel(M, -16, 26, 58), rel(M, 0, 0, 1), 44)
-    kt(26.3, rel(M, -14, 22, 54), rel(M, 2, -4, 2), 46)
-    # ---- the rogue titan appears beside her and fights its way north
-    kt(28.0, rel(A0, -30, 40, 66), rel(A0, 0, 0, 7), 30)
-    for T in (32.0, 37.0, 42.0):
-        a = at(T)
-        kt(T, rel(a, -38, -40, 72), rel(a, 0, 0, 6), 30)
+    kt(2.0, (110, GY + 150, 170), (0, GY + 60, 0), 30)
+    kt(6.0, (140, GY + 230, 200), (10, GY + 140, 0), 30)
+    kt(10.0, (150, e[1] + 120, 210), (e[0], e[1], 12), 32)
+    kt(14.0, (10, -260, 250), (igx, -30, 0), 30)
+    kt(16.5, (40, -210, 250), (igx + 40, -60, 0), 30)
+    kt(19.0, (60, -230, 260), (hq[0], hq[1], 8), 30)
+    kt(23.0, (120, -150, 240), ((hq[0] + M[0]) / 2, (hq[1] + M[1]) / 2, 8), 30)
+    kt(26.0, (20, -140, 190), (M[0], M[1], 4), 34)
+    kt(27.2, rel(M, 26, -40, 46), rel(M, 0, 0, 1), 40)
+    kt(30.6, rel(M, 30, -46, 50), ((M[0] + A0[0]) / 2, (M[1] + A0[1]) / 2, 6), 34)
+    tw = TR.BELL_TOWER["xy"]
+    kt(31.6, (tw[0] + 60, tw[1] - 62, 58), (tw[0] + 18, tw[1] - 18, 18), 32)
+    kt(34.8, (tw[0] + 64, tw[1] - 56, 60), (tw[0] + 26, tw[1] - 22, 16), 32)
+    a = at(39.5)
+    kt(39.5, rel(a, -40, -50, 85), rel(a, 0, 0, 6), 30)
     # ---- lift plan: steep over the cutaway
-    kt(46.4, rel(hq, -22, -14, 58), rel(hq, 0, 0, 1), 30)
-    kt(53.6, rel(hq, -18, -10, 50), rel(hq, 0, 0, 1), 30)
+    kt(46.4, rel(hq, -15, -9, 44), rel(hq, 0, 0, 1), 30)
+    kt(53.6, rel(hq, -13, -8, 40), rel(hq, 0, 0, 1), 30)
     # ---- Eren out of the nape, the cannon and the half-shift, Armin's salute
-    kt(56.7, rel(Cp, -16, 30, 58), rel(Cp, 0, 0, 3), 32)
-    kt(58.8, rel(Cp, -14, 30, 54), rel(Q, 0, 0, 2), 34)
+    kt(56.7, rel(Cp, -10, 18, 42), rel(Cp, 0, 0, 3), 32)
+    kt(58.8, rel(Cp, -8, 18, 40), rel(Q, 0, 0, 2), 34)
     cd = C["cdir"]; perp = np.array([cd[1], -cd[0]])
     mid = (Q + cxy) / 2
-    kt(61.7, rel(mid, -6, 46, 50), rel(mid, 0, 0, 4), 32)
-    kt(63.4, rel(mid, -4, 42, 46), rel(Q, 0, 0, 5), 34)
-    kt(63.8, rel(Q, -8, 34, 50), rel(Q, 0, 0, 2), 46)
-    kt(65.9, rel(Q, -6, 30, 47), rel(Q, 0, 0, 2), 52)
+    # D's cannon_square (default: the inner-gate square): look north so the inner wall is the backdrop;
+    # by the HQ (old staging) look from the open street north of it
+    sgn = -1.0 if Q[1] > -160 else 1.0
+    kt(61.7, rel(mid, -4, 30 * sgn, 44), rel(mid, 0, 0, 4), 32)
+    kt(63.4, rel(mid, -3, 28 * sgn, 42), rel(Q, 0, 0, 5), 34)
+    kt(63.8, rel(Q, -4, 22 * sgn, 34), rel(Q, 0, 0, 3), 40)
+    kt(65.9, rel(Q, -3, 20 * sgn, 32), rel(Q, 0, 0, 3), 46)
     # ---- Pyxis on the wall top above the inner gate (camera level with the wall walk, Trost side)
     sx, sy, sz = TR.WALLTOP_SPEECH
     kt(68.6, (sx + 30, sy - 40, sz + 14), (sx, sy, sz + 1), 55)
@@ -536,6 +539,31 @@ hero_pop()
 col_coll = bpy.data.collections.get("ColossalTitan")
 print(f"[trost] setup total {time.time() - t0:.1f}s; video length {V_END:.1f}s; colossal {'on' if (CA and CA.STATE) else 'MISSING'}")
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import hudcam
+TRACK = {"Eren": "eren", "Mikasa": "mikasa", "Armin": "armin", "AttackTitan": "attack"}
+TRK = {}
+for nm in TRACK:
+    o = bpy.data.objects.new(nm, None); sc.collection.objects.link(o); TRK[nm] = o
+
+def trackers(v, T):
+    """Move the tracker empties to the heroes (hidden heroes go far below ground so the HUD drops their tag)."""
+    for nm, key in TRACK.items():
+        p = None
+        if key == "attack":
+            ok = "attack_titan" in TA.BEATS and TA.BEATS["attack_titan"][0] <= T < 104.5
+            p = TA.hero_pos("attack", T) if ok else None
+        elif v < V_KICK and key == "eren":
+            p = (EREN_WALL[0], EREN_WALL[1], L.WALL_H + 1.8)
+        else:
+            try:
+                p = TA.hero_pos(key, T)
+            except Exception:
+                p = None
+            if p is not None and abs(float(p[0])) + abs(float(p[1])) < 1.0:
+                p = None
+        TRK[nm].location = tuple(float(c) for c in p) if p is not None else (0.0, 0.0, -1000.0)
+
 def frame_state(v):
     T = Tmap(v)
     TA.update(T)
@@ -549,6 +577,7 @@ def frame_state(v):
     breach_at(v)
     loc, rot, lens = cam_at(v)
     cam.location = loc; cam.rotation_euler = rot; cam.data.lens = lens
+    trackers(v, T)
     return T
 
 if B.dry and os.environ.get("RT_PROBE"):
@@ -576,12 +605,21 @@ if B.stills:
 else:
     n0 = int(math.ceil(B.v0 * B.fps)); n1 = int(min(B.v1, V_END) * B.fps)
     jobs = [(f / B.fps, f"rt_{f:05d}.png") for f in range(n0, n1) if f % B.step == 0]
+    jobs = [j for j in jobs if not os.path.exists(os.path.join(B.rt_out, j[1]))]      # resume after a crash
 tr = time.time()
 for i, (v, fn) in enumerate(jobs):
     tu = time.time()
     T = frame_state(v)
     tu = time.time() - tu
     sc.render.filepath = os.path.join(B.rt_out, fn)
+    bpy.context.view_layer.update()
+    try:
+        fi = int(round(v * B.fps))
+        hudcam.dump(sc, fi, B.rt_out, t=v, track=tuple(TRK), extra={"T": T})
+    except Exception as ex_:
+        print("[trost] hudcam failed:", ex_)
     bpy.ops.render.render(write_still=True)
     el = time.time() - tr
     print(f"[trost] {i + 1}/{len(jobs)} v={v:.2f} T={T:.2f} -> {fn} ({el:.0f}s, {el / (i + 1):.2f}s/f, update {tu:.2f}s)", flush=True)
+if not B.stills:
+    open(os.path.join(B.rt_out, "_done"), "w").write("%d frames" % len(jobs))

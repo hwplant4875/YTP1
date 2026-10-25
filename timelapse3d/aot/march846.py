@@ -29,8 +29,7 @@ Story (video seconds):
            and turns north toward Trost / Wall Rose
 Agents: N_PEOPLE (default 60,000; each stands for ~4 people) + N_WAGONS carts/wagons + N_TITANS (default 420, 4-15 m).
 LOD per frame by camera distance: near (< 230 m) minimal posed figures (two walk poses, panic pose, cloaked soldiers,
-tool carriers, riders), mid (< 750 m) two-tone capsules, far tiny boxes; far figures are drawn larger than life (x1..4)
-so the column still reads from 600 m.
+tool carriers, riders), mid (< 750 m) two-tone capsules, far tiny boxes; all at TRUE scale (user rule): the mass reads by density, not by enlarged figures.
 
 Gate: Trost's outer gate (trost.OUTER_GATE, gate heading south). Override with MARCH_GATE="x,y" and
 MARCH_GATE_HEADING=<deg of the outward direction, -90 = south>. Without the Trost set (AOT_SET=march846) a placeholder
@@ -1052,7 +1051,7 @@ def update(t, cam_loc):
     tp = np.stack([tx, ty, tz + bob], 1)
     import swarm845 as SW
     dcam = np.sqrt((tx - cam[0]) ** 2 + (ty - cam[1]) ** 2 + (tz - cam[2]) ** 2)
-    tsc = _dscale(dcam, 380.0, 2.6)                     # titans drawn larger far away (same idea as the people)
+    tsc = np.ones(NT)                                   # TRUE scale (user rule): titans keep their real 3-15 m
     co = SW._deform(S["RT"], Ar, Ae, lean, tsc, tyaw, tp)
     S["tob"].data.vertices.foreach_set("co", co.astype(np.float32).ravel()); S["tob"].data.update()
     # ---------------- people
@@ -1096,8 +1095,7 @@ def update(t, cam_loc):
     lod = np.where(kind == 3, 7, lod)
     lod = np.where(d > LOD_NEAR, np.where(kind == 3, 7, 5), lod)
     lod = np.where(d > LOD_MID, 6, lod)
-    sc = _dscale(d, 150.0, 3.3) * (S["hgt"] / 1.7)
-    sc = np.where(S["surv"], sc * (1.0 + 1.6 * float(_sm(12.5, 15.5, t))), sc)     # the last ~100 must read
+    sc = S["hgt"] / 1.7                                  # TRUE scale (user rule): every human the same size
     sc = sc * vis
     tilt = np.where(fleeing & moving, -0.25, 0.0)
     rot = np.stack([tilt * 0, np.zeros(N), yaw], 1)
@@ -1120,7 +1118,7 @@ def update(t, cam_loc):
     wyaw = np.arctan2(wty, wtx) - np.pi / 2 + np.where(over, 0.4 * np.sign(S["w_roll"]), 0.0) * a_
     roll = S["w_roll"] * a_
     dw = np.sqrt((wx - cam[0]) ** 2 + (wy - cam[1]) ** 2 + (wz - cam[2]) ** 2)
-    wsc = _dscale(dw, 220.0, 2.6) * np.where(ws < -S_IN, 0.0, 1.0)
+    wsc = np.where(ws < -S_IN, 0.0, 1.0)                 # true scale
     me = S["wob"].data
     me.vertices.foreach_set("co", np.stack([wx, wy, wz + 0.02], 1).astype(np.float32).ravel())
     me.attributes["s"].data.foreach_set("value", wsc.astype(np.float32))

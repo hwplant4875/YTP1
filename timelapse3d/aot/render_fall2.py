@@ -236,16 +236,20 @@ def seg3_build():
     # ferries on the canal north of the water gate + the kids at the lead ferry's bow
     S["ferries"] = []
     for i, (s0, side) in enumerate(((10.0, -3.0), (LEAD_S0, 4.0), (56.0, -2.5), (84.0, 3.5), (118.0, -1.5))):
-        ob, Lb = SC.boat(f"Ferry{i}", 30 + i, coll, bow_gap=2.0 if i == 1 else 0.0)
+        ob, Lb = SC.boat(f"Ferry{i}", 30 + i, coll, crowd=False)      # refugees: minimal figures (below), not blocks
+        rb = random.Random(30 + i); rb.uniform(14, 17); Bb = rb.uniform(3.6, 4.1)
         S["ferries"].append((ob, Lb, s0, side))
+        S.setdefault("bb", []).append(Bb)
     ob, Lb, s0, side = S["ferries"][1]
     ferry_place(ob, s0, side, 0.0)
     bpy.context.view_layer.update()
     er, mk = SC.make_kids("Boat")
     mw = ob.matrix_world; d = Vector((math.cos(ob.rotation_euler.z), math.sin(ob.rotation_euler.z), 0))
-    for kid, lx, ly, yo in ((er, Lb / 2 - 2.2, 0.15, 0.0), (mk, Lb / 2 - 3.1, -0.55, 0.25)):
+    ks = float(os.environ.get("FALL_KIDS_SCALE", "2.0"))     # read from the sky: kids ~2x (like the swarm's pscale)
+    for kid, lx, ly, yo in ((er, Lb / 2 - 2.0, 0.2, 0.0), (mk, Lb / 2 - 3.3, -0.7, -0.5)):
         p = mw @ Vector((lx, ly, 0.95))
-        SC._place(kid, p.x, p.y, SC._yaw_to(d) + yo, z=p.z)
+        SC._place(kid, p.x, p.y, SC._yaw_to(-d) + yo, z=p.z)  # facing back toward the burning town
+        kid.scale = tuple(v * ks for v in kid.scale)
         r, o = SC.p_stand(0.0)
         if kid is er:                                   # fist clenched at his side, head down: the vow
             r["upperarm01.R"] = SC._Ra(x=-0.25, y=-(SC.LOWER - 0.1)); r["lowerarm01.R"] = SC._R(x=-1.2)
@@ -254,6 +258,24 @@ def seg3_build():
         bpy.context.view_layer.update()
         kid.parent = ob; kid.matrix_parent_inverse = ob.matrix_world.inverted()
     S["kids"] = (er, mk)
+    # refugees on every ferry (minimal swarm figures riding the ferry transforms; a gap at the lead bow for the kids)
+    slots = []
+    rnd = random.Random(17)
+    for fi, (ob, Lb, s0, side) in enumerate(S["ferries"]):
+        Bb = S["bb"][fi]; gap = 4.5 if fi == 1 else 0.0
+        nx_, ny_ = int((Lb - 3.2 - gap) / 0.75), int((Bb - 0.9) / 0.7)
+        for a in range(nx_):
+            for b in range(ny_):
+                x = -Lb / 2 + 1.0 + a * 0.75 + rnd.uniform(-0.15, 0.15); y = -Bb / 2 + 0.45 + b * 0.7 + rnd.uniform(-0.1, 0.1)
+                slots.append((fi, x, y, rnd.uniform(-1.2, 1.2)))
+    S["slots"] = np.array(slots)
+    S["folk"] = MiniCrowd("FerryFolk", len(slots), 23, coll)
+    # warm light behind the burst inner gate (north side): the breach reads as a bright hole
+    ld = bpy.data.lights.new("BreachLight", "AREA"); ld.shape = "RECTANGLE"; ld.size, ld.size_y = 26.0, 30.0
+    ld.color = (1.0, 0.72, 0.42); ld.energy = 0.0
+    lo = bpy.data.objects.new("BreachLight", ld); coll.objects.link(lo)
+    lo.location = (0.0, 14.0, 14.0); lo.rotation_euler = (math.radians(-90), 0.0, 0.0)     # facing south through the hole
+    S["breach_light"] = ld
     # the crowd jamming the west bank of the canal north of the wall, pressing toward the water
     n = int(os.environ.get("FALL_JAM_N", "260"))
     S["jam"] = MiniCrowd("Jam", n, 7, coll)
@@ -297,8 +319,8 @@ def seg3_cam_keys(S):
         (0.0, (48, -250, 62), (0, -95, 8), 30),            # behind and to the side of the charge, the gate ahead
         (IMPACT, (36, -95, 48), (0, -4, 16), 30),           # closing on the impact
         (5.8, (300, -70, 150), (215, 75, 0), 30),           # rising over the wall: the jammed bank, the ferries
-        boatcam(8.0, 17, 8, -9, 0.025),                     # the vow hold: ahead of the lead ferry, over the water on
-        boatcam(11.0, 19, 9.5, -10, 0.03),                  # the far side: the kids at the bow, the bank and the wall behind
+        boatcam(8.0, 13, 6.5, -6, 0.02),                    # the vow hold (3 s, slow drift): just ahead of the lead
+        boatcam(11.0, 15.5, 8.0, -9, 0.035),                # ferry over the water, the kids at the bow facing the burning town
         boatcam(SEG3, 70, 90, 20, 0.3, 28.0),               # crane up over the ferries
     ]
     return guide(ks)
@@ -337,9 +359,19 @@ def seg3_pose(S, s):
     rig.rotation_euler = (0.2 if s < IMPACT + 0.4 else 0.2 * (1 - smooth(IMPACT + 0.4, IMPACT + 1.4, s)), 0.0, math.pi)
     # swarm: the district behind (titans keep wandering / eating); sim t continues from segment 2
     SW.update(68.0 + 1.5 * s, pscale=1.3)
-    # ferries
+    # ferries + their refugees
     for ob, Lb, s0, side in S["ferries"]:
         ferry_place(ob, s0, side, s)
+    bpy.context.view_layer.update()
+    sl = S["slots"]; nf = len(sl)
+    P = np.zeros((nf, 3)); Y = np.zeros(nf)
+    for fi, (ob, Lb, s0, side) in enumerate(S["ferries"]):
+        m = sl[:, 0] == fi
+        mw = np.array(ob.matrix_world)
+        loc = np.c_[sl[m, 1], sl[m, 2], np.full(m.sum(), 0.97), np.ones(m.sum())] @ mw.T
+        P[m] = loc[:, :3]; Y[m] = ob.rotation_euler.z - math.pi / 2 + sl[m, 3]
+    S["folk"].set(P, Y, np.zeros(nf), np.zeros(nf), arms_up=np.where(np.arange(nf) % 5 == 0, 0.6 + 0.2 * np.sin(s * 3 + np.arange(nf)), 0.0))
+    S["breach_light"].energy = float(os.environ.get("FALL_BREACH_W", "2.5e5")) * smooth(IMPACT, IMPACT + 0.4, s)
     # the bank crowd: pressing toward the water, jostling, arms up as the boats leave
     J = S["J"]; n = len(J)
     k = np.clip((s + J[:, 3]) / 9.0, 0, 1) ** 0.7
@@ -431,6 +463,25 @@ def seg45_build():
     S["T"] = np.array([(rnd.uniform(-30, 30), rnd.uniform(15, 60), rnd.uniform(-0.9, 0.9), rnd.uniform(4.0, 9.0), rnd.uniform(-6, 2))
                        for _ in range(n)])
     S["tz"] = None
+    # burning town without volumes (Eevee): fire + dark smoke CARDS (smokecards) at every fire light of states845
+    if os.environ.get("AOT_NOSMOKE") == "1":
+        import smokecards as SMK
+        fires = [o.matrix_world.translation.copy() for o in bpy.data.objects if o.type == "LIGHT" and o.name.startswith("FireL")]
+        rnd = random.Random(8)
+        fc = SMK.SmokeCards("NightFire"); sm = SMK.SmokeCards("NightSmoke")
+        for k, p in enumerate(fires):
+            g = L.height(p.x, p.y) + 0.5
+            big = 0.7 + 0.6 * rnd.random()
+            te = np.arange(-12.0, SEG4 + 1.0, 0.22 + 0.1 * rnd.random())
+            n = len(te)
+            pos = np.c_[np.full(n, p.x) + np.random.uniform(-3, 3, n) * big, np.full(n, p.y) + np.random.uniform(-3, 3, n) * big, np.full(n, g)]
+            fc.add_many(te, pos, None, 2.0 * big, 5.5 * big, 1.3, 4.0, kind="fire", alpha=0.9)
+            te2 = np.arange(-30.0, SEG4 + 1.0, 0.7 + 0.3 * rnd.random()); n2 = len(te2)
+            pos2 = np.c_[np.full(n2, p.x), np.full(n2, p.y), np.full(n2, g + 8 * big)]
+            sm.add_many(te2, pos2, None, 5.0 * big, 26.0 * big, 22.0, 7.0, color=(0.13, 0.10, 0.09), kind="smoke", alpha=0.75)
+        fc.build(coll); sm.build(coll)
+        S["cards"] = (fc, sm)
+        print(f"[fall2] night fire cards at {len(fires)} fires")
     # Grisha beat set
     S["g"] = seg5_build()
     return S
@@ -438,6 +489,8 @@ def seg45_build():
 def seg4_pose(S, s):
     if FX:
         FX.update(FXT + 30.0 + s)
+    for c in S.get("cards", ()):
+        c.update(s, wind=(1.5, 3.0))
     SW.update(120.0 + 3.0 * s, pscale=1.4)
     if S["front"] is not None:
         S["front"].outputs[0].default_value = -400.0 + 7200.0 * smooth(2.5, SEG4, s) ** 1.3

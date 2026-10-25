@@ -41,7 +41,7 @@ import flares as FX
 
 STATE = {}
 DT = 0.2
-PS = float(os.environ.get("TA_PSCALE", "2.0"))
+PS = float(os.environ.get("TA_PSCALE", "1.0"))           # user rule: every human at TRUE scale (1.0)
 KEY = float(os.environ.get("TA_KEY_SCALE", "1.2"))             # key titans: bearded, the HQ seven, Levi's two, flood leaders
 EREN_ACCENT = (0.04, 0.80, 0.32)                                 # emerald collar + hem (emissive), Eren's unique cue
 EREN_CLOAK = (0.13, 0.19, 0.07)                                  # green-tinted brown cloak
@@ -889,7 +889,7 @@ def choreograph(site, seed=850):
         TT.ev[-1]["blind"] = 49.65
         TT.ev[-1]["death"] = (51.05 + 0.04 * k, 1 if k % 2 else -1)
         lift7.append(nm)
-    sc_in = 0.55
+    sc_in = 1.0                                   # true scale (was 0.55 of a 2x figure)
     riflemen = []
     for k in range(9):
         a = k / 9 * math.tau
@@ -987,15 +987,26 @@ def finish_choreography(C, site):
     mroof = S.roof_near(C_pt + sideC * 20, used); used.add(mroof[0])
     mk.hop(30.0, 31.2, mk.end_pos(), mroof[1]).stand(31.2, 56.2, mroof[1], 0.0, "crouch")
     mk.hop(56.2, 57.3, mroof[1], ATD.nape(57.3)).stand(57.3, 58.0, ATD.nape(57.3), 0.0, "carry")
-    Q = S.snap(C_pt + sideC * 13 - fwd * 3)
+    # site key cannon_square: the Garrison corners the trio in an open square (a time cut after the emerge)
+    jump = "cannon_square" in S.d
+    Q = S.snap(v2(S.d["cannon_square"])) if jump else S.snap(C_pt + sideC * 13 - fwd * 3)
     Qp = S.P(Q)
     to_q = lambda t, a: None
-    eren2.walk(58.0, 58.9, ATD.nape(58.0), Qp + np.append(-sideC * 0.9, 0), pose="flail")
+    if jump:   # hold on the corpse, then cut: the trio is already in the square
+        eren2.stand(58.0, 58.6, ATD.nape(58.0), 0.0, "kneel")
+    else:
+        eren2.walk(58.0, 58.9, ATD.nape(58.0), Qp + np.append(-sideC * 0.9, 0), pose="flail")
     eren2.stand(58.9, 68.0, Qp + np.append(-sideC * 0.9, 0), 0.0, "kneel")
-    mk.walk(58.0, 58.9, ATD.nape(58.0), Qp + np.append(sideC * 0.9, 0), pose="run")
+    if jump:
+        mk.stand(58.0, 58.6, ATD.nape(58.0), 0.0, "carry")
+    else:
+        mk.walk(58.0, 58.9, ATD.nape(58.0), Qp + np.append(sideC * 0.9, 0), pose="run")
     armin2 = SQ.flyer("armin2", "cadet", "blond", H=1.63)
     ar_roof = S.roof_near(C_pt - sideC * 22, used); used.add(ar_roof[0])
-    armin2.stand(52.0, 57.6, ar_roof[1], 0.0, "stand").hop(57.6, 58.8, ar_roof[1], Qp + np.append(fwd * 0.9, 0))
+    if jump:
+        armin2.stand(52.0, 57.6, ar_roof[1], 0.0, "stand").hop(57.6, 58.5, ar_roof[1], ATD.nape(58.5) + np.array([*(sideC * 2.0), 0]))
+    else:
+        armin2.stand(52.0, 57.6, ar_roof[1], 0.0, "stand").hop(57.6, 58.8, ar_roof[1], Qp + np.append(fwd * 0.9, 0))
     # Garrison ring + the cannon
     cdir = np.array([math.cos(1.1), math.sin(1.1)])
     cannon_xy = S.snap(Q + cdir * 34)
@@ -1406,7 +1417,7 @@ class Evac:
     T0, T_MIK, T_PULL0, T_PULL1, T_END = 1.0, 10.6, 11.6, 13.4, 46.0
     RATE = 22.0                 # people through the gate per second once it is clear (a flood)
 
-    def __init__(self, site, n=420, seed=846, ps=1.6):
+    def __init__(self, site, n=420, seed=846, ps=1.0):
         self.site, self.n, self.ps = site, n, ps
         self.rnd = np.random.default_rng(seed)
         G = v2(site.d["inner_gate"]); out = v2(site.d.get("inner_out", (0, 1))); out = out / np.linalg.norm(out)
@@ -1564,7 +1575,7 @@ def evac_flyers(SQ, site, EV, used):
     mk.stand(EV.T_MIK, 14.5, land, odm.yaw_of(np.append(out, 0)), "crouch")
     i2, r1 = site.roof_near(G - out * 90, used); used.add(i2)
     mk.hop(14.5, 15.6, land, r1).gone(16.9)
-    dimo = SQ.flyer("dimo", "garrison", "grey", H=1.75, scale=1.2)
+    dimo = SQ.flyer("dimo", "garrison", "grey", H=1.75)
     p0 = site.P(EV.front - out * 0.5 + side * 2.0)
     dimo.stand(2.0, EV.T_MIK + 0.3, p0, odm.yaw_of(np.append(-out, 0)), "wave")
     p1 = site.P(EV.front - out * 4.5 + side * 6.5)
@@ -1650,4 +1661,5 @@ def site_from_trost(T=None):
                 bounds=(-T.W, T.W, T.OUTER_GATE[1] - 140.0, 140.0), pyre=T.PLAZA[:2], wall_pts=wall_pts,
                 inner_gate=T.INNER_GATE, inner_out=(0.0, 1.0), pyxis_pt=T.WALLTOP_SPEECH,
                 bell_tower=bt["xy"], bell_tower_top=bt.get("top_z", 64.0),
-                wagon_obj=bpy.data.objects.get("TrostCargoWagon"))
+                wagon_obj=bpy.data.objects.get("TrostCargoWagon"),
+                cannon_square=(T.INNER_GATE[0], -40.0))   # canon: the Garrison corners the trio near the wall
