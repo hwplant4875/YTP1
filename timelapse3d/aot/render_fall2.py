@@ -197,8 +197,57 @@ FXT = 100.0              # fx845 time base: the kick FX are long settled; the in
 FERRY_V = 6.0              # timelapse
 LEAD_S0 = 30.0
 
+def dress_fields(c=(0.0, 1500.0), ra=1450.0, rb=2600.0, band=240.0, strip=60.0):
+    """Wall Maria farmland north of the inner wall: strip fields with hedgerows and pale tracks, mixed into the shared
+    Terrain material at runtime inside an ellipse (centre c, radii ra north / rb east) -- after march846.dress_fields."""
+    m = bpy.data.materials.get("Terrain")
+    if m is None or not m.use_nodes:
+        return
+    nt = m.node_tree; N, Lk = nt.nodes, nt.links
+    bsdf = next((n for n in N if n.type == "BSDF_PRINCIPLED"), None)
+    if bsdf is None or not bsdf.inputs["Base Color"].is_linked:
+        return
+    base = bsdf.inputs["Base Color"].links[0].from_socket
+    geo = N.new("ShaderNodeNewGeometry"); sep = N.new("ShaderNodeSeparateXYZ"); Lk.new(geo.outputs["Position"], sep.inputs[0])
+    def M_(op, a, b=None):
+        n = N.new("ShaderNodeMath"); n.operation = op
+        for k, x in enumerate((a, b)):
+            if x is None:
+                continue
+            if isinstance(x, (int, float)):
+                n.inputs[k].default_value = x
+            else:
+                Lk.new(x, n.inputs[k])
+        return n.outputs[0]
+    da = M_("SUBTRACT", sep.outputs["Y"], c[1]); db = M_("SUBTRACT", sep.outputs["X"], c[0])
+    ia = M_("FLOOR", M_("DIVIDE", da, band))
+    wn1 = N.new("ShaderNodeTexWhiteNoise"); wn1.noise_dimensions = "1D"; Lk.new(ia, wn1.inputs["W"])
+    jb_f = M_("ADD", M_("DIVIDE", db, strip), M_("MULTIPLY", wn1.outputs["Value"], 7.0)); jb = M_("FLOOR", jb_f)
+    cmb = N.new("ShaderNodeCombineXYZ"); Lk.new(ia, cmb.inputs["X"]); Lk.new(jb, cmb.inputs["Y"])
+    wn2 = N.new("ShaderNodeTexWhiteNoise"); wn2.noise_dimensions = "3D"; Lk.new(cmb.outputs[0], wn2.inputs["Vector"])
+    pal = N.new("ShaderNodeValToRGB"); pal.color_ramp.interpolation = "CONSTANT"; pe = pal.color_ramp.elements
+    cols = [(0.0, (0.40, 0.33, 0.13)), (0.16, (0.17, 0.28, 0.07)), (0.30, (0.25, 0.17, 0.10)), (0.44, (0.50, 0.42, 0.18)),
+            (0.58, (0.20, 0.31, 0.08)), (0.72, (0.33, 0.32, 0.12)), (0.86, (0.14, 0.25, 0.06))]
+    pe[0].position, pe[0].color = cols[0][0], (*cols[0][1], 1); pe[1].position, pe[1].color = cols[1][0], (*cols[1][1], 1)
+    for pp, cc in cols[2:]:
+        pal.color_ramp.elements.new(pp).color = (*cc, 1)
+    Lk.new(wn2.outputs["Value"], pal.inputs["Fac"])
+    fa = M_("FRACT", M_("DIVIDE", da, band)); ea = M_("MULTIPLY", M_("MINIMUM", fa, M_("SUBTRACT", 1.0, fa)), band)
+    hedge = N.new("ShaderNodeMapRange"); hedge.inputs["From Min"].default_value = 1.2; hedge.inputs["From Max"].default_value = 2.6
+    Lk.new(ea, hedge.inputs["Value"])
+    fm = N.new("ShaderNodeMix"); fm.data_type = "RGBA"; fm.inputs["A"].default_value = (0.05, 0.09, 0.03, 1)
+    Lk.new(hedge.outputs["Result"], fm.inputs["Factor"]); Lk.new(pal.outputs["Color"], fm.inputs["B"])
+    e2 = M_("ADD", M_("MULTIPLY", M_("DIVIDE", da, ra), M_("DIVIDE", da, ra)), M_("MULTIPLY", M_("DIVIDE", db, rb), M_("DIVIDE", db, rb)))
+    me_ = N.new("ShaderNodeMapRange"); me_.inputs["From Min"].default_value = 1.0; me_.inputs["From Max"].default_value = 0.8
+    Lk.new(e2, me_.inputs["Value"])
+    fin = N.new("ShaderNodeMix"); fin.data_type = "RGBA"
+    Lk.new(me_.outputs["Result"], fin.inputs["Factor"]); Lk.new(base, fin.inputs["A"]); Lk.new(fm.outputs["Result"], fin.inputs["B"])
+    Lk.new(fin.outputs["Result"], bsdf.inputs["Base Color"])
+
 def seg3_build():
     S = {}
+    if os.environ.get("FALL_FIELDS", "1") == "1":
+        dress_fields()
     # light: the golden low sun of render_fall's end (same values: the seam must match)
     set_sun(float(os.environ.get("FALL_SUN_EL", "4")), float(os.environ.get("FALL_SUN_AZ", "245")), (1.0, 0.50, 0.20),
             float(os.environ.get("CARLA_SUN_E", "4.2")))
@@ -335,16 +384,16 @@ def seg3_build():
     except Exception as ex:
         print("[fall2] dust cards failed:", ex)
     # refugees fleeing north over Wall Maria's land: the road north of the gate and along the canal (true scale)
-    n = int(os.environ.get("FALL_REF_N", "420"))
+    n = int(os.environ.get("FALL_REF_N", "1400"))       # a dense stream, tight on the canal bank and the road
     S["ref"] = MiniCrowd("Refugees", n, 31, coll)
     rnd = random.Random(29)
     R = []
     for i in range(n):
-        if i % 3:
-            y0 = rnd.uniform(40, 520); x0 = math.sin(((y0 - 6) / 120) / 9) * 120 * ((y0 - 6) / 120 / 40) + rnd.uniform(-9, 9)
+        if i % 20 < 11:
+            y0 = rnd.uniform(20, 560); x0 = SC.canal_at(max(0.0, y0 - 8))[0].x - L.CANAL_W / 2 - rnd.uniform(2.0, 7.5)
         else:
-            y0 = rnd.uniform(30, 480); x0 = SC.canal_at(max(0.0, y0 - 8))[0].x - L.CANAL_W / 2 - rnd.uniform(3, 16)
-        R.append((x0, y0, rnd.uniform(1.1, 1.7), rnd.uniform(-0.15, 0.15)))
+            y0 = rnd.uniform(30, 620); t_ = (y0 - 6) / 120; x0 = math.sin(t_ / 9) * 120 * (t_ / 40) + rnd.uniform(-3.5, 3.5)
+        R.append((x0, y0, rnd.uniform(1.1, 1.6), rnd.uniform(-0.03, 0.03)))
     S["R"] = np.array(R)
     S["cam"] = seg3_cam_keys(S)
     return S
@@ -372,9 +421,11 @@ def seg3_cam_keys(S):
         (-1.0, l0, t0, n0),                                  # (guide: at rest at the seam)
         (0.0, l0, t0, n0),
         (3.0, (60, -300, 120), (0, -90, 0), 32),             # flying north up the avenue, the Armored charging ahead
-        (IMPACT, (55, -170, 110), (0, -10, 10), 32),         # the shoulder ram into the intact gate
-        (7.0, (60, -40, 165), (20, 120, 0), 30),             # rising over the wall
-        (9.5, (165, 60, 190), (226, 230, 0), 28),            # north over the canal: ferries, the jammed bank, refugees
+        (3.6, (40, -118, 95), (0, -30, 8), 32),              # nearer (~130 m) for the run and the shoulder ram
+        (IMPACT, (35, -100, 84), (0, -6, 12), 32),           # the ram: the gate explodes
+        (6.4, (95, -45, 118), (190, 60, 0), 30),             # pull up over the wall, turning to the canal
+        (8.0, (195, 10, 95), (222, 110, 0), 30),             # low (~95 m) over the canal: ferries, refugees on bank + road
+        (10.0, (200, 80, 112), (228, 190, 0), 29),           # ... then climb north
         (SEG3, (180, 165, 215), (232, 340, 0), 28),
         (SEG3 + 1.0, (184, 207, 225), (234, 384, 0), 28),    # (guide: keeps moving north ~42 m/s for the hand-off)
     ]

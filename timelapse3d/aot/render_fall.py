@@ -239,6 +239,13 @@ if col:
 if SW:
     SW.HIDE_TITANS = {"smiling"}
 LST = light_setup()
+# the big smoke columns over the breach / the Yeager ruin hide the beat at ~95 m: move them off to the east
+_cx = SC.STATE["C"] if SC and SC.STATE.get("C") is not None else Vector((-48.0, -640.0))
+for o in bpy.data.objects:
+    if o.name.startswith(("FireSmoke", "FlameSmoke")):
+        p2 = o.matrix_world.translation.to_2d()
+        if (p2 - _cx).length < 110 or (p2 - Vector((GX, GY))).length < 110:
+            o.location.x += float(os.environ.get("FALL_SMOKE_DX", "150"))
 print(f"[fall] swarm {'on' if SW and SW.STATE else 'off'}, fx845 {'on' if FX else 'off'}, carla {'on' if SC and SC.STATE.get('C') is not None else 'off'}")
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

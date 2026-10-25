@@ -17,7 +17,7 @@ LOCK="/e/YTP2/3D Timelapse/.gpu_lock"
 until mkdir "$LOCK" 2>/dev/null; do sleep 5; done
 trap 'rmdir "$LOCK" 2>/dev/null' EXIT
 BL="/c/All The Programs/Blender/blender.exe"
-P=seq_colossal,flight,cast845,states845,colossal_asset,seq_colossal
+P=seq_colossal,flight,cast845,states845,colossal_asset,world,seq_colossal
 EXTRA=""; [ -n "$TIMES" ] && EXTRA="--times $TIMES"
 # FL_FIELD: road / tussocks / trees / bushes on the tree -> gate meadow; FL_KIDS_MODE=seated: Eren dozes and bends forward
 FL_FIELD=1 FL_KIDS_MODE=seated TREE_DENS=0.006 SEQ_F=1300 COL_SHOW=1 AOT_STATE=kicked AOT_ARC_T=1 AOT_EVENT=intact AOT_PLUGINS=$P \
