@@ -78,12 +78,97 @@ def fade(x, y, h, frame=None, cores=None):
     return h * core_w(x, y, cores if cores is not None else CORES[frame or active_frame()])
 
 def height_patch(x, y, h):                        # scene.py plug-in hook (coordinates in the active set's frame)
-    return fade(x, y, h)
+    """Local terrain inside the set's core, the world relief outside it: every L.height() caller (march846's agents,
+    swarms, camera clamps, flight.py props) then stands on the same ground the world mesh shows."""
+    fr = active_frame(); w = core_w(x, y, CORES[fr])
+    o = SET_ORIGIN[fr]
+    return h * w + (1.0 - w) * world_height(x + o[0], y + o[1])
+
+# ---------------------------------------------------------------- relief (WORLD coordinates)
+# Gentle rolling hills 10-60 m with a few higher wooded ridges (to ~130 m) between the walls; FLAT (0) under the walls
+# and their districts, inside and round both town cores and Mitras, along the river valley (river + road on its floor)
+# and along the coast.  Precomputed once on a GRID_M grid (bilinear lookup), so it is cheap for every caller.
+GRID_M = float(os.environ.get("WORLD_GRID_M", "100"))
+_HG = {}
+
+def _flat_mask(x, y):
+    """0 = keep flat, 1 = full relief."""
+    d = math.hypot(x - MITRAS[0], y - MITRAS[1])
+    m = 1.0
+    for r in (R_MARIA, R_ROSE, R_SINA):                       # walls and their district bulges (720 m outward)
+        m = min(m, _smooth(950.0, 1900.0, abs(d - r)))
+    m = min(m, _smooth(1800.0, 3200.0, d))                    # Mitras
+    for f in CORES:
+        for (cx, cy), r in CORES[f]:
+            o = SET_ORIGIN[f]
+            m = min(m, _smooth(r + 300.0, r + 1700.0, math.hypot(x - cx - o[0], y - cy - o[1])))
+    xv = valley_x(y)                                          # the river valley (river + road on its floor)
+    m = min(m, _smooth(750.0, 1900.0, abs(x - xv)))
+    m = min(m, _smooth(SEA_Y + 900.0, SEA_Y + 2800.0, y))     # the coast
+    m = min(m, _smooth(R_MARIA + 16000.0, R_MARIA + 9000.0, d))
+    return m
+
+def valley_x(y):
+    """Centre line of the river valley (between the road and the river) at world y."""
+    ty = SET_ORIGIN["trost"][1]
+    if y < ty + 2500:
+        return 180.0 + 120.0 * _smooth(-1000.0, ty, y)
+    return 200.0 * max(0.0, 1 - (y - ty - 2500) / 6000.0)
+
+def _relief_raw(x, y):
+    n1 = noise.noise(Vector((x / 7000.0, y / 7000.0, 0.37)))
+    n2 = noise.noise(Vector((x / 2300.0, y / 2300.0, 3.1)))
+    n3 = noise.noise(Vector((x / 1100.0, y / 1100.0, 5.3)))
+    h = 34.0 + 22.0 * n1 + 10.0 * n2 + 6.0 * n3                            # ~10-60 m rolling ground
+    rg = 1.0 - abs(noise.noise(Vector((x / 9000.0, y / 9000.0, 7.7))))       # ridged: crests along noise zero lines
+    sel = _smooth(0.15, 0.55, noise.noise(Vector((x / 16000.0, y / 16000.0, 11.0))))   # only a few ridges
+    h += 75.0 * sel * _smooth(0.86, 0.98, rg)
+    return max(4.0, h)
+
+def _build_grid():
+    import numpy as np
+    x0, x1 = -R_MARIA - 17000.0, R_MARIA + 17000.0
+    y0, y1 = SEA_Y - 1000.0, MITRAS[1] + R_MARIA + 17000.0
+    nx, ny = int((x1 - x0) / GRID_M) + 1, int((y1 - y0) / GRID_M) + 1
+    G = np.zeros((nx, ny), np.float32)
+    for i in range(nx):
+        x = x0 + i * GRID_M
+        for j in range(ny):
+            y = y0 + j * GRID_M
+            m = _flat_mask(x, y)
+            if m > 0:
+                G[i, j] = m * _relief_raw(x, y)
+    _HG.update(G=G, x0=x0, y0=y0, nx=nx, ny=ny)
 
 def world_height(x, y):
-    return 0.0
+    """Ground height (m) at WORLD (x, y): 0 = flat (walls, towns, valley, coast), up to ~130 m on the ridges."""
+    if not _HG:
+        _build_grid()
+    G = _HG["G"]; fx = (x - _HG["x0"]) / GRID_M; fy = (y - _HG["y0"]) / GRID_M
+    i, j = int(math.floor(fx)), int(math.floor(fy))
+    if i < 0 or j < 0 or i >= _HG["nx"] - 1 or j >= _HG["ny"] - 1:
+        return 0.0
+    u, v = fx - i, fy - j
+    return float(G[i, j] * (1 - u) * (1 - v) + G[i + 1, j] * u * (1 - v) + G[i, j + 1] * (1 - u) * v + G[i + 1, j + 1] * u * v)
 
-# ---------------------------------------------------------------- geometry helpers
+def world_height_np(X, Y):
+    """Vectorised world_height for numpy arrays."""
+    import numpy as np
+    if not _HG:
+        _build_grid()
+    G = _HG["G"]; fx = (np.asarray(X) - _HG["x0"]) / GRID_M; fy = (np.asarray(Y) - _HG["y0"]) / GRID_M
+    i = np.clip(np.floor(fx).astype(int), 0, _HG["nx"] - 2); j = np.clip(np.floor(fy).astype(int), 0, _HG["ny"] - 2)
+    u = np.clip(fx - i, 0, 1); v = np.clip(fy - j, 0, 1)
+    h = G[i, j] * (1 - u) * (1 - v) + G[i + 1, j] * u * (1 - v) + G[i, j + 1] * (1 - u) * v + G[i + 1, j + 1] * u * v
+    out = (fx < 0) | (fy < 0) | (fx >= _HG["nx"] - 1) | (fy >= _HG["ny"] - 1)
+    return np.where(out, 0.0, h)
+
+def ground_z(x, y, frame=None):
+    """Ground height at (x, y) given in a SET frame ("shig" | "trost"): world relief outside the cores (for scenes
+    that build their own terrain, e.g. render_interlude: put camps / props on this outside your cores)."""
+    o = SET_ORIGIN[frame or active_frame()]
+    return world_height(x + o[0], y + o[1])
+
 def _mat(name, col, rough=0.9):
     m = bpy.data.materials.get(name)
     if m:
@@ -139,6 +224,9 @@ def ground_mat():
     x_ = e.new(0.5); x_.color = (0.19, 0.31, 0.07, 1)
     Ln.new(n1.outputs["Fac"], cr.inputs["Fac"])
     meadow = _mix(N, Ln, _mr(N, Ln, n2.outputs["Fac"], 0.35, 0.65, 0.0, 0.18), cr.outputs["Color"], (0.10, 0.20, 0.04, 1))
+    n6 = N.new("ShaderNodeTexNoise"); n6.inputs["Scale"].default_value = 1 / 2600.0; n6.inputs["Detail"].default_value = 4
+    Ln.new(P, n6.inputs["Vector"])
+    meadow = _mix(N, Ln, _mr(N, Ln, n6.outputs["Fac"], 0.66, 0.72, 0.0, 0.7), meadow, (0.40, 0.35, 0.15, 1))   # a few ochre patches
     # woodland: darker soft patches (the forest cones stand on most of them)
     n3 = N.new("ShaderNodeTexNoise"); n3.inputs["Scale"].default_value = 1 / 1800.0; n3.inputs["Detail"].default_value = 5
     Ln.new(P, n3.inputs["Vector"])
@@ -232,13 +320,15 @@ def haze_mat():
     Ln.new(mx.outputs[0], out.inputs["Surface"])
     return m
 
-def _strip(bm, pts, width, z):
-    """Flat ribbon along a polyline (river / road)."""
+def _strip(bm, pts, width, z, hz=False):
+    """Ribbon along a polyline (river / road / track); hz: z is an offset above the world relief."""
     left, right = [], []
     for i, p in enumerate(pts):
         a, c = pts[max(0, i - 1)], pts[min(len(pts) - 1, i + 1)]
         d = Vector((c[0] - a[0], c[1] - a[1])).normalized(); n = Vector((-d.y, d.x)) * width / 2
-        left.append(bm.verts.new((p[0] + n.x, p[1] + n.y, z))); right.append(bm.verts.new((p[0] - n.x, p[1] - n.y, z)))
+        zl = z + (world_height(p[0] + n.x, p[1] + n.y) if hz else 0.0)
+        zr = z + (world_height(p[0] - n.x, p[1] - n.y) if hz else 0.0)
+        left.append(bm.verts.new((p[0] + n.x, p[1] + n.y, zl))); right.append(bm.verts.new((p[0] - n.x, p[1] - n.y, zr)))
     for i in range(len(pts) - 1):
         bm.faces.new((left[i], right[i], right[i + 1], left[i + 1]))
 
@@ -365,6 +455,212 @@ def _trim_set(frame, terrain, cores):
             if core_w(p.x, p.y, [(c, r + 300) for c, r in cores]) <= 0:
                 bpy.data.objects.remove(ob, do_unlink=True)
 
+# ---------------------------------------------------------------- vegetation / farmsteads (instanced, low-poly)
+def _proto(name, kind, col, coll):
+    bm = bmesh.new()
+    if kind == "conifer":                     # 7-vert cone (unit height)
+        base = [bm.verts.new((0.30 * math.cos(k * math.tau / 6), 0.30 * math.sin(k * math.tau / 6), 0.12)) for k in range(6)]
+        top = bm.verts.new((0, 0, 1.0))
+        for k in range(6):
+            bm.faces.new((base[k], base[(k + 1) % 6], top))
+        bm.faces.new(base[::-1])
+    else:                                     # broadleaf: low-poly blob (octahedron-ish, 8 verts), unit height
+        ring = [bm.verts.new((0.42 * math.cos(k * math.tau / 6), 0.42 * math.sin(k * math.tau / 6), 0.58)) for k in range(6)]
+        t, b_ = bm.verts.new((0, 0, 1.0)), bm.verts.new((0, 0, 0.18))
+        for k in range(6):
+            bm.faces.new((ring[k], ring[(k + 1) % 6], t)); bm.faces.new((ring[(k + 1) % 6], ring[k], b_))
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    for f in me.polygons:
+        f.use_smooth = kind != "conifer"
+    me.materials.append(_mat(name + "M", col, 0.85))
+    ob = bpy.data.objects.new(name, me); coll.objects.link(ob); ob.location = (0, 0, -20000.0)
+    return ob
+
+def _scatter_gn(proto):
+    nm = "WD_Scatter_" + proto.name
+    ng = bpy.data.node_groups.get(nm)
+    if ng:
+        return ng
+    ng = bpy.data.node_groups.new(nm, "GeometryNodeTree")
+    ng.interface.new_socket("Geometry", in_out="INPUT", socket_type="NodeSocketGeometry")
+    ng.interface.new_socket("Geometry", in_out="OUTPUT", socket_type="NodeSocketGeometry")
+    N = ng.nodes; Ln = ng.links
+    gi, go = N.new("NodeGroupInput"), N.new("NodeGroupOutput")
+    oi = N.new("GeometryNodeObjectInfo"); oi.transform_space = "ORIGINAL"
+    oi.inputs["Object"].default_value = proto
+    m2p = N.new("GeometryNodeMeshToPoints"); Ln.new(gi.outputs["Geometry"], m2p.inputs["Mesh"])
+    iop = N.new("GeometryNodeInstanceOnPoints"); Ln.new(m2p.outputs["Points"], iop.inputs["Points"])
+    Ln.new(oi.outputs["Geometry"], iop.inputs["Instance"])
+    sa = N.new("GeometryNodeInputNamedAttribute"); sa.data_type = "FLOAT_VECTOR"; sa.inputs["Name"].default_value = "wd_s"
+    ra = N.new("GeometryNodeInputNamedAttribute"); ra.data_type = "FLOAT"; ra.inputs["Name"].default_value = "wd_r"
+    cx = N.new("ShaderNodeCombineXYZ"); Ln.new(ra.outputs["Attribute"], cx.inputs["Z"])
+    Ln.new(sa.outputs["Attribute"], iop.inputs["Scale"]); Ln.new(cx.outputs[0], iop.inputs["Rotation"])
+    Ln.new(iop.outputs["Instances"], go.inputs["Geometry"])
+    return ng
+
+def _points(name, P, S, Rz, proto, coll, root):
+    """One point mesh (positions P (n,3), scales S (n,3), yaw Rz) instanced with `proto` by geometry nodes."""
+    import numpy as np
+    me = bpy.data.meshes.new(name); me.vertices.add(len(P))
+    me.vertices.foreach_set("co", np.asarray(P, np.float32).ravel())
+    a = me.attributes.new("wd_s", "FLOAT_VECTOR", "POINT"); a.data.foreach_set("vector", np.asarray(S, np.float32).ravel())
+    b = me.attributes.new("wd_r", "FLOAT", "POINT"); b.data.foreach_set("value", np.asarray(Rz, np.float32).ravel())
+    ob = bpy.data.objects.new(name, me); coll.objects.link(ob); ob.parent = root
+    md = ob.modifiers.new("Scatter", "NODES"); md.node_group = _scatter_gn(proto)
+    for attr in ("visible_volume_scatter",):
+        if hasattr(ob, attr):
+            setattr(ob, attr, False)
+    return ob
+
+def build_vegetation(coll, root, allc, mycores, river, road, M=None):
+    """Forest clumps of varied size (denser on the hills and ridges), copses and tree lines along the river, hedgerow
+    trees on the strip-field band edges, scattered single trees, a few farmsteads with dirt tracks to the road.
+    Deterministic in world coordinates (identical in every scene); instanced by geometry nodes (cheap in Eevee)."""
+    import numpy as np
+    rng = np.random.default_rng(1845)
+    ty = SET_ORIGIN["trost"][1]
+    pc = bpy.data.collections.new("WorldProtos"); bpy.context.scene.collection.children.link(pc)
+    protos = {"con": _proto("WD_TreeConifer", "conifer", (0.035, 0.10, 0.035), pc),
+              "con2": _proto("WD_TreeConifer2", "conifer", (0.05, 0.13, 0.04), pc),
+              "brd": _proto("WD_TreeBroad", "broad", (0.08, 0.18, 0.04), pc),
+              "brd2": _proto("WD_TreeBroad2", "broad", (0.13, 0.22, 0.05), pc)}
+    allr = (R_MARIA, R_ROSE, R_SINA)
+    def ok(X, Y, ring_clear=110.0):
+        d = np.hypot(X - MITRAS[0], Y - MITRAS[1])
+        g = (Y > SEA_Y + 700) & (d < R_MARIA + 14000)
+        for r in allr:
+            g &= np.abs(d - r) > ring_clear
+        for (cx, cy), r in allc:
+            g &= np.hypot(X - cx, Y - cy) > r + 150
+        g &= np.hypot(X - MITRAS[0], Y - MITRAS[1]) > 1500
+        return g
+    # river / road proximity (valley floor): distance to the densified polylines via a coarse lookup on y
+    rv = np.array(river); rd = np.array(road)
+    def near(X, Y, pl, dmax):
+        out = np.full(len(X), 1e9)
+        for k in range(0, len(pl), 1):
+            pass
+        idx = np.searchsorted(pl[:, 1], Y) if np.all(np.diff(pl[:, 1]) > 0) else None
+        if idx is None:
+            for p in pl[::3]:
+                out = np.minimum(out, np.hypot(X - p[0], Y - p[1]))
+            return out
+        for off in (-3, -2, -1, 0, 1, 2):
+            j = np.clip(idx + off, 0, len(pl) - 1)
+            out = np.minimum(out, np.hypot(X - pl[j, 0], Y - pl[j, 1]))
+        return out
+    groups = {k: ([], [], []) for k in protos}
+    def add(kind, X, Y, H, jitter=0.25, crown=1.5):
+        n = len(X)
+        Z = world_height_np(X, Y) - 0.5
+        hs = H * (1 + rng.uniform(-jitter, jitter, n))
+        S = np.stack([hs * crown * rng.uniform(0.85, 1.15, n), hs * crown * rng.uniform(0.85, 1.15, n), hs], 1)
+        g = groups[kind]; g[0].append(np.stack([X, Y, Z], 1)); g[1].append(S); g[2].append(rng.uniform(0, math.tau, n))
+    R_land = R_MARIA + 12000.0
+    # 1) forest clumps, varied size, placed preferentially on hills / ridges
+    nc = int(os.environ.get("WORLD_CLUMPS", "750"))
+    a = rng.uniform(0, math.tau, nc * 3); rr = np.sqrt(rng.uniform(0, 1, nc * 3)) * R_land
+    CX, CY = MITRAS[0] + np.cos(a) * rr, MITRAS[1] + np.sin(a) * rr
+    hgt = world_height_np(CX, CY)
+    pkeep = 0.12 + 0.88 * np.clip(hgt / 55.0, 0, 1)
+    sel = ok(CX, CY, 300) & (rng.uniform(0, 1, len(CX)) < pkeep)
+    CX, CY, hgt = CX[sel][:nc], CY[sel][:nc], hgt[sel][:nc]
+    sizes = np.exp(rng.normal(np.log(220), 0.6, len(CX))) * (1 + hgt / 60.0)
+    floors = []
+    for cx, cy, sz, hh in zip(CX, CY, sizes, hgt):
+        n = int(min(1500, 1.2 * sz * sz / 260.0))          # closed canopy (crowns ~10 m radius)
+        X = cx + rng.normal(0, sz * 0.5, n); Y = cy + rng.normal(0, sz * 0.38, n)
+        g = ok(X, Y)
+        X, Y = X[g], Y[g]
+        if not len(X):
+            continue
+        con = rng.uniform(0, 1, len(X)) < (0.35 + 0.5 * min(1.0, hh / 70.0))     # conifers on the higher ground
+        bsel = ~con & (rng.uniform(0, 1, len(X)) < 0.8)
+        add("con", X[con], Y[con], 21.0); add("brd", X[bsel], Y[bsel], 15.0)
+        floors.append((cx, cy, sz))
+    # 2) copses + tree lines along the river banks (gaps), 3) scattered single trees in the meadows
+    t = np.linspace(0, 1, len(rv))
+    for side in (-1, 1):
+        d = np.gradient(rv, axis=0); nrm = np.stack([-d[:, 1], d[:, 0]], 1); nrm /= np.linalg.norm(nrm, axis=1, keepdims=True) + 1e-9
+        P = rv + nrm * side * rng.uniform(22, 45, (len(rv), 1))
+        keep = (rng.uniform(0, 1, len(P)) < 0.55) & ok(P[:, 0], P[:, 1])
+        P = P[keep]
+        reps = 3
+        X = np.repeat(P[:, 0], reps) + rng.normal(0, 14, len(P) * reps); Y = np.repeat(P[:, 1], reps) + rng.normal(0, 14, len(P) * reps)
+        add("brd2", X, Y, 13.0)
+    ns = int(os.environ.get("WORLD_SINGLES", "90000"))
+    a = rng.uniform(0, math.tau, ns); rr = np.sqrt(rng.uniform(0, 1, ns)) * R_land
+    X, Y = MITRAS[0] + np.cos(a) * rr, MITRAS[1] + np.sin(a) * rr
+    g = ok(X, Y)
+    X, Y = X[g], Y[g]
+    half = rng.uniform(0, 1, len(X)) < 0.7
+    add("brd", X[half], Y[half], 12.0, 0.35); add("con2", X[~half], Y[~half], 16.0, 0.35)
+    # 4) hedgerow trees on the strip-field band edges (y = k * 300) inside the field bands (valley + town rims)
+    hx, hy = [], []
+    for kb in range(int((SEA_Y + 2500) / 300), int((MITRAS[1] + 3000) / 300)):
+        y = kb * 300.0
+        xs = np.arange(-1700.0, 2100.0, 11.0) + valley_x(y) - 200.0
+        run = (np.floor(xs / 90.0 + kb * 0.37) % 3) != 0                      # broken hedges: 2/3 planted
+        hx.append(xs[run]); hy.append(np.full(run.sum(), y))
+    X, Y = np.concatenate(hx), np.concatenate(hy)
+    g = ok(X, Y) & (near(X, Y, rv, 60) > 40) & (near(X, Y, rd, 30) > 20) & (rng.uniform(0, 1, len(X)) < 0.75)
+    add("brd2", X[g] + rng.normal(0, 2, g.sum()), Y[g] + rng.normal(0, 2, g.sum()), 9.0, 0.3)
+    for k, (Ps, Ss, Rs) in groups.items():
+        if Ps:
+            _points("WD_Trees_" + k, np.concatenate(Ps), np.concatenate(Ss), np.concatenate(Rs), protos[k], coll, root)
+    STATE["trees"] = int(sum(sum(len(p) for p in g[0]) for g in groups.values()))
+    # darker forest floor under the clumps (irregular 14-gons on the relief)
+    bm = bmesh.new()
+    for cx, cy, sz in floors:
+        ring = []
+        for k in range(14):
+            an = k * math.tau / 14; rr_ = sz * (0.75 + 0.25 * noise.noise(Vector((cx / 97 + k, cy / 89, 0.5))))
+            x, y = cx + math.cos(an) * rr_ * 1.05, cy + math.sin(an) * rr_ * 0.8
+            ring.append(bm.verts.new((x, y, world_height(x, y) - 0.15)))
+        bm.faces.new(ring)
+    me = bpy.data.meshes.new("WD_ForestFloor"); bm.to_mesh(me); bm.free(); me.materials.append(_mat("WD_ForestFloorM", (0.07, 0.14, 0.045), 0.95))
+    ob = bpy.data.objects.new("WD_ForestFloor", me); coll.objects.link(ob); ob.parent = root
+    # 5) farmsteads near the strip bands + dirt tracks to the road
+    rb = random.Random(1846)
+    bm = bmesh.new(); bt = bmesh.new()
+    roofm = _mat("WD_FarmRoof", (0.36, 0.15, 0.07), 0.85); wallm = _mat("WD_FarmWall", (0.70, 0.64, 0.52), 0.9)
+    nf = 0
+    for k in range(400):
+        y = rb.uniform(SEA_Y + 3000, MITRAS[1] - 3500)
+        x = valley_x(y) + rb.choice((-1, 1)) * rb.uniform(800, 1600)
+        if not ok(np.array([x]), np.array([y]), 400)[0]:
+            continue
+        z0 = world_height(x, y)
+        yaw = rb.uniform(0, math.pi)
+        for b_ in range(rb.randint(2, 4)):                    # barn + house + sheds round a yard
+            w, dd, hh = rb.uniform(7, 12), rb.uniform(12, 22), rb.uniform(5, 8)
+            ox, oy = rb.uniform(-25, 25), rb.uniform(-25, 25)
+            cx_, cy_ = x + ox * math.cos(yaw) - oy * math.sin(yaw), y + ox * math.sin(yaw) + oy * math.cos(yaw)
+            ca, sa = math.cos(yaw + b_ * math.pi / 2), math.sin(yaw + b_ * math.pi / 2)
+            def P(u, v, z):
+                return bm.verts.new((cx_ + u * ca - v * sa, cy_ + u * sa + v * ca, z0 + z))
+            q = [P(-w / 2, -dd / 2, -1), P(w / 2, -dd / 2, -1), P(w / 2, dd / 2, -1), P(-w / 2, dd / 2, -1)]
+            t_ = [P(-w / 2, -dd / 2, hh), P(w / 2, -dd / 2, hh), P(w / 2, dd / 2, hh), P(-w / 2, dd / 2, hh)]
+            r_ = [P(0, -dd / 2, hh + w * 0.45), P(0, dd / 2, hh + w * 0.45)]
+            for i_ in range(4):
+                bm.faces.new((q[i_], q[(i_ + 1) % 4], t_[(i_ + 1) % 4], t_[i_]))
+            f1 = bm.faces.new((t_[0], t_[1], r_[0])); f2 = bm.faces.new((t_[2], t_[3], r_[1]))
+            f3 = bm.faces.new((t_[1], t_[2], r_[1], r_[0])); f4 = bm.faces.new((t_[3], t_[0], r_[0], r_[1]))
+            for f in (f3, f4):
+                f.material_index = 1
+        # dirt track from the yard to the valley road (gently winding)
+        xr = valley_x(y) - 200.0 if x < valley_x(y) else valley_x(y) + 50.0
+        pts = [(x + (xr - x) * u + 60 * math.sin(u * 5 + k), y + 80 * math.sin(u * 3 + k * 0.7)) for u in np.linspace(0, 1, 18)]
+        _strip(bt, pts, 4.0, 0.06, hz=True)
+        nf += 1
+        if nf >= int(os.environ.get("WORLD_FARMS", "70")):
+            break
+    me = bpy.data.meshes.new("WD_Farmsteads"); bm.to_mesh(me); bm.free(); me.materials.append(wallm); me.materials.append(roofm)
+    ob = bpy.data.objects.new("WD_Farmsteads", me); coll.objects.link(ob); ob.parent = root
+    me = bpy.data.meshes.new("WD_Tracks"); bt.to_mesh(me); bt.free(); me.materials.append((M or {}).get("dirt") or _mat("WD_Dirt", (0.24, 0.20, 0.13), 0.95))
+    ob = bpy.data.objects.new("WD_Tracks", me); coll.objects.link(ob); ob.parent = root
+    STATE["farms"] = nf
+
 def attach(frame=None, M=None, terrain=None, cores=None, trim=True):
     """Add the world layer to the current scene, in the frame of its active set."""
     frame = frame or active_frame()
@@ -387,25 +683,36 @@ def attach(frame=None, M=None, terrain=None, cores=None, trim=True):
     # set cores in world coordinates (both sets, so neither scene grows the other's ground into its own town)
     allc = [((c[0] + SET_ORIGIN[f][0], c[1] + SET_ORIGIN[f][1]), r) for f in CORES for c, r in CORES[f]]
     mycores = [((c[0] + o[0], c[1] + o[1]), r) for c, r in cores]
-    # ---- ground: 1.2 km cells; cells wholly inside this scene's cores are left to the local terrain
+    # ---- ground: 300 m cells with the relief over the land, 4 km flat skirt beyond; cells wholly inside this scene's
+    #      cores are left to the local terrain (which fades to 0 at the core rim, where the relief is 0 too)
     gm = ground_mat()
     bm = bmesh.new()
-    x0, x1 = -R_MARIA - 90000.0, R_MARIA + 90000.0
-    y0, y1 = SEA_Y - 600.0, MITRAS[1] + R_MARIA + 90000.0
-    cell = 2000.0
-    nx, ny = int((x1 - x0) / cell), int((y1 - y0) / cell)
+    ix0, ix1 = -R_MARIA - 16000.0, R_MARIA + 16000.0
+    iy0, iy1 = SEA_Y - 600.0, MITRAS[1] + R_MARIA + 16000.0
+    cell = float(os.environ.get("WORLD_CELL", "300"))
+    nx, ny = int((ix1 - ix0) / cell), int((iy1 - iy0) / cell)
+    ix1, iy1 = ix0 + nx * cell, iy0 + ny * cell
     V = {}
     def vert(i, j):
         if (i, j) not in V:
-            V[(i, j)] = bm.verts.new((x0 + i * cell, y0 + j * cell, -0.4))
+            x, y = ix0 + i * cell, iy0 + j * cell
+            V[(i, j)] = bm.verts.new((x, y, world_height(x, y) - 0.4))
         return V[(i, j)]
     for i in range(nx):
         for j in range(ny):
-            cx_, cy_ = x0 + (i + 0.5) * cell, y0 + (j + 0.5) * cell
+            cx_, cy_ = ix0 + (i + 0.5) * cell, iy0 + (j + 0.5) * cell
             if any(math.hypot(cx_ - c[0], cy_ - c[1]) + cell * 0.71 < 0.8 * r for c, r in mycores):
                 continue
-            bm.faces.new((vert(i, j), vert(i + 1, j), vert(i + 1, j + 1), vert(i, j + 1)))
+            f = bm.faces.new((vert(i, j), vert(i + 1, j), vert(i + 1, j + 1), vert(i, j + 1)))
+            f.smooth = True
+    sk = 4000.0
+    X0, X1, Y1 = ix0 - 100000.0, ix1 + 100000.0, iy1 + 100000.0
+    def quad(a, b, c, d):
+        bm.faces.new([bm.verts.new((x, y, -0.4)) for x, y in (a, b, c, d)])
+    quad((X0, iy0), (ix0, iy0), (ix0, Y1), (X0, Y1)); quad((ix1, iy0), (X1, iy0), (X1, Y1), (ix1, Y1))
+    quad((ix0, iy1), (ix1, iy1), (ix1, Y1), (ix0, Y1))
     put("WD_Ground", bm, [gm])
+    x0, x1 = X0, X1
     # ---- the sea: from a wavy coastline south to the clip distance
     bm = bmesh.new()
     xs = [x0 - 60000 + k * 800.0 for k in range(int((x1 - x0 + 120000) / 800) + 1)]
@@ -477,44 +784,14 @@ def attach(frame=None, M=None, terrain=None, cores=None, trim=True):
         return segs
     bm = bmesh.new()
     for s_ in keep(river, 0.75):
-        _strip(bm, s_, 26.0, 0.05)
+        _strip(bm, s_, 26.0, 0.05, hz=True)
     put("WD_River", bm, [water])
     bm = bmesh.new()
     for s_ in keep(road, 0.75):
-        _strip(bm, s_, 9.0, 0.02)
+        _strip(bm, s_, 9.0, 0.02, hz=True)
     put("WD_Road", bm, [(M or {}).get("dirt") or _mat("WD_Dirt", (0.24, 0.20, 0.13), 0.95)])
     STATE["river"], STATE["road"] = river, road
-    # ---- forest clumps: low-poly cones (6 sides), deterministic in world coordinates
-    rnd = random.Random(1845)
-    bm = bmesh.new()
-    leaf = _mat("WD_Pine", (0.04, 0.12, 0.04), 0.85)
-    ringsr = (R_MARIA, R_ROSE, R_SINA)
-    def bad(x, y):
-        if y < SEA_Y + 900:
-            return True
-        d = math.hypot(x - MITRAS[0], y - MITRAS[1])
-        if d > R_MARIA + 9000 or any(abs(d - r) < 90 for r in ringsr):
-            return True
-        if any(math.hypot(x - c[0], y - c[1]) < r + 120 for c, r in allc):
-            return True
-        return False
-    n_cl = int(os.environ.get("WORLD_CLUMPS", "420"))
-    for c in range(n_cl):
-        a = rnd.uniform(0, math.tau); rr = math.sqrt(rnd.random()) * (R_MARIA + 7000)
-        cx_, cy_ = MITRAS[0] + math.cos(a) * rr, MITRAS[1] + math.sin(a) * rr
-        if bad(cx_, cy_):
-            continue
-        size = rnd.uniform(120, 520); nt_ = int(size * size / 900)
-        for t in range(min(nt_, 260)):
-            x = cx_ + rnd.gauss(0, size * 0.5); y = cy_ + rnd.gauss(0, size * 0.35)
-            if bad(x, y):
-                continue
-            h = rnd.uniform(14, 26); rad = h * 0.3
-            base = [bm.verts.new((x + rad * math.cos(k * math.tau / 6), y + rad * math.sin(k * math.tau / 6), h * 0.15)) for k in range(6)]
-            top = bm.verts.new((x, y, h))
-            for k in range(6):
-                bm.faces.new((base[k], base[(k + 1) % 6], top))
-    put("WD_Forest", bm, [leaf])
+    build_vegetation(coll, root, allc, mycores, river, road, M)
     # ---- horizon haze curtain: a 64-gon cylinder round Mitras (R_MARIA + 45 km), sky-coloured, opaque at the ground
     #      and fading by ~4.5 km up; it hides every ground / sea edge and gives the far coastline its aerial perspective
     #      OPT-IN (WORLD_HAZE=1): in the QA stills the scene's own haze volume + ground/sea running out to the 140 km clip
