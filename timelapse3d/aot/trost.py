@@ -19,13 +19,23 @@ avenue NNW of the outer gate.
 
 API (module `trost`; read the constants after import, call the functions after build):
   W, S, R                 620, 250, 620  (district half width, straight side length, round-end radius)
-  INNER_GATE  (-140, 0)   gate in Wall Rose (crowd jams here behind the cargo wagon; Pixis speaks on the wall above)
+  INNER_GATE  (-140, 0)   gate in Wall Rose, an OPEN passage (no door); the crowd jams behind the cargo wagon; Pixis above
   OUTER_GATE  (0, -870)   gate at the tip, kicked in by the Colossal; Eren seals it with the boulder
   WATER_GATE_ROSE (556, 0), WATER_GATE_OUTER (556, ~-524); CANAL_X = 556, CANAL_W = 24
   PLAZA       (-100, -250, 42)   market square (x, y, radius) on the avenue; the bell tower stands on its west side
   BELL_TOWER  dict(xy=(-160, -250), belfry_z=(34, 43), belfry_c=(-160, -250, 38.5), top_z=64)  open octagonal belfry
-  SUPPLY_HQ   dict(center, rot, size=(70, 44), store_z=(0, 10), roof_z=22, lift_xy, lift_z=(0.3, 10), titan_spots[7],
-                   door_xy, roof_xy)   storeroom = ground-floor hall; the lift drops from the 1st floor into it
+  SUPPLY_HQ   dict(center, rot=0, size=(70, 30), store_z=(0, 10), roof_z=22, lift_xy, lift_z=(0.3, 10), titan_spots[7],
+                   door_xy, roof_xy, keep_xy, keep_size=(30, 30, 24), keep_top_z=49, warehouse_roof_z=(26, 41), tower_xy)
+              the anime complex: a crenellated sandstone KEEP (corner turrets, slate-blue pyramid roofs, arched windows,
+              taller central block, clock/bell turret; object TrostHQ_Keep) joined to a 5-storey WAREHOUSE wing with a
+              steep slate gable roof (center/size above = the warehouse).  Its ground floor is the storeroom (TrostHQ:
+              beams, crates, gas racks, lift frame; TrostHQ_Lift platform); TrostHQ_Upper = upper storeys + slabs + roof
+  CANNON_BASIN dict(center, floor=(x0, x1, y0, y1), floor_z, top_z=6, west_wall_x, wall_h=10, steps_n / steps_s = rows
+              (bottom -> top) of (x, y, z) standing spots on the stepped banks, landing (raised block in the south
+              flight, the salute), trio (Eren/Mikasa/Armin spot on the floor), cannon + cannon_aim (north terrace),
+              terrace_n / terrace_s (x0, x1, y0, y1, z), quay, boat).  A sunken stone dock beside the canal (refs
+              trost_cannon_canal / trost_armin_salute_steps); object TrostCannonBasin, TrostBoat
+  ground_z(x, y) includes the basin terraces / steps (basin_z); walkable() includes the basin
   BOULDER     (-68, -450, 0)     bottom centre of the boulder; BOULDER_SIZE (16, 15, 13); object "TrostBoulder"; boulder_mesh(origin="center") for carry
   BOULDER_SQUARE (-68, -450, 40); BOULDER_ROUTE  polyline boulder -> avenue -> outer gate (Eren's carry)
   AVENUE      polyline outer gate -> inner gate (straight main street, hw 8); EVAC_ROUTE plaza -> inner gate
@@ -41,9 +51,13 @@ API (module `trost`; read the constants after import, call the functions after b
   set_hq_lift(frac)         0 = platform up at the 1st floor (z 10), 1 = down on the storeroom floor
   set_wagon(on)             Dimo Reeves' cargo wagon jammed in the inner gate (hidden by default)
   set_lift(i, frac)         wall lift i platform height, 0 = ground, 1 = wall top
-Object names kept from Shiganshina so fx code can find them: OuterGate, OuterGate_Door, InnerGate, InnerGate_Door.
+Object names kept from Shiganshina so fx code can find them: OuterGate, OuterGate_Door, InnerGate (no InnerGate_Door).
+World layer: agent G's world.py (AOT_PLUGINS=...,world) places this frame at world (0, 5000), keeps the set's terrain
+inside the core circle (0, -435) r 1150 and trims Wall Rose beyond |x| 1000.  trost.py builds no buildings outside
+the district.
 Collections: TrostHQ_Upper (cutaway set), TrostGarrison (cannons, ammo), TrostLifts.
-CAMS: trost_overview, trost_outer_gate, trost_boulder, trost_hq, trost_hq_cut, trost_belltower, trost_inner_gate.
+CAMS: trost_overview, trost_outer_gate, trost_boulder, trost_hq, trost_hq_cut, trost_hq_complex, trost_belltower,
+      trost_inner_gate, trost_basin.
 """
 import bpy, bmesh, math, random, os, sys, time
 from mathutils import Vector, Euler, noise
@@ -92,7 +106,9 @@ EVAC_ROUTE = [(_avenue_x(y), float(y)) for y in range(int(PLAZA[1]), -11, 10)] +
 # supply HQ: mid-district, axis-aligned, main door facing south
 _HQ_C = (240.0, -380.0)
 _HQ_ROT = 0.0          # axis-aligned (long side E-W, door south) so trost_action's (w, d) box matches the building
-HQ_L, HQ_D = 70.0, 44.0
+HQ_L, HQ_D = 70.0, 30.0             # warehouse wing (storeroom + lift); the keep joins its west end
+HQ_KEEP = 30.0
+HQ_KEEP_X = -HQ_L / 2 - HQ_KEEP / 2   # keep centre in HQ-local x
 def hq_world(lx, ly):
     c, s = math.cos(_HQ_ROT), math.sin(_HQ_ROT)
     return (_HQ_C[0] + lx * c - ly * s, _HQ_C[1] + lx * s + ly * c)
@@ -100,10 +116,11 @@ def hq_local(x, y):
     c, s = math.cos(_HQ_ROT), math.sin(_HQ_ROT)
     dx, dy = x - _HQ_C[0], y - _HQ_C[1]
     return (dx * c + dy * s, -dx * s + dy * c)
-_TITAN_LOCAL = [(-17, -8), (-15, 9), (-8, -12), (8, 13), (15, -9), (18, 7), (-3, 13)]   # clear of lift and racks
+_TITAN_LOCAL = [(-17, -7), (-15, 7), (-8, -9), (8, 9), (15, -7), (17, 6), (-3, 9)]   # clear of lift and racks
 SUPPLY_HQ = dict(center=_HQ_C, rot=_HQ_ROT, size=(HQ_L, HQ_D), store_z=(0.0, 10.0), roof_z=22.0,
                  lift_xy=_HQ_C, lift_z=(0.3, 10.0), titan_spots=[hq_world(*p) for p in _TITAN_LOCAL],
-                 door_xy=hq_world(0, -HQ_D / 2 - 2), roof_xy=_HQ_C, tower_xy=hq_world(-HQ_L / 2 - 5.2, HQ_D / 2 - 7))
+                 door_xy=hq_world(0, -HQ_D / 2 - 2), roof_xy=_HQ_C, tower_xy=hq_world(HQ_KEEP_X + 2, 0),
+                 keep_xy=hq_world(HQ_KEEP_X, 0), keep_size=(HQ_KEEP, HQ_KEEP, 24.0), keep_top_z=49.0, warehouse_roof_z=(26.0, 41.0))
 
 _CH_C = (-185.0, -250.0)                 # church centre (nave along x, tower at the east end facing the plaza)
 BELL_TOWER = dict(xy=(_CH_C[0] + 25, _CH_C[1]), belfry_z=(34.0, 43.0), belfry_c=(_CH_C[0] + 25, _CH_C[1], 38.5), top_z=64.0)
@@ -118,7 +135,32 @@ WALL_LIFTS = [dict(name=n, xy=p, out=o, platform=f"TrostLift_{n}_Platform") for 
 # zones where streets are cut and no houses stand: (kind, params)
 def _in_hq(x, y, pad):
     lx, ly = hq_local(x, y)
-    return abs(lx) < HQ_L / 2 + 11 + pad and abs(ly) < HQ_D / 2 + pad + 2
+    return HQ_KEEP_X - HQ_KEEP / 2 - 6 - pad < lx < HQ_L / 2 + 3 + pad and abs(ly) < HQ_KEEP / 2 + 5 + pad
+
+# ---------------- the cannon basin (refs trost_cannon_canal / trost_armin_salute_steps): a sunken stone dock beside the
+# canal, dry floor at street level framed by 6 m stone terraces: stepped banks on the north and south sides (soldiers
+# stand on the steps; a raised stone landing in the middle of the south flight), a tall buttressed retaining wall on the
+# west, the east side open to the canal with a quay and a boat.
+_BX0, _BX1, _BY0, _BY1 = 494.0, 543.0, -225.0, -175.0          # basin floor
+_BTOP, _BSTEP_N, _BSTEP_H, _BSTEP_D = 6.0, 8, 0.75, 1.5
+def _step_rows(side):
+    rows = []
+    for k in range(_BSTEP_N):
+        yy = (_BY1 + (k + 0.5) * _BSTEP_D) if side > 0 else (_BY0 - (k + 0.5) * _BSTEP_D)
+        rows.append([(float(x), yy, (k + 1) * _BSTEP_H) for x in range(int(_BX0) + 3, int(_BX1) - 2, 2)
+                     if not (side < 0 and 512.0 < x < 522.0)])
+    return rows
+CANNON_BASIN = dict(center=((_BX0 + _BX1) / 2, (_BY0 + _BY1) / 2), floor=(_BX0, _BX1, _BY0, _BY1), floor_z=0.15,
+                    top_z=_BTOP, west_wall_x=_BX0, wall_h=10.0,
+                    steps_n=_step_rows(1), steps_s=_step_rows(-1),          # rows bottom -> top of (x, y, z) standing spots
+                    landing=(517.0, _BY0 - 7.0, 4.64),                       # raised stone landing in the south flight
+                    trio=(510.0, (_BY0 + _BY1) / 2, 0.15),                  # Eren / Mikasa / Armin on the basin floor
+                    cannon=(522.0, _BY1 + _BSTEP_N * _BSTEP_D + 3.0, _BTOP), cannon_aim=(0.0, -1.0),
+                    terrace_n=(_BX0 - 14, _BX1, _BY1 + _BSTEP_N * _BSTEP_D, _BY1 + _BSTEP_N * _BSTEP_D + 8, _BTOP),
+                    terrace_s=(_BX0 - 14, _BX1, _BY0 - _BSTEP_N * _BSTEP_D - 8, _BY0 - _BSTEP_N * _BSTEP_D, _BTOP),
+                    quay=(_BX1 - 1.0, (_BY0 + _BY1) / 2, 0.3), boat=(CANAL_X - 4.0, (_BY0 + _BY1) / 2 + 6.0, 0.13))
+def _in_basin(x, y, pad):
+    return _BX0 - 16 - pad < x < _BX1 + 2 + pad and _BY0 - _BSTEP_N * _BSTEP_D - 9 - pad < y < _BY1 + _BSTEP_N * _BSTEP_D + 9 + pad
 def _in_church(x, y, pad):
     return _CH_C[0] - 30 - pad < x < _CH_C[0] + 32 + pad and abs(y - _CH_C[1]) < 10 + pad
 def in_canal(x, y):
@@ -154,7 +196,7 @@ def street_polylines():
         cur = []
         for x, y in pts:
             bad = (not in_district(x, y, 4)) and pts is not AVENUE
-            bad = bad or _in_hq(x, y, hw) or _in_church(x, y, hw)
+            bad = bad or _in_hq(x, y, hw) or _in_church(x, y, hw) or _in_basin(x, y, hw)
             if bad:
                 if len(cur) > 2:
                     out.append((cur, hw))
@@ -221,10 +263,29 @@ def walkable(x, y):
         return True
     if oy - 160 < y < oy - 6 and abs(x) < 26 + (oy - 6 - y) * 0.6:      # outside the outer gate (Maria land)
         return True
+    if _in_basin(x, y, 0) and x < _BX1 + 0.5:
+        return True
     return in_district(x, y, 6.0) and on_road(x, y)
 
 def ground_z(x, y):
-    return L.height(x, y)
+    """Terrain height, plus the cannon basin's terraces and steps (the basin floor is at street level)."""
+    h = L.height(x, y)
+    if _in_basin(x, y, 0):
+        h += basin_z(x, y)
+    return h
+
+def basin_z(x, y):
+    """Height of the basin structures above the street at (x, y): steps, terraces, landing (0 on the floor)."""
+    if x > _BX1 or x < _BX0 - 14:
+        return 0.0
+    if x < _BX0:
+        return _BTOP + 4.0 if x > _BX0 - 3 else _BTOP
+    if _BY0 <= y <= _BY1:
+        return 0.0
+    d = (y - _BY1) if y > _BY1 else (_BY0 - y)
+    if y < _BY0 and 512.0 < x < 522.0 and d < 9.0:
+        return 4.64
+    return min(_BTOP, (int(d / _BSTEP_D) + 1) * _BSTEP_H) if d < _BSTEP_N * _BSTEP_D else _BTOP
 
 # ---------------------------------------------------------------- rebind scene.py's district (import time)
 def _install():
@@ -254,7 +315,9 @@ CAMS = {
     "trost_hq": ((_HQ_C[0] - 150, _HQ_C[1] + 70, 120), (_HQ_C[0], _HQ_C[1], 6), 34),
     "trost_hq_cut": ((_HQ_C[0] - 70, _HQ_C[1] + 35, 120), (_HQ_C[0], _HQ_C[1], 0), 34),
     "trost_belltower": ((PLAZA[0] + 70, PLAZA[1] - 90, 80), (BELL_TOWER["xy"][0], BELL_TOWER["xy"][1], 30), 34),
-    "trost_inner_gate": ((INNER_GATE[0] + 70, -175, 95), (INNER_GATE[0], 0, 14), 32),
+    "trost_inner_gate": ((INNER_GATE[0] + 45, -120, 60), (INNER_GATE[0], 0, 12), 34),
+    "trost_hq_complex": ((_HQ_C[0] + 60, _HQ_C[1] - 150, 95), (_HQ_C[0] - 25, _HQ_C[1], 18), 32),
+    "trost_basin": ((518.0 - 70, -200.0 - 55, 60), (518.0, -200.0, 2), 34),
 }
 
 # ---------------------------------------------------------------- small mesh helpers
@@ -290,7 +353,7 @@ def build_walls(M):
     rose_top = [p for p in rose if abs(p[0]) < 2600]
     L.wall_top("WallTopRose", rose_top, r_gaps, M)
     L.wall_top("WallTopTrost", dist, d_gaps, M)
-    L.gatehouse("InnerGate", INNER_GATE, 0, M)
+    L.gatehouse("InnerGate", INNER_GATE, 0, M, door=False)   # open passage for the evacuation (HANDOFF 09:37)
     L.gatehouse("OuterGate", OUTER_GATE, 0, M, deep=8.0)
     L.gatehouse("WaterGateRose", WATER_GATE_ROSE, 0, M, w=CANAL_W, h=11, door=False)
     a = math.atan2(WATER_GATE_OUTER[1] + S, WATER_GATE_OUTER[0])
@@ -363,14 +426,35 @@ def set_lift(i, frac):
 
 # ---------------------------------------------------------------- supply HQ
 HQ_UPPER = []
+def _merlons(bm, x0, y0, x1, y1, z, mi=0, every=2.2, size=(1.1, 0.9, 1.3)):
+    """Crenellation: merlon blocks along the edge (x0, y0) -> (x1, y1) on top of a parapet at height z."""
+    L_ = math.hypot(x1 - x0, y1 - y0); n = max(1, int(L_ / every))
+    rot = math.atan2(y1 - y0, x1 - x0)
+    for k in range(n + 1):
+        u = k / n
+        L.box(bm, (x0 + (x1 - x0) * u, y0 + (y1 - y0) * u, z + size[2] / 2), (size[0], size[1], size[2]), rot, mi=mi)
+
+def _arched(bm, x, y, z, w, h, axis, mi=1):
+    """Arched window inset on a wall face (axis 'x': face normal along y; 'y': normal along x)."""
+    if axis == "x":
+        L.box(bm, (x, y, z), (w, 0.25, h), mi=mi)
+        L.cyl(bm, (x, y - 0.12, z + h / 2), (x, y + 0.12, z + h / 2), w / 2, seg=10, mi=mi)
+    else:
+        L.box(bm, (x, y, z), (0.25, w, h), mi=mi)
+        L.cyl(bm, (x - 0.12, y, z + h / 2), (x + 0.12, y, z + h / 2), w / 2, seg=10, mi=mi)
+
 def build_hq(M):
-    """Three-storey stone supply depot with a flat roof and a corner tower. Ground floor = the storeroom hall
-    (crates, gas tanks, ceiling beams the cadets hide on, the lift platform). Upper storeys, floor slabs and roof
-    live in collection TrostHQ_Upper so set_hq_cutaway(True) opens the building to a sky view."""
+    """The anime supply HQ complex (refs trost_hq_keep_front / _distant_towers / _warehouse_wing, HANDOFF 10:20-10:22):
+    a pale sandstone crenellated KEEP (square block with four corner turrets under slate-blue pyramid roofs, a row of
+    arched windows, a taller crenellated central block, a small clock/bell turret on top) joined at its east side to a
+    long, tall 5-storey sandstone WAREHOUSE wing (steep dark-slate gabled roof, rows of small square windows, a few
+    arched ground-floor windows, pilaster strips on the gable end).  The warehouse ground floor is the storeroom of the
+    lift operation (beams, crates, gas racks, the lift); its upper storeys, floor slabs and roof are the cutaway set
+    (collection TrostHQ_Upper, set_hq_cutaway(True) opens it to the sky)."""
     up = L.new_coll("TrostHQ_Upper")
     t = 1.4
     Lx, Dy = HQ_L, HQ_D
-    # ---- lower walls (z 0..10) with the main door (local -y, faces the ring road) and a loading door (+y)
+    # ================= warehouse: ground floor storeroom (z 0..10), stays in the cutaway
     bm = bmesh.new()
     zl = 10.0
     def wall_x(y, z0, z1, door=None):
@@ -381,23 +465,21 @@ def build_hq(M):
         for sx in (-1, 1):
             L.box(bm, (sx * (dw / 2 + seg / 2), y, (z0 + z1) / 2), (seg, t, z1 - z0))
         L.box(bm, (0, y, (dh + z1) / 2), (dw, t, z1 - dh))
-    wall_x(-Dy / 2 + t / 2, 0, zl, door=(9.0, 7.5))
+    wall_x(-Dy / 2 + t / 2, 0, zl, door=(8.0, 7.0))
     wall_x(Dy / 2 - t / 2, 0, zl, door=(7.0, 6.0))
-    for sx in (-1, 1):
-        L.box(bm, (sx * (Lx / 2 - t / 2), 0, zl / 2), (t, Dy - 2 * t, zl))
-    # plinth + pilasters
-    L.box(bm, (0, 0, 0.5), (Lx + 1.2, Dy + 1.2, 1.0))
-    for k in range(8):
-        xx = -Lx / 2 + k * Lx / 7
+    L.box(bm, (Lx / 2 - t / 2, 0, zl / 2), (t, Dy - 2 * t, zl))                       # east gable end (west abuts the keep)
+    L.box(bm, (-Lx / 2 + t / 2, 0, zl / 2), (t, Dy - 2 * t, zl))
+    L.box(bm, (0, 0, 0.5), (Lx + 1.0, Dy + 1.0, 1.0))                                 # plinth
+    for k in range(10):                                                               # pilaster strips, long faces
+        xx = -Lx / 2 + 1 + k * (Lx - 2) / 9
         for sy in (-1, 1):
-            L.box(bm, (xx, sy * (Dy / 2 + 0.3), zl / 2), (1.6, 0.8, zl))
-    # high windows in the hall
-    for k in range(7):
-        xx = -Lx / 2 + (k + 0.5) * Lx / 7
-        for sy in (-1, 1):
-            if abs(xx) > 6:
-                L.box(bm, (xx, sy * (Dy / 2 + 0.05), 6.5), (2.0, 0.2, 3.0), mi=1)
-    # floor, ceiling beams the cadets crouch on (z ~9), storeroom contents
+            L.box(bm, (xx, sy * (Dy / 2 + 0.25), zl / 2), (1.3, 0.6, zl))
+    for k in range(9):                                                                # arched ground-floor windows
+        xx = -Lx / 2 + 4 + k * (Lx - 8) / 8
+        if abs(xx) > 6:
+            for sy in (-1, 1):
+                _arched(bm, xx, sy * (Dy / 2 + 0.05), 4.6, 2.0, 3.2, "x")
+    # storeroom interior: plank floor, ceiling beams (the cadets crouch on them), crates, ODM gas racks, the lift frame
     L.box(bm, (0, 0, 0.62), (Lx - 2 * t, Dy - 2 * t, 0.25), mi=2)
     for k in range(1, 10):
         xx = -Lx / 2 + k * Lx / 10
@@ -405,24 +487,22 @@ def build_hq(M):
     for yy in (-Dy / 4, Dy / 4):
         L.box(bm, (0, yy, 8.4), (Lx - 2 * t, 0.6, 0.6), mi=2)
     rnd = random.Random(5)
-    for sy in (-1, 1):                                       # crate stacks along the long walls
-        for k in range(16):
-            xx = -Lx / 2 + 4 + k * (Lx - 8) / 15
-            if abs(xx) < 6 and sy < 0:
+    for sy in (-1, 1):
+        for k in range(12):
+            xx = -19 + k * 38 / 11
+            if abs(xx) < 5 and sy < 0:
                 continue
-            n = rnd.randint(1, 3)
-            for j in range(n):
-                L.box(bm, (xx + rnd.uniform(-0.3, 0.3), sy * (Dy / 2 - 3.2), 0.75 + 0.8 + j * 1.6), (2.6, 2.6, 1.55), mi=3)
-    for row in range(4):                                     # gas tank racks at both ends (ODM refills)
-        for k in range(9):
+            for j in range(rnd.randint(1, 3)):
+                L.box(bm, (xx + rnd.uniform(-0.3, 0.3), sy * (Dy / 2 - 3.0), 0.75 + 0.8 + j * 1.6), (2.4, 2.4, 1.55), mi=3)
+    for row in range(4):
+        for k in range(7):
             for sx in (-1, 1):
                 x0 = sx * (Lx / 2 - 3.5 - row * 3.0)
-                yy = -12 + k * 3.0
-                L.cyl(bm, (x0 - 1.1, yy, 1.3 + (k % 2) * 0.05), (x0 + 1.1, yy, 1.3), 0.55, seg=10, mi=4)
+                yy = -9 + k * 3.0
+                L.cyl(bm, (x0 - 1.1, yy, 1.3), (x0 + 1.1, yy, 1.3), 0.55, seg=10, mi=4)
                 L.cyl(bm, (x0 - 1.1, yy, 2.5), (x0 + 1.1, yy, 2.5), 0.55, seg=10, mi=4)
-        L.box(bm, (Lx / 2 - 3.5 - row * 3.0, 0, 0.9), (0.4, 28, 0.6), mi=2)
-        L.box(bm, (-(Lx / 2 - 3.5 - row * 3.0), 0, 0.9), (0.4, 28, 0.6), mi=2)
-    # lift frame: 4 posts through the 1st-floor opening, top beams and a winch drum
+        for sx in (-1, 1):
+            L.box(bm, (sx * (Lx / 2 - 3.5 - row * 3.0), 0, 0.9), (0.4, 22, 0.6), mi=2)
     for sx in (-5.6, 5.6):
         for sy in (-5.6, 5.6):
             L.box(bm, (sx, sy, 7.4), (0.6, 0.6, 14.0), mi=2)
@@ -430,7 +510,7 @@ def build_hq(M):
         L.box(bm, (0, sy, 14.2), (12.0, 0.6, 0.6), mi=2)
     L.cyl(bm, (-4.5, 0, 14.6), (4.5, 0, 14.6), 0.6, seg=12, mi=5)
     low = _to_world(L.obj_from_bm("TrostHQ", bm, [M["hq_stone"], M["window"], M["plank"], M["crate"], M["gas"], M["iron"]]), _HQ_C, _HQ_ROT)
-    # ---- lift platform (moves)
+    # lift platform (moves; parented to the storeroom)
     pb = bmesh.new()
     L.box(pb, (0, 0, 0.2), (10.4, 10.4, 0.4), mi=0)
     for sx in (-5.0, 5.0):
@@ -440,59 +520,90 @@ def build_hq(M):
             L.box(pb, (sx, sy, 0.6), (0.2, 0.2, 0.8), mi=1)
     lift = L.obj_from_bm("TrostHQ_Lift", pb, [M["plank"], M["iron"]])
     lift.parent = low; lift.location = (0, 0, 10.0)
-    # ---- upper storeys z 10..22 (+ parapet), floor slabs with the lift opening, flat roof, chimneys
+    # ================= warehouse upper storeys z 10..26, slabs, steep dark-slate gabled roof (the cutaway set)
     ub = bmesh.new()
-    zt = 22.0
+    zt = 26.0
     for sy in (-1, 1):
         L.box(ub, (0, sy * (Dy / 2 - t / 2), (zl + zt) / 2), (Lx, t, zt - zl))
-        L.box(ub, (0, sy * (Dy / 2 + 0.2), zl + 0.3), (Lx + 0.4, 0.6, 0.6))          # string course
+        L.box(ub, (0, sy * (Dy / 2 + 0.2), zl + 0.3), (Lx + 0.4, 0.6, 0.6))           # string course
+        for k in range(10):
+            xx = -Lx / 2 + 1 + k * (Lx - 2) / 9
+            L.box(ub, (xx, sy * (Dy / 2 + 0.25), (zl + zt) / 2), (1.3, 0.6, zt - zl))
+        for zz in (12.6, 15.8, 19.0, 22.2):                                           # rows of small square windows
+            for k in range(16):
+                xx = -Lx / 2 + 3 + k * (Lx - 6) / 15
+                L.box(ub, (xx, sy * (Dy / 2 + 0.05), zz), (1.2, 0.2, 1.3), mi=1)
     for sx in (-1, 1):
         L.box(ub, (sx * (Lx / 2 - t / 2), 0, (zl + zt) / 2), (t, Dy - 2 * t, zt - zl))
-    L.box(ub, (0, 0, zt + 0.7), (Lx + 0.6, Dy + 0.6, 0.5))
-    for sy in (-1, 1):                                                                 # parapet
-        L.box(ub, (0, sy * (Dy / 2), zt + 1.6), (Lx + 0.6, 0.7, 1.4))
-    for sx in (-1, 1):
-        L.box(ub, (sx * (Lx / 2), 0, zt + 1.6), (0.7, Dy + 0.6, 1.4))
-    for k in range(8):
-        xx = -Lx / 2 + k * Lx / 7
-        for sy in (-1, 1):
-            L.box(ub, (xx, sy * (Dy / 2 + 0.3), (zl + zt) / 2), (1.6, 0.8, zt - zl))
-    for zz in (11.6, 17.4):                                                            # arched-window rows
-        for k in range(14):
-            xx = -Lx / 2 + 2.5 + k * (Lx - 5) / 13
-            for sy in (-1, 1):
-                L.box(ub, (xx, sy * (Dy / 2 + 0.05), zz + 1.5), (1.6, 0.2, 3.0), mi=1)
-        for k in range(8):
-            yy = -Dy / 2 + 3 + k * (Dy - 6) / 7
-            for sx in (-1, 1):
-                L.box(ub, (sx * (Lx / 2 + 0.05), yy, zz + 1.5), (0.2, 1.6, 3.0), mi=1)
+    # east gable end: triangle up to the ridge + pilaster strips + windows
+    ridge = zt + 15.0
+    ge = [ub.verts.new(c) for c in ((Lx / 2, -Dy / 2, zt), (Lx / 2, Dy / 2, zt), (Lx / 2, 0, ridge))]
+    ub.faces.new(ge)
+    ge2 = [ub.verts.new(c) for c in ((Lx / 2 - t, -Dy / 2, zt), (Lx / 2 - t, 0, ridge), (Lx / 2 - t, Dy / 2, zt))]
+    ub.faces.new(ge2)
+    for xg in (-Lx / 2, -Lx / 2 + t):                                                 # west gable (above the keep)
+        ub.faces.new([ub.verts.new(c) for c in ((xg, -Dy / 2, zt), (xg, 0, ridge), (xg, Dy / 2, zt))])
+    for yy in (-Dy / 2 + 0.8, -5, 5, Dy / 2 - 0.8):
+        top = zt + 15.0 * (1 - abs(yy) / (Dy / 2)) - 0.6
+        L.box(ub, (Lx / 2 + 0.3, yy, top / 2), (0.6, 1.2, top))
+    for zz in (12.6, 15.8, 19.0, 22.2, 26.5, 30.5):
+        for yy in ((-9, -3, 3, 9) if zz < 26 else ((-3, 3) if zz < 30 else (0,))):
+            L.box(ub, (Lx / 2 + 0.05, yy, zz), (0.2, 1.2, 1.3), mi=1)
     def slab(z, hole=6.0):
         th = 0.6
         L.box(ub, (0, -(Dy / 2 + hole) / 2, z), (Lx - 2 * t, Dy / 2 - hole - t, th), mi=2)
         L.box(ub, (0, (Dy / 2 + hole) / 2, z), (Lx - 2 * t, Dy / 2 - hole - t, th), mi=2)
         for sx in (-1, 1):
             L.box(ub, (sx * (Lx / 2 + hole) / 2, 0, z), (Lx / 2 - hole - t, 2 * hole, th), mi=2)
-    slab(zl - 0.1)
-    slab(16.0)
-    L.box(ub, (0, 0, zt + 0.95), (Lx - 1.0, Dy - 1.0, 0.1), mi=3)                      # roof surface
-    L.box(ub, (8, 6, zt + 2.6), (6, 5, 3.2))                                           # roof stair hut
-    _gable(ub, 8, 6, 6, 5, zt + 4.2, 1.6, 4)
-    for xx in (-24, 0, 24):
-        L.box(ub, (xx, -Dy / 2 + 4, zt + 2.6), (1.4, 1.4, 3.4))
-    upper = _to_world(L.obj_from_bm("TrostHQ_Upper", ub, [M["hq_stone"], M["window"], M["plank"], M["roof_flat"], M["roof_dark"]], up), _HQ_C, _HQ_ROT)
+    slab(zl - 0.1); slab(16.0); slab(21.0)
+    _gable(ub, 0, 0, Lx + 0.4, Dy, zt, 15.0, 3, over=0.9)                              # steep slate roof (~45 deg)
+    for xx in (-22, 0, 22):                                                           # chimneys on the ridge
+        L.box(ub, (xx, 3.0, ridge - 1.0), (1.6, 1.6, 6.0))
+    upper = _to_world(L.obj_from_bm("TrostHQ_Upper", ub, [M["hq_stone"], M["window"], M["plank"], M["hq_slate"]], up), _HQ_C, _HQ_ROT)
     HQ_UPPER[:] = [upper.name]
-    # ---- corner tower (stays in the cutaway; Armin's rooftop landmark)
-    tb = bmesh.new()
-    tx, ty = -Lx / 2 - 5.2, Dy / 2 - 7
-    L.box(tb, (tx, ty, 17.0), (10, 10, 34))
-    L.box(tb, (tx, ty, 34.4), (11, 11, 0.8))
-    for k in range(3):
-        for sx in (-1, 1):
-            L.box(tb, (tx + sx * 5.05, ty, 25 + k * 3), (0.2, 1.4, 2.2), mi=1)
-            L.box(tb, (tx, ty + sx * 5.05, 25 + k * 3), (1.4, 0.2, 2.2), mi=1)
-    L.box(tb, (tx, ty, 39.4), (11.6, 11.6, 9.2), mi=2, taper=(0.03, 0.03))     # pyramid cap
-    L.cyl(tb, (tx, ty, 43.8), (tx, ty, 49.0), 0.08, seg=4, mi=3)
-    _to_world(L.obj_from_bm("TrostHQ_Tower", tb, [M["hq_stone"], M["window"], M["roof_dark"], M["iron"]]), _HQ_C, _HQ_ROT)
+    # ================= the keep (west end, joined to the warehouse), stays in the cutaway
+    kb = bmesh.new()
+    kx, K_ = HQ_KEEP_X, HQ_KEEP
+    zk = 24.0
+    L.box(kb, (kx, 0, zk / 2), (K_, K_, zk))                                          # main block
+    L.box(kb, (kx, 0, zk + 0.8), (K_ + 0.6, K_ + 0.6, 1.6))                           # parapet
+    h = K_ / 2
+    for (ax, ay, bx, by) in ((-h, -h, h, -h), (h, -h, h, h), (h, h, -h, h), (-h, h, -h, -h)):
+        _merlons(kb, kx + ax, ay, kx + bx, by, zk + 1.6)
+    for k in range(7):                                                                # row of arched windows, 3 faces
+        u = -h + 3.5 + k * (K_ - 7) / 6
+        _arched(kb, kx + u, -h - 0.05, 15.0, 1.6, 3.0, "x"); _arched(kb, kx + u, h + 0.05, 15.0, 1.6, 3.0, "x")
+        _arched(kb, kx - h - 0.05, u, 15.0, 1.6, 3.0, "y")
+    L.box(kb, (kx - h - 0.6, 0, 3.5), (1.2, 6.0, 7.0), mi=1)                          # gate in the west face
+    for sx in (-1, 1):                                                                # four corner turrets
+        for sy in (-1, 1):
+            cx, cy = kx + sx * h, sy * h
+            L.box(kb, (cx, cy, 15.5), (7.0, 7.0, 31.0))
+            L.box(kb, (cx, cy, 31.2), (7.6, 7.6, 0.6))
+            L.box(kb, (cx, cy, 34.6), (8.0, 8.0, 6.2), mi=2, taper=(0.04, 0.04))      # slate-blue pyramid roof
+            for k in (-1, 1):
+                L.box(kb, (cx + k * 1.2, cy + sy * 3.55, 28.0), (0.4, 0.2, 2.2), mi=1)
+    # taller central block with its own crenellation, and the small clock / bell turret on top
+    cb = 16.0; zc = 36.0
+    L.box(kb, (kx + 2, 0, zc / 2), (cb, cb, zc))
+    L.box(kb, (kx + 2, 0, zc + 0.7), (cb + 0.6, cb + 0.6, 1.4))
+    hb = cb / 2
+    for (ax, ay, bx, by) in ((-hb, -hb, hb, -hb), (hb, -hb, hb, hb), (hb, hb, -hb, hb), (-hb, hb, -hb, -hb)):
+        _merlons(kb, kx + 2 + ax, ay, kx + 2 + bx, by, zc + 1.4)
+    for k in range(5):
+        u = -hb + 2.5 + k * (cb - 5) / 4
+        for zz in (27.0, 31.5):
+            L.box(kb, (kx + 2 + u, -hb - 0.05, zz), (0.9, 0.2, 2.0), mi=1)
+            L.box(kb, (kx + 2 + u, hb + 0.05, zz), (0.9, 0.2, 2.0), mi=1)
+    tx = kx + 2
+    L.box(kb, (tx, 0, zc + 4.5), (5.0, 5.0, 7.0))                                     # clock / bell turret
+    for s in (-1, 1):
+        _arched(kb, tx, s * 2.55, zc + 5.0, 1.6, 2.4, "x"); _arched(kb, tx + s * 2.55, 0, zc + 5.0, 1.6, 2.4, "y")
+    L.cyl(kb, (tx, -2.56, zc + 2.8), (tx, -2.62, zc + 2.8), 0.9, seg=16, mi=3)       # clock face
+    L.box(kb, (tx, 0, zc + 8.4), (5.8, 5.8, 0.8))
+    L.cyl(kb, (tx, 0, zc + 8.8), (tx, 0, zc + 11.5), 2.4, 1.6, seg=12, mi=0)          # cupola
+    L.cyl(kb, (tx, 0, zc + 11.5), (tx, 0, zc + 13.0), 1.0, 0.1, seg=12, mi=2)
+    keep = _to_world(L.obj_from_bm("TrostHQ_Keep", kb, [M["hq_stone"], M["window"], M["roof_turret"], M["clock"]]), _HQ_C, _HQ_ROT)
     return low
 
 def set_hq_cutaway(on=True):
@@ -506,6 +617,43 @@ def set_hq_lift(frac):
     if o:
         lo, hi = SUPPLY_HQ["lift_z"]
         o.location.z = hi + (lo - hi) * max(0.0, min(1.0, frac))
+
+# ---------------------------------------------------------------- the cannon basin
+def build_basin(M):
+    bm = bmesh.new()
+    X0, X1, Y0, Y1 = _BX0, _BX1, _BY0, _BY1
+    span = X1 - X0
+    L.box(bm, ((X0 + X1) / 2, (Y0 + Y1) / 2, 0.08), (span, Y1 - Y0, 0.16), mi=1)      # mossy floor
+    for side in (1, -1):                                                               # stepped banks + terraces
+        for k in range(_BSTEP_N):
+            y0 = (Y1 + k * _BSTEP_D) if side > 0 else (Y0 - (k + 1) * _BSTEP_D)
+            z = (k + 1) * _BSTEP_H
+            L.box(bm, ((X0 + X1) / 2, y0 + _BSTEP_D / 2, z / 2), (span, _BSTEP_D, z), mi=0)
+        yt = (Y1 + _BSTEP_N * _BSTEP_D) if side > 0 else (Y0 - _BSTEP_N * _BSTEP_D - 8)
+        L.box(bm, ((X0 - 14 + X1) / 2, yt + 4, _BTOP / 2), (span + 14, 8, _BTOP), mi=0)   # terrace
+        L.box(bm, ((X0 - 14 + X1) / 2, yt + (8.2 if side > 0 else -0.2), _BTOP + 0.5), (span + 14, 0.5, 1.0), mi=0)   # outer parapet
+    L.box(bm, (517.0, Y0 - 4.5, 2.32), (10.0, 9.0, 4.64), mi=0)                         # the raised landing (salute)
+    # west retaining wall (10 m) with three buttress piers and a walk on top, terrace behind it
+    L.box(bm, (X0 - 7, (Y0 + Y1) / 2, _BTOP / 2), (14, Y1 - Y0, _BTOP), mi=0)
+    L.box(bm, (X0 - 1.5, (Y0 + Y1) / 2, 5.0), (3.0, Y1 - Y0 + 2 * _BSTEP_N * _BSTEP_D, 10.0), mi=0)
+    for yy in (Y0 + 6, (Y0 + Y1) / 2, Y1 - 6):
+        L.box(bm, (X0 + 1.0, yy, 4.6), (2.4, 4.0, 9.2), mi=0, taper=(0.6, 0.85))
+    # quay edge, bollards and mooring rings on the canal side
+    L.box(bm, (X1 - 0.6, (Y0 + Y1) / 2, 0.25), (1.2, Y1 - Y0, 0.5), mi=0)
+    for yy in (Y0 + 8, (Y0 + Y1) / 2, Y1 - 8):
+        L.cyl(bm, (X1 - 0.8, yy, 0.4), (X1 - 0.8, yy, 1.3), 0.35, 0.28, seg=8, mi=2)
+    ob = L.obj_from_bm("TrostCannonBasin", bm, [M["hq_stone"], M["moss_floor"], M["iron"]])
+    # the boat at the quay
+    bb = bmesh.new()
+    L.box(bb, (0, 0, 0.55), (9.0, 2.6, 0.9), taper=(1.0, 1.25), mi=0)
+    L.box(bb, (4.8, 0, 0.75), (1.4, 1.6, 0.9), taper=(0.2, 0.8), mi=0)
+    L.box(bb, (-4.6, 0, 0.75), (0.8, 2.2, 0.9), mi=0)
+    for xx in (-2.4, 0.0, 2.4):
+        L.box(bb, (xx, 0, 0.9), (0.3, 2.5, 0.12), mi=1)
+    bo = L.obj_from_bm("TrostBoat", bb, [M["gate"], M["plank"]])
+    bx, by, bz = CANNON_BASIN["boat"]
+    bo.location = (bx, by, bz - 0.25); bo.rotation_euler.z = math.pi / 2
+    return ob
 
 # ---------------------------------------------------------------- church with the bell tower
 def build_church(M):
@@ -659,7 +807,7 @@ def set_wagon(on=True):
 def _blocked(x, y, rad):
     if abs(x - CANAL_X) < CANAL_W / 2 + 4 + rad:
         return True
-    if _in_hq(x, y, rad) or _in_church(x, y, rad + 2):
+    if _in_hq(x, y, rad) or _in_church(x, y, rad + 2) or _in_basin(x, y, rad + 1):
         return True
     for cx, cy, r in (PLAZA, BOULDER_SQUARE, OUTER_GATE_SQUARE):
         if (x - cx) ** 2 + (y - cy) ** 2 < (r + rad) ** 2:
@@ -721,16 +869,6 @@ def town_points(n_variants, widths):
         elif rnd.random() < 0.5:
             trees.append((x, y, 0, rnd.uniform(0, 6.28), rnd.uniform(0.6, 0.9), rnd.randrange(7), -10000.0, 99999.0))
             occ.setdefault((int(x // 12), int(y // 12)), []).append((x, y, 3))
-    # Rose-side settlement around the road north of the inner gate (where the evacuees flee)
-    ix = INNER_GATE[0]
-    for _ in range(9000):
-        x, y = rnd.gauss(ix, 210), rnd.uniform(25, 320)
-        if abs(x - ix) < 14 + y * 0.05 or abs(x - CANAL_X) < CANAL_W / 2 + 6 or rnd.random() > math.exp(-y / 90):
-            continue
-        v = rnd.randrange(n_variants); w, dpt = widths[v]
-        r = max(w, dpt) * 0.6
-        if free(x, y, r + 2):
-            put(x, y, rnd.choice((0, math.pi / 2)) + rnd.uniform(-0.2, 0.2), v, r + 2)
     return pts, trees
 
 def build_bridges(M):
@@ -811,7 +949,11 @@ def build_set(M, year):
     t0 = time.time()
     _install()
     sc = bpy.context.scene
-    M["hq_stone"] = L.mat("HQStone", (0.55, 0.49, 0.37), 0.85, var=0.12, var_scale=0.15, color2=(0.62, 0.56, 0.44))
+    M["hq_stone"] = L.mat("HQStone", (0.50, 0.44, 0.32), 0.88, var=0.16, var_scale=0.15, color2=(0.58, 0.52, 0.39))
+    M["hq_slate"] = L.mat("HQSlate", (0.05, 0.055, 0.065), 0.9, var=0.12, var_scale=0.4)
+    M["roof_turret"] = L.mat("RoofTurret", (0.12, 0.16, 0.25), 0.55, var=0.1, var_scale=0.5)
+    M["clock"] = L.mat("ClockFace", (0.85, 0.82, 0.70), 0.6)
+    M["moss_floor"] = L.mat("MossFloor", (0.11, 0.13, 0.08), 0.95, var=0.25, var_scale=0.18, color2=(0.20, 0.21, 0.14))
     M["plank"] = L.mat("Plank", (0.30, 0.20, 0.11), 0.8, var=0.2, var_scale=0.6)
     M["crate"] = L.mat("Crate", (0.26, 0.15, 0.07), 0.85, var=0.2, var_scale=0.9)
     M["gas"] = L.mat("GasTank", (0.42, 0.45, 0.48), 0.35)
@@ -857,10 +999,11 @@ def build_set(M, year):
     gx0, gy0, gx1, gy1 = INNER_GATE_SQUARE
     L.disc_patch("GateSquare", (gx0 + gx1) / 2, (gy0 + gy1) / 2, (gx1 - gx0) / 2, (gy1 - gy0) / 2 + 2, 0, M["cobble"], 0.17)
     L.disc_patch("OuterSquare", OUTER_GATE_SQUARE[0], OUTER_GATE_SQUARE[1], OUTER_GATE_SQUARE[2], OUTER_GATE_SQUARE[2], 0, M["cobble"], 0.17, round_=True)
-    L.disc_patch("HQCourt", *hq_world(0, -HQ_D / 2 - 6), HQ_L / 2 + 4, 6, _HQ_ROT, M["cobble"], 0.17)
+    L.disc_patch("HQCourt", *hq_world(-HQ_KEEP / 2, -HQ_D / 2 - 8), (HQ_L + HQ_KEEP) / 2 + 6, 7, _HQ_ROT, M["cobble"], 0.17)
     L.canal(M)
     nb = build_bridges(M)
     build_hq(M)
+    build_basin(M)
     build_church(M)
     build_boulder(M)
     build_wagon(M)
@@ -884,7 +1027,7 @@ def build_set(M, year):
     return M
 
 # ---------------------------------------------------------------- stills runner (2nd -P script)
-STILL_STATE = {"trost_hq_cut": dict(cutaway=True, lift=0.55), "trost_inner_gate": dict(wagon=True)}
+STILL_STATE = {"trost_hq_cut": dict(cutaway=True, lift=0.55), "trost_inner_gate": dict(wagon=False)}
 
 def _stills_main():
     import argparse
@@ -897,6 +1040,22 @@ def _stills_main():
         return
     os.makedirs(a.stills, exist_ok=True)
     sc = bpy.context.scene; cam = sc.camera
+    if sc.render.engine.startswith("BLENDER_EEVEE"):           # readable sky views: sun shadows + AO
+        ev = sc.eevee
+        for k_, v_ in (("taa_render_samples", 8), ("use_shadows", True), ("shadow_pool_size", "1024"), ("shadow_resolution_scale", 1.0),
+                       ("use_raytracing", True), ("ray_tracing_method", "SCREEN"), ("use_fast_gi", True),
+                       ("fast_gi_method", "AMBIENT_OCCLUSION_ONLY"), ("fast_gi_distance", 6.0)):
+            try:
+                setattr(ev, k_, v_)
+            except Exception:
+                pass
+        for o in bpy.data.objects:
+            if o.type == "LIGHT" and o.data.type == "SUN":
+                o.data.angle = math.radians(1.2)
+        for n in ("Haze",):
+            o = bpy.data.objects.get(n)
+            if o:
+                o.hide_render = True
     for name in a.cams.split(","):
         loc, tgt, lens = CAMS[name]
         cam.location = loc; cam.data.lens = lens

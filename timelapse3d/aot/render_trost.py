@@ -97,27 +97,37 @@ def site():
 
 # ====================================================================== time map v -> T (trost_action clock)
 # (T0, T1, video seconds) after the kick; pchip through the cumulative knots -> C1-smooth speed ramps
-# (T0, T1, video seconds): SET PIECES at ~1x (scaled by SET_K), quick TRANSITIONS (swoops) between them
-SET_K = float(os.environ.get("RT_SET_K", "1.25"))
-_SP = [  # (T0, T1, dv, is_set_piece)
-    (0, 2, 2.0, 0), (2, 6, 3.0, 1),                 # breach aftermath, FLOOD through the gate hole
-    (6, 7.6, 0.8, 0), (7.6, 12.4, 4.5, 1),          # swoop -> squad 34: Eren eaten
-    (12.4, 13.2, 1.5, 0), (13.2, 16, 3.5, 1),       # swoop -> inner gate: Mikasa clears the wagon, the crowd floods out
-    (16, 17.5, 1.2, 0), (17.5, 21, 3.0, 1),         # swoop -> supply HQ: titans around it, cadets stranded
-    (21, 26.5, 2.2, 0),                             # Mikasa's dash west over the roofs (followed, fast)
-    (26.5, 31, 3.5, 1),                             # she falls into the street by the church; the rogue titan appears
-    (31, 35, 2.6, 1),                               # its first kill at the bell tower's foot
-    (35, 44, 3.5, 0), (44, 46, 1.4, 0),             # it fights its way to the HQ (fast), the HQ dash
-    (46, 54, 5.2, 1),                               # lift plan (cutaway), ~6.5 s
-    (54, 56.5, 1.5, 0), (56.5, 59, 2.5, 1),         # Eren out of the nape
-    (59, 61.5, 1.2, 0), (61.5, 63.5, 2.5, 1),       # swoop -> cannon square: the Garrison ring, the cannon, the half-shift
-    (63.5, 66, 2.0, 1),                             # Armin's salute (overlay hold 2.5 s after SET_K)
-    (66, 68.5, 1.0, 0), (68.5, 71.5, 2.4, 1),       # swoop -> Pyxis on the wall (hold 3 s)
-    (71.5, 74.5, 1.0, 0), (74.5, 79, 3.5, 1),       # swoop -> boulder: Eren shifts, red flare
-    (79, 82, 2.5, 1), (82, 99, 11.0, 1),            # Armin's stab, the carry
-    (99, 104, 4.0, 1), (104, 111, 5.5, 1),          # the seal + yellow flare, Levi
-    (111, 113, 1.0, 0), (113, 117.5, 3.0, 1),       # swoop -> dusk pyres
-    (117.5, 120.5, 2.0, 1), (120.5, 125, 3.0, 1)]   # Marco (hold 2.5 s), pull away
+# (T0, T1, video seconds) per trost_action beat (BEATS names in the comments).  HANDOFF 09:37: a neutral observer in the
+# sky; brisk; no Eren-swallowed or other close beats; the boulder gets the most time.
+# TODO(D): D is reworking evacuation / lift_plan (gunfire + nape ring) / cannon (CANNON_BASIN staging) / boulder_seal;
+#          if their windows move, edit these knots (and the matching keys in cam_keys()).
+SET_K = float(os.environ.get("RT_SET_K", "1.0"))
+_SP = [  # (T0, T1, dv, scaled_by_SET_K)
+    (0, 2, 1.5, 0),                                 # breach aftermath (dust, blocks)
+    (2, 7, 3.0, 1),                                 # flood: titans pour in through the smashed gate, FAST
+    (7, 10, 3.0, 0),                                # sweep north to the inner gate
+    (10, 16, 5.0, 1),                               # evacuation: crowd jammed behind the cart, Mikasa, the cart shoved, out
+    (16, 21, 2.5, 0),                               # sweep (hq_despair passes underneath)
+    (21, 26.5, 3.0, 1),                             # mikasa_falls: her dash, seen high
+    (26.5, 31, 4.0, 1),                             # she falls (seen a little), the Attack Titan arrives (lightning)
+    (31, 35, 3.0, 1),                               # bell_tower: it beats the titan at the tower's foot
+    (35, 44, 4.5, 0),                               # attack_titan followed high toward the HQ
+    (44, 46, 1.0, 0),                               # hq_dash
+    (46, 54, 7.0, 1),                               # lift_plan: titans gather, the ring fires, napes cut (warehouse cutaway)
+    (54, 59, 3.0, 1),                               # at_collapse + emerge
+    (59, 61.5, 3.5, 0),                             # big move across the district to the CANNON_BASIN
+    (61.5, 63.5, 3.0, 1),                           # cannon: Garrison on the steps, the cannon fires, the half-shift, steam
+    (63.5, 66, 2.5, 1),                             # salute on the steps (overlay hold)
+    (66, 68.5, 2.5, 0),                             # move to the inner gate wall
+    (68.5, 71.5, 3.0, 1),                           # pyxis
+    (71.5, 74.5, 2.0, 0),                           # move to the boulder
+    (74.5, 79, 4.0, 1),                             # boulder_shift (red flare)
+    (79, 82, 3.0, 1),                               # boulder_stab
+    (82, 99, 14.0, 1),                              # boulder_carry  (the most important beat)
+    (99, 104, 5.0, 1),                              # boulder_seal (yellow flare)
+    (104, 111, 4.0, 1),                             # levi
+    (111, 113, 1.0, 0),
+    (113, 125, 5.0, 1)]                             # pyres at dusk, pull away
 SEGS = [(a, b, dv * (SET_K if sp else 1.0)) for a, b, dv, sp in _SP]
 KV = [V_KICK]; KT = [0.0]
 for a, b, dv in SEGS:
@@ -175,6 +185,8 @@ class Channel:
                 p = _herm(*q, k / 64); acc.append(acc[-1] + (p - prev).length + 1e-7); prev = p
             self.segs.append((q, acc)); S.append(S[-1] + acc[-1])
         self.S, self.m = S, _pchip_m0(T, S)
+        if len(S) > 1:                                      # constant speed through the pre-seam key (no ease-in)
+            self.m[0] = (S[1] - S[0]) / (T[1] - T[0])
     def at(self, t):
         s = _pchip(self.T, self.S, self.m, t)
         i = 0
@@ -190,15 +202,15 @@ class Channel:
 def P3(xy, z):
     return (float(xy[0]), float(xy[1]), float(z))
 
+SEAM_S8 = dict(loc=(-1013.0, 322.0, 300.0), tgt=(-926.0, 256.0, 0.0), lens=30.0, vel=(157.0, -118.0, -15.0))   # agent G (rev 3)
+
 def cam_keys():
-    """Set pieces: one clear subject per beat in an open space, camera 35-80 m on a steep oblique (low, 15-45 m up,
-    for wall top / squares / streets); between set pieces a quick rise-and-swoop (a high midpoint key is inserted
-    when the hop is long)."""
+    """HANDOFF 09:37: a neutral third-party observer watching calmly from the sky (~100-250 m), no chase cams, one take.
+    v = 0 continues agent B's graduation night exactly at G's seam S8 (pose + velocity), then flies to the outer wall."""
     S = TA.STATE; C = S["C"]; st = S["site"]
     hq = st.hq
-    M, A0, Q, cxy, Cp = C["M"], C["A0"], C["Q"], C["cannon_xy"], C["C_pt"]
-    er, ar = C["e_roof"], C["a_roof"]
-    stop, mp, sp_ = C["stop"], C["mpos"], C["shift_pt"]
+    M, A0, Cp = C["M"], C["A0"], C["C_pt"]
+    stop, sp_ = C["stop"], C["shift_pt"]
     at = lambda t: np.array(S["ATD"].state(t)[0][:2])
     K = []
     def k(v, loc, tgt, lens, piece=True):
@@ -209,78 +221,71 @@ def cam_keys():
         return (float(c[0]) + dx, float(c[1]) + dy, float(z))
     ex, ey = EREN_WALL
     igx, igy = TR.INNER_GATE
-    # ---- intro (video time): dawn over the town, the wall top, the Colossal, the kick
-    k(0.0, (-250, -420, 170), (-40, -790, 25), 28)
-    k(3.6, (-120, -720, 110), (ex, ey, 45), 34)
-    k(7.2, (ex - 18, ey + 44, 82), (ex, ey, L.WALL_H + 0.8), 58)
-    k(9.0, (ex - 12, ey + 52, 82), (ex + 6, ey - 8, L.WALL_H + 5), 46)
-    k(11.4, (ex + 4, ey + 80, 78), (-14, GY - 14, 56), 34)
-    k(13.6, (50, GY + 130, 95), (0, GY + 12, 20), 32)
-    # ---- AERIAL HOLD (user 10/25): from the kick to the Attack Titan's lightning arrival one continuous sky view,
-    # 120-300 m up, reading the beats from the air (name tags point out the heroes): the flood through the gate,
-    # squad 34 / Eren eaten, the evacuation at the inner gate, the titans around the HQ, Mikasa's dash and fall
-    e = (er[:2] + ar[:2]) / 2
-    kt(2.0, (110, GY + 150, 170), (0, GY + 60, 0), 30)
-    kt(6.0, (140, GY + 230, 200), (10, GY + 140, 0), 30)
-    kt(10.0, (150, e[1] + 120, 210), (e[0], e[1], 12), 32)
-    kt(14.0, (10, -260, 250), (igx, -30, 0), 30)
-    kt(16.5, (40, -210, 250), (igx + 40, -60, 0), 30)
-    kt(19.0, (60, -230, 260), (hq[0], hq[1], 8), 30)
-    kt(23.0, (120, -150, 240), ((hq[0] + M[0]) / 2, (hq[1] + M[1]) / 2, 8), 30)
-    kt(26.0, (20, -140, 190), (M[0], M[1], 4), 34)
-    kt(27.2, rel(M, 26, -40, 46), rel(M, 0, 0, 1), 40)
-    kt(30.6, rel(M, 30, -46, 50), ((M[0] + A0[0]) / 2, (M[1] + A0[1]) / 2, 6), 34)
+    sm = SEAM_S8; vel = Vector(sm["vel"])
+    # ---- seam S8 (a key 0.5 s earlier carries the entry velocity), dawn flight to the outer wall, Eren, Colossal, kick
+    k(-0.5, Vector(sm["loc"]) - vel * 0.5, Vector(sm["tgt"]) - vel * 0.5, sm["lens"], False)
+    k(0.0, sm["loc"], sm["tgt"], sm["lens"])
+    k(3.6, (-440, -130, 250), (-150, -600, 30), 30)                      # along the S8 entry velocity
+    k(7.2, (ex - 35, ey + 95, 120), (ex, ey, L.WALL_H + 1), 50)          # the squad on the wall walk, Eren's pose
+    k(9.0, (ex - 25, ey + 110, 122), (ex + 8, ey - 10, L.WALL_H + 6), 44)  # lightning, the Colossal behind him
+    k(11.4, (ex - 5, ey + 165, 130), (-10, GY - 15, 52), 34)
+    k(13.6, (40, GY + 230, 165), (0, GY + 25, 12), 32)                  # the kick
+    # ---- flood: titans pouring in through the smashed gate
+    kt(2.0, (90, GY + 210, 175), (0, GY + 45, 0), 30)
+    kt(6.8, (60, GY + 270, 195), (-6, GY + 130, 0), 30)
+    # ---- evacuation at the OPEN inner gate: the cart, Mikasa, the crowd escaping (TODO(D): evacuation timing)
+    kt(10.3, (igx + 120, -235, 175), (igx, -25, 0), 34)
+    kt(15.7, (igx + 100, -205, 160), (igx, 5, 0), 34)
+    # ---- Mikasa's dash and fall (seen a little), the Attack Titan arrives and beats the titan at the bell tower
+    for T in (21.5, 25.5):
+        m = TA.hero_pos("mikasa", T)
+        if m is not None and np.linalg.norm(np.asarray(m[:2], float)) > 1:
+            kt(T, rel(m, -90, -170, 210), rel(m, 0, 0, 10), 32)
+    kt(27.8, rel(M, 90, -150, 170), ((M[0] + A0[0]) / 2, (M[1] + A0[1]) / 2, 4), 34)
     tw = TR.BELL_TOWER["xy"]
-    kt(31.6, (tw[0] + 60, tw[1] - 62, 58), (tw[0] + 18, tw[1] - 18, 18), 32)
-    kt(34.8, (tw[0] + 64, tw[1] - 56, 60), (tw[0] + 26, tw[1] - 22, 16), 32)
-    a = at(39.5)
-    kt(39.5, rel(a, -40, -50, 85), rel(a, 0, 0, 6), 30)
-    # ---- lift plan: steep over the cutaway
-    kt(46.4, rel(hq, -15, -9, 44), rel(hq, 0, 0, 1), 30)
-    kt(53.6, rel(hq, -13, -8, 40), rel(hq, 0, 0, 1), 30)
-    # ---- Eren out of the nape, the cannon and the half-shift, Armin's salute
-    kt(56.7, rel(Cp, -10, 18, 42), rel(Cp, 0, 0, 3), 32)
-    kt(58.8, rel(Cp, -8, 18, 40), rel(Q, 0, 0, 2), 34)
-    cd = C["cdir"]; perp = np.array([cd[1], -cd[0]])
-    mid = (Q + cxy) / 2
-    # D's cannon_square (default: the inner-gate square): look north so the inner wall is the backdrop;
-    # by the HQ (old staging) look from the open street north of it
-    sgn = -1.0 if Q[1] > -160 else 1.0
-    kt(61.7, rel(mid, -4, 30 * sgn, 44), rel(mid, 0, 0, 4), 32)
-    kt(63.4, rel(mid, -3, 28 * sgn, 42), rel(Q, 0, 0, 5), 34)
-    kt(63.8, rel(Q, -4, 22 * sgn, 34), rel(Q, 0, 0, 3), 40)
-    kt(65.9, rel(Q, -3, 20 * sgn, 32), rel(Q, 0, 0, 3), 46)
-    # ---- Pyxis on the wall top above the inner gate (camera level with the wall walk, Trost side)
-    sx, sy, sz = TR.WALLTOP_SPEECH
-    kt(68.6, (sx + 30, sy - 40, sz + 14), (sx, sy, sz + 1), 55)
-    kt(71.4, (sx + 26, sy - 36, sz + 12), (sx, sy, sz + 1), 62)
-    # ---- boulder: shift by the rock (red flare), the stab, the carry down the avenue, the seal (yellow flare)
-    kt(74.7, rel(sp_, 46, 40, 40), rel(sp_, 0, 0, 8), 32)
-    kt(81.8, rel(sp_, 38, 34, 36), rel(sp_, 0, 0, 10), 34)
-    for T in (86.0, 91.0, 96.0):
+    kt(31.5, (tw[0] + 130, tw[1] - 160, 175), (tw[0] + 30, tw[1] - 30, 12), 34)
+    kt(34.8, (tw[0] + 140, tw[1] - 150, 180), (tw[0] + 45, tw[1] - 40, 10), 34)
+    for T in (38.5, 42.5):                                                    # followed high, no chase
         a = at(T)
-        kt(T, rel(a, 60, 40, 58), rel(a, 0, -20, 10), 30)
-    kt(99.5, (45, GY + 70, 48), (0, GY + 6, 12), 30)
-    kt(103.8, (40, GY + 62, 44), (0, GY + 4, 10), 30)
-    # ---- Levi's entrance
-    kt(104.5, rel(stop, 42, 46, 34), rel(stop, 0, 16, 8), 32)
-    kt(110.8, rel(stop, 36, 40, 30), rel(stop, 0, 20, 4), 34)
-    # ---- dusk pyres and Marco
+        kt(T, rel(a, -100, -160, 190), rel(a, 0, 0, 8), 32)
+    # ---- the HQ (keep + warehouse): the lift operation in the warehouse cutaway (TODO(D): gunfire + nape ring)
+    kt(46.4, rel(hq, -45, -85, 115), rel(hq, 0, 0, 2), 40)
+    kt(53.6, rel(hq, -40, -78, 108), rel(hq, 0, 0, 2), 42)
+    kt(57.0, rel(Cp, -55, -95, 120), rel(Cp, 0, 0, 3), 40)                   # Eren out of the nape
+    # ---- big move across the district to the cannon basin (TODO(D): cannon / salute staging at CANNON_BASIN)
+    bc = TR.CANNON_BASIN["center"]; land = TR.CANNON_BASIN["landing"]
+    kt(61.7, (bc[0] - 105, bc[1] - 115, 125), (bc[0] - 2, bc[1], 2), 40)
+    kt(63.4, (bc[0] - 98, bc[1] - 108, 118), (bc[0], bc[1], 2), 42)
+    kt(63.8, (land[0] - 80, land[1] - 85, 100), (land[0], land[1] + 6, 3), 46)
+    kt(65.9, (land[0] - 76, land[1] - 80, 96), (land[0], land[1] + 6, 3), 50)  # salute (overlay hold)
+    # ---- Pyxis on the wall top above the inner gate
+    sx, sy, sz = TR.WALLTOP_SPEECH
+    kt(68.8, (sx + 75, sy - 125, 125), (sx, sy, sz), 46)
+    kt(71.3, (sx + 70, sy - 118, 120), (sx, sy, sz), 50)
+    # ---- the boulder: shift (red flare), stab, the carry down the avenue, the seal (yellow flare)
+    kt(74.8, rel(sp_, 95, 110, 150), rel(sp_, 0, 0, 6), 34)
+    kt(81.7, rel(sp_, 85, 100, 140), rel(sp_, 0, 0, 8), 36)
+    for T in (85.0, 89.0, 93.0, 97.0):
+        a = at(T)
+        kt(T, rel(a, 120, 80, 175), rel(a, 0, -25, 8), 32)
+    kt(99.6, (95, GY + 190, 165), (0, GY + 8, 10), 34)
+    kt(103.8, (85, GY + 175, 155), (0, GY + 6, 10), 36)
+    # ---- Levi (aerial), then the dusk pyres and pull away
+    kt(105.0, rel(stop, 85, 125, 145), rel(stop, 0, 15, 6), 36)
+    kt(110.8, rel(stop, 80, 118, 140), rel(stop, 0, 18, 4), 38)
     pc = np.array(TR.PLAZA[:2])
-    kt(113.3, rel(pc, 60, -55, 50), rel(pc, 0, 0, 2), 30)
-    kt(117.3, rel(mp, 20, -18, 22), rel(mp, 0, 0, 0), 38)
-    kt(120.4, rel(mp, 17, -15, 19), rel(mp, 0, 0, 0), 44)
-    kt(124.9, rel(pc, 140, -150, 140), rel(pc, 0, 10, 0), 28)
+    kt(114.0, rel(pc, 120, -140, 160), rel(pc, 0, 0, 2), 34)
+    kt(124.9, rel(pc, 200, -260, 260), rel(pc, 0, 10, 0), 30)
     K.sort(key=lambda e: e[0])
     out = []
     for e in K:
         if out and e[0] - out[-1][0] < 0.25:
             continue
-        if out:                                            # rise-and-swoop between distant set pieces
+        if out and out[-1][0] >= 1.0:                       # calm rise on long moves (not on the seam leg: G's entry descends)
             p_, q_ = out[-1], e
             d = (q_[1] - p_[1]).length
-            if d > 160 and q_[0] - p_[0] > 0.5:
-                lm = (p_[1] + q_[1]) / 2; lm.z = max(p_[1].z, q_[1].z) + min(140.0, 0.22 * d)
+            if d > 350 and q_[0] - p_[0] > 0.8:
+                lm = (p_[1] + q_[1]) / 2; lm.z = max(p_[1].z, q_[1].z) + min(70.0, 0.1 * d)
                 out.append(((p_[0] + q_[0]) / 2, lm, (p_[2] + q_[2]) / 2, (p_[3] + q_[3]) / 2, False))
         out.append(e)
     return out
@@ -378,13 +383,13 @@ def light_at(v):
     for k, ob in enumerate(FX["bolts"]):
         ob.hide_render = not (on and on[0] == k)
     FX["flash"].energy = 6e6 if on else 0.0
-    night = 0.55 * (1 - ss(0.2, 3.6, v))
+    night = 1.0 - ss(0.0, 4.0, v)                            # graduation night carries over (seam S8), dawn by v 4
     dk = bump(v, V_LIGHT - 0.15, V_LIGHT, V_LIGHT + 0.35, V_LIGHT + 1.0)
     sc = bpy.context.scene
-    sc.view_settings.exposure = FX["exp"] - 1.6 * dk - 1.4 * night + (0.7 if on else 0.0)
+    sc.view_settings.exposure = FX["exp"] - 1.6 * dk - 0.6 * night + (0.7 if on else 0.0)
     if v >= 16.0:
         return
-    f = (1 - 0.72 * dk) * (1 - 0.8 * night)
+    f = (1 - 0.72 * dk) * (1 - 0.983 * night)                 # night: sun ~0.06 (as the interlude's graduation)
     for n, b in FX["bg"]:
         n.inputs[1].default_value = b * f
     for d, e, c in FX["suns"]:
