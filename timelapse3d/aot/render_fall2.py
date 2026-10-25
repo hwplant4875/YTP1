@@ -510,7 +510,8 @@ def seg3_cam_keys(S):
         (0.0, l0, t0, n0),
         (3.0, (60, -300, 120), (0, -90, 0), 32),             # flying north up the avenue, the Armored charging ahead
         (3.6, (40, -118, 95), (0, -30, 8), 32),              # nearer (~130 m) for the run and the shoulder ram
-        (IMPACT, (35, -100, 84), (0, -6, 12), 32),           # the ram: the gate explodes
+        (4.0, (34, -96, 84), (0, -22, 10), 32),              # closing in (~105 m) for the last second: the run and
+        (IMPACT, (30, -82, 78), (0, -8, 12), 32),            # the rugby shoulder drop read; the gate explodes
         (5.9, (44, -96, 98), (0, -4, 12), 32),               # hold on the burst gate while the dust billows
         (6.8, (95, -45, 118), (190, 60, 0), 30),             # pull up over the wall, turning to the canal
         (8.0, (195, 10, 95), (222, 110, 0), 30),             # low (~95 m) over the canal: ferries, refugees on bank + road
