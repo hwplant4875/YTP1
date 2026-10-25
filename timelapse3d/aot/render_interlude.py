@@ -949,12 +949,16 @@ def update(st, t):
     for rgb, pal in SEASON_MATS:
         _put(rgb.outputs[0], "default_value", (*season_rgb(pal, p), 1), 2e-3)
     nite = SI.night_at(t)
-    _put(st["sun"], "energy", 3.6 * (1 - nite) + 0.06 * nite)
-    _put(st["sun"], "color", (1.0, 0.97, 0.92) if nite < 0.5 else (0.55, 0.65, 1.0))
     winter = max(0.0, 1 - abs(((p - 2.0 + 2) % 4) - 2))         # 1 at mid winter
-    set_sun(st, 38 - 14 * winter - 8 * nite, 25 + 20 * math.sin(t * 0.15))
-    for n, v in st["bg"]:
-        _put(n.inputs[1], "default_value", v * (1 - 0.985 * nite) * (1 - 0.25 * winter), 2e-3)
+    # THE light comes from the shared rig (world.light_rig: same presets in every scene, so seam frames match):
+    # "day" (S3, camps end, S7), a dimmer low winter sun in the season time-lapses, "night" at S8 (graduation)
+    wint = dict(WD.LIGHT_PRESETS["day"]); wint.update(el=24.0, amb=0.19, e=3.0)
+    spec = WD.light_blend(WD.light_blend("day", wint, winter), "night", nite)
+    key = tuple(round(v, 4) if not isinstance(v, tuple) else tuple(round(c, 4) for c in v) for v in spec.values())
+    if st.get("light_key") != key:
+        WD.light_rig(spec)
+        st["light_key"] = key
+    _put(st["bg"][1][0].inputs[1], "default_value", st["bg"][1][1] * (1 - 0.985 * nite) * (1 - 0.25 * winter), 2e-3)  # camera sky
     for s in FOG_NODES:
         _put(s, "default_value", FOG_EMIT * (1 - 0.97 * nite), 2e-3)
     for o in st["flames"]:
@@ -962,7 +966,6 @@ def update(st, t):
     for ld in st["fire_lights"]:
         _put(ld, "energy", 900.0 * nite, 0.5)
     _put(st["grad_fill"], "energy", 2500.0 * nite, 0.5)
-    _put(sc.view_settings, "exposure", st["expo"] + 1.3 * nite)
     # ---- camps (only drawn while the camera is near them)
     camps_on = t < SI.T_ENL
     tn = st["tents"]
