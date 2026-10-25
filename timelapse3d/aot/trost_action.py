@@ -733,7 +733,8 @@ def choreograph(site, seed=850):
         TT.add(name, H=(7.0 if ab else None), abnormal=ab, show=(1.5, 1e9), scale=KEY if k < 3 else 1.0)
         TT.specs[-1]["v"] *= 1.35 * (1.9 if ab else 1.0)       # they run in
         hub = hubs_ok[rnd.randrange(len(hubs_ok))]
-        t_in = 2.0 + 0.31 * k + rnd.uniform(-0.15, 0.15)
+        gap = float(os.environ.get("TA_FLOOD_GAP", "0.31"))                 # entry spacing (s) through the breach
+        t_in = 2.0 + (max(gap, 0.55) if ab else gap) * k + rnd.uniform(-0.15, 0.15) * min(1.0, gap / 0.31)
         TT.leg(name, t_in, out_pt + side * rnd.uniform(-12, 12), hub)
     # titans crowding the supply HQ (already deep in the district when the camera gets there)
     ring = []
