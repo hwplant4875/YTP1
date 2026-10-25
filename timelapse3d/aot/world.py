@@ -92,54 +92,144 @@ def _mat(name, col, rough=0.9):
     b = m.node_tree.nodes["Principled BSDF"]; b.inputs["Base Color"].default_value = (*col, 1); b.inputs["Roughness"].default_value = rough
     return m
 
+def _mr(N, Ln, sock, a, b, c=0.0, d=1.0):
+    n = N.new("ShaderNodeMapRange"); n.inputs["From Min"].default_value = a; n.inputs["From Max"].default_value = b
+    n.inputs["To Min"].default_value = c; n.inputs["To Max"].default_value = d
+    Ln.new(sock, n.inputs["Value"]); return n.outputs["Result"]
+
+def _mix(N, Ln, fac, A, B, blend="MIX"):
+    n = N.new("ShaderNodeMix"); n.data_type = "RGBA"; n.blend_type = blend
+    for sock, v in ((n.inputs["Factor"], fac), (n.inputs["A"], A), (n.inputs["B"], B)):
+        if isinstance(v, (int, float)):
+            sock.default_value = v
+        elif isinstance(v, tuple):
+            sock.default_value = v
+        else:
+            Ln.new(v, sock)
+    return n.outputs["Result"]
+
+def _math(N, Ln, op, a, b=None):
+    n = N.new("ShaderNodeMath"); n.operation = op
+    for k, x in enumerate((a, b)):
+        if x is None:
+            continue
+        if isinstance(x, (int, float)):
+            n.inputs[k].default_value = x
+        else:
+            Ln.new(x, n.inputs[k])
+    return n.outputs[0]
+
 def ground_mat():
-    """Quilted fields + meadow + darker woodland patches, in root object space (= world metres)."""
+    """walls_map_ref.png look, in root object space (= world metres): mostly meadow green with soft large-scale colour
+    variation and darker woodland patches; along the N-S corridor (the river / road between the towns) and round the
+    towns and Mitras, long rectangular STRIP FIELDS running along the road (as march846's runtime farmland), with thin
+    soft hedgerows on the band edges.  No cell outlines."""
     m = bpy.data.materials.new("WD_Ground"); m.use_nodes = True
     nt = m.node_tree; N = nt.nodes; Ln = nt.links
     b = N["Principled BSDF"]; b.inputs["Roughness"].default_value = 0.95
-    tc = N.new("ShaderNodeTexCoord")
-    # fields: voronoi cells ~260 m, each a random tint between meadow, young crop and ripe yellow
-    vo = N.new("ShaderNodeTexVoronoi"); vo.inputs["Scale"].default_value = 1 / 260.0
-    Ln.new(tc.outputs["Object"], vo.inputs["Vector"])
+    tc = N.new("ShaderNodeTexCoord"); P = tc.outputs["Object"]
+    sep = N.new("ShaderNodeSeparateXYZ"); Ln.new(P, sep.inputs[0]); X, Y = sep.outputs["X"], sep.outputs["Y"]
+    # meadow: two greens + a dry tone on big soft noise, plus mid-scale mottling
+    n1 = N.new("ShaderNodeTexNoise"); n1.inputs["Scale"].default_value = 1 / 6000.0; n1.inputs["Detail"].default_value = 3
+    Ln.new(P, n1.inputs["Vector"])
+    n2 = N.new("ShaderNodeTexNoise"); n2.inputs["Scale"].default_value = 1 / 700.0; n2.inputs["Detail"].default_value = 4
+    Ln.new(P, n2.inputs["Vector"])
     cr = N.new("ShaderNodeValToRGB"); e = cr.color_ramp.elements
-    e[0].color = (0.13, 0.26, 0.05, 1); e[1].position = 1.0; e[1].color = (0.55, 0.47, 0.18, 1)
-    el = e.new(0.35); el.color = (0.24, 0.36, 0.08, 1)
-    el = e.new(0.6); el.color = (0.36, 0.42, 0.12, 1)
-    el = e.new(0.82); el.color = (0.45, 0.36, 0.16, 1)
-    Ln.new(vo.outputs["Color"], cr.inputs["Fac"]) if "Color" in vo.outputs else None
-    sep = N.new("ShaderNodeSeparateColor"); Ln.new(vo.outputs["Color"], sep.inputs[0]); Ln.new(sep.outputs[0], cr.inputs["Fac"])
-    # meadow mask: big soft noise; fields only where it is high (patchwork among pasture)
-    n1 = N.new("ShaderNodeTexNoise"); n1.inputs["Scale"].default_value = 1 / 4200.0; n1.inputs["Detail"].default_value = 4
-    Ln.new(tc.outputs["Object"], n1.inputs["Vector"])
-    mk = N.new("ShaderNodeMapRange"); mk.inputs["From Min"].default_value = 0.44; mk.inputs["From Max"].default_value = 0.50
-    Ln.new(n1.outputs["Fac"], mk.inputs["Value"])
-    mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"
-    mx.inputs["A"].default_value = (0.20, 0.33, 0.08, 1)
-    Ln.new(mk.outputs["Result"], mx.inputs["Factor"]); Ln.new(cr.outputs["Color"], mx.inputs["B"])
-    # woodland tint (under the forest clumps and beyond): darker green patches
-    n2 = N.new("ShaderNodeTexNoise"); n2.inputs["Scale"].default_value = 1 / 1500.0; n2.inputs["Detail"].default_value = 6
-    Ln.new(tc.outputs["Object"], n2.inputs["Vector"])
-    wk = N.new("ShaderNodeMapRange"); wk.inputs["From Min"].default_value = 0.66; wk.inputs["From Max"].default_value = 0.70
-    Ln.new(n2.outputs["Fac"], wk.inputs["Value"])
-    mw = N.new("ShaderNodeMix"); mw.data_type = "RGBA"; mw.inputs["B"].default_value = (0.05, 0.13, 0.04, 1)
-    Ln.new(wk.outputs["Result"], mw.inputs["Factor"]); Ln.new(mx.outputs["Result"], mw.inputs["A"])
-    # fine grain
-    n3 = N.new("ShaderNodeTexNoise"); n3.inputs["Scale"].default_value = 1 / 18.0
-    Ln.new(tc.outputs["Object"], n3.inputs["Vector"])
-    bc = N.new("ShaderNodeBrightContrast"); Ln.new(mw.outputs["Result"], bc.inputs["Color"])
-    mr = N.new("ShaderNodeMapRange"); mr.inputs["To Min"].default_value = -0.05; mr.inputs["To Max"].default_value = 0.05
-    Ln.new(n3.outputs["Fac"], mr.inputs["Value"]); Ln.new(mr.outputs["Result"], bc.inputs["Bright"])
-    # hedgerows: dark lines on the field cell edges (only where the quilt is)
-    ve = N.new("ShaderNodeTexVoronoi"); ve.feature = "DISTANCE_TO_EDGE"; ve.inputs["Scale"].default_value = 1 / 260.0
-    Ln.new(tc.outputs["Object"], ve.inputs["Vector"])
-    he = N.new("ShaderNodeMapRange"); he.inputs["From Min"].default_value = 0.02; he.inputs["From Max"].default_value = 0.035
-    he.inputs["To Min"].default_value = 1.0; he.inputs["To Max"].default_value = 0.0
-    Ln.new(ve.outputs["Distance"], he.inputs["Value"])
-    hm = N.new("ShaderNodeMath"); hm.operation = "MULTIPLY"; Ln.new(he.outputs["Result"], hm.inputs[0]); Ln.new(mk.outputs["Result"], hm.inputs[1])
-    mh = N.new("ShaderNodeMix"); mh.data_type = "RGBA"; mh.inputs["B"].default_value = (0.06, 0.12, 0.04, 1)
-    Ln.new(hm.outputs["Value"], mh.inputs["Factor"]); Ln.new(bc.outputs["Color"], mh.inputs["A"])
-    Ln.new(mh.outputs["Result"], b.inputs["Base Color"])
-    STATE["woods_noise"] = (1 / 1500.0, 0.6)
+    e[0].position = 0.30; e[0].color = (0.13, 0.25, 0.05, 1); e[1].position = 0.72; e[1].color = (0.30, 0.36, 0.11, 1)
+    x_ = e.new(0.5); x_.color = (0.19, 0.31, 0.07, 1)
+    Ln.new(n1.outputs["Fac"], cr.inputs["Fac"])
+    meadow = _mix(N, Ln, _mr(N, Ln, n2.outputs["Fac"], 0.35, 0.65, 0.0, 0.18), cr.outputs["Color"], (0.10, 0.20, 0.04, 1))
+    # woodland: darker soft patches (the forest cones stand on most of them)
+    n3 = N.new("ShaderNodeTexNoise"); n3.inputs["Scale"].default_value = 1 / 1800.0; n3.inputs["Detail"].default_value = 5
+    Ln.new(P, n3.inputs["Vector"])
+    meadow = _mix(N, Ln, _mr(N, Ln, n3.outputs["Fac"], 0.64, 0.70, 0.0, 0.85), meadow, (0.05, 0.12, 0.035, 1))
+    # strip fields: bands of BAND m along y (the road axis) cut across x into strips of STRIP m, per-band offset
+    BAND, STRIP = 300.0, 70.0
+    ia = _math(N, Ln, "FLOOR", _math(N, Ln, "DIVIDE", Y, BAND))
+    w1 = N.new("ShaderNodeTexWhiteNoise"); w1.noise_dimensions = "1D"; Ln.new(ia, w1.inputs["W"])
+    jf = _math(N, Ln, "ADD", _math(N, Ln, "DIVIDE", X, STRIP), _math(N, Ln, "MULTIPLY", w1.outputs["Value"], 7.0))
+    jb = _math(N, Ln, "FLOOR", jf)
+    cmb = N.new("ShaderNodeCombineXYZ"); Ln.new(ia, cmb.inputs["X"]); Ln.new(jb, cmb.inputs["Y"])
+    w2 = N.new("ShaderNodeTexWhiteNoise"); w2.noise_dimensions = "3D"; Ln.new(cmb.outputs[0], w2.inputs["Vector"])
+    pal = N.new("ShaderNodeValToRGB"); pal.color_ramp.interpolation = "CONSTANT"; pe = pal.color_ramp.elements
+    cols = [(0.0, (0.36, 0.33, 0.14)), (0.16, (0.17, 0.28, 0.06)), (0.30, (0.27, 0.21, 0.11)), (0.44, (0.44, 0.40, 0.18)),
+            (0.58, (0.21, 0.31, 0.08)), (0.72, (0.30, 0.33, 0.12)), (0.86, (0.15, 0.25, 0.05))]
+    pe[0].position, pe[0].color = cols[0][0], (*cols[0][1], 1)
+    pe[1].position, pe[1].color = cols[1][0], (*cols[1][1], 1)
+    for pp, cc in cols[2:]:
+        x_ = pe.new(pp); x_.color = (*cc, 1)
+    Ln.new(w2.outputs["Value"], pal.inputs["Fac"])
+    fa = _math(N, Ln, "FRACT", _math(N, Ln, "DIVIDE", Y, BAND))
+    ea = _math(N, Ln, "MULTIPLY", _math(N, Ln, "MINIMUM", fa, _math(N, Ln, "SUBTRACT", 1.0, fa)), BAND)
+    hedge = _mr(N, Ln, ea, 1.0, 3.0, 0.55, 0.0)                        # soft 2-3 m hedgerow on the band edges
+    fb = _math(N, Ln, "FRACT", jf)
+    eb = _math(N, Ln, "MULTIPLY", _math(N, Ln, "MINIMUM", fb, _math(N, Ln, "SUBTRACT", 1.0, fb)), STRIP)
+    furrow = _mr(N, Ln, eb, 0.3, 0.9, 0.12, 0.0)                       # faint strip boundaries (not lines)
+    fields = _mix(N, Ln, furrow, pal.outputs["Color"], (0.12, 0.17, 0.06, 1))
+    fields = _mix(N, Ln, hedge, fields, (0.05, 0.10, 0.035, 1))
+    # where the farmland is: the corridor along x ~ 0..500 (river + road), wide rings round the towns and Mitras,
+    # broken up by noise so the edge is ragged; woods win over fields
+    ty = SET_ORIGIN["trost"][1]
+    d_ax = _math(N, Ln, "ABSOLUTE", _math(N, Ln, "SUBTRACT", X, 200.0))
+    corr = _mr(N, Ln, d_ax, 2600.0, 1400.0)
+    ylim = _math(N, Ln, "MULTIPLY", _mr(N, Ln, Y, SEA_Y + 1000, SEA_Y + 2500), _mr(N, Ln, Y, MITRAS[1] + 3000, MITRAS[1] - 500))
+    corr = _math(N, Ln, "MULTIPLY", corr, ylim)
+    acc = corr
+    for cx, cy, r in ((0.0, -300.0, 4200.0), (0.0, ty - 400.0, 4200.0), (MITRAS[0], MITRAS[1], 5200.0)):
+        vm = N.new("ShaderNodeVectorMath"); vm.operation = "DISTANCE"; vm.inputs[1].default_value = (cx, cy, 0.0)
+        Ln.new(P, vm.inputs[0])
+        acc = _math(N, Ln, "MAXIMUM", acc, _mr(N, Ln, vm.outputs["Value"], r, r * 0.6))
+    n4 = N.new("ShaderNodeTexNoise"); n4.inputs["Scale"].default_value = 1 / 2200.0; n4.inputs["Detail"].default_value = 3
+    Ln.new(P, n4.inputs["Vector"])
+    rag = _mr(N, Ln, n4.outputs["Fac"], 0.38, 0.46)
+    fm = _math(N, Ln, "MULTIPLY", _math(N, Ln, "MULTIPLY", acc, rag), _mr(N, Ln, n3.outputs["Fac"], 0.66, 0.60))
+    col = _mix(N, Ln, fm, meadow, fields)
+    # very fine grain
+    n5 = N.new("ShaderNodeTexNoise"); n5.inputs["Scale"].default_value = 1 / 15.0
+    Ln.new(P, n5.inputs["Vector"])
+    bc = N.new("ShaderNodeBrightContrast"); Ln.new(col, bc.inputs["Color"])
+    Ln.new(_mr(N, Ln, n5.outputs["Fac"], 0.0, 1.0, -0.035, 0.035), bc.inputs["Bright"])
+    Ln.new(bc.outputs["Color"], b.inputs["Base Color"])
+    return m
+
+def _blended(m):
+    for attr, val in (("surface_render_method", "BLENDED"), ("blend_method", "BLEND")):
+        try:
+            setattr(m, attr, val)
+        except Exception:
+            pass
+
+def far_band_mat(name, col, near=5000.0, far=14000.0, alpha=1.0):
+    """Shown only far from the camera (camera distance fade): readable rings/districts from high up, invisible in the
+    low sky shots and at every seam frame (cameras there are < 2 km from the ground they see)."""
+    m = bpy.data.materials.new(name); m.use_nodes = True; _blended(m)
+    nt = m.node_tree; N = nt.nodes; Ln = nt.links
+    out = N["Material Output"]; b = N["Principled BSDF"]
+    b.inputs["Base Color"].default_value = (*col, 1); b.inputs["Roughness"].default_value = 0.9
+    cd = N.new("ShaderNodeCameraData")
+    f = _mr(N, Ln, cd.outputs["View Distance"], near, far, 0.0, alpha)
+    tr = N.new("ShaderNodeBsdfTransparent")
+    mx = N.new("ShaderNodeMixShader"); Ln.new(f, mx.inputs[0]); Ln.new(tr.outputs[0], mx.inputs[1]); Ln.new(b.outputs[0], mx.inputs[2])
+    Ln.new(mx.outputs[0], out.inputs["Surface"])
+    return m
+
+def haze_mat():
+    """Horizon haze curtain: sky-coloured emission, opaque at the ground, fading out by ~4 km up."""
+    m = bpy.data.materials.new("WD_HorizonHaze"); m.use_nodes = True; _blended(m)
+    nt = m.node_tree; N = nt.nodes; Ln = nt.links
+    out = N["Material Output"]
+    for n in list(N):
+        if n != out:
+            N.remove(n)
+    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); Ln.new(tc.outputs["Object"], sep.inputs[0])
+    a = _mr(N, Ln, sep.outputs["Z"], 0.0, float(os.environ.get("WORLD_HAZE_H", "5000")), 1.0, 0.0)
+    a = _math(N, Ln, "POWER", a, 2.2)
+    em = N.new("ShaderNodeEmission")
+    em.inputs["Color"].default_value = tuple(float(v) for v in os.environ.get("WORLD_HAZE_RGB", "0.64,0.76,0.93").split(",")) + (1,)
+    em.inputs["Strength"].default_value = float(os.environ.get("WORLD_HAZE_E", "0.9"))
+    tr = N.new("ShaderNodeBsdfTransparent")
+    mx = N.new("ShaderNodeMixShader"); Ln.new(a, mx.inputs[0]); Ln.new(tr.outputs[0], mx.inputs[1]); Ln.new(em.outputs[0], mx.inputs[2])
+    Ln.new(mx.outputs[0], out.inputs["Surface"])
     return m
 
 def _strip(bm, pts, width, z):
@@ -177,7 +267,8 @@ def _wall(bm, pts, closed=False):
     for i in range(n - 1 + (1 if closed else 0)):
         r0, r1 = rings[i], rings[(i + 1) % n]
         for k in range(4):
-            bm.faces.new((r0[k], r0[(k + 1) % 4], r1[(k + 1) % 4], r1[k]))
+            f = bm.faces.new((r0[k], r0[(k + 1) % 4], r1[(k + 1) % 4], r1[k]))
+            f.material_index = 1 if k == 2 else 0       # the walk on top: pale stone (reads from high up)
 
 def _district(cx, cy, ang, W, S, R, step=40.0):
     """District outline (open polyline from the ring out and back), like scene.district_outline, rotated so the bulge
@@ -222,11 +313,11 @@ def ring_points(r, frame, ring_name, step=120.0):
             seg, cur = [], []
             for (x, y) in pts:
                 xs = x - o[0]
-                if abs(xs) < join and y - o[1] > -3000:           # inside the set's own wall stretch
+                if abs(xs) < join and abs(y - o[1]) < 3000:           # inside the set's own wall stretch
                     if len(cur) > 1:
                         seg.append(cur)
                     cur = []; continue
-                w = _smooth(join, join + 3500.0, abs(xs)) if y - o[1] > -3000 else 1.0
+                w = _smooth(join, join + 3500.0, abs(xs)) if abs(y - o[1]) < 3000 else 1.0
                 ys = o[1] - (xs * xs - W * W) / (2 * rb) if abs(xs) <= join + 3500 else y
                 if abs(xs) <= W + 1:
                     ys = o[1]
@@ -249,8 +340,8 @@ def _trim_set(frame, terrain, cores):
     """Delete local terrain outside the cores; cut the set's long walls at JOIN; drop far props of the set."""
     if terrain is not None and terrain.type == "MESH":
         bm = bmesh.new(); bm.from_mesh(terrain.data)
-        rad = [(Vector(c), r + 150.0) for c, r in cores]
-        kill = [f for f in bm.faces if not any((f.calc_center_median().to_2d() - c).length < r for c, r in rad)]
+        rad = [(Vector(c), r) for c, r in cores]       # keep only faces wholly inside a core (terrain is 0 at the rim)
+        kill = [f for f in bm.faces if not any(all((v.co.to_2d() - c).length < r for v in f.verts) for c, r in rad)]
         bmesh.ops.delete(bm, geom=kill, context="FACES"); bm.to_mesh(terrain.data); bm.free()
     ring, rb, join = SET_RING[frame]
     names = {"shig": ("WallMaria", "ButtressMaria", "WallTopMaria"), "trost": ("WallRose", "ButtressRose", "WallTopRose")}[frame]
@@ -299,9 +390,9 @@ def attach(frame=None, M=None, terrain=None, cores=None, trim=True):
     # ---- ground: 1.2 km cells; cells wholly inside this scene's cores are left to the local terrain
     gm = ground_mat()
     bm = bmesh.new()
-    x0, x1 = -R_MARIA - 60000.0, R_MARIA + 60000.0
-    y0, y1 = SEA_Y - 600.0, MITRAS[1] + R_MARIA + 70000.0
-    cell = 1500.0
+    x0, x1 = -R_MARIA - 90000.0, R_MARIA + 90000.0
+    y0, y1 = SEA_Y - 600.0, MITRAS[1] + R_MARIA + 90000.0
+    cell = 2000.0
     nx, ny = int((x1 - x0) / cell), int((y1 - y0) / cell)
     V = {}
     def vert(i, j):
@@ -317,10 +408,10 @@ def attach(frame=None, M=None, terrain=None, cores=None, trim=True):
     put("WD_Ground", bm, [gm])
     # ---- the sea: from a wavy coastline south to the clip distance
     bm = bmesh.new()
-    xs = [x0 - 20000 + k * 600.0 for k in range(int((x1 - x0 + 40000) / 600) + 1)]
+    xs = [x0 - 60000 + k * 800.0 for k in range(int((x1 - x0 + 120000) / 800) + 1)]
     coast = [bm.verts.new((x, SEA_Y + 380 * noise.noise(Vector((x / 5200, 0.3, 1.1))) + 160 * noise.noise(Vector((x / 900, 2.1, 0.4))), -0.05)) for x in xs]
     coast_xy = [(v.co.x, v.co.y) for v in coast]
-    far = [bm.verts.new((x, SEA_Y - 120000, -0.05)) for x in xs]
+    far = [bm.verts.new((x, SEA_Y - 200000, -0.05)) for x in xs]
     for k in range(len(xs) - 1):
         bm.faces.new((far[k], far[k + 1], coast[k + 1], coast[k]))
     sea = _mat("WD_Sea", (0.05, 0.16, 0.26), 0.12)
@@ -336,21 +427,24 @@ def attach(frame=None, M=None, terrain=None, cores=None, trim=True):
             if len(pts) > 1:
                 _wall(bm, pts)
                 # cleared apron along the wall foot (a pale band that keeps the rings readable from the high aerials);
-                # left out within 2.5 km of either town (it would look like a road from low sky heights there)
+                # a pale band drawn at wall-top height, faded in only beyond ~4-16 km camera distance (far_band_mat)
                 run = []
                 for p in pts + [None]:
-                    if p is not None and not any(math.hypot(p[0] - c[0], p[1] - c[1]) < rr + 2500.0 for c, rr in allc):
+                    if p is not None and not any(math.hypot(p[0] - c[0], p[1] - c[1]) < 0.7 * rr for c, rr in mycores):
                         run.append(p); continue
                     if len(run) > 1:
-                        _strip(ba, run, 180.0, -0.25)
+                        _strip(ba, run, float(os.environ.get('WORLD_BAND_W', '320')), 51.0)
                     run = []
             if kind != "arc":
                 if (ring_name in ("maria", "rose")) and kind[2] == 0:
                     carpets.append((ring_name, pts))
                 elif not any(math.hypot(pts[len(pts) // 2][0] - c[0], pts[len(pts) // 2][1] - c[1]) < 1.2 * rr for c, rr in mycores):
                     bd.faces.new([bd.verts.new((x, y, -0.2)) for x, y in pts])      # empty district: a bare yard
-    put("WD_Walls", bm, [stone])
-    put("WD_WallApron", ba, [_mat("WD_Apron", (0.36, 0.38, 0.24), 0.95)])
+    put("WD_Walls", bm, [stone, _mat("WD_WallTop", (0.80, 0.77, 0.68), 0.8)])
+    ap_ = put("WD_WallApron", ba, [far_band_mat("WD_Apron", (0.82, 0.79, 0.70), near=4000.0, far=16000.0, alpha=0.9)])
+    for attr in ("visible_shadow", "visible_diffuse", "visible_glossy", "visible_transmission", "visible_volume_scatter"):
+        if hasattr(ap_, attr):
+            setattr(ap_, attr, False)
     put("WD_DistrictYards", bd, [_mat("WD_Yard", (0.33, 0.30, 0.22), 0.95)])
     # ---- proxy town carpet for the OTHER set's district (it is only ever seen from far away)
     other = {"shig": "rose", "trost": "maria"}[frame]
@@ -421,10 +515,37 @@ def attach(frame=None, M=None, terrain=None, cores=None, trim=True):
             for k in range(6):
                 bm.faces.new((base[k], base[(k + 1) % 6], top))
     put("WD_Forest", bm, [leaf])
+    # ---- horizon haze curtain: a 64-gon cylinder round Mitras (R_MARIA + 45 km), sky-coloured, opaque at the ground
+    #      and fading by ~4.5 km up; it hides every ground / sea edge and gives the far coastline its aerial perspective
+    #      OPT-IN (WORLD_HAZE=1): in the QA stills the scene's own haze volume + ground/sea running out to the 140 km clip
+    #      gave the cleaner horizon; the curtain left a grey band where its emission met the sky.
+    bm = bmesh.new(); RH = R_MARIA + float(os.environ.get("WORLD_HAZE_R", "45000")); n_ = 64
+    lo = [bm.verts.new((MITRAS[0] + RH * math.cos(k * math.tau / n_), MITRAS[1] + RH * math.sin(k * math.tau / n_), -50.0)) for k in range(n_)]
+    hi = [bm.verts.new((v.co.x, v.co.y, 9000.0)) for v in lo]
+    for k in range(n_):
+        bm.faces.new((lo[k], lo[(k + 1) % n_], hi[(k + 1) % n_], hi[k]))
+    hz = put("WD_HorizonHaze", bm, [haze_mat()])
+    hz.hide_render = os.environ.get("WORLD_HAZE", "0") != "1"
+    for attr in ("visible_shadow", "visible_diffuse", "visible_glossy", "visible_transmission", "visible_volume_scatter"):
+        if hasattr(hz, attr):
+            setattr(hz, attr, False)
+    # flight.py's cloud deck (FL_Clouds, 56 km) used to end behind the mountains; now its edge would show as a grey band
+    # above the horizon: grow the mesh (not the object, so the cloud pattern keeps its size) past the haze curtain
+    cl = bpy.data.objects.get("FL_Clouds")
+    if cl is not None and cl.type == "MESH":
+        k_ = float(os.environ.get("WORLD_CLOUD_GROW", "7"))
+        cen = sum((v.co for v in cl.data.vertices), Vector()) / max(1, len(cl.data.vertices))
+        for v in cl.data.vertices:
+            v.co = cen + (v.co - cen) * Vector((k_, k_, 1.0))
+        cl.data.update()
+    # scene.py's "Haze" volume box ends 18 km out: its edge read as a grey band over the horizon. Stretch it past the
+    # haze curtain (centred on this scene's origin) so the aerial perspective just keeps deepening with distance.
+    for hb in [o for o in bpy.data.objects if o.name.startswith("Haze") and o.type == "MESH"]:
+        hb.scale = (float(os.environ.get("WORLD_HAZE_BOX", "95000")), float(os.environ.get("WORLD_HAZE_BOX", "95000")), hb.scale[2])
     # camera clip: the sea and the far rings must stay inside it
     for ob in sc.objects:
         if ob.type == "CAMERA":
-            ob.data.clip_end = max(ob.data.clip_end, float(os.environ.get("WORLD_CLIP", "60000")))
+            ob.data.clip_end = max(ob.data.clip_end, float(os.environ.get("WORLD_CLIP", "140000")))
     print(f"[world] frame {frame}, K {K}: Maria {R_MARIA / 1000:.1f} km, Rose {R_ROSE / 1000:.1f}, Sina {R_SINA / 1000:.1f}; "
           f"Trost frame at world y {SET_ORIGIN['trost'][1]:.0f}; cores {cores}", flush=True)
     return root

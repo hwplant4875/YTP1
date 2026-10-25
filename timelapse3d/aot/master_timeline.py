@@ -174,15 +174,15 @@ SEAMS = {
                note="fall (seg 2) end = fall3 start, at rest (agent A, same scene)"),
     "S2": dict(loc=[180, 165, 215], look=[232, 340, 0], lens=28.0, vel=[4, 42, 10], ddir=[0, 0, 0], dlnlens=0.0,
                note="fall3 end (A, s 12.0, sunset; SEG3_END_LIGHT) = C1 start, same scene; exact key evaluated in Blender"),
-    "S3": _seam([150, 2300, 380], 90, -55, 350, note="C1 (scene.py+world) -> camps (interlude+world): WORLD-ONLY frame "
-                                                    "over Maria territory, 2.45 km from both towns; day light"),
-    "S5": _seam([1900, 0 + TROST_DY, 450], 210, -55, 300, vz=-40,
+    "S3": _seam([250, 1700, 900], 90, -55, 350, note="C1 (scene.py+world) -> camps (interlude+world): WORLD-ONLY frame, 900 m up "
+                                                  "over Maria territory, river (east) and road (west) as leading lines north; day light"),
+    "S5": _seam([1900, 0 + TROST_DY, 650], 210, -60, 300, vz=-40,
                 note="C2a (interlude) -> C2b (march scene): over Wall Rose 1.9 km east of Trost, looking SW; world-only frame"),
-    "S7": _seam([-2700, 900 + TROST_DY, 500], -11.5, -55, 306, vz=-40,
+    "S7": _seam([-3000, 950 + TROST_DY, 900], -11.5, -68, 306, vz=-40,
                 note="C3 (march scene) -> training (interlude): inside Rose, west of the training camp, world-only frame"),
-    "S8": _seam([-1000, 450 + TROST_DY, 320], -40, -60, 196, vz=-15,
-                note="training end (interlude, graduation night) -> Trost v=0 (render_trost, night -> dawn): steep look SE at "
-                     "world ground between the camp (behind) and Trost (just above the frame); world-only frame"),
+    "S8": _seam([-1013, 322 + TROST_DY, 300], -37, -70, 196, vz=-15,
+                note="training end (interlude, graduation night) -> Trost v=0 (render_trost, night -> dawn): steep look SE "
+                     "into the 400 m world-only gap between the camp core (behind) and Trost's core (just above the frame)"),
 }
 TRAINING_CAMP_TROST = (-1450.0, 650.0)   # agent B's new CAMP centre (Trost frame): beside Trost, inside Rose
 
