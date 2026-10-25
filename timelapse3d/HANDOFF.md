@@ -299,3 +299,6 @@ TROST:
 
 ## 13:39 (10/25) USER RULE: Carla beat staging
 - The Yeager house is well to the RIGHT of the outer gate (several blocks away), not beside it. First show the titans pouring through the breach, then the camera travels right (smooth aerial) to the Yeager house, where the Smiling Titan eats Carla. NO other titans near the Smiling Titan in that shot.
+
+## 13:40 (10/25) USER RULE: Armored Titan ram animation
+- The Armored RUNS straight at the inner gate, facing forward, normal run cycle. Only in the last ~0.4 s before impact it drops its shoulder and leans into the hit like a rugby tackle (torso twists ~30-40°, shoulder leads, head tucked, legs keep driving). Never rotate the whole body sideways.
