@@ -447,16 +447,17 @@ def build_breach():
         blocks.append(dict(ob=ob, p0=p0, land=land, T=T, spin=Vector((rnd.uniform(-5, 5), rnd.uniform(-5, 5), rnd.uniform(-3, 3))), s=s))
     BR["blocks"] = blocks
     cs = SC.SmokeCards("RT_BreachDust")
-    n = 140
+    # thinner, shorter-lived breach dust that drifts sideways (east) so the titan stream reads from ~v 15
+    n = 70
     te = np.random.default_rng(3)
-    t0 = te.random(n) * 1.2
-    pos = np.column_stack([GX + te.normal(0, 6, n), GY + 4 + te.random(n) * 10, te.random(n) * 20])
-    vel = np.column_stack([te.normal(0, 8, n), 10 + te.random(n) * 28, te.normal(0, 3, n)])
-    cs.add_many(t0, pos, vel, r0=3.0, r1=14.0, life=7.0, rise=2.0, kind="dust", alpha=0.7, tau=1.2)
+    t0 = te.random(n) * 0.9
+    pos = np.column_stack([GX + te.normal(0, 6, n), GY + 4 + te.random(n) * 8, te.random(n) * 18])
+    vel = np.column_stack([14 + te.normal(0, 6, n), 6 + te.random(n) * 14, te.normal(0, 3, n)])
+    cs.add_many(t0, pos, vel, r0=2.5, r1=10.0, life=3.6, rise=2.5, kind="dust", alpha=0.42, tau=1.6)
     for b in blocks[:14]:                                  # puffs where the big blocks land
         tl = b["T"]
-        p = np.array([[b["land"].x, b["land"].y, 2.0]] * 10) + te.normal(0, 3, (10, 3))
-        cs.add_many(tl + te.random(10) * 0.3, p, te.normal(0, 4, (10, 3)), r0=2.0, r1=9.0, life=5.0, rise=1.5, kind="dust", alpha=0.65, tau=0.8)
+        p = np.array([[b["land"].x, b["land"].y, 2.0]] * 6) + te.normal(0, 3, (6, 3))
+        cs.add_many(tl + te.random(6) * 0.3, p, te.normal(0, 4, (6, 3)) + np.array([6.0, 0, 0]), r0=2.0, r1=7.0, life=3.0, rise=1.5, kind="dust", alpha=0.4, tau=0.8)
     cs.build(coll)
     BR["cards"] = cs
     BR["door"] = bpy.data.objects.get("OuterGate_Door")
