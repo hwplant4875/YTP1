@@ -1,0 +1,188 @@
+"""BRIDGE FLIGHTS between EP1 segments that do not share a scene (agent G, integrator).  ONE Blender session per WORLD.
+
+A bridge (master_timeline.SEGMENTS, kind bridge) = climb half rendered in the outgoing segment's world -> apex inside a
+cloud bank -> descend half rendered in the incoming segment's world.  Each half is a cubic Hermite in time between the
+segment's camera key (evaluated HERE, with that world's own camera function: position, velocity, look direction and
+its rate, log-lens and its rate) and the shared apex (position + velocity), so the camera is C1 at both seams.  The
+world swap at the apex is hidden by assemble_master.py's cloud whiteout.  The world state is frozen at the segment's
+key time (seasons / light / crowd), the camera moves; frames are a pure function of the bridge time.
+
+Worlds (see render_bridge.sh for the exact environment of each):
+  interlude  blender -b -P aot/render_bridge.py -- --world interlude --halves B1b,B2a,B3b,B4a --out <tmp>
+             render_interlude.py imported as a library (its build() / update() / cam_at(); Trost + Wall Rose + camps)
+  march      blender -b -P aot/scene.py -P aot/render_bridge.py -- --world march --halves B2b,B3a ...   (AOT_SET=trost)
+             march846.setup() / update(t, cam) / cam_at(t)
+  trost      blender -b -P aot/scene.py -P aot/render_bridge.py -- --world trost --halves B4b --rt-out <tmp> ...
+             render_trost.py executed up to its render loop (frame_state(v), cam_at(v))
+  shig       blender -b -P aot/scene.py -P aot/render_bridge.py -- --world shig --halves B1a --seg 45 --fall-out <tmp>
+             render_fall2.py executed up to its main block (seg45_build(), seg5_pose(S, s))
+Options: --br-fps 15 (30 final) --br-keys-only (evaluate + cache the segment keys, no render) --br-js 3,10 (only these
+bridge frames).  Output: renders/master/bridges/<id>/br_<j>.png (+ _cam/<j>.json hudcam dumps); the evaluated keys go
+to renders/master/bridges/keys/<state>_<t>.json, which master_timeline.py prefers over everything else.
+"""
+import bpy, json, math, os, sys, time, argparse
+from mathutils import Vector
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE); sys.path.insert(0, os.path.dirname(HERE))
+import master_timeline as MT
+import hudcam
+
+argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+ap = argparse.ArgumentParser(allow_abbrev=False)
+ap.add_argument("--world", required=True, choices=["interlude", "march", "trost", "shig"])
+ap.add_argument("--halves", required=True, help="comma list like B2a,B3b")
+ap.add_argument("--br-fps", type=float, default=15.0)
+ap.add_argument("--br-samples", type=int, default=4)
+ap.add_argument("--br-engine", default="")
+ap.add_argument("--br-res", default="854x480")
+ap.add_argument("--br-keys-only", action="store_true")
+ap.add_argument("--br-js", default="")
+G, _ = ap.parse_known_args(argv)
+FPS = G.br_fps
+HALVES = [(h[:-1], h[-1]) for h in G.halves.split(",") if h.strip()]
+for bid, half in HALVES:
+    br = MT.SEG[bid]
+    assert br["halves"][half]["world"] == G.world, f"{bid}{half} belongs to world {br['halves'][half]['world']}"
+
+def _exec_until(path, marker, extra_globals=None):
+    """Run a render script's module-level setup (scene build, functions) but stop before its render loop."""
+    src = open(path, encoding="utf8").read()
+    k = src.find(marker)
+    if k < 0:
+        raise RuntimeError(f"marker {marker!r} not found in {path}: the script changed, update render_bridge.py")
+    g = {"__name__": "bridge_exec_" + os.path.basename(path)[:-3], "__file__": path}
+    if extra_globals:
+        g.update(extra_globals)
+    exec(compile(src[:k], path, "exec"), g)
+    return g
+
+sc = bpy.context.scene
+W = {}                               # world hooks: state(t), cam(t) -> (loc, dir, lens), per_frame(t_state, cam)
+t_b = time.time()
+if G.world == "interlude":
+    if "--out" not in argv:
+        sys.argv += ["--out", os.path.join(MT.BRIDGES, "_tmp_interlude")]
+    import render_interlude as RI
+    st = RI.build()
+    sc = bpy.context.scene          # build() resets to factory settings: the old scene handle is gone
+    cd = bpy.data.cameras.new("Cam"); cd.clip_start = 0.5; cd.clip_end = 40000
+    cam = bpy.data.objects.new("Cam", cd); sc.collection.objects.link(cam); sc.camera = cam
+    RI.L.render_setup(G.br_engine or "CYCLES", G.br_res, G.br_samples, "GPU")
+    st["expo"] = float(os.environ.get("EXPO", "-1.5")); sc.view_settings.exposure = st["expo"]
+    if sc.render.engine == "CYCLES":
+        cy = sc.cycles
+        cy.samples = G.br_samples; cy.use_adaptive_sampling = False; cy.use_denoising = True
+        try:
+            cy.denoiser = os.environ.get("INT_DENOISER", "OPTIX")
+        except Exception:
+            cy.denoiser = "OPENIMAGEDENOISE"
+        try:
+            cy.denoising_use_gpu = True
+        except Exception:
+            pass
+        cy.max_bounces, cy.diffuse_bounces, cy.glossy_bounces, cy.transmission_bounces = 3, 1, 1, 1
+        cy.volume_bounces = 0; cy.transparent_max_bounces = 24
+        sc.render.use_persistent_data = True
+    def _state(t):
+        RI.update(st, t)
+        if sc.render.engine == "CYCLES":
+            sc.cycles.samples = G.br_samples if RI.SI.night_at(t) < 0.3 else max(G.br_samples, int(os.environ.get("INT_NIGHT_SMP", "16")))
+    def _cam(t):
+        loc, rot, lens = RI.cam_at(t)
+        return Vector(loc), rot.to_matrix() @ Vector((0, 0, -1)), lens
+    def _pf(ts, c):
+        for s in st["smoke"]:
+            s.update(ts, c)
+    W.update(state=_state, cam=_cam, per_frame=_pf, ground=lambda x, y: RI.H(x, y))
+elif G.world == "march":
+    import march846 as MR
+    cam = sc.camera
+    if sc.render.engine.startswith("BLENDER_EEVEE"):
+        ev = sc.eevee; ev.taa_render_samples = G.br_samples
+        for k, v in (("use_raytracing", False), ("volumetric_tile_size", "16"), ("volumetric_samples", 24),
+                     ("shadow_resolution_scale", 0.5), ("shadow_ray_count", 1), ("shadow_step_count", 4)):
+            try:
+                setattr(ev, k, v)
+            except Exception:
+                pass
+    sc.render.use_persistent_data = True
+    cam.data.clip_end = 30000
+    MR.setup()
+    def _cam(t):
+        loc, tgt, lens = MR.cam_at(t)
+        return Vector(loc), (Vector(tgt) - Vector(loc)).normalized(), lens
+    W.update(state=lambda t: W.__setitem__("t", t), cam=_cam, per_frame=lambda ts, c: MR.update(ts, c.location),
+             ground=lambda x, y: MR.L.height(x, y))
+elif G.world == "trost":
+    g = _exec_until(os.path.join(HERE, "render_trost.py"), 'if B.dry and os.environ.get("RT_PROBE")')
+    cam = g["cam"]
+    def _cam(v):
+        loc, rot, lens = g["cam_at"](v)
+        return Vector(loc), rot.to_matrix() @ Vector((0, 0, -1)), lens
+    W.update(state=lambda v: g["frame_state"](v), cam=_cam, per_frame=None, ground=lambda x, y: g["L"].height(x, y))
+elif G.world == "shig":
+    g = _exec_until(os.path.join(HERE, "render_fall2.py"), "# ================================================================ main")
+    cam = g["cam"]
+    S45 = g["seg45_build"]()
+    def _cam(s):
+        g["seg5_pose"](S45, s); bpy.context.view_layer.update()
+        m = cam.matrix_world
+        return m.translation.copy(), (m.to_3x3() @ Vector((0, 0, -1))).normalized(), cam.data.lens
+    W.update(state=lambda s: g["seg5_pose"](S45, s), cam=_cam, per_frame=None, ground=lambda x, y: g["L"].height(x, y))
+sc = bpy.context.scene
+sc.render.image_settings.file_format = "PNG"
+print(f"[bridge] world {G.world} built in {time.time() - t_b:.0f}s, engine {sc.render.engine}", flush=True)
+
+# ------------------------------------------------------------------ segment keys, evaluated with this world's camera
+def eval_key(state, side):
+    """side 'out' (outgoing segment end: backward difference) or 'in' (incoming start: forward difference)."""
+    name, t = state
+    h = 1.0 / 60.0
+    ta, tb = (t - h, t) if side == "out" else (t, t + h)
+    la, da, na = W["cam"](ta)
+    lb, db, nb = W["cam"](tb)
+    l0, d0, n0 = W["cam"](t)
+    k = dict(state=name, t=t, loc=list(l0), dir=list(d0.normalized()), lens=float(n0),
+             vel=list((lb - la) / h), ddir=list((db.normalized() - da.normalized()) / h),
+             dlnlens=(math.log(nb) - math.log(na)) / h)
+    k["look_at"] = list(l0 + d0.normalized() * MT.D_LOOK)
+    os.makedirs(os.path.join(MT.BRIDGES, "keys"), exist_ok=True)
+    json.dump(k, open(os.path.join(MT.BRIDGES, "keys", f"{name}_{t:.3f}.json"), "w"), indent=1)
+    print(f"[bridge] key {name} t={t:.3f} ({side}): loc {tuple(round(c) for c in l0)} |v| {Vector(k['vel']).length:.0f} m/s "
+          f"lens {n0:.1f}", flush=True)
+    return k
+
+js_only = {int(x) for x in G.br_js.split(",") if x.strip()}
+t_r = time.time(); n_done = 0
+for bid, half in HALVES:
+    br = MT.SEG[bid]
+    hd = br["halves"][half]
+    key = eval_key(hd["state"], "out" if half == "a" else "in")
+    if G.br_keys_only:
+        continue
+    W["state"](hd["state"][1])
+    od = MT.bridge_dir(br); os.makedirs(od, exist_ok=True)
+    for j, tb, hh in MT.bridge_frames(br, FPS):
+        if hh != half or (js_only and j not in js_only):
+            continue
+        loc, d, lens = MT.bridge_eval(br, half, key, tb)
+        loc = Vector(loc)
+        try:
+            loc.z = max(loc.z, W["ground"](loc.x, loc.y) + 12.0)
+        except Exception:
+            pass
+        cam.location = loc
+        cam.rotation_euler = Vector(d).to_track_quat("-Z", "Y").to_euler()
+        cam.data.lens = lens
+        bpy.context.view_layer.update()
+        if W.get("per_frame"):
+            W["per_frame"](hd["state"][1], cam)
+            bpy.context.view_layer.update()
+        sc.render.filepath = os.path.join(od, f"br_{j:05d}.png")
+        bpy.ops.render.render(write_still=True)
+        hudcam.dump(sc, j, od, t=tb, extra={"bridge": bid, "half": half, "world": G.world})
+        n_done += 1
+        print(f"[bridge] {bid}{half} j={j} tb={tb:.2f} loc {tuple(round(c) for c in loc)} lens {lens:.0f} "
+              f"({time.time() - t_r:.0f}s, {(time.time() - t_r) / n_done:.1f}s/f)", flush=True)
+print(f"[bridge] done: {n_done} frames in {time.time() - t_r:.0f}s", flush=True)
