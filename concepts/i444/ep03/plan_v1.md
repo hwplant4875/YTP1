@@ -39,3 +39,13 @@ EP01, EP02 승리 포맷 그대로: 고스트페이스 3명 + 색 다른 숫자 
 - 고스트페이스는 가면이 거의 똑같아서 "누가 누군지" 보여 주려면 가면 벗는 장면(정체 공개)을 꼭 넣어야 해요. 모두 공식 예고편과 클립 채널 영상만 써요.
 - 스크림 7(2026) 내용은 개봉 후 공개된 리뷰 기준이에요. 대본 쓸 때 사실을 한 번 더 확인할게요.
 - 다음 편 후보: 프레디, 핀헤드 (댓글 요청).
+
+## 공식 정체 공개 클립 (Movieclips, 노트북 확인 10/25)
+- Scream (1996): 10/12 zyVKJXfRm_g "Surprise, Sidney!" (Billy/Stu 공개), 11/12 kR3VW07XfUo, 12/12 CiT-XIWEC8c (720p)
+- Scream 2: 10/12 r9aUxfTTLfk (720p)
+- Scream 3: 11/12 DMeR-bkC13g (720p)
+- Scream 4: 8/9 p5n3koQZVDY (연령 제한, 로그인 필요: 대체 필요)
+- Scream (2022): 8/10 JZ-kVSRB0rE (1080p)
+- Scream VI: 4YStwghVg0g (1080p)
+- Scream 7: 8/10 VNAkvbt0MGk (2160p)
+- 팬 재업로드(Horror Net 등)는 사용 안 함.
