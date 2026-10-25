@@ -19,7 +19,7 @@ BL="/c/All The Programs/Blender/blender.exe"
 P=seq_carla,flight,states845,swarm845,world,seq_carla
 EXTRA=""; [ -n "$TIMES" ] && EXTRA="--times $TIMES"
 # CARLA_PERFRAME: seq_carla builds once, render_fall poses it per frame; SUN_AZ/EXPO as the opening (render_fast.sh)
-CARLA_PERFRAME=1 CARLA_NOKIDS=1 AOT_YEAGER_XY=${AOT_YEAGER_XY:--48,-640} CARLA_F=2330 CARLA_TITAN_H=${CARLA_TITAN_H:-16} SWARM=1 SUN_AZ=-102 EXPO=-1.5 TREE_DENS=0.006 FL_NOKIDS=1 COL_SHOW=0 \
+CARLA_PERFRAME=1 CARLA_NOKIDS=1 AOT_YEAGER_XY=${AOT_YEAGER_XY:-165,-585} CARLA_F=2330 CARLA_TITAN_H=${CARLA_TITAN_H:-16} SWARM=1 SUN_AZ=-102 EXPO=-1.5 TREE_DENS=0.006 FL_NOKIDS=1 COL_SHOW=0 \
 AOT_STATE=kicked AOT_ARC_T=1 AOT_EVENT=intact AOT_PLUGINS=$P \
   "$BL" -b -P "$HERE/aot/scene.py" -P "$HERE/aot/render_fall.py" -- \
   --cam overview --engine ${ENGINE:-EEVEE} --res 854x480 --samples $SAMPLES --fall-out "$OUT" --s0 $S0 --s1 $S1 --fps $FPS \

@@ -13,7 +13,7 @@ and titans; seq_carla's ferry / kids builders and shifters' Armored for the name
 """
 import bpy, math, os, sys, time, argparse, random, json
 import numpy as np
-from mathutils import Vector, Matrix, noise
+from mathutils import Vector, Matrix, Euler, noise
 
 argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 ap = argparse.ArgumentParser()
@@ -169,6 +169,8 @@ def run(frames, pose, prefix, sub=""):
     os.makedirs(od, exist_ok=True)
     t_start = time.time()
     for i, s in enumerate(frames):
+        if os.path.exists(os.path.join(OUT, "STOP")):      # touch <out>/STOP to end a long render cleanly
+            print("[fall2] STOP file found, ending"); break
         t0 = time.time(); pose(s); tp = time.time() - t0
         i = int(round(s * B.fps)) if not B.times else i
         name = f"{prefix}_{i:05d}.png" if not B.times else f"{prefix}_s{s:05.2f}.png"
@@ -187,9 +189,10 @@ def frame_list(s1):
 
 # ================================================================ SEGMENT 3: the Armored, ferries, the vow
 SEG3 = 12.0
+SUN_COL = tuple(float(v) for v in os.environ.get("FALL_SUN_COL", "1.0,0.78,0.58").split(","))   # warm, not pink-making
 # light at segment 3's end (constant over the segment): agent G's long flight starts from exactly this
 SEG3_END_LIGHT = dict(sun_elevation_deg=float(os.environ.get("FALL_SUN_EL", "4")), sun_azimuth_deg=float(os.environ.get("FALL_SUN_AZ", "245")),
-                      sun_color=(1.0, 0.50, 0.20), sun_energy=float(os.environ.get("CARLA_SUN_E", "4.2")),
+                      sun_color=SUN_COL, sun_energy=float(os.environ.get("CARLA_SUN_E", "4.2")),
                       exposure=float(os.environ.get("EXPO", "-1.5")),
                       sky_ramp=((1.0, 0.62, 0.22, 1.0), (0.95, 0.66, 0.38, 1.0)), view_transform="scene.py default (VT env)")
 IMPACT = 5.0
@@ -244,12 +247,88 @@ def dress_fields(c=(0.0, 1500.0), ra=1450.0, rb=2600.0, band=240.0, strip=60.0):
     Lk.new(me_.outputs["Result"], fin.inputs["Factor"]); Lk.new(base, fin.inputs["A"]); Lk.new(fm.outputs["Result"], fin.inputs["B"])
     Lk.new(fin.outputs["Result"], bsdf.inputs["Base Color"])
 
+TRIPO_ARMORED = os.environ.get("FALL_ARMORED_GLB", r"E:/YTP2/3D Timelapse/assets/tripo/armored_img/tripo-out/"
+                               r"armored-ref-crop-png-rig-1ad3b89b/model.glb")      # the user's pick (image-based)
+
+class TripoArmored:
+    """The Tripo Armored Titan (rigged GLB, A-pose, front = local +X, up +Z, left = +Y), true 15 m, posed by armature
+    rotations given in the armature's rest frame (basis = ML^-1 @ T(h) R T(-h) @ ML, independent of the parents)."""
+    def __init__(self, coll, height=15.0):
+        before = set(bpy.data.objects)
+        bpy.ops.import_scene.gltf(filepath=TRIPO_ARMORED)
+        new = [o for o in bpy.data.objects if o not in before]
+        self.arm = next(o for o in new if o.type == "ARMATURE")
+        for o in new:
+            if o.type == "MESH" and o.parent is None:          # stray helper (Icosphere) in the GLB
+                bpy.data.objects.remove(o, do_unlink=True); continue
+            for c in list(o.users_collection):
+                c.objects.unlink(o)
+            coll.objects.link(o)
+        self.meshes = [o for o in self.arm.children if o.type == "MESH"]
+        dec = float(os.environ.get("FALL_ARMORED_DECIMATE", "0.2"))    # 750k verts -> ~150k for the preview
+        for me in self.meshes:
+            if dec < 1.0:
+                md = me.modifiers.new("Dec", "DECIMATE"); md.ratio = dec
+                with bpy.context.temp_override(object=me, active_object=me, selected_objects=[me]):
+                    bpy.ops.object.modifier_move_to_index(modifier="Dec", index=0)
+                    bpy.ops.object.modifier_apply(modifier="Dec")
+        bpy.context.view_layer.update()
+        zs = [(me.matrix_world @ v.co).z for me in self.meshes for v in me.data.vertices]
+        self.h0 = max(zs) - min(zs)
+        k = height / self.h0
+        self.arm.scale = (k, k, k)
+        self.arm.rotation_mode = "XYZ"
+        self.k = k
+        self.B = {b.name: b for b in self.arm.data.bones}
+        for pb in self.arm.pose.bones:
+            pb.rotation_mode = "QUATERNION"
+        self.feet = ("L_ToeBase", "R_ToeBase", "L_Foot", "R_Foot")
+        print(f"[fall2] Tripo Armored: rest height {self.h0:.3f} -> x{k:.2f} = {height} m, {sum(len(m.data.vertices) for m in self.meshes)} verts")
+
+    def pose(self, R):
+        """R: {bone: Matrix3 in the armature rest frame}; every other bone back to rest."""
+        for pb in self.arm.pose.bones:
+            r = R.get(pb.name)
+            if r is None:
+                pb.matrix_basis = Matrix.Identity(4); continue
+            ML = self.B[pb.name].matrix_local
+            h = ML.to_translation()
+            M = Matrix.Translation(h) @ r.to_4x4() @ Matrix.Translation(-h)
+            pb.matrix_basis = ML.inverted() @ M @ ML
+
+    def place(self, x, y, yaw, lean=0.0, roll=0.0):
+        """Stand at (x, y) on the scene ground (L.height), facing world yaw (0 = +Y): the lowest foot on the ground."""
+        # local +X is the front: world rotation = yaw + 90 deg about Z, then the forward lean / roll
+        Rw = Matrix.Rotation(yaw + math.pi / 2, 4, "Z") @ Matrix.Rotation(lean, 4, "Y") @ Matrix.Rotation(roll, 4, "X")
+        self.arm.matrix_world = Matrix.Translation((x, y, 0.0)) @ Rw @ Matrix.Scale(self.k, 4)
+        bpy.context.view_layer.update()
+        zmin = min((self.arm.matrix_world @ self.arm.pose.bones[f].tail).z for f in self.feet if f in self.arm.pose.bones)
+        self.arm.matrix_world = Matrix.Translation((0, 0, L.height(x, y) - zmin + 0.15)) @ self.arm.matrix_world
+
+def _Ry(a): return Matrix.Rotation(a, 3, "Y")
+def _Rz(a): return Matrix.Rotation(a, 3, "Z")
+def _Rx(a): return Matrix.Rotation(a, 3, "X")
+
+def armored_pose_rots(ph, run=1.0, ram=0.0):
+    """Run cycle at phase ph (rad) blended into the lowered-shoulder ram (ram 0..1). Armature rest frame:
+    +X front, +Y left, +Z up; Ry(-a) swings a hanging limb forward, Ry(+a) leans the upper body forward."""
+    sw = math.sin(ph) * 0.65 * run
+    kneeL = 0.9 * max(0.0, math.sin(ph + 1.6)) * run; kneeR = 0.9 * max(0.0, math.sin(ph + 1.6 + math.pi)) * run
+    R = {"L_Thigh": _Ry(-sw), "R_Thigh": _Ry(sw), "L_Calf": _Ry(kneeL), "R_Calf": _Ry(kneeR),
+         "L_Upperarm": _Ry(0.55 * sw * (1 - ram)), "R_Upperarm": _Ry(-0.55 * sw * (1 - ram)),
+         "Waist": _Ry(0.22 * run + 0.30 * ram), "Spine01": _Rz(-0.60 * ram) @ _Ry(0.10 * run + 0.18 * ram),
+         "NeckTwist01": _Ry(0.20 * run + 0.45 * ram)}      # rugby drop: torso twist ~35 deg, shoulder leads, head tucked
+    if ram > 0:                                     # left shoulder leads: left arm tucked in, right arm swung back
+        R["L_Upperarm"] = _Rx(-0.5 * ram) @ R["L_Upperarm"]; R["L_Forearm"] = _Ry(-0.9 * ram)
+        R["R_Upperarm"] = _Ry(0.6 * ram) @ R["R_Upperarm"]
+    return R
+
 def seg3_build():
     S = {}
     if os.environ.get("FALL_FIELDS", "1") == "1":
         dress_fields()
     # light: the golden low sun of render_fall's end (same values: the seam must match)
-    set_sun(float(os.environ.get("FALL_SUN_EL", "4")), float(os.environ.get("FALL_SUN_AZ", "245")), (1.0, 0.50, 0.20),
+    set_sun(float(os.environ.get("FALL_SUN_EL", "4")), float(os.environ.get("FALL_SUN_AZ", "245")), SUN_COL,
             float(os.environ.get("CARLA_SUN_E", "4.2")))
     w = sc.world
     if w and w.use_nodes:
@@ -258,17 +337,21 @@ def seg3_build():
                 e = nd.color_ramp.elements
                 e[0].color = (1.0, 0.62, 0.22, 1); e[1].color = (0.95, 0.66, 0.38, 1)
     # the Armored Titan
-    import shifters as SH
     t0 = time.time()
-    rig = SH.make_armored("ArmoredTitan")
-    rig["gait"] = dict(stride=0.75, knee=1.0, sway=0.015, bob=0.04, arm=0.65, limp=0.0)
-    rig["slouch"] = 0.5; rig["arms_out"] = 0.85; rig["gait_seed"] = 3
-    k = float(os.environ.get("FALL_ARM_SCALE", "1.3"))        # read from the sky over 8-17 m houses
-    rig.scale = tuple(v * k for v in rig.scale)
-    if rig.animation_data:
-        rig.animation_data.action = None
-    S["arm"] = rig
-    print(f"[fall2] Armored built {time.time() - t0:.0f}s")
+    if os.environ.get("FALL_ARMORED", "tripo") == "tripo":
+        S["tripo"] = TA = TripoArmored(coll)
+        TA.arm.name = "ArmoredTitan"
+        S["arm"] = TA.arm
+        print(f"[fall2] Armored (Tripo) built {time.time() - t0:.0f}s")
+    import shifters as SH
+    rig = SH.make_armored("ArmoredTitanProc") if "tripo" not in S else None
+    if rig is not None:                              # FALL_ARMORED=procedural: the old shifters build (true 15 m)
+        rig["gait"] = dict(stride=0.75, knee=1.0, sway=0.015, bob=0.04, arm=0.65, limp=0.0)
+        rig["slouch"] = 0.5; rig["arms_out"] = 0.85; rig["gait_seed"] = 3
+        if rig.animation_data:
+            rig.animation_data.action = None
+        S["arm"] = rig
+        print(f"[fall2] Armored built {time.time() - t0:.0f}s")
     # inner gate pieces (states845 armored build): shown only from the impact on
     S["inner_mods"] = [m for m in bpy.data.objects["InnerGate"].modifiers if m.type == "BOOLEAN"] if bpy.data.objects.get("InnerGate") else []
     S["inner_after"] = [o for o in bpy.data.objects if o.name.startswith(("InnerGate_Grime", "InnerDust"))]
@@ -375,11 +458,16 @@ def seg3_build():
         import smokecards as SMK
         dc = SMK.SmokeCards("BreachDust")
         rnd = np.random.default_rng(5)
-        n = 160
-        te = IMPACT + rnd.uniform(0, 0.5, n)
-        pos = np.c_[rnd.uniform(-8, 8, n), rnd.uniform(-8, 8, n), rnd.uniform(1, 20, n)]
-        vel = np.c_[rnd.uniform(-14, 14, n), np.where(rnd.random(n) < 0.75, rnd.uniform(6, 30, n), rnd.uniform(-18, -4, n)), rnd.uniform(0, 7, n)]
-        dc.add_many(te, pos, vel, 3.0, 16.0, 6.0, 1.5, kind="dust", alpha=0.85, tau=0.8)
+        n = int(os.environ.get("FALL_DUST_N", "420"))      # thick burst: big, dense cards that grow and drift for ~9 s
+        te = IMPACT + rnd.uniform(0, 0.7, n)
+        pos = np.c_[rnd.uniform(-10, 10, n), rnd.uniform(-9, 9, n), rnd.uniform(0.5, 24, n)]
+        vel = np.c_[rnd.uniform(-18, 18, n), np.where(rnd.random(n) < 0.6, rnd.uniform(6, 34, n), rnd.uniform(-26, -4, n)), rnd.uniform(0, 8, n)]
+        dc.add_many(te, pos, vel, 4.0, 30.0, 9.0, 1.8, kind="dust", alpha=0.97, tau=1.1)
+        m2 = 120                                           # a low rolling skirt along the ground both sides of the wall
+        te2 = IMPACT + 0.1 + rnd.uniform(0, 0.8, m2)
+        pos2 = np.c_[rnd.uniform(-14, 14, m2), rnd.uniform(-12, 12, m2), np.full(m2, 2.0)]
+        vel2 = np.c_[rnd.uniform(-30, 30, m2), rnd.uniform(-30, 30, m2), np.zeros(m2)]
+        dc.add_many(te2, pos2, vel2, 6.0, 34.0, 10.0, 0.6, kind="dust", alpha=0.95, tau=1.5)
         dc.build(coll); S["dustcards"] = dc
     except Exception as ex:
         print("[fall2] dust cards failed:", ex)
@@ -411,7 +499,7 @@ def armored_y(s):
         return -190.0 + 181.0 * (0.4 * u + 0.6 * u * u)
     return -9.0 + 17.0 * (1 - math.exp(-(s - IMPACT) / 0.6))
 
-SEAM_IN = ((8.0, L.OUTER_GATE[1] + 186, 94.0), (-34.0, L.OUTER_GATE[1] + 72, 0.0), 32.0)   # = render_fall's last key (at rest)
+SEAM_IN = ((132.0, L.OUTER_GATE[1] + 48, 90.0), (164.0, L.OUTER_GATE[1] + 136, 0.0), 32.0)   # = render_fall's last key (at rest)
 
 def seg3_cam_keys(S):
     """Sky observer at a moderate height, one take: from render_fall's last pose up the avenue behind the charge,
@@ -423,7 +511,8 @@ def seg3_cam_keys(S):
         (3.0, (60, -300, 120), (0, -90, 0), 32),             # flying north up the avenue, the Armored charging ahead
         (3.6, (40, -118, 95), (0, -30, 8), 32),              # nearer (~130 m) for the run and the shoulder ram
         (IMPACT, (35, -100, 84), (0, -6, 12), 32),           # the ram: the gate explodes
-        (6.4, (95, -45, 118), (190, 60, 0), 30),             # pull up over the wall, turning to the canal
+        (5.9, (44, -96, 98), (0, -4, 12), 32),               # hold on the burst gate while the dust billows
+        (6.8, (95, -45, 118), (190, 60, 0), 30),             # pull up over the wall, turning to the canal
         (8.0, (195, 10, 95), (222, 110, 0), 30),             # low (~95 m) over the canal: ferries, refugees on bank + road
         (10.0, (200, 80, 112), (228, 190, 0), 29),           # ... then climb north
         (SEG3, (180, 165, 215), (232, 340, 0), 28),
@@ -451,11 +540,27 @@ def seg3_pose(S, s):
     # the Armored: charge (head down, shoulder first), then stands in the burst gate
     rig = S["arm"]; y = armored_y(s)
     dist = (y + 190.0)
-    p = (dist / 26.0) % 1.0 if s < IMPACT + 0.8 else 0.22
-    rots, off = PT._gait(rig, p, amp=1.0 if s < IMPACT + 0.5 else max(0.0, 1 - (s - IMPACT - 0.5) / 0.5))
-    off, _, _ = PT._ground(rig, rots, off)
-    PT._apply(rig, rots, off)
-    rig.location = (0.0, y, L.height(0.0, y) - 0.1)
+    # runs straight at the gate (normal run, facing forward); only the last ~0.4 s it drops the shoulder like a rugby
+    # tackle: torso twisted ~35 deg, shoulder leading, head tucked, legs still driving (user 10/25)
+    ram = smooth(IMPACT - 0.45, IMPACT - 0.1, s) * (1 - smooth(IMPACT + 0.5, IMPACT + 1.4, s))
+    lean = 0.2 if s < IMPACT + 0.4 else 0.2 * (1 - smooth(IMPACT + 0.4, IMPACT + 1.4, s))
+    run = 1.0 if s < IMPACT + 0.3 else max(0.0, 1 - (s - IMPACT - 0.3) / 0.6)
+    if "tripo" in S:
+        TA = S["tripo"]
+        ph = 2 * math.pi * dist / float(os.environ.get("FALL_ARM_STRIDE", "13.0"))
+        TA.pose(armored_pose_rots(ph, run, ram))
+        TA.place(0.0, y, 0.0, lean=0.12 * lean + 0.12 * ram, roll=0.0)      # faces the gate: no sideways turn
+    else:
+        p = (dist / 26.0) % 1.0 if s < IMPACT + 0.8 else 0.22
+        rots, off = PT._gait(rig, p, amp=1.0 if s < IMPACT + 0.5 else max(0.0, 1 - (s - IMPACT - 0.5) / 0.5))
+        if ram > 0:
+            for bn, r in (("spine03", SC._R(y=0.33 * ram)), ("spine04", SC._R(x=0.15 * ram, y=0.28 * ram)),
+                          ("neck01", SC._R(x=-0.45 * ram)), ("clavicle.L", SC._R(z=-0.25 * ram))):
+                if bn in rig.pose.bones:
+                    rots[bn] = (rots[bn] @ r) if bn in rots else r
+        off, _, _ = PT._ground(rig, rots, off)
+        PT._apply(rig, rots, off)
+        rig.location = (0.0, y, L.height(0.0, y) - 0.1)
     if os.environ.get("FALL_DEBUG"):
         bpy.context.view_layer.update()
         print("[fall2 dbg] armored", tuple(round(v, 1) for v in rig.location), rig.hide_render, tuple(round(v, 2) for v in rig.scale),
@@ -467,9 +572,8 @@ def seg3_pose(S, s):
             print("[fall2 dbg] body world bbox", [round(min(w[i] for w in ws), 1) for i in range(3)], [round(max(w[i] for w in ws), 1) for i in range(3)],
                   "users_collection", [cc.name for cc in c.users_collection], "visible_camera", c.visible_camera)
             ce.to_mesh_clear()
-    ram = smooth(IMPACT - 1.2, IMPACT - 0.3, s) * (1 - smooth(IMPACT + 0.6, IMPACT + 1.6, s))   # lowered-shoulder ram
-    lean = 0.2 if s < IMPACT + 0.4 else 0.2 * (1 - smooth(IMPACT + 0.4, IMPACT + 1.4, s))
-    rig.rotation_euler = (lean + 0.15 * ram, 0.28 * ram, math.pi + 0.75 * ram)
+    if "tripo" not in S:
+        rig.rotation_euler = (lean + 0.22 * ram, 0.0, math.pi)          # no sideways turn of the whole body
     # swarm: the district behind (titans keep wandering / eating); sim t continues from segment 2
     SW.update(68.0 + 1.5 * s, pscale=1.0)          # user rule: true scale
     # ferries + their refugees

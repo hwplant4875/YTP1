@@ -16,6 +16,7 @@ Duplicate crowds / titans are simply not loaded (no seq_colossal, render_fast cr
 blocky Smiling Titan is hidden because seq_carla's MPFB Smiling Titan plays the beat.
 """
 import bpy, math, os, sys, time, argparse
+import numpy as np
 from mathutils import Vector, noise
 
 argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
@@ -82,12 +83,13 @@ def a_keys():
         (-1.0, (PLZ.x + 50, PLZ.y + 45, 146), (GX, GY + 100, 0), 38),        # (extrapolation guide only)
         (0.0, (PLZ.x + 55, PLZ.y + 50, 150), (GX, GY + 120, 0), 38),         # = render_fast keys()[-1]
         (2.4, (PLZ.x + 32, PLZ.y + 70, 92), (PLZ.x, PLZ.y - 30, 0), 34),     # down over the panicking plaza
-        (4.8, (40, GY + 200, 108), (-14, GY + 60, 0), 32),                   # titans pouring through the breach
-        # the Carla beat (Yeager house right of the outer gate, AOT_YEAGER_XY): neutral sky observer, slow drift,
-        # the gate and the titans pouring in stay in frame; no close-up, no Hannes / kids (user 10/25)
-        (A_END, (22, GY + 192, 98), (-26, GY + 70, 0), 32),
-        (SEG_END, (8, GY + 186, 94), (-34, GY + 72, 0), 32),
-        (SEG_END + 1.0, (8, GY + 186, 94), (-34, GY + 72, 0), 32),        # (guide: the seam into render_fall2 is at rest)
+        (4.6, (30, GY + 120, 105), (0, GY + 10, 0), 32),                     # the titans pouring through the breach
+        # then a smooth aerial travel right (east) to the Yeager house (AOT_YEAGER_XY, ~210 m from the gate), where the
+        # Smiling Titan eats Carla: neutral sky observer, no close-up, no Hannes / kids, no other titans nearby
+        (6.6, (118, GY + 40, 100), (158, GY + 132, 0), 32),
+        (A_END, (126, GY + 44, 94), (162, GY + 134, 0), 32),
+        (SEG_END, (132, GY + 48, 90), (164, GY + 136, 0), 32),
+        (SEG_END + 1.0, (132, GY + 48, 90), (164, GY + 136, 0), 32),      # (guide: the seam into render_fall2 is at rest)
     ]
 
 def _cr(p0, p1, p2, p3, u, t0, t1, t2, t3):
@@ -176,7 +178,7 @@ def light_setup():
         el = math.radians(float(os.environ.get("FALL_SUN_EL", "4")))
         az = math.radians(float(os.environ.get("FALL_SUN_AZ", "245")))   # shared with render_fall2 (seam match)
         st["d1"] = Vector((-math.cos(el) * math.cos(az), -math.cos(el) * math.sin(az), -math.sin(el)))
-        st["e1"] = float(os.environ.get("CARLA_SUN_E", "4.2")); st["c1"] = Vector((1.0, 0.50, 0.20))
+        st["e1"] = float(os.environ.get("CARLA_SUN_E", "4.2")); st["c1"] = Vector(tuple(float(v) for v in os.environ.get("FALL_SUN_COL", "1.0,0.78,0.58").split(",")))   # = render_fall2 SUN_COL
     w = bpy.context.scene.world
     st["ramp"] = []
     if w and w.use_nodes:
@@ -268,11 +270,19 @@ else:
     times = [(int(round(B.s0 * B.fps)) + j) / B.fps for j in range(int(round((B.s1 - B.s0) * B.fps)))]
 t_start = time.time()
 for i, s in enumerate(times):
+    if os.path.exists(os.path.join(B.fall_out, "STOP")):   # touch <out>/STOP to end a long render cleanly
+        print("[fall] STOP file found, ending"); break
     t0 = time.time()
     ts = sim_t(s)
     if FX:
         FX.update(ts)
     if SW and SW.STATE:
+        hide = {"smiling"}                          # seq_carla's Smiling Titan plays the beat; keep the block clear
+        if SC and SC.STATE.get("C") is not None and s > A_END - 2.5:
+            k0 = min(int(ts / SW.DT), SW.STATE["K"] - 1); C2 = SC.STATE["C"]
+            dx = SW.STATE["TX"][k0] - C2.x; dy = SW.STATE["TY"][k0] - C2.y
+            hide |= set(int(j) for j in np.where(dx * dx + dy * dy < 95.0 ** 2)[0])
+        SW.HIDE_TITANS = hide
         SW.update(ts, pscale=pscale(s))
     if SC and SC.STATE.get("C") is not None:
         SC.pose_carla(carla_f(s))
