@@ -104,11 +104,10 @@ def site():
 SET_K = float(os.environ.get("RT_SET_K", "1.0"))
 _SP = [  # (T0, T1, dv, scaled_by_SET_K)
     (0, 2, 1.5, 0),                                 # breach aftermath (dust, blocks)
-    (2, 7, 3.0, 1),                                 # flood: titans pour in through the smashed gate, FAST
-    (7, 10, 3.0, 0),                                # sweep north to the inner gate
-    (10, 16, 5.0, 1),                               # evacuation: crowd jammed behind the cart, Mikasa, the cart shoved, out
-    (16, 21, 2.5, 0),                               # sweep (hq_despair passes underneath)
-    (21, 26.5, 3.0, 1),                             # mikasa_falls: her dash, seen high
+    (2, 9, 4.5, 1),                                 # flood: ~30 titans stream through the breach into the main street
+    (9, 10.2, 1.4, 0),                              # sweep north to the inner gate
+    (10.2, 16, 5.0, 1),                             # evacuation: Mikasa drops in (10.6), the cart hauled (11.6-13.4), out
+    (16, 26.5, 2.8, 0),                             # short travel to the church (Mikasa's dash passes underneath)
     (26.5, 31, 4.0, 1),                             # she falls (seen a little), the Attack Titan arrives (lightning)
     (31, 35, 3.0, 1),                               # bell_tower: it beats the titan at the tower's foot
     (35, 44, 4.5, 0),                               # attack_titan followed high toward the HQ
@@ -231,20 +230,18 @@ def cam_keys():
     k(11.4, (ex - 5, ey + 165, 130), (-10, GY - 15, 52), 34)
     k(13.6, (40, GY + 230, 165), (0, GY + 25, 12), 32)                  # the kick
     # ---- flood: titans pouring in through the smashed gate
-    kt(2.0, (90, GY + 210, 175), (0, GY + 45, 0), 30)
-    kt(6.8, (60, GY + 270, 195), (-6, GY + 130, 0), 30)
+    kt(2.2, (55, GY + 150, 160), (0, GY + 30, 0), 32)                      # on the breach: the stream pours in
+    kt(5.5, (45, GY + 220, 165), (-8, GY + 110, 0), 32)                    # following the stream up the avenue
+    kt(8.8, (30, GY + 300, 170), (-20, GY + 200, 0), 32)
     # ---- evacuation at the OPEN inner gate: the cart, Mikasa, the crowd escaping (TODO(D): evacuation timing)
     kt(10.3, (igx + 70, -135, 88), (igx, -18, 0), 36)                     # lower (60-90 m): the cart, the jam
     kt(15.7, (igx + 60, -118, 78), (igx, 4, 0), 36)
     # ---- Mikasa's dash and fall (seen a little), the Attack Titan arrives and beats the titan at the bell tower
-    for T in (21.5, 25.5):
-        m = TA.hero_pos("mikasa", T)
-        if m is not None and np.linalg.norm(np.asarray(m[:2], float)) > 1:
-            kt(T, rel(m, -90, -170, 210), rel(m, 0, 0, 10), 32)
-    kt(27.8, rel(M, 90, -150, 170), ((M[0] + A0[0]) / 2, (M[1] + A0[1]) / 2, 4), 34)
+    kt(27.0, rel(M, 55, -85, 95), ((M[0] + A0[0]) / 2, (M[1] + A0[1]) / 2, 4), 38)   # larger: her fall, the arrival
+    kt(30.6, rel(M, 60, -90, 98), ((M[0] + A0[0]) / 2, (M[1] + A0[1]) / 2, 6), 38)
     tw = TR.BELL_TOWER["xy"]
-    kt(31.5, (tw[0] + 130, tw[1] - 160, 175), (tw[0] + 30, tw[1] - 30, 12), 34)
-    kt(34.8, (tw[0] + 140, tw[1] - 150, 180), (tw[0] + 45, tw[1] - 40, 10), 34)
+    kt(31.8, (tw[0] + 85, tw[1] - 105, 115), (tw[0] + 25, tw[1] - 25, 12), 36)
+    kt(34.8, (tw[0] + 92, tw[1] - 100, 118), (tw[0] + 38, tw[1] - 35, 10), 36)
     for T in (38.5, 42.5):                                                    # followed high, no chase
         a = at(T)
         kt(T, rel(a, -100, -160, 190), rel(a, 0, 0, 8), 32)
@@ -341,7 +338,8 @@ def intro_at(v):
 # ====================================================================== lightning, darkness, dawn
 FLICKER = ((V_LIGHT + 0.02, V_LIGHT + 0.10, 0), (V_LIGHT + 0.14, V_LIGHT + 0.19, 1), (V_LIGHT + 0.24, V_LIGHT + 0.35, 0))
 
-def _bolt(name, seed, top=720.0):
+def _bolt(name, seed, top=720.0, strike=None):
+    STRIKE = globals()["STRIKE"] if strike is None else Vector(strike)
     rnd = random.Random(seed)
     bm = bmesh.new()
     def channel(p, n, step, r, spread, depth=0):
@@ -376,6 +374,28 @@ def build_fx():
     FX["bg"] = [(n, n.inputs[1].default_value) for n in w.node_tree.nodes if n.type == "BACKGROUND"]
     FX["suns"] = [(o.data, o.data.energy, tuple(o.data.color)) for o in bpy.data.objects if o.type == "LIGHT" and o.data.type == "SUN"]
     FX["exp"] = bpy.context.scene.view_settings.exposure
+
+AT_BOLT = {}
+def build_at_bolt():
+    """The Attack Titan's arrival (HANDOFF 09:37): a big yellow-orange lightning strike and flash at its spawn point."""
+    S = TA.STATE; A0 = S["C"]["A0"]
+    vis = getattr(S["ATD"], "vis", None) or [(26.5, 1e9)]
+    t0 = float(vis[0][0])
+    p = (float(A0[0]), float(A0[1]), 0.0)
+    AT_BOLT["bolts"] = [_bolt("RT_ATBolt0", 31, 520.0, p), _bolt("RT_ATBolt1", 47, 520.0, p)]
+    ld = bpy.data.lights.new("RT_ATFlash", "POINT"); ld.color = (1.0, 0.72, 0.3); ld.shadow_soft_size = 25; ld.energy = 0
+    lo = bpy.data.objects.new("RT_ATFlash", ld); lo.location = (p[0], p[1], 90.0); bpy.context.scene.collection.objects.link(lo)
+    AT_BOLT["flash"] = ld
+    AT_BOLT["flick"] = ((t0 - 0.05, t0 + 0.10, 0), (t0 + 0.16, t0 + 0.24, 1), (t0 + 0.30, t0 + 0.45, 0))
+    print(f"[trost] Attack Titan lightning at T {t0:.2f}, {p[:2]}")
+
+def at_bolt_at(T):
+    if not AT_BOLT:
+        return
+    on = [b for a, c, b in AT_BOLT["flick"] if a <= T < c]
+    for k, ob in enumerate(AT_BOLT["bolts"]):
+        ob.hide_render = not (on and on[0] == k)
+    AT_BOLT["flash"].energy = 5e6 if on else 0.0
 
 def light_at(v):
     """Dawn (v 0-4) and the lightning darkening (v 9-10); afterwards trost_action owns the light (dusk at the pyres)."""
@@ -528,7 +548,7 @@ TA.setup(SITE, light=True)
 if not SITE.get("boulder_obj"):
     adopt_boulder()
 print(f"[trost] TA setup {time.time() - t0:.1f}s", TA.info(), "beats:", sorted(TA.BEATS))
-build_intro(); build_fx(); build_breach()
+build_intro(); build_fx(); build_breach(); build_at_bolt()
 
 def hero_pop():
     """Subtle emission boost so the hero colour cues pop against the roofs: Mikasa's scarf, Armin's blond hair,
@@ -575,6 +595,7 @@ def frame_state(v):
     T = Tmap(v)
     TA.update(T)
     light_at(v)
+    at_bolt_at(T)
     show, rise, kick, fade, hl, hr = colossal_at(v)
     if col_coll:
         col_coll.hide_render = not show

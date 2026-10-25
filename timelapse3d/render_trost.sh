@@ -18,7 +18,7 @@ until mkdir "$LOCK" 2>/dev/null; do sleep 5; done
 trap 'rmdir "$LOCK" 2>/dev/null' EXIT
 BL="/c/All The Programs/Blender/blender.exe"
 for TRY in 1 2 3; do
-TA_PSCALE=${TA_PSCALE:-1.0} TREE_DENS=${TREE_DENS:-0.005} COL_H=${COL_H:-64} COL_DX=${COL_DX:--7} AOT_SET=trost AOT_PLUGINS=${RT_PLUGINS:-colossal_asset,world} \
+TA_PSCALE=${TA_PSCALE:-1.0} SUN_AZ=${SUN_AZ:--102} TA_FLOOD=${TA_FLOOD:-30} TA_FLOOD_GAP=${TA_FLOOD_GAP:-0.22} TREE_DENS=${TREE_DENS:-0.005} COL_H=${COL_H:-64} COL_DX=${COL_DX:--7} AOT_SET=trost AOT_PLUGINS=${RT_PLUGINS:-colossal_asset,world} \
   "$BL" -b -P "$HERE/aot/scene.py" -P "$HERE/aot/render_trost.py" -- \
   --year 850 --cam trost_overview --engine ${ENGINE:-BLENDER_EEVEE} --res 854x480 --samples $SMP \
   --rt-out "$FR" --fps $FPS --rt-samples $SMP $EXTRA 2>&1 \
