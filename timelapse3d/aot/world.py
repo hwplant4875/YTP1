@@ -171,11 +171,11 @@ def ground_mat():
     # broken up by noise so the edge is ragged; woods win over fields
     ty = SET_ORIGIN["trost"][1]
     d_ax = _math(N, Ln, "ABSOLUTE", _math(N, Ln, "SUBTRACT", X, 200.0))
-    corr = _mr(N, Ln, d_ax, 2600.0, 1400.0)
+    corr = _mr(N, Ln, d_ax, 1500.0, 900.0)       # ~1-1.5 km either side of the river/road axis
     ylim = _math(N, Ln, "MULTIPLY", _mr(N, Ln, Y, SEA_Y + 1000, SEA_Y + 2500), _mr(N, Ln, Y, MITRAS[1] + 3000, MITRAS[1] - 500))
     corr = _math(N, Ln, "MULTIPLY", corr, ylim)
     acc = corr
-    for cx, cy, r in ((0.0, -300.0, 4200.0), (0.0, ty - 400.0, 4200.0), (MITRAS[0], MITRAS[1], 5200.0)):
+    for cx, cy, r in ((0.0, -300.0, 2600.0), (0.0, ty - 400.0, 2400.0), (MITRAS[0], MITRAS[1], 2800.0)):   # ~1-2 km rims
         vm = N.new("ShaderNodeVectorMath"); vm.operation = "DISTANCE"; vm.inputs[1].default_value = (cx, cy, 0.0)
         Ln.new(P, vm.inputs[0])
         acc = _math(N, Ln, "MAXIMUM", acc, _mr(N, Ln, vm.outputs["Value"], r, r * 0.6))
