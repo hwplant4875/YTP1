@@ -52,9 +52,13 @@ X0 = TR.INNER_GATE[0] if TR else -140.0
 TW, TS, TRR = (TR.W, TR.S, TR.R) if TR else (620.0, 250.0, 620.0)
 OUTER = TR.OUTER_GATE if TR else (0.0, -870.0)
 PSCALE = float(os.environ.get("INT_PSCALE", "1.0"))     # user rule: every human at TRUE scale
-CAMP = Vector((-1500.0, 2300.0))
+import master_timeline as MT   # agent G: seams S3 / S7 / S8 and the camp position (pure Python)
+import world as WD             # agent G: the shared world layer (walls, river, fields, sea); same in every scene
+CAMP = Vector(MT.TRAINING_CAMP_TROST)                    # (-1450, 650) Trost frame: beside Trost, inside Wall Rose
 RIG0 = Vector((CAMP.x - 74.0, CAMP.y - 22.0))            # first balance rig; rigs run north in 9 m steps
 ERIG = 2                                                 # Eren's rig index
+# local terrain only inside these cores (Trost frame); world ground everywhere else (world.fade / world.attach)
+CORES = [((0.0, -435.0), 950.0), ((-140.0, 400.0), 750.0), ((CAMP.x, CAMP.y), 450.0)]
 FOG_D = float(os.environ.get("INT_FOG", "22000"))     # light distance haze only (QA: no grey-blue wash)
 
 def smooth(a, b, t):
@@ -76,13 +80,8 @@ def H(x, y):
     flat *= smooth(380.0, 900.0, math.hypot(x - CAMP.x, y - CAMP.y))
     h = (noise.noise(Vector((x / 1800, y / 1800, 0.3))) * 16 + noise.noise(Vector((x / 420, y / 420, 1.7))) * 3
          + noise.noise(Vector((x / 260, y / 260, 4.2))) * 0.6) * flat
-    dc = math.hypot(x - CAMP.x, y - CAMP.y)               # wooded hills round the training camp (N and W sides)
-    side = max(smooth(CAMP.y - 400, CAMP.y + 200, y), smooth(CAMP.x - 150, CAMP.x - 650, x))
-    h += smooth(380.0, 1100.0, dc) * (1 - smooth(2600.0, 3600.0, dc)) * side * (0.55 + 0.45 * noise.noise(Vector((x / 500, y / 500, 6.6)))) * 150
-    r = math.hypot(x + 2500, y - 3000)                   # mountains north-west behind the camp, ridges far south
-    h += smooth(3200.0, 8000.0, r) * smooth(600.0, 2600.0, y) * (noise.noise(Vector((x / 2600, y / 2600, 9.1))) * 0.5 + 0.6) ** 2 * 700
-    h += smooth(7000.0, 12000.0, -y) * (noise.noise(Vector((x / 3000, y / 3000, 3.3))) * 0.5 + 0.5) * 260
-    return h
+    w = WD.core_w(x, y, CORES)                           # local terrain inside the cores, the world relief outside
+    return h * w + (1.0 - w) * (WD.ground_z(x, y, "trost") if w < 1.0 else 0.0)
 
 L.height = H                 # people_kit.ground() / stage() / scene helpers read aotlib.height: THIS world
 
@@ -425,7 +424,7 @@ def build():
     rnd = random.Random(845)
     # ---- roads: north from the inner gate past the camps, branch to the training camp; south from the outer gate
     strip("RoadNorth", [(X0, 8.0)] + [(X0 + 18 * math.sin(k / 3.0) * (k / 30), 8.0 + k * 40.0) for k in range(1, 60)], 12.0, M["road"])
-    strip("RoadCamp", [(X0, 1750), (-500, 1950), (-950, 2150), (CAMP.x + 100, CAMP.y - 30)], 8.0, M["road"])
+    strip("RoadCamp", [(X0 - 170, 300), (-700, 420), (-1050, 560), (CAMP.x + 250, CAMP.y - 68)], 8.0, M["road"])
     strip("RoadSouth", [(OUTER[0], OUTER[1] - 6)] + [(OUTER[0] + 220 * math.sin(k / 9.0) * min(1, k / 12), OUTER[1] - k * 60.0)
                                                     for k in range(1, 150)], 10.0, M["road"])
     rect("GatePlazaIn", X0, 60, 360, 90, M["dirt"], lift=0.12)
@@ -447,7 +446,7 @@ def build():
             x, y = X0 + gx + rnd.uniform(-0.6, 0.6), gy + rnd.uniform(-0.6, 0.6)
             dn = math.hypot(gx / 700, (gy - 40) / 730) / 1.42
             tents.append((x, y, math.pi / 2 + rnd.uniform(-0.04, 0.04), 1 if rnd.random() < 0.15 else 0,
-                          -2.0 + 5.8 * min(1.0, dn) ** 1.6 + rnd.uniform(-0.25, 0.25)))
+                          -2.0 + 5.0 * min(1.0, dn) ** 1.6 + rnd.uniform(-0.25, 0.25)))
     T = np.array(tents)
     st["tents"] = dict(ob=instancer("Tents", [tent_proto(M, 0, "TentA"), tent_proto(M, 1, "TentB")], len(T)), T=T,
                        xyz=np.stack([T[:, 0], T[:, 1], Hv(T[:, 0], T[:, 1])], 1))
@@ -470,7 +469,7 @@ def build():
         me.transform(Matrix.Rotation(math.pi / 2, 4, "Z"))                 # long side along the wall
         ob = bpy.data.objects.new(f"Barn{k}", me); sc.collection.objects.link(ob)
         bx = X0 + x
-        barns.append((ob, Vector((bx, 25.0, H(bx, 25.0))), 1.0 + 4.5 * abs(x) / 700 + rnd.uniform(-0.3, 0.3)))
+        barns.append((ob, Vector((bx, 25.0, H(bx, 25.0))), 0.5 + 3.6 * abs(x) / 700 + rnd.uniform(-0.3, 0.3)))
     st["barns"] = barns
     # ---- refugees milling in the lanes and on the square
     civ = civilian_protos("Civ", 10, 3)
@@ -481,13 +480,13 @@ def build():
     ry_ = np.where(~snap, np.round(ry_ / 48) * 48 + np.array([rnd.uniform(-3, 3) for _ in range(nref)]), ry_)
     dn = np.hypot(gx_ / 700, (ry_ - 40) / 730) / 1.42
     rx_ = X0 + gx_
-    st["ref"] = dict(ob=instancer("Refugees", civ, nref), x=rx_, y=ry_, z=Hv(rx_, ry_), t_app=-2.0 + 5.8 * np.minimum(1, dn) ** 1.6,
+    st["ref"] = dict(ob=instancer("Refugees", civ, nref), x=rx_, y=ry_, z=Hv(rx_, ry_), t_app=-2.0 + 5.0 * np.minimum(1, dn) ** 1.6,
                      ph=np.array([rnd.uniform(0, 6.28) for _ in range(nref)]), w=np.array([rnd.uniform(0.6, 1.6) for _ in range(nref)]),
                      vi=np.array([rnd.randrange(10) for _ in range(nref)]))
     # ---- forest north of the camps: cleared from the camp side outward (1.0-6.3 s), plots appear behind the front
     trp = tree_protos(M)
     def t_cut(x, y):
-        return 1.0 + 5.3 * np.clip((np.hypot((x - X0) * 0.55, y - 760) - 60) / 900.0, 0, 1)
+        return 0.5 + 4.4 * np.clip((np.hypot((x - X0) * 0.55, y - 760) - 60) / 900.0, 0, 1)
     fx, fy = [], []
     for gx in np.arange(-1350.0, 1351.0, 13.0):
         for gy in np.arange(820.0, 1720.0, 13.0):
@@ -514,19 +513,9 @@ def build():
     sx, sy = [], []
     for _ in range(26000):
         x, y = rnd.uniform(-4200, 3600), rnd.uniform(1700, 4200)
-        if math.hypot(x - CAMP.x, y - CAMP.y) < 330 or abs(x - X0) < 30:
+        if math.hypot(x - CAMP.x, y - CAMP.y) < 900 or abs(x - X0) < 30:
             continue
         if noise.noise(Vector((x / 700, y / 700, 2.0))) < -0.15:
-            continue
-        sx.append(x); sy.append(y)
-    for _ in range(9000):
-        x, y = rnd.uniform(-5200, 5200), rnd.uniform(-9000, -150)
-        if noise.noise(Vector((x / 900, y / 900, 5.0))) < 0.25 or _d_district(x, y) < 60 or abs(x - OUTER[0]) < 260:
-            continue
-        sx.append(x); sy.append(y)
-    for _ in range(5000):
-        x, y = rnd.uniform(-4500, 4500), rnd.uniform(200, 1800)
-        if abs(x - X0) < 1500 or noise.noise(Vector((x / 500, y / 500, 7.0))) < 0.1:
             continue
         sx.append(x); sy.append(y)
     sx, sy = np.array(sx), np.array(sy)
@@ -543,6 +532,12 @@ def build():
                        lane=np.array([rnd.choice((-3.0, 3.0)) for _ in range(40)]))
     build_camp(M, st, rnd)
     world(st)
+    st["terrain"] = bpy.data.objects.get("Terrain")
+    if os.environ.get("INT_WORLD", "1") == "1":
+        WD.attach("trost", M, st["terrain"], cores=CORES)   # trims my terrain / Wall Rose outside the cores; world beyond
+    st["terrain_mat"] = M["terrain"]
+    wg = bpy.data.objects.get("WD_Ground")
+    st["world_ground_mat"] = wg.data.materials[0] if wg else None
     st["track"] = {}
     for nm in ("Eren", "Mikasa", "Armin"):             # name-tag anchors for hud2 (obj: "Eren")
         e = bpy.data.objects.new(nm, None); sc.collection.objects.link(e)
@@ -564,7 +559,7 @@ def dress_camp(M, st, rnd, PK):
     hay = smat("HayS", [(0.55, 0.42, 0.16), (0.50, 0.36, 0.12), SNOW, (0.48, 0.38, 0.15)], var=0.2, var_scale=0.8, fog=False)
     board = L.mat("TitanBoard", (0.52, 0.38, 0.24), 0.85, var=0.2, var_scale=0.5)
     nape = L.mat("NapeMark", (0.62, 0.06, 0.04), 0.7)
-    road = [(-950.0, 2150.0), (C.x + 100, C.y - 30)]
+    road = [(-1050.0, 560.0), (C.x + 250, C.y - 68)]
     # ---- fence round the compound (gap where the camp road comes in on the east side)
     x0, x1, y0, y1 = C.x - 240, C.x + 240, C.y - 160, C.y + 130
     bm = bmesh.new()
@@ -664,10 +659,10 @@ def dress_camp(M, st, rnd, PK):
     for o in pines:
         sc.collection.objects.link(o)
     px, py = [], []
-    for _ in range(16000):
-        a = rnd.uniform(0, 2 * math.pi); r_ = 240 + 1200 * rnd.random() ** 1.3
+    for _ in range(7000):
+        a = rnd.uniform(0, 2 * math.pi); r_ = 235 + 165 * rnd.random() ** 0.8
         x, y = C.x + math.cos(a) * r_ * 1.15, C.y + math.sin(a) * r_
-        if abs(x - C.x) < 268 and abs(y - C.y) < 190:
+        if abs(x - C.x) < 268 and abs(y - C.y) < 190 or x > C.x + 330:
             continue
         if _seg_dist(x, y, *road) < 14 or (C.x - 240 < x < C.x + 150 and C.y - 290 < y < C.y - 175):
             continue
@@ -860,35 +855,82 @@ class Channel:
         return _herm(*q, (k + f) / 96)
 
 RC = Vector((RIG0.x, RIG0.y + ERIG * 9.0))
+D_LOOK = 300.0                                           # look point = loc + D_LOOK * dir (same convention as master_timeline)
+
+def _seam(name):
+    k = MT.seam_key(name, "trost")
+    return dict(loc=Vector(k["loc"]), dir=Vector(k["dir"]).normalized(), lens=float(k["lens"]), vel=Vector(k["vel"]),
+                ddir=Vector(k.get("ddir", (0, 0, 0))), dlnlens=float(k.get("dlnlens", 0.0)))
+
 def cam_keys():
-    """(t, loc, look_at, lens).  First key = segment START (bridge from the march: low over the Maria plains south of
-    Trost, looking north at the bulge), last key = segment END (low oblique on the graduation rows)."""
-    C = CAMP; ox, oy = OUTER
+    """Camera keys (t, key).  key: loc, dir, lens and optionally vel / ddir / dlnlens (exact rates; otherwise central
+    differences of the neighbours).  SEAMS (master_timeline.py, strict one take): t = 0 is S3 (the camps segment starts
+    on C1's matched camera), t = SI.T_S7 is S7 (training starts on C3's camera), t = SI.DURATION is S8 (graduation night
+    hands over to Trost).  The camps segment ends at SI.T_CAMPS_END (C2 starts from this camera there)."""
+    C = CAMP
+    def k(loc, look, lens, vel=None):
+        loc = Vector(loc); d = (Vector(look) - loc).normalized()
+        out = dict(loc=loc, dir=d, lens=float(lens))
+        if vel is not None:
+            out.update(vel=Vector(vel), ddir=Vector((0, 0, 0)), dlnlens=0.0)
+        return out
     return [
-        (0.0, (ox + 160, oy - 1500, 70), (ox - 40, oy + 200, 45), 30),                 # START: plains, Trost ahead
-        (1.9, (ox - 60, oy - 260, 230), (X0, 250, 0), 30),                             # rising over the bulge tip
-        (3.8, (X0 - 130, -170, 300), (X0 + 20, 560, 0), 30),                           # over Wall Rose: the camps
-        (5.9, (X0 - 380, 470, 310), (X0 - 120, 1250, 0), 30),                          # fields being cleared
-        (7.7, (-1020, 1580, 360), (-1480, 2260, 0), 30),                               # flight to the camp
-        (9.6, (C.x - 252, C.y + 140, 30), (C.x - 10, C.y - 10, 0), 30),                # reveal over the lookout tower: the rows
-        (10.9, (RC.x + 17, RC.y - 21, 13), (RC.x, RC.y + 0.6, 1.9), 36),             # Eren upside down (hold)
-        (12.6, (RC.x + 15, RC.y - 19, 12), (RC.x, RC.y + 0.6, 1.9), 36),
-        (14.9, (C.x + 30, C.y - 470, 125), (C.x - 10, C.y - 70, 0), 30),             # seasons: titan cut-outs in the lower third
-        (17.2, (C.x + 290, C.y - 400, 140), (C.x - 10, C.y - 40, 0), 30),            # paddock + horses lower third
-        (20.5, (C.x + 46, C.y - 62, 34), (C.x, C.y + 14, 1.5), 32),                  # END: graduation night
+        (0.0, _seam("S3")),                                                          # START (seam S3), daylight
+        (2.6, k((120, -1250, 620), (-60, 300, 0), 30)),                             # over the Trost bulge
+        (4.0, k((-60, -250, 480), (X0, 700, 0), 30)),                                # over Wall Rose: the camps
+        (SI.T_CAMPS_END, k((-150, 380, 420), (X0 - 60, 1250, 0), 30, vel=(-60, 480, -40))),   # camps END (C2 takes over)
+        (SI.T_S7, _seam("S7")),                                                      # training START (seam S7)
+        (9.6, k((C.x - 252, C.y + 140, 30), (C.x - 10, C.y - 10, 0), 30)),           # reveal over the lookout tower
+        (10.9, k((RC.x + 17, RC.y - 21, 13), (RC.x, RC.y + 0.6, 1.9), 36, vel=(-0.6, 0.6, -0.3))),   # Eren upside down
+        (12.6, k((RC.x + 15, RC.y - 19, 12), (RC.x, RC.y + 0.6, 1.9), 36, vel=(-0.6, 0.6, -0.3))),
+        (14.9, k((C.x + 30, C.y - 470, 125), (C.x - 10, C.y - 70, 0), 30)),          # seasons: titan cut-outs, lower third
+        (17.2, k((C.x + 290, C.y - 400, 140), (C.x - 10, C.y - 40, 0), 30)),         # paddock + horses
+        (18.4, k((C.x + 60, C.y - 90, 60), (C.x, C.y + 14, 1.5), 32)),               # graduation night: the rows
+        (19.2, k((C.x + 130, C.y - 130, 120), (C.x + 10, C.y - 10, 0), 30)),
+        (SI.DURATION, _seam("S8")),                                                  # END (seam S8), night
     ]
 
 _TAB = {}
+def _prep():
+    ks = cam_keys(); n = len(ks)
+    T = [t for t, _ in ks]; K = [dict(kk) for _, kk in ks]
+    for kk in K:
+        kk["L"] = kk["loc"] + kk["dir"] * D_LOOK; kk["ln"] = math.log(kk["lens"])
+    for i, kk in enumerate(K):
+        a, b = max(0, i - 1), min(n - 1, i + 1)
+        dt = T[b] - T[a]
+        if "vel" not in kk:
+            kk["vel"] = (K[b]["loc"] - K[a]["loc"]) / dt
+            kk["mL"] = (K[b]["L"] - K[a]["L"]) / dt
+            kk["dlnlens"] = (K[b]["ln"] - K[a]["ln"]) / dt
+        else:
+            kk["mL"] = kk["vel"] + kk.get("ddir", Vector((0, 0, 0))) * D_LOOK
+    _TAB.update(T=T, K=K)
+
+def _h(p0, m0, p1, m1, T, s):
+    h00, h10, h01, h11 = 2 * s ** 3 - 3 * s ** 2 + 1, s ** 3 - 2 * s ** 2 + s, -2 * s ** 3 + 3 * s ** 2, s ** 3 - s ** 2
+    return p0 * h00 + m0 * (h10 * T) + p1 * h01 + m1 * (h11 * T)
+
 def cam_at(t):
+    """Cubic Hermite in time per span with the keys' rates: C1 everywhere, exact position / direction / lens /
+    velocity at the seam keys (what master_timeline's connectors match)."""
     if not _TAB:
-        ks = cam_keys(); T = [k[0] for k in ks]; lnl = [math.log(k[3]) for k in ks]
-        _TAB.update(loc=Channel(T, [k[1] for k in ks]), tgt=Channel(T, [k[2] for k in ks]), T=T, lnl=lnl, ml=_pchip_m(T, lnl))
-    loc, tgt = _TAB["loc"].at(t), _TAB["tgt"].at(t)
-    lens = math.exp(_pchip(_TAB["T"], _TAB["lnl"], _TAB["ml"], t))
-    loc.z = max(loc.z, H(loc.x, loc.y) + 6.0)
-    if abs(loc.y) < 30:                                  # never through Wall Rose
-        loc.z = max(loc.z, L.WALL_H + 25.0)
-    return loc, (tgt - loc).to_track_quat("-Z", "Y").to_euler(), lens
+        _prep()
+    T, K = _TAB["T"], _TAB["K"]
+    t = min(max(t, T[0]), T[-1])
+    i = 0
+    while i < len(T) - 2 and T[i + 1] <= t:
+        i += 1
+    a, b = K[i], K[i + 1]; dT = T[i + 1] - T[i]; s = (t - T[i]) / dT
+    loc = _h(a["loc"], a["vel"], b["loc"], b["vel"], dT, s)
+    look = _h(a["L"], a["mL"], b["L"], b["mL"], dT, s)
+    lens = math.exp(_h(a["ln"], a["dlnlens"], b["ln"], b["dlnlens"], dT, s))
+    seam = min(abs(t - T[0]), abs(t - SI.T_S7), abs(t - T[-1])) < 1e-6
+    if not seam:
+        loc.z = max(loc.z, H(loc.x, loc.y) + 6.0)
+        if abs(loc.y) < 30:                              # never through Wall Rose
+            loc.z = max(loc.z, L.WALL_H + 25.0)
+    return loc, (look - loc).to_track_quat("-Z", "Y").to_euler(), lens
 
 # ---------------------------------------------------------------- per-frame state (pure function of t)
 def _put(owner, attr, val, tol=1e-4):
@@ -910,7 +952,7 @@ def update(st, t):
     _put(st["sun"], "energy", 3.6 * (1 - nite) + 0.06 * nite)
     _put(st["sun"], "color", (1.0, 0.97, 0.92) if nite < 0.5 else (0.55, 0.65, 1.0))
     winter = max(0.0, 1 - abs(((p - 2.0 + 2) % 4) - 2))         # 1 at mid winter
-    set_sun(st, 40 - 14 * winter - 8 * nite, 25 + 20 * math.sin(t * 0.15))
+    set_sun(st, 38 - 14 * winter - 8 * nite, 25 + 20 * math.sin(t * 0.15))
     for n, v in st["bg"]:
         _put(n.inputs[1], "default_value", v * (1 - 0.985 * nite) * (1 - 0.25 * winter), 2e-3)
     for s in FOG_NODES:
@@ -926,7 +968,12 @@ def update(st, t):
     tn = st["tents"]
     grow = np.clip((t - tn["T"][:, 4]) / 0.3, 0, 1)
     set_points(tn["ob"], tn["xyz"], grow * (1.7 if camps_on else 0.0), tn["T"][:, 2], tn["T"][:, 3].astype(int))
+    tm = st["world_ground_mat"] if (st.get("world_ground_mat") and t >= SI.DURATION - 1.3) else st["terrain_mat"]
+    ter = st.get("terrain")
+    if ter and ter.data.materials and ter.data.materials[0] != tm:
+        ter.data.materials[0] = tm
     for ob, base, ta in st["barns"]:
+        _put(ob, "hide_render", not camps_on)
         u = smooth(ta, ta + 0.6, t)
         if abs(ob.location.z - (base.z - 9.0 * (1 - u))) > 1e-4 or ob.location.x != base.x:
             ob.location = (base.x, base.y, base.z - 9.0 * (1 - u))
@@ -1012,7 +1059,7 @@ if __name__ == "__main__":
     t_b = time.time()
     st = build()
     sc = bpy.context.scene
-    cd = bpy.data.cameras.new("Cam"); cd.clip_start = 0.5; cd.clip_end = 40000
+    cd = bpy.data.cameras.new("Cam"); cd.clip_start = 0.5; cd.clip_end = 60000
     cam = bpy.data.objects.new("Cam", cd); sc.collection.objects.link(cam); sc.camera = cam
     L.render_setup(B.engine, B.res, B.samples, "GPU")
     st["expo"] = float(os.environ.get("EXPO", "-1.5"))
@@ -1048,6 +1095,7 @@ if __name__ == "__main__":
     except Exception:
         AN = {}
     t_s = time.time()
+    last_png = None
     for i, t in enumerate(times):
         update(st, t)
         if sc.render.engine == "CYCLES":          # the torch-lit night needs a few more samples than daylight
@@ -1062,8 +1110,16 @@ if __name__ == "__main__":
         bpy.context.view_layer.update()
         hudcam.dump(sc, i, B.out, track=("Eren", "Mikasa", "Armin"), name=None if not B.times else name[:-4], t=t)
         sc.render.filepath = os.path.join(B.out, name)
-        if not B.dry:
+        gap = (not B.times and os.environ.get("INT_RENDER_GAP", "0") != "1"
+               and SI.T_CAMPS_END + 2.5 / B.fps < t < SI.T_S7 - 2.5 / B.fps and last_png)
+        if B.dry:
+            pass
+        elif gap:                                   # 5.2-7.0 is never used by the master (C2 / C3 bridge it): hold a frame
+            import shutil
+            shutil.copyfile(last_png, sc.render.filepath)
+        else:
             bpy.ops.render.render(write_still=True)
+            last_png = sc.render.filepath
         AN[name] = dict(t=round(t, 4), tags=tags, hud=SI.hud_at(t))
         print(f"[int] t={t:.2f}s -> {name} ({time.time() - t_s:.0f}s)", flush=True)
     json.dump(AN, open(apath, "w"), ensure_ascii=False, indent=0)

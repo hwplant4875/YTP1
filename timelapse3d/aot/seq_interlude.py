@@ -13,8 +13,10 @@ Timeline in VIDEO SECONDS (30 fps final, 15 fps previews), 20.5 s total:
   17.6-20.5  graduation 850 night: the cadets in rows saluting, torches round the field.  END KEY: low oblique on the rows
 """
 
-DURATION = 20.5
-T_FLY, T_ENL, T_RIG, T_SEA, T_GRAD = 6.5, 8.5, 10.3, 12.8, 17.6
+DURATION = 307 / 15             # the last preview frame (i = 307) is seam S8 exactly
+T_CAMPS_END = 5.2               # camps segment ends here (master_timeline: camps src_out); C2 bridges on from this state
+T_FLY, T_ENL, T_RIG, T_SEA, T_GRAD = 5.2, 8.5, 10.3, 12.8, 17.6
+T_S7 = 7.0                      # training segment starts here, exactly at seam S7 (5.2-7.0 is never used in the master)
 
 BEATS = [
     (0.0, T_FLY, "camps", "846: rise over Wall Rose; refugee camps; fields cleared, storehouses (summer 846 -> spring 847)"),
@@ -34,7 +36,7 @@ def _smooth(a, b, t):
 def season_at(t):
     """Continuous season phase: 0 summer, 1 autumn, 2 winter (snow), 3 spring (wraps at 4)."""
     if t < T_FLY:                                   # summer 846 -> autumn -> a brief famine winter -> spring 847
-        return 1.2 * _smooth(0.6, 3.2, t) + 1.5 * _smooth(3.4, 4.6, t) + 0.3 * _smooth(4.6, T_FLY - 0.3, t)
+        return 1.2 * _smooth(0.3, 2.5, t) + 1.5 * _smooth(2.7, 3.7, t) + 0.3 * _smooth(3.7, 4.9, t)
     if t < T_SEA:                                   # spring 847 enlist -> summer on the rig
         return (3.0 + 1.0 * _smooth(T_ENL, T_RIG + 1.0, t)) % 4.0
     if t < T_GRAD:                                  # summer 847 -> spring 850 = 11 seasons
@@ -42,7 +44,7 @@ def season_at(t):
     return 3.0
 
 def year_at(t):
-    if t < 3.4:
+    if t < 3.2:
         return 846
     if t < T_SEA:
         return 847
