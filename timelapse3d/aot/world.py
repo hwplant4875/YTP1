@@ -85,7 +85,8 @@ def height_patch(x, y, h):                        # scene.py plug-in hook (coord
     return h * w + (1.0 - w) * world_height(x + o[0], y + o[1])
 
 # ---------------------------------------------------------------- relief (WORLD coordinates)
-# Gentle rolling hills 10-60 m with a few higher wooded ridges (to ~130 m) between the walls; FLAT (0) under the walls
+# Rolling hills 20-120 m with a few higher wooded ridges (to ~200 m) only in the open land far between the walls
+# (relief capped at 30 m within ~2.3-4 km of walls, towns and the valley, so the 50 m walls stay the landmark); FLAT (0) under the walls
 # and their districts, inside and round both town cores and Mitras, along the river valley (river + road on its floor)
 # and along the coast.  Precomputed once on a GRID_M grid (bilinear lookup), so it is cheap for every caller.
 GRID_M = float(os.environ.get("WORLD_GRID_M", "100"))
@@ -108,6 +109,18 @@ def _flat_mask(x, y):
     m = min(m, _smooth(R_MARIA + 16000.0, R_MARIA + 9000.0, d))
     return m
 
+def _big_mask(x, y):
+    """The walls stay the landmark: relief above 30 m only far from every wall, town and the valley (open land)."""
+    d = math.hypot(x - MITRAS[0], y - MITRAS[1])
+    m = 1.0
+    for r in (R_MARIA, R_ROSE, R_SINA):
+        m = min(m, _smooth(2300.0, 4200.0, abs(d - r)))
+    for f in CORES:
+        for (cx, cy), r in CORES[f]:
+            o = SET_ORIGIN[f]
+            m = min(m, _smooth(r + 2500.0, r + 4500.0, math.hypot(x - cx - o[0], y - cy - o[1])))
+    return min(m, _smooth(2200.0, 3500.0, abs(x - valley_x(y))))
+
 def valley_x(y):
     """Centre line of the river valley (between the road and the river) at world y."""
     ty = SET_ORIGIN["trost"][1]
@@ -116,14 +129,15 @@ def valley_x(y):
     return 200.0 * max(0.0, 1 - (y - ty - 2500) / 6000.0)
 
 def _relief_raw(x, y):
-    n1 = noise.noise(Vector((x / 7000.0, y / 7000.0, 0.37)))
-    n2 = noise.noise(Vector((x / 2300.0, y / 2300.0, 3.1)))
-    n3 = noise.noise(Vector((x / 1100.0, y / 1100.0, 5.3)))
-    h = 34.0 + 22.0 * n1 + 10.0 * n2 + 6.0 * n3                            # ~10-60 m rolling ground
+    n1 = noise.noise(Vector((x / 6500.0, y / 6500.0, 0.37)))
+    n2 = noise.noise(Vector((x / 1700.0, y / 1700.0, 3.1)))
+    n3 = noise.noise(Vector((x / 750.0, y / 750.0, 5.3)))
+    loc = 0.5 + 0.5 * noise.noise(Vector((x / 11000.0, y / 11000.0, 9.4)))      # shorter hills only in places
+    h = 68.0 + 40.0 * n1 + (20.0 + 22.0 * loc) * n2 + 20.0 * loc * n3          # ~20-120 m rolling ground, steeper short hills in places                            # ~10-60 m rolling ground
     rg = 1.0 - abs(noise.noise(Vector((x / 9000.0, y / 9000.0, 7.7))))       # ridged: crests along noise zero lines
     sel = _smooth(0.15, 0.55, noise.noise(Vector((x / 16000.0, y / 16000.0, 11.0))))   # only a few ridges
-    h += 75.0 * sel * _smooth(0.86, 0.98, rg)
-    return max(4.0, h)
+    h += 95.0 * sel * _smooth(0.84, 0.98, rg)                                     # ridges to ~200 m
+    return max(10.0, h)
 
 def _build_grid():
     import numpy as np
@@ -137,7 +151,8 @@ def _build_grid():
             y = y0 + j * GRID_M
             m = _flat_mask(x, y)
             if m > 0:
-                G[i, j] = m * _relief_raw(x, y)
+                raw = _relief_raw(x, y)
+                G[i, j] = m * (min(raw, 30.0) + max(0.0, raw - 30.0) * _big_mask(x, y))
     _HG.update(G=G, x0=x0, y0=y0, nx=nx, ny=ny)
 
 def world_height(x, y):
@@ -275,6 +290,8 @@ def ground_mat():
     # very fine grain
     n5 = N.new("ShaderNodeTexNoise"); n5.inputs["Scale"].default_value = 1 / 15.0
     Ln.new(P, n5.inputs["Vector"])
+    geo = N.new("ShaderNodeNewGeometry"); sz_ = N.new("ShaderNodeSeparateXYZ"); Ln.new(geo.outputs["Normal"], sz_.inputs[0])
+    col = _mix(N, Ln, _mr(N, Ln, sz_.outputs["Z"], 0.9993, 0.975, 0.0, 0.55), col, (0.035, 0.07, 0.025, 1))   # darker slopes
     bc = N.new("ShaderNodeBrightContrast"); Ln.new(col, bc.inputs["Color"])
     Ln.new(_mr(N, Ln, n5.outputs["Fac"], 0.0, 1.0, -0.035, 0.035), bc.inputs["Bright"])
     Ln.new(bc.outputs["Color"], b.inputs["Base Color"])
@@ -550,7 +567,7 @@ def build_vegetation(coll, root, allc, mycores, river, road, M=None):
             out = np.minimum(out, np.hypot(X - pl[j, 0], Y - pl[j, 1]))
         return out
     groups = {k: ([], [], []) for k in protos}
-    def add(kind, X, Y, H, jitter=0.25, crown=1.5):
+    def add(kind, X, Y, H, jitter=0.25, crown=1.9):
         n = len(X)
         Z = world_height_np(X, Y) - 0.5
         hs = H * (1 + rng.uniform(-jitter, jitter, n))
@@ -558,23 +575,23 @@ def build_vegetation(coll, root, allc, mycores, river, road, M=None):
         g = groups[kind]; g[0].append(np.stack([X, Y, Z], 1)); g[1].append(S); g[2].append(rng.uniform(0, math.tau, n))
     R_land = R_MARIA + 12000.0
     # 1) forest clumps, varied size, placed preferentially on hills / ridges
-    nc = int(os.environ.get("WORLD_CLUMPS", "750"))
+    nc = int(os.environ.get("WORLD_CLUMPS", "1000"))
     a = rng.uniform(0, math.tau, nc * 3); rr = np.sqrt(rng.uniform(0, 1, nc * 3)) * R_land
     CX, CY = MITRAS[0] + np.cos(a) * rr, MITRAS[1] + np.sin(a) * rr
     hgt = world_height_np(CX, CY)
-    pkeep = 0.12 + 0.88 * np.clip(hgt / 55.0, 0, 1)
+    pkeep = 0.10 + 0.90 * np.clip(hgt / 90.0, 0, 1)
     sel = ok(CX, CY, 300) & (rng.uniform(0, 1, len(CX)) < pkeep)
     CX, CY, hgt = CX[sel][:nc], CY[sel][:nc], hgt[sel][:nc]
-    sizes = np.exp(rng.normal(np.log(220), 0.6, len(CX))) * (1 + hgt / 60.0)
+    sizes = np.exp(rng.normal(np.log(260), 0.55, len(CX))) * (1 + hgt / 90.0)
     floors = []
     for cx, cy, sz, hh in zip(CX, CY, sizes, hgt):
-        n = int(min(1500, 1.2 * sz * sz / 260.0))          # closed canopy (crowns ~10 m radius)
+        n = int(min(1600, 1.2 * sz * sz / 420.0))          # closed canopy (crowns ~11 m radius)
         X = cx + rng.normal(0, sz * 0.5, n); Y = cy + rng.normal(0, sz * 0.38, n)
         g = ok(X, Y)
         X, Y = X[g], Y[g]
         if not len(X):
             continue
-        con = rng.uniform(0, 1, len(X)) < (0.35 + 0.5 * min(1.0, hh / 70.0))     # conifers on the higher ground
+        con = rng.uniform(0, 1, len(X)) < (0.35 + 0.5 * min(1.0, hh / 120.0))    # conifers on the higher ground
         bsel = ~con & (rng.uniform(0, 1, len(X)) < 0.8)
         add("con", X[con], Y[con], 21.0); add("brd", X[bsel], Y[bsel], 15.0)
         floors.append((cx, cy, sz))
@@ -588,7 +605,7 @@ def build_vegetation(coll, root, allc, mycores, river, road, M=None):
         reps = 3
         X = np.repeat(P[:, 0], reps) + rng.normal(0, 14, len(P) * reps); Y = np.repeat(P[:, 1], reps) + rng.normal(0, 14, len(P) * reps)
         add("brd2", X, Y, 13.0)
-    ns = int(os.environ.get("WORLD_SINGLES", "90000"))
+    ns = int(os.environ.get("WORLD_SINGLES", "50000"))
     a = rng.uniform(0, math.tau, ns); rr = np.sqrt(rng.uniform(0, 1, ns)) * R_land
     X, Y = MITRAS[0] + np.cos(a) * rr, MITRAS[1] + np.sin(a) * rr
     g = ok(X, Y)
@@ -689,7 +706,7 @@ def attach(frame=None, M=None, terrain=None, cores=None, trim=True):
     bm = bmesh.new()
     ix0, ix1 = -R_MARIA - 16000.0, R_MARIA + 16000.0
     iy0, iy1 = SEA_Y - 600.0, MITRAS[1] + R_MARIA + 16000.0
-    cell = float(os.environ.get("WORLD_CELL", "300"))
+    cell = float(os.environ.get("WORLD_CELL", "200"))
     nx, ny = int((ix1 - ix0) / cell), int((iy1 - iy0) / cell)
     ix1, iy1 = ix0 + nx * cell, iy0 + ny * cell
     V = {}

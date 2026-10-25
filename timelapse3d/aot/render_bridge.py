@@ -30,6 +30,7 @@ ap = argparse.ArgumentParser(allow_abbrev=False)
 ap.add_argument("--world", required=True, choices=["interlude", "march", "trost", "shig", "base"])
 ap.add_argument("--halves", default="", help="comma list like C2a,C3b")
 ap.add_argument("--stills", default="", help="name:x,y,z:lx,ly,lz:lens;...  WORLD coordinates (world.py); rendered into renders/master/world_stills")
+ap.add_argument("--still-sun", default="", help="el,az (deg): override the Sun for --stills (a low sun shows the relief)")
 ap.add_argument("--still-frame", default="", help="frame of the scene for --stills (shig | trost; default world.active_frame())")
 ap.add_argument("--br-fps", type=float, default=15.0)
 ap.add_argument("--br-samples", type=int, default=4)
@@ -190,6 +191,10 @@ if G.stills:                              # world stills (world coordinates -> t
     fr = G.still_frame or WD.active_frame()
     od = os.path.join(MT.MASTER, "world_stills"); os.makedirs(od, exist_ok=True)
     cam.data.clip_end = 250000.0
+    so = bpy.data.objects.get("Sun")
+    if G.still_sun and so:
+        el_, az_ = (math.radians(float(v)) for v in G.still_sun.split(","))
+        so.rotation_euler = Vector((-math.cos(el_) * math.cos(az_), -math.cos(el_) * math.sin(az_), -math.sin(el_))).to_track_quat("-Z", "Y").to_euler()
     for spec in [x for x in G.stills.split(";") if x.strip()]:
         nm, a, b, ln = spec.split(":")
         loc = Vector(WD.to_set(tuple(float(v) for v in a.split(",")), fr))
