@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # TROST SEGMENT (aot/render_trost.py on the aot/trost.py set + aot/trost_action.py), ONE Blender session per part.
-#   PART=1 bash render_trost.sh          parts: 1 = v 0-40, 2 = v 40-80, 3 = v 80-end (118.8 s)  (15 fps, 854x480)
+#   PART=1 bash render_trost.sh          parts: 1 = v 0-38, 2 = v 38-76, 3 = v 76-end (111 s)  (15 fps, 854x480)
 #   STILLS="8.5,14.2,30" bash render_trost.sh       stills only (video seconds) into OUT
 #   DRY=1 bash render_trost.sh           build + print the timeline / camera, no render
 # Env: ENGINE (CYCLES|BLENDER_EEVEE), SMP (samples), STEP (render every Nth frame; the encode repeats frames)
 FPS="${FPS:-15}"; SMP="${SMP:-1}"; STEP="${STEP:-2}"; PART="${PART:-1}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 OUT="${OUT:-E:/YTP2/3D Timelapse/renders/trost}"
-case "$PART" in 1) V0=0; V1=40;; 2) V0=40; V1=80;; 3) V0=80; V1=999;; esac
+case "$PART" in 1) V0=0; V1=38;; 2) V0=38; V1=76;; 3) V0=76; V1=999;; esac
 [ -n "$WIN" ] && V0=${WIN%,*} && V1=${WIN#*,}
 FR="$OUT/frames_p$PART"; mkdir -p "$OUT"; rm -f "$FR/_done"
 EXTRA="--v0 $V0 --v1 $V1 --step $STEP"

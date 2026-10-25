@@ -123,11 +123,11 @@ _SP = [  # (T0, T1, dv, scaled_by_SET_K)
     (71.5, 74.5, 2.0, 0),                           # move to the boulder
     (74.5, 79, 4.0, 1),                             # boulder_shift (red flare)
     (79, 82, 3.0, 1),                               # boulder_stab
-    (82, 99, 14.0, 1),                              # boulder_carry  (the most important beat)
-    (99, 104, 5.0, 1),                              # boulder_seal (yellow flare)
-    (104, 111, 4.0, 1),                             # levi
-    (111, 113, 1.0, 0),
-    (113, 125, 5.0, 1)]                             # pyres at dusk, pull away
+    (82, 110, 18.0, 1),                             # boulder_carry (the walk T 84.6-109.6; escort kills 88/93/98/102.5/106.5)
+    (110, 115, 5.0, 1),                             # boulder_seal: drop 111-112.4, seal dust, yellow flares 113.6/113.9
+    (115, 122, 4.0, 1),                             # levi
+    (122, 124, 1.0, 0),
+    (124, 136, 5.0, 1)]                             # pyres at dusk (marco 128.5-131.5 seen from the air), pull away
 SEGS = [(a, b, dv * (SET_K if sp else 1.0)) for a, b, dv, sp in _SP]
 KV = [V_KICK]; KT = [0.0]
 for a, b, dv in SEGS:
@@ -234,8 +234,8 @@ def cam_keys():
     kt(2.0, (90, GY + 210, 175), (0, GY + 45, 0), 30)
     kt(6.8, (60, GY + 270, 195), (-6, GY + 130, 0), 30)
     # ---- evacuation at the OPEN inner gate: the cart, Mikasa, the crowd escaping (TODO(D): evacuation timing)
-    kt(10.3, (igx + 120, -235, 175), (igx, -25, 0), 34)
-    kt(15.7, (igx + 100, -205, 160), (igx, 5, 0), 34)
+    kt(10.3, (igx + 70, -135, 88), (igx, -18, 0), 36)                     # lower (60-90 m): the cart, the jam
+    kt(15.7, (igx + 60, -118, 78), (igx, 4, 0), 36)
     # ---- Mikasa's dash and fall (seen a little), the Attack Titan arrives and beats the titan at the bell tower
     for T in (21.5, 25.5):
         m = TA.hero_pos("mikasa", T)
@@ -254,8 +254,8 @@ def cam_keys():
     kt(57.0, rel(Cp, -55, -95, 120), rel(Cp, 0, 0, 3), 40)                   # Eren out of the nape
     # ---- big move across the district to the cannon basin (TODO(D): cannon / salute staging at CANNON_BASIN)
     bc = TR.CANNON_BASIN["center"]; land = TR.CANNON_BASIN["landing"]
-    kt(61.7, (bc[0] - 105, bc[1] - 115, 125), (bc[0] - 2, bc[1], 2), 40)
-    kt(63.4, (bc[0] - 98, bc[1] - 108, 118), (bc[0], bc[1], 2), 42)
+    kt(61.7, (bc[0] - 62, bc[1] - 66, 82), (bc[0] - 4, bc[1], 6), 38)      # lower: the half-shift skeleton, steam
+    kt(63.4, (bc[0] - 58, bc[1] - 62, 76), (bc[0] - 4, bc[1], 7), 40)
     kt(63.8, (land[0] - 80, land[1] - 85, 100), (land[0], land[1] + 6, 3), 46)
     kt(65.9, (land[0] - 76, land[1] - 80, 96), (land[0], land[1] + 6, 3), 50)  # salute (overlay hold)
     # ---- Pyxis on the wall top above the inner gate
@@ -265,17 +265,17 @@ def cam_keys():
     # ---- the boulder: shift (red flare), stab, the carry down the avenue, the seal (yellow flare)
     kt(74.8, rel(sp_, 95, 110, 150), rel(sp_, 0, 0, 6), 34)
     kt(81.7, rel(sp_, 85, 100, 140), rel(sp_, 0, 0, 8), 36)
-    for T in (85.0, 89.0, 93.0, 97.0):
+    for T in (85.0, 90.0, 95.0, 100.0, 105.0, 109.0):                      # the carry, the escort kills around it
         a = at(T)
-        kt(T, rel(a, 120, 80, 175), rel(a, 0, -25, 8), 32)
-    kt(99.6, (95, GY + 190, 165), (0, GY + 8, 10), 34)
-    kt(103.8, (85, GY + 175, 155), (0, GY + 6, 10), 36)
+        kt(T, rel(a, 58, 46, 92), rel(a, 0, -10, 9), 34)                 # lower + steep: the Titan under the boulder
+    kt(110.6, (90, GY + 180, 150), (0, GY + 6, 9), 34)                     # the seal, yellow flares
+    kt(114.8, (82, GY + 168, 142), (0, GY + 5, 9), 36)
     # ---- Levi (aerial), then the dusk pyres and pull away
-    kt(105.0, rel(stop, 85, 125, 145), rel(stop, 0, 15, 6), 36)
-    kt(110.8, rel(stop, 80, 118, 140), rel(stop, 0, 18, 4), 38)
+    kt(115.6, rel(stop, 85, 125, 145), rel(stop, 0, 15, 6), 36)
+    kt(121.6, rel(stop, 80, 118, 140), rel(stop, 0, 18, 4), 38)
     pc = np.array(TR.PLAZA[:2])
-    kt(114.0, rel(pc, 120, -140, 160), rel(pc, 0, 0, 2), 34)
-    kt(124.9, rel(pc, 200, -260, 260), rel(pc, 0, 10, 0), 30)
+    kt(125.0, rel(pc, 120, -140, 160), rel(pc, 0, 0, 2), 34)
+    kt(135.9, rel(pc, 200, -260, 260), rel(pc, 0, 10, 0), 30)
     K.sort(key=lambda e: e[0])
     out = []
     for e in K:
@@ -444,7 +444,9 @@ def build_breach():
 def breach_at(v):
     t = v - V_KICK
     if BR.get("door"):
-        BR["door"].hide_render = t >= 0
+        BR["door"].hide_render = BR["door"].hide_viewport = t >= 0
+    if hasattr(TR, "set_breach"):
+        TR.set_breach(t >= 0)
     for b in BR["blocks"]:
         ob = b["ob"]
         if t < 0 or t > 40:

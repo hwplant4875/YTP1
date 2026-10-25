@@ -36,7 +36,7 @@ API (module `trost`; read the constants after import, call the functions after b
               terrace_n / terrace_s (x0, x1, y0, y1, z), quay, boat).  A sunken stone dock beside the canal (refs
               trost_cannon_canal / trost_armin_salute_steps); object TrostCannonBasin, TrostBoat
   ground_z(x, y) includes the basin terraces / steps (basin_z); walkable() includes the basin
-  BOULDER     (-68, -450, 0)     bottom centre of the boulder; BOULDER_SIZE (14, 14, 13.6), near-sphere; object "TrostBoulder"; boulder_mesh(origin="center") for carry
+  BOULDER     (-68, -450, 0)     bottom centre of the boulder; BOULDER_SIZE (15.2, 15.2, 14.5), near-sphere; object "TrostBoulder"; boulder_mesh(origin="center") for carry
   BOULDER_SQUARE (-68, -450, 40); BOULDER_ROUTE  polyline boulder -> avenue -> outer gate (Eren's carry)
   AVENUE      polyline outer gate -> inner gate (straight main street, hw 8); EVAC_ROUTE plaza -> inner gate
   INNER_GATE_SQUARE (x0, y0, x1, y1); OUTER_GATE_SQUARE (x, y, r)
@@ -50,6 +50,7 @@ API (module `trost`; read the constants after import, call the functions after b
   set_hq_cutaway(on)        hide/show the HQ roof, upper storeys and floor slabs (sky view into the storeroom)
   set_hq_lift(frac)         0 = platform up at the 1st floor (z 10), 1 = down on the storeroom floor
   set_wagon(on)             Dimo Reeves' cargo wagon jammed in the inner gate (hidden by default)
+  set_breach(on)            after the kick: OuterGate + door -> OuterGateBroken (15.6 x 15 m opening) + OuterGateRubble
   set_lift(i, frac)         wall lift i platform height, 0 = ground, 1 = wall top
 Object names kept from Shiganshina so fx code can find them: OuterGate, OuterGate_Door, InnerGate (no InnerGate_Door).
 World layer: agent G's world.py (AOT_PLUGINS=...,world) places this frame at world (0, 5000), keeps the set's terrain
@@ -88,7 +89,7 @@ WATER_GATE_ROSE = (CANAL_X, 0.0)
 WATER_GATE_OUTER = (CANAL_X, district_ymin(CANAL_X))
 PLAZA = (-100.0, -250.0, 42.0)
 BOULDER = (-68.0, -450.0, 0.0)
-BOULDER_SIZE = (14.0, 14.0, 13.6)     # a near-perfect grey sphere ~14 m across (ep 12-13), bigger than the houses
+BOULDER_SIZE = (15.2, 15.2, 14.5)     # a near-perfect grey sphere ~15 m across (ep 12-13; TA_BOULDER_R 7.6)
 BOULDER_SQUARE = (-68.0, -450.0, 44.0)
 INNER_GATE_SQUARE = (INNER_GATE[0] - 60, -70.0, INNER_GATE[0] + 60, -12.0)
 OUTER_GATE_SQUARE = (0.0, OUTER_GATE[1] + 38, 38.0)
@@ -355,6 +356,23 @@ def build_walls(M):
     L.wall_top("WallTopTrost", dist, d_gaps, M)
     L.gatehouse("InnerGate", INNER_GATE, 0, M, door=False)   # open passage for the evacuation (HANDOFF 09:37)
     L.gatehouse("OuterGate", OUTER_GATE, 0, M, deep=8.0)
+    # the BREACH (hidden until the kick, set_breach(True)): a broken ~15.6 m wide x 15 m high opening that the
+    # 15.2 m boulder plugs flush, with jagged broken blocks around its edge and rubble at its foot
+    br = L.gatehouse("OuterGateBroken", OUTER_GATE, 0, M, w=15.6, h=15.0, door=False)
+    bm = bmesh.new(); rnd = random.Random(4)
+    for k in range(26):
+        a = rnd.uniform(0.0, math.pi)
+        r = rnd.uniform(7.6, 9.4)
+        x, z = math.cos(a) * r, 7.5 + math.sin(a) * r * 0.95
+        L.box(bm, (OUTER_GATE[0] + x, OUTER_GATE[1] + rnd.uniform(-4, 4), z), (rnd.uniform(1.0, 2.6),) * 3,
+              rot=rnd.uniform(0, 3), taper=(rnd.uniform(0.6, 1.0), rnd.uniform(0.6, 1.0)))
+    for k in range(40):
+        x, y = rnd.uniform(-12, 12), OUTER_GATE[1] + rnd.uniform(-6, 14)
+        sz = rnd.uniform(0.6, 2.4)
+        L.box(bm, (OUTER_GATE[0] + x, y, sz * 0.35), (sz, sz * rnd.uniform(0.6, 1.2), sz * 0.7), rot=rnd.uniform(0, 3))
+    rb = L.obj_from_bm("OuterGateRubble", bm, [M["stone"]])
+    for o in (br, rb):
+        o.hide_render = o.hide_viewport = True
     L.gatehouse("WaterGateRose", WATER_GATE_ROSE, 0, M, w=CANAL_W, h=11, door=False)
     a = math.atan2(WATER_GATE_OUTER[1] + S, WATER_GATE_OUTER[0])
     L.gatehouse("WaterGateOuter", WATER_GATE_OUTER, a + math.pi / 2, M, w=CANAL_W, h=11, door=False)
@@ -418,6 +436,13 @@ def build_lifts(M):
         po = L.obj_from_bm(spec["platform"], pb, [M["gate"], M["iron"]], lc)
         po.parent = ob; po.location = (0, (y0 + y1) / 2, 0.4)
     return lc
+
+def set_breach(on=True):
+    """After the kick: the intact OuterGate (+ door) is replaced by the broken, boulder-sized opening and rubble."""
+    for n, vis in (("OuterGate", not on), ("OuterGate_Door", not on), ("OuterGateBroken", on), ("OuterGateRubble", on)):
+        o = bpy.data.objects.get(n)
+        if o:
+            o.hide_render = o.hide_viewport = not vis
 
 def set_lift(i, frac):
     po = bpy.data.objects.get(WALL_LIFTS[i]["platform"])
