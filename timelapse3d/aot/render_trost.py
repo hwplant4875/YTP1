@@ -230,9 +230,9 @@ def cam_keys():
     k(11.4, (ex - 5, ey + 165, 130), (-10, GY - 15, 52), 34)
     k(13.6, (40, GY + 230, 165), (0, GY + 25, 12), 32)                  # the kick
     # ---- flood: titans pouring in through the smashed gate
-    kt(2.2, (55, GY + 150, 160), (0, GY + 30, 0), 32)                      # on the breach: the stream pours in
-    kt(5.5, (45, GY + 220, 165), (-8, GY + 110, 0), 32)                    # following the stream up the avenue
-    kt(8.8, (30, GY + 300, 170), (-20, GY + 200, 0), 32)
+    kt(2.2, (55, GY + 140, 150), (0, GY + 10, 0), 34)                      # on the breach: the stream pours in
+    kt(5.5, (50, GY + 150, 150), (-2, GY + 25, 0), 34)                     # titans 15-45 m inside, fanning out
+    kt(8.8, (40, GY + 175, 150), (-6, GY + 50, 0), 34)
     # ---- evacuation at the OPEN inner gate: the cart, Mikasa, the crowd escaping (TODO(D): evacuation timing)
     kt(10.3, (igx + 70, -135, 88), (igx, -18, 0), 36)                     # lower (60-90 m): the cart, the jam
     kt(15.7, (igx + 60, -118, 78), (igx, 4, 0), 36)
@@ -246,19 +246,19 @@ def cam_keys():
         a = at(T)
         kt(T, rel(a, -100, -160, 190), rel(a, 0, 0, 8), 32)
     # ---- the HQ (keep + warehouse): the lift operation in the warehouse cutaway (TODO(D): gunfire + nape ring)
-    kt(46.4, rel(hq, -45, -85, 115), rel(hq, 0, 0, 2), 40)
-    kt(53.6, rel(hq, -40, -78, 108), rel(hq, 0, 0, 2), 42)
+    kt(46.4, rel(hq, -28, -55, 80), rel(hq, 0, 0, 2), 42)                 # closer on the lift ring: volley, dives
+    kt(53.6, rel(hq, -25, -50, 75), rel(hq, 0, 0, 2), 44)
     kt(57.0, rel(Cp, -55, -95, 120), rel(Cp, 0, 0, 3), 40)                   # Eren out of the nape
     # ---- big move across the district to the cannon basin (TODO(D): cannon / salute staging at CANNON_BASIN)
     bc = TR.CANNON_BASIN["center"]; land = TR.CANNON_BASIN["landing"]
-    kt(61.7, (bc[0] - 62, bc[1] - 66, 82), (bc[0] - 4, bc[1], 6), 38)      # lower: the half-shift skeleton, steam
-    kt(63.4, (bc[0] - 58, bc[1] - 62, 76), (bc[0] - 4, bc[1], 7), 40)
+    kt(61.7, (bc[0] - 50, bc[1] - 53, 68), (bc[0] - 4, bc[1], 6), 38)      # lower + 20% closer: the half-shift, steam
+    kt(63.4, (bc[0] - 46, bc[1] - 50, 63), (bc[0] - 4, bc[1], 7), 40)
     kt(63.8, (land[0] - 80, land[1] - 85, 100), (land[0], land[1] + 6, 3), 46)
     kt(65.9, (land[0] - 76, land[1] - 80, 96), (land[0], land[1] + 6, 3), 50)  # salute (overlay hold)
     # ---- Pyxis on the wall top above the inner gate
     sx, sy, sz = TR.WALLTOP_SPEECH
-    kt(68.8, (sx + 75, sy - 125, 125), (sx, sy, sz), 46)
-    kt(71.3, (sx + 70, sy - 118, 120), (sx, sy, sz), 50)
+    kt(68.8, (sx + 30, sy - 58, 98), (sx, sy, sz + 1), 50)                # closer + steeper: Pyxis and the ranks
+    kt(71.3, (sx + 27, sy - 53, 94), (sx, sy, sz + 1), 54)
     # ---- the boulder: shift (red flare), stab, the carry down the avenue, the seal (yellow flare)
     kt(74.8, rel(sp_, 95, 110, 150), rel(sp_, 0, 0, 6), 34)
     kt(81.7, rel(sp_, 85, 100, 140), rel(sp_, 0, 0, 8), 36)

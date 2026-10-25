@@ -260,7 +260,7 @@ def walkable(x, y):
     if 8 < y < 140 and abs(x - ix) < 16 + (y - 8) * 0.5:               # road/field north of the inner gate (Rose)
         return True
     oy = OUTER_GATE[1]
-    if abs(x) < 6.0 and oy - 12 <= y <= oy + 12:                        # outer gate passage
+    if abs(x) < 7.6 and oy - 12 <= y <= oy + 14:                        # outer gate passage (the 15.6 m breach)
         return True
     if oy - 160 < y < oy - 6 and abs(x) < 26 + (oy - 6 - y) * 0.6:      # outside the outer gate (Maria land)
         return True
@@ -1072,6 +1072,16 @@ def build_set(M, year):
     M["gas"] = L.mat("GasTank", (0.42, 0.45, 0.48), 0.35)
     M["roof_flat"] = L.mat("RoofFlat", (0.33, 0.29, 0.25), 0.9, var=0.15, var_scale=0.1)
     M["rock"] = marble_mat()
+    try:                                                       # less glossy canal water (no sun-glare blobs)
+        wn = M["water"].node_tree; wb = wn.nodes["Principled BSDF"]
+        wb.inputs["Roughness"].default_value = 0.25
+        tcw = wn.nodes.new("ShaderNodeTexCoord"); nzw = wn.nodes.new("ShaderNodeTexNoise")
+        nzw.inputs["Scale"].default_value = 0.9; nzw.inputs["Detail"].default_value = 4
+        wn.links.new(tcw.outputs["Object"], nzw.inputs["Vector"])
+        bpw = wn.nodes.new("ShaderNodeBump"); bpw.inputs["Strength"].default_value = 0.25
+        wn.links.new(nzw.outputs["Fac"], bpw.inputs["Height"]); wn.links.new(bpw.outputs["Normal"], wb.inputs["Normal"])
+    except Exception:
+        pass
     M["rubble"] = L.mat("Rubble", (0.20, 0.18, 0.16), 0.95, var=0.2, var_scale=0.5)
     M["tarp"] = L.mat("Tarp", (0.45, 0.40, 0.28), 0.9)
     M["church_w"] = L.mat("ChurchWhite", (0.80, 0.76, 0.66), 0.85, var=0.1, var_scale=0.2)
