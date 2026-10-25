@@ -302,3 +302,5 @@ TROST:
 
 ## 13:40 (10/25) USER RULE: Armored Titan ram animation
 - The Armored RUNS straight at the inner gate, facing forward, normal run cycle. Only in the last ~0.4 s before impact it drops its shoulder and leans into the hit like a rugby tackle (torso twists ~30-40°, shoulder leads, head tucked, legs keep driving). Never rotate the whole body sideways.
+
+## 15:29 (10/25 UTC) USER: the Trost boulder is a near-perfect ROUND ball-like rock (as in the anime), huge (larger than the houses, ~12-15 m), not a craggy lump. Plus 13:49 QA (pending, agents paused by the usage limit): HQ warm sandstone with block texture and DARK slate warehouse roof (only turret roofs slate blue-grey); cannon basin old stone texture with damp darker lower walls and moss streaks, visible step edges; Trost roof colour variation.
