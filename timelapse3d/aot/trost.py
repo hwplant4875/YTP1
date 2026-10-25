@@ -36,7 +36,7 @@ API (module `trost`; read the constants after import, call the functions after b
               terrace_n / terrace_s (x0, x1, y0, y1, z), quay, boat).  A sunken stone dock beside the canal (refs
               trost_cannon_canal / trost_armin_salute_steps); object TrostCannonBasin, TrostBoat
   ground_z(x, y) includes the basin terraces / steps (basin_z); walkable() includes the basin
-  BOULDER     (-68, -450, 0)     bottom centre of the boulder; BOULDER_SIZE (16, 15, 13); object "TrostBoulder"; boulder_mesh(origin="center") for carry
+  BOULDER     (-68, -450, 0)     bottom centre of the boulder; BOULDER_SIZE (14, 14, 13.6), near-sphere; object "TrostBoulder"; boulder_mesh(origin="center") for carry
   BOULDER_SQUARE (-68, -450, 40); BOULDER_ROUTE  polyline boulder -> avenue -> outer gate (Eren's carry)
   AVENUE      polyline outer gate -> inner gate (straight main street, hw 8); EVAC_ROUTE plaza -> inner gate
   INNER_GATE_SQUARE (x0, y0, x1, y1); OUTER_GATE_SQUARE (x, y, r)
@@ -88,7 +88,7 @@ WATER_GATE_ROSE = (CANAL_X, 0.0)
 WATER_GATE_OUTER = (CANAL_X, district_ymin(CANAL_X))
 PLAZA = (-100.0, -250.0, 42.0)
 BOULDER = (-68.0, -450.0, 0.0)
-BOULDER_SIZE = (16.0, 15.0, 13.0)     # bigger than a house: the 15 m Attack Titan hunches under it
+BOULDER_SIZE = (14.0, 14.0, 13.6)     # a near-perfect grey sphere ~14 m across (ep 12-13), bigger than the houses
 BOULDER_SQUARE = (-68.0, -450.0, 44.0)
 INNER_GATE_SQUARE = (INNER_GATE[0] - 60, -70.0, INNER_GATE[0] + 60, -12.0)
 OUTER_GATE_SQUARE = (0.0, OUTER_GATE[1] + 38, 38.0)
@@ -642,7 +642,11 @@ def build_basin(M):
     L.box(bm, (X1 - 0.6, (Y0 + Y1) / 2, 0.25), (1.2, Y1 - Y0, 0.5), mi=0)
     for yy in (Y0 + 8, (Y0 + Y1) / 2, Y1 - 8):
         L.cyl(bm, (X1 - 0.8, yy, 0.4), (X1 - 0.8, yy, 1.3), 0.35, 0.28, seg=8, mi=2)
-    ob = L.obj_from_bm("TrostCannonBasin", bm, [M["hq_stone"], M["moss_floor"], M["iron"]])
+    for side in (1, -1):                                                               # dark step nosings
+        for k in range(_BSTEP_N):
+            yn = (Y1 + k * _BSTEP_D) if side > 0 else (Y0 - k * _BSTEP_D)
+            L.box(bm, ((X0 + X1) / 2, yn, (k + 1) * _BSTEP_H - 0.03), (span, 0.14, 0.1), mi=3)
+    ob = L.obj_from_bm("TrostCannonBasin", bm, [M["basin_stone"], M["moss_floor"], M["iron"], M["step_edge"]])
     # the boat at the quay
     bb = bmesh.new()
     L.box(bb, (0, 0, 0.55), (9.0, 2.6, 0.9), taper=(1.0, 1.25), mi=0)
@@ -688,6 +692,92 @@ def build_church(M):
     return ob
 
 # ---------------------------------------------------------------- the boulder
+def _uv_walls(N, Lk, tc):
+    """(x + y, z) from object coordinates: a wall-plane coordinate that works for walls facing x or y."""
+    sep = N.new("ShaderNodeSeparateXYZ"); Lk.new(tc.outputs["Object"], sep.inputs[0])
+    ad = N.new("ShaderNodeMath"); ad.operation = "ADD"; Lk.new(sep.outputs["X"], ad.inputs[0]); Lk.new(sep.outputs["Y"], ad.inputs[1])
+    cb = N.new("ShaderNodeCombineXYZ"); Lk.new(ad.outputs[0], cb.inputs["X"]); Lk.new(sep.outputs["Z"], cb.inputs["Y"])
+    # horizontal faces (tops of steps, terraces, roofs) use (x, y) so the blocks don't smear into plank stripes
+    geo = N.new("ShaderNodeNewGeometry"); sn = N.new("ShaderNodeSeparateXYZ"); Lk.new(geo.outputs["Normal"], sn.inputs[0])
+    ab = N.new("ShaderNodeMath"); ab.operation = "ABSOLUTE"; Lk.new(sn.outputs["Z"], ab.inputs[0])
+    gt = N.new("ShaderNodeMath"); gt.operation = "GREATER_THAN"; gt.inputs[1].default_value = 0.6; Lk.new(ab.outputs[0], gt.inputs[0])
+    mx = N.new("ShaderNodeMix"); mx.data_type = "VECTOR"
+    Lk.new(gt.outputs[0], mx.inputs["Factor"]); Lk.new(cb.outputs[0], mx.inputs[4]); Lk.new(tc.outputs["Object"], mx.inputs[5])
+    return mx.outputs[1], sep.outputs["Z"]
+
+def stone_block_mat(name, base, base2, mortar, scale=0.6, damp=0.0, moss=0.0):
+    """Procedural stone blocks (sandstone / old dock stone): running-bond blocks ~0.8 x 0.4 m with per-block colour
+    variation, grime noise and mortar bump.  damp > 0 darkens the lower walls (object z < ~4 m) with vertical moss
+    streaks (the cannon basin, ref trost_cannon_canal_ref.png)."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree; N = nt.nodes; Lk = nt.links
+    bsdf = N["Principled BSDF"]; bsdf.inputs["Roughness"].default_value = 0.9
+    tc = N.new("ShaderNodeTexCoord")
+    uv, z = _uv_walls(N, Lk, tc)
+    br = N.new("ShaderNodeTexBrick"); br.inputs["Scale"].default_value = scale
+    br.inputs["Color1"].default_value = (*base, 1); br.inputs["Color2"].default_value = (*base2, 1)
+    br.inputs["Mortar"].default_value = (*mortar, 1); br.inputs["Mortar Size"].default_value = 0.025
+    br.inputs["Bias"].default_value = 0.0; br.offset = 0.5
+    Lk.new(uv, br.inputs["Vector"])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.35; nz.inputs["Detail"].default_value = 6
+    Lk.new(tc.outputs["Object"], nz.inputs["Vector"])
+    gr = N.new("ShaderNodeMix"); gr.data_type = "RGBA"; gr.blend_type = "MULTIPLY"; gr.inputs["Factor"].default_value = 0.35
+    Lk.new(br.outputs["Color"], gr.inputs["A"]); Lk.new(nz.outputs["Color"], gr.inputs["B"])
+    col = gr.outputs["Result"]
+    if damp > 0:
+        dz = N.new("ShaderNodeMapRange"); dz.inputs["From Min"].default_value = 4.5; dz.inputs["From Max"].default_value = 0.5
+        Lk.new(z, dz.inputs["Value"])
+        st = N.new("ShaderNodeVectorMath"); st.operation = "MULTIPLY"; st.inputs[1].default_value = (0.9, 0.9, 0.06)
+        Lk.new(tc.outputs["Object"], st.inputs[0])
+        sn = N.new("ShaderNodeTexNoise"); sn.inputs["Scale"].default_value = 1.4; sn.inputs["Detail"].default_value = 4
+        Lk.new(st.outputs[0], sn.inputs["Vector"])
+        streak = N.new("ShaderNodeMath"); streak.operation = "MULTIPLY"; Lk.new(sn.outputs["Fac"], streak.inputs[0])
+        Lk.new(dz.outputs["Result"], streak.inputs[1])
+        fac = N.new("ShaderNodeMath"); fac.operation = "MULTIPLY"; fac.inputs[1].default_value = damp * 1.6
+        Lk.new(streak.outputs[0], fac.inputs[0])
+        dk = N.new("ShaderNodeMix"); dk.data_type = "RGBA"; dk.blend_type = "MULTIPLY"
+        Lk.new(fac.outputs[0], dk.inputs["Factor"]); Lk.new(col, dk.inputs["A"]); dk.inputs["B"].default_value = (0.25, 0.27, 0.2, 1)
+        col = dk.outputs["Result"]
+        if moss > 0:
+            mf = N.new("ShaderNodeMath"); mf.operation = "MULTIPLY"; mf.inputs[1].default_value = moss
+            Lk.new(fac.outputs[0], mf.inputs[0])
+            mm = N.new("ShaderNodeMix"); mm.data_type = "RGBA"
+            Lk.new(mf.outputs[0], mm.inputs["Factor"]); Lk.new(col, mm.inputs["A"]); mm.inputs["B"].default_value = (0.06, 0.09, 0.035, 1)
+            col = mm.outputs["Result"]
+    Lk.new(col, bsdf.inputs["Base Color"])
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.3
+    Lk.new(br.outputs["Fac"], bp.inputs["Height"]); Lk.new(bp.outputs["Normal"], bsdf.inputs["Normal"])
+    return m
+
+def marble_mat(name="TrostBoulderMarble"):
+    """Smooth grey stone with a subtle marbled surface (the anime boulder: a near-perfect grey sphere)."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree; N = nt.nodes; Lk = nt.links
+    bsdf = N["Principled BSDF"]; bsdf.inputs["Roughness"].default_value = 0.55
+    tc = N.new("ShaderNodeTexCoord")
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.25; nz.inputs["Detail"].default_value = 8
+    nz.inputs["Distortion"].default_value = 2.5
+    Lk.new(tc.outputs["Object"], nz.inputs["Vector"])
+    wv = N.new("ShaderNodeTexWave"); wv.inputs["Scale"].default_value = 0.12; wv.inputs["Distortion"].default_value = 9.0
+    wv.inputs["Detail"].default_value = 6
+    Lk.new(tc.outputs["Object"], wv.inputs["Vector"])
+    rp = N.new("ShaderNodeValToRGB"); e = rp.color_ramp.elements
+    e[0].position, e[0].color = 0.25, (0.26, 0.26, 0.265, 1)
+    e[1].position, e[1].color = 0.8, (0.34, 0.335, 0.33, 1)
+    mx = N.new("ShaderNodeMath"); mx.operation = "ADD"
+    Lk.new(nz.outputs["Fac"], mx.inputs[0]); Lk.new(wv.outputs["Fac"], mx.inputs[1])
+    wq = N.new("ShaderNodeMath"); wq.operation = "MULTIPLY"; wq.inputs[1].default_value = 0.25    # faint veins only
+    Lk.new(wv.outputs["Fac"], wq.inputs[0])
+    mx2 = N.new("ShaderNodeMath"); mx2.operation = "ADD"; Lk.new(nz.outputs["Fac"], mx2.inputs[0]); Lk.new(wq.outputs[0], mx2.inputs[1])
+    hf = N.new("ShaderNodeMath"); hf.operation = "MULTIPLY"; hf.inputs[1].default_value = 0.8
+    Lk.new(mx2.outputs[0], hf.inputs[0]); Lk.new(hf.outputs[0], rp.inputs["Fac"])
+    Lk.new(rp.outputs["Color"], bsdf.inputs["Base Color"])
+    fn = N.new("ShaderNodeTexNoise"); fn.inputs["Scale"].default_value = 6.0; fn.inputs["Detail"].default_value = 4
+    Lk.new(tc.outputs["Object"], fn.inputs["Vector"])
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.08
+    Lk.new(fn.outputs["Fac"], bp.inputs["Height"]); Lk.new(bp.outputs["Normal"], bsdf.inputs["Normal"])
+    return m
+
 def rock_mat(name="TrostRock"):
     """Rough boulder shading: grey-brown mottling, dark crevices along Voronoi cracks, moss on up-facing surfaces,
     bump from the cracks + fine grain (design bible 3.6: albedo ~#7a706a, fracture faces lighter)."""
@@ -739,26 +829,18 @@ def rock_mat(name="TrostRock"):
     return m
 
 def boulder_mesh(name="TrostBoulderMesh", origin="bottom"):
-    """Lumpy flattened boulder of BOULDER_SIZE: multi-octave displacement plus a few planar fracture cuts
-    (flat facets) and a flat seat. origin = "bottom" (bottom centre) or "center"."""
+    """The anime boulder: an almost perfectly round, smooth grey near-sphere (slight irregularity only, a small flat
+    seat where it rests). origin = "bottom" (bottom centre) or "center"."""
     bm = bmesh.new()
     bmesh.ops.create_icosphere(bm, subdivisions=4, radius=1.0)
     rx, ry, rz = BOULDER_SIZE[0] / 2, BOULDER_SIZE[1] / 2, BOULDER_SIZE[2] / 2
-    rnd = random.Random(17)
-    cuts = [(Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-0.3, 1))).normalized(), rnd.uniform(0.78, 0.9)) for _ in range(6)]
     for v in bm.verts:
         n = v.co.normalized()
-        d = (1.0 + 0.20 * noise.noise(n * 1.2 + Vector((3, 1, 7))) + 0.09 * noise.noise(n * 3.1 + Vector((1, 9, 2)))
-             + 0.04 * noise.noise(n * 7.5 + Vector((4, 2, 8))) + 0.015 * noise.noise(n * 18 + Vector((7, 3, 1))))
-        p = n * d
-        for cn, cd in cuts:                                   # fracture planes: clamp to flat facets
-            k = p.dot(cn)
-            if k > cd:
-                p -= cn * (k - cd) * 0.85
-        v.co = Vector((p.x * rx, p.y * ry, p.z * rz))
-        if v.co.z < -rz * 0.72:
-            v.co.z = -rz * 0.72 + 0.05 * noise.noise(v.co * 0.4)
-    zoff = rz * 0.72 - 0.4 if origin == "bottom" else -0.0
+        d = 1.0 + 0.025 * noise.noise(n * 1.4 + Vector((3, 1, 7))) + 0.008 * noise.noise(n * 4.0 + Vector((1, 9, 2)))
+        v.co = Vector((n.x * rx * d, n.y * ry * d, n.z * rz * d))
+        if v.co.z < -rz * 0.93:
+            v.co.z = -rz * 0.93                                          # small flat seat
+    zoff = rz * 0.93 - 0.15 if origin == "bottom" else 0.0
     for v in bm.verts:
         v.co.z += zoff
     for f in bm.faces:
@@ -774,8 +856,8 @@ def build_boulder(M):
     ob.rotation_euler.z = math.radians(28)
     rb = bmesh.new()                                                    # rubble and loose rocks around its seat
     rnd = random.Random(13)
-    for i in range(34):
-        a = rnd.uniform(0, math.tau); r = rnd.uniform(8.5, 14.0); s = rnd.uniform(0.4, 1.6)
+    for i in range(14):
+        a = rnd.uniform(0, math.tau); r = rnd.uniform(8.0, 12.0); s = rnd.uniform(0.3, 0.9)
         c = bmesh.ops.create_icosphere(rb, subdivisions=1, radius=s)
         for v in c["verts"]:
             v.co.z *= 0.6
@@ -949,16 +1031,22 @@ def build_set(M, year):
     t0 = time.time()
     _install()
     sc = bpy.context.scene
-    M["hq_stone"] = L.mat("HQStone", (0.50, 0.44, 0.32), 0.88, var=0.16, var_scale=0.15, color2=(0.58, 0.52, 0.39))
-    M["hq_slate"] = L.mat("HQSlate", (0.05, 0.055, 0.065), 0.9, var=0.12, var_scale=0.4)
-    M["roof_turret"] = L.mat("RoofTurret", (0.12, 0.16, 0.25), 0.55, var=0.1, var_scale=0.5)
+    M["hq_stone"] = stone_block_mat("HQSandstone", (0.50, 0.38, 0.21), (0.57, 0.44, 0.26), (0.26, 0.21, 0.14), scale=0.6)
+    M["hq_slate"] = L.mat("HQSlate", (0.028, 0.03, 0.034), 0.95, var=0.15, var_scale=0.6, color2=(0.045, 0.047, 0.05))
+    M["basin_stone"] = stone_block_mat("BasinStone", (0.27, 0.25, 0.20), (0.32, 0.29, 0.23), (0.12, 0.11, 0.09),
+                                       scale=0.55, damp=0.7, moss=0.6)
+    M["step_edge"] = L.mat("StepEdge", (0.10, 0.095, 0.08), 0.9)
+    for k, col in enumerate(((0.50, 0.21, 0.07), (0.42, 0.11, 0.05), (0.26, 0.13, 0.06), (0.30, 0.08, 0.05),
+                             (0.46, 0.29, 0.10), (0.55, 0.27, 0.14), (0.36, 0.17, 0.08))):
+        M[f"roof_t{k}"] = L.tile_roof_mat(f"RoofT{k}", col)
+    M["roof_turret"] = L.mat("RoofTurret", (0.09, 0.11, 0.15), 0.75, var=0.1, var_scale=0.5)
     M["clock"] = L.mat("ClockFace", (0.85, 0.82, 0.70), 0.6)
     M["moss_floor"] = L.mat("MossFloor", (0.11, 0.13, 0.08), 0.95, var=0.25, var_scale=0.18, color2=(0.20, 0.21, 0.14))
     M["plank"] = L.mat("Plank", (0.30, 0.20, 0.11), 0.8, var=0.2, var_scale=0.6)
     M["crate"] = L.mat("Crate", (0.26, 0.15, 0.07), 0.85, var=0.2, var_scale=0.9)
     M["gas"] = L.mat("GasTank", (0.42, 0.45, 0.48), 0.35)
     M["roof_flat"] = L.mat("RoofFlat", (0.33, 0.29, 0.25), 0.9, var=0.15, var_scale=0.1)
-    M["rock"] = rock_mat()
+    M["rock"] = marble_mat()
     M["rubble"] = L.mat("Rubble", (0.20, 0.18, 0.16), 0.95, var=0.2, var_scale=0.5)
     M["tarp"] = L.mat("Tarp", (0.45, 0.40, 0.28), 0.9)
     M["church_w"] = L.mat("ChurchWhite", (0.80, 0.76, 0.66), 0.85, var=0.1, var_scale=0.2)
@@ -968,12 +1056,12 @@ def build_set(M, year):
     build_lifts(M)
     hc = L.new_coll("HouseVariants")
     walls = ["plaster", "plaster_w", "plaster_o", "timber"]
-    roofs = ["roof_red", "roof_orange", "roof_brown", "roof_red", "roof_dark"]
+    roofs = [f"roof_t{k}" for k in range(7)]                    # orange / red / brown variety across Trost
     rnd = random.Random(8)
     widths = []
     for i in range(40):
         w = rnd.uniform(7.5, 11); d = rnd.uniform(11, 15); h = rnd.choice((11, 14, 14, 17, 17, 20))
-        me = L.house_mesh(f"TH{i}", w, d, h, d * 0.5, M, walls[i % 4], roofs[(i // 4) % 5], chimney=i % 3 == 0, hip=i % 6 == 0)
+        me = L.house_mesh(f"TH{i}", w, d, h, d * 0.5, M, walls[i % 4], roofs[(i * 3) % 7], chimney=i % 3 == 0, hip=i % 6 == 0)
         hc.objects.link(bpy.data.objects.new(f"TH{i}", me))
         widths.append((w, d))
     pts, ttrees = town_points(len(widths), widths)
