@@ -51,7 +51,7 @@ if os.environ.get("INT_TROST", "1") == "1":
 X0 = TR.INNER_GATE[0] if TR else -140.0
 TW, TS, TRR = (TR.W, TR.S, TR.R) if TR else (620.0, 250.0, 620.0)
 OUTER = TR.OUTER_GATE if TR else (0.0, -870.0)
-PSCALE = float(os.environ.get("INT_PSCALE", "1.7"))     # people drawn larger than life for the 150-450 m shots
+PSCALE = float(os.environ.get("INT_PSCALE", "1.0"))     # user rule: every human at TRUE scale
 CAMP = Vector((-1500.0, 2300.0))
 RIG0 = Vector((CAMP.x - 74.0, CAMP.y - 22.0))            # first balance rig; rigs run north in 9 m steps
 ERIG = 2                                                 # Eren's rig index
@@ -947,7 +947,7 @@ def update(st, t):
     ca = st["carts"]
     u = (ca["ph"] + t * 0.12) % 1.0                                  # up and down the north road, 60 m .. 1700 m
     cy = 60 + u * 1640; cx = X0 + 18 * np.sin((cy - 8) / 120.0) * ((cy - 8) / 1200.0) + ca["lane"]
-    set_points(ca["ob"], np.stack([cx, cy, np.full(40, 0.15)], 1), np.full(40, 1.3 if camps_on else 0.0),
+    set_points(ca["ob"], np.stack([cx, cy, np.full(40, 0.15)], 1), np.full(40, 1.0 if camps_on else 0.0),
                np.where(ca["lane"] > 0, 0.0, math.pi), np.zeros(40, int))
     town = bpy.data.objects.get("Town")
     if town and town.hide_render != (not camps_on):
