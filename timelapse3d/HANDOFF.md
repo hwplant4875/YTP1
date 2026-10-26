@@ -349,3 +349,7 @@ TROST:
 - Seen from the Garrison bank looking at Eren's group and the wall, the canal + barred water gate must be on the LEFT. v3_basin had it on the right because g7 mirrored the anime basin N-S into Trost.
 - Cloud ruling: build the basin at its ANIME position, on Wall Rose's NORTH face beside the canal water gate (Y' = 1740 - Y for every basin element; floor X 340..385, Y 875..907). See SCENE_BIBLE_v2 g7 "CORRECTION". Re-key g7 0-19.5 s on the north side. A few basin buildings north of Rose are an allowed lore exception.
 - (Lead had first proposed rotating the basin east of the canal; superseded by this cloud ruling.)
+
+## 16:5x (10/26 UTC) Orientation audit (workflow, 21 agents: Sonnet audit + Opus verify vs the anime frames)
+- 8 confirmed items, recorded in SCENE_BIBLE_v2 D "AUDIT CORRECTIONS" (they override older text): g1 canal-east note; g2 smoke bends WEST; g2 hamlet east-heavy; pit bridge NNE; g5 punch travels south (CAP into the west alley wall); RoseHQ lift at (-195,870); YF on the east plank box (22,52); g8 sun swings 255 -> ~200 deg during the carry.
+- Routed: g8 agent (YF, sun, pit bridge, RoseHQ lift in trost.py), g5 agent (punch), g1 agent (hamlet). g2 smoke goes to the g2 build.

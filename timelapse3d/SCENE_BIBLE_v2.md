@@ -673,6 +673,16 @@ complex (-268, 805) over g3's (-420, -75 set). Sun at the basin 255° (g7) over 
     titans; decoy mass at D.
 30. ALL · flares and ODM: thin trails with bright heads; ODM wires as 0.12 m dark cylinders, white puffs.
 
+### AUDIT CORRECTIONS (10/26, orientation audit vs the anime frames; these OVERRIDE the text above)
+1. g1 spec note: ep02 05:25.5 is shot from NORTH of Wall Maria looking south (frame-left = EAST). The anime is consistent: canal EAST (x +228). Do not move it.
+2. g2 smoke: the columns over Shiganshina bend WEST (-x) up high, not east (ep02 07:46.0: plumes rise from the wall top at frame lower-left and stream to frame-right = west when facing south). Use the same west wind as g1, ≈ (-1.5..-3, +0.3..0.6).
+3. g2 hamlet: east-heavy, as in the 05:25 pan. Move the west-of-road cottages east of x 0, between the road (x > 15) and the quay apron (x < 145), y 30..200, e.g. (-60,40)->(40,45), (-45,115)->(35,110), (-115,70)->(85,95).
+4. C row P: the ring-pit plank bridge is at bearing ≈ 25-30° (NNE) from P, not 315° (ep09 F09/000003609, ep04 20:30, F11/000014506).
+5. g5 punch in MA/SS: the AT enters from the SS junction (punch key (-258.5, 420.5)) and the blow travels SOUTH and slightly west. CAP is hurled 15-18 m SSW into the WEST alley wall at Y ≈ 400-405 (chips and decal there).
+6. C row L: add a fifth Rose lift, "RoseHQ" at (-195, 870) on the south face west of the inner bastion: two tall brown posts with a lintel and crossbar, near full wall height (behind the HQ in ep09 21:36.8).
+7. C row FL: YF (Rico's yellow flare) = (22, 52, 2.5), on top of the EAST plank box. Rico stays east of the push gap (deck X +12..+20, Y 32-40) during the slump.
+8. g8 sun: keep az 255° / el 12° at the g7→g8 hand-off and the green flare, then swing the azimuth smoothly to ≈ 200-205° during the carry (el 8° → 3°), so the low sun sits behind the gate, slightly east of it, by the seal and the yellow flare.
+
 ### P2 (polish)
 31. g1: wall-top guns on round turntable pits; brick plinth details on the OG inside face; ≈ 50 people in the plaza looking up.
 32. g2: ferry lanterns and roof discs; flung soldier; 2-pier truss bridge north; passage 5 x 7 m if GATE_W/H is cheap.
