@@ -27,7 +27,10 @@ NAME = {'carvey': 'Jason Carvey', 'karl': 'Karl Gibbs', 'mrs_loomis': 'Mrs. Loom
         'roman': 'Roman Bridger'}
 def short(k): return 'MRS. LOOMIS' if k == 'mrs_loomis' else NAME[k].split()[-1 if k == 'carvey' else 0].upper()
 def film_of(k): return KS.get(k, {}).get('film', '')
-def tier(p): return "YOU'RE DEAD" if p <= 25 else 'PROBABLY DEAD' if p <= 40 else 'COIN FLIP' if p <= 55 else "YOU'LL LIVE" if p <= 75 else 'EASY'
+# TierMaker-style board, row names picked by the user 10/26 (letter, phrase, max survival %)
+TIERS = [['S', 'Slaughtered', 25], ['A', 'Almost Dead', 40], ['B', 'Better Run', 50], ['C', 'Close Call', 60], ['D', "Don't Worry", 80],
+         ['E', 'Easy', 101]]
+def tier(p): return next(f'{l} {ph.upper()}' for l, ph, mx in TIERS if p <= mx)
 def stats(k):
     s = KS.get(k, {})
     return {n: s.get(f, 5) for n, f in (('STRENGTH', 'strength'), ('INTELLIGENCE', 'intelligence'), ('KILL COUNT', 'kill_count'),
@@ -53,7 +56,7 @@ def sec(voice, shots, rank=None, key=None, card_at=None, extra=(), pad=0.5, clip
 X = []
 # cold open: frame 0 = the mask; every way Ghostface has gone down lands on its word (shot / stabbed / fire / car / head)
 X.append(sec('s00', [(0, 's7_01_animatronic', 178.25), ('shot', 's7_10_sidney_kills', 139.92), ('stabbed', 's5_10_daughter', 103.75),
-  ('set on', 's5_09_fighting', 144.78, 0.85), ('run over', 's7_04_walls', 232.28, 0.8), ('shot in', 's6_family', 172.95, 0.7),
+  ('set on', 's5_09_fighting', 144.78, 0.85), ('run over', 's7_04_walls', 232.3, 0.6), ('shot in', 's6_family', 172.95, 0.7),
   ('and somehow', 's1_01_like_scary', 6), ('phone still', 's6_core4', 34.4), ('because', 's7_06_spree', 219.0, 0.95),
   ('one guy', 's5_08_act3', 24), ('there have', 's1_10_surprise', 60), ('16 different', 's3_11_family', 65.3),
   ('people behind', 's5_09_fighting', 51), ('that mask', 's7_07_hunted', 132.0), ('and today', 's2_10_blame', 9.0),
@@ -81,12 +84,12 @@ X.append(sec('s02', [(0, 's6_opening', 3.3), ('from scream', 's6_opening', 9), (
   ('real ghostface', 's6_opening', 278.75), ('whole time', 's6_opening', 288.5), ('he was the ghostface', 's6_opening', 296),
   ('5 minutes', 's6_opening', 284.2), ('somebody scarier', 's6_opening', 298.3, 0.75), ('survival rate', 's6_opening', 186, 0.75)],
   [16, 'Jason Carvey', 'Scream VI (2023)'], 'carvey', 'took the job'))
-X.append(sec('s03', [(0, 's7_04_walls', 53.0), ('from scream', 's7_04_walls', 107.5), ('an escaped', 's7_04_walls', 190.0),
+X.append(sec('s03', [(0, 's7_04_walls', 52.5), ('from scream', 's7_04_walls', 107.5), ('an escaped', 's7_04_walls', 190.0),
   ('genuinely scary', 's7_04_walls', 219.2), ('but he was really', 's7_09_anna_camp', 0), ('for the people', 's7_09_anna_camp', 194.0),
   ('and his run', 's7_04_walls', 192.5), ('floored it', 's7_04_walls', 249.9), ('and hit him', 's7_04_walls', 232.28, 0.8),
   ('once they pulled', 's7_still_karl_unmasked', 0), ('the creepy stranger', 's7_still_karl_coffee', 0), ('survival rate', 's7_04_walls', 234.1, 0.9)],
   [15, 'Karl Gibbs', 'Scream 7 (2026)'], 'karl', 19.4))
-X.append(sec('s04', [(0, 's2_11_mothers_love', 6.0), ("billy's mom", 's1_11_creative', 99.75), ('who spent', 's2_11_mothers_love', 19.3),
+X.append(sec('s04', [(0, 's2_10_blame', 118.83), ("billy's mom", 's1_11_creative', 99.75), ('who spent', 's2_11_mothers_love', 19.3),
   ('friendly reporter', 's2_11_mothers_love', 41.3), ('her plan', 's2_10_blame', 122.6), ('honestly', 's2_11_mothers_love', 32.0),
   ('but up close', 's2_11_mothers_love', 96.0), ('once cotton', 's2_12_intense', 110.0), ('it was over', 's2_12_intense', 107.9),
   ('survival rate', 's2_12_intense', 113.5)],
@@ -106,10 +109,10 @@ X.append(sec('s07', [(0, 's6_family', 85.77, 0.7), ('the awkward', 's6_subway', 
   [11, 'Ethan Landry', 'Scream VI (2023)'], 'ethan', 15.9))
 X.append(sec('s08', [(0, 's7_09_anna_camp', 20.0), ('he worked', 's7_02_stu', 6), ('tech guy', 's7_09_anna_camp', 32.0, 0.76), ('faking calls', 's7_02_stu', 54),
   ('from stu', 's7_02_stu', 70.4), ('with deepfakes', 's7_02_stu', 75), ('terrifying', 's7_02_stu', 63),
-  ('but when it came', 's7_09_anna_camp', 232.0), ('sydney shot', 's7_09_anna_camp', 254.24), ('survival rate', 's7_09_anna_camp', 23.0)],
+  ('but when it came', 's7_09_anna_camp', 232.0), ('sydney shot', 's7_09_anna_camp', 254.0), ('survival rate', 's7_09_anna_camp', 23.0)],
   [10, 'Marco Davis', 'Scream 7 (2026)'], 'marco', 15.0))
 X.append(sec('s09', [(0, 's5_08_act3', 73.0, 0.85), ('the sweet', 's5_09_fighting', 90.2), ('way too harmless', 's5_08_act3', 78),
-  ('but his crew', 's5_03_sheriff', 141.4), ('in broad', 's5_03_sheriff', 148.0),
+  ('but his crew', 's5_03_sheriff', 141.4), ('in broad', 's5_03_sheriff', 145.7),
   ('fooled sam', 's5_09_fighting', 36.15, 0.8), ('and the moment', 's5_09_fighting', 92), ('she stabbed', 's5_10_daughter', 80.15),
   ('over and over', 's5_10_daughter', 100.0), ('until he finally', 's5_10_daughter', 107.3, 0.6)],
   [9, 'Richie Kirsch', 'Scream (2022)'], 'richie', 16.4))
@@ -118,21 +121,21 @@ X.append(sec('s10', [(0, 's7_09_anna_camp', 100), ("sydney's neighbor", 's7_09_a
   ('and it took', 's7_09_anna_camp', 267.2), ('shooting together', 's7_10_sidney_kills', 141.25), ('to stop her', 's7_10_sidney_kills', 140.0),
   ('survival rate', 's7_09_anna_camp', 186)],
   [8, 'Jessica Bowden', 'Scream 7 (2026)'], 'jessica', 16.4))
-X.append(sec('s11', [(0, 's1_10_surprise', 46.6), ('a lot of', 's1_10_surprise', 7), ('most unhinged', 's1_10_surprise', 112.4),
+X.append(sec('s11', [(0, 's1_10_surprise', 8.5), ('most unhinged', 's1_10_surprise', 112.4),
   ('but he was really', 's1_11_creative', 56.4), ('he was so', 's1_11_creative', 87), ('he and billy', 's1_11_creative', 101.0),
   ('each other', 's1_11_creative', 113.375, 0.75), ('survival rate', 's1_12_tables', 45)],
   [7, 'Stu Macher', 'Scream (1996)'], 'stu', 16.4))
 X.append(sec('s12', [(0, 's2_10_blame', 9.0), ('the film', 's2_10_blame', 14.4), ('so he could', 's2_10_blame', 30),
   ('he racked', 's2_09_driving', 18), ('body counts', 's2_07_big_boys', 125.75), ('and even framed', 's2_10_blame', 83.75),
-  ('framed derek', 's2_10_blame', 99.4), ('but he never', 's2_10_blame', 3.5), ('because his own', 's2_10_blame', 122.6),
-  ('shot him', 's2_11_mothers_love', 3.85), ('the second he', 's2_11_mothers_love', 6.0), ('survival rate', 's2_10_blame', 16.5)],
+  ('framed derek', 's2_10_blame', 99.4), ('but he never', 's2_10_blame', 3.5), ('because his own', 's2_10_blame', 122.45),
+  ('shot him', 's2_11_mothers_love', 6.0), ('the second he', 's2_11_mothers_love', 3.85), ('survival rate', 's2_10_blame', 16.3)],
   [6, 'Mickey Altieri', 'Scream 2 (1997)'], 'mickey', 18.4))
 X.append(sec('s13', [(0, 's5_09_fighting', 107.0), ('killed dewey', 's5_09_fighting', 57), ('she got shot', 's5_09_fighting', 142.2),
-  ('burning stove', 's5_09_fighting', 144.3), ('she still came', 's5_09_fighting', 147.95), ('swinging', 's5_09_fighting', 152.06),
+  ('burning stove', 's5_09_fighting', 144.3), ('she still came', 's5_09_fighting', 147.95), ('out on fire', 's5_09_fighting', 152.06),
   ('it took tara', 's5_10_daughter', 177.45, 0.85), ('survival rate', 's5_09_fighting', 115.0, 0.6)],
   [5, 'Amber Freeman', 'Scream (2022)'], 'amber', 13.2))
 X.append(sec('s14', [(0, 's1_10_surprise', 0), ('the original', 's1_11_creative', 36), ('the one who', 's1_11_creative', 7.25),
-  ("killing sydney's", 's1_11_creative', 33), ('he was her', 's1_10_surprise', 19), ('he planned', 's1_11_creative', 72),
+  ("killing sydney's", 's1_10_surprise', 27.6), ('he was her', 's1_10_surprise', 19), ('he planned', 's1_11_creative', 72),
   ('he played', 's1_11_creative', 99.5), ("so he's", 's1_11_creative', 114), ("but he isn't", 's1_10_surprise', 39),
   ('3 people', 's1_12_tables', 0), ('survival rate', 's1_12_tables', 86)],
   [4, 'Billy Loomis', 'Scream (1996)'], 'billy', 22.0))
@@ -148,11 +151,11 @@ X.append(sec('s16', [(0, 's4_still_jill', 0), ("sydney's own", 'scream4_reveal',
 X.append(sec('s17', [(0, 's3_11_family', 65.3, 0.85), ('from screen', 's3_11_family', 50), ("sydney's half", 's3_11_family', 72),
   ('only ghostface', 's3_11_family', 24), ('completely alone', 's3_11_family', 78), ('most kills', 's3_02_cutting', 126.3),
   ('claims', 's3_11_family', 84), ('pushed billy', 's1_11_creative', 16), ('original murders', 's1_10_surprise', 66),
-  ('even wore', 's3_12_firing', 27.0), ('so shooting', 's3_12_firing', 111.5), ('and it took', 's3_12_firing', 121.25),
+  ('even wore', 's3_12_firing', 27.0), ('so shooting', 's3_12_firing', 111.5), ('and it took', 's3_12_firing', 119.55), ('a bullet to', 's3_12_firing', 122.05),
   ('finally stop', 's3_12_firing', 129.95, 0.6), ('survival rate', 's3_11_family', 80)],
   [1, 'Roman Bridger', 'Scream 3 (2000)'], 'roman', 24.2))
 # outro: the full board, then the CTA over a long mask close-up
-X.append(sec('s18', [(0, 's6_opening', 186), ('and if you', 's6_subway', 167)], pad=1.5,
+X.append(sec('s18', [(0, 's6_opening', 186), ('and if you', 's6_subway', 167, 0.65)], pad=1.5,
   extra=[('title', ['YOUR #1?'], 'tell me', 'and if you'), ('title', ['FREDDY', '!OR PINHEAD?'], 'freddie', 999)]))
 X[-1]['overlays'].insert(0, ['tierfinal', {'placed': list(PLACED), 'highlights': [[T('s18', 'guy who lasted'), 'carvey'], [T('s18', 'one who planned'), 'roman']],
                                          't_dim': T('s18', 'tell me')}, 0.0, T('s18', 'and if you')])
@@ -172,8 +175,6 @@ for S in X:  # film label per run of one film, gone once the stat card or a full
         if f: S['overlays'].append(['film', f, t, min(end, runs[k + 1][1] if k + 1 < len(runs) else 999)])
 DARK = ['s7_04_walls', 's7_06_spree', 's7_09_anna_camp', 's7_10_sidney_kills', 's6_subway', 's6_ladder', 's6_core4', 's6_two_gf', 's4_02_return',
         's4_06_killcam', 's3_12_firing']
-# TierMaker-style board (user 10/26). Row names: placeholder set until the user picks (letter, phrase, max survival %)
-TIERS = [['S', 'Six Feet Under', 25], ['A', 'Almost Dead', 40], ['B', 'Better Run', 55], ['C', 'Can Fight Back', 75], ['D', "Don't Worry", 101]]
 P = {'sections': X, 'beat_style': 'board', 'tiers': TIERS,
      'zoom': {**{k: 1.0 for k in ['s4_still_jill', 's4_still_jill_bed', 's4_still_charlie', 's4_still_gf', 's4_still_trio', 's4_still_charlie_party', 's4_still_charlie_close', 's4_still_gf_knife', 's4_still_jill_hospital', 's7_still_karl_unmasked', 's7_still_karl_coffee']},
               **{k: 1.08 for k in ['s1_01_like_scary', 's1_10_surprise', 's1_11_creative', 's1_12_tables', 's2_09_driving', 's2_10_blame',

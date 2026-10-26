@@ -288,18 +288,20 @@ def thermo_final(out, placed, dur, fps=30, t_build=(0.25, 1.9), highlights=(), t
     return n, 0, 0
 
 # ------------------------------------------------------------------ TierMaker-style board
-RH, LW = 196, 300                       # row pitch, label column width
-TS = RH - 2                             # square tile, edge to edge (2 px black row lines)
-BX0, BY0 = 138, (H - 5 * RH) // 2      # board top-left; 7 tile slots wide like the template
-BXW = LW + 7 * TS + 2
+LW = 300                                # label column width
+def geom():
+    """row pitch / square tile size (edge to edge, 2 px black row lines) / board origin for the current number of tiers"""
+    nr = len(TIERS); rh = min(196, (H - 40) // nr); ts = rh - 2
+    bxw = LW + 7 * ts + 2                   # 7 tile slots wide like the template
+    return nr, rh, ts, (W - bxw) // 2, (H - nr * rh) // 2, bxw
 def _label_cell(i, flash=0.0):
-    c = TM_COL[i]
+    nr, RH, TS, BX0, BY0, BXW = geom(); c = TM_COL[i]
     if flash > 0: c = tuple(int(v + (255 - v) * flash) for v in c)
     cell = Image.new('RGBA', (LW, TS), c + (255,)); d = ImageDraw.Draw(cell)
     l, ph = LETTERS[i] if LETTERS else (TIERS[i][0], '')
     if ph:
-        d.text((LW / 2, TS * 0.40), l, font=sans(104), fill=TM_INK, anchor='mm')
-        sz = 38
+        d.text((LW / 2, TS * 0.40), l, font=sans(TS * 104 // 194), fill=TM_INK, anchor='mm')
+        sz = min(38, TS * 40 // 194)
         while d.textlength(ph, font=sans(sz)) > LW - 24 and sz > 20: sz -= 1
         d.text((LW / 2, TS * 0.80), ph, font=sans(sz), fill=TM_INK, anchor='mm')
     else:
@@ -307,34 +309,36 @@ def _label_cell(i, flash=0.0):
         d.text((LW / 2, TS / 2), l, font=sans(sz), fill=TM_INK, anchor='mm')
     return cell
 _FACE = {}
-def face(r, size=TS):
+def face(r, size=None):
     """square face tile with the name on a dark strip at the bottom (no ring, no number)"""
+    TS = geom()[2]; size = size or TS
     k = (r['tile'], r['short'], size)
     if k not in _FACE:
         t = img(r['tile']).resize((size, size), Image.LANCZOS).copy(); d = ImageDraw.Draw(t)
         sh = max(30, size * 40 // TS); d.rectangle([0, size - sh, size, size], fill=(0, 0, 0, 165))
         nm = r['short']; sz = max(14, size * 29 // TS)
-        while d.textlength(nm, font=sans(sz, True)) > size - 12 and sz > 12: sz -= 1
+        while d.textlength(nm, font=sans(sz, True)) > size - 6 and sz > 12: sz -= 1
         d.text((size / 2, size - sh / 2), nm, font=sans(sz, True), fill=(255, 255, 255), anchor='mm')
         _FACE[k] = t
     return _FACE[k]
 def _row_of(p): return tier(p)
 def slots(placed):
     """(x, y) of each placed key: rows by tier, left to right in reveal order"""
-    cnt = [0] * 5; pos = {}
+    nr, RH, TS, BX0, BY0, BXW = geom(); cnt = [0] * nr; pos = {}
     for r in placed:
         i = _row_of(r['pct']); pos[r['key']] = (BX0 + LW + 2 + cnt[i] * TS, BY0 + i * RH + 1); cnt[i] += 1
     return pos
 def board_bg(flash_row=None, flash=0.0):
+    nr, RH, TS, BX0, BY0, BXW = geom()
     im = Image.new('RGBA', (W, H), TM_PAGE + (255,)); d = ImageDraw.Draw(im)
-    d.rectangle([BX0, BY0, BX0 + BXW, BY0 + 5 * RH], fill=TM_LINE)
-    for i in range(5):
+    d.rectangle([BX0, BY0, BX0 + BXW, BY0 + nr * RH], fill=TM_LINE)
+    for i in range(nr):
         y = BY0 + i * RH + 1
         d.rectangle([BX0 + LW + 2, y, BX0 + BXW - 1, y + TS - 1], fill=TM_BOARD)
         im.alpha_composite(_label_cell(i, flash if i == flash_row else 0.0), (BX0 + 1, y))
     return im
 def board_beat(out, placed, new, dur=1.2, fps=30):
-    os.makedirs(out, exist_ok=True)
+    os.makedirs(out, exist_ok=True); TS = geom()[2]
     pos = slots(placed + [new]); row = _row_of(new['pct']); tx, ty = pos[new['key']]
     base = board_bg()
     for r in placed: base.alpha_composite(face(r), pos[r['key']])
@@ -367,7 +371,7 @@ def board_beat(out, placed, new, dur=1.2, fps=30):
         save(im.convert('RGB'), out, i)
     return n, 0, 0
 def board_final(out, placed, dur, fps=30, t_build=(0.25, 1.9), highlights=(), t_dim=None):
-    os.makedirs(out, exist_ok=True)
+    os.makedirs(out, exist_ok=True); TS = geom()[2]
     pos = slots(placed); t0, t1 = t_build; step = (t1 - t0) / max(1, len(placed))
     last = max([t1 + 0.4] + [h[0] + 1.3 for h in highlights] + ([t_dim + 0.4] if t_dim else []))
     n = int(math.ceil(min(dur, last) * fps)); base = board_bg()

@@ -29,8 +29,8 @@
     [
      3.08,
      "s7_04_walls",
-     232.28,
-     0.8
+     232.3,
+     0.6
     ],
     [
      4.22,
@@ -592,7 +592,7 @@
        "name": "Jason Carvey",
        "short": "CARVEY",
        "pct": 99,
-       "tier": "EASY",
+       "tier": "E EASY",
        "tile": "tiles/carvey.png"
       }
      },
@@ -642,7 +642,7 @@
     [
      0,
      "s7_04_walls",
-     53.0
+     52.5
     ],
     [
      1.78,
@@ -741,7 +741,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        }
       ],
@@ -750,7 +750,7 @@
        "name": "Karl Gibbs",
        "short": "KARL",
        "pct": 75,
-       "tier": "YOU'LL LIVE",
+       "tier": "D DON'T WORRY",
        "tile": "tiles/karl.png"
       }
      },
@@ -799,8 +799,8 @@
    "shots": [
     [
      0,
-     "s2_11_mothers_love",
-     6.0
+     "s2_10_blame",
+     118.83
     ],
     [
      2.28,
@@ -887,7 +887,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -895,7 +895,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        }
       ],
@@ -904,7 +904,7 @@
        "name": "Mrs. Loomis",
        "short": "MRS. LOOMIS",
        "pct": 68,
-       "tier": "YOU'LL LIVE",
+       "tier": "D DON'T WORRY",
        "tile": "tiles/mrs_loomis.png"
       }
      },
@@ -1048,7 +1048,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -1056,7 +1056,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -1064,7 +1064,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        }
       ],
@@ -1073,7 +1073,7 @@
        "name": "Charlie Walker",
        "short": "CHARLIE",
        "pct": 60,
-       "tier": "YOU'LL LIVE",
+       "tier": "C CLOSE CALL",
        "tile": "tiles/charlie.png"
       }
      },
@@ -1203,7 +1203,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -1211,7 +1211,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -1219,7 +1219,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -1227,7 +1227,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        }
       ],
@@ -1236,7 +1236,7 @@
        "name": "Quinn Bailey",
        "short": "QUINN",
        "pct": 56,
-       "tier": "YOU'LL LIVE",
+       "tier": "C CLOSE CALL",
        "tile": "tiles/quinn.png"
       }
      },
@@ -1373,7 +1373,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -1381,7 +1381,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -1389,7 +1389,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -1397,7 +1397,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        },
        {
@@ -1405,7 +1405,7 @@
         "name": "Quinn Bailey",
         "short": "QUINN",
         "pct": 56,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/quinn.png"
        }
       ],
@@ -1414,7 +1414,7 @@
        "name": "Ethan Landry",
        "short": "ETHAN",
        "pct": 53,
-       "tier": "COIN FLIP",
+       "tier": "C CLOSE CALL",
        "tile": "tiles/ethan.png"
       }
      },
@@ -1505,7 +1505,7 @@
     [
      14.4,
      "s7_09_anna_camp",
-     254.24
+     254.0
     ],
     [
      15.64,
@@ -1552,7 +1552,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -1560,7 +1560,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -1568,7 +1568,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -1576,7 +1576,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        },
        {
@@ -1584,7 +1584,7 @@
         "name": "Quinn Bailey",
         "short": "QUINN",
         "pct": 56,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/quinn.png"
        },
        {
@@ -1592,7 +1592,7 @@
         "name": "Ethan Landry",
         "short": "ETHAN",
         "pct": 53,
-        "tier": "COIN FLIP",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/ethan.png"
        }
       ],
@@ -1601,7 +1601,7 @@
        "name": "Marco Davis",
        "short": "MARCO",
        "pct": 50,
-       "tier": "COIN FLIP",
+       "tier": "B BETTER RUN",
        "tile": "tiles/marco.png"
       }
      },
@@ -1672,7 +1672,7 @@
     [
      7.02,
      "s5_03_sheriff",
-     148.0
+     145.7
     ],
     [
      8.74,
@@ -1741,7 +1741,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -1749,7 +1749,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -1757,7 +1757,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -1765,7 +1765,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        },
        {
@@ -1773,7 +1773,7 @@
         "name": "Quinn Bailey",
         "short": "QUINN",
         "pct": 56,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/quinn.png"
        },
        {
@@ -1781,7 +1781,7 @@
         "name": "Ethan Landry",
         "short": "ETHAN",
         "pct": 53,
-        "tier": "COIN FLIP",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/ethan.png"
        },
        {
@@ -1789,7 +1789,7 @@
         "name": "Marco Davis",
         "short": "MARCO",
         "pct": 50,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/marco.png"
        }
       ],
@@ -1798,7 +1798,7 @@
        "name": "Richie Kirsch",
        "short": "RICHIE",
        "pct": 45,
-       "tier": "COIN FLIP",
+       "tier": "B BETTER RUN",
        "tile": "tiles/richie.png"
       }
      },
@@ -1935,7 +1935,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -1943,7 +1943,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -1951,7 +1951,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -1959,7 +1959,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        },
        {
@@ -1967,7 +1967,7 @@
         "name": "Quinn Bailey",
         "short": "QUINN",
         "pct": 56,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/quinn.png"
        },
        {
@@ -1975,7 +1975,7 @@
         "name": "Ethan Landry",
         "short": "ETHAN",
         "pct": 53,
-        "tier": "COIN FLIP",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/ethan.png"
        },
        {
@@ -1983,7 +1983,7 @@
         "name": "Marco Davis",
         "short": "MARCO",
         "pct": 50,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/marco.png"
        },
        {
@@ -1991,7 +1991,7 @@
         "name": "Richie Kirsch",
         "short": "RICHIE",
         "pct": 45,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/richie.png"
        }
       ],
@@ -2000,7 +2000,7 @@
        "name": "Jessica Bowden",
        "short": "JESSICA",
        "pct": 43,
-       "tier": "COIN FLIP",
+       "tier": "B BETTER RUN",
        "tile": "tiles/jessica.png"
       }
      },
@@ -2050,12 +2050,7 @@
     [
      0,
      "s1_10_surprise",
-     46.6
-    ],
-    [
-     2.2,
-     "s1_10_surprise",
-     7
+     8.5
     ],
     [
      5.96,
@@ -2128,7 +2123,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -2136,7 +2131,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -2144,7 +2139,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -2152,7 +2147,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        },
        {
@@ -2160,7 +2155,7 @@
         "name": "Quinn Bailey",
         "short": "QUINN",
         "pct": 56,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/quinn.png"
        },
        {
@@ -2168,7 +2163,7 @@
         "name": "Ethan Landry",
         "short": "ETHAN",
         "pct": 53,
-        "tier": "COIN FLIP",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/ethan.png"
        },
        {
@@ -2176,7 +2171,7 @@
         "name": "Marco Davis",
         "short": "MARCO",
         "pct": 50,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/marco.png"
        },
        {
@@ -2184,7 +2179,7 @@
         "name": "Richie Kirsch",
         "short": "RICHIE",
         "pct": 45,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/richie.png"
        },
        {
@@ -2192,7 +2187,7 @@
         "name": "Jessica Bowden",
         "short": "JESSICA",
         "pct": 43,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/jessica.png"
        }
       ],
@@ -2201,7 +2196,7 @@
        "name": "Stu Macher",
        "short": "STU",
        "pct": 40,
-       "tier": "PROBABLY DEAD",
+       "tier": "A ALMOST DEAD",
        "tile": "tiles/stu.png"
       }
      },
@@ -2291,22 +2286,22 @@
     [
      14.62,
      "s2_10_blame",
-     122.6
+     122.45
     ],
     [
      16.14,
      "s2_11_mothers_love",
-     3.85
+     6.0
     ],
     [
      16.8,
      "s2_11_mothers_love",
-     6.0
+     3.85
     ],
     [
      19.34,
      "s2_10_blame",
-     16.5
+     16.3
     ]
    ],
    "overlays": [
@@ -2348,7 +2343,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -2356,7 +2351,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -2364,7 +2359,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -2372,7 +2367,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        },
        {
@@ -2380,7 +2375,7 @@
         "name": "Quinn Bailey",
         "short": "QUINN",
         "pct": 56,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/quinn.png"
        },
        {
@@ -2388,7 +2383,7 @@
         "name": "Ethan Landry",
         "short": "ETHAN",
         "pct": 53,
-        "tier": "COIN FLIP",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/ethan.png"
        },
        {
@@ -2396,7 +2391,7 @@
         "name": "Marco Davis",
         "short": "MARCO",
         "pct": 50,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/marco.png"
        },
        {
@@ -2404,7 +2399,7 @@
         "name": "Richie Kirsch",
         "short": "RICHIE",
         "pct": 45,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/richie.png"
        },
        {
@@ -2412,7 +2407,7 @@
         "name": "Jessica Bowden",
         "short": "JESSICA",
         "pct": 43,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/jessica.png"
        },
        {
@@ -2420,7 +2415,7 @@
         "name": "Stu Macher",
         "short": "STU",
         "pct": 40,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/stu.png"
        }
       ],
@@ -2429,7 +2424,7 @@
        "name": "Mickey Altieri",
        "short": "MICKEY",
        "pct": 36,
-       "tier": "PROBABLY DEAD",
+       "tier": "A ALMOST DEAD",
        "tile": "tiles/mickey.png"
       }
      },
@@ -2502,7 +2497,7 @@
      147.95
     ],
     [
-     9.58,
+     8.64,
      "s5_09_fighting",
      152.06
     ],
@@ -2558,7 +2553,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -2566,7 +2561,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -2574,7 +2569,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -2582,7 +2577,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        },
        {
@@ -2590,7 +2585,7 @@
         "name": "Quinn Bailey",
         "short": "QUINN",
         "pct": 56,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/quinn.png"
        },
        {
@@ -2598,7 +2593,7 @@
         "name": "Ethan Landry",
         "short": "ETHAN",
         "pct": 53,
-        "tier": "COIN FLIP",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/ethan.png"
        },
        {
@@ -2606,7 +2601,7 @@
         "name": "Marco Davis",
         "short": "MARCO",
         "pct": 50,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/marco.png"
        },
        {
@@ -2614,7 +2609,7 @@
         "name": "Richie Kirsch",
         "short": "RICHIE",
         "pct": 45,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/richie.png"
        },
        {
@@ -2622,7 +2617,7 @@
         "name": "Jessica Bowden",
         "short": "JESSICA",
         "pct": 43,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/jessica.png"
        },
        {
@@ -2630,7 +2625,7 @@
         "name": "Stu Macher",
         "short": "STU",
         "pct": 40,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/stu.png"
        },
        {
@@ -2638,7 +2633,7 @@
         "name": "Mickey Altieri",
         "short": "MICKEY",
         "pct": 36,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/mickey.png"
        }
       ],
@@ -2647,7 +2642,7 @@
        "name": "Amber Freeman",
        "short": "AMBER",
        "pct": 30,
-       "tier": "PROBABLY DEAD",
+       "tier": "A ALMOST DEAD",
        "tile": "tiles/amber.png"
       }
      },
@@ -2711,8 +2706,8 @@
     ],
     [
      4.92,
-     "s1_11_creative",
-     33
+     "s1_10_surprise",
+     27.6
     ],
     [
      9.04,
@@ -2789,7 +2784,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -2797,7 +2792,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -2805,7 +2800,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -2813,7 +2808,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        },
        {
@@ -2821,7 +2816,7 @@
         "name": "Quinn Bailey",
         "short": "QUINN",
         "pct": 56,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/quinn.png"
        },
        {
@@ -2829,7 +2824,7 @@
         "name": "Ethan Landry",
         "short": "ETHAN",
         "pct": 53,
-        "tier": "COIN FLIP",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/ethan.png"
        },
        {
@@ -2837,7 +2832,7 @@
         "name": "Marco Davis",
         "short": "MARCO",
         "pct": 50,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/marco.png"
        },
        {
@@ -2845,7 +2840,7 @@
         "name": "Richie Kirsch",
         "short": "RICHIE",
         "pct": 45,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/richie.png"
        },
        {
@@ -2853,7 +2848,7 @@
         "name": "Jessica Bowden",
         "short": "JESSICA",
         "pct": 43,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/jessica.png"
        },
        {
@@ -2861,7 +2856,7 @@
         "name": "Stu Macher",
         "short": "STU",
         "pct": 40,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/stu.png"
        },
        {
@@ -2869,7 +2864,7 @@
         "name": "Mickey Altieri",
         "short": "MICKEY",
         "pct": 36,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/mickey.png"
        },
        {
@@ -2877,7 +2872,7 @@
         "name": "Amber Freeman",
         "short": "AMBER",
         "pct": 30,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/amber.png"
        }
       ],
@@ -2886,7 +2881,7 @@
        "name": "Billy Loomis",
        "short": "BILLY",
        "pct": 25,
-       "tier": "YOU'RE DEAD",
+       "tier": "S SLAUGHTERED",
        "tile": "tiles/billy.png"
       }
      },
@@ -3014,7 +3009,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -3022,7 +3017,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -3030,7 +3025,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -3038,7 +3033,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        },
        {
@@ -3046,7 +3041,7 @@
         "name": "Quinn Bailey",
         "short": "QUINN",
         "pct": 56,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/quinn.png"
        },
        {
@@ -3054,7 +3049,7 @@
         "name": "Ethan Landry",
         "short": "ETHAN",
         "pct": 53,
-        "tier": "COIN FLIP",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/ethan.png"
        },
        {
@@ -3062,7 +3057,7 @@
         "name": "Marco Davis",
         "short": "MARCO",
         "pct": 50,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/marco.png"
        },
        {
@@ -3070,7 +3065,7 @@
         "name": "Richie Kirsch",
         "short": "RICHIE",
         "pct": 45,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/richie.png"
        },
        {
@@ -3078,7 +3073,7 @@
         "name": "Jessica Bowden",
         "short": "JESSICA",
         "pct": 43,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/jessica.png"
        },
        {
@@ -3086,7 +3081,7 @@
         "name": "Stu Macher",
         "short": "STU",
         "pct": 40,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/stu.png"
        },
        {
@@ -3094,7 +3089,7 @@
         "name": "Mickey Altieri",
         "short": "MICKEY",
         "pct": 36,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/mickey.png"
        },
        {
@@ -3102,7 +3097,7 @@
         "name": "Amber Freeman",
         "short": "AMBER",
         "pct": 30,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/amber.png"
        },
        {
@@ -3110,7 +3105,7 @@
         "name": "Billy Loomis",
         "short": "BILLY",
         "pct": 25,
-        "tier": "YOU'RE DEAD",
+        "tier": "S SLAUGHTERED",
         "tile": "tiles/billy.png"
        }
       ],
@@ -3119,7 +3114,7 @@
        "name": "Wayne Bailey",
        "short": "WAYNE",
        "pct": 22,
-       "tier": "YOU'RE DEAD",
+       "tier": "S SLAUGHTERED",
        "tile": "tiles/wayne.png"
       }
      },
@@ -3267,7 +3262,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -3275,7 +3270,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -3283,7 +3278,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -3291,7 +3286,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        },
        {
@@ -3299,7 +3294,7 @@
         "name": "Quinn Bailey",
         "short": "QUINN",
         "pct": 56,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/quinn.png"
        },
        {
@@ -3307,7 +3302,7 @@
         "name": "Ethan Landry",
         "short": "ETHAN",
         "pct": 53,
-        "tier": "COIN FLIP",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/ethan.png"
        },
        {
@@ -3315,7 +3310,7 @@
         "name": "Marco Davis",
         "short": "MARCO",
         "pct": 50,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/marco.png"
        },
        {
@@ -3323,7 +3318,7 @@
         "name": "Richie Kirsch",
         "short": "RICHIE",
         "pct": 45,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/richie.png"
        },
        {
@@ -3331,7 +3326,7 @@
         "name": "Jessica Bowden",
         "short": "JESSICA",
         "pct": 43,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/jessica.png"
        },
        {
@@ -3339,7 +3334,7 @@
         "name": "Stu Macher",
         "short": "STU",
         "pct": 40,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/stu.png"
        },
        {
@@ -3347,7 +3342,7 @@
         "name": "Mickey Altieri",
         "short": "MICKEY",
         "pct": 36,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/mickey.png"
        },
        {
@@ -3355,7 +3350,7 @@
         "name": "Amber Freeman",
         "short": "AMBER",
         "pct": 30,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/amber.png"
        },
        {
@@ -3363,7 +3358,7 @@
         "name": "Billy Loomis",
         "short": "BILLY",
         "pct": 25,
-        "tier": "YOU'RE DEAD",
+        "tier": "S SLAUGHTERED",
         "tile": "tiles/billy.png"
        },
        {
@@ -3371,7 +3366,7 @@
         "name": "Wayne Bailey",
         "short": "WAYNE",
         "pct": 22,
-        "tier": "YOU'RE DEAD",
+        "tier": "S SLAUGHTERED",
         "tile": "tiles/wayne.png"
        }
       ],
@@ -3380,7 +3375,7 @@
        "name": "Jill Roberts",
        "short": "JILL",
        "pct": 18,
-       "tier": "YOU'RE DEAD",
+       "tier": "S SLAUGHTERED",
        "tile": "tiles/jill.png"
       }
      },
@@ -3486,7 +3481,12 @@
     [
      20.62,
      "s3_12_firing",
-     121.25
+     119.55
+    ],
+    [
+     21.46,
+     "s3_12_firing",
+     122.05
     ],
     [
      23.24,
@@ -3539,7 +3539,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -3547,7 +3547,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -3555,7 +3555,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -3563,7 +3563,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        },
        {
@@ -3571,7 +3571,7 @@
         "name": "Quinn Bailey",
         "short": "QUINN",
         "pct": 56,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/quinn.png"
        },
        {
@@ -3579,7 +3579,7 @@
         "name": "Ethan Landry",
         "short": "ETHAN",
         "pct": 53,
-        "tier": "COIN FLIP",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/ethan.png"
        },
        {
@@ -3587,7 +3587,7 @@
         "name": "Marco Davis",
         "short": "MARCO",
         "pct": 50,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/marco.png"
        },
        {
@@ -3595,7 +3595,7 @@
         "name": "Richie Kirsch",
         "short": "RICHIE",
         "pct": 45,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/richie.png"
        },
        {
@@ -3603,7 +3603,7 @@
         "name": "Jessica Bowden",
         "short": "JESSICA",
         "pct": 43,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/jessica.png"
        },
        {
@@ -3611,7 +3611,7 @@
         "name": "Stu Macher",
         "short": "STU",
         "pct": 40,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/stu.png"
        },
        {
@@ -3619,7 +3619,7 @@
         "name": "Mickey Altieri",
         "short": "MICKEY",
         "pct": 36,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/mickey.png"
        },
        {
@@ -3627,7 +3627,7 @@
         "name": "Amber Freeman",
         "short": "AMBER",
         "pct": 30,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/amber.png"
        },
        {
@@ -3635,7 +3635,7 @@
         "name": "Billy Loomis",
         "short": "BILLY",
         "pct": 25,
-        "tier": "YOU'RE DEAD",
+        "tier": "S SLAUGHTERED",
         "tile": "tiles/billy.png"
        },
        {
@@ -3643,7 +3643,7 @@
         "name": "Wayne Bailey",
         "short": "WAYNE",
         "pct": 22,
-        "tier": "YOU'RE DEAD",
+        "tier": "S SLAUGHTERED",
         "tile": "tiles/wayne.png"
        },
        {
@@ -3651,7 +3651,7 @@
         "name": "Jill Roberts",
         "short": "JILL",
         "pct": 18,
-        "tier": "YOU'RE DEAD",
+        "tier": "S SLAUGHTERED",
         "tile": "tiles/jill.png"
        }
       ],
@@ -3660,7 +3660,7 @@
        "name": "Roman Bridger",
        "short": "ROMAN",
        "pct": 15,
-       "tier": "YOU'RE DEAD",
+       "tier": "S SLAUGHTERED",
        "tile": "tiles/roman.png"
       }
      },
@@ -3727,7 +3727,8 @@
     [
      8.5,
      "s6_subway",
-     167
+     167,
+     0.65
     ]
    ],
    "overlays": [
@@ -3740,7 +3741,7 @@
         "name": "Jason Carvey",
         "short": "CARVEY",
         "pct": 99,
-        "tier": "EASY",
+        "tier": "E EASY",
         "tile": "tiles/carvey.png"
        },
        {
@@ -3748,7 +3749,7 @@
         "name": "Karl Gibbs",
         "short": "KARL",
         "pct": 75,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/karl.png"
        },
        {
@@ -3756,7 +3757,7 @@
         "name": "Mrs. Loomis",
         "short": "MRS. LOOMIS",
         "pct": 68,
-        "tier": "YOU'LL LIVE",
+        "tier": "D DON'T WORRY",
         "tile": "tiles/mrs_loomis.png"
        },
        {
@@ -3764,7 +3765,7 @@
         "name": "Charlie Walker",
         "short": "CHARLIE",
         "pct": 60,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/charlie.png"
        },
        {
@@ -3772,7 +3773,7 @@
         "name": "Quinn Bailey",
         "short": "QUINN",
         "pct": 56,
-        "tier": "YOU'LL LIVE",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/quinn.png"
        },
        {
@@ -3780,7 +3781,7 @@
         "name": "Ethan Landry",
         "short": "ETHAN",
         "pct": 53,
-        "tier": "COIN FLIP",
+        "tier": "C CLOSE CALL",
         "tile": "tiles/ethan.png"
        },
        {
@@ -3788,7 +3789,7 @@
         "name": "Marco Davis",
         "short": "MARCO",
         "pct": 50,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/marco.png"
        },
        {
@@ -3796,7 +3797,7 @@
         "name": "Richie Kirsch",
         "short": "RICHIE",
         "pct": 45,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/richie.png"
        },
        {
@@ -3804,7 +3805,7 @@
         "name": "Jessica Bowden",
         "short": "JESSICA",
         "pct": 43,
-        "tier": "COIN FLIP",
+        "tier": "B BETTER RUN",
         "tile": "tiles/jessica.png"
        },
        {
@@ -3812,7 +3813,7 @@
         "name": "Stu Macher",
         "short": "STU",
         "pct": 40,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/stu.png"
        },
        {
@@ -3820,7 +3821,7 @@
         "name": "Mickey Altieri",
         "short": "MICKEY",
         "pct": 36,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/mickey.png"
        },
        {
@@ -3828,7 +3829,7 @@
         "name": "Amber Freeman",
         "short": "AMBER",
         "pct": 30,
-        "tier": "PROBABLY DEAD",
+        "tier": "A ALMOST DEAD",
         "tile": "tiles/amber.png"
        },
        {
@@ -3836,7 +3837,7 @@
         "name": "Billy Loomis",
         "short": "BILLY",
         "pct": 25,
-        "tier": "YOU'RE DEAD",
+        "tier": "S SLAUGHTERED",
         "tile": "tiles/billy.png"
        },
        {
@@ -3844,7 +3845,7 @@
         "name": "Wayne Bailey",
         "short": "WAYNE",
         "pct": 22,
-        "tier": "YOU'RE DEAD",
+        "tier": "S SLAUGHTERED",
         "tile": "tiles/wayne.png"
        },
        {
@@ -3852,7 +3853,7 @@
         "name": "Jill Roberts",
         "short": "JILL",
         "pct": 18,
-        "tier": "YOU'RE DEAD",
+        "tier": "S SLAUGHTERED",
         "tile": "tiles/jill.png"
        },
        {
@@ -3860,7 +3861,7 @@
         "name": "Roman Bridger",
         "short": "ROMAN",
         "pct": 15,
-        "tier": "YOU'RE DEAD",
+        "tier": "S SLAUGHTERED",
         "tile": "tiles/roman.png"
        }
       ],
@@ -3904,7 +3905,7 @@
  "tiers": [
   [
    "S",
-   "Six Feet Under",
+   "Slaughtered",
    25
   ],
   [
@@ -3915,16 +3916,21 @@
   [
    "B",
    "Better Run",
-   55
+   50
   ],
   [
    "C",
-   "Can Fight Back",
-   75
+   "Close Call",
+   60
   ],
   [
    "D",
    "Don't Worry",
+   80
+  ],
+  [
+   "E",
+   "Easy",
    101
   ]
  ],
