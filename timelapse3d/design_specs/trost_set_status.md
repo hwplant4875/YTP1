@@ -2,6 +2,19 @@
 
 Latest first.
 
+## Update 3 (g8 agent, cloud QA vs ref/anime/bible/ep13_000019194.jpg; API unchanged)
+- Walls (Trost only): TrostWallStone base pre-warmed (#c3b18c) so the lit toon band reads #CEC3A6; damp foot #6f6a58 with
+  moss and vertical damp streaks 6-12 m (stone_mat damp_k / damp_streaks); TrostPilaster lighter (#d8caa6) so the
+  pilaster shading reads against the recessed panels.
+- Breach front: the radiating crack tubes are gone; OuterGate_Beams is now **TrostBreachTimbers** (6 chunky dark-brown
+  broken beams with splintered ends + 5 dark root strands), renamed because toon.py inks every "*Gate*" object with a
+  0.25 m hull (the thin tubes read as thick black bars). set_breach() shows/hides it as before.
+- Seal: **OuterGate_SealRubble** is now a low skirt only at the ball's sides (dark brick #5e3428 / grey stone), so the
+  ball's front face stays visible at the base of the Λ plug; set_seal(True) also shows **TrostBallContactSeal**.
+- Ball weight: **TrostBallContactB0** (darker contact patch + dust ring on the lawn bed under the ball at B0) and
+  TrostBallContactSeal (same at the seal rest, front ring only). g8 hides the B0 one when the ball is lifted.
+- Note for g8-time renders: g8 also flattens OuterGateRubble (scale z 0.45, pressed to ~0.2 by the jam) at run time.
+
 ## Update 2: blocks 5-9 filled in (build ≈ 19-26 s; stills 1.4-2.0 s/frame after the first-frame shader compile)
 - `TR.set_hq_cutaway(frac)` now dissolves TrostHQ_Bay with a dithered alpha (0 < frac < 1; installed lazily after toon),
   1 hides it; TrostHQ_BayShadow (camera-invisible, shadow-only) keeps the sun out of the storeroom.

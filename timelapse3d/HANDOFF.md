@@ -321,8 +321,8 @@ TROST:
 - C (Trost): NEXT: full Trost re-render with toon: the side-on boulder carry, thinner breach dust, the cart shove; plus a toon before/after still.
 - G (integration): NEXT: connectors C1-C3 and the march with toon, then assemble_master.sh for the full one-take preview.
 
-## 10:52 (10/26 UTC) OWNER: length = TIGHT 7:02 cut, every scene kept ("7?, ?? ?? ??") � FINAL
-- SEGMENTS locked to SCENE_BIBLE_v2 A1 tight column: g1 32.0 � g2 32.0 � g3 78.4 � g4 20.0 � g5 70.0 � g6 69.5 � g7 45.0 � g8 75.0 = 421.9 s.
+## 10:52 (10/26 UTC) OWNER: length = TIGHT 7:02 cut, every scene kept ("7분, 장면 모두 유지") - FINAL
+- SEGMENTS locked to SCENE_BIBLE_v2 A1 tight column: g1 32.0 · g2 32.0 · g3 78.4 · g4 20.0 · g5 70.0 · g6 69.5 · g7 45.0 · g8 75.0 = 421.9 s.
 - One-place re-time: aot/segtime.py (A1 table); each seg module keeps its beats in one table.
 
 ## 11:00 (10/26 UTC) RESUME (laptop): implementing SCENE_BIBLE_v2 section D, multi-agent (max 3, Opus for camera/layout, Sonnet for bulk)
@@ -334,6 +334,18 @@ TROST:
 - He smashes the inner gate with his RIGHT shoulder (not the left; render_fall2.py currently says "left shoulder leads": flip it).
 - After breaking through, his speed carries him into a long forward SLIDE (feet skidding, dust furrows, rubble ploughed ahead) before he stops and straightens. Bible g2 updated (slide to y ≈ +45, 13.5-16 s).
 
+## 13:40 (10/26 UTC) Cloud QA of trost_set_v3 -> routed
+- g8 agent (may edit trost.py for these only): seal shows the ball wedged at the base of the Λ plug (low dark skirt, no pink rubble); breach front = broken dark timber beams + roots instead of black bars; Trost walls warm beige #CEC3A6 + damp mossy lower 6-12 m #6f6a58 + pilaster shading; ball contact shadow + dust ring.
+- g1 agent: the same wall look on Wall Maria/Shiganshina.
+- OPEN for the world/master pass: the ground around Trost is flat bare green; add gentle hills, tree clumps, fields (walls dominant).
+
+## 14:20 (10/26 UTC) OWNER: music and Eren's voice etc. are added by the owner in the edit
+- Our renders stay silent (no music/VO/SFX tracks); keep the short overlay holds so the owner can place lines there.
+
+## 15:4x (10/26 UTC) g1 v1 rendered (render_g1.sh, renders/g1/) -> lead QA: NOT shown to the owner yet
+- The Colossal is unreadable at the bible K4-K5 distance (500-690 m, head 1-2% of the frame), the kick is invisible, 4-6 s is mostly sky, and 22-32 s is near top-down at 52-57° pitch (bible keys break A3). Rework sent: head 10-15% of the frame (owner 06:05/15:07, within 00:44 "no over-zoom"), pitch 30-42° for Carla, pour visible, terraced rows. SEAM_IN may move (g2 not built yet); camkeys/segtime/render_fall2 must stay consistent.
+
 ## 15:25 (10/26 UTC) USER: cannon basin water is on the LEFT (owner capture = anime ep09 F09/000028171)
 - Seen from the Garrison bank looking at Eren's group and the wall, the canal + barred water gate must be on the LEFT. v3_basin had it on the right because g7 mirrored the anime basin N-S into Trost.
 - Cloud ruling: build the basin at its ANIME position, on Wall Rose's NORTH face beside the canal water gate (Y' = 1740 - Y for every basin element; floor X 340..385, Y 875..907). See SCENE_BIBLE_v2 g7 "CORRECTION". Re-key g7 0-19.5 s on the north side. A few basin buildings north of Rose are an allowed lore exception.
+- (Lead had first proposed rotating the basin east of the canal; superseded by this cloud ruling.)

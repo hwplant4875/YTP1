@@ -14,7 +14,10 @@ ground_z, walkable, on_road, nearest_road, in_district, in_canal, street_polylin
 
 KEY OBJECTS (names other agents use)
   OuterGate / OuterGate_Door / OuterGate_Iron      intact town-side gatehouse, its big strap door, the outside iron leaf
-  OuterGateBroken / OuterGateRubble / OuterGate_Beams   the kick breach (X -7.5..7.5, top Z 30-34) + rubble fan + beams
+  OuterGateBroken / OuterGateRubble / TrostBreachTimbers   the kick breach (X -7.5..7.5, top Z 30-34) + rubble fan + broken
+                     timbers / roots (was OuterGate_Beams; renamed so toon.py does not ink it with 0.25 m black hulls)
+  TrostBallContactB0 / TrostBallContactSeal   darker contact patch + dust ring under the ball (bed at B0 / the seal rest;
+                     the seal one shows with set_seal(True); g8 hides the B0 one when the ball is lifted)
   OuterGate_Glow     orange emissive card in the breach (set_glow(v))          OuterGate_Plug   Λ tendril plug (set_plug(f))
   OuterGate_SealRubble crushed-brick ring at the ball rest (set_seal)          GS_Crater* / GS_CraterCap* (set_breach)
   TrostSlab_P1..P6 (pit arc), TrostSlab_A1..A8 (avenue mouth): spiked slab barricades, origin = base centre, local -Y =
@@ -651,7 +654,8 @@ def flat_mat(name, hexcol, rough=0.85, var=0.08, scale=0.4):
         col = c
     return nb.finish(col)
 
-def stone_mat(name, base, mortar_k=0.86, block=(2.4, 1.2), damp=None, moss=None, damp_z=(6.0, 12.0), var=0.07, rand_tint=0.0):
+def stone_mat(name, base, mortar_k=0.86, block=(2.4, 1.2), damp=None, moss=None, damp_z=(6.0, 12.0), var=0.07, rand_tint=0.0,
+              damp_k=0.85, damp_streaks=False):
     """Ashlar / wall stone: faint block courses, broad stains, vertical grime streaks, an optional damp (darker, mossy)
     band at the foot (object z).  Block coords use (x + y, z) on walls and (x, y) on tops."""
     nb = NB(name, 0.9)
@@ -683,7 +687,13 @@ def stone_mat(name, base, mortar_k=0.86, block=(2.4, 1.2), damp=None, moss=None,
         dn = nb.noise(o, 0.15, 3.0)
         zz = nb.math("ADD", Z, nb.math("MULTIPLY", nb.math("SUBTRACT", dn.outputs["Fac"], 0.5), 5.0))
         f = nb.math("SUBTRACT", 1.0, nb.smooth(zz, damp_z[0], damp_z[1]))
-        col = nb.mix(nb.math("MULTIPLY", f, 0.85), col, lin(damp))
+        if damp_streaks:                                      # damp runs up in vertical streaks above the band
+            dsv = nb.vmath("MULTIPLY", o, (0.9, 0.9, 0.035))
+            dsn = nb.noise(dsv, 0.9, 3.0)
+            reach = nb.math("SUBTRACT", 1.0, nb.smooth(Z, damp_z[1], damp_z[1] + 9.0))
+            fs = nb.math("MULTIPLY", nb.smooth(dsn.outputs["Fac"], 0.55, 0.68), reach)
+            f = nb.math("MAXIMUM", f, nb.math("MULTIPLY", fs, 0.8))
+        col = nb.mix(nb.math("MULTIPLY", f, damp_k), col, lin(damp))
         if moss:
             mv = nb.vmath("MULTIPLY", o, (0.8, 0.8, 0.08))
             mn = nb.noise(mv, 1.2, 4.0)
@@ -933,8 +943,13 @@ def _materials(MT):
     if MT.get("_trost_mats"):
         return MT
     MT["_trost_mats"] = True
-    MT["wall_t"] = stone_mat("TrostWallStone", "#cec3a6", damp="#7f786a", moss="#56623e", damp_z=(7.0, 12.5))
-    MT["pilaster"] = stone_mat("TrostPilaster", "#d3c9b0", damp="#827b6c", moss="#56623e", damp_z=(6.0, 11.0))
+    # QA 10/26 (g8 agent): the toon pass multiplies the base by its light band and AgX desaturates it, so #cec3a6 rendered
+    # flat pale grey-white; the base is pre-warmed so the lit wall READS #CEC3A6 on screen, with a darker damp, mossy foot
+    # (#6f6a58 streaks up to 6-12 m) and lighter pilasters so their shading reads against the recessed panels.
+    MT["wall_t"] = stone_mat("TrostWallStone", "#c3b18c", damp="#6f6a58", moss="#4f5a36", damp_z=(6.0, 12.0), damp_k=0.95,
+                             damp_streaks=True)
+    MT["pilaster"] = stone_mat("TrostPilaster", "#d8caa6", damp="#77705d", moss="#4f5a36", damp_z=(5.0, 10.0), damp_k=0.9,
+                               damp_streaks=True)
     MT["walk_brick"] = brick_mat("TrostWalkBrick", "#8e5a48", "#6e4a3c", scale=1.6)
     MT["walk_lime"] = stone_mat("TrostWalkLime", "#cfc4a8", block=(1.6, 1.6))
     MT["gh_brick"] = brick_mat("TrostGateBrick", "#8a4f3c", "#b8aa92", scale=3.0)
@@ -960,6 +975,11 @@ def _materials(MT):
     MT["bark_t"] = flat_mat("TrostBark", "#3a2c22", 0.9, 0.1)
     MT["rubble_brick"] = flat_mat("TrostRubbleBrick", "#8d4b3a", 0.9, 0.15, 1.0)
     MT["rubble_stone"] = flat_mat("TrostRubbleStone", "#8e8a80", 0.9, 0.12, 1.0)
+    MT["rubble_dark"] = flat_mat("TrostRubbleDark", "#5e3428", 0.9, 0.15, 1.0)
+    MT["timber_split"] = flat_mat("TrostTimberSplit", "#4a3424", 0.9, 0.18, 1.2)
+    MT["contact_dark"] = flat_mat("TrostBallContact", "#2e2a24", 0.95, 0.0)
+    MT["contact_mid"] = flat_mat("TrostBallContactMid", "#4f483c", 0.95, 0.0)
+    MT["dust_ring"] = flat_mat("TrostBallDust", "#9a8b6c", 0.95, 0.15, 0.6)
     MT["rock_court"] = rock_mat("TrostRockCourt", "#4a4a48")
     MT["rock_pale"] = rock_mat("TrostRockPale", "#8a867e")
     MT["rock2"] = rock_mat("TrostRock2", "#77726a")
@@ -1066,6 +1086,29 @@ def _coll(name, parent=None):
 def _hide(ob, hidden=True):
     if ob:
         ob.hide_render = ob.hide_viewport = bool(hidden)
+
+def _ball_contact(name, xy, z, MT, front_only=False, coll=None):
+    """QA 10/26 (P2): a darker contact patch (r 2.6 / 4.2) + a pale dust ring (r 6.6-8.8) under the ball so it reads heavy.
+    Flat decals (no toon ink: the name has no Gate/Boulder key).  front_only: the dust ring only on the town side (Y+)."""
+    bm = bmesh.new()
+    cx, cy = xy
+    def ring(r0, r1, z_, mi, a0=0.0, a1=math.tau, seg=40, jag=0.0, seed=1):
+        rr = random.Random(seed)
+        for q in range(seg):
+            u0 = a0 + (a1 - a0) * q / seg; u1 = a0 + (a1 - a0) * (q + 1) / seg
+            j0 = 1 + jag * rr.uniform(-1, 1); j1 = 1 + jag * rr.uniform(-1, 1)
+            ps = [(cx + math.cos(u0) * r0, cy + math.sin(u0) * r0), (cx + math.cos(u1) * r0, cy + math.sin(u1) * r0),
+                  (cx + math.cos(u1) * r1 * j1, cy + math.sin(u1) * r1 * j1), (cx + math.cos(u0) * r1 * j0, cy + math.sin(u0) * r1 * j0)]
+            if r0 <= 0.01:
+                ps = [ps[0], ps[2], ps[3]]
+            bm.faces.new([bm.verts.new((x, y, z_)) for x, y in ps]).material_index = mi
+    a0, a1 = (0.0, math.pi) if front_only else (0.0, math.tau)
+    ring(0.0, 2.6, z + 0.06, 0, seg=24)
+    ring(2.6, 4.2, z + 0.05, 1, seg=32)
+    ring(6.6, 8.8, z + 0.04, 2, a0, a1, seg=44, jag=0.18, seed=7)
+    ob = _mk(name, bm, [MT["contact_dark"], MT["contact_mid"], MT["dust_ring"]], coll)
+    ob.visible_shadow = False
+    return ob
 
 # ====================================================================================== terrain + town floor
 def _axis(fine0, fine1, step, lo, hi, grow=1.25, cap=400.0):
@@ -1597,32 +1640,42 @@ def build_outer_gate(MT):
         sx = rnd.choice((-1, 1))
         box(bm, (sx * (hw_ + rnd.uniform(-0.3, 0.8)), rnd.uniform(10.0, 15.6), z), (rnd.uniform(0.6, 1.6), rnd.uniform(0.6, 2.0), rnd.uniform(0.4, 1.2)),
             rot=rnd.uniform(0, 3), mi=6)
-    for k in range(12):
-        a = rnd.uniform(-0.6, 0.6) + (0 if rnd.random() < 0.5 else math.pi)
-        z = rnd.uniform(4, 34); hw_ = max(hole_gh(z), 7.0)
-        x0 = math.copysign(hw_, math.cos(a))
-        q = [(x0, 15.08, z)]
+    for k in range(12):                                          # (crack tubes removed: QA 10/26) keep the random stream
+        rnd.uniform(-0.6, 0.6); rnd.random(); rnd.uniform(4, 34)
         for j in range(1, 4):
-            q.append((x0 + math.cos(a) * j * rnd.uniform(1.5, 2.5), 15.08, z + math.sin(a) * j * rnd.uniform(1.0, 2.0)))
-        tube(bm, q, 0.035, 0.01, 3, mi=5)
+            rnd.uniform(1.5, 2.5); rnd.uniform(1.0, 2.0)
     broken = _mk("OuterGateBroken", bm, mats + [MT["gh_brick"]])
-    # broken floor beams in 3 layers, dead roots inside
-    bm = bmesh.new()
-    for z in (13.0, 20.0, 27.0):
+    # broken floor beams + a few dead root strands.  QA 10/26: fewer, chunkier dark-brown timbers with splintered ends,
+    # in an object NOT named "*Gate*" (toon.py inks every "Gate" object with a 0.25 m hull: thin tubes became black bars).
+    for z in (13.0, 20.0, 27.0):                                     # keep the random stream as before
         for k in range(4):
-            sx = rnd.choice((-1, 1)); y = rnd.uniform(5.5, 14.5)
-            hw_ = hole_gh(z)
-            ln = rnd.uniform(1.5, 4.5)
-            x0 = sx * (hw_ + 0.5)
-            x1 = x0 - sx * ln
-            tube(bm, [(x0, y, z), (x1, y + rnd.uniform(-0.5, 0.5), z - rnd.uniform(0.0, 1.8))], 0.3, 0.25, 4, mi=0)
+            rnd.choice((-1, 1)); rnd.uniform(5.5, 14.5); rnd.uniform(1.5, 4.5); rnd.uniform(-0.5, 0.5); rnd.uniform(0.0, 1.8)
     for k in range(9):
-        x = rnd.choice((-1, 1)) * rnd.uniform(3.5, 6.5); z = rnd.uniform(18, 31)
-        q = [(x, rnd.uniform(-4.5, 14.0), z)]
+        rnd.choice((-1, 1)); rnd.uniform(3.5, 6.5); rnd.uniform(18, 31); rnd.uniform(-4.5, 14.0)
         for j in range(1, 5):
-            q.append((x + rnd.uniform(-1.2, 1.2), q[-1][1] + rnd.uniform(-1, 1), z - j * rnd.uniform(1.5, 3.0)))
-        tube(bm, q, 0.07, 0.02, 3, mi=1)
-    _mk("OuterGate_Beams", bm, [MT["timber_d"], MT["vine"]])
+            rnd.uniform(-1.2, 1.2); rnd.uniform(-1, 1); rnd.uniform(1.5, 3.0)
+    bm = bmesh.new()
+    brng = random.Random(77)
+    for (z, sx, y, ln, droop) in ((13.2, -1, 9.0, 4.2, 1.4), (13.6, 1, 12.5, 3.0, 0.6), (20.2, 1, 7.5, 4.6, 2.0),
+                                  (20.6, -1, 13.0, 2.6, 0.4), (27.0, -1, 10.5, 3.8, 1.6), (27.4, 1, 6.5, 2.2, 0.8)):
+        hw_ = max(hole_gh(z), 3.0)
+        x0 = sx * (hw_ + 0.6); x1 = x0 - sx * ln
+        a, b = Vector((x0, y, z)), Vector((x1, y + brng.uniform(-0.6, 0.6), z - droop))
+        q1 = a + (b - a) * 0.85
+        tube(bm, [a, q1], 0.32, 0.28, 6, mi=0)                       # the beam (square-ish, 0.6 m)
+        d = (b - a).normalized(); n_ = Vector((-d.y, d.x, 0.0))
+        n_ = n_.normalized() if n_.length > 1e-3 else Vector((1, 0, 0))
+        for j in range(3):                                           # splintered end: 3 thin tapering spikes
+            off = n_ * brng.uniform(-0.2, 0.2) + Vector((0, 0, brng.uniform(-0.18, 0.18)))
+            tip = b + d * brng.uniform(0.4, 1.4) + off * 2.0
+            tube(bm, [q1 + off, tip], 0.14, 0.02, 4, mi=0)
+    for k in range(5):                                               # dark dead root strands hanging in the hole
+        x = brng.choice((-1, 1)) * brng.uniform(3.0, 6.0); z = brng.uniform(20, 31)
+        q = [(x, brng.uniform(6.0, 14.0), z)]
+        for j in range(1, 5):
+            q.append((x + brng.uniform(-1.0, 1.0), q[-1][1] + brng.uniform(-0.8, 0.8), z - j * brng.uniform(1.8, 3.0)))
+        tube(bm, q, 0.16, 0.05, 4, mi=1)
+    _mk("TrostBreachTimbers", bm, [MT["timber_split"], MT["vine"]])
     # rubble fan 15-20 m north of the breach (3 m high at the hole)
     bm = bmesh.new()
     for k in range(190):
@@ -1636,10 +1689,8 @@ def build_outer_gate(MT):
         z = rnd.uniform(0.0, max(0.2, hmax)) + sz * 0.3
         box(bm, (x, y, z), (sz, sz * rnd.uniform(0.6, 1.3), sz * rnd.uniform(0.4, 0.9)), rot=rnd.uniform(0, 3),
             mi=0 if rnd.random() < 0.6 else 1)
-    for k in range(10):
-        x0 = rnd.uniform(-6, 6); y0 = rnd.uniform(13, 22)
-        a = rnd.uniform(0, math.pi)
-        tube(bm, [(x0, y0, 0.6), (x0 + math.cos(a) * 4, y0 + math.sin(a) * 2, rnd.uniform(1.0, 3.0))], 0.28, 0.22, 4, mi=2)
+    for k in range(10):                                              # (rubble timbers dropped: ink bars; QA 10/26)
+        rnd.uniform(-6, 6); rnd.uniform(13, 22); rnd.uniform(0, math.pi); rnd.uniform(1.0, 3.0)
     for k in range(40):                                              # chunks out on the grass / ring road
         a = rnd.uniform(math.radians(15), math.radians(165)); r = rnd.uniform(20, 75)
         x, y = math.cos(a) * r, math.sin(a) * r
@@ -1657,14 +1708,21 @@ def build_outer_gate(MT):
     glow = _mk("OuterGate_Glow", bm, [MT["glow"]])
     glow.visible_shadow = False
     _build_plug(MT, rnd)
+    # QA 10/26: the crushed-brick ring hid the ball.  Now a LOW skirt only at the sides (|X| 5.6..10, under 1 m), dark
+    # brick / grey stone, so the big grey ball reads wedged in the hole at the plug's base with its front face clear.
+    for k in range(60):                                              # keep the random stream as before
+        rnd.uniform(0, math.pi); rnd.uniform(6.8, 8.6); rnd.uniform(0.4, 1.2); rnd.uniform(0, 3)
     bm = bmesh.new()
-    for k in range(60):
-        a = rnd.uniform(0, math.pi); r = rnd.uniform(6.8, 8.6)
-        x, y = math.cos(a) * r * 1.05, 8.0 + math.sin(a) * r * 0.6 + 3.0
-        sz = rnd.uniform(0.4, 1.2)
-        box(bm, (x, max(y, 12.0), sz * 0.3), (sz, sz, sz * 0.6), rot=rnd.uniform(0, 3), mi=0)
-    _mk("OuterGate_SealRubble", bm, [MT["rubble_brick"]])
-    for n_ in ("OuterGateBroken", "OuterGateRubble", "OuterGate_Beams", "OuterGate_Glow", "OuterGate_Plug", "OuterGate_SealRubble"):
+    srng = random.Random(91)
+    for k in range(46):
+        sx = srng.choice((-1, 1))
+        x = sx * srng.uniform(5.6, 10.0); y = srng.uniform(9.5, 17.5)
+        sz = srng.uniform(0.35, 1.0) * (1.0 - 0.35 * (abs(x) - 5.6) / 4.4)
+        box(bm, (x, y, sz * 0.28), (sz * srng.uniform(0.9, 1.5), sz, sz * 0.55), rot=srng.uniform(0, 3), mi=0 if k % 3 else 1)
+    _mk("OuterGate_SealRubble", bm, [MT["rubble_dark"], MT["rubble_stone"]])
+    _ball_contact("TrostBallContactSeal", (BALL_REST_M[0], BALL_REST_M[1]), 0.0, MT, front_only=True)
+    for n_ in ("OuterGateBroken", "OuterGateRubble", "TrostBreachTimbers", "OuterGate_Glow", "OuterGate_Plug", "OuterGate_SealRubble",
+               "TrostBallContactSeal"):
         _hide(bpy.data.objects.get(n_))
     return gate
 
@@ -2002,6 +2060,7 @@ def build_boulder_court(MT):
     rock_blob(bm, (0, 0, 3.0), (3.4, 3.0, 3.6), rnd, 3, 0, 0.95, 0.28)
     r2 = _mk_at("TrostRock2", bm, [MT["rock2"]], (308.0, 247.0, 0.0), cc)
     # broken, pushed-up paving within 4 m of the ball is in the bed's rubble skirt
+    _ball_contact("TrostBallContactB0", (bx, by), 0.6, MT, coll=cc)          # QA 10/26: contact shadow + dust ring (heavy)
     return ob
 
 def build_strip(MT):
@@ -2785,7 +2844,7 @@ def set_breach(on=True):
     the glow card comes on with the breach (set_glow fades it)."""
     for n in ("OuterGate", "OuterGate_Door", "OuterGate_Iron"):
         _hide(bpy.data.objects.get(n), on)
-    for n in ("OuterGateBroken", "OuterGateRubble", "OuterGate_Beams"):
+    for n in ("OuterGateBroken", "OuterGateRubble", "TrostBreachTimbers"):
         _hide(bpy.data.objects.get(n), not on)
     for i in range(len(CRATERS_M) + len(HOLES_M)):
         _hide(bpy.data.objects.get(f"GS_Crater{i}"), not on)
@@ -2812,6 +2871,7 @@ def set_plug(frac):
 def set_seal(on=True, plug=1.0):
     """Sealed state: glow off, crushed-brick ring at the ball rest, plug grown to `plug`."""
     _hide(bpy.data.objects.get("OuterGate_SealRubble"), not on)
+    _hide(bpy.data.objects.get("TrostBallContactSeal"), not on)
     if on:
         set_glow(0.0)
     set_plug(plug if on else 0.0)
