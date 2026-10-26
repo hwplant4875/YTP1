@@ -50,21 +50,21 @@ G1_BIBLE = [
     (33.0, (-130, -686, 114), (-165, -594, 0), 28),      # guide key (seam at rest)
 ]
 # ---------------------------------------------------------------- g2 (W)
-G2 = [   # v3 (g2 v2 QA 10/27, owner 00:44 '갑옷거인에게 포커싱'): the ONE closer segment: K2-K7 ~160-200 m, 46-50 mm, he is
-         # ~90-110 px (~1/4 frame), front / side three-quarter, never behind; framing locked on him 6-20 s (<= 1.7 deg).
-         # Yaw <= 27.7 deg/s, pitch 23-44, height >= 95 m; K0 = g1 seam (rest), K9 = g3 seam (segtime g2_g3).
+G2 = [   # v4 (g2 v3 QA 10/27): close framing (owner 00:44) K2-K7 ~160-200 m, 44-50 mm, ~90-125 px; the impact is held
+         # side three-quarter from the SW (27 deg down), then over the wall for the north slide; the breach is seen from the
+         # north 22-29 deg off its normal at 19.5-21 s.  Yaw <= 28.3 deg/s, pitch 23-42; K0 = g1 seam (rest), K9 = g3 seam.
     (0, (-254, -468, 95), (-167, -590, 2), 28),   # SEAM_IN v2 (= g1 K12, at rest)
     (3, (-185, -330, 108), (-40, -340, 6), 36),   # swoop NE over the roofs, turning onto the avenue
-    (6, (-72, -129.5, 114), (0, -232.5, 9), 48),   # LOCK: front three-quarter (ahead + west of him), ~165 m, he is ~105 px tall
+    (6, (-72, -129.5, 114), (0, -232.5, 9), 48),   # LOCK: front three-quarter (ahead + west of him), ~165 m, ~105 px
     (9, (-80, -47.5, 112), (0, -145.5, 9), 49),   # the face ricochet at 9.15 seen from the front
-    (11.5, (-118, -12, 108), (0, -73, 9), 50),   # he runs past: front 3/4 -> side; gun line, crews, crest leaf
-    (13.5, (-150, -22, 106), (0, -12, 10), 50),   # IMPACT side-on from the west
-    (15, (-150, -8, 140), (0, 26, 9), 49),   # crane up over the wall line: he bursts out of the north face
-    (17, (-140, 40, 128), (0, 46, 9), 47),   # north side: the slide ends at y +46, furrows, rubble
-    (20, (-92, 140, 118), (0, 44, 9), 46),   # front 3/4 from the north-west: him steaming in the thinning haze, the breach behind
-    (23, (-50, 170, 155), (125, 185, 0), 37),   # turn off him toward the quays
-    (25.5, (0, 205, 205), (265, 375, 0), 30),   # quays + ferries
-    (28, (105, 300, 228), (240, 580, 0), 30),   # the lone ferry heading north
+    (11.5, (-112, -78, 102), (0, -73, 9), 50),   # he runs past the camera: front 3/4 -> side
+    (13.5, (-132, -112, 96), (0, -13, 11), 50),   # IMPACT: side three-quarter from the SW, 27 deg down, gatehouse + him in frame
+    (15.5, (-150, -8, 140), (0, 30, 9), 49),   # rise over the wall line: he bursts out of the north face
+    (17, (-140, 40, 128), (0, 46, 9), 47),   # north side: the slide ends at y +46
+    (20, (-80, 145, 118), (0, 34, 10), 44),   # from the north, ~25-30 deg off the wall normal: him steaming + the dark arch breach behind
+    (23.5, (-35, 185, 150), (160, 215, 0), 36),   # turn off him toward the quays
+    (26.5, (30, 240, 215), (265, 400, 0), 30),   # quays + ferries
+    (29, (120, 340, 230), (240, 640, 0), 29),   # the lone ferry heading north
     (32, (175, 480, 240), (228, 1050, 0), 28),   # = g2->g3 seam (segtime g2_g3), unchanged
 ]
 # ---------------------------------------------------------------- g3  (group-local seconds)
