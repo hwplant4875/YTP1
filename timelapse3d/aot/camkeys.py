@@ -50,22 +50,20 @@ G1_BIBLE = [
     (33.0, (-130, -686, 114), (-165, -594, 0), 28),      # guide key (seam at rest)
 ]
 # ---------------------------------------------------------------- g2 (W)
-G2 = [   # v2 (g2 agent 10/27): new seam K0 + a FAR observer (~360 m, pitch 34-41 deg so the 3-4 storey avenue houses do not
-         # hide him) locked on the Armored from the SW (rear three-quarter at most, never behind).  The old K1 (3.5 s, a ~100 deg
-         # turn from the ruin to the avenue) gave 68 deg/s: K1 is now a 3.0 s pan + climb and the lock starts at 6.0 s (<= 24 deg/s).
-         # Look-at keys K2-K4 sit ON his track (seg_g2.arm_y).  K5 cranes over the wall for the slide, K6-K8 the quays / ferries,
-         # K9 = the g2->g3 seam (segtime g2_g3), unchanged.
-    (0.0,  (-254, -468, 95),  (-167, -590, 2), 28),            # SEAM_IN v2 (= g1 K12, at rest)
-    (3.0,  (-248, -470, 150), (-70, -480, 6), 31),             # pan off the ruin toward the avenue, climbing
-    (6.0,  (-210, -445, 210), (0, -233.0, 10), 37),            # locked on him (y -233 at 6.0 s), ~360 m
-    (9.0,  (-196, -366, 222), (0, -146.0, 10), 39),            # wall-top guns + ricochets behind, the face hit at 9.15
-    (11.0, (-189, -306, 226), (0, -88.0, 12), 40),             # field volleys, crest leaf, gun line
-    (13.5, (-182, -240, 230), (0, -10, 14), 40),               # IMPACT (right shoulder)
-    (16.3, (-165, -170, 255), (0, 40, 10), 37),                # over the wall top: the slide ends at y ~ +46
-    (20.0, (-150, -60, 212),  (18, 88, 0),     33),            # dust ball, him standing, gate road, apron crowd
-    (24.0, (-15, 130, 225),   (245, 280, 0),   30),            # quays + ferries (the canal bends east here)
-    (28.0, (105, 300, 232),   (240, 580, 0),   30),            # the lone ferry heading north
-    (32.0, (175, 480, 240),   (228, 1050, 0),  28),            # = g2->g3 seam (segtime g2_g3), unchanged
+G2 = [   # v3 (g2 v2 10/27, owner 00:44 '갑옷거인에게 포커싱'): the ONE closer segment: K2-K5 ~165-200 m, 47-50 mm, he is
+         # ~100-110 px (1/4 frame), front / side three-quarter, never behind; framing locked on him 6-20 s (<= 2.4 deg).
+         # Yaw <= 28.4 deg/s, pitch 23-45, height >= 95 m; K0 = g1 seam (rest), K9 = g3 seam (segtime g2_g3).
+    (0, (-254, -468, 95), (-167, -590, 2), 28),   # SEAM_IN v2 (= g1 K12, at rest)
+    (3, (-185, -330, 108), (-40, -340, 6), 36),   # swoop NE over the roofs, turning onto the avenue
+    (6, (-72, -129.5, 114), (0, -232.5, 9), 48),   # LOCK: front three-quarter (ahead + west of him), ~165 m, he is ~105 px tall
+    (9, (-80, -47.5, 112), (0, -145.5, 9), 49),   # the face ricochet at 9.15 is seen from the front
+    (11.5, (-118, -12, 108), (0, -73, 9), 50),   # he runs past: front 3/4 -> side, gun line + crest leaf in frame
+    (13.5, (-150, -22, 106), (0, -12, 10), 50),   # IMPACT seen side-on from the west (right shoulder toward camera's far side)
+    (16.3, (-150, 2, 132), (0, 38, 9), 47),   # rise over the wall line: he bursts out of the north face and slides to y +46
+    (20, (-110, 120, 122), (0, 46, 9), 47),   # north side, front 3/4: him standing + steaming in the thinning haze, the breach behind
+    (24.5, (-10, 185, 200), (265, 365, 0), 30),   # climb out to the quays + ferries
+    (28, (105, 300, 228), (240, 580, 0), 30),   # the lone ferry heading north
+    (32, (175, 480, 240), (228, 1050, 0), 28),   # = g2->g3 seam (segtime g2_g3), unchanged
 ]
 # ---------------------------------------------------------------- g3  (group-local seconds)
 G3_FLIGHT_W = [                                                       # FA0..FA3, frame W
@@ -127,28 +125,34 @@ G5 = [
     (70.0, (-345, 455, 175),  (-185, 640, 15),  30),              # C10
 ]
 # ---------------------------------------------------------------- g6 (M), tight times
-G6 = [
-    (0.0,  (-345, 455, 175), (-185, 640, 15),  30),               # H0
-    (7.0,  (-330, 470, 150), (-225, 605, 10),  30),               # H1
-    (14.5, (-255, 470, 120), (-205, 600, 6),   32),               # H2
-    (19.5, (-197, 543, 98),  (-187, 643, 1),   38),               # H3 cutaway, pulled back 22 m S (g6 agent 10/27: pitch 51 -> 44,
-    (33.5, (-193, 540, 98),  (-186, 642, 1),   38),               # H3b  owner limit 17-45 deg; still sees the ring over the cut wall)
-    (38.5, (-150, 495, 110), (-185, 620, 8),   32),               # H4
-    (46.5, (-110, 515, 105), (-182, 617, 4),   35),               # H5
-    (52.5, (-132, 538, 96),  (-180, 619, 4),   38),               # H6 (g6 agent: 90 m/40 mm -> 96 m/38 mm, far observer)
-    (59.5, (-90, 560, 115),  (-215, 615, 18),  32),               # H7
-    (64.5, (48, 600, 126),   (-5, 745, 12),    32),               # H7b (g6 agent): look-at guide, keeps the exit pitch <= 45
-    (69.5, (220, 650, 130),  (345, 810, 0),    32),               # H8
+G6 = [   # g6 agent 10/27: owner 16:51 "FAR is better" -> the whole segment stays at the g5 seam distance (230-290 m, 30-34 mm);
+         # bible look-at targets kept, positions pulled back (bible H3 was 127 m / 38 mm at 51 deg pitch, H6 90 m / 40 mm)
+    (0.0,  (-345, 455, 175), (-185, 640, 15),  30),               # H0 = g5 C10
+    (7.0,  (-332, 478, 169), (-225, 605, 10),  30),               # H1 approach, Jean's squad, climbers
+    (14.5, (-318, 484, 158), (-210, 605, 6),   31),               # H2 tackle aftermath, rampage
+    (19.5, (-282, 482, 165), (-190, 630, 3),   33),               # H3 cutaway from the SW (41 deg; sees the ring over the cut wall)
+    (33.5, (-272, 479, 165), (-188, 636, 2),   33),               # H3b drift through the lift op, swarm in the lower frame
+    (38.5, (-215, 440, 170), (-188, 622, 8),   32),               # H4 roar before the wing, cadets on the wing roof
+    (46.5, (-150, 450, 165), (-183, 617, 4),   33),               # H5 collapse + skid along the wing base (owner wing ref, from the sky)
+    (52.5, (-150, 455, 160), (-180, 619, 4),   34),               # H6 Eren on the nape, Mikasa drops in
+    (59.5, (-110, 470, 170), (-215, 615, 18),  31),               # H7 tableau on the keep roof walk + corpses
+    (64.5, (40, 560, 165),   (-5, 745, 12),    32),               # H7b look-at guide (exit pitch <= 45)
+    (69.5, (220, 650, 130),  (345, 810, 0),    32),               # H8 = g7 C0
 ]
 # ---------------------------------------------------------------- g7 (M), PACE table
+# g7 agent 10/27: the basin is on Rose's NORTH face (owner 15:25 10/26), so 0-23.5 s is re-keyed on the north side (the
+# bible keys mirrored Y' = 1740 - Y, then smoothed): C1 crosses the wall WEST of the basin, FIRE moves 3.0 -> 6.0 (a 3 s
+# transit cannot turn the view 100 deg under 30 deg/s), no push-in (FIRE/salute 166-170 m at 38 mm, steam 196 m at 34 mm).
+# Look-at: enters with g6's look-at velocity (look_v_in, computed below) and arrives at rest at C15 (g8 K0 starts at rest).
 G7 = [
-    (0.0,  (220, 650, 130),  (345, 810, 0),   32),
-    (3.0,  (283, 740, 96),   (361, 850, 4),   38),
-    (8.0,  (266, 720, 122),  (363, 855, 24),  32),
-    (11.0, (296, 752, 90),   (360, 842, -1),  40),
-    (13.0, (297, 753, 90),   (360, 842, -1),  40),
-    (16.0, (330, 742, 105),  (350, 852, 10),  38),
-    (19.5, (450, 805, 150),  (343, 862, 40),  36),
+    (0.0,  (220, 650, 130),  (345, 810, 0),   32),                # C0 = g6 H8 (seam, v_in (25, 8, 0))
+    (3.0,  (236, 840, 148),  (398, 880, 0),   33),                # C1 over the Rose top west of the basin
+    (6.0,  (266, 992, 102),  (361, 890, 4),   38),                # C2 FIRE, from the Garrison side (canal + gate on the LEFT)
+    (10.0, (252, 1012, 122), (363, 885, 22),  34),                # C3 steam burst + column (eases back, no push-in)
+    (12.5, (272, 996, 102),  (360, 893, 0),   38),                # C4 salute hold
+    (15.0, (275, 997, 102),  (358, 896, 0),   38),                # C5 Pyxis catches the arm, walks down the bank
+    (17.0, (318, 1012, 112), (346, 886, 10),  38),                # C6 to the basket
+    (20.0, (330, 1052, 160), (338, 878, 42),  36),                # C7 rising with the basket to the Rose top
     (23.5, (250, 1010, 230), (20, 867, 48),   34),
     (27.0, (-20, 1046, 190), (-118, 846, 28), 34),
     (30.0, (-14, 1050, 188), (-118, 846, 28), 34),
@@ -197,6 +201,14 @@ def cam(seg, **over):
     """kwargs for CamPath for a flat segment (g1, g2, g4..g8) in its own frame; over = overrides (e.g. v_in=None)."""
     k = KEYS[seg]; d = dict(keys=k["keys"], v_in=k.get("v_in"), v_out=k.get("v_out"), look_v_in=k.get("look_v_in"), look_v_out=k.get("look_v_out"))
     d.update(over); return d
+
+def _look_vel_end(seg, h=1e-3):
+    """Look-at velocity (m/s) at a segment's last key (the A2 table only gives the camera's)."""
+    p = CamPath(**cam(seg)); t1 = KEYS[seg]["keys"][-1][0]
+    return tuple(float(x) for x in (p.eval(t1)[1] - p.eval(t1 - h)[1]) / h)
+
+KEYS["g7"]["look_v_in"] = _look_vel_end("g6")      # g7 agent: the look-at crosses the g6/g7 seam without a jerk
+KEYS["g7"]["look_v_out"] = (0.0, 0.0, 0.0)          # g8 K0's look-at starts at rest (g8 has no look_v_in)
 
 # ---------------------------------------------------------------- runs (global-time channels) for A3
 def _M(keys, frame, dt=0.0):

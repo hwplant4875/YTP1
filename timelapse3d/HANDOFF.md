@@ -392,3 +392,9 @@ Push g5_trost_v2_*.
 5. Defenders and refugees must read: 6-gun battery with crews, flashes and white smoke; wall guns; a gold ricochet off his face at 9.15 s; crews scatter at 12.4 s; carriage kicked at 12.8 s; ~150 stragglers flee, ~10 freeze.
 6. Cracks: thin dark-grey branching cracks radiating 15-30 m from the hole edge.
 Push g2_armored_v2_*.
+
+
+## 22:06 g5 v2 PASS (cloud QA). No g5 v3. Polish to do in the assembly pass:
+1. Mute the crowd colours 30-40% toward earthy medieval tones (browns, beiges, muted reds, blues and greens; ruling E2).
+2. Add 6-10 larger titans (8-15 m) walking up the main avenue and the ring road at 14-24 s, so the flow reads at the far camera.
+GPU order: g6, g7, then g2 v2.
