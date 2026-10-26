@@ -14,7 +14,7 @@ SCALE (documented factor): WORLD_K = 0.05 (env WORLD_K).  Canon radii x 0.05: Wa
 Sina 12.5 km (canon 480 / 380 / 250 km).  Buildings, walls (50 m), people and titans stay TRUE scale; only the distances
 between the rings are compressed, so Shiganshina -> Trost is 5.0 km (a ~10-15 s flight at a calm sky height) instead
 of 100 km, the whole map fits inside a 60 km camera clip, and the rings read on a single high aerial.
-The districts keep the size of the existing sets (Shiganshina W 290 / S 430, Trost W 620 / S 250).
+The districts keep the size of the existing sets (Shiganshina W 290 / S 430, Trost W 480 / S 390 / R 480, bible C).
 
 COORDINATES: WORLD = the Shiganshina frame (scene.py: Wall Maria along y = 0 at x = 0, Shiganshina bulges south,
 outer gate (0, -720)).  Mitras is at (0, R_MARIA).  The Trost frame (trost.py: Wall Rose along y = 0, outer gate
@@ -43,7 +43,7 @@ SET_ORIGIN = {"shig": (0.0, 0.0), "trost": (0.0, R_MARIA - R_ROSE)}          # s
 # core circles in each set's own frame: (centre, r_out); local terrain fades to 0 between 0.8 r_out and r_out
 CORES = {"shig": [((0.0, -150.0), 1650.0)], "trost": [((0.0, -435.0), 950.0)]}
 SET_RING = {"shig": ("maria", 480000.0 / 30, 1300.0), "trost": ("rose", 380000.0 / 30, 1000.0)}   # ring, set bend r, JOIN
-DISTRICT = {"maria": (290.0, 430.0, 290.0), "rose": (620.0, 250.0, 620.0), "sina": (420.0, 300.0, 420.0)}  # W, S, R
+DISTRICT = {"maria": (290.0, 430.0, 290.0), "rose": (480.0, 390.0, 480.0), "sina": (420.0, 300.0, 420.0)}  # W, S, R
 SEA_Y = -720.0 - 6000.0           # coastline (world y): a band on the southern horizon behind the Colossal
 WALL_H, WALL_T = 50.0, 10.0
 REPLACES = set()
