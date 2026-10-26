@@ -370,7 +370,18 @@ F08/000021520) · volley then 7 drops (15:14.9-15:21) · Sasha/Connie miss (15:2
 20:21.5) · gutted house (18:5x) · end tableau with steaming corpses (F08/000031928).
 
 ### g7. Cannon basin, half-shift, salute, Pyxis (PACE 45.0 s default; full 116 s kept in g7 spec, frame M)
-**Layout (owner: basin INSIDE Trost at the Rose foot, mirrored N-S from the anime; not open).** Floor KF X 340..385, Y 833..865,
+**CORRECTION (owner 15:25 10/26, supersedes the layout coordinates below): LORE POSITION + HANDEDNESS.** In the anime the basin is
+on the NORTH face of Wall Rose (Rose interior), beside the canal water gate; seen from the Garrison bank looking at the wall, the
+water and barred water gate are on the LEFT (owner's capture = ep09 F09/000028171). The earlier N-S mirror into Trost flipped
+left/right and is CANCELLED. Build it on Rose's north face: apply Y' = 1740 - Y to every basin element below (X unchanged):
+floor KF X 340..385, Y 875..907, Z -3.6; bank SB Y 907..919; top terrace TT Y 919..927; plinth PL Y 902..912; west flight SW
+Y 885..907; GB X 308..338, Y 875..891, deck Z 20; cannon (318, 883, 20); T_K (322, 922); GH X 341..377, Y 928..948; half-timbered
+range X 377..387, Y 927..970; boats (389, 897) and (389, 889); L_K derrick (338, 872, 50) on the Rose top; water gate WG stays in the
+wall at X 393..411 with the canal continuing NORTH at X 400. Check from the bank camera: canal on the left (east), tower T_K at the
+near right. These few basin buildings north of Rose are an allowed exception (lore). No titans north of Rose (safe interior).
+Camera: re-key g7 0-19.5 s on the NORTH side (mirror the listed keys with Y' = 1740 - Y, then smooth the g6 H8 → g7 crossing over
+the wall with the speed/turn checker); keys from 23.5 s on are already north of the wall.
+**Old layout (coordinates superseded, details still valid; owner: basin INSIDE Trost at the Rose foot, mirrored N-S from the anime).** Floor KF X 340..385, Y 833..865,
 **Z -3.6** (mossy cobbles: pale sandy south half, green north half); canal water **Z -4.2** for the whole inner run (deepen g4's
 banks by 1.2 m); west pier PW X 331..340, east pier PE X 385..393 (foot in the canal), both battered 8° to Z 30; water gate WG
 X 393..411 (18 m, crown Z 7, iron portcullis); bank SB X 340..385, Y 821..833, 12 steps (0.3 / 1.0 m), darker nosings; plinth PL
@@ -548,7 +559,7 @@ parapet; outer face flat with 3 m counterfort grooves every 20 m; low plain oute
 | HQ | supply HQ | keep (-250, 640); wing X -234..-136, Y 628..652; storeroom X -205..-169; lift (-187, 641) | terrace X -270..-230, Y 612..624; plaza apron X -275..-100, Y 570..624 + west strip X -300..-266, Y 570..660; GH (-200, 566); back range Y 676..700 (P2); AT approach (-222, 531) → (-230, 572) → leap (-240, 600); Eren's nape (-178, 619) |
 | RC | 845 relief complex | centre (-268, 805), X -333..-203, Y 760..850 | its NE tower (≈ 40 m) + east hall replace church T4; in 850 it is just part of the town |
 | D | decoy corner | NW pocket X -475..-360, Y 760..865 | ≈ 400 soldiers on the Rose and west wall tops (X -480..-300 / Y 700..870) |
-| K | cannon basin | floor X 340..385, Y 833..865, Z -3.6 | full detail in g7; T_K (322, 818); GB X 308..338, Y 849..865, Z 20; cannon (318, 857, 20); GH X 341..377, Y 792..812; L_K derrick (338, 868, 50) |
+| K | cannon basin (NORTH face of Rose, corrected 15:25 10/26) | floor X 340..385, Y 875..907, Z -3.6 | water/canal on the viewer's LEFT from the bank; T_K (322, 922); GB X 308..338, Y 875..891, Z 20; cannon (318, 883, 20); GH X 341..377, Y 928..948; L_K derrick (338, 872, 50) |
 | CAN | canal (single) | centreline X 400, 26 m, from the Rose water gate (400, 870) to Y ≈ 330, bending SE to the east-wall exit (445, 300), then straight SE (≈ 135°) ≈ 400 m to join the world river | water Z -4.2 (inner run), green #6f9a7c; stepped stone banks, quays + bollards; pillar-portal bridges at Y ≈ 420, 560, 700, 820 (+2 outside); X 413..475 = quay road + 2-3 house rows to the wall |
 | WG | water gates | Rose (393..411, 865..875) under the basin; east-wall exit (445, 300) | barred stone arches |
 | B0 | Boulder Court | ball (290, 262, 7.4); court X 225..318, Y 236..292 | belfry (228, 290); lawn bed 30 m; second rock (308, 247); lane (232, 300) → (180, 360); exit (284, 236) |
@@ -567,7 +578,7 @@ parapet; outer face flat with 3 m counterfort grooves every 20 m; low plain oute
 | TW | titans at the Rose foot (g7/g8 time) | from D to X ≈ +100, densest X -170..-110 | none within 250 m of K |
 
 **Contradictions resolved here.** HQ: g6 layout (keep west) over g4 (keep east). Inner bastion 38 m (g5) over 26 m; arch 5 x 6.5 m
-over 6 x 8. Basin: g7 at the Wall foot (owner: inside Trost) over g4's free-standing (320..370, 785..835). B0: g8 (290, 262) over g4
+over 6 x 8. Basin: Rose NORTH face at the canal (anime position, corrected 15:25 10/26). B0: g8 (290, 262) over g4
 (-150, 230). East crater (34, 30) over (32, 20). Bollards Y 30 with a gap over Y 22 continuous. Ball rest (0, 8, 7) over (0, 4, 7).
 Craters jagged (g5) not smooth. Canal water Z -4.2 over -3. Rain: optional P2, default off (g4 "no rain" vs g5 evidence). Relief
 complex (-268, 805) over g3's (-420, -75 set). Sun at the basin 255° (g7) over "W/NW" (g4).

@@ -333,3 +333,7 @@ TROST:
 ## 11:38 (10/26 UTC) USER: Armored ram details
 - He smashes the inner gate with his RIGHT shoulder (not the left; render_fall2.py currently says "left shoulder leads": flip it).
 - After breaking through, his speed carries him into a long forward SLIDE (feet skidding, dust furrows, rubble ploughed ahead) before he stops and straightens. Bible g2 updated (slide to y ≈ +45, 13.5-16 s).
+
+## 15:25 (10/26 UTC) USER: cannon basin water is on the LEFT (owner capture = anime ep09 F09/000028171)
+- Seen from the Garrison bank looking at Eren's group and the wall, the canal + barred water gate must be on the LEFT. v3_basin had it on the right because g7 mirrored the anime basin N-S into Trost.
+- Cloud ruling: build the basin at its ANIME position, on Wall Rose's NORTH face beside the canal water gate (Y' = 1740 - Y for every basin element; floor X 340..385, Y 875..907). See SCENE_BIBLE_v2 g7 "CORRECTION". Re-key g7 0-19.5 s on the north side. A few basin buildings north of Rose are an allowed lore exception.
