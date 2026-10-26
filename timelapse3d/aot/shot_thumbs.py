@@ -50,14 +50,14 @@ def log(*a):
 
 # ------------------------------------------------------------------ mirrored district layout
 WD, LS, TIP = D.WD, D.LS, D.TIP
-CX = -D.CANAL_X                     # canal centre line (east side)
+CX = D.CANAL_X                      # canal centre line (east side; district.py is east-canal since 10/26)
 CW = D.CANAL_W
 PLAZA = (-D.PLAZA[0], D.PLAZA[1])
 def MX(p):
     return (-p[0], p[1])
 OUTLINE = [MX(p) for p in D.outline()]                   # east end -> tip -> west end
-CANAL = [MX(p) for p in D.canal_path()]
-STREETS = [([MX(p) for p in pts], hw) for pts, hw in D.street_network()]
+CANAL = list(D.canal_path())                             # already east
+STREETS = list(D.street_network())
 in_district = D.in_district                               # symmetric in x
 CANAL_EXIT = (CX, D.canal_exit_y())
 rnd = random.Random(845)

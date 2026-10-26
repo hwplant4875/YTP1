@@ -55,9 +55,14 @@ HIDE_TITANS = set()          # titan names / indices update() hides (e.g. {"smil
 STATE = {}
 
 # ---------------------------------------------------------------- palettes (linear RGB)
-SHIRTS = [(0.80, 0.07, 0.05), (0.05, 0.18, 0.75), (0.92, 0.68, 0.04), (0.08, 0.48, 0.12), (0.88, 0.88, 0.82),
-          (0.92, 0.32, 0.04), (0.42, 0.10, 0.58), (0.03, 0.50, 0.52), (0.88, 0.32, 0.50), (0.30, 0.62, 0.92),
-          (0.60, 0.80, 0.10), (0.70, 0.12, 0.25)]
+# colourful but no pure primaries: dusty saturated tones (SCENE_BIBLE_v2 E2 supervisor ruling); SWARM_PALETTE=old restores
+SHIRTS = [(0.60, 0.13, 0.08), (0.10, 0.22, 0.50), (0.70, 0.50, 0.10), (0.13, 0.38, 0.15), (0.78, 0.74, 0.64),
+          (0.74, 0.32, 0.10), (0.36, 0.16, 0.42), (0.08, 0.38, 0.40), (0.68, 0.30, 0.40), (0.30, 0.48, 0.66),
+          (0.46, 0.56, 0.16), (0.52, 0.15, 0.22)]
+if os.environ.get("SWARM_PALETTE") == "old":
+    SHIRTS = [(0.80, 0.07, 0.05), (0.05, 0.18, 0.75), (0.92, 0.68, 0.04), (0.08, 0.48, 0.12), (0.88, 0.88, 0.82),
+              (0.92, 0.32, 0.04), (0.42, 0.10, 0.58), (0.03, 0.50, 0.52), (0.88, 0.32, 0.50), (0.30, 0.62, 0.92),
+              (0.60, 0.80, 0.10), (0.70, 0.12, 0.25)]
 PANTS = [(0.10, 0.06, 0.03), (0.04, 0.05, 0.14), (0.20, 0.20, 0.22), (0.40, 0.30, 0.17)]
 SKINS = [(0.80, 0.55, 0.42), (0.70, 0.45, 0.32), (0.55, 0.34, 0.22)]
 HAIRS = [(0.02, 0.016, 0.012), (0.12, 0.06, 0.03), (0.55, 0.40, 0.12), (0.45, 0.12, 0.04), (0.50, 0.50, 0.50)]
@@ -69,6 +74,8 @@ SPECIAL = [  # name, H, girth, arm length, head scale, skin, hair, speed, start 
     dict(name="fat", H=5.0, g=1.75, al=0.85, hs=1.3, skin=1, hair=None, v=2.2, rank=4),
     dict(name="lanky", H=14.5, g=0.68, al=1.25, hs=0.8, skin=6, hair=None, v=5.4, rank=7),
     dict(name="runner", H=7.0, g=0.9, al=1.0, hs=1.15, skin=4, hair=0, v=8.0, rank=11),
+    # ep02 02:57.6: the laughing titan, arms behind its head, mouth wide open (Easter egg)
+    dict(name="laughing", H=9.5, g=1.0, al=1.05, hs=1.15, skin=2, hair=None, v=4.0, laugh=True, rank=5),
 ]
 
 def _smooth(u):
@@ -191,6 +198,9 @@ def titan_geo(g, j, sp):
     g.sphere((0, 0, hc), hr, 8, 6, 0, 1 if sp.get("hair") is not None else 0, 0.15, j, 0, hip, sz=1.1)
     if sp.get("grin"):
         g.box((0, hr * 0.9, hc - hr * 0.32), (hr * 1.25, hr * 0.25, hr * 0.17), 2, j, 0, (0, 0), (0, 0), hip)
+    if sp.get("laugh"):                     # wide open laughing mouth (dark) with a row of teeth on top
+        g.box((0, hr * 0.86, hc - hr * 0.38), (hr * 1.0, hr * 0.3, hr * 0.55), 3, j, 0, (0, 0), (0, 0), hip)
+        g.box((0, hr * 0.98, hc - hr * 0.14), (hr * 1.0, hr * 0.12, hr * 0.12), 2, j, 0, (0, 0), (0, 0), hip)
     sx = 0.13 * H * gi + 0.032 * H
     for side, pu, pf in ((-1, 3, 6), (1, 4, 5)):
         g.box((sx * side, 0, sh - la / 2), (0.055 * H, 0.06 * H, la), 0, j, pu, (0, sh), (0, 0), hip)
@@ -498,10 +508,16 @@ def setup(n_plaza=None, n_street=None, n_titans=None, seed=None, t_end=None):
     TX = np.zeros((K, nt)); TY = np.zeros((K, nt)); TYAW = np.zeros((K, nt)); TG = np.full((K, nt), -1e9)
     VJ = np.full(N, -1, np.int32); VTG = np.full(N, math.inf); VPOS = np.zeros((N, 3))
     tit = []
+    fan = os.environ.get("SWARM_FAN", "")          # "k_dist,spread_deg": walk in across the grass from SE / S / SW (bible g1)
     for j, sp in enumerate(specs):
         dj = 4.0 + 4.2 * j + rnd.uniform(-1.5, 1.5)
-        x = rnd.uniform(-1, 1) * min(dj * 0.5, 60.0)
-        tit.append(dict(x=x, y=OGY - 8 - dj, yaw=0.0, head=(0.0, 1.0), mode="enter", wp=[(0.0, OGY - 8.0), (0.0, OGY + 18.0)],
+        if fan and j >= 2:
+            kd, spread = (float(v) for v in fan.split(","))
+            a = math.radians(rnd.uniform(-spread, spread)); dd = 12.0 + dj * kd
+            x, y0 = math.sin(a) * dd, OGY - 8 - math.cos(a) * dd
+        else:
+            x = rnd.uniform(-1, 1) * min(dj * 0.5, 60.0); y0 = OGY - 8 - dj
+        tit.append(dict(x=x, y=y0, yaw=0.0, head=(0.0, 1.0), mode="enter", wp=[(0.0, OGY - 8.0), (0.0, OGY + 18.0)],
                         tgt=None, cool=0.0, sated=0.0, tg=-1e9, chase=None))
     WT = Gd["WT"]; nx = Gd["nx"]
     alive = np.ones(N, bool)
@@ -653,11 +669,11 @@ def setup(n_plaza=None, n_street=None, n_titans=None, seed=None, t_end=None):
         sx, sh, la, hip, hc, hr = titan_geo(gt, j, sp)
         sp.update(sx=sx, sh=sh, la=la, hip=hip, hc=hc, hr=hr)
         hb = len(T_SKINS)
-        base = [sp["skin"], hb + (sp["hair"] if sp.get("hair") is not None else 0), hb + len(T_HAIRS)]
+        base = [sp["skin"], hb + (sp["hair"] if sp.get("hair") is not None else 0), hb + len(T_HAIRS), hb + len(T_HAIRS) + 1]
         tmat += [base[c] for c in gt.fc[n0:]]
         hands.append((sx, 0.0, sh - 2 * la, j, sh, sh - la, hip))
     tm = [L.mat(f"SW_tskin{i}", c, 0.65, sss=0.0) for i, c in enumerate(T_SKINS)] + [L.mat(f"SW_thair{i}", c, 0.7) for i, c in enumerate(T_HAIRS)] \
-        + [L.mat("SW_teeth", (0.85, 0.80, 0.70), 0.5)]
+        + [L.mat("SW_teeth", (0.85, 0.80, 0.70), 0.5), L.mat("SW_tmouth", (0.12, 0.03, 0.03), 0.6)]
     RT = gt.finish()
     tob = _mesh("SwarmTitans", RT, gt.f, tmat, tm, coll)
     RH = {"B": np.array([h[:3] for h in hands], float), "oid": np.arange(nt, dtype=np.int32), "part": np.full(nt, 5, np.int32),
@@ -750,6 +766,9 @@ def update(t, pscale=None):
             u = _smooth(ej - 2.4); a, b, l = 1.04 * (1 - u), 2.415 * (1 - u) + 0.25 * u, 0.05 - 0.11 * u
         Ar[j, 1] = Ar[j, 2] = 0.0; Ar[j, 3] = 0.15 * math.sin(ej * 6)
         Ar[j, 4] = a; Ae[j, 5] = b; lean[j] = l
+    for j, sp in enumerate(S["specs"]):            # the laughing titan: hands clasped behind its head while it walks
+        if sp.get("laugh") and not (e[j] >= 0 and e[j] < EAT_DUR):
+            Ar[j, 3] = Ar[j, 4] = 3.25 + 0.05 * math.sin(t * 2.0); Ae[j, 5] = Ae[j, 6] = 2.2; lean[j] = 0.06
     Ar[:, 5] = Ar[:, 4]; Ar[:, 6] = Ar[:, 3]
     bob = (0.5 - 0.5 * np.cos(2 * ph)) * 0.025 * H * mv
     tp = tpos.copy(); tp[:, 2] += bob

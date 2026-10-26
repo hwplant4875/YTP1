@@ -19,6 +19,26 @@ G1 = [
     (0.00, (-476, 330.5, 2.4), (-474.6, 327.9, 1.2), 45),
     (2.00, (-480, 338, 7.2), (-300, 0, 10.6), 50),
     (2.05, (-480, 338, 7.2), (-300, 0, 10.6), 50),
+    # v2 (lead QA 10/26, owner rules 06:05 / 15:07 / 00:44 beat the bible keys): swoosh over the inner wall onto the
+    # plaza side so the head + both gripping hands are ~10-15 % of the frame at 5-10 s (camera ~190-220 m from the head,
+    # 48-50 mm), the kick framed from the town side (gate ~13 % of the frame width), then a calm observer 92-105 m up,
+    # pitch 23-37 deg, then ~145 m NW of the Yeager ruin (Carla's street side; pour behind, frame-left).  The old bible K2-K12 are in G1_BIBLE below.
+    (3.4,  (-380, 220, 105), (-40, -560, 0),  30),
+    (4.8,  (-250, 20, 112),  (-20, -640, 10), 32),
+    (6.2,  (-140, -235, 108), (-8, -722, 45), 40),     # v2b (owner 16:51 "distant is better"): far calm observer,
+    (7.4,  (-70, -420, 95),   (-7, -728, 52), 48),     # head + hands ~6-10 % of the frame from ~290-320 m
+    (9.2,  (-55, -445, 92),   (-6, -728, 50), 50),
+    (10.6, (20, -470, 100),   (0, -712, 14),  40),     # kick from the town side at ~250 m: dust dome + arcs readable
+    (12.2, (20, -460, 110),   (0, -700, 20),  36),
+    (14.5, (-25, -450, 110),  (-12, -690, 14), 34),
+    (18.0, (-40, -480, 105),  (-55, -665, 6),  32),
+    (21.5, (-130, -482, 100), (-120, -622, 4), 30),
+    (25.0, (-232, -480, 96),  (-168, -590, 3), 30),    # NW of the ruin: Carla / the Smiling Titan face this way, pour behind
+    (28.5, (-246, -472, 95),  (-168, -589, 4), 28),
+    (32.0, (-254, -468, 95),  (-167, -590, 2), 28),     # = SEAM_IN v2 (render_fall2, segtime g1_g2, g2 K0)
+    (33.0, (-100, -680, 94), (-166, -588, 2), 28),     # guide key (seam at rest)
+]
+G1_BIBLE = [
     (3.9,  (-456, 298, 92),  (-40, -600, 40), 30),
     (5.8,  (-330, 135, 106), (-15, -700, 50), 34),
     (7.8,  (-185, -60, 116), (-8, -700, 55),  42),
@@ -34,7 +54,7 @@ G1 = [
 ]
 # ---------------------------------------------------------------- g2 (W)
 G2 = [
-    (0.0,  (-130, -686, 114), (-165, -594, 0), 28),
+    (0.0,  (-254, -468, 95),  (-167, -590, 2), 28),            # SEAM_IN v2 (was (-130, -686, 114) -> (-165, -594, 0))
     (3.5,  (-180, -590, 118), (0, -310, 10),   32),
     (7.5,  (-215, -440, 120), (0, -190, 10),   35),
     (11.0, (-225, -275, 118), (0, -80, 14),    38),
@@ -212,7 +232,7 @@ def run_A2_keys():
     return _join([_M(G2, "W", g2), _M(G3_FLIGHT_W, "W", g3), _M(G3_CAMPS_M, "M", g3)])
 
 BIBLE = {   # bible-quoted peaks (A3 and per-segment 'Verified' lines): m/s, deg/s
-    "g1": (129, None), "g2": (78, 30), "g3_flight": (412, None), "g3_to_camp": (298, None), "g4": (141, 32), "g5": (43, 29),
+    "g1": (246, 22), "g2": (78, 30), "g3_flight": (412, None), "g3_to_camp": (298, None), "g4": (141, 32), "g5": (43, 29),
     "g6": (39, 25), "g7": (104, 26), "g8": (67, 30), "g3_camps": (None, 32), "A2": (78, 30), "B": (141, 32)}
 
 NOTES = [   # appended to design_specs/camcheck_report.md

@@ -97,8 +97,13 @@ def wall_mat():
     st.inputs["Roughness"].default_value = 0.65
     L.new(tc.outputs["Object"], st.inputs["Vector"])
     r = N.new("ShaderNodeValToRGB"); e = r.color_ramp.elements
-    e[0].position, e[0].color = 0.38, (0.30, 0.29, 0.26, 1)
-    e[1].position, e[1].color = 0.62, (0.62, 0.60, 0.53, 1)
+    # SCENE_BIBLE_v2 owner rules: one warm pale beige sandstone (~#CEC3A6) with weathered stains (WALL_GREY=1: old grey)
+    if os.environ.get("WALL_GREY") == "1":
+        e[0].position, e[0].color = 0.38, (0.30, 0.29, 0.26, 1)
+        e[1].position, e[1].color = 0.62, (0.62, 0.60, 0.53, 1)
+    else:
+        e[0].position, e[0].color = 0.38, (0.36, 0.31, 0.22, 1)
+        e[1].position, e[1].color = 0.62, (0.63, 0.555, 0.39, 1)
     L.new(st.outputs["Fac"], r.inputs["Fac"])
     # vertical streaks: noise stretched along z
     sv = N.new("ShaderNodeVectorMath"); sv.operation = "MULTIPLY"; sv.inputs[1].default_value = (0.6, 0.6, 0.05)
@@ -107,7 +112,20 @@ def wall_mat():
     L.new(sv.outputs[0], sn.inputs["Vector"])
     mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"; mx.inputs["Factor"].default_value = 0.35
     L.new(r.outputs["Color"], mx.inputs["A"]); L.new(sn.outputs["Color"], mx.inputs["B"])
-    L.new(mx.outputs["Result"], bsdf.inputs["Base Color"])
+    out_col = mx.outputs["Result"]
+    if os.environ.get("WALL_GREY") != "1":
+        # damp, darker, mossy lower 6-12 m (ragged top edge from the streak noise)
+        sz = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs["Object"], sz.inputs[0])
+        jz = N.new("ShaderNodeMath"); jz.operation = "MULTIPLY_ADD"; jz.inputs[1].default_value = 6.0
+        L.new(sn.outputs["Fac"], jz.inputs[0]); L.new(sz.outputs["Z"], jz.inputs[2])
+        mr = N.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 6.0; mr.inputs["From Max"].default_value = 13.0
+        mr.inputs["To Min"].default_value = 0.88; mr.inputs["To Max"].default_value = 0.0
+        L.new(jz.outputs[0], mr.inputs["Value"])
+        dm = N.new("ShaderNodeMix"); dm.data_type = "RGBA"; dm.blend_type = "MIX"
+        dm.inputs["B"].default_value = (0.159, 0.144, 0.098, 1)          # #6F6A58 damp, mossy streaks
+        L.new(mr.outputs["Result"], dm.inputs["Factor"]); L.new(mx.outputs["Result"], dm.inputs["A"])
+        out_col = dm.outputs["Result"]
+    L.new(out_col, bsdf.inputs["Base Color"])
     # courses of masonry blocks for close-ups
     br = N.new("ShaderNodeTexBrick"); br.inputs["Scale"].default_value = 0.25
     br.inputs["Mortar Size"].default_value = 0.01; br.inputs["Row Height"].default_value = 0.5
@@ -405,17 +423,43 @@ def along(pts):
 def near_gap(p, gaps, extra):
     return any(math.hypot(p.x - gx, p.y - gy) < hw + extra for gx, gy, hw in gaps)
 
-def buttresses(name, pts, gaps, mats, every=24.0):
-    """Tapered pilasters on both faces, which give the walls their panelled look."""
+PIL_EVERY = float(os.environ.get("WALL_PIL_EVERY", "16"))    # SCENE_BIBLE_v2 g1 / D19: 3.5 m pilasters every 16 m,
+PIL_W, PIL_PROJ, PIL_STUB = 3.5, 2.0, 2.5                     # projecting 2 m, rising 2.5 m above the parapet as flat stubs
+
+def buttresses(name, pts, gaps, mats, every=None):
+    """Flat pilasters on both faces (anime ep01 27530 / ep02 7498): 3.5 m wide every 16 m, projecting 2 m from each
+    face, rising PIL_STUB m above the wall top as flat square-topped stubs (no merlons, no crenellations)."""
+    every = every or PIL_EVERY
     bm = bmesh.new()
     nxt = 0.0
+    z0, z1 = -4.0, WALL_H + PIL_STUB
+    d0, d1 = WALL_T + 2 * PIL_PROJ, TOP_T + 2 * PIL_PROJ
     for p, t, nrm, s in along(pts):
         if s < nxt or near_gap(p, gaps, 10):
             continue
         nxt = s + every
         rot = math.atan2(t.y, t.x)
-        box(bm, (p.x, p.y, (WALL_H - 1.5 - 4) / 2 - 4), (6.0, WALL_T + 7.0, WALL_H - 1.5 + 4), rot,
-            taper=(0.95, (TOP_T + 5.0) / (WALL_T + 7.0)))
+        box(bm, (p.x, p.y, (z0 + z1) / 2), (PIL_W, d0, z1 - z0), rot, taper=(1.0, d1 / d0))
+    return obj_from_bm(name, bm, [mats["stone"]])
+
+def string_courses(name, pts, gaps, mats, zs=(11.5, 23.0)):
+    """Thin horizontal string courses on both faces at ~11.5 m and ~23 m (ep01 27530; bible g1 Set dressing)."""
+    bm = bmesh.new()
+    def half_t(z):
+        return WALL_T / 2 + (TOP_T / 2 - WALL_T / 2) * (z + 4.0) / (WALL_H + 4.0)
+    for k in range(len(pts) - 1):
+        a, b = Vector(pts[k]), Vector(pts[k + 1])
+        mid = (a + b) / 2
+        if near_gap(mid, gaps, 1.5):
+            continue
+        t = b - a; ln = t.length
+        if ln < 1e-6:
+            continue
+        t.normalize(); nrm = Vector((-t.y, t.x)); rot = math.atan2(t.y, t.x)
+        for side in (-1, 1):
+            for z in zs:
+                c = mid + nrm * side * (half_t(z) + 0.22)
+                box(bm, (c.x, c.y, z), (ln + 0.06, 0.55, 0.7), rot)
     return obj_from_bm(name, bm, [mats["stone"]])
 
 def wall_top(name, pts, gaps, mats, every_cross=42.0):
@@ -549,6 +593,9 @@ def build_walls(mats):
     near_maria = [p for p in maria if abs(p[0]) < 4200]
     buttresses("ButtressMaria", near_maria, m_gaps, mats)
     buttresses("ButtressShiganshina", dist, d_gaps, mats)
+    if os.environ.get("WALL_COURSES", "1") != "0":
+        string_courses("CoursesShiganshina", dist, d_gaps, mats)
+        string_courses("CoursesMaria", [p for p in maria if abs(p[0]) < 2600], m_gaps, mats)
     wall_top("WallTopMaria", [p for p in maria if abs(p[0]) < 2600], m_gaps, mats)
     wall_top("WallTopShiganshina", dist, d_gaps, mats)
     gatehouse("InnerGate", (0, 0), 0, mats)
@@ -709,6 +756,7 @@ def scatter(name, coll, pts, year):
 
 # ---------------------------------------------------------------- town layout
 PLAZA = (-20.0, -360.0, 40.0)
+TOWN_TERRACE = os.environ.get("TOWN_TERRACE", "1") == "1"   # continuous terraced rows, back lots aligned (TOWN_TERRACE=0: old)
 
 def street_network():
     """Polylines (list of (x, y)) with half widths: main avenue gate to gate, a canal-side road,
@@ -820,7 +868,7 @@ def town_points(n_variants, widths):
                     rad = min(w, dpt) * 0.5
                     if free(x, y, rad):
                         put(x, y, math.atan2(ty, tx) + (0 if side > 0 else math.pi), v, rad)
-                t += w + rnd.uniform(0.2, 1.4)
+                t += w + (rnd.uniform(0.0, 0.25) if TOWN_TERRACE else rnd.uniform(0.2, 1.4))   # terraced rows (bible g1)
     for _ in range(14000):
         x, y = rnd.uniform(-W, W), rnd.uniform(-S - R, 0)
         if not in_district(x, y, 16) or on_road(x, y, pad=4):
@@ -846,7 +894,7 @@ def town_points(n_variants, widths):
     return pts, trees
 
 def street_angle(x, y):
-    return (0 if y > -S else math.atan2(y + S, x)) + math.pi / 2 + noise.noise(Vector((x / 260, y / 260, 2.5))) * 0.4
+    return (0 if y > -S else math.atan2(y + S, x)) + math.pi / 2 + noise.noise(Vector((x / 260, y / 260, 2.5))) * (0.08 if TOWN_TERRACE else 0.4)
 
 def gn_forest(terrain, tree_coll):
     """Dense forests: points distributed on the terrain, masked by noise, instanced with tree variants."""

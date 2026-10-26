@@ -48,8 +48,8 @@ def W_to_set(x, y=None, z=None): return M_to_set(*W_to_M(x, y, z))
 # ---------------------------------------------------------------- A2 seams (exact; position / look-at / lens / velocity m/s)
 # t = global time of the seam (None: inside g3's march846 span)
 SEAMS = {
-    "g1_g2":     dict(frame="W", pos=(-130, -686, 114), look=(-165, -594, 0), lens=28.0, vel=(0, 0, 0), t=START["g2"],
-                      note="g1 K12 = g2 K0 = render_fall2.SEAM_IN, at rest (g1 adds a guide key 1 s later)"),
+    "g1_g2":     dict(frame="W", pos=(-254, -468, 95), look=(-167, -590, 2), lens=28.0, vel=(0, 0, 0), t=START["g2"],
+                      note="g1 K12 = g2 K0 = render_fall2.SEAM_IN, at rest (g1 adds a guide key 1 s later); v2 10/26 lead QA (was (-130,-686,114)->(-165,-594,0))"),
     "g2_g3":     dict(frame="W", pos=(175, 480, 240), look=(228, 1050, 0), lens=28.0, vel=(0, 45, 8), t=START["g3"],
                       note="g2 K9 = g3 FA0, 45 m/s heading N, vz +8"),
     "g3_in":     dict(frame="M", pos=(170, 170, 125), look=(-10, -60, 0), lens=27.0, vel=(16.7, -61.1, 5.6), t=START["g3"] + 31.3,

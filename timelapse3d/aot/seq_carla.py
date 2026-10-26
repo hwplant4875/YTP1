@@ -355,7 +355,7 @@ def make_carla(name="Carla"):
                  lambda: {"shirt": C._cloth(name + "_dress", _srgb("9C6E5C")),
                           "legs": C._cloth(name + "_dress_l", _srgb("6E4A3C"), scale=30),
                           "boots": C._flat(name + "_shoes", (0.06, 0.04, 0.03), rough=0.5)},
-                 1.66, macro=dict(weight=0.45, proportions=0.6))
+                 float(os.environ.get("CARLA_H", "1.66")), macro=dict(weight=0.45, proportions=0.6))
     C.skirt(name, rig, color=_srgb("6E4A3C"), length=0.1)
     apron(name, rig)
     return rig
@@ -812,13 +812,13 @@ def pose_carla(F):
         bpy.context.view_layer.update()
         waist = _bone_w(ca, "spine04", "head")
         ca.matrix_world = Matrix.Translation(hand + tf * 0.35 - waist) @ ca.matrix_world
-        if F >= T_BITE[0] + 8:
+        if F >= T_BITE[0] + 8 and os.environ.get("CARLA_NOGORE") != "1":
             _flat_red(ca)
         if F >= CARLA_GONE:
             for o in _all_obs(ca):
                 o.hide_render = True
     # red mist at the mouth during and after the bite
-    if T_BITE[0] + 6 <= F < T_BITE[1] + 70:
+    if T_BITE[0] + 6 <= F < T_BITE[1] + 70 and os.environ.get("CARLA_NOGORE") != "1":   # g1: no blood (bite hidden)
         bpy.context.view_layer.update()
         hd, ht = _bone_w(ti, "head", "head"), _bone_w(ti, "head", "tail")
         tf = Vector((math.sin(yaw_t), -math.cos(yaw_t), 0))

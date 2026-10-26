@@ -509,7 +509,7 @@ def armored_y(s):
         return -190.0 + 181.0 * (0.4 * u + 0.6 * u * u)
     return -9.0 + 17.0 * (1 - math.exp(-(s - IMPACT) / 0.6))
 
-SEAM_IN = ((-130.0, L.OUTER_GATE[1] + 34, 114.0), (-165.0, L.OUTER_GATE[1] + 126, 0.0), 28.0)   # = render_fall's last key (at rest)
+SEAM_IN = ((-254.0, L.OUTER_GATE[1] + 252, 95.0), (-167.0, L.OUTER_GATE[1] + 130, 2.0), 28.0)   # v2 10/26 (g1 lead QA); was ((-130, GY+34, 114), (-165, GY+126, 0))   # = render_fall's last key (at rest)
 
 def seg3_cam_keys(S):
     """Sky observer at a moderate height, one take: from render_fall's last pose up the avenue behind the charge,

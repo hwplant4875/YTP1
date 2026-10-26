@@ -45,10 +45,18 @@ YEAGER_HOUSE = (-72.0, -118.0)
 if os.environ.get("AOT_YEAGER_XY"):        # opt-in (render_fall.sh, user 10/25): the Yeager house near the broken outer gate
     YEAGER_HOUSE = tuple(float(v) for v in os.environ["AOT_YEAGER_XY"].split(","))
 # thrown blocks: (x, y, size m, seed). Arcs start at the gate top.
-IMPACTS = [(-58, -585, 16, 1), (96, -625, 13, 2), (-150, -455, 19, 3), (62, -318, 15, 4),
-           (-205, -265, 13, 5), (150, -250, 17, 6), (-30, -190, 12, 7), (YEAGER_HOUSE[0] + 1, YEAGER_HOUSE[1] - 2, 12, 8),
-           (125, -480, 12, 9)]
-OUTER_HOLE = (0.0, L.OUTER_GATE[1], 8.6, 25.0)       # x, y, half width, height: just the gate opening (14 x 20) + arch
+if os.environ.get("AOT_IMPACTS_OLD") == "1":        # pre-bible layout (kept for old renders)
+    IMPACTS = [(-58, -585, 16, 1), (96, -625, 13, 2), (-150, -455, 19, 3), (62, -318, 15, 4),
+               (-205, -265, 13, 5), (150, -250, 17, 6), (-30, -190, 12, 7), (YEAGER_HOUSE[0] + 1, YEAGER_HOUSE[1] - 2, 12, 8),
+               (125, -480, 12, 9)]
+    OUTER_HOLE = (0.0, L.OUTER_GATE[1], 8.6, 25.0)
+else:
+    # SCENE_BIBLE_v2 g1 FX (c): 4-6 long arcs fanning about +-60 deg off the avenue (apex 80-120 m, landing 100-350 m), the
+    # ~9 m rock ON the Yeager house (size 21.4 * 0.42), plus 3-5 m rocks in roofs / streets between the gate and YH.
+    IMPACTS = [(YEAGER_HOUSE[0] + 1, YEAGER_HOUSE[1] - 2, 21.4, 8), (95, -470, 12, 2), (-60, -420, 12, 3), (205, -575, 10, 6),
+               (-245, -515, 11, 5), (35, -615, 9, 4), (-90, -640, 8, 1), (-118, -548, 9, 7), (62, -540, 8, 9)]
+    # ragged dark hole AT GROUND LEVEL filling the gate recess, ~15 x 18.5 m; the wall above stays intact (D4)
+    OUTER_HOLE = (0.0, L.OUTER_GATE[1], 7.5, 18.5)   # x, y, half width, height
 INNER_HOLE = (0.0, 0.0, 12.5, 29.0)                  # about the Armored Titan's height
 
 LABELS = {}
@@ -1106,8 +1114,15 @@ def build(M, year, ctx):
         s = s0 * BS
         dv = Vector((x - OG.x, y - OG.y)); dist = dv.length; dv.normalize()
         launch = 0.02 + n * 0.025
-        T = (0.8 + dist / 240.0) * FX.flight_k()
-        hmax = 25 + dist * 0.16
+        if os.environ.get("AOT_IMPACTS_OLD") == "1":
+            T = (0.8 + dist / 240.0) * FX.flight_k()
+            hmax = 25 + dist * 0.16
+        elif dist > 150:                           # long arcs: apex 80-120 m, 3-4 s flights (bible g1 FX c)
+            T = (1.9 + dist / 170.0) * FX.flight_k()
+            hmax = min(120.0, 80.0 + (dist - 150.0) * 0.2)
+        else:
+            T = (1.1 + dist / 140.0) * FX.flight_k()
+            hmax = 30 + dist * 0.3
         t_land = launch + T
         FX.add_flight(launch, t_land)
         yb = math.hypot(x - YEAGER_HOUSE[0], y - YEAGER_HOUSE[1]) < 5
