@@ -7,27 +7,27 @@
 - **신체:** 힘, 체격, 몸싸움 능력
 - **내구력:** 총, 불, 칼에 맞고도 다시 일어났는가
 
-점수가 높을수록 생존율이 낮아요. 고스트페이스는 사람이라 1위도 0%는 아니에요.
+점수가 높을수록 생존율이 낮아요. 고스트페이스는 사람이라 매 편 총에 맞아 죽었고 시드니는 7편 모두 살아남았어요. 그래서 마이클, 제이슨(1% 수준)보다 전체를 높게 잡아서 1위도 15%예요.
 
 ## 순위 (쉬움 → 어려움)
 | 순위 | 고스트페이스 | 영화 | 킬 | 잠입 | 계획 | 신체 | 내구 | 합계 | 생존율 |
 |---|---|---|---|---|---|---|---|---|---|
-| 16 | Jason Carvey | Scream VI | 1 | 2 | 2 | 2 | 1 | 8 | 80% |
-| 15 | Karl Gibbs | Scream 7 | 2 | 1 | 2 | 4 | 1 | 10 | 68% |
-| 14 | Mrs. Loomis | Scream 2 | 1 | 3 | 4 | 2 | 1 | 11 | 60% |
-| 13 | Charlie Walker | Scream 4 | 3 | 4 | 3 | 3 | 1 | 14 | 48% |
-| 12 | Quinn Bailey | Scream VI | 1 | 5 | 3 | 3 | 3 | 15 | 40% |
-| 11 | Ethan Landry | Scream VI | 2 | 5 | 3 | 3 | 2 | 15 | 36% |
-| 10 | Marco Davis | Scream 7 | 3 | 3 | 4 | 3 | 2 | 15 | 32% |
-| 9 | Richie Kirsch | Scream (2022) | 2 | 5 | 4 | 3 | 2 | 16 | 28% |
-| 8 | Jessica Bowden | Scream 7 | 3 | 4 | 5 | 2 | 2 | 16 | 26% |
-| 7 | Stu Macher | Scream (1996) | 2 | 5 | 3 | 4 | 2 | 16 | 24% |
-| 6 | Mickey Altieri | Scream 2 | 4 | 4 | 3 | 3 | 3 | 17 | 20% |
-| 5 | Amber Freeman | Scream (2022) | 3 | 5 | 3 | 3 | 5 | 19 | 13% |
-| 4 | Billy Loomis | Scream (1996) | 3 | 5 | 5 | 3 | 4 | 20 | 9% |
-| 3 | Wayne Bailey | Scream VI | 4 | 5 | 5 | 4 | 3 | 21 | 6% |
-| 2 | Jill Roberts | Scream 4 | 5 | 5 | 5 | 3 | 4 | 22 | 4% |
-| 1 | Roman Bridger | Scream 3 | 5 | 4 | 5 | 4 | 4 | 22 | 2% |
+| 16 | Jason Carvey | Scream VI | 1 | 2 | 2 | 2 | 1 | 8 | 85% |
+| 15 | Karl Gibbs | Scream 7 | 2 | 1 | 2 | 4 | 1 | 10 | 75% |
+| 14 | Mrs. Loomis | Scream 2 | 1 | 3 | 4 | 2 | 1 | 11 | 68% |
+| 13 | Charlie Walker | Scream 4 | 3 | 4 | 3 | 3 | 1 | 14 | 60% |
+| 12 | Quinn Bailey | Scream VI | 1 | 5 | 3 | 3 | 3 | 15 | 56% |
+| 11 | Ethan Landry | Scream VI | 2 | 5 | 3 | 3 | 2 | 15 | 53% |
+| 10 | Marco Davis | Scream 7 | 3 | 3 | 4 | 3 | 2 | 15 | 50% |
+| 9 | Richie Kirsch | Scream (2022) | 2 | 5 | 4 | 3 | 2 | 16 | 45% |
+| 8 | Jessica Bowden | Scream 7 | 3 | 4 | 5 | 2 | 2 | 16 | 43% |
+| 7 | Stu Macher | Scream (1996) | 2 | 5 | 3 | 4 | 2 | 16 | 40% |
+| 6 | Mickey Altieri | Scream 2 | 4 | 4 | 3 | 3 | 3 | 17 | 36% |
+| 5 | Amber Freeman | Scream (2022) | 3 | 5 | 3 | 3 | 5 | 19 | 30% |
+| 4 | Billy Loomis | Scream (1996) | 3 | 5 | 5 | 3 | 4 | 20 | 25% |
+| 3 | Wayne Bailey | Scream VI | 4 | 5 | 5 | 4 | 3 | 21 | 22% |
+| 2 | Jill Roberts | Scream 4 | 5 | 5 | 5 | 3 | 4 | 22 | 18% |
+| 1 | Roman Bridger | Scream 3 | 5 | 4 | 5 | 4 | 4 | 22 | 15% |
 
 ## 근거 요약
 - **Roman:** 시리즈 최다 킬(9명), 공범 없이 단독 범행, 방탄조끼로 총을 버팀, 1편부터 모든 사건을 설계. 동점인 Jill보다 단독 범행이라 1위.
@@ -46,7 +46,7 @@
 
 ## 팬 랭킹과 비교 (25 Years Later, Collider, Screen Rant)
 - 팬들이 "최고의 고스트페이스"로 꼽는 순서는 보통 Billy > Jill > Stu > Roman > Amber예요. 이건 캐릭터 인기 기준이에요.
-- 우리 기준은 "만나면 살아남기 어려운 순서"라서 킬 수가 가장 많은 Roman(9명, 단독)이 1위예요. 영상에서 이 차이를 직접 말해 주면 반박 댓글 대신 납득하는 댓글이 나와요: "Billy is the best Ghostface. But he's not the hardest to survive."
+- 우리 기준은 "만나면 살아남기 어려운 순서"라서 킬 수가 가장 많은 Roman(9명, 단독)이 1위예요. 영상에서 이 차이를 자연스럽게 한 문장으로 설명해요(예: "Billy might be everyone's favorite Ghostface, but he isn't the one you'd least want to meet").
 - 위험 지점: Wayne 3위(팬 순위는 7위 정도)와 Stu 7위(팬 순위 3위). 킬 수와 수사권(형사)을 근거로 대본에서 설명할게요.
 - 남은 확인: 사이트마다 킬 수가 1~2명씩 달라요(Jill, Mickey 등). 영상에서는 정확한 숫자 대신 "most kills in the franchise"처럼 말해서 틀릴 위험을 줄일게요.
 
