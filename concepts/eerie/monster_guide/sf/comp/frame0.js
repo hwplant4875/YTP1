@@ -1,13 +1,14 @@
 /* frame0.js : EP1 frame 0 = the thumbnail A base. The lone dormant chest in the empty SF3 room under the spotlight.
- * The lid is SHUT to a thin dark crack: no teeth, no eyes, only two small gold glints in the seam (the tell), the chain
- * lying loose along the floor to an iron ring bolted into the flagstone (an intentional restraint), top-left key light
- * on the chest (lit left face, darker right side face). Nothing else.
+ * The lid is SHUT to a thin dark crack: no teeth, no eyes, only two small gold glints in the seam. v3: the chain shows
+ * THE TELL (it slides forward round the front corner and curls up on the floor IN FRONT of the chest, where a real
+ * chest's chain lies coiled at the back: the detail commenters should catch), top-left key light on the chest (lit
+ * left face, darker right side face). Nothing else.
  * SMALL=1 node render_sf.mjs core/lib_core.js,dungeon/dungeon.js,dungeon/props_hr.js,mimiku2/mimiku2.js,comp/comp_kit.js,comp/frame0.js <out.png>
  *
  * window.FRAME0 (shared with thumbA.js / hook.js):
- *   FRAME0.chest(g, x, gy, s, t, o)  draws the whole dormant set piece at ground point (x, gy): cast shadow, floor ring
- *     (back), key-lit chest with its chain run to the ring, ring (front), glints. o: ring=[dx, dy] ring offset from x, gy
- *     (px at s), glint=0.8 (alpha), glintR=6, breath=0.12 (0..0.3: the crack), light (MIMIKU2 light opts), key (keyLit o)
+ *   FRAME0.chest(g, x, gy, s, t, o)  draws the whole dormant set piece at ground point (x, gy): cast shadow,
+ *     key-lit chest with the tell chain curled in front, glints. o: tell=true (false: v2 chain run to an iron floor
+ *     ring), chain (extra MIMIKU2 chain opts for the tell: coilSq, tiltFront), ring=[dx, dy] ring offset (tell=false), glint=0.8 (alpha), glintR=6, breath=0.12 (0..0.3: the crack), light (MIMIKU2 light opts), key (keyLit o)
  */
 (function () {
   const c = document.getElementById('c');
@@ -27,13 +28,18 @@
     chest: (g, x, gy, s, t, o = {}) => {
       const pose = F.pose(t, { breath: o.breath });
       const an = M.anchors(x, gy, s, pose);
+      // v3: THE TELL by default (the rig's dormant floor chain: slid forward round the front corner, curled up in
+      // front of the chest). o.tell = false brings back the v2 run to the iron floor ring.
+      const tell = o.tell !== false;
       const rd = o.ring || [1.35 * W0, 0.12 * W0];
       const ring = [x + rd[0] * s, gy + rd[1] * s];
       const rs = s * 0.8;
-      pose.chain = { pts: CK.floorChain(an.chain, gy - 0.03 * W0 * s + 0.04 * W0 * s, s, [ring[0] + 4 * rs, ring[1] + 2 * rs]) };
+      if (tell) pose.chain = Object.assign({ floor: true }, o.chain || {});
+      else pose.chain = { pts: CK.floorChain(an.chain, gy - 0.03 * W0 * s + 0.04 * W0 * s, s, [ring[0] + 4 * rs, ring[1] + 2 * rs]) };
       M.castShadow(g, x, gy, s, pose, { alpha: 0.42, squash: 0.2, skew: 0.5, blur: 8 });
-      PR.floorRing(g, ring[0], ring[1], rs, { part: 'back' });
-      const b = { x: x - 0.75 * W0 * s, y: gy - 1.05 * W0 * s, w: 1.5 * W0 * s + (ring[0] - x) + 40 * s, h: 1.25 * W0 * s };
+      if (!tell) PR.floorRing(g, ring[0], ring[1], rs, { part: 'back' });
+      const b = tell ? { x: x - 0.8 * W0 * s, y: gy - 1.05 * W0 * s, w: 1.75 * W0 * s, h: 1.65 * W0 * s }
+        : { x: x - 0.75 * W0 * s, y: gy - 1.05 * W0 * s, w: 1.5 * W0 * s + (ring[0] - x) + 40 * s, h: 1.25 * W0 * s };
       // the crack stays a DARK line: the lower gum band (normally a red lip inside an open mouth) is darkened for this
       // shot only (MIMIKU2.COL is restored right after)
       const COL = M.COL, keep = { gum: COL.gum, gumLight: COL.gumLight };
@@ -41,9 +47,9 @@
       try {
         CK.keyLit(g, gg => M.draw(gg, x, gy, s, Object.assign({}, pose, o.light ? { light: o.light } : {})), b, Object.assign({ x0: 0.0, x1: 0.55, dark: 0.42, lite: 0.2 }, o.key || {}));
       } finally { Object.assign(COL, keep); }
-      PR.floorRing(g, ring[0], ring[1], rs, { part: 'front' });
+      if (!tell) PR.floorRing(g, ring[0], ring[1], rs, { part: 'front' });
       F.glints(g, x, gy, s, pose, o.glint ?? 0.8, o.glintR ?? 6);
-      return { pose, an, ring };
+      return { pose, an, ring: tell ? null : ring };
     },
   };
   window.draw = t => {

@@ -4,6 +4,8 @@
  * v2 fixes: the camera is pushed in (the floor strip is cropped) so totem and chest share the frame at thumbnail size;
  * the plumed shield helm is on TOP (the plume streams up and back, never between helms); each helm gets a dark
  * separation halo + a warm rim from the room so all three are countable at 168 px.
+ * v3 (minimal knights): slimmer helms sit closer to the jamb so the gripping hands touch them, the crest helm on top
+ * tilts out so its fin + plume clear the jamb, a lighter warm grade keeps the one shade tone readable.
  * SMALL=1 node render_sf.mjs core/lib_core.js,dungeon/dungeon.js,dungeon/props_hr.js,mimiku2/mimiku2.js,knight/knight.js,comp/comp_kit.js,comp/frame0.js,comp/hook.js <out.png> */
 (function () {
   const c = document.getElementById('c');
@@ -11,9 +13,9 @@
   const KS = 0.76;                                    // knights in the doorway (back wall depth)
   // the totem, bottom -> top: [type, peekH, peekOut, tilt, handH]
   const TOTEM = [
-    ['hammer', 56, 66, 12, 124],
-    ['spear', 192, 98, 26, 276],
-    ['shield', 330, 62, 4, 396],
+    ['hammer', 56, 52, 12, 124],
+    ['spear', 192, 84, 26, 276],
+    ['shield', 322, 52, 16, 390],
   ];
   const rim = { color: '#FFD9A8', alpha: 0.95, dir: [-1, -0.25], width: 3.4 };
   window.draw = t => {
@@ -36,7 +38,7 @@
           // dark separation halo: the helm silhouette dilated by ~6 px in the passage colour, so stacked helms never
           // merge into one grey cluster
           CK.halo(g, gg => K.draw(gg, edge.x, edge.y, KS, Object.assign({}, o, { cast: false })), 5, '#0D0B0C');
-          K.draw(g, edge.x, edge.y, KS, Object.assign({}, o, { rim, grade: { color: '#FFE2B8', amount: 0.18, mode: 'screen' } }));
+          K.draw(g, edge.x, edge.y, KS, Object.assign({}, o, { rim, grade: { color: '#FFE2B8', amount: 0.08, mode: 'screen' } }));
         });
       },
       actors: (g, info) => {
