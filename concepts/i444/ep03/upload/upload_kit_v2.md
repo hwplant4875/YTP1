@@ -9,6 +9,8 @@
 - B + ghostface_v2_b_text_behind.jpg (가면 뒤 WHO'S #1?): Which Ghostface Would Kill You First? Every Scream Killer Ranked
 
 ## 설명
+Spoiler warning: this ranking reveals the killer in every Scream movie, including Scream 7.
+
 He's been shot, stabbed, set on fire, run over by a car and shot in the head, and somehow the phone still rings, because Ghostface was never just one guy.
 
 Sixteen different killers have worn the mask across seven Scream movies, from Scream (1996) to Scream 7 (2026). We scored every one of them on strength, intelligence, kill count and deception, and turned that into one number: your chance of surviving them.
