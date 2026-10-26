@@ -321,7 +321,7 @@ def _hook_hop(s, t, t_raw):
         st.update(pos=p0, pose="crouch", hook=hip0 + (A - hip0) * u, gas=u < 0.5)
         return st
     if t < trel:                                                 # reel: pulled along the wire, accelerating
-        u = (t - t0 - tf) / (trel - t0 - tf); ue = u ** 1.8
+        u = (t - t0 - tf) / (trel - t0 - tf); ue = max(u, 0.0) ** 1.8
         p = p0 + (R - p0) * ue
         p = p - np.array([0.0, 0.0, 0.06 * float(np.linalg.norm(R - p0)) * math.sin(math.pi * ue)])
         st.update(pos=p, pose="fly", pitch=-1.1 * min(1.0, 0.3 + u), hook=A, gas=True)
