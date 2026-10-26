@@ -199,6 +199,17 @@ def onion_church(M, coll):
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     return L.obj_from_bm("G1ChurchOnion", bm, [wall, M.get("roof_red"), S["onion"], S["dark"]], coll)
 
+def gate_crest(M, coll):
+    """Outer face of the outer gate (ep01 18:36.9): a small shield crest over the passage + a cornice band (P2 dressing)."""
+    S = _mats(M); bm = bmesh.new()
+    gx, gy = L.OUTER_GATE
+    fy = gy - L.WALL_T / 2 - 0.7                       # just proud of the outer face (the face tapers: ~-725 at mid height)
+    L.box(bm, (gx, fy, 25.5), (5.2, 0.8, 6.4), mi=0)                       # shield block
+    L.box(bm, (gx, fy - 0.35, 26.5), (3.6, 0.3, 3.0), mi=1)                # dark emblem field
+    L.box(bm, (gx, fy - 0.45, 27.0), (1.6, 0.25, 1.6), mi=0)               # boss
+    L.box(bm, (gx, fy + 0.2, 22.2), (14.0, 1.2, 0.8), mi=0)                # cornice under the crest
+    return L.obj_from_bm("G1GateCrest", bm, [S["bell"], S["dark"]], coll)
+
 # ---------------------------------------------------------------- the Yeager neighbourhood
 def yeager_terrace(M, coll):
     S = _mats(M)
@@ -360,6 +371,11 @@ def build(M, year, ctx):
     pz = bpy.data.objects.get("Plaza")
     if pz and M.get("dirt"):
         pz.data.materials[0] = M["dirt"]                       # bare dirt plaza (ep01 18:16.5)
+    dg = bpy.data.objects.get("DistrictGround")             # no flat grey void between the rows: warm packed earth
+    if dg and os.environ.get("G1_GROUND", "1") == "1":       # with cobbled / trodden patches (~30 m)
+        gm = L.mat("G1TownGround", (0.40, 0.31, 0.20), 0.95, var=0.28, var_scale=0.035, color2=(0.47, 0.43, 0.36))
+        dg.data.materials[0] = gm
+    gate_crest(M, coll)
     belfry(M, coll); onion_church(M, coll)
     yeager_terrace(M, coll)
     if north:

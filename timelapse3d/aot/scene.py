@@ -861,7 +861,7 @@ def town_points(n_variants, widths):
                     off = hw + dpt / 2 + 0.8
                     x = ax + tx * t + nx * off * side
                     y = ay + ty * t + ny * off * side
-                    if rnd.random() < 0.06 or not in_district(x, y, 15):
+                    if rnd.random() < 0.06 or not in_district(x, y, 8 if TOWN_TERRACE else 15):
                         continue
                     if on_road(x, y, pad=dpt / 2 - 0.5):
                         continue
@@ -882,6 +882,18 @@ def town_points(n_variants, widths):
         elif rnd.random() < 0.5:
             trees.append((x, y, 0, rnd.uniform(0, 6.28), rnd.uniform(0.6, 0.9), rnd.randrange(7), -10000, 99999))
             occ.setdefault((int(x // 12), int(y // 12)), []).append((x, y, 3))
+    if TOWN_TERRACE:
+        # dense infill of the back lots (bible g1 set dressing: terraced blocks with shared walls, narrow lanes, rows right
+        # up to the wall foot; the avenue / streets / plaza / squares stay open).  Own RNG so the settlement below is unchanged.
+        rf = random.Random(22)
+        for _ in range(int(os.environ.get("TOWN_FILL_TRIES", "90000"))):
+            x, y = rf.uniform(-W, W), rf.uniform(-S - R, 0)
+            if not in_district(x, y, 8) or on_road(x, y, pad=3):
+                continue
+            v = rf.randrange(n_variants); w, dpt = widths[v]
+            r = w * 0.47                                   # side-by-side shared walls; depths may overlap (one roof mass)
+            if free(x, y, r):
+                put(x, y, street_angle(x, y), v, r)
     # small settlement just inside Wall Maria around the inner gate road and along the canal
     for _ in range(9000):
         x, y = rnd.gauss(-CS * 40, 170), rnd.uniform(25, 260)

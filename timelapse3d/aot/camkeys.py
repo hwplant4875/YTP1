@@ -16,27 +16,24 @@ from camchan import CamPath, speed_profile
 # K0 / K1: the locked tree shots (not numbers in the bible): K1 = render_fast fallback flight_at(900); K0 = close on the kids,
 # 3 m from them on the same line of sight (render_fast: c0 = l0 + (k0 - l0) * 0.74, lens 0.9 * 50)
 G1 = [
-    (0.00, (-476, 330.5, 2.4), (-474.6, 327.9, 1.2), 45),
-    (2.00, (-480, 338, 7.2), (-300, 0, 10.6), 50),
+    (0.0, (-476, 330.5, 2.4), (-474.6, 327.9, 1.2), 45),
+    (2.0, (-480, 338, 7.2), (-300, 0, 10.6), 50),
     (2.05, (-480, 338, 7.2), (-300, 0, 10.6), 50),
-    # v2 (lead QA 10/26, owner rules 06:05 / 15:07 / 00:44 beat the bible keys): swoosh over the inner wall onto the
-    # plaza side so the head + both gripping hands are ~10-15 % of the frame at 5-10 s (camera ~190-220 m from the head,
-    # 48-50 mm), the kick framed from the town side (gate ~13 % of the frame width), then a calm observer 92-105 m up,
-    # pitch 23-37 deg, then ~145 m NW of the Yeager ruin (Carla's street side; pour behind, frame-left).  The old bible K2-K12 are in G1_BIBLE below.
-    (3.4,  (-380, 220, 105), (-40, -560, 0),  30),
-    (4.8,  (-250, 20, 112),  (-20, -640, 10), 32),
-    (6.2,  (-140, -235, 108), (-8, -722, 45), 40),     # v2b (owner 16:51 "distant is better"): far calm observer,
-    (7.4,  (-70, -420, 95),   (-7, -728, 52), 48),     # head + hands ~6-10 % of the frame from ~290-320 m
-    (9.2,  (-55, -445, 92),   (-6, -728, 50), 50),
-    (10.6, (20, -470, 100),   (0, -712, 14),  40),     # kick from the town side at ~250 m: dust dome + arcs readable
-    (12.2, (20, -460, 110),   (0, -700, 20),  36),
-    (14.5, (-25, -450, 110),  (-12, -690, 14), 34),
-    (18.0, (-40, -480, 105),  (-55, -665, 6),  32),
-    (21.5, (-130, -482, 100), (-120, -622, 4), 30),
-    (25.0, (-232, -480, 96),  (-168, -590, 3), 30),    # NW of the ruin: Carla / the Smiling Titan face this way, pour behind
-    (28.5, (-246, -472, 95),  (-168, -589, 4), 28),
-    (32.0, (-254, -468, 95),  (-167, -590, 2), 28),     # = SEAM_IN v2 (render_fall2, segtime g1_g2, g2 K0)
-    (33.0, (-100, -680, 94), (-166, -588, 2), 28),     # guide key (seam at rest)
+    (3.17, (-455, 300, 45), (-150, -400, 10), 40),   # v3 (cloud QA 18:10): constant-speed swoosh (accel 1.4 s, cruise ~132 m/s, decel 1.6 s), peak 147 m/s
+    (4.05, (-400, 215, 95), (-40, -560, 0), 31),
+    (5.45, (-300, 60, 112), (-25, -620, 8), 32),
+    (7.38, (-190, -170, 108), (-12, -700, 35), 38),
+    (8.74, (-120, -330, 100), (-8, -724, 48), 46),
+    (10.0, (-95, -390, 98), (-7, -728, 52), 50),   # hold ~360 m from the head (far observer, owner 16:51): head + hands ~6-8 % of the frame
+    (10.55, (-72, -414, 96), (-6, -728, 50), 50),
+    (11.25, (-58, -428, 98), (-3, -715, 20), 42),   # kick from the town side ~290 m: dust dome + debris arcs
+    (12.5, (-45, -440, 105), (0, -705, 20), 36),
+    (14.5, (-25, -450, 110), (-12, -690, 14), 34),
+    (18.0, (-40, -480, 105), (-55, -665, 6), 32),
+    (22.0, (-222, -500, 97), (-168, -592, 3), 30),   # fly left, then a slow drift 3-6 m/s NW of the Yeager ruin (Carla's street side, pour behind / frame-left)
+    (27.0, (-240, -484, 96), (-168, -590, 3), 29),
+    (32.0, (-254, -468, 95), (-167, -590, 2), 28),   # = SEAM_IN (unchanged since v2: g2 builds against it)
+    (33.0, (-254, -468, 95), (-167, -590, 2), 28),   # guide key (seam at rest)
 ]
 G1_BIBLE = [
     (3.9,  (-456, 298, 92),  (-40, -600, 40), 30),
@@ -53,17 +50,22 @@ G1_BIBLE = [
     (33.0, (-130, -686, 114), (-165, -594, 0), 28),      # guide key (seam at rest)
 ]
 # ---------------------------------------------------------------- g2 (W)
-G2 = [
-    (0.0,  (-254, -468, 95),  (-167, -590, 2), 28),            # SEAM_IN v2 (was (-130, -686, 114) -> (-165, -594, 0))
-    (3.5,  (-180, -590, 118), (0, -310, 10),   32),
-    (7.5,  (-215, -440, 120), (0, -190, 10),   35),
-    (11.0, (-225, -275, 118), (0, -80, 14),    38),
-    (13.5, (-215, -185, 118), (0, -8, 18),     38),
-    (16.0, (-195, -140, 132), (10, 30, 12),    35),
-    (20.0, (-110, -5, 170),   (45, 125, 0),    32),
-    (24.0, (-15, 130, 205),   (160, 290, 0),   30),
-    (28.0, (105, 300, 222),   (228, 580, 0),   30),
-    (32.0, (175, 480, 240),   (228, 1050, 0),  28),
+G2 = [   # v2 (g2 agent 10/27): new seam K0 + a FAR observer (~360 m, pitch 34-41 deg so the 3-4 storey avenue houses do not
+         # hide him) locked on the Armored from the SW (rear three-quarter at most, never behind).  The old K1 (3.5 s, a ~100 deg
+         # turn from the ruin to the avenue) gave 68 deg/s: K1 is now a 3.0 s pan + climb and the lock starts at 6.0 s (<= 24 deg/s).
+         # Look-at keys K2-K4 sit ON his track (seg_g2.arm_y).  K5 cranes over the wall for the slide, K6-K8 the quays / ferries,
+         # K9 = the g2->g3 seam (segtime g2_g3), unchanged.
+    (0.0,  (-254, -468, 95),  (-167, -590, 2), 28),            # SEAM_IN v2 (= g1 K12, at rest)
+    (3.0,  (-248, -470, 150), (-70, -480, 6), 31),             # pan off the ruin toward the avenue, climbing
+    (6.0,  (-210, -445, 210), (0, -233.0, 10), 37),            # locked on him (y -233 at 6.0 s), ~360 m
+    (9.0,  (-196, -366, 222), (0, -146.0, 10), 39),            # wall-top guns + ricochets behind, the face hit at 9.15
+    (11.0, (-189, -306, 226), (0, -88.0, 12), 40),             # field volleys, crest leaf, gun line
+    (13.5, (-182, -240, 230), (0, -10, 14), 40),               # IMPACT (right shoulder)
+    (16.3, (-165, -170, 255), (0, 40, 10), 37),                # over the wall top: the slide ends at y ~ +46
+    (20.0, (-150, -60, 212),  (18, 88, 0),     33),            # dust ball, him standing, gate road, apron crowd
+    (24.0, (-15, 130, 225),   (245, 280, 0),   30),            # quays + ferries (the canal bends east here)
+    (28.0, (105, 300, 232),   (240, 580, 0),   30),            # the lone ferry heading north
+    (32.0, (175, 480, 240),   (228, 1050, 0),  28),            # = g2->g3 seam (segtime g2_g3), unchanged
 ]
 # ---------------------------------------------------------------- g3  (group-local seconds)
 G3_FLIGHT_W = [                                                       # FA0..FA3, frame W
@@ -129,12 +131,13 @@ G6 = [
     (0.0,  (-345, 455, 175), (-185, 640, 15),  30),               # H0
     (7.0,  (-330, 470, 150), (-225, 605, 10),  30),               # H1
     (14.5, (-255, 470, 120), (-205, 600, 6),   32),               # H2
-    (19.5, (-198, 565, 100), (-187, 643, 1),   38),               # H3 (pitch 51 deg, cutaway)
-    (33.5, (-194, 562, 100), (-186, 642, 1),   38),               # H3b
+    (19.5, (-197, 543, 98),  (-187, 643, 1),   38),               # H3 cutaway, pulled back 22 m S (g6 agent 10/27: pitch 51 -> 44,
+    (33.5, (-193, 540, 98),  (-186, 642, 1),   38),               # H3b  owner limit 17-45 deg; still sees the ring over the cut wall)
     (38.5, (-150, 495, 110), (-185, 620, 8),   32),               # H4
     (46.5, (-110, 515, 105), (-182, 617, 4),   35),               # H5
-    (52.5, (-130, 540, 90),  (-180, 619, 4),   40),               # H6
+    (52.5, (-132, 538, 96),  (-180, 619, 4),   38),               # H6 (g6 agent: 90 m/40 mm -> 96 m/38 mm, far observer)
     (59.5, (-90, 560, 115),  (-215, 615, 18),  32),               # H7
+    (64.5, (48, 600, 126),   (-5, 745, 12),    32),               # H7b (g6 agent): look-at guide, keeps the exit pitch <= 45
     (69.5, (220, 650, 130),  (345, 810, 0),    32),               # H8
 ]
 # ---------------------------------------------------------------- g7 (M), PACE table
@@ -239,7 +242,7 @@ NOTES = [   # appended to design_specs/camcheck_report.md
     "Agree with the bible within rounding: g1 129 m/s; g3 flight pure PCHIP 412 m/s (profile run 372 vs the profile's 369); g3 flight-to-camp 298 m/s; g4 141 m/s / 31.5 deg/s (bible 32); g5 43 / 29; g7 104 / 26.5 (26); g8 67 / 29.9 (30), min height 89 m (bible says 89 too); g3 camps pan 31.9 deg/s (bible 32).",
     "Disagree: g2 alone peaks at 54 m/s (bible 78): the bible figure comes from the A2 run where g2 is one channel with the g3 flight keys; with the A2 seam as v_out (0,45,8) g2 ends smoothly at 46 m/s. g6 yaw peaks at 18.8 deg/s (bible 25): the bible number is from the single run B; with seam tangents g6 alone is calmer.",
     "Over the A3 limits (flags in the table): YAW > 30 deg/s: g3 camps P2->P3 pan 31.9 (26.4 s local), g4 G0b swing 31.5 (2.6 s), run A2 32.0, run B 31.7 (the same two spots; the bible itself quotes 32). All are < 3 % over; none is a flip.",
-    "g2: pitch 49 deg in the first 0.7 s (K0 aimed at the Yeager house from 114 m, A3 allows 45); g7: pitch 46 deg at 20.1 s (a 0.07 s window); g8: height 89 m at 49.3 s (A3 minimum 90, 1 m short at S1); g1: pitch -1..57 deg: the tree shots K0/K1 are locked close-ups and K5 (pitch 9 deg, 50 mm hold on the Colossal at 500 m) is below the 17 deg pitch rule; flag kept for the record.",
+    "g2 (v2 10/27): new seam K0 (-254,-468,95), K1 a 3.0 s pan, lock from 6.0 s: peak yaw 68 -> <30 deg/s (see camchan --check g2). g7: pitch 46 deg at 20.1 s (a 0.07 s window); g8: height 89 m at 49.3 s (A3 minimum 90, 1 m short at S1); g1: pitch -1..57 deg: the tree shots K0/K1 are locked close-ups and K5 (pitch 9 deg, 50 mm hold on the Colossal at 500 m) is below the 17 deg pitch rule; flag kept for the record.",
     "g3_to_camp with the march846 CAM_OUT velocity as v_in (0,95,22) overshoots to 681 m (> 650) at 50-53 s because the 640 m start key climbs at 22 m/s into FT1 (520 m); the bible's lead-in guide key at FT0-1 s (run B) peaks at 640 m. Use the guide key, or lower FT0/FT1 height by ~40 m.",
     "A2/B as ONE channel also match the per-segment numbers (g2 + flight: 412 m/s is the flight); g3 flight 0-17.7 must be driven with camchan.speed_profile (45 -> 369 m/s ramp over 0-3.7, cruise to 9.0, constant decel to rest at 17.7), as the bible says.",
     "Assumptions in the transcription: g1 K0 (3 m from the kids, same line of sight as K1, 45 mm) and K1 (render_fast fallback flight_at(900): cam (-480, 338, 7.2), look (-300, 0, 10.6), 50 mm) are not numbers in the bible; g3 lens at H2..H3 held at 40 (bible: '28->40' then '40->28'), CAM_IN 27; g3 look-at rate at CAM_IN (0,-111,0) and at CAM_OUT (0,283,13) from march846.CAM_KEYS secants (the bible gives only the camera velocities); the g1 guide key at 33.0 duplicates K12 (v_out is left unset: PCHIP gives rest at 32.0).",
@@ -258,7 +261,7 @@ def path(name):
             lim.update(hmin_from=3.9, under=1.0)
             q["comment"] = "K0/K1 locked tree framing are not numbers in the bible (K1 = render_fast fallback, K0 approximated); height rule applied from K2 (3.9 s); look-under test off (K0 look is 3 m ahead of the camera on purpose, same bearing as K1)."
         if name == "g6":
-            lim.update(pitch=(17, 52)); q["comment"] = "H3/H3b are the 51 deg cutaway: pitch allowed to 52."
+            lim.update(pitch=(17, 45)); q["comment"] = "H3/H3b cutaway pulled back to <= 45 deg pitch (owner limit 17-45, g6 agent 10/27)."
         return p, kw, q
     if name == "g3_flight":
         p = CamPath(_M(G3_FLIGHT_W, "W") + _M(G3_CAMPS_M[:2], "M"), v_in=S("g2_g3")["vel"])

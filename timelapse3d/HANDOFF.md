@@ -363,3 +363,22 @@ TROST:
 
 ## 16:53 (10/26 UTC) OWNER: remove the decoy corner D completely ("저기 구석에만 있는게 어색하므로 다 빼자")
 - No titan mass, decoy soldiers, cranes or mop-up props at D (NW pocket). Mop-up stays near the gate square. Bible g8/C rows D and the "decoy" must-haves are void.
+
+
+## 18:10 g1 v3 fix list (coordinator cloud QA of g1_fall_v2) — QUEUED, start after g8 v2 + g5 v1 are pushed
+1. Town density (main flaw): continuous terraced rows with shared walls, narrow lanes, the avenue as the only wide gap, rows right up to the wall foot (ref ep02_000007498, ep01). Cobble/dirt variation between rows, no flat grey void.
+2. Smooth the 6.5 s whip to under 150 m/s.
+3. 22-32 s: slow drift/orbit at 3-5 m/s, staying far. Keep the g1->g2 seam (-254,-468,95) at rest so g2 keeps matching.
+4. P2: gate dressing and wall-top cannons.
+Keep the far camera.
+
+
+## 19:09 g5 v2 fix list (coordinator cloud QA of g5_trost_v1) - QUEUED: resume the g5 agent as soon as g2 finishes; g5 v2 gets GPU priority over g6 and g1 v3
+1. Steam at 9-17 s: white/light-grey billowing steam that rises, spreads and thins over ~4 s. No blue blob.
+2. Pour visible from 12 to 30 s: 20-35 titans of mixed sizes stream along lanes L1-L5 up the avenue and the ring road. Warmer skin plus a contact shadow. Keep a few in frame during the turn toward the HQ.
+3. Abnormal: charges up the open avenue EVS with a dust cloud. Mikasa kills it at about (-85,782); it skids prone to (-96,794) at the crowd's south edge while the crowd recoils. Drop the roof-hop or land it in the open. "MIKASA" tag in Russo One with a leader line at 33.8-39 s and 50-54 s; no merchant tag.
+4. Crowd: colourful, saturated clothing (ruling E2), a 4-6 m gap behind the cart, and the drain eased in and out.
+5. Alley 46-62 s: C8/C9/C9' looking SOUTH from about 230 m N and 150 m up. Lower or remove 2-4 blocking houses. The AT must read clearly.
+6. ODM: wires of 35 m or less to nearby anchors, thin light grey, removed on arrival (no ~100 m black lines).
+7. Remove the brown disc on the small square; use a small stone well if a feature is needed.
+Push g5_trost_v2_*.
