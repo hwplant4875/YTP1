@@ -74,6 +74,9 @@ for si, S in enumerate(E['sections']):
               f"eq=contrast=1.05:saturation=0.92:gamma={G.get(name,1.12)},vignette=PI/5,setsar=1")
         # zoompan (d=1) emits one frame per input frame, so normalise to FPS first or 23.976/60 fps sources play at 1.25x / 0.5x
         vf = (f"setpts=PTS/{sp}," if sp != 1.0 else '') + f"fps={FPS}," + vf
+        # owner's request: a solid black bottom bar (reads as letterbox) over the Movieclips/Fandango mark;
+        # Scream 7 uploads carry it higher, inside the picture, so their bar is taller
+        if 'still' not in name: vf += f",drawbox=x=0:y={905 if name.startswith('s7_') else 980}:w=iw:h=ih:color=black:t=fill"
         if name == 'BLACK':
             run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', f'color=c=black:s=1920x1080:r={FPS}', '-frames:v', str(n), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p', '-video_track_timescale', '15360', o])
             wav(ao, n)
