@@ -52,7 +52,7 @@ X.append(sec('s03', [(0, 's7_09_anna_camp', 21), ('from Scream', 's7_09_anna_cam
   ('escaped', 's7_09_anna_camp', 156), ('used as', 's7_09_anna_camp', 0), ('people really', 's7_09_anna_camp', 99), ('his run', 's7_04_walls', 222),
   ('Gale,', 's7_04_walls', 227), ('hit him', 's7_04_walls', 230.5), ('Survival rate', 's7_04_walls', 243), ('Instruction', 's7_04_walls', 246)],
   [15, 'Karl Gibbs', 'Scream 7 (2026)'], 75, 'Stay near the people with the car keys.'))
-X.append(sec('s04', [(0, 's2_10_blame', 113), ("Billy's mom", 's1_11_creative', 6), ('who spent', 's2_10_blame', 106), ('friendly reporter', 's2_10_blame', 120),
+X.append(sec('s04', [(0, 's2_10_blame', 122.45), ("Billy's mom", 's1_11_creative', 6), ('who spent', 's2_10_blame', 106), ('friendly reporter', 's2_10_blame', 120),
   ('Her plan', 's2_10_blame', 115), ('but up close', 's2_10_blame', 60), ('least dangerous', 's2_10_blame', 70), ('once Cotton', 's2_10_blame', 117),
   ('with a gun', 's2_10_blame', 123), ('it was over', 's2_10_blame', 107), ('Survival rate', 's2_10_blame', 116), ('Instruction', 's2_10_blame', 121)],
   [14, 'Mrs. Loomis', 'Scream 2 (1997)'], 68, "Never trust a reporter who's a little too nice."))
@@ -60,10 +60,10 @@ X.append(sec('s05', [(0, 's4_still_charlie', 0), ('the horror nerd', 's4_02_retu
   ('kills,', 's4_02_return', 75), ('trusted', 's4_02_return', 120), ('and Jill', 's4_still_jill', 0), ('through the heart', 's4_02_return', 125.5),
   ('Survival rate', 's4_still_charlie', 2), ('Instruction', 's4_still_gf', 0)],
   [13, 'Charlie Walker', 'Scream 4 (2011)'], 60, 'If he quizzes you on horror movies, leave.'))
-X.append(sec('s06', [(0, 's6_family', 27), ('She faked', 's6_core4', 89), ('everyone stopped', 's6_core4', 54), ('genuinely evil', 's6_family', 47),
+X.append(sec('s06', [(0, 's6_family', 29.45), ('She faked', 's6_core4', 89), ('everyone stopped', 's6_core4', 54), ('genuinely evil', 's6_family', 46.7),
   ('one confirmed', 's6_core4', 117), ('Sam shot', 's6_family', 165), ('Survival rate', 's6_family', 13.5), ('Instruction', 's6_family', 168)],
   [12, 'Quinn Bailey', 'Scream VI (2023)'], 56, 'See the body before you believe it.'))
-X.append(sec('s07', [(0, 's6_family', 86), ('the awkward', 's6_family', 15), ('just a little', 's6_family', 18), ('That closeness', 's6_family', 97),
+X.append(sec('s07', [(0, 's6_family', 86), ('the awkward', 's6_family', 18), ('just a little', 's6_family', 20), ('That closeness', 's6_family', 97),
   ('but in a straight', 's6_ladder', 150), ('lost to', 's6_ladder', 138), ('Kirby dropped', 's6_family', 141), ('very Scream', 's6_two_gf', 135),
   ('Survival rate', 's6_family', 20), ('Instruction', 's6_family', 142)],
   [11, 'Ethan Landry', 'Scream VI (2023)'], 53, 'Be suspicious of the nice roommate.'))
@@ -71,7 +71,7 @@ X.append(sec('s08', [(0, 's7_02_stu', 51), ('He worked', 's7_02_stu', 6), ('tech
   ('from Stu', 's7_02_stu', 66), ('with deepfakes', 's7_02_stu', 75), ('terrifying', 's7_02_stu', 63), ('final fight', 's7_10_sidney_kills', 15),
   ('Sidney shot', 's7_10_sidney_kills', 18), ('Survival rate', 's7_02_stu', 90), ('Instruction', 's7_02_stu', 105)],
   [10, 'Marco Davis', 'Scream 7 (2026)'], 50, "If a dead killer calls you, it's not him."))
-X.append(sec('s09', [(0, 's5_08_act3', 72), ('the sweet', 's5_08_act3', 63), ('nobody suspected', 's5_08_act3', 78), ('He stabbed', 's5_03_sheriff', 135),
+X.append(sec('s09', [(0, 's5_08_act3', 73.0), ('the sweet', 's5_08_act3', 63), ('nobody suspected', 's5_08_act3', 78), ('He stabbed', 's5_03_sheriff', 135),
   ('broad daylight', 's5_03_sheriff', 141), ('fooled Sam', 's5_09_fighting', 3), ('but the moment', 's5_09_fighting', 92), ('she cut', 's5_09_fighting', 96),
   ('Survival rate', 's5_09_fighting', 0), ('Instruction', 's5_08_act3', 96), ('little too much', 's5_08_act3', 70)],
   [9, 'Richie Kirsch', 'Scream (2022)'], 45, 'If your boyfriend loves horror movies a little too much, ask questions.'))
@@ -80,8 +80,8 @@ X.append(sec('s10', [(0, 's7_09_anna_camp', 100), ("Sidney's neighbor", 's7_09_a
   ('took Sidney', 's7_09_anna_camp', 255), ('shooting together', 's7_09_anna_camp', 266), ('Survival rate', 's7_09_anna_camp', 186),
   ('Instruction', 's7_09_anna_camp', 228)],
   [8, 'Jessica Bowden', 'Scream 7 (2026)'], 43, 'Know your neighbors better than they know you.'))
-X.append(sec('s11', [(0, 's1_11_creative', 24), ('A lot of', 's1_10_surprise', 7), ('most unhinged', 's1_11_creative', 30), ('but he only', 's1_10_surprise', 112),
-  ('Sidney ended', 's1_12_tables', 104), ('TV right', 's1_12_tables', 108.5), ('Stu might', 's1_11_creative', 90), ("but he's not", 's1_11_creative', 111),
+X.append(sec('s11', [(0, 's1_11_creative', 87.0), ('A lot of', 's1_10_surprise', 7), ('most unhinged', 's1_11_creative', 30), ('but he only', 's1_10_surprise', 112),
+  ('Sidney ended', 's1_12_tables', 104), ('TV right', 's1_12_tables', 108.5), ('Stu might', 's1_11_creative', 89.5), ("but he's not", 's1_11_creative', 111),
   ('Survival rate', 's1_11_creative', 48), ('Instruction', 's1_12_tables', 45)],
   [7, 'Stu Macher', 'Scream (1996)'], 40, 'Keep a TV between you and him.',
   extra=[('title', ['NOT THE HARDEST', '!TO SURVIVE'], "but he's not", 'Survival rate')]))
@@ -90,7 +90,7 @@ X.append(sec('s12', [(0, 's2_10_blame', 3), ('the film', 's2_10_blame', 9), ('ca
   ('shot him', 's2_10_blame', 105), ('he still', 's2_10_blame', 54), ('finished him', 's2_10_blame', 78), ('Survival rate', 's2_10_blame', 33),
   ('Instruction', 's2_10_blame', 39)],
   [6, 'Mickey Altieri', 'Scream 2 (1997)'], 36, 'If he sits up, keep shooting.'))
-X.append(sec('s13', [(0, 's5_09_fighting', 104), ('killed Dewey', 's5_09_fighting', 57), ('She got shot', 's5_09_fighting', 137), ('burning stove', 's5_09_fighting', 129),
+X.append(sec('s13', [(0, 's5_09_fighting', 107.0), ('killed Dewey', 's5_09_fighting', 57), ('She got shot', 's5_09_fighting', 137), ('burning stove', 's5_09_fighting', 129),
   ('she still came', 's5_09_fighting', 145.5), ('swinging', 's5_09_fighting', 149), ('took Tara', 's5_09_fighting', 152.5), ('Survival rate', 's5_09_fighting', 70),
   ('Instruction', 's5_08_act3', 102)],
   [5, 'Amber Freeman', 'Scream (2022)'], 30, "If she's on fire and still walking, run."))
