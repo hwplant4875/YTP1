@@ -412,13 +412,14 @@ def board_final(out, placed, dur, fps=30, t_build=None, highlights=(), t_dim=Non
         hl = {k: math.sin(math.pi * (tt - th) / 1.2) for th, k in highlights if th <= tt < th + 1.2}
         dim = max(hl.values()) if hl else 0.0
         for r in placed:
-            if r['key'] in hl: top.append((r, 1 + 0.4 * hl[r['key']])); continue
+            if r['key'] in hl: top.append((r, 1 + 0.25 * hl[r['key']])); continue
             t = face(r)
             if dim > 0: t = Image.blend(t, Image.new('RGBA', t.size, (0, 0, 0, 255)), 0.5 * dim)
             im.alpha_composite(t, pos[r['key']])
         for r, sc in top:
             x, y = pos[r['key']]; t = face(r, TS * sc)
-            x = min(max(x + TS / 2 - t.size[0] / 2, 0), W - t.size[0]); y = min(max(y + TS / 2 - t.size[1] / 2, 0), H - t.size[1])
+            # grow right/down from the slot so the enlarged face never covers the label column or the row above's name tags
+            x = min(max(x, 0), W - t.size[0]); y = min(max(y, 0), H - t.size[1])
             with_shadow(im, t, (x, y), (0, 10), 16, 220)
         if t_dim is not None and tt >= t_dim:
             im = Image.blend(im, Image.new('RGBA', (W, H), (0, 0, 0, 255)), 0.55 * ease((tt - t_dim) / 0.35))

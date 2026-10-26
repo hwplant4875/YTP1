@@ -20,9 +20,9 @@ Who would you put at number one? Tell us in the comments, and vote for Freddy or
 0:50 #16 to #13
 2:38 #12 to #9
 4:14 #8 to #5
-5:54 #4 to #2
-7:17 #1
-7:50 The final tier list
+5:53 #4 to #2
+7:16 #1
+7:49 The final tier list
 
 Horror Ranked rates horror villains by one question: could you survive them?
 

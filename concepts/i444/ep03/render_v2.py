@@ -72,7 +72,8 @@ for si, S in enumerate(E['sections']):
         vf = (f"scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,"
               f"zoompan=z='{Z.get(name,1.04)}+0.03*on/({max(1,n)})':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1920x1080:fps={FPS},"
               f"eq=contrast=1.05:saturation=0.92:gamma={G.get(name,1.12)},vignette=PI/5,setsar=1")
-        if sp != 1.0: vf = f"setpts=PTS/{sp},fps={FPS}," + vf
+        # zoompan (d=1) emits one frame per input frame, so normalise to FPS first or 23.976/60 fps sources play at 1.25x / 0.5x
+        vf = (f"setpts=PTS/{sp}," if sp != 1.0 else '') + f"fps={FPS}," + vf
         if name == 'BLACK':
             run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', f'color=c=black:s=1920x1080:r={FPS}', '-frames:v', str(n), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p', '-video_track_timescale', '15360', o])
             wav(ao, n)
