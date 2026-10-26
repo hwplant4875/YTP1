@@ -1,0 +1,122 @@
+[
+ {
+  "window": "0-52 s",
+  "checked": "Pulled word start times from voice_v4/s00.json and s01.json (s01 starts at 17.81 s: 17.31 s voice plus 0.5 s pad) and compared them with the edl_v2 shots and overlays. Made 10 fps contact sheets for 0-52 s, plus larger frames of the 'Shot' and 'Run over by a car' shots (the car one brightened to see the dark frames). Ran ffmpeg blackdetect on 0-52 s and it found no black frames.\n\nEvery word in the window lands on the right picture:\n- 'shot' (0.64): a woman takes a gunshot and the blood hits at 0.6-0.8 (Scream 7, 0.3-0.94).\n- 'stabbed' (1.20): the man with a bloody knife wound to the face is on screen from 0.94.\n- 'set on fire' (2.0-2.4): the person catches fire at 1.9-2.6.\n- 'run over by a car' (3.16-3.84): Ghostface stands in the road at 3.1, the car hits at about 3.3-3.4, and the car is still in frame through 3.8.\n- 'shot in the head' (4.52-5.12): the gun is aimed at 4.2, the blood shows at 4.6, and the bullet hole is visible from 5.0.\n- 'Ghostface' (8.64): a Ghostface close-up runs from 7.6 to 9.8.\n- 'sixteen' (11.79): the '16 GHOSTFACES' title is up from 11.44 to 14.3.\n- 'how hard \u2026 to survive' (23.93-25.49): the title is up from 23.35 to 26.25.\n- Stat bars on the GHOSTFACE card fill within about 0.15 s of each word: strength at 29.55 (word 29.41), intelligence 30.21, kill count 31.37, deception 32.19 (word 32.29). The '??' survival rate shows by 39.2-40.4.\n- 'Michael' (41.41): Michael Myers from H20 is clearly on screen from 41.05 to 41.65.\n- 'Jason' (41.81): Jason's mask from Jason Lives (p6_reborn) is clearly on screen from 41.65 to 42.4.\n- 'human' (43.73): the 'ALL HUMAN' title is up from 43.51.\n- 'dead' (46.25): the gunshot shot is at about 46.0, then the impaled body appears at 46.5.\n- 'Number sixteen' (50.71): the #16 Jason Carvey card arrives at 50.7.\n\nSince the clips now play at true speed, every action still hits within 0.3 s of its word. There are no tier rows in this window.",
+  "issues": []
+ },
+ {
+  "window": "52-136 s",
+  "checked": "I checked all of the window at 10 fps against the whisper word onsets in voice_v4/words.json. Section starts from the EDL: s02 at 50.71, s03 at 80.47, s04 at 108.78, s05 at 135.28. blackdetect over 52-136 s found no black frames.\n\nCarvey:\n- 'Carvey' (52.13): the #16 card is over the Ghostface masks.\n- 'kills his film professor' (55.73): he is washing bloody hands from 55.65 to 57.1. The s6_opening clip starts after the kill, so no better source frame exists.\n- 'finds out' (61.23): the body in the fridge.\n- 'real Ghostface' (61.87/62.21): Ghostface is clearly on screen from 61.8 to 63.6. OK.\n- 'somebody scarier' (67.69): Ghostface. OK.\n- The 99% stamp lands at about 71.2. The Easy slam lands in the Easy row at about 79.0-79.1 on 'easy' (79.02). OK.\n\nKarl:\n- 'Carl' (81.57): Ghostface is clearly in the #15 shot. OK.\n- 'escaped' (84.11): Ghostface on the stairs.\n- 'genuinely scary in a fight' (85.95): the lunge and the struggle. OK.\n- 'hit him with her van' (93.55): Ghostface is standing and the van crosses frame at about 93.5-93.9. OK.\n- 'pulled the mask off' (95.45): the unmasked still starts at 95.09. OK.\n- 'creepy stranger' (97.57): the coffee still starts at 97.33. OK.\n- The 75% stamp lands at about 101.1 (word at 101.43). The Don't Worry slam lands at about 106.9-107.0 on \"don't\" (107.05). OK.\n\nMrs. Loomis:\n- 'Mrs. Loomis' (109.84): her face (mothers_love 85.3) runs from 108.8 to 111.0. OK.\n- \"Billy's mom\" (111.14): Billy at 111.06. OK.\n- 'Her plan' (116.70): her face starts at 116.6. OK.\n- 'up close' (120.34): her close-up. OK.\n- 'least dangerous' (121.64): the struggle with Sidney.\n- 'Cotton' (124.26): Cotton is aiming the gun from 123.9 to 125.6. OK.\n- 'it was over' (125.78): she has been shot. OK.\n- The 68% stamp lands at about 128.2. The Don't Worry slam lands in the Don't Worry row at about 133.4-133.5 on \"don't\" (133.48). OK.\n\nNote for other checkers: the stream changes parameters at 135.27, which re-initialises the filter graph. Any contact sheet with a -t that crosses 135.27 silently drops its partial tile and appears to start at 135.3. Keep sheet ranges from crossing that point.",
+  "issues": [
+   {
+    "video_time": 92.67,
+    "words": "Gale floored it and hit him",
+    "severity": "minor",
+    "problem": "On 'floored it' (92.75) the shot is s7_04_walls 249.9, which is Gale in her red coat standing outside the parked van after the hit. Nothing is speeding and the shot is out of order, so the line has no 'floors it' action before the hit at 93.33.",
+    "section": "s03 (Karl Gibbs)",
+    "shot_index": 7,
+    "fix": "Change the s03 shot 'floored it' in-point from s7_04_walls 249.9 to 232.85 at speed 1.0, the van's headlights charging straight at camera. I checked it at 10 fps: the headlights run from 232.8 to 234.1, so the 0.66 s shot (92.67-93.33) shows only the speeding van. Leave the following 'and hit him' shot (232.28 @0.8) as it is."
+   }
+  ]
+ },
+ {
+  "window": "136-230 s (s05 Charlie #13, s06 Quinn #12, s07 Ethan #11, s08 Marco #10, start of s09)",
+  "checked": "I built 10 fps contact sheets around every name, action word and tier word in the window. Global times come from edl_v2 section starts (s05 135.27, s06 158.23, s07 179.47, s08 204.67) plus voice_v4 whisper word onsets.\n\n**Charlie**\n- His name (136.39) lands on the charlie_close still. That is fine.\n- \"did most of the actual killing\" at 140.87 shows Ghostface. Fine.\n- \"Jill\" (145.25) shows Jill, and \"the second she\" shows the bloody-knife Ghostface. Both fine.\n\n**Quinn**\n- Her name (159.19) shows Quinn's bloody grin. Fine.\n- \"faked her own death\" goes from Ghostface to the gore body at 161.1. Fine.\n- \"genuinely evil\" at 165.30 shows Quinn smiling with the knife. Fine.\n- \"one confirmed kill\" at 168.13 shows the belly stab, then the screaming victim on \"kill\". Fine.\n- \"Sam shot her\" lands well: Sam fires with a muzzle flash at 170.0 against \"shot\" at 170.05, and the head shot follows at 170.1.\n\n**Ethan**\n- His name (180.49) shows Ethan laughing. Fine.\n- \"awkward roommate\" shows Ethan on the subway. Fine.\n- \"mask came off\" (190.0) shows the unmasked, bloody Ethan. Fine.\n- \"Tara put a knife\" shows Tara, then the knife at 191.6. Fine.\n- \"again and again\" and \"the end\" show the stabbing. Fine.\n\n**Marco**\n- His name (205.55) shows Marco. \"tech guy\" and \"faking calls\" show the computer and phone. Fine.\n- Stu (212.65) and \"deepfakes\" show the Stu video call. Fine.\n- \"final fight\" shows Jessica with the hostage. Fine.\n\n**Tier slams**\nI zoomed into the board crop for all four. Each face lands in the correct row:\n- Quinn flashes in Close Call at 177.79, on \"close\".\n- Ethan flashes in Close Call at 202.96, on \"close\".\n- Marco flashes in Better Run at 226.43, on \"better\".\n\n**Other checks**\n- Blackdetect over 136-230 found 0 black frames.\n- The frame timestamps are continuous.\n\nNote for whoever reruns sheets: the stock contact-sheet command drops the 155.5-158.2 board frames because the filter reinitialises at that point. Adding `-reinit_filter 0` fixes it.",
+  "issues": [
+   {
+    "video_time": 185,
+    "words": "a little too close",
+    "severity": "major",
+    "problem": "Shot s07 #2 (s6_family in 19.3, true speed) cuts at 184.33 to the bloody blonde victim, so the victim covers \"too close\" (184.41-185.0). Ethan only appears for a moment at 185.2-185.5. Then shot #3 (in 16.6, cut at 187.20) covers \"what makes him dangerous\" (187.29-188.4) with dark and blonde-victim frames, so Ethan is not on screen on 'him dangerous' either. The 10 fps check of the s6_family source shows Ethan grinning at 17.9-19.2 and 20.1-20.5, with the victim at 19.3-20.0 and 20.6+.",
+    "section": "s07 (Ethan)",
+    "shot_index": 2,
+    "fix": "Shot 2 ('too close'): change the in-point from 19.3 to 20.05, so Ethan's grin covers 184.33-184.8 and carries 'too close'. Shot 3 ('what makes him'): change the in-point from 16.6 to 18.3, so Ethan's grin covers 187.2-188.1 and the whole of 'what makes him dangerous'. Both checked at 10 fps on the source."
+   },
+   {
+    "video_time": 219.23,
+    "words": "Sidney shot him",
+    "severity": "minor",
+    "problem": "Shot s08 #8 (s7_09_anna_camp in 254.0, cut at 219.07) shows Sidney turning and aiming on \"Sidney shot\". The muzzle flash comes only at 219.5 and Marco's hit at 219.6, which is about 0.27 s after the onset of \"shot\" (219.23) and lands on \"him\". In the source the flash is at 254.4-254.5 and Marco is hit at 254.7-254.9.",
+    "section": "s08 (Marco)",
+    "shot_index": 8,
+    "fix": "Change the in-point from 254.0 to 254.2. Sidney's aim then shows at 219.07, the flash at about 219.27 on 'shot', and Marco's hit at about 219.5-219.67 on 'him', before the stat card. Checked at 10 fps on the source."
+   },
+   {
+    "video_time": 156.34,
+    "words": "Charlie lands in the Close Call tier",
+    "severity": "minor",
+    "problem": "After the 0.18 s move, Charlie's face flashes into the Close Call row at 156.34 and is settled by 156.44. That is during 'the': the voice envelope puts the /k/ of 'Close' at about 156.47 and the vowel at about 156.59. The slam is about 0.13 s (4 frames) earlier than Quinn's, Ethan's and Marco's, which each flash about 0.02 s before the /k/. The row is correct.",
+    "section": "s05 (Charlie)",
+    "shot_index": 7,
+    "fix": "Set the s05 tier hit in voice_v4/tier_lines.json from 21.17 to about 21.29 (+0.12 s), so the flash lands at about 156.46 on 'Close', matching the other three slams. The slam SFX moves with it, because it is placed at the hit time."
+   }
+  ]
+ },
+ {
+  "window": "230-305 s",
+  "checked": "I made 10 fps contact sheets for 228-308 s and ran blackdetect over 228-306 s. It found no black frames. I placed section times from the SRT plus voice_v4 word onsets, and the cuts in the render land where those times predict.\n\nRichie (s09):\n- \"sweet boyfriend\" (230.43) and \"way too harmless\" (232.21): Richie is clearly on screen.\n- \"took out the sheriff\" (234.37-234.99) and \"broad daylight\" (235.53): s5_03_sheriff, with Ghostface stabbing the blonde sheriff on a sunny porch.\n- \"fooled Sam\" (236.95): the cut at 236.87 lands on Sam.\n- \"the moment she figured him out\": Richie.\n- \"she stabbed\" (241.01): s5_10_daughter at 80.15. The knife and blood at Richie's ear show at 240.9-241.1 in the render, which I checked against the source at 10 fps.\n- \"over and over\" (241.65): Sam stabbing downward.\n- \"finally stopped moving\": Richie bloodied.\n- Stat card at 244.5. His face slams into the Better Run row at 252.3, on \"better\" (252.29).\n\nJessica (s10):\n- Name (254.97): she is shown under the #8 card.\n- \"Sydney's neighbor\" (256.35): Sidney.\n- \"actually running\", \"willing\", \"own family\" and \"colder\": Jessica, then the bloody body, then Jessica with Sidney.\n- \"it took Sidney\" (267.83): Sidney aiming her gun.\n- \"shooting together\" and \"to stop her\" (268.7-269.8): muzzle flash and Jessica jerking from the hits.\n- Her face slams into Better Run at about 278.1, on \"better\" (278.10).\n\nStu (s11):\n- Name (280.70): Stu (Matthew Lillard) under the #7 card. I checked a full-res frame.\n- \"most unhinged\" (285.80): Stu with the gun.\n- \"Billy's sidekick\" (289.54): the cut at 289.5 shows Stu and Billy together.\n- \"he and Billy stabbed\" (292.74-293.32): Billy raises the knife.\n- \"each other\" (293.82): Billy's knife goes into Stu.\n- Then Billy bleeding.\n- Stat card at 296.2. His face slams into Almost Dead at about 302.5-302.6, on \"almost\" (302.56).\n\nMickey's #6 card fades in normally at 304.5.\n\nI found no real problems in this window, so I have no fixes to report. Scratch sheets are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa5/w230/",
+  "issues": []
+ },
+ {
+  "window": "305-384 s (EP03 v5: s12 Mickey 304.43-331.93, s13 Amber 331.93-353.78, s14 Billy 353.78-383.68)",
+  "checked": "I made 10 fps contact sheets covering 304-384 s, saved under C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa5/w305/. I placed the shots using the section starts computed from the EDL (s12 at 304.43, matching the SRT) and the whisper word onsets in voice_v4/words.json. Blackdetect over 304-384 found no black frames.\n\nMICKEY\n- 'Mickey' (305.31): the #6 card is over Mickey.\n- 'He racked' (312.33): Ghostface is in the car.\n- 'body counts' (313.71): a bloody body is on screen.\n- 'framed Derek' (315.95): Derek appears on the frat letters at about 315.9.\n- 'his own partner' (319.67): Mrs. Loomis holds the gun, starting at the 319.05 cut.\n- 'shot him' (320.65): the 320.57 cut shows Mrs. Loomis aiming. Mickey is down from 321.23.\n  - The gunshot itself is not in s2_10_blame (checked 121-129) or in s2_11_mothers_love (checked 0-8), so this cut is the best the sources allow.\n- 'Almost Dead' (330.00): Mickey's tile slams into row A on the word.\n\nAMBER\n- 'Amber' (332.81): the #5 card is on screen.\n- 'killed Dewey' (334.93): Amber is on screen. There is no Dewey death footage in any s5 source; s5_03 was checked at 1 fps and only has Judy.\n- 'got shot' (336.59): the cut is at 336.27 and Gale's muzzle flash is at about 336.7.\n- 'fell' (337.67): Amber falls onto the stove at 337.6-338.0.\n- 'burning stove' (338.41): Amber is in flames at the stove.\n- 'out on fire' (340.65-341.13): burning Amber walks out.\n- 'swinging a knife' (341.59-342.47): the burnt Amber raises her knife arm.\n- 'Tara' (343.51): Tara aims from the 343.15 cut. That shot ends at source 179.8, before the end card at 180.0. No firing frame exists in s5_10 (checked 176-184).\n- 'Almost Dead' (351.87): Amber's tile slams into row A.\n\nBILLY\n- 'Billy' (354.72): the #4 card is over Billy.\n- 'the original' (356.06): Billy with Sidney.\n- 'killing Sidney's mom' (358.78): the 358.70 cut shows Billy's confession with Sidney. The murder itself happens before the film.\n- 'boyfriend' (363.34), 'planned' (364.24) and 'played the victim' (365.68): Billy is on screen for each.\n- 'Slaughtered' (382.02): Billy's tile slams into row S.\n\nNo real problems found.",
+  "issues": []
+ },
+ {
+  "window": "384-437 s",
+  "checked": "I checked every action word, name and tier word at 10 fps, from 0.3 s before each one to 1.5 s after it. Section start times are s15 = 383.68 and s16 = 408.74, worked out from the voice durations plus pads, and the cut times match the render. I also read the s6_store, scream4_reveal and s4_02_return source footage at 10 fps.\n\nWayne checks that pass:\n- \"Wayne\" (385.00): Wayne is visible under the #3 card.\n- \"He was the cop\" (386.7): Wayne on the phone.\n- \"murders\" (388.24): Ghostface in the subway.\n- \"led\" (394.80): Wayne aiming his gun.\n- \"whole family\" (395.2): Ethan grinning.\n- \"Sam\" (398.64): Sam standing over Wayne.\n- \"stabbed\" (399.00): Sam is pressing down on Wayne while his hand flails.\n- \"eye\" (399.76-399.86): the bloody eye close-up starts at 399.7.\n- The 22% stamp lands at 401.7.\n- Wayne's face slams into the Slaughtered row at 407.07, right on \"slaughtered\".\n\nJill checks that pass:\n- \"Jill\" (409.62): Jill is under the #2 card.\n- \"Sidney's own cousin\": Sidney is on screen with Ghostface.\n- \"even her own partner\": the Charlie party still.\n- \"then played\": the hospital still.\n- \"whole town\": the party crowd, then Dewey.\n- \"came closer\": the trio still.\n- \"stealing Sidney's life\": Jill and Sidney in frame.\n- The 18% stamp lands at 430.2.\n- Jill's face slams into the Slaughtered row at about 434.6-434.76, on \"slaughtered\".\n\nSignalstats/blackdetect found no black frames in 384-437. The darkest frame has an average brightness of 22.7, at 399.9 (the eye close-up).",
+  "issues": [
+   {
+    "video_time": 396.38,
+    "words": "through the bloodiest run",
+    "severity": "major",
+    "problem": "Shot 6 starts at 395.86 (s6_store, in-point 80.625). It shows Ghostface on the clerk for only about 0.3 s, then cuts inside the source to Sam and Tara's shocked faces from 396.2 to 396.7. So on 'bloodiest' (396.38) no violence is on screen. The Ghostface grab and stab in the source is at 79.8-80.5, which is before the current in-point.",
+    "section": "s15 (Wayne)",
+    "shot_index": 6,
+    "fix": "Change s15 shot 6 ('through the bloodiest') to ['s6_store', 79.6], checked at 10 fps. The result: mask close-up 395.86-396.06, grab at 396.06, stab blur 396.26-396.76 (covers 'bloodiest'), Ghostface on the clerk until 397.26, then the shocked girls."
+   },
+   {
+    "video_time": 412.68,
+    "words": "and the smile she gave",
+    "severity": "major",
+    "problem": "Shot 2 starts at 412.44 (scream4_reveal, in-point 10.25). At true speed, 412.44-413.0 shows Ghostface on the stairs and dark frames. Jill's face only appears at 413.0 and she does not smile until about 413.6-414.0, almost 1 s after 'smile' (412.68).",
+    "section": "s16 (Jill)",
+    "shot_index": 2,
+    "fix": "Change s16 shot 2 ('the smile') to ['scream4_reveal', 14.0]. Source 14.0-16.5 is Jill smirking at Sidney (checked at 10 fps), so she is smiling from the cut through 'mask came off'. Shot 3 ('says everything', in-point 14.25) would then repeat the same footage, so move shot 3 to ['scream4_reveal', 19.5]. Source 19.5-22.0 is a different close-up of Jill talking and smirking, and it covers the 1.86 s shot."
+   },
+   {
+    "video_time": 416.6,
+    "words": "She killed her friends",
+    "severity": "major",
+    "problem": "Shot 4 runs 416.42-417.78 (s4_02_return, in-point 120.3). At true speed the whole 1.36 s is Ghostface looming in the attic (source 120.3-121.66). The friend being attacked (Olivia, source 122.1+) never appears, so no kill and no friend is on screen for 'killed her friends'.",
+    "section": "s16 (Jill)",
+    "shot_index": 4,
+    "fix": "Change s16 shot 4 to ['s4_02_return', 122.0]. Source 122.1-123.4 is Ghostface dragging Olivia across the floor while she screams (checked at 10 fps), so the attack is on screen at 'killed' (416.60) and 'friends' (417.02)."
+   },
+   {
+    "video_time": 417.96,
+    "words": "her mom",
+    "severity": "major",
+    "problem": "Shot 5 runs 417.78-418.56 (scream4_reveal, in-point 6.4). It shows Ghostface attacking the woman in the teal top. That is Sidney, the same teal top she wears opposite Jill in the reveal, not Jill's mother Kate. Kate Roberts does not appear anywhere in scream4_reveal (0-24 s checked at 2 fps), so 'her mom' is shown over the wrong victim.",
+    "section": "s16 (Jill)",
+    "shot_index": 5,
+    "fix": "Best fix: cut in footage of Kate Roberts' death from Scream 4 if one of the clips has it. If none does, change s16 shot 5 to ['s4_still_gf_knife', 0], a generic Ghostface with knife, so the shot no longer shows Sidney as the victim on 'her mom'."
+   }
+  ]
+ },
+ {
+  "window": "437-484.33 s",
+  "checked": "I checked 436-484 s at 10 fps against the s17/s18 voice word timings (s17 starts at 436.45, s18 at 469.90). Every word below landed correctly. \"Bulletproof vest\" at 454.34-454.8 has the L.A.P.D. vest on screen. \"Shooting\" at 455.53 lands on Roman being shot, with flash and smoke, through \"chest\" at 456.13. \"Bullet\" at 458.37 shows Dewey aiming. \"Head\" at 458.89 shows Roman with the bullet hole at 458.7 and falling at 458.8-459.0. \"Dewey\" at 459.29 shows Dewey from 459.1 to 459.6. The other names also land: \"Sidney's half-brother\" has Roman, \"Billy\" at 450.73 has Billy (Scream 1996, from 450.1), and \"kills\" has a body. The Slaughtered slam lands in the top row at about 468.36-468.4 with \"Slaughtered\" at 468.44. The board is correct with 16 tiles and ROMAN last in Slaughtered. In the final board, Carvey grows from 471.96 on \"guy\" and Roman grows from 473.92 on \"the one who planned\". Both grow right and down, and no labels are covered (checked at 472.4 and 474.5 at full resolution). \"YOUR #1?\" appears at 475.8 and FREDDY / OR PINHEAD? at about 479.0, just before \"Freddy\" at 479.18, over a Ghostface shot to the end. Blackdetect (d=0.05, pix_th=0.08) found no black frames from 436 s on. One problem is reported in issues.",
+  "issues": [
+   {
+    "video_time": 438.29,
+    "words": "Roman Bridger",
+    "severity": "minor",
+    "section": "s17",
+    "shot_index": 1,
+    "problem": "Shot 1 (s3_11_family @50.0) starts at section 1.84 s (438.29), in the middle of 'Bridger' (438.05-438.53). Roman's face leaves early. The first 0.2 s of the new shot is the end of a different shot (dark doorway with Sidney, source 50.0-50.2), so 438.3-438.4 shows no person. Ghostface only appears at 438.5.",
+    "fix": "In build_edl_v2.py / edl_v2.json s17, change shot 1 from [1.84, 's3_11_family', 50] to [2.08, 's3_11_family', 50.2] so the cut lands on 'from'. Shot 0 (in-point 65.3, speed 0.8) then runs to source about 66.96. I verified at 10 fps that Roman's face is still on screen at 66.5-67.2, and that Ghostface begins cleanly at source 50.2."
+   }
+  ]
+ }
+]

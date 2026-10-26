@@ -94,7 +94,7 @@ X.append(sec('s02', [(0, 's6_opening', 3.3), ('from scream', 's6_opening', 9), (
   [16, 'Jason Carvey', 'Scream VI (2023)'], 'carvey', 'took the job'))
 X.append(sec('s03', [(0, 's7_04_walls', 52.5), ('from scream', 's7_04_walls', 107.5), ('an escaped', 's7_04_walls', 190.0),
   ('genuinely scary', 's7_04_walls', 219.2), ('but he was really', 's7_09_anna_camp', 0), ('for the people', 's7_09_anna_camp', 194.0),
-  ('and his run', 's7_04_walls', 192.5), ('floored it', 's7_04_walls', 249.9), ('and hit him', 's7_04_walls', 232.28, 0.8),
+  ('and his run', 's7_04_walls', 192.5), ('floored it', 's7_04_walls', 232.85), ('and hit him', 's7_04_walls', 232.28, 0.8),
   ('once they pulled', 's7_still_karl_unmasked', 0), ('the creepy stranger', 's7_still_karl_coffee', 0), ('survival rate', 's7_04_walls', 234.1, 0.9)],
   [15, 'Karl Gibbs', 'Scream 7 (2026)'], 'karl', 19.4))
 X.append(sec('s04', [(0, 's2_11_mothers_love', 85.3), ("billy's mom", 's1_11_creative', 99.75), ('who spent', 's2_11_mothers_love', 19.3),
@@ -111,13 +111,13 @@ X.append(sec('s06', [(0, 's6_family', 120.5, 0.54), ('she faked', 's6_core4', 89
   ('genuinely evil', 's6_family', 98.4, 0.55), ('but she only', 's6_family', 101.85), ('one confirmed', 's6_core4', 116.5),
   ('sam shot', 's6_family', 172.78), ('survival rate', 's6_family', 171.65, 0.3)],
   [12, 'Quinn Bailey', 'Scream VI (2023)'], 'quinn', 12.8))
-X.append(sec('s07', [(0, 's6_family', 85.77, 0.7), ('the awkward', 's6_subway', 159.25, 0.65), ('too close', 's6_family', 19.3),
-  ('what makes him', 's6_family', 16.6), ('but once the mask', 's6_family', 140.75), ('terra put', 's6_family', 147.5),
+X.append(sec('s07', [(0, 's6_family', 85.77, 0.7), ('the awkward', 's6_subway', 159.25, 0.65), ('too close', 's6_family', 20.05),
+  ('what makes him', 's6_family', 18.3), ('but once the mask', 's6_family', 140.75), ('terra put', 's6_family', 147.5),
   ('and again', 's6_family', 158.0, 0.6), ('and that was', 's6_family', 151.7, 0.5), ('survival rate', 's6_family', 85.77, 0.78)],
   [11, 'Ethan Landry', 'Scream VI (2023)'], 'ethan', 15.9))
 X.append(sec('s08', [(0, 's7_09_anna_camp', 20.0), ('he worked', 's7_02_stu', 6), ('tech guy', 's7_09_anna_camp', 32.0, 0.76), ('faking calls', 's7_02_stu', 54),
   ('from stu', 's7_02_stu', 70.4), ('with deepfakes', 's7_02_stu', 75), ('terrifying', 's7_02_stu', 63),
-  ('but when it came', 's7_09_anna_camp', 232.0), ('sydney shot', 's7_09_anna_camp', 254.0), ('survival rate', 's7_09_anna_camp', 23.0)],
+  ('but when it came', 's7_09_anna_camp', 232.0), ('sydney shot', 's7_09_anna_camp', 254.2), ('survival rate', 's7_09_anna_camp', 23.0)],
   [10, 'Marco Davis', 'Scream 7 (2026)'], 'marco', 15.0))
 X.append(sec('s09', [(0, 's5_08_act3', 73.0, 0.85), ('the sweet', 's5_09_fighting', 90.2), ('way too harmless', 's5_09_fighting', 97.2),
   ('but his crew', 's5_03_sheriff', 141.4), ('in broad', 's5_03_sheriff', 145.7),
@@ -148,15 +148,15 @@ X.append(sec('s14', [(0, 's1_10_surprise', 0), ('the original', 's1_11_creative'
   ('3 people', 's1_12_tables', 0), ('survival rate', 's1_12_tables', 86)],
   [4, 'Billy Loomis', 'Scream (1996)'], 'billy', 22.0))
 X.append(sec('s15', [(0, 's6_family', 0, 0.8), ('he was the cop', 's6_sam_gf', 58), ('murders', 's6_subway', 30.8), ('which means', 's6_sam_gf', 66),
-  ('and he led', 's6_family', 6.9), ('whole family', 's6_family', 17.9), ('through the bloodiest', 's6_store', 80.625), ('until sam', 's6_sam_gf', 164.8),
+  ('and he led', 's6_family', 6.9), ('whole family', 's6_family', 17.9), ('through the bloodiest', 's6_store', 79.6), ('until sam', 's6_sam_gf', 164.8),
   ('survival rate', 's6_sam_gf', 68.9)],
   [3, 'Detective Wayne Bailey', 'Scream VI (2023)'], 'wayne', 16.5))
-X.append(sec('s16', [(0, 's4_still_jill', 0), ("sydney's own", 'scream4_reveal', 4.75), ('the smile', 'scream4_reveal', 10.25),
-  ('says everything', 'scream4_reveal', 14.25), ('she killed', 's4_02_return', 120.3), ('her mom', 'scream4_reveal', 6.4),
+X.append(sec('s16', [(0, 's4_still_jill', 0), ("sydney's own", 'scream4_reveal', 4.75), ('the smile', 'scream4_reveal', 14.0),
+  ('says everything', 'scream4_reveal', 19.5), ('she killed', 's4_02_return', 122.0), ('her mom', 's4_still_gf_knife', 0),
   ('even her', 's4_still_charlie_party', 0), ('then played', 's4_still_jill_hospital', 0), ('the whole town', 's4_06_killcam', 108),
   ('came closer', 's4_still_trio', 0), ('to stealing', 'scream4_reveal', 20.9, 0.9), ('for good', 's4_still_jill', 6)],
   [2, 'Jill Roberts', 'Scream 4 (2011)'], 'jill', 19.6))
-X.append(sec('s17', [(0, 's3_11_family', 65.3, 0.8), ('from screen', 's3_11_family', 50), ("sydney's half", 's3_11_family', 72),
+X.append(sec('s17', [(0, 's3_11_family', 65.3, 0.8), (2.08, 's3_11_family', 50.2), ("sydney's half", 's3_11_family', 72),
   ('only ghostface', 's3_11_family', 24), ('completely alone', 's3_11_family', 78), ('most kills', 's3_02_cutting', 126.3),
   ('claims', 's3_11_family', 84), ('pushed billy', 's1_11_creative', 16), ('original murders', 's1_10_surprise', 66),
   ('even wore', 's3_12_firing', 27.0), ('bulletproof', 's3_12_firing', 26.0), ('so shooting', 's3_12_firing', 111.5), ('and it took', 's3_12_firing', 119.55), ('a bullet to', 's3_12_firing', 122.05), ('dewey', 's3_12_firing', 121.4),
