@@ -3,24 +3,23 @@
  * Needs core/lib_core.js (window.SFX) loaded first. Plain canvas 2D, deterministic (SFX.hash / SFX.rng, never
  * Math.random). Spec: plan_v2_changes.md section B "Guests" + owner decisions 2026-10-26.
  *
- * LOOK
- *   Generic gothic full plate (fluted breastplate, ogee plackart, fan-winged couters / poleyns, pointed sabatons) in
- *   the show's cute construction: chunky stubby proportions with a BIG helm (~3.2 heads tall), rounded shapes, flat
- *   fills, ONE hard shade per plate (bottom-right) plus a thin top-left light edge so it reads as metal, no outlines,
- *   one group drop shadow. FACELESS: the visor slit is pure #0B0C0F, nothing is ever visible inside. They act only
- *   through helm tilt / nod, hands, posture, sweat drops and little motion lines.
- *   Plate #7A7E86, shade #5A5D64, light edge / rim #A9AEB5 (plan B). One muted cloth accent per type.
+ * LOOK (v3, owner 2026-10-26: "too thick, make them minimal and simple")
+ *   Generic full plate reduced to flat motion-graphics shapes: slim body under a BIG helm (cute proportions, not chunky),
+ *   every part is ONE silhouette with ONE hard shade tone (bottom-right), no outlines, no light edges, one group drop
+ *   shadow. Parts are kept apart only by the occlusion shadow they cast on what is behind them.
+ *   FACELESS: the visor slit is one continuous pure #0B0C0F bar, nothing is ever visible inside. They act only through
+ *   helm tilt / nod, hands, posture, sweat drops and little motion lines.
+ *   Plate #7A7E86, shade #5A5D64 (light #A9AEB5 only on spear blades / rim light). One muted cloth accent per type.
+ *   DETAIL BUDGET (v3): helm = silhouette + slit (+ brace stripe on the bucket, fin + plume on the crest); torso =
+ *   breastplate + fauld + belt with a tiny buckle; pauldron = one small dome; arm / leg = one tapered tube each; gauntlet
+ *   = cuff + mitten + thumb; sabaton = one wedge. No rivets, flutes, ridges, lames, cops, finger lines or breath holes.
  *   Avoided on purpose: onion helms, stone-slab armour, blue tabards (no specific game set).
- *   DETAIL BUDGET (v2): the Guests are the CUTE layer, so they stay lighter than the monster anatomy: rivets only on the
- *   helm band / pauldrons (+ one on the bucket brace), breastplate = one centre ridge + one flute per side, one lame
- *   per pauldron, no thigh lames, fat rounded thigh / shin capsules with small plain knee discs, one sabaton line.
  *
  * TYPES (H = the plan's helm unit, 136 px; shoulder widths follow plan B)
- *   'hammer'  wide (shoulders ~1.6 H), flat-topped bucket great helm with a cross brace, big two-handed maul,
- *             rust sash.
- *   'spear'   thin (shoulders ~1.0 H), tall pointed sugarloaf helm, long winged spear with a pennon, olive half-cape.
- *   'shield'  medium (shoulders ~1.3 H), round helm with a tall stepped crest + wine plume, big heater shield (key
- *             emblem) on the far arm and a lantern in the near hand.
+ *   'hammer'  widest (chest 124 px), flat-topped bucket great helm with a brace stripe, two-handed maul, rust sash.
+ *   'spear'   thinnest (chest 86 px), tall pointed sugarloaf helm, long spear with a pennon, olive half-cape.
+ *   'shield'  medium (chest 104 px), round helm with a fin crest + wine plume, heater shield (key emblem) on the far
+ *             arm and a lantern in the near hand.
  *   At s = 1 (chest width W = 180 px) the helm dome tops out at ~2.4 W = 432 px; the spear point and the crest go higher.
  *
  * VARIANTS
@@ -111,21 +110,21 @@
   // all lengths in px at s = 1. hip = hip-joint height, torso = hip joint -> neck, helm = dome height above the neck.
   const TYPES = {
     hammer: {
-      name: 'hammer', helm: 'bucket', helmW: 134, helmH: 138, hip: 136, torso: 158,
-      waistW: 112, chestW: 166, shX: 74, shDrop: 30, paulR: 47, armU: 54, armL: 50, armW: 40, fist: 23,
-      legX: 30, legW: 58, thigh: 68, shin: 60, ankle: 16, foot: 64, footH: 26, stance: 34, strideA: 34, lift: 22,
+      name: 'hammer', helm: 'bucket', helmW: 118, helmH: 136, hip: 136, torso: 160,
+      waistW: 84, chestW: 124, shX: 54, shDrop: 28, paulR: 30, armU: 56, armL: 52, armW: 28, fist: 19,
+      legX: 22, legW: 38, thigh: 70, shin: 62, ankle: 13, foot: 54, footH: 22, stance: 28, strideA: 34, lift: 22,
       knockDX: 168, chestDX: 208,
     },
     spear: {
-      name: 'spear', helm: 'point', helmW: 104, helmH: 126, point: 52, hip: 150, torso: 152,
-      waistW: 74, chestW: 112, shX: 47, shDrop: 26, paulR: 30, armU: 58, armL: 54, armW: 29, fist: 18,
-      legX: 20, legW: 46, thigh: 74, shin: 67, ankle: 15, foot: 58, footH: 23, stance: 24, strideA: 44, lift: 24,
+      name: 'spear', helm: 'point', helmW: 94, helmH: 124, point: 54, hip: 152, torso: 152,
+      waistW: 58, chestW: 86, shX: 36, shDrop: 24, paulR: 21, armU: 58, armL: 54, armW: 21, fist: 15,
+      legX: 16, legW: 30, thigh: 76, shin: 68, ankle: 12, foot: 48, footH: 19, stance: 20, strideA: 44, lift: 24,
       knockDX: 168, chestDX: 208,
     },
     shield: {
-      name: 'shield', helm: 'crest', helmW: 118, helmH: 128, crest: 58, hip: 148, torso: 152,
-      waistW: 92, chestW: 138, shX: 60, shDrop: 28, paulR: 37, armU: 56, armL: 52, armW: 34, fist: 21,
-      legX: 25, legW: 50, thigh: 74, shin: 64, ankle: 16, foot: 60, footH: 24, stance: 28, strideA: 38, lift: 23,
+      name: 'shield', helm: 'crest', helmW: 104, helmH: 126, crest: 54, hip: 150, torso: 154,
+      waistW: 70, chestW: 104, shX: 45, shDrop: 26, paulR: 25, armU: 57, armL: 53, armW: 24, fist: 17,
+      legX: 19, legW: 34, thigh: 75, shin: 66, ankle: 13, foot: 50, footH: 20, stance: 24, strideA: 38, lift: 23,
       knockDX: 120, chestDX: 160,
     },
   };
@@ -160,8 +159,14 @@
   // ------------------------------------------------------------------------------------------------ paint helpers
   // plate: flat base + ONE hard shade (bottom-right). v3 minimal: no light edge unless o.edge is set (blades only).
   function plate(g, path, o = {}) {
-    const sd = o.sd ?? 5;
-    S.cel(g, path, o.base || P.plate, o.shade === false ? null : (o.shadeCol || P.shade), sd * LX, sd);
+    const sd = o.sd ?? 5, base = o.base || P.plate, shade = o.shade === false ? null : (o.shadeCol || P.shade);
+    // nonzero cel (unlike SFX.cel's evenodd it keeps unions of overlapping sub-paths clean: limbs, gauntlets)
+    g.beginPath(); path(g); g.fillStyle = shade || base; g.fill();
+    if (shade) {
+      g.save(); g.clip();
+      g.translate(-sd * LX, -sd); g.beginPath(); path(g); g.fillStyle = base; g.fill();
+      g.restore();
+    }
     if (o.edge) {
       const ld = o.ld ?? 2;
       g.save(); g.beginPath(); path(g); g.clip();
@@ -207,7 +212,7 @@
     if (T.helm === 'bucket') {
       // flat-topped great helm, barely barrelled
       const body = c => S.addRoundPoly(c, [[-w * 0.46, -h], [w * 0.46, -h], [w * 0.5, -h * 0.5], [w * 0.48, 0], [-w * 0.48, 0], [-w * 0.5, -h * 0.5]], [w * 0.16, w * 0.16, w * 0.3, w * 0.07, w * 0.07, w * 0.3]);
-      plate(g, body, { sd: 9 });
+      plate(g, body, { sd: 8 });
       // the cross brace reduced to one shade stripe under the slit
       g.save(); g.beginPath(); body(g); g.clip();
       flat(g, c => S.addRoundRect(c, f - w * 0.045, sy, w * 0.09, -sy - h * 0.12, w * 0.045), P.shade);
@@ -222,7 +227,7 @@
         c.quadraticCurveTo(w * 0.53, 0, w * 0.46, 0);
         c.closePath();
       };
-      plate(g, body, { sd: 9 });
+      plate(g, body, { sd: 8 });
     } else { // crest
       const ch = T.crest, sw = Math.sin(t * 2.1);
       const cloth = horror ? COL.clothHorror : COL.cloth.shield;
@@ -232,8 +237,8 @@
       S.cel(g, c => S.addBlob(c, [[-w * 0.1, -h - ch * 0.92], [-w * 0.52, -h - ch * 0.86], [-w * 0.76 + sw * 3, -h * 0.74], [-w * 0.66 + sw * 3, -h * 0.4], [-w * 0.42, -h * 0.84]], 0.5), cloth[0], cloth[1], 7 * LX, 6);
       g.restore();
       // crest: one smooth fan over the dome
-      const fin = c => { c.moveTo(w * 0.32, -h * 0.84); c.bezierCurveTo(w * 0.32, -h * 1.05 - ch * 1.27, -w * 0.34, -h * 1.05 - ch * 1.27, -w * 0.34, -h * 0.84); c.closePath(); };
-      plate(g, fin, { sd: 6 });
+      const fin = c => { c.moveTo(w * 0.15, -h * 0.75); c.ellipse(-w * 0.05, -h * 0.75, w * 0.2, h * 0.25 + ch, 0, 0, Math.PI, true); c.closePath(); };
+      plate(g, fin, { base: P.shade, shadeCol: P.deep, sd: 5 });
       // round dome
       const body = c => {
         c.moveTo(-w * 0.46, 0);
@@ -244,7 +249,7 @@
         c.quadraticCurveTo(w * 0.52, 0, w * 0.46, 0);
         c.closePath();
       };
-      plate(g, body, { sd: 9 });
+      plate(g, body, { sd: 8 });
     }
     // the slit: pure dark, one continuous bar (nothing inside, never two eyes)
     flat(g, c => S.addRoundRect(c, -w * 0.38 + f, sy - sh / 2, w * 0.74, sh, sh / 2), P.slit);
@@ -500,7 +505,7 @@
       [-ww * 0.5, by0], [ww * 0.5, by0],
       [cw * 0.5, -tw * 0.62], [cw * 0.38, ty], [-cw * 0.38, ty], [-cw * 0.5, -tw * 0.62],
     ], [8, 8, cw * 0.32, 14, 14, cw * 0.32]);
-    plate(g, breast, { sd: 8 });
+    plate(g, breast, { sd: 6 });
     // belt + small buckle
     const accent = P.accent;
     flat(g, c => S.addRoundRect(c, -ww * 0.56, by0 - 4, ww * 1.12, 12, 4), accent || P.leather);
@@ -1079,7 +1084,7 @@
   }
 
   window.KNIGHT = {
-    version: '1.1', W, H: HU, TYPES, COL, POSES,
+    version: '3.0', W, H: HU, TYPES, COL, POSES,
     draw, drawHelm, drawProp, solve: solvePublic,
     stride: type => TYPES[type || 'hammer'].strideA * 4,
     knockAt: type => [TYPES[type || 'hammer'].knockDX, -150],

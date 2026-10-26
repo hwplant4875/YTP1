@@ -473,8 +473,14 @@
   // ------------------------------------------------------------------ resolve options
   function resolve(opts) {
     const base = pose(opts.state || 'stand', opts.unfold ?? 1, opts.yaw);
-    const p = merge(base, opts);
+    let p = merge(base, opts);
     if (opts.yaw !== undefined) p.yaw = opts.yaw;
+    if (opts.realChest) {
+      // a plain chest from the same model: shut, no seam, no limbs, no face, the chain coiled neatly at the side-back
+      p = merge(p, { lidOpen: 0, breath: 0, hip: [p.hip[0], 0], pitch: 0, tilt: 0, crouch: 0, tongue: { len: 0 }, chain: { floor: true, real: true, pts: null }, fx: {} });
+      p.legs = { L: { grow: 0 }, R: { grow: 0 } }; p.arms = { L: { mode: 'none', grow: 0 }, R: { mode: 'none', grow: 0 } };
+      p.realChest = true;
+    }
     p.hip = p.hip.slice();
     if (p.crouch) {
       const c = clamp(p.crouch);
@@ -485,6 +491,7 @@
     if (opts.blush !== undefined) p.ex.blush = opts.blush;              // per-shot blush override (0..1.3)
     p.fx = merge(p.ex.fx || {}, opts.fx || {});
     p.parts = merge({ legs: true, arms: true, tongue: true, chain: true, fx: true }, opts.parts || {});
+    if (p.realChest) Object.assign(p.parts, { legs: false, arms: false, tongue: false, fx: false });
     return p;
   }
 
@@ -1368,23 +1375,84 @@
   }
 
   // ------------------------------------------------------------------ chain
+  // resample a screen polyline at equal arc length (link pitch); returns the points and, for each, the source flag
+  function resample(poly, flags, step) {
+    const out = [poly[0].slice()], fl = [flags[0]];
+    let i = 0, q = poly[0].slice(), rest = step;
+    while (i < poly.length - 1) {
+      const b = poly[i + 1], d = len(sub(b, q));
+      if (d >= rest) { q = add(q, mul(sub(b, q), rest / d)); out.push(q.slice()); fl.push(flags[i + 1]); rest = step; }
+      else { rest -= d; q = b.slice(); i++; }
+    }
+    return { pts: out, flags: fl };
+  }
+  // DORMANT CHAIN (the tell, chain.floor = true). Both versions hang from the same side lock.
+  //   mimic  : the chain slides FORWARD down the side face, rounds the front corner on the floor and ends in a loose
+  //            curl lying IN FRONT of the chest (visible from the front 3/4: the thing viewers learn to spot).
+  //   real   : (opts.realChest / chain.real) the chain drops straight down the side and is coiled up neatly on the
+  //            floor at the side-BACK, like a chest somebody actually packed.
+  // Floor coils are drawn with a cartoon tilt (coilSq: vertical squash of the coil, much rounder than the true 7 deg
+  // camera would give) so the curl reads at small sizes. Points are in px at s = 1, relative to the ground point.
+  function floorChain(p, sol, c, ls, pitch) {
+    const R = sol.R, F = sol.F, A = sol.chainAnchor, hx = p.hip[0];
+    const real = !!(c.real ?? p.realChest);
+    // floor point; in front of the chest the floor depth is exaggerated a little (cartoon tilt) so a curl lying there
+    // drops clear of the chest's bottom edge instead of climbing onto its front face
+    const gnd = (x, z) => add(F.ground(x, z), [hx, Math.max(0, z - DIM.D / 2) * (c.tiltFront ?? 0.22)]);
+    const xS = W / 2, D2 = DIM.D / 2;
+    const sq = c.coilSq ?? 0.5;
+    const pts = [A.slice()], fr = [0];
+    const push = (q, f) => { pts.push(q); fr.push(f); };
+    // hanging part: quadratic sag from the lock to where it touches the floor
+    const hang = (T, bulge) => {
+      const ctl = [lerp(A[0], T[0], 0.35) + bulge[0], lerp(A[1], T[1], 0.8) + bulge[1]];
+      for (let i = 1; i <= 12; i++) { const u = i / 12, a = lerp(A[0], ctl[0], u), b = lerp(A[1], ctl[1], u), a2 = lerp(ctl[0], T[0], u), b2 = lerp(ctl[1], T[1], u); push([lerp(a, a2, u), lerp(b, b2, u)], 0); }
+    };
+    // a flat spiral on the floor around a centre (screen), from radius r0 to r1 over `turns`, starting at angle a0,
+    // turning in direction dir (+1 = clockwise on screen)
+    const spiral = (cen, r0, r1, a0, turns, dir, f) => {
+      const n = Math.ceil(turns * 40);
+      for (let i = 1; i <= n; i++) {
+        const u = i / n, a = a0 + dir * u * turns * TAU, r = lerp(r0, r1, Math.pow(u, 0.9));
+        push([cen[0] + Math.cos(a) * r, cen[1] + Math.sin(a) * r * sq], f);
+      }
+    };
+    if (real) {
+      // straight drop toward the back, then a neat stacked coil (a low helix: each turn sits on the one below)
+      const T = gnd(xS + 0.05 * W, -0.45 * D2);
+      hang(T, [0.03 * W, 0]);
+      const cen = gnd(xS + 0.2 * W, -0.75 * D2), rr = 0.15 * W, turns = 2.4, rise = 0.042 * W;
+      const a0 = Math.atan2((T[1] - cen[1]) / sq, T[0] - cen[0]);
+      const n = Math.ceil(turns * 40);
+      for (let i = 1; i <= n; i++) {
+        const u = i / n, a = a0 - u * turns * TAU, r = rr * (1 - 0.12 * u);
+        push([cen[0] + Math.cos(a) * r, cen[1] + Math.sin(a) * r * sq - u * turns * rise], 0);
+      }
+    } else {
+      // forward: touches down near the front of the side face, rounds the front corner, curls up in front
+      const T = gnd(xS + 0.07 * W, 0.45 * D2);
+      hang(T, [0.05 * W, 0.02 * W]);
+      const K = gnd(xS + 0.1 * W, D2 + 0.12 * W);
+      push(lp(T, K, 0.5).slice(0, 2), 1); push(K, 1);
+      const cen = gnd(xS - 0.06 * W, D2 + 0.34 * W), r0 = 0.18 * W;
+      const a0 = Math.atan2((K[1] - cen[1]) / sq, K[0] - cen[0]);
+      // from the corner it sweeps toward the camera and back in on itself: a loose 1.3-turn curl
+      spiral(cen, r0, 0.035 * W, a0, 1.5, 1, 1);
+    }
+    const r = resample(pts, fr, pitch);
+    // index where the in-front-of-the-chest part starts (even, so ring / bar alternation stays continuous)
+    let k = r.flags.indexOf(1);
+    if (k > 0 && k % 2) k -= 1;
+    r.pts.front = k > 0 ? k : -1;
+    return r.pts;
+  }
   function chainPts(p, sol) {
     const c = p.chain || {};
     if (c.pts) return c.pts.map(q => [(q[0] - sol.X) / sol.Sc, (q[1] - sol.Y) / sol.Sc]);
     const A = sol.chainAnchor, links = c.links ?? 17, ls = 0.09 * W, pitch = ls * 0.7;
     const hang = Math.PI / 2 + (c.swing || 0), sag = clamp(c.sag ?? 1), start = hang - 0.75 * sag;
     const t = c.t ?? p.t ?? 0, sway = c.sway ?? 0.05;
-    if (c.floor) {
-      // dormant: the chain falls to the floor and lies there straight (uncurled: the tell)
-      const out = [A.slice()];
-      let onFloor = false;
-      for (let i = 1; i <= links; i++) {
-        const prev = out[out.length - 1];
-        if (!onFloor && prev[1] + pitch < -0.02 * W) out.push([prev[0] + (i === 1 ? 0.01 * W : 0), prev[1] + pitch]);
-        else { onFloor = true; out.push([prev[0] + pitch, -0.03 * W]); }
-      }
-      return out;
-    }
+    if (c.floor) return floorChain(p, sol, c, ls, pitch);
     const pts = [A.slice()];
     for (let i = 0; i < links; i++) {
       const u = (i + 0.5) / links;
@@ -1440,7 +1508,9 @@
     const drawLeg = (k, far) => { const Lg = sol.legs[k]; paintLeg(g, Lg, far, sol.F); paintFoot(g, Lg, sol.F, far); };
     let chain = null;
     if (p.parts.chain && sol.chainAnchor) chain = chainPts(p, sol);
-    if (chain && !sol.chainNear) S.drawChain(g, chain, 0.09 * W, COL.chain);
+    const chainBack = chain && chain.front > 0 ? chain.slice(0, chain.front + 1) : chain;
+    const chainFront = chain && chain.front > 0 ? chain.slice(chain.front) : null;
+    if (chainBack && !sol.chainNear) S.drawChain(g, chainBack, 0.09 * W, COL.chain);
     const isFarArm = k => k === farKey && sideOn;
     if (p.parts.arms && farKey && sol.arms[farKey] && sol.arms[farKey].mode === 'arm' && sideOn) paintArm(g, sol.arms[farKey], true);
     if (p.parts.legs) {
@@ -1478,7 +1548,8 @@
       paintHand(g, Ar, tonesOf(false));
       g.restore();
     });
-    if (chain && sol.chainNear) S.drawChain(g, chain, 0.09 * W, COL.chain);
+    if (chainBack && sol.chainNear) S.drawChain(g, chainBack, 0.09 * W, COL.chain);
+    if (chainFront) S.drawChain(g, chainFront, 0.09 * W, COL.chain);
     if (p.parts.fx) paintFx(g, p, sol);
     sol.chain = chain;
   }

@@ -8,10 +8,10 @@
   const card = (x, y, w, h) => S.roundRect(ctx, x, y, w, h, 18, CARD);
 
   const ROW1 = [
-    { f: 'neutral', name: 'NEUTRAL', sub: 'deadpan HR · rods in a V' },
-    { f: 'pleased', name: 'PLEASED', sub: 'smile arcs + blush · rods perk' },
-    { f: 'surprised', name: 'SURPRISED', sub: 'round eyes + o · kick + spark', antT: 0.12 },
-    { f: 'annoyed', name: 'ANNOYED', sub: 'narrowed eyes + vein · rods cross' },
+    { f: 'neutral', name: 'NEUTRAL', sub: 'two dots + a line · rods in a V' },
+    { f: 'pleased', name: 'PLEASED', sub: '^ ^ arcs + smile · rods perk' },
+    { f: 'surprised', name: 'SURPRISED', sub: 'big dots + small o · kick + spark', antT: 0.12 },
+    { f: 'annoyed', name: 'ANNOYED', sub: 'slanted strokes · rods cross' },
     { f: 'eerie', name: 'EERIE', sub: 'two lights drift · a smile flickers', eerieSmile: true, t: 4 },
     { f: 'panic', name: 'PANIC', sub: 'colour bars + beep · rods shake', t: 0.37 },
   ];
@@ -34,7 +34,7 @@
     for (let y = 0; y < H; y += 40) ctx.fillRect(0, y, W, 1);
     S.title(ctx, 'HELEN', 56, 66, 70, { align: 'left', color: INK, track: 2 });
     S.label(ctx, 'screen faces  ·  HR manager, Monster HR', 300, 54, 22, { align: 'left', color: INK });
-    S.label(ctx, 'glow line art #8FE6D8 on #0F3B36  ·  scanlines  ·  2-3 frame static wipe on every change', 300, 84, 18, { align: 'left', color: MUTED, weight: 700 });
+    S.label(ctx, 'minimal: two dots + one mouth mark, #C4F5EC on #0F3B36  ·  2-3 frame static wipe on change', 300, 84, 18, { align: 'left', color: MUTED, weight: 700 });
 
     const cw = 296, ch = 318, gx = 16, x0 = (W - (6 * cw + 5 * gx)) / 2, s = 1.42;
     [[ROW1, 118], [ROW2, 118 + ch + 14]].forEach(([row, y0]) => {

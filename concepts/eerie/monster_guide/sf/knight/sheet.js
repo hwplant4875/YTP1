@@ -80,7 +80,7 @@
   function helms(x, y, w, h) {
     card(x, y, w, h, 'HELMS  ·  FACELESS');
     const by = y + h - 34, s = 0.84;
-    [['hammer', 'bucket great helm', x + 92], ['spear', 'pointed sugarloaf', x + 244], ['shield', 'fluted crest + plume', x + 404]].forEach(([ty, nm, hx], i) => {
+    [['hammer', 'bucket great helm', x + 92], ['spear', 'pointed sugarloaf', x + 244], ['shield', 'crest + plume', x + 404]].forEach(([ty, nm, hx], i) => {
       K.drawHelm(ctx, hx, by - 4, s, { type: ty, tilt: [-4, 6, -8][i], t: T0 });
       S.label(ctx, nm, hx, by + 14, 13, { color: MUTED, weight: 800 });
     });
@@ -106,7 +106,7 @@
     K.drawProp(ctx, 'hammer', x + 26, y + 172, 0.6, { a: -0.5 });
     S.label(ctx, 'maul', x + 92, y + h - 22, 13, { color: MUTED, weight: 800 });
     K.drawProp(ctx, 'spear', x + 176, y + 196, 0.5, { a: -Math.PI / 2 + 0.42, len: 290, t: 0.35 });
-    S.label(ctx, 'winged spear', x + 214, y + h - 22, 13, { color: MUTED, weight: 800 });
+    S.label(ctx, 'spear + pennon', x + 214, y + h - 22, 13, { color: MUTED, weight: 800 });
     K.drawProp(ctx, 'shield', x + 300, y + 124, 0.7, { r: 0.06 });
     S.label(ctx, 'heater · key', x + 300, y + h - 22, 13, { color: MUTED, weight: 800 });
     K.drawProp(ctx, 'lantern', x + 380, y + 56, 1.05, { swing: 0.05 });
