@@ -40,6 +40,33 @@
  *               lift 0..1 (held: bigger shadow), glow 0..1
  *   CURSOR.ripple(ctx, x, y, s, k, o)          the click ripple alone
  *   CURSOR.EXPRS / CURSOR.STATES               names, for sheets
+ *
+ * v2 : GAME-UI ICON SWAPS (owner request: the cursor keeps swapping icons like a game UI)
+ *   extra states   'hourglass' busy icon (white caps + posts, pale glass, gold sand; the dots sit on the top cap).
+ *                    It is centred on the arrow's visual centre (HG_C), so a swap point -> hourglass pops in place.
+ *                    opts.sand 0..1 (0 = all on top, 1 = all run down; default loops with t), opts.flip 0..1 (the
+ *                    half-turn flip, easeInOutBack; at flip = 1 the glass is upside down = full again, so the caller
+ *                    resets sand to 0 and flip to 0 on the next frame)
+ *                  'rclick' / 'dclick'  pointer + a tiny mouse badge with the right / left button lit ('dclick'
+ *                    adds a ×2 tag). Pair 'dclick' with opts.dbl.
+ *   opts.swap      seconds since the last icon swap (null = none): scale-in spring + squash -> stretch -> settle and
+ *                  a little poof of dots around the pivot. Pass it for ~0.5 s after every state change.
+ *   opts.dbl       0..1 double-click effect (two quick ripples, the second gold, + tiny impact sparks); drawn at the
+ *                  hotspot. Also CURSOR.dblclick(ctx, x, y, s, k, o) alone.
+ *   CURSOR.menu(ctx, x, y, o)         right-click context menu, top-left corner at (x, y) (= the click point).
+ *               o: items [{label, key, color}] | ['Open', ...], title, w=340, pop 0..1 (springs out of the corner),
+ *               hover (row index, fractional = the highlight bar sliding), pick 0..1 (the chosen row flashes)
+ *               CURSOR.menuRow(x, y, i, o) -> [x, y] a good hotspot over row i
+ *   CURSOR.button(ctx, x, y, w, h, o) chunky game button (top-left x, y). o: label, size, color '#FFC83D', press 0..1
+ *               (the cap sinks into its base), icon fn(ctx, cx, cy, r), glow 0..1, textColor
+ *   CURSOR.tabs(ctx, x, y, o)         tab strip. o: tabs ['MAP', 'BAG', 'RULES'], active, prev, k 0..1 (switch progress:
+ *               the gold underline slides prev -> active), press {i, k}, tw=150, th=54
+ *               CURSOR.tabAt(x, y, i, o) -> [x, y] centre of tab i
+ *   CURSOR.slider(ctx, x, y, w, o)    value slider, track centre-left at (x, y). o: value 0..1, grab 0..1 (knob grows,
+ *               value bubble), label.  CURSOR.sliderKnob(x, y, w, v) -> [x, y]
+ *   CURSOR.minimap(ctx, x, y, o)      corner HUD: room grid + "you are here" pip + a MOVE arrow button. o: rooms
+ *               [[col, row, name]], at [col, row] (fractional while moving), visited count, press 0..1, glow 0..1,
+ *               title. CURSOR.MINIMAP.w / h, CURSOR.MINIMAP.btn(x, y) -> [x, y] centre of the MOVE button
  * =====================================================================================================================
  */
 (function () {
@@ -48,7 +75,7 @@
   const clamp = S.clamp, lerp = S.lerp;
   const INK = '#15131A', BODY = '#FFFFFF', SHADE = '#C9CEDC', GOLD = '#FFE08A', RED = '#E2475A';
   const K = window.CURSOR = {};
-  K.STATES = ['point', 'click', 'drag', 'hand', 'grab', 'loading', 'forbidden'];
+  K.STATES = ['point', 'click', 'drag', 'hand', 'grab', 'loading', 'forbidden', 'hourglass', 'rclick', 'dclick'];
   K.EXPRS = ['neutral', 'happy', 'blink', 'wow', 'worried', 'annoyed', 'smug', 'focus', 'dizzy', 'love', 'none'];
 
   // ---------------------------------------------------------------- shapes (hotspot at 0,0, s = 1)
@@ -145,6 +172,101 @@
     g.restore();
   }
 
+  // ---------------------------------------------------------------- hourglass (busy icon, v2)
+  const HG_C = [24, 48];                     // centred on the arrow's visual centre so swaps pop in place
+  const SAND = '#FFC83D', SAND_SH = '#E0962E', GLASS = '#DDF0FF', GLASS_SH = '#B7D3EA';
+  const HG_GLASS = [[-25, -40], [25, -40], [5, -3], [5, 3], [25, 40], [-25, 40], [-5, 3], [-5, -3]];
+  const addGlass = g => S.addRoundPoly(g, HG_GLASS, [7, 7, 4, 4, 7, 7, 4, 4]);
+  function hourglass(g, o) {
+    const fl = clamp(o.flip || 0), ang = S.ease.easeInOutBack(fl, 1.3) * Math.PI;
+    const sand = clamp(o.sand ?? (((o.t || 0) % 1.8) / 1.8));
+    g.save(); g.translate(HG_C[0], HG_C[1]); g.rotate(ang);
+    // glass: ink edge, pale fill, one hard shade on the right
+    g.beginPath(); addGlass(g); g.lineJoin = 'round'; g.strokeStyle = o.ink; g.lineWidth = 9; g.stroke();
+    g.fillStyle = GLASS; g.fill();
+    S.clip(g, addGlass, cg => {
+      cg.fillStyle = GLASS_SH; cg.beginPath(); cg.moveTo(12, -40); cg.lineTo(30, -40); cg.lineTo(30, 40); cg.lineTo(12, 40); cg.lineTo(2, 0); cg.closePath(); cg.fill();
+      // sand on top (sits on the neck, shrinks), pile at the bottom (grows), the stream between
+      const yT = lerp(-33, -2, sand);
+      if (sand < 0.995) { cg.fillStyle = SAND; cg.fillRect(-30, yT, 60, -yT); cg.fillStyle = SAND_SH; cg.fillRect(8, yT, 22, -yT); }
+      const h = 34 * sand;
+      if (h > 0.5) {
+        cg.fillStyle = SAND; cg.beginPath(); cg.moveTo(-30, 41); cg.lineTo(-30, 41 - h * 0.5); cg.quadraticCurveTo(0, 41 - h * 1.35, 30, 41 - h * 0.5); cg.lineTo(30, 41); cg.closePath(); cg.fill();
+        cg.fillStyle = SAND_SH; cg.beginPath(); cg.moveTo(9, 41); cg.lineTo(9, 41 - h * 0.86); cg.quadraticCurveTo(20, 41 - h * 0.7, 30, 41 - h * 0.5); cg.lineTo(30, 41); cg.closePath(); cg.fill();
+      }
+      if (sand > 0.01 && sand < 0.99 && fl === 0) {
+        cg.strokeStyle = SAND; cg.lineWidth = 3.6; cg.lineCap = 'round';
+        cg.beginPath(); cg.moveTo(0, -2); cg.lineTo(0, 41 - h * 0.95); cg.stroke();
+        cg.setLineDash([3, 7]); cg.lineDashOffset = -(o.t || 0) * 140; cg.strokeStyle = '#FFF2C4'; cg.lineWidth = 2.2;
+        cg.beginPath(); cg.moveTo(0, -2); cg.lineTo(0, 41 - h * 0.95); cg.stroke(); cg.setLineDash([]);
+      }
+      // glass glint (top-left)
+      S.capsule(cg, -15, -31, -9, -18, 5, 4, 'rgba(255,255,255,0.9)');
+    });
+    // posts + caps (the hourglass frame, same white / shade / ink as the arrow)
+    [-30, 30].forEach(px => solid(g, c => S.addCapsule(c, px, -44, px, 44, 8), o, 7));
+    solid(g, c => S.addRoundRect(c, -36, -58, 72, 19, 8), o);
+    solid(g, c => S.addRoundRect(c, -36, 39, 72, 19, 8), o);
+    face(g, 0, -48.5, o, 0.72);
+    g.restore();
+  }
+
+  // tiny mouse badge (rclick / dclick): which = 'L' | 'R'
+  function mouseBadge(g, bx, by, o, which, x2) {
+    const w = 34, h = 46, x0 = bx - w / 2, y0 = by - h / 2;
+    g.save();
+    S.roundRect(g, x0 - 4.5, y0 - 4.5, w + 9, h + 9, 19, o.ink);
+    S.roundRect(g, x0, y0, w, h, 15, o.body);
+    S.clip(g, c => S.addRoundRect(c, x0, y0, w, h, 15), cg => {
+      cg.fillStyle = o.shade; cg.fillRect(x0 + w - 7, y0, 7, h); cg.fillRect(x0, y0 + h - 6, w, 6);
+      const flash = 0.75 + 0.25 * Math.sin((o.t || 0) * 30);
+      cg.fillStyle = C.rgba(GOLD, flash); cg.fillRect(which === 'R' ? bx : x0, y0, w / 2, h * 0.42);
+    });
+    g.strokeStyle = o.ink; g.lineWidth = 3; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(bx, y0 + 1); g.lineTo(bx, y0 + h * 0.42); g.moveTo(x0 + 1, y0 + h * 0.42); g.lineTo(x0 + w - 1, y0 + h * 0.42); g.stroke();
+    if (x2) {
+      S.roundRect(g, bx + 6, by + 8, 38, 26, 9, o.ink);
+      S.label(g, '×2', bx + 25, by + 21, 19, { color: GOLD, weight: 1000 });
+    }
+    g.restore();
+  }
+
+  // swap poof: little dots bursting out of the pivot when the icon changes
+  function poof(ctx, x, y, s, e) {
+    const q = clamp(e / 0.34); if (q <= 0 || q >= 1) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    for (let i = 0; i < 7; i++) {
+      const a = i / 7 * TAU - 0.4, r = 38 + S.ease.easeOutCubic(q) * 46;
+      S.circle(ctx, Math.cos(a) * r, Math.sin(a) * r, 6.5 * (1 - q) + 1, C.rgba(i % 2 ? GOLD : '#FFFFFF', 1 - q));
+    }
+    ctx.restore();
+  }
+
+  // double click: two quick ripples (white, then gold) + tiny impact sparks at each click
+  K.dblclick = (ctx, x, y, s, k, o = {}) => {
+    if (k == null || k <= 0 || k >= 1) return;
+    const r1 = k / 0.6, r2 = (k - 0.28) / 0.6;
+    if (r1 > 0 && r1 < 1) K.ripple(ctx, x, y, s * 0.8, r1, { color: '#FFFFFF' });
+    if (r2 > 0 && r2 < 1) K.ripple(ctx, x, y, s * 1.05, r2, { color: GOLD });
+    [[0, 0], [0.28, 1]].forEach(([d, j]) => {
+      const q = (k - d) / 0.36; if (q <= 0 || q >= 1) return;
+      const e = S.ease.easeOutCubic(q);
+      ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.lineCap = 'round';
+      for (let i = 0; i < 6; i++) {
+        const a = i / 6 * TAU + 0.26 + j * 0.52, r0 = 16 + e * 58, len = 18 * (1 - q) + 2;
+        ctx.strokeStyle = C.rgba(INK, 0.5 * (1 - q)); ctx.lineWidth = 7;
+        ctx.beginPath(); ctx.moveTo(Math.cos(a) * r0, Math.sin(a) * r0); ctx.lineTo(Math.cos(a) * (r0 + len), Math.sin(a) * (r0 + len)); ctx.stroke();
+        ctx.strokeStyle = C.rgba(j ? GOLD : '#FFFFFF', 1 - q * q); ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(Math.cos(a) * r0, Math.sin(a) * r0); ctx.lineTo(Math.cos(a) * (r0 + len), Math.sin(a) * (r0 + len)); ctx.stroke();
+      }
+      for (let i = 0; i < 3; i++) {
+        const a = i / 3 * TAU + 0.8 + j, r = 30 + e * 44;
+        S.sparkle(ctx, Math.cos(a) * r, Math.sin(a) * r, 11 * (1 - q) + 1, j ? GOLD : '#FFFFFF', q * 1.5);
+      }
+      ctx.restore();
+    });
+  };
+
   // ---------------------------------------------------------------- the ripple (click feedback)
   K.ripple = (ctx, x, y, s, k, o = {}) => {
     if (k == null || k <= 0 || k >= 1) return;
@@ -173,11 +295,20 @@
     const st = o.state;
     if (st === 'drag' && o.from) K.selection(ctx, o.from[0], o.from[1], x, y, { t: o.t });
     if (o.ripple != null) K.ripple(ctx, x, y, s, o.ripple);
+    if (o.dbl != null) K.dblclick(ctx, x, y, s, o.dbl);
     let tilt = (o.tilt || 0) + (o.wiggle ? o.wiggle * 0.22 * Math.sin(o.t * 19) * (0.6 + 0.4 * Math.sin(o.t * 5.3)) : 0);
     let sq = o.squash || 0;
     if (st === 'click') sq = Math.max(sq, 0.16 * (o.press ?? 1));
-    const isHand = st === 'hand' || st === 'grab';
-    const piv = st === 'grab' ? [0, 0] : isHand ? [16, 66] : ARROW_C;
+    const isHand = st === 'hand' || st === 'grab', isHG = st === 'hourglass';
+    const piv = st === 'grab' ? [0, 0] : isHand ? [16, 66] : isHG ? HG_C : ARROW_C;
+    // icon swap pop: scale-in spring + squash -> stretch -> settle, and a poof of dots
+    let popSc = 1;
+    if (o.swap != null && o.swap >= 0 && o.swap < 0.7) {
+      popSc = 0.6 + 0.4 * S.spring(o.swap, 3.4, 0.3);
+      sq += 0.5 * S.wobble(o.swap, 3.4, 6.5);
+      const pv = S.rot(piv[0] * s, piv[1] * s, tilt);
+      poof(ctx, x + pv[0], y + pv[1], s, o.swap);
+    }
 
     // hover glow: soft warm halo behind
     if (o.glow > 0) {
@@ -194,11 +325,12 @@
       g.save(); g.translate(x, y); g.scale(s, s); g.rotate(tilt);
       // squash / stretch about the pivot. Default axis = the arrow's own axis (tip -> tail ~ 62 deg); stretchDir
       // overrides it with a screen direction (motion), undoing the tilt so the stretch follows the path.
-      const ax = o.stretchDir != null ? o.stretchDir - tilt : (isHand ? Math.PI / 2 : Math.atan2(ARROW_C[1], ARROW_C[0]));
+      const ax = o.stretchDir != null ? o.stretchDir - tilt : (isHand || isHG ? Math.PI / 2 : Math.atan2(ARROW_C[1], ARROW_C[0]));
       const k = 1 - sq * 0.5, kw = 1 / Math.sqrt(Math.max(0.3, k)) * (sq < 0 ? 1 : 1 + sq * 0.15);
-      g.translate(piv[0], piv[1]); g.rotate(ax); g.scale(k, kw); g.rotate(-ax); g.translate(-piv[0], -piv[1]);
+      g.translate(piv[0], piv[1]); g.scale(popSc, popSc); g.rotate(ax); g.scale(k, kw); g.rotate(-ax); g.translate(-piv[0], -piv[1]);
       if ((o.press || 0) > 0 && st !== 'grab') g.translate(-3 * o.press, -6 * o.press);
-      if (isHand) {
+      if (isHG) hourglass(g, o);
+      else if (isHand) {
         if (st === 'hand') {
           solid(g, addCuff, Object.assign({}, o, { body: '#E9ECF4', shade: '#B9BFCF' }));
           solid(g, addHand, o, 9, handFill);
@@ -220,6 +352,7 @@
         face(g, ARROW_C[0] - 1, ARROW_C[1] + 1, o);
         if (st === 'loading') badge(g, 64, 98, o, 'loading');
         if (st === 'forbidden') badge(g, 64, 98, o, 'forbidden');
+        if (st === 'rclick' || st === 'dclick') mouseBadge(g, 66, 96, o, st === 'rclick' ? 'R' : 'L', st === 'dclick');
       }
       g.restore();
     }, { scale: s, dx: 10, dy: 14, blur: 12, color: 'rgba(0,0,0,0.42)', alpha: o.alpha ?? 1, shadow: o.shadow !== false });
@@ -323,5 +456,167 @@
       ctx.restore();
     }
     ctx.restore();
+  };
+  // ================================================================ v2 game-UI widgets (our own design: dark slate,
+  // gold trim, chunky ink-edged caps; nothing copied from an OS or a specific game)
+  const SLATE = '#141826', SLATE2 = '#1E2436', TRIM = '#C9A24A', TXT = '#E8ECF6';
+
+  // ---- right-click context menu
+  const MENU_HEAD = 46, MENU_ROW = 52, MENU_PAD = 10;
+  const menuItems = o => (o.items || ['Open', 'Inspect']).map(it => (typeof it === 'string' ? { label: it } : it));
+  K.menuRow = (x, y, i, o = {}) => [x + (o.w || 340) * 0.42, y + MENU_HEAD + MENU_PAD + i * MENU_ROW + MENU_ROW / 2];
+  K.menu = (ctx, x, y, o = {}) => {
+    const pop = o.pop ?? 1; if (pop <= 0) return;
+    const items = menuItems(o), w = o.w || 340, h = MENU_HEAD + MENU_PAD * 2 + items.length * MENU_ROW;
+    const e = S.ease.easeOutBack(clamp(pop), 2.0);
+    ctx.save(); ctx.translate(x, y); ctx.scale(lerp(0.25, 1, e), lerp(0.1, 1, e)); ctx.globalAlpha *= clamp(pop * 3);
+    S.shadowGroup(ctx, g => {
+      S.roundRect(g, -4, -4, w + 8, h + 8, 18, INK);
+      S.roundRect(g, 0, 0, w, h, 14, SLATE);
+      S.roundRect(g, 0, 0, w, MENU_HEAD, [14, 14, 0, 0], SLATE2);
+      g.fillStyle = '#0B0E16'; g.fillRect(0, MENU_HEAD, w, 3);
+      S.roundRect(g, 6, 6, w - 12, h - 12, 10, null, C.rgba(GOLD, 0.35), 2);
+      // the "corner" tab that points at the click
+      S.poly(g, [[0, 0], [26, 0], [0, 26]], TRIM);
+    }, { scale: 1, dx: 8, dy: 11, blur: 14, color: 'rgba(0,0,0,0.5)' });
+    S.label(ctx, o.title || 'ACTIONS', 36, MENU_HEAD / 2 + 1, 19, { align: 'left', color: GOLD, weight: 1000 });
+    // hover bar (fractional index slides between rows)
+    const hv = o.hover;
+    if (hv != null && hv >= 0) {
+      const hy = MENU_HEAD + MENU_PAD + hv * MENU_ROW;
+      const fl = o.pick > 0 && o.pick < 1 ? (Math.sin(o.pick * Math.PI * 6) > 0 ? 1 : 0) : 0;
+      S.roundRect(ctx, 8, hy + 4, w - 16, MENU_ROW - 8, 10, fl ? '#FFFFFF' : GOLD);
+      S.roundRect(ctx, 8, hy + MENU_ROW - 12, w - 16, 8, [0, 0, 10, 10], fl ? '#E9ECF4' : '#E0A93A');
+    }
+    items.forEach((it, i) => {
+      const ry = MENU_HEAD + MENU_PAD + i * MENU_ROW + MENU_ROW / 2;
+      const on = hv != null && Math.abs(hv - i) < 0.5;
+      const col = on ? INK : (it.color || TXT);
+      // row gem
+      ctx.save(); ctx.translate(30, ry); ctx.rotate(Math.PI / 4);
+      S.roundRect(ctx, -6, -6, 12, 12, 3, on ? INK : (it.color || '#6E7894'));
+      ctx.restore();
+      S.label(ctx, it.label, 50, ry, 24, { align: 'left', color: col, weight: 900 });
+      if (it.key) {
+        const kw = 12 + it.key.length * 12;
+        S.roundRect(ctx, w - 22 - kw, ry - 14, kw, 28, 7, on ? C.rgba(INK, 0.18) : 'rgba(255,255,255,0.08)');
+        S.label(ctx, it.key, w - 22 - kw / 2, ry + 1, 16, { color: on ? INK : 'rgba(232,236,246,0.55)', weight: 900 });
+      }
+    });
+    ctx.restore();
+  };
+
+  // ---- chunky game button
+  K.button = (ctx, x, y, w, h, o = {}) => {
+    const p = clamp(o.press || 0), dep = o.depth ?? 10, r = o.r ?? 14;
+    const col = o.color || '#FFC83D', side = C.shade(col, -0.42), top = y + dep * p;
+    if (o.glow > 0) {
+      ctx.save(); ctx.globalCompositeOperation = 'screen';
+      const gr = ctx.createRadialGradient(x + w / 2, y + h / 2, 4, x + w / 2, y + h / 2, Math.max(w, h) * 0.7);
+      gr.addColorStop(0, C.rgba(col, 0.5 * o.glow)); gr.addColorStop(1, C.rgba(col, 0));
+      ctx.fillStyle = gr; ctx.fillRect(x - w, y - h, w * 3, h * 3); ctx.restore();
+    }
+    S.shadowGroup(ctx, g => {
+      S.roundRect(g, x - 4, top - 4, w + 8, h + dep * (1 - p) + 8, r + 4, INK);
+      S.roundRect(g, x, top + 6, w, h + dep * (1 - p) - 6, r, side);
+      S.roundRect(g, x, top, w, h, r, col);
+      S.roundRect(g, x + 7, top + 5, w - 14, h * 0.34, [r - 5, r - 5, 6, 6], C.rgba('#FFFFFF', 0.3 - 0.15 * p));
+    }, { scale: 1, dx: 5 * (1 - p) + 2, dy: 7 * (1 - p) + 3, blur: 8, color: 'rgba(0,0,0,0.45)' });
+    const cx = x + w / 2, cy = top + h / 2;
+    if (o.icon) o.icon(ctx, o.label ? x + h * 0.5 : cx, cy, h * 0.3);
+    if (o.label) S.label(ctx, o.label, o.icon ? x + h * 0.5 + (w - h * 0.5) / 2 : cx, cy + 1, o.size || 24, { color: o.textColor || INK, weight: 1000 });
+  };
+  // arrow icon for buttons (fat chevron arrow)
+  K.arrowIcon = (dir = 0, col = INK) => (ctx, cx, cy, r) => {
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(dir);
+    S.roundPoly(ctx, [[-r, -r * 0.38], [r * 0.15, -r * 0.38], [r * 0.15, -r], [r * 1.15, 0], [r * 0.15, r], [r * 0.15, r * 0.38], [-r, r * 0.38]], r * 0.16, col);
+    ctx.restore();
+  };
+
+  // ---- tab strip
+  const tabGeo = o => ({ tw: o.tw || 150, th: o.th || 54, gap: o.gap ?? 8 });
+  K.tabAt = (x, y, i, o = {}) => { const { tw, th, gap } = tabGeo(o); return [x + i * (tw + gap) + tw / 2, y + th / 2]; };
+  K.tabs = (ctx, x, y, o = {}) => {
+    const tabs = o.tabs || ['MAP', 'BAG', 'RULES'], { tw, th, gap } = tabGeo(o);
+    const a = o.active ?? 0, pv = o.prev ?? a, k = clamp(o.k ?? 1), W = tabs.length * (tw + gap) - gap;
+    S.shadowGroup(ctx, g => {
+      S.roundRect(g, x - 10, y + th - 2, W + 20, 16, 8, INK);
+      S.roundRect(g, x - 6, y + th + 1, W + 12, 9, 5, SLATE2);
+      tabs.forEach((lb, i) => {
+        const act = i === a ? k : i === pv ? 1 - k : 0;
+        const pr = o.press && o.press.i === i ? clamp(o.press.k) : 0;
+        const tx = x + i * (tw + gap), ty = y - 10 * act + 6 * pr, hh = th + 10 * act - 6 * pr;
+        S.roundRect(g, tx - 4, ty - 4, tw + 8, hh + 6, [16, 16, 0, 0], INK);
+        S.roundRect(g, tx, ty, tw, hh, [12, 12, 0, 0], C.mix(SLATE2, '#FFC83D', act));
+        S.roundRect(g, tx, ty + hh - 8, tw, 8, 0, C.mix('#141826', '#E0962E', act));
+        S.roundRect(g, tx + 6, ty + 5, tw - 12, 10, 5, C.rgba('#FFFFFF', 0.08 + 0.22 * act));
+      });
+    }, { scale: 1, dx: 6, dy: 8, blur: 10, color: 'rgba(0,0,0,0.45)' });
+    tabs.forEach((lb, i) => {
+      const act = i === a ? k : i === pv ? 1 - k : 0;
+      const pr = o.press && o.press.i === i ? clamp(o.press.k) : 0;
+      S.label(ctx, lb, x + i * (tw + gap) + tw / 2, y + th / 2 - 4 * act + 6 * pr, 22, { color: act > 0.5 ? INK : '#AEB6C9', weight: 1000 });
+    });
+    // the gold underline slides prev -> active
+    const ux = lerp(x + pv * (tw + gap), x + a * (tw + gap), S.ease.easeOutBack(k, 1.6));
+    S.roundRect(ctx, ux + 10, y + th + 2, tw - 20, 6, 3, GOLD);
+  };
+
+  // ---- slider
+  K.sliderKnob = (x, y, w, v) => [x + w * clamp(v), y];
+  K.slider = (ctx, x, y, w, o = {}) => {
+    const v = clamp(o.value ?? 0.5), gb = clamp(o.grab || 0), kx = x + w * v;
+    if (o.label) S.label(ctx, o.label, x, y - 38, 19, { align: 'left', color: 'rgba(232,236,246,0.75)', weight: 900 });
+    S.roundRect(ctx, x - 5, y - 12, w + 10, 24, 12, INK);
+    S.roundRect(ctx, x, y - 7, w, 14, 7, '#2A3044');
+    if (v > 0.01) S.roundRect(ctx, x, y - 7, Math.max(14, w * v), 14, 7, GOLD);
+    const R = 19 * (1 + 0.18 * gb);
+    S.shadowGroup(ctx, g => {
+      S.circle(g, kx, y, R + 4.5, INK);
+      S.cel(g, c => { c.moveTo(kx + R, y); c.arc(kx, y, R, 0, TAU); }, '#FFFFFF', SHADE, 4, 4);
+      S.circle(g, kx, y, R * 0.36, C.mix('#AEB6C9', GOLD, gb));
+    }, { scale: 1, dx: 4 + 4 * gb, dy: 6 + 6 * gb, blur: 8, color: 'rgba(0,0,0,0.45)' });
+    if (gb > 0.05) {
+      ctx.save(); ctx.globalAlpha *= clamp(gb * 2);
+      const by = y - 52 - 8 * gb;
+      S.roundRect(ctx, kx - 34, by - 18, 68, 36, 10, INK);
+      S.poly(ctx, [[kx - 8, by + 17], [kx + 8, by + 17], [kx, by + 27]], INK);
+      S.label(ctx, Math.round(v * 100) + '%', kx, by + 1, 19, { color: GOLD, weight: 1000 });
+      ctx.restore();
+    }
+  };
+
+  // ---- minimap corner HUD with the MOVE button
+  const MM = K.MINIMAP = { w: 380, h: 214, btn: (x, y) => [x + 380 - 70, y + 214 - 64] };
+  K.minimap = (ctx, x, y, o = {}) => {
+    const { w, h } = MM, rooms = o.rooms || [[0, 1, 'ROOM'], [1, 1, 'HALL'], [2, 1, '?'], [1, 0, '?']];
+    const at = o.at || [0, 1], vis = o.visited ?? 1, t = o.t || 0;
+    S.shadowGroup(ctx, g => {
+      S.roundRect(g, x - 4, y - 4, w + 8, h + 8, 20, INK);
+      S.roundRect(g, x, y, w, h, 16, 'rgba(16,19,30,0.92)');
+      S.roundRect(g, x + 7, y + 7, w - 14, h - 14, 11, null, C.rgba(GOLD, 0.3), 2);
+    }, { scale: 1, dx: 8, dy: 10, blur: 14, color: 'rgba(0,0,0,0.5)' });
+    S.label(ctx, o.title || 'MAP · B1', x + 24, y + 30, 18, { align: 'left', color: GOLD, weight: 1000 });
+    const cell = (cx, cy) => [x + 30 + cx * 74, y + 58 + cy * 54];
+    // links
+    ctx.strokeStyle = 'rgba(232,236,246,0.25)'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+    ctx.beginPath(); rooms.forEach(([cx, cy]) => rooms.forEach(([dx, dy]) => {
+      if (Math.abs(cx - dx) + Math.abs(cy - dy) === 1 && (dx > cx || dy > cy)) { const a = cell(cx, cy), b = cell(dx, dy); ctx.moveTo(a[0] + 28, a[1] + 20); ctx.lineTo(b[0] + 28, b[1] + 20); }
+    })); ctx.stroke();
+    rooms.forEach(([cx, cy, nm], i) => {
+      const [px, py] = cell(cx, cy), seen = i < vis + 1;
+      S.roundRect(ctx, px, py, 56, 40, 8, seen ? '#2A3044' : '#1A1E2B', i < vis ? null : 'rgba(232,236,246,0.25)', 2);
+      S.label(ctx, i < vis ? nm : '?', px + 28, py + 21, 13, { color: i < vis ? 'rgba(232,236,246,0.8)' : 'rgba(232,236,246,0.35)', weight: 900 });
+    });
+    // you-are-here pip (pulses), gold frame on the current cell
+    const [mx, my] = cell(at[0], at[1]);
+    S.roundRect(ctx, mx - 3, my - 3, 62, 46, 10, null, GOLD, 3);
+    const pr = 0.5 + 0.5 * Math.sin(t * 6);
+    S.circle(ctx, mx + 28, my - 10, 8 + 3 * pr, C.rgba(GOLD, 0.3));
+    S.circle(ctx, mx + 28, my - 10, 6.5, GOLD, INK, 3);
+    // the MOVE button
+    const [bx, by] = MM.btn(x, y);
+    S.label(ctx, 'MOVE', bx, by - 50, 15, { color: 'rgba(232,236,246,0.7)', weight: 1000 });
+    K.button(ctx, bx - 46, by - 30, 92, 56, { press: o.press, glow: o.glow, icon: K.arrowIcon(0, INK), color: '#7FD3FF', depth: 9 });
   };
 })();
