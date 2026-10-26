@@ -11,7 +11,7 @@
 ## 설명
 He's been shot, stabbed, set on fire, run over by a car and shot in the head, and somehow the phone still rings, because Ghostface was never just one guy.
 
-Sixteen different killers have worn the mask across seven Scream movies, from Scream (1996) to Scream 7 (2026). We scored every one of them on strength, intelligence, kill count and deception, turned that into a survival rate, and put them all on one tier list, from E for Easy to S for Slaughtered.
+Sixteen different killers have worn the mask across seven Scream movies, from Scream (1996) to Scream 7 (2026). We scored every one of them on strength, intelligence, kill count and deception, turned that into a survival rate, and put them all on one tier list, from Easy to Slaughtered.
 
 Who would you put at number one? Tell us in the comments, and vote for Freddy or Pinhead next.
 
