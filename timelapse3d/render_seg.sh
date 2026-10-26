@@ -16,6 +16,20 @@ FR="$OUT/frames"; mkdir -p "$FR"
 BL="/c/All The Programs/Blender/blender.exe"
 LOCK="/e/YTP2/3D Timelapse/.gpu_lock"
 DUR="${DUR:-$(cd "$HERE/aot" && python -c "import segtime; print(segtime.DUR['$SEG'])")}"
+# OPT-IN Shiganshina set (frame W; g2 agent 10/27): SEG_SET=shiganshina (the default for SEG=g2) builds scene.py's own
+# Shiganshina 845 with g1's plug-ins + env (AOT_STATE=kicked, Colossal hidden) instead of AOT_SET=trost, and render_seg.py
+# runs with SEG_FRAME=W (identity frame, scene.py ground).  Trost segments are unchanged.
+SEG_SETVAR=trost; SEG_YEAR="${SEG_YEAR:-850}"
+[ "$SEG" = g2 ] && SEG_SET="${SEG_SET:-shiganshina}"
+if [ "$SEG_SET" = shiganshina ]; then
+  export SEG_FRAME=W FL_FIELD=1 FL_KIDS_MODE=seated FL_NOKIDS= FL_NOGRASS= TREE_DENS=0.006 SEQ_F=1300 COL_SHOW=0 \
+    AOT_STATE=kicked AOT_ARC_T=1 AOT_EVENT=intact AOT_YEAGER_XY=-165,-585 CARLA_PERFRAME=1 CARLA_NOKIDS=1 CARLA_NOGORE=1 \
+    CARLA_H=1.6 CARLA_TITAN_H=13 CARLA_F=2200 SWARM_TITANS="${SWARM_TITANS:-36}" SWARM_FAN="${SWARM_FAN:-0.95,60}" \
+    SWARM_TEND="${SWARM_TEND:-90}" FPS="$FPS"
+  SEG_SETVAR=""; SEG_YEAR=845
+  SEG_PLUGINS="${SEG_PLUGINS:-seq_colossal,seq_carla,flight,cast845,g1_set,states845,world,seq_colossal,seq_carla}"
+  SEG_CAM="${SEG_CAM:-seq}"
+fi
 
 run_blender() {   # $1 = output dir (may contain spaces), $2 = extra args, $3 = nolock; GPU lock only while Blender runs
   local SOUT="$1" NOLOCK="$3"
@@ -23,11 +37,11 @@ run_blender() {   # $1 = output dir (may contain spaces), $2 = extra args, $3 = 
     until mkdir "$LOCK" 2>/dev/null; do sleep 5; done
     trap 'rmdir "$LOCK" 2>/dev/null' EXIT
   fi
-  AOT_SET=trost AOT_PLUGINS=${SEG_PLUGINS:-world} TA_PSCALE=1.0 \
+  AOT_SET=$SEG_SETVAR AOT_PLUGINS=${SEG_PLUGINS:-world} TA_PSCALE=1.0 \
     "$BL" -b -P "$HERE/aot/scene.py" -P "$HERE/aot/render_seg.py" -- \
-    --year 850 --cam ${SEG_CAM:-gate} --engine ${ENGINE:-BLENDER_EEVEE} --res 854x480 --samples $SMP \
+    --year $SEG_YEAR --cam ${SEG_CAM:-gate} --engine ${ENGINE:-BLENDER_EEVEE} --res 854x480 --samples $SMP \
     --seg "$SEG" --seg-out "$SOUT" --fps $FPS --seg-samples $SMP $2 2>&1 \
-    | grep --line-buffered -E "\[seg|\[g8|\[trost\]|\[plugin|Traceback|Error|error:|line [0-9]+|FLAG|peak|  -|camera|t [0-9]"
+    | grep --line-buffered -E "\[seg|\[g8|\[g2|\[trost\]|\[plugin|Traceback|Error|error:|line [0-9]+|FLAG|peak|  -|camera|t [0-9]"
   if [ -z "$NOLOCK" ]; then rmdir "$LOCK" 2>/dev/null; trap - EXIT; fi
 }
 
