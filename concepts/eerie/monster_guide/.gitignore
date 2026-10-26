@@ -1,1 +1,5 @@
 _page*.html
+remotion_intro/node_modules/
+remotion_intro/out/
+remotion_intro/public/fonts/
+remotion_intro/public/audio/
