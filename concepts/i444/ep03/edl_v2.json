@@ -1,0 +1,3364 @@
+{
+ "sections": [
+  {
+   "voice": "s00",
+   "pad": 0.5,
+   "clip_audio_db": -20,
+   "shots": [
+    [
+     0,
+     "s7_01_animatronic",
+     178.25
+    ],
+    [
+     0.3,
+     "s7_10_sidney_kills",
+     139.92
+    ],
+    [
+     0.94,
+     "s5_10_daughter",
+     103.75
+    ],
+    [
+     1.84,
+     "s5_09_fighting",
+     144.78,
+     0.85
+    ],
+    [
+     3.08,
+     "s7_04_walls",
+     232.28,
+     0.8
+    ],
+    [
+     4.22,
+     "s6_family",
+     172.95,
+     0.7
+    ],
+    [
+     5.64,
+     "s1_01_like_scary",
+     6
+    ],
+    [
+     6.62,
+     "s6_core4",
+     34.4
+    ],
+    [
+     7.6,
+     "s7_06_spree",
+     219.0,
+     0.95
+    ],
+    [
+     9.82,
+     "s5_08_act3",
+     24
+    ],
+    [
+     10.96,
+     "s1_10_surprise",
+     60
+    ],
+    [
+     11.44,
+     "s3_11_family",
+     65.3
+    ],
+    [
+     12.42,
+     "s5_09_fighting",
+     51
+    ],
+    [
+     13.2,
+     "s7_07_hunted",
+     132.0
+    ],
+    [
+     14.3,
+     "s2_10_blame",
+     9.0
+    ],
+    [
+     15.16,
+     "s7_09_anna_camp",
+     100
+    ]
+   ],
+   "overlays": [
+    [
+     "word",
+     "Shot",
+     0.3,
+     0.94
+    ],
+    [
+     "word",
+     "Stabbed",
+     0.94,
+     1.84
+    ],
+    [
+     "word",
+     "Set on fire",
+     1.84,
+     3.08
+    ],
+    [
+     "word",
+     "Run over by a car",
+     3.08,
+     4.22
+    ],
+    [
+     "word",
+     "Shot in the head",
+     4.22,
+     5.64
+    ],
+    [
+     "title",
+     [
+      "16 GHOSTFACES"
+     ],
+     11.44,
+     14.3
+    ],
+    [
+     "film",
+     "Scream 7 (2026)",
+     0,
+     0.94
+    ],
+    [
+     "film",
+     "Scream (2022)",
+     0.94,
+     3.08
+    ],
+    [
+     "film",
+     "Scream 7 (2026)",
+     3.08,
+     4.22
+    ],
+    [
+     "film",
+     "Scream VI (2023)",
+     4.22,
+     5.64
+    ],
+    [
+     "film",
+     "Scream (1996)",
+     5.64,
+     6.62
+    ],
+    [
+     "film",
+     "Scream VI (2023)",
+     6.62,
+     7.6
+    ],
+    [
+     "film",
+     "Scream 7 (2026)",
+     7.6,
+     9.82
+    ],
+    [
+     "film",
+     "Scream (2022)",
+     9.82,
+     10.96
+    ],
+    [
+     "film",
+     "Scream (1996)",
+     10.96,
+     11.44
+    ],
+    [
+     "film",
+     "Scream 3 (2000)",
+     11.44,
+     12.42
+    ],
+    [
+     "film",
+     "Scream (2022)",
+     12.42,
+     13.2
+    ],
+    [
+     "film",
+     "Scream 7 (2026)",
+     13.2,
+     14.3
+    ],
+    [
+     "film",
+     "Scream 2 (1997)",
+     14.3,
+     15.16
+    ],
+    [
+     "film",
+     "Scream 7 (2026)",
+     15.16,
+     999
+    ]
+   ],
+   "sfx": []
+  },
+  {
+   "voice": "s01",
+   "pad": 0.5,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s6_core4",
+     3
+    ],
+    [
+     2.14,
+     "s5_08_act3",
+     26
+    ],
+    [
+     3.06,
+     "s7_01_animatronic",
+     193
+    ],
+    [
+     3.84,
+     "s4_still_gf",
+     0
+    ],
+    [
+     5.54,
+     "s1_10_surprise",
+     87
+    ],
+    [
+     8.44,
+     "s6_core4",
+     23.4
+    ],
+    [
+     11.66,
+     "s2_03_omega",
+     115.25
+    ],
+    [
+     12.32,
+     "s3_11_family",
+     73.6
+    ],
+    [
+     13.48,
+     "s5_03_sheriff",
+     153.25
+    ],
+    [
+     14.3,
+     "s1_10_surprise",
+     27.5
+    ],
+    [
+     15.3,
+     "s1_09_look_behind",
+     83.4
+    ],
+    [
+     17.38,
+     "s5_09_fighting",
+     100
+    ],
+    [
+     18.94,
+     "s7_04_walls",
+     53
+    ],
+    [
+     21.44,
+     "s1_01_like_scary",
+     30
+    ],
+    [
+     22.86,
+     "s6_opening",
+     282
+    ],
+    [
+     24.62,
+     "s5_09_fighting",
+     90.2
+    ],
+    [
+     27.44,
+     "s5_10_daughter",
+     159.3
+    ],
+    [
+     28.68,
+     "s2_10_blame",
+     99.4
+    ],
+    [
+     30.9,
+     "s3_11_family",
+     63
+    ]
+   ],
+   "overlays": [
+    [
+     "title",
+     [
+      "HOW HARD",
+      "!TO SURVIVE"
+     ],
+     5.54,
+     8.44
+    ],
+    [
+     "title",
+     [
+      "ALL HUMAN"
+     ],
+     25.7,
+     26.46
+    ],
+    [
+     "stats",
+     {
+      "name": "GHOSTFACE",
+      "tile_png": "tiles/mystery.png",
+      "stats": {
+       "STRENGTH": 6,
+       "INTELLIGENCE": 7,
+       "KILL COUNT": 5,
+       "DECEPTION": 8
+      },
+      "pct": "??",
+      "dur": 13.24,
+      "t_pct": 12.02,
+      "reveal": [
+       2.12,
+       2.78,
+       3.94,
+       4.76
+      ]
+     },
+     9.62,
+     22.86
+    ],
+    [
+     "film",
+     "Scream VI (2023)",
+     0,
+     2.14
+    ],
+    [
+     "film",
+     "Scream (2022)",
+     2.14,
+     3.06
+    ],
+    [
+     "film",
+     "Scream 7 (2026)",
+     3.06,
+     3.84
+    ],
+    [
+     "film",
+     "Scream 4 (2011)",
+     3.84,
+     5.54
+    ],
+    [
+     "film",
+     "Scream (1996)",
+     5.54,
+     8.44
+    ],
+    [
+     "film",
+     "Scream VI (2023)",
+     8.44,
+     11.66
+    ],
+    [
+     "film",
+     "Scream 2 (1997)",
+     11.66,
+     12.32
+    ],
+    [
+     "film",
+     "Scream 3 (2000)",
+     12.32,
+     13.48
+    ],
+    [
+     "film",
+     "Scream (2022)",
+     13.48,
+     14.3
+    ],
+    [
+     "film",
+     "Scream (1996)",
+     14.3,
+     17.38
+    ],
+    [
+     "film",
+     "Scream (2022)",
+     17.38,
+     18.94
+    ],
+    [
+     "film",
+     "Scream 7 (2026)",
+     18.94,
+     21.44
+    ],
+    [
+     "film",
+     "Scream (1996)",
+     21.44,
+     22.86
+    ],
+    [
+     "film",
+     "Scream VI (2023)",
+     22.86,
+     24.62
+    ],
+    [
+     "film",
+     "Scream (2022)",
+     24.62,
+     28.68
+    ],
+    [
+     "film",
+     "Scream 2 (1997)",
+     28.68,
+     30.9
+    ],
+    [
+     "film",
+     "Scream 3 (2000)",
+     30.9,
+     999
+    ]
+   ],
+   "sfx": [
+    [
+     9.62,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     21.639999999999997,
+     "sfx/stamp.wav",
+     -12
+    ]
+   ]
+  },
+  {
+   "voice": "s02",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s6_opening",
+     3.3
+    ],
+    [
+     1.84,
+     "s6_opening",
+     9
+    ],
+    [
+     3.5,
+     "s6_opening",
+     30
+    ],
+    [
+     4.94,
+     "s6_opening",
+     11.7
+    ],
+    [
+     6.4,
+     "s6_opening",
+     99
+    ],
+    [
+     7.42,
+     "s6_opening",
+     168
+    ],
+    [
+     9.1,
+     "s6_opening",
+     18
+    ],
+    [
+     10.44,
+     "s6_opening",
+     273.4
+    ],
+    [
+     11.08,
+     "s6_opening",
+     278.75
+    ],
+    [
+     13.0,
+     "s6_opening",
+     288.5
+    ],
+    [
+     14.44,
+     "s6_opening",
+     296
+    ],
+    [
+     15.72,
+     "s6_opening",
+     284.2
+    ],
+    [
+     16.9,
+     "s6_opening",
+     298.3,
+     0.75
+    ],
+    [
+     19.3,
+     "s6_opening",
+     186,
+     0.75
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      16,
+      "Jason Carvey",
+      "Scream VI (2023)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "JASON CARVEY",
+      "tile_png": "tiles/carvey.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 99,
+      "t_pct": 2.61,
+      "dur": 5.88
+     },
+     17.88,
+     23.76
+    ],
+    [
+     "tier",
+     {
+      "placed": [],
+      "new": {
+       "key": "carvey",
+       "name": "Jason Carvey",
+       "tier": "EASY"
+      }
+     },
+     23.76,
+     999
+    ],
+    [
+     "film",
+     "Scream VI (2023)",
+     0,
+     17.88
+    ]
+   ],
+   "sfx": [
+    [
+     17.88,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     18.18,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     20.49,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     24.060000000000002,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s03",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s7_04_walls",
+     53.0
+    ],
+    [
+     1.76,
+     "s7_04_walls",
+     107.5
+    ],
+    [
+     3.54,
+     "s7_04_walls",
+     190.0
+    ],
+    [
+     5.42,
+     "s7_04_walls",
+     219.2
+    ],
+    [
+     7.38,
+     "s7_09_anna_camp",
+     0
+    ],
+    [
+     8.98,
+     "s7_09_anna_camp",
+     194.0
+    ],
+    [
+     10.54,
+     "s7_04_walls",
+     192.5
+    ],
+    [
+     12.16,
+     "s7_04_walls",
+     249.9
+    ],
+    [
+     12.98,
+     "s7_04_walls",
+     232.28,
+     0.8
+    ],
+    [
+     14.74,
+     "s7_04_walls",
+     234.1,
+     0.9
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      15,
+      "Karl Gibbs",
+      "Scream 7 (2026)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "KARL GIBBS",
+      "tile_png": "tiles/karl.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 75,
+      "t_pct": 1.38,
+      "dur": 2.97
+     },
+     13.95,
+     16.92
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       }
+      ],
+      "new": {
+       "key": "karl",
+       "name": "Karl Gibbs",
+       "tier": "YOU'LL LIVE"
+      }
+     },
+     16.92,
+     999
+    ],
+    [
+     "film",
+     "Scream 7 (2026)",
+     0,
+     13.95
+    ]
+   ],
+   "sfx": [
+    [
+     13.95,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     14.25,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     15.329999999999998,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     17.220000000000002,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s04",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s2_11_mothers_love",
+     6.0
+    ],
+    [
+     2.28,
+     "s1_11_creative",
+     99.75
+    ],
+    [
+     3.24,
+     "s2_11_mothers_love",
+     19.3
+    ],
+    [
+     5.3,
+     "s2_11_mothers_love",
+     41.3
+    ],
+    [
+     7.84,
+     "s2_10_blame",
+     122.6
+    ],
+    [
+     9.38,
+     "s2_11_mothers_love",
+     32.0
+    ],
+    [
+     11.18,
+     "s2_11_mothers_love",
+     96.0
+    ],
+    [
+     15.1,
+     "s2_12_intense",
+     110.0
+    ],
+    [
+     16.92,
+     "s2_12_intense",
+     107.9
+    ],
+    [
+     18.28,
+     "s2_12_intense",
+     113.5
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      14,
+      "Mrs. Loomis",
+      "Scream 2 (1997)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "MRS. LOOMIS",
+      "tile_png": "tiles/mrs_loomis.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 68,
+      "t_pct": 1.27,
+      "dur": 2.35
+     },
+     18.0,
+     20.35
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       }
+      ],
+      "new": {
+       "key": "mrs_loomis",
+       "name": "Mrs. Loomis",
+       "tier": "YOU'LL LIVE"
+      }
+     },
+     20.35,
+     999
+    ],
+    [
+     "film",
+     "Scream 2 (1997)",
+     0,
+     2.28
+    ],
+    [
+     "film",
+     "Scream (1996)",
+     2.28,
+     3.24
+    ],
+    [
+     "film",
+     "Scream 2 (1997)",
+     3.24,
+     18.0
+    ]
+   ],
+   "sfx": [
+    [
+     18.0,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     18.3,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     19.27,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     20.650000000000002,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s05",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s4_still_charlie",
+     0
+    ],
+    [
+     2.38,
+     "s4_02_return",
+     104.3
+    ],
+    [
+     3.36,
+     "s4_still_trio",
+     0
+    ],
+    [
+     5.36,
+     "s4_02_return",
+     124.3
+    ],
+    [
+     7.02,
+     "s4_still_charlie",
+     3
+    ],
+    [
+     7.92,
+     "s4_still_jill",
+     0
+    ],
+    [
+     8.84,
+     "scream4_reveal",
+     19.6
+    ],
+    [
+     10.24,
+     "s4_still_charlie",
+     5
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      13,
+      "Charlie Walker",
+      "Scream 4 (2011)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "CHARLIE WALKER",
+      "tile_png": "tiles/charlie.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 60,
+      "t_pct": 1.93,
+      "dur": 2.84
+     },
+     11.9,
+     14.74
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       }
+      ],
+      "new": {
+       "key": "charlie",
+       "name": "Charlie Walker",
+       "tier": "YOU'LL LIVE"
+      }
+     },
+     14.74,
+     999
+    ],
+    [
+     "film",
+     "Scream 4 (2011)",
+     0,
+     11.9
+    ]
+   ],
+   "sfx": [
+    [
+     11.9,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     12.200000000000001,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     13.83,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     15.040000000000001,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s06",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s6_family",
+     120.5,
+     0.54
+    ],
+    [
+     2.48,
+     "s6_core4",
+     89
+    ],
+    [
+     4.54,
+     "s6_core4",
+     54
+    ],
+    [
+     7.06,
+     "s6_family",
+     98.4,
+     0.55
+    ],
+    [
+     8.96,
+     "s6_family",
+     101.85
+    ],
+    [
+     9.9,
+     "s6_core4",
+     116.5
+    ],
+    [
+     11.44,
+     "s6_family",
+     172.78
+    ],
+    [
+     13.4,
+     "s6_family",
+     171.65,
+     0.3
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      12,
+      "Quinn Bailey",
+      "Scream VI (2023)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "QUINN BAILEY",
+      "tile_png": "tiles/quinn.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 56,
+      "t_pct": 1.19,
+      "dur": 2.81
+     },
+     12.8,
+     15.61
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       }
+      ],
+      "new": {
+       "key": "quinn",
+       "name": "Quinn Bailey",
+       "tier": "YOU'LL LIVE"
+      }
+     },
+     15.61,
+     999
+    ],
+    [
+     "film",
+     "Scream VI (2023)",
+     0,
+     12.8
+    ]
+   ],
+   "sfx": [
+    [
+     12.8,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     13.100000000000001,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     13.99,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     15.91,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s07",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s6_family",
+     85.77,
+     0.7
+    ],
+    [
+     2.5,
+     "s6_subway",
+     159.25,
+     0.65
+    ],
+    [
+     4.86,
+     "s6_family",
+     19.3
+    ],
+    [
+     7.74,
+     "s6_family",
+     16.6
+    ],
+    [
+     9.74,
+     "s6_family",
+     140.75
+    ],
+    [
+     11.64,
+     "s6_family",
+     147.5
+    ],
+    [
+     13.12,
+     "s6_family",
+     158.0,
+     0.6
+    ],
+    [
+     14.52,
+     "s6_family",
+     151.7,
+     0.5
+    ],
+    [
+     17.14,
+     "s6_family",
+     85.77,
+     0.78
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      11,
+      "Ethan Landry",
+      "Scream VI (2023)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "ETHAN LANDRY",
+      "tile_png": "tiles/ethan.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 53,
+      "t_pct": 2.35,
+      "dur": 3.54
+     },
+     15.9,
+     19.44
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "tier": "YOU'LL LIVE"
+       }
+      ],
+      "new": {
+       "key": "ethan",
+       "name": "Ethan Landry",
+       "tier": "COIN FLIP"
+      }
+     },
+     19.44,
+     999
+    ],
+    [
+     "film",
+     "Scream VI (2023)",
+     0,
+     15.9
+    ]
+   ],
+   "sfx": [
+    [
+     15.9,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     16.2,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     18.25,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     19.740000000000002,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s08",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s7_09_anna_camp",
+     20.0
+    ],
+    [
+     2.4,
+     "s7_02_stu",
+     6
+    ],
+    [
+     4.32,
+     "s7_09_anna_camp",
+     32.0,
+     0.76
+    ],
+    [
+     6.28,
+     "s7_02_stu",
+     54
+    ],
+    [
+     7.62,
+     "s7_02_stu",
+     70.4
+    ],
+    [
+     8.54,
+     "s7_02_stu",
+     75
+    ],
+    [
+     10.5,
+     "s7_02_stu",
+     63
+    ],
+    [
+     12.22,
+     "s7_09_anna_camp",
+     232.0
+    ],
+    [
+     14.4,
+     "s7_09_anna_camp",
+     254.24
+    ],
+    [
+     15.64,
+     "s7_09_anna_camp",
+     23.0
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      10,
+      "Marco Davis",
+      "Scream 7 (2026)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "MARCO DAVIS",
+      "tile_png": "tiles/marco.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 50,
+      "t_pct": 1.25,
+      "dur": 2.53
+     },
+     15.0,
+     17.53
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "tier": "COIN FLIP"
+       }
+      ],
+      "new": {
+       "key": "marco",
+       "name": "Marco Davis",
+       "tier": "COIN FLIP"
+      }
+     },
+     17.53,
+     999
+    ],
+    [
+     "film",
+     "Scream 7 (2026)",
+     0,
+     15.0
+    ]
+   ],
+   "sfx": [
+    [
+     15.0,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     15.3,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     16.25,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     17.830000000000002,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s09",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s5_08_act3",
+     73.0,
+     0.85
+    ],
+    [
+     2.14,
+     "s5_09_fighting",
+     90.2
+    ],
+    [
+     3.0,
+     "s5_08_act3",
+     78
+    ],
+    [
+     5.62,
+     "s5_03_sheriff",
+     140.5
+    ],
+    [
+     6.14,
+     "s5_03_sheriff",
+     144.0
+    ],
+    [
+     6.96,
+     "s5_03_sheriff",
+     135.0
+    ],
+    [
+     8.42,
+     "s5_09_fighting",
+     36.15,
+     0.8
+    ],
+    [
+     10.6,
+     "s5_09_fighting",
+     92
+    ],
+    [
+     12.48,
+     "s5_10_daughter",
+     80.15
+    ],
+    [
+     13.16,
+     "s5_10_daughter",
+     100.0
+    ],
+    [
+     14.36,
+     "s5_10_daughter",
+     107.3,
+     0.6
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      9,
+      "Richie Kirsch",
+      "Scream (2022)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "RICHIE KIRSCH",
+      "tile_png": "tiles/richie.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 45,
+      "t_pct": 1.91,
+      "dur": 2.89
+     },
+     16.4,
+     19.29
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "tier": "COIN FLIP"
+       }
+      ],
+      "new": {
+       "key": "richie",
+       "name": "Richie Kirsch",
+       "tier": "COIN FLIP"
+      }
+     },
+     19.29,
+     999
+    ],
+    [
+     "film",
+     "Scream (2022)",
+     0,
+     16.4
+    ]
+   ],
+   "sfx": [
+    [
+     16.4,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     16.7,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     18.31,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     19.59,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s10",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s7_09_anna_camp",
+     100
+    ],
+    [
+     2.26,
+     "s7_09_anna_camp",
+     4.45
+    ],
+    [
+     4.16,
+     "s7_09_anna_camp",
+     8.0
+    ],
+    [
+     7.2,
+     "s7_09_anna_camp",
+     171
+    ],
+    [
+     8.26,
+     "s7_09_anna_camp",
+     66
+    ],
+    [
+     11.0,
+     "s7_09_anna_camp",
+     180
+    ],
+    [
+     13.32,
+     "s7_09_anna_camp",
+     267.2
+    ],
+    [
+     14.64,
+     "s7_10_sidney_kills",
+     141.25
+    ],
+    [
+     15.4,
+     "s7_10_sidney_kills",
+     140.0
+    ],
+    [
+     16.96,
+     "s7_09_anna_camp",
+     186
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      8,
+      "Jessica Bowden",
+      "Scream 7 (2026)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "JESSICA BOWDEN",
+      "tile_png": "tiles/jessica.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 43,
+      "t_pct": 1.25,
+      "dur": 2.68
+     },
+     16.4,
+     19.08
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "tier": "COIN FLIP"
+       }
+      ],
+      "new": {
+       "key": "jessica",
+       "name": "Jessica Bowden",
+       "tier": "COIN FLIP"
+      }
+     },
+     19.08,
+     999
+    ],
+    [
+     "film",
+     "Scream 7 (2026)",
+     0,
+     16.4
+    ]
+   ],
+   "sfx": [
+    [
+     16.4,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     16.7,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     17.65,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     19.38,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s11",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s1_10_surprise",
+     46.6
+    ],
+    [
+     2.3,
+     "s1_10_surprise",
+     7
+    ],
+    [
+     6.08,
+     "s1_10_surprise",
+     112.4
+    ],
+    [
+     8.88,
+     "s1_11_creative",
+     56.4
+    ],
+    [
+     11.06,
+     "s1_11_creative",
+     87
+    ],
+    [
+     12.88,
+     "s1_11_creative",
+     100.75
+    ],
+    [
+     14.12,
+     "s1_11_creative",
+     103.9
+    ],
+    [
+     15.36,
+     "s1_11_creative",
+     113.375,
+     0.75
+    ],
+    [
+     17.6,
+     "s1_12_tables",
+     45
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      7,
+      "Stu Macher",
+      "Scream (1996)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "STU MACHER",
+      "tile_png": "tiles/stu.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 40,
+      "t_pct": 1.51,
+      "dur": 2.92
+     },
+     16.4,
+     19.32
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "tier": "COIN FLIP"
+       }
+      ],
+      "new": {
+       "key": "stu",
+       "name": "Stu Macher",
+       "tier": "PROBABLY DEAD"
+      }
+     },
+     19.32,
+     999
+    ],
+    [
+     "film",
+     "Scream (1996)",
+     0,
+     16.4
+    ]
+   ],
+   "sfx": [
+    [
+     16.4,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     16.7,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     17.91,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     19.62,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s12",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s2_10_blame",
+     9.0
+    ],
+    [
+     2.36,
+     "s2_10_blame",
+     14.4
+    ],
+    [
+     4.78,
+     "s2_10_blame",
+     30
+    ],
+    [
+     7.82,
+     "s2_09_driving",
+     18
+    ],
+    [
+     9.2,
+     "s2_07_big_boys",
+     125.75
+    ],
+    [
+     10.66,
+     "s2_10_blame",
+     83.75
+    ],
+    [
+     11.44,
+     "s2_10_blame",
+     99.4
+    ],
+    [
+     12.84,
+     "s2_10_blame",
+     3.5
+    ],
+    [
+     14.62,
+     "s2_10_blame",
+     122.6
+    ],
+    [
+     16.14,
+     "s2_11_mothers_love",
+     3.85
+    ],
+    [
+     16.8,
+     "s2_11_mothers_love",
+     6.0
+    ],
+    [
+     19.34,
+     "s2_10_blame",
+     16.5
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      6,
+      "Mickey Altieri",
+      "Scream 2 (1997)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "MICKEY ALTIERI",
+      "tile_png": "tiles/mickey.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 36,
+      "t_pct": 1.97,
+      "dur": 3.16
+     },
+     18.4,
+     21.56
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "tier": "PROBABLY DEAD"
+       }
+      ],
+      "new": {
+       "key": "mickey",
+       "name": "Mickey Altieri",
+       "tier": "PROBABLY DEAD"
+      }
+     },
+     21.56,
+     999
+    ],
+    [
+     "film",
+     "Scream 2 (1997)",
+     0,
+     18.4
+    ]
+   ],
+   "sfx": [
+    [
+     18.4,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     18.7,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     20.369999999999997,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     21.86,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s13",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s5_09_fighting",
+     107.0
+    ],
+    [
+     2.92,
+     "s5_09_fighting",
+     57
+    ],
+    [
+     4.34,
+     "s5_09_fighting",
+     142.2
+    ],
+    [
+     6.4,
+     "s5_09_fighting",
+     144.3
+    ],
+    [
+     7.72,
+     "s5_09_fighting",
+     147.95
+    ],
+    [
+     9.58,
+     "s5_09_fighting",
+     152.06
+    ],
+    [
+     11.22,
+     "s5_10_daughter",
+     177.45,
+     0.85
+    ],
+    [
+     14.0,
+     "s5_09_fighting",
+     115.0,
+     0.6
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      5,
+      "Amber Freeman",
+      "Scream (2022)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "AMBER FREEMAN",
+      "tile_png": "tiles/amber.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 30,
+      "t_pct": 1.39,
+      "dur": 2.63
+     },
+     13.2,
+     15.83
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "tier": "PROBABLY DEAD"
+       }
+      ],
+      "new": {
+       "key": "amber",
+       "name": "Amber Freeman",
+       "tier": "PROBABLY DEAD"
+      }
+     },
+     15.83,
+     999
+    ],
+    [
+     "film",
+     "Scream (2022)",
+     0,
+     13.2
+    ]
+   ],
+   "sfx": [
+    [
+     13.2,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     13.5,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     14.59,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     16.13,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s14",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s1_10_surprise",
+     0
+    ],
+    [
+     2.2,
+     "s1_11_creative",
+     36
+    ],
+    [
+     3.24,
+     "s1_11_creative",
+     7.25
+    ],
+    [
+     4.92,
+     "s1_11_creative",
+     33
+    ],
+    [
+     9.04,
+     "s1_10_surprise",
+     19
+    ],
+    [
+     10.24,
+     "s1_11_creative",
+     72
+    ],
+    [
+     11.7,
+     "s1_11_creative",
+     99.5
+    ],
+    [
+     13.76,
+     "s1_11_creative",
+     114
+    ],
+    [
+     16.64,
+     "s1_10_surprise",
+     39
+    ],
+    [
+     19.42,
+     "s1_12_tables",
+     0
+    ],
+    [
+     22.88,
+     "s1_12_tables",
+     86
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      4,
+      "Billy Loomis",
+      "Scream (1996)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "BILLY LOOMIS",
+      "tile_png": "tiles/billy.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 25,
+      "t_pct": 1.61,
+      "dur": 3.15
+     },
+     22.0,
+     25.15
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "tier": "PROBABLY DEAD"
+       }
+      ],
+      "new": {
+       "key": "billy",
+       "name": "Billy Loomis",
+       "tier": "YOU'RE DEAD"
+      }
+     },
+     25.15,
+     999
+    ],
+    [
+     "film",
+     "Scream (1996)",
+     0,
+     22.0
+    ]
+   ],
+   "sfx": [
+    [
+     22.0,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     22.3,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     23.61,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     25.45,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s15",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s6_family",
+     0,
+     0.8
+    ],
+    [
+     2.96,
+     "s6_sam_gf",
+     58
+    ],
+    [
+     4.48,
+     "s6_subway",
+     30.8
+    ],
+    [
+     6.76,
+     "s6_sam_gf",
+     66
+    ],
+    [
+     10.72,
+     "s6_family",
+     6.9
+    ],
+    [
+     12.18,
+     "s6_store",
+     80.625
+    ],
+    [
+     14.34,
+     "s6_sam_gf",
+     164.8
+    ],
+    [
+     17.0,
+     "s6_sam_gf",
+     68.9
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      3,
+      "Detective Wayne Bailey",
+      "Scream VI (2023)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "WAYNE BAILEY",
+      "tile_png": "tiles/wayne.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 22,
+      "t_pct": 1.49,
+      "dur": 2.66
+     },
+     16.5,
+     19.16
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "tier": "YOU'RE DEAD"
+       }
+      ],
+      "new": {
+       "key": "wayne",
+       "name": "Wayne Bailey",
+       "tier": "YOU'RE DEAD"
+      }
+     },
+     19.16,
+     999
+    ],
+    [
+     "film",
+     "Scream VI (2023)",
+     0,
+     16.5
+    ]
+   ],
+   "sfx": [
+    [
+     16.5,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     16.8,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     17.99,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     19.46,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s16",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s4_still_jill",
+     0
+    ],
+    [
+     2.04,
+     "scream4_reveal",
+     4.5
+    ],
+    [
+     3.7,
+     "scream4_reveal",
+     10.0
+    ],
+    [
+     5.82,
+     "scream4_reveal",
+     14.0
+    ],
+    [
+     7.68,
+     "s4_02_return",
+     120.3
+    ],
+    [
+     9.04,
+     "scream4_reveal",
+     6.4
+    ],
+    [
+     9.82,
+     "s4_still_charlie",
+     0
+    ],
+    [
+     11.52,
+     "s4_still_jill_bed",
+     0
+    ],
+    [
+     14.18,
+     "s4_06_killcam",
+     108
+    ],
+    [
+     16.28,
+     "s4_still_trio",
+     0
+    ],
+    [
+     17.54,
+     "scream4_reveal",
+     13.0
+    ],
+    [
+     18.9,
+     "s4_still_jill",
+     6
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      2,
+      "Jill Roberts",
+      "Scream 4 (2011)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "JILL ROBERTS",
+      "tile_png": "tiles/jill.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 18,
+      "t_pct": 1.81,
+      "dur": 2.85
+     },
+     19.6,
+     22.45
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "tier": "YOU'RE DEAD"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "tier": "YOU'RE DEAD"
+       }
+      ],
+      "new": {
+       "key": "jill",
+       "name": "Jill Roberts",
+       "tier": "YOU'RE DEAD"
+      }
+     },
+     22.45,
+     999
+    ],
+    [
+     "film",
+     "Scream 4 (2011)",
+     0,
+     19.6
+    ]
+   ],
+   "sfx": [
+    [
+     19.6,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     19.900000000000002,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     21.41,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     22.75,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s17",
+   "pad": 1.2,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s3_11_family",
+     65.3,
+     0.85
+    ],
+    [
+     1.84,
+     "s3_11_family",
+     50
+    ],
+    [
+     3.78,
+     "s3_11_family",
+     72
+    ],
+    [
+     5.52,
+     "s3_11_family",
+     24
+    ],
+    [
+     7.26,
+     "s3_11_family",
+     78
+    ],
+    [
+     9.26,
+     "s3_02_cutting",
+     126.3
+    ],
+    [
+     12.44,
+     "s3_11_family",
+     84
+    ],
+    [
+     13.64,
+     "s1_11_creative",
+     16
+    ],
+    [
+     15.14,
+     "s1_10_surprise",
+     66
+    ],
+    [
+     16.78,
+     "s3_12_firing",
+     27.0
+    ],
+    [
+     18.44,
+     "s3_12_firing",
+     111.5
+    ],
+    [
+     20.62,
+     "s3_12_firing",
+     121.25
+    ],
+    [
+     23.24,
+     "s3_12_firing",
+     129.95,
+     0.6
+    ],
+    [
+     24.56,
+     "s3_11_family",
+     80
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      1,
+      "Roman Bridger",
+      "Scream 3 (2000)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "ROMAN BRIDGER",
+      "tile_png": "tiles/roman.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 5,
+       "KILL COUNT": 5,
+       "DECEPTION": 5
+      },
+      "pct": 15,
+      "t_pct": 1.39,
+      "dur": 2.9
+     },
+     24.2,
+     27.1
+    ],
+    [
+     "tier",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "tier": "YOU'RE DEAD"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "tier": "YOU'RE DEAD"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "tier": "YOU'RE DEAD"
+       }
+      ],
+      "new": {
+       "key": "roman",
+       "name": "Roman Bridger",
+       "tier": "YOU'RE DEAD"
+      }
+     },
+     27.1,
+     999
+    ],
+    [
+     "film",
+     "Scream 3 (2000)",
+     0,
+     13.64
+    ],
+    [
+     "film",
+     "Scream (1996)",
+     13.64,
+     16.78
+    ],
+    [
+     "film",
+     "Scream 3 (2000)",
+     16.78,
+     24.2
+    ]
+   ],
+   "sfx": [
+    [
+     24.2,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     24.5,
+     "sfx/fill.wav",
+     -20
+    ],
+    [
+     25.59,
+     "sfx/stamp.wav",
+     -12
+    ],
+    [
+     27.400000000000002,
+     "sfx/slam.wav",
+     -10
+    ]
+   ]
+  },
+  {
+   "voice": "s18",
+   "pad": 1.5,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "s6_opening",
+     186
+    ],
+    [
+     8.5,
+     "s6_subway",
+     167
+    ]
+   ],
+   "overlays": [
+    [
+     "tierfinal",
+     {
+      "placed": [
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "tier": "EASY"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "tier": "YOU'LL LIVE"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "tier": "COIN FLIP"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "tier": "PROBABLY DEAD"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "tier": "YOU'RE DEAD"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "tier": "YOU'RE DEAD"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "tier": "YOU'RE DEAD"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "tier": "YOU'RE DEAD"
+       }
+      ]
+     },
+     0.0,
+     8.5
+    ],
+    [
+     "title",
+     [
+      "YOUR #1?"
+     ],
+     5.92,
+     8.5
+    ],
+    [
+     "title",
+     [
+      "FREDDY",
+      "!OR PINHEAD?"
+     ],
+     9.1,
+     999
+    ]
+   ],
+   "sfx": []
+  }
+ ],
+ "zoom": {
+  "s4_still_jill": 1.0,
+  "s4_still_jill_bed": 1.0,
+  "s4_still_charlie": 1.0,
+  "s4_still_gf": 1.0,
+  "s4_still_trio": 1.0,
+  "s1_01_like_scary": 1.08,
+  "s1_10_surprise": 1.08,
+  "s1_11_creative": 1.08,
+  "s1_12_tables": 1.08,
+  "s2_09_driving": 1.08,
+  "s2_10_blame": 1.08,
+  "s2_11_mothers_love": 1.08,
+  "s2_12_intense": 1.08,
+  "s3_11_family": 1.08,
+  "s3_12_firing": 1.08
+ },
+ "gamma": {
+  "s7_04_walls": 1.28,
+  "s7_06_spree": 1.28,
+  "s7_09_anna_camp": 1.28,
+  "s7_10_sidney_kills": 1.28,
+  "s6_subway": 1.28,
+  "s6_ladder": 1.28,
+  "s6_core4": 1.28,
+  "s6_two_gf": 1.28,
+  "s4_02_return": 1.28,
+  "s4_06_killcam": 1.28,
+  "s3_12_firing": 1.28
+ }
+}
