@@ -67,8 +67,8 @@ BEATS = dict(
     street_punch=2.6, st1_kill=2.75, climb=(0.8, 7.0), jean_land=2.6, crash=(4.4, 5.0), stragglers=(4.0, 8.0),
     look_roar=(6.9, 7.9), leap=(9.9, 10.7), hq_punch=10.9, tackle=(11.0, 11.9), trio=(4.0, 13.4),
     r1_kill=12.6, r2_kill=13.8, f2_kill=15.85, roar2=(16.5, 17.5), f3_kill=18.45, w1_kill=24.05,
-    cut_open=(17.0, 19.0), lift=(19.5, 22.5), ring=(22.5, 27.4), volley=27.5, drop=(27.8, 28.8),
-    misses=(28.8, 29.6), finish=(30.3, 30.7), cut_close=(33.5, 35.5), inside_gone=35.6,
+    cut_open=(17.6, 18.8), lift=(19.5, 22.5), ring=(22.5, 27.4), volley=27.5, drop=(27.8, 28.8),
+    misses=(28.8, 29.6), finish=(30.3, 30.7), cut_close=(34.0, 35.2), inside_gone=35.6,
     swarm=(31.2, 35.0), biter_kills=(32.6, 33.8, 35.0), breakout=34.0, wing_roof=(35.6, 37.6),
     brd_in=(27.0, 35.6), brd_bite=(36.0, 38.0), brd_kill=38.0,
     roar3=(38.8, 41.8), lunge=(42.0, 42.8), fall=(42.8, 43.6), skid=(43.6, 45.0), whiteout=(45.0, 48.5),
@@ -90,6 +90,7 @@ TERRACE = (-270.0, -230.0, 612.0, 624.0, 2.5)
 WALK_Z = 28.0                              # keep tier-1 roof walk
 SEAM5 = dict(pos=(-231.0, 531.0), heading=349.0, v=6.0)   # g5 AT_END / AT_END_HEADING / AT_END_V (exact)
 WIND = np.array([2.6, 1.2, 0.0])           # = g5 (smoke drift)
+STEAM_WARM = (1.0, 0.88, 0.74)             # = g5 v2: counters the blue sky fill on steam cards
 SMOKE_SITES = [(-62, 112), (48, 140), (-108, 186), (118, 228), (-28, 262), (-188, 142), (168, 330), (-138, 362), (64, 420),
                (-232, 262), (222, 150), (-84, 560), (-300, 420)]                # = g5 (continue its columns over the seam)
 SMOKE_KEEP = (11, 12, 8, 9)                # these 4 keep burning; the other 9 sources die out 15-40 s (bible: 2-4 in g6)
@@ -1024,6 +1025,14 @@ def build_cards(coll):
     import smokecards as SC
     rng = np.random.default_rng(66)
     C = SC.SmokeCards("G6Cards")
+    _am = C.add_many
+    def _add_many(te, pos, vel=None, *a, **k):
+        if k.get("kind") == "steam":
+            c = k.get("color")
+            base = np.array([0.92, 0.92, 0.90]) if c is None else np.asarray(c, float)
+            k["color"] = base * np.array(STEAM_WARM)
+        return _am(te, pos, vel, *a, **k)
+    C.add_many = _add_many
     TT = STATE["TT"]
     # ---- town smoke columns continuing g5's 13 (pre-rolled so they stand at t 0); 9 die out 15-40 s
     for k, (x, y) in enumerate(SMOKE_SITES):
@@ -1134,10 +1143,24 @@ def build_cards(coll):
                life=rng.uniform(2.0, 3.0, n), rise=0.5, kind="dust", alpha=0.8, tau=0.6, color=hexrgb("#a08a6a"))
     body = [S3(-191.5 + u, 619.0, 1.5) for u in np.linspace(0.0, NAPE_OFF[0] + 1.0, 8)]
     w0, w1 = BEATS["whiteout"]
-    ts = np.arange(w0 - 0.6, w1, 0.012); n = len(ts)                       # dense white-out
-    P_ = np.array([body[i % len(body)] for i in range(n)]) + rng.normal(0, 2.5, (n, 3))
-    C.add_many(ts, P_, np.column_stack([rng.normal(0, 3, n), rng.normal(0, 3, n), rng.uniform(5, 11, n)]), r0=3.5, r1=rng.uniform(10, 16, n),
-               life=rng.uniform(3.0, 4.5, n), rise=3.0, kind="steam", alpha=0.75, tau=0.8)
+    # QA 10/27: no single white ball over the body.  g5 v2 steam approach: many smaller warm-tinted cards released
+    # continuously from the body's EDGES, thrown outward low (12-34 m/s, small elevation), rising and drifting, each thinning
+    # over 3.4-4.6 s; release rate tails off from ~49.5 so the shroud is thinning by ~50 and the body / nape stay readable.
+    n = 460
+    tt = w0 - 0.5 + rng.random(n) ** 1.7 * (w1 + 2.0 - w0)              # dense at the impact, tailing off by ~50.5
+    along = rng.uniform(-1.0, NAPE_OFF[0] + 2.0, n); side = rng.choice([-1.0, 1.0], n)
+    th = rng.normal(0.0, 0.55, n) + np.where(side > 0, math.pi / 2, -math.pi / 2)   # mostly N / S of the body, some along it
+    el = rng.uniform(0.04, 0.45, n); spd = rng.uniform(12, 34, n)
+    dirs = np.column_stack([np.cos(th) * np.cos(el) * 0.55, np.sin(th) * np.cos(el), np.sin(el)])
+    P_ = np.column_stack([np.full(n, -191.5) + along, np.full(n, 619.0 - segtime.SET_OFF_Y) + side * rng.uniform(3.0, 5.0, n),
+                          rng.uniform(0.8, 3.5, n)])
+    C.add_many(tt, P_, dirs * spd[:, None] + np.array([0.0, 0.0, 2.5]), r0=2.5, r1=rng.uniform(7, 12, n),
+               life=rng.uniform(3.4, 4.6, n), rise=3.0, kind="steam", alpha=0.30, tau=1.4, color=hexrgb("#f7f3ec"))
+    n = 140                                                                 # a lower, slower skirt that rolls along the paving
+    tt = w0 - 0.3 + rng.random(n) ** 1.4 * 4.5
+    P_ = np.column_stack([-191.5 + rng.uniform(-2, NAPE_OFF[0] + 3, n), (619.0 - segtime.SET_OFF_Y) + rng.choice([-1.0, 1.0], n) * rng.uniform(3.5, 7.0, n), rng.uniform(0.3, 1.5, n)])
+    C.add_many(tt, P_, np.column_stack([rng.normal(0, 8, n), rng.normal(0, 10, n), rng.uniform(0.5, 2.5, n)]), r0=3.0, r1=rng.uniform(8, 13, n),
+               life=rng.uniform(3.4, 4.6, n), rise=1.5, kind="steam", alpha=0.26, tau=1.2, color=hexrgb("#efe8dc"))
     for i, b in enumerate(body):                                          # 8 columns from the body to the end, thinning
         ts = np.arange(w0, DUR, 0.18 if i % 2 else 0.26)
         _column(C, rng, ts, b, 12.0, alpha=0.36, rise=6.5, r=(1.5, 5.5), life=(6.0, 9.0), spread=0.06)
@@ -1151,26 +1174,32 @@ def build_cards(coll):
 
 # ====================================================================== storeroom lights (warm torches, cage lantern, volley spike)
 def build_lights(coll):
+    """Warm storeroom light while the bay is open (QA 10/27: brighter so the lift and the volley read): 3 torch-height
+    fills, a broad warm 'light from the hole' above the open bay (custom distance so it stays local), and the cage lantern
+    (+ the 2-frame volley spike).  No shadows: the sun is kept out by the shadow proxy, these only add warmth inside."""
     L_ = []
-    for k, (x, y, z, e) in enumerate(((-199, 636, 3.0, 260.0), (-187, 646, 3.0, 220.0), (-175, 636, 3.0, 260.0), (-187, 641, 4.4, 0.0))):
-        ld = bpy.data.lights.new(f"G6_StoreLight{k}", "POINT"); ld.color = hexrgb("#ff9a40"); ld.energy = 0.0
-        try:
-            ld.shadow_soft_size = 0.4; ld.use_shadow = False
-        except Exception:
-            pass
+    for k, (x, y, z, e, d, r) in enumerate(((-199, 636, 3.0, 480.0, 16.0, 0.4), (-187, 646, 3.0, 420.0, 16.0, 0.4),
+                                             (-175, 636, 3.0, 480.0, 16.0, 0.4), (-187, 640, 13.0, 3600.0, 22.0, 3.0),
+                                             (-187, 641, 4.4, 0.0, 30.0, 0.4))):
+        ld = bpy.data.lights.new(f"G6_StoreLight{k}", "POINT"); ld.color = hexrgb("#ffb070" if k == 3 else "#ff9a40"); ld.energy = 0.0
+        for a_, v_ in (("shadow_soft_size", r), ("use_shadow", False), ("use_custom_distance", True), ("cutoff_distance", d)):
+            try:
+                setattr(ld, a_, v_)
+            except Exception:
+                pass
         o = bpy.data.objects.new(f"G6_StoreLight{k}", ld); coll.objects.link(o); o.location = SV(x, y, z)
         L_.append((o, e))
     STATE["lights"] = L_
 
 def update_lights(t):
-    c = cut_frac(t) if t < BEATS["cut_close"][1] else 0.0
+    c = cut_frac(t)
     for k, (o, e) in enumerate(STATE["lights"]):
-        if k < 3:
+        if k < 4:
             o.data.energy = e * c
         else:                                                  # the cage lantern + the volley spike (2 frames, 2,000 W)
             o.location = SV(LIFT_C[0], LIFT_C[1], cage_z(t) + 3.6)
             sp = bump(t, BEATS["volley"] - 0.01, BEATS["volley"], BEATS["volley"] + 0.1, BEATS["volley"] + 0.16)
-            o.data.energy = (90.0 * c + 2000.0 * sp) if c > 0 else 0.0
+            o.data.energy = (150.0 * c + 2000.0 * sp) if c > 0 else 0.0
 
 # ====================================================================== build / update (contract)
 def build(site):
@@ -1204,7 +1233,28 @@ def build(site):
     say(f"build {time.time() - t0:.1f}s")
 
 def finish():
-    pass
+    """QA 10/27: the bay fade showed as grey dithered (hashed) noise.  Install trost's cut materials now (after toon) and
+    switch them to a clean alpha BLEND (no overlap sorting noise); the fade itself is shortened to ~1.2 s."""
+    TR = STATE["TR"]
+    try:
+        for n in TR.HQ_UPPER:
+            o = bpy.data.objects.get(n)
+            if o is None:
+                continue
+            TR._install_cut(o)
+            for slot in o.material_slots:
+                m = slot.material
+                if m is None or not m.name.startswith("Cut_"):
+                    continue
+                for a_, v_ in (("use_transparency_overlap", False), ("use_backface_culling", True)):
+                    try:
+                        setattr(m, a_, v_)
+                    except Exception:
+                        pass
+                STATE.setdefault("cut_mats", []).append(m)
+        say(f"bay cutaway: clean alpha blend while fading ({len(STATE.get('cut_mats', []))} materials)")
+    except Exception as ex:
+        say("cutaway blend setup failed:", ex)
 
 def update(tv):
     tv = float(tv)
@@ -1216,6 +1266,14 @@ def update(tv):
     except Exception as ex:
         if not STATE.get("hq_warned"):
             say("HQ hooks failed:", ex); STATE["hq_warned"] = True
+    fading = 0.0 < cut_frac(t) < 0.999                    # blended only while fading (opaque roof sorts normally vs the steam)
+    if STATE.get("cut_blend") != fading:
+        for m in STATE.get("cut_mats", []):
+            try:
+                m.surface_render_method = "BLENDED" if fading else "DITHERED"
+            except Exception:
+                pass
+        STATE["cut_blend"] = fading
     try:
         TR.set_glow(0.25 * (1 - ss(0.0, 20.0, t)))
     except Exception:

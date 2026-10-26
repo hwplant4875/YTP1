@@ -407,3 +407,6 @@ GPU order: g6, g7, then g2 v2.
 2. Forecourt crowd: Garrison brown/beige jackets in loose rank blocks so the ~2,000 read as a formation.
 3. Tags in Russo One: EREN/MIKASA/ARMIN at ~9-16 s, then PYXIS from his arrival through the speech. At most 3 at once, each fading after ~4 s (from seg_g7 TRACK).
 Queue: g2 v2 -> g4 -> g3 -> connectors -> full one-take preview.
+
+
+## g6 QA fixes landed (code + stills, cd seg_g6.py, graphics_timelines/g6_tags.json). renders/g6 frames are OLD: re-render g6, then run hud2 g6_tags.json BEFORE the master assembly.

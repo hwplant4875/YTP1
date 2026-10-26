@@ -1,0 +1,35 @@
+{
+ "segment": "g6 Supply HQ / lift op / Eren emerges: name tags burnt into the preview (hud2, Russo One). Only EREN (rising out of the nape) and MIKASA (drops in, kneels by him).",
+ "fps": 15,
+ "frames": "E:/YTP2/3D Timelapse/renders/g6/frames/f_%05d.png",
+ "first": 0,
+ "last": 1041,
+ "cams": "E:/YTP2/3D Timelapse/renders/g6/frames",
+ "out": "E:/YTP2/3D Timelapse/renders/g6/hud_frames",
+ "prefix": "g6h",
+ "mp4": "E:/YTP2/3D Timelapse/renders/g6/g6_preview.mp4",
+ "tracks": [
+  {
+   "type": "tag",
+   "t0": 48.6,
+   "t1": 53.0,
+   "name": "EREN",
+   "obj": "Eren",
+   "color": "green",
+   "len": 30,
+   "size": 15,
+   "lean": 14
+  },
+  {
+   "type": "tag",
+   "t0": 50.6,
+   "t1": 53.5,
+   "name": "MIKASA",
+   "obj": "Mikasa",
+   "color": "red",
+   "len": 30,
+   "size": 15,
+   "lean": -14
+  }
+ ]
+}
