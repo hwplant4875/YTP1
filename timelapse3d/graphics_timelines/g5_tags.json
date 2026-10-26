@@ -1,0 +1,15 @@
+{
+ "segment": "g5 Trost breach / evacuation / Attack Titan: name tags burnt into the preview (hud2, Russo One)",
+ "fps": 15,
+ "frames": "E:/YTP2/3D Timelapse/renders/g5/frames/f_%05d.png",
+ "first": 0,
+ "last": 1049,
+ "cams": "E:/YTP2/3D Timelapse/renders/g5/frames",
+ "out": "E:/YTP2/3D Timelapse/renders/g5/hud_frames",
+ "prefix": "g5h",
+ "mp4": "E:/YTP2/3D Timelapse/renders/g5/g5_preview.mp4",
+ "tracks": [
+  {"type": "tag", "t0": 33.8, "t1": 39.0, "name": "MIKASA", "obj": "Mikasa", "color": "red", "len": 30, "size": 15},
+  {"type": "tag", "t0": 50.0, "t1": 54.0, "name": "MIKASA", "obj": "Mikasa", "color": "red", "len": 30, "size": 15}
+ ]
+}

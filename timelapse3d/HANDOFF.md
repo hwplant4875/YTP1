@@ -382,3 +382,13 @@ Keep the far camera.
 6. ODM: wires of 35 m or less to nearby anchors, thin light grey, removed on arrival (no ~100 m black lines).
 7. Remove the brown disc on the small square; use a small stone well if a feature is needed.
 Push g5_trost_v2_*.
+
+
+## 21:18 g2 v2 fix list (coordinator cloud QA of g2_armored_v1) - QUEUED: after g5 v2, before g7 renders. Resume the g2 agent when a slot frees.
+1. A real breach: a tall narrow arch 12-14 m x 24-26 m through the full wall thickness, the wings survive, and you can see through it both ways (ep02 10:22.2, 10:45.6).
+2. He visibly bursts out of the north face and slides to y≈+45 (furrows, skidding, rubble ploughed ahead, right shoulder forward), then straightens and steams in thinning haze at 18-23 s (ep02 10:35.7). K5-K6 high enough to see the north side.
+3. Dust: a lumpy ochre ball bursting mostly NORTH, dense for ~1 s, readable again by 17-18 s. Chunks fan north, 6-8 of them above the wall top.
+4. Framing (owner 00:44, "갑옷거인에게 포커싱"): K1-K4 closer so he is ~100-120 px tall (~1/4 of the frame height), centred, front or side three-quarter, never behind. This is the ONE exception to the far-camera default. Speed and yaw limits still apply.
+5. Defenders and refugees must read: 6-gun battery with crews, flashes and white smoke; wall guns; a gold ricochet off his face at 9.15 s; crews scatter at 12.4 s; carriage kicked at 12.8 s; ~150 stragglers flee, ~10 freeze.
+6. Cracks: thin dark-grey branching cracks radiating 15-30 m from the hole edge.
+Push g2_armored_v2_*.

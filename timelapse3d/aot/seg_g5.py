@@ -26,7 +26,7 @@ dusty colourful palette), smokecards (steam / dust / smoke / fire / glow cards),
 set_glow, set_wagon, set_cart, TrostSlab_*, TrostTowerT_Top), toon.
 Placeholders built here: G5_* objects (debris, streak, cracks, X-stakes, pools, ribs, shafts, cloud shadow discs).
 """
-import math, os, random, sys, time
+import math, os, random, sys, time, types
 import numpy as np
 
 try:
@@ -223,15 +223,19 @@ def at_vel(t, dt=0.05):
     return (b - a) / (2 * dt)
 
 # ====================================================================== the crowd drain (pure)
-V_DRAIN, C_WAVE = 13.0, 120.0          # ~8x: the plaza visibly empties while E is still in frame (41-43.5)
+V_DRAIN, C_WAVE = 10.0, 120.0          # ~6x arch flow; eased in (1 s) and out (slows from 3 s on)
+_DT_TAB = np.arange(0.0, 40.0, 0.02)
+_V_TAB = V_DRAIN * np.array([ss(0.0, 1.0, x) * (1.0 - 0.55 * ss(3.0, 8.0, x)) for x in _DT_TAB])
+_R_TAB = np.concatenate([[0.0], np.cumsum(0.5 * (_V_TAB[1:] + _V_TAB[:-1]) * 0.02)])
 def drain_R(tau):
-    """Radius of the 'consumed' disk at the arch mouth tau s after the drain front reaches a person."""
-    tau = np.maximum(tau, 0.0)
-    return V_DRAIN * (tau - 0.8 * (1.0 - np.exp(-tau / 0.8)))
+    """Radius of the 'consumed' disk at the arch mouth tau s after the drain front reaches a person (eased in / out)."""
+    return np.interp(np.maximum(tau, 0.0), _DT_TAB, _R_TAB)
 
 def drain_speed(tau):
-    tau = np.maximum(tau, 0.0)
-    return V_DRAIN * (1.0 - np.exp(-tau / 0.8)) * (tau > 0)
+    return np.interp(np.maximum(tau, 0.0), _DT_TAB, _V_TAB) * (np.asarray(tau) > 0)
+
+STEAM_WARM = (1.0, 0.88, 0.74)          # counters the blue sky fill on steam cards (owner QA: no blue steam)
+WARM_SKINS = ["#f0a07a", "#e8875f", "#f4b08a", "#dd7c58", "#ee9a74", "#e48f68", "#f2a682"]   # warm, reads on beige paving
 
 # ====================================================================== everything below needs Blender
 STATE = {}
@@ -315,6 +319,12 @@ def build_colossal():
     arm = CA.STATE["arm"]
     STATE["col_coll"] = arm.users_collection[0]
     STATE["col_objs"] = list(STATE["col_coll"].all_objects)
+    if "cards" in CA.STATE:
+        try:
+            pool = CA.STATE["cards"][0].pools["steam"]
+            pool.A[:, 13:16] = pool.A[:, 13:16] * np.array(STEAM_WARM)
+        except Exception as ex:
+            say("colossal steam tint failed:", ex)
     hb = arm.pose.bones["mixamorig_Head_06"]
     bpy.context.view_layer.update()
     say("colossal head (set)", tuple(round(v, 1) for v in (arm.matrix_world @ hb.head)), "root", tuple(round(v, 1) for v in CA.STATE["root"].location))
@@ -586,7 +596,7 @@ def make_titans_class():
                 tmat += [base[c] for c in gt.fc[n0:]]
                 rig.append([(sx, 0.0, sh - 2 * la, 5, (0, sh), (0, sh - la)), (0.0, hr * 0.9, hc - hr * 0.3, 0, (0, 0), (0, 0)),
                             (0.0, -hr * 0.9, hc - hr * 1.1, 0, (0, 0), (0, 0)), (0.0, 0.0, hc + hr * 1.05, 0, (0, 0), (0, 0))])
-            tm = [L.mat(f"G5_tskin{i}", c, 0.65) for i, c in enumerate(SW.T_SKINS)] + [L.mat(f"G5_thair{i}", c, 0.7) for i, c in enumerate(SW.T_HAIRS)] \
+            tm = [L.mat(f"G5_tskin{i}", hexrgb(WARM_SKINS[i % len(WARM_SKINS)]), 0.65) for i in range(len(SW.T_SKINS))] + [L.mat(f"G5_thair{i}", c, 0.7) for i, c in enumerate(SW.T_HAIRS)] \
                 + [L.mat("G5_tteeth", (0.85, 0.80, 0.70), 0.5)]
             self.R = gt.finish()
             self.ob = SW._mesh("TrostTitans", self.R, gt.f, tmat, tm, coll)
@@ -666,15 +676,15 @@ def build_titans(coll):
     sizes = [rnd.uniform(3.0, 4.0) for _ in range(9)] + [rnd.uniform(5.0, 7.0) for _ in range(16)] + \
             [rnd.uniform(8.0, 10.0) for _ in range(7)] + [rnd.uniform(12.0, 15.0) for _ in range(3)]
     rnd.shuffle(sizes)
-    roles = ["first", "trench1", "abn1", "crater", "trench2", "abn2", "prone", "sit"] + ["av"] * 11 + ["ring_w"] * 4 + ["ring_e"] * 4 + \
-            ["lip"] * 4 + ["mill"] * 4
-    tail_roles = roles[8:]; rnd.shuffle(tail_roles); roles = roles[:8] + tail_roles
+    roles = ["first", "abn1", "av", "av", "ring_w", "av", "ring_e", "trench1", "av", "abn2", "av", "crater", "ring_w", "av",
+             "ring_e", "prone", "av", "av", "sit", "ring_w", "av", "trench2", "ring_e", "av", "lip", "av", "ring_w", "av", "ring_e",
+             "av", "mill", "ring_w", "av", "ring_e", "lip"]
     i5 = min(range(len(sizes)), key=lambda i: abs(sizes[i] - 5.0)); sizes[0], sizes[i5] = sizes[i5], sizes[0]
     for r_ in ("abn1", "abn2"):
         k = roles.index(r_); sizes[k] = rnd.uniform(6.5, 8.5)
     lane_x = (-4.5, 0.0, 4.5)
     av_n = 0; rw = rn = lp = ml = 0
-    RW = [(-118, 92), (-168, 152), (-96, 142), (-205, 226)]; RE = [(112, 86), (162, 150), (96, 136), (204, 220)]
+    RW = [(-150, 118), (-212, 200), (-262, 282), (-122, 182), (-300, 340)]; RE = [(130, 108), (190, 188), (242, 262), (108, 180), (282, 330)]
     LIP = [(-21, 60), (22, 61), (-28, 47), (28, 48)]
     MILL = [[(-48, 32), (-55, 62), (-38, 88)], [(46, 34), (58, 60), (40, 92)], [(-10, 86), (12, 95), (30, 80)], [(-60, 20), (-70, 45), (-52, 70)]]
     pour = []
@@ -682,7 +692,7 @@ def build_titans(coll):
         nm = f"p{k + 1}"
         th = BEATS["first_titan"] + 0.48 * k + rnd.uniform(-0.05, 0.05)
         lx = lane_x[k % 3] + rnd.uniform(-0.6, 0.6)
-        v = 2.6 * (1.0 + 0.17 * H) * rnd.uniform(0.9, 1.1)      # ~3x real: the pour reads fast
+        v = 3.2 * (1.0 + 0.17 * H) * rnd.uniform(0.9, 1.1)      # ~3-4x real: the pour streams up the town 12-30 s
         vh = 5.0                                           # one speed in the breach: >= 7 m nose to tail per lane
         abn = role.startswith("abn")
         if abn:
@@ -709,9 +719,9 @@ def build_titans(coll):
         elif role == "sit":
             pts = [p_, (-4, 24), (-12, 40)]
         elif abn:
-            pts = [p_, (0, 50)] + [tuple(q) for q in AV] [:3] + [(-90, 590)]
+            pts = [p_, (0, 50)] + [tuple(q) for q in AV][:3] + ([(-90, 590), (-118, 640)] if role == "abn1" else [(-40, 520), (-30, 640)])
         elif role == "av":
-            yy = 105.0 + av_n * 14.0 + rnd.uniform(-4, 4); av_n += 1
+            yy = 150.0 + av_n * 22.0 + rnd.uniform(-6, 6); av_n += 1             # far targets: they keep walking 12-30+
             S = poly_len(AV); xs = poly_at(AV, S, yy - 74.0)
             pts = [p_, (0, 50), (0, 74), (float(xs[0]) + rnd.uniform(-4, 4), float(xs[1]))]
         elif role == "ring_w":
@@ -746,6 +756,11 @@ def build_titans(coll):
         add(nm, H, keys, show=(0.0, 99.0), g5=g5, **kw)
         pour.append((nm, role, th))
     STATE["pour"] = pour
+    # deep abnormal runners already far up the town (in frame while the camera turns to the HQ and the inner gate)
+    for k, (a, b) in enumerate((((-60, 470), (-230, 560)), ((-75, 520), (-150, 470)), ((-40, 560), (-120, 600)))):
+        P_ = route(a, b)
+        keys = [(0.0, *P_[0])] + [(k_[0] + 15.0 + 2.0 * k, k_[1], k_[2]) for k_ in _keys_path(0.0, P_, 9.0)]
+        add(f"deep{k}", rnd.uniform(6.0, 9.0), keys, show=(14.0, 99.0), abnormal=True, hair=rnd.choice([None, 0, 1]))
     # ---------------- outside: titans crossing the fields toward the gate (beyond the wall)
     for k in range(12):
         x0 = rnd.uniform(-260, 260); y0 = rnd.uniform(-420, -170); H = 3.0 + 11.0 * rnd.random() ** 1.3
@@ -816,8 +831,8 @@ def build_titans(coll):
         return best[1] if best else None
     used = set()
     vk = []
-    for te, xy, ok in ((BEATS["vkills"][0], (0, 90), ("av", "first")), (BEATS["vkills"][1], (90, 110), ("ring_e",)),
-                       (BEATS["vkills"][2], (-20, 60), ("lip", "mill"))):
+    for te, xy, ok in ((BEATS["vkills"][0], (0, 90), ("av", "first")), (BEATS["vkills"][1], (90, 110), ("ring_e", "av")),
+                       (BEATS["vkills"][2], (-20, 60), ("lip", "mill", "av", "ring_w", "ring_e"))):
         nm = near(te, xy, ok, used)
         if nm:
             used.add(nm); TT.ev[TT.j(nm)]["death"] = (te, 1); TT.specs[TT.j(nm)].setdefault("g5", {}).update(keep=True, shrink=0.8)
@@ -835,16 +850,101 @@ def build_titans(coll):
     TT.build(coll)
     say(f"titans: {len(TT.specs)}; vanguard kills {vk}; grab {grab}")
 
+def build_shadows(coll):
+    """Soft dark contact-shadow blobs under every pure titan and the Attack Titan (they read on the beige paving)."""
+    n = len(STATE["TT"].specs) + 1
+    V = np.zeros((4 * n, 3)); F = [[4 * k, 4 * k + 1, 4 * k + 2, 4 * k + 3] for k in range(n)]
+    me = bpy.data.meshes.new("G5_ContactShadows"); me.from_pydata(V.tolist(), [], F)
+    uv = me.uv_layers.new(name="UVMap"); uv.data.foreach_set("uv", np.tile([0, 0, 1, 0, 1, 1, 0, 1], n).astype(np.float32))
+    m = bpy.data.materials.new("G5_ContactShadow"); m.use_nodes = True
+    nt = m.node_tree; N = nt.nodes; Lk = nt.links
+    N.remove(N["Principled BSDF"])
+    tc = N.new("ShaderNodeTexCoord")
+    sub = N.new("ShaderNodeVectorMath"); sub.operation = "SUBTRACT"; sub.inputs[1].default_value = (0.5, 0.5, 0.0)
+    Lk.new(tc.outputs["UV"], sub.inputs[0])
+    ln = N.new("ShaderNodeVectorMath"); ln.operation = "LENGTH"; Lk.new(sub.outputs[0], ln.inputs[0])
+    mr = N.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.18; mr.inputs["From Max"].default_value = 0.5
+    mr.inputs["To Min"].default_value = 0.55; mr.inputs["To Max"].default_value = 0.0; Lk.new(ln.outputs["Value"], mr.inputs["Value"])
+    em = N.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (0.02, 0.016, 0.012, 1.0); em.inputs["Strength"].default_value = 1.0
+    tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader")
+    Lk.new(mr.outputs["Result"], mx.inputs[0]); Lk.new(tr.outputs[0], mx.inputs[1]); Lk.new(em.outputs[0], mx.inputs[2])
+    Lk.new(mx.outputs[0], N["Material Output"].inputs["Surface"])
+    try:
+        m.surface_render_method = "BLENDED"
+    except Exception:
+        pass
+    m["toon"] = 1
+    me.materials.append(m); me.update()
+    ob = bpy.data.objects.new("G5_ContactShadows", me); coll.objects.link(ob); ob.visible_shadow = False
+    STATE["shadows"] = ob
+
+def update_shadows(t):
+    TT = STATE["TT"]; ob = STATE["shadows"]
+    Ar, Ae, lean, vis, yaw, pos, pitch = TT.poses(t)
+    H = TT.H
+    n = len(H)
+    c = pos.copy(); c[:, 2] += 0.12
+    fw = np.column_stack([-np.sin(yaw), np.cos(yaw), np.zeros(n)]); rt = np.column_stack([np.cos(yaw), np.sin(yaw), np.zeros(n)])
+    ly = np.abs(np.sin(pitch))
+    c += fw * (0.42 * H * ly * np.sign(-pitch + 1e-9))[:, None]
+    a = 0.30 * H * np.maximum(vis, 0.0); b = a * (1.0 + 1.4 * ly)
+    on = vis > 0.02
+    st = at_state(t)
+    if st["vis"]:
+        p = st["pos"]; ca = S3(p[0], p[1], G(*p) + st["z"] + 0.12)
+    else:
+        ca = np.array([0, 0, -500.0])
+    c = np.vstack([c, ca]); a = np.append(a, 4.2); b = np.append(b, 4.2); on = np.append(on, bool(st["vis"]))
+    fw = np.vstack([fw, [0, 1, 0]]); rt = np.vstack([rt, [1, 0, 0]])
+    V = np.zeros((len(a), 4, 3))
+    for q, (sx, sy) in enumerate(((-1, -1), (1, -1), (1, 1), (-1, 1))):
+        V[:, q] = c + rt * (sx * a)[:, None] + fw * (sy * b)[:, None]
+    V[~on] = np.array([0, 0, -500.0])
+    ob.data.vertices.foreach_set("co", V.reshape(-1).astype(np.float32)); ob.data.update()
+
 def titan_M(name, t, part="pos"):
     TT = STATE["TT"]
     p = getattr(TT, part)(name, t)
     return np.array([p[0], p[1] + segtime.SET_OFF_Y, p[2]])
 
 # ====================================================================== people: ODM squads (odm.Squads)
+WIRE_MAX = 32.0
+def _short_hop(self, t0, t1, p0, p1, apex=None, gas=1.0, anchors=None):
+    """odm Flyer.hop with wires <= WIRE_MAX: long hops become a chain of sub-hops, each hooked to a roof / wall point
+    just beyond its landing (a short taut wire, retracted on arrival)."""
+    import odm
+    p0 = np.asarray(p0, float); p1 = np.asarray(p1, float)
+    L_ = float(np.linalg.norm(p1 - p0))
+    if anchors is not None:
+        A = np.asarray(anchors[0], float)
+        if np.linalg.norm(A - (p0 + np.array([0, 0, 0.9]))) <= WIRE_MAX + 3:
+            return odm.Flyer.hop(self, t0, t1, p0, p1, apex, gas, [A])
+    n = max(1, int(math.ceil(L_ / (WIRE_MAX - 6.0))))
+    pts = [p0 + (p1 - p0) * (k / n) for k in range(n + 1)]
+    for k in range(1, n):                                          # mid-air waypoints ride a little higher
+        pts[k] = pts[k] + np.array([0.0, 0.0, 3.0])
+    for k in range(n):
+        a, b = pts[k], pts[k + 1]
+        d = b - a; dh = np.array([d[0], d[1], 0.0]); lh = float(np.linalg.norm(dh))
+        fwd = dh / lh if lh > 1e-3 else np.array([0.0, 1.0, 0.0])
+        q = b + fwd * 3.0
+        zr = top_z(float(q[0]), float(q[1]) + segtime.SET_OFF_Y)
+        A = np.array([q[0], q[1], max(zr + 0.5, b[2] + 4.0)])
+        hip = a + np.array([0, 0, 0.9])
+        if np.linalg.norm(A - hip) > WIRE_MAX:                     # too far: anchor along the line
+            A = hip + (A - hip) / np.linalg.norm(A - hip) * WIRE_MAX
+        ta = t0 + (t1 - t0) * k / n; tb = t0 + (t1 - t0) * (k + 1) / n
+        odm.Flyer.hop(self, ta, tb, a, b, apex, gas if k == n - 1 else 1.0, [A])
+    return self
+
 def build_people(coll):
     import odm
     rnd = random.Random(850)
     SQ = odm.Squads("G5Squads", pscale=1.0, hook=True)          # owner 10/27: one hook per shot
+    _flyer0 = SQ.flyer
+    def _flyer(*a, **k):                                           # every hop: wire <= ~32 m to a nearby anchor
+        f = _flyer0(*a, **k); f.hop = types.MethodType(_short_hop, f); return f
+    SQ.flyer = _flyer
     STATE["SQ"] = SQ
     TT = STATE["TT"]
     P = lambda x, y, z: S3(x, y, z)
@@ -870,7 +970,7 @@ def build_people(coll):
         else:                                              # down the inner face on wires
             gp = gnd_set(p0[0], 16 + 3 * k)
             f.hop(BEATS["drop_wires"][0] + 0.2 * k, BEATS["drop_wires"][1] + 0.2 * k, p0, gp, apex=1.0,
-                  anchors=(p0 + np.array([-1.0, 0.0, 0.6]), p0 + np.array([1.0, 0.0, 0.6])))
+                  anchors=(np.array([p0[0], p0[1] + 4.5, 26.0]),))
             f.stand(BEATS["drop_wires"][1] + 0.2 * k, DUR, gp, yaw_s, "stand")
     # Eren: holds on the wall top, runs at the sweeping forearm (7.6-9.0), steam burst, back on the wall top
     er = SQ.by_name["eren"]; e0 = cad[1][1]
@@ -964,25 +1064,35 @@ def build_people(coll):
         left = np.array([-d[1], d[0]])
         return S3(a[0] + left[0] * side, a[1] + left[1] * side, G(a[0], a[1]) + up)
     m0 = roof_set(24, 650); s0 = roof_set(36, 640)
-    mk.stand(0.0, 24.6, m0, yaw_at((24, 650), AB_IN), "crouch"); so.stand(0.0, 25.0, s0, yaw_at((36, 640), AB_IN), "crouch")
-    tk = [24.6 + 1.25 * i for i in range(8)]
-    prev = m0
-    for i, t_ in enumerate(tk[:-1]):
-        lag = max(0.0, 1.3 - 0.2 * i)
-        q = chase_pt(tk[i + 1], lag, 9.0, 11.0 + 2.0 * (i % 2))
-        mk.hop(t_, tk[i + 1], prev, q, apex=4); prev = q
-    mk.dive(tk[-1], BEATS["kill"], prev, lambda t: TT.nape("AB", t) + np.array([0, 0, 0.6]))
-    prev = s0
-    for i, t_ in enumerate(tk[:-1]):
-        q = chase_pt(tk[i + 1] + 0.4, 2.6, 13.0, 9.0 + 2.0 * (i % 2))
-        so.hop(t_ + 0.4, tk[i + 1] + 0.4, prev, q, apex=4); prev = q
-    sl = roof_set(-72, 766)
-    so.hop(tk[-1] + 0.4, BEATS["kill"] + 0.9, prev, sl, apex=5).stand(BEATS["kill"] + 0.9, DUR, sl, yaw_at((-72, 766), AB_CORPSE), "stand")
+    def behind(t, d_, side=0.0):
+        a = abp(t); b = abp(t + 0.2); dv = b[:2] - a[:2]; nn = np.linalg.norm(dv)
+        dv = dv / nn if nn > 1e-6 else np.array([-0.68, 0.73])
+        q = a[:2] - dv * d_ + np.array([-dv[1], dv[0]]) * side
+        return gnd_set(q[0], q[1], dz=0.1), dv
+    def wall_anchor(p, dv, side):                                   # a point on the street-side facade, 10 m up
+        q = p[:2] + np.array([-dv[1], dv[0]]) * side * 7.0 + dv * 8.0
+        return np.array([q[0], q[1], top_z(float(q[0]), float(q[1]) + segtime.SET_OFF_Y) * 0.6 + 2.0])
+    mk.stand(0.0, 29.4, m0, yaw_at((24, 650), AB_IN), "crouch"); so.stand(0.0, 29.9, s0, yaw_at((36, 640), AB_IN), "crouch")
+    land1, dv1 = behind(30.5, 26.0, 2.0)
+    mk.hop(29.4, 30.5, m0, land1, apex=4)                          # down into the open street behind it
+    prev = land1
+    for t_a, t_b, dd_ in ((30.5, 31.6, 20.0), (31.6, 32.7, 14.0)):  # skims along the street on short hooks
+        q, dv = behind(t_b, dd_, 1.5)
+        q = q + np.array([0.0, 0.0, 2.5])
+        mk.hop(t_a, t_b, prev, q, apex=2, anchors=[wall_anchor(q, dv, 1.0)]); prev = q
+    mk.dive(32.7, BEATS["kill"], prev, lambda t: TT.nape("AB", t) + np.array([0, 0, 0.6]))
+    sl1, sdv = behind(31.0, 30.0, -2.0)
+    so.hop(29.9, 31.0, s0, sl1, apex=4); prev = sl1
+    for t_a, t_b, dd_ in ((31.0, 32.2, 26.0), (32.2, 33.6, 24.0)):
+        q, dv = behind(t_b, dd_, -2.0)
+        so.hop(t_a, t_b, prev, q, apex=2, anchors=[wall_anchor(q, dv, -1.0)]); prev = q
+    sl = gnd_set(-82.0, 778.0)
+    so.walk(33.6, 34.8, prev, sl, "run").stand(34.8, DUR, sl, yaw_at((-82, 778), AB_CORPSE), "stand")
     back = lambda t: TT.nape("AB", t) + np.array([0.0, 0.0, 0.5])
     mk.follow(BEATS["kill"], BEATS["hop"][0], back, yaw_fn=lambda t: yaw_at(AB_CORPSE, MERCHANT), pose="stand")
     land = gnd_set(*MIK_LAND)
     mk.hop(BEATS["hop"][0], BEATS["hop"][1], back(BEATS["hop"][0]), land, apex=10,
-           anchors=(S3(-146, 851, 24), S3(-130, 851, 22)))
+           anchors=(S3(-139, 851, 16),))
     face_p = gnd_set(*MIK_FACE)
     mk.walk(BEATS["lane"][0], BEATS["lane"][1], land, face_p, "run")
     mk.stand(BEATS["lane"][1], BEATS["back_corpse"][0], face_p, yaw_n, "stand")
@@ -1048,13 +1158,18 @@ def build_people(coll):
     co.hop(r0 + 0.6, r1 + 0.6, co.end_pos(), ridge + np.array([-1.4, 0.8, 0.0]), apex=9)
     co.stand(r1 + 0.6, DUR, ridge + np.array([-1.4, 0.8, 0.0]), heading_yaw(110.0), "stand")
     SQ.build(coll)
+    if getattr(SQ, "wob", None) is not None:                       # thin LIGHT grey wires (owner QA 10/27)
+        for m in SQ.wob.data.materials:
+            b_ = m.node_tree.nodes.get("Principled BSDF") if m and m.use_nodes else None
+            if b_:
+                b_.inputs["Base Color"].default_value = (0.62, 0.62, 0.60, 1.0)
     say(f"flyers: {len(SQ.flyers)}")
 
 # ====================================================================== the evacuation crowd (5,500 minimal figures)
-SHIRTS_DUSTY = ["#9a5a48", "#5f7a8c", "#b89a5a", "#6d8a5a", "#8a6a8a", "#c8b89a", "#7a8a9a", "#a8785a", "#5a6a4a",
-                "#9a8a6a", "#6a5a7a", "#b07a6a", "#8a9a6a", "#7a5a4a", "#a89a8a", "#5a7a7a"]
-PANTS_DUSTY = ["#4a3a2e", "#3e4048", "#5a4a3a", "#6a5e4e", "#3a342c"]
-SCARVES = ["#c8bca0", "#9a7a5a", "#a86a5a", "#7a8a8a"]
+SHIRTS_DUSTY = ["#d1495b", "#edae49", "#1d8a99", "#3e6fb0", "#6a994e", "#f28f3b", "#8e5ea2", "#e07a5f", "#3d9970", "#c8553d",
+                "#f4d35e", "#5aa9e6", "#b5468a", "#e9e2d0", "#9bc53d", "#ff8c69"]
+PANTS_DUSTY = ["#2b4162", "#5c3c2a", "#3f4a3c", "#6b4f3a", "#2e2e3a", "#7a3b32"]
+SCARVES = ["#f1e3c8", "#d9a441", "#c0504d", "#4e8fb5"]
 HAIRS_C = ["#1c1814", "#3a2a1e", "#6a4a2a", "#8a6a3a", "#5a3a28", "#8a8a84"]
 SKINS_C = ["#d8a888", "#c49474", "#a87a5a"]
 
@@ -1083,7 +1198,7 @@ def _crowd_slots(rng):
         lx = cs * dx + sn * dy; ly = -sn * dx + cs * dy
         return ~((np.abs(lx) < hx + m) & (ly > hy0 - m) & (ly < hy1 + m))
     m = outside_rect(P, CART_START[0], CART_START[1], 2.7, -3.0, 9.0)
-    m &= ~((np.abs(P[:, 0] - MERCHANT[0]) < 5.2) & (P[:, 1] > 842.2))          # the 4-6 m gap at the merchant
+    m &= ~((np.abs(P[:, 0] - MERCHANT[0]) < 5.2) & (P[:, 1] > 843.6))          # the 4-6 m gap behind the cart (rear ~848.8)
     m &= np.hypot(P[:, 0] - (-100.0), P[:, 1] - 798.0) > 7.0
     m &= ~((P[:, 0] > -133) & (P[:, 1] > 848.6))                               # the east-wing ledge
     return P[m]
@@ -1321,6 +1436,14 @@ def build_cards(coll):
     import smokecards as SC
     rng = np.random.default_rng(55)
     C = SC.SmokeCards("G5Cards")
+    _am = C.add_many
+    def _add_many(te, pos, vel=None, *a, **k):
+        if k.get("kind") == "steam":
+            c = k.get("color")
+            base = np.array([0.92, 0.92, 0.90]) if c is None else np.asarray(c, float)
+            k["color"] = base * np.array(STEAM_WARM)
+        return _am(te, pos, vel, *a, **k)
+    C.add_many = _add_many
     TT = STATE["TT"]
     kick = BEATS["kick"]
     # ---- Colossal: embers (orange points drifting up around the head / over the gatehouse)
@@ -1360,15 +1483,18 @@ def build_cards(coll):
                    np.column_stack([np.sin(ts * 1.7) * 1.2, np.cos(ts * 1.3) * 1.2, rng.uniform(3.0, 4.5, n)]), r0=1.0, r1=rng.uniform(2.6, 3.6, n),
                    life=rng.uniform(3.6, 4.6, n), rise=1.0, kind="steam", alpha=0.5, tau=0.0)
     # ---- the steam explosion (9.0): 100 m tall, 120 m wide outside the wall in 3 s, spills over, thins by 25
-    te = BEATS["steam_burst"]; n = 220
-    th = rng.uniform(0, math.tau, n); el = rng.uniform(-0.1, 1.3, n); spd = rng.uniform(16, 40, n)
-    dirs = np.column_stack([np.cos(th) * np.cos(el), np.sin(th) * np.cos(el) * 0.75, np.sin(el)])
-    C.add_many(te + rng.random(n) * 0.7, S3(0, -16, 46)[None, :] + rng.normal(0, 5, (n, 3)), dirs * spd[:, None] + np.array([0, 0, 8.0]),
-               r0=10.0, r1=rng.uniform(30, 46, n), life=rng.uniform(10.0, 16.0, n), rise=3.5, kind="steam", alpha=0.95, tau=1.6)
-    n = 40
-    C.add_many(te + 0.6 + rng.random(n) * 1.2, np.column_stack([rng.uniform(-50, 50, n), np.full(n, -870.0 - 4.0), rng.uniform(48, 62, n)]),
-               np.column_stack([rng.normal(0, 3, n), rng.uniform(5, 10, n), rng.uniform(-4, 0, n)]), r0=6.0, r1=rng.uniform(14, 20, n),
-               life=rng.uniform(6.0, 10.0, n), rise=0.0, kind="steam", alpha=0.6, tau=2.5)
+    te = BEATS["steam_burst"]
+    n = 420
+    tt = te + rng.random(n) ** 1.6 * 2.6                                   # dense at 9.0, tailing off by ~11.6
+    th = rng.uniform(0, math.tau, n); el = rng.uniform(0.05, 1.2, n); spd = rng.uniform(12, 34, n)
+    dirs = np.column_stack([np.cos(th) * np.cos(el), np.sin(th) * np.cos(el) * 0.8, np.sin(el)])
+    C.add_many(tt, S3(0, -15, 48)[None, :] + rng.normal(0, 5, (n, 3)), dirs * spd[:, None] + np.array([0, 0, 9.0]),
+               r0=4.0, r1=rng.uniform(11, 19, n), life=rng.uniform(3.4, 4.6, n), rise=4.0, kind="steam", alpha=0.5, tau=1.4,
+               color=hexrgb("#f7f3ec"))
+    n = 60
+    C.add_many(te + 0.4 + rng.random(n) * 2.0, np.column_stack([rng.uniform(-45, 45, n), np.full(n, -870.0 - 3.0), rng.uniform(49, 58, n)]),
+               np.column_stack([rng.normal(0, 3, n), rng.uniform(5, 10, n), rng.uniform(3, 8, n)]), r0=3.0, r1=rng.uniform(9, 14, n),
+               life=rng.uniform(3.2, 4.2, n), rise=2.5, kind="steam", alpha=0.45, tau=1.5, color=hexrgb("#f4efe6"))
     # ---- debris landing puffs (filled in by build_debris) + sweep dust
     for (tl, p, big) in STATE.get("landings", []):
         m = 6 if big else 2
@@ -1919,6 +2045,53 @@ def update_cloud_shadows(t, sun_dir):
             q[0] = (q[0] + 800) % 1500 - 800
             o.location = Vector(S3(q[0] + off[0], q[1] + off[1], h))
 
+CLEAR_LOTS = [(-256.0, -200.0, 429.5, 466.0)]          # M rects (x0, x1, y0, y1): houses removed for the alley view
+def clear_lots():
+    """Owner QA (alley 46-62 s): the camera looks S down MA from ~230 m N; the houses N of SS hid SS and the punch."""
+    o = bpy.data.objects.get("TrostTown")
+    if o is None or o.type != "MESH":
+        return
+    import bmesh as _bm
+    me = o.data; mw = o.matrix_world
+    bm = _bm.new(); bm.from_mesh(me)
+    dead = []
+    for v in bm.verts:
+        w = mw @ v.co; x, y = w.x, w.y + segtime.SET_OFF_Y
+        if any(x0 <= x <= x1 and y0 <= y <= y1 for x0, x1, y0, y1 in CLEAR_LOTS):
+            dead.append(v)
+    _bm.ops.delete(bm, geom=dead, context="VERTS")
+    bm.to_mesh(me); bm.free(); me.update()
+    say(f"cleared {len(dead)} houses N of SS for the alley view")
+
+def fix_q2_dome(coll):
+    """Owner QA: the domed drum N of Q2 reads as a flat brown disc from the sky: remove dome + drum, leave paving and a
+    small stone well."""
+    o = bpy.data.objects.get("TrostQ2Buildings")
+    if o is None:
+        return
+    me = o.data
+    kill = {i for i, m in enumerate(me.materials) if m and (m.name.startswith("TrostRoofCopper") or m.name.startswith("TrostTowerCream"))}
+    if not kill:
+        return
+    import bmesh as _bm
+    bm = _bm.new(); bm.from_mesh(me)
+    dead = [f for f in bm.faces if f.material_index in kill]
+    cs = [f.calc_center_median() for f in dead]
+    _bm.ops.delete(bm, geom=dead, context="FACES")
+    bm.to_mesh(me); bm.free(); me.update()
+    if cs:
+        mw = o.matrix_world
+        c = mw @ Vector((sum(v.x for v in cs) / len(cs), sum(v.y for v in cs) / len(cs), 0.0))
+        L = STATE["L"]; bmw = bmesh.new()
+        z0 = G(c.x, c.y + segtime.SET_OFF_Y)
+        L.cyl(bmw, (c.x, c.y, z0), (c.x, c.y, z0 + 1.0), 1.6, 1.6, seg=12)                 # stone well, 3 m across
+        L.cyl(bmw, (c.x, c.y, z0 + 1.0), (c.x, c.y, z0 + 1.05), 1.15, 1.15, seg=12, mi=1)
+        for sx in (-1, 1):
+            L.box(bmw, (c.x + sx * 1.2, c.y, z0 + 2.0), (0.2, 0.2, 2.0))
+        L.box(bmw, (c.x, c.y, z0 + 3.0), (2.8, 0.3, 0.2))
+        w = L.obj_from_bm("G5_Q2Well", bmw, [L.mat("G5_WellStone", hexrgb("#9a948a"), 0.9), L.mat("G5_WellDark", (0.02, 0.02, 0.025), 0.9)], coll)
+    say(f"Q2 dome + drum removed ({len(dead)} faces), well added")
+
 # ====================================================================== build / update (contract)
 def build(site):
     t0 = time.time()
@@ -1936,6 +2109,8 @@ def build(site):
         TR.set_wagon(True); TR.set_cart("start")
     except Exception as ex:
         say("cart hooks failed:", ex)
+    fix_q2_dome(coll)
+    clear_lots(); bpy.context.view_layer.update(); _RC.clear()
     build_cannon_events()
     build_slabs()
     build_debris(coll)
@@ -1944,6 +2119,7 @@ def build(site):
     build_tower_burst(coll)
     build_titans(coll)
     build_attack(coll)
+    build_shadows(coll)
     build_colossal()
     build_people(coll)
     build_crowd(coll)
@@ -1980,6 +2156,7 @@ def update(t):
     update_colossal(t)
     _pose_attack(t)
     STATE["TT"].update(t)
+    update_shadows(t)
     try:
         STATE["SQ"].update(t)
     except TypeError:                     # odm one-hook hop: u ** 1.8 of a -1e-17 rounding residue -> complex; nudge t
