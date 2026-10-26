@@ -154,8 +154,8 @@ BIG = {'chorus1', 'jaeger_call_response', 'final_chorus', 'outro_G_ending', 'mai
 # narration valley (bars 148-172) has no sung melody: composed cello recitative over the C#m-G#-A-C loop,
 # (bar, beat, beats, sounding midi), checked against chords_verified
 NARR_CELLO = [
-    (149, 0, 2, 57), (149, 2, 2, 56), (150, 0, 2, 61), (150, 2, 1, 59), (150, 3, 1, 57), (151, 0, 3, 56), (151, 3, 1, 54),
-    (152, 0, 4, 57), (153, 0, 2, 56), (153, 2, 1, 57), (153, 3, 1, 59), (154, 0, 2, 61), (154, 2, 2, 63), (155, 0, 8, 64)]
+    (149, 0, 2, 57), (149, 2, 2, 56), (150, 0, 2, 61), (150, 2, 1, 59), (150, 3, 1, 58), (151, 0, 3, 56), (151, 3, 1, 54),
+    (152, 0, 4, 57), (153, 0, 2, 56), (153, 2, 1, 57), (153, 3, 1, 59), (154, 0, 2, 61), (154, 2, 2, 63), (155, 0, 6, 64), (156, 2, 2, 63)]
 _HEAD = [(157, 0, 1, 61), (157, 1, 1, 61), (157, 2, 1, 64), (157, 3, 1, 63), (158, 0, 2, 60), (158, 2, 2, 63), (159, 0, 2, 61),
          (159, 2, 2, 64), (160, 0, 4, 64), (161, 0, 2, 68), (161, 2, 2, 64), (162, 0, 2, 63), (162, 2, 2, 60), (163, 0, 4, 61)]
 NARR_CELLO += _HEAD + [(164, 0, 4, 64)] + [(b + 8, bt, n, m) for b, bt, n, m in _HEAD] + [
@@ -256,14 +256,10 @@ def stem_lead():
             out['lead_' + inst] = fit(S.render(notes, instrument=inst, sr=SR, seed=3 if inst == 'violin' else 5))
     # second violin voice (separate render so its slurs do not interfere with the main line):
     # narration descant + the instrumental break, where the violin doubles the guitar solo's long on-beat notes
-    extra = [nt(n, vel=64, vib=1.3) for n in grid_notes(NARR_VIOLIN, 'narration', 64, phrase_bars=8)]
-    g, _ = part('guitar')
-    brk = [n for n in g['lead'] if 132 <= n['bar'] < 148 and n.get('beats', 0) >= 0.5 and float(n.get('beat', 0.5)) % 1 == 0
-           and 55 <= n['midi'] <= 88]
-    extra += [nt(n, vel=float(np.clip(20 + n.get('vel', 80), 70, 112)), vib=1.2) for n in brk]
+    extra = [nt(n, vel=56, vib=1.3) for n in grid_notes(NARR_VIOLIN, 'narration', 56, phrase_bars=8)]
     out['lead_violin'] = out.get('lead_violin', np.zeros((N, 2), np.float32)) + fit(
-        S.render(slurred(extra), instrument='violin', sr=SR, seed=11)) * 0.85
-    print('lead from', src, {k: len(v) for k, v in lines.items()}, 'violin extra', len(extra), '(break', len(brk), ')')
+        S.render(slurred(extra), instrument='violin', sr=SR, seed=11))
+    print('lead from', src, {k: len(v) for k, v in lines.items()}, 'descant', len(extra))
     return out
 
 
@@ -335,20 +331,25 @@ def place_note(inst, art, midi):
 
 
 def dedup(notes, min_frac=0.5):
-    """drop a note that repeats the pitch of an already kept note for more than min_frac of its length
-    (two copies of the same sample at the same pitch phase against each other). Earlier entries win."""
-    kept = {}
+    """merge same-pitch notes of one instrument+articulation that overlap for more than min_frac of the longer one
+    (two copies of the same sample at the same pitch phase against each other): the kept note takes the union of
+    both durations and the higher velocity / gain"""
     out = []
-    for q in notes:
+    by_pitch = {}
+    for q in sorted(notes, key=lambda q: q['start_s']):
         a0, a1 = q['start_s'], q['start_s'] + q['dur_s']
-        clash = False
-        for b0, b1 in kept.get(q['midi'], ()):
-            if min(a1, b1) - max(a0, b0) > max(0.15, min_frac * (a1 - a0)):
-                clash = True
+        for k in by_pitch.get(q['midi'], ()):
+            p = out[k]
+            b0, b1 = p['start_s'], p['start_s'] + p['dur_s']
+            if min(a1, b1) - max(a0, b0) > max(0.15, min_frac * max(a1 - a0, b1 - b0)):   # mostly the same note
+                p['dur_s'] = max(a1, b1) - b0
+                p['vel'] = max(p['vel'], q['vel'])
+                if 'gain_db' in p or 'gain_db' in q:
+                    p['gain_db'] = max(p.get('gain_db', 0), q.get('gain_db', 0))
                 break
-        if not clash:
-            kept.setdefault(q['midi'], []).append((a0, a1))
-            out.append(q)
+        else:
+            by_pitch.setdefault(q['midi'], []).append(len(out))
+            out.append(dict(q))
     return out
 
 
@@ -356,9 +357,10 @@ def tutti_hits():
     """orchestral hits that are not in the transcription: low C# sforzando under the opening chant (bar 17),
     G-minor tutti chord on the band cut-off (bar 231 beat 3.5). -> [(inst, midi, start_s, dur_s, vel)]"""
     t17, fin = tc(tb(17)), tc(tb(231, 3.5))
-    hits = [(i, m, t17, 0.5, 110) for i, ms in (('basses', (37,)), ('celli', (37, 49)), ('trombones', (49,)), ('tuba', (37,)))
-            for m in ms]
-    hits += [(i, m, fin, 1.1, 120) for i, ms in (('basses', (31, 43)), ('tuba', (31, 43)), ('trombones', (43, 55)),
+    t19 = tc(tb(19))
+    hits = [(i, m, t, 0.5, v) for t, v in ((t17, 110), (t19, 100))
+            for i, ms in (('basses', (37,)), ('celli', (37, 49)), ('trombones', (49,)), ('tuba', (37,))) for m in ms]
+    hits += [(i, m, fin, 1.1, 105) for i, ms in (('basses', (31, 43)), ('tuba', (31, 43)), ('trombones', (43, 55)),
                                                   ('celli', (50, 55)), ('horns', (58, 62)), ('violins2', (67, 70)),
                                                   ('violins1', (74, 79)), ('trumpets', (67, 74))) for m in ms]
     return hits
@@ -407,15 +409,11 @@ def stem_orchestra():
         seq.append((inst, 'staccato', dict(start_s=t, dur_s=min(d, 0.45), midi=float(m), vel=v, gain_db=0)))
         if d > 0.6:
             seq.append((inst, 'sustain', dict(start_s=t + 0.02, dur_s=d, midi=float(m), vel=v - 15, gain_db=-2)))
-    by, dropped = {}, 0
-    for inst in sorted({x[0] for x in seq}):
-        mine = [x for x in seq if x[0] == inst]
-        kept = dedup([x[2] for x in mine])
-        ids = {id(q) for q in kept}
-        dropped += len(mine) - len(kept)
-        for _, a, q in mine:
-            if id(q) in ids:
-                by.setdefault((inst, a), []).append(q)
+    by, merged = {}, 0
+    for key in sorted({(x[0], x[1]) for x in seq}):
+        mine = [x[2] for x in seq if (x[0], x[1]) == key]
+        by[key] = dedup(mine)
+        merged += len(mine) - len(by[key])
     stems = {'strings': np.zeros((N, 2), np.float32), 'brass': np.zeros((N, 2), np.float32),
              'winds': np.zeros((N, 2), np.float32)}
     fam = {'violins1': 'strings', 'violins2': 'strings', 'violas': 'strings', 'celli': 'strings', 'basses': 'strings',
@@ -429,13 +427,11 @@ def stem_orchestra():
             y = E.render(qs, inst, art, sr=SR, length_s=END_S, seed=hash((inst, art, gdb)) % 97)
             stems[fam[inst]] += fit(y) * 10 ** (gdb / 20)
         print('orch', inst, art, len(notes))
-    print('orchestra from', src, 'dedup dropped', dropped)
+    print('orchestra from', src, 'same-pitch merges', merged)
     return stems
 
 
 HOOK_WORDS = ('chorus1_jaeger_word', 'final_chorus_eren_word')
-BOOKEND_BARS = 213          # the opening chant (bars 17-18) returns over the last G minor bars (230-231), C# -> G;
-                            # its '-ger' chord (bVII) resolves into the final G-minor tutti hit
 
 
 def octave_fit(ms, lo, hi, shifts):
@@ -467,8 +463,6 @@ def choir_parts():
                     continue
                 q = nt(n, vel=min(120, n.get('vel', 85) + boost))
                 (stabs if short and n['d'] <= 0.7 else notes).append(q)
-                if ps['name'] == 'seid_ihr_das_essen_chant':
-                    stabs.append(dict(q, start_s=q['start_s'] + BOOKEND_BARS * 4 * BEAT, midi=q['midi'] - 6, vel=112.0))
         if not ps.get('pitched', True):
             # unpitched gang shout: double its rhythm with chord tones (root + 5th, male range)
             for o in ps.get('rhythm_onsets', []):
@@ -614,7 +608,7 @@ def stem_drums():
     # Splice layers under DRSKit: short (kick 0.12 s), 4 pitch variants each so no two hits are the same waveform.
     # Kick polarity/offset checked against DRSKit's kick: in phase at 0 ms (40-150 Hz sum is maximal there).
     k_var = variants(SPL + 'DD_HR_kick_one_shot_low_hard.wav', 4, 30, length_s=0.12, seed=1)
-    s_var = variants(SPL + 'DD_HR_snare_one_shot_metal_hard.wav', 4, 30, seed=2)
+    s_var = variants(SPL + 'DD_HR_snare_one_shot_metal_hard.wav', 4, 50, seed=2)
     c_spl = load_wav(SPL + 'DD_HR_cymbal_one_shot_crash_large_hard.wav')
     rev = load_wav(SPL + 'SHS_MRO_fx_rev_crash.wav')
     taiko = []
@@ -637,11 +631,15 @@ def stem_drums():
         if not keep(h):
             continue
         pc, t, v = h['piece'], tc(h['t']), h.get('vel', 90)
+        if h['bar'] == 116 and float(h.get('beat', 1)) == 0 and pc in ('kick', 'gran_cassa'):
+            pc, v = ('kick', 106) if pc == 'kick' else ('big_drum', 125)   # call 3 hits like calls 1, 2, 4
+        if h['bar'] == 28 and float(h.get('beat', 1)) == 0 and pc == 'crash':
+            v = max(v, 112)                                                 # verse-1 downbeat
         bridge = 173 <= h['bar'] < 185
         if pc == 'crash':
             if bridge and h['bar'] != 173:
                 continue                      # bridge: crashes only on its first bar (and bar 185)
-            if bridge:
+            if bridge and h['bar'] != 173:
                 v *= 0.6
             crash_n += 1
             hits.append(dict(start_s=t, piece='crash_l' if crash_n % 2 else 'crash_r', vel=v))
@@ -654,7 +652,7 @@ def stem_drums():
                 place(kit, k_var[cnt['k'] % 4], t, 0.12 * v / 127 * jit())
                 cnt['k'] += 1
             if pc == 'snare':
-                place(kit, s_var[cnt['s'] % 4], t, 0.11 * v / 127 * jit())
+                place(kit, s_var[cnt['s'] % 4], t, 0.07 * v / 127 * jit())
                 cnt['s'] += 1
         elif pc == 'big_drum':
             tk(t, 0.55 * v / 127)
@@ -701,10 +699,12 @@ def stem_fx():
     smack = load_wav(SPL + 'ESM_TEBSSE_FX_blockbuster_hit_one_shot_big_orchestral_bass_drum_smack_02.wav')
     riser = load_wav(SPL + 'ESM_Infiltration_Thriller_Riser_Tension_Escalation_03_Horror_Trailer_Cinematic_Build_Up_Rising_Epic_Whoosh_Transition.wav')
     braam = load_wav(SPL + 'ESM_Movie_Trailer_Braaam_One_Shot_Brutal_Annihilation_A_02_Cinematic_Pulse_Flowing.wav', semis=4)
-    for bar, g in ((17, 0.25), (19, 0.3), (52, 0.35), (108, 0.35), (197, 0.35), (224, 0.35)):
+    for bar, g in ((17, 0.25), (19, 0.5), (52, 0.35), (108, 0.35), (197, 0.35), (224, 0.35)):
         place(fx, boom, tc(tb(bar)), g)
         place(fx, smack, tc(tb(bar)), 0.4)
     place(fx, smack, tc(tb(124)), 0.22)        # break entry
+    place(fx, smack, tc(tb(173)), 0.5)         # bridge entry
+    place(fx, smack, tc(tb(28)), 0.25)         # verse-1 entry
     place(fx, boom, tc(tb(190)), 0.2)          # band re-entry in the last build
     for bar in (52, 197):
         place(fx, braam, tc(tb(bar)), 0.3)

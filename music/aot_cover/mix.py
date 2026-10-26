@@ -29,12 +29,12 @@ CFG = {
     'brass_stabs': (-25.0, 0.30, 0.0, [HighpassFilter(80)]),
     'winds': (-27.0, 0.36, 0.0, [HighpassFilter(250)]),
     'choir': (-24.0, 0.38, 0.0, [HighpassFilter(140), PeakFilter(3000, 1.0, 1.0)]),
-    'guitars': (-23.5, 0.0, 0.14, [HighpassFilter(85), PeakFilter(350, -2.0, 1.0), PeakFilter(3000, -1.5, 1.0), LowpassFilter(12000)]),
+    'guitars': (-23.5, 0.0, 0.14, [HighpassFilter(70), PeakFilter(350, -2.0, 1.0), PeakFilter(3000, -1.5, 1.0), LowpassFilter(12000)]),
     'lead_guitar': (-21.0, 0.18, 0.10, [HighpassFilter(150), LowpassFilter(10000)]),
-    'bass': (-22.5, 0.0, 0.04, [HighpassFilter(32), PeakFilter(72, 4.0, 0.8), PeakFilter(160, -2.0, 1.2), PeakFilter(1200, -3.0, 0.8),
+    'bass': (-20.5, 0.0, 0.04, [HighpassFilter(32), PeakFilter(72, 4.0, 0.8), PeakFilter(160, -2.0, 1.2), PeakFilter(1200, -3.0, 0.8),
                                 LowpassFilter(3000), Compressor(threshold_db=-18, ratio=3.5, attack_ms=8, release_ms=120)]),
     'piano': (-25.0, 0.30, 0.0, [HighpassFilter(80)]),
-    'drums': (-20.5, 0.06, 0.22, [HighpassFilter(40), PeakFilter(48, -3.0, 1.4), PeakFilter(95, 2.0, 1.0), PeakFilter(3500, 2.0, 1.0),
+    'drums': (-20.5, 0.06, 0.22, [HighpassFilter(40), PeakFilter(48, -1.0, 1.4), PeakFilter(95, 2.0, 1.0), PeakFilter(3500, 2.0, 1.0),
                                   HighShelfFilter(6000, 2.0), Compressor(threshold_db=-16, ratio=3.0, attack_ms=4, release_ms=90)]),
     'epic_perc': (-24.0, 0.22, 0.0, [HighpassFilter(30)]),
     'fx': (-25.0, 0.20, 0.0, [HighpassFilter(25)]),
@@ -44,34 +44,43 @@ DELAY_MS = {'lead_violin': 20.0, 'lead_cello': 22.0}     # the solo sampler spea
 LR_DB = {'strings': (-1.5, 1.5)}                         # riffs leaned left (violins1 + violins2 both left)
 
 # section automation (dB, after gain staging, 2-beat ramps): the song's shape. Keys are section names or (bar_from, bar_to).
+def JAE(db):
+    """the four "Wir sind die JAE-ger!" call bar-pairs of the Jaeger section"""
+    return {(b, b + 2): db for b in (108, 112, 116, 120)}
+
+
 SEC_GAIN = {
     'guitars': {'band_entry': -3, 'main_riff': 1, 'verse1': -6, 'prechorus1': -3, 'interlude_groove': -4, 'verse2': -4.5,
                 'jaeger_call_response': -3, 'instrumental_break': 2, 'narration': -4, 'bridge': -7, 'build_prechorus3': -2,
-                'outro_riff': 1, 'outro_groove': 3, 'outro_G_ending': 3},
-    'drums': {'band_entry': 6, 'verse1': -4, 'interlude_groove': -3.5, 'verse2': -2.5, 'narration': -2, 'bridge': -4,
-              'chorus1': 2.5, 'jaeger_call_response': 1, 'final_chorus': 3, 'outro_G_ending': 4},
+                'outro_riff': 1, 'outro_groove': 3, 'outro_G_ending': 3, **JAE(2), (116, 117): 3, (173, 174): 4},
+    'drums': {'band_entry': 6, (19, 20): 3, (116, 117): 3, (154, 155): 4, (173, 174): 4, 'verse1': -4, 'interlude_groove': -3.5, 'verse2': -2.5, 'narration': -2, 'bridge': -4,
+              'chorus1': 2.5, 'jaeger_call_response': 1, 'final_chorus': 3, 'outro_G_ending': 4, **JAE(2)},
     'lead_guitar': {'instrumental_break': 4, 'outro_groove': 5, 'outro_G_ending': 5},
-    'choir': {'band_entry': 4, 'chorus1': 6, 'jaeger_call_response': 5, 'final_chorus': 6},
-    'brass_stabs': {'band_entry': 3, 'jaeger_call_response': 5},
-    'brass': {'chorus1': 5, 'final_chorus': 6, 'build_prechorus3': 2, 'outro_G_ending': 3},
+    'choir': {'band_entry': 4, 'chorus1': 6, 'jaeger_call_response': 5, 'final_chorus': 6, **JAE(5)},
+    'brass_stabs': {'band_entry': 3, 'jaeger_call_response': 5, **JAE(4)},
+    'brass': {'chorus1': 5, 'final_chorus': 6, 'build_prechorus3': 2, 'outro_G_ending': 3, (116, 117): 4, (231, 234): -4},
     'strings': {'main_riff': -2, 'interlude_riff': -2, 'outro_riff': -2, 'verse1': 2, 'interlude_groove': 4, 'verse2': 2,
-                (148, 157): 3, 'outro_G_ending': 3},
-    'low_strings': {'outro_G_ending': 3},
-    'winds': {'verse1': 2, 'interlude_groove': 4, 'verse2': 2},
-    'epic_perc': {'band_entry': 6},
+                (116, 117): 4, (148, 149): 4, (154, 157): 3, (173, 174): 6, 'outro_G_ending': 3, (231, 234): -3},
+    'low_strings': {'outro_G_ending': 3, (231, 234): -2},
+    'winds': {'verse1': 2, 'interlude_groove': 4, 'verse2': 2, (173, 174): 4},
+    'epic_perc': {'band_entry': 4, **JAE(4)},
     'piano': {'bridge': 3, (76, 80): 5},
-    'bass': {'verse1': -2, 'chorus1': 1, 'final_chorus': 1.5},
-    'lead_cello': {'verse1': 6.5, 'prechorus1': 4.5, 'final_chorus': -1.0},
-    'lead_violin': {'chorus1': 4.2, 'verse2': 0.8, 'prechorus2': 1.5, 'jaeger_call_response': 3.2, 'bridge': 1.8,
-                    'build_prechorus3': 1.1, 'final_chorus': -1.0},
+    'bass': {'chorus1': 1, 'final_chorus': 1.5, (173, 174): 4},
+    'lead_cello': {'verse1': 6.5, 'prechorus1': 4.5, 'narration': 3, 'final_chorus': 0},
+    'lead_violin': {'chorus1': 3.2, 'verse2': 0.8, 'prechorus2': 0.2, 'jaeger_call_response': 0, 'bridge': 2.3,
+                    'build_prechorus3': -1.6, (189, 191): 1.6, 'final_chorus': 0},
 }
 # whole-mix contour (measured against the original's per-section loudness): riffs and the instrumental sections
 # back up, the narration valley not too deep, crescendos into each chorus
-BUS_GAIN = {'band_entry': 2.5, 'main_riff': 3, 'prechorus1': 1, 'chorus1': -1, 'interlude_riff': 3, 'interlude_groove': 3.5,
-            'verse2': -1.5, 'instrumental_break': 1.5, 'narration': 4, 'bridge': -1, 'outro_riff': 3, 'outro_groove': 3.5,
-            (50, 51): 1, (51, 52): 2.5, (106, 107): 1, (107, 108): 2.5, (189, 193): -1, (193, 195): 1, (195, 197): 3,
-            'final_chorus': 0.5, 'outro_G_ending': 2.5}
-SEC_EQ = {'guitars': {'verse2': [PeakFilter(400, -3.0, 1.0)]}}   # verse 2 guitars were boxy
+BUS_GAIN = {'band_entry': 1.5, 'main_riff': 3, (42, 44): 1.5, 'prechorus1': 1, (49, 51): -1, 'chorus1': 1.5, (59, 60): 1.5,
+            'interlude_riff': 3, 'interlude_groove': 3.5, 'verse2': 1, 'prechorus2': 2, 'instrumental_break': 1.5,
+            (140, 144): 1, (144, 148): 2, 'narration': 4, (148, 157): 1, 'bridge': 0.5, 'build_prechorus3': 3.3, 'outro_riff': 3,
+            'outro_groove': 3.5, (224, 228): 1.5,
+            (50, 51): 1, (51, 52): 1.5, (106, 107): 1, (107, 108): 2.5, (189, 193): -1, (193, 195): 1, (195, 197): 3,
+            'final_chorus': 1, 'outro_G_ending': 2.5}
+SEC_EQ = {'guitars': {'verse2': [PeakFilter(400, -3.0, 1.0)]},   # verse 2 guitars were boxy
+          # the verse/bridge drum cuts took the kick down with the cymbals: give the low end back
+          'drums': {'verse1': [LowShelfFilter(100, 3.5)], 'verse2': [LowShelfFilter(100, 3.0)], 'bridge': [LowShelfFilter(100, 4.5)]}}
 
 G = json.load(open(A + '/analysis/grid.json'))
 BEAT, FIRST = G['beat_s'], G['first_beat_t']
@@ -90,11 +99,18 @@ def spans(spec):
 
 
 def curve_db(spec, n):
+    """step gains with 2-beat ramps that never swallow a downbeat: a rise is completed by the boundary,
+    a drop starts at the boundary (max of the early and the late ramp)"""
     from scipy.ndimage import uniform_filter1d
     g = np.zeros(n, np.float32)
     for a, b, db in spans(spec):
         g[max(0, int(a * SR)):max(0, int(b * SR))] += db
-    return uniform_filter1d(g, size=int(2 * BEAT * SR), mode='nearest')
+    r = int(2 * BEAT * SR)
+    sm = uniform_filter1d(g, size=r, mode='nearest')
+    h = r // 2
+    early = np.concatenate([sm[h:], np.repeat(sm[-1:], h)])
+    late = np.concatenate([np.repeat(sm[:1], h), sm[:-h]])
+    return np.maximum(early, late)
 
 
 def apply_curve(y, spec):
@@ -130,8 +146,13 @@ def align_lr(y, max_ms=5.0):
     return y.astype(np.float32), lag
 
 
-def lr_balance_db(y):
-    a = np.sqrt((y.astype(np.float64) ** 2).mean(0) + 1e-12)
+def lr_balance_db(y, win=4800):
+    """L/R level difference over the frames where the stem actually sounds (within 30 dB of its loudest frame)"""
+    n = len(y) // win
+    e = (y[:n * win].astype(np.float64) ** 2).reshape(n, win, 2).mean(1)
+    tot = e.sum(1)
+    act = tot > tot.max() * 1e-3
+    a = np.sqrt(e[act].mean(0) + 1e-12)
     return float(20 * np.log10(a[0] / a[1]))
 
 
@@ -240,8 +261,8 @@ def main(name):
         if k in DELAY_MS:
             d = int(DELAY_MS[k] * SR / 1000)
             y = np.concatenate([np.zeros((d, 2), np.float32), y[:-d]])
-        if k.startswith('lead_'):
-            y, info['lr_lag'] = align_lr(y)
+        if k in ('lead_violin', 'lead_cello'):
+            # level balance only: the stems' L/R are in phase (an inter-channel shift made the violin cancel in mono)
             b = lr_balance_db(y)
             y = y * np.array([10 ** (-b / 40), 10 ** (b / 40)], np.float32)
             info['lr_bal_fixed_db'] = round(b, 2)
@@ -273,10 +294,15 @@ def main(name):
     I0, _ = measure_lufs(mix)
     mix = mix * 10 ** ((-18.0 - I0) / 20)
     mix = Pedalboard([HighpassFilter(25), Compressor(threshold_db=-10, ratio=1.5, attack_ms=30, release_ms=400),
-                      LowShelfFilter(80, 0.8), HighShelfFilter(12000, 1.5)])(mix.T.copy(), SR).T
+                      LowShelfFilter(90, 1.5), HighShelfFilter(12000, 1.5)])(mix.T.copy(), SR).T
     I, _ = measure_lufs(mix)
     m = mix * 10 ** ((-14.0 - I) / 20)
-    m = tp_limit(m.astype(np.float32), -1.3)
+    pre = m.astype(np.float32)
+    m = tp_limit(pre, -1.3)
+    from scipy.ndimage import uniform_filter1d
+    gr = 20 * np.log10((uniform_filter1d(np.abs(m).max(1), 480) + 1e-9) / (uniform_filter1d(np.abs(pre).max(1), 480) + 1e-9))
+    report['_limiter'] = dict(max_gr_db=round(float(-gr.min()), 2), at_s=round(float(np.argmin(gr)) / SR, 2),
+                              frac_over_1db=round(float((gr < -1).mean()), 4))
     # trim leading/trailing silence to the music (keep the 0.3 s pre-roll), fade the reverb tail
     nz = np.where(np.abs(m).max(1) > 10 ** (-70 / 20))[0]
     end = min(len(m), nz[-1] + int(0.2 * SR)) if len(nz) else len(m)
