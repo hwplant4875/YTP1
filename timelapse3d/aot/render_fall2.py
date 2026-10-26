@@ -150,7 +150,10 @@ else:
             hz.hide_render = True
 coll = L.new_coll("Fall2")
 
+_TOON = []
 def render(path):
+    if not _TOON:                                  # project toon look once, after the script's setup (TOON=0 disables)
+        import toon; toon.apply(); _TOON.append(1)
     sc.render.filepath = path
     if os.environ.get("FALL_DRY") == "1":          # logic check without the GPU
         return
@@ -193,7 +196,7 @@ SUN_COL = tuple(float(v) for v in os.environ.get("FALL_SUN_COL", "1.0,0.78,0.58"
 # light at segment 3's end (constant over the segment): agent G's long flight starts from exactly this
 SEG3_END_LIGHT = dict(sun_elevation_deg=float(os.environ.get("FALL_SUN_EL", "4")), sun_azimuth_deg=float(os.environ.get("FALL_SUN_AZ", "245")),
                       sun_color=SUN_COL, sun_energy=float(os.environ.get("CARLA_SUN_E", "4.2")),
-                      exposure=float(os.environ.get("EXPO", "-1.5")),
+                      exposure=float(os.environ.get("EXPO", "-1.5")), ambient=0.18,   # world.light_rig("sunset", col=...)
                       sky_ramp=((1.0, 0.62, 0.22, 1.0), (0.95, 0.66, 0.38, 1.0)), view_transform="scene.py default (VT env)")
 IMPACT = 5.0
 FXT = 100.0              # fx845 time base: the kick FX are long settled; the inner burst is registered at FXT + IMPACT
@@ -328,8 +331,13 @@ def seg3_build():
     if os.environ.get("FALL_FIELDS", "1") == "1":
         dress_fields()
     # light: the golden low sun of render_fall's end (same values: the seam must match)
-    set_sun(float(os.environ.get("FALL_SUN_EL", "4")), float(os.environ.get("FALL_SUN_AZ", "245")), SUN_COL,
-            float(os.environ.get("CARLA_SUN_E", "4.2")))
+    WD = sys.modules.get("world")
+    if WD and hasattr(WD, "light_rig"):            # the shared rig: identical to render_fall's end and G's flight start
+        WD.light_rig(dict(WD.LIGHT_PRESETS["sunset"], col=SUN_COL, el=SEG3_END_LIGHT["sun_elevation_deg"],
+                          az=SEG3_END_LIGHT["sun_azimuth_deg"], e=SEG3_END_LIGHT["sun_energy"], expo=SEG3_END_LIGHT["exposure"]))
+    else:
+        set_sun(float(os.environ.get("FALL_SUN_EL", "4")), float(os.environ.get("FALL_SUN_AZ", "245")), SUN_COL,
+                float(os.environ.get("CARLA_SUN_E", "4.2")))
     w = sc.world
     if w and w.use_nodes:
         for nd in w.node_tree.nodes:

@@ -1,9 +1,10 @@
 """TOON SHADING TEST (opt-in, Eevee only): cel-shaded materials + a subtle rim + inverted-hull outlines on key objects.
 
-Enable: env TOON=1 and list `toon` LAST in AOT_PLUGINS (so it runs after every other plug-in / set has built):
+PROJECT DEFAULT since 10/26 (user chose option 2, less orange): every render script calls toon.apply() after its own
+setup; TOON=0 disables it.  As a plug-in, list `toon` LAST in AOT_PLUGINS (it then also runs at the end of the build):
     TOON=1 AOT_PLUGINS=...,toon blender -b -P aot/scene.py ... --engine BLENDER_EEVEE
     TOON=1 AOT_SET=trost AOT_PLUGINS=world,toon ...        (trost.build_set calls plug-in builds at its end)
-Without TOON=1 the module does nothing.  The project is NOT switched to toon; this is a look test.
+With TOON=0 the module does nothing.  Eevee only.
 
 What it does (by code, at build time):
   * every Principled-BSDF material: lit colour -> Shader to RGB -> luminance ratio against the material's own base
@@ -18,10 +19,10 @@ Env: TOON_REF (light level of the top band, default 3.2), TOON_STEPS ("0.28,0.62
 """
 import bpy, os, re
 
-ON = os.environ.get("TOON", "0") == "1"
+ON = os.environ.get("TOON", "1") != "0"           # project default since 10/26 (user option 2); TOON=0 disables
 REF = float(os.environ.get("TOON_REF", "3.2"))
 EDGES = [float(x) for x in os.environ.get("TOON_STEPS", "0.28,0.62").split(",")]
-RIM = float(os.environ.get("TOON_RIM", "0.35"))
+RIM = float(os.environ.get("TOON_RIM", "0.25"))
 INK = float(os.environ.get("TOON_INK", "1.0"))
 REPLACES = set()
 
@@ -59,20 +60,20 @@ def _convert(m):
     nr = N.new("ShaderNodeMath"); nr.operation = "DIVIDE"; nr.inputs[1].default_value = REF; Lk.new(rt.outputs[0], nr.inputs[0])
     ramp = N.new("ShaderNodeValToRGB"); ramp.color_ramp.interpolation = "CONSTANT"
     e = ramp.color_ramp.elements
-    e[0].position, e[0].color = 0.0, (0.30, 0.31, 0.38, 1)          # shadow band, slightly cool
-    e[1].position, e[1].color = EDGES[0], (0.62, 0.62, 0.64, 1)
-    e3 = e.new(EDGES[1]); e3.color = (1.0, 0.98, 0.94, 1)           # light band, slightly warm
+    e[0].position, e[0].color = 0.0, (0.34, 0.35, 0.39, 1)          # shadow band, barely cool
+    e[1].position, e[1].color = EDGES[0], (0.66, 0.66, 0.67, 1)
+    e3 = e.new(EDGES[1]); e3.color = (1.0, 1.0, 1.0, 1)             # light band, neutral (less orange, user 10/26)
     Lk.new(nr.outputs[0], ramp.inputs["Fac"])
     col = N.new("ShaderNodeMix"); col.data_type = "RGBA"; col.blend_type = "MULTIPLY"; col.inputs["Factor"].default_value = 1.0
     Lk.new(base, col.inputs["A"]); Lk.new(ramp.outputs["Color"], col.inputs["B"])
-    hs = N.new("ShaderNodeHueSaturation"); hs.inputs["Saturation"].default_value = float(os.environ.get("TOON_SAT", "1.1"))
+    hs = N.new("ShaderNodeHueSaturation"); hs.inputs["Saturation"].default_value = float(os.environ.get("TOON_SAT", "1.0"))
     Lk.new(col.outputs["Result"], hs.inputs["Color"])
     lw = N.new("ShaderNodeLayerWeight"); lw.inputs["Blend"].default_value = 0.35
     rr = N.new("ShaderNodeMapRange"); rr.inputs["From Min"].default_value = 0.72; rr.inputs["From Max"].default_value = 0.8
     rr.inputs["To Max"].default_value = RIM; Lk.new(lw.outputs["Facing"], rr.inputs["Value"])
     rim = N.new("ShaderNodeMix"); rim.data_type = "RGBA"; rim.blend_type = "SCREEN"
     Lk.new(rr.outputs["Result"], rim.inputs["Factor"]); Lk.new(hs.outputs["Color"], rim.inputs["A"])
-    rim.inputs["B"].default_value = (1.0, 0.95, 0.85, 1)
+    rim.inputs["B"].default_value = (1.0, 1.0, 1.0, 1)
     em = N.new("ShaderNodeEmission"); em.inputs["Strength"].default_value = REF
     Lk.new(rim.outputs["Result"], em.inputs["Color"])
     Lk.new(em.outputs[0], out.inputs["Surface"])
@@ -104,7 +105,13 @@ def _outline(ob, t):
     return True
 
 def apply():
+    """Convert once more (idempotent): call it AFTER a render script's own setup so script-made objects convert too.
+    Eevee only (Shader to RGB does not exist in Cycles): with another engine it does nothing."""
     if not ON:
+        return
+    eng = bpy.context.scene.render.engine
+    if not eng.startswith("BLENDER_EEVEE"):
+        print(f"[toon] skipped (engine {eng}; toon is Eevee-only)", flush=True)
         return
     n = sum(_convert(m) for m in list(bpy.data.materials))
     k = 0

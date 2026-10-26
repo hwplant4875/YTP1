@@ -58,9 +58,12 @@ os.makedirs(B.m_out, exist_ok=True)
 
 t_set = time.time()
 MR.setup()
+if sys.modules.get("toon"):                 # agent G: opt-in toon (TOON=1, toon in AOT_PLUGINS) also on the crowd
+    sys.modules["toon"].apply()
 print(f"[march] setup {time.time() - t_set:.0f}s  engine {eng}  people {MR.STATE['N']} wagons {MR.STATE['NW']} titans {MR.STATE['NT']}")
 MR.write_alive_json(os.path.join(B.m_out, "march846_alive.json"), fps=30.0)
 
+import toon; toon.apply()                         # project toon look (TOON=0 disables; Eevee only) after this script's setup
 if B.times:
     times = [float(x) for x in B.times.split(",") if x.strip()]
 else:

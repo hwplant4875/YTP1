@@ -188,8 +188,20 @@ def light_setup():
                 st["ramp"].append((e[0], Vector(e[0].color), Vector((1.0, 0.62, 0.22, 1)), e[1], Vector(e[1].color), Vector((0.95, 0.66, 0.38, 1))))
     return st
 
+WD = sys.modules.get("world")
+DAY_SPEC = dict(el=38.0, az=float(os.environ.get("SUN_AZ", "25")) % 360.0, col=(1.0, 1.0, 1.0), e=float(os.environ.get("SUN_E", "3.6")),
+                amb=0.25, expo=float(os.environ.get("EXPO", "-1.5")))          # = scene.py's sun in the opening
+def sunset_spec():
+    return dict(WD.LIGHT_PRESETS["sunset"], col=tuple(float(v) for v in os.environ.get("FALL_SUN_COL", "1.0,0.78,0.58").split(",")),
+                az=float(os.environ.get("FALL_SUN_AZ", "245")), el=float(os.environ.get("FALL_SUN_EL", "4")))
+
 def light_at(st, s):
     k = smooth(6.8, 8.0, s)
+    if WD and hasattr(WD, "light_rig"):            # the shared rig (world.light_rig): opening day -> render_fall2's sunset
+        WD.light_rig(WD.light_blend(DAY_SPEC, sunset_spec(), k))
+        for e0, a0, b0, e1, a1, b1 in st["ramp"]:
+            e0.color = tuple(a0.lerp(b0, k)); e1.color = tuple(a1.lerp(b1, k))
+        return
     so = st["sun"]
     if so:
         d = st["d0"].lerp(st["d1"], k).normalized()
@@ -264,6 +276,7 @@ def hud_dump(key, s):
     hudcam.dump(sc, key if isinstance(key, int) else 0, B.fall_out, t=s, track=tr, name=None if isinstance(key, int) else key,
                 extra={"segment": "fall", "labels": {k: v for k, v in TAGS.items() if v in tr}, "anchor": "rig origin = feet"})
 
+import toon; toon.apply()                         # project toon look (TOON=0 disables; Eevee only) after this script's setup
 if B.times:
     times = [float(x) for x in B.times.split(",") if x.strip()]
 else:

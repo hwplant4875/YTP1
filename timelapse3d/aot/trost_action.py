@@ -1571,10 +1571,11 @@ class Evac:
         self.wyaw0 = math.atan2(self.side[1], self.side[0]) + math.radians(4)
 
     def wagon_state(self, t):
-        u1 = _ss(self.T_PULL0, self.T_PULL0 + 0.8, t)                 # swing it lengthwise
-        u2 = _ss(self.T_PULL0 + 0.6, self.T_PULL1 + 0.8, t)           # haul it through and aside
-        p = self.w0 + self.out * 26 * u2 + self.side * 10 * _ss(self.T_PULL1, self.T_PULL1 + 1.5, t)
-        return p, self.wyaw0 + (math.pi / 2 - math.radians(4)) * u1
+        # user (10/26): the cart is NOT driven out through the gate; it is shoved a little to the SIDE (and back a step
+        # into the square), clearing the passage so the crowd escapes past it
+        u = _ss(self.T_PULL0, self.T_PULL1, t)
+        p = self.w0 - self.out * 4.0 * u + self.side * 16.0 * u
+        return p, self.wyaw0 + math.radians(15) * u
 
     def update(self, t):
         on = 0.0 <= t < self.T_END + 6

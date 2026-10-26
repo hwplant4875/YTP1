@@ -263,8 +263,11 @@ def cam_keys():
     kt(74.8, rel(sp_, 95, 110, 150), rel(sp_, 0, 0, 6), 34)
     kt(81.7, rel(sp_, 85, 100, 140), rel(sp_, 0, 0, 8), 36)
     for T in (85.0, 90.0, 95.0, 100.0, 105.0, 109.0):                      # the carry, the escort kills around it
-        a = at(T)
-        kt(T, rel(a, 58, 46, 92), rel(a, 0, -10, 9), 34)                 # lower + steep: the Titan under the boulder
+        a = at(T); a2 = at(min(T + 1.0, 109.6))
+        d = a2 - a; d = d / max(1e-6, float(np.linalg.norm(d)))
+        side = np.array([-d[1], d[0]]) if (-d[1]) > 0 else np.array([d[1], -d[0]])       # the east side of the walk
+        c = a + side * 56 - d * 18                                          # side-on, a little behind, ~39 deg down
+        kt(T, (float(c[0]), float(c[1]), 52.0), rel(a, 0, 0, 12), 34)     # body, arms and strides under the sphere
     kt(110.6, (90, GY + 180, 150), (0, GY + 6, 9), 34)                     # the seal, yellow flares
     kt(114.8, (82, GY + 168, 142), (0, GY + 5, 9), 36)
     # ---- Levi (aerial), then the dusk pyres and pull away
@@ -609,6 +612,7 @@ def frame_state(v):
     trackers(v, T)
     return T
 
+import toon; toon.apply()                         # project toon look (TOON=0 disables; Eevee only) after this script's setup
 if B.dry and os.environ.get("RT_PROBE"):
     C = TA.STATE["C"]
     print("[trost] probe C:", {k: (np.round(np.asarray(v, float), 1).tolist() if isinstance(v, (tuple, list, np.ndarray)) and np.asarray(v).dtype != object and np.asarray(v).size <= 6 else type(v).__name__) for k, v in C.items()})

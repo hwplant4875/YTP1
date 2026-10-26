@@ -326,6 +326,7 @@ if FX845 is None and os.environ.get("AOT_STATE") == "kicked":
 if FX845 is not None and not any(FX845.REG.get(k) for k in ("blocks", "mods", "houses", "appear")):
     FX845 = None                                                   # module loaded but nothing registered (intact build)
 print("[fast] fx845 per-frame destruction:", "on" if FX845 else "off")
+import toon; toon.apply()                         # project toon look (TOON=0 disables; Eevee only) after this script's setup
 if B.times:
     times = [float(x) for x in B.times.split(",") if x.strip()]
 else:

@@ -95,6 +95,7 @@ if G.world == "interlude":
         for s in st["smoke"]:
             s.update(ts, c)
     W.update(state=_state, cam=_cam, per_frame=_pf, ground=lambda x, y: RI.H(x, y))
+    W["light_at"] = lambda br, tb: (sys.modules.get("world") or __import__("world")).light_rig("day")   # B: "day" at t 5.2 / S5
 elif G.world == "march":
     import march846 as MR
     cam = sc.camera
@@ -114,6 +115,17 @@ elif G.world == "march":
         return Vector(loc), (Vector(tgt) - Vector(loc)).normalized(), lens
     W.update(state=lambda t: W.__setitem__("t", t), cam=_cam, per_frame=lambda ts, c: MR.update(ts, c.location),
              ground=lambda x, y: MR.L.height(x, y))
+    WDm = sys.modules.get("world") or __import__("world")
+    F_LIGHT = WDm.light_capture()                       # agent F's march light, as its frames show it
+    print("[bridge] march light (captured)", {k: (round(v, 2) if isinstance(v, float) else v) for k, v in F_LIGHT.items()}, flush=True)
+    def _march_light(br, tb):
+        hd_ = [h for h, v in br["halves"].items() if v["world"] == "march"][0]
+        T0 = MT.span_start(br, hd_); u = min(1.0, max(0.0, (tb - T0) / br["halves"][hd_]["T"]))
+        k0, k1 = br["halves"][hd_]["k0"], br["halves"][hd_]["k1"]
+        a_ = "day" if "seam" in k0 else F_LIGHT                # seam end = shared "day", segment end = F's own light
+        b_ = "day" if "seam" in k1 else F_LIGHT
+        WDm.light_rig(WDm.light_blend(a_, b_, u * u * (3 - 2 * u)), exclusive=False)
+    W["light_at"] = _march_light
 elif G.world == "trost":
     g = _exec_until(os.path.join(HERE, "render_trost.py"), 'if B.dry and os.environ.get("RT_PROBE")')
     cam = g["cam"]
@@ -139,19 +151,24 @@ elif G.world == "shig":
     DAY = dict(el=float(os.environ.get("C1_DAY_EL", "40")), az=float(os.environ.get("C1_DAY_AZ", "160")),
                col=(1.0, 0.97, 0.92), e=3.6, expo=float(os.environ.get("C1_DAY_EXPO", "-1.5")))
     def _light_at(br, tb):
-        """C1 timelapse with the SHARED rig (world.light_rig): A's SEG3_END_LIGHT (sunset) -> night -> the "day" preset
-        that agent B's interlude uses at S3.  Re-reads SEG3_END_LIGHT from render_fall2 at build, so A's changes follow."""
+        """C1 timelapse with the SHARED rig (world.light_rig): agent A's light exactly as its last frame shows it
+        (captured from the scene after seg3_pose(12.0); SEG3_END_LIGHT is the documented source) -> a short dusk dip
+        (60 % toward "night") -> the "day" preset that agent B's interlude uses at S3."""
         WD = sys.modules.get("world") or __import__("world")
-        L0_ = dict(el=L0["sun_elevation_deg"], az=L0["sun_azimuth_deg"], col=tuple(L0["sun_color"]), e=L0["sun_energy"],
-                   amb=0.18, expo=L0.get("exposure", -1.5))
+        if "_c1_L0" not in W:
+            W["_c1_L0"] = WD.light_capture()
+            print("[bridge] C1 start light (captured from A's scene)", W["_c1_L0"], flush=True)
+        L0_ = W["_c1_L0"]
+        dusk = WD.light_blend(L0_, "night", 0.6)
         u = min(1.0, max(0.0, tb / MT.bridge_total(br)))
-        if u < 0.35:
-            spec = WD.light_blend(L0_, "night", u / 0.35)
-        elif u < 0.55:
-            spec = WD.light_blend("night", "night", 0.0)
+        sm = lambda x: x * x * (3 - 2 * x)
+        if u < 0.30:
+            spec = WD.light_blend(L0_, dusk, sm(u / 0.30))
+        elif u < 0.42:
+            spec = dusk
         else:
-            spec = WD.light_blend("night", "day", (u - 0.55) / 0.45)
-        WD.light_rig(spec)
+            spec = WD.light_blend(dusk, "day", sm((u - 0.42) / 0.58))
+        WD.light_rig(spec, exclusive=u > 0.42)
     W["light_at"] = _light_at
 sc = bpy.context.scene
 sc.render.image_settings.file_format = "PNG"
@@ -176,6 +193,7 @@ def eval_key(state, side):
           f"lens {n0:.1f}", flush=True)
     return k
 
+import toon; toon.apply()                         # project toon look (TOON=0 disables; Eevee only) after this script's setup
 if G.stills:                              # world stills (world coordinates -> this scene's set frame)
     WD = sys.modules.get("world") or __import__("world")
     fr = G.still_frame or WD.active_frame()

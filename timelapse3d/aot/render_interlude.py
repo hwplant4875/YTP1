@@ -1097,6 +1097,7 @@ if __name__ == "__main__":
         AN = json.load(open(apath)) if B.times else {}
     except Exception:
         AN = {}
+    import toon; toon.apply()                         # project toon look (TOON=0 disables; Eevee only) after this script's setup
     t_s = time.time()
     last_png = None
     for i, t in enumerate(times):
