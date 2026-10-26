@@ -307,3 +307,10 @@ TROST:
 
 ## 15:37 (10/25 UTC) USER PICK: Armored Titan model = Tripo image-to-3D (D)
 - assets/tripo/armored_img/tripo-out/armored-ref-crop-png-rig-1ad3b89b/model.glb (from the user's figure photo, rigged; imports facing sideways). Used at true 15 m. Other titans stay our own procedural ones unless the user says otherwise.
+
+## 00:44-00:46 (10/26 UTC) USER: Shiganshina v3 fixes + toon choice + cart
+- Toon: option "reduce orange and apply" (toon shader project-wide, less orange).
+- Yeager house: to the LEFT as seen from the Colossal (opposite side of the outer gate), several blocks away; pour first, then the camera flies LEFT to Carla + the lone Smiling Titan.
+- Camera: smooth ease in/out; pull back over-zoomed shots to the moderate neutral sky observer.
+- Armored ram: refugees freeze/flee; Garrison fights him (wall cannons firing, impacts bouncing off his armour, soldiers on the ground/wall); he is UNSTOPPABLE, keeps running, shoulder-rams only at impact (never rotate the whole titan). Keep the framing locked on him.
+- Trost evacuation: the cart is only shoved a little to the SIDE to clear the passage; it never drives through the gate.
