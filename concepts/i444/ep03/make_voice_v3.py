@@ -1,6 +1,6 @@
 # EP03 narration v3 = voice_v2 with the lines whose action no official clip shows rewritten to things we can show
 # (laptop frame QA 10/26): s00 "crushed by a TV" -> "shot in the head", Karl run over by Gale's van, Ethan / Richie / Stu /
-# Mickey / Jill / Charlie deaths reworded to the footage we have. Writes voice_v3/<seg>.mp3 + .json (same alignment format as voice/)
+# Mickey / Jill / Charlie deaths reworded to the footage we have; s09 / s11 fact fixes (Amber killed Judy, Billy stabbed Stu once). Writes voice_v3/<seg>.mp3 + .json (same alignment format as voice/)
 import json, os, base64, subprocess, urllib.request, shutil
 import numpy as np
 K = os.environ['ELEVENLABS_JC_API_KEY']; V2, V3 = 'voice_v2/', 'voice_v3/'; P = V3 + 'parts/'
@@ -12,18 +12,18 @@ NEW = {
  's03': ("Number fifteen is Karl Gibbs from Scream Seven, an escaped patient who's big and genuinely scary in a fight, but he was "
          "really just a pawn for the people running things, and his run ended the second Gale floored it and hit him with her van. "
          "Survival rate: seventy-five percent.", "Survival rate: ninety-nine percent, unless you're his film professor.", None),
- 's05': ("Number thirteen is Charlie Walker, the horror nerd who knew every rule in the book. He pulled off a few kills, but the guy "
+ 's05': ("Number thirteen is Charlie Walker, the horror nerd who knew every rule in the book. He did most of the actual killing, but the guy "
          "trusted the wrong partner, and Jill turned on him the second she didn't need him anymore. Survival rate: sixty percent.",
          "Survival rate: sixty-eight percent.", None),
  's07': ("Number eleven is Ethan Landry, the awkward roommate who was always just a little too close, and that closeness is exactly "
          "what makes him dangerous, but once the mask came off, Tara put a knife in him again and again, and that was the end of the "
          "awkward roommate. Survival rate: fifty-three percent.", "Survival rate: fifty-six percent.", None),
- 's09': ("Number nine is Richie Kirsch, the sweet boyfriend nobody suspected for a single second, who stabbed the sheriff in broad "
-         "daylight and fooled Sam the whole movie, but the moment she figured him out, she stabbed him over and over until he finally "
-         "stopped moving. Survival rate: forty-five percent.", "Survival rate: fifty percent.", None),
+ 's09': ("Number nine is Richie Kirsch, the sweet boyfriend who looked way too harmless to be a killer, but his crew took out the "
+         "sheriff in broad daylight while he fooled Sam the whole movie, and the moment she figured him out, she stabbed him over and "
+         "over until he finally stopped moving. Survival rate: forty-five percent.", "Survival rate: fifty percent.", None),
  's11': ("Number seven is Stu Macher, and a lot of fans would put him way higher, because he's easily one of the most unhinged "
-         "Ghostfaces ever, but he only had a couple of kills, and he was so committed to the bit that he let Billy stab him over and "
-         "over just to sell their story. Survival rate: forty percent.", "Survival rate: forty-three percent.", None),
+         "Ghostfaces ever, but he was really just Billy's sidekick, and he was so committed to the bit that he and Billy stabbed each "
+         "other just to sell their story. Survival rate: forty percent.", "Survival rate: forty-three percent.", None),
  's12': ("Number six is Mickey Altieri, the film student who planned to get caught on purpose so he could blame the movies at his "
          "trial. He racked up one of the biggest body counts of the early films and even framed Derek, but he never saw the twist "
          "coming, because his own partner shot him the second he stopped being useful. Survival rate: thirty-six percent.",

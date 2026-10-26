@@ -570,14 +570,15 @@
       "name": "JASON CARVEY",
       "tile_png": "tiles/carvey.png",
       "stats": {
-       "STRENGTH": 5,
-       "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
-       "DECEPTION": 5
+       "STRENGTH": 3,
+       "INTELLIGENCE": 3,
+       "KILL COUNT": 2,
+       "DECEPTION": 2
       },
       "pct": 99,
       "t_pct": 2.61,
-      "dur": 5.88
+      "dur": 5.88,
+      "film": "Scream VI (2023)"
      },
      17.88,
      23.76
@@ -589,7 +590,10 @@
       "new": {
        "key": "carvey",
        "name": "Jason Carvey",
-       "tier": "EASY"
+       "short": "CARVEY",
+       "pct": 99,
+       "tier": "EASY",
+       "tile": "tiles/carvey.png"
       }
      },
      23.76,
@@ -619,9 +623,14 @@
      -12
     ],
     [
-     24.060000000000002,
+     23.76,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     24.26,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -700,14 +709,15 @@
       "name": "KARL GIBBS",
       "tile_png": "tiles/karl.png",
       "stats": {
-       "STRENGTH": 5,
-       "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
-       "DECEPTION": 5
+       "STRENGTH": 7,
+       "INTELLIGENCE": 2,
+       "KILL COUNT": 4,
+       "DECEPTION": 1
       },
       "pct": 75,
       "t_pct": 1.38,
-      "dur": 2.97
+      "dur": 2.97,
+      "film": "Scream 7 (2026)"
      },
      13.95,
      16.92
@@ -719,13 +729,19 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        }
       ],
       "new": {
        "key": "karl",
        "name": "Karl Gibbs",
-       "tier": "YOU'LL LIVE"
+       "short": "KARL",
+       "pct": 75,
+       "tier": "YOU'LL LIVE",
+       "tile": "tiles/karl.png"
       }
      },
      16.92,
@@ -755,9 +771,14 @@
      -12
     ],
     [
-     17.220000000000002,
+     16.92,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     17.42,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -834,14 +855,15 @@
       "name": "MRS. LOOMIS",
       "tile_png": "tiles/mrs_loomis.png",
       "stats": {
-       "STRENGTH": 5,
-       "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
+       "STRENGTH": 3,
+       "INTELLIGENCE": 7,
+       "KILL COUNT": 2,
        "DECEPTION": 5
       },
       "pct": 68,
       "t_pct": 1.27,
-      "dur": 2.35
+      "dur": 2.35,
+      "film": "Scream 2 (1997)"
      },
      18.0,
      20.35
@@ -853,18 +875,27 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        }
       ],
       "new": {
        "key": "mrs_loomis",
        "name": "Mrs. Loomis",
-       "tier": "YOU'LL LIVE"
+       "short": "MRS. LOOMIS",
+       "pct": 68,
+       "tier": "YOU'LL LIVE",
+       "tile": "tiles/mrs_loomis.png"
       }
      },
      20.35,
@@ -906,9 +937,14 @@
      -12
     ],
     [
-     20.650000000000002,
+     20.35,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     20.85,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -923,42 +959,42 @@
      0
     ],
     [
-     2.38,
+     2.48,
      "s4_02_return",
      104.3
     ],
     [
-     3.36,
+     3.54,
      "s4_still_trio",
      0
     ],
     [
-     5.36,
+     5.6,
      "s4_02_return",
      124.3
     ],
     [
-     7.02,
+     7.5,
      "s4_still_charlie_close",
      0
     ],
     [
-     7.92,
+     8.34,
      "s4_still_jill",
      0
     ],
     [
-     8.84,
+     9.66,
      "scream4_reveal",
      19.6
     ],
     [
-     10.24,
+     10.76,
      "s4_still_gf_knife",
      0
     ],
     [
-     11.9,
+     12.3,
      "s4_still_charlie_party",
      0
     ]
@@ -981,16 +1017,17 @@
       "tile_png": "tiles/charlie.png",
       "stats": {
        "STRENGTH": 5,
-       "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
-       "DECEPTION": 5
+       "INTELLIGENCE": 4,
+       "KILL COUNT": 8,
+       "DECEPTION": 7
       },
       "pct": 60,
-      "t_pct": 1.93,
-      "dur": 2.84
+      "t_pct": 2.13,
+      "dur": 3.16,
+      "film": "Scream 4 (2011)"
      },
-     11.9,
-     14.74
+     12.3,
+     15.46
     ],
     [
      "tier",
@@ -999,55 +1036,72 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        }
       ],
       "new": {
        "key": "charlie",
        "name": "Charlie Walker",
-       "tier": "YOU'LL LIVE"
+       "short": "CHARLIE",
+       "pct": 60,
+       "tier": "YOU'LL LIVE",
+       "tile": "tiles/charlie.png"
       }
      },
-     14.74,
+     15.46,
      999
     ],
     [
      "film",
      "Scream 4 (2011)",
      0,
-     11.9
+     12.3
     ]
    ],
    "sfx": [
     [
-     11.9,
+     12.3,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     12.200000000000001,
+     12.600000000000001,
      "sfx/fill.wav",
      -20
     ],
     [
-     13.83,
+     14.43,
      "sfx/stamp.wav",
      -12
     ],
     [
-     15.040000000000001,
+     15.46,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     15.96,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -1119,12 +1173,13 @@
       "stats": {
        "STRENGTH": 5,
        "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
-       "DECEPTION": 5
+       "KILL COUNT": 2,
+       "DECEPTION": 8
       },
       "pct": 56,
       "t_pct": 1.19,
-      "dur": 2.81
+      "dur": 2.81,
+      "film": "Scream VI (2023)"
      },
      12.8,
      15.61
@@ -1136,28 +1191,43 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        }
       ],
       "new": {
        "key": "quinn",
        "name": "Quinn Bailey",
-       "tier": "YOU'LL LIVE"
+       "short": "QUINN",
+       "pct": 56,
+       "tier": "YOU'LL LIVE",
+       "tile": "tiles/quinn.png"
       }
      },
      15.61,
@@ -1187,9 +1257,14 @@
      -12
     ],
     [
-     15.91,
+     15.61,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     16.11,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -1266,14 +1341,15 @@
       "name": "ETHAN LANDRY",
       "tile_png": "tiles/ethan.png",
       "stats": {
-       "STRENGTH": 5,
+       "STRENGTH": 6,
        "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
-       "DECEPTION": 5
+       "KILL COUNT": 3,
+       "DECEPTION": 7
       },
       "pct": 53,
       "t_pct": 2.35,
-      "dur": 3.54
+      "dur": 3.54,
+      "film": "Scream VI (2023)"
      },
      15.9,
      19.44
@@ -1285,33 +1361,51 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        },
        {
         "key": "quinn",
         "name": "Quinn Bailey",
-        "tier": "YOU'LL LIVE"
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/quinn.png"
        }
       ],
       "new": {
        "key": "ethan",
        "name": "Ethan Landry",
-       "tier": "COIN FLIP"
+       "short": "ETHAN",
+       "pct": 53,
+       "tier": "COIN FLIP",
+       "tile": "tiles/ethan.png"
       }
      },
      19.44,
@@ -1341,9 +1435,14 @@
      -12
     ],
     [
-     19.740000000000002,
+     19.44,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     19.94,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -1421,14 +1520,15 @@
       "name": "MARCO DAVIS",
       "tile_png": "tiles/marco.png",
       "stats": {
-       "STRENGTH": 5,
-       "INTELLIGENCE": 5,
+       "STRENGTH": 6,
+       "INTELLIGENCE": 6,
        "KILL COUNT": 5,
        "DECEPTION": 5
       },
       "pct": 50,
       "t_pct": 1.25,
-      "dur": 2.53
+      "dur": 2.53,
+      "film": "Scream 7 (2026)"
      },
      15.0,
      17.53
@@ -1440,38 +1540,59 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        },
        {
         "key": "quinn",
         "name": "Quinn Bailey",
-        "tier": "YOU'LL LIVE"
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/quinn.png"
        },
        {
         "key": "ethan",
         "name": "Ethan Landry",
-        "tier": "COIN FLIP"
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "COIN FLIP",
+        "tile": "tiles/ethan.png"
        }
       ],
       "new": {
        "key": "marco",
        "name": "Marco Davis",
-       "tier": "COIN FLIP"
+       "short": "MARCO",
+       "pct": 50,
+       "tier": "COIN FLIP",
+       "tile": "tiles/marco.png"
       }
      },
      17.53,
@@ -1501,9 +1622,14 @@
      -12
     ],
     [
-     17.830000000000002,
+     17.53,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     18.03,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -1519,53 +1645,48 @@
      0.85
     ],
     [
-     2.14,
+     2.12,
      "s5_09_fighting",
      90.2
     ],
     [
-     3.0,
+     3.38,
      "s5_08_act3",
      78
     ],
     [
      5.62,
      "s5_03_sheriff",
-     140.5
+     141.4
     ],
     [
-     6.14,
+     7.02,
      "s5_03_sheriff",
-     144.0
+     148.0
     ],
     [
-     6.96,
-     "s5_03_sheriff",
-     135.0
-    ],
-    [
-     8.42,
+     8.74,
      "s5_09_fighting",
      36.15,
      0.8
     ],
     [
-     10.6,
+     10.92,
      "s5_09_fighting",
      92
     ],
     [
-     12.48,
+     12.7,
      "s5_10_daughter",
      80.15
     ],
     [
-     13.16,
+     13.44,
      "s5_10_daughter",
      100.0
     ],
     [
-     14.36,
+     14.6,
      "s5_10_daughter",
      107.3,
      0.6
@@ -1588,17 +1709,18 @@
       "name": "RICHIE KIRSCH",
       "tile_png": "tiles/richie.png",
       "stats": {
-       "STRENGTH": 5,
-       "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
-       "DECEPTION": 5
+       "STRENGTH": 6,
+       "INTELLIGENCE": 6,
+       "KILL COUNT": 2,
+       "DECEPTION": 9
       },
       "pct": 45,
-      "t_pct": 1.91,
-      "dur": 2.89
+      "t_pct": 1.35,
+      "dur": 3.05,
+      "film": "Scream (2022)"
      },
      16.4,
-     19.29
+     19.45
     ],
     [
      "tier",
@@ -1607,46 +1729,70 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        },
        {
         "key": "quinn",
         "name": "Quinn Bailey",
-        "tier": "YOU'LL LIVE"
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/quinn.png"
        },
        {
         "key": "ethan",
         "name": "Ethan Landry",
-        "tier": "COIN FLIP"
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "COIN FLIP",
+        "tile": "tiles/ethan.png"
        },
        {
         "key": "marco",
         "name": "Marco Davis",
-        "tier": "COIN FLIP"
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "COIN FLIP",
+        "tile": "tiles/marco.png"
        }
       ],
       "new": {
        "key": "richie",
        "name": "Richie Kirsch",
-       "tier": "COIN FLIP"
+       "short": "RICHIE",
+       "pct": 45,
+       "tier": "COIN FLIP",
+       "tile": "tiles/richie.png"
       }
      },
-     19.29,
+     19.45,
      999
     ],
     [
@@ -1668,14 +1814,19 @@
      -20
     ],
     [
-     18.31,
+     17.75,
      "sfx/stamp.wav",
      -12
     ],
     [
-     19.59,
+     19.45,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     19.95,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -1752,14 +1903,15 @@
       "name": "JESSICA BOWDEN",
       "tile_png": "tiles/jessica.png",
       "stats": {
-       "STRENGTH": 5,
-       "INTELLIGENCE": 5,
+       "STRENGTH": 6,
+       "INTELLIGENCE": 7,
        "KILL COUNT": 5,
-       "DECEPTION": 5
+       "DECEPTION": 7
       },
       "pct": 43,
       "t_pct": 1.25,
-      "dur": 2.68
+      "dur": 2.68,
+      "film": "Scream 7 (2026)"
      },
      16.4,
      19.08
@@ -1771,48 +1923,75 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        },
        {
         "key": "quinn",
         "name": "Quinn Bailey",
-        "tier": "YOU'LL LIVE"
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/quinn.png"
        },
        {
         "key": "ethan",
         "name": "Ethan Landry",
-        "tier": "COIN FLIP"
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "COIN FLIP",
+        "tile": "tiles/ethan.png"
        },
        {
         "key": "marco",
         "name": "Marco Davis",
-        "tier": "COIN FLIP"
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "COIN FLIP",
+        "tile": "tiles/marco.png"
        },
        {
         "key": "richie",
         "name": "Richie Kirsch",
-        "tier": "COIN FLIP"
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "COIN FLIP",
+        "tile": "tiles/richie.png"
        }
       ],
       "new": {
        "key": "jessica",
        "name": "Jessica Bowden",
-       "tier": "COIN FLIP"
+       "short": "JESSICA",
+       "pct": 43,
+       "tier": "COIN FLIP",
+       "tile": "tiles/jessica.png"
       }
      },
      19.08,
@@ -1842,9 +2021,14 @@
      -12
     ],
     [
-     19.38,
+     19.08,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     19.58,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -1859,43 +2043,38 @@
      46.6
     ],
     [
-     2.3,
+     2.2,
      "s1_10_surprise",
      7
     ],
     [
-     6.08,
+     5.96,
      "s1_10_surprise",
      112.4
     ],
     [
-     8.88,
+     8.72,
      "s1_11_creative",
      56.4
     ],
     [
-     11.06,
+     11.08,
      "s1_11_creative",
      87
     ],
     [
-     12.88,
+     12.9,
      "s1_11_creative",
-     100.75
+     101.0
     ],
     [
-     14.12,
-     "s1_11_creative",
-     103.9
-    ],
-    [
-     15.36,
+     13.98,
      "s1_11_creative",
      113.375,
      0.75
     ],
     [
-     17.6,
+     16.7,
      "s1_12_tables",
      45
     ]
@@ -1917,17 +2096,18 @@
       "name": "STU MACHER",
       "tile_png": "tiles/stu.png",
       "stats": {
-       "STRENGTH": 5,
+       "STRENGTH": 7,
        "INTELLIGENCE": 5,
        "KILL COUNT": 5,
-       "DECEPTION": 5
+       "DECEPTION": 9
       },
       "pct": 40,
-      "t_pct": 1.51,
-      "dur": 2.92
+      "t_pct": 0.63,
+      "dur": 2.01,
+      "film": "Scream (1996)"
      },
      16.4,
-     19.32
+     18.41
     ],
     [
      "tier",
@@ -1936,56 +2116,86 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        },
        {
         "key": "quinn",
         "name": "Quinn Bailey",
-        "tier": "YOU'LL LIVE"
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/quinn.png"
        },
        {
         "key": "ethan",
         "name": "Ethan Landry",
-        "tier": "COIN FLIP"
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "COIN FLIP",
+        "tile": "tiles/ethan.png"
        },
        {
         "key": "marco",
         "name": "Marco Davis",
-        "tier": "COIN FLIP"
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "COIN FLIP",
+        "tile": "tiles/marco.png"
        },
        {
         "key": "richie",
         "name": "Richie Kirsch",
-        "tier": "COIN FLIP"
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "COIN FLIP",
+        "tile": "tiles/richie.png"
        },
        {
         "key": "jessica",
         "name": "Jessica Bowden",
-        "tier": "COIN FLIP"
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "COIN FLIP",
+        "tile": "tiles/jessica.png"
        }
       ],
       "new": {
        "key": "stu",
        "name": "Stu Macher",
-       "tier": "PROBABLY DEAD"
+       "short": "STU",
+       "pct": 40,
+       "tier": "PROBABLY DEAD",
+       "tile": "tiles/stu.png"
       }
      },
-     19.32,
+     18.41,
      999
     ],
     [
@@ -2007,14 +2217,19 @@
      -20
     ],
     [
-     17.91,
+     17.029999999999998,
      "sfx/stamp.wav",
      -12
     ],
     [
-     19.62,
+     18.41,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     18.91,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -2101,14 +2316,15 @@
       "name": "MICKEY ALTIERI",
       "tile_png": "tiles/mickey.png",
       "stats": {
-       "STRENGTH": 5,
-       "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
-       "DECEPTION": 5
+       "STRENGTH": 8,
+       "INTELLIGENCE": 4,
+       "KILL COUNT": 8,
+       "DECEPTION": 7
       },
       "pct": 36,
       "t_pct": 1.97,
-      "dur": 3.16
+      "dur": 3.16,
+      "film": "Scream 2 (1997)"
      },
      18.4,
      21.56
@@ -2120,58 +2336,91 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        },
        {
         "key": "quinn",
         "name": "Quinn Bailey",
-        "tier": "YOU'LL LIVE"
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/quinn.png"
        },
        {
         "key": "ethan",
         "name": "Ethan Landry",
-        "tier": "COIN FLIP"
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "COIN FLIP",
+        "tile": "tiles/ethan.png"
        },
        {
         "key": "marco",
         "name": "Marco Davis",
-        "tier": "COIN FLIP"
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "COIN FLIP",
+        "tile": "tiles/marco.png"
        },
        {
         "key": "richie",
         "name": "Richie Kirsch",
-        "tier": "COIN FLIP"
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "COIN FLIP",
+        "tile": "tiles/richie.png"
        },
        {
         "key": "jessica",
         "name": "Jessica Bowden",
-        "tier": "COIN FLIP"
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "COIN FLIP",
+        "tile": "tiles/jessica.png"
        },
        {
         "key": "stu",
         "name": "Stu Macher",
-        "tier": "PROBABLY DEAD"
+        "short": "STU",
+        "pct": 40,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/stu.png"
        }
       ],
       "new": {
        "key": "mickey",
        "name": "Mickey Altieri",
-       "tier": "PROBABLY DEAD"
+       "short": "MICKEY",
+       "pct": 36,
+       "tier": "PROBABLY DEAD",
+       "tile": "tiles/mickey.png"
       }
      },
      21.56,
@@ -2201,9 +2450,14 @@
      -12
     ],
     [
-     21.86,
+     21.56,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     22.06,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -2272,14 +2526,15 @@
       "name": "AMBER FREEMAN",
       "tile_png": "tiles/amber.png",
       "stats": {
-       "STRENGTH": 5,
+       "STRENGTH": 8,
        "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
-       "DECEPTION": 5
+       "KILL COUNT": 6,
+       "DECEPTION": 9
       },
       "pct": 30,
       "t_pct": 1.39,
-      "dur": 2.63
+      "dur": 2.63,
+      "film": "Scream (2022)"
      },
      13.2,
      15.83
@@ -2291,63 +2546,99 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        },
        {
         "key": "quinn",
         "name": "Quinn Bailey",
-        "tier": "YOU'LL LIVE"
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/quinn.png"
        },
        {
         "key": "ethan",
         "name": "Ethan Landry",
-        "tier": "COIN FLIP"
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "COIN FLIP",
+        "tile": "tiles/ethan.png"
        },
        {
         "key": "marco",
         "name": "Marco Davis",
-        "tier": "COIN FLIP"
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "COIN FLIP",
+        "tile": "tiles/marco.png"
        },
        {
         "key": "richie",
         "name": "Richie Kirsch",
-        "tier": "COIN FLIP"
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "COIN FLIP",
+        "tile": "tiles/richie.png"
        },
        {
         "key": "jessica",
         "name": "Jessica Bowden",
-        "tier": "COIN FLIP"
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "COIN FLIP",
+        "tile": "tiles/jessica.png"
        },
        {
         "key": "stu",
         "name": "Stu Macher",
-        "tier": "PROBABLY DEAD"
+        "short": "STU",
+        "pct": 40,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/stu.png"
        },
        {
         "key": "mickey",
         "name": "Mickey Altieri",
-        "tier": "PROBABLY DEAD"
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/mickey.png"
        }
       ],
       "new": {
        "key": "amber",
        "name": "Amber Freeman",
-       "tier": "PROBABLY DEAD"
+       "short": "AMBER",
+       "pct": 30,
+       "tier": "PROBABLY DEAD",
+       "tile": "tiles/amber.png"
       }
      },
      15.83,
@@ -2377,9 +2668,14 @@
      -12
     ],
     [
-     16.13,
+     15.83,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     16.33,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -2461,14 +2757,15 @@
       "name": "BILLY LOOMIS",
       "tile_png": "tiles/billy.png",
       "stats": {
-       "STRENGTH": 5,
-       "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
-       "DECEPTION": 5
+       "STRENGTH": 8,
+       "INTELLIGENCE": 8,
+       "KILL COUNT": 4,
+       "DECEPTION": 9
       },
       "pct": 25,
       "t_pct": 1.61,
-      "dur": 3.15
+      "dur": 3.15,
+      "film": "Scream (1996)"
      },
      22.0,
      25.15
@@ -2480,68 +2777,107 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        },
        {
         "key": "quinn",
         "name": "Quinn Bailey",
-        "tier": "YOU'LL LIVE"
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/quinn.png"
        },
        {
         "key": "ethan",
         "name": "Ethan Landry",
-        "tier": "COIN FLIP"
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "COIN FLIP",
+        "tile": "tiles/ethan.png"
        },
        {
         "key": "marco",
         "name": "Marco Davis",
-        "tier": "COIN FLIP"
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "COIN FLIP",
+        "tile": "tiles/marco.png"
        },
        {
         "key": "richie",
         "name": "Richie Kirsch",
-        "tier": "COIN FLIP"
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "COIN FLIP",
+        "tile": "tiles/richie.png"
        },
        {
         "key": "jessica",
         "name": "Jessica Bowden",
-        "tier": "COIN FLIP"
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "COIN FLIP",
+        "tile": "tiles/jessica.png"
        },
        {
         "key": "stu",
         "name": "Stu Macher",
-        "tier": "PROBABLY DEAD"
+        "short": "STU",
+        "pct": 40,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/stu.png"
        },
        {
         "key": "mickey",
         "name": "Mickey Altieri",
-        "tier": "PROBABLY DEAD"
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/mickey.png"
        },
        {
         "key": "amber",
         "name": "Amber Freeman",
-        "tier": "PROBABLY DEAD"
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/amber.png"
        }
       ],
       "new": {
        "key": "billy",
        "name": "Billy Loomis",
-       "tier": "YOU'RE DEAD"
+       "short": "BILLY",
+       "pct": 25,
+       "tier": "YOU'RE DEAD",
+       "tile": "tiles/billy.png"
       }
      },
      25.15,
@@ -2571,9 +2907,14 @@
      -12
     ],
     [
-     25.45,
+     25.15,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     25.65,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -2641,14 +2982,15 @@
       "name": "WAYNE BAILEY",
       "tile_png": "tiles/wayne.png",
       "stats": {
-       "STRENGTH": 5,
-       "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
-       "DECEPTION": 5
+       "STRENGTH": 8,
+       "INTELLIGENCE": 8,
+       "KILL COUNT": 7,
+       "DECEPTION": 9
       },
       "pct": 22,
       "t_pct": 1.49,
-      "dur": 2.66
+      "dur": 2.66,
+      "film": "Scream VI (2023)"
      },
      16.5,
      19.16
@@ -2660,73 +3002,115 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        },
        {
         "key": "quinn",
         "name": "Quinn Bailey",
-        "tier": "YOU'LL LIVE"
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/quinn.png"
        },
        {
         "key": "ethan",
         "name": "Ethan Landry",
-        "tier": "COIN FLIP"
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "COIN FLIP",
+        "tile": "tiles/ethan.png"
        },
        {
         "key": "marco",
         "name": "Marco Davis",
-        "tier": "COIN FLIP"
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "COIN FLIP",
+        "tile": "tiles/marco.png"
        },
        {
         "key": "richie",
         "name": "Richie Kirsch",
-        "tier": "COIN FLIP"
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "COIN FLIP",
+        "tile": "tiles/richie.png"
        },
        {
         "key": "jessica",
         "name": "Jessica Bowden",
-        "tier": "COIN FLIP"
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "COIN FLIP",
+        "tile": "tiles/jessica.png"
        },
        {
         "key": "stu",
         "name": "Stu Macher",
-        "tier": "PROBABLY DEAD"
+        "short": "STU",
+        "pct": 40,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/stu.png"
        },
        {
         "key": "mickey",
         "name": "Mickey Altieri",
-        "tier": "PROBABLY DEAD"
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/mickey.png"
        },
        {
         "key": "amber",
         "name": "Amber Freeman",
-        "tier": "PROBABLY DEAD"
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/amber.png"
        },
        {
         "key": "billy",
         "name": "Billy Loomis",
-        "tier": "YOU'RE DEAD"
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "YOU'RE DEAD",
+        "tile": "tiles/billy.png"
        }
       ],
       "new": {
        "key": "wayne",
        "name": "Wayne Bailey",
-       "tier": "YOU'RE DEAD"
+       "short": "WAYNE",
+       "pct": 22,
+       "tier": "YOU'RE DEAD",
+       "tile": "tiles/wayne.png"
       }
      },
      19.16,
@@ -2756,9 +3140,14 @@
      -12
     ],
     [
-     19.46,
+     19.16,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     19.66,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -2846,14 +3235,15 @@
       "name": "JILL ROBERTS",
       "tile_png": "tiles/jill.png",
       "stats": {
-       "STRENGTH": 5,
-       "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
-       "DECEPTION": 5
+       "STRENGTH": 7,
+       "INTELLIGENCE": 9,
+       "KILL COUNT": 4,
+       "DECEPTION": 10
       },
       "pct": 18,
       "t_pct": 1.81,
-      "dur": 2.85
+      "dur": 2.85,
+      "film": "Scream 4 (2011)"
      },
      19.6,
      22.45
@@ -2865,78 +3255,123 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        },
        {
         "key": "quinn",
         "name": "Quinn Bailey",
-        "tier": "YOU'LL LIVE"
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/quinn.png"
        },
        {
         "key": "ethan",
         "name": "Ethan Landry",
-        "tier": "COIN FLIP"
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "COIN FLIP",
+        "tile": "tiles/ethan.png"
        },
        {
         "key": "marco",
         "name": "Marco Davis",
-        "tier": "COIN FLIP"
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "COIN FLIP",
+        "tile": "tiles/marco.png"
        },
        {
         "key": "richie",
         "name": "Richie Kirsch",
-        "tier": "COIN FLIP"
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "COIN FLIP",
+        "tile": "tiles/richie.png"
        },
        {
         "key": "jessica",
         "name": "Jessica Bowden",
-        "tier": "COIN FLIP"
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "COIN FLIP",
+        "tile": "tiles/jessica.png"
        },
        {
         "key": "stu",
         "name": "Stu Macher",
-        "tier": "PROBABLY DEAD"
+        "short": "STU",
+        "pct": 40,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/stu.png"
        },
        {
         "key": "mickey",
         "name": "Mickey Altieri",
-        "tier": "PROBABLY DEAD"
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/mickey.png"
        },
        {
         "key": "amber",
         "name": "Amber Freeman",
-        "tier": "PROBABLY DEAD"
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/amber.png"
        },
        {
         "key": "billy",
         "name": "Billy Loomis",
-        "tier": "YOU'RE DEAD"
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "YOU'RE DEAD",
+        "tile": "tiles/billy.png"
        },
        {
         "key": "wayne",
         "name": "Wayne Bailey",
-        "tier": "YOU'RE DEAD"
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "YOU'RE DEAD",
+        "tile": "tiles/wayne.png"
        }
       ],
       "new": {
        "key": "jill",
        "name": "Jill Roberts",
-       "tier": "YOU'RE DEAD"
+       "short": "JILL",
+       "pct": 18,
+       "tier": "YOU'RE DEAD",
+       "tile": "tiles/jill.png"
       }
      },
      22.45,
@@ -2966,9 +3401,14 @@
      -12
     ],
     [
-     22.75,
+     22.45,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     22.95,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -3067,14 +3507,15 @@
       "name": "ROMAN BRIDGER",
       "tile_png": "tiles/roman.png",
       "stats": {
-       "STRENGTH": 5,
-       "INTELLIGENCE": 5,
-       "KILL COUNT": 5,
-       "DECEPTION": 5
+       "STRENGTH": 8,
+       "INTELLIGENCE": 9,
+       "KILL COUNT": 10,
+       "DECEPTION": 7
       },
       "pct": 15,
       "t_pct": 1.39,
-      "dur": 2.9
+      "dur": 2.9,
+      "film": "Scream 3 (2000)"
      },
      24.2,
      27.1
@@ -3086,83 +3527,131 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        },
        {
         "key": "quinn",
         "name": "Quinn Bailey",
-        "tier": "YOU'LL LIVE"
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/quinn.png"
        },
        {
         "key": "ethan",
         "name": "Ethan Landry",
-        "tier": "COIN FLIP"
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "COIN FLIP",
+        "tile": "tiles/ethan.png"
        },
        {
         "key": "marco",
         "name": "Marco Davis",
-        "tier": "COIN FLIP"
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "COIN FLIP",
+        "tile": "tiles/marco.png"
        },
        {
         "key": "richie",
         "name": "Richie Kirsch",
-        "tier": "COIN FLIP"
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "COIN FLIP",
+        "tile": "tiles/richie.png"
        },
        {
         "key": "jessica",
         "name": "Jessica Bowden",
-        "tier": "COIN FLIP"
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "COIN FLIP",
+        "tile": "tiles/jessica.png"
        },
        {
         "key": "stu",
         "name": "Stu Macher",
-        "tier": "PROBABLY DEAD"
+        "short": "STU",
+        "pct": 40,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/stu.png"
        },
        {
         "key": "mickey",
         "name": "Mickey Altieri",
-        "tier": "PROBABLY DEAD"
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/mickey.png"
        },
        {
         "key": "amber",
         "name": "Amber Freeman",
-        "tier": "PROBABLY DEAD"
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/amber.png"
        },
        {
         "key": "billy",
         "name": "Billy Loomis",
-        "tier": "YOU'RE DEAD"
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "YOU'RE DEAD",
+        "tile": "tiles/billy.png"
        },
        {
         "key": "wayne",
         "name": "Wayne Bailey",
-        "tier": "YOU'RE DEAD"
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "YOU'RE DEAD",
+        "tile": "tiles/wayne.png"
        },
        {
         "key": "jill",
         "name": "Jill Roberts",
-        "tier": "YOU'RE DEAD"
+        "short": "JILL",
+        "pct": 18,
+        "tier": "YOU'RE DEAD",
+        "tile": "tiles/jill.png"
        }
       ],
       "new": {
        "key": "roman",
        "name": "Roman Bridger",
-       "tier": "YOU'RE DEAD"
+       "short": "ROMAN",
+       "pct": 15,
+       "tier": "YOU'RE DEAD",
+       "tile": "tiles/roman.png"
       }
      },
      27.1,
@@ -3204,9 +3693,14 @@
      -12
     ],
     [
-     27.400000000000002,
+     27.1,
+     "sfx/whoosh.wav",
+     -16
+    ],
+    [
+     27.6,
      "sfx/slam.wav",
-     -10
+     -6
     ]
    ]
   },
@@ -3234,84 +3728,143 @@
        {
         "key": "carvey",
         "name": "Jason Carvey",
-        "tier": "EASY"
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "EASY",
+        "tile": "tiles/carvey.png"
        },
        {
         "key": "karl",
         "name": "Karl Gibbs",
-        "tier": "YOU'LL LIVE"
+        "short": "KARL",
+        "pct": 75,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/karl.png"
        },
        {
         "key": "mrs_loomis",
         "name": "Mrs. Loomis",
-        "tier": "YOU'LL LIVE"
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/mrs_loomis.png"
        },
        {
         "key": "charlie",
         "name": "Charlie Walker",
-        "tier": "YOU'LL LIVE"
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/charlie.png"
        },
        {
         "key": "quinn",
         "name": "Quinn Bailey",
-        "tier": "YOU'LL LIVE"
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "YOU'LL LIVE",
+        "tile": "tiles/quinn.png"
        },
        {
         "key": "ethan",
         "name": "Ethan Landry",
-        "tier": "COIN FLIP"
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "COIN FLIP",
+        "tile": "tiles/ethan.png"
        },
        {
         "key": "marco",
         "name": "Marco Davis",
-        "tier": "COIN FLIP"
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "COIN FLIP",
+        "tile": "tiles/marco.png"
        },
        {
         "key": "richie",
         "name": "Richie Kirsch",
-        "tier": "COIN FLIP"
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "COIN FLIP",
+        "tile": "tiles/richie.png"
        },
        {
         "key": "jessica",
         "name": "Jessica Bowden",
-        "tier": "COIN FLIP"
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "COIN FLIP",
+        "tile": "tiles/jessica.png"
        },
        {
         "key": "stu",
         "name": "Stu Macher",
-        "tier": "PROBABLY DEAD"
+        "short": "STU",
+        "pct": 40,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/stu.png"
        },
        {
         "key": "mickey",
         "name": "Mickey Altieri",
-        "tier": "PROBABLY DEAD"
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/mickey.png"
        },
        {
         "key": "amber",
         "name": "Amber Freeman",
-        "tier": "PROBABLY DEAD"
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "PROBABLY DEAD",
+        "tile": "tiles/amber.png"
        },
        {
         "key": "billy",
         "name": "Billy Loomis",
-        "tier": "YOU'RE DEAD"
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "YOU'RE DEAD",
+        "tile": "tiles/billy.png"
        },
        {
         "key": "wayne",
         "name": "Wayne Bailey",
-        "tier": "YOU'RE DEAD"
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "YOU'RE DEAD",
+        "tile": "tiles/wayne.png"
        },
        {
         "key": "jill",
         "name": "Jill Roberts",
-        "tier": "YOU'RE DEAD"
+        "short": "JILL",
+        "pct": 18,
+        "tier": "YOU'RE DEAD",
+        "tile": "tiles/jill.png"
        },
        {
         "key": "roman",
         "name": "Roman Bridger",
-        "tier": "YOU'RE DEAD"
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "YOU'RE DEAD",
+        "tile": "tiles/roman.png"
        }
-      ]
+      ],
+      "highlights": [
+       [
+        2.06,
+        "carvey"
+       ],
+       [
+        4.02,
+        "roman"
+       ]
+      ],
+      "t_dim": 5.92
      },
      0.0,
      8.5
@@ -3337,6 +3890,7 @@
    "sfx": []
   }
  ],
+ "beat_style": "thermo",
  "zoom": {
   "s4_still_jill": 1.0,
   "s4_still_jill_bed": 1.0,

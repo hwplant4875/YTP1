@@ -11,17 +11,17 @@
 ## 설명
 He's been shot, stabbed, set on fire, run over by a car and shot in the head, and somehow the phone still rings, because Ghostface was never just one guy.
 
-Sixteen different killers have worn the mask across seven Scream movies, from Scream (1996) to Scream 7 (2026). We scored every one of them on strength, intelligence, kill count and deception, turned that into a survival rate, and put them all on one survival board, from "easy" to "you're dead".
+Sixteen different killers have worn the mask across seven Scream movies, from Scream (1996) to Scream 7 (2026). We scored every one of them on strength, intelligence, kill count and deception, turned that into a survival rate, and pinned them all on one survival meter, from "easy" to "you're dead".
 
 Who would you put at number one? Tell us in the comments, and vote for Freddy or Pinhead next.
 
 0:00 Sixteen killers, one mask
 0:17 How we score them
 0:50 #16 to #13
-2:11 #12 to #9
-3:28 #8 to #5
+2:12 #12 to #9
+3:29 #8 to #5
 4:48 #4 to #2
-5:58 #1
+5:59 #1
 6:27 The final board
 
 Horror Ranked rates horror villains by one question: could you survive them?
@@ -39,4 +39,4 @@ scream, ghostface, every ghostface ranked, ghostface killers ranked, scream 7, s
 - 언어: 영어, 자막 파일 업로드
 - 썸네일 3종 A/B 테스트 (C 추천, 지난 영상에서 이긴 3인 형식)
 - 공개 시간 제안: 할로윈 주간이라 최대한 빨리. 한국 시간 오전 8~10시 (미국 저녁)
-- 챕터 시간은 최종 렌더 길이로 한 번 더 확인
+- 챕터 시간은 v2 편집표 기준 (s05·s09·s11 재녹음 반영, 총 6:41)

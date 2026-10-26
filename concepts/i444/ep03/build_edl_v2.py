@@ -18,19 +18,22 @@ def vdur(seg): return round(json.load(open(D + f'voice_v3/{seg}.json'))['charact
 def num_onset(seg):  # the spoken % right after "Survival rate"
     ws = W[seg]; i = max(k for k, w in enumerate(ws) if norm(w[2]) == 'survival'); return ws[i + 2][0]
 STATS = json.load(open(D + 'stats_v2.json')) if os.path.exists(D + 'stats_v2.json') else {}
+KS = {r['key']: r for r in STATS.get('killers', [])} if isinstance(STATS.get('killers'), list) else STATS.get('killers', {})
 PCT = {'carvey': 99, 'karl': 75, 'mrs_loomis': 68, 'charlie': 60, 'quinn': 56, 'ethan': 53, 'marco': 50, 'richie': 45,
        'jessica': 43, 'stu': 40, 'mickey': 36, 'amber': 30, 'billy': 25, 'wayne': 22, 'jill': 18, 'roman': 15}
 NAME = {'carvey': 'Jason Carvey', 'karl': 'Karl Gibbs', 'mrs_loomis': 'Mrs. Loomis', 'charlie': 'Charlie Walker', 'quinn': 'Quinn Bailey',
         'ethan': 'Ethan Landry', 'marco': 'Marco Davis', 'richie': 'Richie Kirsch', 'jessica': 'Jessica Bowden', 'stu': 'Stu Macher',
         'mickey': 'Mickey Altieri', 'amber': 'Amber Freeman', 'billy': 'Billy Loomis', 'wayne': 'Wayne Bailey', 'jill': 'Jill Roberts',
         'roman': 'Roman Bridger'}
+def short(k): return 'MRS. LOOMIS' if k == 'mrs_loomis' else NAME[k].split()[-1 if k == 'carvey' else 0].upper()
+def film_of(k): return KS.get(k, {}).get('film', '')
 def tier(p): return "YOU'RE DEAD" if p <= 25 else 'PROBABLY DEAD' if p <= 40 else 'COIN FLIP' if p <= 55 else "YOU'LL LIVE" if p <= 75 else 'EASY'
 def stats(k):
-    s = STATS.get('killers', {}).get(k, {})
+    s = KS.get(k, {})
     return {n: s.get(f, 5) for n, f in (('STRENGTH', 'strength'), ('INTELLIGENCE', 'intelligence'), ('KILL COUNT', 'kill_count'),
                                        ('DECEPTION', 'deception'))}
 PLACED = []
-SFX_GAIN = {'whoosh': -16, 'fill': -20, 'stamp': -12, 'slam': -10}
+SFX_GAIN = {'whoosh': -16, 'fill': -20, 'stamp': -12, 'slam': -6}
 def sec(voice, shots, rank=None, key=None, card_at=None, extra=(), pad=0.5, clip_db=-99):
     shots = [[T(voice, s[0]), *s[1:]] for s in shots]
     S = {'voice': voice, 'pad': pad, 'clip_audio_db': clip_db, 'shots': shots, 'overlays': [], 'sfx': []}
@@ -38,11 +41,12 @@ def sec(voice, shots, rank=None, key=None, card_at=None, extra=(), pad=0.5, clip
     if key:  # stat card from card_at (after the death beat) to the end of the voice, then the tier beat over the pad
         S['pad'] = 1.2; v = vdur(voice); a = T(voice, card_at); tp = round(num_onset(voice) - 0.05 - a, 3)
         S['overlays'].append(['stats', {'name': NAME[key].upper(), 'tile_png': f'tiles/{key}.png', 'stats': stats(key), 'pct': PCT[key],
-                                        't_pct': tp, 'dur': round(v - a, 3)}, a, v])
-        new = {'key': key, 'name': NAME[key], 'tier': tier(PCT[key])}
+                                        't_pct': tp, 'dur': round(v - a, 3), 'film': film_of(key)}, a, v])
+        new = {'key': key, 'name': NAME[key], 'short': short(key), 'pct': PCT[key], 'tier': tier(PCT[key]), 'tile': f'tiles/{key}.png'}
         S['overlays'].append(['tier', {'placed': list(PLACED), 'new': new}, v, 999]); PLACED.append(new)
+        # whoosh as the card slides in, a soft fill under the bars, the stamp on the spoken %, the slam when the mask hits (0.5 s into the beat)
         S['sfx'] += [[a, 'sfx/whoosh.wav', SFX_GAIN['whoosh']], [a + 0.3, 'sfx/fill.wav', SFX_GAIN['fill']],
-                     [a + tp, 'sfx/stamp.wav', SFX_GAIN['stamp']], [v + 0.3, 'sfx/slam.wav', SFX_GAIN['slam']]]
+                     [a + tp, 'sfx/stamp.wav', SFX_GAIN['stamp']], [v, 'sfx/whoosh.wav', SFX_GAIN['whoosh']], [v + 0.5, 'sfx/slam.wav', SFX_GAIN['slam']]]
         S['card_at'] = a
     S['overlays'] += [[k, val, T(voice, x), T(voice, y)] for k, val, x, y in extra]
     return S
@@ -88,10 +92,10 @@ X.append(sec('s04', [(0, 's2_11_mothers_love', 6.0), ("billy's mom", 's1_11_crea
   ('survival rate', 's2_12_intense', 113.5)],
   [14, 'Mrs. Loomis', 'Scream 2 (1997)'], 'mrs_loomis', 18.0))
 X.append(sec('s05', [(0, 's4_still_charlie_party', 0), ('the horror nerd', 's4_02_return', 104.3), ('every rule', 's4_still_trio', 0),
-  ('he pulled', 's4_02_return', 124.3), ('but the guy', 's4_still_charlie_close', 0),
+  ('he did most', 's4_02_return', 124.3), ('but the guy', 's4_still_charlie_close', 0),
   ('the wrong partner', 's4_still_jill', 0), ('and jill', 'scream4_reveal', 19.6), ('the second she', 's4_still_gf_knife', 0),
-  (11.9, 's4_still_charlie_party', 0)],
-  [13, 'Charlie Walker', 'Scream 4 (2011)'], 'charlie', 11.9))
+  (12.3, 's4_still_charlie_party', 0)],
+  [13, 'Charlie Walker', 'Scream 4 (2011)'], 'charlie', 12.3))
 X.append(sec('s06', [(0, 's6_family', 120.5, 0.54), ('she faked', 's6_core4', 89), ('everyone stopped', 's6_core4', 54),
   ('genuinely evil', 's6_family', 98.4, 0.55), ('but she only', 's6_family', 101.85), ('one confirmed', 's6_core4', 116.5),
   ('sam shot', 's6_family', 172.78), ('survival rate', 's6_family', 171.65, 0.3)],
@@ -104,9 +108,9 @@ X.append(sec('s08', [(0, 's7_09_anna_camp', 20.0), ('he worked', 's7_02_stu', 6)
   ('from stu', 's7_02_stu', 70.4), ('with deepfakes', 's7_02_stu', 75), ('terrifying', 's7_02_stu', 63),
   ('but when it came', 's7_09_anna_camp', 232.0), ('sydney shot', 's7_09_anna_camp', 254.24), ('survival rate', 's7_09_anna_camp', 23.0)],
   [10, 'Marco Davis', 'Scream 7 (2026)'], 'marco', 15.0))
-X.append(sec('s09', [(0, 's5_08_act3', 73.0, 0.85), ('the sweet', 's5_09_fighting', 90.2), ('nobody suspected', 's5_08_act3', 78),
-  ('who stabbed', 's5_03_sheriff', 140.5), ('stabbed the', 's5_03_sheriff', 144.0), ('in broad', 's5_03_sheriff', 135.0),
-  ('fooled sam', 's5_09_fighting', 36.15, 0.8), ('but the moment', 's5_09_fighting', 92), ('she stabbed', 's5_10_daughter', 80.15),
+X.append(sec('s09', [(0, 's5_08_act3', 73.0, 0.85), ('the sweet', 's5_09_fighting', 90.2), ('way too harmless', 's5_08_act3', 78),
+  ('but his crew', 's5_03_sheriff', 141.4), ('in broad', 's5_03_sheriff', 148.0),
+  ('fooled sam', 's5_09_fighting', 36.15, 0.8), ('and the moment', 's5_09_fighting', 92), ('she stabbed', 's5_10_daughter', 80.15),
   ('over and over', 's5_10_daughter', 100.0), ('until he finally', 's5_10_daughter', 107.3, 0.6)],
   [9, 'Richie Kirsch', 'Scream (2022)'], 'richie', 16.4))
 X.append(sec('s10', [(0, 's7_09_anna_camp', 100), ("sydney's neighbor", 's7_09_anna_camp', 4.45), ('actually running', 's7_09_anna_camp', 8.0),
@@ -115,8 +119,8 @@ X.append(sec('s10', [(0, 's7_09_anna_camp', 100), ("sydney's neighbor", 's7_09_a
   ('survival rate', 's7_09_anna_camp', 186)],
   [8, 'Jessica Bowden', 'Scream 7 (2026)'], 'jessica', 16.4))
 X.append(sec('s11', [(0, 's1_10_surprise', 46.6), ('a lot of', 's1_10_surprise', 7), ('most unhinged', 's1_10_surprise', 112.4),
-  ('but he only', 's1_11_creative', 56.4), ('he was so', 's1_11_creative', 87), ('he let billy', 's1_11_creative', 100.75),
-  ('over and over', 's1_11_creative', 103.9), ('just to sell', 's1_11_creative', 113.375, 0.75), ('survival rate', 's1_12_tables', 45)],
+  ('but he was really', 's1_11_creative', 56.4), ('he was so', 's1_11_creative', 87), ('he and billy', 's1_11_creative', 101.0),
+  ('each other', 's1_11_creative', 113.375, 0.75), ('survival rate', 's1_12_tables', 45)],
   [7, 'Stu Macher', 'Scream (1996)'], 'stu', 16.4))
 X.append(sec('s12', [(0, 's2_10_blame', 9.0), ('the film', 's2_10_blame', 14.4), ('so he could', 's2_10_blame', 30),
   ('he racked', 's2_09_driving', 18), ('body counts', 's2_07_big_boys', 125.75), ('and even framed', 's2_10_blame', 83.75),
@@ -150,7 +154,8 @@ X.append(sec('s17', [(0, 's3_11_family', 65.3, 0.85), ('from screen', 's3_11_fam
 # outro: the full board, then the CTA over a long mask close-up
 X.append(sec('s18', [(0, 's6_opening', 186), ('and if you', 's6_subway', 167)], pad=1.5,
   extra=[('title', ['YOUR #1?'], 'tell me', 'and if you'), ('title', ['FREDDY', '!OR PINHEAD?'], 'freddie', 999)]))
-X[-1]['overlays'].insert(0, ['tierfinal', {'placed': list(PLACED)}, 0.0, T('s18', 'and if you')])
+X[-1]['overlays'].insert(0, ['tierfinal', {'placed': list(PLACED), 'highlights': [[T('s18', 'guy who lasted'), 'carvey'], [T('s18', 'one who planned'), 'roman']],
+                                         't_dim': T('s18', 'tell me')}, 0.0, T('s18', 'and if you')])
 FILM = [('s1_', 'Scream (1996)'), ('s2_', 'Scream 2 (1997)'), ('s3_', 'Scream 3 (2000)'), ('s4_', 'Scream 4 (2011)'), ('scream4', 'Scream 4 (2011)'),
         ('s5_', 'Scream (2022)'), ('s6_', 'Scream VI (2023)'), ('s7_', 'Scream 7 (2026)')]
 def film(n): return next((v for k, v in FILM if n.startswith(k)), None)
@@ -167,7 +172,7 @@ for S in X:  # film label per run of one film, gone once the stat card or a full
         if f: S['overlays'].append(['film', f, t, min(end, runs[k + 1][1] if k + 1 < len(runs) else 999)])
 DARK = ['s7_04_walls', 's7_06_spree', 's7_09_anna_camp', 's7_10_sidney_kills', 's6_subway', 's6_ladder', 's6_core4', 's6_two_gf', 's4_02_return',
         's4_06_killcam', 's3_12_firing']
-P = {'sections': X,
+P = {'sections': X, 'beat_style': 'thermo',
      'zoom': {**{k: 1.0 for k in ['s4_still_jill', 's4_still_jill_bed', 's4_still_charlie', 's4_still_gf', 's4_still_trio', 's4_still_charlie_party', 's4_still_charlie_close', 's4_still_gf_knife', 's4_still_jill_hospital']},
               **{k: 1.08 for k in ['s1_01_like_scary', 's1_10_surprise', 's1_11_creative', 's1_12_tables', 's2_09_driving', 's2_10_blame',
                                    's2_11_mothers_love', 's2_12_intense', 's3_11_family', 's3_12_firing']}},
