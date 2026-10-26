@@ -6,18 +6,21 @@
  * DESIGN (H = TV head height = 104 px at s = 1; the show scale is s = 1 -> chest width W = 180 px)
  *   case top 458 px above the ground at s = 1 (~2.5 W; the head is drawn 1.1x, HS, for a cuter read); the
  *   rabbit-ear antennae reach ~504 px. HELEN.solve() gives exact headTop / screen / hands / bounds per pose.
- *   head    rounded CRT: 1.3 H wide, corner r 0.15 H, 3/4 side depth 0.35 H. Case cream #E8DCC8, bezel inside #2A2230.
+ *   v3 RESTYLE (owner 2026-10-26): outfit in black / ivory / white only, screen faces extremely minimal.
+ *   head    rounded CRT: 1.3 H wide, corner r 0.15 H, 3/4 side depth 0.35 H. Case ivory #EFE8DA, bezel inside #1D1C20.
  *           screen 0.96 x 0.72 H (4:3), convex, bezel top 0.1 / sides 0.17 / bottom 0.18 H. Bottom bezel: speaker
- *           grille left, dials right (mint #3FC9B5 + grey #8C8F96). Antennae 0.45 H at +-0.15 H, 25 deg, ball tips,
- *           springy (they act like an ahoge).
- *   screen  dark teal #0F3B36, line art #8FE6D8 glowing #3FC9B5 (SFX.eye glow mode = the 귤멍 eye recipe as light),
- *           scanlines (6 px period at 1080p, 15 %), CRT vignette, glass glare top-left. Mint is used ONLY on the screen,
- *           the lanyard and one dial.
- *   body    lavender blazer + knee-length pencil skirt #958BB0 / shade #736A8C, blouse #F2EEE8 with a plum bow
- *           #3A2A3E, skin #F6E6E8, low pumps #2A2230. Props: mint lanyard + badge "HELEN / HR MANAGER", clipboard
- *           #8C8F96 with paper #F4EFE6, TV remote #2A2230 with a red #D83A4A button, rubber stamp.
+ *           grille left, dials right (mint #3FC9B5 + black). Antennae 0.45 H at +-0.15 H, 25 deg, warm-grey rods with
+ *           ivory ball tips, springy (they act like an ahoge). Neck swivel + antenna pill black.
+ *   screen  dark teal #0F3B36 (the ONLY colour on her), light marks #C4F5EC with one soft glow. Faces are minimal: two
+ *           solid dots (or ^ arcs / short slanted strokes) for eyes and at most one small mouth mark. No lids, lashes,
+ *           pupils, highlights or blush. Faint scanlines (6 %), light vignette, one small glare stroke.
+ *   body    black blazer + knee-length pencil skirt #27262B / shade #18171B with ivory piping #EFE8DA on the lapels,
+ *           front opening, hem, pocket flaps and cuffs; white blouse #FCFBF8 with a black bow; ivory button; skin
+ *           #F6E6E8; black pumps #1D1C20. Props: white lanyard + badge (black band) "HELEN / HR MANAGER", black
+ *           clipboard with paper #F7F3EA, black TV remote with a red #D83A4A button, wooden rubber stamp.
  *   look    flat fills, ONE hard shade per material (light from the top-left), no outlines, one group drop shadow,
- *           mint screen spill on collar / shoulders / hands, optional rim light for dark sets.
+ *           mint screen spill on collar / blouse / hands, and a soft ivory rim ON by default so the black suit holds
+ *           its silhouette on dark walls (pass rim: false to drop it, or your own rim object for a lit set).
  *
  * API
  *   HELEN.draw(ctx, x, y, s = 1, o = {})   whole character as ONE shadow group. (x, y) = ground point between the feet.
@@ -28,7 +31,7 @@
  *     slide       { n: 10, text: 'WHEN THEY KNOCK, OPEN WIDE.' }   Rule card filling the screen; a tiny face window in
  *                 the bottom-right corner keeps lip-syncing (mouth / blink / look apply to it).
  *     mouth       lip-sync shape: 'none' (the face's closed mouth) | 'o' | 'u' | 'wide' | '~'
- *     look        {x, y} gaze -1..1 in SCREEN space (x + = screen right). Default: straight, or toward the turn.
+ *     look        {x, y} gaze -1..1 in SCREEN space (x + = screen right): shifts the eye dots. Default: straight / toward the turn.
  *     blink       1 open .. 0 shut. Default: automatic idle blink from t (SFX.blinkAt) when t is given, else 1.
  *     prevFace, wipe   static wipe between faces: wipe 0..1 sweeps a noise band down the screen; above it the new
  *                 face, below it prevFace. Use HELEN.wipeAt(t, tChange) for the 2-3 frame timing.
@@ -55,8 +58,9 @@
  *     props       { clipboard: true, remote: true, badge: true }
  *     spill       0..1 mint screen light on collar / shoulders / hands (default 0.3)
  *     bloom       0..1 soft screen halo drawn into the scene around the head (default 0.35)
- *     rim         false | { color = '#DCE8FF', alpha = 0.55, width = 2.6 (px at s = 1), dir = [-1, -0.6] } rim light on
- *                 the silhouette edge facing dir (screen space). Default false; turn it on for dark sets.
+ *     rim         false | { color = '#DCE8FF', alpha = 0.55, width = 2.6 (px at s = 1), dir = [-1, -0.6], back = true,
+ *                 backK = 0.5 } rim light on the silhouette edge facing dir (screen space) plus a weaker back edge
+ *                 (back: false = key edge only). Default (v3): soft ivory { '#EFE8DA', 0.5, 2.4, backK 0.6 }; false = none.
  *     shadow      group drop shadow (default true)        cast = contact shadow on the floor (default true)
  *   HELEN.drawHead(ctx, x, y, s, o)   head only (close-ups, face sheets). (x, y) = bottom centre of the case.
  *   HELEN.solve(x, y, s, o) -> { screen: {x, y, w, h}, headTop, neck, hands: {near, far}, bounds } in canvas px
@@ -1122,7 +1126,7 @@
   }
 
   // screen light on the LIGHT materials (collar, blouse cuffs, neck, hands): a colour mix that falls off over ~2.4 H
-  // from the screen centre, so a white collar visibly turns mint while the blazer keeps its lavender.
+  // from the screen centre, so a white collar visibly turns mint while the black blazer stays black.
   const SPILL_COL = '#7FE6D4';
   function spillMix(R, col, p, k = 1) {
     if (!(R.spillA > 0) || !R.scrU || R.faceKey === 'off') return col;

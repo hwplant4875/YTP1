@@ -1002,7 +1002,7 @@
         g.rotate(tilt + nod * 0.14);
         g.translate(nod * 5, nod * 5);
         // a sliver of the gorget under the helm
-        plate(g, c => S.addRoundRect(c, -w * 0.4, -6, w * 0.8, 20, 8), { sd: 3, ld: 1.6 });
+        plate(g, c => S.addRoundRect(c, -w * 0.36, -6, w * 0.72, 18, 8), { sd: 3 });
         drawHelmLocal(g, T, { nod, variant: o.variant, t });
         g.restore();
       }
@@ -1011,13 +1011,8 @@
         const f = T.fist * 1.2, hy = -handH;
         // back of the gauntlet just inside the opening, three plated fingers curling over the edge onto the wall face
         occl(g, c => S.addRoundRect(c, -f * 1.0, hy - f * 0.8, f * 2.3, f * 1.6, f * 0.5), 5, 0.4);
-        plate(g, c => S.addRoundPoly(c, [[f * 1.35, hy - f * 0.95], [f * 0.5, hy - f * 0.8], [f * 0.5, hy + f * 0.8], [f * 1.35, hy + f * 0.98]], [4, 3, 3, 4]), { sd: 3, ld: 1.6 });
-        plate(g, c => S.addRoundRect(c, -f * 0.1, hy - f * 0.78, f * 0.95, f * 1.56, f * 0.5), { sd: 3.5, ld: 1.8 });
-        for (let i = -1; i <= 1; i++) {
-          const fy = hy + i * f * 0.5;
-          plate(g, c => S.addRoundRect(c, -f * 0.95, fy - f * 0.23, f * 1.15, f * 0.46, f * 0.23), { sd: 2.5, ld: 1.4 });
-          flat(g, c => c.rect(-f * 0.45, fy - f * 0.2, 2, f * 0.4), P.shade);
-        }
+        plate(g, c => { S.addRoundPoly(c, [[f * 1.3, hy - f * 0.85], [f * 0.4, hy - f * 0.72], [f * 0.4, hy + f * 0.72], [f * 1.3, hy + f * 0.88]], [4, 3, 3, 4]); S.addRoundRect(c, -f * 0.1, hy - f * 0.74, f * 0.9, f * 1.48, f * 0.5); }, { sd: 3 });
+        plate(g, c => { for (let i = -1; i <= 1; i++) { const fy = hy + i * f * 0.48; S.addRoundRect(c, -f * 0.9, fy - f * 0.21, f * 1.1, f * 0.42, f * 0.21); } }, { sd: 2.5 });
         g.restore();
       }
     }, { scale: s, bounds: { x: x - 300 * s, y: y - (peekH + h + 120) * s, w: 600 * s, h: (peekH + h + 160) * s }, shadow: o.shadow !== false });
