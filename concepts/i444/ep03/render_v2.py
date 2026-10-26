@@ -14,6 +14,19 @@ WORK = os.path.join(os.path.dirname(os.path.abspath(OUT)), 'work_' + os.path.spl
 os.makedirs(WORK, exist_ok=True)
 ONLY = set(filter(None, os.environ.get('ONLY', '').split(',')))
 def run(cmd): subprocess.run(cmd, check=True)
+# spoiler mosaic for the cold open: killers' unmasked faces, keyed by (clip, in-point); boxes are 1920x1080 output pixels
+# (x, y, w, h, from_t) and cover the face's whole path through the shot (hand-placed from frames, checked at full rate)
+MOSAIC = {('s7_10_sidney_kills', 139.92): [(1050, 150, 480, 480, 0)], ('s5_10_daughter', 103.75): [(1020, 85, 720, 875, 0)],
+          ('s5_09_fighting', 144.78): [(570, 85, 750, 605, 0)], ('s6_family', 172.95): [(690, 85, 660, 845, 0.38)],
+          ('s1_10_surprise', 60): [(0, 85, 1470, 890, 0)], ('s3_11_family', 65.3): [(570, 85, 780, 665, 0)],
+          ('s5_09_fighting', 51): [(240, 85, 1530, 845, 0)], ('s2_10_blame', 9.0): [(90, 85, 900, 890, 0)],
+          ('s7_09_anna_camp', 100): [(420, 90, 840, 680, 0)]}
+BLOCK = 54  # mosaic cell size in output pixels (~8-10 cells across a face)
+def mosaic(vf, boxes):
+    for k, (x, y, w, h, t0) in enumerate(boxes):
+        vf += (f",split[mA{k}][mB{k}];[mB{k}]crop={w}:{h}:{x}:{y},scale={max(1, w // BLOCK)}:{max(1, h // BLOCK)}:flags=area,"
+               f"scale={w}:{h}:flags=neighbor[mC{k}];[mA{k}][mC{k}]overlay={x}:{y}:enable='gte(t,{t0})'")
+    return vf
 def dur(p): return float(subprocess.check_output(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p]))
 def rel(p): return p if os.path.isabs(p) else os.path.join(EDIR, p)
 def src(name):
@@ -77,6 +90,7 @@ for si, S in enumerate(E['sections']):
         # owner's request: a solid black bottom bar (reads as letterbox) over the Movieclips/Fandango mark;
         # Scream 7 uploads carry it higher, inside the picture, so their bar is taller
         if 'still' not in name: vf += f",drawbox=x=0:y={905 if name.startswith('s7_') else 980}:w=iw:h=ih:color=black:t=fill"
+        if S['voice'] == 's00' and (name, tin) in MOSAIC: vf = mosaic(vf, MOSAIC[(name, tin)])
         if name == 'BLACK':
             run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', f'color=c=black:s=1920x1080:r={FPS}', '-frames:v', str(n), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p', '-video_track_timescale', '15360', o])
             wav(ao, n)
