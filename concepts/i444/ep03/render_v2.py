@@ -90,7 +90,6 @@ for si, S in enumerate(E['sections']):
         # owner's request: a solid black bottom bar (reads as letterbox) over the Movieclips/Fandango mark;
         # Scream 7 uploads carry it higher, inside the picture, so their bar is taller
         if 'still' not in name: vf += f",drawbox=x=0:y={905 if name.startswith('s7_') else 980}:w=iw:h=ih:color=black:t=fill"
-        if S['voice'] == 's00' and (name, tin) in MOSAIC: vf = mosaic(vf, MOSAIC[(name, tin)])
         if name == 'BLACK':
             run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', f'color=c=black:s=1920x1080:r={FPS}', '-frames:v', str(n), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p', '-video_track_timescale', '15360', o])
             wav(ao, n)
