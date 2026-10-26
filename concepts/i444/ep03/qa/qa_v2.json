@@ -1,0 +1,404 @@
+[
+ {
+  "window": "0-17s (cold open, section s00)",
+  "checked": "I checked the whole window at 10 fps (contact sheets in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa2/w00/). I timed each word with the whisper onsets in voice_v3/words.json, which build_edl_v2.py uses. The SRT matches them closely.\n\n- \"shot\" at 0.38: the picture cuts at 0.30 to s7_10 (Jessica). The muzzle flash is at about 0.38 and the blood burst and hit are clear from 0.5 to 0.8. OK.\n- \"stabbed\" at 1.02: the cut is at 0.94 to Richie, bloody and being stabbed, and he is clear. OK. A 1-frame lag of the caption behind the cut is negligible.\n- \"set on fire\" at 1.92: the cut is at 1.84. Amber's arm catches fire around 1.9 and she is engulfed from 2.2 to 3.0. OK.\n- \"run over by a car\" at 3.16: the SUV enters at 3.18 and hits Ghostface at about 3.38. This is a minor issue, reported below.\n- \"shot in the head\" at 4.30: Sam aims and fires from 4.22 to 4.5. Quinn's forehead bullet hole is clear from 4.6 to 5.5, and \"head\" is at 4.92. OK.\n- \"phone\" at 6.70: a phone ringing on screen from 6.62 to 7.2. OK.\n- \"Ghostface\" at 8.42: a big mask close-up from 7.6 to 9.8. OK.\n- \"16\" at 11.52: cut at 11.44 to Roman, with the \"16 GHOSTFACES\" title fully readable from 11.44 to 14.3 and not clipped.\n- \"that mask\" at 13.28: Ghostface mask on screen from 13.2. The title sits below the mask and does not cover it.\n- No black frames, end cards or countdown cards anywhere from 0 to 17.8.\n- The film tags in the top-right corner are readable.\n- This window has no stat cards and no thermometer beats.",
+  "issues": [
+   {
+    "video_time": 3.08,
+    "words": "run over by a car",
+    "kind": "action_sync",
+    "severity": "minor",
+    "problem": "The car hit starts on the word but is over too fast. At 3.1-3.2 Ghostface is small and dark in the street, with the big RUN OVER BY A CAR caption across his body. At 3.3-3.6 the SUV passes as a blur and the impact itself hardly shows. From 3.7, while 'car' is spoken (3.78-4.04), the screen shows a wide empty road with distant headlights and no Ghostface. Viewers barely see him get hit.",
+    "section": "s00",
+    "shot_index": 4,
+    "fix_clip": "s7_04_walls",
+    "fix_in": 232.3,
+    "fix_note": "Keep the cut at 3.08 but use in 232.30 at speed 0.6 instead of 232.28 at 0.8. The SUV enters at source 232.36 (video ~3.18), impact is at 232.52 (~3.45), and it carries Ghostface out at 232.8 (~3.91), so the hit stays on screen through 'car' at 3.78. In the source, 232.5-232.55 has the SUV right on Ghostface. Also consider moving the word caption higher or lower for this shot, because it sits over Ghostface's torso in the 3.1-3.3 frames."
+   }
+  ]
+ },
+ {
+  "window": "17s-60s (rules intro with mystery stat card, #16 Jason Carvey up to 'acts like he's the new face')",
+  "checked": "I checked SRT lines 10-30 against contact sheets at 2 fps for the whole window and at 10 fps around the action words. Rules intro: 'every Ghostface gets scored' (~26.3) shows a clear Ghostface mask (s6_core4 23.4). The mystery GHOSTFACE stat card slides in at ~27.5. A full-resolution check at 39.9 s shows all four bars, their labels and the x/10 values fully visible and not clipped. Each bar fills on its spoken word (strength 29.4, intelligence 30.3, kill count 31.4, deception 32.2). The '??' stamp lands on 'survival rate' at ~39.5 and does not overlap anything. The 'HOW HARD / TO SURVIVE' title (23.4-26.3) and the 'ALL HUMAN' title (~43.5) are readable and not clipped. 'Ended up dead' (~46) shows a dead body (s5_10_daughter 159.3). The '#16 JASON CARVEY / Scream VI (2023)' rank card lands on 'Number sixteen' (~50.8) and is readable. Carvey is clearly visible handling the masks and on the phone. blackdetect found no black frames in 17-60 s, and I saw no end cards or countdown cards. The 'Michael or Jason' line (~41) is a passing mention of other franchises' killers over a dim Carvey-attack shot (s6_opening 282). That word is not an action word, so I did not flag it.",
+  "issues": [
+   {
+    "video_time": 55.9,
+    "words": "kills his film professor",
+    "kind": "action_sync",
+    "severity": "major",
+    "problem": "On 'kills his film professor' (55.6-57.0 s) the picture is a dark, blurry close-up of hands being washed in a sink (s6_opening 11.7). There is no kill, no professor and no Ghostface, so the action word does not show the action. The s6_opening source starts after Laura Crane's murder: 0-11 s is Carvey with the mask wall, 12-13.5 s is the hand-washing, then he is on the phone. No ep03 clip in action_index.json contains the professor kill.",
+    "section": "s02 (#16 Jason Carvey)",
+    "shot_index": 3,
+    "fix_clip": "s6_opening",
+    "fix_in": 9,
+    "fix_note": "The right moment (Carvey stabbing Laura Crane in the alley) does not exist in any source clip, so the best fix is a new Scream VI clip of the Laura Crane kill, cut in on 'kills'. If you stay with the current sources, use s6_opening 9.0 instead: Carvey holding the bright, clearly visible Ghostface masks, which is clear through about 11.9. That ties him to the killing better than the murky sink shot. Alternatively, keep the wash shot but start it at 12.0, where blood on the hands reads slightly better. That only implies the kill after the fact.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s6_opening",
+     "corrected_in": 12,
+     "reason": "I'm rejecting s6_opening 9.0. The shot lasts 1.46 s (section t 4.94 to 6.4) and plays on \"kills his film professor\" (SRT 55.909-57.436). I checked the source at 10 fps. Masks are clear from 8.9 to about 11.5, not 11.9: the hand-washing starts at 11.6. So 9.0 to 10.46 is clean on its own. The problem is that s02 shot 1 (\"from scream\", section t 1.84 to 3.5) already uses s6_opening from 9 to about 10.66. In the render, that exact mask shot plays around 53.5 to 54.1 s. Using 9.0 again would replay the same footage about 2 seconds later, with only the 30 s phone shot in between. It also still shows no kill. There isn't a clean alternative inside the mask shot: 10.7 + 1.46 = 12.16 runs into the hand-washing at 11.6. The action index has no professor (Laura Crane) kill in any ep03 clip, and its s6_opening kill and stab entries (273-300) are all Carvey's own death. Those belong to later shots and would contradict the line. The real fix is a new Scream VI clip of the Laura Crane alley kill, cut in on \"kills\". Until then, the least-bad option within the current sources is s6_opening 12.0. That gives hands-with-blood the whole way, 12.0 to 13.46, before the cut to Carvey on the phone at about 14.1, with no end card or black. It's still dark and blurry and only implies the kill, so it doesn't fully meet the owner's rule. This value is a placeholder and needs a new clip."
+    }
+   }
+  ]
+ },
+ {
+  "window": "60-110 s (end of #16 Carvey s02, #15 Karl Gibbs s03 at 75.59-93.71, #14 Mrs. Loomis s04 from 93.71)",
+  "checked": "I took word times from voice_v3/s02-s04.json character alignment, offset by the section starts (s02 50.71, s03 75.59, s04 93.71); these agree with the SRT. I sampled the render at 10 fps around each of these words. Ghostface at 62.11 is OK: mask clear from 61.8 to 63.3. 'He was the Ghostface' at 65.79 is OK: Carvey is on screen. Carvey stats card 68.6-74.5 is OK: 4 bars and the 99% stamp land on 'ninety-nine' at 71.27, nothing clipped. 'Karl Gibbs' at 76.79 is a PROBLEM. 'escaped patient' / 'fight' at 79.2-82.4 is OK: Ghostface fights a woman holding a bat (81.0-82.2), with a 0.1 s motion-blur flash at 82.3. 'pawn for the people' at 84.5-85.9 is OK: Karl and Jessica shown. 'Gale floored it' at 87.87 is OK: Gale shown. 'hit him with her van' at 88.95 is OK: the SUV impact on Ghostface lands at about 88.87 (walls 232.28 @0.8), then headlights at 'van' 89.43. Karl stats card 89.54-92.51 has all bars and the stamp visible but is slightly early (minor). Karl thermometer 92.5-93.7 is OK: the mask lands at 75, the KARL 75% callout is readable, no overlap. Carvey thermometer 74.47-75.59 is a PROBLEM (overlap). 'Mrs. Loomis' at 94.91 is a PROBLEM. \"Billy's mom\" at 96.03 is OK: Billy is clear from 95.99. 'friendly reporter' / 'Debbie Salt' at 99.1-101.15 is OK: clear Loomis close-up. 'her plan' at 101.74 is OK: Loomis with gun. 'once Cotton showed up with a gun' at 109.07-110.11 is OK: Cotton is on screen aiming a gun from 108.81. 'it was over' at 110.75 is OK: Cotton close-up, then muzzle flash at 111.2. No black frames, end cards or countdown cards in the window.",
+  "issues": [
+   {
+    "video_time": 94.91,
+    "words": "Number fourteen is Mrs. Loomis",
+    "kind": "wrong_subject",
+    "severity": "major",
+    "problem": "While her name is spoken (94.9-95.9) the shot (s2_11_mothers_love from 6.0) is pushed in and dimmed behind the rank card. Her face is on the left of the frame, fully under the big red '#14' and 'MRS. LOOMIS' text. All the viewer sees is a blurry gun hand. Her face shows only on the first frame at 93.7, before the name is spoken.",
+    "section": "s04",
+    "shot_index": 0,
+    "fix_clip": "s2_10_blame",
+    "fix_in": 118.9,
+    "fix_note": "Use a shot with Loomis center-right, clear of the left-side rank card. In s2_10_blame she is in a medium shot holding a gun from 120.0 to 121.05; with in=118.9 that span covers section t 1.1-2.15, which is the name plus 'Billy's'. The clip cuts to Sidney at 121.1, so keep the cut to Billy at 2.28 or trim it to 2.15. Another option: keep the clip but move the rank-card text, or end its dim/push before 1.2 s.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 118.83,
+     "reason": "I checked s2_10_blame in the source at 10 fps and 30 fps. Shot 0 lasts 2.28 s (the next cut is at 2.28), so with in=118.9 the shot covers source 118.9 to 121.18. The clip cuts to Sidney at 121.133; the last Mrs. Loomis frame is about 121.10. So in=118.9 would show 1-2 frames of Sidney at the end of the shot, and nothing in the clip can end it sooner unless the shot is trimmed.\n\nMrs. Loomis (white coat, gun up) is center-right of frame and clearly visible from about 119.9 to 121.10. That keeps her clear of the left-side rank card. Gale's blurred head is in the left foreground until about 120.4, but the card covers that area.\n\nHer name is spoken at section t 1.2-2.2 (video 94.9-95.9). With in=118.83 that maps to source 120.03-121.03, and Mrs. Loomis is on screen the whole time. The shot then ends at 121.11, just before the Sidney cut, so the existing cut to Billy at 2.28 can stay as it is.\n\nOne caveat: before the name, at section t 0-1.07 (source 118.83-119.9), the picture is a wide shot of Gale. That is the wrong person, but it runs only during \"Number fourteen is\", not during the name. If you want Mrs. Loomis framed even more clearly, you could also keep the rank card's push-in modest, because she sits at about 60-75% of the frame width."
+    }
+   },
+   {
+    "video_time": 76.79,
+    "words": "is Karl Gibbs from Scream Seven",
+    "kind": "wrong_subject",
+    "severity": "major",
+    "problem": "Shot 0 (s7_04_walls 53.0) shows Ghostface only until about 76.6. He then rises and leaves the frame. From 76.9 the screen is a dark, empty hallway wall, and shot 1 (walls 107.5, from 77.35) is also a dim empty hallway. So nobody is visible on 'Karl Gibbs' (76.79-77.6), and Karl's own face is never shown when he is named.",
+    "section": "s03",
+    "shot_index": 0,
+    "fix_clip": "s7_09_anna_camp",
+    "fix_in": 19.9,
+    "fix_note": "Insert a new shot at section t=1.10 ('Karl'), lasting until the existing 2.12 cut: s7_09_anna_camp from 19.9. That gives an unmasked bald Karl close-up, center-right in frame, clear of the #15 card (action_index: Karl close-up 20-27.5). The clip is dark, so add it to the 1.28 gamma list. Minimum fix if Ghostface is kept: start shot 0 at walls 52.6 so the mask stays centered through the name, and replace shot 1's empty hallway.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s7_09_anna_camp",
+     "corrected_in": 19.9,
+     "reason": "I checked this at 10 fps against the 1.28 gamma, over s7_09_anna_camp 19.9 to 23.9. Bald, unmasked Karl Gibbs is clearly visible in a close-up from the very first frame. He sits center-right, well clear of the #15 / KARL GIBBS card at top-left. There is no cut, black frame or end card. From 21.0 to 22.4 he turns to a three-quarter profile, but he stays readable the whole time. The render confirms the problem: the section starts at about 75.59 s, so 'Karl' (76.79) falls at about section t=1.20. At that point shot 0 is already showing Ghostface leaving and then an empty wall, so inserting at t=1.10 lands about 0.1 s before the name, which is good. One note on the cut: edl_v2.json has the next cut at t=1.76, not 2.12, so the inserted shot runs about 0.66 s to the 1.76 cut. After that, shot 1 (walls 107.5) is still a dim empty hallway on 'Scream Seven'. If the shot should run to 2.12 as proposed, shot 1 has to start at 2.12, or be replaced. 19.9 to 21.0 stays on Karl, so that length is fine. Small repeat: s08 opens on anna_camp 20.0, the same footage."
+    }
+   },
+   {
+    "video_time": 74.6,
+    "words": "(Carvey thermometer beat after 'his film professor')",
+    "kind": "graphic",
+    "severity": "major",
+    "problem": "In the Carvey beat (74.47-75.59) the mask lands at 99%, the very top of the tube. It sits on top of the 'GHOSTFACE SURVIVAL METER' title (covers 'SUR') and the legend ('COIN FLIP'). The CARVEY 99% callout box covers 'METER' and the 'EASY' legend item. Title and legend are clipped and overlapping for the whole beat, which is also very short (1.1 s).",
+    "section": "s02",
+    "shot_index": -1,
+    "fix_clip": "",
+    "fix_in": 0,
+    "fix_note": "Overlay 'tier' at s02 23.76: in anim.thermo_beat, move the title and legend higher, or start the tube lower, so that 100% sits below the legend. Alternatively, clamp the callout's y below the legend and nudge it right of the tube. Consider lengthening the s02 pad so the beat is readable for more than 1.1 s."
+   },
+   {
+    "video_time": 89.54,
+    "words": "hit him with her van. Survival rate: seventy-five percent",
+    "kind": "graphic",
+    "severity": "minor",
+    "problem": "The Karl stats card slides in at 89.54, while 'her van' is still being spoken over the headlight aftermath, before 'Survival rate' (90.39). The 75% stamp lands at about 90.9, which is 0.6 s before 'seventy-five' (91.54). Carvey's stamp, by contrast, lands exactly on its word. The card's tile and the thermometer callout show a generic mask with '?' (tiles/karl.png) instead of Karl's face.",
+    "section": "s03",
+    "shot_index": 9,
+    "fix_clip": "",
+    "fix_in": 0,
+    "fix_note": "Move the s03 stats overlay start from 13.95 to about 14.75 ('Survival') and keep t_pct about 1.2, so the stamp lands at 15.95 'seventy-five'. Shift the matching sfx (whoosh/fill/stamp). Optionally make tiles/karl.png from s7_09_anna_camp at about 21.0 (Karl close-up)."
+   }
+  ]
+ },
+ {
+  "window": "110-155 s",
+  "checked": "I read the SRT and the voice_v3/words.json word onsets for 110-155 s. Section starts in the render are s04 93.70, s05 115.27, s06 131.93 and s07 148.73. I checked the following at 10 fps.\n- \"Cotton \u2026 with a gun / it was over\" (110.2-111.6): Cotton is aiming, then the muzzle flash. OK.\n- Mrs. Loomis stat card (111.7-114.06): 4 bars and the 68% stamp are fully visible. OK.\n- s04 thermometer beat (114.06-115.27): problem, see issues.\n- \"Charlie Walker\" (116.39): Charlie is clear behind the #13 card. OK.\n- \"did most of the actual killing\" (122.5): Ghostface, then the victim being dragged. OK.\n- \"Jill turned on him\" (125.25-125.95): scream4_reveal at 19.6 shows Jill clearly facing Charlie, knife in hand. There is no on-screen stab anywhere in this clip, so this is acceptable as is.\n- Charlie stat card (127.57-130.73): 4 bars and 60% are fully visible. OK.\n- s05 thermometer beat: the CHARLIE 60% callout is readable and the mask lands at 60. OK.\n- \"Quinn Bailey\" (133.21): Quinn's bloody grin with the #12 card. OK.\n- \"faked her own death\" (~135.4): the fake-death attack is shown. OK.\n- \"one confirmed kill\" (142.3): Quinn with the knife. OK.\n- \"Sam shot her in the head\" (Sam 143.45, shot 143.75, head 144.43): Sam is aiming at 143.4-143.7, and the cut at 143.8 shows Quinn with the bullet hole until 144.5. OK.\n- Quinn stat card (144.73-147.54): 4 bars and 56% are visible. OK.\n- s06 thermometer beat: the QUINN 56% callout is readable. OK.\n- \"Ethan Landry\" (150.11): Ethan is laughing behind the #11 card, then the subway shot. OK.\n- No black frames, end cards or countdown cards in the window.\n\nNote: ffmpeg contact sheets made with the fps filter after an input -ss dropped the first 2-5 s here (the packets have no timestamp gaps). I checked those spans with single-frame grabs instead.",
+  "issues": [
+   {
+    "video_time": 114.6,
+    "words": "Survival rate: sixty-eight percent (Mrs. Loomis thermometer beat)",
+    "kind": "graphic",
+    "severity": "major",
+    "problem": "In the thermometer callout the new name is clipped: it reads 'MRS. LOOM' because the text runs past the callout's right border. The '68%' also touches the border. This lasts from 114.6 to 115.27.",
+    "section": "s04",
+    "shot_index": 9,
+    "fix_clip": "",
+    "fix_in": 0,
+    "fix_note": "Graphic fix, not an in-point change. In anim.py thermo_beat at line 227, text(dp,(314,98),new['short'], 64 if len<=8 else 52 \u2026) is too big for 11-character names. Either shrink the font to fit the box width (measure it with textlength and step down to about 40px for 'MRS. LOOMIS'), or widen the callout box. Then re-render the s04 tier beat. Check other long shorts in later beats too, e.g. 'MRS. LOOMIS' if it appears in later callouts."
+   },
+   {
+    "video_time": 147.7,
+    "words": "Survival rate: fifty-six percent (Quinn thermometer beat); also 114.1 and 130.8 beats",
+    "kind": "graphic",
+    "severity": "minor",
+    "problem": "Some previously placed contestants disappear from the meter during a thermometer beat. In the 147.6-148.7 beat KARL 75% and CHARLIE 60% are missing; only CARVEY and MRS. LOOMIS show. In the 114.1 beat KARL is missing, and in the 130.8 beat MRS. LOOMIS is missing. The missing ones are always on the same (right) side as the new callout, so they seem to be hidden under or behind it.",
+    "section": "s06",
+    "shot_index": 7,
+    "fix_clip": "",
+    "fix_in": 0,
+    "fix_note": "Graphic fix in anim.py _layout/thermo_beat. The new entry's large callout covers the right-side slots of earlier entries. Either put the new callout on the side with fewer entries, or offset the earlier right-side callouts so they stay visible (or draw them after the new callout). Then re-render the s04, s05 and s06 tier beats."
+   }
+  ]
+ },
+ {
+  "window": "155-200s",
+  "checked": "I read every SRT line from 155 to 206 s and checked word times against the voice_v3 character timings. I measured the voice onsets in the render audio: \"Sidney\" starts at about 183.8, \"shot\" at about 184.2 and \"Survival\" at 185.1. The SRT runs about 0.15-0.2 s late against the render. I made 10 fps contact sheets for all of 155-203 s and pulled full-size frames of both stat cards and both thermometer beats.\n\nPassed:\n- Ethan: \"mask came off\" (159.6) shows the unmasked, bloodied Ethan. \"Tara put a knife in him again and again\" (160.5-162.6) shows Tara's bloody face, then the knife going into Ethan's face (dark but readable), then a wide shot of Tara stabbing down.\n- Ethan stat card (164.7-168.3): all 4 bars, 53% lands on \"fifty-three\" and nothing is clipped. His thermometer beat (168.3-169.5): the mask lands at 53 and the ETHAN 53% callout is readable.\n- Marco: the #10 MARCO DAVIS rank card sits over the bald man, who matches tiles/marco.png. \"Stu Macher\" (177.6) shows the deepfake Stu video call right on the word.\n- Marco stat card at full size: 4 bars and the 50% / COIN FLIP stamp are all visible with nothing clipped. His thermometer beat (187.1-188.2) is readable. The anim.py layout deliberately hides older labels on the callout side.\n- Richie: the #9 RICHIE KIRSCH rank card is over Richie, and \"fooled Sam\" (197.2) shows Sam.\n- No black frames, end cards or countdown cards in the window.",
+  "issues": [
+   {
+    "video_time": 184.2,
+    "words": "Sidney shot him",
+    "kind": "action_sync",
+    "severity": "major",
+    "problem": "The gunshot plays about 0.4 s early. Sidney's muzzle flash and Marco snapping back run from 183.8 to 184.2, on the word \"Sidney\". On the word \"shot\" (audio onset about 184.2) the source clip has already cut to the blonde (Jessica) swinging a chair, the wrong person, and the Marco stat card slides in over it from 184.4. So the shooting is never on screen when \"shot\" is said.",
+    "section": "s08 (index 8, Marco Davis)",
+    "shot_index": 8,
+    "fix_clip": "s7_09_anna_camp",
+    "fix_in": 254,
+    "fix_note": "Change shot 8's in-point from 254.24 to 254.0. In the source, Sidney aims from 254.0, the muzzle flash is at 254.4 and Marco's head snaps back from 254.5 to 254.8, and the cut to the blonde comes at about 254.9. With in=254.0 the shot starts on \"Sidney\" (render about 183.75), the flash lands at about 184.15 and the hit plays from about 184.25 to 184.55, on \"shot him\". 253.9 and earlier is a different shot of the bald man in the garden, so don't go below 254.0. Suggestion: also move the Marco stats card_at in build_edl_v2.py (currently 15.0, i.e. \"shot him\") to about 15.55 (\"Survival\"). Otherwise the card slides over the centre-right of the frame, where Marco is hit.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s7_09_anna_camp",
+     "corrected_in": 254,
+     "reason": "I checked the source at 10 fps from 253.6 to 256.6, then frame by frame around the cut (the clip runs at about 24 fps). The bald man in the garden is on screen up to 253.92. The first frame of Sidney is at 253.96, so an in-point of 254.0 starts cleanly on Sidney with no frame of the previous shot. In the source, Sidney charges in and aims from 254.0 to 254.3, the muzzle flash is at about 254.4, Marco is hit and his head snaps back from about 254.5 to 254.8, and the cut to the blonde swinging a chair is at about 254.9. All of it is bright enough and Sidney is clearly visible. The shot lasts 1.24 s (section t 14.4 to 15.64). In the current render it starts at about 183.75; I worked this out from where the flash lands (about 183.9 with in 254.24). With in=254.0 the shot opens on Sidney at 183.75, the flash lands at about 184.15 and the hit plays from about 184.25 to 184.55. The narration's audio energy (music mixed in) shows the \"Sidney\" syllables at about 183.95 and a new onset at about 184.15 to 184.2, which is probably \"shot\". That puts the flash and hit on \"shot him\" instead of the blonde. The last roughly 0.35 s of the shot (render 184.65 to 184.99) still cuts to the blonde, as it does now. That is the source's own next shot, after the hit has played, and no in-point can avoid it within this shot length. Do not go below 254.0, because before 253.96 is the bald man. I also agree with moving the Marco stats card_at from 15.0 to about 15.55: in the current render the card already covers the right side of the frame from 184.4, which is where the hit would now be."
+    }
+   },
+   {
+    "video_time": 195.1,
+    "words": "his crew took out the sheriff in broad daylight",
+    "kind": "action_sync",
+    "severity": "major",
+    "problem": "On \"took out\" (194.7) Ghostface raises the knife, which is fine. But from \"sheriff\" (render about 195.1) through \"broad daylight\" (to about 196.6), the picture is a static wide shot of the house front. Ghostface and Judy are tiny figures on the lawn, so the stabbing of the sheriff is not clearly visible on her word.",
+    "section": "s09 (index 9, Richie Kirsch)",
+    "shot_index": 4,
+    "fix_clip": "s5_03_sheriff",
+    "fix_in": 145.7,
+    "fix_note": "Change shot 4's in-point from 148.0 to 145.7. In the source, from 145.7 to 147.1 the Ghostface mask fills the frame in clear daylight with the flag behind as it leans over and stabs Judy, and 147.2-147.4 is a close-up of the stab on the lawn. The shot runs about 1.72 s (src 145.7-147.42), so it ends before the wide shot at 148.2. Alternative: 144.0 shows Judy gasping as she is stabbed with Ghostface's shoulder over her, though the mask itself is less visible.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s5_03_sheriff",
+     "corrected_in": 145.7,
+     "reason": "I checked the source at 10 fps for 145.7-147.5, which covers the shot's 1.72 s (t 7.02 to 8.74 in the section). From the first frame through about 147.1 (offsets 0.0-1.4), the Ghostface mask fills the frame in clear daylight, with the 1801 house number and the flag behind it. It is leaning over the blonde victim and stabbing her, so the killer is clearly visible as \"sheriff\" is spoken (SRT 194.229-196.369). There is some motion blur on the arm swings at offsets 0.7-0.9 and 1.2-1.4, but the mask stays sharp. At about 147.2 (offset 1.5) the source cuts to a close-up of the stab: the victim in a lavender top on the lawn with Ghostface's gloved hand on her. That close-up is still the same action, and it runs to the end of the shot at about 147.42. Nothing in this range is black, an end card, the wrong person or an empty frame. The proposed in-point of 145.7 is the right one. Contact sheet: C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa2/s09sh4/b.jpg"
+    }
+   }
+  ]
+ },
+ {
+  "window": "200-240 s",
+  "checked": "I checked every narrated beat in the window at 10 fps and saw only one major problem. Section timing came from the voice_v3 durations plus pads and matches the SRT. These were fine:\n- s09 \"she stabbed him\" (200.98): shot 7 cuts at 200.8 to Sam's knife hitting Richie. \"over and over\" (201.62) shows Sam stabbing again and again. \"until he finally stopped moving\" (202.7) shows Richie bloody and dying.\n- Richie stat card (204.5 to 207.55): all 4 bars are visible and the 45% stamp lands at about 205.9, on the spoken number. In the tier beat (207.55 to 208.75) the mask lands at 45 and the RICHIE 45% callout is readable with no overlaps.\n- s10 \"Jessica Bowden\" (209.71): Jessica's lit face is visible to the right of the #8 card. \"Sydney's neighbor\" (211.09) cuts to Sidney at 211.01. \"colder\" shows Jessica.\n- \"Sydney\" (222.57) shows Sidney aiming. \"Tatum\" and \"shooting together\" (223.19 to 223.85) cut to the double muzzle flash at 223.39, about 0.2 s after \"Tatum\" starts. \"to stop her\" (224.23) shows Jessica being hit.\n- Jessica stat card (225.15 to 227.83): 4 bars, and 43% stamps at about 226.6. Her tier beat is clean: the mask lands at 43 and the callout is readable.\n- s11 \"most unhinged\" shows Stu aiming the gun, manic.\n- No black frames, end cards or countdown cards anywhere from 200 to 240.\n\nSmaller things I saw but did not list as issues:\n- 223.2 to 223.3: blurry frames inside shot 6, just as \"Tatum\" starts.\n- 215.65 and 237.45: 0.3 s source cutaways to Sidney. Neither is on an action word.\n- 218.1 to 219.6: on \"to get what she wanted\" the picture shows Sidney, not Jessica.\n- 238.81 \"Billy's sidekick\": the picture is only Stu. Billy shows up only briefly, about 239.9 to 240.05 in a Billy and Stu two-shot. This is minor and has no clean fix.",
+  "issues": [
+   {
+    "video_time": 229.97,
+    "words": "Number seven is Stu Macher",
+    "kind": "wrong_subject",
+    "severity": "major",
+    "problem": "On the name (229.97 to 230.6) Stu's face is dark at the far left of the frame and the #7 / STU MACHER rank card covers it. The viewer sees only the lamp, the door and a gun.",
+    "section": "s11 (section index 11, #7 Stu Macher, starts 229.03)",
+    "shot_index": 0,
+    "fix_clip": "s1_10_surprise",
+    "fix_in": 8.5,
+    "fix_note": "Shot 0 uses s1_10_surprise from 46.6, a dark lamp shot with Stu at the far left, under the rank card (229.03 to 231.93). s1_10_surprise from 8.0 to 18.5 is a bright, continuous shot of Stu in the beige sweater at center-right with Sidney leaning on him, so his face stays clear of the card. Set shot 0 to start at 8.5; it runs 2.2 s, to 10.7. Shot 1 currently uses s1_10_surprise from 7.0, which would now repeat the same footage. Move it to s1_10_surprise 46.6, the Stu grin-and-gun lamp shot. The card only overlaps it for 0.7 s.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s1_10_surprise",
+     "corrected_in": 8.5,
+     "reason": "I checked the source at 10 fps from 8.0 to 12.0 s in s1_10_surprise. The new shot runs from 8.5 to 10.7 at normal speed; the 1.08 for this clip in build_edl_v2.py is zoom, not speed. Across that range the shot is one bright, continuous take: Stu in the beige sweater sits at center-right with Sidney leaning on him, his face is clear, and nothing cuts away, fades to black or hits an end card. In the current render the #7 / STU MACHER card fills only the left third of the frame, so it won't cover his face at this framing. That means Stu is visible from the first frame on 'Number seven is Stu Macher' (229.97). I also checked the moved shot 1 (s1_10_surprise from 46.6). It runs 3.76 s, to 50.36, inside the action-index unmasked_face span of 46.6 to 51.8. It shows Stu grinning in the lamp shot, then raising and aiming the gun, all continuous. The rank card overlaps it only from 2.2 to 2.9 s in the section. Moving it avoids repeating the 7.0 footage."
+    }
+   }
+  ]
+ },
+ {
+  "window": "240-280s",
+  "checked": "I took the word times from the voice_v3 alignment JSON and confirmed them by cross-correlating the audio (s13 voice starts at 271.405 in the render). The SRT runs about 0.48 s late in this window. Real word times: Billy 242.59, stabbed 242.87, Mickey 249.60, body 258.12, Derek 260.72, twist 262.84, partner 264.56, shot 265.12, Amber 272.44, killed Dewey 274.52, shot 276.20, Gale 276.68, stove 278.36.\n\nI made 10 fps contact sheets for 240-280 and full-size grabs of both stat cards and both thermometer beats.\n\nThese were OK:\n- Billy stabbing Stu, then Stu bloody with the knife (241.9-244), lands on \"Billy/stabbed\".\n- Stu stat card (245.5-247.4): 4 bars, 40% stamp and PROBABLY DEAD tag all visible and unclipped. Thermometer (247.5-248.6): mask lands on 40, STU 40% callout readable, nothing overlaps.\n- Mickey under the #6 card: dimmed but recognisable.\n- Bloody body on \"body counts\" (257.8-259.0).\n- Derek on the Greek letters on \"framed Derek\" (260.1-261.4).\n- Mrs Loomis reveal at 263.3 on \"twist coming\".\n- Mickey stat card (267.1-270.1): 4 bars and 36% fine. Thermometer (270.2-271.4): mask lands on 36, MICKEY 36% callout readable.\n- Amber visible under #5.\n- \"Killed Dewey\" shows Amber fighting. No Dewey kill is in the source clips, but the killer is visible.\n- Gale's muzzle flash at 276.1, on \"shot\" (276.2). Amber is hit at 276.3-276.6.\n- Amber's arm on the burner, then fully on fire at 278.2, on \"stove\" (278.36).\n\nNo black frames, end cards or countdown cards in the window.",
+  "issues": [
+   {
+    "video_time": 264.5,
+    "words": "because his own partner shot him",
+    "kind": "wrong_subject",
+    "severity": "major",
+    "problem": "On 'partner' (264.56) the picture is Sidney (264.5-264.7), the tail of shot 8, because s2_10_blame cuts from Mrs Loomis to Sidney at about 124.15. On 'shot' (265.12) the picture is Mickey already dead on the floor (shot 9). The partner with the gun only appears at 265.44.",
+    "section": "s12 (sections[12], Mickey Altieri)",
+    "shot_index": 9,
+    "fix_clip": "s2_11_mothers_love",
+    "fix_in": 6,
+    "fix_note": "Move shot 9's start from 16.14 to 15.8 and use it as [15.8, 's2_11_mothers_love', 6.0]. That puts Mrs Loomis aiming the pistol (clear from 6.0 to 10.4) on both 'partner' and 'shot him', and removes Sidney from the end of shot 8 (which now ends at source 123.78, still Mrs Loomis). Then make shot 10 [17.3, 's2_11_mothers_love', 3.85] so Mickey's body on the floor (3.6-5.6) follows as the result. The actual gunshot on Mickey is not in any source clip.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s2_11_mothers_love",
+     "corrected_in": 6,
+     "reason": "I checked the source at 10 fps and measured the exact cut frames with signalstats. The source runs at 23.976 fps, and the 1.08 for these clips in the edit list is zoom, not speed, so source time maps 1:1 to the timeline.\n\nIn s2_11_mothers_love:\n- Before about 3.71 there is a wide shot of Sidney and Mrs Loomis.\n- From 3.71 to 5.88 Mickey lies dead on the floor with the gun by his hand.\n- From 5.88 to about 11.0 there is a clear close-up of Mrs Loomis aiming the pistol.\n- After that it cuts to Sidney.\n\nProposed shot 9, [15.8, 's2_11_mothers_love', 6.0], runs to 17.3, which is source 6.0 to 7.5. That is Mrs Loomis aiming the whole time, clearly lit with the gun in frame, and there is no cut. 'partner' (264.56, section time about 16.2) lands at source about 6.4 and 'shot' (265.12) at about 6.96, so both words show the partner with the gun.\n\nShot 8 (s2_10_blame from 122.6) now ends at source 123.78, which is still Mrs Loomis holding the gun. The cut to Sidney is at about 124.2, so Sidney no longer appears.\n\nShot 10, [17.3, 's2_11_mothers_love', 3.85], runs to 19.34, which is source 3.85 to 5.89. The body is clear from the first frame. However, the cut to the Mrs Loomis close-up is at 5.88, so the last frame or so may flash her. Use 3.8 instead: that gives source 3.80 to 5.84, all body and clear of both cuts (3.71 and 5.88).\n\nShot 9 is accepted as proposed. For shot 10, use [17.3, 's2_11_mothers_love', 3.8]."
+    }
+   },
+   {
+    "video_time": 270.1,
+    "words": "(end of 'thirty-six percent', just before the thermometer)",
+    "kind": "other",
+    "severity": "minor",
+    "problem": "3 frames (270.10-270.17) flash a blurry shirtless torso from the next shot in the source, just before the thermometer starts.",
+    "section": "s12 (sections[12], Mickey Altieri)",
+    "shot_index": 11,
+    "fix_clip": "s2_10_blame",
+    "fix_in": 16.3,
+    "fix_note": "Shot 11 (in-point 16.5, about 2.22 s long) runs past the source cut at about 18.62. Set the in-point to 16.3 so the shot ends at about 18.52, still inside the clean Mickey close-up (14-18.9)."
+   }
+  ]
+ },
+ {
+  "window": "280-320s",
+  "checked": "I checked every narration word from 278 to 326 s, using whisper word onsets from voice_v3/words.json with the section offsets added (s13 starts at 271.40, s14 at 288.43, s15 at 314.78). Words checked: \"burning stove\", \"on fire\", \"swinging a knife\", \"Tara shooting her in the head\", \"Billy Loomis\", \"killing Sidney's mom\", \"boyfriend\", \"planned\", \"played the victim\", \"Detective Wayne Bailey\", \"cop\", \"murders\". I made contact sheets at 10 fps across the whole window and looked at full-resolution frames of the Amber stat card (287.0), the Billy thermometer beat (314.5) and the Wayne rank card (316.8). Graphics that pass: the Amber card at 284.6-287.2 and the Billy card at 310.4-313.6 show all 4 bars, and the % stamp lands on the spoken number (30% at about 286.1, 25% at about 312.2) with nothing clipped. In the thermometer beats at 287.2 and 313.6 the mask lands at about +0.6 s, and the AMBER 30% and BILLY 25% callouts are readable with no overlaps. The rank cards for #4 Billy and #3 Wayne are readable. There are no black frames, end cards or countdown cards in the window. These shots are fine: Amber burning on \"burning stove\" (278.2) and \"swinging\" (281.0); Billy clear on his name (289.4), on \"boyfriend\" and \"planned\" (297.5-300), and on \"played the victim\" and \"favorite Ghostface\" (300-305); Wayne on \"cop\" (317.74) and Ghostface on the subway on \"murders\" (319.3).",
+  "issues": [
+   {
+    "video_time": 280.34,
+    "words": "came back out on fire",
+    "kind": "action_sync",
+    "severity": "major",
+    "problem": "\"On fire\" is spoken at 280.34-280.9, and from about 280.5 to 280.95 the picture cuts away to a Sidney reaction close-up. The burning Amber only comes back at 281.0. Shot 4 (s5_09_fighting from 147.95) holds burning footage for only about 1.4 s before the source cuts to Sidney and Gale, which happens at about 149.4-151.9 in the source.",
+    "section": "s13 (Amber Freeman, #5)",
+    "shot_index": 5,
+    "fix_clip": "s5_09_fighting",
+    "fix_in": 152,
+    "fix_note": "In build_edl_v2.py s13, change the anchor of shot 5 from 'swinging' to 'on fire' (it would start at about 280.26) and keep the clip at in-point 152.0. Amber is engulfed and walking in flames from 152.0 to 153.5 in the source, then burns behind the counter. Shot 4 (147.95) then ends before the Sidney cutaway.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s5_09_fighting",
+     "corrected_in": 152.06,
+     "reason": "I accept the fix of moving the shot 5 anchor to 'on fire', with one change: keep the in-point at 152.06 instead of 152.0. 'on' is at 8.94 s into the section, so the anchor gives 8.86 s, about 280.28 in the video. That matches the current render, where shot 5 starts at about 281.0, so the section starts at about 271.42. In the 10 fps render sheet the burning Amber does come back only at about 281.0, after the Sidney close-up from about 280.5 to 280.9. That confirms the problem. Checked the source frame by frame at 23.976 fps: the cut from the Gale close-up to the wide burning-kitchen shot happens at about 152.03. The frame shown at 152.0 is still Gale (it starts at 151.985), so an in-point of 152.0 would flash one Gale frame. 152.06 (the current value) starts cleanly on Amber engulfed in flames. At 10 fps over the new shot's length (about 280.28 to 282.74, so source 152.06 to about 154.5): Amber is clearly visible burning and flailing in the wide kitchen shot from 152.06 to about 153.4. 'swinging' (about 281.1, source about 152.9) still lands on that burning figure. From 153.4 to 154.5 the source cuts to a closer, darker shot of flames by the counter with her body only partly visible. That is weaker but it is still fire, with no Sidney, end card or black. The Sidney/Gale shot behind the flames only starts at about 154.9, after the shot ends. Shot 4 (147.95) then runs about 1.1 s (147.95 to about 149.07). That is all burning footage and ends before the Sidney cutaway at about 149.7."
+    }
+   },
+   {
+    "video_time": 293.43,
+    "words": "by killing Sidney's mom a year before",
+    "kind": "wrong_subject",
+    "severity": "major",
+    "problem": "Billy is not shown on \"killing Sidney's mom\". The shot (s1_11_creative from 33) shows Sidney's bloody face from 293.35 to 294.85, then Stu with his hands behind his head from 294.9 to 295.4 (wrong person). Billy only appears from 295.5.",
+    "section": "s14 (Billy Loomis, #4)",
+    "shot_index": 3,
+    "fix_clip": "s1_10_surprise",
+    "fix_in": 27.6,
+    "fix_note": "Billy's reveal shot: bloody shirt, voice changer at his mouth, gun in hand. He is clear from 27.6 to 31.0 in the source, which covers the whole line \"killing Sidney's mom a year before\". The last ~0.7 s, during \"the first movie even begins\", falls on Sidney. s01 already uses 27.5 on 'deception'. If that reuse is not wanted, use s1_10_surprise 0-4.9 instead (Billy's bloody close-up, after the part shot 0 already uses).",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s1_10_surprise",
+     "corrected_in": 27.6,
+     "reason": "I recommend accepting the fix as proposed: s1_10_surprise from 27.6 at speed 1.0. Shot 3 starts at 4.92 in section s14 and the next shot starts at 9.04, so it runs 4.12 s, from video 293.43 to 297.55. The subtitles put \"this by killing Sidney's mom a year before\" at 293.62 to 295.92 and \"the first movie even begins\" at 295.94 to 298.16.\n\nI checked the source at 10 fps from 27.6 to 31.8. Billy fills the frame from the first frame to 30.9 in the source: unmasked, bloody white T-shirt, voice changer at his mouth, gun in hand, well lit and sharp. There are no cuts, black frames or end cards in that stretch. Only the back of Sidney's head shows on the right. That is video 293.43 to about 296.73, so Billy is on screen for the whole \"killing Sidney's mom a year before\" line and into \"the first movie\".\n\nAt 31.0 in the source (video about 296.83) there is a hard cut to Sidney facing the camera, with Stu in the background, for the last ~0.7 s. That part falls under \"even begins\", so no action word lands on it. The project's 1.08 zoom for this clip will not crop Billy, who sits in the left-centre of the frame. The only downside is that s01 already uses this reveal from 27.5 on 'deception', so the same footage appears twice in the video.\n\nThe fallback also checks out if that reuse is unwanted. s1_10_surprise from 0 to 4.7 is a clear bloody close-up of Billy, but it cuts to Sidney at 4.8. Shot 0 of this same section already uses 0 to 2.2, so starting at 2.2 would give only 2.6 s of Billy and then about 1.5 s of Sidney. That still covers \"killing Sidney's mom a year before\", but 27.6 is the better pick. Contact sheets are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa2/s14sh3/ (a.jpg for 27.6 onward, b.jpg for 0 to 5)."
+    }
+   },
+   {
+    "video_time": 283.22,
+    "words": "it took Tara shooting her in the head",
+    "kind": "action_sync",
+    "severity": "minor",
+    "problem": "From 282.62 to 284.6, Tara is shown aiming the pistol (s5_10_daughter 177.45, speed 0.85). The headshot is never shown: no muzzle flash and no Amber. Per action_index the shot itself is not in the source clip, which cuts to the end card at 180.0. The stat card then comes in at 284.6 over a dark, blurry background.",
+    "section": "s13 (Amber Freeman, #5)",
+    "shot_index": 6,
+    "fix_clip": "s5_10_daughter",
+    "fix_in": 177.45,
+    "fix_note": "No source clip on disk contains the Amber headshot. Keeping Tara aiming is the closest available picture. A real fix would need a new clip of the shot; otherwise change the wording."
+   },
+   {
+    "video_time": 316.1,
+    "words": "Detective Wayne Bailey",
+    "kind": "action_sync",
+    "severity": "minor",
+    "problem": "On his name (316.1-317.2), Bailey is dark and half hidden behind the #3 rank card text. Shot 0 (s6_family 0 at speed 0.8) also runs past the source cut at 2.1 s, so from 317.4 to 317.74 the picture shows Tara with a blurry hand in the foreground instead of Bailey.",
+    "section": "s15 (Wayne Bailey, #3)",
+    "shot_index": 0,
+    "fix_clip": "s6_family",
+    "fix_in": 0,
+    "fix_note": "Keep in-point 0 but slow the clip to speed 0.7 (2.96 s x 0.7 = 2.07 s of source, which ends before the cut at 2.1 s). The shot then stays on Bailey aiming the gun for the whole shot. Optionally raise the gamma for s6_family on this shot."
+   }
+  ]
+ },
+ {
+  "window": "320-365 s (end of s15 Wayne Bailey from t=5.2, all of s16 Jill Roberts, start of s17 Roman Bridger to t=6.2)",
+  "checked": "Method: every frame from 319 to 366 s was pulled at 10 fps with an input seek and frame numbering. I didn't use drawtext pts labels, because the suggested contact-sheet command gave wrong labels on some sheets in this file (one sheet started at 3.1). I checked the narration against the rendered audio with faster-whisper word timestamps, and the section starts against scene cuts and keyframes. Render section starts: s15=314.77, s16=335.13, s17=358.80. The SRT runs about 0.6 s later than the real audio (see the first issue), so all word times below are actual audio times.\n\nChecked and OK:\n- 'murders'/'committing them' (Ghostface in the subway from ~320.6).\n- 'Jill Roberts' (Jill still under the #2 card, 335.1-337.1).\n- \"Sidney's own cousin\" (Ghostface vs Sidney in the hallway, 337.17).\n- 'the smile ... mask came off' (unmasked Jill smirking, face clear 339.5-342.7. The mask-pull itself is at 338.8-339.4, dark, but the line is about the smile.)\n- 'She killed her friends' (clear attic Ghostface at 342.77).\n- 'her own partner' (Charlie with Jill, 344.97).\n- 'wounded survivor' (hospital still, 346.67).\n- 'whole town believed' (deputies, 349.27).\n- 'stealing Sidney's life' (slow-mo Jill, 352.67).\n- 'Roman Bridger' (Roman's face under the #1 card from 358.8).\n- \"half-brother\" (Roman unmasked, 362.6).\n- Wayne stats card (331.3-333.9) and Jill stats card (354.7-357.6) at full res: 4 bars, the % stamp (22% / 18%) and the YOU'RE DEAD pill are all fully visible, nothing clipped.\n- Wayne thermometer beat (333.9-335.1): mask lands on 22, callout readable, no overlap.\n- No black frames, end cards or countdown cards in the window.",
+  "issues": [
+   {
+    "video_time": 320,
+    "words": "(whole window) e.g. 'stabbed' SRT 330.88 vs audio ~330.1; 'killed' SRT 343.72 vs audio ~342.96; 'Roman' SRT 360.81 vs audio ~359.9",
+    "kind": "other",
+    "severity": "major",
+    "problem": "The SRT is not in sync with this render. Every caption here is about 0.6-0.8 s late. Section starts in the render: s15 314.77, s16 335.13, s17 358.80 (matching scene cuts and keyframes). The SRT puts them at 315.36, 335.76 and 359.45, a constant +0.6 s. The video's shots line up with the real audio, so the picture is fine, but captions uploaded with this video will trail the voice. The drift probably comes from an earlier section (make_srt_v2.py adds up mp3 duration + pad, while render_v2.py uses frame-rounded t_global, or an earlier section was rendered with a different length).",
+    "section": "s15-s17 (SRT file)",
+    "shot_index": 0,
+    "fix_clip": "upload/ghostface_ranked_en_v2.srt",
+    "fix_in": -0.6,
+    "fix_note": "Rebuild the SRT from the render's actual section starts (round(t_global*FPS)/FPS as in render_v2.py, or the measured cut times), or shift it by about -0.6 s and recheck at other points. Note for other QA windows: SRT word times are late by about 0.6 s, so subtract that before judging sync.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "Regenerate the SRT. Do not shift it. Run: python make_srt_v2.py edl_v2.json voice_v3 upload/ghostface_ranked_en_v2.srt. A verified copy is already at C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa2/srtsync/regen.srt",
+     "corrected_in": 0,
+     "reason": "The diagnosis is partly right: the uploaded SRT does trail the voice by about 0.6 s around s15 to s17. But the offset is not constant, so a -0.6 s shift is the wrong fix. I compared all 184 cues in the uploaded SRT with a fresh run of make_srt_v2.py (edl_v2.json + voice_v3). The 184 cues and their text are the same, but the lag grows steadily through the video. It is 0.00 at 0 s, 0.04 at 23 s, 0.15 at 97 s, 0.37 at 205 s, 0.55 at 310 s, 0.62 at 337 s and 0.71 at 391 s. The uploaded file was probably built from older voice files or durations. A flat -0.6 s shift would make the first half of the captions up to about 0.6 s early, and the end would still be about 0.1 s late. I checked the regenerated timing against the actual audio by cross-correlating each voice_v3 mp3 with the render's audio. The voice starts at 50.705 (s02), 115.272 (s05), 335.138 (s16) and 358.805 (s17). The regenerated section starts are 50.71, 115.26, 335.14 and 358.79, all within 15 ms. s15 is computed at 314.78, which matches the measured cut at 314.77. In the regenerated SRT, 'stabbed him in the eye' starts at 330.30, 'She killed her friends' at 342.90 and 'And number one is Roman Bridger' at 358.79. These line up with the speech, and make_srt_v2.py and render_v2.py use the same voice + pad math. So the fix is to rerun make_srt_v2.py with voice_v3 into upload/. Other QA windows should use regen.srt for word times, not a flat -0.6 s correction. The picture for this window lines up with the real audio, and nothing here needs a new in-point."
+    }
+   },
+   {
+    "video_time": 330.1,
+    "words": "until Sam stabbed him in the eye",
+    "kind": "action_sync",
+    "severity": "major",
+    "problem": "When 'stabbed' is spoken (audio ~330.05-330.3), the picture is Sam leaning over Bailey with his hand raised, and no stab. At 330.4 it cuts to a dark close-up of Bailey's bloody face. The actual knife swing in this shot (s6_sam_gf ~167.2) only appears at ~331.0-331.3, about 1 s late, and the Wayne stats card slides in over it at 331.3. So the stab is never shown on the word.",
+    "section": "s15",
+    "shot_index": 6,
+    "fix_clip": "s6_sam_gf",
+    "fix_in": 128,
+    "fix_note": "s6_sam_gf 129.2-129.8 is a clear, well-lit shot of Sam raising the knife and stabbing down at Bailey (action_index lists 129.25). 'stabbed' falls about 1.0-1.1 s into this shot, and the render shows the source about 0.2 s ahead of the in-point. With in=128.0: Bailey bloody at shot start, Sam's snarl at ~329.9 ('Sam'), knife raise ~330.1, downstroke 330.2-330.7, right on 'stabbed'. Optional: add a cut at t\u224816.0 in s15 (render ~330.8) to s6_sam_gf 166.5 (bloody eye close-up) for 'in the eye'. Keep the rest of the shot under the stats card.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s6_sam_gf",
+     "corrected_in": 128.3,
+     "reason": "The clip choice is right but the in-point is about 0.3 s late, so I'm rejecting 128.0 and proposing 128.3.\n\nTiming. The render shows the source almost exactly at the in-point (about +0.03 s), not 0.2 s ahead. In the frame-accurate check, render 329.10 shows source 164.83 and render 329.133 shows the source's own cut at 164.867. The shot runs 329.10-331.76 (section start about 314.76; stats card at 331.26 matches the render). Whisper word times in the video: \"until\" 329.18, \"Sam\" 329.72, \"stabbed\" 330.08-330.54, \"him in the eye\" 330.54-331.56.\n\nWhat the source shows at 10 fps (127.5-131.5):\n- 127.5-128.95: dark close-up of Bailey's bloody face.\n- 129.0: hard cut to a well-lit low angle of Sam snarling.\n- 129.3-129.7: the knife arm comes up into frame.\n- About 129.8: the downstroke.\n- 129.9: cut to a dim close-up of Sam, which lasts to about 131.2.\n- 131.3: cut to a different scene (Tara), but that is after this shot ends.\n\nWith in=128.0, the cut to Sam lands at 330.10, the raise at 330.40-330.80 and the downstroke at about 330.90. The blow lands during \"in the eye\", about 0.35 s after \"stabbed\" ends, so the stab still trails the word.\n\nWith in=128.3, the cut to Sam lands at 329.78, right on \"Sam\" (329.72). The knife raise starts at 330.0-330.08 as \"stabbed\" begins, and the downstroke lands at about 330.5 inside \"stabbed\". The cut to the dim Sam close-up comes at 330.6. From there to the shot end (source 130.96, before the 131.3 cut) it is Sam's face, under the stats card from 331.26. No black frame, end card or wrong person appears in 128.3-130.96.\n\nOne weakness: the first 0.7 s (329.1-329.78, on \"until\") is the dark shot of Bailey's bloody face. It is dim but readable as Bailey.\n\nThe optional \"in the eye\" cut is fine but would need re-timing: \"in the eye\" runs about 330.82-331.56, so a cut at section t\u224815.95 (render about 330.7) to s6_sam_gf 166.5 would fit.\n\nScratch frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa2/s15sh6/ (src128.jpg, rfine.jpg, sfine.jpg, render.jpg)."
+    }
+   },
+   {
+    "video_time": 357.6,
+    "words": "(thermometer beat after 'Survival rate: eighteen percent')",
+    "kind": "graphic",
+    "severity": "minor",
+    "problem": "In Jill's thermometer beat, the CARVEY 99% label and its tile sit on the top left at y\u224847-108 (720p scale). The tile covers the red 'YOU'RE DEAD' swatch at the start of the legend row under the 'GHOSTFACE SURVIVAL METER' title, so the label and legend overlap. In Wayne's beat Carvey is on the right and doesn't collide.",
+    "section": "s16",
+    "shot_index": 11,
+    "fix_clip": "overlay:tier (anim.thermo_beat)",
+    "fix_in": 22.45,
+    "fix_note": "Overlay ['tier', ..., 22.45, 999] in s16. In anim.thermo_beat, keep side labels below the legend row (clamp the label y to about 110 px or more at 720p, about 165 px at 1080p), or keep CARVEY on the right side as in the Wayne beat. Check the same overlap in later beats (s17 Roman, s18 tierfinal) where Carvey may also land top-left."
+   }
+  ]
+ },
+ {
+  "window": "365.0-400.5 s (section 17 Roman Bridger from shot 4 onward, Roman stat card and tier beat, section 18 outro with final meter and CTA)",
+  "checked": "I matched every SRT line in the window to the word onsets in voice_v3/words.json. Section 17 starts at about 358.84 s and section 18 at about 387.1 s in the render. I sampled the video at 10 fps and looked at full-res frames for the graphics. Words checked: \"worked completely alone\" (Ghostface/Roman, fine); \"most kills\" (366.6 s, the s3_02_cutting victim with the bloody face is on screen, fine); \"pushed Billy\" (373.3 s, the s1_11_creative Billy/Sidney shot is cut at about 372.5 s and the Scream (1996) film tag changes too, fine); \"bulletproof vest\" (the LAPD vest flashes for about 0.1 s at 375.6 s, then Roman lies playing dead; acceptable); \"shooting him in the chest\" (377.78 s, the muzzle flash and Roman being hit are on screen at 377.8 s, good); \"bullet to the head from Dewey\" (PROBLEM, see issue 1). The stat card at 383.0 to 385.9 s shows all 4 bars filling, the 15% stamp lands on \"fifteen\" and YOU'RE DEAD is shown, nothing is clipped. Tier beat at 385.9 to 387.0 s: the mask drops to 15 and the ROMAN 15% callout is readable. The callout box covers the right-column labels below Marco, which matches the beat design used in the other sections. The final meter rebuilds at 387.1 to 388 s, then holds with all 16 placed, readable. The YOUR #1? title over the dimmed meter is readable. FREDDY / OR PINHEAD? sits over the subway mask close-up and is readable. The last ~9 frames show the source clip's end card (PROBLEM, see issue 2). No other black frames.",
+  "issues": [
+   {
+    "video_time": 381.12,
+    "words": "took a bullet to the head from Dewey",
+    "kind": "action_sync",
+    "severity": "major",
+    "problem": "Dewey's shot (muzzle flash at about 380.4 s, Roman hit at about 380.75 s) plays out before 'head' (381.12 s). On 'head' the frame is a dark, blurry body falling. On 'Dewey' (381.54 s) and up to 382.08 s it is a nearly empty room of chairs with a dark shape on the floor (source 123.3-124.5). Neither Dewey nor the head shot is visible on those words.",
+    "section": "s17",
+    "shot_index": 12,
+    "fix_clip": "s3_12_firing",
+    "fix_in": 120.95,
+    "fix_note": "Change shot 12 ('and it took', s3_12_firing) in-point from 121.25 to 120.95. Dewey with the bloody forehead appears at source 121.2, the flash is at 122.2 and Roman's head hit is at 122.5-122.6. That puts the flash at about 380.7 s and the head hit at about 381.05 s, on 'head'. Also move shot 13 (s3_12_firing 129.95 @0.6, Roman dead with the bullet wound) to anchor 'to finally' (t about 23.02) instead of 'finally stop'. That cuts out the empty-chairs footage (source 123.3+) and shows the result of the head shot right after 'Dewey'.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s3_12_firing",
+     "corrected_in": 121,
+     "reason": "I checked the source at 10 fps and at 30 fps, and the proposal's source times are wrong. In s3_12_firing, Dewey with the bloody forehead lowers his gun from 121.25 to about 121.9 and aims from 122.15. The muzzle flash is at 122.73-122.77, not 122.2. A close-up of Roman follows at 122.8-122.93, then the head hit with blood at about 122.97-123.17. From 123.2 to 123.7 there is a dark, blurry fall, and the empty room of chairs runs from about 123.75. The first frames of the proposed in-point are a different person: Sidney laughing appears at 120.95-121.15.\n\nThe current render shows the same order: Dewey aiming at 380.2-380.5, Roman's face at 380.6, the hit at 380.8-380.9, the dark fall at 381.0-381.3, the chairs at 381.4-381.9, and dead Roman from 382.0. So the render maps source to video at about video = source + 257.85, roughly 0.25 s earlier than the EDL arithmetic gives.\n\nMoving the in-point 0.30 s earlier, to 120.95, does put the hit at about 381.1-381.3, on 'head' (381.12). But there are two problems. First, it brings in up to about 0.2 s of Sidney if the render does not skip the start of the shot as it seems to now. Second, with shot 13 at t=23.02, the word 'Dewey' (381.54) still lands on the dark, blurry fall (source about 123.4-123.6) for about 0.25 s before the dead-Roman shot.\n\nBetter fix: set shot 12's in-point to 121.0, which still puts the hit right on 'head' (render about 381.07-381.27) and starts on Dewey with the gun, not Sidney. Move shot 13 (s3_12_firing 129.95 @0.6, dead Roman with the bloody head wound, clearly visible and steady for over 2 s) to the onset of 'Dewey', t of about 22.70 in the section, instead of 23.02 or 23.24. Shot 12 then ends right after the hit, before the dark fall and the empty chairs, and the result of Dewey's shot is on screen as his name is spoken. Dewey himself is visible earlier, on 'took a bullet', aiming the gun. Contact sheets are a.jpg, b.jpg, c.jpg and r.jpg in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa2/s17_12/."
+    }
+   },
+   {
+    "video_time": 400.2,
+    "words": "(after 'you know where to ask.')",
+    "kind": "black_or_endcard",
+    "severity": "major",
+    "problem": "The s6_subway mask close-up runs past the source content into the clip's black/grey frame and then its blue end card. That happens behind the FREDDY / OR PINHEAD? title in the last ~0.3 s (400.2 s grey frame, 400.4-400.5 s blue end-card bar). The mask also leaves the frame at about 399.3 s, so the last second is only blurry passengers.",
+    "section": "s18",
+    "shot_index": 1,
+    "fix_clip": "s6_subway",
+    "fix_in": 167,
+    "fix_note": "Keep in-point 167.0, where the mask close-up starts. The index says content ends at 172.85, but the real content end is about 172.7, after which come black and the blue end card. Add speed 0.8 ([8.5,'s6_subway',167,0.8]) so the ~5 s tail only uses about 4 s of source and stays on the mask through the end. Another option is to cut the s18 pad from 1.5 to about 1.1 s. Do not move the in-point earlier: 163-167 is a woman being gagged, with no mask.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s6_subway",
+     "corrected_in": 167,
+     "reason": "I'm accepting [8.5,'s6_subway',167,0.8]. In the render the shot starts at about 395.6 s and runs to the end at 400.5 s, so it lasts about 4.9 s. At speed 0.8 that uses about 3.9 s of source, from 167.0 to about 170.9. I checked 167.0-171.0 at 10 fps (contact sheet a.jpg). The hooded Ghostface mask is clearly visible and centred in every frame from 167.0 to 170.9: there are no cuts, no black frames and no other people taking over the shot. Around 168.6-169.5 the head turns a little and slightly blurs, but the mask stays easy to see. In the source (b.jpg), the mask stays in frame until about 171.7. After that come blurry passengers (171.8-172.7), a grey/black frame at about 172.8, and the blue end card at about 172.9. So even with a few frames of rounding, the slowed shot finishes about 0.8 s before the mask leaves the frame and about 1.9 s before the black frame and end card. The in-point is correct as it is. A slightly earlier one is not needed, and 163-167 shows no mask. The FREDDY / OR PINHEAD? title sits over the mask's upper half (see the current render, c.jpg) but leaves the eyes and mouth visible. That is unchanged by this fix, so I didn't count it against the proposal. Sheets: C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa2/s18fix/a.jpg, b.jpg and c.jpg."
+    }
+   }
+  ]
+ }
+]
