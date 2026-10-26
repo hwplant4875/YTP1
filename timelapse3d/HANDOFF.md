@@ -360,3 +360,6 @@ TROST:
 - Plug = ONE instant slam after the roar (0.3-0.5 s), big dust burst + short camera shake (0.3-0.5 deg, 0.4 s), then the slump.
 - Breach hole = ball-sized (14-15 m wide x 15-16 m tall, round broken top); bible C updated; trost.py by the g8 agent; g5's kick reveals the same hole.
 - Push every render immediately, version-labelled (renders/laptop/<seg>_<name>_vN_*).
+
+## 16:53 (10/26 UTC) OWNER: remove the decoy corner D completely ("저기 구석에만 있는게 어색하므로 다 빼자")
+- No titan mass, decoy soldiers, cranes or mop-up props at D (NW pocket). Mop-up stays near the gate square. Bible g8/C rows D and the "decoy" must-haves are void.
