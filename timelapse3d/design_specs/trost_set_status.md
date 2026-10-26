@@ -2,6 +2,30 @@
 
 Latest first.
 
+## Update 5 (g7 agent, 10/27): cannon basin K moved to Wall Rose's NORTH face (owner 15:25 10/26 + cloud ruling)
+- **Position.** The basin is at its anime position on Rose's north face beside the canal water gate, built as the old
+  south layout mirrored about Y 870 (`TR.K_MIRROR_Y = 1740`, `TR._kmy(y)`; `build_basin` authors the old numbers and
+  `_kmirror()` reflects the bmesh). Floor KF X 340..385, Y 875..907 (Z -3.6; mossy half against the wall, sandy half
+  toward the bank); bank SB Y 907..919 (12 steps); terrace TT Y 919..927; plinth PL X 357..367, Y 902..912 (top -0.6);
+  west flight SW Y 885..907; piers PW X 331..340 / PE X 385..393 on the north face; gun bastion GB X 308..338, Y 875..891
+  (deck Z 20); **TrostCannon_K at (318, 883, 20), bearing 85 deg** (old 95 mirrored); T_K (322, 922); GH X 341..377,
+  Y 928..948; half-timbered range Y 927..970; boats (389, 889/897); derrick L_K (338, 872, 50) with its chain on the north
+  side; **TrostBasket_K stop (342, 879, -3.6)** (`set_basket(frac)` unchanged, 1 = Z 50).
+- Seen from the Garrison bank (north, looking south at the wall) the canal, barred water gate and boats are on the LEFT.
+- **API kept** (names and signatures): ANCHORS_M K_* keys hold the north numbers (+ new K_BANK, K_TT, K_SW, K_HT, K_BOATS,
+  K_PIERS); `CANNON_BASIN` keeps its keys (`steps_s` = the bank rows, now on the floor's north side; `cannon_aim`
+  (1.0, 0.09); new `side="north"`, `mirror_y`). `ground_z_m`, `walkable_m`, `height_patch` and the terrain holes follow.
+- **Water gate north face**: barred grille at Y 875.4 + an east narrowing pier (415, 879); the south side got a west
+  narrowing pier (389, 861) in place of the moved PE.
+- **Canal north of Rose**: `CANAL_NORTH_M` (X 400, Y 875 -> 1330), `canal_dist_m` covers it; objects
+  TrostCanalNorthBanks / TrostCanalNorthWater / TrostCanalNorthFill (not "Canal*", which world.py trims); the west bank and
+  fill stop at the basin (Y < 921) so the floor meets the water over a low ledge (lip), as in ep09 19:35.
+- Terrain: the 5 m fine grid now runs to M Y 1340 (was 990) for the canal hole; a town-floor apron X 296..420, Y 874..975.
+- **Old site** (X 301..377, Y 769..856 at the Rose SOUTH foot): `_infill_old_basin()` places terraces there AFTER the main
+  layout with its own RNG (Random(2026)), so every other house in town is unchanged (the site stays reserved for the main
+  generator; the yard-tree pass is unaffected).  Still camera `v3_basin` = the north view, `v3_basin_old_site` = g6 H8.
+- Note for g6: its exit (H8 = g7 C0, looking at (345, 810)) now frames those terraces, not a basin.
+
 ## Update 4 (g8 agent, owner 10/27 + audit; API unchanged)
 - **Breach is BOULDER-SIZED**: OuterGateBroken hole 15.6 m wide through the gatehouse with a broken round top at Z ~16
   (was 15 x 32-34 m), ~13 m in the wall body; OuterGate_Glow card resized to the hole; TrostBreachTimbers moved to the new
@@ -90,9 +114,9 @@ Note: AV's last leg now runs (-60,470) -> (-128,735) -> (-153,803) so it enters 
   `TR.set_hq_cutaway(frac)` 0 = closed, 1 = gone (dither in between is a TODO; see gaps).
 - TrostHQ_Back: back range + courtyard tree + gutted house GH (-200, 566).
 
-### g7 (basin)
+### g7 (basin) -- SUPERSEDED by Update 5: the basin is on Rose's NORTH face (Y' = 1740 - Y)
 - TrostBasin (floor Z -3.6, piers, bank + nosings, plinth, SW flight, GB deck Z 20, T_K, GH, half-timbered range),
-  **TrostCannon_K** at (318, 857, 20) aimed 95 deg, TrostBoats_K, TrostHoist_K, **TrostBasket_K** (`TR.set_basket(frac)`).
+  **TrostCannon_K** at (318, 883, 20) aimed 85 deg, TrostBoats_K, TrostHoist_K, **TrostBasket_K** (`TR.set_basket(frac)`).
 - `TR.CANNON_BASIN` (set coords): trio, cannon, plinth/landing, steps_s rows, basket, derrick.
 
 ### Known gaps

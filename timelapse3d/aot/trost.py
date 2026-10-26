@@ -66,7 +66,7 @@ TOWERS_M = {   # bell towers T: (X, Y, side, height, cap)  cap: red / copper / s
     "T8": (300, 560, 8, 50, "slate"), "TF1": (-310, 560, 7, 42, "copper"), "TF2": (60, 200, 7, 43, "slate"),
     "TF3": (205, 470, 8, 49, "red"), "TF4": (-30, 655, 7, 45, "red"), "TF5": (130, 790, 8, 47, "slate"),
     "TF6": (-430, 690, 7, 41, "copper"), "TF7": (335, 190, 7, 44, "red"), "TF8": (-170, 360, 8, 46, "slate"),
-}   # + T_K (322, 818) basin, court belfry (228, 290), tower T (-218, 522) Q2, RC NE tower (-213, 845) = 19 in all
+}   # + T_K (322, 922) basin (north of Rose), court belfry (228, 290), tower T (-218, 522) Q2, RC NE tower (-213, 845) = 19 in all
 
 ANCHORS_M = {
     "O": (0, 0, 0), "BALL_REST": BALL_REST_M, "COL_FEET": (0, -23, 0), "COL_FIST_R": (26, 0, 50),
@@ -85,9 +85,12 @@ ANCHORS_M = {
     "HQ_WEST": (-300, -266, 570, 660), "GH_HOUSE": (-200, 566), "EREN_NAPE": (-178, 619),
     "AT_PATH": [(-222, 531), (-230, 572), (-240, 600)],
     "RC": (-268, 805), "D": (-475, -360, 760, 865),
-    "K_FLOOR": (340, 385, 833, 865, -3.6), "T_K": (322, 818), "GB": (308, 338, 849, 865, 20.0),
-    "K_CANNON": (318, 857, 20), "K_TRIO": (362, 852, -3.6), "K_PLINTH": (357, 367, 828, 838, -0.6),
-    "K_GH": (341, 377, 792, 812), "L_K": (338, 868, 50), "K_BASKET": (342, 861, -3.6),
+    # cannon basin K on Rose's NORTH face (owner 15:25 10/26, anime position; = the old south layout mirrored Y' = 1740 - Y)
+    "K_FLOOR": (340, 385, 875, 907, -3.6), "T_K": (322, 922), "GB": (308, 338, 875, 891, 20.0),
+    "K_CANNON": (318, 883, 20), "K_TRIO": (362, 888, -3.6), "K_PLINTH": (357, 367, 902, 912, -0.6),
+    "K_GH": (341, 377, 928, 948), "L_K": (338, 872, 50), "K_BASKET": (342, 879, -3.6),
+    "K_BANK": (340, 385, 907, 919), "K_TT": (300, 400, 919, 927, 0.0), "K_SW": (340, 348, 885, 907),
+    "K_HT": (377, 387, 927, 970), "K_BOATS": [(389, 897), (389, 889)], "K_PIERS": [(331, 340), (385, 393)],
     "CAN": [(400, 870), (400, 345), (445, 300)], "CAN_W": 26.0, "CAN_WATER_Z": -4.2,
     "CAN_BRIDGES_Y": [420, 560, 700, 820], "WG_ROSE": (393, 411, 865, 875), "WG_EXIT": (445, 300),
     "B0": BOULDER_CENTER_M, "COURT": (225, 318, 236, 292), "BELFRY": (228, 290, 42.0), "BED": (290, 262, 15.0),
@@ -136,18 +139,28 @@ SUPPLY_HQ = dict(center=M(-187, 641)[:2], rot=0.0, size=(36.0, 20.0), store_z=(0
                  wing=(M(-234, 628)[:2], M(-136, 652)[:2]), plaza=(M(-275, 570)[:2], M(-100, 624)[:2]))
 HQ_UPPER = []
 
+# Cannon basin K: OWNER 15:25 10/26 (+ cloud ruling) - at its anime position on Wall Rose's NORTH face beside the canal water
+# gate, i.e. the old (south, mirrored-into-Trost) layout reflected about Y 870: Y' = K_MIRROR_Y - Y.  Seen from the Garrison
+# bank (north, looking south at the wall) the canal + barred water gate + boats are on the LEFT (east).  build_basin authors
+# the geometry in the old coordinates and mirrors it; every query below uses the mirrored (north) numbers.
+K_MIRROR_Y = 1740.0
+def _kmy(y):
+    """Old south-layout basin Y -> the built north-face Y (and back: the map is its own inverse)."""
+    return K_MIRROR_Y - y
+
 def _basin_rows():
     rows = []
-    for k in range(12):                              # SB: 12 steps of 0.3 / 1.0 m from Z -3.6 (Y 833) up to Z 0 (Y 821)
-        yy = 833.0 - (k + 0.5) * 1.0
+    for k in range(12):                              # SB: 12 steps of 0.3 / 1.0 m from Z -3.6 (Y 907) up to Z 0 (Y 919)
+        yy = 907.0 + (k + 0.5) * 1.0
         z = -3.6 + (k + 1) * 0.3
         rows.append([M(x, yy, z) for x in range(342, 384, 2) if not 356.0 < x < 368.0])
     return rows
-CANNON_BASIN = dict(center=M(362, 849)[:2], floor=(340.0, 385.0, 833.0 + DY, 865.0 + DY), floor_z=-3.6, top_z=0.0,
-                    steps_s=_basin_rows(), steps_n=[], landing=M(362, 833, -0.6), trio=M(362, 852, -3.6),
-                    cannon=M(318, 857, 20), cannon_aim=(1.0, -0.09), plinth=M(362, 833, -0.6),
-                    terrace=(300.0, 400.0, 813.0 + DY, 821.0 + DY, 0.0), quay=M(386, 849, -3.6), boat=M(389, 847, -4.2),
-                    basket=M(342, 861, -3.6), derrick=M(338, 868, 50))
+# key names kept for API compatibility: steps_s = the bank SB rows (now on the floor's NORTH side, the Garrison side)
+CANNON_BASIN = dict(center=M(362, 891)[:2], floor=(340.0, 385.0, 875.0 + DY, 907.0 + DY), floor_z=-3.6, top_z=0.0,
+                    steps_s=_basin_rows(), steps_n=[], landing=M(362, 907, -0.6), trio=M(362, 888, -3.6),
+                    cannon=M(318, 883, 20), cannon_aim=(1.0, 0.09), plinth=M(362, 907, -0.6),
+                    terrace=(300.0, 400.0, 919.0 + DY, 927.0 + DY, 0.0), quay=M(386, 891, -3.6), boat=M(389, 893, -4.2),
+                    basket=M(342, 879, -3.6), derrick=M(338, 872, 50), side="north", mirror_y=K_MIRROR_Y)
 
 # ====================================================================================== district geometry (M)
 def wall_dist_m(X, Y):
@@ -208,7 +221,12 @@ def _seg_dist(px, py, ax, ay, bx, by):
     t = 0.0 if l2 == 0 else max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / l2))
     return math.hypot(px - ax - t * dx, py - ay - t * dy), t
 
+CANAL_NORTH_Y1 = 1330.0           # the canal continues NORTH out of the Rose water gate past the basin (g7, owner 15:25 10/26)
+CANAL_NORTH_M = [(400.0, float(y)) for y in range(int(CANAL_NORTH_Y1), 874, -8)] + [(400.0, 875.0)]
+
 def canal_dist_m(X, Y):
+    if 873.0 <= Y <= CANAL_NORTH_Y1 and abs(X - 400.0) < 60.0:
+        return abs(X - 400.0)
     if not (-20 < X < 760 and -20 < Y < 877):
         return 1e9
     if Y > 372 and abs(X - 400) < 60:
@@ -258,15 +276,16 @@ def ground_z_m(X, Y):
             return -2.0 * (1 - (d / r) ** 2) if r > 3 else -2.5
     if canal_dist_m(X, Y) < 11.5:
         return CANAL_WATER_Z
-    if 340.0 <= X <= 385.0 and 821.0 <= Y <= 865.0:
-        if Y >= 833.0:
-            if X < 348.0 and Y < 855.0:
+    if 340.0 <= X <= 385.0 and 875.0 <= Y <= 919.0:            # cannon basin K (Rose NORTH face): old layout via _kmy
+        Yo = _kmy(Y)
+        if Yo >= 833.0:
+            if X < 348.0 and Yo < 855.0:
                 return -3.6 + max(0.0, min(3.6, (348.0 - X) * 0.45))
             return -3.6
-        if 357.0 <= X <= 367.0 and Y >= 828.0:
+        if 357.0 <= X <= 367.0 and Yo >= 828.0:
             return -0.6
-        return -3.6 + min(3.6, (int((833.0 - Y) / 1.0) + 1) * 0.3)
-    if 308.0 <= X <= 338.0 and 849.0 <= Y <= 865.0:
+        return -3.6 + min(3.6, (int((833.0 - Yo) / 1.0) + 1) * 0.3)
+    if 308.0 <= X <= 338.0 and 875.0 <= Y <= 891.0:            # gun bastion GB deck
         return 20.0
     if -266.5 <= X <= -257.5 and 440.0 <= Y <= 458.0:             # MA: 5 steps (0.3 / 0.6) then the rubble foot
         return min(1.5, (int((Y - 440.0) / 0.6) + 1) * 0.3)
@@ -466,7 +485,9 @@ def walkable_m(X, Y):
         return True
     if -170 < Y < -6 and abs(X) < 26 + (-6 - Y) * 0.6:        # fields outside the outer gate
         return True
-    if 340 <= X <= 385 and 821 <= Y <= 865:                    # cannon basin floor + bank
+    if 340 <= X <= 385 and 875 <= Y <= 919:                    # cannon basin floor + bank (Rose north face)
+        return True
+    if 300 <= X <= 400 and 919 <= Y <= 927:                    # its top terrace TT
         return True
     return in_district_m(X, Y, 8.0) and on_road_m(X, Y) and canal_dist_m(X, Y) > 13.0
 
@@ -478,6 +499,8 @@ def height_patch(x, y, h):
     X, Y = x, y - DY
     if wall_dist_m(X, Y) > -2.0 or (-80 < X < 40 and 875 < Y < 990):
         return ground_z_m(X, Y)
+    if (340 <= X <= 385 and 875 <= Y <= 919) or (abs(X - 400.0) < 11.5 and 875 <= Y <= CANAL_NORTH_Y1):
+        return ground_z_m(X, Y)                     # basin K floor / bank and the canal north of Rose (both below Z 0)
     d = math.hypot(x, y + 435.0)
     if d > 1400.0:                                  # owner: no mountains, low hills only
         cap = 6.0 + 24.0 * min(1.0, (d - 1400.0) / 3000.0)
@@ -1134,7 +1157,7 @@ def _hole_m(X, Y):
             return True
     if canal_dist_m(X, Y) < 13.05:
         return True
-    if 340.0 < X < 385.0 and 821.0 < Y < 866.0:
+    if 340.0 < X < 385.0 and 874.0 < Y < 919.0:                  # cannon basin K (Rose north face)
         return True
     return False
 
@@ -1143,11 +1166,11 @@ def build_terrain_trost(MT):
     floor has no z-fighting with a second ground; material 0 = scene meadow, 1 = Trost town floor (masks in M)."""
     t0 = time.time()
     xs = _axis(-600.0, 840.0, 5.0, -9000.0, 9000.0)
-    ys = _axis(-140.0 + DY, 990.0 + DY, 5.0, -9000.0, 9000.0)
+    ys = _axis(-140.0 + DY, CANAL_NORTH_Y1 + 10.0 + DY, 5.0, -9000.0, 9000.0)    # fine to the canal's north end (g7 basin)
     nx, ny = len(xs), len(ys)
     H = [[L.height(x, y) for y in ys] for x in xs]
     verts = [(xs[i], ys[j], H[i][j]) for i in range(nx) for j in range(ny)]
-    HO = [[(-30 < x < 800 and -30 < y - DY < 880 and _hole_m(x, y - DY)) for y in ys] for x in xs]
+    HO = [[(-30 < x < 800 and -30 < y - DY < CANAL_NORTH_Y1 + 5.0 and _hole_m(x, y - DY)) for y in ys] for x in xs]
     faces, mats = [], []
     for i in range(nx - 1):
         for j in range(ny - 1):
@@ -1156,7 +1179,8 @@ def build_terrain_trost(MT):
                 continue
             cxm, cym = (x0 + x1) / 2, (y0 + y1) / 2
             faces.append((i * ny + j, (i + 1) * ny + j, (i + 1) * ny + j + 1, i * ny + j + 1))
-            mats.append(1 if (wall_dist_m(cxm, cym) > 2.0 or (-65 < cxm < 25 and 905 < cym < 965)) else 0)
+            mats.append(1 if (wall_dist_m(cxm, cym) > 2.0 or (-65 < cxm < 25 and 905 < cym < 965)
+                              or (296 < cxm < 420 and 874 < cym < 975)) else 0)   # + the basin K apron (north of Rose)
     me = bpy.data.meshes.new("Terrain")
     me.from_pydata(verts, [], faces)
     me.polygons.foreach_set("material_index", mats)
@@ -2230,6 +2254,15 @@ def build_canal(MT):
         box(bm, (402.0, 864.6, z), (18.0, 0.3, 0.3), mi=1)
     box(bm, (402.0, 869.0, -1.0), (17.6, 9.0, 7.6), mi=2)                       # dark tunnel behind the grille
     box(bm, (415.0, 861.0, -2.0), (8.0, 8.0, 9.6), mi=0)                         # east narrowing pier (mirror of PE)
+    box(bm, (389.0, 861.0, -2.0), (8.0, 8.0, 9.6), mi=0)                         # west narrowing pier (the basin moved north)
+    # NORTH face (g7 basin K, owner 15:25 10/26): the barred gate the Garrison bank sees on its LEFT; the basin's pier PE
+    # (X 385..393) is its west side, an east narrowing pier mirrors it
+    for k in range(13):
+        x = 393.0 + 0.75 + k * 1.5
+        box(bm, (x, 875.4, -1.6), (0.35, 0.35, 8.8), mi=1)
+    for z in (-2.5, 0.0, 2.2):
+        box(bm, (402.0, 875.4, z), (18.0, 0.3, 0.3), mi=1)
+    box(bm, (415.0, 879.0, -2.0), (8.0, 8.0, 9.6), mi=0)
     a = math.atan2(300.0 - 480.0, 445.0)
     t = Vector((-math.sin(a), math.cos(a))); n = Vector((math.cos(a), math.sin(a)))
     c = Vector((445.0, 300.0))
@@ -2241,6 +2274,28 @@ def build_canal(MT):
         obox(bm, q, t, n, 0.35, 0.35, -6.0, 2.6, 1)
     obox(bm, c, t, n, 24.0, 9.0, -6.0, 2.6, 2)
     _mk("WaterGates", bm, [MT["wall_t"], MT["iron_t"], MT["window_t"]], cc)
+    # ---- the canal NORTH of Rose (owner 15:25 10/26: the basin sits beside it on the north face).  Own objects (not "Canal*",
+    #      which world.py trims beyond the core).  The west bank / fill stop at the basin (Y < 921) so its floor meets the water.
+    nfull = list(CANAL_NORTH_M)                                  # north -> south, ends at the gate (400, 875)
+    nwest = [p for p in nfull if p[1] >= 921.0]
+    bm = bmesh.new()
+    bank_strip(bm, nfull, 1)
+    if len(nwest) > 1:
+        bank_strip(bm, nwest, -1)
+    strip(bm, nfull, -11.6, 11.6, -6.4, 3)
+    box(bm, (386.95, 898.0, -5.3), (3.3, 46.0, 2.3), mi=0)        # low ledge: the basin floor's lip runs straight into the water
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    _mk("TrostCanalNorthBanks", bm, [MT["bank"], MT["quay"], MT["water_c"], MT["canal_bed"]], cc)
+    bm = bmesh.new()
+    strip(bm, nfull, -11.7, 11.7, CANAL_WATER_Z, 0)
+    _mk("TrostCanalNorthWater", bm, [MT["water_c"]], cc)
+    bm = bmesh.new()
+    strip(bm, nfull, 13.0, 20.5, -0.25, 0)
+    if len(nwest) > 1:
+        strip(bm, nwest, -20.5, -13.0, -0.25, 0)
+    for v in bm.verts:
+        v.co.y += DY
+    L.obj_from_bm("TrostCanalNorthFill", bm, [terr_m], cc)
     return cc
 
 # ====================================================================================== town fabric (terraces)
@@ -2686,8 +2741,45 @@ def layout_town():
     _frontage(rnd)
     _back_rows(rnd, 3)
     _infill(rnd)
+    _infill_old_basin()                      # AFTER the main layout, own RNG: nothing above changes (g7 basin moved north)
     print(f"[trost] layout {len(HOUSES)} houses {time.time() - t0:.1f}s", flush=True)
     return HOUSES
+
+OLD_BASIN_SITE = (301.0, 377.0, 769.0, 856.0)     # the cannon basin's former (south-face) site, X 300..400 / Y 768..870
+def _infill_old_basin():
+    """Terraces on the basin's former site at the Rose SOUTH foot (the basin now sits on the north face, owner 15:25 10/26).
+    The site stays reserved for the main generator so its RNG sequence (every other house in town) is unchanged; this pass
+    fills it afterwards with its own RNG: back-to-back rows on two E-W lanes (Y 834-842, 798-806), a N-S lane X 337-342,
+    the 6 m wall-foot road (Y > 856) and the canal quay (X > 377) kept clear."""
+    rnd = random.Random(2026)
+    P = _pools()
+    pool = [i for i in P.get("plain", []) + P.get("timber", []) if HOUSE_VARIANTS[i][2] <= 14.0]
+    if not pool:
+        return 0
+    x0s, y0s = OLD_BASIN_SITE[0], OLD_BASIN_SITE[2]
+    rows = [(842.0, 0.0), (834.0, math.pi), (806.0, 0.0), (798.0, math.pi), (771.0, 0.0)]   # (front line Y, ang): ang 0 faces S
+    n0 = len(HOUSES)
+    for yf, ang in rows:
+        for xa, xb in ((x0s, 337.0), (342.0, OLD_BASIN_SITE[1])):
+            x = xa
+            while x < xb - 6.0:
+                v = rnd.choice(pool)
+                name, w, d, Ht, roof, pl = HOUSE_VARIANTS[v]
+                sx = 1.0
+                if x + w > xb:
+                    sx = (xb - x) / w
+                    if sx < 0.8:
+                        break
+                ww = w * sx
+                cy = yf + d / 2 if ang == 0.0 else yf - d / 2
+                cx = x + ww / 2
+                o = _obb(cx, cy, ww, d, ang)
+                inside = all(OLD_BASIN_SITE[0] - 0.01 <= px <= OLD_BASIN_SITE[1] + 0.01 and y0s - 0.01 <= py <= OLD_BASIN_SITE[3] + 0.01
+                             for px, py in _obb_corners(o))
+                if inside and _occ_free(o):
+                    _place(cx, cy, ang, v, sx, 1.0, force=True, tag="k_old")
+                x += ww
+    return len(HOUSES) - n0
 
 def build_town(MT):
     """Continuous 3-5 storey terraces along every street (arcades on AV/C), back rows, infill; instanced by GN."""
@@ -3690,8 +3782,19 @@ def build_hq(MT):
     return keep
 
 # ====================================================================================== block 8: cannon basin K (g7)
+def _kmirror(bm):
+    """Reflect an M-frame bmesh about Y 870 (Y' = K_MIRROR_Y - Y) and flip the winding so the normals stay outward."""
+    for v in bm.verts:
+        v.co.y = K_MIRROR_Y - v.co.y
+    bmesh.ops.reverse_faces(bm, faces=list(bm.faces))
+    return bm
+
 def build_basin(MT):
-    """K: floor Z -3.6 (pale sandy south half, mossy green north half), piers PW/PE battered 8 deg, bank SB (12 steps,
+    """OWNER 15:25 10/26: the basin is on Wall Rose's NORTH face (anime position; canal + barred water gate on the LEFT
+    seen from the Garrison bank).  Authored below in the old south-layout numbers, then mirrored with _kmirror
+    (Y' = 1740 - Y): floor X 340..385, Y 875..907; bank Y 907..919; terrace TT Y 919..927; GB Y 875..891 (deck Z 20) with
+    the cannon at (318, 883, 20); T_K (322, 922); GH Y 928..948; boats (389, 889/897); derrick L_K (338, 872, 50).
+    K: floor Z -3.6 (pale sandy south half, mossy green north half), piers PW/PE battered 8 deg, bank SB (12 steps,
     dark nosings), plinth PL with a wavy band, west flight SW, terrace TT, gun bastion GB (deck Z 20, rails, turntable,
     cannon aimed at the trio), bell tower T_K, Garrison building GH (clock oculus), half-timbered range, 2 boats,
     hoist L_K (derrick + wheel + winch hut on the Rose top, basket on 4 chains = TrostBasket_K)."""
@@ -3707,7 +3810,8 @@ def build_basin(MT):
     sandy = floor_m.ramp(rs, [(0.0, lin("#b8ab8a")), (1.0, lin("#cfc3a2"))])
     mossy = floor_m.ramp(rs, [(0.0, lin("#55663f")), (1.0, lin("#7a8a55"))])
     n = floor_m.noise(o, 0.12, 4.0)
-    f = floor_m.smooth(floor_m.math("ADD", Y, floor_m.math("MULTIPLY", n.outputs["Fac"], 10.0)), 849.0, 856.0)
+    Yo = floor_m.math("SUBTRACT", K_MIRROR_Y, Y)                         # old-layout Y (mossy half against the wall)
+    f = floor_m.smooth(floor_m.math("ADD", Yo, floor_m.math("MULTIPLY", n.outputs["Fac"], 10.0)), 849.0, 856.0)
     floorc = floor_m.finish(floor_m.mix(f, sandy, mossy))
     gun = MT["iron_t"]
     mats = [old, bank, nose, floorc, MT["window_t"], MT["timber_d"], MT["roof_red_t"], MT["tower_cream"], MT["f_cream"], MT["f_tcream"],
@@ -3800,14 +3904,14 @@ def build_basin(MT):
         y = 773.0 + k * 6.0
         for xx, ss in ((378.5, -1), (385.5, 1)):
             box(bm, (xx, y, 15.0), (1.6, 1.6, 2.0), mi=9)
-    _mk("TrostBasin", bm, mats, kc)
-    SPECIAL_FOOTPRINTS.extend([(359.0, 802.0, 36.0, 20.0, 0.0, "K_GH"), (382.0, 791.5, 10.0, 43.0, 0.0, "K_HT"),
-                               (322.0, 818.0, 8.0, 8.0, 0.0, "T_K")])
-    # the cannon on the bastion (turntable centre (318, 857, 20), bearing 95 deg, depression 27 deg)
+    _mk("TrostBasin", _kmirror(bm), mats, kc)
+    SPECIAL_FOOTPRINTS.extend([(359.0, _kmy(802.0), 36.0, 20.0, 0.0, "K_GH"), (382.0, _kmy(791.5), 10.0, 43.0, 0.0, "K_HT"),
+                               (322.0, _kmy(818.0), 8.0, 8.0, 0.0, "T_K")])
+    # the cannon on the bastion (turntable centre (318, 883, 20), bearing 85 deg (old 95 mirrored), aimed at the trio)
     cm = _cannon_mesh(MT)
     cn = bpy.data.objects.new("TrostCannon_K", cm); kc.objects.link(cn)
-    cn.location = M(318.0, 857.0, 20.0)
-    cn.rotation_euler = (0.0, 0.0, -math.radians(95.0))
+    cn.location = M(318.0, _kmy(857.0), 20.0)
+    cn.rotation_euler = (0.0, 0.0, -math.radians(180.0 - 95.0))
     # 2 rowing boats (389, 843) / (389, 851), 7 x 1.8 m, long axis N-S
     bm = bmesh.new()
     for y in (843.0, 851.0):
@@ -3816,7 +3920,7 @@ def build_basin(MT):
         box(bm, (389.0, y + 3.25, -4.0), (0.9, 0.8, 0.4), mi=0, taper=(0.2, 1.0))
         for k in (-1.5, 0.0, 1.5):
             box(bm, (389.0, y + k, -3.95), (1.7, 0.3, 0.1), mi=1)
-    _mk("TrostBoats_K", bm, [flat_mat("BoatWood", "#5a4030", 0.8, 0.08), MT["plank_t"]], kc)
+    _mk("TrostBoats_K", _kmirror(bm), [flat_mat("BoatWood", "#5a4030", 0.8, 0.08), MT["plank_t"]], kc)
     # hoist L_K: derrick + wheel + counterweight + winch hut on the Rose top (338, 868, 50); basket on 4 chains
     bm = bmesh.new()
     for sx in (-2.0, 2.0):
@@ -3828,7 +3932,7 @@ def build_basin(MT):
     box(bm, (344.0, 871.5, 51.6), (4.0, 3.6, 3.2), mi=2)
     box(bm, (344.0, 871.5, 54.0), (4.4, 4.0, 1.6), mi=3, taper=(1.0, 0.1))
     cyl(bm, (338.0, 862.6, 59.5), (338.0, 862.6, -2.4), 0.05, seg=4, mi=1)
-    _mk("TrostHoist_K", bm, [MT["timber_d"], MT["iron_t"], MT["f_tcream"], MT["roof_red_t"]], kc)
+    _mk("TrostHoist_K", _kmirror(bm), [MT["timber_d"], MT["iron_t"], MT["f_tcream"], MT["roof_red_t"]], kc)
     bm = bmesh.new()
     box(bm, (0, 0, 0.15), (4.0, 4.0, 0.3), mi=0)
     for sx in (-1, 1):
@@ -3836,7 +3940,7 @@ def build_basin(MT):
         for sy in (-1, 1):
             box(bm, (sx * 1.95, sy * 1.95, 0.5), (0.12, 0.12, 0.8), mi=0)
             cyl(bm, (sx * 1.95, sy * 1.95, 0.8), (0, 0, 4.5), 0.04, seg=4, mi=1)
-    _mk_at("TrostBasket_K", bm, [MT["plank_t"], MT["iron_t"]], (342.0, 861.0, -3.6), kc)
+    _mk_at("TrostBasket_K", bm, [MT["plank_t"], MT["iron_t"]], (342.0, _kmy(861.0), -3.6), kc)
     return kc
 
 def set_basket(frac):
@@ -4034,7 +4138,8 @@ STILL_CAMS = {   # name: (loc M, look M, lens, state)
     "v3_strip": ((40, 230, 100), (180, 62, 12), 38, {}),
     "v3_inner_gate": ((-60, 690, 120), (-140, 840, 12), 32, {"cart": True}),
     "v3_hq": ((-345, 455, 175), (-200, 640, 15), 30, {}),
-    "v3_basin": ((283, 740, 96), (361, 850, 4), 38, {}),
+    "v3_basin": ((283, 1000, 96), (361, 890, 4), 38, {}),          # basin K on Rose's north face (owner 15:25 10/26)
+    "v3_basin_old_site": ((220, 650, 130), (345, 810, 0), 32, {}),   # g6 H8 = g7 C0: the former site, now terraces
     "v3_town_av": ((-40, 330, 170), (0, 0, 30), 32, {}),
     "v3_hq_cut": ((-198, 565, 100), (-187, 643, 1), 38, {"cutaway": True, "lift": 0.5}),
     "v3_walltop": ((10, -2, 64), (-30, 520, 0), 30, {}),

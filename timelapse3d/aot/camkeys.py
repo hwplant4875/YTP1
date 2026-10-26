@@ -50,18 +50,20 @@ G1_BIBLE = [
     (33.0, (-130, -686, 114), (-165, -594, 0), 28),      # guide key (seam at rest)
 ]
 # ---------------------------------------------------------------- g2 (W)
-G2 = [   # v3 (g2 v2 10/27, owner 00:44 '갑옷거인에게 포커싱'): the ONE closer segment: K2-K5 ~165-200 m, 47-50 mm, he is
-         # ~100-110 px (1/4 frame), front / side three-quarter, never behind; framing locked on him 6-20 s (<= 2.4 deg).
-         # Yaw <= 28.4 deg/s, pitch 23-45, height >= 95 m; K0 = g1 seam (rest), K9 = g3 seam (segtime g2_g3).
+G2 = [   # v3 (g2 v2 QA 10/27, owner 00:44 '갑옷거인에게 포커싱'): the ONE closer segment: K2-K7 ~160-200 m, 46-50 mm, he is
+         # ~90-110 px (~1/4 frame), front / side three-quarter, never behind; framing locked on him 6-20 s (<= 1.7 deg).
+         # Yaw <= 27.7 deg/s, pitch 23-44, height >= 95 m; K0 = g1 seam (rest), K9 = g3 seam (segtime g2_g3).
     (0, (-254, -468, 95), (-167, -590, 2), 28),   # SEAM_IN v2 (= g1 K12, at rest)
     (3, (-185, -330, 108), (-40, -340, 6), 36),   # swoop NE over the roofs, turning onto the avenue
     (6, (-72, -129.5, 114), (0, -232.5, 9), 48),   # LOCK: front three-quarter (ahead + west of him), ~165 m, he is ~105 px tall
-    (9, (-80, -47.5, 112), (0, -145.5, 9), 49),   # the face ricochet at 9.15 is seen from the front
-    (11.5, (-118, -12, 108), (0, -73, 9), 50),   # he runs past: front 3/4 -> side, gun line + crest leaf in frame
-    (13.5, (-150, -22, 106), (0, -12, 10), 50),   # IMPACT seen side-on from the west (right shoulder toward camera's far side)
-    (16.3, (-150, 2, 132), (0, 38, 9), 47),   # rise over the wall line: he bursts out of the north face and slides to y +46
-    (20, (-110, 120, 122), (0, 46, 9), 47),   # north side, front 3/4: him standing + steaming in the thinning haze, the breach behind
-    (24.5, (-10, 185, 200), (265, 365, 0), 30),   # climb out to the quays + ferries
+    (9, (-80, -47.5, 112), (0, -145.5, 9), 49),   # the face ricochet at 9.15 seen from the front
+    (11.5, (-118, -12, 108), (0, -73, 9), 50),   # he runs past: front 3/4 -> side; gun line, crews, crest leaf
+    (13.5, (-150, -22, 106), (0, -12, 10), 50),   # IMPACT side-on from the west
+    (15, (-150, -8, 140), (0, 26, 9), 49),   # crane up over the wall line: he bursts out of the north face
+    (17, (-140, 40, 128), (0, 46, 9), 47),   # north side: the slide ends at y +46, furrows, rubble
+    (20, (-92, 140, 118), (0, 44, 9), 46),   # front 3/4 from the north-west: him steaming in the thinning haze, the breach behind
+    (23, (-50, 170, 155), (125, 185, 0), 37),   # turn off him toward the quays
+    (25.5, (0, 205, 205), (265, 375, 0), 30),   # quays + ferries
     (28, (105, 300, 228), (240, 580, 0), 30),   # the lone ferry heading north
     (32, (175, 480, 240), (228, 1050, 0), 28),   # = g2->g3 seam (segtime g2_g3), unchanged
 ]
@@ -99,8 +101,8 @@ G3_TO_CAMP_M = [
 # ---------------------------------------------------------------- g4 (M)
 G4 = [
     (0.0,  (-1570, 1190, 170), (-1450, 1490, 0), 30),             # G0
-    (1.8,  (-1495, 1135, 192), (-1100, 1320, 0), 30),             # G0b
-    (4.1,  (-1380, 1060, 230), (-860, 760, 0),   29),             # G1
+    (2.0,  (-1495, 1135, 192), (-1120, 1330, 0), 30),             # G0b (g4 agent 10/27: 1.8 -> 2.0 s, look (-1100,1320) -> (-1120,1330))
+    (4.1,  (-1380, 1060, 230), (-900, 880, 0),   29),             # G1  (look (-860,760) -> (-900,880)): opening swing 31.5 -> 27.7 deg/s
     (9.1,  (-760, 1010, 320),  (-80, 480, 0),    28),             # G2
     (12.4, (-400, 760, 290),   (-20, 260, 0),    28),             # G3
     (16.8, (-110, 430, 200),   (0, 40, 20),      30),             # G4
@@ -189,8 +191,9 @@ KEYS = {
         flight=dict(frame="W", keys=G3_FLIGHT_W, t=(0.0, 12.9)),
         camps=dict(frame="M", keys=G3_CAMPS_M, v_in=None, v_out=None, t=(12.9, 31.3)),
         march=dict(frame="M", cam_in=CAM_IN, cam_out=CAM_OUT, t=(31.3, 49.3)),
-        to_camp=dict(frame="M", keys=G3_TO_CAMP_M, v_in=CAM_OUT["vel"], look_v_in=CAM_OUT["look_vel"], v_out=S("g3_g4")["vel"], t=(49.3, 78.4)))),
-    "g4": dict(frame="M", keys=G4, v_in=S("g3_g4")["vel"], v_out=S("g4_g5")["vel"]),
+        to_camp=dict(frame="M", keys=G3_TO_CAMP_M, v_in=CAM_OUT["vel"], look_v_in=CAM_OUT["look_vel"], v_out=S("g3_g4")["vel"],
+                     look_v_out=(0.0, 0.0, 0.0), t=(49.3, 78.4)))),   # g4 agent 10/27: look-at at rest at FT7 = g4 G0 (g4 starts its look-at from rest)
+    "g4": dict(frame="M", keys=G4, v_in=S("g3_g4")["vel"], v_out=S("g4_g5")["vel"], look_v_out=(0.0, 0.0, 0.0)),   # look-at at rest = g5 C0 (g5 has no look_v_in)
     "g5": dict(frame="M", keys=G5, v_in=S("g4_g5")["vel"], v_out=S("g5_g6")["vel"]),
     "g6": dict(frame="M", keys=G6, v_in=S("g5_g6")["vel"], v_out=S("g6_g7")["vel"]),
     "g7": dict(frame="M", keys=G7, v_in=S("g6_g7")["vel"], v_out=S("g7_g8")["vel"]),
@@ -293,7 +296,7 @@ def path(name):
         q["comment"] = "H (17.7, at rest) to CAM_IN with v_out = (16.7,-61.1,5.6) and the look-point rate of march846 CAM_KEYS[0..1]. FA4->H (12.9-17.7) is inside the flight profile."
         return p, kw, q
     if name == "g3_to_camp":
-        p = CamPath(**dict(keys=G3_TO_CAMP_M, v_in=CAM_OUT["vel"], look_v_in=CAM_OUT["look_vel"], v_out=S("g3_g4")["vel"]))
+        p = CamPath(**dict(keys=G3_TO_CAMP_M, v_in=CAM_OUT["vel"], look_v_in=CAM_OUT["look_vel"], v_out=S("g3_g4")["vel"], look_v_out=(0.0, 0.0, 0.0)))
         kw.update(t0=49.3, t1=78.4); lim.update(hmin=65, speed=300)
         q["comment"] = "FT3-FT5 sit at 95/85/70 m over the 104th camp by design: height floor 65, speed limit 300 (bible quotes 298 m/s for this flight)."
         return p, kw, q
