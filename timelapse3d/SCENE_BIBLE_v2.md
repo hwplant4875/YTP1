@@ -152,8 +152,9 @@ carriage, 2 spoked wheels 2.0-2.4 m, 4 crew each. Ferries: 34 x 10 m oval dark h
 brown barrel roof with 2 rows of discs, A-frame end trusses, lantern, packed deck (≈ 500). Breach after the ram: TALL NARROW arch
 12-14 x 24-26 m (replace INNER_HOLE 25 m wide), side wings survive, crack decals 15-30 m.
 **Characters.** Armored 15 m (Tripo model, rotate to face +y), plates #e2c47a, red gaps, eye glow allowed ≤ 2 px. Normal upright
-run 29 m/s (1.55 steps/s, 18-19 m stride), dust puff per footfall; **only the last 0.4 s**: torso twists 30-40°, left shoulder
-leads, root never rotates (13:40 10/25). Followers: 3 titans 5/7/9 m 120-250 m behind. South: ~150 stragglers through the gun gaps
+run 29 m/s (1.55 steps/s, 18-19 m stride), dust puff per footfall; **only the last 0.4 s**: torso twists 30-40°, **RIGHT shoulder**
+leads (owner 11:38 10/26), root never rotates (13:40 10/25); after the hit his momentum carries him into a long forward SLIDE
+through the breach (feet skidding, two dust furrows, rubble ploughed ahead) before he stops and straightens (owner 11:38 10/26). Followers: 3 titans 5/7/9 m 120-250 m behind. South: ~150 stragglers through the gun gaps
 by 11 s; ~10 freeze at house fronts. Garrison: 24 gun crew (scatter at 12.4), 10 across the apron at 11.8, 12 on the wall top.
 North: 3-4k instanced refugees (one 300-600 tri figure via GN, baked flipbook phase) on quays/apron; panic wave 8 m/s from
 (0, 30) at impact. Ferries F1 y +300 moving, F2 y +150 moving, F3 moored west landing y +60 (casts off 10.0), F4 east landing
@@ -165,7 +166,7 @@ above the wall), 8-10 boulders left on the lawn; lumpy ochre dust ball 10 → 40
 **Choreography.** Run front y(t) = -400 + 20t + 3t² (t ≤ 1.5), then -363 + 29(t - 1.5): y -320 @3, -233 @6, -146 @9, -88 @11,
 -30 @13 · 0-10 ferries glide · 5.8/6.3/6.9/7.4 wall guns fire (hits 6.0 chest, 7.1 shoulder) · 9.0 first field volley, 9.15
 shell glances off his FACE · 10.0 F3 casts off · 11.0 second volley · 11.8 crest leaf starts sliding down · 12.4 crews scatter,
-12.8 a carriage kicked over · 13.1-13.5 shoulder drop · **13.5 IMPACT** · 13.5-15 he drives through to y +25 · 18-23 stands
+12.8 a carriage kicked over · 13.1-13.5 shoulder drop · **13.5 IMPACT** · 13.5-16 he SLIDES through on momentum to y ≈ +45 (feet skidding, dust furrows, rubble ploughed ahead, right shoulder still forward) · 18-23 stands
 upright steaming in the dust · 23-32 ferries north, light toward dusk, camera passes them.
 **Camera keys (W).** K0 0 (-130, -686, 114)→(-165, -594, 0) 28 · K1 3.5 (-180, -590, 118)→(0, -310, 10) 32 · K2 7.5
 (-215, -440, 120)→(0, -190, 10) 35 · K3 11.0 (-225, -275, 118)→(0, -80, 14) 38 · K4 13.5 (-215, -185, 118)→(0, -8, 18) 38 ·

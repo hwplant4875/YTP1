@@ -329,3 +329,7 @@ TROST:
 - Side job done: analysis/ep05_a.mp4 + ep05_b.mp4 (ep05 split at 12:03, -c copy), in E:\YTP2\3D Timelapse\analysis\ (reference only).
 - Wave 1 running: (1) camchan.py/segtime.py/camkeys.py + master_timeline A1/A2 (D1); (2) trost.py rebuilt to section C (D10, 25, static parts of 12-17, 27, 28); (3) g8 boulder via the new generic driver render_seg.py + seg_g8.py (D16, 17, 29, 30).
 - Order after that: g5, g1, g2, g6, g7, g4, g3, then the master assembly. Contracts: AGENTS_BRIEF.md "WAVE v2".
+
+## 11:38 (10/26 UTC) USER: Armored ram details
+- He smashes the inner gate with his RIGHT shoulder (not the left; render_fall2.py currently says "left shoulder leads": flip it).
+- After breaking through, his speed carries him into a long forward SLIDE (feet skidding, dust furrows, rubble ploughed ahead) before he stops and straightens. Bible g2 updated (slide to y ≈ +45, 13.5-16 s).

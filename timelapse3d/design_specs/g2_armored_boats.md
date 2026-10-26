@@ -246,7 +246,7 @@ at about 12 m (F2/000007498, F2/000011103).
   - **Gait (owner rule).** A normal upright run, facing forward.
     - Froude-correct sprint for a 15 m body: cadence 1.55 steps/s, step length 18-19 m, speed 29 m/s, so no foot skate.
     - Arms pump. Every footfall raises a dust puff 6-8 m wide plus a 4 m footprint scuff decal (F2/000013433).
-  - **Last 0.4 s** (owner rule, 13:40 10/25): the torso twists 30-40 deg so the left shoulder leads, the head tucks, the legs keep
+  - **Last 0.4 s** (owner rule, 13:40 10/25): the torso twists 30-40 deg so the RIGHT shoulder leads (owner 11:38 10/26), the head tucks, the legs keep
     driving and the whole root never rotates. The anime pose at the moment of impact is F2/000014354.
   - **After the burst.** He carries on about 25 m north through the hole, decelerating over 1.5 s. He straightens up, with white
     steam puffs from his mouth (F2/000015241), and STANDS upright in the dust in front of the hole (F2/000015478, F2/000015574).
@@ -373,7 +373,7 @@ The Armored's position on the avenue (x = 0), with the run front at y:
 | 12.4 | The gun crews scatter sideways. His feet come down inside the cannon line at 12.8 and 13.15, and one carriage is kicked over and rolls 8 m. |
 | 13.1-13.5 | Shoulder drop in the last 0.4 s. The leaf's lower edge has come down to about 1/3 of the passage height: the gate still reads INTACT and closing. |
 | 13.5 | IMPACT: white-gold flash, the passage, crest leaf and the brick between them explode, the hole opens (12-14 x 24-26 m narrow arch), debris fans north and 6-8 big chunks arc high over the wall top. A south dust ring rolls out of the hole. |
-| 13.5-15.0 | He drives through the hole to y +25 and decelerates. The north dust ball grows to about 40 m at about (0, +55). The panic wave spreads along the gate road toward the apron and quays. Chunks land on the lawn (two cottages are hit only if the hamlet is allowed). |
+| 13.5-16.0 | OWNER 11:38 10/26: momentum carries him into a long forward SLIDE through the hole to y ≈ +45 (feet skidding, two dust furrows, rubble ploughed ahead), then he decelerates. The north dust ball grows to about 40 m at about (0, +55). The panic wave spreads along the gate road toward the apron and quays. Chunks land on the lawn (two cottages are hit only if the hamlet is allowed). |
 | 15-18 | The dust peaks and starts to thin. Crack decals become visible on the wall face. The south side surviving brick wings are visible through the haze. The follower titans keep walking toward the gate (y -250..-150). |
 | 18-23 | He stands upright in the dust north of the wall (steam), at most a few slow steps (INF). F4 is overfilled. The north crowd streams away north along the gate road and quay edges. |
 | 23-32 | The ferries carry on north (F1 is at y +556 by t = 32). The camera rises and passes them. The canal widens into the river and the light shifts toward dusk. Hand off. |
