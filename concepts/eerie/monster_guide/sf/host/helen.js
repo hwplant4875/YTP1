@@ -33,11 +33,17 @@
  *     prevFace, wipe   static wipe between faces: wipe 0..1 sweeps a noise band down the screen; above it the new
  *                 face, below it prevFace. Use HELEN.wipeAt(t, tChange) for the 2-3 frame timing.
  *     offK        'off' face progress 0..1 (collapse to a line, then to a white dot, then dark). Default 1 (dark).
- *     pose        'idle-clipboard' (default) | 'remote-at-head' | 'present-point' | 'stamp' | 'walk' | 'stand'
+ *     pose        'idle-clipboard' (default) | 'idle-hip' ('hand-on-hip') | 'remote-at-head' | 'present-point'
+ *                 | 'stamp' | 'walk' | 'stand'
  *     phase       walk cycle 0..1 (one full cycle = two steps). Move x yourself: one cycle covers HELEN.STRIDE * 2 * s.
  *     stampK      stamp pose: 0 raised .. 1 down on the paper.   stampText 'APPROVED' | 'DENIED'
  *     stampMark   true = the imprint is on the paper (default: stampK >= 0.97)
  *     turn        0 front .. 1 three-quarter (35 deg).            dir  1 faces screen-right, -1 screen-left (mirror)
+ *     headTurn    head turn on its own, -1..1, independent of the body (present-point turns the head to the hand).
+ *                 Default: follows `turn`. Signed: - = toward screen-left in body space.
+ *     weight      0..1 contrapposto: hips shift, one knee softens, the shoulders counter-tilt. Default 1 standing,
+ *                 forced 0 while walking. Pairs well with pose 'idle-hip' + headTilt 6-8 for hero shots.
+ *     eerieSmile  force the eerie face's flickering smile strip on (default: a deterministic 2-frame flicker from t).
  *     t           seconds: idle breathing, antenna sway, static flicker, spinner, auto blink.
  *     antT        seconds since the last antenna impulse (springy kick: a face change, a stop, a stamp hit ...)
  *     antenna     override { ang: deg, bend, still: bool } for both rods
