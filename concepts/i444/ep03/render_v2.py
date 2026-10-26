@@ -1,5 +1,5 @@
 # Horror Ranked EP03 v2 renderer: clips + narration + overlays (static PNGs from ep01/gfx.py, animated frame sequences
-# from anim.py: stat cards, survival-thermometer beats, the outro board) + SFX + quiet music -> mp4
+# from anim.py: stat cards, tier-board (or survival-thermometer) beats, the outro board) + SFX + quiet music -> mp4
 # usage: python render_v2.py <edl.json> <clips_dir> <voice_dir> <music.mp3> <out.mp4> [fps]
 # env: LEAN=1 deletes shot files once a section is built; ONLY=s05,s12 renders just those sections (for QA)
 import json, os, sys, subprocess
@@ -23,7 +23,9 @@ def src(name):
             if os.path.exists(p): return p
     raise FileNotFoundError(name)
 def rec(r): return {**r, 'tile': rel(r['tile'])}
-E = json.load(open(edl)); Z = E.get('zoom', {}); G = E.get('gamma', {}); parts = []; voice_items = []; sfx_items = []; t_global = 0.0
+E = json.load(open(edl)); BOARD = E.get('beat_style') == 'board'
+if E.get('tiers'): anim.set_tiers(E['tiers'])
+Z = E.get('zoom', {}); G = E.get('gamma', {}); parts = []; voice_items = []; sfx_items = []; t_global = 0.0
 # frame-exact timeline: every section and shot boundary is rounded to whole frames from the absolute voice time,
 # video and clip audio are rendered separately (no AAC priming drift), so cuts and overlays stay locked to the narration
 SPF = 48000 // FPS
@@ -38,7 +40,7 @@ def wav(o, n, a_in=None, db=-99):
 def animated(kind, arg, d_ov, L, si, j):
     """render an animated overlay into WORK/anNN_NN/ (cached: skipped when the frames already exist); returns (dir, x, y)"""
     out = os.path.join(WORK, f'an{si:02d}_{j:02d}')
-    key = json.dumps([kind, arg], sort_keys=True)
+    key = json.dumps([kind, arg, E.get('tiers'), E.get('beat_style')], sort_keys=True)
     if os.path.exists(os.path.join(out, 'key.json')) and open(os.path.join(out, 'key.json')).read() == key:
         n, x, y = json.load(open(os.path.join(out, 'xy.json'))); return out, x, y
     for p in (os.listdir(out) if os.path.isdir(out) else []): os.remove(os.path.join(out, p))
@@ -47,9 +49,9 @@ def animated(kind, arg, d_ov, L, si, j):
         n, x, y = anim.stat_card(out, **a)
     elif kind == 'tier':
         placed = [rec(r) for r in arg['placed']]
-        n, x, y = anim.thermo_beat(out, placed, rec(arg['new']), dur=d_ov)
+        n, x, y = (anim.board_beat if BOARD else anim.thermo_beat)(out, placed, rec(arg['new']), dur=d_ov)
     elif kind == 'tierfinal':
-        n, x, y = anim.thermo_final(out, [rec(r) for r in arg['placed']], d_ov, highlights=[tuple(h) for h in arg.get('highlights', [])],
+        n, x, y = (anim.board_final if BOARD else anim.thermo_final)(out, [rec(r) for r in arg['placed']], d_ov, highlights=[tuple(h) for h in arg.get('highlights', [])],
                                     t_dim=arg.get('t_dim'))
     json.dump([n, x, y], open(os.path.join(out, 'xy.json'), 'w')); open(os.path.join(out, 'key.json'), 'w').write(key)
     return out, x, y

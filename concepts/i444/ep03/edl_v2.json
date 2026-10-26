@@ -645,17 +645,17 @@
      53.0
     ],
     [
-     1.76,
+     1.78,
      "s7_04_walls",
      107.5
     ],
     [
-     3.54,
+     3.4,
      "s7_04_walls",
      190.0
     ],
     [
-     5.42,
+     5.4,
      "s7_04_walls",
      219.2
     ],
@@ -665,28 +665,38 @@
      0
     ],
     [
-     8.98,
+     8.9,
      "s7_09_anna_camp",
      194.0
     ],
     [
-     10.54,
+     10.44,
      "s7_04_walls",
      192.5
     ],
     [
-     12.16,
+     12.2,
      "s7_04_walls",
      249.9
     ],
     [
-     12.98,
+     12.86,
      "s7_04_walls",
      232.28,
      0.8
     ],
     [
-     14.74,
+     14.62,
+     "s7_still_karl_unmasked",
+     0
+    ],
+    [
+     16.86,
+     "s7_still_karl_coffee",
+     0
+    ],
+    [
+     19.86,
      "s7_04_walls",
      234.1,
      0.9
@@ -715,12 +725,12 @@
        "DECEPTION": 1
       },
       "pct": 75,
-      "t_pct": 1.38,
-      "dur": 2.97,
+      "t_pct": 1.51,
+      "dur": 2.77,
       "film": "Scream 7 (2026)"
      },
-     13.95,
-     16.92
+     19.4,
+     22.17
     ],
     [
      "tier",
@@ -744,39 +754,39 @@
        "tile": "tiles/karl.png"
       }
      },
-     16.92,
+     22.17,
      999
     ],
     [
      "film",
      "Scream 7 (2026)",
      0,
-     13.95
+     19.4
     ]
    ],
    "sfx": [
     [
-     13.95,
+     19.4,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     14.25,
+     19.7,
      "sfx/fill.wav",
      -20
     ],
     [
-     15.329999999999998,
+     20.91,
      "sfx/stamp.wav",
      -12
     ],
     [
-     16.92,
+     22.17,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     17.42,
+     22.67,
      "sfx/slam.wav",
      -6
     ]
@@ -3890,7 +3900,34 @@
    "sfx": []
   }
  ],
- "beat_style": "thermo",
+ "beat_style": "board",
+ "tiers": [
+  [
+   "S",
+   "Six Feet Under",
+   25
+  ],
+  [
+   "A",
+   "Almost Dead",
+   40
+  ],
+  [
+   "B",
+   "Better Run",
+   55
+  ],
+  [
+   "C",
+   "Can Fight Back",
+   75
+  ],
+  [
+   "D",
+   "Don't Worry",
+   101
+  ]
+ ],
  "zoom": {
   "s4_still_jill": 1.0,
   "s4_still_jill_bed": 1.0,
@@ -3901,6 +3938,8 @@
   "s4_still_charlie_close": 1.0,
   "s4_still_gf_knife": 1.0,
   "s4_still_jill_hospital": 1.0,
+  "s7_still_karl_unmasked": 1.0,
+  "s7_still_karl_coffee": 1.0,
   "s1_01_like_scary": 1.08,
   "s1_10_surprise": 1.08,
   "s1_11_creative": 1.08,

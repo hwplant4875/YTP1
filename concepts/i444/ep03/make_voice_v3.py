@@ -1,6 +1,6 @@
 # EP03 narration v3 = voice_v2 with the lines whose action no official clip shows rewritten to things we can show
 # (laptop frame QA 10/26): s00 "crushed by a TV" -> "shot in the head", Karl run over by Gale's van, Ethan / Richie / Stu /
-# Mickey / Jill / Charlie deaths reworded to the footage we have; s09 / s11 fact fixes (Amber killed Judy, Billy stabbed Stu once). Writes voice_v3/<seg>.mp3 + .json (same alignment format as voice/)
+# Mickey / Jill / Charlie deaths reworded to the footage we have; s09 / s11 fact fixes (Amber killed Judy, Billy stabbed Stu once); s03 adds Karl's unmasking (the coffee-shop stranger). Writes voice_v3/<seg>.mp3 + .json (same alignment format as voice/)
 import json, os, base64, subprocess, urllib.request, shutil
 import numpy as np
 K = os.environ['ELEVENLABS_JC_API_KEY']; V2, V3 = 'voice_v2/', 'voice_v3/'; P = V3 + 'parts/'
@@ -10,7 +10,8 @@ NEW = {
  's00a': ("He's been shot, stabbed, set on fire, run over by a car and shot in the head, and somehow the phone still rings, "
           "because Ghostface was never just one guy.", None, S00B),
  's03': ("Number fifteen is Karl Gibbs from Scream Seven, an escaped patient who's big and genuinely scary in a fight, but he was "
-         "really just a pawn for the people running things, and his run ended the second Gale floored it and hit him with her van. "
+         "really just a pawn for the people running things, and his run ended the second Gale floored it and hit him with her van, "
+         "and once they pulled the mask off, he turned out to be the creepy stranger from Sidney's coffee shop. "
          "Survival rate: seventy-five percent.", "Survival rate: ninety-nine percent, unless you're his film professor.", None),
  's05': ("Number thirteen is Charlie Walker, the horror nerd who knew every rule in the book. He did most of the actual killing, but the guy "
          "trusted the wrong partner, and Jill turned on him the second she didn't need him anymore. Survival rate: sixty percent.",

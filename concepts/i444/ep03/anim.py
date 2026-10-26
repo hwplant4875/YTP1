@@ -2,6 +2,9 @@
 #  stat_card     right-hand panel: tile + name, 4 stat bars filling one by one, then the survival % stamps as it is spoken
 #  thermo_beat   full-screen survival thermometer: the blood level drains to the new %, a Ghostface mask stabs in at that mark
 #  thermo_final  outro: all 16 masks pinned in ranking order, two highlights, then dims under the closing titles
+#  board_beat    TierMaker-style board (user 10/26: the TierMaker template look, no coloured rings, no numbers on tiles, names kept):
+#                the new face flies in and slams into its tier row
+#  board_final   outro: the full board fills up in ranking order, two highlights, then dims
 # Each function writes <out>/%04d.png and returns (frame_count, x, y); frames stop at the last change (the renderer holds it).
 import os, math
 import numpy as np
@@ -11,7 +14,26 @@ FONT = os.path.join(HERE, '..', 'ep01', 'YouTubeSans-Black.otf')
 W, H = 1920, 1080
 TIERS = [("YOU'RE DEAD", (214, 32, 39), 25), ('PROBABLY DEAD', (240, 112, 24), 40), ('COIN FLIP', (246, 196, 30), 55),
          ("YOU'LL LIVE", (60, 190, 90), 75), ('EASY', (52, 140, 235), 101)]
+# TierMaker template: pastel row labels top -> bottom, near-black board, black row lines, plain Arial-like type in dark ink
+TM_COL = [(255, 127, 127), (255, 191, 127), (255, 223, 127), (255, 255, 127), (191, 255, 127), (127, 255, 127)]
+TM_BOARD, TM_LINE, TM_INK, TM_PAGE = (26, 26, 23), (0, 0, 0), (24, 24, 22), (10, 10, 10)
+LETTERS = None                                   # [(letter, phrase), ...] once set_tiers() runs
+def set_tiers(rows):
+    """rows = [[letter, phrase, max_pct], ...] top (deadliest) -> bottom; switches every graphic to the TierMaker colours"""
+    global TIERS, LETTERS
+    TIERS = [((l + '  ' + ph.upper()) if ph else l, TM_COL[i], mx) for i, (l, ph, mx) in enumerate(rows)]
+    LETTERS = [(l, ph) for l, ph, mx in rows]
 WHITE, BONE, RED = (245, 242, 236), (200, 192, 178), (225, 30, 38)
+_SANS = {}
+def sans(sz, bold=False):
+    """Arial (Windows laptop) or its metric twin Liberation Sans (server)"""
+    k = (sz, bold)
+    if k not in _SANS:
+        for p in ([r'C:\Windows\Fonts\arialbd.ttf', '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf'] if bold else
+                  [r'C:\Windows\Fonts\arial.ttf', '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf']):
+            if os.path.exists(p): _SANS[k] = ImageFont.truetype(p, sz); break
+        else: _SANS[k] = ImageFont.truetype(os.path.join(HERE, '..', 'ep01', 'YouTubeSans-Black.otf'), sz)
+    return _SANS[k]
 _F = {}
 def f(sz):
     if sz not in _F: _F[sz] = ImageFont.truetype(FONT, sz)
@@ -61,7 +83,7 @@ def stat_card(out, name, tile_png, stats, pct, dur, t_pct, fps=30, reveal=None, 
     static = Image.new('RGBA', (PW, PH), (0, 0, 0, 0)); d = ImageDraw.Draw(static)
     d.rounded_rectangle([0, 0, PW - 1, PH - 1], 26, fill=(10, 9, 12, 215), outline=(70, 66, 74, 255), width=3)
     d.rounded_rectangle([0, 0, PW - 1, 12], 6, fill=c + (255,))
-    t = tile(tile_png, 200, ring=c); static.alpha_composite(t, (34, 40))
+    t = tile(tile_png, 200, ring=None if LETTERS else c); static.alpha_composite(t, (34, 40))
     nm = name.upper(); sz = 62
     while d.textlength(nm, font=f(sz)) > PW - 300 and sz > 34: sz -= 2
     if d.textlength(nm, font=f(sz)) > PW - 300 and ' ' in nm:      # two lines
@@ -102,7 +124,7 @@ def stat_card(out, name, tile_png, stats, pct, dur, t_pct, fps=30, reveal=None, 
                 tl = Image.new('RGBA', (PW, PH), (0, 0, 0, 0)); dt = ImageDraw.Draw(tl)
                 w2 = dt.textlength(nm2, font=f(34)) + 40
                 dt.rounded_rectangle([BX, 716, BX + w2, 768], 12, fill=c + (a,))
-                text(dt, (BX + 20, 754), nm2, 34, (15, 12, 12, a) if tier(pct) == 2 else (255, 255, 255, a), 'ls')
+                text(dt, (BX + 20, 754), nm2, 34, (15, 12, 12, a) if (LETTERS or tier(pct) == 2) else (255, 255, 255, a), 'ls')
                 fr.alpha_composite(tl)
         # slide in: 0.28 s from +140 px with alpha
         k3 = ease(tt / 0.28)
@@ -260,6 +282,111 @@ def thermo_final(out, placed, dur, fps=30, t_build=(0.25, 1.9), highlights=(), t
                 if key == r['key'] and th <= tt < th + 1.2: glow = math.sin(math.pi * (tt - th) / 1.2)
             _callout(im, r, *pos[r['key']], alpha=min(1, pop[r['key']]), glow=glow)
         _pins(im, order, pos, pop={k: v for k, v in pop.items()})
+        if t_dim is not None and tt >= t_dim:
+            im = Image.blend(im, Image.new('RGBA', (W, H), (0, 0, 0, 255)), 0.55 * ease((tt - t_dim) / 0.35))
+        save(im.convert('RGB'), out, i)
+    return n, 0, 0
+
+# ------------------------------------------------------------------ TierMaker-style board
+RH, LW = 196, 300                       # row pitch, label column width
+TS = RH - 2                             # square tile, edge to edge (2 px black row lines)
+BX0, BY0 = 138, (H - 5 * RH) // 2      # board top-left; 7 tile slots wide like the template
+BXW = LW + 7 * TS + 2
+def _label_cell(i, flash=0.0):
+    c = TM_COL[i]
+    if flash > 0: c = tuple(int(v + (255 - v) * flash) for v in c)
+    cell = Image.new('RGBA', (LW, TS), c + (255,)); d = ImageDraw.Draw(cell)
+    l, ph = LETTERS[i] if LETTERS else (TIERS[i][0], '')
+    if ph:
+        d.text((LW / 2, TS * 0.40), l, font=sans(104), fill=TM_INK, anchor='mm')
+        sz = 38
+        while d.textlength(ph, font=sans(sz)) > LW - 24 and sz > 20: sz -= 1
+        d.text((LW / 2, TS * 0.80), ph, font=sans(sz), fill=TM_INK, anchor='mm')
+    else:
+        sz = 104 if len(l) <= 2 else 34
+        d.text((LW / 2, TS / 2), l, font=sans(sz), fill=TM_INK, anchor='mm')
+    return cell
+_FACE = {}
+def face(r, size=TS):
+    """square face tile with the name on a dark strip at the bottom (no ring, no number)"""
+    k = (r['tile'], r['short'], size)
+    if k not in _FACE:
+        t = img(r['tile']).resize((size, size), Image.LANCZOS).copy(); d = ImageDraw.Draw(t)
+        sh = max(30, size * 40 // TS); d.rectangle([0, size - sh, size, size], fill=(0, 0, 0, 165))
+        nm = r['short']; sz = max(14, size * 29 // TS)
+        while d.textlength(nm, font=sans(sz, True)) > size - 12 and sz > 12: sz -= 1
+        d.text((size / 2, size - sh / 2), nm, font=sans(sz, True), fill=(255, 255, 255), anchor='mm')
+        _FACE[k] = t
+    return _FACE[k]
+def _row_of(p): return tier(p)
+def slots(placed):
+    """(x, y) of each placed key: rows by tier, left to right in reveal order"""
+    cnt = [0] * 5; pos = {}
+    for r in placed:
+        i = _row_of(r['pct']); pos[r['key']] = (BX0 + LW + 2 + cnt[i] * TS, BY0 + i * RH + 1); cnt[i] += 1
+    return pos
+def board_bg(flash_row=None, flash=0.0):
+    im = Image.new('RGBA', (W, H), TM_PAGE + (255,)); d = ImageDraw.Draw(im)
+    d.rectangle([BX0, BY0, BX0 + BXW, BY0 + 5 * RH], fill=TM_LINE)
+    for i in range(5):
+        y = BY0 + i * RH + 1
+        d.rectangle([BX0 + LW + 2, y, BX0 + BXW - 1, y + TS - 1], fill=TM_BOARD)
+        im.alpha_composite(_label_cell(i, flash if i == flash_row else 0.0), (BX0 + 1, y))
+    return im
+def board_beat(out, placed, new, dur=1.2, fps=30):
+    os.makedirs(out, exist_ok=True)
+    pos = slots(placed + [new]); row = _row_of(new['pct']); tx, ty = pos[new['key']]
+    base = board_bg()
+    for r in placed: base.alpha_composite(face(r), pos[r['key']])
+    T_HIT, T_IN = 0.5, 0.1
+    n = int(round(min(dur, T_HIT + 0.45) * fps)) + 1
+    sx, sy, s0 = 1340, 470, 2.3                       # starts big at the right, then slams down into its slot
+    for i in range(n):
+        tt = i / fps
+        if tt < T_HIT:
+            im = base.copy()
+            k = max(0.0, (tt - T_IN) / (T_HIT - T_IN)); k = k * k        # accelerate into the hit
+            sc = s0 + (1 - s0) * k; sz = int(TS * sc)
+            cx = sx + (tx + TS / 2 - sx) * k; cy = sy + (ty + TS / 2 - sy) * k
+            t = face(new, sz).rotate(-8 * (1 - k), Image.BICUBIC, expand=True)
+            if tt < T_IN: t.putalpha(t.getchannel('A').point(lambda v: int(v * tt / T_IN)))
+            with_shadow(im, t, (cx - t.size[0] / 2, cy - t.size[1] / 2), (0, int(10 + 30 * (1 - k))), 14, 200)
+        else:
+            u = tt - T_HIT
+            im = board_bg(row, 0.55 * max(0.0, 1 - u / 0.3))
+            for r in placed: im.alpha_composite(face(r), pos[r['key']])
+            sc = 1 + 0.12 * max(0.0, 1 - u / 0.15); sz = int(TS * sc)
+            t = face(new, sz)
+            fl = max(0.0, 1 - u / 0.2)
+            if fl > 0: t = Image.blend(t, Image.new('RGBA', t.size, (255, 255, 255, 255)), 0.75 * fl)
+            im.alpha_composite(t, (int(tx + TS / 2 - sz / 2), int(ty + TS / 2 - sz / 2)))
+            if u < 0.12:                                  # impact shake
+                a = 5 * (1 - u / 0.12); sh = Image.new('RGBA', (W, H), TM_PAGE + (255,))
+                sh.alpha_composite(im, (int(a * math.sin(tt * 90)), int(a * math.cos(tt * 77)))); im = sh
+        if tt < 0.07: im = Image.blend(im, Image.new('RGBA', (W, H), (255, 255, 255, 255)), 0.35 * (1 - tt / 0.07))
+        save(im.convert('RGB'), out, i)
+    return n, 0, 0
+def board_final(out, placed, dur, fps=30, t_build=(0.25, 1.9), highlights=(), t_dim=None):
+    os.makedirs(out, exist_ok=True)
+    pos = slots(placed); t0, t1 = t_build; step = (t1 - t0) / max(1, len(placed))
+    last = max([t1 + 0.4] + [h[0] + 1.3 for h in highlights] + ([t_dim + 0.4] if t_dim else []))
+    n = int(math.ceil(min(dur, last) * fps)); base = board_bg()
+    for i in range(n):
+        tt = i / fps; im = base.copy(); top = []
+        hl = {k: math.sin(math.pi * (tt - th) / 1.2) for th, k in highlights if th <= tt < th + 1.2}
+        dim = max(hl.values()) if hl else 0.0
+        for j, r in enumerate(placed):
+            k = (tt - (t0 + j * step)) / 0.14
+            if k < 0: continue
+            sc = 1.35 - 0.35 * ease(k) if k < 1 else 1.0
+            if r['key'] in hl: top.append((r, 1 + 0.28 * hl[r['key']])); continue
+            t = face(r, int(TS * sc))
+            if dim > 0: t = Image.blend(t, Image.new('RGBA', t.size, (0, 0, 0, 255)), 0.5 * dim)
+            x, y = pos[r['key']]; im.alpha_composite(t, (int(x + TS / 2 - t.size[0] / 2), int(y + TS / 2 - t.size[1] / 2)))
+        for r, sc in top:                                 # highlighted face grows above its neighbours
+            t = face(r, int(TS * sc)); x, y = pos[r['key']]
+            x = min(max(x + TS / 2 - t.size[0] / 2, 0), W - t.size[0]); y = min(max(y + TS / 2 - t.size[1] / 2, 0), H - t.size[1])
+            with_shadow(im, t, (x, y), (0, 10), 16, 220)
         if t_dim is not None and tt >= t_dim:
             im = Image.blend(im, Image.new('RGBA', (W, H), (0, 0, 0, 255)), 0.55 * ease((tt - t_dim) / 0.35))
         save(im.convert('RGB'), out, i)

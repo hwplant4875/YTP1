@@ -83,9 +83,9 @@ X.append(sec('s02', [(0, 's6_opening', 3.3), ('from scream', 's6_opening', 9), (
   [16, 'Jason Carvey', 'Scream VI (2023)'], 'carvey', 'took the job'))
 X.append(sec('s03', [(0, 's7_04_walls', 53.0), ('from scream', 's7_04_walls', 107.5), ('an escaped', 's7_04_walls', 190.0),
   ('genuinely scary', 's7_04_walls', 219.2), ('but he was really', 's7_09_anna_camp', 0), ('for the people', 's7_09_anna_camp', 194.0),
-  ('and his run', 's7_04_walls', 192.5), ('gale floored', 's7_04_walls', 249.9), ('and hit him', 's7_04_walls', 232.28, 0.8),
-  ('survival rate', 's7_04_walls', 234.1, 0.9)],
-  [15, 'Karl Gibbs', 'Scream 7 (2026)'], 'karl', 13.95))
+  ('and his run', 's7_04_walls', 192.5), ('floored it', 's7_04_walls', 249.9), ('and hit him', 's7_04_walls', 232.28, 0.8),
+  ('once they pulled', 's7_still_karl_unmasked', 0), ('the creepy stranger', 's7_still_karl_coffee', 0), ('survival rate', 's7_04_walls', 234.1, 0.9)],
+  [15, 'Karl Gibbs', 'Scream 7 (2026)'], 'karl', 19.4))
 X.append(sec('s04', [(0, 's2_11_mothers_love', 6.0), ("billy's mom", 's1_11_creative', 99.75), ('who spent', 's2_11_mothers_love', 19.3),
   ('friendly reporter', 's2_11_mothers_love', 41.3), ('her plan', 's2_10_blame', 122.6), ('honestly', 's2_11_mothers_love', 32.0),
   ('but up close', 's2_11_mothers_love', 96.0), ('once cotton', 's2_12_intense', 110.0), ('it was over', 's2_12_intense', 107.9),
@@ -172,8 +172,10 @@ for S in X:  # film label per run of one film, gone once the stat card or a full
         if f: S['overlays'].append(['film', f, t, min(end, runs[k + 1][1] if k + 1 < len(runs) else 999)])
 DARK = ['s7_04_walls', 's7_06_spree', 's7_09_anna_camp', 's7_10_sidney_kills', 's6_subway', 's6_ladder', 's6_core4', 's6_two_gf', 's4_02_return',
         's4_06_killcam', 's3_12_firing']
-P = {'sections': X, 'beat_style': 'thermo',
-     'zoom': {**{k: 1.0 for k in ['s4_still_jill', 's4_still_jill_bed', 's4_still_charlie', 's4_still_gf', 's4_still_trio', 's4_still_charlie_party', 's4_still_charlie_close', 's4_still_gf_knife', 's4_still_jill_hospital']},
+# TierMaker-style board (user 10/26). Row names: placeholder set until the user picks (letter, phrase, max survival %)
+TIERS = [['S', 'Six Feet Under', 25], ['A', 'Almost Dead', 40], ['B', 'Better Run', 55], ['C', 'Can Fight Back', 75], ['D', "Don't Worry", 101]]
+P = {'sections': X, 'beat_style': 'board', 'tiers': TIERS,
+     'zoom': {**{k: 1.0 for k in ['s4_still_jill', 's4_still_jill_bed', 's4_still_charlie', 's4_still_gf', 's4_still_trio', 's4_still_charlie_party', 's4_still_charlie_close', 's4_still_gf_knife', 's4_still_jill_hospital', 's7_still_karl_unmasked', 's7_still_karl_coffee']},
               **{k: 1.08 for k in ['s1_01_like_scary', 's1_10_surprise', 's1_11_creative', 's1_12_tables', 's2_09_driving', 's2_10_blame',
                                    's2_11_mothers_love', 's2_12_intense', 's3_11_family', 's3_12_firing']}},
      'gamma': {k: 1.28 for k in DARK}}
