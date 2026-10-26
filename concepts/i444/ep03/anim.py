@@ -90,7 +90,7 @@ def stat_card(out, name, tile_png, stats, pct, dur, t_pct, fps=30, reveal=None, 
     else:
         last = max(0.9, min(1.7, t_pct - 0.55)); starts = [0.32 + i * (last - 0.32) / 3 for i in range(4)]
     FILL = 0.36
-    end = max(t_pct + 0.6, starts[-1] + FILL + 0.1)
+    end = max(t_pct + 0.75, starts[-1] + FILL + 0.1)
     n = int(math.ceil(min(dur, end) * fps)) + 1
     LW = W - SX
     content = Image.new('RGBA', (LW, H), (0, 0, 0, 0)); d = ImageDraw.Draw(content)
@@ -107,7 +107,8 @@ def stat_card(out, name, tile_png, stats, pct, dur, t_pct, fps=30, reveal=None, 
         y = Y0 + i * DY
         text(d, (CX, y), k, 30, BONE, 'ls')
         d.rectangle([CX, y + 16, CX + CW, y + 16 + BH], fill=(58, 56, 60, 255))
-    text(d, (CX, 868), 'SURVIVAL RATE', 40, WHITE, 'ls')
+    text(d, (CX, 846), 'SURVIVAL RATE', 40, WHITE, 'ls')
+    c = col(pct) if num else WHITE                                     # tier colour (TierMaker pastel once set_tiers ran)
     for i in range(n):
         tt = i / fps
         fr = content.copy(); d = ImageDraw.Draw(fr)
@@ -120,9 +121,16 @@ def stat_card(out, name, tile_png, stats, pct, dur, t_pct, fps=30, reveal=None, 
             k2 = (tt - t_pct) / 0.2
             s2 = (f'{int(round(pct * ease(k2)))}%' if k2 < 1 else f'{pct}%') if num else '??'
             sc = 1.0 + 0.12 * (1 - ease((tt - t_pct - 0.2) / 0.16)) if k2 >= 1 else 1.12
-            lay = Image.new('RGBA', (520, 230), (0, 0, 0, 0)); text(ImageDraw.Draw(lay), (500, 190), s2, 150, WHITE, 'rs')
+            lay = Image.new('RGBA', (520, 230), (0, 0, 0, 0)); text(ImageDraw.Draw(lay), (500, 190), s2, 150, c, 'rs', stroke=6)
             if sc != 1.0: lay = lay.resize((int(520 * sc), int(230 * sc)), Image.BICUBIC)
-            fr.alpha_composite(lay, (int(CX + CW - 500 * sc), int(900 - 190 * sc)))
+            fr.alpha_composite(lay, (int(CX + CW - 500 * sc), int(922 - 190 * sc)))
+            if num and tt >= t_pct + 0.36:                               # the tier-name cell fades in under SURVIVAL RATE
+                a = int(255 * ease((tt - t_pct - 0.36) / 0.2)); nm2 = TIERS[tier(pct)][0]
+                tl = Image.new('RGBA', fr.size, (0, 0, 0, 0)); dt = ImageDraw.Draw(tl)
+                w2 = dt.textlength(nm2, font=f(34)) + 40
+                dt.rounded_rectangle([CX, 868, CX + w2, 922], 12, fill=c + (a,))
+                text(dt, (CX + 20, 908), nm2, 34, (15, 12, 12, a) if (LETTERS or tier(pct) == 2) else (255, 255, 255, a), 'ls')
+                fr.alpha_composite(tl)
         # in: the shadow fades up over 0.3 s while the content slides 50 px in from the right
         k3 = ease(tt / 0.3); full = Image.new('RGBA', (LW, H), (0, 0, 0, 0))
         sh = shadow()

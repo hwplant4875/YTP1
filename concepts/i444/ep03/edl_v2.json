@@ -2418,6 +2418,38 @@
    "sfx": []
   }
  ],
+ "tiers": [
+  [
+   "S",
+   "Slaughtered",
+   25
+  ],
+  [
+   "A",
+   "Almost Dead",
+   40
+  ],
+  [
+   "B",
+   "Better Run",
+   50
+  ],
+  [
+   "C",
+   "Close Call",
+   60
+  ],
+  [
+   "D",
+   "Don't Worry",
+   80
+  ],
+  [
+   "E",
+   "Easy",
+   101
+  ]
+ ],
  "zoom": {
   "s4_still_jill": 1.0,
   "s4_still_jill_bed": 1.0,

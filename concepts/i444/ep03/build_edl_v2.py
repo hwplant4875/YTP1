@@ -32,6 +32,9 @@ def stats(k):
     s = KS.get(k, {})
     return {n: s.get(f, 5) for n, f in (('STRENGTH', 'strength'), ('INTELLIGENCE', 'intelligence'), ('KILL COUNT', 'kill_count'),
                                        ('DECEPTION', 'deception'))}
+# survival tiers (user 10/26 15:19: the card shows the tier name in its TierMaker colour; the % takes that colour too)
+TIERS = [['S', 'Slaughtered', 25], ['A', 'Almost Dead', 40], ['B', 'Better Run', 50], ['C', 'Close Call', 60], ['D', "Don't Worry", 80],
+         ['E', 'Easy', 101]]
 SFX_GAIN = {'whoosh': -16, 'fill': -20, 'stamp': -12, 'slam': -6}
 def sec(voice, shots, rank=None, key=None, card_at=None, extra=(), pad=0.5, clip_db=-99):
     shots = [[T(voice, s[0]), *s[1:]] for s in shots]
@@ -166,7 +169,7 @@ for S in X:  # film label per run of one film, gone once the stat card takes the
         if f: S['overlays'].append(['film', f, t, min(end, runs[k + 1][1] if k + 1 < len(runs) else 999)])
 DARK = ['s7_04_walls', 's7_06_spree', 's7_09_anna_camp', 's7_10_sidney_kills', 's6_subway', 's6_ladder', 's6_core4', 's6_two_gf', 's4_02_return',
         's4_06_killcam', 's3_12_firing']
-P = {'sections': X,
+P = {'sections': X, 'tiers': TIERS,
      'zoom': {**{k: 1.0 for k in ['s4_still_jill', 's4_still_jill_bed', 's4_still_charlie', 's4_still_gf', 's4_still_trio', 's4_still_charlie_party', 's4_still_charlie_close', 's4_still_gf_knife', 's4_still_jill_hospital', 's7_still_karl_unmasked', 's7_still_karl_coffee']},
               **{k: 1.08 for k in ['s1_01_like_scary', 's1_10_surprise', 's1_11_creative', 's1_12_tables', 's2_09_driving', 's2_10_blame',
                                    's2_11_mothers_love', 's2_12_intense', 's3_11_family', 's3_12_firing']}},
