@@ -98,7 +98,7 @@ ANCHORS_M = {
     "CROUCH": (44, 27), "CROUCH_FALL": (52, 36),
     "PYR": [(-60, 470), (50, 55), (-12, 250), (150, 330)],
     "A": (-20, 935, 90, 60), "S1": (-120, 866, 50), "S2": (-20, 874, 50), "PYXIS_POST": (-20, 866, 50),
-    "L": [(-380, 870), (-40, 870), (260, 870)], "ROSE_HOISTS_X": [-60, -20, 20],
+    "L": [(-380, 870), (-40, 870), (260, 870), (-195, 870)], "ROSE_HOISTS_X": [-60, -20, 20],
     "TOWERS": {k: v[:2] for k, v in TOWERS_M.items()},
 }
 
@@ -122,7 +122,8 @@ EVAC_ROUTE = [M(-60, 470)[:2], M(-100, 625)[:2], M(-135, 790)[:2], M(-140, 845)[
 BELL_TOWER = dict(xy=M(-110, 470)[:2], belfry_z=(38.0, 45.0), belfry_c=M(-110, 470, 41.5), top_z=50.0)
 WALL_LIFTS = [dict(name=n, xy=M(*p)[:2], out=o, platform=f"TrostLift_{n}_Platform")
               for n, p, o in (("RoseW", (-380, 870), (0, -1)), ("RoseC", (-40, 870), (0, -1)), ("RoseE", (260, 870), (0, -1)),
-                              ("Gate", (-62, 4.0), (0.129, 0.992)))]       # LG: shaft at about (-62, 10)
+                              ("Gate", (-62, 4.0), (0.129, 0.992)),        # LG: shaft at about (-62, 10)
+                              ("RoseHQ", (-195, 870), (0, -1)))]           # AUDIT 6: posts + lintel behind the HQ (ep09 21:36.8)
 LABELS = {"TROST DISTRICT": M(60, 420, 20), "WALL ROSE": M(-1100, 870, 50), "INNER GATE": M(-140, 870, 50),
           "OUTER GATE": M(0, 0, 50), "SUPPLY HQ": M(-250, 640, 40), "BOULDER": M(290, 262, 16)}
 
@@ -1233,7 +1234,7 @@ def _near(p, lst, r):
     return any(math.hypot(p[0] - q[0], p[1] - q[1]) < r for q in lst)
 
 SPECIAL_PIL = [(-158.0, 870.0), (-110.0, 870.0)]
-LIFT_PTS = [(-380.0, 870.0), (-40.0, 870.0), (260.0, 870.0), (-62.0, 10.0), (338.0, 870.0)]
+LIFT_PTS = [(-380.0, 870.0), (-40.0, 870.0), (260.0, 870.0), (-62.0, 10.0), (338.0, 870.0), (-195.0, 870.0)]
 
 def _pilasters(bm, pts, inner_sign, start, every, skip_pts, mi_sh=0):
     """Inner-face pilasters 7 x 3 m with a flared foot and block caps 3 m above the parapet."""
@@ -1600,8 +1601,10 @@ def build_outer_gate(MT):
     _door_leaves(MT)
     # ---- breached
     tab = [rnd.uniform(-1, 1) for _ in range(97)]
-    hole_gh = lambda z: _hole_half(z, tab, 7.5, 32.0)
-    hole_wall = lambda z: _hole_half(z, tab[13:] + tab[:13], 6.5, 30.0)
+    # OWNER 10/27: the breach is BOULDER-SIZED (the 14 m ball fills it snugly): 15.6 m wide through the gatehouse with a
+    # broken round top at Z ~16 (was 15 x 32-34 m), stepping to ~13 m in the wall body (the step jams the ball)
+    hole_gh = lambda z: _hole_half(z, tab, 7.8, 16.2)
+    hole_wall = lambda z: _hole_half(z, tab[13:] + tab[:13], 6.6, 15.0)
     bm = bmesh.new()
     cell = 1.2
     ZC = 36.0                                                                  # cells below, solid above
@@ -1656,8 +1659,8 @@ def build_outer_gate(MT):
             rnd.uniform(-1.2, 1.2); rnd.uniform(-1, 1); rnd.uniform(1.5, 3.0)
     bm = bmesh.new()
     brng = random.Random(77)
-    for (z, sx, y, ln, droop) in ((13.2, -1, 9.0, 4.2, 1.4), (13.6, 1, 12.5, 3.0, 0.6), (20.2, 1, 7.5, 4.6, 2.0),
-                                  (20.6, -1, 13.0, 2.6, 0.4), (27.0, -1, 10.5, 3.8, 1.6), (27.4, 1, 6.5, 2.2, 0.8)):
+    for (z, sx, y, ln, droop) in ((12.6, -1, 13.6, 3.0, 0.8), (14.0, 1, 12.9, 2.6, 0.6), (15.2, -1, 14.3, 2.2, 0.4),
+                                  (11.4, 1, 14.4, 3.2, 1.0), (15.6, 1, 14.0, 1.8, 0.3), (10.2, -1, 14.6, 2.4, 0.9)):
         hw_ = max(hole_gh(z), 3.0)
         x0 = sx * (hw_ + 0.6); x1 = x0 - sx * ln
         a, b = Vector((x0, y, z)), Vector((x1, y + brng.uniform(-0.6, 0.6), z - droop))
@@ -1670,10 +1673,10 @@ def build_outer_gate(MT):
             tip = b + d * brng.uniform(0.4, 1.4) + off * 2.0
             tube(bm, [q1 + off, tip], 0.14, 0.02, 4, mi=0)
     for k in range(5):                                               # dark dead root strands hanging in the hole
-        x = brng.choice((-1, 1)) * brng.uniform(3.0, 6.0); z = brng.uniform(20, 31)
-        q = [(x, brng.uniform(6.0, 14.0), z)]
+        x = brng.choice((-1, 1)) * brng.uniform(4.5, 6.5); z = brng.uniform(14.0, 16.0)
+        q = [(x, brng.uniform(13.6, 14.8), z)]
         for j in range(1, 5):
-            q.append((x + brng.uniform(-1.0, 1.0), q[-1][1] + brng.uniform(-0.8, 0.8), z - j * brng.uniform(1.8, 3.0)))
+            q.append((x + brng.uniform(-0.6, 0.6), q[-1][1] + brng.uniform(-0.2, 0.3), z - j * brng.uniform(0.8, 1.4)))
         tube(bm, q, 0.16, 0.05, 4, mi=1)
     _mk("TrostBreachTimbers", bm, [MT["timber_split"], MT["vine"]])
     # rubble fan 15-20 m north of the breach (3 m high at the hole)
@@ -1701,10 +1704,12 @@ def build_outer_gate(MT):
     _mk("OuterGateRubble", bm, [MT["rubble_brick"], MT["rubble_stone"], MT["timber_d"]])
     # glow card inside the breach (fades with set_glow), plug (hidden), seal rubble
     bm = bmesh.new()
-    vs = [bm.verts.new(p) for p in ((-6.4, -3.5, 0.2), (6.4, -3.5, 0.2), (6.4, -3.5, 26.0), (-6.4, -3.5, 26.0))]
+    vs = [bm.verts.new(p) for p in ((-6.0, -3.5, 0.2), (6.0, -3.5, 0.2), (6.0, -3.5, 8.6), (-6.0, -3.5, 8.6))]
     bm.faces.new(vs)
-    vs = [bm.verts.new(p) for p in ((-6.0, -3.0, 26.0), (6.0, -3.0, 26.0), (0.0, -3.0, 30.0))]
-    bm.faces.new(vs)
+    arc = [bm.verts.new((6.0 * math.cos(math.pi * k / 8), -3.0, 8.6 + 6.0 * math.sin(math.pi * k / 8))) for k in range(9)]
+    ctr = bm.verts.new((0.0, -3.0, 8.6))
+    for k in range(8):
+        bm.faces.new((ctr, arc[k], arc[k + 1]))
     glow = _mk("OuterGate_Glow", bm, [MT["glow"]])
     glow.visible_shadow = False
     _build_plug(MT, rnd)
@@ -1727,18 +1732,20 @@ def build_outer_gate(MT):
     return gate
 
 def _build_plug(MT, rnd):
-    """Λ plug: a dark tapering spire of titan remains from the ball up to Z 38 (base 15 m), ~60 tendril curves, some
-    spreading 5-10 m over the brick.  Origin (0, 12, 0) M; set_plug(frac) grows it (scale z)."""
-    bm = bmesh.new()                                     # authored in M, shifted to the origin (0, 12, 0) below
-    hexa(bm, [(-7.4, 9.0, 12.5), (7.4, 9.0, 12.5), (7.4, 16.2, 12.5), (-7.4, 16.2, 12.5),
-              (-0.4, 11.0, 37.5), (0.4, 11.0, 37.5), (0.4, 15.4, 37.5), (-0.4, 15.4, 37.5)], 0)
+    """Λ plug: a dark tapering spire of titan remains from the TOP OF THE BALL (Z ~14.5) up the brick face to Z 38 (base 15 m),
+    ~60 tendril curves, some spreading 5-10 m over the brick.  Origin (0, 12, 14.5) M; set_plug(frac) grows it upward
+    (scale z).  OWNER 10/27: the breach is ball-sized, so the spire stands on the gatehouse face above the wedged ball."""
+    Z0 = 14.5
+    bm = bmesh.new()                                     # authored in M, shifted to the origin (0, 12, Z0) below
+    hexa(bm, [(-6.6, 14.4, 16.2), (6.6, 14.4, 16.2), (6.6, 16.6, 16.2), (-6.6, 16.6, 16.2),      # on the face, above the hole:
+              (-0.4, 14.8, 37.5), (0.4, 14.8, 37.5), (0.4, 16.0, 37.5), (-0.4, 16.0, 37.5)], 0)    # the ball's front stays clear
     for k in range(62):
-        x0 = rnd.uniform(-7.2, 7.2); z0 = rnd.uniform(9.0, 15.0)
+        x0 = rnd.uniform(-6.8, 6.8); z0 = rnd.uniform(14.8, 17.0)
         if k >= 46:                                      # tendrils fanning sideways over the brick (5-10 m)
             sx = 1 if x0 > 0 else -1
             ln = rnd.uniform(5.0, 10.0)
-            zt = rnd.uniform(12.0, 32.0)
-            hw0 = 7.4 * max(0.0, 1 - (zt - 12.5) / 25.0)
+            zt = rnd.uniform(14.0, 32.0)
+            hw0 = 7.0 * max(0.0, 1 - (zt - 14.0) / 24.0)
             pts = [(sx * hw0 * 0.8, 15.6, zt)]
             for j in range(1, 6):
                 pts.append((pts[-1][0] + sx * ln / 5 + rnd.uniform(-0.4, 0.4), 15.25 + rnd.uniform(-0.05, 0.2),
@@ -1749,14 +1756,14 @@ def _build_plug(MT, rnd):
         pts = []
         for j in range(8):
             t = j / 7
-            hw_ = 7.4 * (1 - t) ** 1.1
+            hw_ = 7.0 * (1 - t) ** 1.1
             x = x0 * (1 - t) + rnd.uniform(-0.6, 0.6) * (1 - t * 0.7)
             x = max(-hw_ - 0.5, min(hw_ + 0.5, x))
-            pts.append((x, rnd.uniform(14.6, 17.2), z0 + (apex_z - z0) * t))
+            pts.append((x, rnd.uniform(15.3, 17.0), z0 + (apex_z - z0) * t))
         tube(bm, pts, rnd.uniform(0.5, 1.2), 0.1, 5, mi=0)
     for v in bm.verts:
-        v.co.y -= 12.0
-    ob = _mk_at("OuterGate_Plug", bm, [MT["tendril"]], (0.0, 12.0, 0.0))
+        v.co.y -= 12.0; v.co.z -= Z0
+    ob = _mk_at("OuterGate_Plug", bm, [MT["tendril"]], (0.0, 12.0, Z0))
     return ob
 
 # ====================================================================================== gate square GS
@@ -1880,8 +1887,9 @@ def build_gate_square(MT):
         c = (PIT_C[0] + r * math.cos(a), PIT_C[1] + r * math.sin(a))
         vs = [bm.verts.new((c[0] + rnd.uniform(0.8, 1.6) * math.cos(j * 0.785), c[1] + rnd.uniform(0.8, 1.6) * math.sin(j * 0.785), zf + 0.03)) for j in range(8)]
         bm.faces.new(vs).material_index = 5
-    # plank bridge 4 x 16 m at compass bearing 315 (NW) from P, over the outer trench onto the middle ring
-    ab = math.radians(135.0)
+    # plank bridge 4 x 16 m at compass bearing ~28 (NNE) from P, over the outer trench onto the middle ring
+    # (AUDIT CORRECTIONS 4, 10/26: ep09 F09/000003609, ep04 20:30, F11/000014506; was 315 / NW)
+    ab = math.radians(90.0 - 28.0)
     d = Vector((math.cos(ab), math.sin(ab))); t = Vector((-d.y, d.x))
     c = Vector(PIT_C) + d * 21.0
     obox(bm, c, d, t, 16.0, 4.0, 0.05, 0.45, 3)
@@ -1891,7 +1899,7 @@ def build_gate_square(MT):
     n = 40
     for k in range(n):
         a0 = math.radians(20 + k * 140 / n); a1 = math.radians(20 + (k + 1) * 140 / n)
-        if abs(math.degrees(a0) - 135) < 6:
+        if abs(math.degrees(a0) - (90.0 - 28.0)) < 6:          # gap where the bridge lands
             continue
         p0 = Vector((PIT_C[0] + 24.0 * math.cos(a0), PIT_C[1] + 24.0 * math.sin(a0)))
         p1 = Vector((PIT_C[0] + 24.0 * math.cos(a1), PIT_C[1] + 24.0 * math.sin(a1)))
@@ -2803,6 +2811,25 @@ def build_lifts(MT):
     for spec in WALL_LIFTS:
         X, Y = to_m(*spec["xy"])[:2]
         ox, oy = spec["out"]
+        if spec["name"] == "RoseHQ":                   # AUDIT 6: two tall brown posts + lintel + crossbar, near full height
+            bm = bmesh.new()
+            for sx in (-2.8, 2.8):
+                box(bm, (sx, 6.0, 24.6), (0.7, 0.7, 49.2), mi=0)
+            box(bm, (0.0, 6.0, 49.6), (7.4, 0.9, 0.9), mi=0)                      # lintel
+            box(bm, (0.0, 6.0, 31.0), (5.6, 0.5, 0.5), mi=0)                      # crossbar
+            for sx in (-2.8, 2.8):
+                box(bm, (sx, 3.2, 49.6), (0.5, 5.6, 0.5), mi=0)                   # ties back into the wall face
+            for sx in (-0.8, 0.8):
+                cyl(bm, (sx, 6.0, 49.2), (sx, 6.0, 2.0), 0.05, seg=4, mi=3)      # ropes
+            ob = L.obj_from_bm(f"TrostLift_{spec['name']}", bm, [MT["timber_d"], MT["f_tcream"], MT["roof_red_t"], MT["iron_t"]], lc)
+            ob.location = M(X, Y, 0.0); ob.rotation_euler.z = math.atan2(oy, ox) - math.pi / 2
+            pb = bmesh.new()
+            box(pb, (0, 0, 0.18), (4.3, 3.6, 0.36), mi=0)
+            for sx in (-2.0, 2.0):
+                box(pb, (sx, 0, 0.75), (0.15, 3.6, 0.15), mi=1)
+            po = L.obj_from_bm(spec["platform"], pb, [MT["plank_t"], MT["iron_t"]], lc)
+            po.parent = ob; po.location = (0, 6.0, 0.4)
+            continue
         bm = bmesh.new()
         y0, y1 = 5.4, 10.4
         for sx in (-2.4, 2.4):

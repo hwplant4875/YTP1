@@ -16,6 +16,7 @@ Segment module contract (aot/seg_<id>.py):
     CAM_LIMITS dict  overrides for camchan.check (e.g. dict(hmin=89))
     check()    extra self checks (collision etc.), printed by --check / --dry
     finish()   called once after toon.apply() (material tweaks that must survive the toon pass)
+    cam_shake(t) -> (pitch, yaw) radians added to the camera (short impact shakes)
 
 Frames: <seg-out>/f_<global frame index>.png with index = round(t * fps); STEP > 1 renders every STEP-th frame
 (render_seg.sh repeats frames before encoding).  Missing frames are resumed after a crash.  hudcam JSON per frame in _cam/.
@@ -42,11 +43,17 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.dirname(HERE))
 import aotlib as L
 import camchan
-TR = sys.modules.get("trost") or importlib.import_module("trost")
+# OPT-IN (g2 agent, 10/27): SEG_FRAME=W renders a Shiganshina-frame segment (g1/g2) on scene.py's own Shiganshina set
+# (no AOT_SET, render_seg.sh SEG_SET=shiganshina): the module's CAM / TRACK are in frame W, M2S is the identity, the
+# ground is scene.py's height(), and the trost-only "Haze" hiding is skipped.  Default (unset) = unchanged Trost path.
+FRAME_W = os.environ.get("SEG_FRAME", "M").upper() == "W"
+TR = None if FRAME_W else (sys.modules.get("trost") or importlib.import_module("trost"))
 
 SET_DY = 870.0
 def M2S(p):
-    """Trost master frame M -> trost.py set frame."""
+    """Trost master frame M -> trost.py set frame (SEG_FRAME=W: identity)."""
+    if FRAME_W:
+        return Vector((float(p[0]), float(p[1]), float(p[2]) if len(p) > 2 else 0.0))
     if hasattr(TR, "M"):
         try:
             return Vector(TR.M(float(p[0]), float(p[1]), float(p[2]) if len(p) > 2 else 0.0))
@@ -55,7 +62,9 @@ def M2S(p):
     return Vector((float(p[0]), float(p[1]) - SET_DY, float(p[2]) if len(p) > 2 else 0.0))
 
 def ground_M(x, y):
-    """Terrain / paving height at M (x, y)."""
+    """Terrain / paving height at M (x, y) (SEG_FRAME=W: scene.py height at W (x, y))."""
+    if FRAME_W:
+        return float(L.height(x, y))
     xs, ys = x, y - SET_DY
     if hasattr(TR, "ground_z"):
         try:
@@ -103,7 +112,7 @@ else:
     cy.samples = B.seg_samples; cy.use_adaptive_sampling = True; cy.use_denoising = True
     sc.render.use_simplify = True; sc.render.simplify_subdivision_render = 0
 sc.render.use_persistent_data = True
-for n in ("Haze",):                      # Eevee smears the giant haze volume; the set's mist pass carries the depth
+for n in (() if FRAME_W else ("Haze",)):  # Eevee smears the giant haze volume; the set's mist pass carries the depth
     o = bpy.data.objects.get(n)
     if o:
         o.hide_render = True
@@ -134,6 +143,9 @@ def cam_at(t):
         loc, look, lens = v[0:3], v[3:6], v[6]
     loc, look = M2S(loc), M2S(look)
     rot = (look - loc).to_track_quat("-Z", "Y").to_euler()
+    if hasattr(SEG, "cam_shake"):                  # optional: SEG.cam_shake(t) -> (pitch, yaw) radians (impacts)
+        dx, dz = SEG.cam_shake(t)
+        rot.x += dx; rot.z += dz
     return loc, rot, lens
 
 def run_checks():

@@ -2,6 +2,15 @@
 
 Latest first.
 
+## Update 4 (g8 agent, owner 10/27 + audit; API unchanged)
+- **Breach is BOULDER-SIZED**: OuterGateBroken hole 15.6 m wide through the gatehouse with a broken round top at Z ~16
+  (was 15 x 32-34 m), ~13 m in the wall body; OuterGate_Glow card resized to the hole; TrostBreachTimbers moved to the new
+  hole top; **OuterGate_Plug** now grows UP from the ball top (origin (0, 12, 14.5) M; set_plug(frac) unchanged) and stands
+  on the brick face above the wedged ball.
+- Ring-pit plank bridge at compass bearing ~28 deg (NNE) from P (AUDIT 4; was 315), railing gap moved with it.
+- 5th Rose lift **RoseHQ** at M (-195, 870), south face (AUDIT 6): two tall brown posts + lintel + crossbar; appended to
+  WALL_LIFTS (index 4: existing indices unchanged), LIFT_PTS and ANCHORS_M["L"]; platform TrostLift_RoseHQ_Platform.
+
 ## Update 3 (g8 agent, cloud QA vs ref/anime/bible/ep13_000019194.jpg; API unchanged)
 - Walls (Trost only): TrostWallStone base pre-warmed (#c3b18c) so the lit toon band reads #CEC3A6; damp foot #6f6a58 with
   moss and vertical damp streaks 6-12 m (stone_mat damp_k / damp_streaks); TrostPilaster lighter (#d8caa6) so the

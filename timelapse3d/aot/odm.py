@@ -29,6 +29,16 @@ API
     sq.update(t)                      # every frame
     sq.pos(name, t) -> (x, y, z)      # for cameras / name tags; sq.state(name, t) -> full state dict
 Kits: cadet, garrison, scout.  Hair keys: HAIRS.  Extra figure flags: scarf, rifle, cravat, scale.
+
+ONE-HOOK MODE (owner 10/27; opt-in, backward compatible):  odm.Squads(name, hook=True)  (or sq.flyer(..., hook=True)).
+Every hop / dive / spin then shows exactly ONE wire with a small dark hook at its end (never a wire without a hook):
+    fire  0.15-0.25 s: the hook leaves the hip and flies straight (~130 m/s) to the anchor, the wire growing behind it,
+          a short gas puff at the hip;
+    reel  the hook bites, the wire is taut (hip -> anchor), the soldier is pulled along it with ease-in (accelerating),
+          a slight swing arc below the line, a white gas trail;
+    release well before the anchor: the wire retracts in 0.15 s, the soldier flies a ballistic arc to the landing point.
+hop(t0, t1, p0, p1, apex=None, gas=1.0, anchors=None): in hook mode anchors[0] (if given) is the single anchor (wall face,
+roof edge, chimney, a titan's nape); default = 5 m beyond p1 and 9 m + 8 % of the hop length above it.
 """
 import math, random
 import numpy as np
@@ -154,7 +164,8 @@ def yaw_of(d):
 # ---------------------------------------------------------------- tracks
 class Flyer:
     def __init__(self, name, kit="cadet", hair="brown", scarf=False, rifle=False, cravat=False, H=1.7, scale=1.0, seed=0, moustache=False,
-                 accent=None, cloak=None, gear=True):
+                 accent=None, cloak=None, gear=True, hook=False):
+        self.hook = hook                                                          # one-hook fire / reel / release mode
         self.name, self.kit, self.hair, self.scarf, self.rifle, self.cravat = name, kit, hair, scarf, rifle, cravat
         self.moustache, self.accent, self.cloak = moustache, accent, cloak       # accent: emissive rgb; cloak: rgb override
         self.gear = gear                                                          # False: no ODM units / blades (Eren out of the nape)
@@ -218,6 +229,8 @@ class Flyer:
             p = s[3] + (s[4] - s[3]) * u
             st.update(pos=p, yaw=yaw_of(s[4] - s[3]), pose=s[5] if t_raw <= t1 else "stand")
             st["phase"] = np.linalg.norm(s[4][:2] - s[3][:2]) * u
+        elif k == "hop" and self.hook:
+            st.update(_hook_hop(s, t, t_raw))
         elif k == "hop":
             p0, p1, apex, gas, anc = s[3], s[4], s[5], s[6], s[7]
             ue = _ss(u) * 0.35 + u * 0.65                       # quick launch, steady swing
@@ -259,6 +272,10 @@ class Flyer:
             st["gas"] = t_raw < t1 and u < 0.6
             if t_raw < t1 and u < 0.7:
                 st["anchors"] = [tgt + np.array([sx * 2.0, 0, 1.5]) for sx in (-1, 1)]
+                if self.hook:                                    # one hook into the target; it flies there in the first 0.15 s
+                    hip = p + np.array([0, 0, 0.9]); a_ = tgt + np.array([0, 0, 1.0])
+                    f_ = min(1.0, (t_raw - t0) / 0.15)
+                    st["anchors"] = None; st["hook"] = hip + (a_ - hip) * f_
             if t_raw >= t1:
                 st["pos"] = v3(fn(t_raw))
         elif k == "spin":
@@ -274,6 +291,8 @@ class Flyer:
             st["gas"] = t_raw < t1
             if t_raw < t1:
                 st["anchors"] = [c + np.array([0, 0, 1.0]), c + np.array([0.5, 0.5, 2.0])]
+                if self.hook:
+                    st["anchors"] = None; st["hook"] = c + np.array([0, 0, 1.0])
         elif k == "follow":
             fn, yfn, pose, vfn = s[3], s[4], s[5], s[6]
             st.update(pos=v3(fn(t_raw if t_raw < t1 else t1)), yaw=yfn(t) if yfn else 0.0, pose=pose)
@@ -281,6 +300,41 @@ class Flyer:
                 st["vis"] = vfn(t_raw)
         return st
 
+
+def _hook_hop(s, t, t_raw):
+    """One-hook hop: fire the hook (0.15-0.25 s), reel along the taut wire (ease-in, slight sag), release, ballistic arc."""
+    t0, t1, p0, p1, apex, gas, anc = s[1], s[2], s[3], s[4], s[5], s[6], s[7]
+    T = max(t1 - t0, 1e-3)
+    d = p1 - p0; dh = np.array([d[0], d[1], 0.0]); L_ = float(np.linalg.norm(dh))
+    fwd = dh / L_ if L_ > 1e-3 else np.array([0.0, 1.0, 0.0])
+    A = v3(anc[0]) if anc else p1 + fwd * 5.0 + np.array([0.0, 0.0, 9.0 + 0.08 * float(np.linalg.norm(d))])
+    hip0 = p0 + np.array([0.0, 0.0, 0.9])
+    tf = min(max(float(np.linalg.norm(A - hip0)) / 130.0, 0.15), 0.25, 0.3 * T)
+    trel = t0 + tf + (T - tf) * 0.62
+    R = p0 + (A - p0) * 0.72                                     # released well before the anchor
+    yaw = yaw_of(d) if L_ > 1e-3 else 0.0
+    st = dict(yaw=yaw, gas=False, anchors=None, hook=None, pose="stand", pitch=0.0)
+    if t_raw >= t1:
+        st.update(pos=p1, pose="stand"); return st
+    if t < t0 + tf:                                              # fire: hook flies, soldier braces at p0
+        u = (t - t0) / tf
+        st.update(pos=p0, pose="crouch", hook=hip0 + (A - hip0) * u, gas=u < 0.5)
+        return st
+    if t < trel:                                                 # reel: pulled along the wire, accelerating
+        u = (t - t0 - tf) / (trel - t0 - tf); ue = u ** 1.8
+        p = p0 + (R - p0) * ue
+        p = p - np.array([0.0, 0.0, 0.06 * float(np.linalg.norm(R - p0)) * math.sin(math.pi * ue)])
+        st.update(pos=p, pose="fly", pitch=-1.1 * min(1.0, 0.3 + u), hook=A, gas=True)
+        return st
+    u = (t - trel) / max(t1 - trel, 1e-3)                        # release: ballistic arc to the landing, wire retracts
+    apx = 1.5 + 0.03 * float(np.linalg.norm(p1 - R))
+    p = R + (p1 - R) * u; p = p + np.array([0.0, 0.0, 4 * apx * u * (1 - u)])
+    st.update(pos=p, pose="fly" if u < 0.85 else "stand", pitch=-1.0 * (1 - u))
+    tr = t - trel
+    if tr < 0.15:
+        hip = p + np.array([0.0, 0.0, 0.9])
+        st["hook"] = A + (hip - A) * (tr / 0.15)
+    return st
 
 def roof_route(f, t0, pts, speed=22.0, wait=(0.6, 2.5), rnd=None, start_wait=0.0, apex=None):
     """Hop a flyer through a list of perch points (x, y, z) starting at t0 (first point = where it stands).
@@ -344,13 +398,15 @@ def _pose_arrays(pose, t, i, st):
 
 
 class Squads:
-    def __init__(self, name="ODM", pscale=None):
+    def __init__(self, name="ODM", pscale=None, hook=False):
         self.name = name
+        self.hook = hook                       # default for new flyers: one-hook fire / reel / release (see module doc)
         self.pscale = PSCALE if pscale is None else pscale
         self.flyers = []
         self.by_name = {}
 
     def flyer(self, name, kit="cadet", hair="brown", **kw):
+        kw.setdefault("hook", self.hook)
         f = Flyer(name, kit, hair, seed=len(self.flyers), **kw)
         self.flyers.append(f); self.by_name[name] = f
         return f
@@ -408,6 +464,11 @@ class Squads:
         me.from_pydata(np.zeros((nw * 8, 3)).tolist(), [], [[a + 8 * k for a in fa] for k in range(nw) for fa in cube_f])
         me.materials.append(wm); me.update()
         self.wob = bpy.data.objects.new(me.name, me); coll.objects.link(self.wob); self.wob.visible_shadow = False
+        hm = bpy.data.meshes.new(self.name + "_Hooks")            # one small dark hook head per flyer (hook mode)
+        nh = max(n, 1)
+        hm.from_pydata(np.zeros((nh * 8, 3)).tolist(), [], [[a + 8 * k for a in fa] for k in range(nh) for fa in cube_f])
+        hm.materials.append(wm); hm.update()
+        self.hob = bpy.data.objects.new(hm.name, hm); coll.objects.link(self.hob); self.hob.visible_shadow = False
         # gas puffs: precomputed from every gas-on stretch of every track
         self.gas = FX.PuffField(self.name + "_Gas", kind="steam", color=(0.93, 0.94, 0.96), alpha=0.6, grow=1.3)
         ps = self.pscale
@@ -450,6 +511,7 @@ class Squads:
         Ar = np.zeros((n, 8)); Ae = np.zeros((n, 8)); lean = np.zeros(n)
         vis = np.zeros(n); yaw = np.zeros(n); pos = np.zeros((n, 3)); pitch = np.zeros(n); roll = np.zeros(n)
         W = np.zeros((2 * max(n, 1), 8, 3))
+        Hk = np.zeros((max(n, 1), 8, 3))
         ps = self.pscale
         for i, f in enumerate(self.flyers):
             st = f.state(t)
@@ -462,7 +524,12 @@ class Squads:
             if st["pose"] == "lie":                       # pitched flat about the hip: drop the hip to the ground
                 pitch[i] = -math.pi / 2 + 0.05
                 pos[i] = pos[i] + np.array([0, 0, -(self.hips[i] - 0.12) * vis[i]])
-            if st["anchors"] is not None:
+            if st.get("hook") is not None:                 # ONE wire: hip centre -> hook, and the hook head at its tip
+                hip = st["pos"] + np.array([0, 0, 0.86 * vis[i]])
+                tip = v3(st["hook"])
+                W[2 * i] = _wire_box(hip, tip, 0.06 * ps)
+                Hk[i] = _wire_box(tip - (tip - hip) / max(np.linalg.norm(tip - hip), 1e-3) * 0.45, tip, 0.16 * ps)
+            elif st["anchors"] is not None:
                 c, sn = math.cos(yaw[i]), math.sin(yaw[i])
                 for k, sx in enumerate((-1, 1)):
                     hip = st["pos"] + np.array([c * 0.25 * sx, sn * 0.25 * sx, 0.0]) * vis[i] + np.array([0, 0, 0.86 * vis[i]])
@@ -471,6 +538,8 @@ class Squads:
         co = deform(self.R, Ar, Ae, lean, vis, yaw, pos, pitch, roll, piv)
         self.ob.data.vertices.foreach_set("co", co.astype(np.float32).ravel()); self.ob.data.update()
         self.wob.data.vertices.foreach_set("co", W.reshape(-1, 3).astype(np.float32).ravel()); self.wob.data.update()
+        if getattr(self, "hob", None) is not None:
+            self.hob.data.vertices.foreach_set("co", Hk.reshape(-1, 3).astype(np.float32).ravel()); self.hob.data.update()
         self.gas.update(t)
 
 

@@ -31,15 +31,35 @@ import segtime
 
 DUR = segtime.DUR["g8"]                    # 75.0 (tight)
 
-# ====================================================================== BEATS (tight, local seconds) - ONE re-time table
+# ====================================================================== BEATS + WARP (the ONE re-time place)
+# BEATS are on the CHOREOGRAPHY clock.  WARP maps the segment's video time t (0..75) to that clock, piecewise linear, so a
+# re-time is an edit of WARP alone: owner 10/27 "faster carry" = video 19-38 plays choreography 19-47 (x1.47, ~23.5 m/s on
+# the route), and the saved time goes to the hold on the slammed-in ball, Levi and the cleanup / pyres.  Camera keys, light
+# keys and the pyres are written on the VIDEO clock.
+WARP = [(0.0, 0.0), (19.0, 19.0), (38.0, 47.0), (39.6, 48.6), (46.5, 53.5), (54.5, 60.0), (60.5, 66.0), (71.0, 71.0), (75.0, 75.0)]
+
+def T_old(t):
+    """video time -> choreography time."""
+    for (a, A), (b, B) in zip(WARP, WARP[1:]):
+        if t <= b:
+            return A + (B - A) * (max(t, a) - a) / (b - a)
+    return t
+
+def T_new(t):
+    """choreography time -> video time."""
+    for (a, A), (b, B) in zip(WARP, WARP[1:]):
+        if t <= B:
+            return a + (b - a) * (max(t, A) - A) / (B - A)
+    return t
+
 BEATS = dict(
     green=3.0, eren_swing=(1.0, 4.45), transform=4.5, roar1=(5.0, 5.6), smash=6.0, miss=7.0, red=8.0, selfpunch=9.5,
     stagger=(9.75, 10.45), sit=(10.4, 11.0), armin_land=12.0, t7_kill=12.6, stab=13.5, t12_kill=14.2,
     wake=15.0, standup=(15.0, 16.0), turn=(16.0, 16.6), squat=(16.6, 17.3), chest=(17.3, 18.2), overhead=(18.2, 19.0),
     carry=(19.0, 47.0), rad_kill=23.0, crawler_kill=27.6, west_street=(30.5, 37.0), trainee_kill=35.2, trench_fall=38.0,
     breach_in=(22.0, 31.0, 40.0), mitabi_grab=(40.4, 41.2), crouch_kill=43.4, ian_grab=43.5,
-    roar2=(46.6, 47.5), back_off=(47.0, 47.6), drop=(47.5, 48.5), shove=(48.5, 49.3), jam=49.5, slump=(49.6, 52.0),
-    plug=(50.0, 54.0), face_plug=(50.0, 53.5), yellow=53.0, relay=54.5, nape_cut=(52.0, 60.0),
+    roar2=(47.0, 47.9), slam=(47.9, 48.3), jam=48.3, slump=(48.5, 50.6),             # OWNER 10/27: ONE instant slam (~0.4 s)
+    plug=(48.8, 52.8), face_plug=(48.8, 52.3), yellow=53.0, relay=54.5, nape_cut=(52.0, 60.0),
     levi_drop=55.5, levi_cut1=56.3, levi_cut2=56.7, levi_stand=57.5,
     night=(59.6, 62.8), day=(63.2, 66.0), survey=(62.8, 66.2), captured=64.8, d_clear=(60.2, 64.6),
     cleanup=(66.0, 71.0), rows=(66.0, 69.2), pyres=(66.4, 67.4, 68.4, 69.4), end_hold=(71.0, 75.0))
@@ -47,7 +67,8 @@ BEATS = dict(
 # ====================================================================== anchors (frame M; bible section C + g8 spec 2a-2d)
 BALL_R = 7.0                                   # ONE radius everywhere (bible C BALL); trost.BALL_R overrides if present
 B0 = (290.0, 262.0); BALL_REST0 = (290.0, 262.0, 7.4)           # ball on its lawn bed (sunk 0.2 m into the 0.6 m bed)
-BALL_DROP = (0.0, 17.5, 7.0); BALL_SEAL = (0.0, 8.0, 7.0)        # dropped in front, shoved 9.5 m, jams flush (front Y 15)
+BALL_DROP = (0.0, 17.5, 7.0); BALL_SEAL = (0.0, 10.5, 7.0)       # slammed into the ball-sized hole (owner 10/27): wedged in the
+                                                                # gatehouse opening, 2.5 m proud of the face so it reads
 BERSERK = (260.0, 289.0); MIKASA_ROOF = (252.0, 300.0); MISS_ROOF = (241.0, 289.0)
 SIT = (281.0, 271.0)                                            # hips on the bed kerb, back against the ball's NW face
 LIFT = (290.0, 273.5)                    # stands, shuffles round to the ball's NORTH side and lifts facing south (route side):
@@ -55,13 +76,14 @@ LIFT = (290.0, 273.5)                    # stands, shuffles round to the ball's 
 ROUTE = [LIFT, (284, 232), (280, 160), (274, 117), (228, 86), (185, 64), (141, 47), (95, 35), (63, 29), (36, 21), (18, 18.5), (4, 23)]
 ROUTE_NAMES = ["lift", "R1", "R2", "R3", "a1", "a2", "a3", "a4", "R4", "R5", "R5b", "R6"]
 ROUTE_T = [19.0, 21.8, 26.2, 29.8, None, None, None, None, 42.8, 44.4, 45.6, 47.0]   # None = by distance (cruise)
-PUSH_FROM = (2.0, 27.5)                          # backs off R6 to here for the drop + crouch-shove (in the pit's open sector)
-SHOVE_END = (2.5, 21.0)                          # behind the ball as it jams
+SLAM_POS = (2.5, 20.5)                           # lunges 3 m south from R6 as he slams the ball down into the breach
 KNEEL = (8.0, 19.5)                              # then slumps sideways onto its NE shoulder: the ball's front stays visible (QA)
-GF = (334.0, 136.0, 51.5); RF = (306.0, 300.0, 19.0); YF = (-24.0, 40.0, 2.5); PY = (-20.0, 870.0, 50.5)
+RICO_DECK = (16.0, 36.0)                         # AUDIT 7: Rico east of the 20 m push gap (deck X 12..20, Y 32..40)
+GF = (334.0, 136.0, 51.5); RF = (306.0, 300.0, 19.0); YF = (22.0, 52.0, 2.5); PY = (-20.0, 870.0, 50.5)
 LV = (-40.0, 2.0, 50.5); CT = [(-45.0, 45.0), (-55.0, 32.0)]; MI = (-67.0, 18.0); IA = (-36.0, 56.0)
 CROUCH = (44.0, 27.0); CROUCH_FALL = (52.0, 36.0); PIT = (0.0, 36.0)
 PYRES = [(-60.0, 470.0), (-12.0, 250.0), (150.0, 330.0), (50.0, 55.0)]        # C, AV, street, GS ring road east (lit in order)
+PYRE_T = (61.0, 62.6, 64.2, 65.8)                # VIDEO clock: the pyres light one by one in the longer cleanup
 D_BOX = (-475.0, -360.0, 760.0, 865.0)
 PILASTER_E = (17.0, 27.0, 11.0)                  # east pilaster X 17..27, town-side face Y 11
 
@@ -69,23 +91,22 @@ PILASTER_E = (17.0, 27.0, 11.0)                  # east pilaster X 17..27, town-
 _SEAM_IN = segtime.seam("g7_g8"); _SEAM_OUT = segtime.seam("g8_end")
 CAM_KEYS = [
     (0.0,  tuple(_SEAM_IN["pos"]), tuple(_SEAM_IN["look"]), _SEAM_IN["lens"]),        # K0 = g7 C15
+    # OWNER 10/27 16:51: "distant is actually better" -> the v1 camera distances and framing; times follow the WARP
     (6.5,  (60, 660, 205),   (252, 296, 6),   40),     # K2' green trail, transformation, roof smash (bible K2 6.0 (-40, 760, 210)
                                                        #     -> (230, 320, 0) 28 mm left the berserk at 556 m / 28 mm unreadable)
     (13.0, (60, 300, 150),   (282, 268, 8),   35),     # K3' the court from the WEST: over its open west half the sitting titan
     (15.5, (100, 250, 120),  (285, 265, 10),  42),     # K4' reads (bible K3/K4 from the NNW: blocked by the north terrace and
                                                        #     the court belfry (228, 290) at the court's NW corner)
     (19.0, (120, 282, 108),  (289, 266, 14),  40),     # K5' the lift side-on from the west (bible K5 (175, 395, 105) saw his back)
-    (28.0, (95, 150, 100),   (276, 143, 12),  38),     # C1' carry side-on from the town (west) side (bible C1 (95, 290, 105)
-                                                       #     was a rear three-quarter at 120-145 deg off his front)
-    (38.0, (-25, 95, 98),    (150, 52, 12),   38),     # C2' along the wall, front three-quarter from WNW: his legs are seen
-                                                       #     over the open strip / gate square (bible C2 (40, 230, 100) looked
-                                                       #     across the 13-19 m terraces, which hid everything below the ball)
-    (45.0, (-60, 175, 95),   (40, 24, 12),    40),     # C3 the gate square, Mikasa's kill
-    (49.5, (-75, 150, 90),   (3, 14, 12),     42),     # S1 the push and the jam
-    (54.0, (-95, 225, 135),  (0, 20, 40),     32),     # S2 the Λ plug and the yellow trail
-    (58.0, (-105, 245, 140), (0, 30, 15),     34),     # L1 Levi
-    (62.0, (-60, 330, 200),  (-280, 170, 10), 30),     # B1 (tight look-at) - fixes the L1 -> M1 yaw flip
-    (66.0, (-60, 430, 290),  (-410, 800, 20), 28),     # M1 night pulses at D, day, Survey Corps
+    (25.1, (95, 150, 100),   (276, 143, 12),  38),     # C1' carry side-on from the town (west) side
+    (31.9, (-25, 95, 98),    (150, 52, 12),   38),     # C2' along the wall, front three-quarter from WNW (open strip)
+    (36.6, (-60, 175, 95),   (40, 24, 12),    40),     # C3 the gate square, Mikasa's kill
+    (40.0, (-75, 150, 90),   (3, 14, 12),     42),     # S1 the slam (39.3, camera shake) and the ball wedged in the breach
+    (43.5, (-80, 160, 93),   (2, 13, 12),     41),     # S1b hold on the wedged ball, the plug grows, 5 titans face it
+    (47.1, (-95, 225, 135),  (0, 20, 40),     32),     # S2 the Λ plug and the yellow trail (from the east plank box)
+    (52.0, (-105, 245, 140), (0, 30, 15),     34),     # L1 Levi
+    (56.5, (-60, 330, 200),  (-280, 170, 10), 30),     # B1 (tight look-at) - fixes the L1 -> M1 yaw flip; night cannons at the gate
+    (61.5, (-60, 430, 290),  (-410, 800, 20), 28),     # M1 day 2, Survey Corps over the district
     (71.0, (150, 600, 190),  (-120, 420, 0),  30),     # E1 (tight look-at) cleanup, pyres, rows
     (75.0, tuple(_SEAM_OUT["pos"]), tuple(_SEAM_OUT["look"]), _SEAM_OUT["lens"]),     # E2 END
     (76.0, tuple(_SEAM_OUT["pos"]), tuple(_SEAM_OUT["look"]), _SEAM_OUT["lens"]),     # guide key: at rest at E2
@@ -156,8 +177,8 @@ def route_yaw(s):
         a, b = route_xy(0.0), route_xy(10.0)
     return yaw_to(b[0] - a[0], b[1] - a[1])
 
-STEP_L = 8.4          # m per step (tight cut: 446 m in 28 s; cruise ~17 m/s -> ~2 steps/s, the bible's 'heavy jog' option)
-FOOT_A = 3.6          # stride half-amplitude in the pose (feet slide < 0.6 m per step)
+STEP_L = 10.5         # m per step (tight cut: 446 m in 28 s; cruise ~17 m/s -> ~2 steps/s, the bible's 'heavy jog' option)
+FOOT_A = 4.9          # stride half-amplitude in the pose (feet slide < 0.6 m per step)
 FOOT_W = 1.7
 
 def foot_w(s):
@@ -238,20 +259,16 @@ def at_state(t):
         if s > _RS[-2]:
             st["yaw"] = ang_lerp(route_yaw(s), math.pi / 2, ss(_RS[-2], ROUTE_LEN, s))
     else:
-        r6 = np.array(ROUTE[-1]); pf = np.array(PUSH_FROM); kn = np.array(KNEEL)
-        a, b = BEATS["back_off"]
+        r6 = np.array(ROUTE[-1]); sp_ = np.array(SLAM_POS); kn = np.array(KNEEL)
+        a, b = BEATS["slam"]
         st["yaw"] = ang_lerp(math.pi / 2, Y_SOUTH, ss(46.8, 47.6, t))
-        p = r6 + (pf - r6) * ss(a, b, t)
-        p = p + (np.array(SHOVE_END) - pf) * ss(BEATS["shove"][0], BEATS["jam"] - 0.1, t)
-        p = p + (kn - np.array(SHOVE_END)) * ss(BEATS["slump"][0], BEATS["slump"][1], t)
+        p = r6 + (sp_ - r6) * ss(a - 0.1, b, t)
+        p = p + (kn - sp_) * ss(BEATS["slump"][0], BEATS["slump"][1], t)
         st["pos"] = p
-        if t < BEATS["drop"][0]:
-            st["mode"] = "roar_carry"; st["u"] = bump(t, 46.6, 46.9, 47.25, 47.5)
-        elif t < BEATS["shove"][0]:
-            st["mode"] = "drop"; st["u"] = ss(*BEATS["drop"], t)
+        if t < a:
+            st["mode"] = "roar_carry"; st["u"] = bump(t, 47.0, 47.3, 47.6, 47.9)
         elif t < BEATS["slump"][0]:
-            st["mode"] = "shove"; st["u"] = ss(BEATS["shove"][0], BEATS["jam"], t)
-            st["phase"] = math.pi * 2.0 * ss(BEATS["shove"][0], BEATS["jam"], t)
+            st["mode"] = "slam"; st["u"] = ss(a, b, t)
         else:
             st["mode"] = "slump"; st["u"] = ss(*BEATS["slump"], t)
             st["yaw"] = ang_lerp(Y_SOUTH, yaw_to(BALL_SEAL[0] + 3.0 - KNEEL[0], BALL_SEAL[1] + 4.0 - KNEEL[1]), st["u"])
@@ -280,22 +297,18 @@ def ball_state(t, at=None, frame=None):
         u = ss(*BEATS["overhead"], t)
         chest = tf(0.0, 5.6, 11.5)
         return chest + (over - chest) * u, -0.4 - 0.6 * u, 0.0
-    if t < BEATS["drop"][0]:
+    if t < BEATS["slam"][0]:
         s = at.get("s", ROUTE_LEN)
         c = over + np.array([0.0, ball_north_shift(s), 0.0])
         return c, -1.0 + 0.05 * math.sin(at.get("phase", 0.0)), 0.04 * math.sin(at.get("phase", 0.0))
-    drop = np.array(BALL_DROP); seal = np.array(BALL_SEAL)
-    if t < BEATS["shove"][0]:
-        u = ss(*BEATS["drop"], t)
-        top = over + np.array([0.0, 1.0, 0.0])
-        c = top + (drop - top) * u
-        c[2] = top[2] + (drop[2] - top[2]) * (u ** 1.6)          # falls the last metres
-        return c, -1.0 - 0.3 * u, 0.0
-    u = ss(BEATS["shove"][0], BEATS["jam"], t)
-    u = 1 - (1 - min(1.0, (t - BEATS["shove"][0]) / (BEATS["jam"] - BEATS["shove"][0]))) ** 2 if t < BEATS["jam"] else 1.0
-    c = drop + (seal - drop) * u
-    roll = np.linalg.norm(seal - drop) * u / BALL_R
-    return c, -1.3 + roll, 0.0
+    seal = np.array(BALL_SEAL)
+    a, b = BEATS["slam"]
+    if t < b:                                                    # the slam: overhead -> into the breach, accelerating
+        u = ((t - a) / (b - a)) ** 2
+        top = over + np.array([0.0, 0.5, 1.5]) * math.sin(math.pi * min(1.0, (t - a) / (b - a)))
+        c = top + (seal - top) * u
+        return c, -1.0 - 1.6 * u, 0.0
+    return seal, -2.6, 0.0
 
 # ====================================================================== everything below needs Blender
 STATE = {}
@@ -481,7 +494,7 @@ def make_poses():
                       knee=V(0, 1, 0.25), hands={"R": (V(5, 6, 6), V(1, -0.3, -0.5), "abs"), "L": (V(-5, 6, 6), V(-1, -0.3, -0.5), "abs")}, fist=0.2, jaw=14)
     P["chest"] = dict(hips=7.2, bend=_bends(-6, -6, -2, 4, 6), feet={"R": (V(2.6, 0.4, 0), -14), "L": (V(-2.6, 0.2, 0), 14)},
                       knee=V(0, 1, 0.1), hands={"R": (V(4, 5, 11), V(1, -0.3, -0.5), "abs"), "L": (V(-4, 5, 11), V(-1, -0.3, -0.5), "abs")}, fist=0.2, jaw=20)
-    P["carry"] = dict(hips=7.5, bend=_bends(8, 6, 4, 2, 24), feet={"R": (V(FOOT_W, 0.0, 0), -6), "L": (V(-FOOT_W, 0.0, 0), 6)},
+    P["carry"] = dict(hips=7.15, bend=_bends(8, 6, 4, 2, 24), feet={"R": (V(FOOT_W, 0.0, 0), -6), "L": (V(-FOOT_W, 0.0, 0), 6)},
                       knee=V(0, 1, 0), hands={"R": (V(5, 1, 15), V(1, 0.1, -0.3), "abs"), "L": (V(-5, 1, 15), V(-1, 0.1, -0.3), "abs")}, fist=0.25, jaw=10)
     P["roar_carry"] = dict(P["carry"], hips=7.8, bend=_bends(-4, -6, -6, -10, -6), jaw=34)
     P["drop"] = dict(hips=6.6, bend=_bends(22, 12, 6, 0, 0), feet={"R": (V(1.9, 0.8, 0), -8), "L": (V(-1.9, -0.6, 0), 8)},
@@ -491,6 +504,9 @@ def make_poses():
     P["slump"] = dict(hips=3.6, bend=_bends(40, 18, 8, 10, 30), feet={"R": (V(1.9, -5.2, 0), -8), "L": (V(-1.9, -4.9, 0), 8)},
                       knee=V(0, 1, -0.6), hands={"R": (V(3, 4, 7), V(1, -0.2, -0.6), "abs"), "L": (V(-3, 4, 7), V(-1, -0.2, -0.6), "abs")}, fist=0.0, jaw=8)
     P["roar"] = dict(P["roar"])
+    P["slam"] = dict(hips=5.6, bend=_bends(34, 16, 8, -6, -12), feet={"R": (V(2.0, 1.4, 0), -8), "L": (V(-2.0, -2.8, 0), 8)},
+                     knee=V(0, 1, 0.15), hands={"R": (V(2.6, 7.0, 3.0), V(1, 0.2, -0.5), "abs"), "L": (V(-2.6, 7.0, 3.0), V(-1, 0.2, -0.5), "abs")},
+                     fist=0.2, jaw=34)
     return P
 
 def _ball_hands(spec, c_tf, dirs, pole):
@@ -572,7 +588,7 @@ def _pose_titan(t):
         uu = st["u"]
         spec = blend(P["sit"], P["crouch"], ss(0.0, 0.55, uu)) if uu < 0.55 else blend(P["crouch"], P["stand"], ss(0.55, 1.0, uu))
         zoff = -0.3 * (1 - ss(0.0, 0.4, uu))
-    elif mode in ("lift", "carry", "roar_carry", "drop", "shove", "slump"):
+    elif mode in ("lift", "carry", "roar_carry", "drop", "shove", "slam", "slump"):
         spec = None
     else:
         spec = P["stand"]
@@ -610,8 +626,15 @@ def _pose_titan(t):
         elif mode == "shove":
             sp = _walk_feet(P["shove"], st["phase"], 1.4)
             spec = _ball_hands(sp, c_tf, (0.42, -0.9, 0.05), (1.0, -0.2, -0.6))
+        elif mode == "slam":                             # ONE slam: overhead -> down into the breach in ~0.4 s
+            u = st["u"]
+            sp = blend(P["carry"], P["slam"], ss(0.0, 0.7, u))
+            dirs = Vector((0.8, -0.05, -0.6)).lerp(Vector((0.6, -0.65, 0.3)), u)
+            spec = _ball_hands(sp, c_tf, dirs, (1.0, 0.0, -0.4))
+            if u > 0.7:
+                spec = blend(spec, P["slam"], ss(0.7, 1.0, u))
         else:                                            # slump on the jammed ball
-            sp = blend(P["shove"], P["slump"], st["u"])
+            sp = blend(P["slam"], P["slump"], st["u"])
             spec = _ball_hands(sp, c_tf, (0.55, -0.82, 0.2), (1.0, -0.2, -0.6))
     AT.POSES["_g8"] = spec
     T.pose("_g8", ground=False)
@@ -754,7 +777,7 @@ def build_titans(coll):
         if claw: g8["claw"] = claw
         if nm == "yellow": g8["crouch"] = 52.5
         add(nm, H, [(0, *a), (BEATS["face_plug"][0], *a), (BEATS["face_plug"][1], *b), (99, *b)], show=(0, 75), g8=g8, **kw)
-        TT.specs[-1]["face"] = (lambda bb: (lambda tt: tuple(S3(0, 12)[:2]) if tt > 49 else tuple(S3(*route_xy(route_s(min(tt, 46.9))))[:2])))(b)
+        TT.specs[-1]["face"] = (lambda bb: (lambda tt: tuple(S3(0, 12)[:2]) if tt > BEATS["jam"] else tuple(S3(*route_xy(route_s(min(tt, 46.9))))[:2])))(b)
     # Levi's two: thin2 (7 m) and bald (9 m) turn toward the nape group and are cut down
     k_t2 = TT.j("thin2"); TT.keys[k_t2] = [(0, *S3(9, 63)[:2]), (50.0, *S3(9, 63)[:2]), (53.5, *S3(4, 33)[:2]), (54.6, *S3(4, 33)[:2]),
                                            (56.2, *S3(3, 27)[:2]), (99, *S3(3, 27)[:2])]
@@ -778,40 +801,14 @@ def build_titans(coll):
         g8=dict(crouch=41.6))
     TT.specs[-1]["face"] = CROUCH_FALL and tuple(S3(*CROUCH_FALL)[:2])
     kill("crouch", BEATS["crouch_kill"], 1)
-    # ---- the decoy mass at D: 60 at t 0 growing to 100 by t 40, arms up, faces to the wall; shelled at night (mop-up)
-    x0, x1, y0, y1 = D_BOX
-    slots = []
-    for r_ in range(7):
-        for c_ in range(16):
-            x = x0 + 8 + c_ * 7.0 + (r_ % 2) * 3.0 + rnd.uniform(-1.5, 1.5)
-            y = y1 - 6 - r_ * 8.5 + rnd.uniform(-1.5, 1.5)
-            if x < x1 - 4:
-                slots.append((x, y))
-    rnd.shuffle(slots)
-    slots = sorted(slots, key=lambda p: (y1 - p[1]) + 0.3 * abs(p[0] - (x0 + x1) / 2))[:100]
-    d0, d1 = BEATS["d_clear"]
-    for k, (x, y) in enumerate(slots):
-        H = 4.0 + 10.0 * rnd.random() ** 1.3
-        wall = (x, y1 + 2.0) if y > y0 + 40 else (x0 - 2.0, y)
-        if k < 60:
-            keys = [(0, x, y), (99, x, y)]; arr = -1.0
-        else:
-            arr = rnd.uniform(2.0, 40.0)
-            st = (x + rnd.uniform(60, 160), y - rnd.uniform(120, 260))
-            keys = [(0, *st), (arr - 25.0, *st), (arr, x, y), (99, x, y)]
-        add(f"d{k}", H, keys, show=(0, 66.5), g8=dict(hands_up=max(0.0, arr), keep=False), hair=rnd.choice([None, 0, 1, 2, 3]))
-        TT.specs[-1]["face"] = tuple(S3(*wall)[:2])
-        TT.ev[-1]["death"] = (d0 + (d1 - d0) * (k / 100.0) + rnd.uniform(-0.3, 0.3), rnd.choice([1, -1]))
-    # ---- titans pressing on the west curve of the wall (shelled at night from the wall-top guns above them, in the B1 frame)
-    WC = []
-    for k in range(12):
-        ang = math.radians(-46.0 - 1.6 * k); r = 466.0 - (k % 3) * 6.0
-        x, y = r * math.sin(ang), 480.0 - r * math.cos(ang)
-        WC.append((x, y))
-        add(f"wc{k}", 5.0 + 7.0 * rnd.random(), [(0, x, y), (99, x, y)], show=(0, 66.5), g8=dict(hands_up=0.0, keep=False))
-        TT.specs[-1]["face"] = tuple(S3(1.1 * x, 480.0 + 1.1 * (y - 480.0))[:2])
-        TT.ev[-1]["death"] = (BEATS["night"][0] + 0.8 + 2.4 * k / 12.0 + rnd.uniform(-0.2, 0.2), rnd.choice([1, -1]))
-    STATE["WC"] = WC
+    # ---- OWNER 16:53: no decoy corner D (no titan mass, no packed wall tops, no west-curve group).  The mop-up stays at the
+    #      gate square: wall-top cannons round the seal shell the titans left there at night (deaths spread over the night)
+    targets = ["lipW", "thin1", "yellow", "inb0", "inb1", "inb2", "mg1", "mg2", "iang", "trench", "pitlying"]
+    n0, n1 = BEATS["night"]
+    for k, nm in enumerate(targets):
+        td = n0 + 0.6 + (n1 - n0 - 1.0) * k / (len(targets) - 1) + rnd.uniform(-0.1, 0.1)
+        kill(nm, td, rnd.choice([1, -1]), keep=False)
+    STATE["shell_targets"] = targets
     # ---- 2 captured titans pinned in their frames (gate square, west half)
     add("cap4", 4.0, [(0, *CT[0]), (99, *CT[0])], show=(BEATS["captured"], 99), g8=dict(pinned=True))
     TT.specs[-1]["face"] = tuple(S3(-45, 20)[:2])
@@ -825,7 +822,7 @@ def build_titans(coll):
 def build_people(coll):
     import odm
     rnd = random.Random(850)
-    SQ = odm.Squads("G8Squads", pscale=1.0)
+    SQ = odm.Squads("G8Squads", pscale=1.0, hook=True)          # owner 10/27: one hook per shot (fire / reel / release)
     STATE["SQ"] = SQ
     TT = STATE["TT"]
     P = lambda x, y, z: S3(x, y, z)
@@ -901,7 +898,9 @@ def build_people(coll):
         q = route_xy(behind(t_ + 2.2)); qq = perch(q[0] + 14, q[1] + 12)
         nq = S3(*qq)
         ri.hop(t_, t_ + 1.3, prev, nq, apex=7).stand(t_ + 1.3, t_ + 2.4, nq, yaw_c, "crouch"); prev = nq; t_ += 2.4
-    ri.hop(t_, 48.6, prev, yf, apex=10).stand(48.6, BEATS["yellow"] + 0.6, yf, odm.yaw_of(np.array([0, -1.0, 0])), "aim")
+    deck = P(RICO_DECK[0], RICO_DECK[1], G(*RICO_DECK) + 0.1)          # AUDIT 7: on the deck east of the push gap for the slump,
+    ri.hop(t_, 48.6, prev, deck, apex=10).stand(48.6, 51.8, deck, odm.yaw_of(np.array([-0.4, -1.0, 0])), "stand")   # then the
+    ri.hop(51.8, 52.5, deck, yf, apex=4).stand(52.5, BEATS["yellow"] + 0.6, yf, odm.yaw_of(np.array([0, -1.0, 0])), "aim")  # east box
     ri.stand(BEATS["yellow"] + 0.6, 75.0, yf, odm.yaw_of(np.array([0, -1.0, 0])), "stand")
     # ---- the elite squads: Ian (ahead), Rico's (rear; the 12 m class), Mitabi (to the gate square first)
     ian = [SQ.flyer(n, "garrison", h) for n, h in (("ian", "dark"), ("i1", "brown"), ("i2", "ash"), ("i3", "black"))]
@@ -998,17 +997,6 @@ def build_people(coll):
                     f.stand(t_ - 0.01, t_, nq, 0.0); prev = nq; continue
                 f.hop(t_, t_ + 1.1, prev, nq, apex=12); prev = nq; t_ += 1.1
             f.stand(t_, BEATS["survey"][1], prev, 0.0).gone(BEATS["survey"][1])
-    # ---- decoy soldiers hanging on wires on the wall faces at D (static wires) + Pyxis's officers handled by people_kit
-    wires = []
-    for k in range(24):
-        if k < 12:
-            p = P(-474.0, 772 + k * 7.5, 18 + (k * 7) % 14); top = P(-478.0, 772 + k * 7.5, 50.5)
-        else:
-            p = P(-470 + (k - 12) * 8.5, 864.0, 16 + (k * 5) % 16); top = P(-470 + (k - 12) * 8.5, 868.0, 50.5)
-        f = SQ.flyer(f"wire{k}", "garrison", rnd.choice(["dark", "brown", "ash"]))
-        f.stand(0.0, 60.0, p, 0.0, "stand")
-        wires.append((p + np.array([0, 0, 1.0]), top))
-    STATE["static_wires"] = wires
     SQ.build(coll)
     STATE["at_nape_people"] = True
     print(f"[g8] flyers: {len(SQ.flyers)}")
@@ -1030,7 +1018,7 @@ def _nape_set(t):
         h = 8.2 + 4.4 * st["u"]; back = -2.5 + 1.5 * st["u"]
     elif mode in ("slump",):
         h = 9.5 - 2.0 * st["u"]; back = 1.2 + 1.8 * st["u"]
-    elif mode in ("shove", "drop"):
+    elif mode in ("shove", "drop", "slam"):
         h = 9.5; back = 1.0
     else:
         h = 12.6; back = -1.0
@@ -1042,16 +1030,6 @@ def build_crowds():
     rnd = random.Random(31)
     out = []
     z = 50.3
-    # Rose top above D (two rows) and the west wall top (two rows): ~400 soldiers packed
-    for (cx, cy, w, d, rot, n) in ((-390, 867.5, 170, 3.0, 0.0, 110), (-390, 872.5, 170, 3.0, 0.0, 100),
-                                   (-477.5, 785, 150, 3.0, math.pi / 2, 95), (-482.5, 785, 150, 3.0, math.pi / 2, 85)):
-        c = S3(cx, cy)
-        es = PK.crowd(["garrison", "garrison", "cadet"], (c[0], c[1], w, d, rot), n, "stand", yaw=rot, seed=rnd.randrange(999),
-                      spacing=(1.55, 1.5), jitter=0.25)
-        for e in es:
-            e.location.z = z
-            e.rotation_euler.z = rot + math.pi + rnd.uniform(-0.3, 0.3)       # facing into the corner (the titans)
-        out += es
     # Pyxis + Anka + officers on the Rose top at PY (the yellow signal is confirmed there)
     pc = S3(*PY)
     for k, (pre, dx) in enumerate((("pixis", 0.0), ("garrison:2", 1.4), ("garrison:4", -1.4), ("garrison:1", 2.8), ("garrison:6", -2.8), ("garrison:3", 4.2))):
@@ -1203,17 +1181,19 @@ def build_cards(coll):
     for te, kind, p in STATE["cannon_events"]:
         C.add_many([te], [p], None, r0=7.0 if kind == "burst" else 3.5, r1=9.0 if kind == "burst" else 4.0, life=0.16 if kind == "muzzle" else 0.24,
                    rise=0.0, kind="glow", alpha=1.0, color=hexrgb("#ffc040") if kind == "muzzle" else (1.0, 0.75, 0.45), fade_in=0.005)
-    # pyres: flame cards 6-10 m + black-brown smoke columns 150-200 m leaning with the wind
-    for k, (xy, te) in enumerate(zip(PYRES, BEATS["pyres"])):
+    CN = SC.SmokeCards("G8CardsVideo")                    # pyres on the video clock (not warped)
+    for k, (xy, te) in enumerate(zip(PYRES, PYRE_T)):
         base = S3(xy[0], xy[1], G(*xy) + 2.0)
-        ts = np.arange(te, DUR, 0.06); n = len(ts)
-        C.add_many(ts, np.tile(base, (n, 1)) + np.column_stack([rng.normal(0, 1.4, n), rng.normal(0, 1.0, n), rng.uniform(0, 2, n)]),
-                   np.column_stack([rng.normal(0, 0.5, n), rng.normal(0, 0.5, n), rng.uniform(4, 8, n)]), r0=2.2, r1=rng.uniform(3.5, 5.5, n),
-                   life=rng.uniform(0.7, 1.2, n), rise=2.0, kind="fire", alpha=1.0, color=hexrgb("#ff9a2a"))
-        ts = np.arange(te + 0.3, DUR, 0.18); n = len(ts)
-        C.add_many(ts, np.tile(base + np.array([0, 0, 6.0]), (n, 1)) + rng.normal(0, 1.5, (n, 3)),
-                   np.column_stack([rng.normal(0, 0.8, n), rng.normal(0, 0.8, n), rng.uniform(26, 32, n)]), r0=3.0, r1=rng.uniform(12, 20, n),
-                   life=rng.uniform(13, 16, n), rise=4.0, kind="smoke", alpha=0.7, tau=5.0, color=hexrgb("#2b2724"))
+        ts = np.arange(te, DUR, 0.05); n = len(ts)
+        CN.add_many(ts, np.tile(base, (n, 1)) + np.column_stack([rng.normal(0, 1.6, n), rng.normal(0, 1.2, n), rng.uniform(0, 2.5, n)]),
+                    np.column_stack([rng.normal(0, 0.5, n), rng.normal(0, 0.5, n), rng.uniform(5, 9, n)]), r0=2.8, r1=rng.uniform(4.5, 7.0, n),
+                    life=rng.uniform(0.7, 1.2, n), rise=2.0, kind="fire", alpha=1.0, color=hexrgb("#ff9a2a"))
+        ts = np.arange(te + 0.3, DUR, 0.15); n = len(ts)
+        CN.add_many(ts, np.tile(base + np.array([0, 0, 7.0]), (n, 1)) + rng.normal(0, 1.8, (n, 3)),
+                    np.column_stack([rng.normal(0, 0.8, n), rng.normal(0, 0.8, n), rng.uniform(26, 32, n)]), r0=4.0, r1=rng.uniform(18, 28, n),
+                    life=rng.uniform(13, 16, n), rise=4.0, kind="smoke", alpha=0.75, tau=5.0, color=hexrgb("#2b2724"))
+    CN.build(coll)
+    STATE["cards_video"] = CN
     # 8 grey-brown smoke columns from burning buildings (ambient, the whole beat)
     for k in range(8):
         x, y = rng.uniform(-350, 300), rng.uniform(120, 760)
@@ -1225,27 +1205,24 @@ def build_cards(coll):
     print(f"[g8] smoke cards: {C.count()}")
 
 def build_cannon_events():
-    """Mop-up cannons 'around the clock': muzzle flashes along the wall tops at D (and the west wall), shell bursts in the
-    corner mass.  Strong pulses at night, slower by day.  (te, kind, set position)."""
+    """Mop-up cannons 'around the clock' (owner 16:53: at the gate square, no corner D): muzzle flashes on the wall top
+    round the seal, shell bursts on the titans left in the gate square at night, slower fire outside by day."""
     rng = np.random.default_rng(55)
-    guns = [S3(-470 + 20 * k, 866.0, 52.0) for k in range(9)] + [S3(-476.0, 705 + 20 * k, 52.0) for k in range(8)] + \
-           [S3(-475.0 * math.sin(a), 480 - 475.0 * math.cos(a), 52.0) for a in np.radians([-50, -62, -74, -86])]
+    guns = [S3(478.0 * math.sin(a), 480 - 478.0 * math.cos(a), 52.0) for a in np.radians([-44, -36, -28, -20, 20, 28, 36, 44])]
+    TT = STATE["TT"]
     ev = []
-    t = BEATS["night"][0] + 0.2
-    while t < BEATS["day"][1]:
-        night = t < BEATS["night"][1] + 0.3
+    for nm in STATE.get("shell_targets", []):            # 2-3 shells walk onto each titan, the last one kills it
+        td = TT.ev[TT.j(nm)]["death"][0]
+        for q, dt in enumerate((-0.9, -0.45, 0.0)[int(rng.integers(2)):]):
+            p = TT.pos(nm, td + dt - 0.35) + np.array([rng.normal(0, 2.5 if dt < 0 else 0.6), rng.normal(0, 2.5 if dt < 0 else 0.6), rng.uniform(3, 8)])
+            g = guns[int(rng.integers(len(guns)))]
+            ev.append((td + dt - 0.35, "muzzle", g)); ev.append((td + dt, "burst", p))
+    t = BEATS["day"][0]
+    while t < BEATS["day"][1]:                           # by day: slower fire from the gate guns over the fields outside
         g = guns[int(rng.integers(len(guns)))]
-        ev.append((t, "muzzle", g))
-        x0, x1, y0, y1 = D_BOX
-        if night and rng.random() < 0.45 and STATE.get("WC"):          # the west-curve group (in the B1 frame)
-            wx, wy = STATE["WC"][int(rng.integers(len(STATE["WC"])))]
-            tgt = S3(wx + rng.normal(0, 4), wy + rng.normal(0, 4), rng.uniform(3, 9))
-            g = guns[17 + int(rng.integers(4))]
-            ev[-1] = (t, "muzzle", g)
-        else:
-            tgt = S3(rng.uniform(x0 + 8, x1 - 8), rng.uniform(y0 + 10, y1 - 8), rng.uniform(3, 9))
-        ev.append((t + 0.35, "burst", tgt))
-        t += rng.uniform(0.18, 0.4) if night else rng.uniform(0.5, 1.1)
+        ev.append((t, "muzzle", g)); ev.append((t + 0.4, "burst", S3(rng.uniform(-120, 120), rng.uniform(-260, -90), rng.uniform(3, 8))))
+        t += rng.uniform(0.8, 1.6)
+    ev.sort(key=lambda e: e[0])
     STATE["cannon_events"] = ev
 
 def build_transform_fx(coll):
@@ -1522,21 +1499,7 @@ def build_set_pieces(coll):
     fr.location = SV(0, 0, G(*CT[0])); fr.location.y = SV(0, 0)[1]; fr.hide_render = True
     STATE["frames"] = fr
     PLACEHOLDERS.append("G8PH_CaptureFrames (2 timber pole frames at CT)")
-    # ---- crane pylons (6-8 grey masts, jib arms, gear wheels) + hoist cage at D (wall tops)
-    bm = bmesh.new()
-    for k in range(7):
-        x = -465 + k * 22.0; y = 868.0
-        L.cyl(bm, (x, y, 50), (x, y, 72), 0.6, 0.45, seg=6)
-        L.cyl(bm, (x, y, 70), (x + 6, y - 7, 66), 0.25, 0.2, seg=4)
-        w = bmesh.ops.create_cone(bm, cap_ends=True, segments=12, radius1=2.2, radius2=2.2, depth=0.4)
-        for v in w["verts"]:
-            v.co = Matrix.Rotation(math.pi / 2, 3, "X") @ v.co + Vector((x + 1.2, y, 56.0))
-    cp = L.obj_from_bm("G8PH_Cranes", bm, [L.mat("G8_CraneGrey", (0.36, 0.36, 0.35), 0.7)], coll)
-    cp.location = SV(0, 0, 0); cp.location.y = SV(0, 0)[1]
-    bm = bmesh.new(); L.box(bm, (0, 0, 1.5), (3.0, 3.0, 3.0))
-    cg = L.obj_from_bm("G8PH_HoistCage", bm, [L.mat("G8_Cage", (0.25, 0.16, 0.08), 0.8)], coll)
-    STATE["cage"] = cg
-    PLACEHOLDERS.append("G8PH_Cranes/HoistCage (mop-up cranes and the hoist cage at D)")
+    cp = None                                            # OWNER 16:53: no cranes / hoist at D
     # ---- covered bodies in rows (AV kerbs Y 120..400 + the GS ring road), 4 batches; pyre log stacks
     batches = [bmesh.new() for _ in range(4)]
     k = 0
@@ -1568,13 +1531,19 @@ def build_set_pieces(coll):
     STATE["pyre_logs"] = py
     STATE["mopup_hook"] = None
     if hasattr(TR, "set_mopup") and bpy.data.objects.get("TrostCapturedFrames"):     # the set has them: use the set's
-        STATE["mopup_hook"] = TR.set_mopup
-        for o in (fr, cp, py):
+        STATE["mopup_hook"] = _set_mopup_no_cranes
+        for o in (fr, py):
             bpy.data.objects.remove(o, do_unlink=True)
         STATE["frames"] = STATE["pyre_logs"] = None
         PLACEHOLDERS[:] = [x for x in PLACEHOLDERS if "CaptureFrames" not in x]
         PLACEHOLDERS[:] = [x.replace("G8PH_Cranes/HoistCage (mop-up cranes and", "G8PH_HoistCage (") for x in PLACEHOLDERS]
     print(f"[g8] body rows: {k}")
+
+def _set_mopup_no_cranes(on, pyres=None):
+    """The set's mop-up props without its cranes at D (owner 16:53)."""
+    _hide(bpy.data.objects.get("TrostCapturedFrames"), not on)
+    _hide(bpy.data.objects.get("TrostCranesD"), True)
+    _hide(bpy.data.objects.get("TrostPyres"), not (on if pyres is None else pyres))
 
 def build_lights(coll):
     """<= 8 live point lights: 4 pyres + 4 cannon flashes (recycled)."""
@@ -1613,9 +1582,11 @@ def build(site):
     build_set_pieces(coll)
     STATE["bed_trees"] = bpy.data.objects.get("TrostBedTrees") or bpy.data.objects.get("G8PH_BedTrees")
     STATE["contact_b0"] = bpy.data.objects.get("TrostBallContactB0")
+    cs_ = bpy.data.objects.get("TrostBallContactSeal")               # the set's seal contact ring follows our rest point
+    if cs_ is not None:
+        cs_.location.y += BALL_SEAL[1] - 8.0
     build_titans(coll)
     build_people(coll)
-    build_static_wires(coll)
     build_crowds()
     build_flares(coll)
     build_cannon_events()
@@ -1629,13 +1600,14 @@ def build(site):
 def finish():
     pass
 
-def update(t):
-    t = float(t)
+def update(tv):
+    tv = float(tv)
+    t = T_old(tv)                                        # the choreography clock (WARP); camera / light / pyres stay on tv
     st, holder = _pose_titan(t)
     # ball
     b = STATE["ball"]
     c, rx, ry = ball_state(t, st if st["vis"] else None, STATE["seat"])
-    b.location = Vector(S3(c)); b.rotation_euler = (rx, ry, 0.4 + (st["yaw"] if t >= 18.2 and t < BEATS["drop"][0] else 0.0))
+    b.location = Vector(S3(c)); b.rotation_euler = (rx, ry, 0.4 + (st["yaw"] if t >= 18.2 and t < BEATS["slam"][0] else 0.0))
     if t < BEATS["chest"][0]:
         b.location.z = G(*B0) + 0.6 + BALL_R * 13.6 / 14.0 - 0.2
     # titans, people, flares, cards
@@ -1643,6 +1615,7 @@ def update(t):
     STATE["SQ"].update(t)
     STATE["FL"].update(t, wind=(2.2, 0.8))
     STATE["cards"].update(t, wind=(1.5, 0.6))
+    STATE["cards_video"].update(tv, wind=(1.5, 0.6))
     # transformation FX
     bolt, fl, ld = STATE["tfx"]
     tb = BEATS["transform"]
@@ -1691,7 +1664,7 @@ def update(t):
         _hide(STATE["ring"], t < BEATS["jam"])
     rub = STATE.get("kick_rubble")
     if rub is not None:                                  # the ball rolls through the kick's rubble fan and presses it flat
-        rub.scale.z = STATE["kick_rubble_z"] * (1.0 - 0.55 * ss(BEATS["drop"][1], BEATS["jam"], t))
+        rub.scale.z = STATE["kick_rubble_z"] * (1.0 - 0.55 * ss(BEATS["slam"][0], BEATS["jam"], t))
     if STATE.get("roof_hook"):
         try: STATE["roof_hook"](t >= BEATS["smash"] + 0.05)
         except Exception as ex: print("[g8] mikasa roof hook failed:", ex)
@@ -1717,12 +1690,9 @@ def update(t):
     _hide(STATE["pyre_logs"], t < BEATS["cleanup"][0])
     for e in STATE["workers"]:
         _hide(e, t < BEATS["cleanup"][0])
-    _hide(STATE["wire_ob"], t >= 60.0)
-    cg = STATE["cage"]; ph = (t % 20.0) / 20.0; z = 2.0 + 46.0 * (0.5 - 0.5 * math.cos(ph * math.tau))
-    cg.location = SV(-430.0, 863.0, z)
     # lights: pyres (flicker) + recycled cannon flashes (most recent 4)
-    for k, (ld_, te) in enumerate(zip(STATE["pyre_lights"], BEATS["pyres"])):
-        ld_.energy = (2000.0 * ss(te, te + 0.8, t) * (0.85 + 0.15 * math.sin(t * 11 + k))) if t >= te else 0.0
+    for k, (ld_, te) in enumerate(zip(STATE["pyre_lights"], PYRE_T)):
+        ld_.energy = (2500.0 * ss(te, te + 0.8, tv) * (0.85 + 0.15 * math.sin(tv * 11 + k))) if tv >= te else 0.0
     act = [(te, p) for te, kind, p in STATE["cannon_events"] if 0.0 <= t - te < 0.22][-4:]
     for k, (lo, ld_) in enumerate(STATE["cannon_lights"]):
         if k < len(act):
@@ -1731,17 +1701,19 @@ def update(t):
             ld_.energy = 0.0
 
 # ---------------------------------------------------------------------- light (sun, sky, exposure) - one key table
+# AUDIT 8: az 255 / el 12 at the hand-off and the green flare, then the azimuth swings to ~200-205 during the carry
+# (el 8 -> 3) so the low sun sits behind the gate by the seal and the yellow flare.
 # t: sun elevation (deg), compass azimuth (deg), sun energy, sun rgb, zenith rgb, horizon rgb, world (lighting) strength, exposure offset
 LIGHT_KEYS = [
-    (0.0,  12.0, 250, 3.4, (1.00, 0.80, 0.56), (0.20, 0.35, 0.68), (0.96, 0.78, 0.55), 1.00, 0.00),   # golden late afternoon
-    (8.0,  10.0, 251, 3.3, (1.00, 0.76, 0.50), (0.20, 0.33, 0.64), (0.98, 0.74, 0.50), 0.95, 0.00),   # red flare: still golden
-    (19.0,  8.0, 252, 3.1, (1.00, 0.68, 0.42), (0.21, 0.30, 0.58), (1.00, 0.68, 0.44), 0.90, 0.00),   # carry: warmer
-    (40.0,  4.0, 254, 2.8, (1.00, 0.56, 0.32), (0.22, 0.26, 0.50), (1.00, 0.58, 0.36), 0.80, 0.05),   # redder
-    (47.0,  2.5, 255, 2.5, (1.00, 0.52, 0.28), (0.22, 0.24, 0.46), (1.00, 0.56, 0.32), 0.72, 0.10),
-    (53.0,  0.6, 255, 2.0, (1.00, 0.64, 0.26), (0.22, 0.22, 0.42), (1.00, 0.70, 0.30), 0.62, 0.15),   # YELLOW at sunset
-    (56.5, -2.5, 256, 0.9, (1.00, 0.55, 0.60), (0.18, 0.13, 0.32), (0.86, 0.46, 0.56), 0.45, 0.35),   # Levi: pink-violet dusk
-    (59.6, -9.0, 80, 0.35, (0.45, 0.55, 0.95), (0.012, 0.016, 0.045), (0.05, 0.06, 0.13), 0.12, 0.70),  # night (moonlight)
-    (62.8, -9.0, 80, 0.35, (0.45, 0.55, 0.95), (0.012, 0.016, 0.045), (0.05, 0.06, 0.13), 0.12, 0.70),
+    (0.0,  12.0, 255, 3.4, (1.00, 0.80, 0.56), (0.20, 0.35, 0.68), (0.96, 0.78, 0.55), 1.00, 0.00),   # golden late afternoon
+    (8.0,  10.0, 254, 3.3, (1.00, 0.76, 0.50), (0.20, 0.33, 0.64), (0.98, 0.74, 0.50), 0.95, 0.00),   # red flare: still golden
+    (19.0,  8.0, 248, 3.1, (1.00, 0.68, 0.42), (0.21, 0.30, 0.58), (1.00, 0.68, 0.44), 0.90, 0.00),   # carry: warmer
+    (40.0,  4.0, 212, 2.8, (1.00, 0.56, 0.32), (0.22, 0.26, 0.50), (1.00, 0.58, 0.36), 0.80, 0.05),   # redder
+    (47.0,  3.0, 204, 2.5, (1.00, 0.52, 0.28), (0.22, 0.24, 0.46), (1.00, 0.56, 0.32), 0.72, 0.10),
+    (53.0,  0.6, 202, 2.0, (1.00, 0.64, 0.26), (0.22, 0.22, 0.42), (1.00, 0.70, 0.30), 0.62, 0.15),   # YELLOW at sunset
+    (56.5, -2.5, 204, 0.9, (1.00, 0.55, 0.60), (0.18, 0.13, 0.32), (0.86, 0.46, 0.56), 0.45, 0.35),   # Levi: pink-violet dusk
+    (59.6, 30.0, 120, 1.1, (0.55, 0.66, 1.00), (0.03, 0.05, 0.12), (0.10, 0.13, 0.24), 0.30, 0.00),  # moonlit night
+    (62.8, 30.0, 120, 1.1, (0.55, 0.66, 1.00), (0.03, 0.05, 0.12), (0.10, 0.13, 0.24), 0.30, 0.00),
     (63.4, 38.0, 150, 3.6, (1.00, 0.97, 0.92), (0.10, 0.28, 0.75), (0.70, 0.80, 0.93), 1.00, 0.00),  # day 2: blue sky
     (66.0, 38.0, 170, 3.6, (1.00, 0.96, 0.90), (0.11, 0.29, 0.74), (0.72, 0.81, 0.92), 1.00, 0.00),
     (66.6, 26.0, 225, 3.0, (1.00, 0.88, 0.72), (0.34, 0.42, 0.60), (0.86, 0.80, 0.70), 0.90, 0.05),  # cleanup: hazy warm day
@@ -1758,9 +1730,9 @@ GRADE_KEYS = [
     (40.0, (1.13, 0.93, 0.76), -0.15),    # carry: warmer / redder
     (47.0, (1.15, 0.91, 0.72), -0.25),
     (53.0, (1.16, 0.95, 0.66), -0.40),    # yellow at sunset
-    (56.5, (1.04, 0.80, 0.98), -1.00),    # Levi: pink-violet dusk
-    (59.6, (0.58, 0.72, 1.18), -1.90),    # night
-    (62.8, (0.58, 0.72, 1.18), -1.90),
+    (56.5, (1.04, 0.84, 1.00), -0.45),    # Levi: pink-violet dusk (readable)
+    (59.6, (0.66, 0.80, 1.16), -0.75),    # moonlit night: blue, town / wall / plug still readable
+    (62.8, (0.66, 0.80, 1.16), -0.75),
     (63.4, (1.00, 1.00, 1.00), 0.00),     # day 2, blue sky
     (66.0, (1.00, 1.00, 1.00), 0.00),
     (66.6, (1.05, 1.00, 0.90), -0.05),    # hazy warm cleanup day
@@ -1797,8 +1769,9 @@ def _lkey(t):
             return a, b, ss(a[0], b[0], t)
     return K[-1], K[-1], 0.0
 
-def light(t):
-    a, b, u = _lkey(float(t))
+def light(tv):
+    t = T_old(float(tv))                                 # light keys and the grade follow the story (choreography) clock
+    a, b, u = _lkey(t)
     def mix(i):
         x, y = a[i], b[i]
         if isinstance(x, tuple):
@@ -1838,6 +1811,14 @@ def light(t):
         if not STATE.get("grade_warned"):
             print("[g8] colour grade failed:", ex_); STATE["grade_warned"] = True
 
+def cam_shake(tv):
+    """Short camera shake at the slam (video clock): (pitch, yaw) radians, ~0.45 deg peak, 0.4 s, decaying."""
+    tj = T_new(BEATS["jam"]); u = tv - tj
+    if u < 0.0 or u > 0.45:
+        return 0.0, 0.0
+    a = math.radians(0.45) * (1 - u / 0.45) ** 2
+    return a * math.sin(u * 2 * math.pi * 14.0), a * 0.7 * math.sin(u * 2 * math.pi * 11.0 + 1.3)
+
 # ====================================================================== HUD trackers (M) + self checks
 def _p_set_to_M(p):
     return (float(p[0]), float(p[1]) + segtime.SET_OFF_Y, float(p[2]))
@@ -1861,8 +1842,9 @@ def _eren(t):
         return _sq("eren_out")(t)
     return None
 
-TRACK = {"Eren": _eren, "AttackTitan": _at_head, "Mikasa": _sq("mikasa"), "Armin": _sq("armin"), "Rico": _sq("rico"),
-         "Levi": _sq("levi", 52.0, 75.0), "Pyxis": lambda t: _p_set_to_M(STATE["pyxis"]) if 52.0 <= t < 60.0 else None}
+_TRACK0 = {"Eren": _eren, "AttackTitan": _at_head, "Mikasa": _sq("mikasa"), "Armin": _sq("armin"), "Rico": _sq("rico"),
+           "Levi": _sq("levi", 52.0, 75.0), "Pyxis": lambda t: _p_set_to_M(STATE["pyxis"]) if 52.0 <= t < 60.0 else None}
+TRACK = {k: (lambda f: (lambda tv: f(T_old(tv))))(f) for k, f in _TRACK0.items()}
 
 def check():
     """Collision checks of the carry (bible g8 build notes): feet outside the outer trench (r 17-24 about P, outside the
@@ -1890,14 +1872,16 @@ def check():
     print(f"[g8] CHECK ball rest {tuple(rest)} front Y {rest[1] + BALL_R:.1f} (gatehouse face Y 15)")
     angs, dists, pits = [], [], []
     for t in np.arange(BEATS["carry"][0], BEATS["carry"][1], 0.1):         # camera vs his facing: never behind his back
-        st = at_state(t); loc, look, lens = CAM.eval(t)
+        st = at_state(t); loc, look, lens = CAM.eval(T_new(t))
         fw = np.array([-math.sin(st["yaw"]), math.cos(st["yaw"])]); d = np.array(loc[:2]) - st["pos"]; dist = float(np.linalg.norm(d))
         angs.append(math.degrees(math.acos(max(-1.0, min(1.0, float(np.dot(fw, d / dist))))))); dists.append(dist)
         pits.append(math.degrees(math.atan2(loc[2] - 12.0, dist)))
     print(f"[g8] CHECK carry camera: angle off his front {min(angs):.0f}..{max(angs):.0f} deg (90 = side, > 90 = behind), "
           f"distance {min(dists):.0f}..{max(dists):.0f} m, pitch to the ball {min(pits):.1f}..{max(pits):.1f} deg")
-    vmax = max((route_s(t + 0.05) - route_s(t)) / 0.05 for t in np.arange(19.0, 47.0, 0.05))
-    print(f"[g8] CHECK carry peak speed {vmax:.1f} m/s, cadence at cruise {vmax / STEP_L:.2f} steps/s")
+    vmax = max((route_s(T_old(t + 0.05)) - route_s(T_old(t))) / 0.05 for t in np.arange(19.0, 38.0, 0.05))     # video clock
+    vavg = ROUTE_LEN / (T_new(BEATS["carry"][1]) - T_new(BEATS["carry"][0]))
+    print(f"[g8] CHECK carry (video clock) {T_new(BEATS['carry'][0]):.1f}-{T_new(BEATS['carry'][1]):.1f} s: mean {vavg:.1f} m/s, peak {vmax:.1f} m/s, "
+          f"cadence {vavg / STEP_L:.2f} (mean) .. {vmax / STEP_L:.2f} (peak) steps/s, stride {STEP_L} m")
     return dict(pilaster=worst_p, trench=len(bad))
 
 if __name__ == "__main__":
