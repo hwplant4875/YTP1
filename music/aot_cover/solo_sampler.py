@@ -164,10 +164,15 @@ class Bank:
         ov = man.get('preset_overrides', {}).get(f'{instrument}:{self.source}', {})
         self.preset.update(ov)
 
-    def choose(self, entries, midi, level, rng, avoid=None):
+    def choose(self, entries, midi, level, rng, avoid=None, steady=False):
         """Nearest-pitch sample within one dynamic layer with natural-string preference
-        and round-robin among near-equal candidates."""
+        and round-robin among near-equal candidates. steady=True (long notes): skip warbling sustains
+        (am_std_db > 2.2) when a steady one is within max_shift."""
         cands = [e for e in entries if e['dyn_level'] == level]
+        if steady:
+            ok = [e for e in cands if (e.get('am_std_db') or 0) <= 2.2 and abs(e['midi'] - midi) <= self.preset['max_shift']]
+            if ok:
+                cands = ok
         strings = self.preset['strings']
         def natural_string(m):
             ok = [s for s in strings if s <= m + 0.5]
@@ -479,6 +484,10 @@ def render(notes, instrument='violin', sr=48000, manifest=None, seed=0, humanize
             # bow change inside a slurred repeated note: short dip then slight re-bite
             env *= 1 - 0.38 * np.exp(-((tc - tb + 0.012) / 0.022) ** 2)
             env *= 1 + 0.10 * np.exp(-((tc - tb - 0.045) / 0.04) ** 2)
+        if p_i is not None and n.get('reartic'):
+            # new syllable inside a slur: bow change at the note start (dip, then a little bite)
+            env *= 1 - 0.5 * np.exp(-((tc + 0.010) / 0.018) ** 2)
+            env *= 1 + 0.09 * np.exp(-((tc - 0.04) / 0.035) ** 2)
         if x_i is not None:
             t_tr = end - start
             env *= _eqp_curve(np.clip((tc - (t_tr - xout / 2)) / max(xout, 1e-3), 0, 1), False)
@@ -493,7 +502,7 @@ def render(notes, instrument='violin', sr=48000, manifest=None, seed=0, humanize
         acc = np.zeros((2, ns_), np.float32)
         chosen = []
         for j in active:
-            e = bank.choose(entries, target, levels[j], rng, avoid=last_file)
+            e = bank.choose(entries, target, levels[j], rng, avoid=last_file, steady=dur >= 0.8)
             chosen.append(e)
             x = _load_audio(e['file'])
             shift = target - e['midi']

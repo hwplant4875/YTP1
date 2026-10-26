@@ -858,7 +858,7 @@ def make_cab_ir(sr=48000, variant='v30', n=2048, seed=0):
     else:
         mag += bump(105, 4.0, 0.3) + bump(800, 1.0, 0.7) + bump(2300, 4.0, 0.25) + bump(3700, 5.0, 0.18) - bump(2950, 2.0, 0.1) \
             - bump(420, 2.5, 0.35)
-        lp_f, lp_s = 5200, 34
+        lp_f, lp_s = 6500, 24   # draft2: 6-10 kHz was 4.5 dB under the original guitar stem
     hp = 75.0
     mag += np.where(f < hp, -24 * np.log2(hp / f), 0.0)
     mag += np.where(f > lp_f, -lp_s * np.log2(f / lp_f), 0.0)
@@ -922,7 +922,7 @@ def amp_sim(x, sr=48000, preset='high_gain', cab='v30', seed=0, oversample=4):
     y = 0.9 * np.tanh(y / 0.9 * 0.8) / 0.8  # power amp softness
     ir = make_cab_ir(sr, cab, seed=seed)
     y = _sig.fftconvolve(y, ir)[:n0].astype(np.float32)
-    y = _sos(y, [_biquad('hp', 80, sr, 0.7), _biquad('lp', 9500, sr, 0.7)])
+    y = _sos(y, [_biquad('hp', 80, sr, 0.7), _biquad('lp', 12000, sr, 0.7)])
     r = float(np.sqrt(np.mean(y ** 2)) + 1e-9)
     # level: amp output is compressed by nature; fix overall to out_db RMS over sounding parts
     act = np.abs(y) > r * 0.1

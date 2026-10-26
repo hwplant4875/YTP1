@@ -1,0 +1,21 @@
+{
+ "violin:vsco2ce": {
+  "vib_depth": 16.0,
+  "vib_delay": 0.1,
+  "vib_fade": 0.28,
+  "body": 0.0
+ },
+ "violin:philharmonia": {
+  "vib_depth": 5.0,
+  "body": 0.0
+ },
+ "cello:philharmonia": {
+  "vib_depth": 9.0,
+  "body": 0.0
+ },
+ "cello:iowa_mis_2012": {
+  "vib_depth": 21.0,
+  "vib_delay": 0.1,
+  "vib_fade": 0.3
+ }
+}
