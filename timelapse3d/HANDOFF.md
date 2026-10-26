@@ -320,3 +320,12 @@ TROST:
 - A (Shiganshina): was starting the 00:44 fixes (Yeager house to the LEFT, camera ease/pull-back, Armored vs Garrison cannons + fleeing refugees, framing locked on him). Partial edits may be in render_fall*.py (committed as WIP below). NEXT: finish, then render fall + fall3 + the opening with world + toon.
 - C (Trost): NEXT: full Trost re-render with toon: the side-on boulder carry, thinner breach dust, the cart shove; plus a toon before/after still.
 - G (integration): NEXT: connectors C1-C3 and the march with toon, then assemble_master.sh for the full one-take preview.
+
+## 10:52 (10/26 UTC) OWNER: length = TIGHT 7:02 cut, every scene kept ("7?, ?? ?? ??") — FINAL
+- SEGMENTS locked to SCENE_BIBLE_v2 A1 tight column: g1 32.0 · g2 32.0 · g3 78.4 · g4 20.0 · g5 70.0 · g6 69.5 · g7 45.0 · g8 75.0 = 421.9 s.
+- One-place re-time: aot/segtime.py (A1 table); each seg module keeps its beats in one table.
+
+## 11:00 (10/26 UTC) RESUME (laptop): implementing SCENE_BIBLE_v2 section D, multi-agent (max 3, Opus for camera/layout, Sonnet for bulk)
+- Side job done: analysis/ep05_a.mp4 + ep05_b.mp4 (ep05 split at 12:03, -c copy), in E:\YTP2\3D Timelapse\analysis\ (reference only).
+- Wave 1 running: (1) camchan.py/segtime.py/camkeys.py + master_timeline A1/A2 (D1); (2) trost.py rebuilt to section C (D10, 25, static parts of 12-17, 27, 28); (3) g8 boulder via the new generic driver render_seg.py + seg_g8.py (D16, 17, 29, 30).
+- Order after that: g5, g1, g2, g6, g7, g4, g3, then the master assembly. Contracts: AGENTS_BRIEF.md "WAVE v2".

@@ -73,19 +73,22 @@ def keys():
         (13.0, (PLAZA.x + 55, PLAZA.y + 50, 150), (GX, GY + 120, 0), 38),  # debris arcs into the town
     ]
 
-def _herm(p0, p1, p2, p3, u, dist):
+def _herm(p0, p1, p2, p3, u, dist, m1=None, m2=None):
     """Hermite segment p1->p2 with Catmull-Rom tangents scaled by the chord lengths (no overshoot when neighbouring
     keys are very unequally spaced, e.g. the slow 2 s zoom next to the 300 m whoosh)."""
     d01, d12, d23 = dist(p0, p1), dist(p1, p2), dist(p2, p3)
-    m1 = (p2 - p0) * (d12 / (d01 + d12)) if d01 + d12 > 1e-9 else p2 - p1
-    m2 = (p3 - p1) * (d12 / (d12 + d23)) if d12 + d23 > 1e-9 else p2 - p1
+    if m1 is None: m1 = (p2 - p0) * (d12 / (d01 + d12)) if d01 + d12 > 1e-9 else p2 - p1
+    if m2 is None: m2 = (p3 - p1) * (d12 / (d12 + d23)) if d12 + d23 > 1e-9 else p2 - p1
     h00, h10, h01, h11 = 2 * u ** 3 - 3 * u ** 2 + 1, u ** 3 - 2 * u ** 2 + u, -2 * u ** 3 + 3 * u ** 2, u ** 3 - u ** 2
     return p1 * h00 + m1 * h10 + p2 * h01 + m2 * h11
 
-def _pchip_m(T, S):
-    """Fritsch-Carlson tangents: monotone cubic through (T_i, S_i), C1, no overshoot, starts from rest."""
+def _pchip_m(T, S, m0=None, m1=None):
+    """Fritsch-Carlson tangents: monotone cubic through (T_i, S_i), C1, no overshoot, starts from rest (m0 / m1: end rates)."""
     D = [(S[i + 1] - S[i]) / (T[i + 1] - T[i]) for i in range(len(T) - 1)]
-    return [0.0] + [0.0 if D[i - 1] * D[i] <= 0 else 2 * D[i - 1] * D[i] / (D[i - 1] + D[i]) for i in range(1, len(D))] + [D[-1]]
+    m = [0.0] + [0.0 if D[i - 1] * D[i] <= 0 else 2 * D[i - 1] * D[i] / (D[i - 1] + D[i]) for i in range(1, len(D))] + [D[-1]]
+    if m0 is not None: m[0] = m0
+    if m1 is not None: m[-1] = m1
+    return m
 
 def _pchip(T, S, m, t):
     t = min(max(t, T[0]), T[-1])
@@ -97,26 +100,35 @@ def _pchip(T, S, m, t):
 class _Channel:
     """One camera channel (location or look-at point): chord-scaled Hermite path through the keys, re-timed by a
     monotone time -> arc-length curve so its speed is C1-smooth in time (no jumps at keys, no per-segment pacing)."""
-    def __init__(self, T, pts):
+    def __init__(self, T, pts, v_in=None, v_out=None):
+        """v_in / v_out (optional, m/s vectors): velocity at the first / last key for a moving seam (aot/camchan.py has the
+        numpy twin).  Omitted = the original behaviour (leave from rest, arrive at the last secant speed)."""
         self.T, self.P = T, [Vector(p) for p in pts]
         n = len(pts); self.segs = []; S = [0.0]
+        vi = Vector(v_in) if v_in is not None and Vector(v_in).length > 1e-9 else None
+        vo = Vector(v_out) if v_out is not None and Vector(v_out).length > 1e-9 else None
         for i in range(n - 1):
             q = [self.P[max(0, min(n - 1, j))] for j in (i - 1, i, i + 1, i + 2)]
+            d12 = (q[2] - q[1]).length
+            m1 = vi.normalized() * d12 if (i == 0 and vi is not None) else None
+            m2 = vo.normalized() * d12 if (i == n - 2 and vo is not None) else None
+            N = 96 if m1 is None and m2 is None else 1536
             acc = [0.0]; prev = q[1]
-            for k in range(1, 97):
-                p = _herm(*q, k / 96, lambda a, b: (a - b).length)
+            for k in range(1, N + 1):
+                p = _herm(*q, k / N, lambda a, b: (a - b).length, m1, m2)
                 acc.append(acc[-1] + (p - prev).length + 1e-7); prev = p
-            self.segs.append((q, acc)); S.append(S[-1] + acc[-1])
-        self.S, self.m = S, _pchip_m(T, S)
+            self.segs.append((q, acc, m1, m2, N)); S.append(S[-1] + acc[-1])
+        self.S = S
+        self.m = _pchip_m(T, S, Vector(v_in).length if v_in is not None else None, Vector(v_out).length if v_out is not None else None)
     def at(self, t):
         s = _pchip(self.T, self.S, self.m, t)
         i = min(len(self.segs) - 1, max(j for j in range(len(self.segs)) if self.S[j] <= s + 1e-9))
-        q, acc = self.segs[i]; r = s - self.S[i]
+        q, acc, m1, m2, N = self.segs[i]; r = s - self.S[i]
         k = 0
         while k < len(acc) - 2 and acc[k + 1] < r:
             k += 1
         f = min(1.0, max(0.0, (r - acc[k]) / (acc[k + 1] - acc[k])))
-        return _herm(*q, (k + f) / 96, lambda a, b: (a - b).length)
+        return _herm(*q, (k + f) / N, lambda a, b: (a - b).length, m1, m2)
 
 _TAB = {}
 def _table():
