@@ -87,9 +87,10 @@ X.append(sec('s04', [(0, 's2_11_mothers_love', 6.0), ("billy's mom", 's1_11_crea
   ('but up close', 's2_11_mothers_love', 96.0), ('once cotton', 's2_12_intense', 110.0), ('it was over', 's2_12_intense', 107.9),
   ('survival rate', 's2_12_intense', 113.5)],
   [14, 'Mrs. Loomis', 'Scream 2 (1997)'], 'mrs_loomis', 18.0))
-X.append(sec('s05', [(0, 's4_still_charlie', 0), ('the horror nerd', 's4_02_return', 104.3), ('every rule', 's4_still_trio', 0),
-  ('he pulled', 's4_02_return', 124.3), ('but the guy', 's4_still_charlie', 3),
-  ('the wrong partner', 's4_still_jill', 0), ('and jill', 'scream4_reveal', 19.6), ('the second she', 's4_still_charlie', 5)],
+X.append(sec('s05', [(0, 's4_still_charlie_party', 0), ('the horror nerd', 's4_02_return', 104.3), ('every rule', 's4_still_trio', 0),
+  ('he pulled', 's4_02_return', 124.3), ('but the guy', 's4_still_charlie_close', 0),
+  ('the wrong partner', 's4_still_jill', 0), ('and jill', 'scream4_reveal', 19.6), ('the second she', 's4_still_gf_knife', 0),
+  (11.9, 's4_still_charlie_party', 0)],
   [13, 'Charlie Walker', 'Scream 4 (2011)'], 'charlie', 11.9))
 X.append(sec('s06', [(0, 's6_family', 120.5, 0.54), ('she faked', 's6_core4', 89), ('everyone stopped', 's6_core4', 54),
   ('genuinely evil', 's6_family', 98.4, 0.55), ('but she only', 's6_family', 101.85), ('one confirmed', 's6_core4', 116.5),
@@ -135,10 +136,10 @@ X.append(sec('s15', [(0, 's6_family', 0, 0.8), ('he was the cop', 's6_sam_gf', 5
   ('and he led', 's6_family', 6.9), ('through the bloodiest', 's6_store', 80.625), ('until sam', 's6_sam_gf', 164.8),
   ('survival rate', 's6_sam_gf', 68.9)],
   [3, 'Detective Wayne Bailey', 'Scream VI (2023)'], 'wayne', 16.5))
-X.append(sec('s16', [(0, 's4_still_jill', 0), ("sydney's own", 'scream4_reveal', 4.5), ('the smile', 'scream4_reveal', 10.0),
-  ('says everything', 'scream4_reveal', 14.0), ('she killed', 's4_02_return', 120.3), ('her mom', 'scream4_reveal', 6.4),
-  ('even her', 's4_still_charlie', 0), ('then played', 's4_still_jill_bed', 0), ('the whole town', 's4_06_killcam', 108),
-  ('came closer', 's4_still_trio', 0), ('to stealing', 'scream4_reveal', 13.0), ('for good', 's4_still_jill', 6)],
+X.append(sec('s16', [(0, 's4_still_jill', 0), ("sydney's own", 'scream4_reveal', 4.75), ('the smile', 'scream4_reveal', 10.45),
+  ('says everything', 'scream4_reveal', 14.25), ('she killed', 's4_02_return', 120.3), ('her mom', 'scream4_reveal', 6.4),
+  ('even her', 's4_still_charlie_party', 0), ('then played', 's4_still_jill_hospital', 0), ('the whole town', 's4_06_killcam', 108),
+  ('came closer', 's4_still_trio', 0), ('to stealing', 'scream4_reveal', 20.9, 0.9), ('for good', 's4_still_jill', 6)],
   [2, 'Jill Roberts', 'Scream 4 (2011)'], 'jill', 19.6))
 X.append(sec('s17', [(0, 's3_11_family', 65.3, 0.85), ('from screen', 's3_11_family', 50), ("sydney's half", 's3_11_family', 72),
   ('only ghostface', 's3_11_family', 24), ('completely alone', 's3_11_family', 78), ('most kills', 's3_02_cutting', 126.3),
@@ -167,7 +168,7 @@ for S in X:  # film label per run of one film, gone once the stat card or a full
 DARK = ['s7_04_walls', 's7_06_spree', 's7_09_anna_camp', 's7_10_sidney_kills', 's6_subway', 's6_ladder', 's6_core4', 's6_two_gf', 's4_02_return',
         's4_06_killcam', 's3_12_firing']
 P = {'sections': X,
-     'zoom': {**{k: 1.0 for k in ['s4_still_jill', 's4_still_jill_bed', 's4_still_charlie', 's4_still_gf', 's4_still_trio']},
+     'zoom': {**{k: 1.0 for k in ['s4_still_jill', 's4_still_jill_bed', 's4_still_charlie', 's4_still_gf', 's4_still_trio', 's4_still_charlie_party', 's4_still_charlie_close', 's4_still_gf_knife', 's4_still_jill_hospital']},
               **{k: 1.08 for k in ['s1_01_like_scary', 's1_10_surprise', 's1_11_creative', 's1_12_tables', 's2_09_driving', 's2_10_blame',
                                    's2_11_mothers_love', 's2_12_intense', 's3_11_family', 's3_12_firing']}},
      'gamma': {k: 1.28 for k in DARK}}

@@ -1,5 +1,7 @@
-# face stills (clip @ source seconds); marco: never unmasked in any downloaded clip
-carvey s6_opening 48.5 | roman s3_11_family 80.0 | karl s7_09_anna_camp 34.0 | jessica s7_09_anna_camp 110.0
+# face stills (clip @ source seconds)
+# karl: NO unmasked frame in any downloaded clip (only masked Ghostface, e.g. s7_04_walls 191.0) -> use a Ghostface-mask tile with a red '?'
+# marco.jpg = the bald orderly in s7_09 (earlier mislabelled as Karl; web sources confirm the character is Marco)
+carvey s6_opening 48.5 | roman s3_11_family 80.0 | marco s7_09_anna_camp 34.0 | jessica s7_09_anna_camp 110.0
 mrs_loomis s2_10_blame 123.2 | mickey s2_10_blame 3.5 | stu s1_11_creative 90.5 | billy s1_11_creative 36.5
-jill scream4_reveal 15.0 | charlie s4_still_charlie 0.5 | richie s5_08_act3 73.5 | amber s5_09_fighting 115.6
-quinn s6_family 30.0 | ethan s6_family 86.5 | wayne s6_family 0.5
+jill scream4_reveal 15.0 | charlie = official TMDB still xI5eVG (party, Charlie left; s4_still_charlie pBeEPUg2 is really Trevor) | richie s5_08_act3 73.5 | amber s5_09_fighting 115.6
+quinn = official Scream VI character poster (the s6_family 30.0 frame was Kirby, not Quinn) | ethan s6_family 86.5 | wayne s6_family 0.5

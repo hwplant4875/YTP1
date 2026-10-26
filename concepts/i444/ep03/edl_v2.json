@@ -919,7 +919,7 @@
    "shots": [
     [
      0,
-     "s4_still_charlie",
+     "s4_still_charlie_party",
      0
     ],
     [
@@ -939,8 +939,8 @@
     ],
     [
      7.02,
-     "s4_still_charlie",
-     3
+     "s4_still_charlie_close",
+     0
     ],
     [
      7.92,
@@ -954,8 +954,13 @@
     ],
     [
      10.24,
-     "s4_still_charlie",
-     5
+     "s4_still_gf_knife",
+     0
+    ],
+    [
+     11.9,
+     "s4_still_charlie_party",
+     0
     ]
    ],
    "overlays": [
@@ -2770,17 +2775,17 @@
     [
      2.04,
      "scream4_reveal",
-     4.5
+     4.75
     ],
     [
      3.7,
      "scream4_reveal",
-     10.0
+     10.45
     ],
     [
      5.82,
      "scream4_reveal",
-     14.0
+     14.25
     ],
     [
      7.68,
@@ -2794,12 +2799,12 @@
     ],
     [
      9.82,
-     "s4_still_charlie",
+     "s4_still_charlie_party",
      0
     ],
     [
      11.52,
-     "s4_still_jill_bed",
+     "s4_still_jill_hospital",
      0
     ],
     [
@@ -2815,7 +2820,8 @@
     [
      17.54,
      "scream4_reveal",
-     13.0
+     20.9,
+     0.9
     ],
     [
      18.9,
@@ -3337,6 +3343,10 @@
   "s4_still_charlie": 1.0,
   "s4_still_gf": 1.0,
   "s4_still_trio": 1.0,
+  "s4_still_charlie_party": 1.0,
+  "s4_still_charlie_close": 1.0,
+  "s4_still_gf_knife": 1.0,
+  "s4_still_jill_hospital": 1.0,
   "s1_01_like_scary": 1.08,
   "s1_10_surprise": 1.08,
   "s1_11_creative": 1.08,
