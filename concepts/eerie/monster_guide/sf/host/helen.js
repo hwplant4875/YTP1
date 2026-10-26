@@ -1027,7 +1027,9 @@
     const calf = [lerp(k[0], a[0], 0.3) + out * 0.01 * H, lerp(k[1], a[1], 0.3)];
     const shin = [lerp(k[0], a[0], 0.68), lerp(k[1], a[1], 0.68)];
     const far = R.turn > 0.3 && i === 1;
-    celU(g, c => S.addLimb(c, [h, k, calf, shin, a], [0.24 * H, 0.165 * H, 0.18 * H, 0.13 * H, 0.1 * H]), far ? COL.skinShade : COL.skin, far ? C.shade(COL.skinShade, -0.06) : COL.skinShade, 0.025);
+    // optional stockings (COL.legs / COL.legsShade, unset by default = bare skin), so only the monster has pale skin
+    const lb = COL.legs || COL.skin, ls = COL.legsShade || COL.skinShade;
+    celU(g, c => S.addLimb(c, [h, k, calf, shin, a], [0.24 * H, 0.165 * H, 0.18 * H, 0.13 * H, 0.1 * H]), far ? ls : lb, far ? C.shade(ls, -0.06) : ls, 0.025);
   }
 
   function drawSkirt(g, R) {

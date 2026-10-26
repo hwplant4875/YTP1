@@ -7,7 +7,9 @@
  * more detailed, too-real finish that clashes with the chest: uneven human silhouettes (hollow inner thigh, calf bulge,
  * shin narrowing hard to a thin ankle, forearm swelling below the elbow), matte sickly skin with 2-3 extra tones, raised
  * tendons (one light edge, one deep edge), short crease arcs at every knee and elbow, pinker darker knee / knuckle zones,
- * a pointed elbow bone, a few thick grey-violet veins, knobby long fingers with dark nails, long uneven teeth on both
+ * a pointed elbow bone, a few thick grey-violet veins, and a hard CORE SHADOW band (+ deep edge + lit streak) on the
+ * away-from-light side of every limb segment so the masses read at body scale (s = 0.45), separate pink kneecap /
+ * ankle / elbow knobs, knobby long fingers with dark nails, long uneven teeth on both
  * lips, a wet fleshy tongue. Never gore.
  *
  * UNITS: px at s = 1, with W = chest width = 180 px. Everything is measured from the GROUND POINT (x, y) passed to
@@ -38,6 +40,7 @@
  *                                 foot pointing at the camera is squashed so its sole sits ON the ground line.
  *                   kneeOut       -1 knock-kneed .. +1 spider-out (front-view bend); the knee always bends forward too
  *                   toe           foot pitch in radians (+ = toes point down: airborne, tiptoe)
+                   splay         toe-out angle in radians (default 0.62: duck-footed, so the long toes read)
  *                   grow          0..1 limb length factor (legs sprouting during the unfold); 0 hides the leg
  *     arms        { L: {...}, R: {...} }
  *                   hand [x, y]   wrist target (ground-relative px)
@@ -48,7 +51,9 @@
  *                   thumb 0..1    thumb curl;  spread 0..1 finger fan;  curlDir +-1 which way they curl
  *                   elbowUp       0..1 how strongly the elbow prefers up (default 0.8);  grow 0..1 like legs
  *                   handScale     >1 fakes a hand coming toward the camera (forearm widens toward it, hand grows)
- *     tongue      { len (W, 0 = retracted), ang (rad, root direction, default straight down), swing (rad, rotates the
+ *     tongue      (auto-retracts while the lid is shut; drapes over the lower teeth with a rounded fold, a side wall and a
+                 contact shadow on the chest front)
+                 { len (W, 0 = retracted), ang (rad, root direction, default straight down), swing (rad, rotates the
  *                   whole tongue), curl (rad, bends progressively toward the tip), wave (rad amplitude), phase, width,
  *                   behind (true: drawn behind the chest, streaming back from under it) }
  *     chain       { swing (rad: the hang direction, + = toward screen-left), sway (rad travelling wave), sag 0..1
@@ -57,7 +62,9 @@
  *     expr        'neutral' | 'happy' | 'nervous' | 'hungry' | 'annoyed' | 'scared' | 'sleepy' | 'smitten' | 'pounce'
  *                 | 'yawn' | 'effort'.  nervous / annoyed / scared / pounce draw BRIGHT eyes (cream-gold sclera, tiny
  *                 dark pupil); the rest are glow eyes (light on the dark mouth).
- *     look        {x, y} -1..1 gaze;  blink 0..1 (1 = open; use SFX.blinkAt(t));  blush 0..1.3 overrides the expression's blush
+ *     eyeAt       0..1 eye depth from the hinge toward the upper lip (default 0.22);  eyeLift (W, default 0.07) lifts
+                 the eyes off the lower tooth row as the lid opens;  teeth  tooth-length multiplier (expr pounce = 1.25)
+     look        {x, y} -1..1 gaze;  blink 0..1 (1 = open; use SFX.blinkAt(t));  blush 0..1.3 overrides the expression's blush
  *     eye         extra SFX.eye overrides for both eyes (e.g. {open: 0.7})
  *     fx          { sweat, drool, sparkle, zzz, hearts, tears } booleans/0..1 (expressions switch some on)
  *     t           seconds, for fx motion and the procedural chain sway
@@ -66,7 +73,9 @@
  *     light       { key, keyA, keyD, rim, rimA, rimD, rimDir:[x,y], keyDir:[x,y], falloff:{y0, y1, a} } optional mood
  *                 lighting baked on the group in screen space (warm key on the lit edges, cool rim on the shadow
  *                 side, darker toward the feet; y0/y1 are ABSOLUTE canvas y). Used by the hero shot.
- *     alpha       0..1 whole-character fade;  silhouette: colour = draw a flat one-colour silhouette (onion skins)
+ *     flesh       0..1 (default 0): fleshier too-human limbs (fuller calves / thighs / forearms / fingers over the same
+                 knobby joints) + a pinkish-grey sickly SKIN palette, so wide / small shots never read as bare bone
+     alpha       0..1 whole-character fade;  silhouette: colour = draw a flat one-colour silhouette (onion skins)
  *     parts       { legs, arms, tongue, chain, fx } false = skip (close-ups)
  *   MIMIKU2.pose(state, unfold, yaw) -> opts      the preset itself (to tweak and pass back)
  *   MIMIKU2.walkPose(phase, o) -> opts            gangly bouncy walk cycle, phase 0..1 (two steps). o: yaw=-35,
@@ -101,10 +110,10 @@
   const DIM = {
     W, Hb: 0.55 * W, D: 0.6 * W, Tf: 0.15 * W, dome: 0.13 * W, o: 0.025 * W, rim: 0.05 * W,
     hipX: 0.22 * W, hipY: -0.05 * W,
-    shX: 0.43 * W, shY: -0.585 * W, shZ: -0.06 * W,
+    shX: 0.485 * W, shY: -0.6 * W, shZ: 0.02 * W,
     thigh: 0.95 * W, shin: 0.95 * W, ankle: 0.085 * W, foot: 0.3 * W,
-    upper: 0.8 * W, fore: 0.8 * W, hand: 0.35 * W,
-    eyeW: 0.3 * W, eyeU: 0.245, eyeAt: 0.2,
+    upper: 0.8 * W, fore: 0.8 * W, hand: 0.35 * W, handK: 1.2, footK: 1.3,   // handK / footK: drawn size of hands / feet
+    eyeW: 0.3 * W, eyeU: 0.245, eyeAt: 0.22,
     lidMax: 110, elev: 7, standHip: 1.8 * W, idleLid: 0.75,
   };
 
@@ -259,7 +268,7 @@
     const F = yawFrame(yaw), hip = [0, -DIM.standHip];
     const leg = sd => ({ foot: add(F.ground(sd * 0.3 * W, 0.0), [0, -ANK]), kneeOut: -0.5, toe: 0, grow: 1 });
     // arms dangle: elbows up and out (DS mimic), long forearms hanging, wrists just below the chest
-    const arm = sd => ({ mode: 'arm', hand: add(hip, F.vec(sd * 1.16 * W, -0.22 * W, -0.04 * W)), handAng: Math.PI / 2 - sd * 0.12, curl: 0.36, spread: 0.32, curlDir: -sd, grow: 1 });
+    const arm = sd => ({ mode: 'arm', hand: add(hip, F.vec(sd * 1.16 * W, -0.22 * W, -0.04 * W)), handAng: Math.PI / 2 - sd * 0.12, curl: 0.24, spread: 0.5, curlDir: -sd, grow: 1 });
     return {
       yaw, hip, tilt: 0, pitch: 0, lidOpen: DIM.idleLid, breath: 0,
       legs: { L: leg(-1), R: leg(1) }, arms: { L: arm(-1), R: arm(1) },
@@ -314,8 +323,26 @@
         const [k0, a] = keys[i - 1], [k1, b] = keys[i];
         const e = E.easeInOutCubic((k - k0) / (k1 - k0));
         let out = lerpPose(a, b, e);
-        const armMode = i <= 2 ? (k < 0.08 ? 'none' : 'hand') : 'arm';
-        out = merge(out, { arms: { L: { mode: armMode }, R: { mode: armMode } }, chain: { floor: k < 0.3 } });
+        if (i === 1) out = merge(out, { arms: { L: { mode: k < 0.08 ? 'none' : 'hand' }, R: { mode: k < 0.08 ? 'none' : 'hand' } } });
+        else if (i === 2) {
+          // the hands never leave their arms behind: they slide along the lip to the mouth corners (arm still hidden
+          // inside), then the arms unfold OUT of the corners and reach for the floor; the IK clamps the wrist to the
+          // reach of the growing arm, so a hand is always attached
+          const F = yawFrame(yaw), pa = a.arms, pb = b.arms, slide = 0.22;
+          const arms = {};
+          for (const [key, sd] of [['L', -1], ['R', 1]]) {
+            const corner = lipGrip(F, sd, 0.47);
+            if (e < slide) {
+              const q = e / slide;
+              arms[key] = merge(pa[key], { mode: 'hand', hand: lp(pa[key].hand, corner, sstep(0, 1, q)), grow: 1 });
+            } else {
+              const q = (e - slide) / (1 - slide), qq = sstep(0, 1, q);
+              arms[key] = merge(lerpPose(pa[key], pb[key], qq), { mode: 'arm', hand: lp(corner, pb[key].hand, qq), grow: lerp(0.42, pb[key].grow ?? 1, sstep(0, 0.7, q)), elbowUp: 1 });
+            }
+          }
+          out = merge(out, { arms });
+        }
+        out = merge(out, { chain: { floor: k < 0.3 } });
         return out;
       }
     }
@@ -346,11 +373,11 @@
     };
     const L = foot(-1, 0), R = foot(1, 0.5);
     const bob = Math.cos(TAU * 2 * (ph - 0.36));                // -1 = DOWN just after each contact, +1 = UP before the next
-    const hip = [F.ground(Math.sin(TAU * ph) * 0.05 * W, 0)[0], -(1.74 * W + 0.065 * W * bounce * bob)];
+    const hip = [F.ground(Math.sin(TAU * ph) * 0.05 * W, 0)[0], -(1.7 * W + 0.13 * W * bounce * bob)];
     const sw = (sd, off) => {                                     // loose pendulum arm, lags the opposite leg, hangs LOW
       const q = TAU * (ph + off) - 0.9;
       return {
-        mode: 'arm', hand: add(hip, F.vec(sd * 1.0 * W, 0.5 * W - 0.08 * W * Math.cos(q * 2), 0.6 * W * Math.sin(q))),
+        mode: 'arm', hand: add(hip, F.vec(sd * 1.0 * W, 0.5 * W - 0.14 * W * Math.cos(q * 2), 0.78 * W * Math.sin(q))),
         handAng: Math.PI / 2 - sd * 0.08 + 0.42 * Math.sin(q - 0.8) * fs, curl: 0.32 + 0.14 * Math.sin(q - 0.6), spread: 0.32, curlDir: -sd, grow: 1, elbowUp: 0.75,
       };
     };
@@ -376,14 +403,14 @@
     // hang (hand angle offset), lid, pitch, tongue {ang deg (authored facing screen-left: 0 = back/right), curl, len}
     const K = [
       { t: 0.0, hip: 1.8, lid: 0.75, pitch: 0, ft: [0.29, 0, 0, 0, -0.28], hand: [1.1, -1.56, -0.04], hang: 0.1, curl: 0.34, tl: { ang: 90, curl: 0.12, len: 1.32 }, expr: 'neutral' },
-      { t: 0.2, hip: 0.98, lid: 0.12, pitch: 14, ft: [0.4, 0.02, 0, 0, 0.7], hand: [1.0, -0.12, -0.35], hang: 0.9, curl: 0.15, tl: { ang: 90, curl: 0.2, len: 0.3 }, expr: 'effort' },
-      { t: 0.29, hip: 2.05, lid: 1.05, pitch: -8, ft: [0.22, -0.3, 0, 0.75, -0.1], hand: [0.55, -3.55, 0.55], hang: -1.45, curl: 0.12, tl: { ang: 75, curl: -0.3, len: 1.3 }, expr: 'pounce' },
-      { t: 0.42, hip: 1.45, lid: 1.1, pitch: 4, ft: [0.4, 0.1, 0.55, 0.8, 0.45], hand: [1.1, -3.1, 0.35], hang: -0.9, curl: 0.35, tl: { ang: 40, curl: -0.6, len: 1.2 }, expr: 'pounce' },
-      { t: 0.55, hip: 1.25, lid: 1.15, pitch: 8, ft: [0.45, 0.25, 0.95, 0.9, 0.6], hand: [1.2, -2.85, 0.2], hang: -0.6, curl: 0.55, tl: { ang: 22, curl: -0.75, len: 1.15 }, expr: 'happy' },
-      { t: 0.7, hip: 1.3, lid: 0.9, pitch: 2, ft: [0.35, 0.05, 0.4, 0.5, 0.35], hand: [1.3, -2.95, 0.0], hang: -0.5, curl: 0.4, tl: { ang: -25, curl: -0.55, len: 1.2 }, expr: 'pounce' },
-      { t: 0.8, hip: 1.85, lid: 1.0, pitch: -4, ft: [0.33, 0.05, 0.0, 0.0, 0.2], hand: [1.35, -3.0, -0.1], hang: -0.9, curl: 0.25, tl: { ang: -10, curl: -0.5, len: 1.25 }, expr: 'scared' },
+      { t: 0.2, hip: 0.98, lid: 0.0, pitch: 14, ft: [0.4, 0.02, 0, 0, 0.7], hand: [1.0, -0.12, -0.35], hang: 0.9, curl: 0.15, tl: { ang: 90, curl: 0.2, len: 0.0 }, expr: 'effort' },
+      { t: 0.29, hip: 2.05, lid: 1.05, pitch: -8, ft: [0.22, -0.3, 0, 0.75, -0.1], hand: [1.35, -2.85, 0.0], hang: -1.45, curl: 0.12, tl: { ang: 75, curl: -0.3, len: 1.3 }, expr: 'pounce' },
+      { t: 0.42, hip: 1.45, lid: 1.1, pitch: 4, ft: [0.4, 0.1, 0.55, 0.8, 0.45], hand: [1.15, -2.8, 0.35], hang: -0.9, curl: 0.35, tl: { ang: 40, curl: -0.6, len: 1.2 }, expr: 'pounce' },
+      { t: 0.55, hip: 1.25, lid: 1.15, pitch: 8, ft: [0.45, 0.25, 0.95, 0.9, 0.6], hand: [1.2, -2.6, 0.2], hang: -0.6, curl: 0.55, tl: { ang: 22, curl: -0.75, len: 1.15 }, expr: 'happy' },
+      { t: 0.7, hip: 1.3, lid: 0.9, pitch: 2, ft: [0.35, 0.05, 0.4, 0.5, 0.35], hand: [1.3, -2.95, 0.0], hang: -0.5, curl: 0.4, tl: { ang: -48, curl: -0.5, len: 1.1 }, expr: 'pounce' },
+      { t: 0.8, hip: 1.85, lid: 1.0, pitch: -4, ft: [0.33, 0.05, 0.0, 0.0, 0.2], hand: [1.35, -3.0, -0.1], hang: -0.9, curl: 0.25, tl: { ang: -32, curl: -0.45, len: 1.18 }, expr: 'scared' },
       { t: 0.86, hip: 0.82, lid: 0.45, pitch: 16, ft: [0.5, 0.0, 0, 0, 0.85], hand: [0.85, -0.03, 0.4], hang: 1.25, curl: 0.75, tl: { ang: 80, curl: 0.5, len: 1.0 }, expr: 'scared' },
-      { t: 0.93, hip: 1.95, lid: 0.95, pitch: -4, ft: [0.3, 0, 0, 0, -0.2], hand: [1.15, -1.5, 0.0], hang: 0.1, curl: 0.3, tl: { ang: 95, curl: -0.2, len: 1.35 }, expr: 'happy' },
+      { t: 0.93, hip: 1.95, lid: 0.95, pitch: -4, ft: [0.3, 0, 0, 0, -0.2], hand: [0.82, -1.3, 0.3], hang: 0.55, curl: 0.42, tl: { ang: 95, curl: -0.2, len: 1.35 }, expr: 'happy' },
       { t: 1.0, hip: 1.8, lid: 0.75, pitch: 0, ft: [0.29, 0, 0, 0, -0.28], hand: [1.1, -1.56, -0.04], hang: 0.1, curl: 0.34, tl: { ang: 90, curl: 0.12, len: 1.32 }, expr: 'neutral' },
     ];
     let i = 1; while (i < K.length - 1 && k > K[i].t) i++;
@@ -429,10 +456,10 @@
     // authored diving screen-left (dir = -1); x values flip with dir
     const X = x => x * -dir;
     return merge(p, {
-      yaw, hip, pitch: 14, tilt: 26 * dir, lidOpen: 1.16, expr: 'pounce', look: { x: 0.35 * dir, y: 0.55 },
+      yaw, hip, pitch: 20, tilt: 40 * dir, lidOpen: 1.16, expr: 'pounce', look: { x: 0.35 * dir, y: 0.55 },
       legs: {
-        L: { foot: [hip[0] + X(1.28 * W), hip[1] - 0.92 * W], toe: 2.3, kneeOut: 0.2, grow: 1 },
-        R: { foot: [hip[0] + X(1.68 * W), hip[1] - 0.38 * W], toe: 2.1, kneeOut: 0.3, grow: 1 },
+        L: { foot: [hip[0] + X(0.62 * W), hip[1] - 1.5 * W], toe: 2.3, kneeOut: 0.2, grow: 1 },
+        R: { foot: [hip[0] + X(1.12 * W), hip[1] - 1.2 * W], toe: 2.1, kneeOut: 0.3, grow: 1 },
       },
       arms: {
         L: { mode: 'arm', hand: [target[0] - X(grab * 1.05), target[1] + 0.02 * W], handAng: Math.PI / 2 + X(0.22), curl: 0.62, spread: 1, curlDir: X(1), elbowUp: 1, thumb: 0.4 },
@@ -475,7 +502,7 @@
       const ko = L.kneeOut ?? -0.25;
       const pole = F.view([sd * ko * 0.8, -0.05, 1]);
       const sol = ik(hip, L.foot, DIM.thigh * g, DIM.shin * g, pole, 1.06);
-      out.legs[key] = { sd, g, hip, knee: sol.J, ankle: sol.E, toe: L.toe || 0, pole };
+      out.legs[key] = { sd, g, hip, knee: sol.J, ankle: sol.E, toe: L.toe || 0, splay: L.splay, pole };
     }
     for (const sd of [-1, 1]) {
       const key = sd < 0 ? 'L' : 'R', A = p.arms[key] || {}, g = clamp(A.grow ?? 1), mode = A.mode || 'arm';
@@ -498,17 +525,20 @@
     // the eyes sit LOW on the back wall of the mouth, at the hinge (throat), just above the lower teeth: the dark
     // above them is the palate, so the open lid reads as a mouth and not as a screen
     const hgL = R.P([-W / 2 + DIM.rim, -DIM.Hb, -DIM.D / 2]), hgR = R.P([W / 2 - DIM.rim, -DIM.Hb, -DIM.D / 2]);
+    // lifted clear of the lower tooth row (the eye bottoms sit on the lip line, not behind the teeth)
+    const upV = nrm(sub(lp(upL, upR, 0.5), lp(lipL, lipR, 0.5))).slice(0, 2), lift = (p.eyeLift ?? 0.07) * W * clamp((th - 0.12) / 0.45);
     out.eyes = [-1, 1].map(sd => {
       const u = 0.5 + sd * DIM.eyeU;
-      return lp(lp(hgL, hgR, u), lp(upL, upR, u), DIM.eyeAt);
+      return add(lp(lp(hgL, hgR, u), lp(upL, upR, u), p.eyeAt ?? DIM.eyeAt).slice(0, 2), mul(upV, lift));
     });
     out.lipAng = ang(sub(lipR, lipL));
     out.faceAng = ang(sub(upR, upL));
     out.th = th;
     const T = p.tongue || {};
-    if ((T.len ?? 0) > 0.02 && p.parts.tongue) {
-      const root = add(lp(lipL, lipR, 0.5), mul(dirA(out.lipAng - Math.PI / 2), 0.05 * W));
-      const n = 16, Lt = T.len * W, seg = Lt / n;
+    const tLen = (T.len ?? 0) * clamp((th - 0.06) / 0.22);
+    if (tLen > 0.02 && p.parts.tongue) {
+      const root = add(lp(lipL, lipR, 0.5), mul(dirA(out.lipAng - Math.PI / 2), (T.behind ? 0.05 : 0.025) * W));
+      const n = 16, Lt = tLen * W, seg = Lt / n;
       const pts = [root];
       const a0 = (T.ang ?? Math.PI / 2) + (T.swing || 0) + (p.tilt || 0) * RAD * 0.3;
       for (let i = 0; i < n; i++) {
@@ -516,7 +546,7 @@
         const a = a0 + (T.curl || 0) * u * u * 2.2 + (T.wave || 0) * Math.sin((T.phase || 0) - u * 3.2) * u;
         pts.push(add(pts[pts.length - 1], mul(dirA(a), seg)));
       }
-      out.tongue = { pts, w: (T.width ?? 1) * 0.2 * W, behind: !!T.behind };
+      out.tongue = { pts, w: (T.width ?? 1) * 0.2 * W * clamp(0.5 + tLen / 0.6), behind: !!T.behind, foldU: clamp(0.04 * W / Lt, 0, 0.5) };
     }
     if (p.parts.chain) {
       const anc = R.P([W / 2 + 0.01 * W, -0.62 * DIM.Hb, 0.12 * DIM.D]);
@@ -733,14 +763,15 @@
       });
       return;
     }
-    if (sol.th > 0.62) return;
-    const piv = R.LP([0, -Hb - Tf * 0.5, D / 2 + o]);
-    const front = R.dir([1, 0, 0]), sx = Math.abs(front[0]);
-    g.save(); g.translate(piv[0], piv[1]); g.rotate(-0.05 + 0.04 * Math.sin((p.t || 0) * 3));
-    S.cel(g, cc => S.addRoundRect(cc, -w * sx / 2, -0.012 * W, w * sx, h, [0.015 * W, 0.015 * W, 0.05 * W, 0.05 * W]), COL.gold, COL.goldShade, 0.018 * W, 0.018 * W);
-    S.circle(g, 0, h - 0.052 * W, 0.016 * W, COL.goldShade);
-    S.circle(g, -w * sx * 0.2, 0.012 * W, 0.01 * W, COL.goldLight);
-    g.restore();
+    // open: the tab stays on the lid FRONT face (it rides up with the lid, above the gap, never between the eyes)
+    const f = faceFrame(R.LP, R.LD, [-0.05 * W, -Hb - Tf * 0.92, D / 2 + o + 0.004 * W], [1, 0, 0], [0, 1, 0]);
+    if (!f.vis) return;
+    const hh = Tf * 0.8, ww = 0.1 * W;
+    withFace(g, f, c => {
+      S.cel(c, cc => S.addRoundRect(cc, 0, 0, ww, hh, [0.012 * W, 0.012 * W, 0.04 * W, 0.04 * W]), COL.gold, COL.goldShade, 0.014 * W, 0.014 * W);
+      S.circle(c, ww / 2, hh - 0.035 * W, 0.013 * W, COL.goldShade);
+      S.circle(c, ww / 2, 0.02 * W, 0.01 * W, COL.goldLight);
+    });
   }
 
   // cavity polygon (the dark mouth) and the face inside it
@@ -768,10 +799,10 @@
     if (!bright || o.closed) { S.eye(g, o); return; }
     const dev = Math.hypot(g.getTransform().a, g.getTransform().b);
     const b = Object.assign({}, o, {
-      glow: false, sclera: C.rgba(C.mix('#E8C67A', COL.eyeCream, clamp(bright)), 0.9), ink: COL.eyeInk, creaseColor: C.rgba(COL.eyeInk, 0.6),
-      iris: ['#C98516', '#F0B22E', '#FFD86A'], pupilColor: '#2A1406', lowerCrease: false,
+      glow: false, sclera: C.rgba(C.mix('#D9AE55', COL.eyeCream, clamp(bright)), 0.88), ink: COL.eyeInk, creaseColor: C.rgba(COL.eyeInk, 0.6),
+      iris: ['#B87410', '#E59E22', '#F7C548'], pupilColor: '#24110A', lowerCrease: false,
     });
-    S.glow(g, gg => S.eye(gg, b), { blur: 0.07 * dev, alpha: 0.55, bounds: { x: -0.8, y: -0.7, w: 1.6, h: 1.4 } });
+    S.glow(g, gg => S.eye(gg, b), { blur: 0.06 * dev, alpha: 0.2, wide: true, bounds: { x: -0.8, y: -0.7, w: 1.6, h: 1.4 } });
   }
 
   function paintFace(g, p, sol, poly) {
@@ -846,7 +877,7 @@
     if (th < 0.012) return;
     const { L: lL, R: lR, uL, uR } = sol.lip;
     const gap = sol.gap;
-    const big = p.ex.teeth || 1;
+    const big = p.teeth ?? (p.ex.teeth || 1);
     if (which === 'up') {
       const dn = nrm(sub(lp(lL, lR, 0.5), lp(uL, uR, 0.5)));
       const maxL = Math.max(2, gap * 0.52);
@@ -870,8 +901,9 @@
       S.strip(g, [g0, g1], 0.026 * W, COL.gum);
       for (const t of TEETH.lo) {
         const b = add(lp(lL, lR, 0.03 + t.u * 0.94).slice(0, 2), mul(upd, 0.006 * W));
-        const Lt = Math.min(0.12 * W * t.len * big, maxL * t.len);
-        tooth(g, b, ang(upd) + t.tilt, Lt, 0.033 * W * t.w, t.bend, t.stain);
+        const uu = 0.03 + t.u * 0.94, eyeF = 1 - 0.62 * clamp((th - 0.2) / 0.3) * Math.max(bump(uu, 0.5 - DIM.eyeU, 0.17), bump(uu, 0.5 + DIM.eyeU, 0.17));
+        const Lt = Math.min(0.12 * W * t.len * big, maxL * t.len) * eyeF;
+        tooth(g, b, ang(upd) + t.tilt, Lt, 0.033 * W * t.w * lerp(1, 0.85, 1 - eyeF), t.bend, t.stain);
       }
     }
   }
@@ -888,9 +920,20 @@
       const e = P[n - 1], hE = half(1), aN = ang(N[n - 1]), fwd = nrm(sub(P[n - 1], P[n - 2])), sg = sgnTurn(N[n - 1], fwd);
       for (let j = 1; j < 14; j++) { const a = aN + sg * Math.PI * j / 14; c.lineTo(e[0] + Math.cos(a) * hE, e[1] + Math.sin(a) * hE); }
       for (let i = n - 1; i >= 0; i--) { const h = half(U[i]); c.lineTo(P[i][0] - N[i][0] * h, P[i][1] - N[i][1] * h); }
+      { // rounded back of the tongue at the root (it bulges out of the throat, never a flat cut)
+        const h0 = half(0), b0 = nrm(sub(P[0], P[1])), a0 = ang(mul(N[0], -1)), sg0 = sgnTurn(mul(N[0], -1), b0);
+        for (let j = 1; j < 12; j++) { const a = a0 + sg0 * Math.PI * j / 12; c.lineTo(P[0][0] + Math.cos(a) * h0, P[0][1] + Math.sin(a) * h0 * 0.38); }
+      }
       c.closePath();
     };
-    S.cel(g, outline, COL.tongue, COL.tongueShade, 0.032 * W, 0.032 * W);
+    // it DRAPES: a soft contact shadow on the chest front, a dark side wall on the right (thickness), then the top
+    if (sol.bodyHull && !T.behind) {
+      g.save(); g.beginPath(); pathPts(g, sol.bodyHull); g.clip();
+      g.translate(0.035 * W, 0.03 * W); g.beginPath(); outline(g); g.fillStyle = 'rgba(30,16,20,0.38)'; g.fill();
+      g.restore();
+    }
+    g.save(); g.translate(0.022 * W, 0.014 * W); g.beginPath(); outline(g); g.fillStyle = C.shade(COL.tongueShade, -0.18); g.fill(); g.restore();
+    S.cel(g, outline, COL.tongue, COL.tongueShade, 0.04 * W, 0.03 * W);
     g.save(); g.beginPath(); outline(g); g.clip();
     // darker root where it leaves the throat
     S.strip(g, S._poly.slicePts(P, 0, 0.14), u => w0 * 1.3 * (1 - u) ** 1.4, C.rgba(COL.groove, 0.55));
@@ -913,15 +956,37 @@
     S.strip(g, tail, u => 0.03 * W * (1 - u) ** 1.1, COL.wet);
     S.circle(g, head[0], head[1], 0.016 * W, COL.wet);
     S.circle(g, ...hp(0.22 + du * 2.2), 0.005 * W, C.rgba('#FFF0F4', 0.55));
+    if (FL > 0) {                                                          // flesh mode: a long wet specular streak + beads
+      const seg = []; for (let j = 0; j <= 14; j++) seg.push(hp(0.34 + 0.44 * j / 14));
+      S.strip(g, seg, u => 0.014 * W * Math.sin(Math.PI * u) ** 0.8 * FL, C.rgba('#FFF4F7', 0.7 * FL));
+      const seg2 = []; for (let j = 0; j <= 8; j++) seg2.push(hp(0.82 + 0.1 * j / 8));
+      S.strip(g, seg2, u => 0.01 * W * Math.sin(Math.PI * u) * FL, C.rgba('#FFF4F7', 0.55 * FL));
+      S.circle(g, ...hp(0.8), 0.006 * W, C.rgba('#FFFFFF', 0.8 * FL));
+    }
+    if (!T.behind && T.foldU > 0.01) {                                     // the rounded roll where it leaves the lip
+      const uf = T.foldU, i = Math.min(n - 1, Math.round(uf * (n - 1))), c0 = P[i], nf = N[i], fw = nrm(sub(P[Math.min(n - 1, i + 1)], P[Math.max(0, i - 1)]));
+      const hh = half(uf), arc = (off, bow) => { const q = []; for (let j = 0; j <= 10; j++) { const k = -1 + j / 5; q.push(add(add(c0, mul(nf, k * hh * 1.1)), mul(fw, off + bow * (1 - k * k)))); } return q; };
+      const back = len(sub(c0, P[0]));                                     // the back of the tongue, in the throat's shadow
+      S.strip(g, arc(-back - 0.02 * W, -0.02 * W), u => 0.075 * W * Math.sin(Math.PI * u) ** 0.4, C.rgba(C.shade(COL.tongueShade, -0.3), 0.92));
+      S.strip(g, arc(-0.03 * W, -0.012 * W), u => 0.04 * W * Math.sin(Math.PI * u) ** 0.6, C.rgba(COL.groove, 0.75));
+      S.strip(g, arc(0.006 * W, 0.016 * W), u => 0.03 * W * Math.sin(Math.PI * u) ** 0.8, C.rgba('#F08A9C', 0.95));
+      S.strip(g, arc(0.03 * W, 0.022 * W), u => 0.012 * W * Math.sin(Math.PI * u) ** 0.8, C.rgba(COL.groove, 0.5));
+    }
     g.restore();
   }
 
   // ------------------------------------------------------------------ the grotesque limbs
+  // FLESH (opts.flesh 0..1, default 0 = the v2.2 look): fleshier too-human limbs for wide / small shots, so the anatomy
+  // never reads as bare bone: thicker calves, thighs and forearms over the same knobby joints, fuller fingers with
+  // softer joints, and a sickly pinkish-grey SKIN palette (bone is ivory; skin is flesh) with mauve shade tones.
+  let FL = 0;
+  const FLESH = { skin: '#D7BBB0', skinShade: '#9F8282', skinMid: '#C4A79F', skinDeep: '#735A66', skinLite: '#E9D6CC', pink: '#D0918F', pinkShade: '#A26C72' };
+  const skinC = key => FL > 0 && FLESH[key] ? C.mix(COL[key], FLESH[key], FL) : COL[key];
   function tonesOf(far) {
     const k = far ? -0.13 : 0;
     return {
-      base: C.shade(COL.skin, k), shade: C.shade(COL.skinShade, k), mid: C.shade(COL.skinMid, k), deep: C.shade(COL.skinDeep, k),
-      lite: C.shade(COL.skinLite, k), zone: C.shade(C.mix(COL.skin, COL.pink, 0.55), k - 0.05), zoneShade: C.shade(COL.pinkShade, k - 0.06),
+      base: C.shade(skinC('skin'), k), shade: C.shade(skinC('skinShade'), k), core: C.shade(skinC('skinShade'), k + 0.02), mid: C.shade(skinC('skinMid'), k), deep: C.shade(skinC('skinDeep'), k),
+      lite: C.shade(skinC('skinLite'), k), zone: C.shade(C.mix(skinC('skin'), skinC('pink'), 0.55), k - 0.05), zoneShade: C.shade(skinC('pinkShade'), k - 0.06),
     };
   }
   // outline of one straight bone with an UNEVEN silhouette: w1(u) is the half width on the side of perp(d), w2(u) on
@@ -943,33 +1008,60 @@
   const sidePt = (seg, i, u, k) => add(add(seg.A, mul(seg.d, seg.L * u)), mul(seg.n, (i === 1 ? 1 : -1) * k * (i === 1 ? seg.w1(u) : seg.w2(u))));
   // half-width profiles (px at s = 1). fr = anterior score of that side (-1 posterior .. 1 anterior), md = medial score
   function profThigh(u, fr, md) {
-    let h = lerp(0.06, 0.032, Math.pow(u, 0.8));
-    h += pos(md) * (-0.022 * bump(u, 0.56, 0.36) + 0.006 * bump(u, 0.04, 0.12));      // hollow inner thigh
-    h += pos(-md) * 0.012 * bump(u, 0.3, 0.42);                                         // outer sweep
-    h += pos(fr) * 0.016 * bump(u, 0.5, 0.42);                                          // quads
-    h += pos(-fr) * (0.014 * bump(u, 0.36, 0.42) - 0.007 * bump(u, 0.94, 0.1));        // hamstrings, hollow behind the knee
-    h += 0.015 * bump(u, 1, 0.2);                                                       // condyles: the knee is knobby
+    // heavy at the hip, tapering hard to a pinched knee (the kneecap is a separate knob on top)
+    let h = 0.092 - 0.066 * Math.pow(u, 0.7);
+    h += pos(md) * (-0.02 * bump(u, 0.58, 0.34) + 0.006 * bump(u, 0.04, 0.12));      // hollow inner thigh
+    h += pos(-md) * 0.022 * bump(u, 0.3, 0.42);                                         // outer sweep
+    h += pos(fr) * 0.018 * bump(u, 0.42, 0.42);                                         // quads
+    h += pos(-fr) * (0.016 * bump(u, 0.32, 0.42) - 0.008 * bump(u, 0.94, 0.1));        // hamstrings, hollow behind the knee
+    h -= 0.004 * bump(u, 0.9, 0.1);                                                     // pinch just above the knee
+    h += 0.01 * bump(u, 1, 0.14);                                                       // condyles
+    h *= 1 + FL * 0.42 * (1 - bump(u, 1, 0.16));
     return h * W;
   }
   function profShin(u, fr, md) {
-    let h = lerp(0.034, 0.0135, sstep(0.0, 1, u));                                       // narrows hard to a thin ankle
-    h += pos(-fr) * 0.054 * bump(u, 0.27, 0.34);                                        // calf bulge
-    h += pos(md) * 0.03 * bump(u, 0.3, 0.3) + pos(-md) * 0.017 * bump(u, 0.22, 0.28);   // calf heads (front view)
-    h += 0.018 * bump(u, 0, 0.2);                                                       // tibial plateau
-    h += 0.005 * bump(u, 1, 0.08);                                                      // ankle flare
+    let h = lerp(0.026, 0.011, sstep(0.0, 1, u));                                       // knee-pinched, narrows to a thin ankle
+    h += pos(-fr) * 0.062 * bump(u, 0.3, 0.32);                                         // big calf bulge
+    h += pos(fr) * 0.006 * bump(u, 0.25, 0.3);                                          // tibia ridge
+    h += pos(md) * 0.042 * bump(u, 0.3, 0.3) + pos(-md) * 0.028 * bump(u, 0.24, 0.28);  // calf heads (front view)
+    h += 0.012 * bump(u, 0, 0.16);                                                      // tibial plateau
+    h += 0.006 * bump(u, 1, 0.08);                                                      // ankle flare
+    h += pos(-fr) * 0.011 * bump(u, 0.9, 0.16);                                         // Achilles stands off the back
+    h += FL * (0.02 * bump(u, 0.32, 0.42) + pos(-fr) * 0.026 * bump(u, 0.3, 0.3) + 0.01 * bump(u, 0.58, 0.32));   // flesh: full calf
     return h * W;
   }
   function profUpper(u, out) {
-    let h = lerp(0.042, 0.027, u);
-    h += pos(out) * 0.008 * bump(u, 0.42, 0.4) + pos(-out) * (0.011 * bump(u, 0.5, 0.4) - 0.005 * bump(u, 0.94, 0.1));
-    h += 0.009 * bump(u, 1, 0.16);                                                      // epicondyles
+    // stringy: a lump of shoulder at the root, a thin bone-and-cord middle, knobby at the elbow
+    let h = 0.036 - 0.016 * sstep(0, 0.6, u);
+    h += 0.01 * bump(u, 0.08, 0.2);
+    h += pos(out) * 0.01 * bump(u, 0.36, 0.3) + pos(-out) * (0.012 * bump(u, 0.45, 0.32) - 0.005 * bump(u, 0.94, 0.1));
+    h += 0.012 * bump(u, 1, 0.14);                                                      // epicondyles
+    h += FL * (0.024 * bump(u, 0.42, 0.5) + pos(-out) * 0.01 * bump(u, 0.45, 0.3) + 0.006 * bump(u, 0.1, 0.2));    // flesh: biceps / triceps
     return h * W;
   }
   function profFore(u, out) {
-    let h = lerp(0.028, 0.0145, sstep(0, 1, u));
-    h += pos(out) * 0.024 * bump(u, 0.2, 0.32) + pos(-out) * 0.019 * bump(u, 0.24, 0.3) + 0.008 * bump(u, 0.12, 0.2); // swell below the elbow
-    h += 0.005 * bump(u, 1, 0.08);                                                      // wrist knobs
+    let h = lerp(0.026, 0.012, sstep(0, 1, u));
+    h += pos(out) * 0.028 * bump(u, 0.22, 0.3) + pos(-out) * 0.022 * bump(u, 0.24, 0.3) + 0.009 * bump(u, 0.12, 0.2); // swell below the elbow
+    h += 0.007 * bump(u, 1, 0.08);                                                      // wrist knobs
+    h += FL * (0.024 * bump(u, 0.26, 0.4) + 0.008 * bump(u, 0.66, 0.34));               // flesh: forearm belly
     return h * W;
+  }
+  // THE CORE SHADOW: a hard, wide band of skin-shade along the side of a segment that faces away from the top-left
+  // light (the back edge), plus a deep edge inside it and a lit streak on the other side: 3 skin tones that read at
+  // body scale (s = 0.45), so the limbs never flatten into pale pipes
+  const KEY = nrm([-0.55, -0.83]);
+  function coreShade(g, seg, T, o = {}) {
+    const sd = dot(seg.n, KEY) > 0 ? 2 : 1;                // the side facing away from the light
+    const N = 24, inn = [], out = [], deep = [], lit = [], litIn = [];
+    const k0 = o.k0 ?? -0.12, kd = o.kd ?? 0.5;
+    for (let j = 0; j <= N; j++) {
+      const u = j / N;
+      inn.push(sidePt(seg, sd, u, k0)); out.push(sidePt(seg, sd, u, 1.4)); deep.push(sidePt(seg, sd, u, kd));
+      lit.push(sidePt(seg, 3 - sd, u, 0.42)); litIn.push(sidePt(seg, 3 - sd, u, 0.74));
+    }
+    g.beginPath(); pathPts(g, inn.concat(out.slice().reverse())); g.fillStyle = T.core; g.fill();
+    g.beginPath(); pathPts(g, deep.concat(out.slice().reverse())); g.fillStyle = C.rgba(T.deep, o.deepA ?? 0.9); g.fill();
+    if (o.lit !== false) { g.beginPath(); pathPts(g, lit.concat(litIn.slice().reverse())); g.fillStyle = C.rgba(T.lite, 0.8); g.fill(); }
   }
   // mid tone on every muscle bulge (the extra half width a side gets from its directional term), a shade sliver along
   // every hollow: the 2nd and 3rd skin tones that make the masses read as too-real anatomy
@@ -1012,6 +1104,12 @@
     if (fork) one(fork, w * 0.68);
   }
   function crease(g, pts, w, col, a) { S.strip(g, catmull(pts, 4), u => w * Math.sin(Math.PI * clamp(u)) ** 0.7, C.rgba(col, a)); }
+  // a second, narrower shade step inside the hard shade (bottom-right): the extra tone that rounds the bone
+  function deepRim(g, pts, d, col, a) {
+    g.save(); g.beginPath(); pathPts(g, pts); g.clip();
+    g.beginPath(); g.rect(-1e5, -1e5, 2e5, 2e5); pathPts(g, pts.map(q => [q[0] - d, q[1] - d])); g.fillStyle = C.rgba(col, a); g.fill('evenodd');
+    g.restore();
+  }
   // soft pink-dark flush (knees, elbows): skin colour change, not a lighting gradient
   function flush(g, c, r, col, a) {
     const gr = g.createRadialGradient(c[0], c[1], 0, c[0], c[1], r);
@@ -1038,24 +1136,28 @@
     const thigh = limbOutline(hip, knee, u => s * profThigh(u, t1.fr, t1.md), u => s * profThigh(u, t2.fr, t2.md));
     const shin = limbOutline(knee, ankle, u => s * profShin(u, s1.fr, s1.md), u => s * profShin(u, s2.fr, s2.md));
     // ---- shin (the thigh overlaps it at the knee)
-    S.cel(g, c => pathPts(c, shin.pts), T.base, T.shade, 0.022 * W, 0.022 * W);
+    S.cel(g, c => pathPts(c, shin.pts), T.base, T.shade, 0.02 * W, 0.02 * W);
+    deepRim(g, shin.pts, 0.009 * W, T.deep, 0.55);
     clipPts(g, shin.pts, () => {
       massTones(g, shin, u => s * profShin(u, 0, 0), T);
+      coreShade(g, shin, T);
       const post = s1.fr < s2.fr ? 1 : 2, postSc = Math.min(s1.fr, s2.fr), ant = 3 - post;
-      crease(g, [sidePt(shin, ant, 0.14, 0.6), sidePt(shin, ant, 0.45, 0.58), sidePt(shin, ant, 0.8, 0.5)], 0.006 * W, T.deep, 0.32);   // tibia edge
-      if (postSc < -0.25) {                                                     // Achilles cord + the hollow in front of it
-        const a = clamp(-postSc * 1.4);
-        raised(g, [sidePt(shin, post, 0.6, 0.52), sidePt(shin, post, 0.8, 0.6), sidePt(shin, post, 1.0, 0.55)], 0.024 * kk, T, a);
-        crease(g, [sidePt(shin, post, 0.72, 0.0), sidePt(shin, post, 0.86, 0.12), sidePt(shin, post, 0.97, 0.18)], 0.009 * W, T.deep, 0.5 * a);
+      crease(g, [sidePt(shin, ant, 0.12, 0.62), sidePt(shin, ant, 0.45, 0.6), sidePt(shin, ant, 0.82, 0.48)], 0.008 * W, T.deep, 0.4);   // tibia edge
+      if (postSc < -0.2) {                                                      // Achilles cord + the hollow in front of it
+        const a = clamp(-postSc * 1.6);
+        raised(g, [sidePt(shin, post, 0.62, 0.45), sidePt(shin, post, 0.8, 0.55), sidePt(shin, post, 1.0, 0.45)], 0.02 * kk, T, a);
+        crease(g, [sidePt(shin, post, 0.66, -0.05), sidePt(shin, post, 0.82, 0.05), sidePt(shin, post, 0.97, 0.05)], 0.011 * W, T.deep, 0.6 * a);
       }
-      const ms = s1.md > s2.md ? 1 : 2;                                          // one vein, medial-front of the shin
-      vein(g, [sidePt(shin, ms, 0.26, 0.05), sidePt(shin, ms, 0.4, 0.3), sidePt(shin, ms, 0.56, 0.12), sidePt(shin, ms, 0.74, 0.32)], 0.018 * kk, T,
-        [sidePt(shin, ms, 0.47, 0.22), sidePt(shin, ms, 0.6, -0.2)]);
+      const ms = s1.md > s2.md ? 1 : 2;                                          // one wandering vein, medial-front of the shin
+      vein(g, [sidePt(shin, ms, 0.3, -0.1), sidePt(shin, ms, 0.38, 0.3), sidePt(shin, ms, 0.47, 0.0), sidePt(shin, ms, 0.56, 0.38), sidePt(shin, ms, 0.66, 0.1)], 0.02 * kk, T,
+        [sidePt(shin, ms, 0.45, 0.08), sidePt(shin, ms, 0.52, -0.4), sidePt(shin, ms, 0.6, -0.5)]);
     });
     // ---- thigh
     S.cel(g, c => pathPts(c, thigh.pts), T.base, T.shade, 0.024 * W, 0.024 * W);
+    deepRim(g, thigh.pts, 0.01 * W, T.deep, 0.5);
     clipPts(g, thigh.pts, () => {
       massTones(g, thigh, u => s * profThigh(u, 0, 0), T);
+      coreShade(g, thigh, T);
       const post = t1.fr < t2.fr ? 1 : 2, postSc = Math.min(t1.fr, t2.fr);
       if (postSc < -0.22) {                                                     // hamstring cords running into the knee pit
         const a = clamp(-postSc * 1.5);
@@ -1063,20 +1165,23 @@
         raised(g, [sidePt(thigh, post, 0.6, -0.05), sidePt(thigh, post, 0.82, 0.18), sidePt(thigh, post, 1.0, 0.22)], 0.018 * kk, T, a * 0.85);
       }
       const ms = t1.md > t2.md ? 1 : 2;                                          // the hollow of the inner thigh
-      if (Math.max(t1.md, t2.md) > 0.4) crease(g, [sidePt(thigh, ms, 0.34, 0.55), sidePt(thigh, ms, 0.56, 0.42), sidePt(thigh, ms, 0.8, 0.5)], 0.008 * W, T.deep, 0.3);
+      if (Math.max(t1.md, t2.md) > 0.4) crease(g, [sidePt(thigh, ms, 0.34, 0.5), sidePt(thigh, ms, 0.56, 0.36), sidePt(thigh, ms, 0.8, 0.46)], 0.01 * W, T.deep, 0.4);
+      const fs = t1.fr > t2.fr ? 1 : 2;                                          // the long sartorius groove across the front
+      crease(g, [sidePt(thigh, fs, 0.12, 0.2), sidePt(thigh, fs, 0.45, -0.1), sidePt(thigh, fs, 0.8, -0.45)], 0.008 * W, T.deep, 0.28);
     });
     // ---- knee: pinker darker zone, a bony patella (flat shield, not a ball), skin folds, the knee pit
     const legAx = nrm(sub(ankle, hip)), bendV = nrm(sub(knee, lp(hip, ankle, 0.5)));
     const antOff = add(mul(bendV, 0.03 * kk * clamp(bend * 3)), mul(front, 0.032 * kk));
-    const pc = add(knee, add(antOff, mul(legAx, -0.006 * kk)));
+    const pc = add(knee, add(antOff, mul(legAx, -0.012 * kk)));
     clipUnion(g, [thigh.pts, shin.pts], () => flush(g, pc, 0.1 * kk, T.zone, 0.85));
     g.save(); g.translate(pc[0], pc[1]); g.rotate(ang(legAx) - Math.PI / 2);
-    const pw = 0.031 * kk, ph = 0.038 * kk;
-    S.cel(g, c => { c.moveTo(0, -ph); c.bezierCurveTo(pw * 1.2, -ph * 0.95, pw * 0.95, ph * 0.4, 0, ph); c.bezierCurveTo(-pw * 0.95, ph * 0.4, -pw * 1.2, -ph * 0.95, 0, -ph); c.closePath(); },
-      C.mix(T.zone, T.base, 0.25), T.zoneShade, 0.009 * kk, 0.009 * kk);
+    const pw = 0.046 * kk, ph = 0.052 * kk;
+    S.cel(g, c => { c.moveTo(0, -ph); c.bezierCurveTo(pw * 1.25, -ph * 0.95, pw * 1.05, ph * 0.55, 0, ph); c.bezierCurveTo(-pw * 1.05, ph * 0.55, -pw * 1.25, -ph * 0.95, 0, -ph); c.closePath(); },
+      T.zone, T.zoneShade, 0.016 * kk, 0.014 * kk);
+    S.ellipse(g, -pw * 0.3, -ph * 0.35, pw * 0.28, ph * 0.2, -0.4, C.rgba(T.lite, 0.55));
     g.restore();
-    foldArcs(g, add(pc, mul(legAx, -0.052 * kk)), mul(legAx, -1), 3, 0.015 * kk, 0.03 * kk, 0.008 * kk, 0.0068 * W, T.deep, 0.6);
-    foldArcs(g, add(pc, mul(legAx, 0.052 * kk)), legAx, 2, 0.014 * kk, 0.024 * kk, 0.006 * kk, 0.006 * W, T.deep, 0.5);
+    foldArcs(g, add(pc, mul(legAx, -0.05 * kk)), mul(legAx, -1), 3, 0.016 * kk, 0.032 * kk, 0.009 * kk, 0.009 * W, T.deep, 0.72);
+    foldArcs(g, add(pc, mul(legAx, 0.05 * kk)), legAx, 2, 0.015 * kk, 0.026 * kk, 0.007 * kk, 0.008 * W, T.deep, 0.6);
     if (bend > 0.12 || Math.abs(front[0]) > 0.35) {                              // knee pit crease (side-ish views)
       const bk = add(knee, add(mul(bendV, -0.034 * kk * clamp(bend * 3)), mul(front, -0.032 * kk)));
       crease(g, [add(bk, mul(kv, -0.03 * kk)), bk, add(bk, mul(av, 0.03 * kk))], 0.009 * W, T.deep, 0.65);
@@ -1084,8 +1189,8 @@
   }
 
   function paintFoot(g, Lg, F, far) {
-    const { ankle, sd } = Lg, s = Lg.g * 1.18, T = tonesOf(far);
-    const splay = sd * 0.22, tp = Lg.toe || 0;
+    const { ankle, sd } = Lg, s = Lg.g * DIM.footK, T = tonesOf(far);
+    const splay = sd * (Lg.splay ?? 0.62), tp = Lg.toe || 0;
     const cs = Math.cos(splay), sn = Math.sin(splay), ct = Math.cos(tp), st = Math.sin(tp);
     const FP0 = (a, c, h) => {                                              // foot-local (fwd, lateral, down) in W
       const a1 = a * ct - h * st, h1 = a * st + h * ct;
@@ -1096,7 +1201,7 @@
     const inner = -sd;
     const hullSrc = [[-0.035, 0, -0.03], [0.035, 0, -0.03], [-0.068, 0, 0.04], [-0.05, 0, 0.074], [0.06, inner * 0.034, 0.074], [0.06, -inner * 0.038, 0.074],
       [0.175, inner * 0.06, 0.066], [0.165, -inner * 0.055, 0.068], [0.0, 0.034, 0.02], [0.0, -0.034, 0.02], [0.11, 0, 0.03]];
-    const toes = [[0.058, 0.3, 0.036], [0.032, 0.28, 0.027], [0.007, 0.262, 0.025], [-0.018, 0.245, 0.023], [-0.043, 0.222, 0.021]];
+    const toes = [[0.058, 0.32, 0.036], [0.032, 0.315, 0.027], [0.007, 0.295, 0.025], [-0.018, 0.272, 0.023], [-0.043, 0.245, 0.021]];
     // floor clamp: in this orthographic camera a planted foot that points at the camera projects BELOW the ground line;
     // squash it about the ankle so the sole and toe tips sit on the line (a short front-on wedge)
     let ky = 1;
@@ -1135,8 +1240,8 @@
     // ankle bones (malleoli): knobs either side, pinkish, no shine
     const kn = perp(nrm(sub(Lg.knee, ankle)));
     for (const sg of [-1, 1]) {
-      const q = add(ankle, mul(kn, sg * 0.026 * W * Lg.g)), r = (sg === inner ? 0.021 : 0.018) * W * Lg.g;
-      S.cel(g, c => { c.moveTo(q[0] + r, q[1]); c.arc(q[0], q[1], r, 0, TAU); }, T.zone, T.zoneShade, 0.006 * W, 0.006 * W);
+      const q = add(ankle, mul(kn, sg * 0.024 * W * Lg.g)), r = (sg === inner ? 0.03 : 0.025) * W * Lg.g;
+      S.cel(g, c => { c.moveTo(q[0] + r, q[1]); c.arc(q[0], q[1], r, 0, TAU); }, T.zone, T.zoneShade, 0.01 * W, 0.01 * W);
     }
   }
 
@@ -1155,23 +1260,28 @@
       const fore = limbOutline(elbow, wrist, u => s * profFore(u, oF1) * foK(u), u => s * profFore(u, oF2) * foK(u));
       // forearm
       S.cel(g, c => pathPts(c, fore.pts), T.base, T.shade, 0.02 * W, 0.02 * W);
+      deepRim(g, fore.pts, 0.008 * W, T.deep, 0.5);
       clipPts(g, fore.pts, () => {
         massTones(g, fore, u => s * profFore(u, 0, 0) * foK(u), T);
+        coreShade(g, fore, T);
         const ins = oF1 < oF2 ? 1 : 2, ot = 3 - ins;                            // inner (flexor) / outer (extensor) side
         raised(g, [sidePt(fore, ins, 0.56, 0.1), sidePt(fore, ins, 0.8, 0.22), sidePt(fore, ins, 0.99, 0.12)], 0.016 * kk * lerp(1, hs, 0.7), T, 0.85);   // wrist tendons
         raised(g, [sidePt(fore, ins, 0.62, -0.32), sidePt(fore, ins, 0.84, -0.22), sidePt(fore, ins, 0.99, -0.3)], 0.012 * kk * lerp(1, hs, 0.7), T, 0.7);
-        vein(g, [sidePt(fore, ot, 0.3, 0.1), sidePt(fore, ot, 0.48, -0.12), sidePt(fore, ot, 0.66, 0.06), sidePt(fore, ot, 0.88, -0.2)], 0.018 * kk * lerp(1, hs, 0.6), T,
-          [sidePt(fore, ot, 0.56, -0.04), sidePt(fore, ot, 0.7, 0.5)]);
-        crease(g, [sidePt(fore, ot, 0.1, 0.55), sidePt(fore, ot, 0.32, 0.62), sidePt(fore, ot, 0.5, 0.45)], 0.006 * W, T.deep, 0.3);
+        vein(g, [sidePt(fore, ot, 0.34, 0.25), sidePt(fore, ot, 0.44, -0.2), sidePt(fore, ot, 0.55, 0.15), sidePt(fore, ot, 0.66, -0.25), sidePt(fore, ot, 0.8, 0.0)], 0.02 * kk * lerp(1, hs, 0.6), T,
+          [sidePt(fore, ot, 0.5, 0.0), sidePt(fore, ot, 0.6, 0.5), sidePt(fore, ot, 0.72, 0.62)]);
+        crease(g, [sidePt(fore, ot, 0.08, 0.55), sidePt(fore, ot, 0.3, 0.62), sidePt(fore, ot, 0.48, 0.45)], 0.008 * W, T.deep, 0.38);
       });
       // upper arm
       S.cel(g, c => pathPts(c, upper.pts), T.base, T.shade, 0.02 * W, 0.02 * W);
+      deepRim(g, upper.pts, 0.008 * W, T.deep, 0.5);
       clipPts(g, upper.pts, () => {
         massTones(g, upper, u => s * profUpper(u, 0), T);
+        coreShade(g, upper, T);
+        raised(g, [sidePt(upper, 1, 0.12, 0.1), sidePt(upper, 1, 0.5, -0.15), sidePt(upper, 1, 0.9, 0.05)], 0.014 * kk, T, 0.8);   // a stringy cord
         // the root comes out of the dark mouth: socket shadow fading along the first ~0.12 W
         if (opt.socket) {
           g.beginPath(); pathPts(g, opt.socket); g.clip();
-          const gr = g.createRadialGradient(sh[0], sh[1], 0, sh[0], sh[1], 0.15 * kk);
+          const gr = g.createRadialGradient(sh[0], sh[1], 0, sh[0], sh[1], 0.075 * kk);
           gr.addColorStop(0, C.rgba(COL.mouth, 0.95)); gr.addColorStop(0.45, C.rgba(COL.mouth, 0.6)); gr.addColorStop(1, C.rgba(COL.mouth, 0));
           g.fillStyle = gr; g.fillRect(sh[0] - 0.2 * kk, sh[1] - 0.2 * kk, 0.4 * kk, 0.4 * kk);
         }
@@ -1181,11 +1291,11 @@
       const ep = add(elbow, mul(outV, 0.024 * kk * bk));
       g.save(); g.translate(ep[0], ep[1]); g.rotate(bk > 0.1 ? ang(outV) : ang(uv) + Math.PI / 2);
       const ok = lerp(0.6, 1, bk);
-      S.cel(g, c => { c.moveTo(0.036 * kk * ok, 0); c.quadraticCurveTo(0.004 * kk, 0.026 * kk, -0.026 * kk, 0.024 * kk); c.lineTo(-0.026 * kk, -0.024 * kk); c.quadraticCurveTo(0.004 * kk, -0.026 * kk, 0.036 * kk * ok, 0); c.closePath(); },
-        T.zone, T.zoneShade, 0.007 * kk, 0.007 * kk);
+      S.cel(g, c => { c.moveTo(0.05 * kk * ok, 0); c.quadraticCurveTo(0.006 * kk, 0.036 * kk, -0.03 * kk, 0.032 * kk); c.lineTo(-0.03 * kk, -0.032 * kk); c.quadraticCurveTo(0.006 * kk, -0.036 * kk, 0.05 * kk * ok, 0); c.closePath(); },
+        T.zone, T.zoneShade, 0.012 * kk, 0.012 * kk);
       g.restore();
       const ov = bk > 0.1 ? outV : perp(uv);
-      foldArcs(g, add(elbow, mul(ov, -0.006 * kk)), mul(ov, -1), 3, 0.013 * kk, 0.022 * kk, -0.007 * kk, 0.0062 * W, T.deep, 0.62);
+      foldArcs(g, add(elbow, mul(ov, -0.004 * kk)), mul(ov, -1), 3, 0.014 * kk, 0.024 * kk, -0.008 * kk, 0.0085 * W, T.deep, 0.72);
       if (bk > 0.2) {
         const crook = add(elbow, mul(ov, -0.03 * kk));
         crease(g, [add(crook, mul(uv, -0.024 * kk)), add(crook, mul(ov, -0.006 * kk)), add(crook, mul(fv, 0.026 * kk))], 0.008 * W, T.deep, 0.6);
@@ -1205,11 +1315,12 @@
   }
   // knobby digit: joints wider than the phalanx middles, one hard shade rim
   function knobby(g, pts, wf, T, k) {
+    if (FL > 0) { const mx = Math.max(...wf.slice(1)); wf = wf.map((w, i) => (i ? lerp(w, (w + mx * 0.8) / 2, FL * 0.6) : w) * (1 + 0.3 * FL)); }
     S.limb(g, pts, wf, T.shade);
     S.limb(g, pts.map(q => add(q, [-0.0042 * k, -0.0042 * k])), wf.map(w => w * 0.8), T.base);
   }
   function paintHand(g, Ar, T) {
-    const A = Ar.A || {}, sd = Ar.sd, hsc = A.handScale || 1, s = Ar.g * hsc, k = W * s;
+    const A = Ar.A || {}, sd = Ar.sd, hsc = A.handScale || 1, s = Ar.g * hsc * DIM.handK, k = W * s;
     const wr = Ar.wrist, ha = Ar.handAng, d = dirA(ha), n = perp(d);
     const curl = clamp(A.curl ?? 0.3), spread = clamp(A.spread ?? 0.35), cdir = A.curlDir ?? -sd, fc = A.fingers || [];
     const tside = dot(n, [-sd, 0]) >= 0 ? 1 : -1;                         // thumb toward the body centre
@@ -1222,10 +1333,11 @@
       const pts = [b, lp(b, p1, 0.5), p1, lp(p1, p2, 0.55), p2];
       knobby(g, pts, [0.05, 0.028, 0.031, 0.021, 0.019].map(v => v * k), T, k);
       S.circle(g, p1[0], p1[1], 0.013 * k, C.rgba(T.zone, 0.9));
-      nail(g, p2, nrm(sub(p2, p1)), 0.019 * k, 0.034 * k);
+      nail(g, p2, nrm(sub(p2, p1)), 0.019 * k * (1 + 0.4 * FL), 0.034 * k * (1 + 0.3 * FL));
     }
     // back of the hand
-    const palm = [H(-0.02, -0.034), H(0.05, -0.058), H(0.125, -0.068), H(0.152, -0.04), H(0.16, 0.0), H(0.152, 0.04), H(0.125, 0.068), H(0.05, 0.058), H(-0.02, 0.034)];
+    const pk = 1 + 0.22 * FL;
+    const palm = [H(-0.02, -0.034 * pk), H(0.05, -0.058 * pk), H(0.125, -0.068 * pk), H(0.152, -0.04 * pk), H(0.16, 0.0), H(0.152, 0.04 * pk), H(0.125, 0.068 * pk), H(0.05, 0.058 * pk), H(-0.02, 0.034 * pk)];
     S.cel(g, c => S.addBlob(c, palm, 0.55), T.base, T.shade, 0.014 * k, 0.014 * k);
     // long knobby fingers, index (thumb side) .. pinky
     const FD = [[0.047, 0.205], [0.016, 0.228], [-0.016, 0.214], [-0.046, 0.168]];
@@ -1237,14 +1349,14 @@
       const segs = [0.45, 0.31, 0.24], bends = [0.3, 0.55, 0.45], J = [b];
       for (let j = 0; j < 3; j++) { a += cdir * cu * bends[j] * 1.25; J.push(add(J[j], mul(dirA(a), segs[j] * Lf * k))); }
       const pts = [J[0], lp(J[0], J[1], 0.5), J[1], lp(J[1], J[2], 0.5), J[2], lp(J[2], J[3], 0.55), J[3]];
-      const wf = [0.032, 0.02, 0.026, 0.017, 0.021, 0.0155, 0.0135].map(v => v * k);
+      const wf = [0.034, 0.021, 0.028, 0.018, 0.023, 0.0165, 0.0145].map(v => v * k);
       knobby(g, pts, wf, T, k);
       for (const j of [1, 2]) {                                             // pinkish knobbly joints + creases
         const q = J[j], dd = nrm(sub(J[j + 1], J[j - 1])), nn = perp(dd), r = wf[j * 2] * 0.42;
-        S.circle(g, q[0] - 0.003 * k, q[1] - 0.003 * k, r, C.rgba(T.zone, 0.9));
+        S.circle(g, q[0] - 0.003 * k, q[1] - 0.003 * k, r * (1 + 0.25 * FL), C.rgba(T.zone, 0.9 - 0.35 * FL));
         for (const off of [-0.006, 0.006]) { const m = add(q, mul(dd, off * k)); crease(g, [add(m, mul(nn, -r * 0.8)), add(m, mul(dd, 0.002 * k)), add(m, mul(nn, r * 0.8))], 0.0042 * k, T.deep, 0.5); }
       }
-      nail(g, J[3], nrm(sub(J[3], J[2])), 0.02 * k, 0.036 * k);
+      nail(g, J[3], nrm(sub(J[3], J[2])), 0.02 * k * (1 + 0.4 * FL), 0.036 * k * (1 + 0.3 * FL));
       bases.push(J[0]);
     });
     // extensor tendons pushing up the skin (subtle raised cords fanning from the wrist to each knuckle) + one vein
@@ -1303,7 +1415,7 @@
     if (fx.zzz) {
       for (let i = 0; i < 3; i++) {
         const k = ((t * 0.35 + i / 3) % 1);
-        S.label(g, 'z', lidTop[0] - 0.12 * W + k * 0.22 * W, lidTop[1] - 0.02 * W - k * 0.32 * W, (0.12 + 0.1 * k) * W, { color: COL.zzz, alpha: Math.sin(Math.PI * k), weight: 900 });
+        S.label(g, 'z', sol.mouth[0] + 0.4 * W + k * 0.2 * W, lidTop[1] - 0.2 * W - k * 0.28 * W, (0.12 + 0.1 * k) * W, { color: COL.zzz, alpha: Math.sin(Math.PI * k), weight: 900 });
       }
     }
     if (fx.hearts) {
@@ -1321,6 +1433,7 @@
 
   // ------------------------------------------------------------------ main paint
   function paint(g, p, sol) {
+    FL = clamp(p.flesh ?? 0);
     const near = sol.near, sideOn = Math.abs(sol.R.yawDeg) > 12;
     const legKeys = Object.keys(sol.legs), armKeys = Object.keys(sol.arms);
     const farKey = near === 0 ? null : near > 0 ? 'L' : 'R';
@@ -1337,24 +1450,24 @@
     const poly = mouthPoly(sol);
     if (p.parts.tongue && sol.tongue && sol.tongue.behind) paintTongue(g, p, sol);
     if (sol.th > 0.012) S.poly(g, poly, COL.mouth);
-    const lidHull = paintLid(g, p, sol).hull;
+    paintLid(g, p, sol);
     paintFace(g, p, sol, poly);
     paintTeeth(g, p, sol, 'up');
-    const boxHull = convexHull(lidHull.concat(paintBody(g, p, sol).hull));
+    sol.bodyHull = paintBody(g, p, sol).hull;
     paintHasp(g, p, sol);
     // near arms: the root is re-covered by the box walls and the upper tooth row, so the arm comes OUT of the mouth
     // gap at the corner instead of sitting on the outside of the box
     if (p.parts.arms) armKeys.forEach(k => {
       const Ar = sol.arms[k];
       if (Ar.mode !== 'arm' || isFarArm(k)) return;
-      paintArm(g, Ar, false, { socket: sol.th > 0.15 ? boxHull : null });
+      paintArm(g, Ar, false, { socket: sol.th > 0.15 ? poly : null });
       g.save(); g.beginPath(); g.arc(Ar.sh[0], Ar.sh[1], 0.17 * W, 0, TAU); g.clip();
       g.save(); g.beginPath(); g.rect(-1e5, -1e5, 2e5, 2e5); pathPts(g, poly); g.clip('evenodd'); paintBody(g, p, sol); g.restore();
       paintTeeth(g, p, sol, 'up');
       g.restore();
     });
-    if (p.parts.tongue && sol.tongue && !sol.tongue.behind) paintTongue(g, p, sol);
     paintTeeth(g, p, sol, 'lo', poly);
+    if (p.parts.tongue && sol.tongue && !sol.tongue.behind) paintTongue(g, p, sol);
     // gripping hands (peek): only below the upper lip line, so the lid edge stays in front of the wrists
     if (p.parts.arms) armKeys.forEach(k => {
       const Ar = sol.arms[k];
@@ -1506,5 +1619,5 @@
     }, { scale: s, alpha: o.alpha ?? 1 });
   }
 
-  window.MIMIKU2 = { draw, pose, walkPose, jumpPose, pouncePose, lerpPose, anchors, castShadow, knight, merge, yawFrame, EXPR, COL, DIM, version: '2.1' };
+  window.MIMIKU2 = { draw, pose, walkPose, jumpPose, pouncePose, lerpPose, anchors, castShadow, knight, merge, yawFrame, EXPR, COL, DIM, version: '2.2' };
 })();

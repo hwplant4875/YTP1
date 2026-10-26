@@ -10,12 +10,12 @@
   const SC = 0.8, GY = 716, UW = K.W * SC; // one W in px on this sheet
   const T0 = 0.35;
   const FIG = [
-    { x: 196, n: '1', name: 'HAMMER', sub: 'idle · maul planted', o: { type: 'hammer', pose: 'idle' } },
-    { x: 436, n: '2', name: 'HAMMER', sub: 'raises the maul', o: { type: 'hammer', pose: 'ready' } },
+    { x: 186, n: '1', name: 'HAMMER', sub: 'idle · maul planted', o: { type: 'hammer', pose: 'idle' } },
+    { x: 446, n: '2', name: 'HAMMER', sub: 'shoulders the maul', o: { type: 'hammer', pose: 'ready' } },
     { x: 628, n: '3', name: 'SPEAR', sub: 'idle · thin + tall', o: { type: 'spear', pose: 'idle' } },
-    { x: 846, n: '4', name: 'SPEAR', sub: 'levels the spear', o: { type: 'spear', pose: 'ready', spearLen: 420 } },
-    { x: 1096, n: '5', name: 'SHIELD', sub: 'idle · lantern', o: { type: 'shield', pose: 'idle' } },
-    { x: 1330, n: '6', name: 'SHIELD', sub: 'lantern up · searching', o: { type: 'shield', pose: 'ready' } },
+    { x: 846, n: '4', name: 'SPEAR', sub: 'levels the spear', o: { type: 'spear', pose: 'ready', spearLen: 350 } },
+    { x: 1116, n: '5', name: 'SHIELD', sub: 'idle · lantern', o: { type: 'shield', pose: 'idle' } },
+    { x: 1342, n: '6', name: 'SHIELD', sub: 'lantern up · searching', o: { type: 'shield', pose: 'ready' } },
     { x: 1560, n: '7', name: '404 KNIGHT', sub: 'scratch · notebook · quill', o: { type: 'spear', pose: 'notebook', variant: 'k404' } },
     { x: 1790, n: '8', name: 'HORROR', sub: 'dark plate · cold slit line', o: { type: 'hammer', pose: 'idle', variant: 'horror', tilt: -4 } },
   ];

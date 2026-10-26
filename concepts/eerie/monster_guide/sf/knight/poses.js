@@ -36,7 +36,7 @@
   function peek(x, y, w, h) {
     card(x, y, w, h, 'PEEK  ·  THE TOTEM', 'helm + one hand each · they nod together');
     clipCard(x, y, w, h, () => {
-      const ex = x + 250, top = y + 50, gy = y + h - 26;
+      const ex = x + 250, top = y + 50, gy = y + h - 26, ty = 10; // ty: the totem sits 20 px lower than the jamb foot
       // passage behind the opening: dark, a faint torch far in
       ctx.fillStyle = '#05080A'; ctx.fillRect(ex, top, x + w - ex, gy - top + 30);
       const lg = ctx.createRadialGradient(ex + 230, gy - 150, 10, ex + 230, gy - 150, 260);
@@ -51,15 +51,15 @@
       ctx.fillStyle = '#1B252C'; ctx.fillRect(ex - 16, top, 16, gy - top + 30); // reveal (wall thickness)
       ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(ex - 16, top, 4, gy - top + 30);
       // three knights, stacked. Bottom = hammer (crouched), middle = spear, top = shield. Same nod value.
-      const nod = 0.35, s = 0.82;
+      const nod = 0.35, s = 0.78;
       const clip = c => c.rect(ex, 0, 4000, 4000);
       const stack = [
         { type: 'hammer', peekH: 96, peekOut: 70, tilt: 14, handH: 132 },
         { type: 'spear', peekH: 228, peekOut: 76, tilt: 22, handH: 262 },
         { type: 'shield', peekH: 362, peekOut: 66, tilt: 12, handH: 400 },
       ];
-      stack.slice().reverse().forEach(k => K.draw(ctx, ex, gy, s, Object.assign({ pose: 'peek', part: 'helm', clip, nod, t: T0 }, k)));
-      stack.forEach(k => K.draw(ctx, ex, gy, s, Object.assign({ pose: 'peek', part: 'hand', t: T0 }, k)));
+      stack.slice().reverse().forEach(k => K.draw(ctx, ex, gy + ty, s, Object.assign({ pose: 'peek', part: 'helm', clip, nod, t: T0 }, k)));
+      stack.forEach(k => K.draw(ctx, ex, gy + ty, s, Object.assign({ pose: 'peek', part: 'hand', t: T0 }, k)));
     });
   }
 
@@ -89,7 +89,7 @@
       ctx.save(); ctx.beginPath(); ctx.rect(fx, y + 40, fw, h - 40); ctx.clip();
       const lidY = chest(cx, gy, s, i === 2 ? { breath: 0.9 } : {});
       // the knock point is on the lid top, a little in from the near edge
-      const ka = [(cx - 40 * s - kx) / s, (lidY - gy) / s + 4];
+      const ka = [(cx - 22 * s - kx) / s, (lidY - gy) / s + 4];
       K.draw(ctx, kx, gy, s, { type: 'hammer', pose: 'knock', k, knockAt: ka, t: T0 + i * 0.4 });
       if (i === 1) S.label(ctx, 'tok!', cx + 70 * s, lidY - 70 * s, 24, { color: 'rgba(255,244,214,0.95)', weight: 900 });
       if (i === 2) S.label(ctx, '…?', kx + 130 * s, gy - 470 * s, 30, { color: INK, weight: 900 });
@@ -116,7 +116,7 @@
     card(x, y, w, h, 'NOTEBOOK', '404 knight · writes down the tell');
     const s = 0.8, gy = y + h - 30;
     ctx.fillStyle = 'rgba(242,238,246,0.1)'; ctx.fillRect(x + 20, gy, w - 40, 2);
-    K.draw(ctx, x + 170, gy, s, { type: 'spear', variant: 'k404', pose: 'notebook', t: T0 });
+    K.draw(ctx, x + 170, gy, s, { type: 'spear', variant: 'k404', pose: 'notebook', t: T0, spearLen: 470 });
     // what he writes (a page insert)
     const px = x + w - 150, py = y + 120;
     S.shadowGroup(ctx, g => {

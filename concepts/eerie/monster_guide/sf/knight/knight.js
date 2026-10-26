@@ -11,6 +11,9 @@
  *   through helm tilt / nod, hands, posture, sweat drops and little motion lines.
  *   Plate #7A7E86, shade #5A5D64, light edge / rim #A9AEB5 (plan B). One muted cloth accent per type.
  *   Avoided on purpose: onion helms, stone-slab armour, blue tabards (no specific game set).
+ *   DETAIL BUDGET (v2): the Guests are the CUTE layer, so they stay lighter than the monster anatomy: rivets only on the
+ *   helm band / pauldrons (+ one on the bucket brace), breastplate = one centre ridge + one flute per side, one lame
+ *   per pauldron, no thigh lames, fat rounded thigh / shin capsules with small plain knee discs, one sabaton line.
  *
  * TYPES (H = the plan's helm unit, 136 px; shoulder widths follow plan B)
  *   'hammer'  wide (shoulders ~1.6 H), flat-topped bucket great helm with a cross brace, big two-handed maul,
@@ -22,18 +25,24 @@
  *
  * VARIANTS
  *   'normal'  as above.
- *   'k404'    the recurring 404 knight (any type; the show uses the spear knight): a jagged scratch on the left of the
- *             helm, a small notebook "PROTOCOL 404" and a quill at the belt (the notebook pose uses that notebook).
- *   'horror'  dark plate #2B2D33, one accent line #A8443A (belt), one cold light line #E2FFFA glowing in the slit.
- *             Still faceless: only the line, never eyes.
+ *   'k404'    the recurring 404 knight (any type; the show uses the spear knight): a jagged scratch on the helm,
+ *             ALWAYS on screen-left of the helm (the thumbnail side) also when mirrored, a small notebook
+ *             "PROTOCOL 404" and a quill at the belt (the notebook pose holds it OPEN, pages toward the helm, label
+ *             toward camera). The label fits the brand word with measureText; below ~6 screen px it shows only "404".
+ *   'horror'  dark plate #2B2D33, one accent line #A8443A (belt), ONE continuous cold light line #E2FFFA in the slit
+ *             (on the bucket helm the brace is cut at slit height so it never reads as two eyes). Faceless.
  *
  * API
+ *   pose 'ready' = signature pose: hammer shoulders the maul, spear levels the spear, shield raises the lantern.
  *   KNIGHT.draw(ctx, x, y, s = 1, o = {}) -> R    whole knight as ONE shadow group. (x, y) = ground point between the
  *                                                  feet (pose 'peek': the foot of the edge it peeks around).
  *     type      'hammer' | 'spear' | 'shield'                       variant  'normal' | 'k404' | 'horror'
  *     pose      'idle' | 'walk' | 'ready' | 'knock' | 'notebook' | 'backaway' | 'nod' | 'peek'
- *     phase     walk cycle 0..1 (two steps). One cycle covers KNIGHT.stride(type) * s px: move x yourself.
- *     k         0..1 progress for 'knock' (0 wind-up, 0.5 contact, 0.62 rebound, 1 listening) and 'nod'
+ *     phase     walk cycle 0..1 (two steps). One cycle covers KNIGHT.stride(type) * s px: move x yourself; the planted
+ *               sabaton is then pinned to the ground (IK never over-reaches). Hips follow their own foot so the legs
+ *               never cross; the helm bob lags the body by ~0.06 cycle.
+ *     k         0..1 progress for 'knock' (0 wind-up: lean back, helm up, weight on the back foot; 0.5 contact: lean
+ *               in + squash; 0.62 rebound; 1 listening: helm tilted ~17 deg to the lid, back heel up) and 'nod'
  *               (0 up, 0.5 down, 1 up again). 'backaway' k = retreat cycle (shuffle) phase.
  *     knockAt   [dx, dy] contact point relative to (x, y) in px at s = 1 along the facing (default
  *               KNIGHT.knockAt(type): the lid top of a dormant chest whose centre is KNIGHT.chestDX(type) ahead)
@@ -104,19 +113,19 @@
     hammer: {
       name: 'hammer', helm: 'bucket', helmW: 134, helmH: 138, hip: 136, torso: 158,
       waistW: 112, chestW: 166, shX: 74, shDrop: 30, paulR: 47, armU: 54, armL: 50, armW: 40, fist: 23,
-      legX: 30, legW: 50, thigh: 68, shin: 60, ankle: 16, foot: 64, footH: 26, stance: 34, strideA: 24, lift: 22,
+      legX: 30, legW: 58, thigh: 68, shin: 60, ankle: 16, foot: 64, footH: 26, stance: 34, strideA: 34, lift: 22,
       knockDX: 168, chestDX: 208,
     },
     spear: {
-      name: 'spear', helm: 'point', helmW: 102, helmH: 120, point: 52, hip: 160, torso: 148,
+      name: 'spear', helm: 'point', helmW: 104, helmH: 126, point: 52, hip: 150, torso: 152,
       waistW: 74, chestW: 112, shX: 47, shDrop: 26, paulR: 30, armU: 58, armL: 54, armW: 29, fist: 18,
-      legX: 20, legW: 35, thigh: 80, shin: 70, ankle: 15, foot: 56, footH: 21, stance: 24, strideA: 30, lift: 24,
+      legX: 20, legW: 46, thigh: 74, shin: 67, ankle: 15, foot: 58, footH: 23, stance: 24, strideA: 44, lift: 24,
       knockDX: 168, chestDX: 208,
     },
     shield: {
       name: 'shield', helm: 'crest', helmW: 118, helmH: 128, crest: 58, hip: 148, torso: 152,
       waistW: 92, chestW: 138, shX: 60, shDrop: 28, paulR: 37, armU: 56, armL: 52, armW: 34, fist: 21,
-      legX: 25, legW: 42, thigh: 74, shin: 64, ankle: 16, foot: 60, footH: 24, stance: 28, strideA: 27, lift: 23,
+      legX: 25, legW: 50, thigh: 74, shin: 64, ankle: 16, foot: 60, footH: 24, stance: 28, strideA: 38, lift: 23,
       knockDX: 120, chestDX: 160,
     },
   };
@@ -216,11 +225,14 @@
       const slitL = c => S.addRoundRect(c, -w * 0.4 + f, sy - sh / 2, w * 0.34, sh, sh / 2);
       const slitR = c => S.addRoundRect(c, f + w * 0.07, sy - sh / 2, w * 0.3, sh, sh / 2);
       flat(g, slitL, P.slit); flat(g, slitR, P.slit);
-      if (horror) coldSlit(g, [[-w * 0.36 + f, sy], [f + w * 0.33, sy]], sh, t);
       // vertical brace down the middle (the cross)
       const brace = c => S.addRoundRect(c, f - w * 0.055, -h * 0.97, w * 0.11, h * 0.84, 5);
       plate(g, brace, { sd: 3, ld: 2 });
-      rivet(g, f, -h * 0.78, 3.2); rivet(g, f, sy - sh * 1.0 + 2, 3.2); rivet(g, f, -h * 0.3, 3.2);
+      rivet(g, f, -h * 0.78, 3.2);
+      if (horror) { // ONE slit: the brace is cut at slit height so the cold line runs unbroken (never two eye dashes)
+        flat(g, c => S.addRoundRect(c, -w * 0.4 + f, sy - sh / 2, w * 0.77, sh, sh / 2), P.slit);
+        coldSlit(g, [[-w * 0.36 + f, sy], [f + w * 0.33, sy]], sh, t);
+      }
       // breaths: small holes on the face side, low
       for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) S.circle(g, f + w * (0.15 + j * 0.09) , -h * (0.38 - i * 0.075) + ny * 0.5, 2.6, P.slit);
       g.restore();
@@ -257,9 +269,12 @@
       const sw = Math.sin(t * 2.1);
       const cloth = o.variant === 'horror' ? COL.clothHorror : COL.cloth.shield;
       // plume: a bushy horsehair comma hanging off the back of the crest
+      const pr = o.plumeRot || 0, pv = [-w * 0.2, -h - ch * 0.7];
+      g.save(); g.translate(pv[0], pv[1]); g.rotate(pr); g.translate(-pv[0], -pv[1]);
       const plume = c => S.addBlob(c, [[-w * 0.08, -h - ch * 0.98], [-w * 0.5, -h - ch * 0.98], [-w * 0.8 + sw * 2, -h * 0.82], [-w * 0.74 + sw * 4, -h * 0.34], [-w * 0.6 + sw * 2, -h * 0.62], [-w * 0.42, -h * 0.92], [-w * 0.2, -h - ch * 0.62]], 0.5);
       S.cel(g, plume, cloth[0], cloth[1], 8 * LX, 6);
       line(g, [[-w * 0.4, -h - ch * 0.8], [-w * 0.64 + sw * 2, -h * 0.9], [-w * 0.7 + sw * 3, -h * 0.55]], C.shade(cloth[0], 0.2), 3, 0.5);
+      g.restore();
       // crest: a tall fluted fan of plate running front to back over the dome, scalloped top edge
       const cw2 = w * 0.36, cb = -h * 0.9, ctop = -h - ch;
       const fin = c => {
@@ -304,8 +319,9 @@
     }
     // the 404 knight's scratch: one jagged gash on the left of the helm
     if (o.variant === 'k404') {
+      // always on SCREEN-LEFT of the helm (the thumbnail side), even when the rig mirrors: x is flipped by LX
       const sx = -w * 0.3, syy = -h * 0.82;
-      const pts = [[sx - 10, syy - 4], [sx - 2, syy + 10], [sx - 8, syy + 16], [sx + 6, syy + 34], [sx + 2, syy + 40], [sx + 12, syy + 54]];
+      const pts = [[sx - 10, syy - 4], [sx - 2, syy + 10], [sx - 8, syy + 16], [sx + 6, syy + 34], [sx + 2, syy + 40], [sx + 12, syy + 54]].map(p => [p[0] * LX, p[1]]);
       S.strip(g, pts.map(p => [p[0] + 1.5 * LX, p[1] + 1.5]), u => 5.2 * Math.sin(Math.PI * clamp(u * 0.9 + 0.05)) ** 0.6, P.light);
       S.strip(g, pts, u => 4.2 * Math.sin(Math.PI * clamp(u * 0.9 + 0.05)) ** 0.6, '#2A2C31');
     }
@@ -333,7 +349,6 @@
     // langets (metal strips) under the head
     g.save(); g.translate(p1[0], p1[1]); g.rotate(a);
     plate(g, c => S.addRoundRect(c, -76, -hw * 0.6, 50, hw * 1.2, 4), { sd: 2, ld: 1.5 });
-    rivet(g, -62, 0, 2.8); rivet(g, -42, 0, 2.8);
     // the head: a big block across the haft, banded faces
     const hl = 66, hh = 124;
     const head = c => S.addRoundRect(c, -hl * 0.55, -hh / 2, hl, hh, 12);
@@ -344,7 +359,6 @@
     // collar
     flat(g, c => S.addRoundRect(c, -hl * 0.55 - 4, -10, hl + 8, 20, 6), P.shade);
     flat(g, c => S.addRoundRect(c, -hl * 0.55 - 4, -10, hl + 8, 4, 2), P.light);
-    rivet(g, -hl * 0.05, 0, 3.6);
     g.restore();
     // pommel knob
     plate(g, c => c.arc(p0[0], p0[1], 11, 0, TAU), { sd: 3, ld: 2 });
@@ -427,7 +441,6 @@
     }
     g.restore();
     // rim rivets
-    for (const [x, y] of [[-w * 0.4, -h * 0.43], [w * 0.4, -h * 0.43], [-w * 0.44, h * 0.02], [w * 0.44, h * 0.02], [0, h * 0.44]]) rivet(g, x, y, 3.6);
     g.restore();
   }
 
@@ -468,9 +481,39 @@
     flat(g, k => k.rect(w * 0.28, -h / 2, 5, h), P.leather);
     // label plate (never mirrored)
     g.save(); g.scale(LX, 1);
-    S.roundRect(g, -w * 0.36, -h * 0.34, w * 0.62, h * 0.5, 3, COL.bookLabel);
-    S.label(g, 'PROTOCOL', -w * 0.05, -h * 0.22, Math.max(5, w * 0.11), { color: COL.ink, weight: 900 });
-    S.label(g, '404', -w * 0.05, -h * 0.02, w * 0.27, { color: '#8E1F2E', weight: 900 });
+    drawBookLabel(g, -w * 0.05, -h * 0.09, w * 0.62, h * 0.5);
+    g.restore();
+    g.restore();
+  }
+
+  // the PROTOCOL 404 label plate, centred at (cx, cy). The brand word is fitted to the plate with measureText; when it
+  // would be smaller than ~6 screen px only "404" is drawn (a clipped brand word reads as a bug).
+  function drawBookLabel(g, cx, cy, pw, ph) {
+    S.roundRect(g, cx - pw / 2, cy - ph / 2, pw, ph, 3, COL.bookLabel);
+    const m = g.getTransform(), sc = Math.hypot(m.a, m.b) || 1;
+    g.save(); g.font = '900 10px Nunito'; const tw = g.measureText('PROTOCOL').width; g.restore();
+    const fs = Math.min(pw * 0.18, (pw * 0.84) / tw * 10);
+    if (fs * sc >= 6) {
+      S.label(g, 'PROTOCOL', cx, cy - ph * 0.24, fs, { color: COL.ink, weight: 900 });
+      S.label(g, '404', cx, cy + ph * 0.14, Math.min(pw * 0.42, ph * 0.5), { color: '#8E1F2E', weight: 900 });
+    } else S.label(g, '404', cx, cy + ph * 0.02, Math.min(pw * 0.44, ph * 0.62), { color: '#8E1F2E', weight: 900 });
+  }
+
+  // the notebook held OPEN toward the helm: we see the outside (two covers in a shallow V, spine in the middle), the
+  // page block peeks over the top edge where the quill writes, the label is on the cover facing the camera.
+  function drawOpenBook(g, c, r, o = {}) {
+    const w = o.w || 92, h = o.h || 70;
+    g.save(); g.translate(c[0], c[1]); g.rotate(r);
+    // pages (seen from above the covers)
+    flat(g, k => { k.moveTo(-w * 0.47, -h / 2 + 2); k.quadraticCurveTo(-w * 0.22, -h / 2 - 12, 0, -h / 2 - 2); k.quadraticCurveTo(w * 0.22, -h / 2 - 12, w * 0.47, -h / 2 + 2); k.lineTo(w * 0.47, -h / 2 + 8); k.lineTo(-w * 0.47, -h / 2 + 8); k.closePath(); }, COL.paper);
+    line(g, [[-w * 0.4, -h / 2 - 2], [-w * 0.06, -h / 2 - 5]], COL.paperLine, 1.2);
+    line(g, [[w * 0.06, -h / 2 - 5], [w * 0.4, -h / 2 - 2]], COL.paperLine, 1.2);
+    // covers: back cover (screen-left, a touch darker, foreshortened) and front cover (screen-right, faces camera)
+    S.cel(g, k => { k.moveTo(-2, -h / 2); k.lineTo(-w * 0.48, -h / 2 + 4); k.lineTo(-w * 0.46, h / 2 - 2); k.lineTo(-2, h / 2); k.closePath(); }, COL.bookShade, C.shade(COL.bookShade, -0.25), 3 * LX, 3);
+    S.cel(g, k => { k.moveTo(2, -h / 2); k.lineTo(w * 0.5, -h / 2 + 3); k.lineTo(w * 0.49, h / 2 - 1); k.lineTo(2, h / 2); k.closePath(); }, COL.book, COL.bookShade, 4 * LX, 4);
+    flat(g, k => S.addRoundRect(k, -4, -h / 2 - 1, 8, h + 2, 3), C.shade(COL.bookShade, -0.3)); // spine
+    g.save(); g.scale(LX, 1);
+    drawBookLabel(g, LX * w * 0.26, 2, w * 0.36, h * 0.46);
     g.restore();
     g.restore();
   }
@@ -528,11 +571,11 @@
   function drawLeg(g, R, T, L) {
     const hip = L.hip, knee = L.knee, ank = L.ank;
     // under-mail
-    plate(g, c => S.addLimb(c, [hip, knee, ank], [T.legW * 0.82, T.legW * 0.7, T.legW * 0.55]), { base: P.mail, shadeCol: P.mailShade, sd: 4, light: false });
-    // greave (shin)
-    plate(g, capPath(knee, ank, T.legW * 0.84, T.legW * 0.66), { sd: 5, ld: 2 });
+    plate(g, c => S.addLimb(c, [hip, knee, ank], [T.legW * 0.86, T.legW * 0.78, T.legW * 0.6]), { base: P.mail, shadeCol: P.mailShade, sd: 4, light: false });
+    // greave (shin): one fat rounded capsule
+    plate(g, capPath(knee, ank, T.legW * 0.92, T.legW * 0.74), { sd: 5, ld: 2 });
     // cuisse (thigh)
-    plate(g, capPath(hip, lp(hip, knee, 0.92), T.legW, T.legW * 0.86), { sd: 6, ld: 2.4 });
+    plate(g, capPath(hip, lp(hip, knee, 0.97), T.legW, T.legW * 0.9), { sd: 6, ld: 2.4 });
     // sabaton (pointed toe), along the ground
     const fa = L.toe || 0;
     g.save(); g.translate(ank[0], ank[1]); g.rotate(fa);
@@ -540,15 +583,13 @@
     const shoe = c => { c.moveTo(-fl * 0.32, -fh * 0.55); c.quadraticCurveTo(fl * 0.2, -fh * 0.8, fl * 0.5, -fh * 0.25); c.quadraticCurveTo(fl * 0.68, -fh * 0.1, fl * 0.74, fh * 0.42); c.quadraticCurveTo(fl * 0.3, fh * 0.62, -fl * 0.3, fh * 0.58); c.quadraticCurveTo(-fl * 0.42, fh * 0.1, -fl * 0.32, -fh * 0.55); c.closePath(); };
     plate(g, shoe, { sd: 5, ld: 2 });
     // lames across the instep
-    for (let i = 0; i < 3; i++) { const x = fl * (0.02 + i * 0.13); line(g, [[x, -fh * 0.55 + i * 3], [x + fl * 0.06, fh * 0.5]], P.shade, 2); }
+    line(g, [[fl * 0.1, -fh * 0.5], [fl * 0.16, fh * 0.5]], P.shade, 2);
     g.restore();
     // poleyn (knee cop) with a fan wing on the outer side
     const ka = ang(hip, knee);
     g.save(); g.translate(knee[0], knee[1]); g.rotate(ka - Math.PI / 2);
-    const r = T.legW * 0.47;
-    plate(g, c => c.ellipse(r * 0.75, 0, r * 0.62, r * 0.85, 0, 0, TAU), { sd: 3, ld: 1.6 });
-    plate(g, c => c.arc(0, 0, r, 0, TAU), { sd: 4, ld: 2 });
-    rivet(g, 0, 0, r * 0.2);
+    const r = T.legW * 0.34;
+    plate(g, c => c.arc(0, 0, r, 0, TAU), { sd: 3, ld: 1.6 });
     g.restore();
   }
 
@@ -564,7 +605,6 @@
       g.save(); g.translate(el[0], el[1]); g.rotate(ea);
       const r = T.armW * 0.5;
       plate(g, c => c.arc(0, 0, r * 0.86, 0, TAU), { sd: 3.5, ld: 1.8 });
-      rivet(g, 0, 0, r * 0.18);
       g.restore();
     }
     if (part !== 'arm') drawHand(g, wr, A.handAng, T, A.shape, A.thumb);
@@ -578,8 +618,7 @@
     const ox = near ? -r * 0.1 : r * 0.08;
     // two lames under the cap (lowest first): curved bands hugging the arm
     const band = (y0, ww, hh) => c => { c.moveTo(ox - ww, y0); c.quadraticCurveTo(ox, y0 + r * 0.26, ox + ww, y0); c.lineTo(ox + ww * 0.94, y0 + hh); c.quadraticCurveTo(ox, y0 + hh + r * 0.28, ox - ww * 0.94, y0 + hh); c.closePath(); };
-    plate(g, band(r * 0.5, r * 0.84, r * 0.3), { sd: 3, ld: 1.8 });
-    plate(g, band(r * 0.22, r * 0.96, r * 0.32), { sd: 3, ld: 1.8 });
+    plate(g, band(r * 0.26, r * 0.92, r * 0.36), { sd: 3, ld: 1.8 }); // one lame only
     // the cap: a rounded dome over the shoulder
     const cap = c => { c.moveTo(ox - r * 1.06, r * 0.24); c.ellipse(ox, r * 0.24, r * 1.06, r * 0.98, 0, Math.PI, TAU); c.quadraticCurveTo(ox, r * 0.56, ox - r * 1.06, r * 0.24); c.closePath(); };
     plate(g, cap, { sd: 6, ld: 2.8 });
@@ -598,13 +637,12 @@
     const fy0 = -26, fy1 = 26;
     const fauld = c => S.addRoundPoly(c, [[-ww * 0.54, fy0], [ww * 0.54, fy0], [ww * 0.64, fy1], [-ww * 0.64, fy1]], [6, 6, 8, 8]);
     plate(g, fauld, { sd: 5, ld: 2 });
-    for (let i = 1; i <= 2; i++) { const y = fy0 + i * (fy1 - fy0) / 3; line(g, [[-ww * 0.6, y], [ww * 0.6, y]], P.shade, 2.2); }
+    for (let i = 1; i <= 1; i++) { const y = fy0 + (fy1 - fy0) / 2; line(g, [[-ww * 0.6, y], [ww * 0.6, y]], P.shade, 2.2); }
     for (const sd of [-1, 1]) { // tassets hang over each thigh
       const tx = sd * ww * 0.3 + (sd > 0 ? 4 : 0), rr = R.tasset[sd > 0 ? 1 : 0];
       g.save(); g.translate(tx, fy1 - 6); g.rotate(rr);
       const tw2 = ww * (sd < 0 ? 0.5 : 0.44);
       plate(g, c => S.addRoundPoly(c, [[-tw2 / 2, 0], [tw2 / 2, 0], [tw2 / 2 + 3, 30], [0, 36], [-tw2 / 2 - 3, 30]], [4, 4, 8, 6, 8]), { sd: 4, ld: 2 });
-      line(g, [[-tw2 / 2 + 2, 13], [tw2 / 2 - 2, 13]], P.shade, 2);
       g.restore();
     }
     // breastplate
@@ -616,8 +654,7 @@
     plate(g, breast, { sd: 9, ld: 3 });
     g.save(); g.beginPath(); breast(g); g.clip();
     // gothic fluting: fan of lines from the waist
-    for (let i = -2; i <= 2; i++) {
-      if (i === 0) continue;
+    for (const i of [-1, 1]) {
       const x0 = fx * 0.6 + i * ww * 0.13, x1 = fx + i * cw * 0.2;
       line(g, [[x0, by0 - 6], [x1, -tw * 0.72]], P.shade, 2.2, 0);
       line(g, [[x0 - 2.5 * LX, by0 - 6], [x1 - 2.5 * LX, -tw * 0.72]], P.light, 1.4, 0);
@@ -629,7 +666,6 @@
     // plackart (ogee point up the belly)
     const pk = c => { c.moveTo(-ww * 0.46, by0 + 2); c.lineTo(ww * 0.46, by0 + 2); c.bezierCurveTo(ww * 0.46, -tw * 0.22, fx * 0.7 + 10, -tw * 0.32, fx * 0.7, -tw * 0.47); c.bezierCurveTo(fx * 0.7 - 10, -tw * 0.32, -ww * 0.46, -tw * 0.22, -ww * 0.46, by0 + 2); c.closePath(); };
     plate(g, pk, { sd: 5, ld: 2.2 });
-    rivet(g, fx * 0.7, -tw * 0.42, 3);
     // gorget (collar lames under the helm)
     const gw = T.helmW * 0.42;
     plate(g, c => S.addRoundRect(c, -gw, -tw - 2, gw * 2, 22, 9), { sd: 4, ld: 2 });
@@ -696,7 +732,7 @@
       feet: { near: { p: [-T.stance, -T.ankle], toe: 0 }, far: { p: [T.stance * 0.9, -T.ankle], toe: 0 } },
       arms: { near: null, far: null },
       props: [], fx: { sweat: 0, lines: 0, impact: 0, impactAt: null },
-      tasset: [0, 0], sashSwing: 0, capeSwing: 0, lanternSwing: 0, lantern: null,
+      tasset: [0, 0], sashSwing: 0, capeSwing: 0, lanternSwing: 0, lantern: null, plumeRot: 0, hipOff: null,
     };
     const breath = Math.sin(t * TAU * 0.45);
     R.hipY += breath * 1.2;
@@ -719,11 +755,15 @@
       };
       const dirm = pose === 'walk' ? 1 : -1; // backaway: the cycle runs backwards (feet move toward the facing)
       const ln = leg(dirm > 0 ? ph : 1 - ph), lf = leg(dirm > 0 ? ph + 0.5 : 0.5 - ph);
-      const lane = T.legX * (pose === 'walk' ? 0.45 : 0.9); // walking feet track closer to the centre line
+      const lane = T.legX * (pose === 'walk' ? 0.35 : 0.9); // walking feet track closer to the centre line
       R.feet.near.p = [-lane + ln.x, -T.ankle + ln.y]; R.feet.near.toe = ln.toe;
       R.feet.far.p = [lane + lf.x, -T.ankle + lf.y]; R.feet.far.toe = lf.toe;
+      // the hips sit half-way over their own foot along the 3/4 axis: hip order == foot order, so the legs never cross
+      if (pose === 'walk') R.hipOff = { near: 0.5 * R.feet.near.p[0], far: 0.5 * R.feet.far.p[0] };
       const bob = (1 - Math.cos(4 * Math.PI * ph)) / 2;
-      R.hipY = T.hip - 7 + bob * 6;
+      const bobD = (1 - Math.cos(4 * Math.PI * (ph - 0.06))) / 2; // the helm follows the body ~1-2 frames late
+      R.hipY = T.hip - 4 + bob * 5;
+      R.helmDY = (bob - bobD) * 9;
       R.lean = 0.05 + 0.015 * Math.sin(4 * Math.PI * ph);
       R.tilt = 0.03 * Math.sin(TAU * ph);
       R.tasset = [ln.x / A * -0.12, lf.x / A * -0.12];
@@ -753,11 +793,12 @@
         }
       } else if (type === 'spear') {
         if (pose === 'walk') {
-          const hand = add(sh('near'), [-26, T.armU + 8]);
-          const a = -Math.PI / 2 + 0.1;
+          // the spear sways 2-3 degrees against the hips, the carrying hand rides the step, the far arm swings
+          const hand = add(sh('near'), [-26 + 4 * sw, T.armU + 8 - 3 * Math.abs(sw)]);
+          const a = -Math.PI / 2 + 0.1 - 0.045 * sw;
           R.arms.near = arm('near', hand, { handAng: Math.PI, bend: -1 });
           R.props.push({ kind: 'spear', p0: polar(hand, a, -T.hip * 0.62), a, z: 9.5 });
-          R.arms.far = hang('far'); R.arms.far.wr = add(R.arms.far.wr, [14 * sw, -2 * Math.abs(sw)]);
+          R.arms.far = hang('far'); R.arms.far.wr = add(R.arms.far.wr, [26 * sw, -5 * Math.abs(sw)]);
         } else {
           // backaway: spear pointed at the threat, shaky, both hands
           const hn = torsoPt([-T.shX * 0.3, -T.torso * 0.35]), hf = torsoPt([T.shX * 1.6, -T.torso * 0.5]);
@@ -789,22 +830,23 @@
       R.feet.near.p = [-T.stance * 1.5, -T.ankle]; R.feet.far.p = [T.stance * 1.5, -T.ankle];
       R.hipY = T.hip - 18;
       if (type === 'hammer') {
-        R.lean = -0.1; R.tilt = 0.14;
-        const hn = torsoPt([-T.shX * 0.5, -T.torso * 0.9]), a = -Math.PI * 0.6;
-        const hf = polar(hn, a, 30);
-        R.props.push({ kind: 'hammer', p0: polar(hn, a, -26), a, z: 6.5 });
-        R.arms.near = arm('near', hn, { handAng: a + Math.PI / 2, bend: 1 });
-        R.arms.far = arm('far', hf, { handAng: a + Math.PI / 2, bend: 1, z: 'front' });
+        // shoulders the maul: haft over the near shoulder, low hand at the belly near the pommel, high hand at the collar
+        R.lean = -0.08; R.tilt = 0.12;
+        const hn = torsoPt([T.shX * 0.55, -T.torso * 0.34]), a = -Math.PI * 0.9;
+        const hf = polar(hn, a, 74);
+        R.props.push({ kind: 'hammer', p0: polar(hn, a, -72), a, z: 6.5 });
+        R.arms.near = arm('near', hf, { handAng: a + Math.PI / 2, bend: 1 });
+        R.arms.far = arm('far', hn, { handAng: a + Math.PI / 2, bend: 1, z: 'front' });
       } else if (type === 'spear') {
         R.lean = 0.1; R.tilt = 0.06; R.feet.near.p = [-T.stance * 2.2, -T.ankle]; R.feet.far.p = [T.stance * 1.9, -T.ankle];
-        const hn = torsoPt([-T.shX * 0.4, -T.torso * 0.28]), a = -0.62;
-        const hf = polar(hn, a, 92);
+        const hn = torsoPt([-T.shX * 0.4, -T.torso * 0.28]), a = -0.48;
+        const hf = polar(hn, a, 112);
         R.props.push({ kind: 'spear', p0: polar(hn, a, -120), a, z: 8.5 });
         R.arms.near = arm('near', hn, { handAng: a + Math.PI / 2, bend: 1 });
-        R.arms.far = arm('far', hf, { handAng: a + Math.PI / 2, bend: 1, z: 'front' });
+        R.arms.far = arm('far', hf, { handAng: a + Math.PI / 2, bend: -1, z: 'front' }); // elbow under the haft
       } else {
         // shield up in front, lantern held high beside the helm: searching
-        R.lean = 0.06; R.tilt = 0.16;
+        R.lean = 0.06; R.tilt = 0.16; R.plumeRot = -0.2;
         const sc = torsoPt([T.shX * 1.05, -T.torso * 0.36]);
         R.props.push({ kind: 'shield', c: sc, r: -0.06, z: 8.5 });
         R.arms.far = arm('far', add(sc, [-8, -12]), { z: 'back' });
@@ -824,12 +866,19 @@
       R.fx.impact = k >= 0.48 && k < 0.66 ? 1 - (k - 0.48) / 0.18 : 0;
       R.fx.impactAt = K;
       const listen = E.easeInOutCubic(clamp((k - 0.62) / 0.3));
-      R.lean = 0.14 + 0.04 * (1 - up); R.tilt = 0.06 + 0.22 * listen; R.hipY = T.hip - 6;
-      R.feet.near.p = [-T.stance * 1.2, -T.ankle]; R.feet.far.p = [T.stance * 1.4, -T.ankle];
+      // acting: wind-up = lean back + helm up, weight on the back foot; contact = lean in + squash;
+      // listen = helm tilted toward the lid, leaning in, back heel up (on tiptoe)
+      const wu = k < 0.5 ? up : 0, hit = Math.max(0, 1 - Math.abs(k - 0.52) / 0.14);
+      R.lean = -0.17 * wu + 0.105 * hit * (1 - listen) + 0.13 * listen;
+      R.tilt = -0.2 * wu + 0.04 * hit + 0.3 * listen;
+      R.hipY = T.hip - 6 - 9 * hit * (1 - listen) + 4 * listen;
+      R.hipX = -14 * wu + 4 * hit + 6 * listen;
+      R.feet.near.p = [-T.stance * 1.2, -T.ankle - 11 * listen]; R.feet.near.toe = 0.42 * listen;
+      R.feet.far.p = [T.stance * 1.4, -T.ankle];
       if (type === 'hammer') {
         // choked-up grip in front of the chest; the haft pivots in the hands (a wrist tap) so the maul head's lower
         // face lands on K. The pommel end sticks out behind the knight.
-        const hh2 = 62, aC = 0.08, gripToHead = 130, gripToPommel = 120;
+        const hh2 = 62, aC = 0.08 + 0.12 * listen, gripToHead = 130, gripToPommel = 120;
         const headC = add(K, [hh2 * Math.sin(aC), -hh2 * Math.cos(aC)]);
         const grip = add(polar(headC, aC + Math.PI, gripToHead), [-6 * up, -24 * up]);
         const a = aC - up * 1.0;
@@ -858,15 +907,15 @@
     } else if (pose === 'notebook') {
       // the notebook held up in front of the chest (cover toward us), quill scribbling over its top edge
       R.tilt = 0.24; R.nod = 0.6; R.lean = 0.06;
-      const nb = torsoPt([T.shX * 0.7 + 36, -T.torso * 0.6]);
-      R.props.push({ kind: 'notebookHeld', c: nb, r: -0.08, z: 8.6 });
-      R.arms.far = arm('far', add(nb, [30, 22]), { handAng: -Math.PI / 2 + 0.3, bend: 1, shape: 'fist', z: 'back', thumb: -1 });
+      const nb = torsoPt([T.shX * 0.7 + 40, -T.torso * 0.56]);
+      R.props.push({ kind: 'notebookOpen', c: nb, r: -0.08, z: 8.6 });
+      R.arms.far = arm('far', add(nb, [40, 18]), { handAng: -Math.PI / 2 + 0.3, bend: 1, shape: 'fist', z: 'back', thumb: -1 });
       const wq = 0.5 + 0.5 * Math.sin(t * 9), wq2 = Math.sin(t * 23) * 2;
-      const pen = add(nb, [-16 + wq * 22, -42 + wq2]);
-      R.arms.near = arm('near', add(pen, [-8, -22]), { handAng: 0.9, bend: 1, shape: 'fist', z: 'front' });
+      const pen = add(nb, [-26 + wq * 30, -40 + wq2]);
+      R.arms.near = arm('near', add(pen, [-12, -10]), { handAng: 0.9, bend: 1, shape: 'fist', z: 'front' });
       R.props.push({ kind: 'quillHeld', p: pen, a: -Math.PI * 0.6, z: 10.5 });
       if (type === 'hammer') { const head = [-T.stance * 3.1, -36], p0 = polar(head, -Math.PI / 2 + 0.38, 250); R.props.push({ kind: 'hammer', p0, a: ang(p0, head), z: 4.5 }); }
-      if (type === 'spear') R.props.push({ kind: 'spear', p0: [-T.stance * 2.4, -2], a: -Math.PI / 2 + 0.16, z: 0.5 });
+      if (type === 'spear') R.props.push({ kind: 'spear', p0: [-T.stance * 5.4, -2], a: -Math.PI / 2 + 0.16, z: 0.5 }); // leans on the back shoulder, point clear of the helm
       if (type === 'shield') R.props.push({ kind: 'shield', c: torsoPt([-T.shX * 0.55, -T.torso * 0.62]), r: -0.18, z: 0.5 });
       R.noBeltKit = true;
     } else if (pose === 'peek') {
@@ -877,10 +926,10 @@
       if (type === 'hammer') {
         // maul stood on its head in front, both gauntlets on the haft (guard pose), pommel up under the helm
         const head = [72, -64], a = Math.PI / 2 - 0.24; // pommel -> head direction (pommel leans toward the body)
-        const p0 = polar(head, a + Math.PI, 250);
-        R.props.push({ kind: 'hammer', p0, a, z: 8.5 });
-        R.arms.far = arm('far', polar(p0, a, 100 + breath), { handAng: Math.PI + 0.1, bend: 1, z: 'front', thumb: -1 });
-        R.arms.near = arm('near', polar(p0, a, 60 + breath), { handAng: Math.PI + 0.05, bend: 1, thumb: -1 });
+        const p0 = polar(head, a + Math.PI, 218);
+        R.props.push({ kind: 'hammer', p0, a, len: 218, z: 8.5 });
+        R.arms.far = arm('far', polar(p0, a, 68 + breath), { handAng: Math.PI + 0.1, bend: 1, z: 'front', thumb: -1 });
+        R.arms.near = arm('near', polar(p0, a, 30 + breath), { handAng: Math.PI + 0.05, bend: 1, thumb: -1 });
       } else if (type === 'spear') {
         const hand = add(sh('near'), [-34, T.armU + 6]);
         R.arms.near = arm('near', hand, { handAng: Math.PI, bend: -1 });
@@ -908,7 +957,7 @@
     R.neck = torsoPt([0, -T.torso]);
     for (const side of ['near', 'far']) {
       const F = R.feet[side];
-      const hp = add(R.hipP, rot([side === 'near' ? -T.legX : T.legX * 0.85, 0], R.lean * 0.4));
+      const hp = R.hipOff ? add(R.hipP, [R.hipOff[side], 0]) : add(R.hipP, rot([side === 'near' ? -T.legX : T.legX * 0.85, 0], R.lean * 0.4));
       const [knee, ank] = ik(hp, F.p, T.thigh, T.shin, 1);
       F.hip = hp; F.knee = knee; F.ank = ank;
       const A = R.arms[side];
@@ -928,6 +977,7 @@
     else if (pr.kind === 'spear') drawSpear(g, pr.p0, pr.a, { t, variant: R.variant, len: R.spearLen });
     else if (pr.kind === 'shield') drawShield(g, pr.c, pr.r, { variant: R.variant, w: T.name === 'shield' ? 132 : 112, h: T.name === 'shield' ? 164 : 140 });
     else if (pr.kind === 'notebookHeld') drawNotebook(g, pr.c, pr.r, { w: 62, h: 78 });
+    else if (pr.kind === 'notebookOpen') drawOpenBook(g, pr.c, pr.r, { w: 96, h: 72 });
     else if (pr.kind === 'quillHeld') drawQuill(g, pr.p, pr.a, { len: 62 });
     else if (pr.kind === 'lanternFloor') { R.lanternPt = drawLantern(g, add(pr.p, [0, -80]), 0, { lit: R.lanternLit }); }
   }
@@ -942,6 +992,7 @@
     if (pr.kind === 'hammer') { const p1 = polar(pr.p0, pr.a, pr.len || 250); return c => { S.addCapsule(c, pr.p0[0], pr.p0[1], p1[0], p1[1], 15, 15); c.moveTo(p1[0] + 46, p1[1]); c.arc(p1[0], p1[1], 46, 0, TAU); }; }
     if (pr.kind === 'spear') { const p1 = polar(pr.p0, pr.a, pr.len || 540); return c => S.addCapsule(c, pr.p0[0], pr.p0[1], p1[0], p1[1], 10, 10); }
     if (pr.kind === 'shield') { const w = T.name === 'shield' ? 132 : 112, h = T.name === 'shield' ? 164 : 140; return c => { c.save(); c.translate(pr.c[0], pr.c[1]); c.rotate(pr.r); shieldPath(w, h)(c); c.restore(); }; }
+    if (pr.kind === 'notebookOpen') return c => { c.save(); c.translate(pr.c[0], pr.c[1]); c.rotate(pr.r); S.addRoundRect(c, -48, -36, 96, 72, 4); c.restore(); };
     if (pr.kind === 'notebookHeld') return c => { c.save(); c.translate(pr.c[0], pr.c[1]); c.rotate(pr.r); S.addRoundRect(c, -31, -39, 62, 78, 5); c.restore(); };
     return null;
   }
@@ -964,7 +1015,7 @@
     push(7, gg => {
       gg.save(); helmXf(gg);
       occl(gg, c => S.addRoundRect(c, -hw * 0.5, -hh, hw, hh, hw * 0.2), 8, 0.36);
-      drawHelmLocal(gg, T, { nod: R.nod, variant: R.variant, t }); gg.restore();
+      drawHelmLocal(gg, T, { nod: R.nod, variant: R.variant, t, plumeRot: R.plumeRot }); gg.restore();
     });
     push(9, gg => { if (R.arms.far && R.arms.far.z === 'front') { occl(gg, armSil(T, R.arms.far), 6); drawArm(gg, R, T, R.arms.far); } });
     push(10, gg => {
@@ -1213,7 +1264,7 @@
   }
 
   window.KNIGHT = {
-    version: '1.0', W, H: HU, TYPES, COL, POSES,
+    version: '1.1', W, H: HU, TYPES, COL, POSES,
     draw, drawHelm, drawProp, solve: solvePublic,
     stride: type => TYPES[type || 'hammer'].strideA * 4,
     knockAt: type => [TYPES[type || 'hammer'].knockDX, -150],
