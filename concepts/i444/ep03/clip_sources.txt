@@ -46,3 +46,5 @@ s7_06_spree | 2G_HMpEcjFU | Scream 7 6/10
 s7_07_hunted | XoeBItnqaso | Scream 7 7/10
 s7_08_two_gf | VNAkvbt0MGk | Scream 7 8/10
 # also look for official Scream 7 Movieclips 9/10 and 10/10 (reveal/ending) and official trailers of all 7 films (no countdown cards)
+s6_opening | LfH6L-TnouE | Scream VI opening, Jason Carvey + real Ghostface (JoBlo Movie Clips, studio-licensed clip; end card from 299 s)
+# Scream 4 (age-gated reveal not used): stillclips/s4_still_*.mp4 = 12 s loops of official TMDB stills (jill 8rG475nI, jill_bed t1Y1nQ3D, charlie pBeEPUg2, gf uPP2ZUmJ, trio dsrp8h7k)
