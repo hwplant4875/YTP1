@@ -1,13 +1,12 @@
-# EP03 v2 Every Ghostface Ranked: builds edl_v2.json from voice_v4 (cold open, rules, #16..#1, outro)
-# Cuts are anchored to whisper word onsets (voice_v4/words.json; the ElevenLabs alignment drifts up to 0.7 s near pauses).
+# EP03 v2 Every Ghostface Ranked: builds edl_v2.json from voice_v3 (cold open, rules, #16..#1, outro)
+# Cuts are anchored to whisper word onsets (voice_v3/words.json; the ElevenLabs alignment drifts up to 0.7 s near pauses).
 # Every action word in the cold open lands on the frame where it happens (checked at 10 fps on the 360p copies).
-# Each entry: rank card, stat card (4 bars, then the % stamps as the number is spoken), then the tier line (voice_v4) over the
-# TierMaker board: the face leaves the tray under the board and slams into its row on the tier name.
-# render: python render_v2.py edl_v2.json <clips_dir> voice_v4 <music.mp3> <out.mp4>
+# Each entry: rank card, then the survival-rate card (4 bars, then the % stamps as the number is spoken) to the end of the entry.
+# User 10/26 14:18: the tier list (board, tier lines, final board) is gone; the survival-rate card is the main graphic.
+# render: python render_v2.py edl_v2.json <clips_dir> voice_v3 <music.mp3> <out.mp4>
 import json, re, os
 D = os.path.dirname(os.path.abspath(__file__)) + '/'
-W = json.load(open(D + 'voice_v4/words.json'))
-TL = json.load(open(D + 'voice_v4/tier_lines.json'))   # {seg: {start, hit}} of the appended tier line
+W = json.load(open(D + 'voice_v3/words.json'))
 LEAD = 0.08
 def norm(s): return re.sub(r"[^a-z0-9']", '', s.lower())
 def at(seg, phrase):  # onset of the first word of phrase (whisper spelling) in seg
@@ -16,7 +15,7 @@ def at(seg, phrase):  # onset of the first word of phrase (whisper spelling) in 
         if ws[i:i + len(ph)] == ph: return W[seg][i][0]
     raise KeyError((seg, phrase))
 def T(seg, x): return x if isinstance(x, (int, float)) else round(max(0, at(seg, x) - LEAD), 3)
-def vdur(seg): return round(json.load(open(D + f'voice_v4/{seg}.json'))['character_end_times_seconds'][-1], 3)
+def vdur(seg): return round(json.load(open(D + f'voice_v3/{seg}.json'))['character_end_times_seconds'][-1], 3)
 def num_onset(seg):  # the spoken % right after "Survival rate"
     ws = W[seg]; i = max(k for k, w in enumerate(ws) if norm(w[2]) == 'survival'); return ws[i + 2][0]
 STATS = json.load(open(D + 'stats_v2.json')) if os.path.exists(D + 'stats_v2.json') else {}
@@ -28,36 +27,23 @@ NAME = {'carvey': 'Jason Carvey', 'karl': 'Karl Gibbs', 'mrs_loomis': 'Mrs. Loom
         'mickey': 'Mickey Altieri', 'amber': 'Amber Freeman', 'billy': 'Billy Loomis', 'wayne': 'Wayne Bailey', 'jill': 'Jill Roberts',
         'roman': 'Roman Bridger'}
 def short(k): return 'MRS. LOOMIS' if k == 'mrs_loomis' else NAME[k].split()[-1 if k == 'carvey' else 0].upper()
-def _rec(k): return {'key': k, 'name': NAME[k], 'short': short(k), 'pct': PCT[k], 'tier': tier(PCT[k]), 'tile': f'tiles/{k}.png'}
 def film_of(k): return KS.get(k, {}).get('film', '')
-# TierMaker-style board, row names picked by the user 10/26 (letter, phrase, max survival %)
-TIERS = [['S', 'Slaughtered', 25], ['A', 'Almost Dead', 40], ['B', 'Better Run', 50], ['C', 'Close Call', 60], ['D', "Don't Worry", 80],
-         ['E', 'Easy', 101]]
-def tier(p): return next(f'{l} {ph.upper()}' for l, ph, mx in TIERS if p <= mx)
 def stats(k):
     s = KS.get(k, {})
     return {n: s.get(f, 5) for n, f in (('STRENGTH', 'strength'), ('INTELLIGENCE', 'intelligence'), ('KILL COUNT', 'kill_count'),
                                        ('DECEPTION', 'deception'))}
-PLACED = []
-REC = {k: _rec(k) for k in PCT}
-POOL = sorted(REC.values(), key=lambda r: r['short'])   # the unranked tray under the board, alphabetical
 SFX_GAIN = {'whoosh': -16, 'fill': -20, 'stamp': -12, 'slam': -6}
 def sec(voice, shots, rank=None, key=None, card_at=None, extra=(), pad=0.5, clip_db=-99):
     shots = [[T(voice, s[0]), *s[1:]] for s in shots]
     S = {'voice': voice, 'pad': pad, 'clip_audio_db': clip_db, 'shots': shots, 'overlays': [], 'sfx': []}
     if rank: S['overlays'].append(['rank', rank, 0.0, 2.9])
-    if key:  # stat card from card_at (after the death beat) until the tier line, then the board for the tier line + pad
-        S['pad'] = 0.7; a = T(voice, card_at); tp = round(num_onset(voice) - 0.05 - a, 3)
-        vb = round(TL[voice]['start'] - 0.1, 3); hit = TL[voice]['hit']
+    if key:  # survival-rate card from card_at (after the death beat) to the end of the entry (voice + pad)
+        S['pad'] = 0.9; a = T(voice, card_at); tp = round(num_onset(voice) - 0.05 - a, 3)
         S['overlays'].append(['stats', {'name': NAME[key].upper(), 'tile_png': f'tiles/{key}.png', 'stats': stats(key), 'pct': PCT[key],
-                                        't_pct': tp, 'dur': round(vb - a, 3), 'film': film_of(key)}, a, vb])
-        new = REC[key]
-        S['overlays'].append(['tier', {'placed': list(PLACED), 'new': new, 'pool': POOL, 't_hit': round(hit - vb, 3)}, vb, 999])
-        PLACED.append(new)
-        # whoosh as the card slides in, a soft fill under the bars, the stamp on the spoken %, then the face's whoosh and its slam on the tier name
+                                        't_pct': tp, 'dur': round(vdur(voice) + S['pad'] - a, 3), 'film': film_of(key)}, a, 999])
+        # a soft whoosh as the card comes in, a soft fill under the bars, the stamp on the spoken %
         S['sfx'] += [[a, 'sfx/whoosh.wav', SFX_GAIN['whoosh']], [a + 0.3, 'sfx/fill.wav', SFX_GAIN['fill']],
-                     [a + tp, 'sfx/stamp.wav', SFX_GAIN['stamp']], [hit - 0.42, 'sfx/whoosh.wav', SFX_GAIN['whoosh']],
-                     [hit, 'sfx/slam.wav', SFX_GAIN['slam']]]
+                     [a + tp, 'sfx/stamp.wav', SFX_GAIN['stamp']]]
         S['card_at'] = a
     S['overlays'] += [[k, val, T(voice, x), T(voice, y)] for k, val, x, y in extra]
     return S
@@ -162,17 +148,14 @@ X.append(sec('s17', [(0, 's3_11_family', 65.3, 0.8), (2.08, 's3_11_family', 50.2
   ('even wore', 's3_12_firing', 27.0), ('bulletproof', 's3_12_firing', 26.0), ('so shooting', 's3_12_firing', 111.5), ('and it took', 's3_12_firing', 119.55), ('a bullet to', 's3_12_firing', 122.05), ('dewey', 's3_12_firing', 121.4),
   ('finally stop', 's3_12_firing', 129.95, 0.6), ('survival rate', 's3_11_family', 80)],
   [1, 'Roman Bridger', 'Scream 3 (2000)'], 'roman', 24.2))
-# outro: the full board, then the CTA over a long mask close-up
+# outro: the CTA over the mask footage
 X.append(sec('s18', [(0, 's6_opening', 186), ('and if you', 's6_subway', 167, 0.65)], pad=2.5,
   extra=[('title', ['YOUR #1?'], 'tell me', 'and if you'), ('title', ['FREDDY', '!OR PINHEAD?'], 'freddie', 999)]))
-X[-1]['overlays'].insert(0, ['tierfinal', {'placed': list(PLACED), 'highlights': [[T('s18', 'guy who lasted'), 'carvey'], [T('s18', 'one who planned'), 'roman']],
-                                         't_dim': T('s18', 'tell me')}, 0.0, T('s18', 'and if you')])
 FILM = [('h20_', 'Halloween H20 (1998)'), ('p6_', 'Jason Lives (1986)'), ('s1_', 'Scream (1996)'), ('s2_', 'Scream 2 (1997)'), ('s3_', 'Scream 3 (2000)'), ('s4_', 'Scream 4 (2011)'), ('scream4', 'Scream 4 (2011)'),
         ('s5_', 'Scream (2022)'), ('s6_', 'Scream VI (2023)'), ('s7_', 'Scream 7 (2026)')]
 def film(n): return next((v for k, v in FILM if n.startswith(k)), None)
-for S in X:  # film label per run of one film, gone once the stat card or a full-screen board takes the frame
+for S in X:  # film label per run of one film, gone once the stat card takes the frame
     end = S.pop('card_at', 999)
-    if S['voice'] == 's18': end = 0
     runs = []
     for t, n, *_ in S['shots']:
         if t >= end: break
@@ -183,7 +166,7 @@ for S in X:  # film label per run of one film, gone once the stat card or a full
         if f: S['overlays'].append(['film', f, t, min(end, runs[k + 1][1] if k + 1 < len(runs) else 999)])
 DARK = ['s7_04_walls', 's7_06_spree', 's7_09_anna_camp', 's7_10_sidney_kills', 's6_subway', 's6_ladder', 's6_core4', 's6_two_gf', 's4_02_return',
         's4_06_killcam', 's3_12_firing']
-P = {'sections': X, 'beat_style': 'board', 'tiers': TIERS,
+P = {'sections': X,
      'zoom': {**{k: 1.0 for k in ['s4_still_jill', 's4_still_jill_bed', 's4_still_charlie', 's4_still_gf', 's4_still_trio', 's4_still_charlie_party', 's4_still_charlie_close', 's4_still_gf_knife', 's4_still_jill_hospital', 's7_still_karl_unmasked', 's7_still_karl_coffee']},
               **{k: 1.08 for k in ['s1_01_like_scary', 's1_10_surprise', 's1_11_creative', 's1_12_tables', 's2_09_driving', 's2_10_blame',
                                    's2_11_mothers_love', 's2_12_intense', 's3_11_family', 's3_12_firing']}},

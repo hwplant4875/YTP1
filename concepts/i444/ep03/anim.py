@@ -68,71 +68,72 @@ def with_shadow(base, layer, xy, off=(0, 8), blur=8, alpha=190):
 def save(im, out, i): im.save(os.path.join(out, f'{i:04d}.png'), compress_level=1)
 
 # ------------------------------------------------------------------ stat card
-PX, PY, PW, PH = 1030, 150, 840, 800        # panel box in the frame (keeps x >= 1000, y 140..980)
+# User 10/26 14:18: simple and clean. No window, no coloured top line, no gloss: the right side of the frame darkens with a soft
+# shadow and the name, the four stats (flat pure-red bars) and the survival rate sit straight on it.
+SX = 840                                    # the layer covers x SX..W, full height; the shadow ramps up from its left edge
+CX = 1080 - SX                              # content left edge inside the layer (x 1080 in the frame)
+CW = 1860 - 1080                            # content width
+_SHADOW = None
+def shadow():
+    global _SHADOW
+    if _SHADOW is None:
+        x = np.arange(W - SX, dtype=np.float32); k = np.clip(x / 460.0, 0, 1); k = k * k * (3 - 2 * k)
+        a = (0.84 * 255 * k).astype(np.uint8)
+        al = np.repeat(a[None, :], H, 0); im = np.zeros((H, W - SX, 4), np.uint8); im[..., 3] = al
+        _SHADOW = Image.fromarray(im, 'RGBA')
+    return _SHADOW
 def stat_card(out, name, tile_png, stats, pct, dur, t_pct, fps=30, reveal=None, film=''):
     os.makedirs(out, exist_ok=True)
-    num = isinstance(pct, (int, float)); c = col(pct) if num else RED
-    keys = list(stats)
+    num = isinstance(pct, (int, float)); keys = list(stats)
     # bar start times: given (rules demo) or staggered, squeezed so all four are full before the % lands
     if reveal: starts = list(reveal)
     else:
         last = max(0.9, min(1.7, t_pct - 0.55)); starts = [0.32 + i * (last - 0.32) / 3 for i in range(4)]
     FILL = 0.36
-    end = max(t_pct + 0.75, starts[-1] + FILL + 0.1)
+    end = max(t_pct + 0.6, starts[-1] + FILL + 0.1)
     n = int(math.ceil(min(dur, end) * fps)) + 1
-    static = Image.new('RGBA', (PW, PH), (0, 0, 0, 0)); d = ImageDraw.Draw(static)
-    d.rounded_rectangle([0, 0, PW - 1, PH - 1], 26, fill=(10, 9, 12, 215), outline=(70, 66, 74, 255), width=3)
-    d.rounded_rectangle([0, 0, PW - 1, 12], 6, fill=c + (255,))
-    t = tile(tile_png, 200, ring=None if LETTERS else c); static.alpha_composite(t, (34, 40))
-    nm = name.upper(); sz = 62
-    while d.textlength(nm, font=f(sz)) > PW - 300 and sz > 34: sz -= 2
-    if d.textlength(nm, font=f(sz)) > PW - 300 and ' ' in nm:      # two lines
-        a, b = nm.split(' ', 1); text(d, (276, 100), a, 56, WHITE, 'ls'); text(d, (276, 166), b, 56, WHITE, 'ls')
-    else: text(d, (276, 130), nm, sz, WHITE, 'ls')
-    if film: text(d, (278, 210), film.upper(), 30, BONE, 'ls')
-    BX, BW, BH, Y0, DY = 40, PW - 80, 30, 300, 86
+    LW = W - SX
+    content = Image.new('RGBA', (LW, H), (0, 0, 0, 0)); d = ImageDraw.Draw(content)
+    TS = 176; TY = 150
+    content.alpha_composite(tile(tile_png, TS), (CX, TY))
+    nm = name.upper(); sz = 60; NX = CX + TS + 34; NW = CX + CW - NX
+    while d.textlength(nm, font=f(sz)) > NW and sz > 36: sz -= 2
+    if d.textlength(nm, font=f(sz)) > NW and ' ' in nm:          # two lines
+        a1, b1 = nm.split(' ', 1); text(d, (NX, TY + 64), a1, 54, WHITE, 'ls'); text(d, (NX, TY + 124), b1, 54, WHITE, 'ls')
+    else: text(d, (NX, TY + 96), nm, sz, WHITE, 'ls')
+    if film: text(d, (NX + 2, TY + 160), film.upper(), 28, BONE, 'ls')
+    BH, Y0, DY = 22, 440, 96
     for i, k in enumerate(keys):
         y = Y0 + i * DY
-        text(d, (BX, y), k, 32, BONE, 'ls')
-        d.rounded_rectangle([BX, y + 14, BX + BW, y + 14 + BH], 15, fill=(40, 38, 44, 255))
-    d.line([(BX, 630), (BX + BW, 630)], fill=(70, 66, 74, 255), width=2)
-    text(d, (BX, 694), 'SURVIVAL RATE', 40, WHITE, 'ls')
+        text(d, (CX, y), k, 30, BONE, 'ls')
+        d.rectangle([CX, y + 16, CX + CW, y + 16 + BH], fill=(58, 56, 60, 255))
+    text(d, (CX, 868), 'SURVIVAL RATE', 40, WHITE, 'ls')
     for i in range(n):
         tt = i / fps
-        fr = Image.new('RGBA', (PW, PH), (0, 0, 0, 0)); fr.alpha_composite(static); d = ImageDraw.Draw(fr)
+        fr = content.copy(); d = ImageDraw.Draw(fr)
         for j, k in enumerate(keys):
             y = Y0 + j * DY; v = stats[k]; e = ease((tt - starts[j]) / FILL)
             if e > 0:
-                w = max(BH, BW * v / 10 * e)
-                d.rounded_rectangle([BX, y + 14, BX + w, y + 14 + BH], 15, fill=(225, 30, 38, 255))
-                d.rounded_rectangle([BX + 4, y + 17, BX + w - 4, y + 22], 3, fill=(255, 120, 120, 120))
-            shown = int(round(v * e)) if e > 0 else 0
-            text(d, (BX + BW, y), f'{shown}/10' if e > 0 else '', 40, WHITE, 'rs')
+                d.rectangle([CX, y + 16, CX + max(2, CW * v / 10 * e), y + 16 + BH], fill=RED + (255,))   # flat pure red
+                text(d, (CX + CW, y), f'{int(round(v * e))}/10', 36, WHITE, 'rs')
         if tt >= t_pct - 0.02:
             k2 = (tt - t_pct) / 0.2
-            if num:
-                val = int(round(pct * ease(k2))) if k2 < 1 else pct; s = f'{val}%'
-            else: s = '??'
-            sc = 1.0 + 0.2 * (1 - ease((tt - t_pct - 0.2) / 0.16)) if k2 >= 1 else 1.2
-            lay = Image.new('RGBA', (520, 230), (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
-            text(dl, (500, 190), s, 160, c, 'rs', stroke=6)
-            if sc != 1.0:
-                lay = lay.resize((int(520 * sc), int(230 * sc)), Image.BICUBIC)
-            fr.alpha_composite(lay, (int(PW - 40 - 500 * sc), int(772 - 190 * sc)))
-            if num and tt >= t_pct + 0.36:
-                a = int(255 * ease((tt - t_pct - 0.36) / 0.2)); nm2 = TIERS[tier(pct)][0]
-                tl = Image.new('RGBA', (PW, PH), (0, 0, 0, 0)); dt = ImageDraw.Draw(tl)
-                w2 = dt.textlength(nm2, font=f(34)) + 40
-                dt.rounded_rectangle([BX, 716, BX + w2, 768], 12, fill=c + (a,))
-                text(dt, (BX + 20, 754), nm2, 34, (15, 12, 12, a) if (LETTERS or tier(pct) == 2) else (255, 255, 255, a), 'ls')
-                fr.alpha_composite(tl)
-        # slide in: 0.28 s from +140 px with alpha
-        k3 = ease(tt / 0.28)
+            s2 = (f'{int(round(pct * ease(k2)))}%' if k2 < 1 else f'{pct}%') if num else '??'
+            sc = 1.0 + 0.12 * (1 - ease((tt - t_pct - 0.2) / 0.16)) if k2 >= 1 else 1.12
+            lay = Image.new('RGBA', (520, 230), (0, 0, 0, 0)); text(ImageDraw.Draw(lay), (500, 190), s2, 150, WHITE, 'rs')
+            if sc != 1.0: lay = lay.resize((int(520 * sc), int(230 * sc)), Image.BICUBIC)
+            fr.alpha_composite(lay, (int(CX + CW - 500 * sc), int(900 - 190 * sc)))
+        # in: the shadow fades up over 0.3 s while the content slides 50 px in from the right
+        k3 = ease(tt / 0.3); full = Image.new('RGBA', (LW, H), (0, 0, 0, 0))
+        sh = shadow()
+        if k3 < 1: sh = sh.copy(); sh.putalpha(sh.getchannel('A').point(lambda v: int(v * k3)))
+        full.alpha_composite(sh)
         if k3 < 1:
-            sh = Image.new('RGBA', (PW, PH), (0, 0, 0, 0)); sh.alpha_composite(fr, (int(140 * (1 - k3)), 0))
-            sh.putalpha(sh.getchannel('A').point(lambda v: int(v * k3))); fr = sh
-        save(fr, out, i)
-    return n, PX, PY
+            c2 = Image.new('RGBA', (LW, H), (0, 0, 0, 0)); c2.alpha_composite(fr, (int(50 * (1 - k3)), 0))
+            c2.putalpha(c2.getchannel('A').point(lambda v: int(v * k3))); fr = c2
+        full.alpha_composite(fr)
+        save(full, out, i)
+    return n, SX, 0
 
 # ------------------------------------------------------------------ survival thermometer
 TX, T100, T0 = 960, 172, 958
