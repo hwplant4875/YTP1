@@ -61,7 +61,7 @@
       g.fillStyle = 'rgba(237,231,242,0.12)'; g.fillRect(1250, gy2, 612, 2);
       [[0, 1372, 0.75], [-35, 1515, 0.6], [-65, 1650, 0.42], [35, 1790, 0.6]].forEach(([yw, x2, ld]) => M.draw(g, x2, gy2, s2, { state: 'stand', yaw: yw, lidOpen: ld, t: 0.8, chain: { sway: 0.04 } }));
     });
-    const L = [[X.dormant, '1', 'DORMANT', 'shut · crooked · chain lies straight'], [X.peek, '2', 'PEEK', 'lid cracked · eyes glow · fingers creep'],
+    const L = [[X.dormant, '1', 'DORMANT', 'shut · chain curls forward (the tell)'], [X.peek, '2', 'PEEK', 'lid cracked · eyes glow · fingers creep'],
       [X.unfold, '3', 'UNFOLD', 'legs sprout · palms push · chest lifts'], [X.stand, '4', 'STANDING IDLE', 'tongue to the knees · arms dangle'],
       [X.yawn, '5', 'YAWN', 'lid wide · tongue curls back in'], [X.knight - 0.45 * U, '6', 'POUNCE', 'nose-down dive · hands either side of the helm']];
     L.forEach(([x, n, a, b]) => SH.stateLabel(ctx, x, gy + 44, n, a, b));

@@ -58,7 +58,11 @@
  *                   behind (true: drawn behind the chest, streaming back from under it) }
  *     chain       { swing (rad: the hang direction, + = toward screen-left), sway (rad travelling wave), sag 0..1
  *                   (1 = hangs, low = flies straight out), t, links=17, pts (ABSOLUTE canvas points, e.g. from
- *                   SFX.simChain; override), floor (true: tail lies on the floor uncurled, dormant) }
+ *                   SFX.simChain; override), floor (true, dormant: THE TELL, the chain slides forward round the front corner and curls up in front of
+ *                   the chest), real (true: the neat side-back coil of a real chest), coilSq (floor-coil squash, 0.5),
+ *                   tiltFront (extra floor depth in front of the chest, 0.22) }
+ *     realChest   true: a plain chest from the same model (shut, no seam, face, limbs or fx; chain coiled neatly at the
+ *                 side-back) for rule gags and side-by-side comparisons with the dormant mimic
  *     expr        'neutral' | 'happy' | 'nervous' | 'hungry' | 'annoyed' | 'scared' | 'sleepy' | 'smitten' | 'pounce'
  *                 | 'yawn' | 'effort'.  nervous / annoyed / scared / pounce draw BRIGHT eyes (cream-gold sclera, tiny
  *                 dark pupil); the rest are glow eyes (light on the dark mouth).
