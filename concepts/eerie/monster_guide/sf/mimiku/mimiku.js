@@ -6,7 +6,7 @@
  *   chest: base 0.40 W high, depth 0.60 W, lid 0.20 W + 0.05 W barrel dome, lid overhang 0.03 W, walls 0.05 W.
  *   The chest is a real (orthographic) box: yaw turns it (0 front, 35 three-quarter, 90 side), the camera looks down
  *   8 degrees, the lid hinges at the back edge. Mouth = everything between the base rim and the lid's inner rim.
- *   eyes 0.27 W wide at +-0.17 W, 45 % down the opening; < 35 deg lid shows two glints instead.
+ *   eyes 0.26 W wide at +-0.17 W, 53 % down the opening; < 35 deg lid shows two glints instead.
  *   arms: upper 0.55 W, forearm 0.95 W (long), from the mouth corners; elbows rise above the lid (2-bone IK).
  *   legs: thigh 0.72 W + shin 0.70 W, bony capsules with knee knobs and joint dots (2-bone IK, knees out).
  *   teeth: 13 upper / 12 lower rounded pegs, alternating long/short; flat tongue with a centre groove.
@@ -32,10 +32,12 @@
  *     tongue          { len, pitch: [deg...], lat: [deg...], width, floor, floorDir }  pitch 0 = forward, 90 = down,
  *                     180 = back; lat = sideways. Keys are spread along the part outside the mouth. null = no tongue.
  *     chain           { mode: 'forward' | 'trail', links=10, droop: [deg, deg], sway, t }
- *     look {x, y}     gaze -1..1    blink 0..1 (1 open)    eyeAt 0.45 (eye centre, fraction down the opening)
+ *     look {x, y}     gaze -1..1    blink 0..1 (1 open)    eyeAt 0.53 (eye centre, fraction down the opening)
  *     fx              { sweat, drool, sparkle, zzz, tear, wave, speed, tap } booleans (expr presets switch some on)
  *     parts           { legs, arms, chain, tongue, fx } false = skip (close-ups)
  *     shadow=true     group drop shadow (down-right)        t = time (s) for secondary motion
+ *     skip            debug only: array of paint-pass names to leave out ('ring', 'lidRing', 'lidTop', 'lidSide',
+ *                     'lidFront', 'clasp'); used to bisect drawing bugs, leave unset in production.
  *   MIMIKU.solve(p) -> { hip, eyes: [[x,y],[x,y]], mouth: [x,y], lidTop: y, bounds } in canvas px (for layouts)
  *   MIMIKU.drawHand(ctx, x, y, angDeg, type, side, size)      one mitten hand (callouts)
  *   MIMIKU.drawTooth(ctx, x, y, len, w, down)                 one peg tooth (callouts)
@@ -60,12 +62,12 @@
     tooth: '#F3E9D2', toothShade: '#CDBF9F',
     mouth: '#3A0F1E', mouthShade: '#2A0914', gum: '#6E1D33',
     tongue: '#E2566E', tongueShade: '#C4455E', groove: '#B23A52',
-    glint: '#FFC83D', ink: '#140a0e', brow: '#F3E9D2', blush: '#FF8FA3',
+    glint: '#FFC83D', ink: '#140a0e', brow: '#F3E9D2', blush: '#FF7F98',
     sweat: '#a9dcff', drool: '#d9efff', droolShade: '#a9cfe9',
   };
   const DIM = {
-    U: 200, hb: 0.40, dep: 0.60, T: 0.20, dome: 0.05, o: 0.03, tw: 0.045, elev: 8, lift: 0.66,
-    eyeW: 0.275, eyeX: 0.17, upper: 0.55, fore: 0.95, thigh: 0.72, shin: 0.70, hipX: 0.19,
+    U: 200, hb: 0.40, dep: 0.60, T: 0.20, dome: 0.05, o: 0.03, tw: 0.045, elev: 8, lift: 0.8,
+    eyeW: 0.26, eyeX: 0.17, upper: 0.55, fore: 0.95, thigh: 0.72, shin: 0.70, hipX: 0.19,
     armW: [0.1, 0.084, 0.064], legW: [0.098, 0.076, 0.072, 0.056],
   };
 
@@ -131,6 +133,25 @@
     c.bezierCurveTo(x0, y0 + tl - tl * k, x0 + tl - tl * k, y0, x0 + tl, y0);
     c.closePath();
   }
+  function roundPolyAdd(c, P, r) { // robust rounded polygon: near-straight corners are skipped (arcTo overshoots there)
+    const n = P.length; if (n < 3) return;
+    const pts = [];
+    for (let i = 0; i < n; i++) {
+      const a = P[(i - 1 + n) % n], b = P[i], d = P[(i + 1) % n];
+      const ux = b[0] - a[0], uy = b[1] - a[1], vx = d[0] - b[0], vy = d[1] - b[1];
+      const lu = Math.hypot(ux, uy), lv = Math.hypot(vx, vy);
+      if (lu < 1e-6 || lv < 1e-6) continue;
+      const cr = (ux * vy - uy * vx) / (lu * lv), dt = (ux * vx + uy * vy) / (lu * lv);
+      const turn = Math.atan2(Math.abs(cr), dt); // 0 = straight
+      if (turn < 0.06) continue;
+      const t = Math.min(r * Math.tan(turn / 2), lu * 0.48, lv * 0.48);
+      pts.push({ A: [b[0] - ux / lu * t, b[1] - uy / lu * t], V: b, B: [b[0] + vx / lv * t, b[1] + vy / lv * t] });
+    }
+    if (pts.length < 3) { c.moveTo(P[0][0], P[0][1]); for (let i = 1; i < n; i++) c.lineTo(P[i][0], P[i][1]); c.closePath(); return; }
+    c.moveTo(pts[0].A[0], pts[0].A[1]);
+    for (let i = 0; i < pts.length; i++) { const q = pts[i]; c.lineTo(q.A[0], q.A[1]); c.quadraticCurveTo(q.V[0], q.V[1], q.B[0], q.B[1]); }
+    c.closePath();
+  }
   function ribbonAdd(c, P, half) { // closed ribbon around a polyline; half = fn(u, i) half-width
     const N = normalsOf(P), U = arcU(P), n = P.length;
     for (let i = 0; i < n; i++) { const h = half(U[i], i); const X = P[i][0] + N[i][0] * h, Y = P[i][1] + N[i][1] * h; i ? c.lineTo(X, Y) : c.moveTo(X, Y); }
@@ -172,7 +193,7 @@
 
   // ------------------------------------------------------------------ presets
   const EXPR = {
-    default: { eye: { irisScale: 0.66, pupil: 'slit', h: 0.7 }, brow: { tilt: 0.06, arch: 0.2 }, blush: 0.5 },
+    default: { eye: { irisScale: 0.66, pupil: 'slit', h: 0.7 }, brow: { tilt: 0.06, arch: 0.2 }, blush: 0.62 },
     nervous: { eye: { irisScale: 0.3, pupil: 'slit', pupilScale: 0.75, h: 0.76, look: { x: 0.35, y: -0.05 } }, brow: { tilt: 0.5, arch: 0.08, dy: -0.012 }, blush: 0.35, fx: { sweat: true } },
     greedy: { eye: { irisScale: 0.74, pupil: 'star', pupilScale: 1.12, h: 0.74, highlight2: true }, brow: { tilt: -0.05, arch: 0.32, dy: -0.016 }, blush: 0.6, fx: { drool: true, sparkle: true } },
     happy: { eye: { closed: 'smile', lashes: 3 }, brow: { tilt: 0.12, arch: 0.32, dy: -0.01 }, blush: 0.7 },
@@ -185,20 +206,20 @@
   const TONGUE_LOLL = { len: 0.62, pitch: [20, 75, 95, 85, 60], lat: [0, 12, 30, 45, 55], width: 0.24 };
 
   const POSES = {
-    dormant: { lid: 4, tilt: -6, sit: true, legs: null, arms: null, tongue: null, expr: 'default', chain: { mode: 'forward' } },
+    dormant: { lid: 8, tilt: -6, sit: true, legs: null, arms: null, tongue: null, expr: 'default', chain: { mode: 'forward' } },
     peek: {
       lid: 40, tilt: 3, sit: true, legs: null, expr: 'nervous', tongue: null, chain: { mode: 'forward' },
-      arms: { L: null, R: { wrist: [0.6, -0.16], bend: 1, hand: 'tap', handAng: 110, z: 'front' } }, fx: { tap: true },
-      shoulderK: 0.32,
+      arms: { R: null, L: { root: [-0.36, 0.12, 0.0], l1: 0.3, l2: 0.5, wrist: [-0.72, -0.1], bend: 1, hand: 'tap', handAng: 110, z: 'front' } }, fx: { tap: 'L' },
+      look: { x: -0.55, y: 0.35 },
     },
     stand: {
-      lid: 70, hip: [0, 1.36], legs: { L: { foot: [-0.36, -0.035], bend: 1 }, R: { foot: [0.36, -0.035], bend: -1 } },
-      arms: { L: { wrist: [-1.32, -2.3], bend: 1, hand: 'wave', handAng: -112 }, R: { wrist: [0.96, -1.62], bend: -1, hand: 'hang', handBend: 8 } },
+      lid: 70, hip: [0, 1.32], legs: { L: { foot: [-0.36, -0.035], bend: 1 }, R: { foot: [0.36, -0.035], bend: -1 } },
+      arms: { L: { wrist: [-1.33, -1.84], bend: 1, hand: 'wave', handAng: -118 }, R: { wrist: [1.04, -1.5], bend: -1, hand: 'hang', handBend: 8 } },
       tongue: { len: 0.46, pitch: [25, 80, 95, 70], lat: [0, 4, 10, 16] }, expr: 'happy', fx: { wave: 'L' },
     },
     rest: { // neutral standing pose for the turnaround
-      lid: 70, hip: [0, 1.36], legs: { L: { foot: [-0.34, -0.035], bend: 1 }, R: { foot: [0.34, -0.035], bend: -1 } },
-      arms: { L: { wrist: [-0.98, -1.62], bend: 1, hand: 'hang', handBend: -8 }, R: { wrist: [0.98, -1.62], bend: -1, hand: 'hang', handBend: 8 } },
+      lid: 70, hip: [0, 1.32], legs: { L: { foot: [-0.34, -0.035], bend: 1 }, R: { foot: [0.34, -0.035], bend: -1 } },
+      arms: { L: { wrist: [-0.96, -1.52], bend: 1, hand: 'hang', handBend: -8 }, R: { wrist: [0.96, -1.52], bend: -1, hand: 'hang', handBend: 8 } },
       tongue: { len: 0.42, pitch: [25, 85, 92, 80], lat: [0, 0, 4, 8] }, expr: 'default',
     },
     crouch: {
@@ -207,16 +228,16 @@
       tongue: { len: 1.0, pitch: [30, 88, 92, 90, 86], lat: [0, 3, -4, 3, 8] }, expr: 'hunt', shoulderK: 0.5,
     },
     pounce: {
-      lid: 80, yaw: 30, hip: [0.18, 1.3], tilt: -24,
-      legs: { L: { foot: [0.78, -0.42], bend: -1 }, R: { foot: [1.12, -0.7], bend: -1 } },
-      arms: { L: { wrist: [-1.45, -2.3], bend: 1, hand: 'grab', handBend: -12 }, R: { wrist: [-1.12, -1.78], bend: 1, hand: 'grab', handBend: -8 } },
-      tongue: { len: 1.05, pitch: [25, 60, 110, 150, 165], lat: [0, 18, 32, 26, 12], width: 0.23 },
+      lid: 80, yaw: 30, hip: [0.2, 1.3], tilt: -18,
+      legs: { L: { foot: [0.95, -0.9], bend: -1 }, R: { foot: [1.28, -1.2], bend: -1 } },
+      arms: { L: { wrist: [-1.55, -1.9], bend: 1, hand: 'grab', handBend: -14 }, R: { wrist: [-1.05, -2.85], bend: 1, hand: 'grab', handBend: -24 } },
+      tongue: { len: 1.15, pitch: [30, 70, 120, 160, 172], lat: [0, -14, 8, 26, 12], width: 0.19 },
       chain: { mode: 'trail' }, expr: 'greedy', fx: { speed: true }, airborne: true,
     },
     yawn: {
       lid: 90, hip: [0, 1.3], legs: { L: { foot: [-0.3, -0.035], bend: 1 }, R: { foot: [0.3, -0.035], bend: -1 } },
-      arms: { L: { wrist: [-0.86, -1.42], bend: 1, hand: 'limp', handBend: -6 }, R: { wrist: [0.86, -1.42], bend: -1, hand: 'limp', handBend: 6 } },
-      tongue: { len: 1.62, pitch: [35, 89, 90, 90, 90], lat: [0, 0, 2, -2, 0], floor: true, floorDir: 1 }, expr: 'yawn', tilt: 0,
+      arms: { L: { wrist: [-0.8, -3.42], bend: -1, hand: 'open', handBend: -6, spread: 12 }, R: { wrist: [0.74, -1.22], bend: -1, hand: 'limp', handBend: 10 } },
+      tongue: { len: 0.95, pitch: [30, 88, 100, 40, -60], lat: [0, 0, 15, 40, 50], width: 0.24 }, expr: 'yawn', tilt: 2,
     },
   };
 
@@ -277,17 +298,19 @@
       v.L(-xl, hb, o - tw), v.L(xl, hb, o - tw), v.L(-xl, hb, -dep + tw), v.L(xl, hb, -dep + tw)];
     R.hull = hull(H3.map(q => v.P(q[0], q[1], q[2])));
     // eyes
-    const eyeAt = p.eyeAt ?? 0.45;
+    const eyeAt = p.eyeAt ?? 0.53;
     R.eyes = [-1, 1].map(s => R.mp(s * DIM.eyeX, 1 - eyeAt, 0.07));
     // shoulders, hips (body 2D -> world)
     const sk = p.shoulderK ?? 0.56;
-    R.shoulder = { L: R.B(R.mp(-(xi - 0.03), sk, 0.03)), R: R.B(R.mp(xi - 0.03, sk, 0.03)) };
+    const sx = p.shoulderX ?? 0.5;
+    R.shoulder = { L: R.B(R.mp(-sx, sk, 0.06)), R: R.B(R.mp(sx, sk, 0.06)) };
     R.hipJ = { L: R.B(v.P(-DIM.hipX, 0.035, -dep / 2)), R: R.B(v.P(DIM.hipX, 0.035, -dep / 2)) };
     // arms
     R.arms = {};
     if (p.parts.arms && p.arms) for (const s of ['L', 'R']) {
       const a = p.arms[s]; if (!a) continue;
-      const Sh = R.shoulder[s], k = ik(Sh, a.wrist, DIM.upper, DIM.fore, a.bend ?? (s === 'L' ? 1 : -1));
+      const Sh = a.root ? R.B(R.mp(a.root[0], a.root[1], a.root[2] || 0)) : R.shoulder[s];
+      const k = ik(Sh, a.wrist, DIM.upper * (a.l1 || 1), DIM.fore * (a.l2 || 1), a.bend ?? (s === 'L' ? 1 : -1));
       let hAng = a.handAng !== undefined ? a.handAng * RAD : k.a2 + (a.handBend || 0) * RAD;
       R.arms[s] = { S: Sh, E: k.J, W: k.E, hAng, a, side: s === 'L' ? 1 : -1 };
     }
@@ -345,7 +368,7 @@
   }
 
   function chainPts(p, v, R) {
-    const c = p.chain || {}, n = c.links ?? 10, L0 = c.size ?? 0.072, pitch = L0 * 0.72;
+    const c = p.chain || {}, n = c.links ?? 8, L0 = c.size ?? 0.07, pitch = L0 * 0.72;
     const pts = [R.hasp.slice()], sizes = [];
     const front = clamp(1 - Math.abs(p.yaw || 0) / 28); // front view: forward is invisible, so cheat it obliquely
     let q = R.hasp3.slice(); q[0] += 0.035;
@@ -372,6 +395,7 @@
     return { pts, sizes };
   }
 
+  const skip = (p, k) => Array.isArray(p.skip) && p.skip.includes(k);
   // ------------------------------------------------------------------ parts: chest
   function strapsAndRivets(g, xs, y0, y1, w, rivY, colA, colB) {
     for (const x of xs) {
@@ -530,7 +554,7 @@
     claws.push({ a: T(t2[0] - Math.cos(ta + tc) * 0.006, t2[1] - Math.sin(ta + tc) * 0.006), b: T(...tt), w: 0.028 * k });
     // palm (a soft rounded box)
     const palm = [];
-    for (let i = 0; i < 20; i++) { const th = i / 20 * TAU; palm.push(T(0.05 + Math.cos(th) * 0.058, Math.sin(th) * 0.054 + 0.004)); }
+    for (let i = 0; i < 20; i++) { const th = i / 20 * TAU * side; palm.push(T(0.05 + Math.cos(th) * 0.058, Math.sin(th) * 0.054 + 0.004)); }
     return { parts, claws, palm };
   }
   function addHand(c, hg) {
@@ -583,19 +607,19 @@
     // --- base front face
     if (v.vis([0, 0, 1]) > 0.02) inFace(g, v, [0, hb, 0], [1, 0, 0], [0, -1, 0], gg => drawBaseFront(gg, p));
     // --- base top rim and the lid's wall edges: both sit BEHIND the mouth contents
-    if (v.lid > 3) inFace(g, v, [0, hb, -dep], [1, 0, 0], [0, 0, 1], gg => { gg.beginPath(); ringPath(gg, -0.5, 0, 0.5, dep, tw, 0.05); gg.fillStyle = COL.woodRim; gg.fill(); });
+    if (v.lid > 3 && !skip(p, 'ring')) inFace(g, v, [0, hb, -dep], [1, 0, 0], [0, 0, 1], gg => { gg.beginPath(); ringPath(gg, -0.5, 0, 0.5, dep, tw, 0.05); gg.fillStyle = COL.woodRim; gg.fill(); });
     const nb = v.Lv(0, -1, 0);
-    if (v.lid > 3 && v.vis(nb) > 0.01) inFace(g, v, v.L(0, hb, -dep), v.Lv(1, 0, 0), v.Lv(0, 0, 1), gg => {
+    if (v.lid > 3 && v.vis(nb) > 0.01 && !skip(p, 'lidRing')) inFace(g, v, v.L(0, hb, -dep), v.Lv(1, 0, 0), v.Lv(0, 0, 1), gg => {
       gg.beginPath(); ringPath(gg, -(0.5 + o), 0, 0.5 + o, dep + o, tw, 0.04); gg.fillStyle = COL.woodShade; gg.fill();
     });
     // --- the mouth
-    const hullPath = c => S.addRoundPoly(c, R.hull, 0.07);
+    const hullPath = c => roundPolyAdd(c, R.hull, 0.07);
     const open = v.lid > 0.5;
     if (open) {
       clipIn(g, hullPath, gg => {
         gg.fillStyle = COL.mouthShade; gg.fillRect(-5, -5, 10, 10);
         gg.save(); gg.translate(0.035 * LS, 0.06); gg.beginPath(); hullPath(gg); gg.fillStyle = COL.mouth; gg.fill(); gg.restore();
-        if (v.lid >= 35) drawEyes(gg, p, R); else drawGlints(gg, p, R);
+        if (v.lid >= 35) drawEyes(gg, p, R);
         // gums + teeth (front rows; side rows foreshorten away in the front view)
         const xA = v.Pl(1, 0, 0);
         const rowAt = (O, down, fn) => { gg.save(); gg.transform(xA[0], xA[1], 0, down ? 1 : -1, O[0], O[1]); fn(gg); gg.restore(); };
@@ -619,6 +643,8 @@
           S.roundRect(gg, -0.02, -0.01, 0.36, 0.03, 0.012, COL.gum);
           teethRow(gg, 4, 0.0, 0.32, 0.07, 0.05, 0.034, 11, null); gg.restore();
         }
+        if (v.lid >= 35) drawBrows(gg, p, R);
+        if (v.lid < 35) drawGlints(gg, p, R);
       });
     }
   }
@@ -626,15 +652,15 @@
     const v = R.v, hb = DIM.hb, dep = DIM.dep, T = DIM.T, o = DIM.o, tw = DIM.tw, dome = DIM.dome;
     // top surface (barrel lid): visible when nearly shut
     const nt = v.Lv(0, 1, 0);
-    if (v.vis(nt) > 0.005) {
+    if (v.vis(nt) > 0.005 && !skip(p, 'lidTop')) {
       const w = 0.5 + o, rows = [];
       for (let i = 0; i <= 8; i++) { const zz = lerp(o, -dep, i / 8), yy = hb + T + dome * Math.sin(Math.PI * i / 8); rows.push([zz, yy]); }
       const pts = [];
       for (const [zz, yy] of rows) { pts.push(v.PL(-w + 0.02, yy, zz)); pts.push(v.PL(w - 0.02, yy, zz)); }
       const hp = hull(pts);
-      const path = c => S.addRoundPoly(c, hp, 0.03);
+      const path = c => roundPolyAdd(c, hp, 0.03);
       g.beginPath(); path(g); g.fillStyle = COL.woodRim; g.fill();
-      clipIn(g, path, gg => {
+      if (v.sp < 0.6) clipIn(g, path, gg => {
         for (const sx of [-0.3, 0.3]) {
           const strip = [];
           for (const [zz, yy] of rows) strip.push(v.PL(sx - 0.037, yy + 0.002, zz));
@@ -646,10 +672,10 @@
       });
     }
     // side face (shows the barrel arch)
-    if (v.vis(v.Lv(1, 0, 0)) > 0.02) inFace(g, v, v.L(0.5 + o, hb + T, o), v.Lv(0, 0, -1), v.Lv(0, -1, 0), gg => drawLidSide(gg, p));
+    if (v.vis(v.Lv(1, 0, 0)) > 0.02 && !skip(p, 'lidSide')) inFace(g, v, v.L(0.5 + o, hb + T, o), v.Lv(0, 0, -1), v.Lv(0, -1, 0), gg => drawLidSide(gg, p));
     // front face
     const nf = v.Lv(0, 0, 1);
-    if (v.vis(nf) > 0.01) inFace(g, v, v.L(0, hb + T, o), v.Lv(1, 0, 0), v.Lv(0, -1, 0), gg => drawLidFront(gg, p));
+    if (v.vis(nf) > 0.01 && !skip(p, 'lidFront')) inFace(g, v, v.L(0, hb + T, o), v.Lv(1, 0, 0), v.Lv(0, -1, 0), gg => drawLidFront(gg, p));
   }
   function paintClasp(g, p, R) {
     const v = R.v, A = v.PL(0, DIM.hb + 0.045, DIM.o + 0.006);
@@ -685,7 +711,8 @@
     const v = R.v, c = R.eyes[i], ax = v.Pl(1, 0, 0);
     const far = i === 0, sc = v.cp < 0.4 ? (far ? 0 : Math.max(0.42, v.cp)) : 1;
     if (sc === 0) return;
-    g.save(); g.translate(c[0], c[1]); g.transform(ax[0] * (sc === 1 ? 1 : sc / Math.max(1e-3, v.cp)), ax[1], 0, 1, 0, 0);
+    g.save(); g.translate(c[0], c[1]);
+    if (sc === 1) g.transform(ax[0], ax[1], 0, 1, 0, 0); else g.transform(sc, 0, 0, 1, 0, 0);
     fn(g); g.restore();
   }
   function drawEyes(g, p, R) {
@@ -699,9 +726,18 @@
         }
         if (ex.blush > 0) S.blush(gg, s * 0.02, eh * 0.62 + 0.035, ew * 0.82, ex.blush, COL.blush);
         S.eye(gg, o);
-        // floating brow stroke
+      });
+    }
+  }
+  // floating brow strokes: painted AFTER the teeth so the upper pegs never hide them
+  function drawBrows(g, p, R) {
+    const ex = p._ex, ew = DIM.eyeW;
+    for (let i = 0; i < 2; i++) {
+      const s = i === 0 ? -1 : 1;
+      eyeFrame(g, R, i, gg => {
+        const o = eyeOpts(p, R, s), eh = ew * (o.h ?? 0.6);
         const b = Object.assign({}, ex.brow || {}, (ex.brow && ex.brow[s < 0 ? 'L' : 'R']) || {});
-        if (b && b.show !== false) S.brow(gg, s * 0.02, -eh * 0.5 - 0.062 + (b.dy || 0), ew * 0.4, { tilt: b.tilt || 0, arch: b.arch ?? 0.12, thick: 0.15, mirror: s > 0, color: COL.brow });
+        if (b && b.show !== false) S.brow(gg, s * 0.022, -eh * 0.5 - 0.04 + (b.dy || 0), ew * 0.42, { tilt: b.tilt || 0, arch: b.arch ?? 0.12, thick: 0.2, mirror: s > 0, color: COL.brow });
       });
     }
   }
@@ -728,6 +764,8 @@
       return w / 2;
     };
     const path = c => ribbonAdd(c, P, half);
+    // contact shadow on whatever the tongue lies over (separates tongue from wood in grey)
+    g.save(); g.translate(0.022, 0.03); g.fillStyle = 'rgba(42,9,20,0.42)'; g.beginPath(); path(g); g.fill(); g.restore();
     cel(g, path, COL.tongue, COL.tongueShade, 0.026, 0.02);
     // centre groove
     const U = arcU(P), G = P.filter((_, i) => U[i] > 0.1 && U[i] < 0.8);
@@ -750,7 +788,7 @@
       S.sweat(g, b[0], b[1] + 0.02, 0.07, { color: COL.drool, shade: COL.droolShade });
     }
     if (fx.sparkle) {
-      for (const [dx, dy, r] of [[-0.62, -0.1, 0.05], [0.66, -0.2, 0.06], [0.58, 0.12, 0.035]]) {
+      for (const [dx, dy, r] of [[-0.6, -0.1, 0.05], [0.62, -0.2, 0.055], [0.56, 0.12, 0.035]]) {
         const c = R.B(R.mp(dx, 0.55, 0)); S.sparkle(g, c[0], c[1], r, '#FFE58A');
       }
     }
@@ -766,16 +804,16 @@
       }
     }
     if (fx.tap) {
-      const A = R.arms.R; if (A) {
-        const tip = A.W; g.save(); g.strokeStyle = 'rgba(216,204,224,0.75)'; g.lineCap = 'round'; g.lineWidth = 0.013;
-        for (const [dx, dy, ex2, ey2] of [[0.1, -0.08, 0.16, -0.12], [0.13, 0.0, 0.2, -0.01], [0.04, -0.12, 0.06, -0.19]]) { g.beginPath(); g.moveTo(tip[0] + dx, tip[1] + dy); g.lineTo(tip[0] + ex2, tip[1] + ey2); g.stroke(); }
+      const A = R.arms[fx.tap === 'R' ? 'R' : 'L']; if (A) {
+        const sg = A.side, tip = add(A.W, mul(dir2(A.hAng), 0.16)); g.save(); g.strokeStyle = 'rgba(216,204,224,0.8)'; g.lineCap = 'round'; g.lineWidth = 0.014;
+        for (const [dx, dy, ex2, ey2] of [[0.09, -0.06, 0.15, -0.1], [0.11, 0.02, 0.18, 0.02], [0.02, -0.11, 0.04, -0.18]]) { g.beginPath(); g.moveTo(tip[0] - sg * dx, tip[1] + dy); g.lineTo(tip[0] - sg * ex2, tip[1] + ey2); g.stroke(); }
         g.restore();
       }
     }
     if (fx.speed) {
       g.save(); g.strokeStyle = 'rgba(216,204,224,0.35)'; g.lineCap = 'round';
       const c = R.B([0, -0.4]);
-      for (const [dy, l, w] of [[-0.55, 0.5, 0.016], [-0.25, 0.75, 0.014], [0.05, 0.45, 0.016], [0.35, 0.6, 0.012]]) { g.lineWidth = w; g.beginPath(); g.moveTo(c[0] + 0.75, c[1] + dy); g.lineTo(c[0] + 0.75 + l, c[1] + dy + l * 0.08); g.stroke(); }
+      for (const [dy, l, w] of [[-0.5, 0.4, 0.016], [-0.2, 0.6, 0.014], [0.1, 0.36, 0.016], [0.4, 0.5, 0.012]]) { g.lineWidth = w; g.beginPath(); g.moveTo(c[0] + 0.72, c[1] + dy); g.lineTo(c[0] + 0.72 + l, c[1] + dy + l * 0.08); g.stroke(); }
       g.restore();
     }
   }
@@ -792,7 +830,7 @@
       if (R.legs.L && far) drawLeg(g, R.legs.L, true, v);
       if (R.legs.L && !far) drawLeg(g, R.legs.L, false, v);
       if (R.legs.R) drawLeg(g, R.legs.R, false, v);
-      if (R.arms.L && (far || R.arms.L.a.z === 'back')) drawArm(g, R.arms.L, far);
+      for (const s of ['L', 'R']) { const A = R.arms[s]; if (A && A.a.z !== 'front' && !(s === 'R' && far && false)) drawArm(g, A, far && s === 'L'); }
       // 2. chest
       g.save(); g.translate(R.hip[0], R.hip[1]); g.rotate(R.tilt);
       paintBody(g, p, R);
@@ -801,12 +839,11 @@
       paintTongue(g, p, R);
       g.save(); g.translate(R.hip[0], R.hip[1]); g.rotate(R.tilt);
       paintLid(g, p, R);
-      paintClasp(g, p, R);
+      if (!skip(p, 'clasp')) paintClasp(g, p, R);
       if (p.parts.chain && p.chain !== null) paintHasp(g, p, R);
       g.restore();
       // 4. arms in front, chain, fx
-      if (R.arms.L && !(far || R.arms.L.a.z === 'back')) drawArm(g, R.arms.L, false);
-      if (R.arms.R && R.arms.R.a.z !== 'back') drawArm(g, R.arms.R, false);
+      for (const s of ['L', 'R']) { const A = R.arms[s]; if (A && A.a.z === 'front') drawArm(g, A, false); }
       if (R.chain) drawChainLinks(g, R.chain.pts, R.chain.sizes);
       if (p.parts.fx) paintFx(g, p, R);
       g.restore();
@@ -824,6 +861,7 @@
     return {
       hip: toPx(R.hip), eyes: R.eyes.map(e => toPx(R.B(e))), mouth: toPx(R.B(R.mp(0, 0.5, 0))),
       lidTop: toPx(R.lidTop), U, R,
+      top: (() => { let m = 1e9; const v = R.v; for (const x of [-0.5, 0.5]) for (const z of [DIM.o, -DIM.dep / 2, -DIM.dep]) { const y = DIM.hb + DIM.T + (z === -DIM.dep / 2 ? DIM.dome : 0); m = Math.min(m, R.B(v.PL(x, y, z))[1]); } return p.y + m * U; })(),
     };
   }
 
