@@ -1,10 +1,11 @@
 # Horror Ranked EP03 업로드 키트 v2
 
 영상: 노트북 `E:\YTP2\Instruction444\renders\ep03_full_v7.mp4` (6:42, 1080p 30fps, 티어표 없는 버전)
-자막: 노트북에서 voice_v3 기준으로 다시 만드는 `ghostface_ranked_en_v2.srt` (영어)
+자막: `ghostface_ranked_en_v2.srt` (영어, 노트북 v7 시간 기준)
 
 ## 제목 (썸네일과 짝, A/B 테스트용)
-- C + ghostface_v2_c_extremes.jpg (99% / 53% / 10%, 지난 A/B에서 이긴 3인 형식): Every Ghostface Ranked by Your Chance of Surviving Them (추천)
+- C + 3인 형식 (99% / 53% / 10%, 지난 A/B에서 이긴 형식): Every Ghostface Ranked by Your Chance of Surviving Them (추천)
+  - 썸네일 후보: ghostface_v2_c2_two_masks.jpg (카비 얼굴 + 마스크 2개, 추천) / ghostface_v2_c3_three_masks.jpg (마스크 3개, 스포 없음) / ghostface_v2_c_extremes.jpg (얼굴 3개, 이전 버전)
 - A + ghostface_v2_a_mask_text.jpg (가면 + 16 KILLERS): 16 Ghostface Killers Ranked From Easiest to Hardest to Survive
 - B + ghostface_v2_b_text_behind.jpg (가면 뒤 WHO'S #1?): Which Ghostface Would Kill You First? Every Scream Killer Ranked
 
