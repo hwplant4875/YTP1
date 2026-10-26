@@ -1,0 +1,1767 @@
+[
+ {
+  "section": "s00",
+  "shots_checked": 21,
+  "ok_notes": "I checked all 21 shots of s00 (0-22.6 s in the render) at 5-10 fps. The render lines up with the EDL times.\n\nThese shots are fine:\n- Shot 0, 'He's been': body on the floor.\n- Shot 2, 'stabbed': blond Ghostface killer bloodied, knife strike visible from 1.1.\n- Shot 6, 'and somehow': Casey answering the phone.\n- Shot 8, 'because Ghostface': masked Ghostface, clear and well lit.\n- Shot 9, 'just one guy': Stab on a TV.\n- Shot 10, 'There have been': Billy and Stu.\n- Shots 11-12: Roman, then Amber.\n- Shot 14, 'so today': Mickey.\n- Shot 15, 'ranking every single one': Scream 7 killer.\n- Shots 16-17: Jason Carvey on the phone. The owner wants this 'from the ~' sentence (16.96+) cut, so shots 16-18 will change anyway.\n- Shots 18-20: Sidney, then Casey on the phone for 'calling your house'.\n\nTwo notes on timing:\n- In the render, s00 hands over to the next section at about 22.6, not at 23.14 (voice end + pad).\n- Outside s00: s03 shot 7 (s7_04_walls at 230.5) ends just before the car hit at about 232.4. That is very likely the '1:36' complaint. Move it to about 232.0.\n\nScratch frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s00/",
+  "issues": [
+   {
+    "section": "s00",
+    "shot_index": 5,
+    "anchor_words": "and run over by a car",
+    "video_time": 4.32,
+    "problem": "Source in-point 229.5 shows an empty, dark night road from 4.32 to about 5.0, then Sidney in a striped sweater from 5.0 to 5.8. No car and no impact are on screen while the narrator says 'run over by a car' and the caption reads RUN OVER BY A CAR.",
+    "severity": "critical",
+    "fix_clip": "s7_04_walls",
+    "fix_in": 232,
+    "fix_note": "In s7_04_walls, Ghostface stands in the road at 232.0-232.4. The SUV slams through him at 232.4-232.9, its headlights come at the camera at 233.0-234.3, and it rolls over the body at 234.5-235.5. With in=232.0, the 1.48 s shot runs 232.0-233.48 and the impact lands on 'over by' (about 4.6-4.9 in the video). If the impact should land right on 'run' (4.40), use in=232.3. Related bug outside this section: s03 shot [14.44, 's7_04_walls', 230.5] runs 230.5-231.98 and ends just before the hit, which is most likely the owner's '1:36 car not visible' complaint. Move it to about 232.0 as well.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s7_04_walls",
+     "corrected_in": 232.25,
+     "reason": "I checked the frames and the right clip is s7_04_walls, but it works better from 232.25 than from 232.0. The shot is 1.48 s long (section time 4.32-5.80). In the narration, 'run' starts at 4.40, 'over' at 4.60, 'by' at 4.80 and 'car' runs 5.04-5.36.\n\nWhat the source frames show:\n- 232.0-232.35: Ghostface stands in the night road with his white mask showing. The shot is dark but he is easy to see, and there is a boy's head in the foreground.\n- 232.4: the SUV enters the frame.\n- 232.5-232.75: the SUV slams through Ghostface.\n- 232.8-233.8: the SUV's headlights come at the camera with a lens flare.\n\nThere are no end cards, black frames or countdown cards anywhere in 232.0-233.8.\n\nWith the proposed in=232.0, the car only shows up at about 4.72 and hits at about 4.82, which is on 'by', after 'run over' has already been said. With in=232.25, the shot opens on Ghostface in the road, the car enters at about 4.47 (on 'run'), and the hit lands at about 4.57-4.82 (on 'over'). The shot then ends at 233.73 on the oncoming headlights while 'a car' is spoken.\n\nThe rule is still met at 232.25: Ghostface is clearly visible from the very first frame and the impact matches the words. One limit: the shot is dark, not bright. The 'rolls over the body' moment (about 234.5) falls outside this 1.48 s window and is not shown.\n\nI agree with the related note: the s03 shot at in=230.5 ends at 231.98, just before the car arrives. Moving it to about 232.0-232.25 would make the hit visible there too."
+    }
+   },
+   {
+    "section": "s00",
+    "shot_index": 4,
+    "anchor_words": "crushed by a TV",
+    "video_time": 2.96,
+    "problem": "s1_12_tables at 108 shows only a TV set playing a film (Halloween on screen). Nobody is crushed and no TV falls. The wrong action is on screen for the word and caption 'CRUSHED BY A TV'.",
+    "severity": "critical",
+    "fix_clip": "s1_12_tables",
+    "fix_in": 108,
+    "fix_note": "No TV-crush footage exists in the downloaded ep03 clips. I checked s1_12_tables 0-120 (its content ends about 120.5, then the end card starts), s1_11_creative 80-128, s6_family 137-176, s6_two_gf 110-158 and s6_ladder 128-164. Neither the Stu (1996) nor the Ethan (VI) TV kill is in any of them. Options: (a) get a clip of the Stu TV death or the Ethan/Kirby TV kill; (b) use a reveal still with a drop/shake animation; (c) as a last resort, reword the hook. Note that the s11 (Stu) and s07 (Ethan) sections probably have the same gap.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "",
+     "corrected_in": -1,
+     "reason": "Rejected. This shot runs from 2.96 to 4.32 s in the section, so it lasts 1.36 s. I took frames from s1_12_tables at 108.0 to 109.25 s in 0.25 s steps. Every frame shows only a TV set against floral curtains, playing a film. From 108.0 to 108.75 a woman is on the TV screen; from 109.0 it cuts to a hallway shot, still on the TV. Nobody is crushed and no TV falls, so the picture does not match 'crushed by a TV'. I also scanned 84 to 124 s at 1 fps. That stretch shows Billy, bloodied, walking the hallway with a phone (84 to 107), the TV (108 to 109), Ghostface attacking Billy, Sidney, and from about 121 s the Movieclips end card. There is no TV-crush moment anywhere in it. I found no better in-point in this clip. This agrees with the editor's own note: the hook needs a real Stu/Ethan TV-death clip, a still with a drop/shake animation, or a reworded line."
+    }
+   },
+   {
+    "section": "s00",
+    "shot_index": 1,
+    "anchor_words": "shot,",
+    "video_time": 0.52,
+    "problem": "In-point 139 shows Amber standing with her hands up in the kitchen for the whole 0.52 s shot. No gun fires and nobody is hit while 'shot' (0.60) is spoken and the SHOT caption is on screen.",
+    "severity": "critical",
+    "fix_clip": "s5_09_fighting",
+    "fix_in": 142.6,
+    "fix_note": "Gale fires the gun at 142.7 (muzzle flash, close-up). Amber jerks back from the hit at 142.9-143.1. With in=142.6, the shot covers 142.6-143.12, so the flash lands at about 0.62 in the video, right on 'shot', and the cut comes on Amber recoiling. The source cuts at about 143.2 into blurry falling motion, so the shot cannot run longer than about 0.6 s.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s5_09_fighting",
+     "corrected_in": 142.6,
+     "reason": "I checked frames from s5_09_fighting at 10 fps from 142.4 to 143.5. The shot runs from video 0.52 to 1.04, which is source 142.6 to 143.12. At 142.6 the first frame is a clear, well-lit close-up of Gale aiming the gun. The muzzle flash comes at about 142.7, which is video 0.62, so it lands right as 'shot' starts at 0.60. From 142.9 to 143.1 the shot cuts to the kitchen wide shot, where Amber is clearly visible jerking back from the hit. The dark, blurry frames start after 143.12 (about 143.5), so they fall outside the shot. There is no end card, no black frame and no countdown."
+    }
+   },
+   {
+    "section": "s00",
+    "shot_index": 7,
+    "anchor_words": "the phone still rings",
+    "video_time": 6.88,
+    "problem": "In-point 33 shows Mindy laughing at the table from 6.88 to about 7.9. The ringing phone (Danny calling) appears only around 7.9-8.36, which is about 0.9 s after 'phone' (6.96) and after 'rings' (7.65).",
+    "severity": "major",
+    "fix_clip": "s6_core4",
+    "fix_in": 34.4,
+    "fix_note": "In s6_core4, the phone close-up showing the incoming call runs 34.45-35.30, about 0.85 s. Tara reacting follows at 35.35-36.2, then she throws the phone. With in=34.4, the phone is on screen at 6.88-7.75 and covers 'phone still rings'. Tara's reaction for the last 0.6 s is acceptable.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s6_core4",
+     "corrected_in": 34.4,
+     "reason": "I checked s6_core4 from 33.9 to 36.4 s at 8 fps, then pulled single frames at 34.36 and 34.4. Mindy laughing ends at about 34.3. From 34.36 on, the shot is a clear close-up of a hand holding the phone, with the incoming call from 'Danny' showing. It is bright and sharp, with no end card or black frame. The close-up runs to about 35.2. Tara's reaction starts at about 35.28, and she throws the phone at about 36.0. With an in-point of 34.4, the phone is on screen from 6.88 to about 7.7 in the section. That covers 'phone' at 6.96 and 'rings' at 7.65 from the first frame. The last ~0.6 s of the 1.48 s shot shows Tara reacting to the call, which still fits the line. The proposed in-point of 34.4 is correct."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s00",
+    "shot_index": 3,
+    "anchor_words": "set on fire,",
+    "video_time": 1.84,
+    "problem": "The fire is clear at 1.84-2.6, but the shot cuts to a Sidney/Gale reaction close-up at about 2.7-2.96 while the SET ON FIRE caption is still on screen.",
+    "severity": "minor",
+    "fix_clip": "s5_09_fighting",
+    "fix_in": 144.78,
+    "fix_note": "Amber's flames are visible from about 144.8. The source cuts to the reaction at about 145.86. With in=144.78, the burning stays on screen for almost the full 1.12 s shot."
+   },
+   {
+    "section": "s00",
+    "shot_index": 13,
+    "anchor_words": "that mask,",
+    "video_time": 13.12,
+    "problem": "On 'that mask' (13.36) the picture is a dark, low-angle shot of a dead body on the floor (Scream VI). No mask is visible. The 16 GHOSTFACES title is over it.",
+    "severity": "minor",
+    "fix_clip": "s6_family",
+    "fix_in": 13,
+    "fix_note": "Prefer any clearly lit Ghostface mask close-up, for example a Scream VI Ghostface face shot like the one already used in the render at about 22.8 (s6 clips). I did not verify an exact in-point; check frames before using it."
+   }
+  ]
+ },
+ {
+  "section": "s01",
+  "shots_checked": 17,
+  "ok_notes": "I checked all 17 shots against the rendered video. The section starts at 23.06 and the next section (#16 Jason Carvey) starts at about 53.7, and the render timing matches the EDL. These shots are fine: 0 (s6_core4, window then a clear Ghostface), 1 (Scream 2022 Ghostface over a victim), 2 (Scream VI Ghostface close-up on 'coolest'), 3 (Scream 4 opening girls on 'whose movie was best'), 4 (bloody Billy under the 'HOW HARD TO SURVIVE' title), 5 (dead girl at 'killed', then a knife stab with the US flag), 6 (Scream VI victim grabbed and stabbed on 'close to their victims'), 7 (Sidney and the video-call 'plan' man for 'how smart the plan was'), 11 (Casey on the phone under the 'SURVIVAL RATE' title, clear and lit), 13 (Richie under the 'ALL HUMAN' title, lit), 15 (Scream 2 Derek on the stage star, 'so your odds'), 16 (Scream 3 Sidney, then a clear Ghostface, 'at least at the start'). No end cards or black frames appear in this section. Proposed in-points were checked at 4-8 fps. For s7_06_spree the whole clip is too dark for any word-tied shot, and its end card starts at about 290 s. Scratch frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s01/",
+  "issues": [
+   {
+    "section": "s01",
+    "shot_index": 8,
+    "anchor_words": "how strong they were and how hard they were to",
+    "video_time": 36.66,
+    "problem": "s7_06_spree@222: almost black for the whole 2.24 s. A blurred head tumbles out of frame in the first ~0.8 s, then it is an empty dark room with no subject. Nothing on screen says 'strong', and the spree clip is mostly dark from 0 to 290 s.",
+    "severity": "major",
+    "fix_clip": "s5_09_fighting",
+    "fix_in": 121,
+    "fix_note": "Scream (2022) kitchen: the unmasked killer pins Gale to the floor and chokes her. Well lit from 121.0 to about 123.5 (2.5 s usable, covers 2.24 s). Change the film label for 13.6-15.84 to 'Scream (2022)'. Second choice: s6_store 118.5, a lit Ghostface aiming a shotgun (about 1.25 s clean before it cuts to the clerk).",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s5_09_fighting",
+     "corrected_in": 121.27,
+     "reason": "I accept the clip, but the in-point has to move. At the proposed 121.0, the first ~0.25 s (121.0 to about 121.24) is a different, blurry shot: a dark, out-of-focus arm across the frame in front of the kitchen cabinets, with Gale barely visible. That breaks the rule that the subject must be clear from the very first frame. The hard cut to the lit choke shot lands at about 121.25. From there to about 123.25 it is clear and well lit the whole time: the killer (face hidden by her hair) pins Gale to the wooden floor and chokes her, a good fit for 'how strong they were'. That is only about 2.0 s of usable footage, not the 2.5 s the editor claimed, and the shot needs 2.24 s (13.6 to 15.84). Starting at 121.27, the last ~0.24 s cuts at about 123.27 to a lit close-up of Tara screaming in the same scene. That tail is not black, an end card or a countdown, and it is not on the action word, so it is acceptable. Optionally, set speed to about 0.9 to stretch the choke over the full 2.24 s. Change the film label for 13.6-15.84 to 'Scream (2022)'. Frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s01s8/ (cs.jpg, a.jpg, b.jpg, c.jpg)."
+    }
+   },
+   {
+    "section": "s01",
+    "shot_index": 14,
+    "anchor_words": "and every one of them ended up dead",
+    "video_time": 48.5,
+    "problem": "s1_12_tables@0: Billy and Stu wounded and walking around the kitchen (alive, bleeding). On 'dead' (26.28, about 0.84 s into the shot) nobody is dying or dead, so the word lands on the wrong action.",
+    "severity": "critical",
+    "fix_clip": "s5_10_daughter",
+    "fix_in": 159.2,
+    "fix_note": "Scream (2022): gun aimed down at the downed Richie, muzzle flash at 160.0 (lands on 'dead' at shot +0.84), then a lit close-up of his bloody dead face. Clean from 159.2 to 160.45; the shot needs 1.2 s. Change the film label for 25.44-26.64 to 'Scream (2022)'. A longer option for the dead face is s5_10_daughter 161.0-162.75 (Richie lying dead in blood, lit), but it has no 'moment' on the word.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s5_10_daughter",
+     "corrected_in": 159.24,
+     "reason": "I checked the frames frame by frame. The source cuts from Sam to the gun-on-Richie POV at about 159.18-159.20. The frame at 159.159 is still Sam, so an in-point of exactly 159.2 could show one frame of Sam. There are two muzzle flashes, at about 159.28 and about 160.12 (not 160.0). The source cuts back to Sam at about 160.55. Every frame from 159.20 to 160.5 shows Richie's lit, bloody face clearly, with the gun aimed down and no black frame or end card. With an in-point of 159.24, the shot opens on the gun POV and gets the first flash almost at once. 'Dead' (+0.84) then lands at 160.08, with the second flash at 160.12, which is about one frame later. The 1.2 s shot ends at 160.44, before the cut back to Sam. Accepted with the in-point moved to 159.24. Change the film label for 25.44-26.64 to Scream (2022)."
+    }
+   },
+   {
+    "section": "s01",
+    "shot_index": 9,
+    "anchor_words": "down.",
+    "video_time": 38.9,
+    "problem": "s3_11_family@24: Scream 3 Ghostface just standing in a dark room. On 'hard to put down' (16.52) nothing is being put down or surviving an attack.",
+    "severity": "major",
+    "fix_clip": "s5_09_fighting",
+    "fix_in": 148,
+    "fix_note": "Scream (2022): the killer engulfed in flames, still standing and flailing. Bright and clear from 148.0 to about 149.5 (shot is 1.09 s). This shows 'hard to put down' literally. Label 'Scream (2022)'. Alternative: 144.0, the flare-up as she is set on fire, but only about 0.9 s before it cuts to Sidney and Gale.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s5_09_fighting",
+     "corrected_in": 148,
+     "reason": "I checked the shot frame by frame at 10 fps. It runs from 15.84 to 16.93, so 1.09 s. In the source clip, the cut from the Sidney/Gale reaction shot to the burning killer falls between 147.8 and 147.9. From 148.0 through 149.5 every frame shows the killer, brightly lit and fully on fire, still standing in the kitchen and flailing her arms. That literally matches \"hard to put down\". The picture is clear from the first frame to the last (148.0 to 149.09), with no black frames, end card or countdown. The next cut back to Sidney comes at about 149.7, after the shot has already ended. The 148.0 in-point is safe."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s01",
+    "shot_index": 10,
+    "anchor_words": "And for every Ghostface you get one number",
+    "video_time": 39.99,
+    "problem": "s6_two_gf@138: the first 0.6 s shows a screaming man (Scream VI). On 'Ghostface' (17.68, shot +0.75) the frame is a dark motion blur. The mask only reads clearly from +1.0 to +1.3 s, then it cuts to the two girls.",
+    "severity": "minor",
+    "fix_clip": "s6_two_gf",
+    "fix_in": 138.3,
+    "fix_note": "Shift the in-point by +0.3 s so the clear, centred mask (source 139.0-139.3) starts on the word 'Ghostface'. The man's scream still opens the shot, and the girls still play under 'one number'."
+   },
+   {
+    "section": "s01",
+    "shot_index": 12,
+    "anchor_words": "Unlike Michael or Jason",
+    "video_time": 43.94,
+    "problem": "Two killer names are spoken here: 'Michael' (21.44) and 'Jason' (22.12). The picture is s6_opening@282, a crying victim and a dark Ghostface from Scream VI, so neither named killer is on screen. There is no ep01 (Halloween) clip folder. Jason clips exist in E:/YTP2/Instruction444/clips/ep02.",
+    "severity": "minor",
+    "fix_clip": "s6_opening",
+    "fix_in": 282,
+    "fix_note": "Optional. Split the shot at 21.9 and insert a 0.6 s Jason mask shot from ep02 (for example fvj_final_fight or a p6/p7 clip; no in-point verified here, p3_gets_mask is too dark). Michael would need an EP01 clip, which is not on E:. Otherwise leave as is: it is a comparison line, not an action."
+   }
+  ]
+ },
+ {
+  "section": "s02",
+  "shots_checked": 15,
+  "ok_notes": "Checked all 15 shots of s02 in the render (53.56-79.4 s) at start +0.1 s, middle and end -0.1 s, plus the section boundary at 10 fps. The render cuts to #15 Karl Gibbs at about 79.4 s, close to the expected 79.46 s.\n\nShots that are fine:\n- Shots 0-2 ('Number sixteen is Jason Carvey', 'from Scream Six', 'shows up in the opening'): Jason or the masks are visible with the #16 card.\n- Shots 6-7 ('gets home', 'finds out'): the fridge opens on the roommate's body right at 10.6 s.\n- Shot 8 ('the real Ghostface', word at 11.6 s): Ghostface fills the frame from 11.42 s. Good sync.\n- Shots 9-10 ('the whole time', 'He was the Ghostface'): a stab wound on a bloody shirt, then bloodied Jason.\n- Shot 12 ('somebody scarier took the job'): Ghostface mask from the first frame.\n- Shot 13: Survival rate 85% card over Jason. Clear.\n- Shot 14: the instruction card over an apartment wide shot. No end cards or black frames.\n\nNotes from the owner's request that touch this section, but are content changes rather than frame errors:\n- The owner said '16\ubc88\uc9f8 \ub0a8\uc790\ub294 99%\ub85c \ud558\uc790' ('let's make the 16th guy 99%'). The odds overlay here still reads 85% and the narration says 'eighty-five percent'. The overlay and the VO need updating, and if the score becomes a composite, the scoring concept needs updating too.\n- The owner wants the Instruction lines dropped for now. That removes shot 14's 'Instruction: check who's already in the apartment' line (22.45-25.2 s) and the 'instr' overlay, so the section ends after 'percent.'",
+  "issues": [
+   {
+    "section": "s02",
+    "shot_index": 3,
+    "anchor_words": "kills his film professor,",
+    "video_time": 58.6,
+    "problem": "'kills' is spoken at 5.12 s, but the whole shot (s6_opening @48) is a calm close-up of Jason talking on his phone. No kill and no aftermath of a kill is shown. The Laura Crane (film professor) stabbing is not in s6_opening and not in any of the other Scream VI clips I checked (s6_face is a different film/scene). The kill footage itself does not exist in the clip folder.",
+    "severity": "critical",
+    "fix_clip": "s6_opening",
+    "fix_in": 11.7,
+    "fix_note": "Best available substitute: s6_opening 11.67-14.1 is a close-up of Jason scrubbing his hands at the sink right after the kill (the mask wall is visible before 11.5, so do not start earlier than 11.67). Shot length 1.55 s, so 11.7 to 13.25 is clean, with 2.4 s usable at most. For the kill itself to be on screen, a new Scream VI clip of the Laura Crane alley stabbing would be needed.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s6_opening",
+     "corrected_in": 11.7,
+     "reason": "I checked s6_opening from 11.7 to 13.3 s at 10 fps, covering the 1.55 s shot (5.04 to 6.59 in s02). Every frame is a clear, well-lit close-up of the hands scrubbing at the sink with running water, and dark residue is visible on them. The cut from the mask wall happens around 11.4 to 11.5 s, so 11.7 is clean from the first frame. Nothing in the window is black, an end card or a countdown, and the next shot (Jason's face) does not start until about 14.2 s. This is a clear improvement over the calm phone close-up at 48 s. The limit: it shows the aftermath of the kill, not the stabbing. I scanned 0 to 96 s of s6_opening at 0.5 fps and found no stabbing footage, which matches the editor's finding. So this is the best available in-point, but the kill can only be on screen if a new Scream VI clip of the Laura Crane stabbing is added."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s02",
+    "shot_index": 5,
+    "anchor_words": "new face of the franchise,",
+    "video_time": 61.2,
+    "problem": "'new face of the franchise' (7.72-8.32 s) plays over Jason talking on the phone (s6_opening @168). The picture is correct but has no punch. The source has Jason handling his Ghostface mask and putting it on the mask stand, which fits 'face' far better.",
+    "severity": "minor",
+    "fix_clip": "s6_opening",
+    "fix_in": 9,
+    "fix_note": "s6_opening 9.0-11.4: hand sets the Ghostface mask on the stand, masks clearly lit (2.4 s usable; the 1.72 s shot fits). Shot 1 already uses @9, so either move shot 1 to Jason's unmasked close-up at s6_opening 3.3-8.8, or use 4.4-6.1 here (Jason pulling the black hood/mask off his face)."
+   },
+   {
+    "section": "s02",
+    "shot_index": 11,
+    "anchor_words": "five minutes before",
+    "video_time": 69.64,
+    "problem": "The 0.96 s shot (s6_opening @283.5) packs three source cuts. It opens on a dark, blurry Ghostface mask, cuts to a near-black kitchen frame, and ends on Jason crying, so it reads as visual churn.",
+    "severity": "minor",
+    "fix_clip": "s6_opening",
+    "fix_in": 284.2,
+    "fix_note": "Optional: start nearer the clean Jason-in-agony frame (around 284-285), or merge this shot into shot 12 (Ghostface @291) for a steadier beat. This is cosmetic only."
+   }
+  ]
+ },
+ {
+  "section": "s03",
+  "shots_checked": 12,
+  "ok_notes": "Shot index is 0-based in EDL order; video_time is absolute in ep03_full_v1.mp4 (section start 79.38). Every shot was checked from the rendered frames. Shots 0-2 (anna_camp@21/24/33, 'Number fifteen is Karl Gibbs... He's big') show Karl clearly with the #15 card. Shot 3 (walls@192, 'scary in a fight') shows Ghostface coming out of the lit doorway and onto the porch, which is OK. Shot 4 (anna_camp@156, 'escaped patient') is a clear Karl close-up. Shot 5 (anna_camp@0, 'used as a pawn') shows Ghostface and Karl together, which is good. Shot 6 (anna_camp@99, 'people really running things') shows the blonde mastermind (Anna Camp), which is OK. Shot 10 (walls@243, 'Survival rate 75%') shows Sidney hugging the cop and then the SUV with the body, which is fine. Shot 11 (walls@246) runs under the 'Instruction: stay near the people with the car keys' card. The owner asked to drop the Instruction lines, so this shot/overlay should be cut or rewritten (it ends cleanly at 250.1, before the end card at 252.25). No end cards or black frames appear anywhere in this section. Scratch frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s03/ (hit.jpg shows the impact at 8 fps from source 231.5).",
+  "issues": [
+   {
+    "section": "s03",
+    "shot_index": 9,
+    "anchor_words": "hit him with a car.",
+    "video_time": 93.82,
+    "problem": "This is the owner's 1:36 complaint. The shot uses s7_04_walls@230.5 and runs 1.48 s. It opens on an empty dark street (230.5-231.0), cuts to Sidney (231.0-231.4), then shows Ghostface standing in the road. It cuts away at source 231.98, before the SUV strikes him. The impact is at source ~232.375 (the car sweeps through the frame from 232.375 to 232.75, then headlights bear down from 232.875 to 233.5). No car hit is visible on 'hit' (14.52) or 'car' (15.6).",
+    "severity": "critical",
+    "fix_clip": "s7_04_walls",
+    "fix_in": 232.05,
+    "fix_note": "With in=232.05, Ghostface/Karl is standing clearly in the street at the first frame. The car slams through him at about section 14.77 ('him with'), and the headlights race in until the shot ends (source 233.53). Any in-point from 231.9 to 232.2 works (232.2 puts the impact right on 'hit' but shows Ghostface for only 0.17 s). Usable action runs about 231.9-236.6: the car stops over the body at 234.9-236.6. If shot 10 is made longer, it can stay on this clip through ~236.5. Do not run it to 237.2, where it cuts to the cop lying on the grass.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s7_04_walls",
+     "corrected_in": 232.05,
+     "reason": "I checked frames from 231.9 to 233.9 at 8 fps. The shot runs 1.48 s, so in=232.05 covers source 232.05 to 233.53. At the first frame, Ghostface is standing in the street and is clearly visible: lit, masked, with the boy in the foreground. There is no empty road, black frame or end card. The SUV sweeps through him at source ~232.4 to 232.65, which is section ~14.79 to 15.04 ('him with'). That is only about 0.27 s after 'hit' (14.52), and the impact is on screen before 'car' (15.6). The rest of the shot is the car's headlights bearing down (232.78 onward), which stays on the action until the cut. It clearly fixes the 1:36 complaint, so I accept 232.05."
+    }
+   },
+   {
+    "section": "s03",
+    "shot_index": 8,
+    "anchor_words": "when Gale, Mindy and Chad",
+    "video_time": 92.18,
+    "problem": "The shot uses s7_04_walls@227 for 1.64 s. It shows a dark, blurry close-up of a scuffle, then the uniformed cop lying on the lawn. Gale, Mindy and Chad, who are named here, never appear.",
+    "severity": "critical",
+    "fix_clip": "s7_04_walls",
+    "fix_in": 249.5,
+    "fix_note": "From 249.5, Gale (red coat) is clearly visible stepping away from the SUV and Chad is getting out behind her. Mindy walks in at 250.75 (section ~14.05, as 'Chad' is spoken), and all three stand in frame until 252.1. The end card starts at 252.25, so the most usable length from 249.5 is 2.7 s. In the film the trio appears just after the hit, but this is the only shot of them in this clip. Note: shot 11 (18.56, walls@246) shows the same footage. Replace it whatever happens, since the owner wants the Instruction line/card removed.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s7_04_walls",
+     "corrected_in": 249.9,
+     "reason": "I checked frames at 0.25 s steps from 249.5 to 252.0, and at 10 fps from 250.2 to 251.0. From the first frame at 249.5, Gale (red coat) is clearly visible stepping away from the SUV and Chad is in frame beside it. There is no black frame, countdown or end card. The end card starts about 252.25. The shot is 1.64 s long (section 12.8 to 14.44). In the narration, Gale starts at 12.88, Mindy at 13.44 and Chad at 14.0. With in=249.5, Gale lands at 249.58 (visible) and Chad at 250.70 (visible). But \"Mindy\" lands at 250.14, and Mindy does not enter the frame until about 250.6-250.7, so her name plays over a frame without her. Moving the in-point to 249.9 fixes this. Gale then lands at 249.98, still clearly visible. Mindy lands at 250.54, as she walks in on the left. Chad lands at 251.10 with all three in frame. The shot ends at 251.54, well before the end card. The proposed 249.5 is acceptable, but 249.9 matches the names better. Footage is dim night lighting but the faces are readable. Note: shot 11 (walls@246) overlaps the same footage."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s03",
+    "shot_index": 7,
+    "anchor_words": "and his run ends",
+    "video_time": 91.14,
+    "problem": "walls@222 is a very dark wide shot of two figures crawling on the lawn. The subject is hard to read, but the line has no action word.",
+    "severity": "minor",
+    "fix_clip": "s7_04_walls",
+    "fix_in": 218,
+    "fix_note": "218.0-219.0 is a better-lit porch fight, with Ghostface raising the knife over the cop. This is optional."
+   }
+  ]
+ },
+ {
+  "section": "s04",
+  "shots_checked": 12,
+  "ok_notes": "The #14 Mrs. Loomis rank card, the film labels (Scream 2 / Scream 1996) and the 68% Survival Rate overlay timings are all correct. No end cards or black frames in this section (the blame clip's end card starts at ~127.6 source and is never reached). The core problem is footage: s2_10_blame has only ~2.4 s of Mrs. Loomis (120.25-121.1 and 122.6-124.15), and no ep03 clip shows Cotton. So most of this segment shows Sidney and Mickey while the narration describes Loomis and Cotton. Fixing it properly needs a Scream 2 finale clip with Debbie Salt, Cotton arriving and the shooting; the local clips cannot cover it. Frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s04/shots.jpg and blame_*.jpg.",
+  "issues": [
+   {
+    "section": "s04",
+    "shot_index": 0,
+    "anchor_words": "Number fourteen is Mrs. Loomis,",
+    "video_time": 102,
+    "problem": "Loomis is visible only for the first ~1.65 s. At about 103.7 the source cuts to Sidney (blame 124.2 and on), so most of the word 'Loomis,' (1.52-2.3) plays over Sidney.",
+    "severity": "major",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 122.6,
+    "fix_note": "The clean Loomis close-up runs 122.6-124.15, only about 1.55 s. To cover the 2.24 s shot, use speed ~0.7 from 122.6, or end the shot at ~1.6 s and hold a frame. The other Loomis take, 120.25-121.1, is only 0.85 s.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 122.6,
+     "reason": "I checked the frames frame by frame at 30 fps. In s2_10_blame the clean Mrs. Loomis shot (gun raised, face clear and well lit, no end card or black frame) starts at 122.567 and lasts until 124.2, when it cuts to Sidney. That is about 1.63 s. The current EDL in-point of 122.45 begins on Sidney: Loomis only appears at 122.567. This shot is 2.24 s long, so at normal speed from 122.6 it would cut to Sidney at about 1.6 s, while 'Loomis,' is still being spoken. The fix only works if it uses the slowdown: from 122.6 at speed 0.7, the shot uses 2.24 x 0.7 = 1.568 s of source, ending at about 124.17. That is just before the 124.2 cut, so Loomis is on screen for the whole shot. Do not use a speed above about 0.71. Holding the last frame from about 1.6 s is also acceptable. The other take (about 120.0-120.9) is shorter, and Gale is in the foreground at the start of it, so 122.6 is the better choice."
+    }
+   },
+   {
+    "section": "s04",
+    "shot_index": 1,
+    "anchor_words": "Billy's mom,",
+    "video_time": 104.24,
+    "problem": "The in-point at creative 6.0 shows a body lying on the kitchen floor for ~0.8 s. Billy only appears at ~105.0, so 'Billy's' (2.32) is spoken over the wrong subject.",
+    "severity": "major",
+    "fix_clip": "s1_11_creative",
+    "fix_in": 7,
+    "fix_note": "Billy is clearly visible behind Sidney from 7.0 to 11.3, which easily covers 1.07 s.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s1_11_creative",
+     "corrected_in": 7.3,
+     "reason": "I rejected the proposed in-point. Checked at 30 fps, s1_11_creative still shows the body on the kitchen floor from 7.0 to about 7.13. The cut to the Sidney+Billy two-shot comes at about 7.15\u20137.17. With an in-point of 7.0, the shot starting at 2.24 would open on the floor body for about 0.15 s, so 'Billy's' at 2.32 would land on the wrong subject. That breaks the rule that the subject must be clearly visible from the very first frame. Use 7.3 instead. Billy's face is clear and well lit behind Sidney from 7.17 until the cut to Stu at about 11.4. The 1.07 s shot would run from 7.3 to 8.37, entirely inside that span. There are no end cards, black frames or other people in that range, apart from Sidney, who is in frame with him."
+    }
+   },
+   {
+    "section": "s04",
+    "shot_index": 2,
+    "anchor_words": "who spent the whole movie pretending",
+    "video_time": 105.31,
+    "problem": "The narration is about Mrs. Loomis, but the shot shows Sidney and then Mickey (blame 106-108). Loomis is never visible.",
+    "severity": "major",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 120.25,
+    "fix_note": "This clip only has ~2.4 s of Loomis in total (120.25-121.1 and 122.6-124.15), and none of the other Scream 2 clips (omega, showtime, play, big_boys, driving) contain Debbie Salt/Loomis. Either reuse 120.25 (0.85 s, slowed) or add a new Scream 2 clip of Debbie Salt the reporter.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 122.55,
+     "reason": "I'm rejecting the proposed in-point. In the EDL, s04 shot 2 runs from 3.31 to 5.36 s, so it lasts 2.05 s, and \"who spent\" starts at 3.39 s. I checked s2_10_blame at 8 fps. From 120.25 s, Mrs. Loomis (white trench coat, holding the gun) is clear only until about 121.0 s. Sidney's close-up then fills the remaining ~1.2 s, so the shot would end on the wrong person unless it were slowed to about 0.4x, which looks bad. The clip's longer Loomis run starts at 122.55 s (122.45 is still Sidney) and lasts to about 124.1 s, when it cuts to Sidney at ~124.15. That is about 1.55 s of clean, well-lit Loomis with the gun visible, from the first frame on. It has no end card, black frame or countdown. To fill 2.05 s, play it at about 0.75x, or trim the shot to 1.5 s. Caveat: s04 shot 0 already uses 122.45 for the rank-card opening (0 to 2.24 s), and later shots use 121 and 123. This footage would repeat within about 1 s, so the renderer could crop or zoom it differently, or a new Debbie Salt clip could be added. Frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s04sh2/ (a.jpg, b.jpg, c.jpg)."
+    }
+   },
+   {
+    "section": "s04",
+    "shot_index": 3,
+    "anchor_words": "a friendly reporter named Debbie Salt.",
+    "video_time": 107.36,
+    "problem": "Loomis is shown at the start (blame 120.1). It cuts to Sidney at ~108.6, so 'Debbie Salt' (6.68-7.9) plays over Sidney and Loomis only returns at the very end.",
+    "severity": "major",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 120.25,
+    "fix_note": "Clean Loomis lasts only 120.25-121.1 (0.85 s) and the shot needs 2.59 s. Slow it (speed ~0.35), or cut to Loomis right on 'Debbie' (6.68) using 122.6 (1.55 s available) if shot 0 uses a different take. A dedicated Debbie Salt clip would be better.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 122.55,
+     "reason": "I checked frames at 8-10 fps. In s2_10_blame, Loomis appears in two takes. Take A runs about 119.7-121.05; until about 120.5, Gale's head and shoulder still intrude at the left edge, and the cut to Sidney comes at about 121.1. Take B runs about 122.55-124.15, is clean, well lit and shows Loomis aiming the gun, and cuts to Sidney at about 124.2. The shot is s04 shot 3, from 5.36 to 7.95 (2.59 s). Its narration is \"a friendly reporter named Debbie Salt\", with 'Debbie' at 6.68 and 'Salt' at 7.44. The proposed in-point of 120.25 at normal speed shows Loomis for only about 0.8 s, then Sidney plays over 'Debbie Salt', so it fails the rule. Even slowed to 0.35, the clip runs from 120.25 to about 121.16: it opens with Gale's face partly in frame and touches the cut to Sidney at the end. Only speed 0.29 or slower stays clean, which would look like a freeze. Better fix: use 122.55 at speed 0.6. That covers source 122.55-124.10, so all 2.59 s show only Loomis, with no end card or black frame. Shot 0 currently uses 122.45 at normal speed, which reuses the same footage and also runs into Sidney at about 124.2. Move shot 0 to take A, starting at 120.3 at about speed 0.75 for its 2.24 s (covers about 120.3-121.0), so the two shots do not repeat. A dedicated Debbie Salt reporter clip would still be the best option if one is available."
+    }
+   },
+   {
+    "section": "s04",
+    "shot_index": 4,
+    "anchor_words": "Her plan was patient and honestly kind of brilliant,",
+    "video_time": 109.95,
+    "problem": "Shows Sidney and Mickey standing (blame 115-118), then Gale walking in. The subject ('Her' = Loomis) is not shown at all during the 3.4 s shot.",
+    "severity": "major",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 122.6,
+    "fix_note": "There is no more unused Loomis footage in this clip (max 1.55 s at 122.6). New Loomis/Debbie footage is needed to cover 3.4 s. Otherwise use Loomis at 122.6 for the first 1.5 s.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 122.45,
+     "reason": "This is s04 shot index 4 (t=7.95 to 11.36, about 3.41 s). I pulled frames from s2_10_blame at 122.6 s in 0.25 s steps. Loomis (white coat, holding the gun) is clearly visible from 122.6 to about 124.0. At about 124.1 (+1.5 s) the clip hard-cuts to a Sidney close-up, and Sidney stays on screen through 126.0. So for the last ~1.9 s of the shot the subject is the wrong person, and the proposal fails. I checked 100-131 s at 1-2 fps. Loomis only appears in short pieces: about 119.6-121.0 (partly with Gale in the foreground) and 122.45-124.1. Everything after about 127.5 is the Movieclips end card. No unbroken 3.4 s of Loomis exists in this clip. The best in-point is 122.45, which gives about 1.6 s of Loomis. The other ~1.8 s of the shot needs a different source or a split shot. Possible covers are the 120.0-120.9 Loomis-alone piece, already used in shot 3, or a freeze/slow-down of 122.45-124.0. Re-time the shot to avoid the Sidney cut. Accepting it at 3.4 s length would show Sidney during 'brilliant'."
+    }
+   },
+   {
+    "section": "s04",
+    "shot_index": 7,
+    "anchor_words": "and once Cotton",
+    "video_time": 117.28,
+    "problem": "'Cotton' (15.56) is spoken over Sidney and Mickey (blame 117) and then Gale. Cotton Weary never appears.",
+    "severity": "critical",
+    "fix_clip": "none available",
+    "fix_in": 0,
+    "fix_note": "None of the ep03 Scream 2 clips (s2_03_omega, s2_04_showtime, s2_06_play, s2_07_big_boys, s2_09_driving, s2_10_blame) contains Cotton or his arrival with the gun. A Scream 2 ending clip of Cotton shooting Debbie Salt is needed. Otherwise rewrite the line.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "",
+     "corrected_in": 0,
+     "reason": "I checked contact sheets of all six Scream 2 clips (s2_03_omega, s2_04_showtime, s2_06_play, s2_07_big_boys, s2_09_driving, s2_10_blame) at 1 frame every 3 s, skipping the end cards, and Cotton Weary (Liev Schreiber) is not in any of them. s2_10_blame (the source of the current shot at 117 s) shows only Sidney, Mickey and the stage fight before the end card at about 129 s. s2_09_driving shows Sidney, Hallie, Ghostface and the car crash. s2_07_big_boys shows Randy, Gale and Dewey on the campus green. s2_04_showtime is the sorority scene with Sidney, Derek and Dewey: I zoomed in on 79-123 s and the man in the tan jacket is Dewey, not Cotton. s2_03_omega is Cici's death and s2_06_play is the stage play. The editor is right that no ep03 clip shows Cotton or him arriving with the gun. The fix is to source a Scream 2 ending clip of Cotton shooting Mrs. Loomis (Debbie Salt), or to rewrite the line so it doesn't name Cotton. I found no better in-point."
+    }
+   },
+   {
+    "section": "s04",
+    "shot_index": 8,
+    "anchor_words": "showed up with a gun,",
+    "video_time": 118.08,
+    "problem": "Shows Loomis holding the gun (blame 123). The line says Cotton showed up with a gun, so the wrong person is on screen holding the gun.",
+    "severity": "critical",
+    "fix_clip": "none available",
+    "fix_in": 0,
+    "fix_note": "Cotton footage is not in the clip set and needs a new Scream 2 finale clip. If none can be added, change the wording to match what is shown.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "none",
+     "corrected_in": 0,
+     "reason": "I agree with the editor: the problem is real, and no Cotton footage exists to fix it. Shot 8 runs from 16.08 to 16.96 s in the section, and the word \"gun\" lands at 16.40 s. I checked frames of s2_10_blame from 122.5 to 124 s at 4 fps. The shot shows Mrs. Loomis (Laurie Metcalf, white coat) holding the pistol, not Cotton. It is bright and clear, with no end card, but it is the wrong person. I then checked the whole blame clip at 1 fps plus s2_03_omega, s2_04_showtime, s2_06_play, s2_07_big_boys and s2_09_driving at 1 frame every 4 s. Cotton (Liev Schreiber) does not appear in any of them. In the blame clip, 128 s onward is the Movieclips end card. Without a new Scream 2 finale clip, the fix has to be in the narration. Rewording to something like \"once the gun came out, it was over\" (no name) keeps the shot (s2_10_blame at 123 s) correct, because that shot does show the gun coming out clearly. If a Cotton clip is added later, the in-point must land right where he walks in with the gun."
+    }
+   },
+   {
+    "section": "s04",
+    "shot_index": 9,
+    "anchor_words": "it was over.",
+    "video_time": 118.96,
+    "problem": "Shows Mickey (blame 107-108.4). It does not show Loomis being stopped or shot, so the payoff for 'it was over' is missing.",
+    "severity": "major",
+    "fix_clip": "none available",
+    "fix_in": 0,
+    "fix_note": "Loomis being shot by Cotton is not in any ep03 clip. A Scream 2 finale clip is needed. As a stop-gap, Mickey being shot/collapsing elsewhere in the blame clip would at least show an ending action.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "",
+     "corrected_in": 0,
+     "reason": "The proposal gives no usable clip or in-point, so there is nothing to accept. I checked s2_10_blame.mp4 (157.7 s) at 0.5 fps across the whole clip and at 2 fps for 104-128 s. Only 0-~127 s is film; from about 128 s on it is the Movieclips end card. The film part covers the Mickey/Sidney/Gale fight and Mrs. Loomis entering in a white coat holding a gun (about 120-123 s). Cotton never appears, Loomis is never shot, and Mickey is never shot or seen collapsing, so the suggested stop-gap is not in this clip either. 'it was over' starts at s04 t=17.04, inside shot 9 (16.96-18.4). Nothing in this clip can show it. The current in-point of 107 s shows Sidney turning or a Mickey close-up, not Loomis being stopped. A Scream 2 finale clip showing Cotton shooting Loomis is still needed. If shot 9 must be filled for now, the nearest relevant material is Loomis with her gun at about 120.0 s, but that is a different moment and the existing shots already use it (shot 11 at 121, shot 8 at 123). It does not count as the payoff."
+    }
+   },
+   {
+    "section": "s04",
+    "shot_index": 10,
+    "anchor_words": "Survival rate: sixty-eight percent.",
+    "video_time": 120.4,
+    "problem": "'Survival rate' (18.48) plays over Sidney and Mickey (blame 116). Gale and then Loomis only appear in the second half of the shot, so the rated killer is not on screen when the rate is read.",
+    "severity": "major",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 122.6,
+    "fix_note": "Start on Loomis: 122.6 gives 1.55 s, and the shot is 2.48 s, so slow it to ~0.62 or extend with a frame hold. 120.25 (0.85 s) is the alternative take.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 122.6,
+     "reason": "I checked the frames at 10 fps. The narration in s04 rates Mrs. Loomis (Debbie Salt), and the source shows her clearly, holding the gun and well lit, from a cut at about 122.55 s. At 122.6 she is on screen from the very first frame. There is no end card, black frame or countdown, since the clip is 157.7 s long. Her take lasts only until about 124.15 s; the next frame (124.2) cuts back to Sidney. That gives about 1.6 s of usable footage for a 2.48 s shot (18.40 to 20.88). At normal speed Sidney would appear around 20.0 s, while 'sixty-eight percent' is still being said. So the fix only works with the proposed slow-down: speed 0.62 or a little lower, about 0.6, so the shot ends before the 124.15 cut, or a frame hold. The other take, 120.25 to about 121.0, is shorter, and Gale is still partly in the frame at its start, so 122.6 is the better in-point."
+    }
+   },
+   {
+    "section": "s04",
+    "shot_index": 6,
+    "anchor_words": "she's the least dangerous fighter on this list,",
+    "video_time": 114.96,
+    "problem": "Blurry, dark motion frames of Sidney and Mickey fighting (blame 70-72). Loomis is not visible, and 'she' refers to Loomis.",
+    "severity": "major",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 65.5,
+    "fix_note": "There is no Loomis fight footage in this clip. If a fight shot is kept, a clearer one is the wide fight at 64.5-67.5. Ideally use Loomis footage instead.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 122.55,
+     "reason": "I'm rejecting the proposed fix. Frames at 0.25 s steps from 65.5 s show Sidney fighting Mickey, not Loomis. 65.5-67.0 is a clear wide shot, but 67.25-67.75 is close and blurry, and Loomis never appears. Since 'she' in the narration means Mrs. Loomis, the shot is the wrong person. I scanned the whole clip, and its only Loomis footage is two brief shots of her (white coat, gun drawn): about 120.25-121.2 s and 122.55-123.95 s. The second one is the cleanest: she is clear and well lit from the first frame, with no blur, end card or black. From about 123.95 s it cuts to a Sidney close-up. The shot needs 2.32 s (EDL t=12.96 to 15.28), but the Loomis footage is only about 1.4 s, so a plain cut would end on Sidney. Suggested shot: [12.96, 's2_10_blame', 122.55, 0.6]. Slowing it to 0.6 stretches the 1.4 s of Loomis to fill the whole shot. If speed can't be changed, start at 122.55 anyway and accept the last ~0.9 s showing Sidney. Note that shot 8 (in 123) and shot 11 (in 121) already use this Loomis footage, so she will appear more than once; shot 8 may want a different in-point. The clip's end card starts at about 128 s, so it isn't involved."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s04",
+    "shot_index": 5,
+    "anchor_words": "but up close",
+    "video_time": 113.36,
+    "problem": "Shows Mickey grappling with Sidney and a close-up of a bleeding foot (blame 60-61.6), not Loomis. The bleeding-foot frame at ~114.9 is an odd insert.",
+    "severity": "minor",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 60.5,
+    "fix_note": "This is a generic fight shot and is acceptable for 'up close'. Starting at 60.5 avoids the insert at 62.0 (the bloody foot)."
+   },
+   {
+    "section": "s04",
+    "shot_index": 11,
+    "anchor_words": "Instruction: never trust a reporter who's a little too nice.",
+    "video_time": 122.88,
+    "problem": "The Instruction card is still present, and the owner asked to drop Instruction lines. The picture is Sidney and then Loomis, which is fine.",
+    "severity": "minor",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 121,
+    "fix_note": "Remove the Instruction overlay and narration per the owner's request, and trim the section to end after 'sixty-eight percent' plus pad."
+   }
+  ]
+ },
+ {
+  "section": "s05",
+  "shots_checked": 10,
+  "ok_notes": "I checked all 10 s05 shots (127.66 to 147.72) at shot start +0.1 s, middle, and end -0.1 s. Shot 0, '#13 Charlie Walker': Charlie's still with the rank card, with the name spoken at 1.2 s; it is correct. Shot 2 ('every rule in the book') uses the trio still and is fine. Shots 3 and 5 ('He pulled off', 'the guy trusted the wrong partner') show Ghostface stalking and attacking Olivia; both are clear and acceptable. Shot 8, 'Survival rate: sixty percent': Charlie's still with the 60% bar, timed correctly. The owner wants 99% only for the 16th man, so 60% stays. The next section (#12 Quinn Bailey) starts at about 147.6 with a clean transition. The main defect is shot 7: the end card leaks in around 140.4, and the stab on 'Jill stabbed him through the heart' is never shown. The new clip E:/YTP2/Instruction444/clips/ep03/scream4_reveal.mp4 (23.9 s) is the reveal of Jill to Sidney. It has Jill clearly lit at 11.4 to 11.6 and 13.95 to 16.85, and a mask-and-knife drop at 16.9 to 17.6. It does not contain the moment Charlie is stabbed. s4_06_killcam is the Gale barn attack and is not usable for Charlie. Scratch frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s05/.",
+  "issues": [
+   {
+    "section": "s05",
+    "shot_index": 7,
+    "anchor_words": "him through the heart the second she didn't need him anymore (follows 'Jill stabbed' at 9.36-10.0)",
+    "video_time": 137.74,
+    "problem": "No stabbing shown, and neither Jill nor Charlie appears. The shot is s4_02_return@125.5: Ghostface's face, Olivia screaming, then a bloody knife from Olivia's kill. The source end card starts at 128.75. The Movieclips SUBSCRIBE / 'Click above to watch more clips' card is visible in the render around 140.4 s, before the cut to Survival Rate at 140.54.",
+    "severity": "critical",
+    "fix_clip": "scream4_reveal",
+    "fix_in": 13.95,
+    "fix_note": "The new scream4_reveal clip shows Jill, who is clearly lit and smiling, from 13.95 to 16.85 (2.9 s usable, which covers the 2.8 s shot). To land 'stabbed' (9.68): from 9.65 to 10.35, put a cut to scream4_reveal@16.9, where the Ghostface mask and knife fall into frame and stay clearly visible until about 17.6. After that point the frame goes dark. Then cut to scream4_reveal@14.0 for 10.35 to 12.88. None of the ep03 clips contains the actual moment Jill stabs Charlie, so the owner would need to record it if he wants it literally. Never use s4_02_return after about 128.6.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "scream4_reveal",
+     "corrected_in": 14.25,
+     "reason": "I checked the frames at 10 fps. At the proposed in-point, 13.95 (and also 14.0 for the second part), the source still shows the previous shot: Sidney facing a dark-haired person by the stairs. That is the wrong person. The cut to Jill comes between 14.1 and 14.2. From there Jill is clearly lit and smiling over her shoulder until about 16.85. At about 16.9 the Ghostface mask and the knife fall into frame and stay sharp until about 17.6, and after that the frame gets dark. So Jill is not on screen at the first frame of the proposed shot. Use scream4_reveal@14.25 instead. The 2.8 s shot (section time 10.08 to 12.88) then plays Jill from 14.25 to about 16.87, and the last roughly 0.2 s is the mask and bloody knife dropping. That ending still fits the narration. There are no end cards, black frames or countdown cards anywhere in 14.25 to 17.05. If the editor keeps the split version (mask insert at 16.9, then a Jill shot for 10.35 to 12.88), that second in-point must also be 14.25 or later, not 14.0. Also, 'stabbed' (9.68) falls inside shot 6 (s4_still_jill, 9.15 to 10.08), not shot 7. Any mask cut placed at 9.65 would replace part of shot 6. None of the frames I checked shows Jill actually stabbing Charlie."
+    }
+   },
+   {
+    "section": "s05",
+    "shot_index": 6,
+    "anchor_words": "and Jill stabbed (9.23-10.0)",
+    "video_time": 136.81,
+    "problem": "The still of Jill (s4_still_jill) is correct for 'Jill', but 'stabbed' at 9.68 falls inside this static shot, so no stabbing action appears on the word.",
+    "severity": "major",
+    "fix_clip": "scream4_reveal",
+    "fix_in": 11.4,
+    "fix_note": "Option 1: keep this shot at 9.15 but use scream4_reveal@11.4, where Jill is revealed in a hood looking at the camera (clear until 11.6), or keep the still. Either way, end the shot at 9.65 and cut to scream4_reveal@16.9 (mask and knife) on 'stabbed', as described for shot 7.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "scream4_reveal",
+     "corrected_in": 13.4,
+     "reason": "I checked scream4_reveal from 10.9 to 17.9 s in 0.25 s steps. The clip is fine overall: no end card, black frame or countdown in this range. The problem is the proposed in-point. At 11.4 Jill is only half-turned in her black hood. Her face is in profile, dark and partly hidden, and it only reads clearly from about 11.65. Then at about 12.65 the clip cuts to a reverse shot of Sidney, which runs to about 13.1. If the shot keeps its full EDL length (9.15 to 10.08, 0.93 s), the Sidney cut lands inside it. A better in-point is 13.4. From there Jill faces the camera in her hood, smiling, clearly lit, and the framing holds steady until about 16.65. Either planned length fits: 0.5 s if the shot ends at 9.65, or the full 0.93 s. Separately, the 'stabbed' insert at 16.9 is real: it shows the Ghostface mask and a knife on the floor. But it shows no actual stabbing, so judge shot 7 on its own."
+    }
+   },
+   {
+    "section": "s05",
+    "shot_index": 9,
+    "anchor_words": "Instruction: if he quizzes you on horror movies, leave.",
+    "video_time": 143.46,
+    "problem": "The owner asked to drop the 'Instruction' lines, but this shot still has the INSTRUCTION overlay and narration. The picture is s4_still_gf (two blonde women), which matches neither Charlie nor the instruction. The shot is dead air for the rule.",
+    "severity": "major",
+    "fix_clip": "s4_still_charlie",
+    "fix_in": 2,
+    "fix_note": "Remove the instruction narration and overlay, and end the section after 'sixty percent' (about 14.7 s plus pad). That removes this shot entirely. If a tail is needed, hold s4_still_charlie@2.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s4_still_charlie",
+     "corrected_in": 2,
+     "reason": "I checked the voice JSON. 'Survival rate: sixty percent.' ends at about 15.36 s, and everything after it is the Instruction line the owner wants dropped. Removing shot 9 (s4_still_gf at 15.8) and the 'instr' overlay, and ending the section at about 15.36 + 0.7 pad = about 16.06 s, matches the request. Shot 8, s4_still_charlie from 2 s starting at 12.88, then runs about 3.2 s and uses source 2.0 to about 5.2 s. I made frames from source 2.0 to 6.0 s at 0.25 s steps. Every frame clearly shows Charlie Walker sitting, well lit and sharp, in front of a figure holding a can. There are no black frames, end cards or countdowns, and the 12 s clip is long enough. The 'odds' overlay should be extended to the new section end. Optionally, re-voice or trim the audio so the Instruction narration is removed too."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s05",
+    "shot_index": 1,
+    "anchor_words": "the horror nerd who knew every rule",
+    "video_time": 130.01,
+    "problem": "Shows a dark close-up of Ghostface's mask from Olivia's kill, not Charlie the 'horror nerd'. It is acceptable but generic.",
+    "severity": "minor",
+    "fix_clip": "s4_still_trio",
+    "fix_in": 0,
+    "fix_note": "Optional: extend the Charlie still (s4_still_charlie@2) through 'horror nerd', or keep Ghostface. Not critical."
+   },
+   {
+    "section": "s05",
+    "shot_index": 4,
+    "anchor_words": "few kills,",
+    "video_time": 133.98,
+    "problem": "The first frames of the shot (s4_02_return@66) are motion-blurred as Olivia is dragged at the stair railing. The victim becomes readable only around mid-shot.",
+    "severity": "minor",
+    "fix_clip": "s4_02_return",
+    "fix_in": 68.5,
+    "fix_note": "From about 68.5, Olivia is clearly visible being grabbed. A cleaner alternative is 62.0, where she screams in close-up. 1.3 s is needed."
+   }
+  ]
+ },
+ {
+  "section": "s06",
+  "shots_checked": 8,
+  "ok_notes": "I checked all 8 shots at 2.5 fps on the render and 8-10 fps on the source where needed. Shot 1 (core4 89, 'She faked her own death'): Ghostface, then Quinn in the green top screaming as she is grabbed, then the bloody 'body'. It matches. Shot 2 (core4 54, 'everyone stopped looking at her'): the friends at the dinner table and Mindy/Tara smiling. Fine. Shot 4 (core4 117, 'one confirmed kill before'): a woman screaming as Ghostface grabs her, then jeans/green top. Acceptable. No end cards or black frames in this section; the Movieclips end cards start at about 176 s in s6_family and about 178 s in s6_core4, and every proposed in-point is before them. Scratch frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s06/",
+  "issues": [
+   {
+    "section": "s06",
+    "shot_index": 0,
+    "anchor_words": "Number twelve is Quinn Bailey.",
+    "video_time": 147.64,
+    "problem": "Wrong person. The source at s6_family 29.45 shows KIRBY (short blonde bob, slit throat, lying down) for about 0.9 s while the narrator says 'Number twelve is Quinn Bailey'. It then cuts to near-black frames (a dark figure, about 1.0-2.0 s) and then a Ghostface mask. Quinn (Liana Liberato, long auburn hair) is never on screen during her name card.",
+    "severity": "critical",
+    "fix_clip": "s6_family",
+    "fix_in": 120.5,
+    "fix_note": "s6_family 120.5-121.95 is a clear, well-lit close-up of Quinn grinning with a bloody mouth. It runs only about 1.45 s, so either play it at speed 0.6 to fill 2.44 s, or split the shot: s6_family 2.0-3.0 (Quinn standing at the reveal, Tara blurred in the foreground) for 0-1.0, then 120.5 for 1.0-2.44. Other clean Quinn takes: 143.0-144.4 (Quinn in the Ghostface robe, mask lifted, knife raised, about 1.4 s), 168.4-169.4 (same setup, about 1.0 s) and 98.25-99.4 (grinning, about 1.15 s).",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s6_family",
+     "corrected_in": 120.5,
+     "reason": "I'm accepting the fix, but only if the shot plays at speed 0.6. At 120.5 the very first frame of s6_family is a clear, well-lit close-up of Quinn (long auburn hair, bloody grin). She stays on screen until a hard cut at about 122.02, after which a different dark-haired girl in a blue top appears. That gives about 1.52 s of usable Quinn footage, but the shot runs 2.44 s (s06 shot 1 starts at 2.44). Played at normal speed, the last ~0.9 s would show the wrong person. At speed 0.6 the shot uses source 120.5 to 121.96, which ends about 0.06 s before the cut, so it works but with very little margin. There are no black frames, end cards or countdowns in that range. The split option also checks out: s6_family 2.0-3.0 shows Quinn standing, clearly visible, with Tara blurred in front, until a cut at about 3.2. The other takes are about 1.15-1.4 s each, so they would need a split too: 143.0 (Quinn in the robe with the mask lifted; cut at about 144.4) and 98.25 (grinning; cut at about 99.4). Just before 120.5 (at 119.5-120.4) the frame is an over-the-shoulder shot with no clear face, so 120.5 is a good in-point."
+    }
+   },
+   {
+    "section": "s06",
+    "shot_index": 5,
+    "anchor_words": "Sam shot her in the head.",
+    "video_time": 159.32,
+    "problem": "The action is not shown on its subject. Source s6_family 165 is a cool-toned/B&W flashback of Sam aiming a pistol at a different figure (not Quinn), followed from about 12.8 s by Sam smiling. Quinn being shot is never on screen during 'Sam shot her in the head' (the word 'shot' is at 12.00).",
+    "severity": "critical",
+    "fix_clip": "s6_family",
+    "fix_in": 8.9,
+    "fix_note": "At s6_family 8.9 a wide shot shows Quinn lunging at Sam (blue top). At about 9.3 there is a Quinn close-up as she is hit, and her head snaps back from 9.4 to 9.8. With in = 8.9, the hit lands on 'shot' (+0.32 s), and the 1.68 s shot ends at about 10.58 on the Sam/Tara aftermath, which is usable. The next shot (s6_family 13.5, dead Quinn with a head wound) then pays it off. Note: I inferred that this is the gunshot from the head snap and the flash streak at 9.3; check it at 1x.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s6_family",
+     "corrected_in": 8.9,
+     "reason": "I'm rejecting this fix. s6_family from 8.9 to 10.58 shows a fistfight, not a gunshot. The first frame at 8.9 is a blurry, dark wide shot of Quinn's back as she lunges at a woman in a blue top, and Quinn's face isn't visible. The 'flash streak' at 9.30 is a blue-sleeved arm or fist hitting Quinn's face (checked at full resolution). Her head snaps back from 9.4 to 9.8 from that blow, and from 9.9 to 10.4 a woman in a blue top swings a knife. No gun and no muzzle flash appear anywhere in 8.9 to 10.6. The gunshot sounds at 10.60 and 10.85 come from Kirby (the blonde) firing at Bailey from 11.2 to 12.4, not Sam firing at Quinn. Using this cut on 'shot' would show a punch and break the top rule. The clip goes straight from the fight (about 10.5) to Kirby's shots and then to dead Quinn with the head wound (13.4 to 14.0), so there is no in-point here that shows Sam shooting Quinn. corrected_clip/corrected_in only repeat the proposed values because the field is required. They are not a recommendation. Better options are to start this shot on the dead-Quinn head-wound frame (s6_family 13.4) or to find the actual shooting in another source. Frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s06s5/."
+    }
+   },
+   {
+    "section": "s06",
+    "shot_index": 3,
+    "anchor_words": "genuinely evil move, but she only got",
+    "video_time": 154.79,
+    "problem": "Wrong person again. s6_family 46.7 opens on Kirby (blonde bob, bloody throat) for about 0.8 s while the line is about Quinn's 'genuinely evil move'. The rest of the shot is a dark, unreadable view of a plastic-wrapped body and legs in jeans.",
+    "severity": "major",
+    "fix_clip": "s6_family",
+    "fix_in": 143,
+    "fix_note": "s6_family 143.0-144.4 shows Quinn in the Ghostface robe with the mask lifted and the knife raised, which fits 'evil move' well. Only about 1.4 s is usable (it cuts to Sam at about 144.5). Follow it with s6_family 98.25 (Quinn grinning, about 1.15 s) or 118.5-120.0 (bloody knife in a hand, then Quinn), or keep the current plastic-body footage for the last ~1.5 s on 'but she only got'.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s6_family",
+     "corrected_in": 143,
+     "reason": "The shot runs 3.01 s (section 7.15 to 10.16). Words in it: \"genuinely\" 7.23, \"evil\" 7.92, \"move,\" 8.24, \"but\" 9.25, \"she\" 9.44, \"only\" 9.68, \"got\" 10.00. In s6_family, 142.5 to 142.99 is Ethan with a knife in his mouth. The cut to Quinn lands at about 143.0, which makes 143.0 a clean in-point: from the first frame she is clearly lit, bloody-lipped, in the black robe, holding the Ghostface mask and knife up. It stays well exposed through about 144.3. At about 144.375 it cuts to Sam (dark hair, holding the mask) and stays on her to at least 145.4. With 143.0 as the only in-point for the full shot, Sam would be on screen from section time 8.52 to 10.16. That is the wrong person during \"move, but she only got\", so the fix as one in-point fails. I found no single continuous 3 s Quinn shot to use instead. 101.75 to 102.5 (Quinn with a knife) runs about 0.75 s. About 121 (Quinn grinning) is short. 98 is short, and 113 to 114 is short and dark. Everything else around them is Sam, Tara, Ethan or knife inserts. A version that works needs a split. Keep s6_family 143.0 at section 7.15 for at most 1.3 s, ending by 8.45 so it stops before Sam at 144.375. Then add a second shot at 8.45 for the rest (about 1.7 s on \"move, but she only got\"). For that second shot, s6_family 101.75 (Quinn with a knife, about 0.75 s only) or 121.0 (Quinn grinning) are the Quinn options. Both need checking for length, or the second shot can go back to the current plastic-body footage. Do not let 143.0 run past 144.35."
+    }
+   },
+   {
+    "section": "s06",
+    "shot_index": 7,
+    "anchor_words": "Instruction: see the body before you believe it.",
+    "video_time": 164.31,
+    "problem": "The section still contains the 'Instruction: see the body before you believe it' narration and the red INSTRUCTION overlay, which the owner asked to drop now that the channel is Horror Ranked. The picture itself (Sam with Billy's knife, Quinn in the robe) is fine.",
+    "severity": "major",
+    "fix_clip": "s6_family",
+    "fix_in": 168,
+    "fix_note": "Cut the instruction narration and the 'instr' overlay. End the section after 'fifty-six percent.' (about 16.3 s plus pad) and drop this shot or shorten it to a short tail.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s6_family",
+     "corrected_in": 168.5,
+     "reason": "I agree with dropping the instruction narration and the 'instr' overlay. In s06_voice, \"percent\" ends at 16.0 s and \"Instruction\" starts at 16.75 s. Ending the section at about 16.0 s plus the 0.7 s pad puts the end at about 16.7 s. Shot 7 begins at 16.67 s, so it becomes about 0.03 s long: in practice it is dropped, and shot 6 (13.5 s) covers the cut. If a short tail is kept, 168.0 is a poor in-point. I checked the source at 4 fps from 167 to 172 s. At 168.0 the frame is Sam in a dim close-up holding the knife, and the clip cuts to Quinn at 168.5. A 0.7 s tail starting at 168.0 would therefore flash about 0.5 s of Sam and then cut. From 168.5 to about 170.6 s it is one steady, well-lit shot of Quinn in the black robe, bloodied, with the knife raised. There is no end card, no black frame and no countdown, and nothing changes inside the tail. Use 168.5 for any tail, or simply drop the shot."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s06",
+    "shot_index": 6,
+    "anchor_words": "Survival rate: fifty-six percent.",
+    "video_time": 161,
+    "problem": "Dead Quinn (head wound) is visible for only the first ~0.6 s. The SURVIVAL RATE 56% card then sits over unrelated people (Sam in the blue room, Ethan, Kirby, a blur) for most of its 3.3 s.",
+    "severity": "minor",
+    "fix_clip": "s6_family",
+    "fix_in": 13.25,
+    "fix_note": "Dead-Quinn close-up usable range is s6_family about 13.2-13.9 (about 0.7 s). Either hold or freeze that frame, or play it at speed about 0.25 to cover the card, or accept the cutaways."
+   }
+  ]
+ },
+ {
+  "section": "s07",
+  "shots_checked": 10,
+  "ok_notes": "I checked all 10 shots of s07 (rendered 167.62 to about 190.9 s). These are fine. Shot 1 (2.32, 'awkward roommate', @18): Ethan is visible grinning and stabbing Kirby. Shot 2 (4.16, 'a little too close', @20): Ethan is close over a bleeding Kirby. Shot 4 (9.28, 'but in a straight fight', s6_ladder@150): a generic, slightly dark Ghostface-and-floor shot, with no named action. Shot 8 (16.56, 'Survival rate 53%'): Ethan and the Kirby fight are clear, the odds overlay sits correctly at 16.56-19.08 and lines up with 'Survival' at 16.64. No end cards, black frames or countdown cards appear anywhere in the section. Source clip end cards to avoid: s6_family after 175 s and s6_sam_gf after 180 s. Scratch contact sheets are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s07/.",
+  "issues": [
+   {
+    "section": "s07",
+    "shot_index": 6,
+    "anchor_words": "Kirby dropped a TV on his head",
+    "video_time": 179.78,
+    "problem": "No TV drop is shown. The shot (s6_family@141) shows a dark close-up of Ethan with Tara's knife at his mouth, and at about +1.5 s (on 'his head', 181.3 s) the source cuts to Quinn with a Ghostface behind her, so the wrong person is on screen while his head is named. I checked every Scream VI clip (s6_family, s6_sam_gf, s6_core4, s6_face, s6_two_gf and the ladder EDL shots) and none contains Kirby hitting Ethan with the TV.",
+    "severity": "critical",
+    "fix_clip": "s6_family",
+    "fix_in": 140.75,
+    "fix_note": "No TV footage of Ethan exists in clips/ep03. Best fix: reword the line (for example 'and Kirby finished him off') or record the Kirby TV moment, the same way scream4_reveal was recorded. Interim fallback: s6_family@140.75, a close-up of Ethan pinned with the knife, usable only to 142.9 (2.15 s). Play it at speed 0.8 to fill 2.69 s, which avoids the cut to Quinn at 143.0.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s6_family",
+     "corrected_in": 140.75,
+     "reason": "I checked the frames, and the editor's timings are correct. In s6_family, the earlier shot of Tara cuts to the Ethan close-up between 140.7 and 140.8 s. The frame at 140.75 already shows Ethan. That close-up runs until a cut to Quinn with a Ghostface at about 142.95 s. So 2.15 s played at speed 0.8 fills the 2.69 s slot (s07 shots 12.16 to 14.85) without the Quinn cut. There are no end cards, countdowns or black frames.\n\nStill, the fix fails the owner's top rule. The narration says \"Kirby dropped a TV on his head\", but the footage shows no TV and no Kirby. It is a dark, low-contrast close-up of Ethan with Tara's knife at his mouth, so the action that is named never appears on screen. As the editor said, the only real fix is to reword the line (for example \"and then Kirby finished him off\") or to record the Kirby TV scene. s6_family@140.75 at speed 0.8 can only serve as a temporary fallback that keeps the right person on screen."
+    }
+   },
+   {
+    "section": "s07",
+    "shot_index": 0,
+    "anchor_words": "Number eleven is Ethan Landry",
+    "video_time": 167.62,
+    "problem": "Ethan's laughing face is on screen only from 0.0 to about 1.25 s. The source cuts at about 1.3 s to a blurry blue-shirt struggle (Tara/Sam), so his face is gone for most of 'Ethan Landry' (1.12-1.84 s). The rest of the #11 card plays over the struggle and other people.",
+    "severity": "major",
+    "fix_clip": "s6_family",
+    "fix_in": 85.75,
+    "fix_note": "Ethan's laughing close-up runs 85.75-87.55 in the source (1.8 s max). Start at 85.75 with speed about 0.78 so it fills the whole 2.32 s shot and covers the name.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s6_family",
+     "corrected_in": 85.77,
+     "reason": "I checked this against the source frames and the fix works. In s6_family, Ethan's laughing close-up starts with a hard cut between about 85.71 (a dark wall) and 85.75 (Ethan). It holds until about 87.60, then cuts to Tara in the blue shirt. That gives about 1.85 s of usable footage. The EDL shot is 2.32 s long, so at speed 0.78 it uses about 1.81 s of source. Starting at 85.75, it ends around 87.56, so the struggle shot never appears. Ethan's face is clear and lit through the whole range, with no end card, black frame or countdown. He laughs on camera, which fits the \"Number eleven is Ethan Landry\" reveal and covers the name at 1.12-1.84 s. I nudged the in-point to 85.77, which skips the cut frame at 85.75 in case the renderer rounds down to the dark frame before it. At speed 0.78 the shot then ends around 87.58, still before the 87.60 cut."
+    }
+   },
+   {
+    "section": "s07",
+    "shot_index": 3,
+    "anchor_words": "That closeness is exactly why he's dangerous",
+    "video_time": 173.89,
+    "problem": "s6_family@97 holds Ethan for only about 0.9 s. It then cuts to Quinn (about +0.7 s) and to Sam (about +1.7 s), so Sam's face is on screen during 'why he's dangerous' (7.92-8.9 s). Ethan is not the subject for most of the shot.",
+    "severity": "major",
+    "fix_clip": "s6_family",
+    "fix_in": 18,
+    "fix_note": "Ethan grinning while he stabs Kirby runs 18.0-19.3 (1.3 s max), and at 20.15-20.6 he is visible again. Option 1: play 18.0 at speed about 0.45 to fill 3.0 s. Option 2: split the shot into Ethan laughing at 85.75 (1.8 s) followed by 18.0 (1.2 s) landing on 'dangerous'. Shot 1 currently also starts at @18, so if this is used, move shot 1 to s6_family@20.0.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s6_family",
+     "corrected_in": 17.9,
+     "reason": "I checked frames at 10 fps. In s6_family, the close-up of Ethan grinning runs from about 17.9 to 19.27 s. He is the only subject, his face is clear and the shot is lit well enough. There are no black frames or cards. The previous shot cuts away between 17.83 and 17.9, and at about 19.3 the picture cuts to a blood-covered Kirby. That gives about 1.35 s of usable footage, but s07 shot 3 lasts 3.01 s (6.27 to 9.28 in the section), and \"dangerous\" runs from 8.4 to 9.28. So Option 1 as written (start at 18.0, speed 0.45) only covers about 2.78 s. Kirby would then appear from about 9.05, during the last part of \"dangerous\". The fix: start at 17.9 with speed 0.44 or lower. That covers 3.07 s or more, so Ethan stays on screen for the whole shot. Option 2 does not work as proposed. The laughing close-up at 85.83 to 87.6 is the same footage that shot 0 already uses (s6_family@86). I found one other Ethan laugh, at about 135.35 to 136.3, but it is dark and lasts under 1 s. Also, shot 1 currently uses s6_family@18, so it would repeat this footage and must move. The suggested new start, @20.0, matches shot 2 (@20) and shot 8 (@20), so the same footage would play back to back. Pick a different source for shot 1. In the 1 fps overview, Ethan appears at about 15 s and in a knife shot at about 70.8 to 72.3, but I didn't check either at full frame rate."
+    }
+   },
+   {
+    "section": "s07",
+    "shot_index": 5,
+    "anchor_words": "he lost to Tara",
+    "video_time": 178.54,
+    "problem": "s6_ladder@138 shows Tara screaming in terror, which suggests she is losing, while the narration says Ethan lost a straight fight to her. Tara is visible, but the action (Tara beating Ethan) is not.",
+    "severity": "major",
+    "fix_clip": "s6_family",
+    "fix_in": 137.75,
+    "fix_note": "Tara on top of Ethan, stabbing him, runs 137.75-140.6, a clear shot that covers the 1.24 s duration. 147.75-149.9 is also usable (Tara forcing the knife in).",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s6_family",
+     "corrected_in": 137.1,
+     "reason": "The shot is 1.24 s (EDL s07 10.92 to 12.16). The proposed in-point of 137.75 lands right after a cut. From there to about 140.6 is a dim close-up of Tara's face with her mouth open and the back of Ethan's head in the corner. Tara is visible, but the knife and the beat-down are hard to make out, and her expression could still read as distress. Checked at 10 fps, the clearest action is the bright wide shot from 137.1 to 137.65: Tara on top of Ethan by the window, knife hand at his neck, stabbing down. It then cuts to the same close-up at about 137.7. Starting at 137.1 opens on Tara clearly overpowering Ethan, then carries into the close-up through 138.34. There are no end cards, black frames or countdown cards. Frames before 137.0 are dark struggle shots, so don't start any earlier. 147.75 also works (Tara pressing the knife in, close-up), but it is just as dim, so 137.1 is the better choice."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s07",
+    "shot_index": 7,
+    "anchor_words": "which is a very Scream way to go",
+    "video_time": 182.47,
+    "problem": "The shot opens on Chad standing at a counter with a jar (s6_two_gf@135, not this killer). A downed Ghostface only appears at about +1.2 s.",
+    "severity": "minor",
+    "fix_clip": "s6_two_gf",
+    "fix_in": 136.3,
+    "fix_note": "The downed-Ghostface shot runs only 136.3-136.95 (about 0.65 s), followed by Chad slamming the jar down (137.0-138.8). Acceptable as a 'Scream way to go' smash beat, or use it once the TV fix is resolved."
+   },
+   {
+    "section": "s07",
+    "shot_index": 9,
+    "anchor_words": "Instruction: be suspicious of the nice roommate",
+    "video_time": 186.74,
+    "problem": "The narration and the on-screen 'INSTRUCTION' card are still in v1. The owner asked to drop the Instruction lines now that the channel is Horror Ranked. The visuals themselves (Ethan, Quinn, Sam) are fine.",
+    "severity": "minor",
+    "fix_clip": "s6_family",
+    "fix_in": 142,
+    "fix_note": "Cut the 'Instruction:' sentence from the voice and remove the instr overlay. The section then ends after 'fifty-three percent' plus the pad, so this shot can be dropped or shortened."
+   }
+  ]
+ },
+ {
+  "section": "s08",
+  "shots_checked": 11,
+  "ok_notes": "Checked all 11 shots of s08 (190.8-213.5) against the word timings in voice/s08.json, at 2 fps overall and 10 fps around the key moments. These are OK: shot 3 (\\\"faking calls and videos\\\", the deepfake-Stu video call is visible); shot 5 (\\\"with deepfakes\\\", screaming deepfake Stu, which only switches to Sidney in the last ~0.15 s); shot 6 (\\\"terrifying idea, but\u2026\\\", Sidney reacting, well lit); shot 9 (\\\"Survival rate: fifty percent\\\", the Stu-call close-up with the 50% bar, clear). Shots 1-2 (\\\"worked at the mental hospital / tech guy\\\") show Sidney at the coffee shop and a phone being dialed. That is generic but no action word or face is named, so it is acceptable. No end cards, black frames or countdown cards anywhere in the section. The s7_10_sidney_kills end card starts at about src 169, and none of the suggested in-points come near it. Scratch frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s08/",
+  "issues": [
+   {
+    "section": "s08",
+    "shot_index": 8,
+    "anchor_words": "Sidney shot him. (\"shot\" at 14.84 s = 205.64)",
+    "video_time": 205.12,
+    "problem": "The narrator says \"shot\" at 205.64, but the picture at that moment (s7_10_sidney_kills, in-point 18) is a dark, static medium shot of Sidney holding the gun low and talking. No shot is fired, there is no muzzle flash and no one is hit. The action word is not shown.",
+    "severity": "critical",
+    "fix_clip": "s7_10_sidney_kills",
+    "fix_in": 8.78,
+    "fix_note": "Src 8.78-10.22 is Sidney's lit face, firing toward camera, with a muzzle flash at about src 9.30. That lines up exactly with \"shot\" (shot start + 0.52 s). It is usable until about 10.25, when the clip cuts to a dark masked Ghostface, so it covers the full 1.44 s. There is also an earlier flash at src 8.4 (gun only, very dark). None of the downloaded clips shows Marco being hit, so the firing is the best available visual.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s7_10_sidney_kills",
+     "corrected_in": 8.78,
+     "reason": "I'm accepting the fix, but the footage is dark and the opening frames show the gun, not Sidney's face. Shot 8 runs 1.44 s (14.32 to 15.76), so with the 8.78 in-point it uses source 8.78 to 10.22.\n\nWhat the frames show:\n- 8.78 to 9.08: a hand aiming a pistol, visible but dark. Sidney's face is not in frame yet.\n- About 9.18: Sidney's face becomes readable.\n- 9.28: a small muzzle flash while she faces the camera. The word \"shot\" falls at in-point + 0.52 = 9.30, so the flash lands right on the word.\n- 9.3 to 10.22: Sidney keeps aiming the gun at the camera. The image is dim but readable.\n- 10.38: the clip cuts to a masked Ghostface, after this shot ends.\n\nThere are no end cards, black frames or countdowns anywhere in the range. This is clearly better than the current in-point of 18, which shows no firing at all.\n\nStarting later, around 9.1, would put Sidney's face in the first frame, but the flash would then come about 0.34 s before \"shot\". So 8.78 is the best in-point for sync.\n\nCaveats: the scene is dark and the flash is small, so brightening this shot a little would help. No clip shows Marco being hit.\n\nFrames: C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s08_8/"
+    }
+   },
+   {
+    "section": "s08",
+    "shot_index": 0,
+    "anchor_words": "Number ten is Marco Davis.",
+    "video_time": 190.8,
+    "problem": "The narrator names the killer (\"Marco Davis\" at 1.16-2.3 s), but the shot (s7_02_stu, in-point 51) shows a dim Sidney behind the rank card, then the coffee-shop logo on a monitor. No killer is ever on screen. faces/SOURCES.txt confirms Marco is never unmasked in any downloaded clip, so his face cannot be shown. A masked Ghostface is the closest match.",
+    "severity": "critical",
+    "fix_clip": "s7_08_two_gf",
+    "fix_in": 81.6,
+    "fix_note": "At src 81.6-83.4 a masked Ghostface stands clearly in the doorway of the cafe (dim but readable). Max usable length is about 1.8 s, which is short of the 2.35 s shot. Either play it at 0.77x or hold this shot until \"Davis\" ends (about 2.35 s) and fill the first 0.55 s with the rank-card wipe. There is a darker alternative at s7_10_sidney_kills 10.4-11.8 (Ghostface in the barn, 1.4 s). Another option is to keep s7_02_stu but jump to the screaming deepfake 'Stu' at src 70.4, since that is Marco's own creation.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s7_08_two_gf",
+     "corrected_in": 81.9,
+     "reason": "I checked frames at 10 fps. At the proposed in-point of 81.6 the frame is almost black. From 81.6 to 81.8 the only things visible are a sliver of the mask at the top edge and a monitor. The Ghostface does not read clearly until about 81.9. He then stands clearly in the cafe from 81.9 until a hard cut at about 83.45. After that cut comes a yellow-lit blonde woman (Sidney/victim), who is the wrong person. The clean window is only about 1.55 s. The shot needs 2.35 s, so playing from 81.6 at normal speed lands on the woman at about 1.85 s into the shot, while \"Davis\" is still on screen. The first 0.3 s is also too dark. Usable version: start at 81.9 and either play at about 0.66x (1.55/2.35) or end the shot at 1.5 s and fill the rest with the rank-card wipe. Do not use 0.77x from 81.6, because it still opens on the dark frames. The barn alternative (s7_10_sidney_kills 10.4 to 11.8) is darker and shows a silhouette with no readable mask face, so it is worse. The deepfake Stu (s7_02_stu 70.4 to about 72.6) is bright and clear, but it shows a different person's face (Stu) while the narrator names Marco. That breaks the not-a-different-person rule, so I don't recommend it."
+    }
+   },
+   {
+    "section": "s08",
+    "shot_index": 4,
+    "anchor_words": "from Stu Macher (\"Stu\" at 8.08 s = 198.88)",
+    "video_time": 198.64,
+    "problem": "The shot (s7_02_stu, in-point 66) opens on Sidney talking at her desk. The deepfake Stu face only appears at about 199.3, roughly 0.4-0.7 s after \"Stu Macher\" is spoken. So the named face is late and Sidney is on screen when Stu is named.",
+    "severity": "major",
+    "fix_clip": "s7_02_stu",
+    "fix_in": 70.4,
+    "fix_note": "At src 70.4-72.9 the deepfake Stu face is screaming full-frame on the video call (2.5 s of continuous Stu), which covers the 0.92 s shot from the first frame. Src 66.9-68.0 is a shorter alternative (1.1 s).",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s7_02_stu",
+     "corrected_in": 70.4,
+     "reason": "Shot 4 runs 0.92 s (7.84 to 8.76 in the section). I sampled the source at 10 fps from 70.0 to 71.5 and at 4 fps from 66 to 74. Sidney fills 70.0 to 70.2. The deepfake Stu video-call face cuts in at about 70.3 and stays on screen, screaming and close to the camera, until about 72.3. From 70.4 every frame through 71.32 shows Stu clearly: well lit, sharp, and in the centre of the frame. There is no Sidney, end card, black frame or countdown. So Stu is on screen from the shot's first frame (7.84), before \"Stu\" is spoken at 8.08, and stays there through the shot. Src 66.9 to 68.0 is not needed."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s08",
+    "shot_index": 7,
+    "anchor_words": "final fight, Sidney",
+    "video_time": 204.28,
+    "problem": "The shot (s7_10_sidney_kills, in-point 15) is very dark: Sidney is a silhouette aiming the gun. You can make it out, but Sidney is hard to see just before her name is spoken.",
+    "severity": "minor",
+    "fix_clip": "s7_10_sidney_kills",
+    "fix_in": 7.95,
+    "fix_note": "Optional. Src 7.95-8.79 is Sidney in the barn with a muzzle flash at 8.4, which gives the 'final fight' a beat of action. It is still dark. Do this together with the shot 8 change to 8.78 so the two read as one continuous firing moment."
+   },
+   {
+    "section": "s08",
+    "shot_index": 10,
+    "anchor_words": "Instruction: if a dead killer calls you, it's not him.",
+    "video_time": 209.47,
+    "problem": "The 'INSTRUCTION' caption and narration are still in the section. The owner asked to drop Instructions for now because they feel awkward on a channel now called Horror Ranked. Shot 9 at the 50% line also needs re-scoring under the new Strength/Speed/Intelligence/Kill Count model. These are script and overlay changes, not picture problems.",
+    "severity": "minor",
+    "fix_clip": "s7_02_stu",
+    "fix_in": 105,
+    "fix_note": "Cut the instruction line and its overlay when the narration is regenerated. The picture itself (deepfake Stu on the monitor, then Sidney) is fine."
+   }
+  ]
+ },
+ {
+  "section": "s09",
+  "shots_checked": 11,
+  "ok_notes": "Rendered section s09 (213.42-237.6) was checked at 4 fps. Shots 2 ('nobody suspected': Amber, then Richie with Sam), 4 (once shot 3 is fixed), 6 (Richie grinning on 'the moment she figured it out'), 8 (the Survival rate 45% card over Richie and Sam, starting on 'Survival') and 9/10 are fine: subjects are visible and there are no end cards or black frames. The source clip s5_08_act3 has its Movieclips end card from 120.5 s, and s5_10_daughter has its end card from about 180 s; none of the proposed in-points go near them. The user asked to drop the 'Instruction' lines: shots 9-10 (17.84-24.2) carry the 'INSTRUCTION: If your boyfriend loves horror movies...' overlay and narration. If that line is cut, the section should end after 'forty-five percent' (about 17.5 s + pad). Scratch frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s09/.",
+  "issues": [
+   {
+    "section": "s09",
+    "shot_index": 7,
+    "anchor_words": "she cut his throat and shot him to make sure",
+    "video_time": 225.74,
+    "problem": "Both action words land on this 2.96 s shot, but neither action is shown. fighting@96 shows an empty blood-stained staircase from 12.32 to 13.1 s (that is where 'cut his throat' is spoken), then Richie crawling and grinning while 'shot him' is spoken at 13.64. There is no throat cut and no gunshot. Richie's real death is in s5_10_daughter.",
+    "severity": "critical",
+    "fix_clip": "s5_10_daughter",
+    "fix_in": 113.9,
+    "fix_note": "Split the shot into two. (a) 12.32-13.56: s5_10_daughter @113.9. Sam's hand is at Richie's throat and the knife slashes at about 114.2-114.8, so it lands on 'cut' (12.64). Around 115.0 it cuts to Sam's face. The aftermath close-up of the slit throat is at 117.4-120.4 if a cleaner throat image is wanted. (b) 13.56-15.28: s5_10_daughter @159.9. The gun is aimed at Richie on the floor, the muzzle flash is at 160.1 (about 0.1 s after 'shot' at 13.64), Sam fires at 160.6-161.0, and the headshot blood burst runs 161.0-162.2. The 1.72 s needed ends at 161.62. Both points are well before the end card, which starts at about 180.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s5_10_daughter",
+     "corrected_in": 117.5,
+     "reason": "Partial accept. Split (b) checks out and should be used as proposed: s5_10_daughter at 159.9 for 13.56-15.28. I checked it at 8 fps. From the first frame the gun is aimed at Richie lying on the floor, and his face is visible. At about 160.4-160.9 it cuts to Sam firing, and the headshot blood burst on Richie runs from 161.0. The shot ends at 161.62, far from the end card, and there are no black frames.\n\nSplit (a) at 113.9 fails, checked at 10 fps from 113.9 to 115.2. From 113.9 to about 114.8 Richie lies on his back with Sam's hand on his throat. A bloody knife appears raised at the top-left of the frame (114.3-114.8), but it never touches or slashes his throat. At 114.9 the picture cuts to a medium shot of Sam's face and stays there until the shot ends at 115.14. So no throat cut is visible when 'cut his throat' is spoken (about 12.64).\n\nThe better in-point for (a) is s5_10_daughter at 117.5, again for 12.32-13.56 (1.24 s, ending 118.74). From 117.5 on the frame is a clear close-up of Richie's face. The bloody knife blade is drawn across his throat, Sam's hand grips his neck, and blood is spattered all over. It stays on that same throat-cut close-up through about 119.3. Avoid 117.3-117.45, which is still Sam's face.\n\nFinal: (a) s5_10_daughter at 117.5, then (b) s5_10_daughter at 159.9. Frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s09s7/ (a.jpg, b.jpg, c.jpg, d.jpg)."
+    }
+   },
+   {
+    "section": "s09",
+    "shot_index": 3,
+    "anchor_words": "He stabbed the sheriff",
+    "video_time": 219.5,
+    "problem": "'stabbed' is spoken at 6.40, but sheriff@135 shows Ghostface just standing on the porch with the knife raised for the whole shot (to 7.36). The lunge and stab only appear in the next shot at about 7.5-7.75, roughly 1.1 s late.",
+    "severity": "major",
+    "fix_clip": "s5_03_sheriff",
+    "fix_in": 140.15,
+    "fix_note": "Start shot 3 at sheriff @140.15. Ghostface lunges and swings at Judy from 140.4 to 141.3, so the swing lands on 'stabbed' (6.40). Then make shot 4 continuous at @141.43: Judy on the ground with the bloody knife in her, 141.4-142.7. Or merge shots 3 and 4 into one 2.56 s shot from 140.15.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s5_03_sheriff",
+     "corrected_in": 140.44,
+     "reason": "I'm rejecting 140.15 as the in-point. The first frames, 140.15 to about 140.42, are a blurry close-up of the black cloak against the bushes. That's 0.28 s of unclear picture at the start of the shot. The camera cuts at about 140.43 to a clear wide shot: Ghostface on the porch with the knife raised over blonde Judy. He lunges and swings from about 140.45 to 141.3. Judy is on the ground with the bloody knife in her from 141.4 to about 142.4, and at about 142.65 the picture cuts back to the porch. A better in-point is s5_03_sheriff at 140.44. Shot 3 starts at 6.08, so 'stabbed' (6.40) lands on about 140.76, in the middle of the swing, and Ghostface is clearly visible from the very first frame. Shot 3 lasts 1.28 s, so it runs to about 141.72 and ends on Judy down with the knife. That covers the stab without needing a separate shot 4. Shot 4 is the 1.28 s from 7.36 to 8.64. To keep it continuous, start it at about 141.72. If shots 3 and 4 are merged into one 2.56 s shot from 140.44, it would end at 143.0 and include the cut back to the porch at about 142.65. Splitting into two shots avoids that. No end card, countdown or black frames appear anywhere in 140.15 to 142.75. Frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s09sh3/."
+    }
+   },
+   {
+    "section": "s09",
+    "shot_index": 1,
+    "anchor_words": "the sweet boyfriend",
+    "video_time": 215.5,
+    "problem": "'the sweet boyfriend' refers to Richie, but act3@63 shows Sam and Tara huddled together, and the end of the shot (about 3.0 s) is dark and blurry. Richie is not on screen.",
+    "severity": "major",
+    "fix_clip": "s5_09_fighting",
+    "fix_in": 90,
+    "fix_note": "Use s5_09_fighting @90.0 for the 1.2 s needed. Richie sits relaxed and smiling at 90-92, which is before shot 6's 92.0 in-point, so nothing is duplicated. Another option is act3 @67.6: Richie in the blue doorway, clear from 67.67, but only about 1.0 s usable before it cuts to Mindy at 68.6.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s5_09_fighting",
+     "corrected_in": 90.2,
+     "reason": "Shot 1 of s09 runs 1.2 s (2.08 to 3.28), and \"the sweet boyfriend\" is spoken from 2.16 to 3.28. I checked s5_09_fighting at 30 fps. The cut from Mindy to Richie lands at about 90.1 s, so frames from 90.0 to about 90.07 still show Mindy. That is 2-3 frames of the wrong person, so the proposed in-point of 90.0 is slightly off. From 90.1 onward Richie sits in a plaid shirt in a warm-lit room, smiling, centred and clearly visible. Nothing is dark or blurry, and there is no end card or black frame through 92.5. Moving the in-point to 90.2 adds a small safety margin and fills the 1.2 s with Richie only (90.2 to 91.4). It still ends before shot 6's in-point at 92.0, so nothing is duplicated."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s09",
+    "shot_index": 0,
+    "anchor_words": "Number nine is Richie Kirsch",
+    "video_time": 213.42,
+    "problem": "Richie is clear while his name is spoken (1.08-1.7). In the last ~0.3 s (render 1.75-2.08), though, he turns away and the frame becomes an empty yellow wall/door (source 74.75-75.08).",
+    "severity": "minor",
+    "fix_clip": "s5_08_act3",
+    "fix_in": 72.7,
+    "fix_note": "Moving the in-point earlier to about 72.7 would end the shot at about 74.8, before the empty wall. This only works if 72.7-73.0 is already Richie (at 1 fps, 72 still showed Sam/Tara, so check that first). Otherwise cut to the new shot 1 about 0.3 s earlier."
+   },
+   {
+    "section": "s09",
+    "shot_index": 5,
+    "anchor_words": "and fooled Sam the whole movie",
+    "video_time": 222.06,
+    "problem": "Sam is clear from 8.64 to about 9.3, but from 9.5 to 10.6 the frame is a dark, blurry tumble of the fight in which nobody can be identified.",
+    "severity": "minor",
+    "fix_clip": "s5_09_fighting",
+    "fix_in": 36,
+    "fix_note": "Optional: for the second half (from about 9.5), cut to s5_09_fighting @36.0, where Sam is clearly lit in front of the curtains at 36-37. Or end shot 5 earlier and start shot 6 (Richie @92) sooner, at about 9.6, @91.0."
+   }
+  ]
+ },
+ {
+  "section": "s10",
+  "shots_checked": 10,
+  "ok_notes": "Checked all 10 shots in the rendered video (237.56-261.76) at 4 fps across the whole section and 8 fps around the uncertain moments. The #8 card is fine: Jessica is visible as 'Jessica Bowden' is spoken (shot 0). Shot 2 ('actually running everything') shows Sidney, then a bloodied corpse on the floor. That is acceptable, though it would be stronger if Jessica were on screen. Shot 3 ('She was willing to kill') shows Jessica talking, which is fine. Shot 4 ('kill her own family') shows the bloody body, then Sidney, which is fine. Shot 5 ('colder than most people') shows Jessica with Sidney behind her, which is fine. Shot 6 ('took Sidney and Tatum') shows the backyard fight with Tatum and Jessica grappling. It is dim but readable. Shot 8 is the 'Survival rate 43%' overlay on a Jessica close-up, lined up with the words. There are no end cards or black frames anywhere in the section. In the source, the end card begins at 270.17.",
+  "issues": [
+   {
+    "section": "s10",
+    "shot_index": 7,
+    "anchor_words": "shooting together to stop her",
+    "video_time": 252.4,
+    "problem": "The narrator says 'shooting' at 252.48, but for the first ~0.9 s of the shot the picture is dark, blurry legs under the table (252.4-253.3). Sidney aiming and firing the gun only shows up at ~253.33, so the action word lands on an unreadable frame.",
+    "severity": "major",
+    "fix_clip": "s7_09_anna_camp",
+    "fix_in": 267.2,
+    "fix_note": "Sidney is clearly firing in the source from 267.17 to about 268.5 (about 1.35 s). After that, Tatum crouches and looks around until about 269.6. The Movieclips end card starts at 270.17. With an in-point of 267.2, the 2.2 s shot runs to 269.4: Sidney shooting, then Tatum, and it stays clear of the end card.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s7_09_anna_camp",
+     "corrected_in": 267.2,
+     "reason": "The shot runs 2.2 s (from 14.84 to 17.04 in s10). I pulled source frames from 267.2 in 0.25 s steps. Sidney is aiming the gun, with muzzle flashes, from the very first frame (267.2) to about 268.3. That covers the word 'shooting'. After a short motion blur around 268.45, it cuts to a clear close-up of the blonde woman (Tatum, per the editor) looking around, which matches 'together'. The shot ends at 269.4. The Movieclips end card does not start until about 270.17. None of the frames are black, cards or countdowns. Frames before 267.1 are the dark legs under the table, so 267.2 is the best in-point."
+    }
+   },
+   {
+    "section": "s10",
+    "shot_index": 1,
+    "anchor_words": "Sidney's neighbor",
+    "video_time": 239.72,
+    "problem": "The narrator says 'Sidney's' at 239.80, but the shot opens on a dark wide shot of Jessica (source 3.0-4.1). Sidney's face only appears at 240.85, about 1.05 s late.",
+    "severity": "major",
+    "fix_clip": "s7_09_anna_camp",
+    "fix_in": 4.3,
+    "fix_note": "The source cuts to Sidney's well-lit close-up at about 4.2, and it holds past 6.8. With in-point 4.3, the 2.16 s shot is Sidney all the way through. Jessica is already on screen in shot 0 under the #8 card, so nothing is lost.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s7_09_anna_camp",
+     "corrected_in": 4.5,
+     "reason": "I rejected the 4.3 s in-point because the shot would open on Jessica, not Sidney. I checked frame by frame from 4.2 to 4.6 s in the source: the dark shot of Jessica holds until about 4.38 s, and Sidney's well-lit close-up only starts at about 4.42 s. With an in-point of 4.3, the first 3 to 4 frames on the word \"Sidney's\" would still show Jessica in the dark. An in-point of 4.5 s fixes this. I checked 4.25 s steps from 4.5 s through 7.25 s, and the full 2.16 s shot (4.5 to 6.66 s) is Sidney's well-lit close-up from the very first frame. There is no end card, black frame or countdown in that range."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s10",
+    "shot_index": 9,
+    "anchor_words": "Instruction: know your neighbors better than they know you.",
+    "video_time": 258,
+    "problem": "This shot carries the red 'INSTRUCTION' label card and the narration line 'Instruction: ...'. The owner said putting 'Instruction' in feels awkward now that the channel is Horror Ranked, and wants it saved for later 'Survival Tips' segments. The image here is also very dark: Jessica's face is low-contrast behind the knife.",
+    "severity": "minor",
+    "fix_clip": "s7_09_anna_camp",
+    "fix_in": 228,
+    "fix_note": "This is a script/overlay change, not a re-cut. Drop the 'instr' overlay and the matching narration words, or re-voice the line, and end the section after 'forty-three percent' plus the pad. If the shot is kept, brighten it or pick a lighter Jessica frame."
+   }
+  ]
+ },
+ {
+  "section": "s11",
+  "shots_checked": 10,
+  "ok_notes": "Shot 1 (surprise@7, 'A lot of fans would put him way higher...') clearly shows Stu with Sidney, which is fine. Shot 3 (surprise@112, 'but he only had a couple of kills') shows Stu aiming the gun, clear and bright, which is fine. Shot 6 (creative@89.5, 'Stu might be one of the best Ghostfaces') shows Stu laughing for the whole shot, which is fine. Shot 7 (creative@111, 'not the hardest to survive' title) shows bloodied Stu behind the title, which is fine. No end cards or black frames anywhere in the section. Main gap: no source clip on disk contains the Scream (1996) TV-drop death, so shot 5 cannot be fixed without a new recording. Frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s11/.",
+  "issues": [
+   {
+    "section": "s11",
+    "shot_index": 5,
+    "anchor_words": "a TV right on his head.",
+    "video_time": 273.78,
+    "problem": "The TV-drop kill is never shown. At 'TV right on his head' the picture is a TV set playing a movie (tables@108.5-109.6), then Billy at the door (about 13.5-13.92 s into the section). No Stu, no Sidney and no drop. None of the Scream (1996) clips on disk (s1_01..s1_12) contain the TV falling on Stu. tables ends with Ghostface / end card at about 118 s, creative at about 131 s and surprise at about 121 s, and none of them have it. s7_02_stu and s7_10_sidney_kills are Scream 7 footage, not this scene.",
+    "severity": "critical",
+    "fix_clip": "NEEDS_NEW_CLIP (Scream 1996 TV-drop scene)",
+    "fix_in": 108,
+    "fix_note": "The owner needs to record the Scream (1996) moment where Sidney pushes the TV onto Stu's head, the same way scream4_reveal was recorded. Cut the shot so the TV hits on 'TV' (section t=12.16). Until then the only stopgap is tables@108.0, which shows the TV set itself (about 1.6 s before it cuts to Billy, so the shot must be no longer than that). This does not meet the owner's rule, so the other option is to rewrite the line.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "",
+     "corrected_in": 0,
+     "reason": "The editor's diagnosis is right, but the fix can't be applied, so I'm not accepting it. Shot 5 of s11 runs from 12.08 to 13.92 s in the section (1.84 s). The narrator says \"TV\" at 12.16 s. The proposed clip (\"NEEDS_NEW_CLIP\", the Scream 1996 TV drop) is not on disk. I checked the stopgap, s1_12_tables at 108.0, frame by frame at 8 fps from 107.5 to 110.5 s. It only shows a TV set playing a movie, then an empty window on that TV. At about 110.1 s it cuts to Billy at the door. Stu, Sidney and the falling TV never appear, so the stopgap breaks the owner's rule. A 1 fps sheet of tables from 96 to 120 s shows Billy, the TV set, Ghostface and Billy on the floor, but no TV drop. A 0.5 fps sheet of s7_02_stu shows Sidney on a video call with a man, followed by the end card from about 113 s. There is no TV drop in it either. I made a 0.5 fps sheet of s7_10_sidney_kills but did not look at it, so that clip is not ruled out. I did not re-check the other Scream (1996) clips myself. I found no better in-point. The owner needs to record the TV-drop scene, the way scream4_reveal was recorded, with the TV hitting on \"TV\" at section time 12.16. Otherwise the line should be rewritten."
+    }
+   },
+   {
+    "section": "s11",
+    "shot_index": 4,
+    "anchor_words": "and Sidney ended him by dropping",
+    "video_time": 272.26,
+    "problem": "The narration names Sidney (word at t=10.64) but the picture is bloody Billy pulling at a door (tables@104). It shows the wrong person, and Sidney never appears.",
+    "severity": "critical",
+    "fix_clip": "s1_11_creative",
+    "fix_in": 93.4,
+    "fix_note": "creative 93.2-96.6+ is a bright, clear close-up of a bloodied, determined Sidney (also 108.0-109.3). The 1.52 s shot fits easily inside 93.4-94.92.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s1_11_creative",
+     "corrected_in": 93.4,
+     "reason": "Accept the fix. The shot runs from 10.56 to 12.08 in the section, so it lasts 1.52 s. I checked the source from 92.4 to 96.4 at 4 fps and the cut at 10 fps. The previous shot, Stu laughing, cuts to Sidney at about 93.15-93.2. So at 93.4 there is a 0.2 s margin, and the first frame is already Sidney. From 93.4 to 94.92 every frame is a bright, sharp, steady close-up of a bloodied Sidney in the kitchen, with no end card, black frame or countdown. That same close-up continues until at least 96.4. Sidney is clearly the subject when her name is spoken at t=10.64. The in-point should not go earlier than 93.25 or Stu will flash on screen."
+    }
+   },
+   {
+    "section": "s11",
+    "shot_index": 8,
+    "anchor_words": "Survival rate: forty percent.",
+    "video_time": 280.34,
+    "problem": "When 'Survival rate' and the 40% bar appear (t=18.72), the picture is Billy in a bloody white shirt for the first about 1.06 s (creative@48-49.1). Stu only shows up from about 19.7 s, so Billy wears Stu's survival rate.",
+    "severity": "major",
+    "fix_clip": "s1_11_creative",
+    "fix_in": 56.4,
+    "fix_note": "creative 56.4 to about 59.0 is a continuous, bright medium shot of Stu with nobody else, which covers the 2.24 s shot. Another option is creative@86.0-92.8 (Stu laughing manically). That range is already used by shots 0 and 6, so avoid repeating the exact frames.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s1_11_creative",
+     "corrected_in": 56.5,
+     "reason": "Shot 8 in s11 runs 2.24 s, from 18.64 to 20.88. In s1_11_creative, a Billy/Sidney close-up cuts to a bright medium shot of Stu between 56.3 and 56.4. That shot holds unbroken until about 59.0, when it cuts to a wide shot of Billy and Stu. The proposed 56.4 sits right on that cut, so a seek could land one frame early on Sidney. 56.5 is safer, and 56.5 to 58.74 is Stu the whole time, centered and well lit. Billy's shoulder shows blurred at the right edge, but Stu is clearly the subject. There is no end card, black frame or countdown. This does not reuse the 86-92.8 frames from shots 0 and 6."
+    }
+   },
+   {
+    "section": "s11",
+    "shot_index": 2,
+    "anchor_words": "unhinged Ghostfaces ever,",
+    "video_time": 267.3,
+    "problem": "The shot opens on Billy for 0.4 s (creative 30.0-30.4) instead of Stu, and it ends with Sidney for about 0.3 s (from about 32.9) during 'ever'. Stu screaming with his hands on his head only arrives about 0.5 s after the cut.",
+    "severity": "major",
+    "fix_clip": "s1_11_creative",
+    "fix_in": 30.6,
+    "fix_note": "Stu screaming with his hands on his head runs from 30.6 to about 32.85, which is about 2.25 s usable. The shot is 2.56 s, so either move the next cut (shot 3) earlier to about t=7.9, or use slight slow-motion (speed about 0.88).",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s1_11_creative",
+     "corrected_in": 30.75,
+     "reason": "I'm rejecting the proposed in-point of 30.6 because the shot would open on Billy, not Stu. Frame-accurate checks (the clip is 23.976 fps) put the Billy-to-Stu cut between about 30.66 and 30.70, so starting at 30.6 shows one or two frames of Billy with an arm blurring across him. Stu is clearly visible, screaming with his hands at and then behind his head, from about 30.70 until about 32.91. The cut to Sidney comes at about 32.95. Starting at 30.75 is safe from the first frame and gives about 2.15 s of clean Stu footage. The EDL shot runs 2.56 s (from t=5.6 to 8.16), so footage starting at 30.75 at normal speed would reach Sidney at about t=7.75. 'Unhinged' starts at about 6.08 and 'ever' at about 7.44, so with no other change Sidney appears during 'ever'. To keep the whole shot on Stu, either move shot 3's cut to about t=7.7 or play the shot at about speed 0.83, so the 2.56 s shot uses about 2.13 s of source. No end card, black frame or countdown appears in 30.7 to 32.9."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s11",
+    "shot_index": 0,
+    "anchor_words": "Number seven is Stu Macher.",
+    "video_time": 261.7,
+    "problem": "Stu (creative@87, laughing) is on the left half of the frame, exactly under the big '#7 / STU MACHER' rank card, and the intro vignette darkens him. His face is mostly hidden behind the text when his name is spoken (t=1.04).",
+    "severity": "minor",
+    "fix_clip": "s1_11_creative",
+    "fix_in": 87,
+    "fix_note": "The footage is right. Either move the rank card to the right side for this entry, or reframe or crop so Stu sits right of center. Also lighten the vignette so his face reads clearly on 'Stu Macher'."
+   },
+   {
+    "section": "s11",
+    "shot_index": 9,
+    "anchor_words": "Instruction: keep a TV between you and him.",
+    "video_time": 282.58,
+    "problem": "The footage is fine (Stu bloodied on the phone, tables@45). However, the owner asked in this request to drop the 'Instruction' lines now that the channel is Horror Ranked. This shot carries the 'INSTRUCTION / KEEP A TV BETWEEN YOU AND HIM.' overlay and VO.",
+    "severity": "minor",
+    "fix_clip": "s1_12_tables",
+    "fix_in": 45,
+    "fix_note": "Remove the instr overlay and cut the VO after 'forty percent.' (word ends at about t=20.6). Then end the section with this Stu shot about 0.7 s later, or drop the shot entirely."
+   }
+  ]
+ },
+ {
+  "section": "s12",
+  "shots_checked": 13,
+  "ok_notes": "Section starts at 286.64 s in the render. Shots checked: 0 to 12 (rendered frames at 2.5 fps across the whole section, source clips at 1 to 6 fps).\n- Shots 1 and 2 (film student / planned to get caught on purpose): Mickey lit and holding the gun, fine.\n- Shots 4 and 5 (s2_09_driving @18 and @21, 'racked up one of the biggest body counts'): Ghostface clearly visible in the cop car, then the stabbed cop and the screaming passengers. Fine.\n- Shot 7 (blame @102, 'when Gale and Sidney finally'): Mickey aiming at Derek, then Sidney. Only loosely matches.\n- Shot 11 (blame @33, Survival rate 36%): Sidney with a gun to her head, then Mickey. The card is readable, fine.\n- No end cards, black frames or Movieclips screens are used. The s2_10_blame end card starts at about 127.6 s.\nMain finding: Mickey's death (Gale and Sidney shoot him, he sits up, they finish him) is not in any clip in E:/YTP2/Instruction444/clips/ep03. The s2_10_blame clip ends just as Gale and Debbie Salt arrive. Shots 8 to 10 cannot satisfy the owner's rule until that finale scene is recorded or sourced, or the narration is changed. Contact sheets are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s12/",
+  "issues": [
+   {
+    "section": "s12",
+    "shot_index": 8,
+    "anchor_words": "shot him,",
+    "video_time": 301.16,
+    "problem": "At 'shot him' the shot (s2_10_blame @105) shows the back of Sidney's head and then Sidney looking around. Nobody fires and Mickey is not shown being hit. No clip in the folder contains Gale and Sidney shooting Mickey: s2_10_blame ends at about 127.5 s, with Gale (white top) and Debbie Salt (gun) arriving, before the finale, and s2_03/04/06/07/09 do not have it either.",
+    "severity": "critical",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 118.5,
+    "fix_note": "Proper fix: get the Scream 2 finale clip where Gale and Sidney shoot Mickey and he sits up (not in the folder). Until then, the best available stand-in starts at blame 118.5: Gale walks in (to 119.1), then a woman raises a gun at 119.2 to 122.6. That woman is Debbie Salt, not Gale, so a stand-in only. Use it for shots 7+8 combined (13.04 to 15.2, 2.16 s). There is no actual gunshot-on-Mickey footage anywhere in the source.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 118.5,
+     "reason": "I checked s2_10_blame from 117.5 to 123.5 s at 4 fps. In the voice file, \"Gale\" starts at 13.24 s and \"shot him\" at 14.6 s. If the combined shot starts at 13.04 with source 118.5, \"Gale\" lands on about 118.7, which shows Gale in her white top walking in on a split frame next to the back of Sidney's head. That part works. \"shot him\" lands on about 120.06. From 119.75 on, the picture is the woman in the light coat aiming a pistol (Debbie Salt), then Sidney's face at 121.0 to 121.25, then the gun woman again. Nobody fires, Mickey never appears, and the person holding the gun is neither Gale nor Sidney. So at \"shot him\" we see a different person and no shooting, which breaks the owner's top rule. There is no end card or black frame in this range, and 118.5 is the best stand-in in this clip, but it does not fix the problem. The real fix needs the Scream 2 finale clip where Gale and Sidney shoot Mickey. If we must ship before that, 118.5 is the least-bad option, or the narration could be reworded so it does not claim we see the shooting."
+    }
+   },
+   {
+    "section": "s12",
+    "shot_index": 9,
+    "anchor_words": "he still sat up one more time",
+    "video_time": 301.84,
+    "problem": "'he still sat up one more time' plays over blame @54: a gun pointed at Sidney, then a shot of Mickey talking. Mickey never sits up, and that moment is not in any available clip.",
+    "severity": "critical",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 65.5,
+    "fix_note": "No sit-up footage exists in the folder. The closest stand-in is blame 65.5 to 66.0, where Mickey pushes himself up off the floor after the fight (only about 0.5 s of usable action; the brawl continues to 70). Better: source the finale clip. Or rewrite the line to match the footage.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 65.5,
+     "reason": "I rejected this fix after checking the frames. The shot runs 2.44 s (section time 15.20 to 17.64), and \"sat up\" is spoken at 15.92 s. From the 65.5 s in-point, the first 65.5 to 65.9 s shows a wide, small view of Mickey crawling or pushing off the floor during the fistfight. At about 66.0 s it cuts to an overhead shot of the Mickey\u2013Sidney brawl, and from about 67.25 s it becomes blurry close-ups of the struggle. So for most of the 2.44 s the picture shows a fight, not a shot man sitting back up. Mickey is never shot in this clip, so the frames can't match \"after they shot him, he still sat up\". I also scanned 70 to 142 s. That part has Derek tied up, Mickey with a bloody face talking to Sidney, and Debbie arriving. Then the Movieclips end card starts at about 127 s (it was already showing in the 57 s tile, offset from 70). None of it shows Mickey sitting up after being shot. No other s2 clip in the folder (omega, showtime, play, big_boys, driving) covers the finale. There is no better in-point. Either source the Scream 2 finale clip (Mickey shot by Gale and Sidney, then sitting up) or rewrite the line to fit the available footage. The corrected_clip and corrected_in fields only repeat the rejected proposal and are not a recommendation. Frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s12_9/"
+    }
+   },
+   {
+    "section": "s12",
+    "shot_index": 10,
+    "anchor_words": "before they finished him off.",
+    "video_time": 304.28,
+    "problem": "'before they finished him off' plays over blame @78: Sidney hiding behind a pillar, then a wide shot of a fight with Mickey being thrown. Mickey is not shown being killed.",
+    "severity": "critical",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 119.6,
+    "fix_note": "No kill footage is available. Stand-in: blame 119.6 to 121.0 shows a gun raised toward Mickey (1.4 s, covers the 1.32 s shot). Ideally use the finale clip of Gale and Sidney shooting Mickey in the head.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 107,
+     "reason": "I rejected the proposed fix. The shot lasts 1.32 s (17.64 to 18.96). I checked frames at blame 119.6 to 120.85 every 0.25 s. They show Gale (Courteney Cox, white top) leaving frame and Debbie Salt / Mrs. Loomis (white coat) holding a gun at waist height. Mickey is not in any of these frames and nobody fires, so the picture does not match \"finished him off\". From 121.0 on, the clip cuts to Sidney close-ups. The kill itself (Gale and Sidney shooting Mickey) is not in s2_10_blame: the clip ends on the Movieclips end card from about 128 s. I also skimmed the other Scream 2 clips (s2_03_omega, s2_04_showtime, s2_06_play, s2_07_big_boys) at a coarse 1 frame every 5 s and did not see a Mickey kill in them. The closest honest stand-in is blame 107.0 to 110.9: a steady medium shot of a bloodied Mickey, clearly lit and in focus, with no end card or black frames, covering the 1.32 s. That at least shows the right person beaten and wounded. It still does not show the actual killing, so the real fix is to source the finale clip or rewrite the line. Frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s12_10/ (fine.jpg, mid.jpg, mick.jpg, wide.jpg)."
+    }
+   },
+   {
+    "section": "s12",
+    "shot_index": 6,
+    "anchor_words": "framed Derek,",
+    "video_time": 298.24,
+    "problem": "At 'framed Derek' the picture (blame @36) is Mickey alone, gun up near his face. Derek is not shown.",
+    "severity": "critical",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 99.4,
+    "fix_note": "At blame 99.4, Derek is tied to the stage star in a clear wide shot, steady through 101.4 (2.0 s, covers the 1.44 s shot). Alternative: 98.6, a low angle with Mickey and Derek's legs in frame, then the star at 99.3.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 99.4,
+     "reason": "The shot runs 1.44 s (11.6 to 13.04 in the section) and \"framed\" is spoken at 11.68. In the source, the cut to the stage star happens at about 99.3. At 99.4 Derek is already tied to the star in a clear, lit shot with his face showing. The same shot holds steady through about 101.4, so it covers the whole 99.4 to 100.84 window. I checked 98.0 to 102.5 in 0.25 s steps and 99.2 to 99.5 at 10 fps: there is no end card, black frame or countdown in that range. The next cut, to Sidney, comes at about 101.5, which is outside the shot."
+    }
+   },
+   {
+    "section": "s12",
+    "shot_index": 0,
+    "anchor_words": "Number six is Mickey Altieri,",
+    "video_time": 286.64,
+    "problem": "On the name 'Mickey Altieri', blame @3 shows Mickey dark and underexposed, and the '#6 MICKEY ALTIERI' rank card covers his eyes and upper face. Only his chin and shirt read clearly for the first 2.4 s.",
+    "severity": "major",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 9,
+    "fix_note": "At blame 9.0 to 11.9, Mickey's bloodied face is lit and centred, a better reveal (2.9 s, covers 2.4). Then move shot 1 to blame 14.0 (lit Mickey grinning with gun, 14 to 18.9) so the shots don't repeat. Alternatively, move the rank card lower or left so it clears his face.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 9,
+     "reason": "I don't recommend the clip swap alone. On its own it does not fix the problem.\n\nThe source footage itself is fine. Frames of s2_10_blame from 9.0 to 11.4 s, every 0.25 s, show lit, bloodied Mickey in close-up from the first frame, raising the gun. No Sidney cutaway, black frame or end card appears until about 12.0 s. Mickey also returns at 14.0, so moving shot 1 to 14.0 works.\n\nTwo things still break the shot:\n\n1. **The darkness comes from the rank card, not the clip.** The source at blame 3.3 s is just as well lit as at 9 s. In the v1 render (section starts at 286.64 s), that same moment is dark for exactly as long as the '#6 MICKEY ALTIERI' card is up, so the card is darkening the frame. Swapping to 9.0 would still look dim under the card.\n2. **The card would still cover his face.** It sits in the left/centre-left area (roughly x 7-45%, y 22-70% of the zoomed frame). At blame 9.0-11.4 Mickey's face is at about x 15-45%, y 10-50%, so '#6' would land on his eyes and forehead again.\n\nI scanned the whole clip from 0 to 130 s. In every close-up (3.3, 9-11.7, 14-19, 29-31, 47.5-49.5) his face is in the left or centre-left of the frame, so no in-point avoids the card.\n\nWhat to do: use blame 9.0 for shot 0 and blame 14.0 for shot 1 as proposed. Also move the rank card to the right third or the lower third, and remove or reduce the darkening under it, so his face stays lit and uncovered for the first 2.4 s."
+    }
+   },
+   {
+    "section": "s12",
+    "shot_index": 12,
+    "anchor_words": "Instruction: if he sits up, keep shooting.",
+    "video_time": 308.69,
+    "problem": "Section still ends with the 'Instruction: if he sits up, keep shooting.' voice line and on-screen INSTRUCTION card. The owner asked to drop Instruction lines now that the channel is Horror Ranked. The picture is also a mix of shots (Sidney, Mickey, Sidney, a wide) that has nothing to do with sitting up or shooting.",
+    "severity": "major",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 39,
+    "fix_note": "Remove the Instruction sentence from the s12 voice and the 'instr' overlay, and end the section after the Survival rate card (about 22.0 s plus pad). No replacement footage needed.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s2_10_blame",
+     "corrected_in": 39,
+     "reason": "Accept the fix. In voice/s12.json the \"Instruction:\" sentence starts at 22.133 s, which is right after \"Survival rate: thirty-six percent.\" ends, and the voice runs to 24.72 s. Cut the voice at about 22.13 s, keep the 0.7 s pad so the section ends near 22.83 s, and remove the 'instr' overlay (22.05-999). That leaves the 'odds' card (18.96-22.01) as the last thing on screen. Shot 12 (s2_10_blame @39, starting at 22.05 s) then plays only about 0.08 s, so delete it from the EDL instead of keeping a near-blank flash. Shot 11 (s2_10_blame @33) stretches to cover 18.96-22.83 s, which is source 33.0-36.9 s. I checked that range at 4 fps (wfqa/s12_12/s11ext.jpg): Sidney holds the gun on Mickey (33.0-33.9), then a clear, well-lit close-up of the bloodied Mickey with the gun at his mouth (34.0-36.2), then Sidney (36.25+). It has no end card, black frame or countdown, and it fits a 'Survival rate' card for Mickey. No replacement footage is needed. The clip/in-point fields are left at the proposed s2_10_blame @39, but that shot should simply be removed."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s12",
+    "shot_index": 3,
+    "anchor_words": "blame the movies at his trial.",
+    "video_time": 292.32,
+    "problem": "Blame @30 holds Mickey for about 1.1 s, then cuts inside the shot to Sidney with a gun to her head on 'at his trial'. Acceptable, but the subject switches away from Mickey mid-sentence.",
+    "severity": "minor",
+    "fix_clip": "s2_10_blame",
+    "fix_in": 14,
+    "fix_note": "Optional: at blame 14.0 to 18.9, Mickey is lit and holding the gun with no cut for 4.9 s, which covers the 2.16 s shot. Only if it isn't already used for shot 1 after the shot-0 fix; otherwise keep it as is."
+   }
+  ]
+ },
+ {
+  "section": "s13",
+  "shots_checked": 9,
+  "ok_notes": "The scene-cut timings in the render match the EDL (section starts at 311.965). Shot 0 (0-3.04, 'Number five is Amber Freeman') is fine: Amber, bloody and laughing on the kitchen floor, with the #5 card. Shot 1 (3.04-4.32, 'who killed Dewey') shows Amber crying against the cupboard and then Gale at 3.85. No Dewey-death footage exists in the ep03 clips (s5_03_sheriff is the Judy Hicks car/Ghostface scene), so this is acceptable. The four critical fixes need their in-points changed together: shot 2 at fighting 142.2, shot 3 at 144.2, shot 4 at 147.92 (speed about 0.79), and shot 5 at 152.05. Together they give one continuous run: gunshot, stove, Amber walking out on fire, knife lunge. Shot 6 must come from s5_10_daughter 177.4 and must stop before 179.95, where the end card starts. Contact sheets are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s13/",
+  "issues": [
+   {
+    "section": "s13",
+    "shot_index": 2,
+    "anchor_words": "She got shot by Gale and fell into",
+    "video_time": 316.3,
+    "problem": "The gunshot never appears. The shot (src 137) shows Gale and Sidney with Gale aiming from 4.32 to 5.82 rel, then cuts to Amber standing with her hands up from 5.82. On 'shot' (4.8 rel) there is no muzzle flash and Amber is not hit.",
+    "severity": "critical",
+    "fix_clip": "s5_09_fighting",
+    "fix_in": 142.2,
+    "fix_note": "From 142.2: Gale close-up aiming, muzzle flash at about 142.7 (lands on 'shot' at 4.8 rel), Amber hit and stumbling 142.9-143.5, then falling toward the stove 143.5-144.4. Covers the full 2.19 s shot and ends right before her hand hits the burner.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s5_09_fighting",
+     "corrected_in": 142.2,
+     "reason": "I checked the source at 8 fps from 141.7 to 144.8 s and the fix holds. The shot runs from 4.32 to 6.51 rel (2.19 s), so the in-point of 142.2 plays source 142.2 to 144.39. The first frame at 142.2 is a clear, bright close-up of Gale aiming. The word 'shot' at 4.8 rel falls at source 142.68, and the muzzle flash appears at about 142.7, right on the word. Amber is clearly visible, hit and lurching at the stove, from 142.95 to 143.3. From about 143.45 to 144.2 her fall is a dark, motion-blurred whip toward the stove, which is acceptable because the narration there is 'by Gale and fell into'. The shot ends at about 144.33 on a burner close-up, which is fine because it leads into the next words, 'a burning stove'. There is no end card, black frame or countdown. Only the Movieclips corner watermark is present, as in the other clips."
+    }
+   },
+   {
+    "section": "s13",
+    "shot_index": 3,
+    "anchor_words": "(a) burning stove,",
+    "video_time": 318.49,
+    "problem": "'burning stove' is spoken at 6.59-6.96 rel but the shot (src 129) is from earlier in the fight. Amber turns the knob, the burner lights, and she only catches fire at the cut (about 7.8 rel), so the action is late by about 0.8 s and is not continuous with the gunshot.",
+    "severity": "major",
+    "fix_clip": "s5_09_fighting",
+    "fix_in": 144.2,
+    "fix_note": "Continues straight from the fixed shot 2. At 144.4 her face and arm land on the lit burner, and at about 145.0 she goes up in flames at the stove. The 1.29 s shot ends at about 145.5 with Amber burning.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s5_09_fighting",
+     "corrected_in": 144.3,
+     "reason": "The proposed fix works, but the in-point needs a small correction. At 30 fps, source 144.20 to 144.27 is still the end of the dark, blurry fall shot, so the new shot would open on about 3 dark frames. The hard cut to the lit blue burner close-up is at 144.30. From there, Amber's arm lands on the flame at about 144.4, and her face and arm are on the burner with fire starting at 144.5 to 144.6. The wide shot of her body burning at the stove starts at 144.75 and keeps going through about 145.6 at higher intensity. There is no end card, black frame or countdown. The Movieclips end card and the Sidney/Gale reaction only start at about 146.1, which is well past the shot. With an in-point of 144.3, 'burning stove' (6.59 rel, 0.08 s into the shot) lands on the lit burner. Amber is visibly on fire about 0.3 s later and stays burning to the end of the shot. The 1.29 s shot ends at about 145.59, which repeats roughly 0.09 s of the next shot (starting at 145.5). That is negligible, or shot 4 can start at 145.6 instead."
+    }
+   },
+   {
+    "section": "s13",
+    "shot_index": 4,
+    "anchor_words": "and she still came back out on fire,",
+    "video_time": 319.77,
+    "problem": "Amber is on fire only for the first 0.47 s. From 8.27 to 9.73 rel the picture is the Sidney/Gale reaction two-shot, so 'came back out on fire' (8.44-9.36) plays over the women's faces, not burning Amber.",
+    "severity": "critical",
+    "fix_clip": "s5_09_fighting",
+    "fix_in": 147.92,
+    "fix_note": "Burning Amber walks toward camera from 147.92 to 149.65 (1.73 s usable; a Sidney close-up starts at 149.75). The shot is 2.2 s, so play it at speed 0.79, or use 147.92 for 1.73 s and start shot 5 about 0.47 s earlier.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s5_09_fighting",
+     "corrected_in": 147.95,
+     "reason": "I checked the source frame by frame at 30 fps and the fix works. The frame at 147.897 is still the Sidney/Gale two-shot. Burning Amber is clear and centred in the bright kitchen from 147.939. She stays on screen through 149.691, and the Sidney close-up starts at 149.733. That leaves about 1.74 s of clean footage with no black frames or end cards. Use 147.95 as the in-point, one frame later than proposed, so the first frame can't land on the two-shot. Shot 4 runs from 7.8 to 10.0, so it is 2.2 s long. Either play it at speed 0.79, which reaches about 149.69 and stays inside the fire footage, or keep normal speed and move shot 5 earlier to about 9.54. Both ways, the fire is on screen for all of 'came back out on fire' (8.44-9.36). Frames: C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s13s4/"
+    }
+   },
+   {
+    "section": "s13",
+    "shot_index": 5,
+    "anchor_words": "swinging a knife,",
+    "video_time": 321.97,
+    "problem": "src 149 shows the burning figure for only about 0.57 s, then cuts to a Sidney close-up at 10.57 rel, so most of 'swinging a knife' (10.08-10.88) plays over Sidney's face. No swing is visible.",
+    "severity": "critical",
+    "fix_clip": "s5_09_fighting",
+    "fix_in": 152.05,
+    "fix_note": "Wide kitchen shot from 152.05: burning Amber lunges forward, swinging her arm, until about 153.35, when she drops behind the counter (about 1.3 s usable, against a 1.36 s shot). A dark close-up of the flames starts at 153.6, so do not run past 153.4.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s5_09_fighting",
+     "corrected_in": 152.06,
+     "reason": "I'm accepting this fix, with the in-point moved slightly to 152.06. Shot 5 runs 1.36 s (from 10.0 to 11.36 in the section), so the source span is 152.06 to 153.42. I checked frames every 0.125 s and around the cut every 0.04 s.\n\n- **Start:** the Sidney/Gale close-up ends at about 152.01. The first wide kitchen frame is at about 152.03, so 152.05 has only one frame of margin and an imprecise seek could flash the close-up. 152.06 adds a little margin.\n- **During the shot:** from 152.03 to about 153.3 the burning Amber is clearly visible in a bright, wide kitchen shot. She lunges and swings her arms over the counter, which matches \"swinging a knife.\"\n- **End:** at 153.25 to 153.38 she is falling behind the counter, still in the same kitchen shot. The dark close-up of the flames starts at about 153.5, so ending at 153.42 stays clear of it.\n- No end card, black frame or countdown appears. The Movieclips watermark is there, as in every other shot.\n\nThe next shot (shot 6) starts at src 152.5 in the same clip, so this fix repeats about 0.9 s of the same lunge right after it. The editor may want to move shot 6's in-point to about 153.45 or later, or pick other footage for it."
+    }
+   },
+   {
+    "section": "s13",
+    "shot_index": 6,
+    "anchor_words": "it took Tara shooting her in the head to end it.",
+    "video_time": 323.34,
+    "problem": "Tara never appears. src 152.5 shows a burning dresser and the floor (dark), then Sidney and Gale standing over the flames, while the narrator says 'Tara' (11.64) and 'shooting her in the head' (12.04-12.84). Tara's headshot is in a different clip.",
+    "severity": "critical",
+    "fix_clip": "s5_10_daughter",
+    "fix_in": 177.4,
+    "fix_note": "Close-up of Tara aiming the pistol from 177.4 to 179.95. The Movieclips end card starts at about 180.0, so never go past 179.95. Usable length is about 2.55 s against a 2.64 s shot: play at speed 0.96, or trim the shot to 2.55 s. Optional lead-in: Amber's burnt lunge at 171.7-173.0 in the same clip.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s5_10_daughter",
+     "corrected_in": 177.45,
+     "reason": "I accept the fix, with a slightly later in-point. I checked s5_10_daughter at 10 fps. The wide shot of the women at the door runs until about 177.3. The close-up of Tara aiming the pistol starts at 177.4. At 176.9-177.3 the frames still show the wide doorway shot, so 177.45 is a safer in-point that avoids catching a stray frame of that shot. From 177.4 to 179.9, every frame clearly shows Tara (Jenna Ortega), well lit, sharp and centered, with the gun aimed at the camera. There are no black frames or countdown cards. The Movieclips end card (blur plus blue panel, then SUBSCRIBE) starts between 179.9 and 180.0, so the shot must not go past 179.93. Shot 6 runs from 11.36 to 14.0 in s13, so it lasts 2.64 s. Usable footage from 177.45 to 179.93 is about 2.48 s. Play it at speed 0.94 (177.45 + 2.64*0.94 = 179.93), or trim the shot to 2.45 s. This keeps Tara on screen when the narrator says 'Tara' at 11.64 and through 'shooting her in the head' (12.04-12.84). One caveat: the frames show her aiming, but no muzzle flash or recoil, so the gunshot itself is not shown. Aiming is the closest moment this clip has, and it is far better than the current burning dresser. The optional lead-in (burnt Amber lunging at 171.7-173.0) is valid footage, but the shot cannot hold both her and Tara within 2.64 s and still keep Tara on 'Tara', so skip it."
+    }
+   },
+   {
+    "section": "s13",
+    "shot_index": 7,
+    "anchor_words": "Survival rate: thirty percent.",
+    "video_time": 325.98,
+    "problem": "The 'Survival rate 30%' card for Amber plays over Tara (src 70, 14.0-15.6 rel) and then Gale (15.6-16.99). The subject being rated (Amber) is not on screen.",
+    "severity": "major",
+    "fix_clip": "s5_09_fighting",
+    "fix_in": 115,
+    "fix_note": "Amber's bloody face, low-angle close-up, from about 115.0 to 118.0 (about 3 s, which fits the 2.99 s shot; a Gale close-up is at 114 and the floor wrestling starts at about 118). Alternative: Amber lying bloody at 107-112 (not used elsewhere in this section, only 107-110 in shot 0).",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s5_09_fighting",
+     "corrected_in": 109.85,
+     "reason": "I rejected the proposed in-point because the shot it picks is too short. Checked at 10 fps, Amber's bloody low-angle close-up in s5_09_fighting starts at about 115.0 (a Gale close-up runs until about 114.95). It cuts at about 117.65 to the floor wrestling shot, where Gale is the one on the floor. That leaves about 2.65 s of Amber, but the shot needs 2.99 s (it runs from 14.0 to 16.99). So starting at 115.0, the last ~0.34 s of the 'Survival rate 30%' card would show Gale, not Amber. There is no end card or black frame in that range. Corrected in-point: 109.85. The Amber-lying-on-the-floor shot runs continuously from before 107 to about 112.85, then cuts to a Gale close-up at about 112.9. So 109.85 to 112.84 shows Amber, bloody and clearly lit, for the full 2.99 s, starting on the first frame. The catch is that shot 0 also uses 107.0 to 110.04, so about 0.19 s of footage repeats 14 s later. That is barely noticeable, but an alternative is to keep 115.0 with a speed of about 0.88 so the 2.65 s close-up fills 2.99 s."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s13",
+    "shot_index": 8,
+    "anchor_words": "Instruction: if she's on fire and still walking, run.",
+    "video_time": 328.97,
+    "problem": "The owner asked to drop the 'Instruction' lines (the channel is now Horror Ranked). Also, src 102 in s5_08_act3 shows Liv (pink hair) and then Tara, not Amber, under a line about Amber.",
+    "severity": "minor",
+    "fix_clip": "s5_08_act3",
+    "fix_in": 109,
+    "fix_note": "Preferred fix: cut this narration line and the instr overlay entirely. If anything stays here, use the Amber reveal in s5_08_act3 at about 109-111 (Amber pointing the gun, end card starts at about 120). Check at 10 fps before use."
+   }
+  ]
+ },
+ {
+  "section": "s14",
+  "shots_checked": 13,
+  "ok_notes": "I checked all 13 shots of s14 in the render (333.08 to 364.58) at 4 fps and the two problem source ranges at 10 fps. These shots are fine:\n- Shot 0 (#4 Billy Loomis card): bloody Billy in the doorway, visible when his name is said at 1.20.\n- Shot 1 ('original'): Billy close-up in the kitchen.\n- Shot 4 ('He was her boyfriend'): Billy in the floral doorway.\n- Shot 5 ('planned everything'): Billy gesturing.\n- Shot 6 ('played the victim perfectly'): Billy with the knife, stab wound visible.\n- Shot 7 ('favorite Ghostface'): Billy bleeding next to Stu. He is unmasked, which is acceptable because the subject is Billy.\n- Shot 8 ('isn't the one you'd least want to meet'): Billy standing and reaching.\n- Shot 9 ('three people ... harder to survive'): wide kitchen shot of Billy with the gun and Stu bleeding. Fine, though the subjects are small in frame.\n- Shot 11 (instruction caption): Billy close-up in the hallway.\n- Shot 12: Stu and Billy close-up, then the clean #3 Wayne Bailey card at 364.58.\n\nNo end cards, black frames or countdown cards anywhere in s14.\n\nScript note: the owner now wants the 'Instruction' lines removed, so the s14 'Instruction: if your boyfriend climbs through your window...' narration and overlay (26.35 onward) should go. That removal will also change the timing of shots 11 and 12.\n\nScratch images: C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s14/",
+  "issues": [
+   {
+    "section": "s14",
+    "shot_index": 10,
+    "anchor_words": "Survival rate: twenty-five percent.",
+    "video_time": 356.04,
+    "problem": "From 'Survival' (23.04) to about 24.0 s the picture is an empty, dark pink hallway with a blurry dark carved-wood foreground. Billy only walks in, small, at the far doorway about 1 s after the word. The 25% bar sits over an empty room.",
+    "severity": "major",
+    "fix_clip": "s1_12_tables",
+    "fix_in": 85.5,
+    "fix_note": "At source 85.5 Billy is already fully in frame, bloody shirt, walking toward camera. The shot runs continuously to about 89.9 s, so the 3.39 s shot (85.5 to 88.89) fits with no cut. Shot 11 (tables@90, close-up) still follows cleanly.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s1_12_tables",
+     "corrected_in": 86,
+     "reason": "I checked s1_12_tables from 85.5 to 90.1 at 4 to 8 fps. From the first frame at 85.5 the bloody-shirted Billy is clearly visible in a well-lit hallway, walking toward the camera, and the take is continuous through 90.0. There are no cuts, black frames or end cards, only the usual small MOVIECLIPS watermark. Shot 10 lasts 3.39 s (22.96 to 26.35) and 'Survival' falls at 23.04, so in=85.5 ends at 88.89 with no cut, and shot 11 at tables@90 follows smoothly. The fix is accepted. One small improvement: at 85.5 Billy is still small and far back in the doorway. Starting at 86.0 shows him larger and centred in the frame when the word lands. That version runs to 89.39, still inside the same continuous take, and lines up even better with the close-up at 90. Either in-point is acceptable; 86.0 is slightly better."
+    }
+   },
+   {
+    "section": "s14",
+    "shot_index": 2,
+    "anchor_words": "the one who started all of this by",
+    "video_time": 336.36,
+    "problem": "The first ~0.9 s of the shot (section 3.28 to 4.2) shows Sidney's dad tied up on the kitchen floor, not Billy, while the narrator says 'the one who started all of this'. Billy only appears at about 4.25 s.",
+    "severity": "major",
+    "fix_clip": "s1_11_creative",
+    "fix_in": 7.2,
+    "fix_note": "Source 7.0 to 11.4 is one continuous shot of Billy holding Sidney, with his face clearly visible. In-point 7.2 covers the 1.72 s shot (7.2 to 8.92) with Billy on screen from the first frame.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s1_11_creative",
+     "corrected_in": 7.3,
+     "reason": "The shot runs from 3.28 to 5.0 in s14, so it lasts 1.72 s. I checked the source frames. The cut from Sidney's dad on the floor to Billy holding Sidney falls at about 7.174 s (24 fps frames: 7.132 shows the dad, 7.174 shows Billy). An in-point of 7.2 is only about one frame after that cut. With seek imprecision or the 24-to-30 fps conversion, the dad frame could flash at the start of the shot. From 7.25 to 9.18 it is one continuous shot of Billy with his face clearly visible. There are no end cards or black frames, and Billy stays on screen past 9.02, the end of the shot when starting at 7.3. Using 7.3 keeps the same footage with a safe margin after the cut."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s14",
+    "shot_index": 3,
+    "anchor_words": "killing Sidney's mom a year before the first movie even begins.",
+    "video_time": 338.08,
+    "problem": "After Sidney's face (fine for 'Sidney's mom'), the shot cuts at about section 6.5 to Stu screaming for ~0.7 s during 'a year before', then back to Billy. A different killer's face appears mid-line about Billy.",
+    "severity": "minor",
+    "fix_clip": "s1_11_creative",
+    "fix_in": 33,
+    "fix_note": "Optional fix: split the shot at section 6.4 and fill the rest (to 9.12) with Billy-only footage, for example s1_11_creative@72 (Billy in the kitchen, about 2.7 s needed). The current in-point is otherwise acceptable."
+   }
+  ]
+ },
+ {
+  "section": "s15",
+  "shots_checked": 10,
+  "ok_notes": "Note on method: in this file, ffmpeg tile contact sheets made with -ss/trim/fps gave wrong or misaligned timestamps, which made the end of s15 look like Jill #2. Single frames taken with input -ss are reliable. Grabbed this way, s15 runs from 364.5 to about 387.8, and Jill #2 starts at about 387.9. Shot 2 (subway@30, 'the murders while he was committing them') shows Ghostface in the crowded subway, which is acceptable. Shot 4 (two_gf@120, 'coming for you') shows Ghostface lunging at Chad; it is dark-ish at the start (374.1) but readable, so OK. Shot 9 (family@8) holds the 'Instruction: don't call the detective' overlay. The owner asked to drop Instruction lines from the narration and the overlay (to be saved for later 'Survival Tips'), so this shot and its narration should be cut or replaced. The picture under it (Quinn, then a dark crowd) is weak anyway. All proposed source in-points are well clear of the Movieclips end cards (s6_sam_gf is 190.6 s long and the proposed ranges end by about 167; s6_family's ranges end by about 22). Scratch frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s15/ (shots.jpg, sg4.jpg, sg5.jpg, fam2.jpg).",
+  "issues": [
+   {
+    "section": "s15",
+    "shot_index": 7,
+    "anchor_words": "until Sam stabbed him in the eye (Sam 15.12, stabbed 15.52, eye 16.24)",
+    "video_time": 379.3,
+    "problem": "s6_ladder@176.5 shows a dark alley, a gloved hand, a person running and a mangled/bloody figure lying on the ground. Sam is never on screen and there is no stab to Bailey's eye. The action word 'stabbed' plays over unrelated footage.",
+    "severity": "critical",
+    "fix_clip": "s6_sam_gf",
+    "fix_in": 164.8,
+    "fix_note": "In s6_sam_gf, 164.85-166.35 shows Sam (lit, clearly visible) forcing the knife down onto Bailey's head. Then 166.5-167.1 is a close-up of Bailey's face pouring blood where the knife went in, and 167.85 is his bloodied face. An in-point of 164.8 for 2.16 s puts Sam on screen at 'until Sam' and the bloody-eye close-up at about 'eye'. Alternative: 162.9 (Bailey bloodied, then knife in eye 163.05-163.65 dark, then Sam 163.8+). Clip ends 190.6, end card is well after 178.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s6_sam_gf",
+     "corrected_in": 164.8,
+     "reason": "I checked the shot from 164.8 to 166.96 s (2.16 s, from shot 7 at 14.8 to shot 8 at 16.96) at 4 fps and 8 fps. From the first frame, 164.8 to about 166.4, Sam is lit, clearly visible and centered, pressing down on Bailey's head with the knife. That covers \"until Sam\" (165.12) and \"stabbed\" (165.52). Around 166.55 the picture cuts to a close-up of Bailey's face with blood pouring from the eye area. This arrives about 0.3 s after \"eye\" (166.24) and stays on screen until the shot ends. The close-up is darker, but his bloodied face and grey hair are readable. There are no black frames, countdown cards or end cards; the clip lasts until 190.6 s. The alternative in-point of 162.9 is worse: it opens on Bailey already bloodied and dark, and Sam only appears after 163.8, so 164.8 is the better choice."
+    }
+   },
+   {
+    "section": "s15",
+    "shot_index": 3,
+    "anchor_words": "which means the guy you'd call for help was the guy coming for you",
+    "video_time": 371.3,
+    "problem": "All 2.7 s of s6_family@3 is a close-up of Sam's face. The line is about Bailey, but he is not shown at all.",
+    "severity": "critical",
+    "fix_clip": "s6_sam_gf",
+    "fix_in": 66,
+    "fix_note": "In s6_sam_gf, 66.0-72.0 is a well-lit medium shot of Bailey talking on his phone: 'the guy you'd call'. That is 6 s of clean footage, more than the 2.72 s needed.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s6_sam_gf",
+     "corrected_in": 66,
+     "reason": "I checked frames from s6_sam_gf at 66.0 s through 68.75 s in 0.25 s steps, covering the shot's 2.72 s (9.52 - 6.8). Every frame is the same continuous, well-lit medium close-up of Detective Bailey (Dermot Mulroney) holding a phone to his ear. He is clearly visible from the very first frame. There are no cuts to another person and no black frames, end cards or countdown cards. It fits 'the guy you'd call for help'. Contact sheet: C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s15sh3/a.jpg"
+    }
+   },
+   {
+    "section": "s15",
+    "shot_index": 1,
+    "anchor_words": "He was the cop investigating",
+    "video_time": 367.38,
+    "problem": "The shot opens on Sam's face at 'He was the cop' (s6_family@6, where Sam runs to about source 6.8). Bailey appears only about 0.8 s into the shot, then it cuts to Quinn screaming at the end (368.88).",
+    "severity": "major",
+    "fix_clip": "s6_sam_gf",
+    "fix_in": 58,
+    "fix_note": "In s6_sam_gf, 58.0-60.4 shows Bailey clear and well lit on the phone (2.4 s against 1.6 s needed). The next shot after 60.5 is a mannequin cutaway, so the shot must not run past 60.4.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s6_sam_gf",
+     "corrected_in": 58,
+     "reason": "The shot runs 1.6 s (EDL s15 shot 1 goes from t=2.88 to 4.48), so it uses source 58.0-59.6. I checked a 4 fps contact sheet of source 56-62 s. Bailey (the cop, holding a phone) is on screen from about 57.0 to 60.25. He is clear and well lit against a pale background in every frame from 58.0 to 59.6, and nothing else appears. The next cut, to a mannequin, comes at about 60.4-60.5, after the shot ends. There is no end card, black frame or countdown. Before 57.0 the shot is a dark hooded mask, which this in-point avoids. Bailey is visible from the first frame, so 58.0 is a good in-point."
+    }
+   },
+   {
+    "section": "s15",
+    "shot_index": 0,
+    "anchor_words": "Number three is Detective Wayne Bailey (Wayne 1.6, Bailey 1.92-2.9)",
+    "video_time": 364.5,
+    "problem": "Bailey is visible only for about the first 2.3 s, and the #3 title card sits over his face. Over the end of 'Bailey' (about 2.4-2.88 s), the picture has already cut to the Quinn/Sam blur, and Sam's face is on screen at 367.28.",
+    "severity": "major",
+    "fix_clip": "s6_family",
+    "fix_in": 0,
+    "fix_note": "s6_family has Bailey aiming the gun only from 0.0 to about 2.3 s. Either play it at speed 0.8 so 2.3 s of source fills 2.88 s, or use s6_sam_gf 7.0-9.4 (Bailey crouched, dimmer). Also consider moving the title card so it does not cover his face.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s6_family",
+     "corrected_in": 0,
+     "reason": "I checked the frames. The in-point is right but both proposed ways of filling the shot fail. s6_family from 0.0 shows Bailey clearly: his face is lit, he is aiming the gun at the camera, and there is no black, end card or countdown. But his shot ends at about 2.05 s of source. Frame by frame from 1.8 s at 23.976 fps, the last Bailey frame is near 2.04 s and the cut to the Quinn/Sam blur lands near 2.07 s. The shot runs 0 to 2.88 s in the section (shot 1 starts at 2.88). At speed 0.8 it needs 2.304 s of source, so about 0.25 s of source, roughly the last 0.3 s on screen, would still be the Quinn/Sam blur over the end of 'Bailey'. That is the same bug as now, just shorter. The other option, s6_sam_gf 7.0 to 9.4, also crosses a cut. Bailey is dim and crouched, with his face mostly lowered from about 8.8 s, and the clip cuts to an overhead table/camera shot at about 9.1 s. So 9.1 to 9.4 is the wrong picture. Corrected fix: s6_family from 0.0 at speed 0.68 (0.7 at most). That covers 2.88 s of output with 1.96 s of source, so Bailey stays on screen through 'Bailey' (1.92 to 2.9 s) and on to the cut at 2.88 s. Separately, move the #3 rank title card (0.0 to 2.9 s) to the bottom or left third. Bailey's face sits in the upper centre-left of the frame and the card currently covers it."
+    }
+   },
+   {
+    "section": "s15",
+    "shot_index": 5,
+    "anchor_words": "his whole family",
+    "video_time": 376.1,
+    "problem": "s6_family@28 is a dark, motion-blurred shot of Sam (376.2), then nearly black (376.5-376.8). 'His whole family' plays over an unreadable frame, and his son Ethan is not shown.",
+    "severity": "major",
+    "fix_clip": "s6_family",
+    "fix_in": 18,
+    "fix_note": "In s6_family, 18.0-19.6 is a clear close-up of a grinning Ethan, Bailey's son. That gives the 0.8 s needed.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s6_family",
+     "corrected_in": 18,
+     "reason": "Shot 5 runs from 11.6 to 12.4 in the section (0.8 s). In s6_family the cut to Ethan comes at about 17.9 s. Every frame from 18.0 through about 19.1 is a clear, readable close-up of a grinning Ethan, with no black, end card or countdown. The cut back to the bloodied Sam is at about 19.2. That makes 18.0-18.8 Ethan for the whole shot, starting on the first frame. I checked it at 4 fps and 10 fps."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s15",
+    "shot_index": 8,
+    "anchor_words": "Survival rate: twenty-two percent",
+    "video_time": 381.46,
+    "problem": "The 22% card opens on Bailey (381.56), but s6_family@1 cuts to Quinn at about 382.7 and then to Sam (383.9), so the subject of the rating is gone for most of the card.",
+    "severity": "minor",
+    "fix_clip": "s6_sam_gf",
+    "fix_in": 68.9,
+    "fix_note": "In s6_sam_gf, 68.9-71.6 is a steady, lit shot of Bailey on the phone (2.7 s against 2.56 s needed). A cutaway follows at 72.0."
+   },
+   {
+    "section": "s15",
+    "shot_index": 6,
+    "anchor_words": "through the bloodiest run in Scream Six",
+    "video_time": 376.9,
+    "problem": "s6_core4@120 shows a kid eating, a kitchen counter and a shadowy hand. Nothing in the footage reads as 'bloodiest'.",
+    "severity": "minor",
+    "fix_clip": "s6_family",
+    "fix_in": 19.5,
+    "fix_note": "In s6_family, 19.5-22.0 shows a bloodied blonde victim and Ethan stabbing (20-22). That is about 2.4 s against 2.4 s needed, but check the 22.5 cut. A wider gory option is s6_family 27.0-28.0 combined with 29.5."
+   }
+  ]
+ },
+ {
+  "section": "s16",
+  "shots_checked": 13,
+  "ok_notes": "Shot 0 (s4_still_jill with the #2 JILL ROBERTS card), shot 2 (Ghostface clearly visible on 'She killed her friends'), shot 7 (Jill still on 'to play the survivor') and shot 11 (Jill under the bed with the 18% survival bar, slightly dim but readable) are fine. No end cards or black frames apart from the near-black shot 3. The main finding: neither s4_02_return (Olivia's murder) nor s4_06_killcam (Stab-a-thon / Gale / Dewey) contains Jill's finale. The user-recorded E:/YTP2/Instruction444/clips/ep03/scream4_reveal.mp4 (24 s, 1080p60) is unused. Its ranges: masked Ghostface vs Sidney 4.5-10.4; Jill unmasked and smirking 10.5-16.8; mask plus knife close-up 16.87-17.5; Jill close-up 19.5-22.4; Sidney's face 12.4-13.9. The self-stab, head-into-frame, defibrillator and gunshot moments exist in no clip, so they need a new recording (the hospital ending) or a narration change. Scratch frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s16/",
+  "issues": [
+   {
+    "section": "s16",
+    "shot_index": 3,
+    "anchor_words": "her mom",
+    "video_time": 393.2,
+    "problem": "s4_02_return@69 is almost black (an empty dark hallway with a silhouette) while the narrator says 'her mom'. The mother is not visible, and no Scream 4 clip in the folder shows the mother's murder.",
+    "severity": "major",
+    "fix_clip": "scream4_reveal",
+    "fix_in": 4.5,
+    "fix_note": "In scream4_reveal 4.5-7.5, Ghostface (Jill) attacks in a lit house, which is clearly visible. Use 0.88 s from 4.5 as the nearest stand-in. Otherwise the user would need to record the Kate Roberts kill scene.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "scream4_reveal",
+     "corrected_in": 4.75,
+     "reason": "\"her mom\" runs from 5.36 to about 5.9 s in s16. Shot 3 lasts 0.88 s, from 5.28 to 6.16. At scream4_reveal 4.5 the first frame shows only the back of a dark-haired woman in teal in the hallway. Ghostface first shows up at the doorway around 4.62\u20134.75, and the attack is clear from about 4.75 to 5.4. The woman is not Jill's mother Kate, though. She is Sidney: her face is clearly visible at about 7.75\u20138.0 s in the same clip, wearing the same teal top. Kate (older, lighter hair) does not appear in 4.5\u20135.4. The proposed shot puts a different person on screen while the narrator says \"her mom\", which breaks the owner's rule, and the first frame does not even show the attack yet. If a generic stand-in is acceptable anyway, scream4_reveal at 4.75 is the better in-point, because Ghostface lunging at the woman is visible from the first frame through 0.88 s. It is still Sidney, not the mother. The proper fix is to record Kate Roberts' death scene, or to rewrite or re-time the line so \"her mom\" lands on a shot that shows her."
+    }
+   },
+   {
+    "section": "s16",
+    "shot_index": 4,
+    "anchor_words": "and even her partner,",
+    "video_time": 394.08,
+    "problem": "s4_02_return@120 shows Olivia lying on the floor first and then Ghostface in the attic. Her partner Charlie is never shown.",
+    "severity": "major",
+    "fix_clip": "s4_still_charlie",
+    "fix_in": 0,
+    "fix_note": "s4_still_charlie shows Charlie clearly in a lit room (12 s still, so the full 1.36 s fits).",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "",
+     "corrected_in": -1,
+     "reason": "I checked s4_still_charlie at 0 to 1.375 s in 0.125 s steps, and also sampled the full 12 s clip at 1 fps. The picture is clear the whole time, and there are no end cards, black frames or countdowns. But it does not show Charlie. The seated man in sharp focus, with the denim jacket and teal polo, is Trevor Sheldon (Nico Tortorella), Jill's ex-boyfriend. Charlie Walker (Rory Culkin) has a much thinner face. The other person, standing in a light blue hoodie and green shirt with a bottle, is cut off above the shoulders, so you can't tell who he is. The clip is a near-still for all 12 s, so no in-point inside it shows Charlie's face. At \"and even her partner,\" (Jill's accomplice Charlie) a viewer would see Trevor, so it breaks the rule that the named person must be the one shown. I found no better in-point in this clip. The fix needs a different source showing Charlie's face, for example Charlie in s4_still_trio or in the s4_06_killcam kitchen scene, if either one has him clearly visible."
+    }
+   },
+   {
+    "section": "s16",
+    "shot_index": 5,
+    "anchor_words": "then stabbed herself",
+    "video_time": 395.44,
+    "problem": "'stabbed' is spoken at +0.24 s, but the picture is the dim still of Jill hiding under the bed. No stabbing or knife is shown. None of the clips contains the self-stab.",
+    "severity": "critical",
+    "fix_clip": "scream4_reveal",
+    "fix_in": 16.87,
+    "fix_note": "In scream4_reveal 16.87-17.5, the Ghostface mask and a raised knife are sharp and close (drop of the mask/knife). Usable to about 18.1 (knife in hand). That is enough for the 1.2 s shot and is the closest available stand-in. The real self-stab needs a new recording.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "",
+     "corrected_in": -1,
+     "reason": "I'm rejecting this fix. The shot runs 1.2 s (EDL 7.52 to 8.72). I checked scream4_reveal at 16.87, 17.12, 17.37, 17.62 and 17.87 s. Only the first frame, at 16.87, shows the mask and knife sharply. By 17.12 the picture is a blurry, spinning close-up of the mask. At 17.37 it is almost all black robe with motion blur, which breaks the rule against dark or blurry frames. 17.62 and 17.87 show black cloth with part of the knife blade. Jill is never on screen, and nothing in it shows a stab or anyone stabbing themselves. All it shows is a costume or mask moving, so it does not match \"then stabbed herself\". I also looked through the rest of the clip at 1 fps, and at 4 fps from 21.9 to 23.9 s. The only knife action is around 22.9 to 23.7 s, where Jill strikes at Sidney in the kitchen. That is a different person being stabbed, so using it would be misleading. No in-point in this clip works better. A recording of the real self-stab scene is still needed. Until then, a safer option is to rewrite the line or show an unambiguous shot of Jill instead."
+    }
+   },
+   {
+    "section": "s16",
+    "shot_index": 6,
+    "anchor_words": "and smashed her own head into a frame to play the",
+    "video_time": 396.64,
+    "problem": "s4_02_return@78 shows Olivia (blonde) crawling in the attic. That is the wrong person and the wrong action for 'smashed her own head into a frame'.",
+    "severity": "critical",
+    "fix_clip": "scream4_reveal",
+    "fix_in": 19.5,
+    "fix_note": "In scream4_reveal 19.5-22.4, Jill is unmasked in a clear, well-lit close-up (2.9 s, enough for 2.24 s). The head-smash itself is not in any clip and would need a new recording of the hospital/house ending.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "scream4_reveal",
+     "corrected_in": 19.6,
+     "reason": "Accepted with a corrected in-point. The shot runs from 8.72 to 10.96 s, so it lasts 2.24 s. At 19.5 s the frame still belongs to the previous shot, a dark close-up of Ghostface's costume and knife. The cut to Jill happens between 19.5 and 19.6 s, which I checked at 10 fps. Starting at 19.6 s, Jill (Emma Roberts, brunette) is the clear subject of a medium close-up in the hallway, unmasked and talking, from the first frame to 21.84 s. The next cut is at about 22.25 s, and nothing in that range is black, an end card or a countdown. The lighting is dim but her face reads clearly. This fixes the wrong-person problem: the current shot shows Olivia (blonde). It still does not show the head smash itself. The whole 23.9 s clip has no head-smash footage: it covers the under-bed and hallway reveal and the kitchen. So this is the right person on 'smashed her own head into a frame', but not the action. Showing the actual smash would need a new recording of the Scream 4 ending."
+    }
+   },
+   {
+    "section": "s16",
+    "shot_index": 8,
+    "anchor_words": "and she nearly got away",
+    "video_time": 400.52,
+    "problem": "s4_06_killcam@108 is a dark party crowd / Dewey shot. Jill is not visible.",
+    "severity": "major",
+    "fix_clip": "scream4_reveal",
+    "fix_in": 11.5,
+    "fix_note": "In scream4_reveal 11.5-12.4, Jill smirks at Sidney in a lit shot (unmasked reveal). The run continues at 14.0-16.8 if needed.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "scream4_reveal",
+     "corrected_in": 14.3,
+     "reason": "Shot s16#8 runs 12.6 to 13.68 in the section, which is 1.08 s, so it needs source 11.5 to 12.58. At 11.5 Jill is shown mostly from behind and side-on while she turns, and she only faces the camera from about 11.75. The source cuts to a Sidney two-shot at about 12.5, so the last 2-3 frames of the proposed shot would show Sidney, not Jill. A better in-point is 14.3: the Sidney shot ends at about 14.2, and from 14.3 to 15.4 the frames are one steady lit close shot of Jill smirking straight at the camera. There is no cut, black frame or end card in that range (the Ghostface mask shot starts at about 16.75). Jill is clearly visible from the first frame."
+    }
+   },
+   {
+    "section": "s16",
+    "shot_index": 9,
+    "anchor_words": "with it before Sidney hit her with a defibrillator",
+    "video_time": 401.6,
+    "problem": "s4_still_gf shows the Stab opening-scene actresses (Anna Paquin / Kristen Bell), which are the wrong people. 'Sidney' is spoken at +0.48 s and 'defibrillator' at +1.44 s, but neither Sidney nor a defibrillator appears.",
+    "severity": "critical",
+    "fix_clip": "scream4_reveal",
+    "fix_in": 12.4,
+    "fix_note": "In scream4_reveal 12.4-13.9, Sidney faces the camera opposite Jill, clearly lit. From 14.0 on it shows Jill, so 12.4 + 2.6 s gives Sidney first, then Jill. No clip shows the defibrillator; a new recording of the hospital finale would be needed.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "scream4_reveal",
+     "corrected_in": 12.62,
+     "reason": "Shot 9 runs 13.68 to 16.28 in the section, so it lasts 2.6 s. I checked frame by frame at 30 fps, and the proposed in-point of 12.4 is wrong: 12.40-12.57 is still the Jill close-up. That puts a 6-frame flash of the wrong person at the start of the shot. The Sidney two-shot runs from 12.60 to 14.17 (Neve Campbell faces the camera opposite the hooded Jill, dim but clearly visible), and then it cuts back to Jill from 14.20. Starting at 12.62 shows Sidney from the first frame through +1.55 s, which covers 'Sidney' (+0.48) and 'defibrillator' (+1.44), then Jill for the last ~1.05 s. There are no end cards, black frames or countdown cards in 12.6-15.3. As the editor noted, no clip shows the defibrillator itself, so the word is matched by showing Sidney only. Scratch frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s16sh9/."
+    }
+   },
+   {
+    "section": "s16",
+    "shot_index": 10,
+    "anchor_words": "and shot her through the heart.",
+    "video_time": 404.2,
+    "problem": "s4_06_killcam@15 opens on a dark Stab-a-thon crowd and then shows Anna Paquin / Kristen Bell. 'shot' is spoken at +0.08 s, but there is no gunshot, no Sidney and no Jill.",
+    "severity": "critical",
+    "fix_clip": "scream4_reveal",
+    "fix_in": 13,
+    "fix_note": "No gunshot footage exists in the ep03 clips. As a stand-in, scream4_reveal 13.0-14.6 shows the Sidney/Jill confrontation (if not used in shot 9; otherwise 20.0-21.6 Jill close-up). Recommend asking the user to record the hospital ending, where Sidney shoots Jill.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "scream4_reveal",
+     "corrected_in": 13,
+     "reason": "Shot 10 runs 16.28-17.92 in the section (1.64 s), and \"shot\" is spoken at 16.36 (+0.08 s). I checked scream4_reveal from 13.0 to 14.75 at 0.25 s steps. From 13.0 to 14.0 it shows Sidney, well lit and talking, facing Jill, who has her back to the camera. At about 14.25 it cuts to a close-up of Jill smirking. The frames are clean, with no end card, black frame or countdown. But this is the confrontation dialogue on the staircase, not a shooting. No gun, gunshot or hit is visible, so it breaks the rule that the word \"shot\" must show that moment. I checked the whole 23.9 s clip at 1 fps and none of it has a gunshot (the rest is the attack under the table, a fall and the kitchen). Shot 9 is s4_still_gf, so this footage isn't already used next door. If a stand-in is acceptable, 13.0 is the best in-point in this clip, because Sidney and Jill are both on screen right on the word. It is still only a stand-in. The real fix is for the user to record the hospital ending where Sidney shoots Jill, or for the narration to be cut over something other than a literal gunshot."
+    }
+   },
+   {
+    "section": "s16",
+    "shot_index": 12,
+    "anchor_words": "Instruction: if she's the last girl standing, look twice.",
+    "video_time": 408.32,
+    "problem": "An 'INSTRUCTION' caption overlay plus narration is still present. The owner asked to remove Instruction lines now that the channel is Horror Ranked.",
+    "severity": "major",
+    "fix_clip": "s4_still_jill",
+    "fix_in": 6,
+    "fix_note": "Drop the instr overlay and cut the voice after 'percent.' (s16 ends at about 19.9 s + pad). The picture itself is fine.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s4_still_jill",
+     "corrected_in": 6,
+     "reason": "I checked frames of s4_still_jill from 6.0 to 10.75 s in 0.25 s steps. Every frame is the same clean, well-lit still. Jill (Emma Roberts) is sharp in the foreground and the Ghostface mask is visible behind her. There is no end card, black frame, countdown or blur, so the picture is fine from the first frame. In s16.json, \"Survival rate: eighteen percent.\" ends at 20.44 s and \"Instruction\" starts at 20.48 s, so cutting the voice after \"percent.\" works cleanly. With the 0.7 s pad, s16 then ends at about 21.14 s. Shot 12 starts at 20.4 s, so it shrinks to about 0.74 s of silent tail on this still. That is acceptable. The editor could also drop shot 12 and let shot 11 (s4_still_jill_bed) run to the end of the section. Either way, the INSTRUCTION caption overlay has to be removed."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s16",
+    "shot_index": 1,
+    "anchor_words": "Sidney's own cousin.",
+    "video_time": 390.08,
+    "problem": "s4_still_trio shows Jill with Kirby and Olivia. Sidney is not in frame while 'Sidney's' is spoken.",
+    "severity": "minor",
+    "fix_clip": "scream4_reveal",
+    "fix_in": 14,
+    "fix_note": "In scream4_reveal 14.0-16.8, Jill faces Sidney (Sidney's hair is in the foreground), clearly lit. Only use this if the 11.5-12.4 range is not used for shot 8."
+   }
+  ]
+ },
+ {
+  "section": "s17",
+  "shots_checked": 15,
+  "ok_notes": "Section s17 has two critical problems with no fix in the current clips. No ep03 clip shows Roman being shot in the chest or Dewey's headshot, so the Scream 3 finale clip has to be supplied. I checked all of s3_11_family (0-130 s; the end card starts at about 130), s3_02_cutting and s3_03_backstab.\n\nThese shots are fine:\n- Shot 0 ('number one is Roman Bridger', 413.1): Roman is clear from the first frame and the #1 card is correct.\n- Shot 1 ('from Scream Three'): Roman, then Sidney.\n- Shots 2-6 (half-brother, only Ghostface, worked alone, most kills, claims he's the one): Roman's face or a Ghostface, all well lit, no end cards.\n- Shot 7 ('pushed Billy', s1_11_creative @16): Billy is visible with Sidney from the start, with the Scream (1996) tag.\n- Shot 8 ('original murders', s1_10_surprise @66): Sidney bloodied, then Billy at about 17.5.\n- Shot 10 ('did nothing'): Roman unharmed and talking is acceptable.\n\nThe section ends cleanly at about 31.66 s. Frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s17/",
+  "issues": [
+   {
+    "section": "s17",
+    "shot_index": 9,
+    "anchor_words": "bulletproof vest, so shooting him in the chest",
+    "video_time": 430.91,
+    "problem": "Shows a static Ghostface in front of the projector (17.81-20.08). Roman is never shown being shot in the chest. The words 'shooting him in the chest' (19.08-19.68) play over a masked figure standing still. No ep03 clip contains this moment: s3_11_family is only the talking reveal, and its end card starts at about 130 s. s3_02_cutting and s3_03_backstab are other scenes.",
+    "severity": "critical",
+    "fix_clip": "",
+    "fix_in": 0,
+    "fix_note": "No usable footage in the clips folder. We need the Scream 3 finale clip where Sidney shoots Roman and he gets back up (vest). It does not exist yet, and per the rules I did not download it, so the owner has to supply it. Until then the least-wrong fallback is to cut 'shooting' onto s3_11_family @74.0 (Roman pulls the Ghostface mask out, 74.0-74.6) and keep Roman's face on screen. That fallback still breaks the owner's rule.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "",
+     "corrected_in": 0,
+     "reason": "The proposed fix names no clip (clip '' from 0 s), so the edit has nothing to cut to and cannot be applied. I checked this myself. s3_11_family is 159.7 s long; I looked at it at 0.5 fps from 0 to 144 s and at 4 fps from 73.5 to 76 s. It covers only the reveal: Roman talking in his black robe, Sidney, and projector flashbacks. Nobody gets shot and no vest appears, and the end card starts at about 130 s. s3_02_cutting (the Jenny McCarthy wardrobe kill) and s3_03_backstab (Cotton's kill plus the house scene) are also end-carded by about 125-130 s and do not contain Roman being shot. The editor's fallback, s3_11_family at 74.0, is also unsuitable. At 74.0 it shows Roman pulling the mask out of his robe, at 74.75 it cuts to Sidney, and it stays on Sidney through 76.0. So for most of the 2.27 s shot (17.81-20.08) the screen shows Sidney, not Roman, and nobody is shot at the word 'shooting'. The owner has to supply the Scream 3 finale clip where Sidney shoots Roman and he gets back up because of the vest. Otherwise the narration line should be rewritten. Frames are in C:/Users/hw549/AppData/Local/Temp/claude/C--Users-hw549-Downloads-YTP1/90ad0de3-f966-43b7-ab22-1bb0242a7d41/scratchpad/wfqa/s17_9/."
+    }
+   },
+   {
+    "section": "s17",
+    "shot_index": 11,
+    "anchor_words": "bullet to the head from Dewey",
+    "video_time": 434.94,
+    "problem": "Shows Roman talking, then Sidney at about 23.0 (s3_11_family @113). There is no Dewey, no gun and no headshot while the narrator says 'bullet to the head from Dewey' (22.08-23.28). The actual headshot is not in any available clip.",
+    "severity": "critical",
+    "fix_clip": "s3_03_backstab",
+    "fix_in": 94,
+    "fix_note": "The best available stand-in is Dewey in profile aiming his revolver, clearly lit, s3_03_backstab 94.0-95.6. It is about 1.6 s, which matches the 1.6 s shot. It is a different scene (the Gale/Jennifer house) and not the real kill. The correct fix is the Scream 3 finale clip where Dewey shoots Roman in the head, which the owner needs to supply. Alternative: s3_03_backstab @89.8 has Dewey lunging and pointing the gun at the camera, but it only lasts about 0.8 s before a cut.",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s3_03_backstab",
+     "corrected_in": 94.2,
+     "reason": "I accept this as a stand-in only, with a slightly later in-point. I checked s3_03_backstab from 93.7 to 96.1 at 10 fps and from 88.5 to 96.5 at 4 fps. The shot is 1.6 s long (EDL s17 shot 11 runs 21.84 to 23.44). At the proposed 94.0, Dewey is still turning, and 94.1 is a motion-blurred lunge. From 94.2 to about 95.3 he is clearly lit, in profile, with his arm out aiming the revolver. From about 95.4 he is lowering the gun, and by 95.6 to 95.8 it points upward. Starting at 94.2 means the first frame already shows Dewey aiming, and about 1.1 s of the 1.6 s shot is a clean aim. There is no end card, black frame or countdown anywhere in the window; only the small Movieclips watermark sits at the bottom left. The 89.8 alternative is only a brief lunge before a cut, so it is worse. Caveat: this is a different scene (the gun is pointed at a young man in the house), and it does not show Roman being shot in the head. It shows Dewey and the gun but not the actual headshot. The real fix is the Scream 3 finale clip, which the owner would need to supply."
+    }
+   },
+   {
+    "section": "s17",
+    "shot_index": 12,
+    "anchor_words": "finally stop him",
+    "video_time": 436.54,
+    "problem": "Shows Sidney, then Roman talking (s3_11_family @118). Nothing shows Roman being stopped or dead. This is the same missing finale footage as shot 11.",
+    "severity": "major",
+    "fix_clip": "",
+    "fix_in": 0,
+    "fix_note": "Use Roman's death from the Scream 3 finale clip once it is supplied. Otherwise extend the Dewey gun shot (s3_03_backstab 94.0) only if it is long enough. It is not: Dewey lowers the gun at about 95.7.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "",
+     "corrected_in": 0,
+     "reason": "The proposed fix names no clip (empty name, in-point 0), so there is nothing to check or render. No Roman death or finale clip is in E:/YTP2/Instruction444/clips/ep03. The shot runs from 23.44 to 24.88 s in s17, about 1.44 s.\n\nI checked the two candidate sources and neither shows Roman being stopped:\n- **s3_11_family:** I checked 96 to 168 s. Before about 129 s it is only Sidney and Roman talking. From about 129 s to the end (159.7 s) it is the Movieclips end card and promo screens.\n- **s3_03_backstab:** I checked 88 to 100 s at 2 fps. The frames show Dewey with a revolver, but the target is not Roman, and he is not shown dying. From about 97 s the shot is a wide group shot. This is too short and the wrong subject.\n\nThere is no usable in-point for \"finally stop him\". It needs the Scream 3 finale clip (Dewey shooting Roman in the head) to be supplied, or the narration line needs rewording."
+    }
+   },
+   {
+    "section": "s17",
+    "shot_index": 13,
+    "anchor_words": "Survival rate: fifteen percent",
+    "video_time": 437.98,
+    "problem": "Sidney is on screen when 'Survival rate' is spoken (24.88-25.9). Roman only appears at about 26.0, which is over 1 s late for the subject.",
+    "severity": "major",
+    "fix_clip": "s3_11_family",
+    "fix_in": 89.2,
+    "fix_note": "From source 89.2 to about 93.9, Roman is clearly lit in the curtain medium shot (Sidney comes back at about 94.0). That covers the full 3.39 s.",
+    "validation": {
+     "accept": false,
+     "corrected_clip": "s3_11_family",
+     "corrected_in": 89.9,
+     "reason": "I checked the frames at 10 fps. At 89.2-89.3 s the shot is still Sidney, and the cut to Roman comes at about 89.4. From 89.4 to about 89.8 Roman is turned away and blurred by motion. If the fix starts at 89.2, Sidney is on screen when 'Survival rate' is spoken. From 89.9 Roman faces the camera, clearly lit in the medium shot in front of the curtain, and he stays that way to about 94.1, when Sidney comes back at about 94.2. Starting at 89.9 covers the full 3.39 s (89.9 to 93.29) with Roman in every frame. There are no end cards, black frames or countdowns. The proposed in-point of 89.2 is wrong. Use 89.9."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s17",
+    "shot_index": 14,
+    "anchor_words": "Instruction: aim for the head, every time.",
+    "video_time": 441.37,
+    "problem": "The 'INSTRUCTION' caption and its voice line are still in the video. The owner asked to drop Instructions for now (the channel is now Horror Ranked).",
+    "severity": "minor",
+    "fix_clip": "s3_11_family",
+    "fix_in": 120,
+    "fix_note": "Remove the instr overlay and that sentence from the narration, and end the section after 'fifteen percent' (about 28.3 s + pad). This is a script/EDL change, not a footage change."
+   }
+  ]
+ },
+ {
+  "section": "s18",
+  "shots_checked": 5,
+  "ok_notes": "Checked the frames at 444.68-458.1 at 4 fps and the spree source at 5 fps. Shot 0 (Scream 2022 act3@27, 'So that's every Ghostface'): the Ghostface mask is clearly visible from the first frame, though the shot is dark. It cuts to a girl at ~1.25 s with Ghostface still standing in the background during 'Ghostface', which is acceptable. Shot 1 (Scream VI opening@186, 'from the guy who lasted five minutes'): Jason Carvey on the phone, lit and in focus. That is the correct subject, the short-lived Ghostface from VI's opening. Shot 2 (Scream 3 family@91, 'to the one who planned it all'): Roman Bridger in a lit close-up, correct mastermind. No end cards or black frames anywhere in the section. Film labels match each shot.",
+  "issues": [
+   {
+    "section": "s18",
+    "shot_index": 3,
+    "anchor_words": "Tell me in the comments who you'd put at number one",
+    "video_time": 450.52,
+    "problem": "Ghostface in the neon bar is only on screen for the first ~1.6 s (450.5-452.1). The source then cuts to an empty tiled floor/hallway (source ~164.4-166.7), so from about 452.2 to 453.88 the frame is an empty floor under the 'YOUR #1?' title while the narrator says 'who you'd put at number one'. That breaks the no-empty-frames rule.",
+    "severity": "major",
+    "fix_clip": "s7_06_spree",
+    "fix_in": 162,
+    "fix_note": "Ghostface is visible without a break at source 162.0-164.3 (2.3 s) and again at 166.8-169.0 (2.2 s). The empty floor is at 164.4-166.7 and Tara's close-ups are at 159-161.8. No single 3.36 s window holds. Option A: split the shot. Use s7_06_spree@162.0 for t=5.84-7.52, then s7_06_spree@166.8 for t=7.52-9.2 (1.68 s each, both all Ghostface). Option B: one shot at 162.0 with speed ~0.68 (2.3 s stretched to 3.36 s).",
+    "validation": {
+     "accept": true,
+     "corrected_clip": "s7_06_spree",
+     "corrected_in": 162,
+     "reason": "I checked frames at 4 fps from source 158 to 170 and at 10 fps around 166.5-167.1. The proposed in-point of 162.0 does not work as one 3.36 s shot at normal speed. It would run to 165.36, and the empty tiled floor appears from about 164.5 to 166.7, so the problem would come back. Option A (the split) holds up. Part 1 uses s7_06_spree from 162.0 for t=5.84-7.52, which plays source 162.0-163.68. Ghostface is centred in the neon bar from the first frame and in every frame after it, with no black or end card. Part 2 uses s7_06_spree for t=7.52-9.2. At 10 fps the floor frames end at 166.7 and the first Ghostface frame is 166.8, so the proposed 166.8 is the exact cut frame. Use 166.85 instead for a safety margin; it plays source 166.85-168.53, and Ghostface is clearly visible the whole way (the neon-guitar wide shot only starts around 168.5-169). Please apply it as two shots: [5.84,'s7_06_spree',162.0] and [7.52,'s7_06_spree',166.85]. Option B (one shot at 162.0 with speed 0.68) is also clean, since it stays inside 162.0-164.3, but the slow motion may look sluggish."
+    }
+   }
+  ],
+  "minor": [
+   {
+    "section": "s18",
+    "shot_index": 4,
+    "anchor_words": "and if you want Freddy or Pinhead next, you know where to ask",
+    "video_time": 453.88,
+    "problem": "The closing shot is a 12 s still of the two girls from the Scream 4 opening (one in focus, one blurred), held for about 4.3 s with no Ghostface in frame. The 'FREDDY / OR PINHEAD?' title carries the line, so it reads fine. It is just a weak end frame for a Ghostface video.",
+    "severity": "minor",
+    "fix_clip": "s4_still_gf",
+    "fix_in": 4,
+    "fix_note": "Optional. Keep it if the CTA title is meant to carry this moment. s4_06_killcam has only brief, dark Ghostface frames (around 50 s and 82 s), so it is no better. A clearly lit Ghostface still from another film's clip would be stronger. Freddy and Pinhead cannot be shown from the Scream clips, and the title covers them."
+   }
+  ]
+ }
+]

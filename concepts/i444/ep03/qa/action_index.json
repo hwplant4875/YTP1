@@ -1,0 +1,3589 @@
+{
+ "events": [
+  {
+   "clip": "s1_01_like_scary",
+   "start": 0,
+   "end": 107.6,
+   "kind": "other",
+   "who": "Casey Becker",
+   "description": "Casey (Drew Barrymore) on the phone in the kitchen with the killer: popcorn, knife block, dark backyard at 92-94. No Ghostface or violence is visible. Phone-call atmosphere only.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_01_like_scary",
+   "start": 40.5,
+   "end": 45.5,
+   "kind": "phone_call",
+   "who": "Casey Becker",
+   "description": "Casey leaning on the counter on the phone, hand going to the knife block",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_04_gut",
+   "start": 17,
+   "end": 122.6,
+   "kind": "other",
+   "who": "Billy Loomis, Stu Macher",
+   "description": "Friends at the fountain in daylight. Billy (dark hair, grey shirt) is next to Sidney at 38-40, 46-55, 77-78, 103-104 and 112. Stu (blond hair, necklace) is with Tatum at 23-27, 31-37, 64-72 and 114-117. These are clear faces but they are not unmask reveals.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_05_die_sidney",
+   "start": 13.9,
+   "end": 15.8,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Ghostface bursts out of the closet behind Sidney with the knife raised (mask clear from 14.3), then lunges",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_05_die_sidney",
+   "start": 15.8,
+   "end": 17.2,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Sidney Prescott",
+   "description": "Ghostface tackles Sidney at the front door. Fast and blurry, and the mask is not visible.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s1_05_die_sidney",
+   "start": 22.9,
+   "end": 23.5,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Ghostface on top of Sidney on the floor, mask visible, swinging the knife",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_05_die_sidney",
+   "start": 28.8,
+   "end": 31.5,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "POV from below: Ghostface's mask fills the frame and he stabs the knife down toward the camera (swing at 29.3-29.8)",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_05_die_sidney",
+   "start": 35.3,
+   "end": 36.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Low-angle close-up of the Ghostface mask over Sidney",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_05_die_sidney",
+   "start": 41.3,
+   "end": 42,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface on the floor holding the knife, mask clearly lit",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_05_die_sidney",
+   "start": 64.5,
+   "end": 66.2,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask in the bedroom closet doorway behind Sidney",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_05_die_sidney",
+   "start": 125.8,
+   "end": 126.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface appears at the front door as Sidney flees",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_05_die_sidney",
+   "start": 128,
+   "end": 128.4,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface at the front door",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_05_die_sidney",
+   "start": 128.4,
+   "end": 130.6,
+   "kind": "other",
+   "who": "Dewey Riley",
+   "description": "Dewey with his gun at the door, Ghostface fleeing at the edge of the frame",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_06_school_out",
+   "start": 0.8,
+   "end": 2.6,
+   "kind": "other",
+   "who": "students (pranksters)",
+   "description": "Students putting on Ghostface masks in the school closet. These are not the killer.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_06_school_out",
+   "start": 109.3,
+   "end": 109.8,
+   "kind": "ghostface_clear",
+   "who": "Ghostface, Principal Himbry",
+   "description": "Ghostface rises with arms spread behind Principal Himbry, mask clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_06_school_out",
+   "start": 110.6,
+   "end": 111.7,
+   "kind": "stabbing",
+   "who": "Ghostface, Principal Himbry",
+   "description": "Ghostface lunges and stabs Himbry, who screams. The first hit is at about 111.0.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_06_school_out",
+   "start": 111.8,
+   "end": 112.2,
+   "kind": "stabbing",
+   "who": "Ghostface",
+   "description": "Over-the-shoulder shot of the Ghostface mask while stabbing",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_06_school_out",
+   "start": 114.3,
+   "end": 115.7,
+   "kind": "stabbing",
+   "who": "Ghostface, Principal Himbry",
+   "description": "Himbry screaming as Ghostface stabs repeatedly",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_06_school_out",
+   "start": 115.7,
+   "end": 116.5,
+   "kind": "stabbing",
+   "who": "Ghostface",
+   "description": "Ghostface raises the knife for the final blow, mask clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_06_school_out",
+   "start": 116.5,
+   "end": 117.3,
+   "kind": "death",
+   "who": "Principal Himbry",
+   "description": "Himbry lying dead and bloody",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_06_school_out",
+   "start": 117.3,
+   "end": 118.5,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Iconic shot of Ghostface holding up the bloody knife, mask clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 25.9,
+   "end": 27.7,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface standing in the garage doorway facing Tatum",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 30,
+   "end": 32.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface standing in the garage, full body",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 39.7,
+   "end": 41.3,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask looming over Tatum's shoulder. The shot is dim.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 53.3,
+   "end": 55.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask behind Tatum",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 61.5,
+   "end": 62.1,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Tatum Riley",
+   "description": "Knife slashes across Tatum's arm (knife clearly visible)",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 63.1,
+   "end": 64,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Ghostface with the knife struggling with Tatum",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 67.4,
+   "end": 69.1,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Close-up of the Ghostface mask, tilted",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 79.5,
+   "end": 79.8,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Ghostface lunges with the knife",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 83,
+   "end": 84.1,
+   "kind": "other",
+   "who": "Ghostface, Tatum Riley",
+   "description": "Tatum hits Ghostface with a thrown bottle (smash at about 83.4), Ghostface staggers. The garage is a bit dark.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 85,
+   "end": 87.4,
+   "kind": "other",
+   "who": "Ghostface",
+   "description": "A second bottle smashes on Ghostface (glass spray at 85.2), and he staggers",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 100.1,
+   "end": 101,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface stands up holding the knife",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 101,
+   "end": 102.7,
+   "kind": "other",
+   "who": "Tatum Riley",
+   "description": "Tatum stuck in the pet door",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 102.8,
+   "end": 104,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface with the knife reaches for the garage door opener",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 122,
+   "end": 122.5,
+   "kind": "death",
+   "who": "Tatum Riley",
+   "description": "Tatum lifted up by the garage door, then the garage opener sparks (122.3)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 122.5,
+   "end": 123.3,
+   "kind": "death",
+   "who": "Tatum Riley",
+   "description": "Tatum's legs dangle limp from the garage door: she is crushed. The shot is dark.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 123.4,
+   "end": 124.4,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask watching",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_07_doggie_door",
+   "start": 127.8,
+   "end": 129.2,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask watching. The shot is dark.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s1_08_survive",
+   "start": 50,
+   "end": 94.6,
+   "kind": "other",
+   "who": "Randy Meeks",
+   "description": "Randy explains the horror movie rules in front of the TV at the party (Halloween is on the TV). No violence.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_09_look_behind",
+   "start": 11.4,
+   "end": 14,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Wide upside-down shot of Randy on red couch; Ghostface appears small in the doorway behind him (Scream 1996). Small/dim figure.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s1_09_look_behind",
+   "start": 26,
+   "end": 29.1,
+   "kind": "ghostface_clear",
+   "who": "Ghostface, Randy",
+   "description": "Ghostface standing right behind Randy on the couch, mask visible (iconic 'look behind you' shot).",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_09_look_behind",
+   "start": 29.1,
+   "end": 31.45,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Low-angle close: Ghostface raises knife over Randy, mask clear and large. Cuts to TV at 31.5.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_09_look_behind",
+   "start": 79,
+   "end": 81.55,
+   "kind": "stabbing",
+   "who": "Kenny, Ghostface",
+   "description": "Ghostface mask behind Kenny (79.0), then Kenny clutches his slit, bloody throat with Ghostface mask in van window (79.8-81.5).",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_09_look_behind",
+   "start": 83.4,
+   "end": 87.7,
+   "kind": "ghostface_clear",
+   "who": "Ghostface, Kenny",
+   "description": "Ghostface rises behind Kenny at the van door, mask clearly visible, knife raised from ~85.6; strikes ~87.2-87.7.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_09_look_behind",
+   "start": 87.85,
+   "end": 89.7,
+   "kind": "stabbing",
+   "who": "Sidney",
+   "description": "Reaction: Sidney in van screaming as Kenny's blood splatters onto her (blood spray 88.2-88.6).",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_09_look_behind",
+   "start": 89.8,
+   "end": 91,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface standing at van door, mask clear.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_09_look_behind",
+   "start": 102.45,
+   "end": 103.5,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Ghostface lunges out of the van at Sidney, mask clear (night, slightly motion-blurred).",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_10_surprise",
+   "start": 0,
+   "end": 4.9,
+   "kind": "other",
+   "who": "Billy Loomis",
+   "description": "Billy (dark hair, bloody white T-shirt) with blood on hand/mouth, close-up.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_10_surprise",
+   "start": 21.4,
+   "end": 22,
+   "kind": "unmasked_face",
+   "who": "Billy Loomis",
+   "description": "Billy close-up in bloody white T-shirt appearing in kitchen doorway.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_10_surprise",
+   "start": 27.5,
+   "end": 31,
+   "kind": "unmasked_face",
+   "who": "Billy Loomis",
+   "description": "KILLER REVEAL: Billy holds the voice changer to his mouth ('Surprise, Sidney'), bloody shirt, gun in hand.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_10_surprise",
+   "start": 35.9,
+   "end": 37.35,
+   "kind": "unmasked_face",
+   "who": "Billy Loomis",
+   "description": "Billy aims pistol, speaking through voice changer; then over-shoulder gun at Sidney 37.4-38.0 (no muzzle flash/hit visible).",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_10_surprise",
+   "start": 46.6,
+   "end": 51.8,
+   "kind": "unmasked_face",
+   "who": "Stu Macher",
+   "description": "STU REVEAL: Stu (blond, beige sweater) grinning and waving a pistol under the blue kitchen lamp.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_10_surprise",
+   "start": 60,
+   "end": 64,
+   "kind": "unmasked_face",
+   "who": "Billy Loomis, Stu Macher",
+   "description": "Two-shot of Billy and Stu side by side grinning (both killers unmasked together).",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_10_surprise",
+   "start": 112.4,
+   "end": 115.3,
+   "kind": "unmasked_face",
+   "who": "Stu Macher",
+   "description": "Stu aiming pistol under blue lamp, manic.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_11_creative",
+   "start": 99.75,
+   "end": 101.3,
+   "kind": "unmasked_face",
+   "who": "Billy Loomis",
+   "description": "Billy raises a knife, bloody white T-shirt.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_11_creative",
+   "start": 101.35,
+   "end": 103.2,
+   "kind": "stabbing",
+   "who": "Billy Loomis, Stu Macher",
+   "description": "Billy stabs Stu in the shoulder (foreground Stu shoulder bloody), knife pulled back; second stab ~104.6-105.1.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s1_11_creative",
+   "start": 103.25,
+   "end": 105.5,
+   "kind": "stabbing",
+   "who": "Stu Macher",
+   "description": "Stu screaming in pain after being stabbed.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_11_creative",
+   "start": 113.375,
+   "end": 115,
+   "kind": "stabbing",
+   "who": "Billy Loomis, Stu Macher",
+   "description": "Bloody knife from frame right cuts at Stu's face/head; Stu with bloody shoulder grimacing.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_12_tables",
+   "start": 110.5,
+   "end": 111.5,
+   "kind": "ghostface_attack",
+   "who": "Ghostface (Sidney in costume), Billy Loomis",
+   "description": "Ghostface bursts out of closet and hits Billy with an umbrella.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_12_tables",
+   "start": 112.5,
+   "end": 113.5,
+   "kind": "ghostface_attack",
+   "who": "Ghostface (Sidney in costume), Billy Loomis",
+   "description": "Ghostface faces bloody Billy and swings umbrella at him; Billy recoils.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_12_tables",
+   "start": 115.4,
+   "end": 116.4,
+   "kind": "ghostface_attack",
+   "who": "Ghostface (Sidney in costume), Billy Loomis",
+   "description": "Ghostface strikes Billy with umbrella, Billy screams.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_12_tables",
+   "start": 118.25,
+   "end": 119.35,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (Sidney)",
+   "description": "Low-angle Ghostface mask close-up under chandelier, very clear.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s1_12_tables",
+   "start": 119.4,
+   "end": 120.6,
+   "kind": "unmasked_face",
+   "who": "Sidney Prescott",
+   "description": "Ghostface pulls off mask revealing Sidney (hero, not a killer).",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_03_omega",
+   "start": 74.25,
+   "end": 74.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface, Cici",
+   "description": "Ghostface steps out of the doorway behind Cici while she's on the phone. Mask is clear but small.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_03_omega",
+   "start": 75,
+   "end": 76,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Cici",
+   "description": "Ghostface lunges and grabs Cici as she spins and screams. From 75.6 there are fast blurry black-robe frames.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_03_omega",
+   "start": 100.875,
+   "end": 102.6,
+   "kind": "stabbing",
+   "who": "Ghostface, Cici",
+   "description": "Close shot of Ghostface right behind a screaming Cici, stabbing her in the back. Mask and face are both clear.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_03_omega",
+   "start": 103.6,
+   "end": 104.3,
+   "kind": "other",
+   "who": "Ghostface, Cici",
+   "description": "Cici's body crashes through the window onto the balcony.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_03_omega",
+   "start": 112.6,
+   "end": 115.2,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Cici",
+   "description": "Ghostface lifts Cici up on the balcony at night. Mask is briefly visible at about 114.6.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s2_03_omega",
+   "start": 115.25,
+   "end": 115.9,
+   "kind": "death",
+   "who": "Cici",
+   "description": "Cici is thrown off the balcony, body flying through the air.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_03_omega",
+   "start": 116.375,
+   "end": 117.2,
+   "kind": "death",
+   "who": "Cici",
+   "description": "Wide low-angle shot of Cici falling past the house facade.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_04_showtime",
+   "start": 39,
+   "end": 40.1,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface bursts in the front door with arms spread. Full figure and mask are clear.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_04_showtime",
+   "start": 40.25,
+   "end": 41,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Sidney",
+   "description": "Ghostface lunges at Sidney in the sorority hallway.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_04_showtime",
+   "start": 49.5,
+   "end": 49.85,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Ghostface swings the knife at the door (fast, slightly blurry).",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s2_04_showtime",
+   "start": 49.875,
+   "end": 51,
+   "kind": "stabbing",
+   "who": "Derek",
+   "description": "The knife blade punches through the door right next to Derek's head.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_04_showtime",
+   "start": 51.125,
+   "end": 52.4,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Sidney",
+   "description": "Ghostface grabs Sidney from behind at the door. Mask is clear.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_04_showtime",
+   "start": 54.125,
+   "end": 55.1,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Sidney",
+   "description": "Ghostface lunges at Sidney as she runs. Mask is clear, then he chases her.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_04_showtime",
+   "start": 110,
+   "end": 113,
+   "kind": "other",
+   "who": "Derek",
+   "description": "Aftermath: Derek on the floor with a bloody arm, Dewey kneeling over him.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_06_play",
+   "start": 101.75,
+   "end": 102.4,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface among the masked chorus actors on stage. Mask is small, soft and behind another actor.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s2_06_play",
+   "start": 109.375,
+   "end": 109.8,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Sidney",
+   "description": "Ghostface lunges at Sidney from behind on stage. Mask is clear.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_06_play",
+   "start": 115.1,
+   "end": 115.25,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Brief shot of Ghostface with a knife on stage (very short).",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s2_06_play",
+   "start": 125.875,
+   "end": 126.4,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Sidney",
+   "description": "Ghostface grabs Sidney from behind in the stage crowd. Mask is visible.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_07_big_boys",
+   "start": 75.375,
+   "end": 77,
+   "kind": "ghostface_attack",
+   "who": "Randy, Ghostface",
+   "description": "Randy is yanked into the van's side door, seen through the van window. Ghostface's mask shows briefly at about 75.9.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_07_big_boys",
+   "start": 86,
+   "end": 86.6,
+   "kind": "stabbing",
+   "who": "Ghostface, Randy",
+   "description": "Ghostface is seen through the van window stabbing (knife flash). Small and dark.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s2_07_big_boys",
+   "start": 89,
+   "end": 90.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface's mask is visible inside the van through the window.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_07_big_boys",
+   "start": 92,
+   "end": 93.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface climbs out of the van in daylight. Mask is very clear.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_07_big_boys",
+   "start": 98,
+   "end": 100,
+   "kind": "other",
+   "who": "Randy",
+   "description": "Blood drips down from under the van.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_07_big_boys",
+   "start": 125.625,
+   "end": 128,
+   "kind": "death",
+   "who": "Randy",
+   "description": "Randy's blood-soaked body is found in the van. Full reveal is clear from 125.75.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 17.875,
+   "end": 18.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface appears at the cop-car window behind the smiling cop. Mask is clear.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 19,
+   "end": 19.6,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Ghostface smashes through the car window. Mask is clear inside the broken glass.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 22.25,
+   "end": 22.9,
+   "kind": "stabbing",
+   "who": "cop (driver)",
+   "description": "Close-up of the cop's slashed, bloody throat after the stab.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 25.875,
+   "end": 27,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, second cop",
+   "description": "Ghostface is on the car roof and pounces on the second cop.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 27.25,
+   "end": 28.9,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, second cop",
+   "description": "Ghostface fights the cop beside the red car. Mask is visible.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 39.25,
+   "end": 40.6,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, cop",
+   "description": "Ghostface grabs the cop against the car. Mask is visible from 40.125.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 41,
+   "end": 42.9,
+   "kind": "other",
+   "who": "cop",
+   "description": "The cop is thrown onto the car hood and lies there.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 49.5,
+   "end": 51,
+   "kind": "death",
+   "who": "cop",
+   "description": "The cop falls on the road and lies with a bloody wound.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 56.875,
+   "end": 57.8,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Extreme close-up of the Ghostface mask behind the wheel.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 58.375,
+   "end": 58.85,
+   "kind": "other",
+   "who": "cop",
+   "description": "Windshield view: the cop stands in the road aiming a gun at the oncoming car.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 58.9,
+   "end": 59.4,
+   "kind": "car_hit",
+   "who": "cop",
+   "description": "The car hits the cop and he slams onto the hood (windshield POV).",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 61.875,
+   "end": 62.5,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface driving with a headlight glare. Mask is visible.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 64,
+   "end": 64.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface driving, mask in profile.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 67.6,
+   "end": 68.8,
+   "kind": "other",
+   "who": "cop",
+   "description": "The cop clings to the hood of the speeding car.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 69.625,
+   "end": 70.5,
+   "kind": "other",
+   "who": "cop",
+   "description": "Overhead shot: the car speeds with the cop on its hood.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 74.875,
+   "end": 75.3,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface driving, close and clear with sparks.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 75.375,
+   "end": 76.4,
+   "kind": "other",
+   "who": "car",
+   "description": "The car sideswipes a parked white car in a shower of sparks.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 82.625,
+   "end": 83.4,
+   "kind": "other",
+   "who": "car",
+   "description": "The car scrapes along the construction wall throwing sparks.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 84,
+   "end": 84.6,
+   "kind": "other",
+   "who": "car, cop",
+   "description": "Overhead: the car rams the scaffolding/wall with the cop on the hood.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 87.5,
+   "end": 89,
+   "kind": "other",
+   "who": "car",
+   "description": "Overhead view of the wrecked car buried in pipes.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s2_09_driving",
+   "start": 92,
+   "end": 93.5,
+   "kind": "death",
+   "who": "cop",
+   "description": "The cop's bloody body is pinned under the pipes.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s2_10_blame",
+   "start": 3,
+   "end": 5.9,
+   "kind": "unmasked_face",
+   "who": "Mickey",
+   "description": "Mickey (killer, short hair, grey T-shirt, bruised forehead) is unmasked, grinning, clear close-up.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_10_blame",
+   "start": 9,
+   "end": 11.9,
+   "kind": "unmasked_face",
+   "who": "Mickey",
+   "description": "Mickey, bloody-faced and unmasked, laughing with a gun.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_10_blame",
+   "start": 14,
+   "end": 18.9,
+   "kind": "unmasked_face",
+   "who": "Mickey",
+   "description": "Mickey close-up holding the gun, unmasked.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_10_blame",
+   "start": 49.375,
+   "end": 50.3,
+   "kind": "other",
+   "who": "Mickey, Sidney",
+   "description": "Mickey's gun is pointed at Sidney's head.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_10_blame",
+   "start": 60,
+   "end": 60.4,
+   "kind": "other",
+   "who": "Sidney, Mickey",
+   "description": "Sidney strikes Mickey in the face.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_10_blame",
+   "start": 64.375,
+   "end": 65,
+   "kind": "other",
+   "who": "Sidney, Mickey",
+   "description": "Sidney and Mickey crash into the stage set during the fight.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_10_blame",
+   "start": 83.75,
+   "end": 85,
+   "kind": "unmasked_face",
+   "who": "Mickey",
+   "description": "Bloody Mickey aiming a gun at Sidney (over her shoulder).",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_10_blame",
+   "start": 98,
+   "end": 98.3,
+   "kind": "unmasked_face",
+   "who": "Mickey",
+   "description": "Mickey looking up with a bloody face.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s2_10_blame",
+   "start": 119.75,
+   "end": 121,
+   "kind": "unmasked_face",
+   "who": "Mrs Loomis",
+   "description": "Mrs Loomis (short hair, white coat) appears behind Gale holding a gun.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s2_10_blame",
+   "start": 121.625,
+   "end": 123,
+   "kind": "unmasked_face",
+   "who": "Mrs Loomis",
+   "description": "Mrs Loomis in a medium shot with a gun, clear.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s3_02_cutting",
+   "start": 42,
+   "end": 53.5,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (rack of costumes)",
+   "description": "Sarah Darling (blonde, purple top) in wardrobe room with a rack of hanging Ghostface masks/robes; masks sharp from 45-50",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_02_cutting",
+   "start": 98.75,
+   "end": 99.4,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (two in costume room)",
+   "description": "Two Ghostfaces standing among the costume racks, masks visible",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_02_cutting",
+   "start": 102.5,
+   "end": 103.3,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Two Ghostfaces walk toward Sarah at the prop table, wide shot",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_02_cutting",
+   "start": 104.5,
+   "end": 105.3,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface steps out of the dark toward camera, mask clear",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_02_cutting",
+   "start": 112,
+   "end": 113,
+   "kind": "ghostface_attack",
+   "who": "Ghostface / Sarah Darling",
+   "description": "Ghostface lunges at Sarah in the prop room, mask clear and well lit, she swings back",
+   "quality": "clear"
+  },
+  {
+   "clip": "s3_02_cutting",
+   "start": 120.9,
+   "end": 121.9,
+   "kind": "ghostface_attack",
+   "who": "Sarah Darling",
+   "description": "Sarah is hurled through the door window (glass smashes at 120.9), body hangs out of the broken window",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_02_cutting",
+   "start": 124,
+   "end": 126,
+   "kind": "ghostface_attack",
+   "who": "Ghostface / Sarah Darling",
+   "description": "Close-up: Ghostface mask looming over Sarah's head as he kills her",
+   "quality": "clear"
+  },
+  {
+   "clip": "s3_02_cutting",
+   "start": 126.3,
+   "end": 130.6,
+   "kind": "death",
+   "who": "Sarah Darling",
+   "description": "Sarah's dead face upside down, blood on forehead",
+   "quality": "clear"
+  },
+  {
+   "clip": "s3_03_backstab",
+   "start": 47,
+   "end": 47.8,
+   "kind": "ghostface_clear",
+   "who": "Ghostface behind man in white jacket",
+   "description": "Ghostface mask appears over the shoulder of the man on the phone in the kitchen",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_03_backstab",
+   "start": 49,
+   "end": 49.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface behind the man in kitchen as he turns",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_03_backstab",
+   "start": 51,
+   "end": 51.6,
+   "kind": "stabbing",
+   "who": "dark-haired man in white jacket (likely bodyguard Steven Stone)",
+   "description": "Back view: knife plunged in his back, Ghostface wrestling him at the kitchen counter",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_03_backstab",
+   "start": 52.4,
+   "end": 52.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Man grabs Ghostface's mask in close-up during the struggle",
+   "quality": "clear"
+  },
+  {
+   "clip": "s3_03_backstab",
+   "start": 57.3,
+   "end": 57.9,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Ghostface lunges at the man in kitchen, mask clear",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_03_backstab",
+   "start": 60,
+   "end": 61,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface standing over the man slumped at the counter",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_03_backstab",
+   "start": 116.5,
+   "end": 118.3,
+   "kind": "death",
+   "who": "man in white jacket",
+   "description": "He stumbles out by the cars and collapses face down with the knife in his back (lying on ground 117.0)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_11_family",
+   "start": 9,
+   "end": 9.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (Roman)",
+   "description": "Ghostface standing in the mansion screening room",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_11_family",
+   "start": 20,
+   "end": 20.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (Roman)",
+   "description": "Ghostface lit by projector, mask sharp",
+   "quality": "clear"
+  },
+  {
+   "clip": "s3_11_family",
+   "start": 23,
+   "end": 25.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (Roman)",
+   "description": "Ghostface in front of projector screen",
+   "quality": "clear"
+  },
+  {
+   "clip": "s3_11_family",
+   "start": 38,
+   "end": 40.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (Roman)",
+   "description": "Ghostface in front of projected film",
+   "quality": "ok"
+  },
+  {
+   "clip": "s3_11_family",
+   "start": 50,
+   "end": 52.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (Roman)",
+   "description": "Ghostface centered against projected footage",
+   "quality": "clear"
+  },
+  {
+   "clip": "s3_11_family",
+   "start": 63.4,
+   "end": 64.8,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (Roman)",
+   "description": "Ghostface standing by the plants just before unmasking",
+   "quality": "clear"
+  },
+  {
+   "clip": "s3_11_family",
+   "start": 65.3,
+   "end": 66.9,
+   "kind": "unmasked_face",
+   "who": "Roman Bridger",
+   "description": "Mask pulled off (motion 64.9-65.2), Roman's face clear in black hoodie",
+   "quality": "clear"
+  },
+  {
+   "clip": "s3_11_family",
+   "start": 73.6,
+   "end": 74.5,
+   "kind": "other",
+   "who": "Roman Bridger",
+   "description": "Roman holding the voice changer up to his mouth",
+   "quality": "clear"
+  },
+  {
+   "clip": "s4_02_return",
+   "start": 60,
+   "end": 61.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask emerging from darkness",
+   "quality": "ok"
+  },
+  {
+   "clip": "s4_02_return",
+   "start": 72.4,
+   "end": 73,
+   "kind": "ghostface_attack",
+   "who": "Ghostface / blonde victim in red top",
+   "description": "Ghostface grabs the screaming blonde girl from behind at the attic stairs",
+   "quality": "ok"
+  },
+  {
+   "clip": "s4_02_return",
+   "start": 104.3,
+   "end": 107,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface by the light switch in the attic, mask sharp and lit",
+   "quality": "clear"
+  },
+  {
+   "clip": "s4_02_return",
+   "start": 120.3,
+   "end": 122,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface looming over the victim in the attic, lamp behind",
+   "quality": "clear"
+  },
+  {
+   "clip": "s4_02_return",
+   "start": 124.3,
+   "end": 126.1,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface close-up, mask clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s4_02_return",
+   "start": 127.1,
+   "end": 128.4,
+   "kind": "stabbing",
+   "who": "Ghostface",
+   "description": "Bloody knife raised for the kill",
+   "quality": "clear"
+  },
+  {
+   "clip": "s4_06_killcam",
+   "start": 50.3,
+   "end": 51,
+   "kind": "ghostface_clear",
+   "who": "Ghostface behind Gale Weathers",
+   "description": "Ghostface stands right behind Gale in the barn",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s4_06_killcam",
+   "start": 81.7,
+   "end": 83,
+   "kind": "ghostface_attack",
+   "who": "Ghostface / Gale Weathers",
+   "description": "Ghostface mask over Gale on the ground in the barn",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s4_06_killcam",
+   "start": 87.2,
+   "end": 87.8,
+   "kind": "stabbing",
+   "who": "Ghostface / Gale Weathers",
+   "description": "Ghostface raises knife and stabs Gale, then Gale lying wounded (87.8+)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "scream4_reveal",
+   "start": 4.8,
+   "end": 5.3,
+   "kind": "ghostface_attack",
+   "who": "Ghostface (Jill) / Sidney",
+   "description": "Ghostface lunges at Sidney in the hallway",
+   "quality": "ok"
+  },
+  {
+   "clip": "scream4_reveal",
+   "start": 6,
+   "end": 7.3,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (Jill Roberts)",
+   "description": "Ghostface standing in hallway facing Sidney, mask clear",
+   "quality": "ok"
+  },
+  {
+   "clip": "scream4_reveal",
+   "start": 11.6,
+   "end": 12.4,
+   "kind": "unmasked_face",
+   "who": "Jill Roberts",
+   "description": "Jill's face revealed after pulling off mask (hood/mask removal 10.0-11.5)",
+   "quality": "clear"
+  },
+  {
+   "clip": "scream4_reveal",
+   "start": 14,
+   "end": 16.4,
+   "kind": "unmasked_face",
+   "who": "Jill Roberts",
+   "description": "Jill smirking at Sidney, face clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "scream4_reveal",
+   "start": 17,
+   "end": 17.6,
+   "kind": "other",
+   "who": "Jill Roberts",
+   "description": "Ghostface mask dropped to floor with knife",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_02_requel",
+   "start": 0,
+   "end": 177.1,
+   "kind": "other",
+   "who": "Sam, Richie, Mindy, Dewey, friends",
+   "description": "Living-room 'requel' talk scene only. No kills, no Ghostface, no unmasking anywhere in the clip, so there is no usable action moment.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_03_sheriff",
+   "start": 130.375,
+   "end": 131.2,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Judy Hicks",
+   "description": "Wide shot: Ghostface bursts out of the front door and grabs Judy (blonde, lilac hoodie). Mask is clearly visible from 130.5.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_03_sheriff",
+   "start": 132.25,
+   "end": 133.375,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Close-up of the Ghostface mask, centered against the white porch. Clear daylight.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_03_sheriff",
+   "start": 135,
+   "end": 136.5,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Judy Hicks",
+   "description": "Low angle: Ghostface stands on the porch raising a bloody knife while Judy falls in the foreground.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_03_sheriff",
+   "start": 140.375,
+   "end": 141.25,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Ghostface lunges down at Judy on the lawn, mask clear.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_03_sheriff",
+   "start": 141.375,
+   "end": 142.5,
+   "kind": "stabbing",
+   "who": "Judy Hicks, Ghostface",
+   "description": "Judy on the ground fighting off Ghostface's arm. The bloody knife is visible above her.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_03_sheriff",
+   "start": 142.625,
+   "end": 143.125,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Low angle: Ghostface raises the knife for the downward stab.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_03_sheriff",
+   "start": 144,
+   "end": 145.625,
+   "kind": "stabbing",
+   "who": "Judy Hicks",
+   "description": "Judy gasps as she is stabbed, with Ghostface's dark shoulder over her.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_03_sheriff",
+   "start": 145.75,
+   "end": 147.125,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Close-up: the Ghostface mask leans over her, stabbing repeatedly.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_03_sheriff",
+   "start": 151.375,
+   "end": 152.375,
+   "kind": "stabbing",
+   "who": "Ghostface",
+   "description": "Bloody knife raised high against the American flag and porch.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_03_sheriff",
+   "start": 152.5,
+   "end": 153.125,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask close-up from a low angle.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_03_sheriff",
+   "start": 153.25,
+   "end": 155.5,
+   "kind": "death",
+   "who": "Judy Hicks",
+   "description": "Judy lying dead with a blood-spattered face.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_03_sheriff",
+   "start": 155.625,
+   "end": 158.125,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Long, steady close-up of the Ghostface mask (slightly dim).",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_04_throat",
+   "start": 66.625,
+   "end": 67,
+   "kind": "ghostface_clear",
+   "who": "Ghostface, Wes Hicks",
+   "description": "Ghostface is standing right behind Wes (blond, grey T-shirt), mask clear.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_04_throat",
+   "start": 67.625,
+   "end": 68.75,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Wes Hicks",
+   "description": "Ghostface lunges with the knife and Wes grabs his arm. Mask is clear.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_04_throat",
+   "start": 69.25,
+   "end": 70.75,
+   "kind": "ghostface_attack",
+   "who": "Wes Hicks, Ghostface",
+   "description": "Wes holds back Ghostface's knife arm. The knife is visible.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_04_throat",
+   "start": 72.375,
+   "end": 73.5,
+   "kind": "stabbing",
+   "who": "Wes Hicks",
+   "description": "Wes is pinned against the wall and the knife pushes in toward him.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_04_throat",
+   "start": 73.625,
+   "end": 74.875,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Wes Hicks",
+   "description": "Over-the-shoulder shot: Ghostface's mask and gloved knife hand with Wes struggling.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_04_throat",
+   "start": 79.75,
+   "end": 80.25,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask close-up as the knife goes up to Wes's throat.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_04_throat",
+   "start": 81,
+   "end": 81.75,
+   "kind": "stabbing",
+   "who": "Wes Hicks",
+   "description": "Wes grimaces with the knife at his throat.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_04_throat",
+   "start": 81.875,
+   "end": 83,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Tight close-up of the Ghostface mask cheek-to-cheek with Wes.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_04_throat",
+   "start": 83.125,
+   "end": 87.625,
+   "kind": "stabbing",
+   "who": "Wes Hicks, Ghostface",
+   "description": "Two-shot: Ghostface holds the knife in Wes's throat against the door (throat stab).",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_04_throat",
+   "start": 87.75,
+   "end": 90.25,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Big close-up of the Ghostface mask next to Wes's face.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_04_throat",
+   "start": 90.375,
+   "end": 105.5,
+   "kind": "death",
+   "who": "Wes Hicks, Ghostface",
+   "description": "Wes dies with the knife in his throat as the mask watches him (yellow flowers behind). Long hold, good for slow narration.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_08_act3",
+   "start": 14.875,
+   "end": 20.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface, Mindy",
+   "description": "Ghostface lurks in the dark doorway behind Mindy on the couch. Small and dark.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s5_08_act3",
+   "start": 25.125,
+   "end": 28.5,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Overhead angle: Ghostface mask looming in the dark.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_08_act3",
+   "start": 28.625,
+   "end": 31.75,
+   "kind": "ghostface_clear",
+   "who": "Ghostface, Mindy",
+   "description": "Top-down shot: Ghostface standing behind the couch over Mindy. Dark.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s5_08_act3",
+   "start": 43.625,
+   "end": 44.5,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Mindy",
+   "description": "Ghostface's mask with the bloody knife as Mindy grabs the blade.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_08_act3",
+   "start": 44.625,
+   "end": 45.375,
+   "kind": "stabbing",
+   "who": "Mindy",
+   "description": "Mindy screams, grabbing the blood-red knife.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_08_act3",
+   "start": 46.5,
+   "end": 48,
+   "kind": "other",
+   "who": "Sam Carpenter",
+   "description": "Sam smashes a lamp onto Ghostface (motion blur at the end).",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_08_act3",
+   "start": 107.125,
+   "end": 107.375,
+   "kind": "gunshot_hit",
+   "who": "Liv",
+   "description": "Liv (pink-red hair) is shot in the head: blood splatter on the wall. The frame before (106.875) is Liv alive.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_08_act3",
+   "start": 109.25,
+   "end": 111.5,
+   "kind": "unmasked_face",
+   "who": "Amber",
+   "description": "Amber (long dark hair) revealed as the shooter, smiling with an outstretched revolver.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_08_act3",
+   "start": 112.5,
+   "end": 112.75,
+   "kind": "gunshot_hit",
+   "who": "Amber",
+   "description": "Amber fires the revolver again (very short).",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_09_fighting",
+   "start": 0,
+   "end": 1.375,
+   "kind": "unmasked_face",
+   "who": "Richie",
+   "description": "Richie (plaid shirt), unmasked, aiming a pistol and shouting.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_09_fighting",
+   "start": 1.5,
+   "end": 3.875,
+   "kind": "unmasked_face",
+   "who": "Amber",
+   "description": "Amber in the Ghostface robe, unmasked, walking toward the camera in the hallway.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_09_fighting",
+   "start": 10,
+   "end": 10.4,
+   "kind": "other",
+   "who": "Tara",
+   "description": "Tara swings a crutch/chair down onto Amber. Brief.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_09_fighting",
+   "start": 12.5,
+   "end": 15,
+   "kind": "other",
+   "who": "Sam, Richie",
+   "description": "Sam tackles Richie in the kitchen. Fast and blurry.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s5_09_fighting",
+   "start": 87.75,
+   "end": 89.9,
+   "kind": "unmasked_face",
+   "who": "Amber",
+   "description": "Amber, unmasked, in a close shot in the kitchen.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_09_fighting",
+   "start": 100,
+   "end": 101.9,
+   "kind": "unmasked_face",
+   "who": "Richie",
+   "description": "Richie grinning, unmasked, from a high angle.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_09_fighting",
+   "start": 104.5,
+   "end": 106,
+   "kind": "other",
+   "who": "Amber, Gale",
+   "description": "Amber strangles Gale on the floor.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_09_fighting",
+   "start": 137.5,
+   "end": 138.75,
+   "kind": "other",
+   "who": "Gale, Sidney",
+   "description": "Gale aims a pistol at Amber with Sidney beside her.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_09_fighting",
+   "start": 142.625,
+   "end": 143.375,
+   "kind": "gunshot_hit",
+   "who": "Amber",
+   "description": "Muzzle flash from Gale at 142.625, then Amber recoils, hit, at the stove (142.875-143.375).",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_09_fighting",
+   "start": 144.5,
+   "end": 144.75,
+   "kind": "fire_on_person",
+   "who": "Amber",
+   "description": "Amber's arm catches fire on the gas burner.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_09_fighting",
+   "start": 144.875,
+   "end": 146.1,
+   "kind": "fire_on_person",
+   "who": "Amber",
+   "description": "Amber engulfed in flames at the stove. Best fire moment.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_09_fighting",
+   "start": 148,
+   "end": 150,
+   "kind": "fire_on_person",
+   "who": "Amber",
+   "description": "Amber burning, wider shot.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_10_daughter",
+   "start": 10,
+   "end": 11.25,
+   "kind": "other",
+   "who": "Richie",
+   "description": "Richie's hand gripping a big knife.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_10_daughter",
+   "start": 12.375,
+   "end": 13.4,
+   "kind": "other",
+   "who": "Sam, Richie",
+   "description": "Sam tackles Richie over the banister and the knife flies.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_10_daughter",
+   "start": 32.5,
+   "end": 34.75,
+   "kind": "other",
+   "who": "Sam, Richie",
+   "description": "Sam and Richie fall down the stairs.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_10_daughter",
+   "start": 80.25,
+   "end": 80.75,
+   "kind": "stabbing",
+   "who": "Sam, Richie",
+   "description": "Sam stabs Richie in the neck/ear area while he is on top of her. Blood appears.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_10_daughter",
+   "start": 100,
+   "end": 101.9,
+   "kind": "stabbing",
+   "who": "Sam Carpenter",
+   "description": "Sam frantically stabbing down at Richie, who is off-frame.",
+   "quality": "ok"
+  },
+  {
+   "clip": "s5_10_daughter",
+   "start": 102.125,
+   "end": 103.625,
+   "kind": "stabbing",
+   "who": "Sam Carpenter",
+   "description": "Bloody knife raised against the chandelier.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_10_daughter",
+   "start": 103.75,
+   "end": 105.4,
+   "kind": "stabbing",
+   "who": "Richie",
+   "description": "Richie, blood-soaked, being stabbed and shielding his face.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_10_daughter",
+   "start": 107.375,
+   "end": 110.6,
+   "kind": "death",
+   "who": "Richie",
+   "description": "Richie bloody and dying under the stabs.",
+   "quality": "clear"
+  },
+  {
+   "clip": "s5_10_daughter",
+   "start": 171.25,
+   "end": 172.9,
+   "kind": "other",
+   "who": "Amber",
+   "description": "Burned Amber lunges back up with a raised knife. Dark.",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s5_10_daughter",
+   "start": 177.375,
+   "end": 179.9,
+   "kind": "other",
+   "who": "Tara",
+   "description": "Tara aims the pistol (the shot itself is not in the clip, which cuts to the end card at 180.0).",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_store",
+   "start": 72,
+   "end": 73.2,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface stands in the dark bodega doorway behind the CLOSED/Mega Win sign; mask readable but low light",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_store",
+   "start": 74.5,
+   "end": 75.25,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface stands behind the bald customer (over-shoulder), mask clear",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_store",
+   "start": 77.375,
+   "end": 79.7,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Tight close-up of the mask, bright and sharp, bald man's head in foreground right",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_store",
+   "start": 80.625,
+   "end": 81,
+   "kind": "stabbing",
+   "who": "Ghostface, bald customer",
+   "description": "Ghostface grabs the bald man and drives the knife into him (first stab, mask visible at left)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_store",
+   "start": 82.375,
+   "end": 83,
+   "kind": "stabbing",
+   "who": "Ghostface, bald customer",
+   "description": "Second stab: Ghostface pulls the bald man in and stabs, mask visible over his shoulder",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_store",
+   "start": 83,
+   "end": 83.7,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Mask close-up mid-attack, lit store background",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_store",
+   "start": 84.375,
+   "end": 85.25,
+   "kind": "stabbing",
+   "who": "Ghostface, bald customer",
+   "description": "Ghostface stabs the bald man repeatedly against the produce stand, knife raised",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_store",
+   "start": 87.625,
+   "end": 88.7,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Mask close-up looking at camera after the kill",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_store",
+   "start": 89.625,
+   "end": 90.5,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface at the counter with store clerk behind",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_store",
+   "start": 91.6,
+   "end": 92,
+   "kind": "gunshot_hit",
+   "who": "store clerk, Ghostface",
+   "description": "Clerk fires shotgun at Ghostface; muzzle blast blows out the shelves (Ghostface not hit - a miss)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_store",
+   "start": 111.125,
+   "end": 111.5,
+   "kind": "ghostface_clear",
+   "who": "Ghostface, store clerk",
+   "description": "Ghostface right behind the clerk (curly hair brown jacket), mask clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_store",
+   "start": 111.75,
+   "end": 113.25,
+   "kind": "stabbing",
+   "who": "Ghostface, store clerk",
+   "description": "Ghostface lunges and stabs the clerk; clerk screams clutching chest at 113.0",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_store",
+   "start": 113.25,
+   "end": 113.8,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Mask close-up as Ghostface shoves the clerk into the freezers",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_store",
+   "start": 118.625,
+   "end": 119.8,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface aims the clerk's shotgun straight at camera, fluorescent lights, very iconic",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_store",
+   "start": 120.6,
+   "end": 121,
+   "kind": "gunshot_hit",
+   "who": "Ghostface, store clerk",
+   "description": "Ghostface fires the shotgun (muzzle flash, wide shot) killing the clerk who is mostly off-frame",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_store",
+   "start": 124.75,
+   "end": 126.2,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface reloads/racks shotgun then mask close-up looking down",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_subway",
+   "start": 33.375,
+   "end": 34.3,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface stands in the crowded subway car, mask clear and centered",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_subway",
+   "start": 35.5,
+   "end": 35.75,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Brief mask close-up in crowd",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_subway",
+   "start": 91.5,
+   "end": 92.3,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface in the middle of the crowded car behind passengers (small, background)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_subway",
+   "start": 137.5,
+   "end": 137.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "One-shot flash of the mask lit in dark subway (only ~4 frames)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_subway",
+   "start": 138,
+   "end": 138.75,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Tara",
+   "description": "Gloved hand clamps Tara's mouth and knife pressed to her side",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_subway",
+   "start": 146.25,
+   "end": 147.9,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Tara",
+   "description": "Ghostface holds Tara with hand over mouth, mask visible beside her face",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_subway",
+   "start": 159.25,
+   "end": 160.75,
+   "kind": "ghostface_clear",
+   "who": "Ghostface, Ethan",
+   "description": "Curly-haired Ethan in the subway with a Ghostface mask right behind him (nice tease)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_subway",
+   "start": 167,
+   "end": 171.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Long mask close-up in subway car, slowly turning head",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_face",
+   "start": 51.5,
+   "end": 51.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Mask blurred behind the frosted door glass (Dr. Christopher Stone's front door)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s6_face",
+   "start": 52.125,
+   "end": 53,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Dr. Stone",
+   "description": "Ghostface smashes his arm through the door glass and grabs grey-haired Dr. Stone",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_face",
+   "start": 53.5,
+   "end": 53.7,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Mask seen through broken glass",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_face",
+   "start": 56.25,
+   "end": 59.6,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Dr. Stone",
+   "description": "Dr. Stone pinned against the iron door bars by Ghostface (mask visible behind bars)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_face",
+   "start": 61.25,
+   "end": 63,
+   "kind": "death",
+   "who": "Dr. Christopher Stone",
+   "description": "Stone falls and lies dead on floor with bloodied face",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_face",
+   "start": 66.25,
+   "end": 66.7,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface stands silhouetted in the doorway",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s6_core4",
+   "start": 4,
+   "end": 5.5,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface watching from apartment across the street, wall lamp beside, mask clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_core4",
+   "start": 23.375,
+   "end": 26.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Same watcher shot, longer: Ghostface tilts head",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_core4",
+   "start": 93.75,
+   "end": 94.7,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface standing in the apartment hall doorway, full body",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_core4",
+   "start": 96.625,
+   "end": 96.9,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Mindy",
+   "description": "Ghostface lunges with knife at Mindy",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_core4",
+   "start": 100,
+   "end": 100.5,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Mask looming over victims in apartment",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_core4",
+   "start": 116,
+   "end": 116.375,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Mask close-up next to Anika",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_core4",
+   "start": 116.5,
+   "end": 117.2,
+   "kind": "stabbing",
+   "who": "Ghostface, Anika",
+   "description": "Knife stabbed into Anika's stomach (close-up, green top)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_core4",
+   "start": 118.5,
+   "end": 119.2,
+   "kind": "stabbing",
+   "who": "Ghostface, Anika",
+   "description": "Second stab into Anika's side",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_core4",
+   "start": 119.25,
+   "end": 119.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Mask close-up beside screaming Anika",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_core4",
+   "start": 122.875,
+   "end": 123.75,
+   "kind": "stabbing",
+   "who": "Ghostface, Anika",
+   "description": "Knife pulled out with blood, Anika screaming",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_core4",
+   "start": 168,
+   "end": 168.6,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Mindy",
+   "description": "Ghostface in bloody bathroom doorway attacking Mindy",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_core4",
+   "start": 170.375,
+   "end": 170.7,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Mask by the lamp in the bloody bathroom",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_two_gf",
+   "start": 54.375,
+   "end": 54.9,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Chad",
+   "description": "Ghostface swings knife at Chad in the dark theater lobby",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s6_two_gf",
+   "start": 56.25,
+   "end": 56.9,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Chad",
+   "description": "Ghostface grapples Chad, mask clear",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_two_gf",
+   "start": 126.25,
+   "end": 126.9,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Tara",
+   "description": "Ghostface grabs Tara at the bar counter, mask clear",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_two_gf",
+   "start": 136.25,
+   "end": 136.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface lying knocked down on floor (mask up)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_two_gf",
+   "start": 138.625,
+   "end": 139,
+   "kind": "stabbing",
+   "who": "Ghostface, Chad",
+   "description": "Ghostface stabs Chad from behind (mask over his shoulder)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_two_gf",
+   "start": 139.375,
+   "end": 139.7,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Mask clear after Chad smashes a jar at him",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_two_gf",
+   "start": 146.875,
+   "end": 150,
+   "kind": "stabbing",
+   "who": "Chad",
+   "description": "Chad held up and stabbed, blood from mouth (Ghostfaces off-frame)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_two_gf",
+   "start": 154.5,
+   "end": 156.3,
+   "kind": "ghostface_clear",
+   "who": "two Ghostfaces",
+   "description": "Two Ghostfaces standing together in the dark lobby (wide, small)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s6_ladder",
+   "start": 113.375,
+   "end": 113.5,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface steps out by the lamp in the bedroom",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_ladder",
+   "start": 146,
+   "end": 147.3,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface at the window at the top of the ladder, lit room behind",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_ladder",
+   "start": 150.125,
+   "end": 151,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface at the window again",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_ladder",
+   "start": 171.25,
+   "end": 171.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface close at window before shaking the ladder",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_ladder",
+   "start": 176.4,
+   "end": 177.5,
+   "kind": "death",
+   "who": "Anika",
+   "description": "Anika falls from the ladder into the alley (wide, dark), body at 177.5",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s6_sam_gf",
+   "start": 101,
+   "end": 102.3,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (Sam in costume)",
+   "description": "Ghostface emerges from the curtain in the shrine, warm light, mask very clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_sam_gf",
+   "start": 108.375,
+   "end": 108.8,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Wayne Bailey",
+   "description": "Ghostface swings knife at grey-haired Detective Wayne Bailey",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_sam_gf",
+   "start": 110,
+   "end": 110.7,
+   "kind": "stabbing",
+   "who": "Ghostface, Wayne Bailey",
+   "description": "Ghostface stabs Bailey, blood on his face",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_sam_gf",
+   "start": 115.125,
+   "end": 116,
+   "kind": "stabbing",
+   "who": "Ghostface, Wayne Bailey",
+   "description": "Ghostface raises knife and stabs Bailey again",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_sam_gf",
+   "start": 120.625,
+   "end": 121.75,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (Sam)",
+   "description": "Low-angle mask close-up standing over Bailey",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_sam_gf",
+   "start": 122.75,
+   "end": 126,
+   "kind": "unmasked_face",
+   "who": "Sam Carpenter",
+   "description": "Ghostface pulls off the mask: it's Sam; face clear from 122.75",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_sam_gf",
+   "start": 129.25,
+   "end": 129.8,
+   "kind": "stabbing",
+   "who": "Sam Carpenter, Wayne Bailey",
+   "description": "Sam raises the knife and stabs downward at Bailey",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_family",
+   "start": 0,
+   "end": 1.9,
+   "kind": "other",
+   "who": "Wayne Bailey",
+   "description": "Grey-haired detective Bailey aiming a gun, snarling; face clear (already unmasked killer)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_family",
+   "start": 6.9,
+   "end": 7.9,
+   "kind": "unmasked_face",
+   "who": "Wayne Bailey",
+   "description": "Second close-up of Bailey aiming the gun, face clear",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_family",
+   "start": 8,
+   "end": 8.5,
+   "kind": "unmasked_face",
+   "who": "Quinn Bailey",
+   "description": "Red-haired Quinn screaming as she charges, face clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_family",
+   "start": 9.3,
+   "end": 9.8,
+   "kind": "other",
+   "who": "Quinn Bailey",
+   "description": "Quinn knocked down / struck mid-charge, head snapping back, hair flying (motion blur)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s6_family",
+   "start": 10.9,
+   "end": 11,
+   "kind": "gunshot_hit",
+   "who": "Kirby / group wide",
+   "description": "Muzzle flash in wide shot of the group brawl (one frame), small in frame",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s6_family",
+   "start": 11.2,
+   "end": 11.95,
+   "kind": "other",
+   "who": "Kirby Reed",
+   "description": "Blonde Kirby firing a pistol straight at camera, clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_family",
+   "start": 12,
+   "end": 12.7,
+   "kind": "gunshot_hit",
+   "who": "Wayne Bailey",
+   "description": "Bailey is hit by Kirby's shot: jerks, arm flies up, drops behind theater seats",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_family",
+   "start": 13.3,
+   "end": 14.1,
+   "kind": "other",
+   "who": "Quinn Bailey",
+   "description": "Quinn lying bloodied on the floor, face clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_family",
+   "start": 16.6,
+   "end": 17.8,
+   "kind": "stabbing",
+   "who": "Ethan Landry, Kirby Reed",
+   "description": "Ethan grabs Kirby from behind and stabs her; she goes down (dark, fast)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s6_family",
+   "start": 17.9,
+   "end": 19.3,
+   "kind": "unmasked_face",
+   "who": "Ethan Landry",
+   "description": "Curly-haired Ethan grinning maniacally in close-up, very clear killer reveal face",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_family",
+   "start": 19.3,
+   "end": 22.2,
+   "kind": "stabbing",
+   "who": "Ethan Landry, Kirby Reed",
+   "description": "Kirby on the floor with bloody throat/chest as Ethan stabs; intercut Ethan grinning 20.1-20.6",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_family",
+   "start": 33.8,
+   "end": 36.3,
+   "kind": "stabbing",
+   "who": "Sam Carpenter, Ethan Landry",
+   "description": "Sam (dark hair, white tank) raises knife and attacks Ethan, pins him over the seats with bloody arm",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_family",
+   "start": 69.5,
+   "end": 71,
+   "kind": "unmasked_face",
+   "who": "Wayne Bailey",
+   "description": "Bailey alive and walking among display cases (theater shrine), small in wide",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_family",
+   "start": 98,
+   "end": 99.4,
+   "kind": "unmasked_face",
+   "who": "Quinn Bailey",
+   "description": "Quinn smiling with bloody mouth, holding knife, face clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_family",
+   "start": 101.5,
+   "end": 103,
+   "kind": "unmasked_face",
+   "who": "Quinn Bailey",
+   "description": "Quinn raising knife, bloody grin, face clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_family",
+   "start": 148.1,
+   "end": 150,
+   "kind": "stabbing",
+   "who": "Tara Carpenter, Ethan Landry",
+   "description": "Close side profile: Tara drives a knife into Ethan's mouth/face (dark but readable)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_family",
+   "start": 158.2,
+   "end": 158.6,
+   "kind": "stabbing",
+   "who": "Tara Carpenter, Ethan Landry",
+   "description": "Wide backlit shot: Tara over Ethan stabbing down",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_family",
+   "start": 159,
+   "end": 163.8,
+   "kind": "stabbing",
+   "who": "Tara Carpenter",
+   "description": "Tara (blue top) repeatedly stabbing downward with both arms raised, face clear and blood-spattered; intercut backlit wide 160.4-161.3",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_family",
+   "start": 165,
+   "end": 166,
+   "kind": "other",
+   "who": "Sam Carpenter",
+   "description": "Sam aiming a pistol in silhouette against bright window",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_family",
+   "start": 171.7,
+   "end": 172.7,
+   "kind": "unmasked_face",
+   "who": "Quinn Bailey",
+   "description": "Quinn screaming with knife raised, bloody mouth",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_family",
+   "start": 172.8,
+   "end": 173.2,
+   "kind": "other",
+   "who": "Sam Carpenter",
+   "description": "Wide: Sam fires pistol at Quinn (over-shoulder)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_family",
+   "start": 173.3,
+   "end": 174.3,
+   "kind": "gunshot_hit",
+   "who": "Quinn Bailey",
+   "description": "Quinn shot in the forehead: bullet hole visible, she freezes and drops",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 8,
+   "end": 11.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface (mask on wall)",
+   "description": "Jason handles Ghostface masks on a wall display; two masks clear and well lit",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 273.4,
+   "end": 274.7,
+   "kind": "death",
+   "who": "Greg (roommate)",
+   "description": "Fridge opened revealing roommate's bloody body stuffed inside",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 275.3,
+   "end": 275.8,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Jason Carvey",
+   "description": "Shocked Jason; Ghostface's arms reach in from behind him",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 275.8,
+   "end": 276.25,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Jason Carvey",
+   "description": "Ghostface grabs Jason from behind, mask clear beside his screaming face",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 278.75,
+   "end": 280.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask close-up, clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 280.75,
+   "end": 282.3,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Jason Carvey",
+   "description": "Wide kitchen: Ghostface lunges and slams Jason; close of Jason crying out",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 282.5,
+   "end": 283.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask close-up during attack",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 288.5,
+   "end": 290.5,
+   "kind": "stabbing",
+   "who": "Ghostface, Jason Carvey",
+   "description": "Repeated knife stabs into Jason's bloody shirt (close insert, motion-blurred knife)",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 290.25,
+   "end": 291.1,
+   "kind": "stabbing",
+   "who": "Ghostface, Jason Carvey",
+   "description": "Ghostface stabbing Jason against fridge, Jason screaming",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 291.25,
+   "end": 292.8,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask close-up tilting",
+   "quality": "ok"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 293,
+   "end": 294.2,
+   "kind": "death",
+   "who": "Jason Carvey",
+   "description": "Jason slumped dead against the fridge, blood from mouth",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 296,
+   "end": 298.2,
+   "kind": "death",
+   "who": "Jason Carvey",
+   "description": "Close-up of dead Jason, bloody mouth, face clear",
+   "quality": "clear"
+  },
+  {
+   "clip": "s6_opening",
+   "start": 298.3,
+   "end": 300.1,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Iconic Ghostface pose with bloody knife held out, then lunges at camera; mask clear and well lit",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 5,
+   "end": 6.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface looms behind blonde girl (pink hoodie) in Stab-memorabilia living room (1fps pin)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 22,
+   "end": 23,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface standing in dark doorway behind the girl (1fps pin)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 45.125,
+   "end": 47,
+   "kind": "ghostface_attack",
+   "who": "Ghostface vs man in white long-sleeve shirt",
+   "description": "Man grabs Ghostface's mask face-to-face, struggle; mask clearly lit by lamp",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 47.625,
+   "end": 48.5,
+   "kind": "ghostface_attack",
+   "who": "Ghostface",
+   "description": "Ghostface face-off with man, then lunges/head-butts him",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 48.75,
+   "end": 49.1,
+   "kind": "stabbing",
+   "who": "Ghostface",
+   "description": "Ghostface swings knife past man while blonde girl screams on floor (fast, blurry)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 53,
+   "end": 54.2,
+   "kind": "stabbing",
+   "who": "Ghostface, man in white shirt",
+   "description": "Man with bloody stab wounds on chest, Ghostface mask right behind him (stabbed from behind); continues ~55-58 in close-up",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 60,
+   "end": 63,
+   "kind": "ghostface_attack",
+   "who": "Ghostface vs blonde girl",
+   "description": "Ghostface swings at the girl, chase begins (1fps pin)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 156.1,
+   "end": 157.9,
+   "kind": "fire_on_person",
+   "who": "Ghostface, wounded blonde girl",
+   "description": "Ghostface silhouette in doorway as floor fire ignites beside wounded girl lying in foreground",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 172.25,
+   "end": 172.7,
+   "kind": "other",
+   "who": "Ghostface",
+   "description": "Ghostface pours gasoline from can",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 172.75,
+   "end": 173.7,
+   "kind": "stabbing",
+   "who": "blonde girl",
+   "description": "Girl on floor with gaping bloody stab wound in her back/side",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 173.75,
+   "end": 175,
+   "kind": "fire_on_person",
+   "who": "blonde girl",
+   "description": "Bloody girl lying with flames roaring right next to her",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 176,
+   "end": 176.9,
+   "kind": "fire_on_person",
+   "who": "Ghostface",
+   "description": "Ghostface with gas can walking through burning room",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 177,
+   "end": 178.2,
+   "kind": "fire_on_person",
+   "who": "blonde girl",
+   "description": "Girl face-down on floor, wall of flames behind her",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 178.25,
+   "end": 187.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Big close-up of Ghostface mask against fire, best mask shot in the clip",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_01_animatronic",
+   "start": 193,
+   "end": 195,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface walks out between flames, mask lit by fire",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_02_stu",
+   "start": 54.625,
+   "end": 57,
+   "kind": "other",
+   "who": "Stu Macher (Matthew Lillard) on video call",
+   "description": "First frame of Stu's face on Sidney's laptop video call, grinning maniacally; recurring 60-73, 82-99, 111-112.9",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_02_stu",
+   "start": 42,
+   "end": 53.5,
+   "kind": "phone_call",
+   "who": "Sidney Prescott",
+   "description": "Sidney at desk answering the incoming video call",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_03_mckenna",
+   "start": 76,
+   "end": 76.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask in dark haunted-house doorway (1fps pin)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_03_mckenna",
+   "start": 107,
+   "end": 108,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface standing in dark set (1fps pin)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_03_mckenna",
+   "start": 118.5,
+   "end": 119.1,
+   "kind": "stabbing",
+   "who": "blonde girl in blue dress on wires",
+   "description": "Wire-suspended girl reaching out with blood-soaked hands",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_03_mckenna",
+   "start": 119.125,
+   "end": 119.45,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Close-up Ghostface mask lunging in",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_03_mckenna",
+   "start": 119.5,
+   "end": 120.8,
+   "kind": "stabbing",
+   "who": "Ghostface, blonde girl in blue dress",
+   "description": "Ghostface stabs suspended girl; bloody gut wound visible on dress",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_03_mckenna",
+   "start": 124,
+   "end": 126,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface beside hanging bloody girl in window set (1fps pin)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_03_mckenna",
+   "start": 135.125,
+   "end": 135.25,
+   "kind": "gunshot_hit",
+   "who": "Sidney Prescott",
+   "description": "Sidney fires pistol (muzzle flash) at fleeing Ghostface - shooter only, no hit visible",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_03_mckenna",
+   "start": 165.625,
+   "end": 167.1,
+   "kind": "death",
+   "who": "blonde girl",
+   "description": "Girl's body hanging lifeless in spotlight",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_04_walls",
+   "start": 53,
+   "end": 55,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask front-on in hallway (1fps pin)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_04_walls",
+   "start": 76,
+   "end": 82,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface close in dim hallway (1fps pin)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_04_walls",
+   "start": 196,
+   "end": 204,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface on stairs then on lit front porch (1fps pin)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_04_walls",
+   "start": 214,
+   "end": 228,
+   "kind": "ghostface_attack",
+   "who": "Ghostface vs police officer",
+   "description": "Ghostface fights cop on lawn, cop thrown down (1fps pin)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_04_walls",
+   "start": 231.875,
+   "end": 232.36,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface standing in street holding knife facing young man",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_04_walls",
+   "start": 232.36,
+   "end": 232.8,
+   "kind": "car_hit",
+   "who": "Ghostface",
+   "description": "SUV enters frame left (232.36) and slams into Ghostface (impact ~232.52), carries him out of frame",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_04_walls",
+   "start": 232.82,
+   "end": 234,
+   "kind": "car_hit",
+   "who": "SUV",
+   "description": "Wide: SUV headlights speeding toward camera after the hit",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_04_walls",
+   "start": 234.1,
+   "end": 236.6,
+   "kind": "car_hit",
+   "who": "SUV, Ghostface body",
+   "description": "SUV skids across lawn past Ghostface lying on the grass",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_04_walls",
+   "start": 236.75,
+   "end": 238,
+   "kind": "death",
+   "who": "police officer",
+   "description": "Wounded cop lying on grass, bloody hand",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_05_mchale",
+   "start": 64,
+   "end": 64.6,
+   "kind": "ghostface_attack",
+   "who": "Ghostface vs police officer",
+   "description": "Attacker bursts through plastic sheeting and tackles cop",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_05_mchale",
+   "start": 65,
+   "end": 67.9,
+   "kind": "ghostface_attack",
+   "who": "police officer",
+   "description": "Cop wrapped and struggling in plastic sheeting on floor",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_05_mchale",
+   "start": 73.375,
+   "end": 74.3,
+   "kind": "stabbing",
+   "who": "police officer",
+   "description": "Bloodied face inside plastic sheet after stabbing",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_05_mchale",
+   "start": 74.375,
+   "end": 76.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask seen through bloody plastic, red haze",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 6,
+   "end": 7.9,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface in kitchen doorway (1fps pin)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 106.125,
+   "end": 107,
+   "kind": "stabbing",
+   "who": "young man in plaid shirt",
+   "description": "Stabbed plaid-shirt young man bursts through kitchen doors and collapses onto girl",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 113.25,
+   "end": 114.9,
+   "kind": "stabbing",
+   "who": "young man in plaid shirt",
+   "description": "Close-up of girl's hands on his bloody stab wound",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 78,
+   "end": 87,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface masked shots in dark kitchen, 84-87 clearest (1fps pin)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 187.375,
+   "end": 188,
+   "kind": "ghostface_attack",
+   "who": "Ghostface vs girl in varsity jacket",
+   "description": "Ghostface appears behind girl and grabs her",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 188.125,
+   "end": 190.4,
+   "kind": "ghostface_attack",
+   "who": "Ghostface vs girl in varsity jacket",
+   "description": "Ghostface slams girl onto booth/table and struggles",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 196.5,
+   "end": 197.4,
+   "kind": "ghostface_attack",
+   "who": "Ghostface vs girl",
+   "description": "Wide: Ghostface drags girl across bar counter",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 199.375,
+   "end": 200.3,
+   "kind": "ghostface_attack",
+   "who": "Ghostface vs girl",
+   "description": "Ghostface mask close behind struggling girl",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 207,
+   "end": 208.3,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface standing in dark bar",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 208.375,
+   "end": 210.9,
+   "kind": "death",
+   "who": "security guard / man in uniform",
+   "description": "Bloody-faced man lying dead on floor",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 219,
+   "end": 221.1,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Steady close-up of Ghostface mask in bar, best mask shot in clip",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 237.75,
+   "end": 238.8,
+   "kind": "stabbing",
+   "who": "plaid-shirt young man",
+   "description": "Bloody hand smeared on glass window",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 239.25,
+   "end": 240,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface mask close, lit",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 248.25,
+   "end": 251,
+   "kind": "death",
+   "who": "uniformed man and plaid-shirt young man",
+   "description": "Bloody uniformed man slumped with plaid-shirt man beside him",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 269,
+   "end": 269.6,
+   "kind": "stabbing",
+   "who": "Ghostface, plaid-shirt young man",
+   "description": "Knife blade held at the young man's throat from behind",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 270.75,
+   "end": 271.6,
+   "kind": "ghostface_attack",
+   "who": "Ghostface vs plaid-shirt young man",
+   "description": "Ghostface grips young man by the throat",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_06_spree",
+   "start": 273.375,
+   "end": 275,
+   "kind": "ghostface_clear",
+   "who": "Ghostface, plaid-shirt young man",
+   "description": "Ghostface mask beside the young man at bar",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_07_hunted",
+   "start": 3.125,
+   "end": 6.4,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Masked Ghostface standing on night sidewalk by shop window, mask visible mid-frame (night, a bit dim)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_07_hunted",
+   "start": 58,
+   "end": 59.4,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface walks toward camera in front of lit storefront; full body, mask visible",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_07_hunted",
+   "start": 60.5,
+   "end": 64.5,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Wide shot: Ghostface walking across the street in front of lit shop windows (small in frame)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_07_hunted",
+   "start": 113,
+   "end": 115.7,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, boyfriend",
+   "description": "Ghostface grapples and knifes the boyfriend at the shop door; 115.375 boyfriend's bloodied face close (dark, motion blur)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_07_hunted",
+   "start": 116.75,
+   "end": 118,
+   "kind": "other",
+   "who": "Ghostface, Tatum",
+   "description": "Girl shoves Ghostface backwards through a shop display window - glass shatters (crash visible 116.75-117.9)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_07_hunted",
+   "start": 123,
+   "end": 124.6,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface lying in shattered glass, mask visible sideways; sits up at 124.5",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_07_hunted",
+   "start": 126.25,
+   "end": 127,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface sitting up in broken glass gripping knife",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_07_hunted",
+   "start": 130.5,
+   "end": 135.4,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface rises and stalks toward camera in warm-lit alley; mask very clear, best 132.0-135.3 (push-in close-up)",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_08_two_gf",
+   "start": 6.625,
+   "end": 8.75,
+   "kind": "other",
+   "who": "Tatum (blonde girl)",
+   "description": "Blonde girl aims pistol in records room (aiming only)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_08_two_gf",
+   "start": 17.375,
+   "end": 18.1,
+   "kind": "other",
+   "who": "Tatum (blonde girl)",
+   "description": "She fires the pistol - muzzle flash at 17.375 and 18.0-18.125 (shot fired, no hit on anyone); bullet holes in wall 18.5",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_08_two_gf",
+   "start": 62,
+   "end": 62.4,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface on the floor with knife on phone-camera feed (low light)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_08_two_gf",
+   "start": 65.375,
+   "end": 65.99,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface rises into frame, mask close-up (65.5-65.9 clearest)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_08_two_gf",
+   "start": 72.625,
+   "end": 74.6,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, victim",
+   "description": "Ghostface grabs and throws a victim through the diner (dark, motion blur)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_08_two_gf",
+   "start": 81.625,
+   "end": 83.4,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface standing in dark diner by windows, mask visible",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_08_two_gf",
+   "start": 107.5,
+   "end": 110.1,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Low-angle close-up of Ghostface mask (dim, half shadowed)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_08_two_gf",
+   "start": 117,
+   "end": 118.4,
+   "kind": "ghostface_clear",
+   "who": "Ghostface, Tatum",
+   "description": "Ghostface appears in background behind blonde girl",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_08_two_gf",
+   "start": 120,
+   "end": 122.5,
+   "kind": "ghostface_attack",
+   "who": "Ghostface, Tatum",
+   "description": "Ghostface right behind screaming blonde girl (mask small but visible)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_08_two_gf",
+   "start": 122.625,
+   "end": 122.95,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface lunges into camera - full-frame mask close-up (only ~0.3 s), then black",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_09_anna_camp",
+   "start": 0,
+   "end": 2.4,
+   "kind": "ghostface_clear",
+   "who": "Ghostface, Karl Gibbs",
+   "description": "Masked Ghostface standing next to bald Karl Gibbs in backyard (dark letterboxed)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_09_anna_camp",
+   "start": 2.5,
+   "end": 4.3,
+   "kind": "unmasked_face",
+   "who": "Jessica Bowden",
+   "description": "Ghostface pulls mask off (2.5-2.875) revealing blonde Jessica Bowden; face clear 3.0-4.3",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_09_anna_camp",
+   "start": 20,
+   "end": 27.5,
+   "kind": "unmasked_face",
+   "who": "Karl Gibbs",
+   "description": "Karl Gibbs unmasked close-up, talking (also 32.0-33.5, 194.0-196.0 two-shot w/ Jessica, 214.0-215.9)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_09_anna_camp",
+   "start": 8,
+   "end": 11.5,
+   "kind": "unmasked_face",
+   "who": "Jessica Bowden",
+   "description": "Jessica Bowden close-up smiling (many more: 98-108, 176-191 clear lit close-ups, 232-246 holding knife to gagged girl's throat)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_09_anna_camp",
+   "start": 252.75,
+   "end": 253.3,
+   "kind": "ghostface_attack",
+   "who": "Jessica Bowden",
+   "description": "Jessica raises knife at the gagged girl as she breaks free (motion blur)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_09_anna_camp",
+   "start": 254.4,
+   "end": 254.8,
+   "kind": "gunshot_hit",
+   "who": "Sidney shoots Karl Gibbs",
+   "description": "254.2 Sidney aims, 254.4 muzzle flash; 254.5-254.8 Karl Gibbs hit, head snaps back (slightly blurry)",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_09_anna_camp",
+   "start": 267.25,
+   "end": 268.4,
+   "kind": "other",
+   "who": "Sidney",
+   "description": "Sidney fires pistol (muzzle flashes), no hit shown",
+   "quality": "ok"
+  },
+  {
+   "clip": "s7_10_sidney_kills",
+   "start": 10.375,
+   "end": 11.75,
+   "kind": "ghostface_clear",
+   "who": "Ghostface",
+   "description": "Ghostface standing in dark barn by ladder (dark)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_10_sidney_kills",
+   "start": 96,
+   "end": 99.6,
+   "kind": "other",
+   "who": "Sidney vs Jessica Bowden",
+   "description": "Sidney fights blonde Jessica against wall, strikes her 99.25-99.5 (dark)",
+   "quality": "dark_or_blurry"
+  },
+  {
+   "clip": "s7_10_sidney_kills",
+   "start": 140,
+   "end": 140.9,
+   "kind": "gunshot_hit",
+   "who": "Jessica Bowden",
+   "description": "140.0 muzzle flash; 140.1 blood bursts from blonde Jessica as she is hit, arm flung up (clear full body)",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_10_sidney_kills",
+   "start": 140.375,
+   "end": 141,
+   "kind": "gunshot_hit",
+   "who": "Jessica Bowden",
+   "description": "Closer angle: Jessica hit, blood spray on plastic sheet behind her",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_10_sidney_kills",
+   "start": 141.25,
+   "end": 142.5,
+   "kind": "other",
+   "who": "Sidney and Tatum",
+   "description": "Both women fire pistols toward camera, muzzle flashes 141.25 and 142.0",
+   "quality": "clear"
+  },
+  {
+   "clip": "s7_10_sidney_kills",
+   "start": 142.625,
+   "end": 143,
+   "kind": "gunshot_hit",
+   "who": "Jessica Bowden",
+   "description": "Jessica hit again, blood burst, arms out",
+   "quality": "ok"
+  }
+ ],
+ "endcards": {
+  "s1_01_like_scary": 107.7,
+  "s1_04_gut": 122.7,
+  "s1_05_die_sidney": 130.7,
+  "s1_06_school_out": 125.7,
+  "s1_07_doggie_door": 130.8,
+  "s1_08_survive": 94.7,
+  "s1_09_look_behind": 118.6,
+  "s1_10_surprise": 121.6,
+  "s1_11_creative": 130.6,
+  "s1_12_tables": 120.6,
+  "s2_03_omega": 120.75,
+  "s2_04_showtime": 132.625,
+  "s2_06_play": 131.75,
+  "s2_07_big_boys": 132.75,
+  "s2_09_driving": 125.75,
+  "s2_10_blame": 127.75,
+  "s3_02_cutting": 130.7,
+  "s3_03_backstab": 125.7,
+  "s3_11_family": 129.8,
+  "s4_02_return": 128.7,
+  "s4_06_killcam": 133.8,
+  "s5_02_requel": 177.25,
+  "s5_03_sheriff": 161.25,
+  "s5_04_throat": 105.625,
+  "s5_08_act3": 120.75,
+  "s5_09_fighting": 159.625,
+  "s5_10_daughter": 180,
+  "s6_store": 128.2,
+  "s6_subway": 172.85,
+  "s6_face": 75.2,
+  "s6_core4": 177.7,
+  "s6_two_gf": 158.85,
+  "s6_ladder": 180.1,
+  "s6_sam_gf": 180.5,
+  "s6_family": 176.1,
+  "s6_opening": 300.2,
+  "s7_01_animatronic": 195.6,
+  "s7_02_stu": 113.875,
+  "s7_03_mckenna": 167.25,
+  "s7_04_walls": 251.9,
+  "s7_05_mchale": 77,
+  "s7_06_spree": 289.35,
+  "s7_07_hunted": 135.5,
+  "s7_08_two_gf": 123,
+  "s7_09_anna_camp": 270.125,
+  "s7_10_sidney_kills": 169.25
+ }
+}
