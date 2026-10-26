@@ -1,0 +1,6 @@
+{
+ "prompt": "Instrumental modern slasher-film suspense underscore. Low cello and contrabass ostinato on a steady slow pulse, a sparse eerie piano motif, soft bowed string tremolo and dark orchestral textures. Tense but restrained, made to sit quietly under a narrator for several minutes: same mood and tempo throughout, no build-up, no climax, no ending, no silences. 72 BPM, D minor. No drums, no booms, no impacts or hits, no stingers, no music box, no celesta, no choir, no vocals, no harsh drones, no shrill high strings, no ticking.",
+ "model_id": "music_v2_5",
+ "music_length_ms": 150000,
+ "force_instrumental": true
+}
