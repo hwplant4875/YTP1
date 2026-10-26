@@ -981,6 +981,25 @@ def light_rig(spec="day", exclusive=True, **over):
     STATE["light"] = P
     return P
 
+def light_capture():
+    """The scene's CURRENT light as a light_rig spec (to blend from / to a segment that lights itself, e.g. march846)."""
+    sc = bpy.context.scene
+    so = bpy.data.objects.get("Sun")
+    P = dict(LIGHT_PRESETS["day"])
+    if so is not None and so.type == "LIGHT":
+        d = so.matrix_world.to_3x3() @ Vector((0, 0, -1))           # light travel direction
+        t = -d
+        P["el"] = math.degrees(math.asin(max(-1.0, min(1.0, t.z))))
+        P["az"] = math.degrees(math.atan2(t.y, t.x))
+        P["col"] = tuple(so.data.color); P["e"] = so.data.energy
+    w = sc.world
+    if w and w.use_nodes:
+        for n in w.node_tree.nodes:
+            if n.type == "BACKGROUND" and n.inputs[1].default_value < 1.0:
+                P["amb"] = n.inputs[1].default_value
+    P["expo"] = sc.view_settings.exposure
+    return P
+
 def light_blend(a, b, u):
     """Interpolate two light specs (names or dicts) for time-of-day ramps across a flight."""
     A = dict(LIGHT_PRESETS[a]) if isinstance(a, str) else dict(a)

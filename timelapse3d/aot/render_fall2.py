@@ -79,10 +79,11 @@ def set_sun(el_deg, az_deg, col, energy):
 # ---------------------------------------------------------------- minimal crowd (swarm845 geometry, own motion)
 class MiniCrowd:
     """N swarm-style figures in one deforming mesh; motion(s) -> pos (N,3), yaw (N,), dist (N,) supplied per frame."""
-    def __init__(self, name, n, seed, coll, titans=None):
+    def __init__(self, name, n, seed, coll, titans=None, outfit=None):
         rnd = random.Random(seed); self.rnd = rnd
         g = SW.Geo(); fm = []
-        mats = [L.mat(f"{name}_shirt{i}", c, 0.75) for i, c in enumerate(SW.SHIRTS)] + [L.mat(f"{name}_pants{i}", c, 0.85) for i, c in enumerate(SW.PANTS)] \
+        shirts, pants = (SW.SHIRTS, SW.PANTS) if outfit is None else ([outfit[0]] * len(SW.SHIRTS), [outfit[1]] * len(SW.PANTS))
+        mats = [L.mat(f"{name}_shirt{i}", c, 0.75) for i, c in enumerate(shirts)] + [L.mat(f"{name}_pants{i}", c, 0.85) for i, c in enumerate(pants)] \
             + [L.mat(f"{name}_skin{i}", c, 0.6) for i, c in enumerate(SW.SKINS)] + [L.mat(f"{name}_hair{i}", c, 0.7) for i, c in enumerate(SW.HAIRS)]
         ns, npn, nk = len(SW.SHIRTS), len(SW.PANTS), len(SW.SKINS)
         self.h = np.zeros(n)
@@ -491,6 +492,7 @@ def seg3_build():
             y0 = rnd.uniform(30, 620); t_ = (y0 - 6) / 120; x0 = math.sin(t_ / 9) * 120 * (t_ / 40) + rnd.uniform(-3.5, 3.5)
         R.append((x0, y0, rnd.uniform(1.1, 1.6), rnd.uniform(-0.03, 0.03)))
     S["R"] = np.array(R)
+    garrison_build(S)
     S["cam"] = seg3_cam_keys(S)
     return S
 
@@ -507,7 +509,7 @@ def armored_y(s):
         return -190.0 + 181.0 * (0.4 * u + 0.6 * u * u)
     return -9.0 + 17.0 * (1 - math.exp(-(s - IMPACT) / 0.6))
 
-SEAM_IN = ((132.0, L.OUTER_GATE[1] + 48, 90.0), (164.0, L.OUTER_GATE[1] + 136, 0.0), 32.0)   # = render_fall's last key (at rest)
+SEAM_IN = ((-130.0, L.OUTER_GATE[1] + 34, 114.0), (-165.0, L.OUTER_GATE[1] + 126, 0.0), 28.0)   # = render_fall's last key (at rest)
 
 def seg3_cam_keys(S):
     """Sky observer at a moderate height, one take: from render_fall's last pose up the avenue behind the charge,
@@ -516,11 +518,10 @@ def seg3_cam_keys(S):
     ks = [
         (-1.0, l0, t0, n0),                                  # (guide: at rest at the seam)
         (0.0, l0, t0, n0),
-        (3.0, (60, -300, 120), (0, -90, 0), 32),             # flying north up the avenue, the Armored charging ahead
-        (3.6, (40, -118, 95), (0, -30, 8), 32),              # nearer (~130 m) for the run and the shoulder ram
-        (4.0, (34, -96, 84), (0, -22, 10), 32),              # closing in (~105 m) for the last second: the run and
-        (IMPACT, (30, -82, 78), (0, -8, 12), 32),            # the rugby shoulder drop read; the gate explodes
-        (5.9, (44, -96, 98), (0, -4, 12), 32),               # hold on the burst gate while the dust billows
+        (2.6, (70, -330, 130), (0, -110, 0), 30),            # flying north up the avenue, the Armored charging ahead
+        (3.8, (40, -150, 100), (0, -40, 8), 32),             # closing in: cannons and soldiers fire, he shrugs it off
+        (IMPACT, (32, -96, 86), (0, -8, 12), 32),            # ~110 m: the shoulder drop and the ram (target locked on him)
+        (5.9, (44, -104, 102), (0, -4, 12), 32),             # hold on the burst gate while the dust billows
         (6.8, (95, -45, 118), (190, 60, 0), 30),             # pull up over the wall, turning to the canal
         (8.0, (195, 10, 95), (222, 110, 0), 30),             # low (~95 m) over the canal: ferries, refugees on bank + road
         (10.0, (200, 80, 112), (228, 190, 0), 29),           # ... then climb north
@@ -528,6 +529,76 @@ def seg3_cam_keys(S):
         (SEG3 + 1.0, (184, 207, 225), (234, 384, 0), 28),    # (guide: keeps moving north ~42 m/s for the hand-off)
     ]
     return ks
+
+GARRISON = ((0.50, 0.33, 0.18), (0.82, 0.80, 0.74))     # tan jacket, white trousers (minimal figures)
+
+def garrison_build(S):
+    """Wall cannons firing at the Armored (muzzle flash + smoke cards, shells bursting harmlessly on his armour),
+    Garrison soldiers on the wall top and on the gate square, refugees on the avenue who freeze then flee."""
+    import smokecards as SMK
+    rnd = random.Random(61)
+    cans = sorted([o for o in bpy.data.objects if o.name.startswith("CannonM") and abs(o.location.x) < 200],
+                  key=lambda o: abs(o.location.x))[:8]
+    flash = SMK.SmokeCards("CannonFlash"); smoke = SMK.SmokeCards("CannonSmoke"); hits = SMK.SmokeCards("ShellHits")
+    shots = []
+    for c in cans:
+        mz = c.matrix_world @ Vector((0, 3.0, 0.8))          # muzzle (barrel along local +Y, facing out = south)
+        t = rnd.uniform(0.4, 1.0)
+        while t < IMPACT - 0.2:
+            shots.append((t, mz)); t += rnd.uniform(0.9, 1.5)
+    if not shots:                                        # no wall cannons found: fire from the wall top near the gate
+        for k in range(10):
+            shots.append((0.5 + 0.4 * k, Vector((rnd.uniform(-90, 90), -4.0, L.WALL_H + 1.0))))
+    for t, mz in shots:
+        flash.add(t, tuple(mz), r0=1.5, r1=4.0, life=0.18, kind="glow", alpha=1.0)
+        smoke.add(t, tuple(mz), vel=(0, -6, 2), r0=2.0, r1=11.0, life=4.5, rise=1.2, kind="smoke", alpha=0.85,
+                  color=(0.78, 0.76, 0.72), tau=0.6)
+        th = t + 0.3                                       # the shell bursts on him: a puff + a glint, he runs on
+        yy = armored_y(th)
+        hp = (rnd.uniform(-2.5, 2.5), yy + rnd.uniform(-1, 2), rnd.uniform(6, 13))
+        hits.add(th, hp, r0=0.8, r1=2.5, life=0.15, kind="glow", alpha=1.0)
+        hits.add(th, hp, vel=(rnd.uniform(-6, 6), rnd.uniform(-8, 2), 3), r0=1.5, r1=7.0, life=2.5, rise=1.0, kind="smoke",
+                 alpha=0.8, color=(0.55, 0.52, 0.48), tau=0.5)
+    for cs in (flash, smoke, hits):
+        cs.build(coll)
+    S["garrison_cards"] = (flash, smoke, hits)
+    print(f"[fall2] Garrison: {len(cans)} wall cannons, {len(shots)} shots")
+    sol = []
+    for k in range(46):                                  # on the wall top, both sides of the gatehouse
+        x = rnd.choice((-1, 1)) * rnd.uniform(12, 150); sol.append((x, rnd.uniform(-1.6, 1.6), L.WALL_H + 0.3, 0))
+    for k in range(34):                                  # on the gate square, facing him
+        x = rnd.choice((-1, 1)) * rnd.uniform(6, 48); y0 = rnd.uniform(-46, -18)
+        sol.append((x, y0, L.height(x, y0) + 0.1, 1))
+    S["sol_data"] = np.array(sol)
+    S["sol"] = MiniCrowd("Garrison", len(sol), 13, coll, outfit=GARRISON)
+    ref = []
+    for k in range(90):                                  # refugees on the avenue ahead of him
+        yy = rnd.uniform(-150, -30); ref.append((rnd.uniform(-7, 7), yy, rnd.choice((-1, 1)), rnd.uniform(2.5, 4.2)))
+    S["av_data"] = np.array(ref)
+    S["av"] = MiniCrowd("AvenueFolk", len(ref), 19, coll)
+    S["av_z"] = None
+
+def garrison_pose(S, s, y_arm):
+    for cs in S.get("garrison_cards", ()):
+        cs.update(s)
+    D = S["sol_data"]; n = len(D)
+    pos = D[:, :3].copy()
+    ground = D[:, 3] == 1
+    k = np.clip((s - (IMPACT - 1.0)) / 2.0, 0, 1) * ground          # the ground soldiers break and scatter as he arrives
+    pos[:, 0] += np.sign(pos[:, 0]) * 35.0 * k ** 1.3
+    yaw = np.where(k > 0.05, np.where(pos[:, 0] > 0, -math.pi / 2, math.pi / 2), math.pi)   # face south (him), then run
+    arms = np.where(ground & (k < 0.05), 1.3, np.where(~ground, 0.9 + 0.2 * np.sin(s * 5 + np.arange(n)), 0.0))
+    S["sol"].set(pos, yaw, 30.0 * k, (k > 0.05).astype(float), arms_up=arms)
+    A = S["av_data"]; m = len(A)
+    near = np.clip((y_arm + 45.0 - A[:, 1]) / 20.0, 0, 1)          # frozen until he is ~45 m away, then they flee sideways
+    dd = np.clip((s - 1.0) * A[:, 3], 0, None) * near
+    px = A[:, 0] + A[:, 2] * np.clip(dd, 0, 30)
+    py = A[:, 1] + 0.3 * dd
+    vis = np.where((y_arm > A[:, 1] + 6) & (np.abs(px) < 9), 0.0, 1.0)     # overrun
+    if S["av_z"] is None:
+        S["av_z"] = np.array([L.height(a, b) + 0.05 for a, b in zip(A[:, 0], A[:, 1])])
+    S["av"].set(np.c_[px, py, S["av_z"]], np.where(near > 0.05, -A[:, 2] * math.pi / 2, math.pi), dd, near, vis=vis,
+                arms_up=np.where(near < 0.05, 0.25, 0.0))
 
 def seg3_pose(S, s):
     if FX:
@@ -627,8 +698,13 @@ def seg3_pose(S, s):
     yr = R[:, 1] + R[:, 2] * 3.0 * s; xr = R[:, 0] + R[:, 3] * 3.0 * s
     zr = np.array([L.height(a, b) + 0.05 for a, b in zip(xr, yr)])
     S["ref"].set(np.c_[xr, yr, zr], np.full(nr, 0.0) - R[:, 3], R[:, 2] * 3.0 * s, np.ones(nr), stride=1.5 * S["ref"].h * 3.0)
-    # camera (+ impact shake)
+    # Garrison: cannon fire from the wall top, soldiers on the wall and the ground; refugees freeze, then flee
+    garrison_pose(S, s, y)
+    # camera (+ impact shake); during the run / ram the framing is locked on the Armored (centred)
     loc, tgt, lens = spline_cam(S["cam"], s)
+    wl = smooth(2.2, 3.0, s) * (1 - smooth(5.3, 5.9, s))
+    if wl > 0:
+        tgt = tgt.lerp(Vector((0.0, y + 4.0, 8.0)), wl)
     if IMPACT <= s < IMPACT + 0.8:
         a = (1 - (s - IMPACT) / 0.8) * 1.6
         loc = loc + Vector((noise.noise(Vector((s * 40, 0, 0))), noise.noise(Vector((0, s * 40, 3))), noise.noise(Vector((5, 1, s * 40))))) * a

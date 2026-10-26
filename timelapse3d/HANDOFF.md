@@ -314,3 +314,9 @@ TROST:
 - Camera: smooth ease in/out; pull back over-zoomed shots to the moderate neutral sky observer.
 - Armored ram: refugees freeze/flee; Garrison fights him (wall cannons firing, impacts bouncing off his armour, soldiers on the ground/wall); he is UNSTOPPABLE, keeps running, shoulder-rams only at impact (never rotate the whole titan). Keep the framing locked on him.
 - Trost evacuation: the cart is only shoved a little to the SIDE to clear the passage; it never drives through the gate.
+
+## 00:49 (10/26 UTC) PAUSED by the user (credits). Where things stopped
+- Toon (less orange) is the default in every render script (2f8208d). Cart shove fix is in trost_action.py.
+- A (Shiganshina): was starting the 00:44 fixes (Yeager house to the LEFT, camera ease/pull-back, Armored vs Garrison cannons + fleeing refugees, framing locked on him). Partial edits may be in render_fall*.py (committed as WIP below). NEXT: finish, then render fall + fall3 + the opening with world + toon.
+- C (Trost): NEXT: full Trost re-render with toon: the side-on boulder carry, thinner breach dust, the cart shove; plus a toon before/after still.
+- G (integration): NEXT: connectors C1-C3 and the march with toon, then assemble_master.sh for the full one-take preview.

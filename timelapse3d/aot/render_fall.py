@@ -83,13 +83,13 @@ def a_keys():
         (-1.0, (PLZ.x + 50, PLZ.y + 45, 146), (GX, GY + 100, 0), 38),        # (extrapolation guide only)
         (0.0, (PLZ.x + 55, PLZ.y + 50, 150), (GX, GY + 120, 0), 38),         # = render_fast keys()[-1]
         (2.4, (PLZ.x + 32, PLZ.y + 70, 92), (PLZ.x, PLZ.y - 30, 0), 34),     # down over the panicking plaza
-        (4.6, (30, GY + 120, 105), (0, GY + 10, 0), 32),                     # the titans pouring through the breach
-        # then a smooth aerial travel right (east) to the Yeager house (AOT_YEAGER_XY, ~210 m from the gate), where the
-        # Smiling Titan eats Carla: neutral sky observer, no close-up, no Hannes / kids, no other titans nearby
-        (6.6, (118, GY + 40, 100), (158, GY + 132, 0), 32),
-        (A_END, (126, GY + 44, 94), (162, GY + 134, 0), 32),
-        (SEG_END, (132, GY + 48, 90), (164, GY + 136, 0), 32),
-        (SEG_END + 1.0, (132, GY + 48, 90), (164, GY + 136, 0), 32),      # (guide: the seam into render_fall2 is at rest)
+        (4.6, (40, GY + 22, 125), (0, GY + 115, 0), 28),                     # over the breach, looking into the town:
+        # the titans pour in; then a smooth aerial travel LEFT (west, as seen from the Colossal) to the Yeager house
+        # (AOT_YEAGER_XY, several blocks from the gate) where the lone Smiling Titan eats Carla; moderate-height observer
+        (6.7, (-118, GY + 30, 122), (-160, GY + 122, 0), 28),
+        (A_END, (-124, GY + 32, 118), (-163, GY + 124, 0), 28),
+        (SEG_END, (-130, GY + 34, 114), (-165, GY + 126, 0), 28),
+        (SEG_END + 1.0, (-130, GY + 34, 114), (-165, GY + 126, 0), 28),   # (guide: the seam into render_fall2 is at rest)
     ]
 
 def _cr(p0, p1, p2, p3, u, t0, t1, t2, t3):

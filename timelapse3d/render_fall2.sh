@@ -19,7 +19,7 @@ until mkdir "$LOCK" 2>/dev/null; do sleep 5; done
 trap 'rmdir "$LOCK" 2>/dev/null' EXIT
 BL="/c/All The Programs/Blender/blender.exe"
 EXTRA=""; [ -n "$TIMES" ] && EXTRA="--times $TIMES"
-CARLA_ENV_DONE=1 AOT_YEAGER_XY=${AOT_YEAGER_XY:-165,-585} SWARM=1 SUN_AZ=-102 EXPO="${EXPO:--1.5}" TREE_DENS=0.006 FL_NOKIDS=1 COL_SHOW=0 \
+CARLA_ENV_DONE=1 AOT_YEAGER_XY=${AOT_YEAGER_XY:--165,-585} SWARM=1 SUN_AZ=-102 EXPO="${EXPO:--1.5}" TREE_DENS=0.006 FL_NOKIDS=1 COL_SHOW=0 \
 AOT_STATE=$ST AOT_ARC_T=1 AOT_EVENT=intact AOT_PLUGINS=flight,states845,swarm845,world \
   "$BL" -b -P "$HERE/aot/scene.py" -P "$HERE/aot/render_fall2.py" -- \
   --cam overview --engine ${ENGINE:-EEVEE} --res 854x480 --samples $SAMPLES --seg $SEG --fall-out "$OUT" --fps $FPS \
