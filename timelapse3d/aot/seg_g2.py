@@ -331,7 +331,7 @@ def build_gatehouse(coll):
                 if w > 0.15:
                     L.box(bm, (sx * (inner + w / 2), side * 5.95, z + dz / 2), (w, 0.9, dz), mi=0 if z < 9.5 else 1)
                 z += dz
-        parts[f"broken{tag}"] = put(f"G2GateCoreBroken{tag}", bm, [M["brick"], stone], coll)
+        parts[f"broken{tag}"] = put(f"G2BreachJamb{tag}", bm, [M["brick"], stone], coll)
         parts[f"broken{tag}"].hide_render = True
         # crest leaf (the drop gate): brick 10 x 12 x 1.3, goddess shield, corbel row, two chains
         bm = bmesh.new()
@@ -374,24 +374,46 @@ def build_gatehouse(coll):
                     L.box(bm, (sx * (hw + wbl / 2), rnd.uniform(-0.3, 0.3), z + dz / 2), (wbl, T - 0.6 - rnd.uniform(0, 1.5), dz))
             z += dz
         L.box(bm, (0, 0, WH - 1.2), (2 * px - pw + 0.2, T + 0.2, 0.8))
-        br = put("G2InnerGateBroken", bm, [stone, iron], coll)
+        br = put("G2BreachBody", bm, [stone, iron], coll)
         br.hide_render = True
         parts["ig_broken"] = br
-    # cracks radiating from the hole (both faces), shown from the impact on
+    # cracks (QA v2): thin dark-grey BRANCHING cracks radiating 15-30 m from the hole edge, on the actual face planes
     bm = bmesh.new(); rnd = random.Random(31)
+    def face_y(x, z, side):
+        if abs(x) < 10.0:
+            return side * ((L.WALL_T + 0.8 - 0.6) / 2 + 0.07)                  # gatehouse recessed panel
+        if abs(x) < 17.0:
+            return side * ((L.WALL_T + 0.8 + 3.2) / 2 + 0.07)                  # gatehouse pilasters
+        return side * (L.WALL_T / 2 + (L.TOP_T / 2 - L.WALL_T / 2) * (z + 4.0) / (L.WALL_H + 4.0) + 0.07)
+    def crack(p, d, ln, w, side, depth=0):
+        n = max(3, int(ln / 1.6)); seg = ln / n
+        for k in range(n):
+            d = (d + Vector((rnd.uniform(-0.28, 0.28), 0, rnd.uniform(-0.28, 0.28)))).normalized()
+            q = p + d * seg
+            if q.z > L.WALL_H - 1.5 or q.z < 10.5 or (abs(q.x) < 16.6 and q.z < 10.8):
+                return
+            ww = w * (1.0 - 0.75 * k / n)
+            c = (p + q) / 2; yy = face_y(c.x, c.z, side)
+            ang = math.atan2(q.z - p.z, q.x - p.x)
+            r = bmesh.ops.create_cube(bm, size=1)
+            for v in r["verts"]:
+                x, y, z = v.co
+                lx, lz = x * (seg + ww), z * ww
+                v.co = Vector((c.x + lx * math.cos(ang) - lz * math.sin(ang), yy + y * 0.04, c.z + lx * math.sin(ang) + lz * math.cos(ang)))
+            if depth < 2 and rnd.random() < 0.22:                              # branch
+                bd = (d + Vector((rnd.uniform(-1, 1), 0, rnd.uniform(-1, 1))) * 0.9).normalized()
+                crack(q, bd, ln * rnd.uniform(0.25, 0.45) * (1 - k / n), ww * 0.7, side, depth + 1)
+            p = q
     for side in (-1, 1):
-        for k in range(9):
-            a = rnd.uniform(0.15, math.pi - 0.15)
-            p = Vector((math.cos(a) * 7.5, 0, 12.0 + math.sin(a) * 13.0))
-            d = Vector((math.cos(a), 0, math.sin(a))); ln = rnd.uniform(14, 30)
-            n = int(ln / 2.4)
-            for s_ in range(n):
-                d2 = (d + Vector((rnd.uniform(-0.5, 0.5), 0, rnd.uniform(-0.5, 0.5)))).normalized()
-                q = p + d2 * 2.4
-                c = (p + q) / 2
-                yy = side * (5.2 if abs(c.x) < 10.0 else 7.05)
-                L.box(bm, (c.x, yy, c.z), (max(0.3, abs(q.x - p.x)), 0.12, max(0.3, abs(q.z - p.z))), mi=0)
-                p = q
+        for k in range(12):
+            a = rnd.uniform(0.0, math.pi) if k < 10 else rnd.choice((0.05, math.pi - 0.05))
+            zc = HOLE_H * 0.55
+            hw = arch_hw(zc + math.sin(a) * 12.0)
+            p = Vector((math.cos(a) * (hw + 0.3), 0, min(HOLE_H, zc + math.sin(a) * 12.0) + 0.2))
+            if p.z < 11.0:
+                p.z = 11.0 + rnd.uniform(0, 4)
+            d = Vector((math.cos(a), 0, math.sin(a) * 0.6)).normalized()
+            crack(p, d, rnd.uniform(15, 30), rnd.uniform(0.15, 0.22), side)
     cr = put("G2Cracks", bm, [M["crack"]], coll); cr.hide_render = True
     parts["cracks"] = cr
     S["gate"] = parts
@@ -609,11 +631,11 @@ def build_ground(coll):
             o.hide_render = True
 
 # ====================================================================== guns (6 field + 6 wall-top), crews, fire FX
-FIELD_X = (-40.0, -26.0, -12.0, 12.0, 26.0, 40.0)
+FIELD_X = (-38.0, -24.0, -10.0, 10.0, 24.0, 38.0)
 FIELD_Y = -34.0
 WALL_GX = (-25.0, 25.0, -60.0, 60.0, -95.0, 95.0)
-VOLLEY = {9.0: (-12.0, 26.0, 40.0), 11.0: (-40.0, -26.0, 12.0)}
-KICKED = 12.0                                # the carriage his foot kicks over at 12.8
+VOLLEY = {8.95: (-10.0, 24.0, 38.0), 11.0: (-38.0, -24.0, 10.0)}   # 8.95 + 0.2 = the face hit at 9.15
+KICKED = 10.0                                # the carriage his foot kicks over at 12.8
 SHELL_T = 0.2                                # shell flight time (fire -> hit), so the hits land on the BEATS times
 
 def gun_mesh(M):
@@ -673,8 +695,8 @@ def gun_shots():
         shots.append((BEATS["volley2"] + (0.0 if x < 0 else 0.12), wall_m[x], tgt, "miss"))
     for tv, xs in VOLLEY.items():
         for k, x in enumerate(xs):
-            t = tv + 0.05 * k; th = t + SHELL_T; ya = arm_y(th)
-            if tv == 9.0:
+            t = tv + 0.08 * k; th = t + SHELL_T; ya = arm_y(th)
+            if tv < 10.0:
                 kind = "face" if k == 0 else "miss"
             else:
                 kind = "hit" if k == 1 else "miss"
@@ -700,7 +722,7 @@ def build_fire_fx():
         mdir = np.array([0.0, -1.0, -0.25 if m[2] > 30 else 0.0])
         n = 5
         F.add_many(t + rng.uniform(0, 0.12, n), m + rng.normal(0, 0.6, (n, 3)), mdir * rng.uniform(6, 14, (n, 1)),
-                   r0=3.0, r1=rng.uniform(10, 15, n), life=rng.uniform(3.5, 5.0, n), rise=0.8, color=(0.70, 0.68, 0.64),
+                   r0=3.5, r1=rng.uniform(11, 16, n), life=rng.uniform(4.0, 5.5, n), rise=0.8, color=(0.93, 0.91, 0.87),
                    kind="smoke", alpha=0.85, tau=0.5, fade_in=0.05)
         F.add_many([t], [m], [d / T], r0=0.45, r1=0.45, life=T, kind="glow", color=(1.0, 0.8, 0.45), alpha=0.9, fade_in=0.01,
                    dirs=[d / dist], stretch=7.0)                                       # the shell, a short tracer
@@ -886,29 +908,26 @@ def build_dust():
     V = np.column_stack([rng.normal(0, 2.5, n), rng.uniform(4, 9, n), rng.uniform(0.5, 1.5, n)])
     D.add_many(te, P, V, r0=7.0, r1=rng.uniform(13, 18, n), life=rng.uniform(6, 8, n), rise=0.6,
                color=ochre * 0.95, kind="g2dust", alpha=0.6, tau=1.2, fade_in=0.3)
-    # IMPACT: south dust ring rolling out over the apron, flash
-    n = 30
-    a = rng.uniform(math.pi * 1.05, math.pi * 1.95, n)
-    P = np.column_stack([np.cos(a) * 4, -14 + np.sin(a) * 2, rng.uniform(1.5, 6, n)])
-    V = np.column_stack([np.cos(a) * rng.uniform(14, 26, n), np.sin(a) * rng.uniform(10, 22, n), rng.uniform(1, 4, n)])
-    D.add_many(T_IMP + rng.uniform(0, 0.4, n), P, V, r0=4.0, r1=rng.uniform(12, 17, n), life=rng.uniform(6, 8.5, n), rise=0.6,
-               color=ochre, kind="g2dust", alpha=0.85, tau=1.0, fade_in=0.05)
-    n = 30                                                                   # burst out of the hole + a plume up the wall face
-    P = np.column_stack([rng.normal(0, 3, n), rng.uniform(-14, -6, n), rng.uniform(4, 22, n)])
-    V = np.column_stack([rng.normal(0, 7, n), rng.uniform(-16, -4, n), rng.uniform(6, 22, n)])
-    D.add_many(T_IMP + rng.uniform(0, 0.3, n), P, V, r0=6, r1=rng.uniform(15, 24, n), life=rng.uniform(6, 9, n), rise=2.0,
-               color=ochre, kind="g2dust", alpha=0.9, tau=0.9, fade_in=0.03)
-    # NORTH: the lumpy cauliflower ball ~40 m on the lawn around (0, +45), top 40-45 m, drifting west, thinning ~8 s+
-    n = 72
-    th_ = rng.uniform(0, 2 * math.pi, n); ph_ = rng.uniform(0, math.pi / 2, n); rr = rng.uniform(7, 19, n)
-    dirs = np.column_stack([np.cos(th_) * np.cos(ph_), np.sin(th_) * np.cos(ph_) * 1.15, np.sin(ph_) * 1.9])
-    te = T_IMP + 0.15 + rng.uniform(0, 1.6, n)
-    cy = np.array([max(14.0, arm_y(t)) for t in te])
-    P = np.column_stack([rng.normal(0, 3, n), cy + rng.normal(4, 3, n), np.full(n, 4.0)])
-    tau = 0.55
-    D.add_many(te, P, dirs * (rr / tau)[:, None], r0=7.0, r1=rng.uniform(13, 19, n), life=rng.uniform(12, 17, n), rise=1.8,
+    # IMPACT (QA v2): the burst goes mostly NORTH out of the breach - a dense lumpy ochre ball for ~1 s, then it thins
+    # so he reads again by 17-18 s; the south side only gets a low ground ring (no sprite on the south face)
+    n = 18
+    a = rng.uniform(math.pi * 1.1, math.pi * 1.9, n)
+    P = np.column_stack([np.cos(a) * 5, -15 + np.sin(a) * 2, rng.uniform(1.0, 3.5, n)])
+    V = np.column_stack([np.cos(a) * rng.uniform(12, 22, n), np.sin(a) * rng.uniform(8, 16, n), rng.uniform(0.5, 2.5, n)])
+    D.add_many(T_IMP + rng.uniform(0.05, 0.4, n), P, V, r0=3.5, r1=rng.uniform(8, 12, n), life=rng.uniform(3.0, 4.5, n), rise=0.4,
+               color=ochre, kind="g2dust", alpha=0.6, tau=0.9, fade_in=0.05)
+    n = 76                                                                   # the burst ball out of the north face
+    te = T_IMP + 0.08 + rng.uniform(0, 0.75, n)
+    P = np.column_stack([rng.normal(0, 3.0, n), rng.uniform(5, 13, n), rng.uniform(2, 20, n)])
+    V = np.column_stack([rng.normal(0, 9, n), rng.uniform(12, 32, n), rng.uniform(2, 15, n)])
+    D.add_many(te, P, V, r0=5.5, r1=rng.uniform(12, 17, n), life=rng.uniform(2.2, 3.4, n), rise=2.2,
                color=np.where(rng.random((n, 1)) < 0.3, dark, ball) * rng.uniform(0.92, 1.08, (n, 1)), kind="g2dust",
-               alpha=1.0, tau=tau, fade_in=0.15)
+               alpha=1.0, tau=0.5, fade_in=0.05)
+    n = 26                                                                   # thinning haze he stands in at 18-23 s (behind him)
+    te = T_IMP + 0.9 + rng.uniform(0, 1.2, n)
+    P = np.column_stack([rng.uniform(-4, 34, n), rng.uniform(28, 78, n), rng.uniform(4, 18, n)])
+    D.add_many(te, P, np.column_stack([rng.normal(0, 1.5, n), rng.uniform(0, 2, n), rng.uniform(0, 1, n)]), r0=9, r1=rng.uniform(16, 24, n),
+               life=rng.uniform(7, 10, n), rise=0.8, color=ball, kind="g2dust", alpha=0.24, tau=1.0, fade_in=0.6)
     # the slide: two dust furrows along his feet + rubble spray
     te = np.arange(T_IMP + 0.1, BEATS["slide"][1] - 0.15, 0.09)
     for sx in (-2.3, 2.3):
@@ -1266,26 +1285,37 @@ def build_civilians(coll):
     rnd = random.Random(17)
     k_n = float(os.environ.get("G2_CROWD", "1.0"))
     civ = [f"civilian:{k}" for k in range(8)]
-    # south stragglers
+    # south stragglers (QA v2): ~150 flee through the gun gaps into the passage or break to the sides; 10 freeze at the
+    # house fronts.  Pure functions of t (see civilians_update).
     St = []
-    for i in range(int(110 * k_n)):
-        y0 = rnd.uniform(-230, -40); x0 = rnd.uniform(-8.5, 8.5); v = rnd.uniform(4.0, 5.5)
-        # the time the Armored is 35 m behind: from then they break for the house fronts and freeze
-        ts = None
-        for k in range(0, 300):
-            tt = k * 0.05
-            if arm_y(tt) > y0 + v * tt - 35.0:
-                ts = tt; break
-        t_in = (-14.0 - y0) / v                     # reaches the passage
-        if ts is not None and ts < t_in:
-            mode = "freeze"
-        else:
-            mode = "in"
+    for i in range(int(150 * k_n)):
         pre = rnd.choice(civ)
-        e_run = PK.person(pre, (x0, y0), yaw=0.0, pose="run")
-        e_std = PK.person(pre, (x0, y0), yaw=0.0, pose="stand")
-        St.append(dict(run=e_run, std=e_std, x0=x0, y0=y0, v=v, ts=ts, t_in=t_in, mode=mode,
-                       side=(1 if x0 > 0 else -1) if abs(x0) > 0.5 else rnd.choice((-1, 1))))
+        if i < 10:                                   # the freezers, pressed against the house fronts on the avenue
+            side = 1 if i % 2 else -1
+            y0 = rnd.uniform(-330, -70); x0 = side * 11.8
+            c = dict(mode="freeze", x0=x0, y0=y0, side=side, v=0.0, ts=0.0, t_in=1e9, t_ap=1e9, xa=0.0)
+        else:
+            y0 = rnd.uniform(-270, -45); x0 = rnd.uniform(-8.0, 8.0); v = rnd.uniform(4.5, 6.5)
+            ts = None
+            for k in range(0, 300):
+                tt = k * 0.05
+                if arm_y(tt) > y0 + v * tt - 35.0:
+                    ts = tt; break
+            ts = 1e9 if ts is None else ts
+            t_in = (-14.0 - y0) / v; t_ap = (-46.0 - y0) / v
+            side = (1 if x0 > 0 else -1) if abs(x0) > 0.5 else rnd.choice((-1, 1))
+            if t_in < min(ts, 13.0):
+                mode = "in"
+            elif ts < t_ap:
+                mode = "side"
+            else:
+                mode = "apron"
+            gap = min((0.0, 17.0, -17.0), key=lambda g: abs(g - x0))
+            c = dict(mode=mode, x0=x0, y0=y0, side=side, v=v, ts=ts, t_in=t_in, t_ap=t_ap, gap=gap, xa=side * rnd.uniform(30, 50))
+        c["run"] = PK.person(pre, (c["x0"], c["y0"]), yaw=0.0, pose="run")
+        c["std"] = PK.person(pre, (c["x0"], c["y0"]), yaw=0.0, pose="stand")
+        St.append(c)
+    print("[g2] stragglers: " + ", ".join(f"{m} {sum(1 for c in St if c['mode'] == m)}" for m in ("in", "side", "apron", "freeze")))
     S["south"] = St
     # north: quays (static), apron (static + panic), gate road stream (walk -> run)
     zq = S["zq"]
@@ -1314,32 +1344,42 @@ def build_civilians(coll):
     S["north"] = Nd
     print(f"[g2] civilians: south {len(St)} (x2 instances), north {len(Nd)}")
 
+def straggler_pos(c, t):
+    """(x, y, running, yaw) of one south straggler at t."""
+    m = c["mode"]
+    if m == "freeze":
+        return c["x0"], c["y0"], False, c["side"] * math.pi / 2
+    v = c["v"]
+    if m == "in":
+        y = c["y0"] + v * min(t, c["t_in"])
+        u = smooth(-70.0, -36.0, y); w = smooth(-34.0, -16.0, y)
+        x = c["x0"] + (c["gap"] - c["x0"]) * u
+        x = x + (0.0 - x) * w * 0.9
+        return x, y, t < c["t_in"], 0.0
+    ts = c["ts"] if m == "side" else c["t_ap"]
+    y = c["y0"] + v * min(t, ts)
+    u = max(0.0, t - ts)
+    if m == "side":
+        xg = c["side"] * 12.4; dx = abs(xg - c["x0"]); tx = dx / 4.6
+        if u < tx:
+            return c["x0"] + (xg - c["x0"]) * u / tx, y, True, -c["side"] * math.pi / 2
+        u2 = u - tx
+        return xg, y - 3.6 * u2, u2 < 9.0, math.pi                         # flee south along the house fronts
+    xg = c["xa"]; dx = abs(xg - c["x0"]); tx = dx / 4.8                     # apron: break sideways across the apron
+    if u < tx:
+        return c["x0"] + (xg - c["x0"]) * u / tx, y, True, -c["side"] * math.pi / 2
+    return xg, y, False, math.pi
+
 def civilians_update(t):
-    ya = arm_y(t)
     for c in S.get("south", ()):
-        e_run, e_std = c["run"], c["std"]
-        if c["mode"] == "in":
-            y = c["y0"] + c["v"] * min(t, c["t_in"]); x = c["x0"] * (1 - smooth(c["t_in"] - 2.5, c["t_in"], t) * 0.85)
-            vis_r, vis_s = t < c["t_in"], False
-            p = (x, y)
-        else:
-            ts = c["ts"]
-            y = c["y0"] + c["v"] * min(t, ts)
-            u = max(0.0, t - ts); xg = c["side"] * 11.6
-            x = c["x0"] + (xg - c["x0"]) * min(1.0, u * 3.4 / max(0.5, abs(xg - c["x0"])))
-            moving = u * 3.4 < abs(xg - c["x0"])
-            vis_r, vis_s = moving, not moving
-            p = (x, y)
-        z = gz(*p)
-        for e, v in ((e_run, vis_r), (e_std, vis_s)):
+        x, y, running, yaw = straggler_pos(c, t)
+        vis_gone = c["mode"] == "in" and t >= c["t_in"]
+        z = gz(x, y)
+        for e, v in ((c["run"], running and not vis_gone), (c["std"], (not running) and not vis_gone)):
             if e.hide_render == v:
                 e.hide_render = not v
             if v:
-                e.location = (p[0], p[1], z)
-                if e is e_std:
-                    e.rotation_euler.z = math.pi + c["side"] * 0.6          # pressed to the wall, facing the avenue
-                elif c["mode"] == "freeze" and t > c["ts"]:
-                    e.rotation_euler.z = -c["side"] * math.pi / 2
+                e.location = (x, y, z); e.rotation_euler.z = yaw
     # north panic wave
     org = Vector((0.0, 30.0))
     for c in S.get("north", ()):
@@ -1407,7 +1447,7 @@ def mats():
     M = dict(
         brick=m("G2Brick", "#b4643f", 0.9, var=0.12, var_scale=0.8), cream=m("G2Cream", "#e3d5b5"), tile=m("G2Tile", "#9a5a3a"),
         timber=m("G2Timber", "#5a3f28"), dark=m("G2Dark", "#1a1410", 0.95), trim=m("G2Trim", "#4f7a55"),
-        shield=m("G2Shield", "#3d4f78"), crack=m("G2Crack", "#2a221c", 0.95), wall=m("G2Wall", "#cec3a6"), iron=m("G2Iron", "#26262a", 0.5),
+        shield=m("G2Shield", "#3d4f78"), crack=m("G2Crack", "#5e5a54", 0.95), wall=m("G2Wall", "#cec3a6"), iron=m("G2Iron", "#26262a", 0.5),
         dirt=m("G2Dirt", "#9c8462", 0.95, var=0.25, var_scale=0.05), rut=m("G2Rut", "#6e5a40", 0.95), verge=m("G2Verge", "#6f8a4a", 0.95),
         dirt_n=m("G2RoadN", "#a08a66", 0.95), strip=m("G2StripWater", "#8fb4b8", 0.2), water=m("G2Water", "#5f8f84", 0.12),
         quay=m("G2Quay", "#cdbf9f", 0.9, var=0.15, var_scale=0.2), quaywall=m("G2QuayWall", "#a89a7e", 0.9), grass_bank=m("G2Bank", "#6f8a4a", 0.95),
@@ -1505,3 +1545,16 @@ def check():
         c, l, ln = CAM.eval(t); a = np.array([0, arm_y(t), 9.0]) - c; d = np.array(l) - c
         ok = max(ok, math.degrees(math.acos(np.dot(a, d) / np.linalg.norm(a) / np.linalg.norm(d))))
     print(f"[g2] framing lock {BEATS['lock']}-{T_IMP} s: max {ok:.2f} deg off the Armored's chest")
+    if bpy is not None and S.get("gate"):                   # breach see-through probe (rays south through the hole)
+        update(20.0)
+        saved = [(o, o.hide_viewport) for o in bpy.data.objects]
+        cards = {id(o) for cs in SMC._ALL for o in cs.objects()}
+        for o, _ in saved:
+            o.hide_viewport = o.hide_render or id(o) in cards or o.name.startswith("G2Ferry")
+        bpy.context.view_layer.update()
+        dg = bpy.context.evaluated_depsgraph_get(); sc = bpy.context.scene
+        for x0, z0 in ((0, 3), (0, 10), (0, 18), (0, 23), (-4, 8), (4, 8), (-6, 12), (6, 12)):
+            hit, loc, nrm, idx, ob, mx = sc.ray_cast(dg, Vector((x0, 40.0, z0)), Vector((0, -1, 0)))
+            print(f"[g2] breach ray x {x0:+} z {z0}: " + (f"HIT {ob.name} at y {loc.y:.1f}" if hit else "clear"))
+        for o, h in saved:
+            o.hide_viewport = h

@@ -398,3 +398,12 @@ Push g2_armored_v2_*.
 1. Mute the crowd colours 30-40% toward earthy medieval tones (browns, beiges, muted reds, blues and greens; ruling E2).
 2. Add 6-10 larger titans (8-15 m) walking up the main avenue and the ring road at 14-24 s, so the flow reads at the far camera.
 GPU order: g6, g7, then g2 v2.
+
+
+## 22:34 g6 v1 PASS (cloud QA) - fixes sent to the g6 agent (code + stills, no re-render): steam shroud instead of the ball at 46-52 s; EREN/MIKASA tags (g6_tags.json); clean roof fade plus a warmer storeroom interior.
+
+## 23:03 g7 v1 PASS (cloud QA). Assembly-pass polish:
+1. North of Rose: farmland patchwork, dirt roads and tree lines matching the g1/g5 terrain. No buildings except Pyxis's forecourt (E3).
+2. Forecourt crowd: Garrison brown/beige jackets in loose rank blocks so the ~2,000 read as a formation.
+3. Tags in Russo One: EREN/MIKASA/ARMIN at ~9-16 s, then PYXIS from his arrival through the speech. At most 3 at once, each fading after ~4 s (from seg_g7 TRACK).
+Queue: g2 v2 -> g4 -> g3 -> connectors -> full one-take preview.
