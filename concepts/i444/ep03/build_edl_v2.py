@@ -163,7 +163,7 @@ X.append(sec('s17', [(0, 's3_11_family', 65.3, 0.85), ('from screen', 's3_11_fam
   ('finally stop', 's3_12_firing', 129.95, 0.6), ('survival rate', 's3_11_family', 80)],
   [1, 'Roman Bridger', 'Scream 3 (2000)'], 'roman', 24.2))
 # outro: the full board, then the CTA over a long mask close-up
-X.append(sec('s18', [(0, 's6_opening', 186), ('and if you', 's6_subway', 167, 0.65)], pad=1.5,
+X.append(sec('s18', [(0, 's6_opening', 186), ('and if you', 's6_subway', 167, 0.65)], pad=2.5,
   extra=[('title', ['YOUR #1?'], 'tell me', 'and if you'), ('title', ['FREDDY', '!OR PINHEAD?'], 'freddie', 999)]))
 X[-1]['overlays'].insert(0, ['tierfinal', {'placed': list(PLACED), 'highlights': [[T('s18', 'guy who lasted'), 'carvey'], [T('s18', 'one who planned'), 'roman']],
                                          't_dim': T('s18', 'tell me')}, 0.0, T('s18', 'and if you')])

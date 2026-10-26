@@ -5812,7 +5812,7 @@
   },
   {
    "voice": "s18",
-   "pad": 1.5,
+   "pad": 2.5,
    "clip_audio_db": -99,
    "shots": [
     [
