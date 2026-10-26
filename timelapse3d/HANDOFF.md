@@ -353,3 +353,10 @@ TROST:
 ## 16:5x (10/26 UTC) Orientation audit (workflow, 21 agents: Sonnet audit + Opus verify vs the anime frames)
 - 8 confirmed items, recorded in SCENE_BIBLE_v2 D "AUDIT CORRECTIONS" (they override older text): g1 canal-east note; g2 smoke bends WEST; g2 hamlet east-heavy; pit bridge NNE; g5 punch travels south (CAP into the west alley wall); RoseHQ lift at (-195,870); YF on the east plank box (22,52); g8 sun swings 255 -> ~200 deg during the carry.
 - Routed: g8 agent (YF, sun, pit bridge, RoseHQ lift in trost.py), g5 agent (punch), g1 agent (hamlet). g2 smoke goes to the g2 build.
+
+## 16:51 (10/26 UTC) OWNER on g8 v1 ("너무 좋은데? 오히려 먼게 좋아") - binding for ALL segments
+- FAR camera preferred everywhere (it hides small flaws); readability only via small cues (rim, steam, dust), never by pushing in. The closer-camera v2 plan is cancelled.
+- ODM: ONE hook per shot; the hook flies to an anchor (0.15-0.25 s, hip gas puff), the wire goes taut, the soldier is reeled along it (white gas trail, slight swing), then release/retract. No hanging or twin wires. Implemented in odm.py (g8 agent), used by every segment.
+- Plug = ONE instant slam after the roar (0.3-0.5 s), big dust burst + short camera shake (0.3-0.5 deg, 0.4 s), then the slump.
+- Breach hole = ball-sized (14-15 m wide x 15-16 m tall, round broken top); bible C updated; trost.py by the g8 agent; g5's kick reveals the same hole.
+- Push every render immediately, version-labelled (renders/laptop/<seg>_<name>_vN_*).

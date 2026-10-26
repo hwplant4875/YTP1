@@ -534,7 +534,7 @@ parapet; outer face flat with 3 m counterfort grooves every 20 m; low plain oute
 | id | element | position / extent (M) | notes |
 |---|---|---|---|
 | O | outer gate | (0, 0) | outside: rust-red riveted iron frame 20 m wide, ≈ 11 m clear, to 45 m, transom Z 26; town side: brick gatehouse 3 tiers, X -17..+17, Y 5..15, 40 m, round-arched windows, 2 arched strap doors + crest plaque; sandstone pilasters X ±17..±27 (6 m deep) |
-| — | kick breach | X -7.5..+7.5 through the gatehouse (Y 5..15), stepping to 13 m in the wall body (Y -5..5), top Z 30-34 | broken beams, roots; glows orange before the seal |
+| — | kick breach | **OWNER 16:51 10/26: ball-sized, 14-15 m wide x 15-16 m tall with a round/broken top so the 14 m ball fills it snugly** (was: X -7.5..+7.5, top Z 30-34) | broken beams, roots; glows orange before the seal |
 | BALL | boulder rest | centre (0, 8, 7), r 7 | front flush with the gatehouse face; crushed-brick ring 1.5 m; Λ plug to Z 38 above it |
 | Col | Colossal | feet Y -18..-28 on X 0 | chin Z 50-52, crown 60; right fist X +22..+30; left sweep X 0 → -35 |
 | GS | gate square | semicircle r 70 on O (Y > 0) | turf #6f8a4c + worn earth; pale paved ring road r 70-78; town starts r ≈ 80 |
