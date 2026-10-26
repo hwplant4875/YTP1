@@ -1,11 +1,13 @@
-# EP03 v2 Every Ghostface Ranked: builds edl_v2.json from voice_v3 (cold open, rules, #16..#1, outro)
-# Cuts are anchored to whisper word onsets (voice_v3/words.json; the ElevenLabs alignment drifts up to 0.7 s near pauses).
+# EP03 v2 Every Ghostface Ranked: builds edl_v2.json from voice_v4 (cold open, rules, #16..#1, outro)
+# Cuts are anchored to whisper word onsets (voice_v4/words.json; the ElevenLabs alignment drifts up to 0.7 s near pauses).
 # Every action word in the cold open lands on the frame where it happens (checked at 10 fps on the 360p copies).
-# Each entry: rank card, stat card (4 bars, then the % stamps as the number is spoken), then a 1.2 s tier beat.
-# render: python render_v2.py edl_v2.json <clips_dir> voice_v3 <music.mp3> <out.mp4>
+# Each entry: rank card, stat card (4 bars, then the % stamps as the number is spoken), then the tier line (voice_v4) over the
+# TierMaker board: the face leaves the tray under the board and slams into its row on the tier name.
+# render: python render_v2.py edl_v2.json <clips_dir> voice_v4 <music.mp3> <out.mp4>
 import json, re, os
 D = os.path.dirname(os.path.abspath(__file__)) + '/'
-W = json.load(open(D + 'voice_v3/words.json'))
+W = json.load(open(D + 'voice_v4/words.json'))
+TL = json.load(open(D + 'voice_v4/tier_lines.json'))   # {seg: {start, hit}} of the appended tier line
 LEAD = 0.08
 def norm(s): return re.sub(r"[^a-z0-9']", '', s.lower())
 def at(seg, phrase):  # onset of the first word of phrase (whisper spelling) in seg
@@ -14,7 +16,7 @@ def at(seg, phrase):  # onset of the first word of phrase (whisper spelling) in 
         if ws[i:i + len(ph)] == ph: return W[seg][i][0]
     raise KeyError((seg, phrase))
 def T(seg, x): return x if isinstance(x, (int, float)) else round(max(0, at(seg, x) - LEAD), 3)
-def vdur(seg): return round(json.load(open(D + f'voice_v3/{seg}.json'))['character_end_times_seconds'][-1], 3)
+def vdur(seg): return round(json.load(open(D + f'voice_v4/{seg}.json'))['character_end_times_seconds'][-1], 3)
 def num_onset(seg):  # the spoken % right after "Survival rate"
     ws = W[seg]; i = max(k for k, w in enumerate(ws) if norm(w[2]) == 'survival'); return ws[i + 2][0]
 STATS = json.load(open(D + 'stats_v2.json')) if os.path.exists(D + 'stats_v2.json') else {}
@@ -26,6 +28,7 @@ NAME = {'carvey': 'Jason Carvey', 'karl': 'Karl Gibbs', 'mrs_loomis': 'Mrs. Loom
         'mickey': 'Mickey Altieri', 'amber': 'Amber Freeman', 'billy': 'Billy Loomis', 'wayne': 'Wayne Bailey', 'jill': 'Jill Roberts',
         'roman': 'Roman Bridger'}
 def short(k): return 'MRS. LOOMIS' if k == 'mrs_loomis' else NAME[k].split()[-1 if k == 'carvey' else 0].upper()
+def _rec(k): return {'key': k, 'name': NAME[k], 'short': short(k), 'pct': PCT[k], 'tier': tier(PCT[k]), 'tile': f'tiles/{k}.png'}
 def film_of(k): return KS.get(k, {}).get('film', '')
 # TierMaker-style board, row names picked by the user 10/26 (letter, phrase, max survival %)
 TIERS = [['S', 'Slaughtered', 25], ['A', 'Almost Dead', 40], ['B', 'Better Run', 50], ['C', 'Close Call', 60], ['D', "Don't Worry", 80],
@@ -36,20 +39,25 @@ def stats(k):
     return {n: s.get(f, 5) for n, f in (('STRENGTH', 'strength'), ('INTELLIGENCE', 'intelligence'), ('KILL COUNT', 'kill_count'),
                                        ('DECEPTION', 'deception'))}
 PLACED = []
+REC = {k: _rec(k) for k in PCT}
+POOL = sorted(REC.values(), key=lambda r: r['short'])   # the unranked tray under the board, alphabetical
 SFX_GAIN = {'whoosh': -16, 'fill': -20, 'stamp': -12, 'slam': -6}
 def sec(voice, shots, rank=None, key=None, card_at=None, extra=(), pad=0.5, clip_db=-99):
     shots = [[T(voice, s[0]), *s[1:]] for s in shots]
     S = {'voice': voice, 'pad': pad, 'clip_audio_db': clip_db, 'shots': shots, 'overlays': [], 'sfx': []}
     if rank: S['overlays'].append(['rank', rank, 0.0, 2.9])
-    if key:  # stat card from card_at (after the death beat) to the end of the voice, then the tier beat over the pad
-        S['pad'] = 1.2; v = vdur(voice); a = T(voice, card_at); tp = round(num_onset(voice) - 0.05 - a, 3)
+    if key:  # stat card from card_at (after the death beat) until the tier line, then the board for the tier line + pad
+        S['pad'] = 0.7; a = T(voice, card_at); tp = round(num_onset(voice) - 0.05 - a, 3)
+        vb = round(TL[voice]['start'] - 0.1, 3); hit = TL[voice]['hit']
         S['overlays'].append(['stats', {'name': NAME[key].upper(), 'tile_png': f'tiles/{key}.png', 'stats': stats(key), 'pct': PCT[key],
-                                        't_pct': tp, 'dur': round(v - a, 3), 'film': film_of(key)}, a, v])
-        new = {'key': key, 'name': NAME[key], 'short': short(key), 'pct': PCT[key], 'tier': tier(PCT[key]), 'tile': f'tiles/{key}.png'}
-        S['overlays'].append(['tier', {'placed': list(PLACED), 'new': new}, v, 999]); PLACED.append(new)
-        # whoosh as the card slides in, a soft fill under the bars, the stamp on the spoken %, the slam when the mask hits (0.5 s into the beat)
+                                        't_pct': tp, 'dur': round(vb - a, 3), 'film': film_of(key)}, a, vb])
+        new = REC[key]
+        S['overlays'].append(['tier', {'placed': list(PLACED), 'new': new, 'pool': POOL, 't_hit': round(hit - vb, 3)}, vb, 999])
+        PLACED.append(new)
+        # whoosh as the card slides in, a soft fill under the bars, the stamp on the spoken %, then the face's whoosh and its slam on the tier name
         S['sfx'] += [[a, 'sfx/whoosh.wav', SFX_GAIN['whoosh']], [a + 0.3, 'sfx/fill.wav', SFX_GAIN['fill']],
-                     [a + tp, 'sfx/stamp.wav', SFX_GAIN['stamp']], [v, 'sfx/whoosh.wav', SFX_GAIN['whoosh']], [v + 0.5, 'sfx/slam.wav', SFX_GAIN['slam']]]
+                     [a + tp, 'sfx/stamp.wav', SFX_GAIN['stamp']], [hit - 0.42, 'sfx/whoosh.wav', SFX_GAIN['whoosh']],
+                     [hit, 'sfx/slam.wav', SFX_GAIN['slam']]]
         S['card_at'] = a
     S['overlays'] += [[k, val, T(voice, x), T(voice, y)] for k, val, x, y in extra]
     return S

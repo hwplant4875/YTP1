@@ -288,107 +288,121 @@ def thermo_final(out, placed, dur, fps=30, t_build=(0.25, 1.9), highlights=(), t
     return n, 0, 0
 
 # ------------------------------------------------------------------ TierMaker-style board
-LW = 300                                # label column width
+# rows (pastel labels) on top, the unranked faces waiting in a tray underneath (the template's image tray), all tiles edge to edge
+LW, TRAY_COLS, TRAY_GAP = 250, 12, 18
 def geom():
-    """row pitch / square tile size (edge to edge, 2 px black row lines) / board origin for the current number of tiers"""
-    nr = len(TIERS); rh = min(196, (H - 40) // nr); ts = rh - 2
-    bxw = LW + 7 * ts + 2                   # 7 tile slots wide like the template
-    return nr, rh, ts, (W - bxw) // 2, (H - nr * rh) // 2, bxw
+    """rows, row pitch, square tile, board x/y, board width, tray top: sized so rows + a 2-line tray fill the frame height"""
+    nr = len(TIERS); ts = min(194, (H - 40 - TRAY_GAP - 2 - 2 * nr) // (nr + 2)); rh = ts + 2
+    bxw = LW + 10 * ts + 2; bx0 = (W - bxw) // 2
+    total = nr * rh + TRAY_GAP + 2 * ts + 2; by0 = (H - total) // 2
+    return nr, rh, ts, bx0, by0, bxw, by0 + nr * rh + TRAY_GAP
 def _label_cell(i, flash=0.0):
-    nr, RH, TS, BX0, BY0, BXW = geom(); c = TM_COL[i]
+    nr, RH, TS, BX0, BY0, BXW, TY = geom(); c = TM_COL[i]
     if flash > 0: c = tuple(int(v + (255 - v) * flash) for v in c)
     cell = Image.new('RGBA', (LW, TS), c + (255,)); d = ImageDraw.Draw(cell)
     l, ph = LETTERS[i] if LETTERS else (TIERS[i][0], '')
     if ph:
-        d.text((LW / 2, TS * 0.40), l, font=sans(TS * 104 // 194), fill=TM_INK, anchor='mm')
-        sz = min(38, TS * 40 // 194)
-        while d.textlength(ph, font=sans(sz)) > LW - 24 and sz > 20: sz -= 1
+        d.text((LW / 2, TS * 0.40), l, font=sans(TS * 60 // 124), fill=TM_INK, anchor='mm')
+        sz = TS * 26 // 124
+        while d.textlength(ph, font=sans(sz)) > LW - 20 and sz > 14: sz -= 1
         d.text((LW / 2, TS * 0.80), ph, font=sans(sz), fill=TM_INK, anchor='mm')
     else:
-        sz = 104 if len(l) <= 2 else 34
-        d.text((LW / 2, TS / 2), l, font=sans(sz), fill=TM_INK, anchor='mm')
+        d.text((LW / 2, TS / 2), l, font=sans(TS * 60 // 124 if len(l) <= 2 else TS * 26 // 124), fill=TM_INK, anchor='mm')
     return cell
 _FACE = {}
 def face(r, size=None):
     """square face tile with the name on a dark strip at the bottom (no ring, no number)"""
-    TS = geom()[2]; size = size or TS
+    TS = geom()[2]; size = max(8, int(size or TS))
     k = (r['tile'], r['short'], size)
     if k not in _FACE:
         t = img(r['tile']).resize((size, size), Image.LANCZOS).copy(); d = ImageDraw.Draw(t)
-        sh = max(30, size * 40 // TS); d.rectangle([0, size - sh, size, size], fill=(0, 0, 0, 165))
-        nm = r['short']; sz = max(14, size * 29 // TS)
-        while d.textlength(nm, font=sans(sz, True)) > size - 6 and sz > 12: sz -= 1
+        sh = max(12, size * 26 // 124); d.rectangle([0, size - sh, size, size], fill=(0, 0, 0, 170))
+        nm = r['short']; sz = max(8, size * 19 // 124)
+        while d.textlength(nm, font=sans(sz, True)) > size - 6 and sz > 8: sz -= 1
         d.text((size / 2, size - sh / 2), nm, font=sans(sz, True), fill=(255, 255, 255), anchor='mm')
         _FACE[k] = t
     return _FACE[k]
 def _row_of(p): return tier(p)
 def slots(placed):
-    """(x, y) of each placed key: rows by tier, left to right in reveal order"""
-    nr, RH, TS, BX0, BY0, BXW = geom(); cnt = [0] * nr; pos = {}
+    """top-left of each placed key: rows by tier, left to right in reveal order"""
+    nr, RH, TS, BX0, BY0, BXW, TY = geom(); cnt = [0] * nr; pos = {}
     for r in placed:
         i = _row_of(r['pct']); pos[r['key']] = (BX0 + LW + 2 + cnt[i] * TS, BY0 + i * RH + 1); cnt[i] += 1
     return pos
+def tray_slots(rest):
+    nr, RH, TS, BX0, BY0, BXW, TY = geom()
+    return {r['key']: (BX0 + 1 + (j % TRAY_COLS) * TS, TY + 1 + (j // TRAY_COLS) * TS) for j, r in enumerate(rest)}
 def board_bg(flash_row=None, flash=0.0):
-    nr, RH, TS, BX0, BY0, BXW = geom()
+    nr, RH, TS, BX0, BY0, BXW, TY = geom()
     im = Image.new('RGBA', (W, H), TM_PAGE + (255,)); d = ImageDraw.Draw(im)
     d.rectangle([BX0, BY0, BX0 + BXW, BY0 + nr * RH], fill=TM_LINE)
     for i in range(nr):
         y = BY0 + i * RH + 1
         d.rectangle([BX0 + LW + 2, y, BX0 + BXW - 1, y + TS - 1], fill=TM_BOARD)
         im.alpha_composite(_label_cell(i, flash if i == flash_row else 0.0), (BX0 + 1, y))
+    d.rectangle([BX0, TY, BX0 + BXW, TY + 2 * TS + 1], fill=TM_BOARD)          # the tray
     return im
-def board_beat(out, placed, new, dur=1.2, fps=30):
-    os.makedirs(out, exist_ok=True); TS = geom()[2]
+def _put(im, r, xy, sc=1.0, shadow=False, white=0.0):
+    TS = geom()[2]; t = face(r, TS * sc)
+    if white > 0: t = Image.blend(t, Image.new('RGBA', t.size, (255, 255, 255, 255)), white)
+    x, y = xy[0] + TS / 2 - t.size[0] / 2, xy[1] + TS / 2 - t.size[1] / 2
+    if shadow: with_shadow(im, t, (x, y), (0, 12), 14, 210)
+    else: im.alpha_composite(t, (int(x), int(y)))
+def board_beat(out, placed, new, dur=4.0, fps=30, t_hit=0.5, pool=None):
+    """the board for one tier line: the new face waits in the tray (pulsing), lifts off 0.42 s before the tier name,
+    arcs up and slams into its row on the tier name; the rest of the tray closes the gap"""
+    os.makedirs(out, exist_ok=True); nr, RH, TS, BX0, BY0, BXW, TY = geom()
+    pool = pool or placed + [new]
+    done = {r['key'] for r in placed}
+    rest0 = [r for r in pool if r['key'] not in done]                  # tray before (incl. the new face)
+    rest1 = [r for r in rest0 if r['key'] != new['key']]               # tray after
     pos = slots(placed + [new]); row = _row_of(new['pct']); tx, ty = pos[new['key']]
+    tp0, tp1 = tray_slots(rest0), tray_slots(rest1); fx, fy = tp0[new['key']]
+    T_FLY = 0.42; t_lift = max(0.15, t_hit - T_FLY)
+    n = int(round(min(dur, t_hit + 0.5) * fps)) + 1
     base = board_bg()
     for r in placed: base.alpha_composite(face(r), pos[r['key']])
-    T_HIT, T_IN = 0.5, 0.1
-    n = int(round(min(dur, T_HIT + 0.45) * fps)) + 1
-    sx, sy, s0 = 1340, 470, 2.3                       # starts big at the right, then slams down into its slot
     for i in range(n):
-        tt = i / fps
-        if tt < T_HIT:
-            im = base.copy()
-            k = max(0.0, (tt - T_IN) / (T_HIT - T_IN)); k = k * k        # accelerate into the hit
-            sc = s0 + (1 - s0) * k; sz = int(TS * sc)
-            cx = sx + (tx + TS / 2 - sx) * k; cy = sy + (ty + TS / 2 - sy) * k
-            t = face(new, sz).rotate(-8 * (1 - k), Image.BICUBIC, expand=True)
-            if tt < T_IN: t.putalpha(t.getchannel('A').point(lambda v: int(v * tt / T_IN)))
-            with_shadow(im, t, (cx - t.size[0] / 2, cy - t.size[1] / 2), (0, int(10 + 30 * (1 - k))), 14, 200)
-        else:
-            u = tt - T_HIT
-            im = board_bg(row, 0.55 * max(0.0, 1 - u / 0.3))
+        tt = i / fps; u = tt - t_hit
+        im = board_bg(row, 0.55 * max(0.0, 1 - u / 0.3)) if u >= 0 else base.copy()
+        if u >= 0:
             for r in placed: im.alpha_composite(face(r), pos[r['key']])
-            sc = 1 + 0.12 * max(0.0, 1 - u / 0.15); sz = int(TS * sc)
-            t = face(new, sz)
-            fl = max(0.0, 1 - u / 0.2)
-            if fl > 0: t = Image.blend(t, Image.new('RGBA', t.size, (255, 255, 255, 255)), 0.75 * fl)
-            im.alpha_composite(t, (int(tx + TS / 2 - sz / 2), int(ty + TS / 2 - sz / 2)))
-            if u < 0.12:                                  # impact shake
+        k = ease((tt - t_lift) / 0.3)                                   # the tray closes the gap after lift-off
+        for r in rest1:
+            (x0, y0), (x1, y1) = tp0[r['key']], tp1[r['key']]
+            im.alpha_composite(face(r), (int(x0 + (x1 - x0) * k), int(y0 + (y1 - y0) * k)))
+        if tt < t_lift:                                                 # waiting in the tray: a gentle pulse so the eye finds it
+            pz = 1 + 0.10 * math.sin(math.pi * min(1.0, tt / 0.35)) + 0.05 * math.sin(tt * 7.0) * min(1.0, tt / 0.35)
+            _put(im, new, (fx, fy - 8 * min(1.0, tt / 0.3)), pz, shadow=True)
+        elif u < 0:                                                     # flight: an arc, big in the middle, accelerating into the slot
+            q = (tt - t_lift) / (t_hit - t_lift); qq = q * q
+            x = fx + (tx - fx) * qq; y = fy + (ty - fy) * qq - 160 * math.sin(math.pi * q)
+            _put(im, new, (x, y), 1 + 0.9 * math.sin(math.pi * q), shadow=True)
+        else:                                                           # slam: overshoot, white flash, label flash, shake
+            _put(im, new, (tx, ty), 1 + 0.14 * max(0.0, 1 - u / 0.15), white=0.75 * max(0.0, 1 - u / 0.2))
+            if u < 0.12:
                 a = 5 * (1 - u / 0.12); sh = Image.new('RGBA', (W, H), TM_PAGE + (255,))
                 sh.alpha_composite(im, (int(a * math.sin(tt * 90)), int(a * math.cos(tt * 77)))); im = sh
         if tt < 0.07: im = Image.blend(im, Image.new('RGBA', (W, H), (255, 255, 255, 255)), 0.35 * (1 - tt / 0.07))
         save(im.convert('RGB'), out, i)
     return n, 0, 0
-def board_final(out, placed, dur, fps=30, t_build=(0.25, 1.9), highlights=(), t_dim=None):
-    os.makedirs(out, exist_ok=True); TS = geom()[2]
-    pos = slots(placed); t0, t1 = t_build; step = (t1 - t0) / max(1, len(placed))
-    last = max([t1 + 0.4] + [h[0] + 1.3 for h in highlights] + ([t_dim + 0.4] if t_dim else []))
+def board_final(out, placed, dur, fps=30, t_build=None, highlights=(), t_dim=None):
+    """outro: the full board (tray empty), two highlighted faces grow over their neighbours, then it dims under the titles"""
+    os.makedirs(out, exist_ok=True); nr, RH, TS, BX0, BY0, BXW, TY = geom()
+    pos = slots(placed)
+    last = max([0.1] + [h[0] + 1.3 for h in highlights] + ([t_dim + 0.4] if t_dim else []))
     n = int(math.ceil(min(dur, last) * fps)); base = board_bg()
     for i in range(n):
         tt = i / fps; im = base.copy(); top = []
         hl = {k: math.sin(math.pi * (tt - th) / 1.2) for th, k in highlights if th <= tt < th + 1.2}
         dim = max(hl.values()) if hl else 0.0
-        for j, r in enumerate(placed):
-            k = (tt - (t0 + j * step)) / 0.14
-            if k < 0: continue
-            sc = 1.35 - 0.35 * ease(k) if k < 1 else 1.0
-            if r['key'] in hl: top.append((r, 1 + 0.28 * hl[r['key']])); continue
-            t = face(r, int(TS * sc))
+        for r in placed:
+            if r['key'] in hl: top.append((r, 1 + 0.4 * hl[r['key']])); continue
+            t = face(r)
             if dim > 0: t = Image.blend(t, Image.new('RGBA', t.size, (0, 0, 0, 255)), 0.5 * dim)
-            x, y = pos[r['key']]; im.alpha_composite(t, (int(x + TS / 2 - t.size[0] / 2), int(y + TS / 2 - t.size[1] / 2)))
-        for r, sc in top:                                 # highlighted face grows above its neighbours
-            t = face(r, int(TS * sc)); x, y = pos[r['key']]
+            im.alpha_composite(t, pos[r['key']])
+        for r, sc in top:
+            x, y = pos[r['key']]; t = face(r, TS * sc)
             x = min(max(x + TS / 2 - t.size[0] / 2, 0), W - t.size[0]); y = min(max(y + TS / 2 - t.size[1] / 2, 0), H - t.size[1])
             with_shadow(im, t, (x, y), (0, 10), 16, 220)
         if t_dim is not None and tt >= t_dim:

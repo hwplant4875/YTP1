@@ -1,0 +1,98 @@
+{
+ "s02": {
+  "start": 24.0,
+  "word": "easy",
+  "line": "For that reason, Jason goes straight into the Easy tier, because you'd outlast him by accident.",
+  "hit": 26.39
+ },
+ "s03": {
+  "start": 22.49,
+  "word": "don't",
+  "line": "He's big, but he had no plan of his own, so I'm putting Karl in the Don't Worry tier.",
+  "hit": 26.8
+ },
+ "s04": {
+  "start": 20.67,
+  "word": "don't",
+  "line": "Great plan, but she's the least dangerous fighter here, so Mrs. Loomis joins him in Don't Worry.",
+  "hit": 26.26
+ },
+ "s05": {
+  "start": 15.78,
+  "word": "close",
+  "line": "He racked up bodies, but you can outfight him, so Charlie lands in the Close Call tier.",
+  "hit": 20.13
+ },
+ "s06": {
+  "start": 15.93,
+  "word": "close",
+  "line": "Creepy, but one kill and done, so Quinn is a Close Call.",
+  "hit": 19.44
+ },
+ "s07": {
+  "start": 19.76,
+  "word": "close",
+  "line": "Too awkward to be scary, but too close to be safe, so Ethan joins Close Call.",
+  "hit": 24.57
+ },
+ "s08": {
+  "start": 17.85,
+  "word": "better",
+  "line": "That's a coin you don't want to flip, so Marco goes into the Better Run tier.",
+  "hit": 21.5
+ },
+ "s09": {
+  "start": 19.77,
+  "word": "better",
+  "line": "You'd never see him coming, so I'm putting Richie in Better Run.",
+  "hit": 22.84
+ },
+ "s10": {
+  "start": 19.4,
+  "word": "better",
+  "line": "Anyone willing to kill their own family belongs in Better Run.",
+  "hit": 22.45
+ },
+ "s11": {
+  "start": 18.73,
+  "word": "almost",
+  "line": "Unhinged and impossible to read, so Stu lands in the Almost Dead tier.",
+  "hit": 22.44
+ },
+ "s12": {
+  "start": 21.88,
+  "word": "almost",
+  "line": "That body count puts Mickey right into Almost Dead.",
+  "hit": 24.09
+ },
+ "s13": {
+  "start": 16.15,
+  "word": "almost",
+  "line": "If fire couldn't stop her, you won't either, so Amber goes into Almost Dead.",
+  "hit": 20.14
+ },
+ "s14": {
+  "start": 25.47,
+  "word": "slaughtered",
+  "line": "Still, the original Ghostface goes straight into Slaughtered, just not at the very top.",
+  "hit": 28.44
+ },
+ "s15": {
+  "start": 19.48,
+  "word": "slaughtered",
+  "line": "When the cop is the killer, there's nobody left to call, so Wayne is Slaughtered.",
+  "hit": 23.79
+ },
+ "s16": {
+  "start": 22.77,
+  "word": "slaughtered",
+  "line": "She'd take out anyone for fame, so Jill goes into Slaughtered.",
+  "hit": 26.28
+ },
+ "s17": {
+  "start": 27.42,
+  "word": "slaughtered",
+  "line": "And the deadliest Ghostface of them all takes the very top of Slaughtered.",
+  "hit": 30.95
+ }
+}

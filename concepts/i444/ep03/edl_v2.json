@@ -477,7 +477,7 @@
   },
   {
    "voice": "s02",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -577,11 +577,11 @@
       },
       "pct": 99,
       "t_pct": 2.61,
-      "dur": 5.88,
+      "dur": 6.02,
       "film": "Scream VI (2023)"
      },
      17.88,
-     23.76
+     23.9
     ],
     [
      "tier",
@@ -594,9 +594,140 @@
        "pct": 99,
        "tier": "E EASY",
        "tile": "tiles/carvey.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 2.49
      },
-     23.76,
+     23.9,
      999
     ],
     [
@@ -623,12 +754,12 @@
      -12
     ],
     [
-     23.76,
+     25.97,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     24.26,
+     26.39,
      "sfx/slam.wav",
      -6
     ]
@@ -636,7 +767,7 @@
   },
   {
    "voice": "s03",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -726,11 +857,11 @@
       },
       "pct": 75,
       "t_pct": 1.51,
-      "dur": 2.77,
+      "dur": 2.99,
       "film": "Scream 7 (2026)"
      },
      19.4,
-     22.17
+     22.39
     ],
     [
      "tier",
@@ -752,9 +883,140 @@
        "pct": 75,
        "tier": "D DON'T WORRY",
        "tile": "tiles/karl.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 4.41
      },
-     22.17,
+     22.39,
      999
     ],
     [
@@ -781,12 +1043,12 @@
      -12
     ],
     [
-     22.17,
+     26.38,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     22.67,
+     26.8,
      "sfx/slam.wav",
      -6
     ]
@@ -794,7 +1056,7 @@
   },
   {
    "voice": "s04",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -872,11 +1134,11 @@
       },
       "pct": 68,
       "t_pct": 1.27,
-      "dur": 2.35,
+      "dur": 2.57,
       "film": "Scream 2 (1997)"
      },
      18.0,
-     20.35
+     20.57
     ],
     [
      "tier",
@@ -906,9 +1168,140 @@
        "pct": 68,
        "tier": "D DON'T WORRY",
        "tile": "tiles/mrs_loomis.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 5.69
      },
-     20.35,
+     20.57,
      999
     ],
     [
@@ -947,12 +1340,12 @@
      -12
     ],
     [
-     20.35,
+     25.84,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     20.85,
+     26.26,
      "sfx/slam.wav",
      -6
     ]
@@ -960,7 +1353,7 @@
   },
   {
    "voice": "s05",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -1033,11 +1426,11 @@
       },
       "pct": 60,
       "t_pct": 2.13,
-      "dur": 3.16,
+      "dur": 3.38,
       "film": "Scream 4 (2011)"
      },
      12.3,
-     15.46
+     15.68
     ],
     [
      "tier",
@@ -1075,9 +1468,140 @@
        "pct": 60,
        "tier": "C CLOSE CALL",
        "tile": "tiles/charlie.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 4.45
      },
-     15.46,
+     15.68,
      999
     ],
     [
@@ -1104,12 +1628,12 @@
      -12
     ],
     [
-     15.46,
+     19.709999999999997,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     15.96,
+     20.13,
      "sfx/slam.wav",
      -6
     ]
@@ -1117,7 +1641,7 @@
   },
   {
    "voice": "s06",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -1188,11 +1712,11 @@
       },
       "pct": 56,
       "t_pct": 1.19,
-      "dur": 2.81,
+      "dur": 3.03,
       "film": "Scream VI (2023)"
      },
      12.8,
-     15.61
+     15.83
     ],
     [
      "tier",
@@ -1238,9 +1762,140 @@
        "pct": 56,
        "tier": "C CLOSE CALL",
        "tile": "tiles/quinn.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 3.61
      },
-     15.61,
+     15.83,
      999
     ],
     [
@@ -1267,12 +1922,12 @@
      -12
     ],
     [
-     15.61,
+     19.02,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     16.11,
+     19.44,
      "sfx/slam.wav",
      -6
     ]
@@ -1280,7 +1935,7 @@
   },
   {
    "voice": "s07",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -1358,11 +2013,11 @@
       },
       "pct": 53,
       "t_pct": 2.35,
-      "dur": 3.54,
+      "dur": 3.76,
       "film": "Scream VI (2023)"
      },
      15.9,
-     19.44
+     19.66
     ],
     [
      "tier",
@@ -1416,9 +2071,140 @@
        "pct": 53,
        "tier": "C CLOSE CALL",
        "tile": "tiles/ethan.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 4.91
      },
-     19.44,
+     19.66,
      999
     ],
     [
@@ -1445,12 +2231,12 @@
      -12
     ],
     [
-     19.44,
+     24.15,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     19.94,
+     24.57,
      "sfx/slam.wav",
      -6
     ]
@@ -1458,7 +2244,7 @@
   },
   {
    "voice": "s08",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -1537,11 +2323,11 @@
       },
       "pct": 50,
       "t_pct": 1.25,
-      "dur": 2.53,
+      "dur": 2.75,
       "film": "Scream 7 (2026)"
      },
      15.0,
-     17.53
+     17.75
     ],
     [
      "tier",
@@ -1603,9 +2389,140 @@
        "pct": 50,
        "tier": "B BETTER RUN",
        "tile": "tiles/marco.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 3.75
      },
-     17.53,
+     17.75,
      999
     ],
     [
@@ -1632,12 +2549,12 @@
      -12
     ],
     [
-     17.53,
+     21.08,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     18.03,
+     21.5,
      "sfx/slam.wav",
      -6
     ]
@@ -1645,7 +2562,7 @@
   },
   {
    "voice": "s09",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -1726,11 +2643,11 @@
       },
       "pct": 45,
       "t_pct": 1.35,
-      "dur": 3.05,
+      "dur": 3.27,
       "film": "Scream (2022)"
      },
      16.4,
-     19.45
+     19.67
     ],
     [
      "tier",
@@ -1800,9 +2717,140 @@
        "pct": 45,
        "tier": "B BETTER RUN",
        "tile": "tiles/richie.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 3.17
      },
-     19.45,
+     19.67,
      999
     ],
     [
@@ -1829,12 +2877,12 @@
      -12
     ],
     [
-     19.45,
+     22.419999999999998,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     19.95,
+     22.84,
      "sfx/slam.wav",
      -6
     ]
@@ -1842,7 +2890,7 @@
   },
   {
    "voice": "s10",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -1920,11 +2968,11 @@
       },
       "pct": 43,
       "t_pct": 1.25,
-      "dur": 2.68,
+      "dur": 2.9,
       "film": "Scream 7 (2026)"
      },
      16.4,
-     19.08
+     19.3
     ],
     [
      "tier",
@@ -2002,9 +3050,140 @@
        "pct": 43,
        "tier": "B BETTER RUN",
        "tile": "tiles/jessica.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 3.15
      },
-     19.08,
+     19.3,
      999
     ],
     [
@@ -2031,12 +3210,12 @@
      -12
     ],
     [
-     19.08,
+     22.029999999999998,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     19.58,
+     22.45,
      "sfx/slam.wav",
      -6
     ]
@@ -2044,7 +3223,7 @@
   },
   {
    "voice": "s11",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -2108,11 +3287,11 @@
       },
       "pct": 40,
       "t_pct": 0.63,
-      "dur": 2.01,
+      "dur": 2.23,
       "film": "Scream (1996)"
      },
      16.4,
-     18.41
+     18.63
     ],
     [
      "tier",
@@ -2198,9 +3377,140 @@
        "pct": 40,
        "tier": "A ALMOST DEAD",
        "tile": "tiles/stu.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 3.81
      },
-     18.41,
+     18.63,
      999
     ],
     [
@@ -2227,12 +3537,12 @@
      -12
     ],
     [
-     18.41,
+     22.02,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     18.91,
+     22.44,
      "sfx/slam.wav",
      -6
     ]
@@ -2240,7 +3550,7 @@
   },
   {
    "voice": "s12",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -2328,11 +3638,11 @@
       },
       "pct": 36,
       "t_pct": 1.97,
-      "dur": 3.16,
+      "dur": 3.38,
       "film": "Scream 2 (1997)"
      },
      18.4,
-     21.56
+     21.78
     ],
     [
      "tier",
@@ -2426,9 +3736,140 @@
        "pct": 36,
        "tier": "A ALMOST DEAD",
        "tile": "tiles/mickey.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 2.31
      },
-     21.56,
+     21.78,
      999
     ],
     [
@@ -2455,12 +3896,12 @@
      -12
     ],
     [
-     21.56,
+     23.669999999999998,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     22.06,
+     24.09,
      "sfx/slam.wav",
      -6
     ]
@@ -2468,7 +3909,7 @@
   },
   {
    "voice": "s13",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -2538,11 +3979,11 @@
       },
       "pct": 30,
       "t_pct": 1.39,
-      "dur": 2.63,
+      "dur": 2.85,
       "film": "Scream (2022)"
      },
      13.2,
-     15.83
+     16.05
     ],
     [
      "tier",
@@ -2644,9 +4085,140 @@
        "pct": 30,
        "tier": "A ALMOST DEAD",
        "tile": "tiles/amber.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 4.09
      },
-     15.83,
+     16.05,
      999
     ],
     [
@@ -2673,12 +4245,12 @@
      -12
     ],
     [
-     15.83,
+     19.72,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     16.33,
+     20.14,
      "sfx/slam.wav",
      -6
     ]
@@ -2686,7 +4258,7 @@
   },
   {
    "voice": "s14",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -2769,11 +4341,11 @@
       },
       "pct": 25,
       "t_pct": 1.61,
-      "dur": 3.15,
+      "dur": 3.37,
       "film": "Scream (1996)"
      },
      22.0,
-     25.15
+     25.37
     ],
     [
      "tier",
@@ -2883,9 +4455,140 @@
        "pct": 25,
        "tier": "S SLAUGHTERED",
        "tile": "tiles/billy.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 3.07
      },
-     25.15,
+     25.37,
      999
     ],
     [
@@ -2912,12 +4615,12 @@
      -12
     ],
     [
-     25.15,
+     28.02,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     25.65,
+     28.44,
      "sfx/slam.wav",
      -6
     ]
@@ -2925,7 +4628,7 @@
   },
   {
    "voice": "s15",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -2994,11 +4697,11 @@
       },
       "pct": 22,
       "t_pct": 1.49,
-      "dur": 2.66,
+      "dur": 2.88,
       "film": "Scream VI (2023)"
      },
      16.5,
-     19.16
+     19.38
     ],
     [
      "tier",
@@ -3116,9 +4819,140 @@
        "pct": 22,
        "tier": "S SLAUGHTERED",
        "tile": "tiles/wayne.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 4.41
      },
-     19.16,
+     19.38,
      999
     ],
     [
@@ -3145,12 +4979,12 @@
      -12
     ],
     [
-     19.16,
+     23.369999999999997,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     19.66,
+     23.79,
      "sfx/slam.wav",
      -6
     ]
@@ -3158,7 +4992,7 @@
   },
   {
    "voice": "s16",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -3247,11 +5081,11 @@
       },
       "pct": 18,
       "t_pct": 1.81,
-      "dur": 2.85,
+      "dur": 3.07,
       "film": "Scream 4 (2011)"
      },
      19.6,
-     22.45
+     22.67
     ],
     [
      "tier",
@@ -3377,9 +5211,140 @@
        "pct": 18,
        "tier": "S SLAUGHTERED",
        "tile": "tiles/jill.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 3.61
      },
-     22.45,
+     22.67,
      999
     ],
     [
@@ -3406,12 +5371,12 @@
      -12
     ],
     [
-     22.45,
+     25.86,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     22.95,
+     26.28,
      "sfx/slam.wav",
      -6
     ]
@@ -3419,7 +5384,7 @@
   },
   {
    "voice": "s17",
-   "pad": 1.2,
+   "pad": 0.7,
    "clip_audio_db": -99,
    "shots": [
     [
@@ -3524,11 +5489,11 @@
       },
       "pct": 15,
       "t_pct": 1.39,
-      "dur": 2.9,
+      "dur": 3.12,
       "film": "Scream 3 (2000)"
      },
      24.2,
-     27.1
+     27.32
     ],
     [
      "tier",
@@ -3662,9 +5627,140 @@
        "pct": 15,
        "tier": "S SLAUGHTERED",
        "tile": "tiles/roman.png"
-      }
+      },
+      "pool": [
+       {
+        "key": "amber",
+        "name": "Amber Freeman",
+        "short": "AMBER",
+        "pct": 30,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/amber.png"
+       },
+       {
+        "key": "billy",
+        "name": "Billy Loomis",
+        "short": "BILLY",
+        "pct": 25,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/billy.png"
+       },
+       {
+        "key": "carvey",
+        "name": "Jason Carvey",
+        "short": "CARVEY",
+        "pct": 99,
+        "tier": "E EASY",
+        "tile": "tiles/carvey.png"
+       },
+       {
+        "key": "charlie",
+        "name": "Charlie Walker",
+        "short": "CHARLIE",
+        "pct": 60,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/charlie.png"
+       },
+       {
+        "key": "ethan",
+        "name": "Ethan Landry",
+        "short": "ETHAN",
+        "pct": 53,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/ethan.png"
+       },
+       {
+        "key": "jessica",
+        "name": "Jessica Bowden",
+        "short": "JESSICA",
+        "pct": 43,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/jessica.png"
+       },
+       {
+        "key": "jill",
+        "name": "Jill Roberts",
+        "short": "JILL",
+        "pct": 18,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/jill.png"
+       },
+       {
+        "key": "karl",
+        "name": "Karl Gibbs",
+        "short": "KARL",
+        "pct": 75,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/karl.png"
+       },
+       {
+        "key": "marco",
+        "name": "Marco Davis",
+        "short": "MARCO",
+        "pct": 50,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/marco.png"
+       },
+       {
+        "key": "mickey",
+        "name": "Mickey Altieri",
+        "short": "MICKEY",
+        "pct": 36,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/mickey.png"
+       },
+       {
+        "key": "mrs_loomis",
+        "name": "Mrs. Loomis",
+        "short": "MRS. LOOMIS",
+        "pct": 68,
+        "tier": "D DON'T WORRY",
+        "tile": "tiles/mrs_loomis.png"
+       },
+       {
+        "key": "quinn",
+        "name": "Quinn Bailey",
+        "short": "QUINN",
+        "pct": 56,
+        "tier": "C CLOSE CALL",
+        "tile": "tiles/quinn.png"
+       },
+       {
+        "key": "richie",
+        "name": "Richie Kirsch",
+        "short": "RICHIE",
+        "pct": 45,
+        "tier": "B BETTER RUN",
+        "tile": "tiles/richie.png"
+       },
+       {
+        "key": "roman",
+        "name": "Roman Bridger",
+        "short": "ROMAN",
+        "pct": 15,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/roman.png"
+       },
+       {
+        "key": "stu",
+        "name": "Stu Macher",
+        "short": "STU",
+        "pct": 40,
+        "tier": "A ALMOST DEAD",
+        "tile": "tiles/stu.png"
+       },
+       {
+        "key": "wayne",
+        "name": "Wayne Bailey",
+        "short": "WAYNE",
+        "pct": 22,
+        "tier": "S SLAUGHTERED",
+        "tile": "tiles/wayne.png"
+       }
+      ],
+      "t_hit": 3.63
      },
-     27.1,
+     27.32,
      999
     ],
     [
@@ -3703,12 +5799,12 @@
      -12
     ],
     [
-     27.1,
+     30.529999999999998,
      "sfx/whoosh.wav",
      -16
     ],
     [
-     27.6,
+     30.95,
      "sfx/slam.wav",
      -6
     ]

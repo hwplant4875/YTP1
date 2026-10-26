@@ -49,7 +49,9 @@ def animated(kind, arg, d_ov, L, si, j):
         n, x, y = anim.stat_card(out, **a)
     elif kind == 'tier':
         placed = [rec(r) for r in arg['placed']]
-        n, x, y = (anim.board_beat if BOARD else anim.thermo_beat)(out, placed, rec(arg['new']), dur=d_ov)
+        if BOARD: n, x, y = anim.board_beat(out, placed, rec(arg['new']), dur=d_ov, t_hit=arg.get('t_hit', 0.5),
+                                            pool=[rec(r) for r in arg.get('pool', [])] or None)
+        else: n, x, y = anim.thermo_beat(out, placed, rec(arg['new']), dur=d_ov)
     elif kind == 'tierfinal':
         n, x, y = (anim.board_final if BOARD else anim.thermo_final)(out, [rec(r) for r in arg['placed']], d_ov, highlights=[tuple(h) for h in arg.get('highlights', [])],
                                     t_dim=arg.get('t_dim'))
