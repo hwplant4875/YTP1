@@ -158,11 +158,12 @@
   }
 
   // ------------------------------------------------------------------------------------------------ paint helpers
-  // plate: flat base + ONE hard shade (bottom-right) + thin light edge (top-left) = brushed metal in the show's style
+  // plate: flat base + ONE hard shade (bottom-right). v3 minimal: no light edge unless o.edge is set (blades only).
   function plate(g, path, o = {}) {
-    const sd = o.sd ?? 6, ld = o.ld ?? 2.4;
+    const sd = o.sd ?? 5;
     S.cel(g, path, o.base || P.plate, o.shade === false ? null : (o.shadeCol || P.shade), sd * LX, sd);
-    if (ld > 0 && o.light !== false) {
+    if (o.edge) {
+      const ld = o.ld ?? 2;
       g.save(); g.beginPath(); path(g); g.clip();
       g.beginPath(); g.rect(-1e5, -1e5, 2e5, 2e5);
       g.translate(ld * LX, ld); path(g); g.translate(-ld * LX, -ld);
@@ -177,13 +178,9 @@
     if (tension) S.addCurve(g, pts, tension); else pts.forEach((p, i) => (i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])));
     g.stroke(); g.restore();
   }
-  function rivet(g, x, y, r) {
-    S.circle(g, x, y, r, P.rivet);
-    S.circle(g, x + 0.3 * r * LX, y + 0.3 * r, r * 0.6, P.shade);
-    S.circle(g, x - 0.1 * r * LX, y - 0.1 * r, r * 0.55, P.rivet);
-  }
   // hard occlusion shadow: the part about to be drawn darkens what is ALREADY drawn behind it (source-atop keeps it
-  // off the background), offset down-right like the show's light. Call right before drawing the part.
+  // off the background), offset down-right like the show's light. Call right before drawing the part. It is what keeps
+  // same-colour plates apart without outlines.
   function occl(g, path, d = 7, a = 0.34) {
     g.save(); g.globalCompositeOperation = 'source-atop';
     g.translate(d * LX, d); g.beginPath(); path(g); g.fillStyle = 'rgba(12,14,20,' + a + ')'; g.fill();
@@ -198,207 +195,116 @@
     const w = T.helmW, h = T.helmH;
     return { w, h, f: 0.13 * w };
   }
+  // centre height of the visor slit (helm-local), shared by the helm, the horror glow and the peek
+  function slitY(T, h, nod) { return (T.helm === 'bucket' ? -0.56 : T.helm === 'point' ? -0.55 : -0.53) * h + (nod || 0) * 0.1 * h; }
 
+  // v3 minimal helms: ONE silhouette + ONE shade + the slit. The type lives in the silhouette (flat top, spike, crest).
   function drawHelmLocal(g, T, o) {
     const { w, h, f } = helmGeo(T);
-    const nod = o.nod || 0, ny = nod * 0.1 * h, t = o.t || 0;
+    const nod = o.nod || 0, t = o.t || 0;
     const horror = o.variant === 'horror';
+    const sy = slitY(T, h, nod), sh = h * 0.085;
     if (T.helm === 'bucket') {
-      // flat-topped great helm, barrel sides
-      const body = c => S.addRoundPoly(c, [[-w * 0.47, -h], [w * 0.47, -h], [w * 0.52, -h * 0.55], [w * 0.5, 0], [-w * 0.5, 0], [-w * 0.52, -h * 0.55]], [w * 0.2, w * 0.2, w * 0.3, w * 0.1, w * 0.1, w * 0.3]);
-      plate(g, body, { sd: 9, ld: 3 });
-      g.save(); g.beginPath(); body(g); g.clip(); // every feature stays inside the barrel
-      // top plate rim (flat top seen almost edge-on)
-      g.fillStyle = P.light; g.globalAlpha = 0.55; g.beginPath(); g.ellipse(0, -h + 2, w * 0.4, 6, 0, Math.PI, TAU); g.fill(); g.globalAlpha = 1;
-      // crown band
-      flat(g, c => c.rect(-w, -h * 0.86, 2 * w, 5), P.shade);
-      flat(g, c => c.rect(-w, -h * 0.86 - 3, 2 * w, 3), P.light);
-      // bottom band
-      flat(g, c => c.rect(-w, -h * 0.13, 2 * w, h * 0.13), P.shade);
-      flat(g, c => c.rect(-w, -h * 0.13, 2 * w, 3), P.light);
-      for (let i = 0; i < 5; i++) rivet(g, -w * 0.38 + i * w * 0.19 + f * 0.4, -h * 0.065, 3.4);
-      // brow plate + eye slits + cross brace
-      const sy = -h * 0.56 + ny, sh = h * 0.085;
-      const brow = c => S.addRoundRect(c, -w * 0.47 + f * 0.5, sy - sh * 1.6, w * 0.95, sh * 1.25, 4);
-      plate(g, brow, { sd: 3, ld: 2 });
-      // slits (pure dark): left one longer (we see more of it), the far one wraps around the barrel
-      const slitL = c => S.addRoundRect(c, -w * 0.4 + f, sy - sh / 2, w * 0.34, sh, sh / 2);
-      const slitR = c => S.addRoundRect(c, f + w * 0.07, sy - sh / 2, w * 0.3, sh, sh / 2);
-      flat(g, slitL, P.slit); flat(g, slitR, P.slit);
-      // vertical brace down the middle (the cross)
-      const brace = c => S.addRoundRect(c, f - w * 0.055, -h * 0.97, w * 0.11, h * 0.84, 5);
-      plate(g, brace, { sd: 3, ld: 2 });
-      rivet(g, f, -h * 0.78, 3.2);
-      if (horror) { // ONE slit: the brace is cut at slit height so the cold line runs unbroken (never two eye dashes)
-        flat(g, c => S.addRoundRect(c, -w * 0.4 + f, sy - sh / 2, w * 0.77, sh, sh / 2), P.slit);
-        coldSlit(g, [[-w * 0.36 + f, sy], [f + w * 0.33, sy]], sh, t);
-      }
-      // breaths: small holes on the face side, low
-      for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) S.circle(g, f + w * (0.15 + j * 0.09) , -h * (0.38 - i * 0.075) + ny * 0.5, 2.6, P.slit);
+      // flat-topped great helm, barely barrelled
+      const body = c => S.addRoundPoly(c, [[-w * 0.46, -h], [w * 0.46, -h], [w * 0.5, -h * 0.5], [w * 0.48, 0], [-w * 0.48, 0], [-w * 0.5, -h * 0.5]], [w * 0.16, w * 0.16, w * 0.3, w * 0.07, w * 0.07, w * 0.3]);
+      plate(g, body, { sd: 9 });
+      // the cross brace reduced to one shade stripe under the slit
+      g.save(); g.beginPath(); body(g); g.clip();
+      flat(g, c => S.addRoundRect(c, f - w * 0.045, sy, w * 0.09, -sy - h * 0.12, w * 0.045), P.shade);
       g.restore();
     } else if (T.helm === 'point') {
-      const pt = T.point;
-      // aventail / bevor flare at the bottom
-      const bev = c => S.addRoundPoly(c, [[-w * 0.5, -h * 0.34], [w * 0.5, -h * 0.34], [w * 0.56, 0], [-w * 0.56, 0]], [10, 10, 8, 8]);
-      plate(g, bev, { sd: 6, ld: 2 });
-      // sugarloaf skull rising to a point (tip leans slightly back)
-      const tipX = -w * 0.06;
+      const pt = T.point, tipX = -w * 0.05;
       const body = c => {
-        c.moveTo(-w * 0.5, -h * 0.18);
-        c.bezierCurveTo(-w * 0.53, -h * 0.66, -w * 0.38, -h * 0.98, tipX, -h - pt);
-        c.bezierCurveTo(w * 0.36, -h * 0.98, w * 0.53, -h * 0.66, w * 0.5, -h * 0.18);
-        c.quadraticCurveTo(0, -h * 0.1, -w * 0.5, -h * 0.18);
+        c.moveTo(-w * 0.46, 0);
+        c.quadraticCurveTo(-w * 0.53, 0, -w * 0.51, -h * 0.22);
+        c.bezierCurveTo(-w * 0.53, -h * 0.68, -w * 0.36, -h * 0.98, tipX, -h - pt);
+        c.bezierCurveTo(w * 0.36, -h * 0.98, w * 0.53, -h * 0.68, w * 0.51, -h * 0.22);
+        c.quadraticCurveTo(w * 0.53, 0, w * 0.46, 0);
         c.closePath();
       };
-      plate(g, body, { sd: 8, ld: 3 });
-      // comb ridge from the tip down to the brow
-      line(g, [[tipX + 1, -h - pt + 10], [f * 0.55, -h * 0.85], [f * 0.9, -h * 0.62]], P.light, 3, 0.5);
-      line(g, [[tipX + 4, -h - pt + 14], [f * 0.55 + 3, -h * 0.84], [f * 0.9 + 3, -h * 0.62]], P.shade, 2, 0.5);
-      // visor: a plate across the face with one slit at its top edge
-      const sy = -h * 0.52 + ny, sh = h * 0.08;
-      const visor = c => S.addRoundPoly(c, [[-w * 0.46 + f * 0.6, sy - sh * 0.2], [w * 0.46 + f * 0.4, sy - sh * 0.2], [w * 0.5 + f * 0.2, -h * 0.22], [f + w * 0.05, -h * 0.13], [-w * 0.48 + f * 0.4, -h * 0.22]], [6, 6, 10, 6, 10]);
-      plate(g, visor, { sd: 5, ld: 2.2 });
-      const slit = c => S.addRoundRect(c, -w * 0.39 + f, sy - sh / 2 - sh * 0.4, w * 0.76, sh, sh / 2);
-      flat(g, slit, P.slit);
-      if (horror) coldSlit(g, [[-w * 0.35 + f, sy - sh * 0.4], [w * 0.33 + f, sy - sh * 0.4]], sh, t);
-      // visor pivot rivet on the side + two small breath dots low on the far side
-      rivet(g, -w * 0.4, -h * 0.42 + ny * 0.5, 4.5);
-      S.circle(g, f + w * 0.27, -h * 0.3 + ny * 0.5, 2.3, P.slit); S.circle(g, f + w * 0.27, -h * 0.24 + ny * 0.5, 2.3, P.slit);
+      plate(g, body, { sd: 9 });
     } else { // crest
-      const ch = T.crest;
-      const sw = Math.sin(t * 2.1);
-      const cloth = o.variant === 'horror' ? COL.clothHorror : COL.cloth.shield;
-      // plume: a bushy horsehair comma hanging off the back of the crest
+      const ch = T.crest, sw = Math.sin(t * 2.1);
+      const cloth = horror ? COL.clothHorror : COL.cloth.shield;
+      // plume: one soft comma off the back of the crest
       const pr = o.plumeRot || 0, pv = [-w * 0.2, -h - ch * 0.7];
       g.save(); g.translate(pv[0], pv[1]); g.rotate(pr); g.translate(-pv[0], -pv[1]);
-      const plume = c => S.addBlob(c, [[-w * 0.08, -h - ch * 0.98], [-w * 0.5, -h - ch * 0.98], [-w * 0.8 + sw * 2, -h * 0.82], [-w * 0.74 + sw * 4, -h * 0.34], [-w * 0.6 + sw * 2, -h * 0.62], [-w * 0.42, -h * 0.92], [-w * 0.2, -h - ch * 0.62]], 0.5);
-      S.cel(g, plume, cloth[0], cloth[1], 8 * LX, 6);
-      line(g, [[-w * 0.4, -h - ch * 0.8], [-w * 0.64 + sw * 2, -h * 0.9], [-w * 0.7 + sw * 3, -h * 0.55]], C.shade(cloth[0], 0.2), 3, 0.5);
+      S.cel(g, c => S.addBlob(c, [[-w * 0.1, -h - ch * 0.92], [-w * 0.52, -h - ch * 0.86], [-w * 0.76 + sw * 3, -h * 0.74], [-w * 0.66 + sw * 3, -h * 0.4], [-w * 0.42, -h * 0.84]], 0.5), cloth[0], cloth[1], 7 * LX, 6);
       g.restore();
-      // crest: a tall fluted fan of plate running front to back over the dome, scalloped top edge
-      const cw2 = w * 0.36, cb = -h * 0.9, ctop = -h - ch;
-      const fin = c => {
-        c.moveTo(cw2, cb);
-        const n = 5;
-        for (let i = 0; i <= n; i++) {
-          const u = i / n, x = lerp(cw2 * 1.05, -cw2 * 1.05, u), y = ctop + 22 * Math.pow(Math.abs(u - 0.4) * 1.6, 1.6) * 1.0;
-          if (i === 0) c.lineTo(x, y + 18);
-          const xn = lerp(cw2 * 1.05, -cw2 * 1.05, (i + 0.5) / n);
-          if (i < n) c.quadraticCurveTo(xn, y - 14, lerp(cw2 * 1.05, -cw2 * 1.05, (i + 1) / n), ctop + 22 * Math.pow(Math.abs((i + 1) / n - 0.4) * 1.6, 1.6));
-        }
-        c.lineTo(-cw2, cb);
-        c.closePath();
-      };
-      plate(g, fin, { sd: 6, ld: 2.8 });
-      g.save(); g.beginPath(); fin(g); g.clip();
-      for (let i = 1; i < 5; i++) { const x = lerp(cw2, -cw2, i / 5); line(g, [[x * 0.35, cb], [x * 1.05, ctop + 14]], P.shade, 2); line(g, [[x * 0.35 - 2 * LX, cb], [x * 1.05 - 2 * LX, ctop + 14]], P.light, 1.2); }
-      g.restore();
+      // crest: one smooth fan over the dome
+      const fin = c => { c.moveTo(w * 0.32, -h * 0.84); c.bezierCurveTo(w * 0.32, -h * 1.05 - ch * 1.27, -w * 0.34, -h * 1.05 - ch * 1.27, -w * 0.34, -h * 0.84); c.closePath(); };
+      plate(g, fin, { sd: 6 });
       // round dome
       const body = c => {
-        c.moveTo(-w * 0.5, -h * 0.2);
+        c.moveTo(-w * 0.46, 0);
+        c.quadraticCurveTo(-w * 0.52, 0, -w * 0.51, -h * 0.2);
         c.lineTo(-w * 0.5, -h * 0.55);
         c.bezierCurveTo(-w * 0.5, -h * 1.03, w * 0.5, -h * 1.03, w * 0.5, -h * 0.55);
-        c.lineTo(w * 0.5, -h * 0.2);
-        c.quadraticCurveTo(0, -h * 0.12, -w * 0.5, -h * 0.2);
+        c.lineTo(w * 0.51, -h * 0.2);
+        c.quadraticCurveTo(w * 0.52, 0, w * 0.46, 0);
         c.closePath();
       };
-      plate(g, body, { sd: 8, ld: 3 });
-      // cheek / bevor plates at the bottom (flared)
-      const bev = c => S.addRoundPoly(c, [[-w * 0.5, -h * 0.3], [w * 0.5, -h * 0.3], [w * 0.55, 0], [-w * 0.55, 0]], [10, 10, 8, 8]);
-      plate(g, bev, { sd: 6, ld: 2 });
-      line(g, [[-w * 0.5, -h * 0.15], [w * 0.5, -h * 0.15]], P.shade, 2.2);
-      // visor: pointed (V) lower edge, slit along its top
-      const sy = -h * 0.5 + ny, sh = h * 0.08;
-      const visor = c => S.addRoundPoly(c, [[-w * 0.48 + f * 0.5, sy], [w * 0.47 + f * 0.5, sy], [w * 0.44 + f * 0.4, -h * 0.3], [f, -h * 0.17 + ny * 0.4], [-w * 0.44 + f * 0.4, -h * 0.3]], [6, 6, 8, 5, 8]);
-      plate(g, visor, { sd: 5, ld: 2.2 });
-      line(g, [[f, sy + sh * 0.9], [f, -h * 0.2 + ny * 0.4]], P.shade, 2.4);
-      const slit = c => S.addRoundRect(c, -w * 0.42 + f, sy - sh, w * 0.8, sh, sh / 2);
-      flat(g, slit, P.slit);
-      if (horror) coldSlit(g, [[-w * 0.38 + f, sy - sh / 2], [w * 0.34 + f, sy - sh / 2]], sh, t);
-      rivet(g, -w * 0.43, sy + sh * 0.6, 4.2); rivet(g, w * 0.45, sy + sh * 0.6, 3.6);
+      plate(g, body, { sd: 9 });
     }
+    // the slit: pure dark, one continuous bar (nothing inside, never two eyes)
+    flat(g, c => S.addRoundRect(c, -w * 0.38 + f, sy - sh / 2, w * 0.74, sh, sh / 2), P.slit);
+    if (horror) coldSlit(g, [[-w * 0.34 + f, sy], [w * 0.32 + f, sy]], sh, t);
     // the 404 knight's scratch: one jagged gash on the left of the helm
     if (o.variant === 'k404') {
       // always on SCREEN-LEFT of the helm (the thumbnail side), even when the rig mirrors: x is flipped by LX
-      const sx = -w * 0.3, syy = -h * 0.82;
+      const sx = -w * 0.28, syy = -h * 0.84;
       const pts = [[sx - 10, syy - 4], [sx - 2, syy + 10], [sx - 8, syy + 16], [sx + 6, syy + 34], [sx + 2, syy + 40], [sx + 12, syy + 54]].map(p => [p[0] * LX, p[1]]);
-      S.strip(g, pts.map(p => [p[0] + 1.5 * LX, p[1] + 1.5]), u => 5.2 * Math.sin(Math.PI * clamp(u * 0.9 + 0.05)) ** 0.6, P.light);
-      S.strip(g, pts, u => 4.2 * Math.sin(Math.PI * clamp(u * 0.9 + 0.05)) ** 0.6, '#2A2C31');
+      S.strip(g, pts, u => 4.6 * Math.sin(Math.PI * clamp(u * 0.9 + 0.05)) ** 0.6, P.slit);
     }
   }
-  // horror: a single cold line of light inside the slit (the glow is added after the group, see emissive())
+  // horror: a single cold line of light inside the slit (the glow is added after the group, see draw())
   function coldSlit(g, pts, sh) {
     S.strip(g, pts, u => sh * 0.34 * (0.4 + 0.6 * Math.sin(Math.PI * u) ** 0.4), P.slitLight || '#E2FFFA');
   }
+  function glowSlit(gg, T, nod) {
+    const { w, h, f } = helmGeo(T), sy = slitY(T, h, nod);
+    S.strip(gg, [[-w * 0.34 + f, sy], [w * 0.32 + f, sy]], u => h * 0.03 * Math.sin(Math.PI * u) ** 0.4, COL.horror.slitLight);
+  }
 
   // ------------------------------------------------------------------------------------------------ props
+  const HAM = { l: 56, h: 100 };              // maul head (along the haft x across it)
   function drawHammer(g, p0, a, o = {}) { // p0 = pommel end, a = direction pommel -> head
     const L = o.len || 250;
     const p1 = polar(p0, a, L);
-    const hw = 15;
-    // haft
-    plate(g, capPath(p0, p1, hw, hw), { base: P.wood, shadeCol: P.woodShade, lightCol: P.woodLight, sd: 3, ld: 1.6 });
-    // leather grip wraps near the pommel
-    for (let i = 0; i < 5; i++) {
-      const c = polar(p0, a, 22 + i * 10);
-      g.save(); g.translate(c[0], c[1]); g.rotate(a);
-      S.roundRect(g, -3.5, -hw * 0.62, 7, hw * 1.24, 2.5, P.leather);
-      g.fillStyle = P.leatherShade; g.fillRect(1.5, -hw * 0.62, 2, hw * 1.24);
-      g.restore();
-    }
-    // langets (metal strips) under the head
+    const hw = 12;
+    plate(g, capPath(p0, p1, hw, hw), { base: P.wood, shadeCol: P.woodShade, sd: 3 });
+    // one leather grip near the pommel
+    const gc = polar(p0, a, 34);
+    g.save(); g.translate(gc[0], gc[1]); g.rotate(a); S.roundRect(g, -18, -hw * 0.62, 36, hw * 1.24, 4, P.leather); g.restore();
+    // the head: one block
     g.save(); g.translate(p1[0], p1[1]); g.rotate(a);
-    plate(g, c => S.addRoundRect(c, -76, -hw * 0.6, 50, hw * 1.2, 4), { sd: 2, ld: 1.5 });
-    // the head: a big block across the haft, banded faces
-    const hl = 66, hh = 124;
-    const head = c => S.addRoundRect(c, -hl * 0.55, -hh / 2, hl, hh, 12);
-    plate(g, head, { sd: 8, ld: 3 });
-    // striking faces (end caps)
-    plate(g, c => S.addRoundRect(c, -hl * 0.62, -hh / 2 - 6, hl * 1.14, 18, 7), { base: P.shade, shadeCol: P.deep, lightCol: P.plate, sd: 4, ld: 2 });
-    plate(g, c => S.addRoundRect(c, -hl * 0.62, hh / 2 - 12, hl * 1.14, 18, 7), { base: P.shade, shadeCol: P.deep, lightCol: P.plate, sd: 4, ld: 2 });
-    // collar
-    flat(g, c => S.addRoundRect(c, -hl * 0.55 - 4, -10, hl + 8, 20, 6), P.shade);
-    flat(g, c => S.addRoundRect(c, -hl * 0.55 - 4, -10, hl + 8, 4, 2), P.light);
+    plate(g, c => S.addRoundRect(c, -HAM.l * 0.55, -HAM.h / 2, HAM.l, HAM.h, 10), { sd: 7 });
     g.restore();
-    // pommel knob
-    plate(g, c => c.arc(p0[0], p0[1], 11, 0, TAU), { sd: 3, ld: 2 });
+    plate(g, c => c.arc(p0[0], p0[1], 9, 0, TAU), { sd: 3 });
     return { p0, p1 };
   }
 
   function drawSpear(g, p0, a, o = {}) { // p0 = butt end, a = direction butt -> tip
     const L = o.len || 540, t = o.t || 0;
     const p1 = polar(p0, a, L);
-    const sw = 10;
-    plate(g, capPath(p0, polar(p0, a, L - 70), sw, sw), { base: P.wood, shadeCol: P.woodShade, lightCol: P.woodLight, sd: 2.5, ld: 1.4 });
+    const sw = 8;
+    plate(g, capPath(p0, polar(p0, a, L - 64), sw, sw), { base: P.wood, shadeCol: P.woodShade, sd: 2.5 });
     // butt ferrule (the "pommel" that knocks)
-    plate(g, capPath(p0, polar(p0, a, 22), 14, 12), { sd: 3, ld: 1.6 });
-    // grip wrap mid-shaft
-    for (let i = 0; i < 4; i++) {
-      const c = polar(p0, a, L * 0.42 + i * 9);
-      g.save(); g.translate(c[0], c[1]); g.rotate(a); S.roundRect(g, -3, -sw * 0.65, 6, sw * 1.3, 2, P.leather); g.restore();
-    }
+    plate(g, capPath(p0, polar(p0, a, 18), 11, 10), { sd: 2.5 });
     // pennon (cloth accent) below the head, flutters with t
     if (o.pennon !== false) {
       const cloth = o.variant === 'horror' ? COL.clothHorror : COL.cloth.spear;
-      const b0 = polar(p0, a, L - 92), b1 = polar(p0, a, L - 128);
-      const n = [Math.cos(a - Math.PI / 2), Math.sin(a - Math.PI / 2)];
+      const b0 = polar(p0, a, L - 84), b1 = polar(p0, a, L - 116);
       const back = -LX; // the pennon streams away from the facing direction
       const fl = Math.sin(t * 3.1) * 6;
-      const tail = [b0[0] + back * 58, b0[1] + 12 + fl], tail2 = [b0[0] + back * 46, b0[1] + 22 + fl * 0.6];
-      g.beginPath(); g.moveTo(b0[0], b0[1]); g.quadraticCurveTo(b0[0] + back * 30, b0[1] + 2 + fl * 0.5, tail[0], tail[1]);
-      g.lineTo(tail2[0] - back * 4, tail2[1] - 2); g.lineTo(tail2[0], tail2[1] + 8);
-      g.quadraticCurveTo(b1[0] + back * 22, b1[1] + 10 + fl * 0.3, b1[0], b1[1]); g.closePath();
-      g.fillStyle = cloth[0]; g.fill();
-      g.save(); g.clip(); g.fillStyle = cloth[1]; g.fillRect(Math.min(b0[0], tail[0]) - 80, b1[1] + 12, 300, 60); g.restore();
-      void n;
+      const tail = [b0[0] + back * 54, b0[1] + 14 + fl];
+      S.cel(g, c => { c.moveTo(b0[0], b0[1]); c.quadraticCurveTo(b0[0] + back * 28, b0[1] + 3 + fl * 0.5, tail[0], tail[1]); c.quadraticCurveTo(b1[0] + back * 24, b1[1] + 8 + fl * 0.3, b1[0], b1[1]); c.closePath(); }, cloth[0], cloth[1], 0, 6);
     }
-    // socket + lugs + leaf blade
+    // socket + leaf blade
     g.save(); g.translate(p1[0], p1[1]); g.rotate(a);
-    plate(g, c => S.addRoundRect(c, -96, -sw * 0.75, 30, sw * 1.5, 4), { sd: 2, ld: 1.4 });
-    plate(g, c => { c.moveTo(-74, -3); c.lineTo(-66, -15); c.lineTo(-60, -3); c.lineTo(-60, 3); c.lineTo(-66, 15); c.lineTo(-74, 3); c.closePath(); }, { sd: 2, ld: 1.2 });
-    const blade = c => { c.moveTo(-66, -4); c.bezierCurveTo(-48, -17, -16, -14, 0, 0); c.bezierCurveTo(-16, 14, -48, 17, -66, 4); c.closePath(); };
-    plate(g, blade, { base: P.light, shadeCol: P.plate, lightCol: '#D5D9DF', sd: 4, ld: 1.6 });
-    line(g, [[-62, 0], [-6, 0]], P.plate, 1.6);
+    plate(g, c => S.addRoundRect(c, -78, -sw * 0.7, 18, sw * 1.4, 4), { sd: 2 });
+    const blade = c => { c.moveTo(-62, -3); c.bezierCurveTo(-46, -14, -16, -12, 0, 0); c.bezierCurveTo(-16, 12, -46, 14, -62, 3); c.closePath(); };
+    plate(g, blade, { base: P.light, shadeCol: P.plate, sd: 4 });
     g.restore();
     return { p0, p1 };
   }
@@ -416,31 +322,28 @@
       c.closePath();
     };
   }
+  const shieldWH = T => (T.name === 'shield' ? [118, 146] : [100, 124]);
   function drawShield(g, c, r, o = {}) { // heater shield, face toward the viewer. c = centre, r = rotation
-    const w = o.w || 132, h = o.h || 164;
+    const w = o.w || 118, h = o.h || 146;
     g.save(); g.translate(c[0], c[1]); g.rotate(r);
-    plate(g, shieldPath(w, h), { sd: 9, ld: 3 });
-    // painted field inside the iron rim
-    const field = shieldPath(w - 22, h - 24);
-    g.save(); g.translate(0, -1);
+    plate(g, shieldPath(w, h), { sd: 8 });
+    // painted field inside a thin iron rim
     const fc = o.variant === 'horror' ? ['#232428', '#1A1B1E'] : COL.shieldField;
-    S.cel(g, field, fc[0], fc[1], 7 * LX, 7);
-    // key emblem (treasure hunters), bone paint
+    g.save(); g.translate(0, -1);
+    S.cel(g, shieldPath(w - 16, h - 18), fc[0], fc[1], 6 * LX, 6);
+    // key emblem (treasure hunters), bone paint, flat
     if (o.variant !== 'horror') {
       g.save(); g.scale(LX, 1); // emblem never mirrors
-      const em = COL.emblem;
-      const key = k => {
-        k.moveTo(0, -h * 0.25 + 20); k.arc(0, -h * 0.25, 20, Math.PI / 2, Math.PI / 2 + TAU);
-        S.addRoundRect(k, -6, -h * 0.25 + 12, 12, h * 0.48, 4);
-        S.addRoundRect(k, 0, h * 0.12, 22, 9, 3);
-        S.addRoundRect(k, 0, h * 0.02, 16, 9, 3);
-      };
-      S.cel(g, key, em[0], em[1], 3, 3);
-      S.circle(g, 0, -h * 0.25, 8.5, fc[0]);
+      const kr = w * 0.13;
+      g.beginPath();
+      g.moveTo(kr, -h * 0.2); g.arc(0, -h * 0.2, kr, 0, TAU);
+      S.addRoundRect(g, -kr * 0.32, -h * 0.2 + kr * 0.6, kr * 0.64, h * 0.42, 3);
+      S.addRoundRect(g, 0, h * 0.12, kr * 1.1, kr * 0.48, 3);
+      g.fillStyle = COL.emblem[0]; g.fill();
+      S.circle(g, 0, -h * 0.2, kr * 0.42, fc[0]);
       g.restore();
     }
     g.restore();
-    // rim rivets
     g.restore();
   }
 
@@ -448,24 +351,20 @@
     const lit = o.lit !== false;
     g.save(); g.translate(hand[0], hand[1]); g.rotate(swing);
     // bail (wire handle)
-    g.strokeStyle = P.deep; g.lineWidth = 3.5; g.beginPath(); g.arc(0, 12, 12, Math.PI * 1.05, Math.PI * 1.95, false); g.stroke();
-    line(g, [[-11, 14], [-13, 22]], P.deep, 3); line(g, [[11, 14], [13, 22]], P.deep, 3);
+    g.strokeStyle = P.deep; g.lineWidth = 3.5; g.beginPath(); g.arc(0, 12, 11, Math.PI * 1.05, Math.PI * 1.95, false); g.stroke();
     // cap
-    plate(g, c => { c.moveTo(-6, 16); c.lineTo(6, 16); c.lineTo(19, 30); c.lineTo(-19, 30); c.closePath(); }, { sd: 3, ld: 1.5 });
-    S.circle(g, 0, 15, 4, P.plate);
-    // glass body
-    const glass = c => S.addRoundRect(c, -15, 30, 30, 36, 5);
+    plate(g, c => S.addRoundPoly(c, [[-6, 15], [6, 15], [17, 29], [-17, 29]], 3), { sd: 3 });
+    // glass body + one bar
+    const glass = c => S.addRoundRect(c, -13, 29, 26, 32, 5);
     if (lit) {
       S.cel(g, glass, COL.glass, COL.glassShade, 4 * LX, 3);
-      S.ellipse(g, 0, 52, 6, 10, 0, COL.flame[1]); S.ellipse(g, 0, 54, 3.4, 6, 0, COL.flame[0]);
+      S.ellipse(g, 0, 47, 5, 9, 0, COL.flame[1]); S.ellipse(g, 0, 49, 3, 5, 0, COL.flame[0]);
     } else S.cel(g, glass, '#3A3530', '#2A2622', 4 * LX, 3);
-    // cage bars
-    for (const x of [-15, -5, 5, 15]) flat(g, c => c.rect(x - 2, 30, 4, 36), P.shade);
+    flat(g, c => c.rect(-1.5, 29, 3, 32), P.shade);
     // base
-    plate(g, c => S.addRoundRect(c, -19, 64, 38, 9, 3), { sd: 2.5, ld: 1.4 });
-    plate(g, c => S.addRoundRect(c, -12, 72, 24, 6, 2), { sd: 2, ld: 1 });
+    plate(g, c => S.addRoundRect(c, -17, 59, 34, 9, 3), { sd: 2.5 });
     g.restore();
-    return polar(hand, swing + Math.PI / 2, 50); // glass centre (for light)
+    return polar(hand, swing + Math.PI / 2, 46); // glass centre (for light)
   }
 
   function drawNotebook(g, c, r, o = {}) { // closed or held: cover toward the viewer. c = centre
@@ -537,76 +436,42 @@
 
   // ------------------------------------------------------------------------------------------------ hands
   // hand frame: origin = wrist, +x = toward the knuckles. side = +1/-1 which side the thumb shows on.
+  // v3: a gauntlet is ONE shape (small flared cuff + mitten) plus a thumb; no knuckle plates or finger lines.
   function drawHand(g, wr, a, T, shape = 'fist', side = 1) {
     const f = T.fist;
     g.save(); g.translate(wr[0], wr[1]); g.rotate(a);
-    // flared cuff (toward the elbow)
-    plate(g, c => S.addRoundPoly(c, [[-f * 1.05, -f * 0.98], [f * 0.18, -f * 0.74], [f * 0.18, f * 0.74], [-f * 1.05, f * 0.98]], [f * 0.3, 3, 3, f * 0.3]), { sd: 3.5, ld: 1.8 });
-    flat(g, c => c.rect(-f * 0.25, -f * 0.8, f * 0.16, f * 1.6), P.shade);
+    const cuff = c => S.addRoundPoly(c, [[-f * 0.7, -f * 0.82], [f * 0.3, -f * 0.66], [f * 0.3, f * 0.66], [-f * 0.7, f * 0.82]], [f * 0.25, 2, 2, f * 0.25]);
     if (shape === 'open') {
-      plate(g, c => S.addRoundRect(c, f * 0.05, -f * 0.68, f * 0.95, f * 1.36, f * 0.4), { sd: 3, ld: 1.6 });
-      for (let i = -1; i <= 1; i++) {
-        const fa = i * 0.2, b = [f * 0.86, i * f * 0.46], tip = polar(b, fa, f * 0.95);
-        plate(g, capPath(b, tip, f * 0.46, f * 0.42), { sd: 2.5, ld: 1.4 });
-        const mid = lp(b, tip, 0.5);
-        g.save(); g.translate(mid[0], mid[1]); g.rotate(fa); flat(g, c => c.rect(-1, -f * 0.2, 2, f * 0.4), P.shade); g.restore();
-      }
-      plate(g, capPath([f * 0.35, side * f * 0.55], [f * 0.8, side * f * 1.15], f * 0.44, f * 0.38), { sd: 2.5, ld: 1.4 });
+      plate(g, c => { cuff(c); S.addRoundRect(c, 0, -f * 0.64, f * 0.95, f * 1.28, f * 0.4); }, { sd: 3 });
+      plate(g, c => { for (let i = -1; i <= 1; i++) { const fa = i * 0.2, b = [f * 0.8, i * f * 0.44], tip = polar(b, fa, f * 0.85); S.addCapsule(c, b[0], b[1], tip[0], tip[1], f * 0.42, f * 0.38); } }, { sd: 2.5 });
+      plate(g, capPath([f * 0.35, side * f * 0.5], [f * 0.75, side * f * 1.05], f * 0.4, f * 0.34), { sd: 2.5 });
     } else if (shape === 'point') {
-      plate(g, c => S.addRoundRect(c, f * 0.05, -f * 0.7, f * 1.3, f * 1.4, f * 0.55), { sd: 3, ld: 1.6 });
-      plate(g, capPath([f * 1.1, -side * f * 0.4], [f * 2.1, -side * f * 0.45], f * 0.42, f * 0.38), { sd: 2.5, ld: 1.4 });
+      plate(g, c => { cuff(c); S.addRoundRect(c, 0, -f * 0.66, f * 1.25, f * 1.32, f * 0.55); }, { sd: 3 });
+      plate(g, capPath([f * 1.05, -side * f * 0.38], [f * 1.95, -side * f * 0.42], f * 0.4, f * 0.36), { sd: 2.5 });
     } else { // fist / grip / knock
-      plate(g, c => S.addRoundRect(c, f * 0.02, -f * 0.74, f * 1.42, f * 1.48, f * 0.56), { sd: 3.5, ld: 1.8 });
-      // knuckle plate
-      plate(g, c => S.addRoundRect(c, f * 0.72, -f * 0.7, f * 0.4, f * 1.4, f * 0.18), { sd: 2, ld: 1.4 });
-      // finger lines
-      for (const yy of [-0.24, 0.24]) flat(g, c => c.rect(f * 1.12, yy * f - 0.9, f * 0.3, 1.8), P.shade);
-      // thumb
-      plate(g, capPath([f * 0.3, side * f * 0.62], [f * 0.95, side * f * 0.72], f * 0.48, f * 0.42), { sd: 2.5, ld: 1.4 });
+      plate(g, c => { cuff(c); S.addRoundRect(c, 0, -f * 0.7, f * 1.35, f * 1.4, f * 0.6); }, { sd: 3 });
+      plate(g, capPath([f * 0.3, side * f * 0.58], [f * 0.9, side * f * 0.66], f * 0.44, f * 0.4), { sd: 2.5 });
     }
     g.restore();
   }
 
   // ------------------------------------------------------------------------------------------------ body parts
+  // v3: each limb is ONE tapered tube (no under-mail, no knee / elbow cops); the bend reads from the angle alone.
   function drawLeg(g, R, T, L) {
     const hip = L.hip, knee = L.knee, ank = L.ank;
-    // under-mail
-    plate(g, c => S.addLimb(c, [hip, knee, ank], [T.legW * 0.86, T.legW * 0.78, T.legW * 0.6]), { base: P.mail, shadeCol: P.mailShade, sd: 4, light: false });
-    // greave (shin): one fat rounded capsule
-    plate(g, capPath(knee, ank, T.legW * 0.92, T.legW * 0.74), { sd: 5, ld: 2 });
-    // cuisse (thigh)
-    plate(g, capPath(hip, lp(hip, knee, 0.97), T.legW, T.legW * 0.9), { sd: 6, ld: 2.4 });
-    // sabaton (pointed toe), along the ground
+    plate(g, c => S.addLimb(c, [hip, knee, ank], [T.legW, T.legW * 0.86, T.legW * 0.72]), { sd: 5 });
+    // sabaton: one rounded wedge with a soft point
     const fa = L.toe || 0;
     g.save(); g.translate(ank[0], ank[1]); g.rotate(fa);
     const fl = T.foot, fh = T.footH;
-    const shoe = c => { c.moveTo(-fl * 0.32, -fh * 0.55); c.quadraticCurveTo(fl * 0.2, -fh * 0.8, fl * 0.5, -fh * 0.25); c.quadraticCurveTo(fl * 0.68, -fh * 0.1, fl * 0.74, fh * 0.42); c.quadraticCurveTo(fl * 0.3, fh * 0.62, -fl * 0.3, fh * 0.58); c.quadraticCurveTo(-fl * 0.42, fh * 0.1, -fl * 0.32, -fh * 0.55); c.closePath(); };
-    plate(g, shoe, { sd: 5, ld: 2 });
-    // lames across the instep
-    line(g, [[fl * 0.1, -fh * 0.5], [fl * 0.16, fh * 0.5]], P.shade, 2);
-    g.restore();
-    // poleyn (knee cop) with a fan wing on the outer side
-    const ka = ang(hip, knee);
-    g.save(); g.translate(knee[0], knee[1]); g.rotate(ka - Math.PI / 2);
-    const r = T.legW * 0.34;
-    plate(g, c => c.arc(0, 0, r, 0, TAU), { sd: 3, ld: 1.6 });
+    const shoe = c => { c.moveTo(-fl * 0.3, -fh * 0.5); c.quadraticCurveTo(fl * 0.25, -fh * 0.72, fl * 0.55, -fh * 0.15); c.quadraticCurveTo(fl * 0.72, fh * 0.1, fl * 0.72, fh * 0.45); c.quadraticCurveTo(fl * 0.3, fh * 0.6, -fl * 0.28, fh * 0.56); c.quadraticCurveTo(-fl * 0.4, fh * 0.05, -fl * 0.3, -fh * 0.5); c.closePath(); };
+    plate(g, shoe, { sd: 4 });
     g.restore();
   }
 
   function drawArm(g, R, T, A, part) {
     const sh = A.sh, el = A.el, wr = A.wr;
-    if (part !== 'hand') {
-      // rerebrace
-      plate(g, capPath(sh, lp(sh, el, 0.9), T.armW, T.armW * 0.86), { sd: 5, ld: 2 });
-      // vambrace
-      plate(g, capPath(lp(el, wr, 0.1), wr, T.armW * 0.86, T.armW * 0.74), { sd: 4.5, ld: 2 });
-      // couter with fan
-      const ea = ang(sh, el);
-      g.save(); g.translate(el[0], el[1]); g.rotate(ea);
-      const r = T.armW * 0.5;
-      plate(g, c => c.arc(0, 0, r * 0.86, 0, TAU), { sd: 3.5, ld: 1.8 });
-      g.restore();
-    }
+    if (part !== 'hand') plate(g, c => S.addLimb(c, [sh, el, wr], [T.armW, T.armW * 0.88, T.armW * 0.78]), { sd: 4 });
     if (part !== 'arm') drawHand(g, wr, A.handAng, T, A.shape, A.thumb);
   }
 
@@ -616,84 +481,43 @@
     const pa = clamp(ua * 0.5, -1.1, 1.1);
     g.save(); g.translate(sh[0], sh[1]); g.rotate(pa);
     const ox = near ? -r * 0.1 : r * 0.08;
-    // two lames under the cap (lowest first): curved bands hugging the arm
-    const band = (y0, ww, hh) => c => { c.moveTo(ox - ww, y0); c.quadraticCurveTo(ox, y0 + r * 0.26, ox + ww, y0); c.lineTo(ox + ww * 0.94, y0 + hh); c.quadraticCurveTo(ox, y0 + hh + r * 0.28, ox - ww * 0.94, y0 + hh); c.closePath(); };
-    plate(g, band(r * 0.26, r * 0.92, r * 0.36), { sd: 3, ld: 1.8 }); // one lame only
-    // the cap: a rounded dome over the shoulder
-    const cap = c => { c.moveTo(ox - r * 1.06, r * 0.24); c.ellipse(ox, r * 0.24, r * 1.06, r * 0.98, 0, Math.PI, TAU); c.quadraticCurveTo(ox, r * 0.56, ox - r * 1.06, r * 0.24); c.closePath(); };
-    plate(g, cap, { sd: 6, ld: 2.8 });
-    // raised edge line + rivet
-    line(g, [[ox - r * 0.86, r * 0.22], [ox, r * 0.38], [ox + r * 0.86, r * 0.22]], P.shade, 2.2, 0.5);
-    rivet(g, ox + (near ? -r * 0.42 : r * 0.42), -r * 0.24, 3.4);
+    // one small dome over the shoulder
+    const cap = c => { c.moveTo(ox - r, r * 0.3); c.ellipse(ox, r * 0.3, r, r * 0.92, 0, Math.PI, TAU); c.quadraticCurveTo(ox, r * 0.62, ox - r, r * 0.3); c.closePath(); };
+    plate(g, cap, { sd: 5 });
     g.restore();
   }
 
   function torsoXf(g, R) { g.translate(R.hipP[0], R.hipP[1]); g.rotate(R.lean); }
 
+  // v3 torso: breastplate (one shape) + short fauld (one shape) + belt. No ridge, flutes, plackart, gorget, tassets.
   function drawTorso(g, R, T, o) {
-    const tw = T.torso, ww = T.waistW, cw = T.chestW, fx = 0.12 * cw; // ridge shift toward the face
+    const tw = T.torso, ww = T.waistW, cw = T.chestW;
     g.save(); torsoXf(g, R);
-    // faulds (skirt of lames) + tassets
-    const fy0 = -26, fy1 = 26;
-    const fauld = c => S.addRoundPoly(c, [[-ww * 0.54, fy0], [ww * 0.54, fy0], [ww * 0.64, fy1], [-ww * 0.64, fy1]], [6, 6, 8, 8]);
-    plate(g, fauld, { sd: 5, ld: 2 });
-    for (let i = 1; i <= 1; i++) { const y = fy0 + (fy1 - fy0) / 2; line(g, [[-ww * 0.6, y], [ww * 0.6, y]], P.shade, 2.2); }
-    for (const sd of [-1, 1]) { // tassets hang over each thigh
-      const tx = sd * ww * 0.3 + (sd > 0 ? 4 : 0), rr = R.tasset[sd > 0 ? 1 : 0];
-      g.save(); g.translate(tx, fy1 - 6); g.rotate(rr);
-      const tw2 = ww * (sd < 0 ? 0.5 : 0.44);
-      plate(g, c => S.addRoundPoly(c, [[-tw2 / 2, 0], [tw2 / 2, 0], [tw2 / 2 + 3, 30], [0, 36], [-tw2 / 2 - 3, 30]], [4, 4, 8, 6, 8]), { sd: 4, ld: 2 });
-      g.restore();
-    }
-    // breastplate
-    const by0 = -24, ty = -tw + 16;
+    const fy0 = -26, fy1 = 32;
+    plate(g, c => S.addRoundPoly(c, [[-ww * 0.52, fy0], [ww * 0.52, fy0], [ww * 0.64, fy1], [-ww * 0.64, fy1]], [6, 6, 10, 10]), { sd: 5 });
+    const by0 = -20, ty = -tw + 6;
     const breast = c => S.addRoundPoly(c, [
       [-ww * 0.5, by0], [ww * 0.5, by0],
-      [cw * 0.5, -tw * 0.58], [cw * 0.42, ty], [cw * 0.2, ty - 12], [-cw * 0.2, ty - 12], [-cw * 0.42, ty], [-cw * 0.5, -tw * 0.58],
-    ], [8, 8, cw * 0.3, 18, 10, 10, 18, cw * 0.3]);
-    plate(g, breast, { sd: 9, ld: 3 });
-    g.save(); g.beginPath(); breast(g); g.clip();
-    // gothic fluting: fan of lines from the waist
-    for (const i of [-1, 1]) {
-      const x0 = fx * 0.6 + i * ww * 0.13, x1 = fx + i * cw * 0.2;
-      line(g, [[x0, by0 - 6], [x1, -tw * 0.72]], P.shade, 2.2, 0);
-      line(g, [[x0 - 2.5 * LX, by0 - 6], [x1 - 2.5 * LX, -tw * 0.72]], P.light, 1.4, 0);
-    }
-    // medial ridge
-    line(g, [[fx * 0.55, by0], [fx, -tw * 0.6], [fx * 0.9, ty - 8]], P.light, 3, 0.5);
-    line(g, [[fx * 0.55 + 3, by0], [fx + 3, -tw * 0.6], [fx * 0.9 + 3, ty - 8]], P.shade, 2, 0.5);
-    g.restore();
-    // plackart (ogee point up the belly)
-    const pk = c => { c.moveTo(-ww * 0.46, by0 + 2); c.lineTo(ww * 0.46, by0 + 2); c.bezierCurveTo(ww * 0.46, -tw * 0.22, fx * 0.7 + 10, -tw * 0.32, fx * 0.7, -tw * 0.47); c.bezierCurveTo(fx * 0.7 - 10, -tw * 0.32, -ww * 0.46, -tw * 0.22, -ww * 0.46, by0 + 2); c.closePath(); };
-    plate(g, pk, { sd: 5, ld: 2.2 });
-    // gorget (collar lames under the helm)
-    const gw = T.helmW * 0.42;
-    plate(g, c => S.addRoundRect(c, -gw, -tw - 2, gw * 2, 22, 9), { sd: 4, ld: 2 });
-    plate(g, c => S.addRoundRect(c, -gw * 1.12, -tw + 14, gw * 2.24, 14, 7), { sd: 3, ld: 1.8 });
-    // belt
+      [cw * 0.5, -tw * 0.62], [cw * 0.38, ty], [-cw * 0.38, ty], [-cw * 0.5, -tw * 0.62],
+    ], [8, 8, cw * 0.32, 14, 14, cw * 0.32]);
+    plate(g, breast, { sd: 8 });
+    // belt + small buckle
     const accent = P.accent;
-    flat(g, c => S.addRoundRect(c, -ww * 0.56, by0 - 4, ww * 1.12, 13, 4), accent || P.leather);
-    flat(g, c => S.addRoundRect(c, -ww * 0.56, by0 + 5, ww * 1.12, 4, 2), accent ? C.shade(accent, -0.3) : P.leatherShade);
-    plate(g, c => S.addRoundRect(c, fx * 0.55 - 9, by0 - 6, 18, 17, 4), { base: P.brass, shadeCol: P.brassShade, sd: 2.5, ld: 1.4, lightCol: C.shade(P.brass, 0.3) });
-    flat(g, c => S.addRoundRect(c, fx * 0.55 - 4.5, by0 - 1.5, 9, 8, 2), accent || P.leather);
+    flat(g, c => S.addRoundRect(c, -ww * 0.56, by0 - 4, ww * 1.12, 12, 4), accent || P.leather);
+    flat(g, c => S.addRoundRect(c, 0.07 * cw - 7, by0 - 5, 14, 14, 3), accent ? C.shade(accent, -0.35) : P.brass);
     g.restore();
   }
 
   function drawSash(g, R, T, t) { // hammer knight: rust sash knotted on the near hip, tails flutter
     const cloth = R.variant === 'horror' ? COL.clothHorror : COL.cloth.hammer;
     g.save(); torsoXf(g, R);
-    const ww = T.waistW, y = -22;
-    flat(g, c => { c.moveTo(-ww * 0.6, y - 10); c.quadraticCurveTo(0, y - 2, ww * 0.6, y - 12); c.lineTo(ww * 0.62, y + 6); c.quadraticCurveTo(0, y + 14, -ww * 0.62, y + 8); c.closePath(); }, cloth[0]);
-    flat(g, c => { c.moveTo(-ww * 0.62, y + 3); c.quadraticCurveTo(0, y + 10, ww * 0.62, y + 1); c.lineTo(ww * 0.62, y + 6); c.quadraticCurveTo(0, y + 14, -ww * 0.62, y + 8); c.closePath(); }, cloth[1]);
-    // knot + tails on the near hip
-    const kx = -ww * 0.5, sw = Math.sin(t * 2.4) * 4 + R.sashSwing * 22;
-    S.strip(g, [[kx, y], [kx - 8, y + 26], [kx - 6 + sw * 0.5, y + 52], [kx - 12 + sw, y + 74]], u => 15 * (1 - u * 0.45), cloth[1]);
-    S.strip(g, [[kx + 4, y], [kx + 8, y + 24], [kx + 4 + sw * 0.4, y + 46], [kx + 10 + sw * 0.8, y + 62]], u => 13 * (1 - u * 0.4), cloth[0]);
-    S.ellipse(g, kx, y + 1, 11, 9, 0.2, cloth[0]);
-    S.ellipse(g, kx + 2 * LX, y + 3, 6, 5, 0.2, cloth[1]);
+    const ww = T.waistW, y = -20;
+    flat(g, c => { c.moveTo(-ww * 0.6, y - 10); c.quadraticCurveTo(0, y - 3, ww * 0.6, y - 11); c.lineTo(ww * 0.62, y + 5); c.quadraticCurveTo(0, y + 12, -ww * 0.62, y + 7); c.closePath(); }, cloth[0]);
+    const kx = -ww * 0.48, sw = Math.sin(t * 2.4) * 4 + R.sashSwing * 22;
+    S.strip(g, [[kx, y], [kx - 6, y + 24], [kx - 4 + sw * 0.5, y + 48], [kx - 10 + sw, y + 66]], u => 13 * (1 - u * 0.45), cloth[1]);
+    S.strip(g, [[kx + 4, y], [kx + 8, y + 22], [kx + 4 + sw * 0.4, y + 42], [kx + 10 + sw * 0.8, y + 56]], u => 11 * (1 - u * 0.4), cloth[0]);
     g.restore();
   }
-
   function drawCape(g, R, T, t) { // spear knight: short olive half-cape behind the near shoulder
     const cloth = R.variant === 'horror' ? COL.clothHorror : COL.cloth.spear;
     g.save(); torsoXf(g, R);
@@ -878,7 +702,7 @@
       if (type === 'hammer') {
         // choked-up grip in front of the chest; the haft pivots in the hands (a wrist tap) so the maul head's lower
         // face lands on K. The pommel end sticks out behind the knight.
-        const hh2 = 62, aC = 0.08 + 0.12 * listen, gripToHead = 130, gripToPommel = 120;
+        const hh2 = HAM.h / 2, aC = 0.08 + 0.12 * listen, gripToHead = 130, gripToPommel = 120;
         const headC = add(K, [hh2 * Math.sin(aC), -hh2 * Math.cos(aC)]);
         const grip = add(polar(headC, aC + Math.PI, gripToHead), [-6 * up, -24 * up]);
         const a = aC - up * 1.0;
@@ -975,7 +799,7 @@
   function propDraw(g, R, T, pr, t) {
     if (pr.kind === 'hammer') drawHammer(g, pr.p0, pr.a, { len: pr.len });
     else if (pr.kind === 'spear') drawSpear(g, pr.p0, pr.a, { t, variant: R.variant, len: R.spearLen });
-    else if (pr.kind === 'shield') drawShield(g, pr.c, pr.r, { variant: R.variant, w: T.name === 'shield' ? 132 : 112, h: T.name === 'shield' ? 164 : 140 });
+    else if (pr.kind === 'shield') { const [sw2, sh2] = shieldWH(T); drawShield(g, pr.c, pr.r, { variant: R.variant, w: sw2, h: sh2 }); }
     else if (pr.kind === 'notebookHeld') drawNotebook(g, pr.c, pr.r, { w: 62, h: 78 });
     else if (pr.kind === 'notebookOpen') drawOpenBook(g, pr.c, pr.r, { w: 96, h: 72 });
     else if (pr.kind === 'quillHeld') drawQuill(g, pr.p, pr.a, { len: 62 });
@@ -989,9 +813,9 @@
   };
   const legSil = (T, L) => c => S.addLimb(c, [L.hip, L.knee, L.ank], [T.legW, T.legW * 0.86, T.legW * 0.66]);
   function propSil(T, pr) {
-    if (pr.kind === 'hammer') { const p1 = polar(pr.p0, pr.a, pr.len || 250); return c => { S.addCapsule(c, pr.p0[0], pr.p0[1], p1[0], p1[1], 15, 15); c.moveTo(p1[0] + 46, p1[1]); c.arc(p1[0], p1[1], 46, 0, TAU); }; }
+    if (pr.kind === 'hammer') { const p1 = polar(pr.p0, pr.a, pr.len || 250); return c => { S.addCapsule(c, pr.p0[0], pr.p0[1], p1[0], p1[1], 12, 12); c.moveTo(p1[0] + HAM.h * 0.4, p1[1]); c.arc(p1[0], p1[1], HAM.h * 0.4, 0, TAU); }; }
     if (pr.kind === 'spear') { const p1 = polar(pr.p0, pr.a, pr.len || 540); return c => S.addCapsule(c, pr.p0[0], pr.p0[1], p1[0], p1[1], 10, 10); }
-    if (pr.kind === 'shield') { const w = T.name === 'shield' ? 132 : 112, h = T.name === 'shield' ? 164 : 140; return c => { c.save(); c.translate(pr.c[0], pr.c[1]); c.rotate(pr.r); shieldPath(w, h)(c); c.restore(); }; }
+    if (pr.kind === 'shield') { const [w, h] = shieldWH(T); return c => { c.save(); c.translate(pr.c[0], pr.c[1]); c.rotate(pr.r); shieldPath(w, h)(c); c.restore(); }; }
     if (pr.kind === 'notebookOpen') return c => { c.save(); c.translate(pr.c[0], pr.c[1]); c.rotate(pr.r); S.addRoundRect(c, -48, -36, 96, 72, 4); c.restore(); };
     if (pr.kind === 'notebookHeld') return c => { c.save(); c.translate(pr.c[0], pr.c[1]); c.rotate(pr.r); S.addRoundRect(c, -31, -39, 62, 78, 5); c.restore(); };
     return null;
@@ -1144,9 +968,7 @@
       S.glow(ctx, gg => {
         gg.save(); gg.translate(x, y); gg.scale(s * dir, s);
         gg.translate(R.neck[0], R.neck[1]); gg.rotate(R.lean + R.tilt + R.nod * 0.12); gg.translate(R.helmDX + R.nod * 6, R.helmDY + R.nod * 4);
-        const sy = (T.helm === 'bucket' ? -h * 0.56 : T.helm === 'point' ? -h * 0.52 - h * 0.032 : -h * 0.54) + R.nod * 0.1 * h;
-        const f = 0.13 * w;
-        S.strip(gg, [[-w * 0.36 + f, sy], [w * 0.33 + f, sy]], u => h * 0.03 * Math.sin(Math.PI * u) ** 0.4, COL.horror.slitLight);
+        glowSlit(gg, T, R.nod);
         gg.restore();
       }, { blur: 14 * s, alpha: 0.9, bounds: { x: x - 200 * s, y: y - 500 * s, w: 400 * s, h: 300 * s } });
     }
@@ -1204,8 +1026,7 @@
         if (o.clip) { gg.beginPath(); o.clip(gg); gg.clip(); }
         gg.translate(x, y); gg.scale(s * dir, s);
         gg.translate(out - Math.sin(tilt) * h * 0.2, -peekH + h * 0.5); gg.rotate(tilt + nod * 0.14); gg.translate(nod * 5, nod * 5);
-        const sy = (T.helm === 'bucket' ? -h * 0.56 : -h * 0.53) + nod * 0.1 * h, f = 0.13 * w;
-        S.strip(gg, [[-w * 0.36 + f, sy], [w * 0.33 + f, sy]], u => h * 0.03 * Math.sin(Math.PI * u) ** 0.4, COL.horror.slitLight);
+        glowSlit(gg, T, nod);
       }, { blur: 12 * s, alpha: 0.9, bounds: { x: x - 300 * s, y: y - (peekH + h + 120) * s, w: 600 * s, h: (peekH + h + 160) * s } });
     }
     if ((o.sweat || 0) > 0) {
@@ -1228,8 +1049,7 @@
       const { w, h } = helmGeo(T);
       S.glow(ctx, gg => {
         gg.translate(x, y); gg.scale(s * dir, s); gg.rotate((o.tilt || 0) * RAD);
-        const sy = (T.helm === 'bucket' ? -h * 0.56 : -h * 0.53) + (o.nod || 0) * 0.1 * h, f = 0.13 * w;
-        S.strip(gg, [[-w * 0.36 + f, sy], [w * 0.33 + f, sy]], u => h * 0.03 * Math.sin(Math.PI * u) ** 0.4, COL.horror.slitLight);
+        glowSlit(gg, T, o.nod || 0);
       }, { blur: 12 * s, alpha: 0.9, bounds: { x: x - 200 * s, y: y - 260 * s, w: 400 * s, h: 300 * s } });
     }
     LX = 1;

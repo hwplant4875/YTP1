@@ -74,17 +74,19 @@
   const STRIDE = 0.34; // H units per step
   const HS = 1.1;       // head drawn 10 % over the 4.3-head canon (cuter read; total stays ~2.55 W at s = 1)
 
-  const COL = {
-    case: '#E8DCC8', caseShade: '#CDBFA8', caseSide: '#D5C7AF', caseSideShade: '#BBAC92', grille: '#A3957E',
-    caseSideLit: '#EFE5D3', caseSideLitShade: '#D9CDB7',
-    bezel: '#2A2230', screen: '#0F3B36', screenDeep: '#0A2B27', line: '#8FE6D8', mint: '#3FC9B5', mintShade: '#2A9C8B',
-    grey: '#8C8F96', greyShade: '#6E7178', ant: '#9EA2AA', antShade: '#7C8088', ball: '#E8DCC8', ballShade: '#C2B49B',
-    blazer: '#958BB0', blazerShade: '#736A8C', crease: '#736A8C', button: '#3A2A3E',
-    blouse: '#F2EEE8', blouseShade: '#D9D0CB', bow: '#3A2A3E', bowShade: '#2A1E2D',
-    skin: '#F6E6E8', skinShade: '#EBD0D6', shoe: '#2A2230', shoeShade: '#1B1520', shoeLight: '#51465A',
-    board: '#8C8F96', boardShade: '#6E7178', paper: '#F4EFE6', paperLine: '#CEC5B6', ink: '#2A2230', clip: '#C3C9D3', clipShade: '#8A91A0',
-    remote: '#2A2230', remoteShade: '#17121B', remoteKey: '#5A5262', red: '#D83A4A', redShade: '#A52A38',
-    wood: '#A0866B', woodShade: '#7A6652', blush: '#F29BB0', stamp: '#D83A4A', badge: '#F4EFE6', lens: '#E2FFFA',
+  const COL = { // v3 monochrome outfit: black / ivory / white. Colour lives only on the screen (+ one dial, the props).
+    case: '#EFE8DA', caseShade: '#D5CBB8', caseSide: '#DED5C3', caseSideShade: '#C3B8A3', grille: '#B5AA95',
+    caseSideLit: '#F6F1E7', caseSideLitShade: '#E0D8C8',
+    bezel: '#1D1C20', screen: '#0F3B36', screenDeep: '#0A2B27', line: '#C4F5EC', mint: '#3FC9B5', mintShade: '#2A9C8B',
+    grey: '#2E2D32', greyShade: '#1D1C20', ant: '#A9A49A', antShade: '#8A857C', ball: '#EFE8DA', ballShade: '#CFC4B0',
+    blazer: '#27262B', blazerShade: '#18171B', crease: '#111013', button: '#EFE8DA',
+    trim: '#EFE8DA', trimShade: '#CFC5B2',
+    blouse: '#FCFBF8', blouseShade: '#DFDCD5', bow: '#1D1C20', bowShade: '#0E0D10',
+    skin: '#F6E6E8', skinShade: '#EBD0D6', shoe: '#1D1C20', shoeShade: '#0E0D10', shoeLight: '#4A4950',
+    board: '#2E2D32', boardShade: '#1D1C20', paper: '#F7F3EA', paperLine: '#CEC7B8', ink: '#1D1C20', clip: '#C9CCD2', clipShade: '#8E939C',
+    remote: '#1D1C20', remoteShade: '#0E0D10', remoteKey: '#4A4950', red: '#D83A4A', redShade: '#A52A38',
+    wood: '#A0866B', woodShade: '#7A6652', blush: '#F29BB0', stamp: '#D83A4A', badge: '#FCFBF8', lens: '#E2FFFA',
+    lanyard: '#FCFBF8', lanyardShade: '#D9D5CC', badgeBand: '#1D1C20',
   };
 
   const FACE_ALIAS = {
@@ -154,22 +156,21 @@
   }
 
   // ================================================================================================= screen faces
-  // Screen eyes: the 귤멍 recipe reduced to what reads as LIGHT on a small screen. ONE bold glowing upper-lid line with an
-  // outer wing, 2 bold outer-corner lash spikes, a big SOLID iris hanging under the lid (no sclera fill, no lower-lid
-  // line, no rings), a dark pupil and one 2-tone highlight (upper-left on screen).
-  //   lid   lid peak height (0.05 flat .. 1 round)     iris  iris radius / eye width     show  visible part of the iris
-  //   gap   iris floats this far under the lid (surprised)     tilt  + raises the outer corner     closed 'smile' | 'flat'
-  const EYE_W = 0.3 * H, EYE_GAP = 0.4;
+  // v3 MINIMAL faces (owner 2026-10-26: "screen face very simple, minimal"). Flat light marks on the glass, one soft glow:
+  //   eyes   two solid rounded dots (or short strokes for closed / narrowed eyes). No lids, lashes, irises or highlights.
+  //   mouth  at most one small mark: a short line at rest, a tiny arc, a small ring for 'o'.
+  // Every face keeps its dictionary name; only the drawing is reduced.
+  //   kind 'dot'  rx, ry dot radii (H units)        kind 'arc' closed smile arcs (^ ^)
+  //   kind 'bar'  short slanted strokes, tilt = rad (+ lowers the inner end -> cross look)
   const FACE_EYES = {
-    neutral: { lid: 0.34, iris: 0.36, show: 0.6 },
-    pleased: { closed: 'smile' },
-    surprised: { lid: 1.0, iris: 0.25, show: 1, gap: 0.075, pupil: 'dot', lashK: 1.15 },
-    annoyed: { lid: 0.06, iris: 0.34, show: 0.4, tilt: 0.2, lashK: 0.8 },
+    neutral: { kind: 'dot', rx: 0.036, ry: 0.05 },
+    pleased: { kind: 'arc' },
+    surprised: { kind: 'dot', rx: 0.05, ry: 0.056 },
+    annoyed: { kind: 'bar', tilt: 0.32 },
   };
   const FACE_MOUTH = { neutral: 'flat', pleased: 'smile', surprised: 'o', annoyed: 'frown' };
   const SW = 0.96 * H, SH = 0.72 * H; // screen size
-  const EYE_Y = 0.03 * H, MOUTH_Y = 0.215 * H;
-  const EYE_LINE = '#E6FFFA', IRIS = COL.mint, IRIS_LO = COL.line, PUPIL = '#072421';
+  const EYE_Y = -0.03 * H, MOUTH_Y = 0.15 * H, EYE_DX = 0.19 * H, STROKE = 0.03 * H;
 
   function glowLines(g, fn, o = {}) {
     const dev = devScale(g);
@@ -184,110 +185,38 @@
     }
     return out;
   }
-  const yAt = (P, x) => { for (let i = 1; i < P.length; i++) { const p = P[i - 1], q = P[i]; if ((p[0] - x) * (q[0] - x) <= 0 && p[0] !== q[0]) return lerp(p[1], q[1], (x - p[0]) / (q[0] - p[0])); } return P[x < P[0][0] ? 0 : P.length - 1][1]; };
-  // eye-local frame: outer corner at -x. Upper-lid curve, outer -> inner.
-  function lidCurve(w, lid, open = 1) {
-    const a = w / 2, O = [-a, 0.02 * w], I = [0.88 * a, 0.1 * w], top = -lid * 0.52 * w;
-    const P = bez3(O, [-0.88 * a, top], [0.42 * a, top * 1.04], I, 22);
-    if (open >= 1) return P;
-    const shut = bez3(O, [-0.6 * a, 0.2 * w], [0.4 * a, 0.22 * w], I, 22); // where the lid lands when shut
-    return P.map((p, i) => [p[0], lerp(p[1], shut[i][1], 1 - open)]);
-  }
-  function spike(g, base, ang, len, bw, curl) { // tapered, slightly curled lash spike
-    const d = [Math.cos(ang), Math.sin(ang)], n = [-d[1], d[0]];
-    const mid = [base[0] + d[0] * len * 0.55, base[1] + d[1] * len * 0.55];
-    const a2 = ang + curl, tip = [mid[0] + Math.cos(a2) * len * 0.5, mid[1] + Math.sin(a2) * len * 0.5];
-    g.moveTo(base[0] + n[0] * bw, base[1] + n[1] * bw);
-    g.quadraticCurveTo(mid[0] + n[0] * bw * 0.5, mid[1] + n[1] * bw * 0.5, tip[0], tip[1]);
-    g.quadraticCurveTo(mid[0] - n[0] * bw * 0.5, mid[1] - n[1] * bw * 0.5, base[0] - n[0] * bw, base[1] - n[1] * bw);
-    g.closePath();
-  }
-  // lid line + wing + outer lashes along a curve P (outer -> inner), bright line colour
-  function lidStroke(g, P, w, o = {}) {
-    const th = (o.th ?? 0.034) * H, k = o.lashK ?? 1;
-    S.strip(g, P, u => th * (u < 0.7 ? lerp(1.12, 1, u / 0.7) : lerp(1, 0.55, (u - 0.7) / 0.3)), EYE_LINE);
-    const O = P[0], O2 = P[2], dx = O[0] - O2[0], dy = O[1] - O2[1], a0 = Math.atan2(dy, dx); // outward tangent at the corner
-    g.fillStyle = EYE_LINE; g.beginPath();
-    spike(g, O, Math.PI + 0.42, 0.25 * w * k, th * 0.62, 0.22);        // the wing: out and up from the outer corner
-    [[0.1, 0.24, 0.45], [0.25, 0.18, 0.28]].forEach(([f, L, lean]) => { // two bold lash spikes leaning to the outer corner
-      const i = Math.round((P.length - 1) * f), p = P[i], q = P[i + 1], ta = Math.atan2(q[1] - p[1], q[0] - p[0]);
-      spike(g, p, ta - Math.PI / 2 - lean, L * w * k, th * 0.58, -0.32);
-    });
-    g.fill();
-  }
-  // one eye; returns { glow(gg), crisp(gg) } painters that set up their own local frame (outer corner at -x, mirrored
-  // for the eye on the screen right). The highlight stays upper-LEFT on screen in both eyes.
-  function screenEye(x, y, w, fe, look, open, mirror) {
-    const hs = mirror ? -1 : 1;
-    const frame = (gg, fn) => { gg.save(); gg.translate(x, y); gg.scale(hs, 1); gg.rotate(fe.tilt || 0); fn(gg); gg.restore(); };
-    if (fe.closed || open < 0.12) {
-      const a = w / 2, mode = fe.closed || 'flat';
-      const P = mode === 'smile'
-        ? bez3([-a, 0.1 * w], [-0.6 * a, -0.3 * w], [0.5 * a, -0.3 * w], [0.88 * a, 0.1 * w], 22)
-        : bez3([-a, 0.08 * w], [-0.5 * a, 0.16 * w], [0.4 * a, 0.17 * w], [0.88 * a, 0.1 * w], 22);
-      return { glow: gg => frame(gg, c => lidStroke(c, P, w, { lashK: 0.85 })), crisp: () => {} };
+
+  // one eye mark at (x, y); sd = -1 left eye, +1 right eye (screen space)
+  function eyeMark(g, x, y, fe, open, sd) {
+    g.fillStyle = COL.line; g.strokeStyle = COL.line; g.lineCap = 'round'; g.lineJoin = 'round'; g.lineWidth = STROKE;
+    if (fe.kind === 'arc') { // ^ : closed happy eye
+      const a = 0.055 * H;
+      g.beginPath(); g.moveTo(x - a, y + 0.02 * H); g.quadraticCurveTo(x, y - 0.05 * H, x + a, y + 0.02 * H); g.stroke(); return;
     }
-    const P = lidCurve(w, fe.lid ?? 0.34, open);
-    const lx = clamp(look.x, -1, 1) * hs, ly = clamp(look.y, -1, 1);
-    const r = (fe.iris ?? 0.36) * w, icx = lx * 0.16 * w;
-    const lidY = yAt(P, icx);
-    const icy = fe.gap != null ? lidY + fe.gap * w + r + ly * 0.04 * w : lidY + (fe.show ?? 0.6) * 2 * r - r + ly * 0.06 * w;
-    const below = c => { c.moveTo(P[0][0] - w, P[0][1] + 0.3 * w); c.lineTo(P[0][0], P[0][1]); P.forEach(p => c.lineTo(p[0], p[1])); c.lineTo(P[P.length - 1][0] + w, P[P.length - 1][1]); c.lineTo(w * 2, w * 3); c.lineTo(-w * 2, w * 3); c.closePath(); };
-    return {
-      glow: gg => frame(gg, c => {
-        c.save(); c.beginPath(); below(c); c.clip();
-        c.beginPath(); c.ellipse(icx, icy, r, r * 1.04, 0, 0, TAU); c.fillStyle = IRIS; c.fill();
-        c.save(); c.clip(); // lower light band that bows like a smile: the 귤멍 iris gradient as two flat tones
-        c.beginPath(); c.moveTo(icx - r * 1.2, icy + 0.16 * r);
-        c.quadraticCurveTo(icx, icy + 0.44 * r, icx + r * 1.2, icy + 0.16 * r); c.lineTo(icx + r * 1.2, icy + r * 1.3); c.lineTo(icx - r * 1.2, icy + r * 1.3); c.closePath();
-        c.fillStyle = IRIS_LO; c.fill(); c.restore();
-        c.restore();
-        lidStroke(c, P, w, { lashK: fe.lashK });
-      }),
-      crisp: gg => frame(gg, c => { // pupil + highlight over the bloom, so they stay crisp
-        c.save(); c.beginPath(); below(c); c.clip();
-        c.fillStyle = PUPIL; c.beginPath();
-        if (fe.pupil === 'dot') c.arc(icx, icy + 0.04 * r, 0.32 * r, 0, TAU);
-        else c.ellipse(icx + lx * 0.05 * r, icy - 0.02 * r, 0.36 * r, 0.52 * r, 0, 0, TAU);
-        c.fill();
-        const hr = (fe.pupil === 'dot' ? 0.3 : 0.25) * r, hx = icx - 0.42 * r * hs, hy = Math.max(icy - 0.34 * r, yAt(P, hx) + hr * 1.45);
-        c.fillStyle = 'rgba(214,255,248,0.8)'; c.beginPath(); c.ellipse(hx, hy, hr * 1.3, hr * 1.05, -0.5 * hs, 0, TAU); c.fill();
-        c.fillStyle = '#ffffff'; c.beginPath(); c.ellipse(hx - 0.14 * hr * hs, hy - 0.12 * hr, hr * 0.66, hr * 0.52, -0.5 * hs, 0, TAU); c.fill();
-        c.restore();
-      }),
-    };
-  }
-  function screenEyes(g, cx, cy, fe, look, open) {
-    const dx = EYE_W / 2 + EYE_GAP * EYE_W / 2;
-    const eyes = [screenEye(cx - dx, cy, EYE_W, fe, look, open, false), screenEye(cx + dx, cy, EYE_W, fe, look, open, true)];
-    glowLines(g, gg => eyes.forEach(e => e.glow(gg)), { blur: 0.028, alpha: 0.8 });
-    eyes.forEach(e => e.crisp(g));
+    if (fe.kind === 'bar') { // short slanted stroke, inner end low
+      const a = 0.05 * H, dy = Math.sin(fe.tilt) * a;
+      g.beginPath(); g.moveTo(x - a, y + sd * dy); g.lineTo(x + a, y - sd * dy); g.stroke(); return;
+    }
+    const rx = fe.rx * H, ry = fe.ry * H * open;
+    if (ry < STROKE * 0.6) { g.beginPath(); g.moveTo(x - rx * 1.15, y); g.lineTo(x + rx * 1.15, y); g.stroke(); return; } // blink
+    g.beginPath(); g.ellipse(x, y, rx, ry, 0, 0, TAU); g.fill();
   }
 
-  const MS = 1.4; // lip-sync mouths read in medium shots
+  const MS = 1.25; // lip-sync mouths read in medium shots
   function mouthShape(g, x, y, type, k = 1) {
     g.save(); g.translate(x, y); g.scale(k * MS, k * MS);
-    g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = COL.line; g.lineWidth = 0.024 * H;
-    const fillDim = C.rgba(COL.mint, 0.3);
+    g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = COL.line; g.fillStyle = COL.line; g.lineWidth = STROKE / MS;
     const sk = () => g.stroke();
     switch (type) {
-      case 'flat': g.beginPath(); g.moveTo(-0.05 * H, 0); g.lineTo(0.05 * H, 0); sk(); break;
-      case 'frown': g.beginPath(); g.moveTo(-0.048 * H, 0.014 * H); g.quadraticCurveTo(0, -0.02 * H, 0.048 * H, 0.014 * H); sk(); break;
-      case 'smile': g.beginPath(); g.moveTo(-0.05 * H, -0.012 * H); g.quadraticCurveTo(0, 0.045 * H, 0.05 * H, -0.012 * H); sk(); break;
-      case 'o': g.beginPath(); g.ellipse(0, 0.012 * H, 0.03 * H, 0.05 * H, 0, 0, TAU); g.fillStyle = fillDim; g.fill(); sk(); break;
-      case 'u': g.beginPath(); g.ellipse(0, 0.004 * H, 0.016 * H, 0.02 * H, 0, 0, TAU); g.fillStyle = fillDim; g.fill(); sk();
-        g.lineWidth = 0.012 * H; g.beginPath(); g.moveTo(-0.036 * H, -0.008 * H); g.lineTo(-0.028 * H, 0.004 * H); g.moveTo(0.036 * H, -0.008 * H); g.lineTo(0.028 * H, 0.004 * H); sk();
-        break;
-      case 'wide': {
-        g.beginPath(); g.moveTo(-0.058 * H, -0.02 * H); g.lineTo(0.058 * H, -0.02 * H);
-        g.quadraticCurveTo(0.06 * H, 0.085 * H, 0, 0.088 * H); g.quadraticCurveTo(-0.06 * H, 0.085 * H, -0.058 * H, -0.02 * H); g.closePath();
-        g.fillStyle = fillDim; g.fill(); sk();
-        g.beginPath(); g.moveTo(-0.026 * H, 0.068 * H); g.quadraticCurveTo(0, 0.04 * H, 0.026 * H, 0.068 * H); g.lineWidth = 0.014 * H; sk();
-        break;
-      }
+      case 'flat': g.beginPath(); g.moveTo(-0.035 * H, 0); g.lineTo(0.035 * H, 0); sk(); break;
+      case 'frown': g.beginPath(); g.moveTo(-0.035 * H, 0.01 * H); g.quadraticCurveTo(0, -0.016 * H, 0.035 * H, 0.01 * H); sk(); break;
+      case 'smile': g.beginPath(); g.moveTo(-0.04 * H, -0.008 * H); g.quadraticCurveTo(0, 0.034 * H, 0.04 * H, -0.008 * H); sk(); break;
+      case 'o': g.beginPath(); g.ellipse(0, 0.006 * H, 0.022 * H, 0.03 * H, 0, 0, TAU); sk(); break;
+      case 'u': g.beginPath(); g.arc(0, 0.004 * H, 0.016 * H, 0, TAU); g.fill(); break;
+      case 'wide': g.beginPath(); g.moveTo(-0.042 * H, -0.012 * H); g.lineTo(0.042 * H, -0.012 * H); g.quadraticCurveTo(0.04 * H, 0.05 * H, 0, 0.05 * H); g.quadraticCurveTo(-0.04 * H, 0.05 * H, -0.042 * H, -0.012 * H); g.closePath(); g.fill(); break;
       case '~': case 'wave': {
         g.beginPath();
-        for (let i = 0; i <= 24; i++) { const u = i / 24, X = (u - 0.5) * 0.11 * H, Y = -0.012 * H * Math.sin(u * TAU * 1.5); i ? g.lineTo(X, Y) : g.moveTo(X, Y); }
+        for (let i = 0; i <= 20; i++) { const u = i / 20, X = (u - 0.5) * 0.08 * H, Y = -0.009 * H * Math.sin(u * TAU); i ? g.lineTo(X, Y) : g.moveTo(X, Y); }
         sk(); break;
       }
       default: break;
@@ -295,28 +224,23 @@
     g.restore();
   }
 
-  // the face proper (eyes + mouth + extras) for the four "drawn" faces; used by the slide's corner window too
+  // the face proper (two eye marks + one mouth mark) for the four "drawn" faces; used by the slide's corner window too
   function drawDrawnFace(g, key, R, k = 1, ox = 0, oy = 0) {
     const look = R.look, blink = R.blink, ht = R.hTurn * R.hDir;
     const fe = FACE_EYES[key] || FACE_EYES.neutral;
-    const lk = look ? { x: look.x, y: (look.y ?? 0) + (key === 'neutral' ? 0.2 : 0) } : { x: ht * 0.45, y: key === 'neutral' ? 0.25 : 0 };
-    g.save(); g.translate(ox, oy); g.scale(k, k);
-    if (key === 'pleased') { // blush dots (the only face gradient), drawn under the line art
-      g.save(); g.globalCompositeOperation = 'lighter';
-      S.blush(g, -0.28 * H, 0.12 * H, 0.17 * H, 0.65, COL.blush);
-      S.blush(g, 0.28 * H, 0.12 * H, 0.17 * H, 0.65, COL.blush);
-      g.restore();
-    }
-    screenEyes(g, 0.03 * H * ht, EYE_Y, fe, lk, fe.closed ? 1 : blink);
+    const lk = look ? { x: clamp(look.x, -1, 1), y: clamp(look.y ?? 0, -1, 1) } : { x: ht * 0.45, y: 0 };
+    const gx = lk.x * 0.035 * H + 0.03 * H * ht, gy = lk.y * 0.025 * H;
     const mType = (R.mouth && R.mouth !== 'none') ? R.mouth : FACE_MOUTH[key] || 'flat';
+    g.save(); g.translate(ox, oy); g.scale(k, k);
     glowLines(g, gg => {
-      mouthShape(gg, 0.05 * H * ht, MOUTH_Y, mType);
-      if (key === 'annoyed') S.anger(gg, 0.31 * H, -0.2 * H, 0.13 * H, COL.line);
-    });
+      eyeMark(gg, -EYE_DX + gx, EYE_Y + gy, fe, fe.kind === 'dot' ? blink : 1, -1);
+      eyeMark(gg, EYE_DX + gx, EYE_Y + gy, fe, fe.kind === 'dot' ? blink : 1, 1);
+      mouthShape(gg, gx * 0.6 + 0.02 * H * ht, MOUTH_Y + gy * 0.5, mType);
+    }, { blur: 0.024, alpha: 0.55 });
     g.restore();
   }
 
-  function screenBG(g, col = COL.screen, glowA = 0.16) {
+  function screenBG(g, col = COL.screen, glowA = 0.1) {
     g.fillStyle = col; g.fillRect(-SW, -SH, SW * 2, SH * 2);
     const rg = g.createRadialGradient(0, 0.02 * H, 0, 0, 0.02 * H, SW * 0.6);
     rg.addColorStop(0, C.rgba(COL.mint, glowA)); rg.addColorStop(1, C.rgba(COL.mint, 0));
@@ -342,22 +266,15 @@
         screenBG(g); drawDrawnFace(g, key, R); break;
       case 'eerie': {
         screenBG(g, '#06201D', 0.08);
-        drawNoise(g, -SW / 2, -SH / 2, SW, SH, fr, 0.34);
-        g.fillStyle = 'rgba(4,20,18,0.35)'; g.fillRect(-SW / 2, -SH / 2, SW, SH);
-        // slow rolling bright bar
-        const ry = ((t * 0.35) % 1.4 - 0.2) * SH - SH / 2;
-        const lg = g.createLinearGradient(0, ry - 0.08 * H, 0, ry + 0.08 * H);
-        lg.addColorStop(0, 'rgba(180,255,240,0)'); lg.addColorStop(0.5, 'rgba(180,255,240,0.10)'); lg.addColorStop(1, 'rgba(180,255,240,0)');
-        g.fillStyle = lg; g.fillRect(-SW / 2, ry - 0.08 * H, SW, 0.16 * H);
+        drawNoise(g, -SW / 2, -SH / 2, SW, SH, fr, 0.14); // v3: a faint static only
         // an over-wide smile line flickers in the static for 2 frames now and then (or always, with eerieSmile)
         const smileOn = R.eerieSmile ?? ((fr % 53) < 2);
         if (smileOn) {
           S.glow(g, gg => {
             gg.globalAlpha = 0.55;
-            S.strip(gg, bez3([-0.36 * H, 0.1 * H], [-0.2 * H, 0.27 * H], [0.2 * H, 0.27 * H], [0.36 * H, 0.1 * H], 30), u => 0.016 * H * Math.sin(Math.PI * u) ** 0.4, COL.lens);
+            S.strip(gg, bez3([-0.36 * H, 0.1 * H], [-0.2 * H, 0.27 * H], [0.2 * H, 0.27 * H], [0.36 * H, 0.1 * H], 30), u => 0.014 * H * Math.sin(Math.PI * u) ** 0.4, COL.lens);
             gg.globalAlpha = 1;
           }, { blur: 0.03 * H * devScale(g), alpha: 0.6, bounds: { x: -SW / 2, y: -SH / 2, w: SW, h: SH } });
-          drawNoise(g, -SW / 2, 0.12 * H, SW, 0.06 * H, fr + 5, 0.35);
         }
         // two light dots where the eyes were: not quite the same size, drifting apart very slowly
         const drift = 0.5 - 0.5 * Math.cos(TAU * t / 9);
@@ -393,10 +310,10 @@
           for (let i = 0; i < n; i++) {
             const a = -Math.PI / 2 + (i / n) * TAU, age = (head - i + n) % n, k = Math.max(0.18, 1 - age / 5);
             gg.globalAlpha = k; gg.fillStyle = COL.line;
-            gg.beginPath(); gg.arc(Math.cos(a) * r, -0.005 * H + Math.sin(a) * r, 0.03 * H * (0.65 + 0.35 * k), 0, TAU); gg.fill();
+            gg.beginPath(); gg.arc(Math.cos(a) * r, -0.005 * H + Math.sin(a) * r, 0.026 * H, 0, TAU); gg.fill();
           }
           gg.globalAlpha = 1;
-        });
+        }, { blur: 0.024, alpha: 0.55 });
         break;
       }
       case 'number': {
@@ -472,30 +389,19 @@
       }
       case 'error404': {
         screenBG(g, '#0A2522', 0.08);
-        drawNoise(g, -SW / 2, -SH / 2, SW, SH, fr + 3, 0.12);
-        const sz = 0.36 * H, ty = -0.02 * H;
-        g.save();
-        g.font = `600 ${sz}px Fredoka`; g.textAlign = 'center'; g.textBaseline = 'middle';
-        g.globalCompositeOperation = 'lighter';
-        g.fillStyle = 'rgba(255,70,100,0.75)'; g.fillText('404', -0.022 * H, ty);
-        g.fillStyle = 'rgba(70,240,255,0.75)'; g.fillText('404', 0.022 * H, ty);
-        g.restore();
+        const sz = 0.34 * H, ty = -0.02 * H;
         glowLines(g, gg => {
-          gg.font = `600 ${sz}px Fredoka`; gg.textAlign = 'center'; gg.textBaseline = 'middle'; gg.fillStyle = COL.lens;
-          const slices = [[-0.5, -0.12, 0], [-0.12, -0.04, 0.05], [-0.04, 0.07, -0.03], [0.07, 0.5, 0]];
+          gg.font = `600 ${sz}px Fredoka`; gg.textAlign = 'center'; gg.textBaseline = 'middle'; gg.fillStyle = COL.line;
+          const slices = [[-0.5, -0.04, 0], [-0.04, 0.05, 0.04], [0.05, 0.5, 0]]; // one quiet slip
           slices.forEach(([a, b, dx]) => {
             gg.save(); gg.beginPath(); gg.rect(-SW / 2, ty + a * sz * 1.6, SW, (b - a) * sz * 1.6); gg.clip();
             gg.fillText('404', dx * H, ty); gg.restore();
           });
           gg.font = `800 ${0.07 * H}px Nunito`; try { gg.letterSpacing = `${0.02 * H}px`; } catch (e) { /**/ }
           gg.fillText('ERROR', 0, 0.245 * H);
-        }, { blur: 0.03 });
-        // glitch bands
-        const r = S.rng(900 + (fr % 7));
-        for (let i = 0; i < 3; i++) {
-          const y = r.range(-0.5, 0.5) * SH, h = r.range(0.01, 0.035) * H;
-          drawNoise(g, -SW / 2, y, SW, h, fr + i, 0.5);
-        }
+        }, { blur: 0.024, alpha: 0.55 });
+        const r = S.rng(900 + (fr % 7)); // one thin glitch band
+        drawNoise(g, -SW / 2, r.range(-0.4, 0.4) * SH, SW, 0.018 * H, fr, 0.35);
         break;
       }
       default: screenBG(g); drawDrawnFace(g, 'neutral', R);
@@ -532,16 +438,13 @@
     } else drawFace(g, key, R);
     // CRT finish: scanlines, edge falloff, glass glare (top-left, the key light)
     const gap = Math.max(6 / devScale(g), 0.04 * H);
-    S.scanlines(g, -SW / 2, -SH / 2 - 2, SW, SH + 4, gap, key === 'slide' ? 0.1 : 0.15, '#000');
+    S.scanlines(g, -SW / 2, -SH / 2 - 2, SW, SH + 4, gap, key === 'slide' ? 0.04 : 0.06, '#000');
     const vg = g.createRadialGradient(0, 0, SH * 0.32, 0, 0, SW * 0.66);
-    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, key === 'slide' ? 'rgba(20,10,30,0.28)' : 'rgba(0,0,0,0.42)');
+    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, key === 'slide' ? 'rgba(20,10,30,0.16)' : 'rgba(0,0,0,0.3)');
     g.fillStyle = vg; g.fillRect(-SW, -SH, SW * 2, SH * 2);
     g.save();
-    g.fillStyle = 'rgba(255,255,255,0.07)';
-    g.beginPath(); g.ellipse(-0.16 * SW, -0.3 * SH, 0.42 * SW, 0.2 * SH, -0.12, 0, TAU); g.fill();
-    g.strokeStyle = 'rgba(255,255,255,0.34)'; g.lineCap = 'round';
-    g.lineWidth = 0.028 * H; g.beginPath(); g.moveTo(-0.39 * SW, -0.2 * SH); g.lineTo(-0.3 * SW, -0.36 * SH); g.stroke();
-    g.lineWidth = 0.016 * H; g.beginPath(); g.moveTo(-0.33 * SW, -0.12 * SH); g.lineTo(-0.27 * SW, -0.23 * SH); g.stroke();
+    g.strokeStyle = 'rgba(255,255,255,0.22)'; g.lineCap = 'round'; // one small glare stroke (top-left key light)
+    g.lineWidth = 0.022 * H; g.beginPath(); g.moveTo(-0.39 * SW, -0.22 * SH); g.lineTo(-0.32 * SW, -0.35 * SH); g.stroke();
     g.restore();
     g.restore();
   }
@@ -706,8 +609,8 @@
     const w = 0.24 * H, h = 0.31 * H;
     S.roundRect(g, -0.03 * H, -0.02 * H, 0.06 * H, 0.05 * H, 0.012 * H, COL.clip);
     cel(g, c => S.addRoundRect(c, -w / 2, 0.02 * H, w, h, 0.03 * H), COL.badge, '#D9D2C4', 0.014);
-    S.roundRect(g, -w / 2, 0.02 * H, w, 0.075 * H, [0.03 * H, 0.03 * H, 0, 0], COL.mint);
-    S.roundRect(g, -0.035 * H, 0.04 * H, 0.07 * H, 0.016 * H, 0.008 * H, COL.mintShade);
+    S.roundRect(g, -w / 2, 0.02 * H, w, 0.075 * H, [0.03 * H, 0.03 * H, 0, 0], COL.badgeBand);
+    S.roundRect(g, -0.035 * H, 0.04 * H, 0.07 * H, 0.016 * H, 0.008 * H, '#3A393F');
     // tiny TV-head ID photo
     S.roundRect(g, -w / 2 + 0.025 * H, 0.115 * H, 0.085 * H, 0.08 * H, 0.012 * H, COL.case);
     S.roundRect(g, -w / 2 + 0.035 * H, 0.125 * H, 0.065 * H, 0.048 * H, 0.008 * H, COL.screen);
@@ -1079,8 +982,12 @@
     const lapR = [nR, [mx(0.255), -3.03], [mx(0.205), -2.985], vB];
     S.roundPoly(g, lapL.map(px), 0.012 * H, COL.blazer);
     S.roundPoly(g, lapR.map(px), 0.012 * H, COL.blazerShade);
-    S.strip(g, [lapL[1], lapL[2], vB].map(px), 0.016 * H, COL.crease);
-    S.strip(g, [lapL[0], lapL[1]].map(px), 0.014 * H, COL.crease);
+    // ivory piping: lapel edges, front opening, hem (the black jacket keeps its shape on dark sets)
+    const pipe = 0.022 * H;
+    S.strip(g, [lapL[0], lapL[1], lapL[2], vB].map(px), pipe, COL.trim);
+    S.strip(g, [lapR[0], lapR[1], lapR[2], vB].map(px), pipe, COL.trimShade);
+    S.strip(g, [vB, [cx, -2.42]].map(px), pipe, COL.trim);
+    { const T = torsoPts(R); S.strip(g, [T[5], T[6], T[7], T[8], T[9]].map(px), pipe, COL.trimShade); }
     // collar points + bow
     S.roundPoly(g, [[mx(-0.135), -3.25], [cx - 0.015, -3.2], [mx(-0.085), -3.1]].map(px), 0.01 * H, bl);
     S.roundPoly(g, [[mx(0.135), -3.25], [cx + 0.015, -3.2], [mx(0.085), -3.1]].map(px), 0.01 * H, blS);
@@ -1094,10 +1001,9 @@
     S.capsule(g, cx * H + 0.01 * H, by * H + 0.02 * H, cx * H + 0.035 * H, by * H + 0.09 * H, 0.025 * H, 0.02 * H, COL.bowShade);
     g.fillStyle = COL.bow; g.beginPath(); g.arc(cx * H, by * H, 0.025 * H, 0, TAU); g.fill();
     // button + pocket flaps
-    g.fillStyle = COL.button; g.beginPath(); g.arc(cx * H, -2.47 * H, 0.026 * H, 0, TAU); g.fill();
-    g.fillStyle = C.rgba('#ffffff', 0.25); g.beginPath(); g.arc(cx * H - 0.008 * H, -2.478 * H, 0.008 * H, 0, TAU); g.fill();
-    S.strip(g, [[mx(-0.33), -2.3], [mx(-0.13), -2.29]].map(px), 0.016 * H, COL.crease);
-    S.strip(g, [[mx(0.13), -2.29], [mx(0.33), -2.3]].map(px), 0.016 * H, COL.crease);
+    g.fillStyle = COL.button; g.beginPath(); g.arc(cx * H, -2.5 * H, 0.03 * H, 0, TAU); g.fill();
+    S.strip(g, [[mx(-0.33), -2.3], [mx(-0.15), -2.29]].map(px), 0.018 * H, COL.trimShade);
+    S.strip(g, [[mx(0.15), -2.29], [mx(0.33), -2.3]].map(px), 0.018 * H, COL.trimShade);
   }
 
   function drawNeck(g, R) {
@@ -1116,8 +1022,8 @@
     const sL = [a, [lerp(a[0], clipP[0], 0.5) - 0.035, lerp(a[1], clipP[1], 0.55)], clipP];
     const sR = [b, [lerp(b[0], clipP[0], 0.45) + 0.045, lerp(b[1], clipP[1], 0.55)], clipP];
     const curve = P => { const out = []; for (let i = 0; i <= 12; i++) { const u = i / 12, v = 1 - u; out.push(px([v * v * P[0][0] + 2 * v * u * P[1][0] + u * u * P[2][0], v * v * P[0][1] + 2 * v * u * P[1][1] + u * u * P[2][1]])); } return out; };
-    S.strip(g, curve(sR), 0.036 * H, COL.mintShade);
-    S.strip(g, curve(sL), 0.036 * H, COL.mint);
+    S.strip(g, curve(sR), 0.032 * H, COL.lanyardShade);
+    S.strip(g, curve(sL), 0.032 * H, COL.lanyard);
     const c = px(clipP);
     g.save(); g.translate(c[0], c[1]); g.rotate(swing); upright(g, 0, () => drawBadgeLocal(g, R)); g.restore();
   }
@@ -1143,7 +1049,7 @@
     // sleeve-end bands + a thin blouse cuff
     const back = d => add(wr, [-Math.cos(fa) * d * H, -Math.sin(fa) * d * H]);
     const nrm = [-Math.sin(fa), Math.cos(fa)];
-    [0.075, 0.11].forEach(d => { const p = back(d); S.strip(g, [add(p, [nrm[0] * 0.08 * H, nrm[1] * 0.08 * H]), add(p, [-nrm[0] * 0.08 * H, -nrm[1] * 0.08 * H])], 0.012 * H, COL.crease); });
+    { const p = back(0.075); S.strip(g, [add(p, [nrm[0] * 0.083 * H, nrm[1] * 0.083 * H]), add(p, [-nrm[0] * 0.083 * H, -nrm[1] * 0.083 * H])], 0.03 * H, COL.trim); }
     const c0 = back(0.0), c1 = add(wr, [Math.cos(fa) * 0.025 * H, Math.sin(fa) * 0.025 * H]);
     S.capsule(g, c0[0], c0[1], c1[0], c1[1], 0.125 * H, 0.12 * H, spillMix(R, COL.blouse, wr, 1.1));
     // props held in the fist (drawn over the sleeve, under the fingers)
@@ -1235,6 +1141,7 @@
     g.restore();
   }
 
+  const RIM_DEFAULT = { color: '#EFE8DA', alpha: 0.5, width: 2.4, dir: [-1, -0.6], backK: 0.6 };
   let _rimCanvas = null;
   function rimPass(g, rim, s) {
     const cv = g.canvas, w = cv.width, h = cv.height;
@@ -1302,7 +1209,12 @@
         spillLight(gB, R, scrBody, spillA * 0.7);
       }, { shadow: false });
       g.restore();
-      if (o.rim) rimPass(g, o.rim === true ? {} : o.rim, s);
+      // v3: the black suit always gets a soft ivory edge (key side + a weaker back edge) unless rim: false
+      const rim = o.rim === false ? null : (o.rim && o.rim !== true) ? o.rim : RIM_DEFAULT;
+      if (rim) {
+        rimPass(g, rim, s);
+        if (rim.back !== false) { const d = rim.dir || [-1, -0.6]; rimPass(g, Object.assign({}, rim, { dir: [-d[0], d[1] * 0.3], alpha: (rim.alpha ?? 0.55) * (rim.backK ?? 0.5), width: (rim.width ?? 2.6) * 0.8 }), s); }
+      }
     }, { scale: s, bounds, shadow: o.shadow !== false });
     // soft screen halo into the scene
     const bloom = o.bloom ?? 0.35;

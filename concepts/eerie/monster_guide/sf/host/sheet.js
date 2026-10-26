@@ -4,7 +4,7 @@
   'use strict';
   const cv = document.getElementById('c'), ctx = cv.getContext('2d'), S = window.SFX, HL = window.HELEN, COL = HL.COL;
   const W = cv.width, H = cv.height, UH = HL.H;
-  const BG = '#1A2329', CARD = '#212C33', INK = '#F2EEF6', MUTED = 'rgba(242,238,246,0.56)', FAINT = 'rgba(242,238,246,0.34)';
+  const BG = '#465058', CARD = '#3D464D', INK = '#F2EEF6', MUTED = 'rgba(242,238,246,0.56)', FAINT = 'rgba(242,238,246,0.34)';
   const SC = 1.18, GY = 742;
   const FIG = [
     { x: 150, n: '1', name: 'FRONT', sub: 'idle · weight on one leg', o: { pose: 'idle-clipboard', face: 'neutral', look: { x: 0, y: 0.1 } } },
@@ -70,7 +70,7 @@
 
   function props(x, y, w, h) {
     card(x, y, w, h, 'PROPS');
-    [86, 230, 374, 518].forEach(px => S.roundRect(ctx, x + px - 64, y + 44, 128, h - 80, 14, '#2A3840'));
+    [86, 230, 374, 518].forEach(px => S.roundRect(ctx, x + px - 64, y + 44, 128, h - 80, 14, '#4F5961'));
     HL.drawRemote(ctx, x + 78, y + 128, 2.3, { ang: -38, press: false });
     S.label(ctx, 'remote · red button', x + 86, y + h - 22, 13, { color: MUTED, weight: 800 });
     HL.drawClipboard(ctx, x + 230, y + 122, 1.5, { rot: 0, mark: 'APPROVED' });
@@ -86,7 +86,7 @@
     const sw = [
       ['case', COL.case], ['case shade', COL.caseShade], ['bezel / pumps', COL.bezel], ['screen', COL.screen],
       ['face line', COL.line], ['mint (signature)', COL.mint], ['blazer + skirt', COL.blazer], ['cloth shade', COL.blazerShade],
-      ['blouse', COL.blouse], ['bow', COL.bow], ['skin', COL.skin], ['remote button', COL.red],
+      ['blouse', COL.blouse], ['ivory piping', COL.trim], ['skin', COL.skin], ['remote button', COL.red],
     ];
     const cols = 3, cw = (w - 40) / cols;
     sw.forEach(([n, c], i) => {
@@ -101,11 +101,11 @@
     card(x, y, w, h, 'READ ON DARK SETS');
     const cr = (a, b) => S.color.contrast(a, b).toFixed(1);
     const L = [
-      `blazer ${COL.blazer} vs room wall #1A2329  ${cr(COL.blazer, '#1A2329')} : 1`,
-      `case ${COL.case} vs wall  ${cr(COL.case, '#1A2329')} : 1`,
-      'screen light spills mint on collar + hands',
-      'rim light option for torch-lit corridors',
-      'mint ONLY on screen, lanyard, one dial',
+      `case ${COL.case} vs wall #1A2329  ${cr(COL.case, '#1A2329')} : 1`,
+      `blouse ${COL.blouse} vs wall  ${cr(COL.blouse, '#1A2329')} : 1`,
+      'black suit: ivory piping on lapels, hem, cuffs',
+      'soft ivory rim ON by default (rim: false)',
+      'outfit = black / ivory / white; colour only on screen',
     ];
     L.forEach((t, i) => S.label(ctx, t, x + 22, y + 58 + i * 30, 14, { align: 'left', color: i < 2 ? INK : MUTED, weight: 800 }));
   }
