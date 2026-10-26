@@ -21,7 +21,7 @@ LETTERS = None                                   # [(letter, phrase), ...] once 
 def set_tiers(rows):
     """rows = [[letter, phrase, max_pct], ...] top (deadliest) -> bottom; switches every graphic to the TierMaker colours"""
     global TIERS, LETTERS
-    TIERS = [((l + '  ' + ph.upper()) if ph else l, TM_COL[i], mx) for i, (l, ph, mx) in enumerate(rows)]
+    TIERS = [(ph.upper() if ph else l, TM_COL[i], mx) for i, (l, ph, mx) in enumerate(rows)]   # user 10/26: names only, no letters
     LETTERS = [(l, ph) for l, ph, mx in rows]
 WHITE, BONE, RED = (245, 242, 236), (200, 192, 178), (225, 30, 38)
 _SANS = {}
@@ -289,25 +289,40 @@ def thermo_final(out, placed, dur, fps=30, t_build=(0.25, 1.9), highlights=(), t
 
 # ------------------------------------------------------------------ TierMaker-style board
 # rows (pastel labels) on top, the unranked faces waiting in a tray underneath (the template's image tray), all tiles edge to edge
-LW, TRAY_COLS, TRAY_GAP = 250, 12, 18
+LW, TRAY_COLS, TRAY_GAP = 380, 12, 18
 def geom():
     """rows, row pitch, square tile, board x/y, board width, tray top: sized so rows + a 2-line tray fill the frame height"""
     nr = len(TIERS); ts = min(194, (H - 40 - TRAY_GAP - 2 - 2 * nr) // (nr + 2)); rh = ts + 2
     bxw = LW + 10 * ts + 2; bx0 = (W - bxw) // 2
     total = nr * rh + TRAY_GAP + 2 * ts + 2; by0 = (H - total) // 2
     return nr, rh, ts, bx0, by0, bxw, by0 + nr * rh + TRAY_GAP
+def _label_lines(ph, sz, w):
+    """the tier name on one line if it fits, else split into two lines at the most even space"""
+    f = sans(sz)
+    if f.getlength(ph) <= w or ' ' not in ph: return [ph]
+    ws = ph.split(' '); cuts = [(' '.join(ws[:k]), ' '.join(ws[k:])) for k in range(1, len(ws))]
+    return list(min(cuts, key=lambda c: max(f.getlength(c[0]), f.getlength(c[1]))))
+_LSZ = {}
+def _label_size(TS):
+    """one font size for every row: the biggest at which each tier name fits its cell (1-2 lines)"""
+    if TS not in _LSZ:
+        names = [ph or l for l, ph in (LETTERS or [(t[0], '') for t in TIERS])]
+        for sz in range(TS * 76 // 124, 14, -1):
+            ok = True
+            for ph in names:
+                ls = _label_lines(ph, sz, LW - 36)
+                if max(sans(sz).getlength(x) for x in ls) > LW - 36 or len(ls) * sz * 1.08 > TS - 12: ok = False; break
+            if ok: break
+        _LSZ[TS] = sz
+    return _LSZ[TS]
 def _label_cell(i, flash=0.0):
     nr, RH, TS, BX0, BY0, BXW, TY = geom(); c = TM_COL[i]
     if flash > 0: c = tuple(int(v + (255 - v) * flash) for v in c)
     cell = Image.new('RGBA', (LW, TS), c + (255,)); d = ImageDraw.Draw(cell)
     l, ph = LETTERS[i] if LETTERS else (TIERS[i][0], '')
-    if ph:
-        d.text((LW / 2, TS * 0.40), l, font=sans(TS * 60 // 124), fill=TM_INK, anchor='mm')
-        sz = TS * 26 // 124
-        while d.textlength(ph, font=sans(sz)) > LW - 20 and sz > 14: sz -= 1
-        d.text((LW / 2, TS * 0.80), ph, font=sans(sz), fill=TM_INK, anchor='mm')
-    else:
-        d.text((LW / 2, TS / 2), l, font=sans(TS * 60 // 124 if len(l) <= 2 else TS * 26 // 124), fill=TM_INK, anchor='mm')
+    sz = _label_size(TS); ls = _label_lines(ph or l, sz, LW - 36); lh = sz * 1.08
+    for j, x in enumerate(ls):                                           # the tier name only, big, centred (no letter)
+        d.text((LW / 2, TS / 2 + (j - (len(ls) - 1) / 2) * lh), x, font=sans(sz), fill=TM_INK, anchor='mm')
     return cell
 _FACE = {}
 def face(r, size=None):

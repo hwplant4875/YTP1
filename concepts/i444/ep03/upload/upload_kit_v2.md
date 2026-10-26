@@ -1,6 +1,6 @@
 # Horror Ranked EP03 업로드 키트 v2
 
-영상: 노트북 `E:\YTP2\Instruction444\renders\ep03_full_v2.mp4` (약 8:01, 1080p 30fps)
+영상: 노트북 `E:\YTP2\Instruction444\renders\ep03_full_v3.mp4` (약 8:05, 1080p 30fps)
 자막: 노트북에서 만드는 `ghostface_ranked_en_v2.srt` (영어, 내레이션 단어 타이밍 기준)
 
 ## 제목 (썸네일과 짝, A/B 테스트용)
@@ -18,11 +18,11 @@ Who would you put at number one? Tell us in the comments, and vote for Freddy or
 0:00 Sixteen killers, one mask
 0:17 How we score them
 0:50 #16 to #13
-2:39 #12 to #9
+2:38 #12 to #9
 4:14 #8 to #5
-5:50 #4 to #2
-7:15 #1
-7:47 The final tier list
+5:54 #4 to #2
+7:17 #1
+7:50 The final tier list
 
 Horror Ranked rates horror villains by one question: could you survive them?
 
@@ -39,4 +39,4 @@ scream, ghostface, every ghostface ranked, ghostface killers ranked, scream 7, s
 - 언어: 영어, 자막 파일 업로드
 - 썸네일 3종 A/B 테스트 (C 추천, 지난 영상에서 이긴 3인 형식)
 - 공개 시간 제안: 할로윈 주간이라 최대한 빨리. 한국 시간 오전 8~10시 (미국 저녁)
-- 챕터 시간은 v2 편집표 기준 (티어 발표 대사 추가 반영, 총 8:01, 8분 넘어서 중간광고 가능). 노트북 렌더 길이로 한 번 더 확인
+- 챕터 시간은 v2 편집표 기준 (티어 발표 대사 추가 반영, 총 8:05, 8분 넘어서 중간광고 가능). 노트북 렌더 길이로 한 번 더 확인

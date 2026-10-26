@@ -8,23 +8,23 @@ import numpy as np
 K = os.environ['ELEVENLABS_JC_API_KEY']; V3, V4 = 'voice_v3/', 'voice_v4/'; P = V4 + 'parts/'
 os.makedirs(P, exist_ok=True)
 GAP = 0.32
-TIER = {  # seg: (line, first word of the tier name as spoken)
- 's02': ("For that reason, Jason goes straight into the Easy tier, because you'd outlast him by accident.", 'easy'),
- 's03': ("He's big, but he had no plan of his own, so I'm putting Karl in the Don't Worry tier.", "don't"),
- 's04': ("Great plan, but she's the least dangerous fighter here, so Mrs. Loomis joins him in Don't Worry.", "don't"),
- 's05': ("He racked up bodies, but you can outfight him, so Charlie lands in the Close Call tier.", 'close'),
- 's06': ("Creepy, but one kill and done, so Quinn is a Close Call.", 'close'),
- 's07': ("Too awkward to be scary, but too close to be safe, so Ethan joins Close Call.", 'close'),
- 's08': ("That's a coin you don't want to flip, so Marco goes into the Better Run tier.", 'better'),
- 's09': ("You'd never see him coming, so I'm putting Richie in Better Run.", 'better'),
- 's10': ("Anyone willing to kill their own family belongs in Better Run.", 'better'),
- 's11': ("Unhinged and impossible to read, so Stu lands in the Almost Dead tier.", 'almost'),
- 's12': ("That body count puts Mickey right into Almost Dead.", 'almost'),
- 's13': ("If fire couldn't stop her, you won't either, so Amber goes into Almost Dead.", 'almost'),
- 's14': ("Still, the original Ghostface goes straight into Slaughtered, just not at the very top.", 'slaughtered'),
- 's15': ("When the cop is the killer, there's nobody left to call, so Wayne is Slaughtered.", 'slaughtered'),
- 's16': ("She'd take out anyone for fame, so Jill goes into Slaughtered.", 'slaughtered'),
- 's17': ("And the deadliest Ghostface of them all takes the very top of Slaughtered.", 'slaughtered'),
+TIER = {  # seg: (line, first word of the tier name as spoken); user 10/26: short, easy, fun, and always "<name> tier"
+ 's02': ("Honestly, you could beat this guy with a pillow. Jason goes straight into the Easy tier.", 'easy'),
+ 's03': ("Big guy, but zero ideas of his own. I'm putting Karl in the Don't Worry tier.", "don't"),
+ 's04': ("Smart plan, but pretty weak. Mrs. Loomis joins him in the Don't Worry tier.", "don't"),
+ 's05': ("He knows every horror rule, except don't trust your partner. Charlie lands in the Close Call tier.", 'close'),
+ 's06': ("Creepy trick, but just one kill. Quinn goes in the Close Call tier.", 'close'),
+ 's07': ("Just lock your bedroom door and you'll be fine. Ethan joins the Close Call tier.", 'close'),
+ 's08': ("If a dead guy calls you, don't pick up. Marco goes in the Better Run tier.", 'better'),
+ 's09': ("The sweet boyfriend is never just a sweet boyfriend. Richie goes in the Better Run tier.", 'better'),
+ 's10': ("If she'd kill her own family, you're not safe either. Jessica lands in the Better Run tier.", 'better'),
+ 's11': ("Never fight a guy who gets stabbed on purpose. Stu goes in the Almost Dead tier.", 'almost'),
+ 's12': ("That's a lot of bodies for a film student. Mickey goes in the Almost Dead tier.", 'almost'),
+ 's13': ("She literally walked out of a fire. Amber goes in the Almost Dead tier.", 'almost'),
+ 's14': ("Billy started it all, so he goes in the Slaughtered tier.", 'slaughtered'),
+ 's15': ("You can't call the cops when the cop is the killer. Wayne goes in the Slaughtered tier.", 'slaughtered'),
+ 's16': ("She'd kill you for more followers. Jill goes in the Slaughtered tier.", 'slaughtered'),
+ 's17': ("A bulletproof vest and a family grudge. Roman takes the very top of the Slaughtered tier.", 'slaughtered'),
 }
 def A(p): return json.load(open(p))
 def tts(name, text, prev):
