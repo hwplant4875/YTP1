@@ -1,7 +1,7 @@
 # EP03 thumbnails v2 ("Every Ghostface Ranked by Your Chance of Surviving Them")
 #   a = mask centred + big "16 KILLERS" at the bottom
 #   b = "WHO'S #1?" at the top, the mask cut out (rembg) and laid over the letters
-#   c = three faces, eyes level: Carvey 99% / Ethan 53% / Roman 15% (the 99% is a person, not the mask, so it can't read as 'Ghostface is easy')
+#   c = three faces, eyes level: Carvey 99% / Ethan 53% / Roman 10% (the 99% is a person, not the mask, so it can't read as 'Ghostface is easy')
 # Run with the rembg venv (needs rembg + scipy):
 #   <scratchpad>/rbenv/bin/python thumbs_v2.py [GFT_SRC_DIR] [OUT_DIR] [CACHE_DIR]
 import os, sys, math
@@ -171,7 +171,7 @@ FACE_SPECS = [
     # file, left/right eye (source px), valid rows of the still (letterbox), scale, x nudge, how much to level the eyes, pct, colour, brightness lift
     dict(path=os.path.join(FACES, 'carvey.jpg'), el=(855, 364), er=(1012, 337), rows=(140, 940), scale=0.82, nudge=-10, rot=0.6, pct='99%', col=GREEN, lift=1.16),
     dict(path=os.path.join(GFT, 'ethan.jpg'), el=(1615, 615), er=(2190, 625), rows=(0, 2160), scale=0.285, nudge=0, rot=1.0, pct='53%', col=YEL),
-    dict(path=ROMAN, el=(492, 307), er=(624, 305), rows=(0, 793), scale=0.99, nudge=0, rot=1.0, pct='15%', col=RED, lift=1.08),
+    dict(path=ROMAN, el=(492, 307), er=(624, 305), rows=(0, 793), scale=0.99, nudge=0, rot=1.0, pct='10%', col=RED, lift=1.08),
 ]
 
 
@@ -214,7 +214,7 @@ def thumb_c():
     for k in (1, 2):                                                     # thin black gutters
         gx = sum(PW[:k]); d.rectangle([gx - 3, 0, gx + 3, H], fill=(0, 0, 0, 255))
     x = 0
-    for sp, pw in zip(FACE_SPECS, PW):                                   # bottoms (stroke incl.) at y~618: '15%' clears the duration badge (y621+)
+    for sp, pw in zip(FACE_SPECS, PW):                                   # bottoms (stroke incl.) at y~618: '10%' clears the duration badge (y621+)
         shadow_text(im, (x + pw // 2, H - 178), sp['pct'], f(182), sp['col'], stroke=8); x += pw
     save(im, 'ghostface_v2_c_extremes.jpg')
 

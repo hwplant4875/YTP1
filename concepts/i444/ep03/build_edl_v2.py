@@ -21,7 +21,7 @@ def num_onset(seg):  # the spoken % right after "Survival rate"
 STATS = json.load(open(D + 'stats_v2.json')) if os.path.exists(D + 'stats_v2.json') else {}
 KS = {r['key']: r for r in STATS.get('killers', [])} if isinstance(STATS.get('killers'), list) else STATS.get('killers', {})
 PCT = {'carvey': 99, 'karl': 75, 'mrs_loomis': 68, 'charlie': 60, 'quinn': 56, 'ethan': 53, 'marco': 50, 'richie': 45,
-       'jessica': 43, 'stu': 40, 'mickey': 36, 'amber': 30, 'billy': 25, 'wayne': 22, 'jill': 18, 'roman': 15}
+       'jessica': 43, 'stu': 40, 'mickey': 36, 'amber': 30, 'billy': 25, 'wayne': 22, 'jill': 18, 'roman': 10}
 NAME = {'carvey': 'Jason Carvey', 'karl': 'Karl Gibbs', 'mrs_loomis': 'Mrs. Loomis', 'charlie': 'Charlie Walker', 'quinn': 'Quinn Bailey',
         'ethan': 'Ethan Landry', 'marco': 'Marco Davis', 'richie': 'Richie Kirsch', 'jessica': 'Jessica Bowden', 'stu': 'Stu Macher',
         'mickey': 'Mickey Altieri', 'amber': 'Amber Freeman', 'billy': 'Billy Loomis', 'wayne': 'Wayne Bailey', 'jill': 'Jill Roberts',
