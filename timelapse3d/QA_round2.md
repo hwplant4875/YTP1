@@ -11,7 +11,9 @@
 - [x] g5 v8: head hold ~2.5 s, AT sprint/punch zoomed (68 mm) and readable.
 - [x] g6 v6: zooms at the blond titan (56 mm) and Eren/Mikasa (50 mm); still far by owner choice, acceptable.
 - [x] s1 v3: Female rise, Plan C harpoon pin and rampage readable at ~85 m.
-- [~] f1 v3: Female + riders now readable (60-200 m cam); left: horse dust streaks = grey slabs, purple flare head too big,
-      plain still flat -> v4: trails hidden, head glow 4.5w -> 2.4w, fset.fine_ground() multiplies WD_Ground by 80 m + 18 m noise.
+- [x] f1 v4: Female + riders readable, no slab trails, textured plain, smoke-column flares (purple drifts).
 - [x] s2 v3: chase readable (~0.55x distance), crane above the roofs, face ending holds.
 - [~] f3 v3: Blender crashed repeatedly at 480p in the dense forest (GTX 1060) -> 234 unique of 755 frames (duplicates = 'frozen'); glossy swamp = blue disc -> v4 at 640x360 (as v1), swamp = dull mud.
+- [~] f3: ROOT CAUSE of the "frozen" f3 v3/v4: grazing views across the canopy put thousands of trees in the frustum -> GPU
+      time over the Windows driver timeout -> Blender died at t 4.5 / 20.6 (gaps filled with duplicates). Fix: camera far clip
+      900 m for 3.6-46.6 s (stills 4.6 / 12 / 20.7 OK), crown-layer corridor 34 m. f3 v5 at 640x360.

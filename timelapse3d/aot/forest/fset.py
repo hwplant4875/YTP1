@@ -110,8 +110,8 @@ def _low_cam_F():
         for m in (seg_f2, seg_f3):
             for k in range(int(m.DUR * 10) + 1):
                 loc, _, _ = m.CAM.eval(k / 10.0)
-                if loc[2] < 110.0:
-                    out.append((loc[0] - C.FO[0], loc[1] - C.FO[1]))
+                if loc[2] < 170.0:     # autopilot 10/28: descents through the crown layer crashed the GPU driver (f3 t 4.5 / 20.6)
+                    out.append((loc[0] - C.FO[0], loc[1] - C.FO[1], 34.0 if loc[2] > 50.0 else 18.0))
     except Exception as ex:
         print("[forest] camera corridor skipped:", ex, flush=True)
     return out
@@ -154,8 +154,8 @@ def build_forest(c):
         P = np.array(pts)
         d = np.full(len(P), 1e9)
         for cp in cam:
-            d = np.minimum(d, np.hypot(P[:, 0] - cp[0], P[:, 1] - cp[1]))
-        keep = (d > 18.0)
+            d = np.minimum(d, np.hypot(P[:, 0] - cp[0], P[:, 1] - cp[1]) - cp[2])
+        keep = (d > 0.0)
         keep[-2:] = True
         pts = [tuple(p) for p, k in zip(P, keep) if k]
     groups = [[] for _ in protos]
@@ -436,7 +436,7 @@ def prune_world_veg():
             n += len(kill)
     # QA batch1 f1: the dark forest-floor 14-gons under the pruned clumps stayed behind as black polygons on the plain
     nf = 0
-    for ob in [o for o in bpy.data.objects if o.type == "MESH" and o.name.startswith("WD_ForestFloor")]:
+    for ob in [o for o in bpy.data.objects if o.type == "MESH" and o.name.startswith("WD_ForestFloor") and not os.environ.get("F_NOFLOORPRUNE")]:
         bm = bmesh.new(); bm.from_mesh(ob.data)
         dead = [f for f in bm.faces if bad(*f.calc_center_median()[:2])]
         nf += len(dead)

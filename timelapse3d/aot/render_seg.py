@@ -145,6 +145,8 @@ def cam_at(t):
     if v:
         loc, look, lens = v[0:3], v[3:6], v[6]
     loc, look = M2S(loc), M2S(look)
+    if os.environ.get("SEG_CAMPRINT"):           # autopilot debug
+        print(f"[seg] cam t={t:.3f} loc={tuple(round(float(v), 1) for v in loc)} look={tuple(round(float(v), 1) for v in look)} lens={lens:.1f}", flush=True)
     rot = (look - loc).to_track_quat("-Z", "Y").to_euler()
     if hasattr(SEG, "cam_shake"):                  # optional: SEG.cam_shake(t) -> (pitch, yaw) radians (impacts)
         dx, dz = SEG.cam_shake(t)

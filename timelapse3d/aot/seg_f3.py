@@ -316,11 +316,17 @@ def _shift(AT, w, u, seed):
     fx["dome"].hide_render = u >= 1.0 or fx["dome"].hide_render
 
 def update(t):
+    SK = os.environ.get("F3_SKIP", "")        # autopilot debug bisect: comma list of fem, eren, flyers, ret, cards
     AT = S["AT"]
     cam = bpy.context.scene.camera
+    # autopilot 10/28: grazing views across the canopy (descent 4.5 s, under-canopy shots) put thousands of giant trees in the
+    # frustum -> GPU time > the Windows driver timeout -> Blender died (f3 v3/v4 = duplicated frames).  Far clip 900 m there.
+    if "_clip0" not in S:
+        S["_clip0"] = cam.data.clip_end
+    cam.data.clip_end = 900.0 if 3.6 < t < 46.6 else S["_clip0"]
     # transformation FX: her beam, Eren's lightning
     bu = (t - BEATS["beam"][0]) / 2.0
-    if bu > -0.01:
+    if bu > -0.01 and not os.environ.get("F3_NOSHIFT"):
         _shift(AT, F(*BEAM_F), bu, 21)
     eu = (t - BEATS["shift"][0]) / 2.0
     if eu > -0.01:
@@ -328,6 +334,7 @@ def update(t):
     # the Female
     fem = S["fem"]
     pose, dz, vis = fem_pose(t)
+    vis = vis and "fem" not in SK
     fem.show(vis)
     if vis:
         fem.pose(pose)
@@ -338,7 +345,7 @@ def update(t):
         fem.hardening(hard)
     # Eren's titan
     er = S["eren"]
-    if t < BEATS["shift"][0] + 0.6:
+    if t < BEATS["shift"][0] + 0.6 or "eren" in SK:
         er.show(False)
     else:
         er.show(True)
@@ -362,7 +369,7 @@ def update(t):
     # flyers
     P = S["P"]; segs = []
     head = fem.bone_world("head", tail=True) if vis else None
-    for nm in FLYERS:
+    for nm in (FLYERS if "flyers" not in SK else ()):
         j = S["fj"][nm]
         x, y, z, v, fly = flyer_F(nm, t)
         p = np.array(_W(x, y, z))
@@ -396,7 +403,7 @@ def update(t):
     S["wires"].update(segs, cam.location)
     # the retreat column + abnormals
     B = S["B"]
-    for k, j in enumerate(S["ret"]):
+    for k, j in enumerate(S["ret"] if "ret" not in SK else ()):
         on = t >= 47.0
         s = ret_head(max(t, 47.0)) - k * 9.0
         x, y, yaw = ret_at(s)
@@ -411,7 +418,8 @@ def update(t):
         C.titan_walk(TT, j, t * 7.0 + i, 0.7, run=True)
         TT.vis[j] = 1.0 if t >= 48.0 else 0.0
     TT.push()
-    S["fs"].update(t, wind=(1.5, 0.5)); S["steam"].update(t, wind=(0.8, 0.3))
+    if "cards" not in SK:
+        S["fs"].update(t, wind=(1.5, 0.5)); S["steam"].update(t, wind=(0.8, 0.3))
 
 def light(t):
     LIGHT.apply(t)
