@@ -229,8 +229,8 @@ def _v(ts, key):
 CAM_KEYS = [   # v2 (QA batch1 P0): video-time keys; 200-350 m oblique on the formation instead of the 950 m overhead
     (0.0, SEAM_F1_W["pos"], SEAM_F1_W["look"], SEAM_F1_W["lens"]),
     _k(1.4, (-60.0, -9450.0, 220.0), (300.0, -9000.0, 10.0), 32.0),           # the gate opens, the first riders burst out
-    _k(3.0, (430.0, -8520.0, 300.0), (600.0, -8050.0, 0.0), 30.0),            # the column fans out past the old town
-    _k(5.5, (200.0, -6280.0, 330.0), (650.0, -5720.0, 0.0), 30.0),            # the dome's right wing, red smoke relays
+    _k(3.0, (498.0, -8332.0, 180.0), (600.0, -8050.0, 0.0), 32.0),            # the column fans out past the old town (r3: 40 % closer)
+    _k(5.5, (380.0, -6056.0, 198.0), (650.0, -5720.0, 0.0), 32.0),            # the dome's right wing, red smoke relays (r3: closer)
     # v3 (autopilot 10/28, f1 v2 still "riders / Female tiny"): 3-4x closer (60-200 m) so the 14 m Female fills 10-25 % of
     # the frame and the riders read; the formation's smoke columns stay in the background
     _v(17.2, _rel(0, 17.2, (-150.0, -120.0, 75.0), 36.0)),                     # she comes in from the RIGHT flank
