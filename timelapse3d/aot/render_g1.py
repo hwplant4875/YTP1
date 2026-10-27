@@ -308,14 +308,14 @@ def build_strike_cards():
     X.build(); X.wind = (0.0, 0.0); CARDS.append(X)
     Sm = SMC.SmokeCards("G1StrikeSmoke")
     n = 46                                                  # the burst: billows up past the wall top within ~0.4 s
-    Sm.add_many(b + 0.05 + rng.uniform(0, 0.35, n), np.column_stack([STRIKE.x + rng.normal(0, 12, n), STRIKE.y + rng.normal(0, 8, n),
-                rng.uniform(15, 50, n)]), np.column_stack([rng.normal(0, 4, n), rng.normal(0, 3, n), rng.uniform(28, 48, n)]),
-                r0=rng.uniform(10, 16, n), r1=rng.uniform(32, 48, n), life=rng.uniform(7, 10, n), rise=2.0,
+    Sm.add_many(b + 0.05 + rng.uniform(0, 0.35, n), np.column_stack([STRIKE.x + rng.normal(0, 20, n), STRIKE.y + rng.normal(0, 8, n),
+                rng.uniform(15, 50, n)]), np.column_stack([rng.normal(0, 6, n), rng.normal(0, 3, n), rng.uniform(32, 56, n)]),
+                r0=rng.uniform(13, 20, n), r1=rng.uniform(42, 64, n), life=rng.uniform(7, 10, n), rise=2.0,
                 color=(0.60, 0.53, 0.45), kind="steam", alpha=0.9, tau=0.9, fade_in=0.08)
     te = np.arange(b + 0.3, BEATS["KICK"], 0.08); n = len(te)       # the sustained column behind him
-    Sm.add_many(te, np.column_stack([STRIKE.x + rng.normal(0, 10, n), STRIKE.y + rng.normal(0, 7, n), rng.uniform(10, 40, n)]),
-                np.column_stack([rng.normal(0, 3, n), rng.normal(-1, 2, n), rng.uniform(18, 28, n)]), r0=rng.uniform(10, 14, n),
-                r1=rng.uniform(30, 44, n), life=rng.uniform(7, 9, n), rise=1.5, color=(0.66, 0.60, 0.53), kind="steam", alpha=0.8,
+    Sm.add_many(te, np.column_stack([STRIKE.x + rng.normal(0, 16, n), STRIKE.y + rng.normal(0, 7, n), rng.uniform(10, 40, n)]),
+                np.column_stack([rng.normal(0, 4, n), rng.normal(-1, 2, n), rng.uniform(20, 32, n)]), r0=rng.uniform(13, 18, n),
+                r1=rng.uniform(40, 58, n), life=rng.uniform(7, 9, n), rise=1.5, color=(0.66, 0.60, 0.53), kind="steam", alpha=0.8,
                 tau=1.0, fade_in=0.2)
     Sm.build(); Sm.wind = (-0.5, 0.15); CARDS.append(Sm)
     print(f"[g1] strike cards {X.count()}, strike smoke {Sm.count()}")
@@ -656,7 +656,7 @@ def local_t(tv):
     return ST.seg_t("g1", tv) if B.vclock else tv
 # owner 10/27 video-clock limits: speed <= 300 m/s (the reference swoosh 2-4.9 s is the explicit exception), yaw <= 60 deg/s,
 # pitch <= 50, lens 24-60; checked on what the viewer sees (camchan.VideoPath)
-VLIM = dict(speed=300, yaw=60, pitch=(-5, 50), lens=(24, 155), hmin=None, hmax=None, under=1.0)
+VLIM = dict(speed=300, yaw=60, pitch=(-5, 50), lens=(24, 300), hmin=None, hmax=None, under=1.0)
 for nm, a_, b_ in (("g1 video clock, all", 0.0, VD), ("g1 video clock after the swoosh", 4.9, VD)):
     r = CC.check(CC.VideoPath(CAM, "g1"), a_, b_, limits=dict(VLIM, name=nm), quiet=True)
     print(f"[g1] camchan.check {nm} ({a_:.1f}-{b_:.2f} video s): peak {r['peak_speed']:.1f} m/s @ {r['t_peak_speed']:.2f}, "

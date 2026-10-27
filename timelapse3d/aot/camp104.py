@@ -25,7 +25,8 @@ from mathutils import Vector
 C = (-1450.0, 1520.0)
 A_U, B_V = 115.0, 85.0                       # floor ellipse semi-axes
 RIM_H = 14.0
-DEPTH_K = 0.4                                # v7 (QA batch1 "white bowl / stadium"): a shallow earth-banked yard, not a quarry
+DEPTH_K = 0.0                                # v8 (g3 v7 still "a round stadium"): FLAT trampled-earth yard flush with the plain,
+                                             # no bank / rock-step ring, ragged outline (rnorm lobes) -> barracks on a yard
 
 def _hex(h):
     h = h.lstrip("#"); c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
@@ -95,6 +96,8 @@ def build(L, M2S, ground_M, coll, seed=104):
         a = math.atan2(v / B_V, u / A_U)
         r = math.hypot(u / A_U, v / B_V)
         fl = 0.010 * math.sin(63 * a) + 0.006 * math.sin(151 * a + 0.7) + 0.018 * math.sin(7 * a + 1.3)
+        if DEPTH_K <= 0.0:                                            # v8: ragged yard edge, not an ellipse
+            fl += 0.11 * math.sin(3 * a + 0.4) + 0.07 * math.sin(5 * a + 2.1) + 0.04 * math.sin(11 * a + 0.9)
         return r * (1.0 - fl), a
     def depth(a, r):
         sw = max(0.0, math.cos(a - math.radians(225.0)))
@@ -110,7 +113,7 @@ def build(L, M2S, ground_M, coll, seed=104):
         return f + 4.0 * terr
     def gz(u, v):
         r, a = rnorm(u, v)
-        if r >= 1.0:
+        if r >= 1.0 or DEPTH_K <= 0.0:
             return plain(u, v)
         fl = floor_at(u, v)
         if r >= 0.975:                                                # the cliff (2-3 m wide band: near vertical)
@@ -121,7 +124,7 @@ def build(L, M2S, ground_M, coll, seed=104):
         if r >= 0.945:
             return fl + 3.0 * (r - 0.945) / 0.01
         return fl
-    g0 = floor_at(0.0, 0.0)
+    g0 = floor_at(0.0, 0.0) if DEPTH_K > 0.0 else zc
     floor_z = g0 + 0.05
     cliff_m = bpy.data.materials.new("CP_Cliff"); cliff_m.use_nodes = True
     nt = cliff_m.node_tree; N_, Ln_ = nt.nodes, nt.links
@@ -192,7 +195,7 @@ def build(L, M2S, ground_M, coll, seed=104):
             zs = [x.co.z for x in q]
             if min(rs) >= 1.0:
                 f.material_index = 0
-            elif max(zs) - min(zs) > 1.2 or (0.94 <= min(rs) and max(rs) < 1.0):
+            elif DEPTH_K > 0.0 and (max(zs) - min(zs) > 1.2 or (0.94 <= min(rs) and max(rs) < 1.0)):
                 f.material_index = 1
             else:
                 f.material_index = 2

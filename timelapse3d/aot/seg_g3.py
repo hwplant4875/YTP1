@@ -139,10 +139,10 @@ MARCH_T_END = 18.0
 MARCH_CAM_KEYS = [   # v7 (QA batch1 P1): NEAR TOP-DOWN hold low over the column (pitch 60-66, 520-600 m) so it crosses the
                      # whole frame and the people read; key 0 = the camps seam, key 18 = the to-camp seam (both unchanged)
     (0.0,  _gp(200, -780, 880),   _gp(300, 0, 0),    40),         # the gate in frame as the column pours out
-    (3.0,  _gp(380, -300, 560),   _gp(450, 0, 0),    34),
-    (6.0,  _gp(650, -220, 520),   _gp(720, 0, 0),    32),         # column left-right across the frame, drifting with it
-    (10.0, _gp(900, -220, 540),   _gp(980, 0, 0),    32),
-    (14.0, _gp(1050, -260, 600),  _gp(1150, 0, 0),   30),         # the titans hit, the column dies
+    (3.0,  _gp(380, -170, 360),   _gp(440, 0, 0),    36),         # v8 (g3 v7 "still a thin strip"): ~230-280 m over the
+    (6.0,  _gp(650, -90, 235),    _gp(700, 0, 0),    38),         # column, pitch ~68, 38 mm: the column band fills ~1/3 of
+    (10.0, _gp(900, -90, 245),    _gp(950, 0, 0),    38),         # the frame height and riders / carts read
+    (14.0, _gp(1050, -120, 290),  _gp(1110, 0, 0),   34),         # the titans hit, the column dies
     (18.0, _gp(760, -1080, 1150), _gp(300, -900, 0), 26),         # pan north toward the camp (to-camp needs no spin)
 ]
 MARCH_OUT_VEL = (0.0, 50.0, -15.0)                                 # M: drifting north, easing down toward FT1
@@ -325,7 +325,7 @@ NIGHT_AG, NIGHT_AH = ((0.95, 0.98, 1.08), 0.25), (4500.0, 0.45, (0.06, 0.08, 0.1
 LKEYS = [  # (t, light, grade, haze)
     (0.0, G2NIGHT, G2NIGHT_G, G2NIGHT_H),
     (B["night"][0], NIGHT_A, NIGHT_AG, NIGHT_AH), (B["night"][1], NIGHT_A, NIGHT_AG, NIGHT_AH),
-    (7.0, (4.0, 78.0, 0.60, (1.0, 0.62, 0.45), (0.05, 0.07, 0.18), (0.55, 0.36, 0.32), 0.11, 0.45), ((1.0, 0.92, 0.95), -1.4),
+    (7.0, (4.0, 78.0, 0.80, (1.0, 0.62, 0.45), (0.07, 0.09, 0.22), (0.62, 0.42, 0.36), 0.14, 0.45), ((1.0, 0.94, 0.95), -0.7),  # v8 lift
      (2600.0, 0.70, (0.62, 0.50, 0.52))),                                                  # v6: sunrise
     (8.8, DAWN2, ((1.05, 0.98, 0.92), -0.45), (2200.0, 0.80, (0.86, 0.76, 0.70))),
     (B["morning"][0], MORNING, G_ID, HAZE0),                                               # clear morning before Trost (FA3)
@@ -334,8 +334,8 @@ LKEYS = [  # (t, light, grade, haze)
     (_m0 + 11.5, (24.0, 250.0, 1.5, (1.0, 0.94, 0.86), (0.34, 0.38, 0.46), (0.64, 0.64, 0.66), 0.25, 0.92), G_DIM, H_MARCH),
     (_m0 + 15.5, GOLD, ((1.10, 1.0, 0.84), -0.05), (3000.0, 0.50, (0.98, 0.84, 0.62))),
     (_m1, GOLD, ((1.10, 1.0, 0.84), -0.05), (3000.0, 0.50, (0.98, 0.84, 0.62))),
-    (_m1 + 1.6, DUSK2, ((0.98, 0.92, 0.98), -0.9), (4000.0, 0.55, (0.40, 0.30, 0.34))),
-    (_m1 + 3.0, NIGHT2, ((0.85, 0.92, 1.12), -2.0), (4500.0, 0.55, (0.08, 0.09, 0.15))),     # the year passes: one night (846 -> 847)
+    (_m1 + 1.6, DUSK2, ((0.98, 0.92, 0.98), -0.5), (4000.0, 0.55, (0.40, 0.30, 0.34))),
+    (_m1 + 3.0, NIGHT_A, NIGHT_AG, NIGHT_AH),     # the year passes: one night (846 -> 847); v8: g3's readable night (was -2.0 = black)
     (_m1 + 5.6, DAWN2, ((1.05, 0.98, 0.92), -0.45), (2200.0, 0.80, (0.86, 0.76, 0.70))),
     (B["FT3"] - 0.6, MORNING, G_ID, HAZE0), (B["seasons"][0], SPRING, G_ID, HAZE0),
     (B["seasons"][0] + 0.6, SUMMER, G_SUM, HAZE0),
