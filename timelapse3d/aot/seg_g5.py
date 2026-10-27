@@ -45,7 +45,8 @@ DUR = segtime.DUR["g5"]                    # 70.0 (tight)
 
 # ====================================================================== BEATS (tight, local seconds) - ONE re-time table
 BEATS = dict(
-    bolt=(0.0, 0.27), rise=(0.0, 2.5), windup=(3.2, 3.85), dip=(3.3, 3.9), kick=4.0, recover=(4.0, 5.0), flung=(4.15, 5.8),
+    bolt=(0.0, 0.27), rise=(0.5, 2.6),   # v4: the skull rises out of the strike smoke (lightning_spec.md)
+    windup=(3.2, 3.85), dip=(3.3, 3.9), kick=4.0, recover=(4.0, 5.0), flung=(4.15, 5.8),
     drop_wires=(4.6, 6.2), grip=(4.9, 5.5), first_titan=6.5, pour=(6.5, 22.8), hand_up=(6.3, 7.0), sweep=(7.0, 9.0),
     eren_arm=(7.6, 9.0), steam_burst=9.0, col_fade=(9.0, 10.2), slabs_rock=(4.0, 5.2), cannons=10.5,
     vkills=(12.5, 16.0, 20.0), overrun=18.0, smoke=14.0, clouds=(12.0, 26.0), relocate=(19.0, 25.0),
@@ -1954,10 +1955,12 @@ def _bolt_mesh(name, top, bot, seed, r, n=26, amp=14.0, coll=None, col="#fcfa95"
     return ob
 
 def build_bolts(coll):
-    b0 = _bolt_mesh("G5_Bolt0", S3(-60, -260, 720), S3(0, -25, 0), 11, 1.4, n=40, amp=18.0, coll=coll, col="#fffaf0", strength=40.0,
-                    branches=5, glow=("#ffc84a", 6.0, 3.2))
-    b1 = _bolt_mesh("G5_Bolt1", S3(-48, -250, 720), S3(0, -25, 0), 12, 1.4, n=40, amp=18.0, coll=coll, col="#fffaf0", strength=40.0,
-                    branches=4, glow=("#ffc84a", 6.0, 3.2))
+    # v4 (owner lightning ref, g1 AND g5): ONE thick wavy golden bolt (no branches), white-yellow core, orange glow sleeve
+    b0 = _bolt_mesh("G5_Bolt0", S3(-60, -260, 720), S3(0, -25, 0), 11, 2.6, n=40, amp=38.0, coll=coll, col="#fcf495", strength=60.0,
+                    branches=0, glow=("#e8940f", 10.0, 2.9))
+    b1 = _bolt_mesh("G5_Bolt1", S3(-52, -255, 720), S3(0, -25, 0), 12, 2.6, n=40, amp=36.0, coll=coll, col="#fcf495", strength=60.0,
+                    branches=0, glow=("#e8940f", 10.0, 2.9))
+    build_strike(coll)
     ld = bpy.data.lights.new("G5_BoltFlash", "POINT"); ld.color = (1.0, 0.85, 0.4); ld.energy = 0.0; ld.shadow_soft_size = 40
     lo = bpy.data.objects.new("G5_BoltFlash", ld); lo.location = SV(0, -40, 150); coll.objects.link(lo)
     ab = _bolt_mesh("G5_ATBolt", S3(BT_POS[0] + 4, BT_POS[1] - 3, 31), S3(BT_POS[0], BT_POS[1], 4), 31, 0.55, n=10, amp=2.0, coll=coll,
@@ -1973,7 +1976,53 @@ def flicker(t):
     if 0.2 <= t < 0.27: return "spike1"
     return None
 
+def build_strike(coll):
+    """v4 (ref/user/lightning_spec.md, as g1 v5): dome shockwave flash + upward spark streaks behind the wall top, thin
+    orange-red ribbon arcs crawling down over the town (0.35-1.4 s), and the SMOKE column up before the skull (rise 0.5)."""
+    L = STATE["L"]; rng = np.random.default_rng(23); rnd = random.Random(17)
+    X = SC.SmokeCards("G5Strike")
+    X.add(0.06, S3(0, -25, 40), r0=20.0, r1=120.0, life=0.42, kind="glow", color=(1.0, 0.78, 0.32), alpha=0.95, fade_in=0.02)
+    X.add(0.08, S3(0, -25, 55), r0=10.0, r1=60.0, life=0.3, kind="glow", color=(1.0, 0.95, 0.7), alpha=1.0, fade_in=0.02)
+    n = 46
+    d = np.column_stack([rng.normal(0, 0.6, n), rng.normal(0, 0.35, n), rng.uniform(0.5, 1.4, n)]); d /= np.linalg.norm(d, axis=1)[:, None]
+    X.add_many(0.06 + rng.uniform(0, 0.15, n), np.tile(S3(0, -25, 48), (n, 1)) + rng.normal(0, 3, (n, 3)), d * rng.uniform(90, 220, n)[:, None],
+               r0=1.6, r1=1.0, life=rng.uniform(0.3, 0.6, n), kind="glow", color=(1.0, 0.82, 0.38), alpha=1.0, fade_in=0.01, dirs=d, stretch=7.0)
+    n = 46
+    X.add_many(0.04 + rng.uniform(0, 0.35, n), np.array([S3(x, y, z) for x, y, z in zip(rng.normal(0, 12, n), -25 + rng.normal(0, 8, n), rng.uniform(15, 50, n))]),
+               np.column_stack([rng.normal(0, 4, n), rng.normal(0, 3, n), rng.uniform(28, 48, n)]), r0=rng.uniform(10, 16, n),
+               r1=rng.uniform(32, 48, n), life=rng.uniform(6, 9, n), rise=2.0, color=(0.60, 0.53, 0.45), kind="steam", alpha=0.9, tau=0.9, fade_in=0.08)
+    X.build(coll); STATE["strike"] = X
+    arcs = []
+    for k in range(7):
+        x0 = rnd.uniform(-110, 110); y0 = rnd.uniform(2, 14); z0 = rnd.uniform(58, 82)
+        Ln_ = rnd.uniform(150, 240); hd = math.radians(90 + rnd.uniform(-35, 35)); dz = rnd.uniform(-45, -20)
+        ph, amp = rnd.uniform(0, 6.3), rnd.uniform(6, 14)
+        pts = []
+        for i in range(43):
+            s_ = i / 42
+            q = (x0 + Ln_ * s_ * math.cos(hd) - math.sin(hd) * amp * math.sin(ph + 9 * s_),
+                 y0 + Ln_ * s_ * math.sin(hd) + math.cos(hd) * amp * math.sin(ph + 9 * s_),
+                 z0 + dz * s_ - 25 * s_ * s_ + 0.5 * amp * math.sin(ph * 1.7 + 13 * s_))
+            pts.append(Vector(S3(*q)))
+        m, em = emit_mat(f"G5_Arc{k}", (1.0, 0.20, 0.03), 0.0)
+        obs = []
+        for c in range(14):
+            bm = bmesh.new()
+            for a, b in zip(pts[3 * c:3 * c + 3], pts[3 * c + 1:3 * c + 4]):
+                L.cyl(bm, a, b, 0.75, 0.75, seg=6)
+            ob = L.obj_from_bm(f"G5_Arc{k}_{c}", bm, [m], coll); ob.visible_shadow = False; ob.hide_render = True; obs.append(ob)
+        arcs.append((obs, em, 0.35 + 0.12 * k + rnd.uniform(0, 0.06)))
+    STATE["arcs"] = arcs
+
 def update_bolts(t):
+    if STATE.get("strike"):
+        STATE["strike"].update(t, wind=(WIND[0], WIND[1]))
+    for obs, em, t0 in STATE.get("arcs", ()):
+        head = (t - t0) / 0.45 * 14; alive = t0 <= t < t0 + 0.8
+        if em is not None:
+            em.default_value = 7.0 * (1 - ss(t0 + 0.45, t0 + 0.8, t))          # (flares.emit_mat returns the Strength socket)
+        for c, ob in enumerate(obs):
+            _hide(ob, not (alive and head - 6 <= c < head))
     b0, b1, ld, ab, ld2 = STATE["bolts"]
     f = flicker(t)
     for b_, on_ in ((b0, f == "spike0"), (b1, f == "spike1")):
