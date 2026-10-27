@@ -108,9 +108,10 @@ G4 = [
     (0.0,  (-1570, 1190, 170), (-1450, 1490, 0), 30),             # G0
     (2.0,  (-1495, 1135, 192), (-1120, 1330, 0), 30),             # G0b (g4 agent 10/27: 1.8 -> 2.0 s, look (-1100,1320) -> (-1120,1330))
     (4.1,  (-1380, 1060, 230), (-900, 880, 0),   29),             # G1  (look (-860,760) -> (-900,880)): opening swing 31.5 -> 27.7 deg/s
-    (9.1,  (-790, 940, 320),   (-40, 350, 0),    34),             # G2  (g4 v2, coordinator 10/27: frame the avenue + outer gate
-    (12.6, (-420, 690, 285),   (-5, 50, 0),      42),             # G3   while the Survey Corps passes 10-15 s; was G2 (-760,1010,320)
-    (14.9, (-235, 540, 240),   (0, 25, 8),       44),             # G3b  ->(-80,480) 28, G3 12.4 (-400,760,290)->(-20,260) 28)
+    (9.1,  (-770, 870, 330),   (-40, 330, 0),    34),             # G2  (g4 v2, coordinator 10/27: high oblique (pitch up to 36)
+    (12.6, (-380, 615, 365),   (-5, 40, 0),      40),             # G3   over the avenue + outer gate + south road while the
+    (15.0, (-210, 435, 330),   (0, 10, 5),       42),             # G3b  Survey Corps passes 10-15 s; was G2 (-760,1010,320)->(-80,480) 28,
+                                                                  #      G3 12.4 (-400,760,290)->(-20,260) 28)
     (16.8, (-110, 430, 200),   (0, 40, 20),      30),             # G4
     (20.0, (-40, 330, 170),    (0, 0, 30),       32),             # G5
 ]
@@ -260,6 +261,7 @@ BIBLE = {   # bible-quoted peaks (A3 and per-segment 'Verified' lines): m/s, deg
     "g6": (39, 25), "g7": (104, 26), "g8": (67, 30), "g3_camps": (None, 32), "A2": (78, 30), "B": (141, 32)}
 
 NOTES = [   # appended to design_specs/camcheck_report.md
+    "g3 (agent 10/27): the rendered camera is seg_g3.CAM_M (check 'g3'): flight 0-17.7 on camchan.speed_profile (372 m/s peak, the bible exception); camps pan re-timed (26.8 deg/s); march846 re-driven on its own route with arc-length channels + a speed profile (289 m/s, 28 deg/s, >= 125 m, pitch >= 17; march846.py's spline gave 458 m/s / 57 deg/s / 81 m / pitch 11); CAM_OUT level (0,95,0); to camp FT1 420 m, FT2 20 m nearer, FT3-FT5 at 185/165/150 m: 294 m/s, <= 640 m, no HEIGHT-HIGH. A2 / B / B_vin now use these keys. g3_flight / g3_flight_prof rows are the reference transcriptions.",
     "Agree with the bible within rounding: g1 129 m/s; g3 flight pure PCHIP 412 m/s (profile run 372 vs the profile's 369); g3 flight-to-camp 298 m/s; g4 141 m/s / 31.5 deg/s (bible 32); g5 43 / 29; g7 104 / 26.5 (26); g8 67 / 29.9 (30), min height 89 m (bible says 89 too); g3 camps pan 31.9 deg/s (bible 32).",
     "Disagree: g2 alone peaks at 54 m/s (bible 78): the bible figure comes from the A2 run where g2 is one channel with the g3 flight keys; with the A2 seam as v_out (0,45,8) g2 ends smoothly at 46 m/s. g6 yaw peaks at 18.8 deg/s (bible 25): the bible number is from the single run B; with seam tangents g6 alone is calmer.",
     "Over the A3 limits (flags in the table): YAW > 30 deg/s: g3 camps P2->P3 pan 31.9 (26.4 s local), g4 G0b swing 31.5 (2.6 s), run A2 32.0, run B 31.7 (the same two spots; the bible itself quotes 32). All are < 3 % over; none is a flip.",

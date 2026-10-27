@@ -1,15 +1,17 @@
 """g4 TROST 850 ESTABLISHING (SCENE_BIBLE_v2 g4, 20.0 s, frame M).  SEG=g4 bash render_seg.sh
 Every frame is a pure function of the local time t (0..DUR).  All times live in BEATS (+ the key tables built from it).
 
-  0-2.8   graduation night at the 104th camp (camp104.py proxy): lit windows, braziers, lantern fade; the eastern sky pales
-  1-3     the Survey Corps column starts down the main avenue AV (120 riders 2 abreast, 3 hooded supply wagons at the rear),
-          ~600 civilians line AV Y 150-450 and wave as it passes; the outer gate O is open (door swung, iron leaf up)
-  3-8     sunrise (time-lapse): Wall Rose lights up, chimney wisps from ~40 houses, low morning haze over the fields
+  0-2.4   graduation night at the 104th camp (camp104.py, shared with g3): deep-blue moonlight, lit windows, braziers
+  1-3     the Survey Corps column starts down the main avenue AV: 120 riders 2 abreast (people_kit scouts riding, green cape
+          quads over the horses so the line reads green) + 3 hooded wagons at the rear, one continuous ~305 m line moving at
+          one shared speed; ~600 civilians line AV Y 150-450 and raise their arms as it passes; the outer gate O is open
+  3.4-7.2 time-lapse golden sunrise: low sun in the east (el 1.5 -> 11 deg, long shadows), pink -> orange horizon band in
+          the mist, warm grade; chimney wisps from ~40 houses; light morning mist, crisp blue by 9.8
   6       the wall-top roster of g5 t 0 (7 cadets incl. Eren, 20 Garrison gunners, 30 vanguard on the GS roofs) takes post
-  8-13    master overview across Rose; the column streams down AV, round the slab arc, out through O and south; the riders
-          speed up on the open road (time-lapse) and dwindle to nothing 260-430 m out (all gone by ~18.8)
-  14.8-17.6  the gate closes (door, iron leaf)
-  16.4-19.75 Eren (EREN tag 16.8-19.7, hud2) on the cannon rail above O: raised-fist pose looking over the town, then turns
+  7.5-15  the column leaves through O and runs down the south road with a low dust trail; the camera (G2 -> G3 -> G3b) frames
+          the avenue, the gate and the road (lens 34 -> 44); tail through the gate at 15.0
+  15-17   the column speeds away (time-lapse) and dwindles 310-470 m out: all gone by 18.5; the gate closes 15.6-18.0
+  16.4-19.75 Eren (EREN tag 16.8-19.7, hud2) on the wall top above O: raised-fist pose looking over the town, then turns
           to face south as g5 has him
   20.0    = g5 t 0: the bolt (g5 frame 0 is the yellow spike) and the Colossal's skull.
 SEAM g4 -> g5: camera G5 = g5 C0 (camkeys, look-at at rest both sides); light = g5 LIGHT_KEYS[0] / GRADE_KEYS[0]; gate intact and
@@ -39,21 +41,25 @@ DUR = segtime.DUR["g4"]                    # 20.0
 # ====================================================================== BEATS (local seconds) - ONE re-time table
 BEATS = dict(
     # time of day: key times of LIGHT_KEYS / GRADE_KEYS / HAZE_KEYS below
-    night=0.0, predawn=1.8, sunrise=3.6, early=6.5, morning=11.0, late=16.5, seam=DUR,
-    lamps=(0.3, 2.8),             # camp lamps fade out
+    night=0.0, night2=2.4, predawn=3.4, sunrise=5.0, golden=7.2, early=9.8, morning=13.0, late=16.5, seam=DUR,
+    lamps=(2.6, 4.0),             # camp lamps fade out (the camp has left the frame by then)
     gate_open=(0.6, 2.4),         # outer gate opens (camera 1.6 km away at the camp)
     corps_go=(1.0, 3.0),          # the column starts / reaches cruise speed
+    corps_tail_out=15.0,          # the last wagon passes the gate (sets the column's start position)
+    corps_away=(15.0, 17.0),      # the whole column speeds away down the south road (time-lapse) and dwindles out
+    dust=(6.0, 17.0),             # dust trail emitted behind the units on the dirt road (cards die by 19.5)
     chimneys=(2.6, 12.5),         # chimney wisps are emitted (cards live <= 5 s: none left at the seam)
     roster=6.0,                   # g5's t 0 wall-top + vanguard roster takes post (camera > 1 km away)
-    gate_close=(14.8, 17.6),      # door swings shut, iron leaf down (tail out at ~13.4, see check())
+    gate_close=(15.6, 18.0),      # door swings shut, iron leaf down (tail out at 15.0, see check())
     eren_fist=(16.4, 19.15),      # Eren's raised-fist pose on the rail (facing the town)
     eren_turn=(19.15, 19.75),     # he turns to face south (g5 t 0 stance)
     tag=(16.8, 19.7),             # EREN name tag (graphics_timelines/g4_tags.json)
     bolt=DUR)                     # = g5 t 0
 
 # Survey Corps column (frame M).  Speeds are time-lapse speeds; s = arc length along CORPS_ROUTE.
-CORPS = dict(rows=60, gap=4.0, half=1.1, wagons=3, wagon_gap=11.0, tail0=112.0, v_town=38.0, v_out=90.0, out_ramp=150.0,
-             fade=(260.0, 430.0))
+# v1 = the column's cruise speed (all units together: a continuous 2-row line ~305 m long), v2 = after corps_away;
+# units fade out between fade[0] and fade[1] metres past the gate.
+CORPS = dict(rows=60, gap=4.6, half=1.1, wagons=3, wagon_gap=11.0, v1=40.0, v2=175.0, fade=(310.0, 470.0))
 # AV -> ring road outside the avenue-mouth slab arc (r 77.5 about O, bearings 0..45) -> round the pit east of P1 -> through the
 # gap sector of the C trenches -> the big strap door (X 3.5) -> O -> the main road (world road M (-60,-530), (-260,-1530))
 CORPS_ROUTE = [(-60.0, 470.0), (-15.0, 300.0), (-3.0, 110.0), (0.0, 86.0)] + \
@@ -83,19 +89,23 @@ def _g5_light0():
         return ((47.0, 135, 3.6, (1.00, 0.96, 0.90), (0.10, 0.28, 0.75), (0.70, 0.80, 0.93), 1.00), ((1.0, 1.0, 1.0), 0.0))
 _L5, _G5 = _g5_light0()
 LIGHT_KEYS = [
-    (BEATS["night"],   32.0, 245, 0.35, (0.55, 0.65, 1.00), (0.008, 0.012, 0.035), (0.03, 0.04, 0.08), 0.25),
-    (BEATS["predawn"],  4.0,  78, 0.60, (1.00, 0.62, 0.45), (0.05, 0.07, 0.18), (0.55, 0.36, 0.32), 0.45),
-    (BEATS["sunrise"],  8.0,  84, 2.20, (1.00, 0.72, 0.48), (0.12, 0.22, 0.52), (0.95, 0.70, 0.52), 0.75),
-    (BEATS["early"],   20.0,  98, 3.00, (0.96, 0.95, 0.98), (0.12, 0.30, 0.70), (0.72, 0.80, 0.92), 0.95),   # crisp blue (Corps)
+    (BEATS["night"],   35.0, 245, 0.45, (0.50, 0.62, 1.00), (0.004, 0.008, 0.030), (0.020, 0.035, 0.090), 0.30),  # moon, deep blue
+    (BEATS["night2"],  35.0, 245, 0.45, (0.50, 0.62, 1.00), (0.004, 0.008, 0.030), (0.020, 0.035, 0.090), 0.30),
+    (BEATS["predawn"],  1.5,  76, 0.80, (1.00, 0.55, 0.40), (0.10, 0.12, 0.30), (0.85, 0.45, 0.38), 0.50),
+    (BEATS["sunrise"],  5.0,  80, 2.60, (1.00, 0.62, 0.35), (0.22, 0.32, 0.60), (1.00, 0.62, 0.42), 0.80),   # golden sunrise, E
+    (BEATS["golden"],  11.0,  88, 3.00, (1.00, 0.78, 0.55), (0.16, 0.32, 0.66), (0.95, 0.78, 0.62), 0.90),
+    (BEATS["early"],   22.0, 100, 3.20, (0.98, 0.95, 0.94), (0.12, 0.30, 0.70), (0.72, 0.80, 0.92), 0.95),   # crisp blue (Corps)
     (BEATS["morning"], 34.0, 116, 3.40, (1.00, 0.96, 0.92), (0.10, 0.28, 0.74), (0.70, 0.80, 0.93), 1.00),
     (BEATS["late"],    46.0, 133, 3.58, (1.00, 0.96, 0.90), (0.10, 0.28, 0.75), (0.70, 0.80, 0.93), 1.00),
     (BEATS["seam"],) + tuple(_L5),                                                                            # = g5 t 0
 ]
 GRADE_KEYS = [                    # t: (gain r, g, b), exposure offset (stops)
-    (BEATS["night"],   (0.80, 0.90, 1.18), -2.6),
-    (BEATS["predawn"], (1.00, 0.92, 0.95), -1.4),
-    (BEATS["sunrise"], (1.05, 0.98, 0.92), -0.45),
-    (BEATS["early"],   (0.97, 1.00, 1.05), -0.12),
+    (BEATS["night"],   (0.30, 0.48, 1.50), -1.8),        # deep blue night (the toon bands carry no light colour: the grade does)
+    (BEATS["night2"],  (0.30, 0.48, 1.50), -1.8),
+    (BEATS["predawn"], (0.88, 0.72, 0.95), -1.1),        # violet-pink first light
+    (BEATS["sunrise"], (1.24, 0.96, 0.70), -0.30),       # golden sunrise
+    (BEATS["golden"],  (1.14, 1.00, 0.84), -0.12),
+    (BEATS["early"],   (1.00, 1.00, 1.02), -0.06),
     (BEATS["morning"], (0.99, 1.00, 1.01), -0.04),
     (BEATS["late"],    (1.00, 1.00, 1.00), 0.0),
     (BEATS["seam"],) + tuple(_G5),
@@ -103,10 +113,12 @@ GRADE_KEYS = [                    # t: (gain r, g, b), exposure offset (stops)
 # compositor mist (scene.eevee_haze): depth (m), amount, haze rgb; the seam value = scene.py defaults (g5 never changes them)
 HAZE0 = (float(os.environ.get("EEVEE_MIST_DEPTH", "5000")), float(os.environ.get("EEVEE_MIST", "0.45")), (0.62, 0.70, 0.82))
 HAZE_KEYS = [
-    (BEATS["night"],   5000.0, 0.55, (0.05, 0.06, 0.12)),
-    (BEATS["predawn"], 2600.0, 0.70, (0.62, 0.50, 0.52)),
-    (BEATS["sunrise"], 2200.0, 0.80, (0.86, 0.76, 0.70)),
-    (BEATS["early"],   2400.0, 0.80, (0.79, 0.83, 0.87)),      # #c9d4dd morning haze
+    (BEATS["night"],   3000.0, 0.60, (0.03, 0.05, 0.14)),
+    (BEATS["night2"],  3000.0, 0.60, (0.03, 0.05, 0.14)),
+    (BEATS["predawn"], 2300.0, 0.78, (0.72, 0.46, 0.50)),      # pink band on the horizon
+    (BEATS["sunrise"], 2000.0, 0.85, (1.00, 0.68, 0.48)),      # orange band
+    (BEATS["golden"],  2200.0, 0.80, (0.94, 0.80, 0.68)),
+    (BEATS["early"],   2600.0, 0.75, (0.79, 0.83, 0.87)),      # #c9d4dd morning haze
     (BEATS["morning"], 3600.0, 0.62, (0.72, 0.78, 0.86)),
     (BEATS["late"],    HAZE0[0], HAZE0[1], HAZE0[2]),
     (BEATS["seam"],    HAZE0[0], HAZE0[1], HAZE0[2]),
@@ -163,14 +175,9 @@ def route_at(s):
     n = np.maximum(np.hypot(tx, ty), 1e-9)
     return x, y, tx / n, ty / n
 
-def _v_of_s(s):
-    """Time-lapse speed field: v_town in town, ramping to v_out over out_ramp metres past the gate."""
-    u = np.clip((s - S_OUT) / CORPS["out_ramp"], 0.0, 1.0); u = u * u * (3 - 2 * u)
-    return CORPS["v_town"] + (CORPS["v_out"] - CORPS["v_town"]) * u
-
-def _go(t):
-    a, b = BEATS["corps_go"]
-    return ss(a, b, t)
+def _speed(t):
+    """Column speed (m/s, every unit): start ramp corps_go -> v1, then corps_away -> v2 (time-lapse)."""
+    return CORPS["v1"] * ss(*BEATS["corps_go"], t) + (CORPS["v2"] - CORPS["v1"]) * ss(*BEATS["corps_away"], t)
 
 def _corps_units():
     """Column units, head first: (kind, s offset behind the head, lateral offset).  Riders 2 abreast, wagons at the rear."""
@@ -186,17 +193,14 @@ UNITS = _corps_units()
 _LC = max(u[1] for u in UNITS)
 
 def _integrate():
-    """s(t) for every unit on a 1/120 s grid (ds/dt = go(t) * v(s)); pure, done once at import."""
+    """D(t) = distance the column has moved (1/120 s grid); the tail starts where it reaches the gate at corps_tail_out."""
     dt = 1.0 / 120.0
     T = np.arange(0.0, DUR + 0.5, dt)
-    s0 = CORPS["tail0"] + _LC - np.array([u[1] for u in UNITS])
-    S = np.zeros((len(T), len(UNITS))); s = s0.copy()
-    for i, t in enumerate(T):
-        S[i] = s
-        g = _go(t + 0.5 * dt)
-        s = s + g * _v_of_s(s) * dt
-    return T, S
-_CT, _CS = _integrate()
+    D = np.concatenate([[0.0], np.cumsum([_speed(t + 0.5 * dt) * dt for t in T[:-1]])])
+    tail0 = S_OUT - float(np.interp(BEATS["corps_tail_out"], T, D))
+    s0 = tail0 + _LC - np.array([u[1] for u in UNITS])
+    return T, s0[None, :] + D[:, None], tail0
+_CT, _CS, TAIL0 = _integrate()
 
 def corps_s(t):
     """Arc length of every unit at time t (linear in the 1/120 s table)."""
@@ -391,6 +395,8 @@ def build_corps(coll):
         else:
             insts.append(_wagon(coll, i, PK, rnd))
     STATE["corps"] = insts
+    build_capes(coll)
+    build_dust(coll)
     say(f"corps: {sum(1 for u in UNITS if u[0] == 'rider')} riders + {CORPS['wagons']} wagons; route {ROUTE_S[-1]:.0f} m, "
         f"gate at s {S_OUT:.0f}; tail out / gone {tail_out_time()}")
 
@@ -417,9 +423,63 @@ def _wagon(coll, i, PK, rnd):
     hs = [PK.horse_only((0.0, 0.0, -500.0), 0.0, coat=("horse_bay", "horse_dark")[k], phase=(0.0, 3.1)[k]) for k in range(2)]
     return [w] + hs
 
+CAPE = dict(w=1.05, l=1.35, z=2.05, drop=0.55, col="#2f5f36")     # Wings-of-Freedom cape green, over the horse's back
+
+def build_capes(coll):
+    """One green cape quad per rider, draped back over the horse (the column must read GREEN from 300-600 m)."""
+    L = STATE["L"]
+    nr = sum(1 for u in UNITS if u[0] == "rider")
+    me = bpy.data.meshes.new("G4_CorpsCapes")
+    me.from_pydata(np.zeros((4 * nr, 3)).tolist(), [], [[4 * k, 4 * k + 1, 4 * k + 2, 4 * k + 3] for k in range(nr)])
+    me.materials.append(L.mat("G4_CapeGreen", hexrgb(CAPE["col"]), 0.85)); me.update()
+    ob = bpy.data.objects.new("G4_CorpsCapes", me); coll.objects.link(ob)
+    STATE["capes"] = (ob, np.array([i for i, u in enumerate(UNITS) if u[0] == "rider"]))
+
+def update_capes(x, y, yaw, vis):
+    ob, idx = STATE["capes"]
+    xs, ys, yw, vs = x[idx], y[idx], yaw[idx], vis[idx]
+    fx, fy = -np.sin(yw), np.cos(yw); rx, ry = np.cos(yw), np.sin(yw)
+    z0 = np.array([G(a, b) for a, b in zip(xs, ys)])
+    w, l, h, dr = CAPE["w"] / 2, CAPE["l"], CAPE["z"], CAPE["drop"]
+    V = np.zeros((len(idx), 4, 3))
+    for q, (a, b, dz) in enumerate(((-w, 0.15, 0.0), (w, 0.15, 0.0), (w * 1.15, -l, -dr), (-w * 1.15, -l, -dr))):
+        V[:, q, 0] = xs + (rx * a + fx * b) * vs
+        V[:, q, 1] = ys + (ry * a + fy * b) * vs - segtime.SET_OFF_Y
+        V[:, q, 2] = z0 + (h + dz) * vs
+    V[vs < 0.01] = (0.0, 0.0, -800.0)
+    ob.data.vertices.foreach_set("co", V.reshape(-1).astype(np.float32)); ob.data.update()
+
+def build_dust(coll):
+    """Low dust trail behind the column on the dirt road outside the gate (pure: cards precomputed from corps_state)."""
+    import smokecards as SC
+    rng = np.random.default_rng(1851)
+    rows = []
+    a, b = BEATS["dust"]
+    for t in np.arange(a, b, 0.12):
+        x, y, yaw, vis, s = corps_state(float(t))
+        out = (s > S_OUT + 8.0) & (vis > 0.25)
+        for i in np.where(out)[0][::3]:
+            fx, fy = -math.sin(yaw[i]), math.cos(yaw[i])
+            rows.append((t + rng.uniform(0, 0.12), x[i] - fx * 2.5 + rng.normal(0, 1.0), y[i] - fy * 2.5 + rng.normal(0, 1.0), vis[i]))
+    if not rows:
+        STATE["dust"] = None; return
+    R = np.array(rows); n = len(R)
+    life = np.minimum(rng.uniform(2.2, 3.2, n), 19.5 - R[:, 0])
+    pos = np.column_stack([R[:, 1], R[:, 2] - segtime.SET_OFF_Y, [G(p, q) + 0.6 for p, q in R[:, 1:3]]])
+    C = SC.SmokeCards("G4CorpsDust")
+    C.add_many(R[:, 0], pos, np.column_stack([rng.normal(0, 0.6, n), rng.normal(0, 0.6, n), rng.uniform(0.1, 0.5, n)]),
+               r0=1.8, r1=rng.uniform(6.0, 9.0, n), life=life, rise=0.35, kind="dust", alpha=0.55 * R[:, 3],
+               color=(0.66, 0.57, 0.43), tau=0.8, fade_in=0.25)
+    C.build(coll)
+    STATE["dust"] = C
+    say(f"corps dust: {n} cards")
+
 def update_corps(t):
     M2S = STATE["site"]["M2S"]
     x, y, yaw, vis, s = corps_state(t)
+    update_capes(x, y, yaw, vis)
+    if STATE.get("dust") is not None:
+        STATE["dust"].update(t, wind=(WIND[0], WIND[1]))
     for i, (u, objs) in enumerate(zip(UNITS, STATE["corps"])):
         on = vis[i] > 0.01
         if u[0] == "rider":
@@ -594,6 +654,17 @@ def update_gate(t):
     g["dout"].scale = (1.0, 1.0, max(f, 0.01))
 
 # ---------------------------------------------------------------------- build / update (contract)
+def _warm_camp_lamps(st):
+    """g4-only runtime tint (camp104.py untouched): the deep-blue night grade (gain 0.30/0.48/1.50) would turn camp104's
+    warm lamps white-blue, so pre-compensate their colour here; after the grade they read warm orange."""
+    try:
+        st["win"].inputs["Color"].default_value = (1.0, 0.30, 0.06, 1.0)
+        st["fire"].inputs["Color"].default_value = (1.0, 0.24, 0.03, 1.0)
+        for ld, _e in st.get("lights", []):
+            ld.color = (1.0, 0.32, 0.07)
+    except Exception as ex:
+        say("camp lamp tint skipped:", ex)
+
 def build(site):
     t0 = time.time()
     STATE["site"] = site; STATE["L"] = site["L"]
@@ -607,6 +678,7 @@ def build(site):
     import camp104
     tb = time.time()
     STATE["camp"] = camp104.build(site["L"], site["M2S"], site["ground_M"], _coll("G4Camp"))
+    _warm_camp_lamps(STATE["camp"])
     for nm, fn in (("camp", None), ("corps", build_corps), ("crowd", build_crowd), ("chimneys", build_chimneys), ("embers", build_embers), ("gate", build_gate)):
         if fn is not None:
             fn(coll)
@@ -629,7 +701,13 @@ def update(t):
     except TypeError:
         SQ.update(tau + 1e-4)
     import camp104
-    camp104.set_night(STATE["camp"], 1.0 - ss(*BEATS["lamps"], t))
+    f = 1.0 - ss(*BEATS["lamps"], t)
+    camp104.set_night(STATE["camp"], f)
+    try:                                   # g4-only: unclipped strengths, so the night grade keeps them orange (not white)
+        STATE["camp"]["win"].inputs["Strength"].default_value = 11.0 * f
+        STATE["camp"]["fire"].inputs["Strength"].default_value = 16.0 * f
+    except Exception:
+        pass
     update_corps(t)
     update_crowd(t)
     STATE["chimneys"].update(t, wind=(WIND[0], WIND[1]))
