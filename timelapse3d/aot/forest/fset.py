@@ -6,7 +6,6 @@ outside its gate, the windmill village, and the Forest of Giant Trees (frame F, 
 """
 import math, os, random, sys
 import numpy as np
-os.environ.setdefault("WD_FINE", "1")          # autopilot 10/28: world.ground_mat fine 20-90 m mottling on the forest plain
 import bpy, bmesh
 from mathutils import Vector, Matrix, noise
 
@@ -480,6 +479,31 @@ def build_all(M, root=None, parts=("road", "forest", "trap", "karanes", "oldtown
                 ob.parent = root
     return c
 
+def fine_ground():
+    """autopilot 10/28 (f1 v3: the plain still one flat green at the 60-200 m camera): multiply WD_Ground's base colour by
+    two noise layers (~80 m patches 0.70-1.18, ~18 m mottling 0.86-1.10) so the meadow has visible texture up close."""
+    m = bpy.data.materials.get("WD_Ground")
+    if m is None or not m.use_nodes:
+        return
+    nt = m.node_tree; N, Ln = nt.nodes, nt.links
+    b = next((n for n in N if n.type == "BSDF_PRINCIPLED"), None)
+    if b is None or not b.inputs["Base Color"].links:
+        return
+    src = b.inputs["Base Color"].links[0].from_socket
+    tc = N.new("ShaderNodeTexCoord")
+    out = src
+    for sc_, a, c, d in ((1 / 80.0, 0.35, 0.70, 1.18), (1 / 18.0, 0.40, 0.86, 1.10)):
+        nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = sc_; nz.inputs["Detail"].default_value = 5
+        Ln.new(tc.outputs["Object"], nz.inputs["Vector"])
+        mr = N.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = a; mr.inputs["From Max"].default_value = 1 - a + 0.3
+        mr.inputs["To Min"].default_value = c; mr.inputs["To Max"].default_value = d
+        Ln.new(nz.outputs["Fac"], mr.inputs["Value"])
+        mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"; mx.inputs["Factor"].default_value = 1.0
+        Ln.new(out, mx.inputs["A"]); Ln.new(mr.outputs["Result"], mx.inputs["B"])
+        out = mx.outputs["Result"]
+    Ln.new(out, b.inputs["Base Color"])
+    print("[forest] fine_ground: WD_Ground mottling on", flush=True)
+
 def build_set(M, year=850):
     import time
     t0 = time.time()
@@ -487,6 +511,7 @@ def build_set(M, year=850):
     C.make_sky(sc)
     W = C.world_mod()
     W.build(M, year, {"terrain": None})
+    fine_ground()
     sys.modules["aotlib"].height = lambda x, y: C.G(x, y)       # render_seg ground checks / people_kit read aotlib.height
     build_all(M)
     print(f"[forest] set built in {time.time() - t0:.1f}s", flush=True)

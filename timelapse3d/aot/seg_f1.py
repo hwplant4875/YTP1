@@ -277,6 +277,7 @@ def build(site):
     for r in ROSTER:
         C.trail_geo(T.g, T.new())
     T.build(c); S["T"] = T
+    T.ob.hide_render = True; T.ob.hide_viewport = True   # autopilot 10/28: the flat streaks read as grey slabs at the low camera
     # people: Armin / Jean / Reiner on their horses, 2 support-squad ODM soldiers
     P = C.Batch("F1_People", C.RIDER_MATS)
     S["pj"] = {}

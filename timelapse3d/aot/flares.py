@@ -151,7 +151,7 @@ class FlareSet:
                 taus = np.arange(0.0, self.BURN + self.TOP_HOLD, 0.03); n = len(taus)
                 P = np.array([self.path(f, tau) for tau in taus])
                 fade = np.clip(1.0 - (taus - self.BURN) / self.TOP_HOLD, 0.15, 1.0)
-                self.cards.add_many(f["t0"] + taus, P, None, r0=4.5 * w, r1=5.0 * w, life=0.09, rise=0.0, color=glow, kind="glow",
+                self.cards.add_many(f["t0"] + taus, P, None, r0=2.4 * w, r1=2.7 * w, life=0.09, rise=0.0, color=glow, kind="glow",   # autopilot: smaller head glow
                                     alpha=fade, fade_in=0.001)
                 hm, hs = emit_mat(f"FlareCore_{f['color']}", tuple(min(1.0, c * 0.4 + 0.6) for c in glow), 60.0)
                 me = bpy.data.meshes.new(f"{self.name}_Core{i}")

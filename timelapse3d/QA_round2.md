@@ -11,3 +11,5 @@
 - [x] g5 v8: head hold ~2.5 s, AT sprint/punch zoomed (68 mm) and readable.
 - [~] g6 v5: far HQ framing (owner 'far is better') but blond-titan bite/throw + Eren/Mikasa unreadable -> v6 zoom 56 mm at 37.3, 50 mm at 52.5.
 - [~] s1 v2: dark start ~2 s OK, church/flash OK; rise/Plan C/rampage tiny -> v3 keys ~85-100 m (were 160-230).
+- [~] f1 v3: Female + riders now readable (60-200 m cam); left: horse dust streaks = grey slabs, purple flare head too big,
+      plain still flat -> v4: trails hidden, head glow 4.5w -> 2.4w, fset.fine_ground() multiplies WD_Ground by 80 m + 18 m noise.
