@@ -282,6 +282,13 @@ def build(site):
     x, y, _ = ret_at(ret_head(BEATS["green"]) - 120)
     fs.add(BEATS["green"], _W(x, y, 3.0), "green", up=130, width=2.4, seed=7)
     fs.build(c); S["fs"] = fs
+    # autopilot 10/28 (f2|f3 seam): f2's blue + green streaks are still hanging in the sky at f2's end -> the same flares,
+    # launched at their f2 times minus f2's DUR, so they continue across the seam instead of vanishing
+    import seg_f2 as _F2
+    pf = flares.FlareSet("F3_PrevFlares")
+    pf.add(_F2.BEATS["blue"] - _F2.DUR, _W(_F2.TX - 30, _F2.TY + 40, 34.0), "blue", up=140, width=2.0, seed=3)
+    pf.add(_F2.BEATS["green"] - _F2.DUR, _W(_F2.TX + 25, _F2.TY + 60, 34.0), "green", up=140, width=2.0, seed=4)
+    pf.build(c); S["pf"] = pf
     steam = flares.PuffField("F3_Steam", kind="steam", alpha=0.45)        # v2: lighter, smaller, shorter (QA)
     te, pos, vel = [], [], []
     ex, ey = eren_F(BEATS["headkick"])
@@ -420,7 +427,7 @@ def update(t):
         TT.vis[j] = 1.0 if t >= 48.0 else 0.0
     TT.push()
     if "cards" not in SK:
-        S["fs"].update(t, wind=(1.5, 0.5)); S["steam"].update(t, wind=(0.8, 0.3))
+        S["fs"].update(t, wind=(1.5, 0.5)); S["steam"].update(t, wind=(0.8, 0.3)); S["pf"].update(t, wind=(1.0, 0.5))
 
 def light(t):
     LIGHT.apply(t)
