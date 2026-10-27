@@ -153,8 +153,8 @@ def build_forest(c):
     if len(cam):
         P = np.array(pts)
         d = np.full(len(P), 1e9)
-        for c in cam:
-            d = np.minimum(d, np.hypot(P[:, 0] - c[0], P[:, 1] - c[1]))
+        for cp in cam:
+            d = np.minimum(d, np.hypot(P[:, 0] - cp[0], P[:, 1] - cp[1]))
         keep = (d > 18.0)
         keep[-2:] = True
         pts = [tuple(p) for p, k in zip(P, keep) if k]

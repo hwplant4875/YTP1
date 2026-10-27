@@ -168,16 +168,15 @@ def build_wall_face(c):
     rubble = C.mat("ST_WallRubble", (0.60, 0.57, 0.50), 0.9)
     bm = bmesh.new()
     rnd = random.Random(25)
-    n = 18; rim = []; back = []
-    for k in range(n):                                        # hole: an irregular RECESS (rim on the wall face, floor 5 m in)
-        a = k * math.tau / n
+    n = 18; rim = []
+    for k in range(n):                                        # hole: an irregular dark patch ON the wall face (the world
+        a = k * math.tau / n                                  # wall cannot be cut), its edge broken up by stone chunks
         r = 9.0 + rnd.uniform(-1.8, 1.8)
         rim.append(bm.verts.new((r * math.cos(a), 0.05, r * math.sin(a))))
-        back.append(bm.verts.new((0.8 * r * math.cos(a), -5.0, 0.8 * r * math.sin(a))))
-    ctr = bm.verts.new((0, -5.0, 0))
+        _cube(bm, (r * math.cos(a), 0.4, r * math.sin(a)), (rnd.uniform(1.5, 3.0), 0.9, rnd.uniform(1.2, 2.4)), rz=0.0)
+    ctr = bm.verts.new((0, 0.05, 0))
     for k in range(n):
-        f = bm.faces.new((ctr, back[(k + 1) % n], back[k])); f.material_index = 1
-        f = bm.faces.new((rim[k], back[k], back[(k + 1) % n], rim[(k + 1) % n])); f.material_index = 4
+        f = bm.faces.new((ctr, rim[k], rim[(k + 1) % n])); f.material_index = 1
     res = bmesh.ops.create_uvsphere(bm, u_segments=20, v_segments=12, radius=1.0)    # the face: ellipsoid 7 x 1.6 x 8.5
     for v in res["verts"]:
         v.co = Vector((v.co.x * 6.0, max(v.co.y, -0.2) * 1.6 + 0.2, v.co.z * 7.6 - 0.8))
@@ -197,7 +196,8 @@ def build_wall_face(c):
     for k in range(10):                                       # broken stone ledge under the hole
         _cube(bm, (rnd.uniform(-8, 8), rnd.uniform(0.3, 1.2), -9.5 + rnd.uniform(-1, 1)), (rnd.uniform(1, 2.5), 1.2, rnd.uniform(0.8, 1.6)))
     for f in bm.faces:
-        if f.material_index == 0 and f.calc_center_median().z < -9:
+        cm_ = f.calc_center_median()
+        if f.material_index == 0 and (cm_.z < -9 or math.hypot(cm_.x, cm_.z) > 6.5):
             f.material_index = 4
     face = C.mesh_obj("ST_WallTitan", bm, [skin, dark, white, iris, rubble], c)
     face.matrix_world = Matrix.Translation((w[0], w[1], GS(fx, fy) + FACE_Z)) @ R
@@ -215,7 +215,7 @@ def _hole_only(face):
     """keep only the dark hole + rubble of the placeholder (drop its ellipsoid / eyes / nose / brow)."""
     me = face.data
     bm = bmesh.new(); bm.from_mesh(me)
-    kill = [f for f in bm.faces if f.material_index in (0, 2, 3) and f.calc_center_median().z > -9 and f.calc_center_median().y > -0.5]
+    kill = [f for f in bm.faces if f.material_index in (0, 2, 3) and f.calc_center_median().z > -9]
     bmesh.ops.delete(bm, geom=kill, context="FACES"); bm.to_mesh(me); bm.free()
     return face
 
@@ -232,20 +232,26 @@ def _pure_face(c, centre, n):
     bpy.context.view_layer.update()
     meshes = [o for o in rig.children_recursive if o.type == "MESH"]
     body = max(meshes, key=lambda o: len(o.data.vertices))
-    neck_z = (rig.matrix_world @ rig.data.bones["head"].head_local).z
-    P = [body.matrix_world @ v.co for v in body.data.vertices]
-    head = [p for p in P if p.z > neck_z]
+    def head_pts():
+        bpy.context.view_layer.update()
+        nz = (rig.matrix_world @ rig.data.bones["head"].head_local).z
+        P = [body.matrix_world @ v.co for v in body.data.vertices]
+        return nz, [p for p in P if p.z > nz]
+    neck_z, head = head_pts()
+    k = 12.0 / max(1e-3, max(p.z for p in head) - min(p.z for p in head))     # a 12 m head (fills the 18 m hole)
+    rig.scale = tuple(v * k for v in rig.scale)
+    neck_z, head = head_pts()
     hz0, hz1 = min(p.z for p in head), max(p.z for p in head)
-    front = max(p.dot(nv) for p in head)
     side = Vector((-nv.y, nv.x, 0.0))
-    hs = [p.dot(side) for p in head]; hc = (min(hs) + max(hs)) / 2; hw = max(hs) - min(hs)
-    eye = Vector((0, 0, 0)) + side * (hc + 0.2 * hw) + Vector((0, 0, hz0 + 0.60 * (hz1 - hz0)))
-    # move: the left eye onto the hole centre, the face front 0.3 m proud of the wall face
+    hs = [p.dot(side) for p in head]; hc = (min(hs) + max(hs)) / 2
+    front = max(p.dot(nv) for p in head)
     cv = Vector(centre)
-    off = Vector((cv.x, cv.y, 0)) - side * eye.dot(side) - nv * (front - 0.3) + Vector((0, 0, cv.z - eye.z))
+    mid = side * hc + Vector((0, 0, hz0 + 0.55 * (hz1 - hz0)))            # between the eyes
+    shell = 4.0
+    # face shell [front - shell, front] -> [patch + 0.1, patch + 0.1 + shell]
+    off = Vector((cv.x, cv.y, 0)) - side * mid.dot(side) - nv * (front - shell - 0.15) + Vector((0, 0, cv.z - mid.z))
     rig.location = off
     bpy.context.view_layer.update()
-    hole_c = cv
     keep = []
     for o in meshes:
         me = o.data
@@ -254,9 +260,8 @@ def _pure_face(c, centre, n):
         kill = []
         for v in bm.verts:
             p = mw @ v.co
-            d = p - hole_c
-            lat = math.hypot(d.dot(side), d.z)
-            if lat > HOLE_R or p.z < neck_z + off.z - 0.5 or d.dot(nv) < -6.0:
+            d = p - cv
+            if math.hypot(d.dot(side), d.z) > HOLE_R or d.dot(nv) < 0.12 or p.z < neck_z + off.z - 0.5:
                 kill.append(v)
         bmesh.ops.delete(bm, geom=kill, context="VERTS"); bm.to_mesh(me); bm.free()
         if len(me.vertices):
