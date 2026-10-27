@@ -433,9 +433,9 @@ def prune_world_veg():
         # scattered single trees / small groves (their dark floor patches stay removed below), clear of the dome's path
         def sparse_keep(i, x, y):
             fx, fy = x - C.FO[0], y - C.FO[1]
-            if not (-9300 < fy < -150 and -350 < fx < 1750) or (i * 2654435761) % 7:
+            if not (-9300 < fy < -150 and -350 < fx < 1750) or (i * 2654435761) % 18:
                 return False
-            return abs(fx - 470.0) > 160.0 or fy > -2600.0 and abs(fx - 300.0) > 160.0
+            return fx < 0.0 or fx > 1150.0          # f1 v6: only far from the dome / Female path (close cones looked crude)
         kill = [i for i, p in enumerate(co) if bad(p[0], p[1]) and not sparse_keep(i, p[0], p[1])]   # world._points: world coordinates
         if kill:
             bm = bmesh.new(); bm.from_mesh(me); bm.verts.ensure_lookup_table()
