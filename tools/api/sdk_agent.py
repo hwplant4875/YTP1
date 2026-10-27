@@ -70,4 +70,6 @@ async def main():
                 print(line, flush=True); log.write(line + "\n")
     log.close()
 
+sys.unraisablehook = lambda *_: None      # Windows proactor pipes print "I/O operation on closed pipe" at GC; harmless
 asyncio.run(main())
+sys.stdout.flush(); os._exit(0)
