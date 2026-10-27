@@ -145,6 +145,11 @@ GENERIC = {
 PRESETS.update(GENERIC)
 GENERIC_KEYS = list(GENERIC.keys())
 PRESETS["longhair_gaper"] = GENERIC["messy_gaper"]   # old name kept as an alias
+# autopilot 10/28: the titan IN THE WALL (s2 ending, seen at ~60 m): pale_starer's head without the googly white eyes /
+# unibrow - sunken eyes with a big dark iris (smiling-style socket), lighter brows. Not in GENERIC (never picked by seed).
+PRESETS["wall_face"] = dict(PRESETS["pale_starer"], hair=None, brow=0.35,
+                            eyes=dict(scale=1.0, iris=0.46, iris_col=(0.20, 0.16, 0.12), push=0.0, socket=0.55),
+                            targets=WIDE_MOUTH + [("head/head-square", 0.5)] + LR("cheek/{s}-cheek-volume-decr", 0.5))
 PART_TOP = 4.5   # centre part: strands below eye_z + PART_TOP * eye_radius are moved fully off the face
 
 # --------------------------------------------------------------------------------------------- shader helpers

@@ -162,7 +162,7 @@ def build_wall_face(c):
     ang = math.atan2(ny, nx)
     R = Matrix.Rotation(ang - math.pi / 2, 4, "Z")            # local +y -> the inward normal (out of the wall)
     skin = C.mat("ST_WallTitanSkin", (0.62, 0.40, 0.30), 0.6)
-    dark = C.mat("ST_HoleDark", (0.05, 0.04, 0.035), 0.95)
+    dark = C.mat("ST_HoleDark", (0.11, 0.095, 0.08), 0.95)          # autopilot: dark stone, not a pitch-black void
     white = C.mat("ST_EyeWhite", (0.86, 0.84, 0.80), 0.4)
     iris = C.mat("ST_EyeIris", (0.06, 0.05, 0.04), 0.3)
     rubble = C.mat("ST_WallRubble", (0.60, 0.57, 0.50), 0.9)
@@ -224,7 +224,7 @@ def _pure_face(c, centre, n):
     """70 m pure titan (pure_titans.make_pure, rest pose) standing INSIDE the wall facing out of it; everything but the
     part of the face inside the hole (centred on its left eye) is deleted, the face sits 0.3 m proud of the hole."""
     import pure_titans as PT
-    rig = PT.make_pure("generic", seed=2, height=70.0, lod=1.0, outline=False, name="ST_WallTitanPure")
+    rig = PT.make_pure("generic", seed=2, preset="wall_face", height=70.0, lod=1.0, outline=False, name="ST_WallTitanPure")   # autopilot: no googly eyes
     for pb in rig.pose.bones:
         pb.matrix_basis = Matrix.Identity(4)
     nv = Vector((n[0], n[1], 0.0)); ang = math.atan2(n[1], n[0])
