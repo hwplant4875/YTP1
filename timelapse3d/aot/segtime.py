@@ -125,7 +125,7 @@ def ramp_knots(dur, holds, ramp=1.2, n=12, speed=None):
     return [(round(tv, 6), round(t, 6)) for tv, t in K]
 # g3 v5: march846 (G3_MARCH) at real time (slope 1 = march846's own tuned speed), eased 2 -> 1 -> 2 over 1.0 video s each side
 # v7 (QA batch1 P1: march ~25 s -> ~10 s): the march plays at 1.8 (18 local s -> ~10 video s)
-TMAP["g3"] = ramp_knots(DUR["g3"], [(G3_MARCH[0], G3_MARCH[1], 1.8)], ramp=1.0)
+TMAP["g3"] = ramp_knots(DUR["g3"], [(G3_MARCH[0], G3_MARCH[1], 1.6)], ramp=1.0)   # round 2: 1.8 -> 1.6 (~11 s)
 
 def slope_knots(dur, plan, n=8):
     """TMAP knots from a slope PLAN = [(t_a, slope, ramp), ...] (local t_a ascending, plan[0] = (0, s0, 0)): play at the
@@ -156,10 +156,19 @@ TMAP["g2"] = _g2_v5()
 # Eren's fist on the wall top above O and the g4|g5 seam.  Video ~7.9 s.
 TMAP["g4"] = slope_knots(DUR["g4"], [(0.0, 2.0, 0.0), (1.0, 3.2, 0.6), (15.0, 2.0, 0.6)])
 # g7 v3 (owner 10/27: camera to the cannon basin MUCH faster): transit local 0.3-5.0 at 4.5x, back to 2 before FIRE 6.0.
-TMAP["g7"] = slope_knots(DUR["g7"], [(0.0, 2.0, 0.0), (0.3, 4.5, 0.4), (4.9, 2.0, 0.35)])
+TMAP["g7"] = slope_knots(DUR["g7"], [(0.0, 2.0, 0.0), (0.3, 4.5, 0.4), (4.9, 2.0, 0.35), (5.9, 1.3, 0.25), (8.0, 2.0, 0.3)])   # round 2: the volley + steam at 1.3
 # g8 v4 (owner 10/27: carry a bit faster): the carry (local 19.5-37.5) at 2.6x, back to 2 before the slam.
 # v4 (QA batch1: "closer, slower moment"): the lift + first carry steps at 1.5, then the fast carry
-TMAP["g8"] = slope_knots(DUR["g8"], [(0.0, 2.0, 0.0), (16.5, 1.5, 0.4), (21.5, 2.6, 0.4), (37.0, 2.0, 0.4)])
+TMAP["g8"] = slope_knots(DUR["g8"], [(0.0, 2.0, 0.0), (16.5, 1.5, 0.4), (21.5, 2.6, 0.4), (37.0, 2.0, 0.4),
+                                      (38.3, 1.4, 0.3), (41.6, 2.0, 0.3), (54.8, 1.3, 0.3), (58.6, 2.0, 0.3)])
+# autopilot round 2 (part 1 was 3:20, target 3:30-4:00): slower KEY moments only, seams stay at slope 2.
+# g8: the slam (39.3) at 1.4 and the herded-corner kill (local 55-58.5) at 1.3.
+# g5: the Colossal's head over the gate (0.6-3.8) at 1.0, the Attack Titan's sprint + PUNCH 57.4 + roar at 1.3.
+TMAP["g5"] = slope_knots(DUR["g5"], [(0.0, 2.0, 0.0), (0.6, 1.0, 0.3), (3.8, 2.0, 0.3), (54.3, 1.3, 0.3), (59.6, 2.0, 0.3)])
+# g6: the cut-open + lift (17.4-22.6) at 1.5, the blond titan spot/charge/bite/throw (35.3-39.2) at 1.3, Eren rising from the
+# steam + Mikasa + the hug + tableau (48.3-59.5) at 1.4.
+TMAP["g6"] = slope_knots(DUR["g6"], [(0.0, 2.0, 0.0), (17.4, 1.5, 0.3), (22.6, 2.0, 0.3), (35.3, 1.3, 0.3), (39.2, 2.0, 0.3),
+                                      (48.3, 1.4, 0.3), (59.5, 2.0, 0.3)])
 def knots(g):
     k = TMAP.get(g)
     return list(k) if k else [(0.0, 0.0), (DUR[g] / SPEED, DUR[g])]

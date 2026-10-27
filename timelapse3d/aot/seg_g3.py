@@ -320,8 +320,8 @@ G_OVC, G_DIM = ((1.0, 1.0, 1.0), -0.15), ((0.98, 0.99, 1.02), -0.45)
 _m0, _m1 = B["march"]
 # v7 (QA batch1 P1: "first ~5 s of night nearly black"): the short flight night holds g2's end-night level with a stronger
 # moon and a lifted grade instead of g4's -2.6 night (g4's NIGHT stays for the graduation night = the g4 seam)
-NIGHT_A = (24.0, 245.0, 0.55, (0.55, 0.66, 1.0), (0.016, 0.026, 0.07), (0.06, 0.08, 0.16), 0.045, 1.0)
-NIGHT_AG, NIGHT_AH = ((0.95, 0.98, 1.08), 0.25), (4500.0, 0.45, (0.06, 0.08, 0.14))
+NIGHT_A = (24.0, 245.0, 0.70, (0.55, 0.66, 1.0), (0.020, 0.032, 0.08), (0.07, 0.09, 0.18), 0.055, 1.0)   # round 2: +moon
+NIGHT_AG, NIGHT_AH = ((0.95, 0.98, 1.08), 0.6), (4500.0, 0.45, (0.06, 0.08, 0.14))
 LKEYS = [  # (t, light, grade, haze)
     (0.0, G2NIGHT, G2NIGHT_G, G2NIGHT_H),
     (B["night"][0], NIGHT_A, NIGHT_AG, NIGHT_AH), (B["night"][1], NIGHT_A, NIGHT_AG, NIGHT_AH),
@@ -340,7 +340,7 @@ LKEYS = [  # (t, light, grade, haze)
     (B["FT3"] - 0.6, MORNING, G_ID, HAZE0), (B["seasons"][0], SPRING, G_ID, HAZE0),
     (B["seasons"][0] + 0.6, SUMMER, G_SUM, HAZE0),
     (B["seasons"][0] + 1.4, AUTUMN, G_AUT, (3200.0, 0.6, (0.86, 0.78, 0.66))),
-    (B["grad"][0] + 0.4, DUSK2, ((0.98, 0.92, 0.98), -0.9), (4000.0, 0.55, (0.40, 0.30, 0.34))),
+    (B["grad"][0] + 0.4, DUSK2, ((0.98, 0.92, 0.98), -0.45), (4000.0, 0.55, (0.40, 0.30, 0.34))),
     (B["grad"][0] + 1.8, NIGHT, NIGHT_G, NIGHT_H), (DUR, NIGHT, NIGHT_G, NIGHT_H)]
 # ground surface: (t, snow 0..1, autumn 0..1): snow is never used any more (v5); the camp's quick autumn only
 SURF_KEYS = [(0.0, 0.0, 0.0), (B["seasons"][0] + 0.5, 0.0, 0.0), (B["seasons"][0] + 1.4, 0.0, 0.7), (B["grad"][0] + 0.6, 0.0, 0.0),
