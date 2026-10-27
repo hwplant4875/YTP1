@@ -246,6 +246,10 @@ def fem_pose(t):
 def update(t):
     B, P, TT = S["B"], S["P"], S["TT"]
     cam = bpy.context.scene.camera
+    # autopilot 10/28 (see seg_f3): canopy-grazing views can exceed the GPU driver timeout -> far clip 900 m in the forest
+    if "_clip0" not in S:
+        S["_clip0"] = cam.data.clip_end
+    cam.data.clip_end = 900.0 if t > 2.6 else S["_clip0"]
     for k, j in enumerate(S["sq"]):
         x, y, yaw = squad_F(k, t)
         B.pos[j] = _W(x, y); B.yaw[j] = yaw
