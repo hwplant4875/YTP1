@@ -11,3 +11,7 @@ Owner rules (10/26 15:19): free copyright-safe horror music or ElevenLabs only, 
 - `eleven_ghostface_bed2.mp3` (10/27, shorts-factory key, owner's choice): same prompt family, "slightly more urgent, menacing", 150 s.
   Bass-heavier than bed 1 (low/mid +5 dB raw). `eleven_ghostface_bed2_loop.mp3`: low-shelf -6 dB at 150 Hz, same levelling and
   8..140 s loop with a 5 s equal-power crossfade; -23.5 LUFS, low/mid +2.2 dB (bed 1 loop: -4.8 dB). Meant for #4 to #1 and the outro.
+
+- `eleven_musicbox_ambience.mp3` (10/27, shorts-factory key, owner's request "오르골 공포 앰비언스, 잔잔하게"): slow detuned music box
+  over soft low strings, 60 BPM A minor, 150 s (quiet first 35 s and last 35 s). `eleven_musicbox_ambience_loop.mp3`: same levelling,
+  8..140 s loop with a 5 s equal-power crossfade.

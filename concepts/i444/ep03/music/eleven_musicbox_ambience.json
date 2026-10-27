@@ -1,0 +1,7 @@
+{
+ "prompt": "Instrumental calm horror ambience led by a music box. A slow, sparse, slightly detuned music box melody in a minor key, soft and fragile, over a quiet dark ambient bed of low soft strings and gentle distant reverb. Eerie, lonely and calm, like an empty child's room at night. Made to sit quietly under a narrator for several minutes: same mood and tempo throughout, no build-up, no climax, no ending, no silences. 60 BPM, A minor. No drums, no booms, no impacts or hits, no stingers, no choir, no vocals, no harsh drones, no shrill high strings, no ticking.",
+ "music_length_ms": 150000,
+ "model_id": "music_v2_5",
+ "force_instrumental": true,
+ "key": "shorts-factory (ELEVENLABS_API_KEY)"
+}
