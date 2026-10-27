@@ -679,21 +679,28 @@ def build_titans(coll):
     roles = ["first", "abn1", "av", "av", "ring_w", "av", "ring_e", "trench1", "av", "abn2", "av", "crater", "ring_w", "av",
              "ring_e", "prone", "av", "av", "sit", "ring_w", "av", "trench2", "ring_e", "av", "lip", "av", "ring_w", "av", "ring_e",
              "av", "mill", "ring_w", "av", "ring_e", "lip"]
+    BIG = [1, 2, 3, 4, 5, 6, 7, 8]                             # 8 extra large walkers (8-15 m) right behind the first titan
+    big_roles = ["av", "av", "ring_w", "av", "av", "ring_e", "av", "av"]
+    for q, (pos_, r_) in enumerate(zip(BIG, big_roles)):
+        roles.insert(pos_, r_ + "_big")
+        sizes.insert(pos_, rnd.uniform(8.0, 15.0))
     i5 = min(range(len(sizes)), key=lambda i: abs(sizes[i] - 5.0)); sizes[0], sizes[i5] = sizes[i5], sizes[0]
     for r_ in ("abn1", "abn2"):
         k = roles.index(r_); sizes[k] = rnd.uniform(6.5, 8.5)
     lane_x = (-4.5, 0.0, 4.5)
     av_n = 0; rw = rn = lp = ml = 0
-    RW = [(-150, 118), (-212, 200), (-262, 282), (-122, 182), (-300, 340)]; RE = [(130, 108), (190, 188), (242, 262), (108, 180), (282, 330)]
+    RW = [(-150, 118), (-212, 200), (-262, 282), (-122, 182), (-300, 340), (-180, 260), (-240, 330)]
+    RE = [(130, 108), (190, 188), (242, 262), (108, 180), (282, 330), (170, 250), (230, 320)]
     LIP = [(-21, 60), (22, 61), (-28, 47), (28, 48)]
     MILL = [[(-48, 32), (-55, 62), (-38, 88)], [(46, 34), (58, 60), (40, 92)], [(-10, 86), (12, 95), (30, 80)], [(-60, 20), (-70, 45), (-52, 70)]]
     pour = []
     for k, (H, role) in enumerate(zip(sizes, roles)):
         nm = f"p{k + 1}"
-        th = BEATS["first_titan"] + 0.48 * k + rnd.uniform(-0.05, 0.05)
+        th = BEATS["first_titan"] + 0.42 * k
         lx = lane_x[k % 3] + rnd.uniform(-0.6, 0.6)
         v = 3.2 * (1.0 + 0.17 * H) * rnd.uniform(0.9, 1.1)      # ~3-4x real: the pour streams up the town 12-30 s
-        vh = 5.0                                           # one speed in the breach: >= 7 m nose to tail per lane
+        vh = 5.5                                           # one speed in the breach: 3 lanes x 0.42 s x 5.5 = 6.9 m nose to tail
+        role = role.replace("_big", "")
         abn = role.startswith("abn")
         if abn:
             v = 15.0
@@ -822,7 +829,7 @@ def build_titans(coll):
     def near(t, xy, roles_ok, used):
         best = None
         for nm, role, th in pour:
-            if role not in roles_ok or nm in used or th > t - 2.0:
+            if role not in roles_ok or nm in used or th > t - 2.0 or TT.H[TT.j(nm)] >= 8.0:
                 continue
             p = TT.pos(nm, t); q = np.array([p[0], p[1] + segtime.SET_OFF_Y])
             d = float(np.linalg.norm(q - np.array(xy)))
@@ -1166,10 +1173,15 @@ def build_people(coll):
     say(f"flyers: {len(SQ.flyers)}")
 
 # ====================================================================== the evacuation crowd (5,500 minimal figures)
-SHIRTS_DUSTY = ["#d1495b", "#edae49", "#1d8a99", "#3e6fb0", "#6a994e", "#f28f3b", "#8e5ea2", "#e07a5f", "#3d9970", "#c8553d",
-                "#f4d35e", "#5aa9e6", "#b5468a", "#e9e2d0", "#9bc53d", "#ff8c69"]
-PANTS_DUSTY = ["#2b4162", "#5c3c2a", "#3f4a3c", "#6b4f3a", "#2e2e3a", "#7a3b32"]
-SCARVES = ["#f1e3c8", "#d9a441", "#c0504d", "#4e8fb5"]
+SHIRTS_V2 = ["#d1495b", "#edae49", "#1d8a99", "#3e6fb0", "#6a994e", "#f28f3b", "#8e5ea2", "#e07a5f", "#3d9970", "#c8553d",
+             "#f4d35e", "#5aa9e6", "#b5468a", "#e9e2d0", "#9bc53d", "#ff8c69"]
+EARTH = ["#7a5a42", "#a89070", "#8a6a4a", "#6e6250", "#9a8468", "#5e5446", "#b8a688", "#7a6a56"]
+def _mute(h, e, k=0.38):
+    a = [int(h[q:q + 2], 16) for q in (1, 3, 5)]; b = [int(e[q:q + 2], 16) for q in (1, 3, 5)]
+    return "#%02x%02x%02x" % tuple(int(round(x + (y - x) * k)) for x, y in zip(a, b))
+SHIRTS_DUSTY = [_mute(h, EARTH[n % len(EARTH)]) for n, h in enumerate(SHIRTS_V2)] + EARTH[:6]   # muted colours + plain earth cloth
+PANTS_DUSTY = ["#3e3a42", "#5c4632", "#4a4a3c", "#6b5440", "#3a3430", "#6a4038"]
+SCARVES = ["#d8ccb0", "#b8924a", "#9a5a48", "#5a7a8e"]
 HAIRS_C = ["#1c1814", "#3a2a1e", "#6a4a2a", "#8a6a3a", "#5a3a28", "#8a8a84"]
 SKINS_C = ["#d8a888", "#c49474", "#a87a5a"]
 
@@ -1882,26 +1894,61 @@ def update_tower(t):
     _hide(STATE["scar"], t < BEATS["cc_slide"][0] + 0.2)
 
 # ====================================================================== bolt (0.0), AT emergence bolt, decals, shafts, clouds
-def _bolt_mesh(name, top, bot, seed, r, n=26, amp=14.0, coll=None, col="#fcfa95", strength=60.0):
+def _bolt_mesh(name, top, bot, seed, r, n=26, amp=14.0, coll=None, col="#fcfa95", strength=60.0, branches=0, glow=None):
+    """Jagged lightning: one main channel top -> bot (bright core) + `branches` side channels, optional gold glow sheath."""
     L = STATE["L"]; rnd = random.Random(seed)
-    bm = bmesh.new()
     top, bot = Vector(top), Vector(bot)
+    chans = []
     pts = [top]
     for k in range(1, n):
         u = k / n
-        sw = math.sin(u * math.pi * 1.6) * amp                     # one thick S-curve
-        q = top.lerp(bot, u) + Vector((sw + rnd.uniform(-2.5, 2.5), rnd.uniform(-2.5, 2.5), 0.0))
+        sw = math.sin(u * math.pi * 1.6) * amp
+        q = top.lerp(bot, u) + Vector((sw + rnd.uniform(-7, 7), rnd.uniform(-7, 7), rnd.uniform(-4, 4)))
         pts.append(q)
     pts.append(bot)
-    for a, b in zip(pts, pts[1:]):
-        L.cyl(bm, a, b, r, r * 0.95, seg=6)
+    chans.append((pts, r))
+    for b in range(branches):
+        i0 = rnd.randrange(3, n - 6)
+        p = pts[i0].copy(); bp = [p]
+        dirv = Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), 0.0)).normalized()
+        step = (top.z - bot.z) / n
+        for k in range(rnd.randint(4, 9)):
+            p = p + dirv * rnd.uniform(8, 16) + Vector((rnd.uniform(-5, 5), rnd.uniform(-5, 5), -step * rnd.uniform(0.6, 1.2)))
+            bp.append(p.copy())
+        chans.append((bp, r * 0.5))
+    bm = bmesh.new()
+    for cp, rr in chans:
+        for a, b in zip(cp, cp[1:]):
+            L.cyl(bm, a, b, rr, rr * 0.9, seg=6)
     m, _ = emit_mat(name + "Mat", hexrgb(col), strength)
     ob = L.obj_from_bm(name, bm, [m], coll); ob.visible_shadow = False; ob.hide_render = True
+    if glow:
+        gcol, gstr, gr = glow
+        gm = bpy.data.materials.new(name + "GlowMat"); gm.use_nodes = True
+        nt = gm.node_tree; N = nt.nodes; Lk = nt.links
+        N.remove(N["Principled BSDF"])
+        em = N.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (*hexrgb(gcol), 1); em.inputs["Strength"].default_value = gstr
+        tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.45
+        Lk.new(tr.outputs[0], mx.inputs[1]); Lk.new(em.outputs[0], mx.inputs[2]); Lk.new(mx.outputs[0], N["Material Output"].inputs["Surface"])
+        try:
+            gm.surface_render_method = "BLENDED"
+        except Exception:
+            pass
+        gm["toon"] = 1
+        bm2 = bmesh.new()
+        for cp, rr in chans:
+            for a, b in zip(cp, cp[1:]):
+                L.cyl(bm2, a, b, rr * gr, rr * gr * 0.9, seg=8)
+        g = L.obj_from_bm(name + "Glow", bm2, [gm], coll); g.visible_shadow = False; g.hide_render = True
+        g.parent = ob; g.matrix_parent_inverse = ob.matrix_world.inverted()
+        ob["glow"] = g.name
     return ob
 
 def build_bolts(coll):
-    b0 = _bolt_mesh("G5_Bolt0", S3(-60, -260, 720), S3(0, -25, 0), 11, 4.0, coll=coll, col="#ffd21a", strength=9.0)
-    b1 = _bolt_mesh("G5_Bolt1", S3(-48, -250, 720), S3(0, -25, 0), 12, 4.0, coll=coll, col="#ffd21a", strength=9.0)
+    b0 = _bolt_mesh("G5_Bolt0", S3(-60, -260, 720), S3(0, -25, 0), 11, 1.4, n=40, amp=18.0, coll=coll, col="#fffaf0", strength=40.0,
+                    branches=5, glow=("#ffc84a", 6.0, 3.2))
+    b1 = _bolt_mesh("G5_Bolt1", S3(-48, -250, 720), S3(0, -25, 0), 12, 1.4, n=40, amp=18.0, coll=coll, col="#fffaf0", strength=40.0,
+                    branches=4, glow=("#ffc84a", 6.0, 3.2))
     ld = bpy.data.lights.new("G5_BoltFlash", "POINT"); ld.color = (1.0, 0.85, 0.4); ld.energy = 0.0; ld.shadow_soft_size = 40
     lo = bpy.data.objects.new("G5_BoltFlash", ld); lo.location = SV(0, -40, 150); coll.objects.link(lo)
     ab = _bolt_mesh("G5_ATBolt", S3(BT_POS[0] + 4, BT_POS[1] - 3, 31), S3(BT_POS[0], BT_POS[1], 4), 31, 0.55, n=10, amp=2.0, coll=coll,
@@ -1920,7 +1967,10 @@ def flicker(t):
 def update_bolts(t):
     b0, b1, ld, ab, ld2 = STATE["bolts"]
     f = flicker(t)
-    _hide(b0, f != "spike0"); _hide(b1, f != "spike1")
+    for b_, on_ in ((b0, f == "spike0"), (b1, f == "spike1")):
+        _hide(b_, not on_)
+        if b_.get("glow"):
+            _hide(bpy.data.objects.get(b_["glow"]), not on_)
     ld.energy = 6e6 if f in ("spike0", "spike1") else 0.0
     te = BEATS["bt_torn"]
     on = te <= t < te + 0.2
@@ -1947,8 +1997,11 @@ def build_decals(coll):
     # BT's dark pool + a ribcage showing as the carcass evaporates
     bm = bmesh.new()
     c = S3(BT_POS[0] - 3.0, BT_POS[1], 0.06)
-    res = bmesh.ops.create_circle(bm, cap_ends=True, segments=16, radius=6.0)
+    res = bmesh.ops.create_circle(bm, cap_ends=True, segments=16, radius=3.6)
+    rr = random.Random(5)
     for v in res["verts"]:
+        if v.co.length > 0.1:
+            v.co *= rr.uniform(0.65, 1.15)
         v.co += Vector(c)
     pool = L.obj_from_bm("G5_BTPool", bm, [L.mat("G5_Pool", hexrgb("#3a1410"), 0.4)], coll); pool.visible_shadow = False
     bm = bmesh.new(); cx, cy = BT_POS[0] - 3.5, BT_POS[1]
@@ -2063,34 +2116,39 @@ def clear_lots():
     bm.to_mesh(me); bm.free(); me.update()
     say(f"cleared {len(dead)} houses N of SS for the alley view")
 
-def fix_q2_dome(coll):
-    """Owner QA: the domed drum N of Q2 reads as a flat brown disc from the sky: remove dome + drum, leave paving and a
-    small stone well."""
+def fix_q2_dome(coll=None):
+    """Owner QA (shared with seg_g6): the domed drum on Q2's north side read as a brown disc on a square base from the
+    sky.  Remove the copper dome, its cream drum and the square block under it (everything of TrostQ2Buildings within
+    9 m of the dome centre), and put a small round well there: 3.4 m grey stone rim, dark water, no base."""
+    import bmesh as _bm, sys as _sys
     o = bpy.data.objects.get("TrostQ2Buildings")
-    if o is None:
+    if o is None or bpy.data.objects.get("G5_Q2Well") is not None:
         return
     me = o.data
-    kill = {i for i, m in enumerate(me.materials) if m and (m.name.startswith("TrostRoofCopper") or m.name.startswith("TrostTowerCream"))}
-    if not kill:
+    cop = {i for i, m in enumerate(me.materials) if m and m.name.startswith("TrostRoofCopper")}
+    if not cop:
         return
-    import bmesh as _bm
     bm = _bm.new(); bm.from_mesh(me)
-    dead = [f for f in bm.faces if f.material_index in kill]
-    cs = [f.calc_center_median() for f in dead]
+    cs = [f.calc_center_median() for f in bm.faces if f.material_index in cop]
+    if not cs:
+        bm.free(); return
+    cx = sum(v.x for v in cs) / len(cs); cy = sum(v.y for v in cs) / len(cs)
+    dead = [f for f in bm.faces if math.hypot(f.calc_center_median().x - cx, f.calc_center_median().y - cy) < 7.6]
     _bm.ops.delete(bm, geom=dead, context="FACES")
     bm.to_mesh(me); bm.free(); me.update()
-    if cs:
-        mw = o.matrix_world
-        c = mw @ Vector((sum(v.x for v in cs) / len(cs), sum(v.y for v in cs) / len(cs), 0.0))
-        L = STATE["L"]; bmw = bmesh.new()
-        z0 = G(c.x, c.y + segtime.SET_OFF_Y)
-        L.cyl(bmw, (c.x, c.y, z0), (c.x, c.y, z0 + 1.0), 1.6, 1.6, seg=12)                 # stone well, 3 m across
-        L.cyl(bmw, (c.x, c.y, z0 + 1.0), (c.x, c.y, z0 + 1.05), 1.15, 1.15, seg=12, mi=1)
-        for sx in (-1, 1):
-            L.box(bmw, (c.x + sx * 1.2, c.y, z0 + 2.0), (0.2, 0.2, 2.0))
-        L.box(bmw, (c.x, c.y, z0 + 3.0), (2.8, 0.3, 0.2))
-        w = L.obj_from_bm("G5_Q2Well", bmw, [L.mat("G5_WellStone", hexrgb("#9a948a"), 0.9), L.mat("G5_WellDark", (0.02, 0.02, 0.025), 0.9)], coll)
-    say(f"Q2 dome + drum removed ({len(dead)} faces), well added")
+    L = STATE.get("L") or _sys.modules["aotlib"]
+    TRm = STATE.get("TR") or _sys.modules.get("trost")
+    c = o.matrix_world @ Vector((cx, cy, 0.0))
+    try:
+        z0 = float(TRm.ground_z(c.x, c.y))
+    except Exception:
+        z0 = 0.0
+    bmw = bmesh.new()
+    L.cyl(bmw, (c.x, c.y, z0), (c.x, c.y, z0 + 0.85), 1.7, 1.7, seg=16)              # grey stone rim, 3.4 m across
+    L.cyl(bmw, (c.x, c.y, z0 + 0.85), (c.x, c.y, z0 + 0.88), 1.2, 1.2, seg=16, mi=1)  # dark water
+    mats = [L.mat("G5_WellStone", hexrgb("#8e8a84"), 0.9), L.mat("G5_WellWater", hexrgb("#14191c"), 0.3)]
+    L.obj_from_bm("G5_Q2Well", bmw, mats, coll)
+    print(f"[seg g5] Q2 dome / drum / base removed ({len(dead)} faces), 3.4 m well at M ({c.x:.1f}, {c.y + segtime.SET_OFF_Y:.1f})")
 
 # ====================================================================== build / update (contract)
 def build(site):
