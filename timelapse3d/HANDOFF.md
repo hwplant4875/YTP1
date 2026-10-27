@@ -419,3 +419,7 @@ Queue: g2 v2 -> g4 -> g3 -> connectors -> full one-take preview.
 
 
 ## Master assembly: aot/assemble_master.py/.sh (concat, seam check, slates); master_overlay.json remapped to g1..g8 (backup master_overlay.v1.json; 10 unmapped items listed under "unmapped"). Seam g4|g5 geometry matches; the diff is the bolt flash. POLISH: the g5 bolt is a flat pure-yellow bar, so make it a white-gold branching lightning bolt.
+
+
+## g3 v2 (10/27, g3 agent): P2 left open - the g3 start river
+- P2: bible g3 / D22 "wide teal river 90-110 m with the 3-pier girder bridges at W y 1600 / 3000 and ferries continuing north" (ep02 13:36.2) is NOT built. g3 frame 0 must equal g2's last frame, which already shows everything up to ~4.7 km north (the g2 canal to y 2400, then world.py's 26 m WD_River), so any wider river / bridge / extra ferry would pop at the g2|g3 seam. Do it once in BOTH places: g2's build_ground (canal widening + bridges + ferries ahead of the camera) and world.py's river polyline (join at M (445, 300) instead of (556, 346)); g3 part A reuses seg_g2.build_ground and inherits it.
