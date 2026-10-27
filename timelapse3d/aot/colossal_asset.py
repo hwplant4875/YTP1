@@ -39,7 +39,25 @@ def _import():
         for mt in m.data.materials:
             if mt and hasattr(mt, "surface_render_method"):
                 mt.surface_render_method = "DITHERED"
+            _boost(mt)
     return root, arm, meshes
+
+def _boost(mt):
+    """autopilot 10/28: the texture read greyish-pink under the post-strike amber grade (refs: red exposed muscle) ->
+    saturation 1.45, slight red push, between the base-colour texture and the BSDF."""
+    if not (mt and mt.use_nodes) or mt.get("_boost") or os.environ.get("COL_NOBOOST"):
+        return
+    N, Lk = mt.node_tree.nodes, mt.node_tree.links
+    b = next((n for n in N if n.type == "BSDF_PRINCIPLED"), None)
+    if b is None or not b.inputs["Base Color"].links:
+        return
+    src = b.inputs["Base Color"].links[0].from_socket
+    hs = N.new("ShaderNodeHueSaturation"); hs.inputs["Saturation"].default_value = 1.45; hs.inputs["Value"].default_value = 0.95
+    Lk.new(src, hs.inputs["Color"])
+    mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"; mx.inputs["Factor"].default_value = 1.0
+    mx.inputs["B"].default_value = (1.08, 0.92, 0.90, 1.0)
+    Lk.new(hs.outputs["Color"], mx.inputs["A"]); Lk.new(mx.outputs["Result"], b.inputs["Base Color"])
+    mt["_boost"] = 1
 
 def _bbox(meshes):
     """World bounds of the deformed (armature-evaluated) meshes; bound_box alone is wrong for this Mixamo export."""
