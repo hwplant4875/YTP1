@@ -9,9 +9,9 @@
 # Env: STEP (render every Nth frame, default 2; frames are repeated before the encode), WINLEN (s per Blender run, default 25),
 #      FPS (15), SMP (Eevee TAA samples, 1), ENGINE (BLENDER_EEVEE), OUT (default renders/<SEG>), DUR (default from segtime).
 SEG="${SEG:?set SEG=g8 (etc.)}"
-# VIDEO CLOCK v3 (owner 10/27: 2x speed, 30 fps): VCLOCK=1 -> FPS 30, DUR = segtime.vdur(SEG), WIN/STILLS in VIDEO seconds,
+# VIDEO CLOCK v3 (owner 10/27: 2x speed): VCLOCK=1 -> FPS 15 previews (final renders FPS=30), DUR = segtime.vdur(SEG), WIN/STILLS in VIDEO seconds,
 # segment evaluated at segtime.seg_t (see aot/segtime.py).  Default OUT for VCLOCK is renders/<SEG>_v3.
-if [ -n "$VCLOCK" ]; then FPS="${FPS:-30}"; VCARG="--vclock"; OUT="${OUT:-E:/YTP2/3D Timelapse/renders/${SEG}_v3}"; fi
+if [ -n "$VCLOCK" ]; then FPS="${FPS:-15}"; VCARG="--vclock"; OUT="${OUT:-E:/YTP2/3D Timelapse/renders/${SEG}_v3}"; fi
 FPS="${FPS:-15}"; SMP="${SMP:-1}"; STEP="${STEP:-2}"; WINLEN="${WINLEN:-25}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 OUT="${OUT:-E:/YTP2/3D Timelapse/renders/$SEG}"
