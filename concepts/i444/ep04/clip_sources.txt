@@ -1,0 +1,60 @@
+# EP04 Freddy: official clips only (Movieclips channel). name | youtube id | note
+# Download on the laptop to E:\YTP2\Instruction444\clips\ep04 (same yt-dlp settings as EP03). Keep the Movieclips bar/box treatment.
+n1_02_boiler | rSAWPBO-ewA | 1984 2/10 Tina's boiler room dream
+n1_03_bathtub | Tf9j5763-Gc | 1984 3/10 bathtub claw
+n1_04_not_dream | cl3sud_uDhc | 1984 4/10 (Tina's ceiling death, check)
+n1_05_suicidal | aaGgRabJ0NI | 1984 5/10 Rod in the cell
+n1_06_glen | 0OqXqd_s0ho | 1984 6/10 Glen's bed geyser
+n1_07_back | 5aegHe2iS8w | 1984 7/10
+n1_08_trap | S0hTkEECANg | 1984 8/10 Nancy's traps
+n1_09_dont_fear | P3WCkLjKW-k | 1984 9/10 turns her back
+n1_10_never_ends | mD5CrAC4LPI | 1984 10/10 last scene, Marge
+n2_bus | gL50dDeaP0o | 1985 deadly bus ride
+n2_gym | YNBY_6D847c | 1985 gym teacher (Schneider)
+n2_kill_for_me | mVjYwcHwNhU | 1985 Grady
+n2_pool | 4-5VtmMeftQ | 1985 pool party massacre
+n2_kiss | 31NHZzhkLV0 | 1985 Lisa's kiss beats him
+n3_puppet | 5BJsRhU83rU | 1987 Phillip marionette
+n3_prime_time | UI5zv3c6r7M | 1987 Jennifer TV
+n3_worm | X61Dtce3UjA | 1987 Freddy worm
+n3_wizard | M4qOOISnTdQ | 1987 Dream Warriors fight back
+n3_skeleton | GbizGGAYyLY | 1987 skeleton attacks (Don)
+n3_souls | dv1IE2erbtE | 1987 souls of the children
+n4_kincaid | M_yIYL44288 | 1988 Kincaid
+n4_beach | 4P-fLum5OJ8 | 1988 beach kill (Kristen? check)
+n4_karate | JiivcaBh6Bw | 1988 Rick invisible karate
+n4_bug | E_FEQ1OJ9Do | 1988 Debbie roach
+n4_soul_food | wJSfCYi6R2g | 1988 "I love soul food"
+n4_alice_fight | SPovP8hBJhE | 1988 Alice vs Freddy, reflection
+n5_motorcycle | BdA5oGhimnM | 1989 Dan motorcycle
+n5_force_feed | bMOpu1RWo_I | 1989 Greta
+n5_baby | WM_T-4E619s | 1989 baby Freddy
+n5_back_to_hell | 4HYgjq-xijM | 1989 ending, Amanda
+n6_bus | sg-d9ZBsiWo | 1991 1/9 bus to hell
+n6_ear | DgpMTfkui0w | 1991 2/9 Carlos hearing aid
+n6_drugs | _RG4iCmljGE | 1991 4/9
+n6_grounded | S0_bjXPRlio | 1991 5/9 Spencer video game
+n6_honey | G7RTm-c2aXc | 1991 6/9 Maggie is his daughter
+n6_forever | 49rUb1-JaIM | 1991 7/9
+n6_fathers_day | gGz0wTHCHK4 | 1991 9/9 pipe bomb
+n7_funeral | dJltbkhK6-s | 1994 3/10
+n7_hand | TqRBV9xkrAU | 1994 4/10
+n7_miss_me | dShLedyR4eg | 1994 5/10
+n7_dr_freddy | ZObhl67NCzQ | 1994 6/10
+n7_slaughter | IOUbfaHj2HU | 1994 7/10 Julie in the hospital
+n7_sleepwalk | V4SyBSgOIgM | 1994 8/10
+n7_lair | JlvCQXYfOAI | 1994 9/10
+n7_die | XTtjLtf_Tw8 | 1994 10/10 furnace
+fj_02_not_strong | FlaH13fnXk0 | 2003 2/10 too weak
+fj_03_party | 0NRYcIcHfV4 | 2003 3/10 Jason crashes the party
+fj_04_back | 2gzMbWXWIA4 | 2003 4/10 "Freddy's back" (Mark)
+fj_06_welcome | Qa_hiWmXFUA | 2003 6/10
+fj_07_fight | bAjGVN4f6wM | 2003 7/10
+fj_08_construction | NQhm9xmVHdU | 2003 8/10
+fj_10_world | at6F59Zfqlw | 2003 10/10 ending, the wink
+r10_class | a8cviBPaWJ0 | 2010 2/9 sleeping in class
+r10_kris | Tp5Q4AyqFOM | 2010 3/9 Kris
+r10_bath | PQ3Qc8bOqlY | 2010 5/9
+r10_death | Q2-Jg_2l1FA | 2010 6/9
+r10_real | vMzDPwqnJfw | 2010 7/9
+r10_wet | e2Cuc3oHb4U | 2010 8/9
