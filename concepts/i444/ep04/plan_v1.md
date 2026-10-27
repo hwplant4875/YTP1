@@ -1,27 +1,26 @@
-# Horror Ranked EP04: Every Horror Movie Set on Halloween Night, Ranked by Your Chance of Surviving It
+# Horror Ranked EP04: Every Freddy Krueger Ranked by Your Chance of Surviving Him
 
-Working title: **Every Halloween Night Horror Movie Ranked by Your Chance of Surviving It**
-Format = EP03: cold open of the deadliest moments, rules card, then #10 to #1, each with the stat card (4 stats + survival % + tier cell).
-Stats (one villain per film): **STRENGTH, INTELLIGENCE, KILL COUNT, SUPERNATURAL** (Deception does not fit every villain; Supernatural separates "you can outrun him" from "you can't kill it").
+Order set by the owner (10/27 10:55): EP04 Freddy, EP05 Pinhead, EP06 Chucky. (The Halloween-night idea is parked in ../ep_halloween/plan_v1.md.)
+Format = EP03: cold open of Freddy's deadliest moments, rules card, then #9 to #1 with the stat card (4 stats + survival % + tier cell).
+Stats: **STRENGTH, INTELLIGENCE, KILL COUNT, DREAM POWER** (Dream Power replaces Deception: how much he can do inside, and outside, dreams).
 Tiers as EP03: Slaughtered <=25, Almost Dead <=40, Better Run <=50, Close Call <=60, Don't Worry <=80, Easy.
+Kills = Freddy's own on-screen kills in that film (Wikipedia plot sections, checked 10/27).
 
-| Rank | Film (all set on Halloween night) | Villain | STR | INT | KILLS | SUP | Survival | Tier | Why (facts checked on Wikipedia plot pages) |
-|---|---|---|---|---|---|---|---|---|---|
-| #10 | Hocus Pocus (1993) | Sanderson Sisters | 3 | 3 | 1 | 9 | **97%** | Easy | The joke slot (like Carvey 99%). On Halloween night 1993 they kill nobody; a virgin lit a candle, a cat and a zombie stop them, sunrise ends them. |
-| #9 | Totally Killer (2023) | Sweet Sixteen Killer | 5 | 6 | 3 | 0 | **80%** | Don't Worry | 3 teens in 1987 + 1 in 2023, and he only hunts one friend group of 16-year-old girls. |
-| #8 | Trick 'r Treat (2007) | Sam | 4 | 5 | 4 | 10 | **62%** | Close Call -> Don't Worry? | Sam only punishes people who break Halloween rules (Emma blows out the jack-o'-lantern early). Follow the rules and he spares you (Kreeg). The rest of Halloween in that town is the problem (the principal, the werewolf girls, the bus kids). |
-| #7 | Hell Fest (2018) | The Other | 6 | 6 | 6 | 0 | **45%** | Better Run | A normal man with a mask in a crowded horror park: kills a woman, Gavin, Asher, Taylor, Quinn. Natalie and Brooke survive; police arrive. |
-| #6 | Haunt (2019) | The Haunt family (6 masked killers) | 7 | 7 | 6 | 0 | **35%** | Almost Dead | Six killers plus traps inside a locked attraction: Mallory, Angela, Evan, Sam die, Bailey dies by accident. Harper and Nathan get out. |
-| #5 | Halloween (1978) | Michael Myers | 8 | 6 | 5 | 6 | **30%** | Almost Dead | Annie, Bob, Lynda (+ the mechanic, the dog) on Halloween night. Laurie, Tommy and Lindsey live; he takes six bullets and walks away. |
-| #4 | Night of the Demons (1988) | Angela and the demons | 6 | 4 | 8 | 10 | **20%** | Slaughtered | Every guest at the mortuary party is possessed or killed (Suzanne, Stooge, Helen, Jay, Max, Frannie, Sal). Only Judy and Rodger climb the barbed-wire wall at sunrise. |
-| #3 | Halloween III: Season of the Witch (1982) | Conal Cochran (Silver Shamrock masks) | 3 | 10 | 10 | 8 | **12%** | Slaughtered | Every kid wearing his mask dies when the 9 pm commercial airs. Challis stops two networks; the third keeps playing. The only Halloween where the killer is a TV ad. |
-| #2 | Terrifier (2016) | Art the Clown | 9 | 6 | 8 | 7 | **6%** | Slaughtered | Kills almost everyone he meets that night; the only survivor (Victoria) is left mutilated. To verify: exact victim list before voicing. |
-| #1 | Terrifier 2 (2022) | Art the Clown | 10 | 7 | 9 | 10 | **3%** | Slaughtered | Back from the dead and supernatural: the coroner, Ricky, Allie, Barbara, Jeff, Brooke. Even the hero Sienna dies and comes back. |
+| Rank | Film | STR | INT | KILLS | DREAM | Survival | Tier | Kills and how people got out |
+|---|---|---|---|---|---|---|---|---|
+| #9 | Freddy vs. Jason (2003) | 5 | 7 | 1 | 4 | **80%** | Don't Worry | His own movie, one kill (Mark). Forgotten and weak, he needs Jason to kill for him; Lori beheads him with Jason's machete. |
+| #8 | Freddy's Revenge (1985) | 6 | 4 | 6 | 5 | **58%** | Close Call | Needs Jesse's body to act. Coach Schneider, Ron Grady, several pool-party guests, Kerry on the bus. Beaten by a kiss: Lisa tells Jesse she loves him and Freddy burns away. |
+| #7 | The Dream Child (1989) | 6 | 7 | 3 | 8 | **50%** | Better Run | Dan (turned into a machine, thrown into traffic), Greta (forced to eat herself), Mark (comic-book cutout). Gets in through Alice's unborn son's dreams; Alice, Yvonne and baby Jacob beat him with Amanda Krueger's help. |
+| #6 | A Nightmare on Elm Street (2010) | 7 | 7 | 4 | 7 | **38%** | Almost Dead | Dean, Kris, Jesse, Nancy's mother Gwen, and the other preschool kids. Micro-naps mean he can get you while you are awake. Nancy pulls him out and slits his throat, and he still comes back. |
+| #5 | Freddy's Dead: The Final Nightmare (1991) | 6 | 6 | 9 | 7 | **30%** | Almost Dead | Has already killed nearly every child and teenager in Springwood before the film starts; on screen Carlos, Spencer and John Doe. His daughter Maggie drags him into reality and blows him up with a pipe bomb. |
+| #4 | A Nightmare on Elm Street (1984) | 7 | 7 | 4 | 8 | **25%** | Slaughtered | Tina, Rod (staged as a suicide in his cell), Glen, Marge. Nancy is the only one who figures him out, and the ending still takes her mother and maybe her friends. |
+| #3 | Dream Warriors (1987) | 8 | 8 | 6 | 9 | **20%** | Slaughtered | Phillip, Jennifer, Taryn, Will, Don Thompson, Nancy. Survivors had trained dream powers (Kristen, Kincaid, Joey) and a priest's holy-water burial. |
+| #2 | New Nightmare (1994) | 9 | 9 | 2 | 10 | **14%** | Slaughtered | Not a man any more: an ancient entity breaking into the real world. Kills Heather's husband Chase on the freeway and the babysitter Julie in a hospital. Only Heather, by becoming Nancy, gets her son back. |
+| #1 | The Dream Master (1988) | 9 | 9 | 6 | 10 | **10%** | Slaughtered | Wipes out the last trained Dream Warriors (Kristen, Kincaid, Joey) plus Sheila, Rick and Debbie, and absorbs their souls and powers. Only Alice, after taking every friend's power, beats him with his own reflection. |
 
 Open questions for the owner
-1. Hocus Pocus as the 97% joke slot: keep, or swap for a pure horror film (Ginger Snaps, Tales of Halloween)?
-2. Trick 'r Treat: 62% (Close Call) or higher (Don't Worry, "just follow the rules")?
-3. Terrifier 2 at #1 above Terrifier 1? (T1 leaves almost no one alive; T2's Art is unkillable.)
-Halloween (1978) is the only Halloween-franchise entry on purpose: idea #2 (every Halloween movie) is next.
+1. #1: The Dream Master (most kills against people who could fight back) or New Nightmare (the scariest, most powerful Freddy, but only 2 kills)?
+2. Freddy vs. Jason at 80% as the easy/joke slot ("one kill in his own movie"), OK?
+3. Freddy's Dead at 30%: on screen he is campy, but he had already emptied the whole town. Keep it in Almost Dead?
 
-Clips: official sources only (Movieclips, studio trailers, Screambox/Cineverse for Terrifier, Shudder for Haunt/Trick 'r Treat), laptop downloads. Terrifier gore must be cut to what YouTube allows (no explicit gore frames; cut on the reaction).
+Clips: official sources only (Movieclips, Warner Bros./New Line trailers), downloaded on the laptop to E:\YTP2\Instruction444\clips\ep04 after the table is approved.
