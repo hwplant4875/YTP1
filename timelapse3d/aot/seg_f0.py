@@ -39,7 +39,7 @@ CAM_KEYS = [
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=(0.0, 0.0, 0.0), v_out=SEAM_F1_W["vel"])
 CAM_LIMITS = dict(speed=4500.0, yaw=60.0, hmin=60.0, hmax=3600.0, pitch=(5.0, 60.0), lens=(26.0, 31.0))
-PLAN = [(0.0, "golden"), (1.0, "golden"), (2.4, "dusk"), (3.4, "night"), (4.0, "night"), (5.4, "dawn"), (7.0, "morning"), (DUR, "morning")]
+PLAN = [(0.0, "golden"), (1.0, "golden"), (2.4, "sunset"), (3.4, "night"), (4.0, "night"), (5.6, "morning"), (DUR, "morning")]   # round 3: no murky dusk / brown dawn haze
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 S = {}
 

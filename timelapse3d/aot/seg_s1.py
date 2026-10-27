@@ -105,7 +105,7 @@ CAM_KEYS = [                                                   # approach from t
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_IN["vel"], v_out=SEAM_S2["vel"])
 CAM_LIMITS = dict(speed=1500.0, yaw=90.0, hmin=30.0, hmax=2000.0, pitch=(5.0, 70.0), lens=(27.0, 43.0))
 LIFT_SKIP = (0, 1, 2)                                          # seam with f3 + the high flight keys stay absolute
-PLAN = [(0.0, "dusk"), (2.2, "night"), (4.0, "night"), (6.0, "dawn"), (8.6, "morning"), (DUR, "morning")]
+PLAN = [(0.0, "sunset"), (1.2, "dusk"), (2.2, "night"), (4.0, "night"), (6.0, "dawn"), (8.6, "morning"), (DUR, "morning")]   # round 3: starts on f3's sunset
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
 S_ = {}

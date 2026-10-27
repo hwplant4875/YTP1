@@ -235,13 +235,13 @@ CAM_KEYS = [
     _k(46.4, (RX - 70.0, RY - 60.0, 60.0), (RX - 9.0, RY - 7.0, 8.0), 32.0),        # pull back: Levi / Mikasa fly out past us
     _k(47.3, (RX - 70.0, RY + 10.0, 140.0), (RX - 40.0, RY - 260.0, 0.0), 30.0),      # pan through south (no flip)
     _k(48.6, (RX - 60.0, RY + 60.0, 220.0), (RX - 400.0, RY - 260.0, 0.0), 30.0),     # rise, turn west to the plain
-    _k(51.0, (-1000.0, 600.0, 520.0), (-1680.0, -500.0, 0.0), 42.0),             # long lens over the retreat
-    _k(53.5, (-1150.0, -200.0, 700.0), (-1680.0, -1300.0, 0.0), 45.0),
+    _k(51.0, (-1420.0, 640.0, 230.0), (-1655.0, 420.0, 4.0), 34.0),              # round 3: ON the retreat column (v2 looked
+    _k(53.5, (-1480.0, 380.0, 280.0), (-1663.0, 200.0, 4.0), 34.0),              #   800 m ahead of it = an empty brown plain)
     (DUR, SEAM_S1["pos"], SEAM_S1["look"], SEAM_S1["lens"]),
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_IN["vel"], v_out=SEAM_S1["vel"])
 CAM_LIMITS = dict(speed=500.0, yaw=120.0, hmin=8.0, hmax=1200.0, pitch=(-15.0, 75.0), lens=(27.0, 46.0))
-PLAN = [(0.0, "afternoon"), (2.0, "sunset"), (5.0, "afternoon"), (46.0, "afternoon"), (50.0, "sunset"), (DUR, "dusk")]   # readable under the canopy
+PLAN = [(0.0, "afternoon"), (2.0, "sunset"), (5.0, "afternoon"), (46.0, "afternoon"), (51.0, "golden"), (DUR, "sunset")]   # round 3: no murky dusk tail   # readable under the canopy
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
 S = {}
