@@ -293,6 +293,10 @@ NIGHT = (_G4L[1], _G4L[2], _G4L[3], tuple(_G4L[4]), tuple(_G4L[5]), tuple(_G4L[6
 NIGHT_G, NIGHT_H = (tuple(_G4G[1]), _G4G[2]), (_G4H[1], _G4H[2], tuple(_G4H[3]))
 DUSK = (3.0, 260.0, 3.7, (1.0, 0.62, 0.46), (0.62, 0.50, 0.60), (0.93, 0.50, 0.34), 0.15, 1.0)
 HAZE0 = (5000.0, 0.45, (0.62, 0.70, 0.82))
+# g2 v5 (owner 10/27): g2 now ENDS AT NIGHT (seg_g2.NIGHT_LIGHT / NIGHT_SKY / NIGHT_HAZE: el 24, az 205 math = 245 compass,
+# e .55, (.55, .65, 1), amb .045, exposure -0.9 = EXP_BASE + 0.6) -> part A starts on it and settles into g4's NIGHT by 5.0
+G2NIGHT = (24.0, 245.0, 0.55, (0.55, 0.65, 1.0), (0.010, 0.016, 0.045), (0.035, 0.05, 0.11), 0.045, 1.0)
+G2NIGHT_G, G2NIGHT_H = ((1.0, 1.0, 1.0), 0.6), (4500.0, 0.50, (0.05, 0.06, 0.11))
 MORNING = (30.0, 115.0, 3.4, (1.00, 0.96, 0.92), (0.10, 0.28, 0.74), (0.70, 0.80, 0.93), 0.25, 1.0)
 SPRING = (32.0, 125.0, 3.3, (1.00, 0.96, 0.92), (0.10, 0.28, 0.74), (0.70, 0.80, 0.93), 0.25, 1.0)
 SUMMER = (52.0, 165.0, 3.8, (1.00, 0.97, 0.90), (0.08, 0.26, 0.78), (0.66, 0.78, 0.94), 0.27, 1.0)
@@ -311,9 +315,7 @@ NIGHT2 = (20.0, 245.0, 0.35, (0.55, 0.65, 1.0), (0.02, 0.03, 0.07), (0.06, 0.07,
 G_OVC, G_DIM = ((1.0, 1.0, 1.0), -0.15), ((0.98, 0.99, 1.02), -0.45)
 _m0, _m1 = B["march"]
 LKEYS = [  # (t, light, grade, haze)
-    (0.0, DUSK, ((1.0, 1.0, 1.0), 0.15), HAZE0),
-    (2.6, (1.0, 262.0, 2.2, (1.0, 0.50, 0.40), (0.25, 0.20, 0.32), (0.70, 0.36, 0.30), 0.10, 0.6), ((0.95, 0.92, 1.0), -0.6),
-     (4500.0, 0.50, (0.45, 0.36, 0.40))),
+    (0.0, G2NIGHT, G2NIGHT_G, G2NIGHT_H),
     (B["night"][0], NIGHT, NIGHT_G, NIGHT_H), (B["night"][1], NIGHT, NIGHT_G, NIGHT_H),
     (10.8, (4.0, 78.0, 0.60, (1.0, 0.62, 0.45), (0.05, 0.07, 0.18), (0.55, 0.36, 0.32), 0.11, 0.45), ((1.0, 0.92, 0.95), -1.4),
      (2600.0, 0.70, (0.62, 0.50, 0.52))),
@@ -1106,7 +1108,7 @@ def light(t):
         L0["mist"].depth = v["mist_depth"]
     G1 = S.get("G1")
     if PART == "A" and G1 and G1.STATE.get("sky_mat"):  # g1's mackerel layer: g2's end dusk pinks, darkening into the night
-        k = 1.0 - 0.93 * ss(0.4, B["night"][0], t)
+        k = 0.07                                        # g2 v5 already ends at night (seg_g2.light: dk = 0.07)
         for nd in G1.STATE["sky_mat"].node_tree.nodes:
             if nd.type == "MIX" and nd.data_type == "RGBA":
                 nd.inputs["A"].default_value = tuple(c * k for c in (0.78, 0.40, 0.38)) + (1.0,)

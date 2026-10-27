@@ -48,8 +48,8 @@ OG = Vector((GX, GY))
 BEATS = dict(
     TREE_END=2.05,            # locked tree shot 0-2.05
     BOLT=4.62,                # one thick S-curved bolt + darken (ref 4.45-5.6) + green-gold tint 0.8 s + 0.2 deg shake
-    PALM_L=(4.8, 5.12),       # left palm on the wall top (fingers over the town-side edge)
-    RISE=(4.62, 8.0),         # head rises (ease-out, RISE_EXP)
+    PALM_L=(5.25, 5.55),      # left palm on the wall top (v5: after the smoke column is up, ref/user/lightning_spec.md)
+    RISE=(5.05, 8.0),         # head rises (ease-out, RISE_EXP) out of the smoke (v5: was 4.62)
     RISE_EXP=3.0,
     PALM_R=(5.9, 6.7),        # right hand grips
     STEAM=(6.8, 9.5),         # body steam builds (after the zoom-in: the sky behind the head stays clean; ref wisps 4.72-7.8)
@@ -259,9 +259,69 @@ def build_bolt():
         obs.append(ob)
     return obs
 
+ARC_N, ARC_SEG, ARC_CRAWL = 7, 14, 0.45
+def build_arcs():
+    """v5 (ref/user/lightning_spec.md 5): thin orange-red wavy ribbon arcs writhing down from the wall top over the darkened
+    town, each split into ARC_SEG chunks that light up head-first and go out behind (a crawling strand), one material each."""
+    rnd = random.Random(17); arcs = []
+    for k in range(ARC_N):
+        x0 = STRIKE.x + rnd.uniform(-110, 110); y0 = GY + rnd.uniform(2, 14); z0 = rnd.uniform(58, 82)
+        Ln_ = rnd.uniform(150, 240); hd = math.radians(90 + rnd.uniform(-35, 35)); dz = rnd.uniform(-45, -20)
+        ph, amp = rnd.uniform(0, 6.3), rnd.uniform(6, 14)
+        pts = []
+        for i in range(ARC_SEG * 3 + 1):
+            s_ = i / (ARC_SEG * 3)
+            side = Vector((-math.sin(hd), math.cos(hd), 0.0))
+            p = Vector((x0 + Ln_ * s_ * math.cos(hd), y0 + Ln_ * s_ * math.sin(hd), z0 + dz * s_ - 25 * s_ * s_))
+            p += side * amp * math.sin(ph + 9.0 * s_) + Vector((0, 0, 0.5 * amp * math.sin(ph * 1.7 + 13.0 * s_)))
+            p += Vector((rnd.uniform(-1.5, 1.5), rnd.uniform(-1.5, 1.5), rnd.uniform(-1.5, 1.5)))
+            pts.append(p)
+        mat = _emit_mat(f"G1Arc{k}", (1.0, 0.36, 0.06), 0.0)
+        em = next(n for n in mat.node_tree.nodes if n.type == "EMISSION")
+        obs = []
+        for c in range(ARC_SEG):
+            bm = bmesh.new()
+            for a, b in zip(pts[3 * c:3 * c + 3], pts[3 * c + 1:3 * c + 4]):
+                L.cyl(bm, a, b, 0.75, 0.75, seg=6)
+            ob = L.obj_from_bm(f"G1_Arc{k}_{c}", bm, [mat])
+            for at in ("visible_shadow", "visible_diffuse", "visible_glossy", "visible_transmission"):
+                setattr(ob, at, False)
+            ob.hide_render = True; obs.append(ob)
+        arcs.append((obs, em, BEATS["BOLT"] + 0.35 + 0.12 * k + rnd.uniform(0, 0.06)))
+    return arcs
+
+def build_strike_cards():
+    """v5 (lightning_spec.md 3 + 6): the dome shockwave flash + upward spark streaks behind the wall top, then the big SMOKE
+    column that rises right after the strike and is up BEFORE the Colossal's head (RISE 5.05) - he emerges from it."""
+    rng = np.random.default_rng(23); b = BEATS["BOLT"]
+    X = SMC.SmokeCards("G1Strike")
+    X.add(b + 0.08, (STRIKE.x, STRIKE.y, 40.0), r0=20.0, r1=120.0, life=0.42, kind="glow", color=(1.0, 0.78, 0.32), alpha=0.95, fade_in=0.02)
+    X.add(b + 0.1, (STRIKE.x, STRIKE.y, 55.0), r0=10.0, r1=60.0, life=0.3, kind="glow", color=(1.0, 0.95, 0.7), alpha=1.0, fade_in=0.02)
+    n = 46
+    d = np.column_stack([rng.normal(0, 0.6, n), rng.normal(0, 0.35, n), rng.uniform(0.5, 1.4, n)])
+    d /= np.linalg.norm(d, axis=1)[:, None]
+    X.add_many(b + 0.08 + rng.uniform(0, 0.15, n), np.tile((STRIKE.x, STRIKE.y, 48.0), (n, 1)) + rng.normal(0, 3, (n, 3)),
+               d * rng.uniform(90, 220, n)[:, None], r0=1.6, r1=1.0, life=rng.uniform(0.3, 0.6, n), kind="glow",
+               color=(1.0, 0.82, 0.38), alpha=1.0, fade_in=0.01, dirs=d, stretch=7.0)
+    X.build(); X.wind = (0.0, 0.0); CARDS.append(X)
+    Sm = SMC.SmokeCards("G1StrikeSmoke")
+    n = 46                                                  # the burst: billows up past the wall top within ~0.4 s
+    Sm.add_many(b + 0.05 + rng.uniform(0, 0.35, n), np.column_stack([STRIKE.x + rng.normal(0, 12, n), STRIKE.y + rng.normal(0, 8, n),
+                rng.uniform(15, 50, n)]), np.column_stack([rng.normal(0, 4, n), rng.normal(0, 3, n), rng.uniform(28, 48, n)]),
+                r0=rng.uniform(10, 16, n), r1=rng.uniform(32, 48, n), life=rng.uniform(7, 10, n), rise=2.0,
+                color=(0.60, 0.53, 0.45), kind="steam", alpha=0.9, tau=0.9, fade_in=0.08)
+    te = np.arange(b + 0.3, BEATS["KICK"], 0.08); n = len(te)       # the sustained column behind him
+    Sm.add_many(te, np.column_stack([STRIKE.x + rng.normal(0, 10, n), STRIKE.y + rng.normal(0, 7, n), rng.uniform(10, 40, n)]),
+                np.column_stack([rng.normal(0, 3, n), rng.normal(-1, 2, n), rng.uniform(18, 28, n)]), r0=rng.uniform(10, 14, n),
+                r1=rng.uniform(30, 44, n), life=rng.uniform(7, 9, n), rise=1.5, color=(0.66, 0.60, 0.53), kind="steam", alpha=0.8,
+                tau=1.0, fade_in=0.2)
+    Sm.build(); Sm.wind = (-0.5, 0.15); CARDS.append(Sm)
+    print(f"[g1] strike cards {X.count()}, strike smoke {Sm.count()}")
+
 FXS = {}
 def build_fx():
     FXS["bolt"] = build_bolt()
+    FXS["arcs"] = build_arcs()
     ld = bpy.data.lights.new("G1_Flash", "POINT"); ld.color = (1.0, 0.92, 0.55); ld.shadow_soft_size = 30
     lo = bpy.data.objects.new("G1_Flash", ld); lo.location = STRIKE + Vector((0, 0, 160))
     bpy.context.scene.collection.objects.link(lo); ld.energy = 0.0
@@ -300,11 +360,18 @@ def fx_at(t, light_e):
     for ob in FXS["bolt"]:
         ob.hide_render = not on
     b = BEATS["BOLT"]
-    dk = bump(t, b - 0.17, b - 0.02, b + 0.33, b + 0.98)         # the screen darkens (reference 4.45-5.6)
-    tint = bump(t, b + 0.2, b + 0.3, b + 0.95, b + 1.15)         # green-gold tint ~0.8 s
-    FXS["flash"].energy = 6e6 if on else 0.0
+    dk = bump(t, b - 0.17, b - 0.02, b + 0.9, b + 1.6)          # the screen darkens (v5: holds through the ribbons)
+    tint = bump(t, b + 0.2, b + 0.3, b + 1.3, b + 1.6)          # dark amber / green tint while the ribbons crawl
+    wf = bump(t, b + 0.22, b + 0.25, b + 0.33, b + 0.37)         # v5: the near full-screen white-yellow flash (~2 frames)
+    FXS["flash"].energy = 6e6 if on else (4e6 * wf)
+    for obs, em, t0 in FXS.get("arcs", ()):
+        head = (t - t0) / ARC_CRAWL * ARC_SEG
+        alive = t0 <= t < t0 + ARC_CRAWL + 0.35
+        em.inputs["Strength"].default_value = 30.0 * (1 - smooth(t0 + ARC_CRAWL, t0 + ARC_CRAWL + 0.35, t))
+        for c, ob in enumerate(obs):
+            ob.hide_render = not (alive and head - 6 <= c < head)
     sc = bpy.context.scene
-    sc.view_settings.exposure = light_e - 1.6 * dk + (0.8 if on else 0.0)
+    sc.view_settings.exposure = light_e - 1.8 * dk + (0.8 if on else 0.0) + 2.6 * wf
     warm_k = smooth(*BEATS["LIGHT_GOLD"], t) * (1 - smooth(*BEATS["LIGHT_SEAM"], t))
     if FXS.get("mist"):
         nd, c0 = FXS["mist"]; wcol = (0.82, 0.77, 0.64, 1.0)
@@ -317,7 +384,7 @@ def fx_at(t, light_e):
         tc = (0.66, 0.74, 0.40)
         warm = smooth(*BEATS["LIGHT_GOLD"], t) * (1 - smooth(*BEATS["LIGHT_SEAM"], t))   # mild golden grade, neutral at the seam
         wc = (1.0, 0.965, 0.89)
-        c = [(1.0 + (tc[i] - 1.0) * 0.55 * tint) * (1.0 + (wc[i] - 1.0) * warm) for i in range(3)]
+        c = [(1.0 + (tc[i] - 1.0) * 0.75 * tint) * (1.0 + (wc[i] - 1.0) * warm) for i in range(3)]
         g.inputs["B"].default_value = (*c, 1.0)
 
 # ================================================================ cards: kick dust dome, plume, gust, dark breach, smoke columns, vanish
@@ -577,6 +644,7 @@ if FX845:                                            # ...and fx845 must not sho
 colossal_setup()
 build_fx()
 build_cards()
+build_strike_cards()
 light_setup()
 CAM = build_campath()
 import segtime as ST

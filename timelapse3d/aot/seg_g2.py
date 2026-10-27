@@ -49,7 +49,8 @@ BEATS = dict(
     volley1=6.0, f3_castoff=10.0, volley2=7.33,   # face hit = volley1 + SHELL_T - 0.05 (6.15)
     apron_run=7.87, leaf=(7.87, 9.0), scatter=8.27, kick_carriage=8.53,
     ram=(8.55, 9.0), impact=9.0, slide=(9.0, 10.87), straighten=(10.87, 12.0), stand=(12.0, 32.0),
-    steam=10.4, light_swing=(9.0, 20.0), dusk=(12.0, 26.0),   # end light = DUSK_LIGHT (= g3 t 0)
+    steam=10.4, light_swing=(9.0, 12.5), night=(10.5, 17.0),  # v5: dusk -> NIGHT during/after the breach (end = g3 t 0)
+    vanish=(11.1, 12.1),                   # v5 (owner): steam burst, the body sinks / dissolves into steam, gone in ~1 s
     fires=(2.0, 16.0),                     # the town catches fire roof to roof (new columns ignite over this span)
     aerial=(17.0, 24.0),                   # the burning town fills the frame (camkeys K10-K11)
 )
@@ -958,7 +959,17 @@ def armored_update(t):
     run, ram, brace = armored_weights(t)
     TA.pose(armored_rots(t))
     lean = 0.03 * run + 0.06 * ram - 0.05 * brace
+    v0, v1 = BEATS["vanish"]
+    gone = t >= v1
+    for me in TA.meshes:
+        if me.hide_render != gone:
+            me.hide_render = gone
+    if gone:
+        return
     TA.place(0.0, arm_y(t), 0.0, lean=lean)
+    u = smooth(v0, v1, t)                                    # v5: sinks into his own steam (and shrinks a little)
+    if u > 0:
+        TA.arm.matrix_world = Matrix.Translation((0.0, 0.0, -16.0 * u * u)) @ TA.arm.matrix_world
 
 # ====================================================================== dust, debris, steam, slide (cards + keyframe-free objects)
 def footfalls():
@@ -1032,16 +1043,25 @@ def build_dust():
                life=rng.uniform(1.0, 1.6, n), rise=0.0, color=(0.82, 0.88, 0.92), kind="steam", alpha=0.9, tau=0.6, fade_in=0.02)
     X.build(S["coll"]); S["cards"].append((X, (0.0, 0.0)))
     St = SMC.SmokeCards("G2Steam")
-    te = np.arange(BEATS["steam"], DUR + 0.1, 0.22); n = len(te)
+    te = np.arange(BEATS["steam"], BEATS["vanish"][1], 0.22); n = len(te)
     ya = np.array([arm_y(t) for t in te])
     St.add_many(te, np.column_stack([rng.normal(0, 0.3, n), ya + 1.9, np.full(n, 13.3)]),
                 np.column_stack([rng.normal(0, 0.6, n), np.full(n, 2.2), rng.uniform(0.5, 1.5, n)]), r0=0.6, r1=rng.uniform(2.6, 3.8, n),
                 life=rng.uniform(1.8, 2.6, n), rise=2.0, kind="steam", alpha=0.85, tau=0.8)
-    te = np.arange(BEATS["steam"] + 0.4, DUR + 0.1, 0.35); n = len(te)
+    te = np.arange(BEATS["steam"] + 0.4, BEATS["vanish"][1], 0.35); n = len(te)
     ya = np.array([arm_y(t) for t in te]); sx = np.where(np.arange(n) % 2 == 0, -3.0, 3.0)
     St.add_many(te, np.column_stack([sx + rng.normal(0, 0.8, n), ya + rng.normal(0, 0.8, n), rng.uniform(10, 12.5, n)]),
                 np.column_stack([sx * 0.4, rng.normal(0, 0.5, n), rng.uniform(1, 2, n)]), r0=1.0, r1=rng.uniform(4, 6, n),
                 life=rng.uniform(2.5, 3.5, n), rise=2.8, kind="steam", alpha=0.7, tau=1.0)
+    # v5 (owner): the vanish - a steam burst that swallows the body (sinks 11.1-12.1), then a lingering steam pillar
+    v0, v1 = BEATS["vanish"]; ya = arm_y(v0); n = 70
+    St.add_many(v0 + rng.uniform(0.0, 0.7, n), np.column_stack([rng.normal(0, 4, n), ya + rng.normal(0, 4, n), rng.uniform(1, 24, n)]),
+                np.column_stack([rng.normal(0, 5, n), rng.normal(0, 5, n), rng.uniform(3, 10, n)]), r0=4.0, r1=rng.uniform(13, 20, n),
+                life=rng.uniform(3.5, 5.5, n), rise=2.5, kind="steam", alpha=0.9, tau=0.9, fade_in=0.08, color=(0.88, 0.90, 0.92))
+    te = np.arange(v1, DUR + 0.1, 0.3); n = len(te)
+    St.add_many(te, np.column_stack([rng.normal(0, 3, n), ya + rng.normal(0, 3, n), rng.uniform(0, 4, n)]),
+                np.column_stack([rng.normal(0, 1, n), rng.normal(0, 1, n), rng.uniform(4, 7, n)]), r0=3.0, r1=rng.uniform(9, 14, n),
+                life=rng.uniform(4, 6, n), rise=2.0, kind="steam", alpha=0.45 * np.clip(1.0 - (te - v1) / 14.0, 0.15, 1.0), tau=1.0)
     St.build(S["coll"]); S["cards"].append((St, (-1.2, 0.3)))
 
 def build_smoke_columns():
@@ -1130,6 +1150,9 @@ def build_fires(coll):
                        rise=0.0, kind="fire", alpha=0.95, fade_in=0.8)
         F.add(ton + 1.0, (x, y, roof + 4.0), r0=10.0, r1=rng.uniform(28, 36), life=80.0, kind="glow", color=(1.0, 0.40, 0.10),
               alpha=0.42, fade_in=3.0)
+        # v5 night: the smoke column lit from below (a dim orange glow card in its lower part)
+        F.add(max(ton + 3.0, BEATS["night"][0]), (x, y, roof + 26.0), r0=14.0, r1=rng.uniform(34, 44), life=80.0, kind="glow",
+              color=(1.0, 0.32, 0.07), alpha=0.22, fade_in=4.0)
         # smoke column (QA stills: thicker / denser): the new sites in full; g1's 10 keep their thin columns from
         # build_smoke_columns and thicken from 2 s on (a wide sparse layer around them)
         if True:
@@ -1159,7 +1182,7 @@ def build_fires(coll):
           f"smoke cards {C.count()}, lights {len(S['fire_lights'])}")
 
 def fires_update(t):
-    E = float(os.environ.get("G2_FIRE_E", "40000"))
+    E = float(os.environ.get("G2_FIRE_E", "40000")) * (1.0 + 0.6 * smooth(*BEATS["night"], t))
     for lo, ton, k in S.get("fire_lights", ()):
         u = smooth(ton + 0.5, ton + 5.0, t)
         lo.data.energy = E * u * (0.85 + 0.15 * math.sin(7.3 * t + k * 1.7) * math.sin(3.1 * t + k))
@@ -1360,7 +1383,10 @@ def ferry_mesh(M):
     return me
 
 FERRIES = [dict(name="F1", y0=300.0, lane=0.0, v=8.0, t0=-1e9), dict(name="F2", y0=150.0, lane=2.0, v=8.0, t0=-1e9),
-           dict(name="F3", y0=60.0, lane=-8.5, v=8.0, t0=BEATS["f3_castoff"]), dict(name="F4", y0=100.0, lane=8.5, v=0.0, t0=1e9)]
+           dict(name="F3", y0=60.0, lane=-8.5, v=8.0, t0=BEATS["f3_castoff"]), dict(name="F4", y0=100.0, lane=8.5, v=7.0, t0=13.0),
+           # v5 (owner): the evacuation readable from the air - more refugee boats already under way north on the river
+           dict(name="F5", y0=470.0, lane=-9.0, v=7.5, t0=-1e9), dict(name="F6", y0=640.0, lane=8.0, v=8.5, t0=-1e9),
+           dict(name="F7", y0=820.0, lane=-6.0, v=7.0, t0=-1e9), dict(name="F8", y0=1010.0, lane=7.0, v=8.0, t0=-1e9)]
 
 def ferry_s(f, t):
     """Distance travelled along the canal (8 m/s, F3 accelerates from rest after casting off)."""
@@ -1524,7 +1550,16 @@ def build_civilians(coll):
     for e in road:
         Nd.append(dict(e=e, p0=Vector(e.location), stream=True))
     S["north"] = Nd
-    print(f"[g2] civilians: south {len(St)} (x2 instances), north {len(Nd)}")
+    # v5 (owner): small refugee columns walking north toward Trost on the gate road and beyond (2 files, readable as
+    # dotted lines from the aerial); they keep walking the whole segment (1.5 m/s local)
+    Cl = []
+    for ci, yh in enumerate((150.0, 290.0, 430.0, 580.0, 730.0, 880.0)):
+        for j in range(int(os.environ.get("G2_COL_N", "28"))):
+            dx = (-0.9 if j % 2 else 0.9) + rnd.uniform(-0.25, 0.25); dy = -1.7 * (j // 2) + rnd.uniform(-0.3, 0.3)
+            e = PK.person(rnd.choice(civ), (dx, yh + dy), yaw=0.0, pose="walk", phase=rnd.random())
+            Cl.append(dict(e=e, dx=dx, y0=yh + dy, ci=ci))
+    S["columns"] = Cl
+    print(f"[g2] civilians: south {len(St)} (x2 instances), north {len(Nd)}, columns {len(Cl)}")
 
 def straggler_pos(c, t):
     """(x, y, running, yaw) of one south straggler at t."""
@@ -1580,6 +1615,9 @@ def civilians_update(t):
             u = min(1.0, (t - tw) / 6.0)
             cx = canal_cx(p0.y); s = 1 if p0.x > cx else -1
             e.location.x = p0.x + (-s) * 2.5 * u
+    for c in S.get("columns", ()):
+        y = c["y0"] + 1.5 * t; x = c["dx"] + 0.8 * math.sin(0.004 * y + c["ci"])
+        c["e"].location = (x, y, gz(x, y)); c["e"].rotation_euler.z = 0.0
     if "SQ" in S:
         S["SQ"].update(t)
 
@@ -1589,6 +1627,11 @@ GOLD_LIGHT = dict(el=6.0, az=200.0, col=(1.0, 0.76, 0.54), e=4.3, amb=0.19, expo
 DUSK_LIGHT = dict(el=3.0, az=190.0, col=(1.0, 0.62, 0.46), e=3.7, amb=0.15, expo=-1.35)  # = the g2 -> g3 seam light
 SEAM_SKY = ((1.0, 0.62, 0.22, 1.0), (0.95, 0.66, 0.38, 1.0))
 DUSK_SKY = ((0.93, 0.50, 0.34, 1.0), (0.62, 0.50, 0.60, 1.0))
+# v5 (owner 10/27): burning Shiganshina at NIGHT - dark blue sky, a cool moon key, the fires carry the town.  = g3 t 0
+# (seg_g3.G2NIGHT / its grade + haze literals: keep them in step when this changes).
+NIGHT_LIGHT = dict(el=24.0, az=205.0, col=(0.55, 0.65, 1.0), e=0.55, amb=0.045, expo=-0.9)
+NIGHT_SKY = ((0.035, 0.05, 0.11, 1.0), (0.010, 0.016, 0.045, 1.0))
+NIGHT_HAZE = (4500.0, 0.50, (0.05, 0.06, 0.11))          # mist depth, amount, colour
 
 def light_setup():
     w = bpy.context.scene.world
@@ -1598,17 +1641,25 @@ def light_setup():
             if nd.type == "VALTORGB":
                 S["ramp"].append(nd.color_ramp.elements)
     S["WD"] = sys.modules.get("world")
+    hz = bpy.data.node_groups.get("EeveeHaze")                # the haze (seg_g3.light_capture's nodes) -> night haze
+    S["haze"] = None
+    if hz is not None:
+        hk = next((n for n in hz.nodes if n.type == "MATH" and n.operation == "MULTIPLY"), None)
+        hm = next((n for n in hz.nodes if n.type == "MIX"), None)
+        ms = w.mist_settings if w else None
+        S["haze"] = (hk, hm, ms, hk.inputs[1].default_value if hk else None,
+                     tuple(hm.inputs["B"].default_value)[:3] if hm else None, ms.depth if ms else None)
 
 def light_spec(t):
     WD = S.get("WD")
-    u = smooth(*BEATS["light_swing"], t); k = smooth(*BEATS["dusk"], t)
-    P = WD.light_blend(SEAM_LIGHT, GOLD_LIGHT, u) if WD else dict(SEAM_LIGHT)
+    u = smooth(*BEATS["light_swing"], t); k = smooth(*BEATS["night"], t)
+    P = WD.light_blend(SEAM_LIGHT, DUSK_LIGHT, u) if WD else dict(SEAM_LIGHT)
     if k > 0 and WD:
-        P = WD.light_blend(P, DUSK_LIGHT, k)
-    return P, k
+        P = WD.light_blend(P, NIGHT_LIGHT, k)
+    return P, u, k
 
 def light(t):
-    P, k = light_spec(t)
+    P, u, k = light_spec(t)
     WD = S.get("WD")
     if WD and hasattr(WD, "light_rig"):
         WD.light_rig(P)
@@ -1616,12 +1667,20 @@ def light(t):
         S["key"].hide_render = False
     for el in S.get("ramp", ()):
         for i, e in enumerate(el[:2]):
-            e.color = tuple(a + (b - a) * k for a, b in zip(SEAM_SKY[i], DUSK_SKY[i]))
-    if G1 and G1.STATE.get("sky_mat"):                  # the mackerel layer: g1's sunset colours -> dusk pinks
+            c = tuple(a + (b - a) * u for a, b in zip(SEAM_SKY[i], DUSK_SKY[i]))
+            e.color = tuple(a + (b - a) * k for a, b in zip(c, NIGHT_SKY[i]))
+    hz = S.get("haze")
+    if hz:
+        hk, hm, ms, k0, c0, d0 = hz
+        if hk is not None: hk.inputs[1].default_value = k0 + (NIGHT_HAZE[1] - k0) * k
+        if hm is not None: hm.inputs["B"].default_value = (*(a + (b - a) * k for a, b in zip(c0, NIGHT_HAZE[2])), 1.0)
+        if ms is not None: ms.depth = d0 + (NIGHT_HAZE[0] - d0) * k
+    if G1 and G1.STATE.get("sky_mat"):                  # the mackerel layer: g1's sunset colours -> dusk pinks -> night (dark)
+        dk = 1.0 - 0.93 * k
         for nd in G1.STATE["sky_mat"].node_tree.nodes:
             if nd.type == "MIX" and nd.data_type == "RGBA":
-                nd.inputs["A"].default_value = tuple(a + (b - a) * k for a, b in zip((0.95, 0.55, 0.30, 1), (0.78, 0.40, 0.38, 1)))
-                nd.inputs["B"].default_value = tuple(a + (b - a) * k for a, b in zip((1.0, 0.78, 0.52, 1), (0.95, 0.60, 0.52, 1)))
+                nd.inputs["A"].default_value = tuple(dk * (a + (b - a) * u) for a, b in zip((0.95, 0.55, 0.30), (0.78, 0.40, 0.38))) + (1.0,)
+                nd.inputs["B"].default_value = tuple(dk * (a + (b - a) * u) for a, b in zip((1.0, 0.78, 0.52), (0.95, 0.60, 0.52))) + (1.0,)
 
 # ====================================================================== build / update
 def mats():

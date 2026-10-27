@@ -19,7 +19,7 @@ Env: TOON_REF (light level of the top band, default 3.2), TOON_STEPS ("0.28,0.62
 """
 import bpy, os, re
 
-ON = os.environ.get("TOON", "1") != "0"           # project default since 10/26 (user option 2); TOON=0 disables
+ON = os.environ.get("TOON", "0") == "1"           # owner 10/27 09:46: NO toon (pre-toon look); TOON=1 re-enables the test
 REF = float(os.environ.get("TOON_REF", "3.2"))
 EDGES = [float(x) for x in os.environ.get("TOON_STEPS", "0.28,0.62").split(",")]
 RIM = float(os.environ.get("TOON_RIM", "0.25"))

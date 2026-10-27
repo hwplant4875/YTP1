@@ -98,6 +98,10 @@ TMAP = {}                              # g -> [(tv, t), ...] knots; missing = li
 # seams.  To stretch a stretch, add knots here, e.g. [(0,0), (4.2,8.4), (4.8,9.4), (16.1,32)] = slope 1.67 around the impact (video 16.1 s).
 TMAP["g2"] = [(0.0, 0.0), (16.0, 32.0)]
 
+def _g2_v5():   # v5 (owner 10/27 09:41): the empty steam stand at 3x, burning-town aerial ~3 s at 2, then an ULTRA-fast move
+    return slope_knots(DUR["g2"], [(0.0, 2.0, 0.0), (12.2, 2.6, 0.4), (14.8, 2.0, 0.4), (21.5, 1.55, 0.3),
+                                        (26.6, 4.5, 0.4), (30.6, 2.0, 0.35)])
+
 def ramp_knots(dur, holds, ramp=1.2, n=12, speed=None):
     """TMAP knots for a segment played at `speed` (default SPEED) except local spans holds = [(t_a, t_b, slope), ...]
     played at `slope`.  The slope eases speed -> slope over `ramp` VIDEO seconds ending exactly at t_a, and back over
@@ -146,6 +150,7 @@ def slope_knots(dur, plan, n=8):
 # -> 1.7 for Carla (BEND 25.5 -> gone 28.9 = 2.0 video s) -> 3 -> 2 at the g1|g2 seam (at rest).  Video ~17.9 s.
 G1_PLAN = [(0.0, 1.0, 0.0), (11.0, 2.0, 0.7), (12.05, 5.5, 0.9), (23.4, 1.7, 0.5), (28.9, 3.0, 0.3), (31.15, 2.0, 0.3)]
 TMAP["g1"] = slope_knots(DUR["g1"], G1_PLAN)
+TMAP["g2"] = _g2_v5()
 # g4 v4 (owner 10/27: 2nd Colossal, faster camera): the establishing approach at 3.2x (local 1.0-15.0), back to 2 for
 # Eren's fist on the wall top above O and the g4|g5 seam.  Video ~7.9 s.
 TMAP["g4"] = slope_knots(DUR["g4"], [(0.0, 2.0, 0.0), (1.0, 3.2, 0.6), (15.0, 2.0, 0.6)])

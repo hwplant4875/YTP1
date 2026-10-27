@@ -21,20 +21,22 @@ from camchan import CamPath, speed_profile
 # frame; pull back to the reference's kick framing (10.0 / 11.0 verbatim, plus a small zoom-in at the kick).  After the kick
 # the video clock runs 2 -> 5.5 (segtime G1_PLAN): fly west over the pour to the Yeager ruin, small zoom-in on Carla, seam.
 # Times are g1 LOCAL seconds (= video seconds up to 11.0).  The v3 keys are kept below as G1_V3 (record only).
-G1 = [
-    (0.0, (-476, 330.5, 2.4), (-474.6, 327.9, 1.2), 45),
-    (2.0, (-480, 338, 7.2), (-300, 0, 10.6), 50),
-    (2.05, (-480, 338, 7.2), (-300, 0, 10.6), 50),
+G1 = [   # v5 (owner 10/27 09:44): open on the ep01 tree shot itself (ref/hill_tree_wall_opening_ref.png: low on the hill,
+         # tree left, Eren + Mikasa small under it, the wall behind), zoom out slightly, then fly up; the Colossal watched from
+         # just above the plaza crowd's heads (s1e1_plaza_crowd_colossal_head), frontal, slight push-in
+    (0.0, (-481, 340, 6.6), (-300, 0, 10.6), 46),
+    (2.0, (-483, 343, 7.0), (-300, 0, 10.6), 40),
+    (2.05, (-483, 343, 7.0), (-300, 0, 10.6), 40),
     (2.6, (-430, 290, 28), (-150, 120, 14), 32),      # ref: leave the tree, up and toward the gate
     (3.2, (-220, 170, 46), (0, 0, 45), 28),           # ref: over the meadow / road, climbing (swoosh)
     (3.55, (-85, 85, 63), (0, -150, 40), 27),
     (3.8, (-15, 18, 72), (-2, -450, 30), 27),         # ref: up and over the inner wall top
     (4.35, (-3, -200, 65), (-7, -700, 42), 30),       # ref: gliding down along the avenue
-    (4.9, (-6, -385, 60), (-7, -720, 52), 46),        # ref: past the plaza, down the gate street (bolt 4.62)
-    (5.45, (-6, -510, 57.5), (-7, -732, 55), 54),     # dolly toward the wall while the head rises (ref: 95 mm from 307 m)
-    (6.6, (-6, -628, 55.5), (-7, -733, 54.5), 58),
-    (7.45, (-6, -648, 54), (-7, -733, 54.5), 60),     # head + both hands ~1/3 of the frame (ref 8.0 framing; COL_HEAD 1.3)
-    (8.0, (-6, -651, 54), (-7, -733, 54), 60),
+    (4.9, (-5, -365, 36), (-7, -733, 48), 40),        # v5: bolt 4.62 seen from the air, then down into the plaza
+    (5.5, (-3, -462, 5.2), (-7, -733, 57), 48),       # just above the crowd's heads (crowd y -530..-480), looking up over the wall
+    (6.6, (-3, -468, 3.9), (-7, -733, 58), 52),       # crowd heads in the lower foreground, frontal
+    (7.45, (-3, -473, 3.8), (-7, -733, 58), 55),      # slight push-in while the head rises out of the smoke
+    (8.0, (-3, -475, 3.8), (-7, -733, 58), 56),
     (10.0, (20, -330, 120), (0, -690, 18), 40),       # ref: pull back, gate and wall in frame
     (11.0, (25, -325, 128), (0, -690, 24), 43),       # ref: the kick (11.0); small zoom-in 40 -> 47 (look a bit higher: the Colossal stays in frame)
     (12.0, (22, -328, 136), (-4, -684, 20), 47),
@@ -103,9 +105,10 @@ G2 = [   # v5 (owner 10/27 07:34): Reiner 1.5x faster in local time (3x on scree
     (15.6, (-95, 170, 135), (0, 30, 12), 48),   # slow drift, then climb
     (19.2, (-230, 330, 400), (-5, -240, 0), 28),   # AERIAL: burning Shiganshina beyond the wall, the breach in the foreground
     (22.4, (-185, 350, 395), (40, -235, 0), 28),   # drift east over the burning town
-    (25.0, (-90, 360, 350), _lk((-90, 360), -38, 640), 29),   # swing east: the canal, quays and ferries
-    (27.6, (25, 385, 300), _lk((25, 385), 10, 360), 29),   # the canal, quays and ferries below
-    (30.0, (118, 425, 262), _lk((118, 425), 58, 520), 28.5),   # turning north toward Trost
+    (24.6, (-150, 365, 380), _lk((-150, 365), -10, 560), 28.5),   # v5: the turn north happens here, still slow
+    (26.6, (-60, 390, 340), _lk((-60, 390), 50, 520), 28.5),   # over the canal, boats + refugee columns below
+    (28.6, (40, 415, 300), _lk((40, 415), 75, 560), 28),   # heading north: the ULTRA-fast stretch (segtime TMAP g2)
+    (30.4, (115, 445, 265), _lk((115, 445), 82, 560), 28),
     (32, (175, 480, 240), (228, 1050, 0), 28),   # = g2->g3 seam (segtime g2_g3), unchanged
 ]
 # ---------------------------------------------------------------- g3  (group-local seconds)
