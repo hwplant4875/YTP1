@@ -31,7 +31,7 @@ G1 = [
     (3.8, (-15, 18, 72), (-2, -450, 30), 27),         # ref: up and over the inner wall top
     (4.35, (-3, -200, 65), (-7, -700, 42), 30),       # ref: gliding down along the avenue
     (4.9, (-6, -385, 60), (-7, -720, 52), 46),        # ref: past the plaza, down the gate street (bolt 4.62)
-    (5.45, (-6, -480, 58), (-7, -732, 55), 50),       # dolly toward the wall while the head rises
+    (5.45, (-6, -510, 57.5), (-7, -732, 55), 54),     # dolly toward the wall while the head rises (ref: 95 mm from 307 m)
     (6.6, (-6, -628, 55.5), (-7, -733, 54.5), 58),
     (7.45, (-6, -648, 54), (-7, -733, 54.5), 60),     # head + both hands ~1/3 of the frame (ref 8.0 framing; COL_HEAD 1.3)
     (8.0, (-6, -651, 54), (-7, -733, 54), 60),

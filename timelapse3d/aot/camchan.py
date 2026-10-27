@@ -127,6 +127,20 @@ class CamPath:
         a, b = max(self.t0, t - h), min(self.t1, t + h)
         return (self.eval(b)[0] - self.eval(a)[0]) / (b - a)
 
+class VideoPath:
+    """A segment camera (local time) seen on the VIDEO clock: eval(tv) = path.eval(segtime.seg_t(seg, tv)), t0..t1 = 0..vdur.
+    check(VideoPath(CAM, "g1")) gives the speeds / yaw rates the viewer actually sees (owner 10/27 video clock)."""
+    def __init__(self, path, seg):
+        import segtime
+        self.path, self.seg, self.ST = path, seg, segtime
+        self.t0, self.t1 = 0.0, segtime.vdur(seg)
+        self.notes = list(getattr(path, "notes", []))
+    def eval(self, tv):
+        return self.path.eval(self.ST.seg_t(self.seg, tv))
+    def vel(self, tv, h=1 / 120):
+        a, b = max(self.t0, tv - h), min(self.t1, tv + h)
+        return (self.eval(b)[0] - self.eval(a)[0]) / (b - a)
+
 # ------------------------------------------------------------------------------------------------ checker
 LIMITS = dict(speed=150.0, yaw=30.0, pitch=(17.0, 45.0), hmin=90.0, hmax=650.0, hmin_from=None, lens=(27.0, 50.0),
               under=15.0, flip=90.0, name="")

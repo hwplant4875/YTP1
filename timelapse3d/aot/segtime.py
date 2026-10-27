@@ -146,6 +146,9 @@ def slope_knots(dur, plan, n=8):
 # -> 1.7 for Carla (BEND 25.5 -> gone 28.9 = 2.0 video s) -> 3 -> 2 at the g1|g2 seam (at rest).  Video ~17.9 s.
 G1_PLAN = [(0.0, 1.0, 0.0), (11.0, 2.0, 0.7), (12.05, 5.5, 0.9), (23.4, 1.7, 0.5), (28.9, 3.0, 0.3), (31.15, 2.0, 0.3)]
 TMAP["g1"] = slope_knots(DUR["g1"], G1_PLAN)
+# g4 v4 (owner 10/27: 2nd Colossal, faster camera): the establishing approach at 3.2x (local 1.0-15.0), back to 2 for
+# Eren's fist on the wall top above O and the g4|g5 seam.  Video ~7.9 s.
+TMAP["g4"] = slope_knots(DUR["g4"], [(0.0, 2.0, 0.0), (1.0, 3.2, 0.6), (15.0, 2.0, 0.6)])
 def knots(g):
     k = TMAP.get(g)
     return list(k) if k else [(0.0, 0.0), (DUR[g] / SPEED, DUR[g])]

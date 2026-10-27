@@ -23,6 +23,7 @@ ap.add_argument("--step", type=int, default=1, help="render every n-th frame, co
 ap.add_argument("--g1-samples", type=int, default=8)
 ap.add_argument("--times", default="")
 ap.add_argument("--prefix", default="g1")
+ap.add_argument("--vclock", action="store_true", help="frames, --t0/--t1 and --times on the VIDEO clock (segtime.seg_t('g1', tv))")
 B, _ = ap.parse_known_args(argv)
 
 import aotlib as L
@@ -40,19 +41,27 @@ import smokecards as SMC
 GX, GY = L.OUTER_GATE
 OG = Vector((GX, GY))
 
-# ================================================================ BEATS (g1 seconds; SCENE_BIBLE_v2 g1 choreography, kick 11.0)
+# ================================================================ BEATS (g1 LOCAL seconds, kick 11.0)
+# g1 v4 (owner 10/27 07:34): 0-11 s are the reference opening's beats (renders/opening_preview_v4.mp4, render_fast.py @
+# 791f565: bolt 4.62, left hand 4.8-5.12, head rise 4.62-8.0 ease-out^3, right hand 5.9-6.7, wind-up 8.8-10.3, kick 11.0)
+# and play at real time (segtime G1_PLAN slope 1); after the kick the video clock runs 2 -> 5.5 -> 1.7 (Carla) -> 2.
 BEATS = dict(
     TREE_END=2.05,            # locked tree shot 0-2.05
-    BOLT=3.3,                 # one thick S-curved bolt + darken + green-gold tint 0.8 s + 0.2 deg shake
-    PALM_L=4.5,               # left palm on the wall top (fingers over the town-side edge)
-    RISE=(5.0, 8.0),          # head rises
-    PALM_R=6.0,               # right hand grips
-    WIND=(9.6, 10.55),        # right-leg wind-up behind the wall (left foot planted)
+    BOLT=4.62,                # one thick S-curved bolt + darken (ref 4.45-5.6) + green-gold tint 0.8 s + 0.2 deg shake
+    PALM_L=(4.8, 5.12),       # left palm on the wall top (fingers over the town-side edge)
+    RISE=(4.62, 8.0),         # head rises (ease-out, RISE_EXP)
+    RISE_EXP=3.0,
+    PALM_R=(5.9, 6.7),        # right hand grips
+    STEAM=(6.8, 9.5),         # body steam builds (after the zoom-in: the sky behind the head stays clean; ref wisps 4.72-7.8)
+    WIND=(8.8, 10.3),         # right-leg wind-up behind the wall (left foot planted)
     KICK=11.0,                # the foot hits the gate (fx845.update(t - KICK)); 0.2 deg shake
     LEG_BACK=(11.3, 12.2),    # kicking leg comes back down
-    SPREAD=(11.9, 12.9),      # hands release, arms spread ~45 deg down: stands steaming 12-15
-    VANISH=(15.0, 17.5),      # steam burst drifting WEST, body sinks away
-    SMILE_IN=19.5,            # Smiling Titan walks in from the wall side (bible: on the upper lane by 21.5)
+    SPREAD=(11.9, 12.9),      # hands release, arms spread ~45 deg down: stands steaming
+    VANISH=(13.6, 16.6),      # steam burst drifting WEST, body sinks away (video ~12.2-12.8)
+    DINA=(12.2, 0.0),         # the Smiling (Dina) titan: from just outside the breach (hidden by the wall) she runs in through
+                              # the breach and up the streets to Carla (arrives at T1 when seq_carla's walk ends, ~25.4); no pop-in
+    DINA_CPS=2.2,             # her gait cycles per VIDEO second (a fast run that does not strobe at 15 fps)
+    SMILE_IN=19.5,            # seq_carla frame mapping anchor (F 2200); her position before T1 comes from the DINA path
     BEND=25.5, GRAB=26.6, LIFT=(26.8, 27.6), BITE=28.4,   # Carla (bite hidden by head / hair, no blood)
     LIGHT_GOLD=(2.05, 5.0),   # locked-shot light -> golden S/SSW afternoon
     LIGHT_SEAM=(22.0, 31.5),  # golden -> render_fall2's low sunset (the g2 seam light)
@@ -127,9 +136,9 @@ def cam_at(t):
 # ================================================================ the Colossal (colossal_asset plug-in, per frame)
 def colossal_at(t):
     """(show, rise, kick, fade, hand_l, hand_r, spread, steam)."""
-    show = 4.05 <= t < BEATS["VANISH"][1] + 0.1
+    show = BEATS["BOLT"] - 0.05 <= t < BEATS["VANISH"][1] + 0.1
     u = min(1.0, max(0.0, (t - BEATS["RISE"][0]) / (BEATS["RISE"][1] - BEATS["RISE"][0])))
-    rise = 1 - (1 - u) ** 2.2                            # ease-out: reads early, still creeping up at 8 s
+    rise = 1 - (1 - u) ** BEATS["RISE_EXP"]              # ease-out: reads early, still creeping up at 8 s
     w0, w1 = BEATS["WIND"]
     if t < w0:
         kick = 0.0
@@ -139,11 +148,11 @@ def colossal_at(t):
         u = (t - w1) / (T_KICK - w1); kick = -1.0 + 2.0 * u * u        # accelerating swing, impact at full speed
     else:
         kick = 1.0 - smooth(*BEATS["LEG_BACK"], t)
-    hand_l = smooth(BEATS["PALM_L"] - 0.38, BEATS["PALM_L"], t)
-    hand_r = smooth(BEATS["PALM_R"] - 0.38, BEATS["PALM_R"], t)
+    hand_l = smooth(*BEATS["PALM_L"], t)
+    hand_r = smooth(*BEATS["PALM_R"], t)
     spread = smooth(*BEATS["SPREAD"], t)
     fade = smooth(*BEATS["VANISH"], t)
-    steam = smooth(BEATS["PALM_L"], 7.8, t)
+    steam = smooth(*BEATS["STEAM"], t)
     return show, rise, kick, fade, hand_l, hand_r, spread, steam
 
 COL = {}
@@ -291,11 +300,11 @@ def fx_at(t, light_e):
     for ob in FXS["bolt"]:
         ob.hide_render = not on
     b = BEATS["BOLT"]
-    dk = bump(t, b - 0.05, b, b + 0.35, b + 0.8)                 # the screen briefly darkens
+    dk = bump(t, b - 0.17, b - 0.02, b + 0.33, b + 0.98)         # the screen darkens (reference 4.45-5.6)
     tint = bump(t, b + 0.2, b + 0.3, b + 0.95, b + 1.15)         # green-gold tint ~0.8 s
     FXS["flash"].energy = 6e6 if on else 0.0
     sc = bpy.context.scene
-    sc.view_settings.exposure = light_e - 1.3 * dk + (0.8 if on else 0.0)
+    sc.view_settings.exposure = light_e - 1.6 * dk + (0.8 if on else 0.0)
     warm_k = smooth(*BEATS["LIGHT_GOLD"], t) * (1 - smooth(*BEATS["LIGHT_SEAM"], t))
     if FXS.get("mist"):
         nd, c0 = FXS["mist"]; wcol = (0.82, 0.77, 0.64, 1.0)
@@ -570,9 +579,19 @@ build_fx()
 build_cards()
 light_setup()
 CAM = build_campath()
-r = CC.check(CAM, 0.0, 32.0, limits=dict(name="g1 render path (scene K0/K1)", hmin_from=3.9, under=1.0), quiet=True)
-print(f"[g1] camchan.check: peak {r['peak_speed']:.1f} m/s @ {r['t_peak_speed']:.2f}, yaw {r['peak_yaw']:.1f} deg/s @ {r['t_peak_yaw']:.2f}, "
-      f"h_min {r['hmin']:.0f} m (from 3.9 s), lens {r['lens_min']:.1f}-{r['lens_max']:.1f}, flags {r['flags']}")
+import segtime as ST
+VD = ST.vdur("g1")
+def local_t(tv):
+    """video seconds -> g1 local seconds (identity without --vclock)."""
+    return ST.seg_t("g1", tv) if B.vclock else tv
+# owner 10/27 video-clock limits: speed <= 300 m/s (the reference swoosh 2-4.9 s is the explicit exception), yaw <= 60 deg/s,
+# pitch <= 50, lens 24-60; checked on what the viewer sees (camchan.VideoPath)
+VLIM = dict(speed=300, yaw=60, pitch=(-5, 50), lens=(24, 60), hmin=None, hmax=None, under=1.0)
+for nm, a_, b_ in (("g1 video clock, all", 0.0, VD), ("g1 video clock after the swoosh", 4.9, VD)):
+    r = CC.check(CC.VideoPath(CAM, "g1"), a_, b_, limits=dict(VLIM, name=nm), quiet=True)
+    print(f"[g1] camchan.check {nm} ({a_:.1f}-{b_:.2f} video s): peak {r['peak_speed']:.1f} m/s @ {r['t_peak_speed']:.2f}, "
+          f"yaw {r['peak_yaw']:.1f} deg/s @ {r['t_peak_yaw']:.2f}, pitch {r['pitch_min']:.0f}..{r['pitch_max']:.0f}, "
+          f"lens {r['lens_min']:.1f}-{r['lens_max']:.1f}, flags {r['flags']}")
 # YH landing time (the 9 m rock) for Carla / the second rock
 T_YH = None
 if FX845:
@@ -592,6 +611,94 @@ if SC and SC.STATE.get("C") is not None:
     if bo:
         CARLA_OBS.append(bo)
 TITAN_OBS = SC._all_obs(SC.STATE["titan"]) if SC and SC.STATE.get("titan") is not None else []
+
+# ---------------------------------------------------------------- the Smiling (Dina) titan: no pop-in (owner 10/27)
+# She starts just outside the breach (hidden by the 50 m wall from every g1 camera), runs in through it right after the kick
+# and up the streets (swarm845's walkable grid, the lanes the pour uses) to seq_carla's T0 -> T1 line, arriving at T1
+# exactly when seq_carla's walk ends (F 2392); from then on pose_carla() drives her (idle -> reach -> lift -> bite).
+DINA = {}
+def _f_inv(F):
+    """g1 local time at which plin(F_KEYS) reaches seq_carla frame F."""
+    for (a, fa), (b, fb) in zip(F_KEYS, F_KEYS[1:]):
+        if fa <= F <= fb:
+            return a + (b - a) * (F - fa) / (fb - fa) if fb > fa else a
+    return F_KEYS[-1][0]
+def dina_setup():
+    if not (SC and SC.STATE.get("titan") is not None):
+        return
+    T0, T1 = SC.STATE["T0"].to_2d(), SC.STATE["T1"].to_2d()
+    pts = None
+    if SW is not None:
+        try:
+            Gd = SW.build_grid()
+            goal = SW.nearest_walk(Gd, T0.x, T0.y)
+            dist = SW.dijkstra(Gd, [goal])
+            st = SW.nearest_walk(Gd, GX, GY + 16.0)
+            cells = SW.descend(Gd, dist, *st)
+            P, _s = SW.make_path(Gd, (GX, GY + 16.0), cells, (T0.x, T0.y), 0.0, random.Random(1))
+            pts = [Vector((float(x), float(y))) for x, y in P]
+        except Exception:
+            import traceback; traceback.print_exc(); pts = None
+    if not pts:
+        pts = [Vector((GX, GY + 16.0)), Vector((GX, GY + 60.0)), T0]
+    pts = [Vector((GX, GY - 40.0)), Vector((GX, GY - 8.0))] + pts + [T1]
+    clean = [pts[0]]
+    for p in pts[1:]:
+        if (p - clean[-1]).length > 0.5:
+            clean.append(p)
+    S_ = [0.0]
+    for a, b in zip(clean, clean[1:]):
+        S_.append(S_[-1] + (b - a).length)
+    t_a, t_b = BEATS["DINA"][0], _f_inv(SC.T_WALK[1])
+    DINA.update(P=clean, S=S_, L=S_[-1], t_a=t_a, t_b=t_b)
+    v = S_[-1] / (t_b - t_a)
+    print(f"[g1] Dina path {len(clean)} pts, {S_[-1]:.0f} m, local {t_a:.2f} -> {t_b:.2f} s (~{v:.0f} m/s local, "
+          f"video {ST.to_video('g1', t_a):.2f} -> {ST.to_video('g1', t_b):.2f} s)")
+def _dina_at(s):
+    P, S_ = DINA["P"], DINA["S"]
+    s = min(max(s, 0.0), DINA["L"])
+    for i in range(len(S_) - 1):
+        if s <= S_[i + 1] or i == len(S_) - 2:
+            f = (s - S_[i]) / max(1e-6, S_[i + 1] - S_[i])
+            return P[i].lerp(P[i + 1], min(1.0, max(0.0, f)))
+def dina_pose(t):
+    """Override seq_carla's titan placement + gait for t < t_b (call after pose_carla)."""
+    if not DINA or t >= DINA["t_b"]:
+        return
+    u = min(1.0, max(0.0, (t - DINA["t_a"]) / (DINA["t_b"] - DINA["t_a"])))
+    # trapezoid: full speed from the start (behind the wall), constant, then a smooth stop over the last 18 %
+    ud = 0.18; vmax = 1.0 / (1.0 - ud / 2)
+    f = vmax * u if u < 1 - ud else 1.0 - vmax * (1 - u) ** 2 / (2 * ud)
+    s = DINA["L"] * f
+    p = _dina_at(s); q = _dina_at(s + 6.0) - _dina_at(s - 6.0)
+    ti = SC.STATE["titan"]
+    yaw = SC._yaw_to(q) if q.length > 1e-3 else SC.STATE["yaw_t"]
+    k_end = smooth(0.9, 1.0, u)                          # face along seq_carla's yaw_t at the end, settle to idle
+    dy = (SC.STATE["yaw_t"] - yaw + math.pi) % (2 * math.pi) - math.pi
+    yaw += dy * k_end
+    SC._place(ti, p.x, p.y, yaw, z=L.height(p.x, p.y) - 0.1)
+    if os.environ.get("G1_DEBUG"):
+        print(f"[g1] DEBUG Dina t={t:.2f} s={s:.0f}/{DINA['L']:.0f} m at ({p.x:.0f}, {p.y:.0f})", flush=True)
+    ph =(ST.to_video("g1", t) * BEATS["DINA_CPS"]) % 1.0
+    pose = SC.t_walk(ti, ph)
+    if k_end > 0:
+        pose = SC._blend(pose, SC.t_idle(ti), k_end)
+    SC._pose(ti, *pose, ground=True)
+    bpy.context.view_layer.update()
+dina_setup()
+
+# swarm titans that come within 85 m of Carla during her beat: hidden for all of g1 from their entry (the old rule hid them
+# when they stepped inside the circle = on-screen pop-outs); g2 keeps its own "inside 85 m" rule
+NEAR_HIDE = {}
+if SW is not None and SW.STATE and SC and SC.STATE.get("C") is not None:
+    S_ = SW.STATE; C2 = SC.STATE["C"]
+    ka = min(int(max(sim_t(BEATS["SMILE_IN"] - 2.0), 0) / SW.DT), S_["K"] - 1)
+    kb = min(int(sim_t(BEATS["END"]) / SW.DT) + 1, S_["K"] - 1)
+    inside = (S_["TX"][ka:kb + 1] - C2.x) ** 2 + (S_["TY"][ka:kb + 1] - C2.y) ** 2 < 85.0 ** 2
+    for j in np.where(inside.any(axis=0))[0]:
+        NEAR_HIDE[int(j)] = ka + int(np.where(inside[:, j])[0].max())          # last k inside
+    n_exit = sum(1 for j, kl in NEAR_HIDE.items() if kl < kb)
+    print(f"[g1] swarm titans hidden near Carla: {len(NEAR_HIDE)} of {S_['nt']} ({n_exit} leave the circle before the seam)")
 import toon; toon.apply()
 print(f"[g1] setup after scene build {time.time() - t_setup:.0f}s")
 
@@ -612,18 +719,18 @@ def set_frame(t):
         PKC.hide_render = t >= T_KICK + 0.4                # the standing kit crowd is swallowed by the gust; swarm people flee
     if SW is not None and SW.STATE:
         hide = {"smiling"}
-        if SC and SC.STATE.get("C") is not None and t > BEATS["SMILE_IN"] - 2.0:
-            ts = sim_t(t)
-            k0 = min(int(max(ts, 0) / SW.DT), SW.STATE["K"] - 1); C2 = SC.STATE["C"]
-            dx = SW.STATE["TX"][k0] - C2.x; dy = SW.STATE["TY"][k0] - C2.y
-            hide |= set(int(j) for j in np.where(dx * dx + dy * dy < 85.0 ** 2)[0])
+        if NEAR_HIDE:
+            k0 = min(int(max(sim_t(t), 0) / SW.DT), SW.STATE["K"] - 1)
+            hide |= {j for j, kl in NEAR_HIDE.items() if k0 <= kl}
         SW.HIDE_TITANS = hide
         SW.update(sim_t(t))
     if SC and SC.STATE.get("C") is not None:
         vis_c = T_YH is not None and t >= T_YH + 0.2
-        vis_t = t >= BEATS["SMILE_IN"]
+        vis_t = t >= BEATS["DINA"][0]
         if vis_c or vis_t:
             SC.pose_carla(plin(F_KEYS, t))
+            if vis_t:
+                dina_pose(t)
         if not vis_c:                                    # (pose_carla shows Carla, and hides her after the bite)
             for o in CARLA_OBS:
                 o.hide_render = True
@@ -644,11 +751,16 @@ def set_frame(t):
     return time.time() - t0
 
 # ================================================================ render loop
+T1_ = min(B.t1, VD) if B.vclock else B.t1
 if B.times:
-    jobs = [(float(x), None) for x in B.times.split(",") if x.strip()]
+    jobs = [(float(x), None) for x in B.times.split(",") if x.strip()]        # video s with --vclock
 else:
-    i0 = int(round(B.t0 * B.fps)); i1 = int(round(B.t1 * B.fps))
+    i0 = int(round(B.t0 * B.fps)); i1 = int(round(T1_ * B.fps))
+    if B.vclock:
+        i1 = min(i1, int(math.floor(VD * B.fps - 1e-6)) + 1)
     jobs = [(i / B.fps, i) for i in range(i0, i1, max(1, B.step))]
+    jobs = [j for j in jobs if not os.path.exists(os.path.join(B.g1_out, f"{B.prefix}_{j[1]:05d}.png"))]   # resume
+print(f"[g1] {'VIDEO clock' if B.vclock else 'local clock'}: {len(jobs)} frames, fps {B.fps:g}, video length {VD:.2f} s")
 t_start = time.time()
 if os.environ.get("G1_PROFILE"):                     # timing probe: which part of the post-kick scene is slow
     t = float(os.environ["G1_PROFILE"]); set_frame(t)
@@ -690,12 +802,13 @@ for t, i in jobs:
     if os.path.exists(os.path.join(B.g1_out, "STOP")):
         print("[g1] STOP file found"); break
     t_fr = time.time()
+    tv = t; t = local_t(tv)
     tp = set_frame(t)
-    name = f"{B.prefix}_t{t:05.2f}.png" if i is None else f"{B.prefix}_{i:05d}.png"
+    name = f"{B.prefix}_t{tv:05.2f}.png" if i is None else f"{B.prefix}_{i:05d}.png"
     sc.render.filepath = os.path.join(B.g1_out, name)
     bpy.ops.render.render(write_still=True)
     if i is not None and B.step > 1:
-        for j in range(i + 1, min(i + B.step, int(round(B.t1 * B.fps)))):
+        for j in range(i + 1, min(i + B.step, int(round(T1_ * B.fps)))):
             shutil.copyfile(sc.render.filepath, os.path.join(B.g1_out, f"{B.prefix}_{j:05d}.png"))
     if os.environ.get("G1_DEBUG") and SW is not None:
         S_ = SW.STATE; ts_ = sim_t(t); k_ = min(int(max(ts_, 0) / SW.DT), S_["K"] - 1)
@@ -703,4 +816,4 @@ for t, i in jobs:
         print(f"[g1] DEBUG titans inside {ins}/{S_['nt']} tob hide {S_['tob'].hide_render} pob hide {S_['pob'].hide_render} "
               f"titan xy0 {S_['TX'][k_][:5].round(0)} {S_['TY'][k_][:5].round(0)} cards " +
               ", ".join(f"{p.ob.name}:{'-' if p.state is None else len(p.state[0])}/{p.ob.hide_render}" for cs in CARDS for p in cs.pools.values()), flush=True)
-    print(f"[g1] t={t:.2f}s -> {name} (pose {tp:.1f}s, frame {time.time() - t_fr:.1f}s, total {time.time() - t_start:.0f}s)", flush=True)
+    print(f"[g1] tv={tv:.2f} t={t:.2f}s -> {name} (pose {tp:.1f}s, frame {time.time() - t_fr:.1f}s, total {time.time() - t_start:.0f}s)", flush=True)
