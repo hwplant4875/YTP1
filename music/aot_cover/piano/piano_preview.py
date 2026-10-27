@@ -7,7 +7,7 @@ import numpy as np, mido, pedalboard, soundfile as sf
 import sfizz_host
 
 SR = 48000
-LEN, FADE = 30.0, 0.5
+LEN, FADE = float(os.environ.get("LEN", "30")), 0.5
 
 def main(mid_path, out):
     mf = mido.MidiFile(mid_path)
@@ -22,7 +22,7 @@ def main(mid_path, out):
     vh.mode = 'Gemini'; vh.mix = 100.0; vh.delay_ms = 90.0; vh.feedback = 55.0; vh.density = 80.0
     vh.width = 100.0; vh.lowcut = 220.0; vh.highcut = 6000.0; vh.moddepth = 20.0
     wet = vh.process(a, SR)
-    y = a + 0.16 * wet
+    y = 0.35 * (a + 0.16 * wet)
     y = pedalboard.Pedalboard([pedalboard.Compressor(threshold_db=-20, ratio=1.6, attack_ms=30, release_ms=250),
                                pedalboard.Limiter(threshold_db=-6, release_ms=200)])(y.astype(np.float32), SR)
     y = y[:, :int(LEN * SR)]
