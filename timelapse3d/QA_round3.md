@@ -7,4 +7,5 @@
 - [ ] g6: still far; g2|g3 seam slight brightness step.
 - [x] NAME TAGS were never in the previews (hud2 overlay only at final assembly) -> tag_burn.py burns Russo One tags (max 3, staggered) from the per-frame camera dumps; part 1 windows from the tag timelines, part 2 from tracker validity. full_onetake_v2 = tagged.
 - [x] full_onetake_v2_preview.mp4 (6:30, TAGGED) = master_onetake_v5 (3:30, tagged g3-g8) + part2_3_onetake_v4 (2:59: f0 v3, f1 v5, f2 v1, f3 v6, s1 v4, s2 v3).
-- [~] s2 ending face cartoonish (pale_starer: googly white eyes, unibrow, black void) -> pure_titans 'wall_face' preset (sunken eyes, big dark iris, light brows), hole = dark stone. Still OK -> s2 v4.
+- [x] s2 v4 ending face fixed: (pale_starer: googly white eyes, unibrow, black void) -> pure_titans 'wall_face' preset (sunken eyes, big dark iris, light brows), hole = dark stone. Still OK -> s2 v4.
+- [x] f2 v3 (480p, every frame; clip 350 m under the canopy - 900 m still timed out at 24.2 s). part2_3_onetake_v5 + full_onetake_v3 (tagged, s2 v4 face, f2 v3).

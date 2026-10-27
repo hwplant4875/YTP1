@@ -497,3 +497,4 @@ P1 g5 v5 (QA 15:00 add): zoom 32->88 mm onto the Colossal's head over the gate (
 - 04:00 master_onetake_v4 (part 1, 3:30.6) pushed. f3 crash root-caused (GPU driver timeout on canopy-grazing views) -> far clip 900 m; f3 v5 rendering. Part 2: f1 v4, s1 v3, s2 v3 done.
 - 04:30 ROUND 2 DONE: part2_3_onetake_v3 (2:59: f0 v2, f1 v4, f2 v1, f3 v5, s1 v3, s2 v3) + full_onetake_v1 (6:30) pushed. Next: round 3 self-QA on full_onetake_v1 (QA_round3.md).
 - 05:10 ROUND 3 DONE: full_onetake_v2 (6:30, name tags burnt in via tag_burn.py) + master_onetake_v5 + part2_3_onetake_v4 pushed. f3 retreat on the column, f0/s1 light without murky dusk, f1 opening closer.
+- 05:50 full_onetake_v3 (6:30 tagged): s2 v4 realistic wall face, f2 v3 480p. NOTE forest renders need camera far clip (seg_f2 350 m / seg_f3 900 m) or the GTX 1060 driver times out.
