@@ -18,3 +18,4 @@
       time over the Windows driver timeout -> Blender died at t 4.5 / 20.6 (gaps filled with duplicates). Fix: camera far clip
       900 m for 3.6-46.6 s (stills 4.6 / 12 / 20.7 OK), crown-layer corridor 34 m. f3 v5 at 640x360.
 - [x] master_onetake_v4_preview.mp4 = 3:30.6 (g1 v7, g2 v5, g3 v10, g4 v6, g5 v8, g6 v6, g7 v4, g8 v6).
+- [~] f0 v1: ~7 s of murky empty sky 2-3 km up -> v2 (10 s): ~900 m over Wall Rose with the wall curving in frame, night 0.6 s.
