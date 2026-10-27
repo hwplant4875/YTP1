@@ -19,6 +19,6 @@ Rules: edit code first, render all later in one batch (480p 15fps previews). TOO
 
 ## STATUS (autopilot 10/28)
 - [x] g1 -> g1_fall_v7: tree-still opening OK, golden bolt + flash + sparks + arcs read, smoke before the head, FACE ~1/3 frame (285 mm).
-- [~] g3 v7 reviewed: night start OK, Trost/farm OK; march still thin strip, post-march night black, camp still round -> v8 rendering.
+- [x] g3 -> g3_flight_v8: march column wide + readable (235-290 m), night readable, camp = flat yard with barracks/tower/rigs/trainees.
 - [~] g8 v4 reviewed: middle bright, green smoke flares OK, carry readable; herd-kill corner titans too small -> v5 rendering (closer cam).
 - [~] g4 v5: opened near black -> v6 (night grade lifted, flat camp) rendering.
