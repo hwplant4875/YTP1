@@ -392,6 +392,10 @@ def prune_world_veg():
             return True
         if -300 < x - 19000 < 900 and abs(y - 24000) < 520:
             return True
+        if -9300 < fy < -150 and -350 < fx < 1750:            # the f1 plain: formation + Female corridor stays open
+            return True
+        if -2000 < fx < -1200 and -6500 < fy < 1600:          # the f3 retreat route west of the forest
+            return True
         return road_dist_F(fx, fy, ROAD_F) < 14 and fy < 0
     n = 0
     for ob in list(bpy.data.objects):
