@@ -62,14 +62,13 @@ X.append(sec('s00', [(0, 's7_01_animatronic', 178.25), ('shot', 's7_10_sidney_ki
          ('word', 'Run over by a car', 'run over', 'shot in'), ('word', 'Shot in the head', 'shot in', 'and somehow'),
          ('title', ['16 GHOSTFACES'], '16 different', 'and today')], clip_db=-20))
 # rules: the stat card demo fills one bar per spoken stat, then "??%" on "survival rate"
-s01_card = T('s01', 'scored on')
-X.append(sec('s01', [(0, 's6_core4', 3), ('not ranking', 's5_08_act3', 26), ('coolest', 's7_01_animatronic', 193), ('whose movie', 's4_still_gf', 0),
-  ('ranking how', 's1_10_surprise', 87), ('so every', 's6_core4', 23.4), ('strength', 's2_03_omega', 115.25),
+s01_card = 0.0  # user 10/27 08:08: the ground-rules intro lines are cut; the card is up from the first frame of s01
+X.append(sec('s01', [(0, 's6_core4', 23.4), ('strength', 's2_03_omega', 115.25),
   ('intelligence', 's3_11_family', 73.6), ('kill count', 's5_03_sheriff', 153.25), ('deception', 's1_10_surprise', 27.5),
   ('which is basically', 's1_09_look_behind', 83.4), ('before you figured', 's5_09_fighting', 100), ('put it all', 's7_04_walls', 53),
   ('your survival', 's1_01_like_scary', 30), ('unlike michael', 's6_opening', 282), ('michael', 'h20_final_confrontation', 93.3), ('jason', 'p6_reborn', 123.5), ('every one of these', 's5_09_fighting', 90.2),
   ('ended up dead', 's5_10_daughter', 159.3), ('so your odds', 's2_10_blame', 99.4), ('at least', 's3_11_family', 63)],
-  extra=[('title', ['HOW HARD', '!TO SURVIVE'], 'ranking how', 'so every'), ('title', ['ALL HUMAN'], 'human', 'and every one')]))
+  extra=[('title', ['ALL HUMAN'], 'human', 'and every one')]))
 X[-1]['overlays'].append(['stats', {'name': 'GHOSTFACE', 'tile_png': 'tiles/mystery.png', 'stats': {'STRENGTH': 6, 'INTELLIGENCE': 7,
   'KILL COUNT': 5, 'DECEPTION': 8}, 'pct': '??', 'dur': round(T('s01', 'unlike michael') - s01_card, 3),
   't_pct': round(T('s01', 'survival rate') + LEAD - s01_card, 3),
