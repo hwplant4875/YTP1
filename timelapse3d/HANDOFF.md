@@ -464,3 +464,4 @@ TASK QUEUE for the LOCAL API session (anime analysis runs there; lean: Sonnet, m
 FOREST (part 2): research/female_arc/ep17..22.md (Sonnet analysis) + FOREST_SCENE_BIBLE.md (beats f1-f16 ~2:20, layout frame F, trajectories, camera, assets, owner questions). Frames local only (research/female_arc/frames, analysis/frames, gitignored).
 PROGRESS 10/27 (resume session): TOON default OFF (toon.py, TOON=1 re-enables). g2 v5 code + stills OK (night moon key, Armored steam vanish 11.1-12.1, boats F4-F8, refugee columns, TMAP g2 v5 ~15.2 s, g3 t0 = G2NIGHT); g1 v5 code (tree-shot start, crowd-eye cam, arcs/flash/strike smoke, RISE 5.05); g8 corner herd-kill (HERD_KILL 62) + TMAP g8 carry 2.6x.
 Render queue: g2_v5 full -> g1_v5 stills2 -> g1 full -> g3..g8 (VCLOCK=1, TOON off) -> master v2 concat. Logs: E:/YTP2/3D Timelapse/logs/.
+DONE g2 v5 (renders/laptop/g2_armored_v5_*, 15.2 s, TOON off): night after the breach, Armored steam-vanish, aerial ~3 s, fast exit north.
