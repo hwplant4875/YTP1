@@ -15,7 +15,40 @@ from camchan import CamPath, speed_profile
 # ---------------------------------------------------------------- g1 (W)  guide key 33.0 = K12 (rest at the seam)
 # K0 / K1: the locked tree shots (not numbers in the bible): K1 = render_fast fallback flight_at(900); K0 = close on the kids,
 # 3 m from them on the same line of sight (render_fast: c0 = l0 + (k0 - l0) * 0.74, lens 0.9 * 50)
+# g1 v4 (owner 10/27 07:34): 0-11 s = renders/opening_preview_v4.mp4 (render_fast.py @ 791f565, keys() 2.6-5.45 verbatim:
+# tree, swoosh over the inner wall, down the avenue at 60-72 m), then the Colossal zoom-in as a DOLLY (lens cap 60 mm; the
+# reference zoomed 46 -> 95 -> 210 mm from ~290 m): ~80 m from the head at 8.0 s so head + gripping hands fill ~1/3 of the
+# frame; pull back to the reference's kick framing (10.0 / 11.0 verbatim, plus a small zoom-in at the kick).  After the kick
+# the video clock runs 2 -> 5.5 (segtime G1_PLAN): fly west over the pour to the Yeager ruin, small zoom-in on Carla, seam.
+# Times are g1 LOCAL seconds (= video seconds up to 11.0).  The v3 keys are kept below as G1_V3 (record only).
 G1 = [
+    (0.0, (-476, 330.5, 2.4), (-474.6, 327.9, 1.2), 45),
+    (2.0, (-480, 338, 7.2), (-300, 0, 10.6), 50),
+    (2.05, (-480, 338, 7.2), (-300, 0, 10.6), 50),
+    (2.6, (-430, 290, 28), (-150, 120, 14), 32),      # ref: leave the tree, up and toward the gate
+    (3.2, (-220, 170, 46), (0, 0, 45), 28),           # ref: over the meadow / road, climbing (swoosh)
+    (3.55, (-85, 85, 63), (0, -150, 40), 27),
+    (3.8, (-15, 18, 72), (-2, -450, 30), 27),         # ref: up and over the inner wall top
+    (4.35, (-3, -200, 65), (-7, -700, 42), 30),       # ref: gliding down along the avenue
+    (4.9, (-6, -385, 60), (-7, -720, 52), 46),        # ref: past the plaza, down the gate street (bolt 4.62)
+    (5.45, (-6, -480, 58), (-7, -732, 55), 50),       # dolly toward the wall while the head rises
+    (6.6, (-6, -628, 55.5), (-7, -733, 54.5), 58),
+    (7.45, (-6, -648, 54), (-7, -733, 54.5), 60),     # head + both hands ~1/3 of the frame (ref 8.0 framing; COL_HEAD 1.3)
+    (8.0, (-6, -651, 54), (-7, -733, 54), 60),
+    (10.0, (20, -330, 120), (0, -690, 18), 40),       # ref: pull back, gate and wall in frame
+    (11.0, (25, -325, 128), (0, -690, 24), 43),       # ref: the kick (11.0); small zoom-in 40 -> 47 (look a bit higher: the Colossal stays in frame)
+    (12.0, (22, -328, 136), (-4, -684, 20), 47),
+    (13.6, (-2, -345, 146), (-30, -652, 6), 42),      # dust dome, the Colossal vanishes, Dina runs in from the breach
+    (16.3, (-70, -368, 144), (-85, -640, 4), 36),     # smoke columns, the pour
+    (20.0, (-160, -402, 126), (-150, -615, 3), 33),
+    (23.7, (-214, -446, 108), (-163, -598, 3), 33),
+    (25.5, (-228, -458, 102), (-165, -592, 4), 37),   # Carla: small zoom-in (bend 25.5, grab 26.6, bite 28.4)
+    (27.0, (-236, -463, 99), (-168, -590, 6), 48),
+    (28.9, (-244, -466, 97), (-168, -590, 5), 48),
+    (32.0, (-254, -468, 95), (-167, -590, 2), 28),    # = SEAM_IN (g2 K0), at rest
+    (33.0, (-254, -468, 95), (-167, -590, 2), 28),    # guide key (seam at rest)
+]
+G1_V3 = [   # g1 v3 (master v1), superseded by v4
     (0.0, (-476, 330.5, 2.4), (-474.6, 327.9, 1.2), 45),
     (2.0, (-480, 338, 7.2), (-300, 0, 10.6), 50),
     (2.05, (-480, 338, 7.2), (-300, 0, 10.6), 50),
@@ -50,21 +83,29 @@ G1_BIBLE = [
     (33.0, (-130, -686, 114), (-165, -594, 0), 28),      # guide key (seam at rest)
 ]
 # ---------------------------------------------------------------- g2 (W)
-G2 = [   # v4 (g2 v3 QA 10/27): close framing (owner 00:44) K2-K7 ~160-200 m, 44-50 mm, ~90-125 px; the impact is held
-         # side three-quarter from the SW (27 deg down), then over the wall for the north slide; the breach is seen from the
-         # north 22-29 deg off its normal at 19.5-21 s.  Yaw <= 28.3 deg/s, pitch 23-42; K0 = g1 seam (rest), K9 = g3 seam.
+def _lk(c, yaw, R):                    # look-at point on the ground at horizontal range R, compass-free yaw (deg, math)
+    import math as _m
+    return (round(c[0] + R * _m.cos(_m.radians(yaw)), 1), round(c[1] + R * _m.sin(_m.radians(yaw)), 1), 0.0)
+G2 = [   # v5 (owner 10/27 07:34): Reiner 1.5x faster in local time (3x on screen with the 2x video clock), impact 9.0;
+         # the run keys keep v4's framing relative to him (front 3/4 lock ~150 m, side 3/4 from the W/SW at the hit with a
+         # small zoom-in 50 -> 58 mm); after the steaming stand the camera climbs NW for an AERIAL of burning Shiganshina at
+         # dusk (19.2-22.4), then swings east over the quays / ferries and north to the unchanged g3 seam (yaw spread evenly).
+         # Video clock (segtime.TMAP g2, slope 2): <= 252 m/s, <= 57 deg/s, pitch 22-46, lens 28-58 (seg_g2.vcheck()).
     (0, (-254, -468, 95), (-167, -590, 2), 28),   # SEAM_IN v2 (= g1 K12, at rest)
-    (3, (-185, -330, 108), (-40, -340, 6), 36),   # swoop NE over the roofs, turning onto the avenue
-    (6, (-72, -129.5, 114), (0, -232.5, 9), 48),   # LOCK: front three-quarter (ahead + west of him), ~165 m, ~105 px
-    (9, (-80, -47.5, 112), (0, -145.5, 9), 49),   # the face ricochet at 9.15 seen from the front
-    (11.5, (-112, -78, 102), (0, -73, 9), 50),   # he runs past the camera: front 3/4 -> side
-    (13.5, (-132, -112, 96), (0, -13, 11), 50),   # IMPACT: side three-quarter from the SW, 27 deg down, gatehouse + him in frame
-    (15.5, (-150, -8, 140), (0, 30, 9), 49),   # rise over the wall line: he bursts out of the north face
-    (17, (-140, 40, 128), (0, 46, 9), 47),   # north side: the slide ends at y +46
-    (20, (-80, 145, 118), (0, 34, 10), 44),   # from the north, ~25-30 deg off the wall normal: him steaming + the dark arch breach behind
-    (23.5, (-35, 185, 150), (160, 215, 0), 36),   # turn off him toward the quays
-    (26.5, (30, 240, 215), (265, 400, 0), 30),   # quays + ferries
-    (29, (120, 340, 230), (240, 640, 0), 29),   # the lone ferry heading north
+    (2.4, (-180, -322, 108), (-45, -360, 6), 37),   # swoop NE over the roofs, he enters frame from the right
+    (4.4, (-86, -158, 114), (0, -215, 9), 48),   # LOCK: front three-quarter (ahead + west of him), ~150 m, ~115 px
+    (6.0, (-95, -75, 115), (0, -146, 9), 49),   # the face ricochet at 6.15 seen from the front
+    (7.6, (-130, -82, 104), (0, -74, 9), 50),   # he runs past the camera: front 3/4 -> side
+    (9.0, (-150, -80, 96), (0, -13, 11), 58),   # IMPACT: side three-quarter from the W/SW, 27 deg down, small zoom-in
+    (10.3, (-150, -10, 140), (0, 28, 9), 48),   # rise over the wall line: he bursts out of the north face
+    (11.3, (-140, 40, 128), (0, 46, 9), 46),   # north side: the slide ends at y +46
+    (13.6, (-85, 140, 118), (0, 40, 11), 50),   # from the north: him steaming + the dark arch breach behind (small zoom-in)
+    (15.6, (-95, 170, 135), (0, 30, 12), 48),   # slow drift, then climb
+    (19.2, (-230, 330, 400), (-5, -240, 0), 28),   # AERIAL: burning Shiganshina beyond the wall, the breach in the foreground
+    (22.4, (-185, 350, 395), (40, -235, 0), 28),   # drift east over the burning town
+    (25.0, (-90, 360, 350), _lk((-90, 360), -38, 640), 29),   # swing east: the canal, quays and ferries
+    (27.6, (25, 385, 300), _lk((25, 385), 10, 360), 29),   # the canal, quays and ferries below
+    (30.0, (118, 425, 262), _lk((118, 425), 58, 520), 28.5),   # turning north toward Trost
     (32, (175, 480, 240), (228, 1050, 0), 28),   # = g2->g3 seam (segtime g2_g3), unchanged
 ]
 # ---------------------------------------------------------------- g3  (group-local seconds)
@@ -74,34 +115,32 @@ G3_FLIGHT_W = [                                                       # FA0..FA3
     (7.3,  (380, 2600, 380), (250, 3700, 0), 28),
     (10.6, (200, 3750, 320), (-100, 4600, 0), 30),
 ]
-# camps, frame M.  Lens: the bible gives H2 "28->40" (ease 17.7-21) and H3 "40->28": H2..H3 are held at 40, CAM_IN is 27 (assumption).
-# g3 agent 10/27: the pan is spread a little wider (H2 21.0 -> 20.6, P1-P3 22.55/24.1/25.65 -> 22.4/24.0/25.6, H3 27.2 -> 27.4,
-# look-ats unchanged): 31.9 -> 26.8 deg/s.  seg_g3.py builds its camera from these rows.
+# camps, frame M.  g3 v5 (owner 10/27 07:34: farm faster + clearer, NO winter, straight to 846): H looks out at the clearing
+# beyond Rose (the farm time-lapse), H2 a small zoom-in on it (38 mm), then ONE turn via the west (~115 deg, was 160) over
+# the relief complex and the 846 avenue to CAM_IN.  seg_g3.py builds its camera from these rows (times = seg_g3.BEATS).
 G3_CAMPS_M = [
     (12.9,  (60, 170, 300),    (-268, 805, 0),   30),             # FA4 = W (60, 4300, 300)
-    (17.7,  (-145, 605, 250),  (-330, 1020, 0),  28),             # H (at rest)
-    (20.6,  (-150, 620, 255),  (-300, 1430, 0),  40),             # H2
-    (22.4,  (-145.5, 613, 253), (-686, 1058, 0), 40),             # P1
-    (24.0,  (-132, 592, 248),  (-732, 582, 0),   40),             # P2
-    (25.6,  (-105, 550, 238),  (-464, 232, 0),   40),             # P3
-    (27.4,  (-60, 480, 220),   (-110, 130, 0),   40),             # H3
-    (31.3,  (170, 170, 125),   (-10, -60, 0),    27),             # CAM_IN
-    (31.8,  (178.4, 139.5, 127.8), (-10, -115.5, 0), 27),         # guide = CAM_IN + 0.5 v (look: + 0.5 look-velocity)
+    (17.7,  (-145, 605, 250),  (-420, 1250, 0),  28),             # H  (drift 5 m/s), looking out at the clearing
+    (20.0,  (-170, 640, 262),  (-480, 1330, 0),  38),             # H2 small zoom-in: the clearing planted
+    (21.5,  (-160, 620, 256),  (-760, 1000, 0),  35),             # P1 the turn via the west (look-at direction monotonic)
+    (22.9,  (-110, 550, 245),  (-760, 420, 0),   32),             # P2 the relief complex / west quarter
+    (24.2,  (-20, 440, 220),   (-400, 60, 0),    30),             # P3 the avenue fills with the 846 crowd
+    (26.6,  (170, 170, 125),   (-10, -60, 0),    27),             # CAM_IN (= segtime.G3_MARCH[0])
+    (27.1,  (178.4, 139.5, 127.8), (-10, -115.5, 0), 27),         # guide = CAM_IN + 0.5 v (look: + 0.5 look-velocity)
 ]
-CAM_IN = dict(frame="M", t=31.3, pos=(170, 170, 125), look=(-10, -60, 0), lens=27.0, vel=(16.7, -61.1, 5.6), look_vel=(0, -111.1, 0))
-# g3 agent 10/27: CAM_OUT leaves LEVEL (0, 95, 0) (was climbing (0, 95, 22): the flight to the camp overshot to 681 m); the
-# look-at velocity is the re-driven march camera's (seg_g3.MARCH_LOOK_OUT_VEL, ~ (107, 457, 11)), filled in by _g3_cam() below.
-CAM_OUT = dict(frame="M", t=49.3, pos=(260, -1050, 640), look=(0, 150, 40), lens=28.0, vel=(0, 95, 0), look_vel=(0, 283.3, 13.3))
-G3_TO_CAMP_M = [   # g3 agent 10/27: FT1 520 -> 420 m, FT2 20 m nearer (294 m/s peak, <= 640 m); FT3-FT5 pulled back + up to 150-185 m
-                   # (owner 16:51 "far is better"; were 95 / 85 / 70 m); FT6, FT7 (= g4 G0) unchanged
-    (49.3, (260, -1050, 640),  (0, 150, 40),     28),             # FT0 = march846.CAM_OUT
-    (55.8, (-350, 370, 420),   (-900, 1270, 0),  28),             # FT1
-    (60.2, (-1230, 1000, 260), (-1450, 1520, 0), 30),             # FT2
-    (63.4, (-1395, 1185, 185), (-1452, 1512, 0), 32),             # FT3
-    (66.7, (-1412, 1240, 165), (-1446, 1528, 0), 35),             # FT4
-    (69.2, (-1478, 1298, 150), (-1440, 1552, 4), 38),             # FT5
-    (74.0, (-1660, 1350, 150), (-1450, 1530, 0), 30),             # FT6
-    (78.4, (-1570, 1190, 170), (-1450, 1490, 0), 30),             # FT7 = g4 G0
+CAM_IN = dict(frame="M", t=ST.G3_MARCH[0], pos=(170, 170, 125), look=(-10, -60, 0), lens=27.0, vel=(16.7, -61.1, 5.6), look_vel=(0, -111.1, 0))
+# g3 v5: march846's ORIGINAL spline is restored inside g3 (owner), so CAM_OUT leaves with its original climb (0, 95, 22) and
+# its look-at rate (0, 283.3, 13.3) (march846.CAM_KEYS secant).
+CAM_OUT = dict(frame="M", t=ST.G3_MARCH[1], pos=(260, -1050, 640), look=(0, 150, 40), lens=28.0, vel=(0, 95, 22), look_vel=(0, 283.3, 13.3))
+G3_TO_CAMP_M = [   # g3 v5: a shorter, higher crossing (the video clock eases 1 -> 2 over its first 1.2 video s), FT4 a small zoom-in on
+                   # the enlistment + rigs, FT6 (the seasons orbit) dropped; FT7 = g4 G0 unchanged.  Times = seg_g3.BEATS FT*.
+    (44.6, (260, -1050, 640),  (0, 150, 40),     28),             # FT0 = march846.CAM_OUT
+    (49.4, (-250, 260, 540),   (-950, 1300, 0),  28),             # FT1
+    (52.6, (-1160, 980, 320),  (-1450, 1520, 0), 30),             # FT2
+    (55.0, (-1395, 1185, 185), (-1452, 1512, 0), 34),             # FT3 the camp: enlistment + rigs
+    (57.0, (-1420, 1250, 168), (-1448, 1530, 0), 44),             # FT4 small zoom-in (Shadis, Eren upside down, Mikasa)
+    (58.4, (-1480, 1290, 155), (-1442, 1548, 4), 34),             # FT5 seasons (no winter) -> dusk
+    (61.8, (-1570, 1190, 170), (-1450, 1490, 0), 30),             # FT7 = g4 G0
 ]
 # ---------------------------------------------------------------- g4 (M)
 G4 = [
@@ -193,13 +232,13 @@ G8 = [
 S = ST.seam
 KEYS = {
     "g1": dict(frame="W", keys=G1, v_in=None, v_out=None),
-    "g2": dict(frame="W", keys=G2, v_in=(0, 0, 0), v_out=S("g2_g3")["vel"]),
+    "g2": dict(frame="W", keys=G2, v_in=(0, 0, 0), v_out=S("g2_g3")["vel"], look_v_out=(0.0, 0.0, 0.0)),   # look-at at rest = g3 FA0 (g3 has no look_v_in)
     "g3": dict(frame="M", groups=dict(
         flight=dict(frame="W", keys=G3_FLIGHT_W, t=(0.0, 12.9)),
-        camps=dict(frame="M", keys=G3_CAMPS_M, v_in=None, v_out=None, t=(12.9, 31.3)),
-        march=dict(frame="M", cam_in=CAM_IN, cam_out=CAM_OUT, t=(31.3, 49.3)),
+        camps=dict(frame="M", keys=G3_CAMPS_M, v_in=None, v_out=None, t=(12.9, CAM_IN["t"])),
+        march=dict(frame="M", cam_in=CAM_IN, cam_out=CAM_OUT, t=(CAM_IN["t"], CAM_OUT["t"])),
         to_camp=dict(frame="M", keys=G3_TO_CAMP_M, v_in=CAM_OUT["vel"], look_v_in=CAM_OUT["look_vel"], v_out=S("g3_g4")["vel"],
-                     look_v_out=(0.0, 0.0, 0.0), t=(49.3, 78.4)))),   # g4 agent 10/27: look-at at rest at FT7 = g4 G0 (g4 starts its look-at from rest)
+                     look_v_out=(0.0, 0.0, 0.0), t=(CAM_OUT["t"], ST.DUR["g3"])))),   # g4 agent 10/27: look-at at rest at FT7 = g4 G0 (g4 starts its look-at from rest)
     "g4": dict(frame="M", keys=G4, v_in=S("g3_g4")["vel"], v_out=S("g4_g5")["vel"], look_v_out=(0.0, 0.0, 0.0)),   # look-at at rest = g5 C0 (g5 has no look_v_in)
     "g5": dict(frame="M", keys=G5, v_in=S("g4_g5")["vel"], v_out=S("g5_g6")["vel"]),
     "g6": dict(frame="M", keys=G6, v_in=S("g5_g6")["vel"], v_out=S("g6_g7")["vel"]),
@@ -239,9 +278,9 @@ def _join(parts):
     return out
 
 def run_B_keys(guide=True):
-    """FT0 -> g8 E2 as ONE channel, global seconds (FT0 = g3 start + 49.3).  Lead-in guide at FT0 - 1 s per bible A3."""
+    """FT0 -> g8 E2 as ONE channel, global seconds (FT0 = g3 start + CAM_OUT t).  Lead-in guide at FT0 - 1 s per bible A3."""
     g3 = ST.START["g3"]; ks = []
-    ks.append(_M([(49.3, *G3_TO_CAMP_M[0][1:])], "M", g3))
+    ks.append(_M([(CAM_OUT["t"], *G3_TO_CAMP_M[0][1:])], "M", g3))
     parts = [_M(G3_TO_CAMP_M[1:], "M", g3)]
     for g, K in (("g4", G4), ("g5", G5), ("g6", G6), ("g7", G7), ("g8", G8)):
         parts.append(_M(K, "M", ST.START[g]))
@@ -252,7 +291,7 @@ def run_B_keys(guide=True):
     return keys
 
 def run_A2_keys():
-    """g2 K0 .. g3 CAM_IN + guide 31.8 as ONE channel, global seconds."""
+    """g2 K0 .. g3 CAM_IN + guide (CAM_IN + 0.5 s) as ONE channel, global seconds."""
     g2, g3 = ST.START["g2"], ST.START["g3"]
     return _join([_M(G2, "W", g2), _M(G3_FLIGHT_W, "W", g3), _M(G3_CAMPS_M, "M", g3)])
 
@@ -261,7 +300,7 @@ BIBLE = {   # bible-quoted peaks (A3 and per-segment 'Verified' lines): m/s, deg
     "g6": (39, 25), "g7": (104, 26), "g8": (67, 30), "g3_camps": (None, 32), "A2": (78, 30), "B": (141, 32)}
 
 NOTES = [   # appended to design_specs/camcheck_report.md
-    "g3 (agent 10/27): the rendered camera is seg_g3.CAM_M (check 'g3'): flight 0-17.7 on camchan.speed_profile (372 m/s peak, the bible exception); camps pan re-timed (26.8 deg/s); march846 re-driven on its own route with arc-length channels + a speed profile (289 m/s, 28 deg/s, >= 125 m, pitch >= 17; march846.py's spline gave 458 m/s / 57 deg/s / 81 m / pitch 11); CAM_OUT level (0,95,0); to camp FT1 420 m, FT2 20 m nearer, FT3-FT5 at 185/165/150 m: 294 m/s, <= 640 m, no HEIGHT-HIGH. A2 / B / B_vin now use these keys. g3_flight / g3_flight_prof rows are the reference transcriptions.",
+    "g3 v5 (agent 10/27 PM, owner feedback): the rendered camera is seg_g3.CAM_M on the VIDEO clock segtime.TMAP['g3'] (python aot/seg_g3.py prints the local and the video checks): flight 0-17.7 unchanged; farm hold + one ~120 deg turn to CAM_IN (66 deg/s video, 33 local); march846's ORIGINAL spline restored at real time (owner: 458 m/s, 57 deg/s, 81 m, pitch 11 accepted); CAM_OUT climbs (0,95,22) again (to camp peaks 677 m, 858 m/s video at ~500 m, v/h 2.0 < the flight north's 2.5); camp 155-185 m.",
     "Agree with the bible within rounding: g1 129 m/s; g3 flight pure PCHIP 412 m/s (profile run 372 vs the profile's 369); g3 flight-to-camp 298 m/s; g4 141 m/s / 31.5 deg/s (bible 32); g5 43 / 29; g7 104 / 26.5 (26); g8 67 / 29.9 (30), min height 89 m (bible says 89 too); g3 camps pan 31.9 deg/s (bible 32).",
     "Disagree: g2 alone peaks at 54 m/s (bible 78): the bible figure comes from the A2 run where g2 is one channel with the g3 flight keys; with the A2 seam as v_out (0,45,8) g2 ends smoothly at 46 m/s. g6 yaw peaks at 18.8 deg/s (bible 25): the bible number is from the single run B; with seam tangents g6 alone is calmer.",
     "Over the A3 limits (flags in the table): YAW > 30 deg/s: g3 camps P2->P3 pan 31.9 (26.4 s local), g4 G0b swing 31.5 (2.6 s), run A2 32.0, run B 31.7 (the same two spots; the bible itself quotes 32). All are < 3 % over; none is a flip.",
@@ -312,20 +351,20 @@ def path(name):
     if name == "g3_camps":
         k = G3_CAMPS_M[:-1]   # up to CAM_IN, seam tangents instead of the guide key
         p = CamPath(k, v_in=(0, 0, 0), v_out=CAM_IN["vel"], look_v_out=CAM_IN["look_vel"])
-        kw.update(t0=17.7, t1=31.3)
+        kw.update(t0=17.7, t1=CAM_IN["t"])
         q["comment"] = "H (17.7, at rest) to CAM_IN with v_out = (16.7,-61.1,5.6) and the look-point rate of march846 CAM_KEYS[0..1]. FA4->H (12.9-17.7) is inside the flight profile."
         return p, kw, q
     if name == "g3_to_camp":
         import seg_g3 as G3                                  # g3 agent 10/27: the rendered path (level CAM_OUT, march look-at rate in)
         p = G3.TOCAMP
-        kw.update(t0=49.3, t1=78.4); lim.update(speed=300)
+        kw.update(t0=CAM_OUT["t"], t1=ST.DUR["g3"]); lim.update(speed=300)
         q["comment"] = ("FT0..FT7 as rendered by seg_g3: v_in = CAM_OUT (0,95,0) (level; the old climb (0,95,22) overshot to 681 m), "
                         "look_v_in = the re-driven march camera's look-at rate, v_out = g3_g4 seam, look-at at rest at FT7 (g4). "
                         "FT3-FT5 now 185/165/150 m (height floor 90 holds); speed limit 300 (flight exception, bible 298).")
         return p, kw, q
     if name == "A2":
         p = CamPath(run_A2_keys(), v_in=(0, 0, 0))
-        kw.update(t0=ST.START["g2"], t1=ST.START["g3"] + 31.3)
+        kw.update(t0=ST.START["g2"], t1=ST.START["g3"] + CAM_IN["t"])
         q["comment"] = "g2 + g3 flight + camps up to CAM_IN as ONE pure-PCHIP channel (bible A2 run), guide key 31.8; the flight part is the 412 m/s case (g3 drives it with the explicit profile)."
         lim.update(speed=None)
         return p, kw, q
@@ -335,7 +374,7 @@ def path(name):
             p = CamPath(keys)
         else:
             p = CamPath(keys, v_in=CAM_OUT["vel"], look_v_in=CAM_OUT["look_vel"])
-        kw.update(t0=ST.START["g3"] + 49.3, t1=ST.TOTAL)
+        kw.update(t0=ST.START["g3"] + CAM_OUT["t"], t1=ST.TOTAL)
         q["comment"] = ("FT0 -> g8 E2 as ONE channel, " + ("lead-in guide key at FT0-1 s (look-at = FT0 look), bible A3." if name == "B" else "with v_in = march846 CAM_OUT velocity instead of the guide key.") +
                         " Heights: FT3-FT5 low by design (70-95 m); the bible quotes the peaks per segment (g4 141/32 ... g8 67/30).")
         lim.update(hmin=65, speed=300)

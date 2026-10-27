@@ -7,14 +7,17 @@ Frames: W = Shiganshina world (inner gate (0,0), +y north); M = Trost master (ou
 trost.py set frame = (X, Y - 870, Z).
 """
 ORDER = ["g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8"]
-DUR = dict(g1=32.0, g2=32.0, g3=78.4, g4=20.0, g5=70.0, g6=69.5, g7=45.0, g8=75.0)      # TIGHT (A1); full: 32 32 78.4 20 84 74 116 136
+DUR = dict(g1=32.0, g2=32.0, g3=61.8, g4=20.0, g5=70.0, g6=69.5, g7=45.0, g8=75.0)      # TIGHT (A1); full: 32 32 78.4 20 84 74 116 136
 FULL = dict(g1=32.0, g2=32.0, g3=78.4, g4=20.0, g5=84.0, g6=74.0, g7=116.0, g8=136.0)
 CONTENT = dict(
     g1="Opening + Shiganshina fall", g2="Armored ram + ferries", g3="Flight north, camps, march846, flight to camp, 104th camp",
     g4="Trost 850 establishing", g5="Trost breach, evacuation, Mikasa, Attack Titan", g6="Supply HQ, lift op, Eren emerges",
     g7="Cannon basin, half-shift, salute, Pyxis", g8="Boulder, seal, Levi, mop-up, pyres")
-# g3 internal groups (local s): flight 0-12.9, camps 12.9-31.3, march846 31.3-49.3, flight to camp 49.3-63.4, 104th camp 63.4-78.4
-G3 = dict(flight=(0.0, 12.9), camps=(12.9, 31.3), march=(31.3, 49.3), to_camp=(49.3, 78.4), camp104=(63.4, 78.4))
+# g3 internal groups (local s).  g3 v5 (owner 10/27 07:34: farm faster, NO winter, the ORIGINAL march846 camera at its own
+# real-time speed): flight 0-17.7, farm + 846 17.7-26.6, march846 26.6-44.6 (played at slope 1, see TMAP below), flight to
+# the camp 44.6-54.6, 104th camp 54.6-61.8.  G3_MARCH is the ONE place the march span lives (seg_g3.BEATS reads it).
+G3_MARCH = (26.6, 44.6)
+G3 = dict(flight=(0.0, 17.7), camps=(17.7, G3_MARCH[0]), march=G3_MARCH, to_camp=(G3_MARCH[1], 61.8), camp104=(54.6, 61.8))
 
 def _starts():
     s, t = {}, 0.0
@@ -52,9 +55,9 @@ SEAMS = {
                       note="g1 K12 = g2 K0 = render_fall2.SEAM_IN, at rest (g1 adds a guide key 1 s later); v2 10/26 lead QA (was (-130,-686,114)->(-165,-594,0))"),
     "g2_g3":     dict(frame="W", pos=(175, 480, 240), look=(228, 1050, 0), lens=28.0, vel=(0, 45, 8), t=START["g3"],
                       note="g2 K9 = g3 FA0, 45 m/s heading N, vz +8"),
-    "g3_in":     dict(frame="M", pos=(170, 170, 125), look=(-10, -60, 0), lens=27.0, vel=(16.7, -61.1, 5.6), t=START["g3"] + 31.3,
+    "g3_in":     dict(frame="M", pos=(170, 170, 125), look=(-10, -60, 0), lens=27.0, vel=(16.7, -61.1, 5.6), t=START["g3"] + G3_MARCH[0],
                       note="g3 CAM_IN = march846.CAM_IN (set: (170, -700, 125)); guide key 31.8 = (178.4, 139.5, 127.8)"),
-    "march_out": dict(frame="M", pos=(260, -1050, 640), look=(0, 150, 40), lens=28.0, vel=(0, 95, 22), t=START["g3"] + 49.3,
+    "march_out": dict(frame="M", pos=(260, -1050, 640), look=(0, 150, 40), lens=28.0, vel=(0, 95, 22), t=START["g3"] + G3_MARCH[1],
                       note="march846.CAM_OUT = g3 FT0 (set: (260, -1920, 640)); lead-in guide FT0-1 s = (260, -1145, 618)"),
     "g3_g4":     dict(frame="M", pos=(-1570, 1190, 170), look=(-1450, 1490, 0), lens=30.0, vel=(14.1, -14.1, 0), t=START["g4"],
                       note="g3 FT7 = g4 G0 (set: (-1570, 320, 170)); 20 m/s heading SE, vz 0"),
@@ -90,6 +93,59 @@ def seam_out(g):
 #   - HUD tag JSONs are on the video clock: convert with to_video(g, t).
 SPEED = 2.0
 TMAP = {}                              # g -> [(tv, t), ...] knots; missing = linear SPEED
+# g2 (agent 10/27, owner 07:34): DUR stays 32.0 local (g3 part A continues at g2 t 32 = seg_g3.G2_T); Reiner's 3x-on-screen
+# speed-up lives in seg_g2's BEATS / run law (1.5x local), so the map stays linear at SPEED: 16.0 s of video, slope 2 at both
+# seams.  To stretch a stretch, add knots here, e.g. [(0,0), (4.2,8.4), (4.8,9.4), (16.1,32)] = slope 1.67 around the impact (video 16.1 s).
+TMAP["g2"] = [(0.0, 0.0), (16.0, 32.0)]
+
+def ramp_knots(dur, holds, ramp=1.2, n=12, speed=None):
+    """TMAP knots for a segment played at `speed` (default SPEED) except local spans holds = [(t_a, t_b, slope), ...]
+    played at `slope`.  The slope eases speed -> slope over `ramp` VIDEO seconds ending exactly at t_a, and back over
+    `ramp` video s starting at t_b (cosine ease, sampled as n linear pieces: slope steps <= ~5 %).  Ends stay at speed."""
+    import math
+    sp = SPEED if speed is None else speed
+    K = [(0.0, 0.0)]
+    def lin_to(t):                                       # advance at sp to local t
+        tv, t0 = K[-1]
+        if t > t0 + 1e-9: K.append((tv + (t - t0) / sp, t))
+    def ease(s0, s1):                                    # ramp from the last knot
+        tv0, t0 = K[-1]
+        F = lambda u: s0 * u + (s1 - s0) * (u - math.sin(math.pi * u) / math.pi) / 2
+        for k in range(1, n + 1):
+            u = k / n; K.append((tv0 + ramp * u, t0 + ramp * F(u)))
+    for a, b, s in holds:
+        lin_to(a - ramp * (sp + s) / 2); ease(sp, s)
+        tv, t0 = K[-1]; K.append((tv + (b - t0) / s, b))
+        ease(s, sp)
+    lin_to(dur)
+    return [(round(tv, 6), round(t, 6)) for tv, t in K]
+# g3 v5: march846 (G3_MARCH) at real time (slope 1 = march846's own tuned speed), eased 2 -> 1 -> 2 over 1.0 video s each side
+TMAP["g3"] = ramp_knots(DUR["g3"], [(G3_MARCH[0], G3_MARCH[1], 1.0)], ramp=1.0)
+
+def slope_knots(dur, plan, n=8):
+    """TMAP knots from a slope PLAN = [(t_a, slope, ramp), ...] (local t_a ascending, plan[0] = (0, s0, 0)): play at the
+    previous slope up to local t_a, then ease (cosine, n linear pieces) to `slope` over `ramp` VIDEO seconds, and so on to
+    local `dur`.  The slope at local dur is the last plan slope (keep it = SPEED for the seam rule)."""
+    import math
+    K = [(0.0, 0.0)]; cur = plan[0][1]
+    def lin_to(t, s):
+        tv, t0 = K[-1]
+        if t > t0 + 1e-9: K.append((tv + (t - t0) / s, t))
+    for t_a, s, ramp in plan[1:]:
+        lin_to(t_a, cur)
+        tv0, t0 = K[-1]
+        F = lambda u: cur * u + (s - cur) * (u - math.sin(math.pi * u) / math.pi) / 2
+        for k in range(1, n + 1):
+            u = k / n; K.append((tv0 + ramp * u, t0 + ramp * F(u)))
+        cur = s
+    lin_to(dur, cur)
+    return [(round(tv, 6), round(t, 6)) for tv, t in K]
+# g1 v4 (owner 10/27 07:34: the opening = renders/opening_preview_v4.mp4 at its REAL-TIME pace, then everything fast):
+# local 0-11.0 at slope 1 (tree, swoosh over the inner wall, avenue, bolt 4.62, head rise + zoom-in to 8.0, pull-back,
+# kick 11.0) -> 2 over 0.7 s -> 5.5 (Colossal vanishes, smoke columns, the pour, Dina runs from the gate, fly west)
+# -> 1.7 for Carla (BEND 25.5 -> gone 28.9 = 2.0 video s) -> 3 -> 2 at the g1|g2 seam (at rest).  Video ~17.9 s.
+G1_PLAN = [(0.0, 1.0, 0.0), (11.0, 2.0, 0.7), (12.05, 5.5, 0.9), (23.4, 1.7, 0.5), (28.9, 3.0, 0.3), (31.15, 2.0, 0.3)]
+TMAP["g1"] = slope_knots(DUR["g1"], G1_PLAN)
 def knots(g):
     k = TMAP.get(g)
     return list(k) if k else [(0.0, 0.0), (DUR[g] / SPEED, DUR[g])]

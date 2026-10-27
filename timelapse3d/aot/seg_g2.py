@@ -1,20 +1,26 @@
-"""g2 ARMORED RAM + FERRIES (SCENE_BIBLE_v2 B.g2 + D6/D7/D21, tight 32.0 s, frame W = Shiganshina world).
+"""g2 ARMORED RAM + BURNING SHIGANSHINA + FERRIES (SCENE_BIBLE_v2 B.g2 + D6/D7/D21, 32.0 s local, frame W = Shiganshina world).
 Driven by aot/render_seg.py with SEG_FRAME=W (SEG=g2 bash render_seg.sh builds scene.py's own Shiganshina 845 with g1's
-plug-ins, see render_seg.sh).  Every frame is a pure function of the local time t (0..32).
+plug-ins, see render_seg.sh).  Every frame is a pure function of the local time t (0..32).  VIDEO CLOCK: segtime.TMAP["g2"]
+(linear, slope 2) -> 16.0 s of video; Reiner runs 1.5x faster in LOCAL time = 3x on screen vs v3 (owner 10/27 07:34).
 
-Story (all times in BEATS below, the ONE re-time place):
-  0     g1 seam at rest (camera on the Yeager ruin, the Smiling Titan), the Armored already running up the avenue at y -400
-  0-5.2 calm pan east onto the avenue; from 5.2 the far observer (~300 m, west side) is LOCKED on him (<= 2 deg)
-  5.8-7.6  wall-top guns (x -25, +25, -60, +60): ricochet 6.0 chest, 7.1 shoulder (gold streak + sparks), misses 6.5 / 7.6
-  9.0 first field volley (3 guns), 9.15 a shell glances off his FACE; 11.0 second volley + the last wall guns (x +-95)
-  11.8 Garrison run across the apron, the crest leaf (drop gate) starts sliding down; 12.4 the gun crews scatter,
-  12.8 a carriage is kicked over; 13.1-13.5 RIGHT-shoulder drop (torso twist, root never rotates)
-  13.5 IMPACT: flash, the passage + leaf + brick between explode, tall narrow arch breach 13 x 25.5 m, wings survive,
-       cracks; 50 chunks fan north (8 big ones arc 60-80 m over the wall), a Garrison soldier flung, south dust ring
-  13.5-16.3 he SLIDES through on momentum to y +46: feet braced and skidding, two dust furrows, rubble ploughed ahead,
-       a splash over the water strip; the ochre dust ball grows to ~40 m; the panic wave runs up the gate road
-  16.3-18 he straightens; 18-32 stands steaming in the haze; 23-32 ferries north, light toward dusk, hand-off K9.
-Camera: camkeys.G2 (v2) through camchan.CamPath (seam in at rest, seam out = segtime g2_g3 velocity).
+Story (local seconds; all times in BEATS below, the ONE re-time place; video = local / 2):
+  0     g1 seam at rest (camera on the Yeager ruin), the Armored already running up the avenue at y -400 (30 -> 43.5 m/s)
+  0-4.4 swoop NE over the roofs onto the avenue; from 4.4 the camera is LOCKED on him (front three-quarter, ~150 m)
+        The apron, the avenue ahead of him and the gate road are ALREADY EVACUATED (owner 07:34): no fleeing column, only
+        a few distant stragglers far north on the gate road; the Garrison gun line, the wall guns and the crews stay.
+  4.3-5.35 wall-top guns (x -25, +25, -60, +60): ricochets on the 1st / 3rd shot (gold streak + sparks), misses 2nd / 4th
+  6.0 first field volley, 6.15 a shell glances off his FACE; 7.33 second volley + the last wall guns (x +-95)
+  7.87 Garrison run across the apron, the crest leaf (drop gate) starts sliding down; 8.27 the gun crews scatter,
+  8.53 a carriage is kicked over; 8.55-9.0 RIGHT-shoulder drop (torso twist, root never rotates)
+  9.0 IMPACT (small zoom-in 50 -> 58 mm, side three-quarter): flash, tall narrow dark arch breach 13 x 25.5 m through the
+       full depth, wings survive, cracks; 50 chunks fan north (8 big ones arc 60-80 m over the wall), a soldier flung
+  9.0-10.9 he SLIDES through on momentum to y +46: feet braced and skidding, two dust furrows, rubble ploughed ahead,
+       a splash over the water strip; the ochre dust ball grows to ~40 m
+  10.9-12.0 he straightens; 12-32 stands steaming in the haze (seen from the north 12-15.6, small zoom-in)
+  15.6-22.4 the camera climbs NW: AERIAL of BURNING Shiganshina at dusk (fires spreading roof to roof since 2 s, dense smoke
+       columns bending west, fire glow on the houses), the breach and the steaming Armored small in the foreground
+  22.4-32 swing east over the canal / quays / ferries and north toward Trost: hand-off to g3 (seam K15, unchanged)
+Camera: camkeys.G2 (v5) through camchan.CamPath (seam in at rest, seam out = segtime g2_g3 velocity, look-at at rest).
 Smoke over Shiganshina bends WEST (wind -2.2, +0.45; bible AUDIT CORRECTIONS 2).  Hamlet east-heavy = g1_set.
 """
 import math, os, random, sys, time
@@ -37,17 +43,19 @@ FRAME = "W"
 
 # ====================================================================== BEATS (the ONE re-time place, local seconds)
 BEATS = dict(
-    lock=6.0,                              # framing locked on him from here (camkeys K2)
-    wall_fire=(5.8, 6.3, 6.9, 7.4),        # wall-top guns x -25, +25, -60, +60
-    wall_hits=(6.0, 7.1), wall_miss=(6.5, 7.6),
-    volley1=9.0, face_hit=9.15, f3_castoff=10.0, volley2=11.0,
-    apron_run=11.8, leaf=(11.8, 13.5), scatter=12.4, kick_carriage=12.8,
-    ram=(13.1, 13.5), impact=13.5, slide=(13.5, 16.3), straighten=(16.3, 18.0), stand=(18.0, 32.0),
-    steam=15.6, light_swing=(13.5, 26.0), dusk=(22.0, 32.0),
+    run_v=43.5, run_v0=30.0, run_acc=1.0,  # m/s: 1.5x v3's 29 (3x on screen with the 2x clock); v0 at t 0, full speed by 1.0
+    lock=4.4,                              # framing locked on him from here (camkeys K2)
+    wall_fire=(4.3, 4.65, 5.0, 5.35),      # wall-top guns x -25, +25, -60, +60 (1st + 3rd ricochet, 2nd + 4th miss)
+    volley1=6.0, f3_castoff=10.0, volley2=7.33,   # face hit = volley1 + SHELL_T - 0.05 (6.15)
+    apron_run=7.87, leaf=(7.87, 9.0), scatter=8.27, kick_carriage=8.53,
+    ram=(8.55, 9.0), impact=9.0, slide=(9.0, 10.87), straighten=(10.87, 12.0), stand=(12.0, 32.0),
+    steam=10.4, light_swing=(9.0, 20.0), dusk=(12.0, 26.0),   # end light = DUSK_LIGHT (= g3 t 0)
+    fires=(2.0, 16.0),                     # the town catches fire roof to roof (new columns ignite over this span)
+    aerial=(17.0, 24.0),                   # the burning town fills the frame (camkeys K10-K11)
 )
 T_IMP = BEATS["impact"]
-RUN_V = 29.0                              # m/s (Froude sprint for 15 m: 1.55 steps/s, 18.7 m steps)
-STEP_LEN = 18.7
+RUN_V = BEATS["run_v"]                     # m/s
+STEP_LEN = 21.0                            # longer bounding stride at the faster run (~2.1 steps/s local)
 SLIDE_T = BEATS["slide"][1] - BEATS["slide"][0]
 GATE_FRONT_S = -13.0                      # brick gatehouse fronts y -13 (south) / +13 (north)
 HOLE_HW, HOLE_H = 6.5, 25.5               # breach: tall narrow pointed arch 13 x 25.5 m
@@ -58,12 +66,15 @@ def smooth(a, b, t):
     u = min(1.0, max(0.0, (t - a) / (b - a))); return u * u * (3 - 2 * u)
 
 def arm_y(t):
-    """Run front of the Armored (his centre) on the avenue x = 0: bible run law, contact at 13.5 s, then the slide."""
-    if t <= 1.5:
-        return -400.0 + 20.0 * t + 3.0 * t * t
+    """Run front of the Armored (his centre) on the avenue x = 0: v0 -> run_v over run_acc s, contact (y -15) at the
+    impact beat, then the slide.  Start y follows from the beats (-399.75 for the defaults, = v3's -400)."""
     if t <= T_IMP:
-        return -363.0 + RUN_V * (t - 1.5)
-    u = min(t - T_IMP, SLIDE_T)               # v = 29 (1 - (u/T)^3): holds speed, then digs in and stops at y ~ +46
+        ta = BEATS["run_acc"]; v0 = BEATS["run_v0"]
+        if t >= ta:
+            return -15.0 - RUN_V * (T_IMP - t)
+        a = (RUN_V - v0) / ta; y1 = -15.0 - RUN_V * (T_IMP - ta)
+        return y1 - (v0 * (ta - t) + 0.5 * a * (ta * ta - t * t))
+    u = min(t - T_IMP, SLIDE_T)               # v = V (1 - (u/T)^3): holds speed, then digs in and stops at y ~ +46
     return -15.0 + RUN_V * (u - u ** 4 / (4 * SLIDE_T ** 3))
 
 def arm_v(t, h=1e-3):
@@ -82,10 +93,10 @@ CAM = camchan.CamPath(**camkeys.cam("g2"))
 TRACK = {"ARMORED TITAN": lambda t: (0.0, arm_y(t), 17.0)}
 
 def cam_shake(t):
-    """<= 0.2 deg for ~0.35 s at the impact (A3 shake rule)."""
-    if not (T_IMP <= t < T_IMP + 0.4) or bpy is None:
+    """<= 0.25 deg for ~0.3 s local at the impact (A3 shake rule)."""
+    if not (T_IMP <= t < T_IMP + 0.3) or bpy is None:
         return (0.0, 0.0)
-    a = math.radians(0.2) * (1 - (t - T_IMP) / 0.4)
+    a = math.radians(0.25) * (1 - (t - T_IMP) / 0.3)
     return (a * noise.noise(Vector((t * 37, 0.3, 1.1))), a * noise.noise(Vector((2.1, t * 33, 0.7))))
 
 # ====================================================================== helpers
@@ -253,10 +264,21 @@ def swarm_setup():
         if not SW.STATE.get("people"):
             SW.setup(t_end=float(os.environ.get("SWARM_TEND", "90")))
         SW.HIDE_TITANS = {"smiling"}
+        SW.HIDE_PEOPLE = evacuated
         S["SW"] = SW
         print("[g2] swarm845", SW.info())
     except Exception:
         import traceback; traceback.print_exc(); S["SW"] = None
+
+def evacuated(P):
+    """Owner 10/27 07:34: the gate area is already evacuated when he charges.  Hide swarm845's people (the ones heading for
+    the inner gate) on the avenue ahead of him (y > -470, out of g1's last frame), on the apron and north of the wall (the
+    field / gate road) and on the market plaza beside his lane (also out of g1's last frame); the town behind him and the
+    canal docks keep theirs."""
+    x, y = P[:, 0], P[:, 1]
+    px, py, pr = L.PLAZA if L is not None and hasattr(L, "PLAZA") else (-20.0, -360.0, 40.0)
+    return ((((x - px) ** 2 + (y - py) ** 2) < (pr + 6.0) ** 2) | ((np.abs(x) < 20.0) & (y > -470.0) & (y < 0.0)) | ((np.abs(x) < 62.0) & (y > -76.0) & (y < 0.0)) |
+            ((y >= 0.0) & (y < 650.0) & (np.abs(x) < 160.0)))
 
 def swarm_update(t):
     SW = S.get("SW")
@@ -692,9 +714,10 @@ def build_ground(coll):
 FIELD_X = (-38.0, -24.0, -10.0, 10.0, 24.0, 38.0)
 FIELD_Y = -34.0
 WALL_GX = (-25.0, 25.0, -60.0, 60.0, -95.0, 95.0)
-VOLLEY = {8.95: (-10.0, 24.0, 38.0), 11.0: (-38.0, -24.0, 10.0)}   # 8.95 + 0.2 = the face hit at 9.15
-KICKED = 10.0                                # the carriage his foot kicks over at 12.8
-SHELL_T = 0.2                                # shell flight time (fire -> hit), so the hits land on the BEATS times
+SHELL_T = 0.2                                # shell flight time (fire -> hit)
+VOLLEY = {BEATS["volley1"] - 0.05: (-10.0, 24.0, 38.0), BEATS["volley2"]: (-38.0, -24.0, 10.0)}   # 1st shot of volley 1 = the face hit
+KICKED = 10.0                                # the carriage his foot kicks over (BEATS kick_carriage)
+WALL_HIT = (0, 2)                            # wall_fire shots that ricochet off him (the others miss)
 
 def gun_mesh(M):
     bm = bmesh.new()
@@ -738,11 +761,11 @@ def gun_shots():
     shots = []
     rnd = random.Random(8)
     wall_m = {x: Vector((x, -4.6, L.WALL_H + 1.6)) for x in WALL_GX}
-    for t, x in zip(BEATS["wall_fire"], WALL_GX[:4]):
+    for k, (t, x) in enumerate(zip(BEATS["wall_fire"], WALL_GX[:4])):
         th = t + SHELL_T
-        kind = "hit" if any(abs(th - h) < 0.05 for h in BEATS["wall_hits"]) else "miss"
+        kind = "hit" if k in WALL_HIT else "miss"
         ya = arm_y(th)
-        tgt = (Vector((0.8, ya - 0.6, 10.5 if th < 6.5 else 12.6)) if kind == "hit"
+        tgt = (Vector((0.8, ya - 0.6, 10.5 if k == 0 else 12.6)) if kind == "hit"
                else Vector((rnd.uniform(-8, 8), ya + rnd.uniform(8, 22), 0.0)))
         if kind == "miss":
             tgt.z = gz(tgt.x, tgt.y)
@@ -754,7 +777,7 @@ def gun_shots():
     for tv, xs in VOLLEY.items():
         for k, x in enumerate(xs):
             t = tv + 0.08 * k; th = t + SHELL_T; ya = arm_y(th)
-            if tv < 10.0:
+            if tv < BEATS["volley2"] - 0.01:
                 kind = "face" if k == 0 else "miss"
             else:
                 kind = "hit" if k == 1 else "miss"
@@ -892,7 +915,7 @@ def _R(ax=0.0, ay=0.0, az=0.0):
     return Matrix.Rotation(az, 3, "Z") @ Matrix.Rotation(ay, 3, "Y") @ Matrix.Rotation(ax, 3, "X")
 
 def armored_weights(t):
-    ram = smooth(*BEATS["ram"], t) * (1 - smooth(T_IMP + 1.1, BEATS["slide"][1], t))
+    ram = smooth(*BEATS["ram"], t) * (1 - smooth(T_IMP + 0.4 * SLIDE_T, BEATS["slide"][1], t))
     brace = smooth(T_IMP, T_IMP + 0.35, t) * (1 - smooth(*BEATS["straighten"], t))
     run = 1.0 - smooth(T_IMP - 0.05, T_IMP + 0.35, t)
     return run, ram, brace
@@ -923,7 +946,8 @@ def armored_rots(t):
     st = 1.0 - max(run, brace)
     if st > 0:                                                                   # standing: breathing, a slow look round
         add("Spine01", ay=0.03 * math.sin(1.3 * t) * st)
-        add("NeckTwist01", az=0.22 * math.sin(0.35 * (t - 18.0)) * smooth(18.0, 20.0, t), ay=0.05 * st)
+        t_st = BEATS["stand"][0]
+        add("NeckTwist01", az=0.22 * math.sin(0.35 * (t - t_st)) * smooth(t_st, t_st + 2.0, t), ay=0.05 * st)
         add("L_Upperarm", ax=0.12 * st); add("R_Upperarm", ax=-0.12 * st)
     return {b: _R(*a) for b, a in A.items()}
 
@@ -1043,6 +1067,103 @@ def build_smoke_columns():
                    None, r0=1.5, r1=2.6, life=60.0, rise=0.0, kind="fire", alpha=0.8, fade_in=0.4)
     C.build(S["coll"]); S["smoke"] = C
     print(f"[g2] smoke columns {len(sites)}, cards {C.count()}")
+
+FIRE_N = int(os.environ.get("G2_FIRES", "26"))          # new fires that ignite during g2 (owner 07:34: burning Shiganshina)
+FIRE_LIGHTS = int(os.environ.get("G2_FIRE_LIGHTS", "14"))
+
+def fire_sites():
+    """New fire sites on real houses (g1_set Town points, alive) across the district, >= 50 m apart and from g1's 10
+    columns, off the avenue / apron / canal; ignition times spread over BEATS fires.  Deterministic."""
+    rnd = random.Random(845)
+    pts = []
+    ob = bpy.data.objects.get("Town")
+    if ob is not None:
+        me = ob.data; n = len(me.vertices)
+        co = np.zeros(3 * n); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+        born = np.full(n, -1e9); dead = np.full(n, 1e9)
+        for nm, arr in (("born", born), ("dead", dead)):
+            if nm in me.attributes:
+                me.attributes[nm].data.foreach_get("value", arr)
+        yr = float(bpy.context.scene.get("year", 845.0))
+        mw = np.array(ob.matrix_world)
+        co = co @ mw[:3, :3].T + mw[:3, 3]
+        pts = [tuple(c) for c, b_, d in zip(co, born, dead) if b_ <= yr < d]          # houses standing in 845
+    if not pts:                                              # fallback: district grid
+        pts = [(x, y, L.height(x, y)) for x in range(-270, 271, 12) for y in range(-700, -60, 12)]
+    old = [(95, -470), (-100, -662), (205, -575), (35, -640), (150, -640), (62, -540), (-62, -612), (-130, -652), (95, -80), (60, -150)]
+    rnd.shuffle(pts)
+    sites = []
+    for x, y, z in pts:
+        if len(sites) >= FIRE_N:
+            break
+        if not L.in_district(x, y, 25.0) or y > -95 or abs(x) < 22 or abs(x - L.CX) < 34:
+            continue
+        if any((x - a) ** 2 + (y - b) ** 2 < 50.0 ** 2 for a, b in old) or any((x - a) ** 2 + (y - b) ** 2 < 50.0 ** 2 for a, b, *_ in sites):
+            continue
+        sites.append((x, y, z))
+    f0, f1 = BEATS["fires"]
+    order = sorted(range(len(sites)), key=lambda i: sites[i][1] + rnd.uniform(-120, 120))   # roughly south (outer gate) first
+    out = []
+    for k, i in enumerate(order):
+        x, y, z = sites[i]
+        out.append((x, y, z, f0 + (f1 - f0) * k / max(1, len(order) - 1) + rnd.uniform(-0.4, 0.4)))
+    return out
+
+def build_fires(coll):
+    """Owner 07:34: Shiganshina BURNING at dusk.  Every site (g1's 10 + FIRE_N new ones): a roof fire of flickering flame
+    cards that grows after ignition, a soft orange glow halo, a dense dark / grey smoke column (bends west with the wind,
+    reaches 150-250 m by the aerial) and, for the first FIRE_LIGHTS sites, a shadowless orange point light that warms the
+    surrounding roofs.  g1's 10 sites keep their t 0 look (their existing columns) and only gain flames from 2 s on."""
+    rng = np.random.default_rng(29)
+    F = SMC.SmokeCards("G2Fires"); C = SMC.SmokeCards("G2FireSmoke")
+    new = fire_sites()
+    th = G1.terrace_h if G1 else (lambda x, y: 0.0)
+    old = [(95, -470), (-100, -662), (205, -575), (35, -640), (150, -640), (62, -540), (-62, -612), (-130, -652), (95, -80), (60, -150)]
+    sites = [(x, y, L.height(x, y) + th(x, y), 2.0 + 0.35 * k, True) for k, (x, y) in enumerate(old)] +             [(x, y, max(z, L.height(x, y) + th(x, y)), ton, False) for x, y, z, ton in new]
+    S["fire_lights"] = []
+    for k, (x, y, bz, ton, is_old) in enumerate(sites):
+        roof = bz + 7.5
+        # flames: 3 tiers that come in one after another (the house catches, then the roof is ablaze)
+        for tier, (dt, n, r0, r1, sp) in enumerate(((0.0, 5, 1.8, 3.6, 2.5), (1.6, 7, 3.0, 6.0, 5.0), (4.0, 8, 4.0, 8.5, 7.0))):
+            P = np.column_stack([x + rng.normal(0, sp, n), y + rng.normal(0, sp, n), roof + rng.uniform(-1.5, 3.0, n)])
+            F.add_many(ton + dt + rng.uniform(0, 0.6, n), P, None, r0=r0, r1=rng.uniform(r1 * 0.85, r1 * 1.15, n), life=80.0,
+                       rise=0.0, kind="fire", alpha=0.95, fade_in=0.8)
+        F.add(ton + 1.0, (x, y, roof + 4.0), r0=10.0, r1=rng.uniform(28, 36), life=80.0, kind="glow", color=(1.0, 0.40, 0.10),
+              alpha=0.42, fade_in=3.0)
+        # smoke column (QA stills: thicker / denser): the new sites in full; g1's 10 keep their thin columns from
+        # build_smoke_columns and thicken from 2 s on (a wide sparse layer around them)
+        if True:
+            te = np.arange(ton + 0.3, DUR + 0.5, 0.2 if is_old else 0.12); m = len(te)
+            dark = k % 3 != 2
+            ph = k * 1.3
+            vx = 2.0 * np.sin(0.7 * te + ph); vy = 1.4 * np.cos(0.5 * te + ph * 0.7)
+            age = np.clip((te - ton) / 4.0, 0.15, 1.0)                     # the column thickens as the fire grows
+            P = np.column_stack([np.full(m, x) + rng.normal(0, 1.5, m), np.full(m, y) + rng.normal(0, 1.5, m), np.full(m, roof + 3.0)])
+            V = np.column_stack([vx * 1.5, vy * 1.5, rng.uniform(12.0, 17.0, m)])
+            col = (0.11, 0.095, 0.085) if dark else (0.34, 0.31, 0.29)
+            C.add_many(te, P, V, r0=rng.uniform(6.0, 9.0, m) * age, r1=rng.uniform(30, 44, m) * (0.5 + 0.5 * age), life=13.0,
+                       rise=0.0, color=col, kind="smoke", alpha=(0.6 if is_old else (0.85 if dark else 0.7)), fade_in=0.35)
+        if len(S["fire_lights"]) < FIRE_LIGHTS and (not is_old or k % 2 == 0):    # g1 sites: every other one
+            if True:
+                ld = bpy.data.lights.new(f"G2FireL{k}", "POINT"); ld.energy = 0.0; ld.color = (1.0, 0.48, 0.16)
+                ld.shadow_soft_size = 6.0; ld.use_shadow = False
+                try:
+                    ld.use_custom_distance = True; ld.cutoff_distance = 110.0
+                except Exception:
+                    pass
+                lo = bpy.data.objects.new(f"G2FireL{k}", ld); coll.objects.link(lo); lo.location = (x, y, roof + 12.0)
+                S["fire_lights"].append((lo, ton, k))
+    F.build(S["coll"]); S["cards"].append((F, (WIND[0] * 0.2, WIND[1] * 0.2)))
+    C.build(S["coll"]); S["firesmoke"] = C
+    print(f"[g2] fires: {len(sites)} sites ({len(new)} new, ignite {BEATS['fires'][0]}-{BEATS['fires'][1]} s), flame cards {F.count()}, "
+          f"smoke cards {C.count()}, lights {len(S['fire_lights'])}")
+
+def fires_update(t):
+    E = float(os.environ.get("G2_FIRE_E", "40000"))
+    for lo, ton, k in S.get("fire_lights", ()):
+        u = smooth(ton + 0.5, ton + 5.0, t)
+        lo.data.energy = E * u * (0.85 + 0.15 * math.sin(7.3 * t + k * 1.7) * math.sin(3.1 * t + k))
+        lo.hide_render = u <= 0.0
 
 def smoke_wind(t):
     """g1 leaves the columns at (-0.5, 0.15); ease into the bible's west wind over the first 4 s."""
@@ -1299,7 +1420,7 @@ def build_garrison(coll):
     SQ = odm.Squads("G2Garrison", pscale=1.0, hook=True)
     rnd = random.Random(61)
     sc_t = BEATS["scatter"]
-    for gi, x in enumerate(FIELD_X):                 # 4 crew per gun, scatter at 12.4 sideways + toward the gate
+    for gi, x in enumerate(FIELD_X):                 # 4 crew per gun, scatter (BEATS scatter) sideways + toward the gate
         z = gz(x, FIELD_Y)
         for k in range(4):
             p = (x + (-1.3 if k % 2 else 1.3), FIELD_Y + (0.8 if k < 2 else 2.6), z)
@@ -1311,7 +1432,7 @@ def build_garrison(coll):
             q = (x + side * rnd.uniform(14, 26), FIELD_Y + rnd.uniform(6, 16), 0.0); q = (q[0], q[1], gz(q[0], q[1]))
             T = math.hypot(q[0] - p[0], q[1] - p[1]) / 5.5
             f.walk(t_go, t_go + T, p, q, "run").stand(t_go + T, DUR, q, odm.yaw_of(np.array([-side * 0.3, -1.0, 0.0])), "crouch")
-    for k in range(10):                              # across the apron in front of the passage at 11.8
+    for k in range(10):                              # across the apron in front of the passage (BEATS apron_run)
         y = rnd.uniform(-24, -15); x0 = rnd.choice((-1, 1)) * rnd.uniform(30, 45)
         x1 = -np.sign(x0) * rnd.uniform(18, 40) if k % 3 else rnd.uniform(-1.5, 1.5)
         y1 = y if k % 3 else -13.5
@@ -1337,8 +1458,10 @@ def build_garrison(coll):
     S["SQ"] = SQ
 
 def build_civilians(coll):
-    """South stragglers through the gun gaps (freeze at the house fronts when he catches up), the north crowd on the gate
-    road / apron / quays (panic wave from (0, 30) at 8 m/s after the impact)."""
+    """Owner 10/27 07:34: the area is ALREADY EVACUATED when he charges - no fleeing column on the apron / avenue / gate road.
+    Left: the boarding crowd on the quays at the ferry landings (compresses toward the water after the impact) and a few
+    distant stragglers walking away north at the far end of the gate road (y 330-450, 290+ m from his stop).  The old south
+    stragglers (v3: ~150 through the gun gaps, 10 freezers) are off by default (G2_SOUTH_N to bring some back)."""
     if not PK:
         return
     rnd = random.Random(17)
@@ -1347,7 +1470,7 @@ def build_civilians(coll):
     # south stragglers (QA v2): ~150 flee through the gun gaps into the passage or break to the sides; 10 freeze at the
     # house fronts.  Pure functions of t (see civilians_update).
     St = []
-    for i in range(int(150 * k_n)):
+    for i in range(int(int(os.environ.get("G2_SOUTH_N", "0")) * k_n)):
         pre = rnd.choice(civ)
         if i < 10:                                   # the freezers, pressed against the house fronts on the avenue
             side = 1 if i % 2 else -1
@@ -1386,7 +1509,7 @@ def build_civilians(coll):
                 e.location.z = z
             Nd.append(dict(e=e, p0=Vector(e.location), stream=stream))
         return ins
-    n_q = int(int(os.environ.get("G2_QUAY_N", "520")) * k_n)
+    n_q = int(int(os.environ.get("G2_QUAY_N", "300")) * k_n)
     place((182.0, 62.0, 54.0, 92.0), int(n_q * 0.45), 81, z=zq)                         # apron by the arches
     for s, frac, y0_, y1_ in ((-1, 0.35, 112.0, 330.0), (1, 0.20, 20.0, 300.0)):          # west (dense) / east quays, on the curve
         for k in range(int(n_q * frac)):
@@ -1396,8 +1519,8 @@ def build_civilians(coll):
             x = canal_cx(y) + s * rnd.uniform(16.5, 33.5 if s < 0 else 26.0)
             e = PK.person(rnd.choice(civ), (x, y, water_z(y) + 3.62), yaw=rnd.uniform(-math.pi, math.pi), pose="stand")
             Nd.append(dict(e=e, p0=Vector(e.location), stream=False))
-    n_r = int(int(os.environ.get("G2_ROAD_N", "160")) * k_n)
-    road = PK.crowd(["civilian"], (0.0, 170.0, 9.0, 200.0), n_r, pose="walk", seed=83, spacing=(1.2, 1.6), jitter=0.4, yaw_jitter=0.3)
+    n_r = int(int(os.environ.get("G2_ROAD_N", "7")) * k_n)       # distant stragglers only (v3: 160 walking up the road)
+    road = PK.crowd(["civilian"], (0.0, 390.0, 9.0, 120.0), n_r, pose="walk", seed=83, spacing=(6.0,), formation="scatter", yaw_jitter=0.3) if n_r else []
     for e in road:
         Nd.append(dict(e=e, p0=Vector(e.location), stream=True))
     S["north"] = Nd
@@ -1545,7 +1668,8 @@ def build(site):
     S["M"] = mats()
     steps = [("settle_g1", settle_g1), ("swarm", swarm_setup), ("gatehouse", lambda: build_gatehouse(coll)),
              ("ground", lambda: build_ground(coll)), ("guns", lambda: build_guns(coll)), ("fire_fx", build_fire_fx),
-             ("dust", build_dust), ("smoke", build_smoke_columns), ("debris", lambda: build_debris(coll)),
+             ("dust", build_dust), ("smoke", build_smoke_columns), ("fires", lambda: build_fires(coll)),
+             ("debris", lambda: build_debris(coll)),
              ("followers", lambda: build_followers(coll)), ("ferries", lambda: build_ferries(coll)),
              ("garrison", lambda: build_garrison(coll)), ("civilians", lambda: build_civilians(coll))]
     for name, fn in steps:
@@ -1585,7 +1709,8 @@ def update(t):
     if FX:
         FX.update(21.0 + t)                      # g1 kick at 11.0, g1 end 32.0 -> 21 s after the kick at the seam
     swarm_update(t)
-    for fn in (update_gate, gun_update, armored_update, debris_update, followers_update, ferries_update, civilians_update):
+    for fn in (update_gate, gun_update, armored_update, debris_update, followers_update, ferries_update, civilians_update,
+               fires_update):
         try:
             fn(t)
         except Exception:
@@ -1595,15 +1720,39 @@ def update(t):
         cs.update(t, wind=w)
     if S.get("smoke"):
         S["smoke"].update(t, wind=smoke_wind(t))
+    if S.get("firesmoke"):
+        S["firesmoke"].update(t, wind=smoke_wind(t))
+
+VLIMITS = dict(speed=300.0, yaw=60.0, pitch=(5.0, 50.0), lens=(24.0, 60.0), hmin=60.0, hmax=650.0)   # owner 10/27, VIDEO clock
+
+class VPath:
+    """CAM on the VIDEO clock (segtime.seg_t): what the viewer sees, for camchan.check."""
+    def __init__(self, cam):
+        self.cam = cam; self.t0 = 0.0; self.t1 = segtime.vdur("g2"); self.notes = list(cam.notes)
+    def eval(self, tv):
+        return self.cam.eval(segtime.seg_t("g2", tv))
+
+def vcheck(ground=lambda x, y: 0.0):
+    """camchan check of the camera on the video clock + framing / Armored speed numbers (video seconds)."""
+    r = camchan.check(VPath(CAM), ground=ground, limits=dict(name="g2 CAM (video clock)", **VLIMITS))
+    k = segtime.knots("g2")
+    print(f"[g2] TMAP {k}: video {segtime.vdur('g2'):.2f} s, slope in {segtime.slope('g2', 0.0):.2f} out {segtime.slope('g2', segtime.vdur('g2')):.2f}")
+    sv = segtime.slope("g2", segtime.to_video("g2", 5.0))
+    print(f"[g2] Armored: y0 {arm_y(0):.1f}, run {RUN_V:.1f} m/s local = {RUN_V * sv:.0f} m/s on screen (v3 29 local = 29 on screen at 1x), "
+          f"impact {T_IMP} local = {segtime.to_video('g2', T_IMP):.2f} video, slide to y {arm_y(BEATS['slide'][1]):.1f} by "
+          f"{segtime.to_video('g2', BEATS['slide'][1]):.2f} video; footfalls {len(footfalls())}")
+    return r
 
 def check():
-    print(f"[g2] Armored y: 0 {arm_y(0):.0f} | 5.2 {arm_y(5.2):.0f} | 9 {arm_y(9):.0f} | 13.5 {arm_y(13.5):.0f} | 16.3 {arm_y(16.3):.1f} "
-          f"| v(13.5) {arm_v(13.49):.1f} m/s; footfalls {len(footfalls())}; leaf bottom @13.5 {leaf_bottom(13.5):.1f} m")
+    print(f"[g2] Armored y: 0 {arm_y(0):.0f} | lock {BEATS['lock']} {arm_y(BEATS['lock']):.0f} | {T_IMP} {arm_y(T_IMP):.0f} | "
+          f"slide end {BEATS['slide'][1]} {arm_y(BEATS['slide'][1]):.1f} | v(impact) {arm_v(T_IMP - 0.01):.1f} m/s; "
+          f"leaf bottom @impact {leaf_bottom(T_IMP):.1f} m")
     ok = 0
     for t in np.arange(BEATS["lock"], T_IMP + 0.01, 0.25):
         c, l, ln = CAM.eval(t); a = np.array([0, arm_y(t), 9.0]) - c; d = np.array(l) - c
         ok = max(ok, math.degrees(math.acos(np.dot(a, d) / np.linalg.norm(a) / np.linalg.norm(d))))
     print(f"[g2] framing lock {BEATS['lock']}-{T_IMP} s: max {ok:.2f} deg off the Armored's chest")
+    vcheck(ground=(lambda x, y: L.height(x, y)) if L is not None else (lambda x, y: 0.0))
     if bpy is not None and S.get("gate"):                   # breach see-through probe (rays south through the hole)
         update(20.0)
         saved = [(o, o.hide_viewport) for o in bpy.data.objects]
@@ -1617,3 +1766,6 @@ def check():
             print(f"[g2] breach ray x {x0:+} z {z0}: " + (f"HIT {ob.name} at y {loc.y:.1f}" if hit else "clear"))
         for o, h in saved:
             o.hide_viewport = h
+
+if __name__ == "__main__":                 # python aot/seg_g2.py : camera + run numbers without Blender
+    vcheck()

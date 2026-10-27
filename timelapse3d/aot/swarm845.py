@@ -52,6 +52,7 @@ NB, SEATS = 5, 24
 EAT_DUR = 3.4
 PEOPLE_SCALE = float(os.environ.get("SWARM_PSCALE", "1.0"))   # >1 exaggerates people for very high shots (render-time only)
 HIDE_TITANS = set()          # titan names / indices update() hides (e.g. {"smiling"} when a hero titan replaces it)
+HIDE_PEOPLE = None           # optional fn(pos (N,3) array) -> bool mask of people update() hides (g2: evacuated zones)
 STATE = {}
 
 # ---------------------------------------------------------------- palettes (linear RGB)
@@ -827,6 +828,8 @@ def update(t, pscale=None):
             mouth = tpos[j] + np.array([-sn * m[1], c * m[1], S["specs"][j]["hc"] - 0.2 * S["specs"][j]["hr"]])
             u = 1.0 - vis[i] / PEOPLE_SCALE
             pos[i] = pos[i] * (1 - u) + mouth * u
+    if HIDE_PEOPLE is not None:
+        vis[np.asarray(HIDE_PEOPLE(pos), bool)] = 0.0
     co = _deform(S["RP"], PAr, PAe, plean, vis, yaw, pos)
     S["pob"].data.vertices.foreach_set("co", co.astype(np.float32).ravel()); S["pob"].data.update()
     # ---------------- boats
