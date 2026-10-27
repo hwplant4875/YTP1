@@ -423,3 +423,9 @@ Queue: g2 v2 -> g4 -> g3 -> connectors -> full one-take preview.
 
 ## g3 v2 (10/27, g3 agent): P2 left open - the g3 start river
 - P2: bible g3 / D22 "wide teal river 90-110 m with the 3-pier girder bridges at W y 1600 / 3000 and ferries continuing north" (ep02 13:36.2) is NOT built. g3 frame 0 must equal g2's last frame, which already shows everything up to ~4.7 km north (the g2 canal to y 2400, then world.py's 26 m WD_River), so any wider river / bridge / extra ferry would pop at the g2|g3 seam. Do it once in BOTH places: g2's build_ground (canal widening + bridges + ferries ahead of the camera) and world.py's river polyline (join at M (445, 300) instead of (556, 346)); g3 part A reuses seg_g2.build_ground and inherits it.
+
+
+## MASTER v1 (2026-10-27 13:54): renders/master/master_preview.mp4, 7:01.9, segments g1v3 g2v3 g3v2 g4v3 g5v3 g6v2 g7v1 g8v2; pushed as renders/laptop/master_onetake_v1_* (bbe457b).
+All 7 seams checked by eye; camera matches. g4|g5 = intended bolt flash. g5|g6: houses removed in the g5 session (alley sightline) reappear in g6, so align them (remove the same houses in g6, or skip the removal near the seam).
+Remaining polish before final: g7 tags + north terrain + forecourt formation; g6 re-render (new well + g5 house removal); burn the master overlay (26 mapped / 10 unmapped); P2 river + bridges (g2 build_ground + world.py).
+Waiting for owner feedback on master v1.
