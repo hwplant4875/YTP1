@@ -9,7 +9,8 @@
 ## Part 2-3
 - (after chain_qa1: f1 v2, f3 v2, s1 v2, s2 v2 reviews)
 - [x] g5 v8: head hold ~2.5 s, AT sprint/punch zoomed (68 mm) and readable.
-- [~] g6 v5: far HQ framing (owner 'far is better') but blond-titan bite/throw + Eren/Mikasa unreadable -> v6 zoom 56 mm at 37.3, 50 mm at 52.5.
-- [~] s1 v2: dark start ~2 s OK, church/flash OK; rise/Plan C/rampage tiny -> v3 keys ~85-100 m (were 160-230).
+- [x] g6 v6: zooms at the blond titan (56 mm) and Eren/Mikasa (50 mm); still far by owner choice, acceptable.
+- [x] s1 v3: Female rise, Plan C harpoon pin and rampage readable at ~85 m.
 - [~] f1 v3: Female + riders now readable (60-200 m cam); left: horse dust streaks = grey slabs, purple flare head too big,
       plain still flat -> v4: trails hidden, head glow 4.5w -> 2.4w, fset.fine_ground() multiplies WD_Ground by 80 m + 18 m noise.
+- [~] s2 v2: wall face ending reads; chase tiny (130-200 m) and crane through roofs at 30-34 s -> v3 chase ~0.55x distance, crane 40-44 m.

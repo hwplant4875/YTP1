@@ -127,17 +127,17 @@ CX, CY = SL.CLIMB
 KX, KY = SL.CRYSTAL
 CAM_KEYS = [
     (0.0, SEAM_IN["pos"], SEAM_IN["look"], SEAM_IN["lens"]),
-    _k(1.6, (20.0, 160.0, 140.0), (-60.0, 40.0, 15.0), 32.0),                          # lightning under the street
-    _k(3.2, (110.0, 150.0, 120.0), (55.0, 10.0, 12.0), 34.0),                          # the tackle
-    _k(7.5, (170.0, 60.0, 150.0), (78.0, -60.0, 12.0), 32.0),
-    _k(10.2, (190.0, -30.0, 170.0), (82.0, -140.0, 15.0), 30.0),                       # through the church
-    _k(14.8, (360.0, 30.0, 150.0), (325.0, -150.0, 12.0), 34.0),                       # berserk bite
-    _k(19.0, (470.0, 60.0, 190.0), (560.0, -190.0, 20.0), 30.0),                       # she runs for the wall
+    _k(1.6, (-16.0, 106.0, 84.0), (-60.0, 40.0, 15.0), 34.0),   # v3 (autopilot): chase keys ~0.55x the v2 distance                          # lightning under the street
+    _k(3.2, (85.0, 87.0, 71.0), (55.0, 10.0, 12.0), 36.0),                          # the tackle
+    _k(7.5, (129.0, 6.0, 88.0), (78.0, -60.0, 12.0), 34.0),
+    _k(10.2, (152.0, -68.0, 115.0), (82.0, -140.0, 15.0), 32.0),                       # through the church
+    _k(14.8, (344.0, -51.0, 88.0), (325.0, -150.0, 12.0), 38.0),                       # berserk bite
+    _k(19.0, (510.0, -52.0, 114.0), (560.0, -190.0, 20.0), 32.0),                       # she runs for the wall
     _k(23.0, _off(SL.CLIMB, 200.0) + (105.0,), (CX, CY, 32.0), 38.0),                  # the climb, wall face-on (v2: slight zoom, QA)
     _k(25.6, _off(SL.CLIMB, 120.0, 30.0) + (60.0,), (CX, CY, 46.0), 40.0),             # push-in: Mikasa cuts the fingers
     _k(27.5, _off(SL.CLIMB, 150.0) + (80.0,), (KX, KY, 6.0), 34.0),                    # the fall, the catch
-    _k(30.0, _off(SL.CRYSTAL, 45.0, 20.0) + (30.0,), (KX, KY, 3.0), 38.0),             # ripped out, the crystal
-    _k(34.0, _off(SL.CLIMB, 70.0) + (22.0,), (CX, CY, 25.0), 35.0),                    # crane up the wall face
+    _k(30.0, _off(SL.CRYSTAL, 45.0, 20.0) + (44.0,), (KX, KY, 3.0), 38.0),   # v3: above the roofs (was 30 m)             # ripped out, the crystal
+    _k(34.0, _off(SL.CLIMB, 70.0) + (40.0,), (CX, CY, 30.0), 35.0),   # v3: was 22 m = through the roofs                    # crane up the wall face
     _k(37.0, _off(SL.CLIMB, 60.0) + (38.0,), (CX, CY, SL.FACE_Z), 42.0),
     _k(DUR, _off(SL.CLIMB, 55.0, 2.0) + (SL.FACE_Z + 2.0,), (CX, CY, SL.FACE_Z + 0.5), 45.0),   # END: the titan in the wall
 ]
