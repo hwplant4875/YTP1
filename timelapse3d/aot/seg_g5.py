@@ -1979,6 +1979,7 @@ def flicker(t):
 def build_strike(coll):
     """v4 (ref/user/lightning_spec.md, as g1 v5): dome shockwave flash + upward spark streaks behind the wall top, thin
     orange-red ribbon arcs crawling down over the town (0.35-1.4 s), and the SMOKE column up before the skull (rise 0.5)."""
+    import smokecards as SC
     L = STATE["L"]; rng = np.random.default_rng(23); rnd = random.Random(17)
     X = SC.SmokeCards("G5Strike")
     X.add(0.06, S3(0, -25, 40), r0=20.0, r1=120.0, life=0.42, kind="glow", color=(1.0, 0.78, 0.32), alpha=0.95, fade_in=0.02)
