@@ -98,8 +98,8 @@ CAM_KEYS = [                                                   # approach from t
     _k(11.6, (-150.0, 150.0, 160.0), (-175.0, 30.0, 0.0), 34.0),           # the carriage, the four walking
     _k(14.2, (-140.0, 98.0, 50.0), (SL.STAIRS[0], SL.STAIRS[1] - 4, 2.0), 42.0),   # push-in: Annie at the stairs
     _k(18.0, (-110.0, 215.0, 170.0), (-150.0, 55.0, 12.0), 30.0),          # pull back: the beam, she rises
-    _k(21.6, (-55.0, 185.0, 150.0), (-90.0, 32.0, 10.0), 32.0),            # Plan C from the roofs
-    _k(26.0, (20.0, 195.0, 210.0), (-20.0, 20.0, 8.0), 30.0),              # the rampage down the avenue
+    _k(21.6, (-60.0, 150.0, 115.0), (-90.0, 32.0, 10.0), 38.0),            # Plan C from the roofs (v2: closer, QA)
+    _k(26.0, (10.0, 150.0, 140.0), (-20.0, 20.0, 8.0), 37.0),              # the rampage down the avenue (v2: on the fight)
     (DUR, SEAM_S2["pos"], SEAM_S2["look"], SEAM_S2["lens"]),
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_IN["vel"], v_out=SEAM_S2["vel"])
@@ -165,7 +165,7 @@ def build(site):
         for k in range(12):
             te.append(ts + 0.04 * k); pos.append(tuple(np.array(ob.location) + np.array((rnd.uniform(-7, 7), rnd.uniform(-7, 7), 2 + k))))
             vel.append((rnd.uniform(-3, 3), rnd.uniform(-3, 3), 3.0))
-    for tt in np.arange(24.0, DUR, 0.18):
+    for tt in np.arange(24.0, 30.0, 0.18):
         x, y = fem_S(float(tt)); te.append(float(tt)); pos.append(_W(x, y, 1.0)); vel.append((0, 0, 1.5))
     dust.add_many(te, pos, vel, r0=3.0, r1=10.0, life=2.6, rise=1.5, alpha=0.55)
     dust.build(c); S_["dust"] = dust
@@ -238,3 +238,8 @@ def light(t):
 def check():
     for t in (9.0, 13.0, 16.0, 18.2, 21.0, 24.0, 30.0):
         print(f"[s1] t {t:4.1f} female S {tuple(round(v) for v in fem_S(t))} annie S {tuple(round(v) for v in walker_S('annie', t)[:2])}")
+
+# v2 (QA batch1 P1): the month-passing flight over the dark plain (story 0-9) at 4x (~2.6 video s instead of 8) and the
+# Plan C / rampage tail at 1.8x; slope 1 at both seams.  Video ~19.4 s
+import segtime as _ST
+C.install_warp(globals(), _ST.slope_knots(30.0, [(0.0, 1.0, 0.0), (0.3, 4.0, 0.6), (8.0, 1.0, 0.6), (21.5, 1.8, 0.4), (29.2, 1.0, 0.4)]))

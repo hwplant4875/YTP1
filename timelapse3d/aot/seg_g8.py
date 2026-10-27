@@ -99,16 +99,18 @@ CAM_KEYS = [
     (13.0, (60, 300, 150),   (282, 268, 8),   35),     # K3' the court from the WEST: over its open west half the sitting titan
     (15.5, (100, 250, 120),  (285, 265, 10),  42),     # K4' reads (bible K3/K4 from the NNW: blocked by the north terrace and
                                                        #     the court belfry (228, 290) at the court's NW corner)
-    (19.0, (120, 282, 108),  (289, 266, 14),  40),     # K5' the lift side-on from the west (bible K5 (175, 395, 105) saw his back)
-    (25.1, (95, 150, 100),   (276, 143, 12),  38),     # C1' carry side-on from the town (west) side
-    (31.9, (-25, 95, 98),    (150, 52, 12),   38),     # C2' along the wall, front three-quarter from WNW (open strip)
+    (19.0, (180, 285, 82),   (289, 266, 14),  42),     # v4 (QA batch1: carry hard to read): ~110 m, not 170     # K5' the lift side-on from the west (bible K5 (175, 395, 105) saw his back)
+    (25.1, (160, 150, 78),   (276, 143, 12),  42),     # C1' carry side-on from the town (west) side
+    (31.9, (40, 92, 82),     (150, 52, 12),   40),     # C2' along the wall, front three-quarter from WNW (open strip)
     (36.6, (-60, 175, 95),   (40, 24, 12),    40),     # C3 the gate square, Mikasa's kill
     (40.0, (-75, 150, 90),   (3, 14, 12),     42),     # S1 the slam (39.3, camera shake) and the ball wedged in the breach
     (43.5, (-80, 160, 93),   (2, 13, 12),     41),     # S1b hold on the wedged ball, the plug grows, 5 titans face it
     (47.1, (-95, 225, 135),  (0, 20, 40),     32),     # S2 the Λ plug and the yellow trail (from the east plank box)
     (52.0, (-105, 245, 140), (0, 30, 15),     34),     # L1 Levi
-    (56.5, (-60, 330, 200),  (-280, 170, 10), 30),     # B1 (tight look-at) - fixes the L1 -> M1 yaw flip; night cannons at the gate
-    (61.5, (-60, 430, 290),  (-410, 800, 20), 28),     # M1 day 2, Survey Corps over the district
+    (55.0, (60, 190, 115),   (-36, 22, 8),    38),     # v4 (QA batch1): the herded corner group (x -34..-44, y 15..26)
+    (57.4, (50, 170, 105),   (-38, 20, 8),    44),     #   killed together (HERD_KILL = local 56.5): slight zoom-in
+    (60.2, (10, 300, 200),   (-130, 290, 5),  32),     #   then a steady turn west into M1 (no yaw flip)
+    (63.4, (-60, 430, 290),  (-410, 800, 20), 28),     # M1 day 2, Survey Corps over the district
     (71.0, (150, 600, 190),  (-120, 420, 0),  30),     # E1 (tight look-at) cleanup, pyres, rows
     (75.0, tuple(_SEAM_OUT["pos"]), tuple(_SEAM_OUT["look"]), _SEAM_OUT["lens"]),     # E2 END
     (76.0, tuple(_SEAM_OUT["pos"]), tuple(_SEAM_OUT["look"]), _SEAM_OUT["lens"]),     # guide key: at rest at E2
@@ -1080,7 +1082,7 @@ def build_flares(coll):
     class Flares8(FX.FlareSet):
         BURN = 2.6
         TOP_HOLD = 1.3
-    FL = Flares8("G8Flares", coll)
+    FL = Flares8("G8Flares", coll, style="column")       # v4 (QA batch1): rising smoke columns with a bright head, not laser lines
     FL.add(BEATS["green"], S3(*GF), "green", up=200.0, lean=(3, 1), seed=11, life=20.0, width=1.6)
     FL.add(BEATS["red"], S3(RF[0], RF[1], RF[2] + 1.6), "red", up=200.0, lean=(-2, 2), seed=12, life=60.0, width=1.7)
     yz = G(YF[0], YF[1]) + YF[2] + 1.6
@@ -1727,12 +1729,13 @@ LIGHT_KEYS = [
     (0.0,  12.0, 255, 3.4, (1.00, 0.80, 0.56), (0.20, 0.35, 0.68), (0.96, 0.78, 0.55), 1.00, 0.00),   # golden late afternoon
     (8.0,  10.0, 254, 3.3, (1.00, 0.76, 0.50), (0.20, 0.33, 0.64), (0.98, 0.74, 0.50), 0.95, 0.00),   # red flare: still golden
     (19.0,  8.0, 248, 3.1, (1.00, 0.68, 0.42), (0.21, 0.30, 0.58), (1.00, 0.68, 0.44), 0.90, 0.00),   # carry: warmer
-    (40.0,  4.0, 212, 2.8, (1.00, 0.56, 0.32), (0.22, 0.26, 0.50), (1.00, 0.58, 0.36), 0.80, 0.05),   # redder
-    (47.0,  3.0, 204, 2.5, (1.00, 0.52, 0.28), (0.22, 0.24, 0.46), (1.00, 0.56, 0.32), 0.72, 0.10),
-    (53.0,  0.6, 202, 2.0, (1.00, 0.64, 0.26), (0.22, 0.22, 0.42), (1.00, 0.70, 0.30), 0.62, 0.15),   # YELLOW at sunset
-    (56.5, -2.5, 204, 0.9, (1.00, 0.55, 0.60), (0.18, 0.13, 0.32), (0.86, 0.46, 0.56), 0.45, 0.35),   # Levi: pink-violet dusk
-    (59.6, 30.0, 120, 1.1, (0.55, 0.66, 1.00), (0.03, 0.05, 0.12), (0.10, 0.13, 0.24), 0.30, 0.00),  # moonlit night
-    (62.8, 30.0, 120, 1.1, (0.55, 0.66, 1.00), (0.03, 0.05, 0.12), (0.10, 0.13, 0.24), 0.30, 0.00),
+    (40.0,  9.0, 212, 3.1, (1.00, 0.60, 0.36), (0.22, 0.28, 0.52), (1.00, 0.60, 0.38), 0.95, 0.20),   # redder (v4 QA: sun kept
+                                                                                                       # above the wall so the gate side is lit)
+    (47.0,  8.0, 204, 3.0, (1.00, 0.56, 0.32), (0.22, 0.26, 0.48), (1.00, 0.58, 0.34), 0.95, 0.30),
+    (53.0,  6.0, 202, 2.7, (1.00, 0.64, 0.30), (0.22, 0.24, 0.44), (1.00, 0.70, 0.34), 0.90, 0.35),   # YELLOW at sunset
+    (56.5,  2.5, 204, 1.6, (1.00, 0.55, 0.60), (0.20, 0.16, 0.36), (0.90, 0.50, 0.58), 0.75, 0.55),   # Levi: pink-violet dusk
+    (59.6, 30.0, 120, 1.6, (0.55, 0.66, 1.00), (0.05, 0.08, 0.18), (0.14, 0.18, 0.32), 0.60, 0.45),  # moonlit night (v4: readable)
+    (62.8, 30.0, 120, 1.6, (0.55, 0.66, 1.00), (0.05, 0.08, 0.18), (0.14, 0.18, 0.32), 0.60, 0.45),
     (63.4, 38.0, 150, 3.6, (1.00, 0.97, 0.92), (0.10, 0.28, 0.75), (0.70, 0.80, 0.93), 1.00, 0.00),  # day 2: blue sky
     (66.0, 38.0, 170, 3.6, (1.00, 0.96, 0.90), (0.11, 0.29, 0.74), (0.72, 0.81, 0.92), 1.00, 0.00),
     (66.6, 26.0, 225, 3.0, (1.00, 0.88, 0.72), (0.34, 0.42, 0.60), (0.86, 0.80, 0.70), 0.90, 0.05),  # cleanup: hazy warm day
@@ -1747,11 +1750,11 @@ GRADE_KEYS = [
     (0.0,  (1.06, 0.98, 0.86), 0.00),     # golden late afternoon
     (19.0, (1.08, 0.96, 0.82), -0.05),
     (40.0, (1.13, 0.93, 0.76), -0.15),    # carry: warmer / redder
-    (47.0, (1.15, 0.91, 0.72), -0.25),
-    (53.0, (1.16, 0.95, 0.66), -0.40),    # yellow at sunset
-    (56.5, (1.04, 0.84, 1.00), -0.45),    # Levi: pink-violet dusk (readable)
-    (59.6, (0.66, 0.80, 1.16), -0.75),    # moonlit night: blue, town / wall / plug still readable
-    (62.8, (0.66, 0.80, 1.16), -0.75),
+    (47.0, (1.15, 0.91, 0.72), -0.10),
+    (53.0, (1.16, 0.95, 0.66), -0.15),    # yellow at sunset
+    (56.5, (1.04, 0.84, 1.00), -0.15),    # Levi: pink-violet dusk (readable)
+    (59.6, (0.74, 0.84, 1.12), -0.30),    # moonlit night: blue, town / wall / plug still readable
+    (62.8, (0.74, 0.84, 1.12), -0.30),
     (63.4, (1.00, 1.00, 1.00), 0.00),     # day 2, blue sky
     (66.0, (1.00, 1.00, 1.00), 0.00),
     (66.6, (1.05, 1.00, 0.90), -0.05),    # hazy warm cleanup day

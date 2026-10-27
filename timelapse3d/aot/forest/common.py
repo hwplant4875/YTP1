@@ -540,3 +540,34 @@ def lift_keys(keys, skip=(), dy=0.0):
             out.append((t, p, l, lens)); continue
         out.append((t, (p[0], p[1], p[2] + G(p[0], p[1] + dy)), (l[0], l[1], l[2] + G(l[0], l[1] + dy)), lens))
     return out
+
+# ---------------------------------------------------------------- video clock over a segment's story clock (QA batch1 10/27)
+class WarpCam:
+    """CamPath on the video clock: eval(t) = inner.eval(story(t))."""
+    def __init__(self, inner, story, dur):
+        self.inner, self.story, self.t0, self.t1 = inner, story, 0.0, dur
+        self.notes = list(getattr(inner, "notes", [])) + ["video clock warped onto the story clock (common.install_warp)"]
+    def eval(self, t):
+        return self.inner.eval(self.story(t))
+
+def install_warp(g, knots):
+    """Run a seg module on a shorter VIDEO clock: knots [(video t, story t), ...] (segtime.slope_knots; keep slope 1 at both
+    ends so the seam velocities hold).  Sets g['DUR'] = video length, g['story'](t), and wraps update / light / CAM / TRACK
+    (TRACK + CAM again after build(), which rebuilds CAM).  Everything inside the module keeps its story times."""
+    tv = [k[0] for k in knots]; ts = [k[1] for k in knots]
+    def story(t):
+        return float(np.interp(t, tv, ts))
+    dur = float(tv[-1])
+    g["story"] = story; g["STORY_DUR"] = float(ts[-1]); g["DUR"] = dur
+    upd, lt, bld = g["update"], g["light"], g["build"]
+    g["update"] = lambda t: upd(story(t))
+    g["light"] = lambda t: lt(story(t))
+    def build(site):
+        bld(site)
+        g["CAM"] = WarpCam(g["CAM"], story, dur)
+        tr = g.get("TRACK", {})
+        for k, fn in list(tr.items()):
+            tr[k] = (lambda f: (lambda t: f(story(t))))(fn)
+    g["build"] = build
+    g["CAM"] = WarpCam(g["CAM"], story, dur)
+    return story

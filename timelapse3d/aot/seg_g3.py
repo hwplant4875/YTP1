@@ -136,12 +136,14 @@ MARCH_T_END = 18.0
 # lengthens; the gate is in frame from tau 0
 # (the column pours out of it until march846.T_TAIL 8.6), in its last 6 s it pans slowly west toward the camp (to-camp continues the turn).
 # (march846's original spline: renders before v6 / git history.)
-MARCH_CAM_KEYS = [                                                  # set frame (_gp: a outward from the gate, b east, z)
-    (0.0,  _gp(200, -780, 880),   _gp(300, 0, 0),    40),         # high on the WEST side: the column runs ACROSS the frame,
-    (6.0,  _gp(450, -900, 1000),  _gp(900, 0, 0),    30),         # the gate at the left; the lens opens as it lengthens
-    (11.0, _gp(700, -1050, 1150), _gp(1400, 0, 0),   24),         # (camera drift <= ~65 m/s)
-    (15.0, _gp(750, -1070, 1170), _gp(1350, -320, 0), 24),        # the column dies; the pan north begins
-    (18.0, _gp(760, -1080, 1150), _gp(300, -900, 0), 26),         # slow pan north toward the camp (to-camp needs no spin)
+MARCH_CAM_KEYS = [   # v7 (QA batch1 P1): NEAR TOP-DOWN hold low over the column (pitch 60-66, 520-600 m) so it crosses the
+                     # whole frame and the people read; key 0 = the camps seam, key 18 = the to-camp seam (both unchanged)
+    (0.0,  _gp(200, -780, 880),   _gp(300, 0, 0),    40),         # the gate in frame as the column pours out
+    (3.0,  _gp(380, -300, 560),   _gp(450, 0, 0),    34),
+    (6.0,  _gp(650, -220, 520),   _gp(720, 0, 0),    32),         # column left-right across the frame, drifting with it
+    (10.0, _gp(900, -220, 540),   _gp(980, 0, 0),    32),
+    (14.0, _gp(1050, -260, 600),  _gp(1150, 0, 0),   30),         # the titans hit, the column dies
+    (18.0, _gp(760, -1080, 1150), _gp(300, -900, 0), 26),         # pan north toward the camp (to-camp needs no spin)
 ]
 MARCH_OUT_VEL = (0.0, 50.0, -15.0)                                 # M: drifting north, easing down toward FT1
 
@@ -305,6 +307,7 @@ AUTUMN = (24.0, 215.0, 3.0, (1.00, 0.80, 0.58), (0.20, 0.30, 0.60), (0.88, 0.74,
 OVERCAST = (30.0, 160.0, 2.0, (1.00, 0.97, 0.92), (0.38, 0.42, 0.48), (0.66, 0.68, 0.70), 0.30, 1.0)
 G_ID, G_AUT, G_SUM = ((1.0, 1.0, 1.0), 0.0), ((1.06, 0.98, 0.88), -0.1), ((1.02, 1.0, 0.98), 0.05)
 H_OVC = (3200.0, 0.50, (0.62, 0.64, 0.68))
+H_MARCH = (9000.0, 0.18, (0.66, 0.68, 0.72))
 # v5 (owner 10/27): NO winter anywhere (no snow, no snowmelt, no winter light).  Farm under the clear morning; the 846 march
 # overcast as march846's own mood (dimming as the column dies), then a natural low GOLD sun breaking through in the WNW for
 # its last ~8 s (no glow cards / ridge hold); one night over the flight to the camp (846 -> 847); the camp: spring morning ->
@@ -315,16 +318,20 @@ DAWN2 = (8.0, 84.0, 2.2, (1.0, 0.72, 0.48), (0.12, 0.22, 0.52), (0.95, 0.70, 0.5
 NIGHT2 = (20.0, 245.0, 0.35, (0.55, 0.65, 1.0), (0.02, 0.03, 0.07), (0.06, 0.07, 0.12), 0.07, 0.3)
 G_OVC, G_DIM = ((1.0, 1.0, 1.0), -0.15), ((0.98, 0.99, 1.02), -0.45)
 _m0, _m1 = B["march"]
+# v7 (QA batch1 P1: "first ~5 s of night nearly black"): the short flight night holds g2's end-night level with a stronger
+# moon and a lifted grade instead of g4's -2.6 night (g4's NIGHT stays for the graduation night = the g4 seam)
+NIGHT_A = (24.0, 245.0, 0.55, (0.55, 0.66, 1.0), (0.016, 0.026, 0.07), (0.06, 0.08, 0.16), 0.045, 1.0)
+NIGHT_AG, NIGHT_AH = ((0.95, 0.98, 1.08), 0.25), (4500.0, 0.45, (0.06, 0.08, 0.14))
 LKEYS = [  # (t, light, grade, haze)
     (0.0, G2NIGHT, G2NIGHT_G, G2NIGHT_H),
-    (B["night"][0], NIGHT, NIGHT_G, NIGHT_H), (B["night"][1], NIGHT, NIGHT_G, NIGHT_H),
+    (B["night"][0], NIGHT_A, NIGHT_AG, NIGHT_AH), (B["night"][1], NIGHT_A, NIGHT_AG, NIGHT_AH),
     (7.0, (4.0, 78.0, 0.60, (1.0, 0.62, 0.45), (0.05, 0.07, 0.18), (0.55, 0.36, 0.32), 0.11, 0.45), ((1.0, 0.92, 0.95), -1.4),
      (2600.0, 0.70, (0.62, 0.50, 0.52))),                                                  # v6: sunrise
     (8.8, DAWN2, ((1.05, 0.98, 0.92), -0.45), (2200.0, 0.80, (0.86, 0.76, 0.70))),
     (B["morning"][0], MORNING, G_ID, HAZE0),                                               # clear morning before Trost (FA3)
     (B["H"] - 1.5, MORNING, G_ID, HAZE0), (B["P3"], MORNING, G_ID, HAZE0),
-    (_m0, OVERCAST, G_OVC, H_OVC), (_m0 + 7.0, OVERCAST, G_OVC, H_OVC),
-    (_m0 + 11.5, (24.0, 250.0, 1.5, (1.0, 0.94, 0.86), (0.34, 0.38, 0.46), (0.64, 0.64, 0.66), 0.25, 0.92), G_DIM, H_OVC),
+    (_m0, OVERCAST, G_OVC, H_MARCH), (_m0 + 7.0, OVERCAST, G_OVC, H_MARCH),     # v7: no haze over the column
+    (_m0 + 11.5, (24.0, 250.0, 1.5, (1.0, 0.94, 0.86), (0.34, 0.38, 0.46), (0.64, 0.64, 0.66), 0.25, 0.92), G_DIM, H_MARCH),
     (_m0 + 15.5, GOLD, ((1.10, 1.0, 0.84), -0.05), (3000.0, 0.50, (0.98, 0.84, 0.62))),
     (_m1, GOLD, ((1.10, 1.0, 0.84), -0.05), (3000.0, 0.50, (0.98, 0.84, 0.62))),
     (_m1 + 1.6, DUSK2, ((0.98, 0.92, 0.98), -0.9), (4000.0, 0.55, (0.40, 0.30, 0.34))),

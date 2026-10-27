@@ -52,7 +52,7 @@ BEATS = dict(
     RISE=(5.05, 8.0),         # head rises (ease-out, RISE_EXP) out of the smoke (v5: was 4.62)
     RISE_EXP=3.0,
     PALM_R=(5.9, 6.7),        # right hand grips
-    STEAM=(6.8, 9.5),         # body steam builds (after the zoom-in: the sky behind the head stays clean; ref wisps 4.72-7.8)
+    STEAM=(8.4, 10.2),        # body steam builds AFTER the face zoom (v6 QA: no smoke over the face at the reveal)
     WIND=(8.8, 10.3),         # right-leg wind-up behind the wall (left foot planted)
     KICK=11.0,                # the foot hits the gate (fx845.update(t - KICK)); 0.2 deg shake
     LEG_BACK=(11.3, 12.2),    # kicking leg comes back down
@@ -100,12 +100,14 @@ def tree_keys():
     l0, t0, n0 = FL.flight_at(900) if FL else ((-480, 338, 6), (-300, 0, 10), 50)
     l0, t0 = Vector(l0), Vector(t0)
     kids = [o.matrix_world.translation for o in (bpy.data.objects.get("Eren"), bpy.data.objects.get("Mikasa")) if o]
-    k0 = (sum(kids, Vector()) / len(kids) + Vector((0, 0, 0.7))) if kids else t0
-    near = float(os.environ.get("FAST_NEAR", "0.74"))
-    c0 = l0 + (k0 - l0) * near; c0.z = max(c0.z, k0.z + 1.0)
-    l1 = l0 + Vector((0, 0, 1.2))
-    return [(0.0, tuple(c0), tuple(k0), n0 * 0.9), (2.0, tuple(l1), tuple(t0 + Vector((0, 0, 0.6))), n0),
-            (2.05, tuple(l1), tuple(t0 + Vector((0, 0, 0.6))), n0)]
+    # v6 (QA batch1 P0): open AT the anime still (ref/hill_tree_wall_opening_ref.png: whole tree, wall top + sky), not on the
+    # kids; a slight zoom-out over 2 s (back + up along the view line, wider lens), then the rise.
+    back = Vector((l0.x - t0.x, l0.y - t0.y, 0.0)).normalized()
+    c0 = l0 + back * 5.0 + Vector((0, 0, 1.6)); c0.z = max(c0.z, L.height(c0.x, c0.y) + 1.5)
+    l1 = l0 + back * 10.0 + Vector((0, 0, 3.0)); l1.z = max(l1.z, L.height(l1.x, l1.y) + 2.5)
+    tg = t0 + Vector((0, 0, 4.0))
+    return [(0.0, tuple(c0), tuple(tg), n0 * 0.80), (2.0, tuple(l1), tuple(tg), n0 * 0.70),
+            (2.05, tuple(l1), tuple(tg), n0 * 0.70)]
 
 def build_campath():
     ks = list(CK.cam("g1")["keys"])
@@ -232,7 +234,7 @@ def _emit_mat(name, col, strength, alpha=None):
     return m
 
 def build_bolt():
-    """ONE thick, unbranched, gently S-curved yellow-white channel (ep01 17:40.5 25427), core #FCFA95 + soft glow sleeve."""
+    """v6 QA: radii x2.3 (read thick at ~470 m).  ONE thick, unbranched, gently S-curved yellow-white channel (ep01 17:40.5 25427), core #FCFA95 + soft glow sleeve."""
     rnd = random.Random(3)
     top = Vector((STRIKE.x + 70.0, STRIKE.y - 180.0, 760.0))
     n = 46
@@ -246,8 +248,8 @@ def build_bolt():
             p += Vector((rnd.uniform(-4, 4), rnd.uniform(-4, 4), rnd.uniform(-3, 3)))
         pts.append(p)
     obs = []
-    for name, rad, mat in (("G1_BoltCore", (2.6, 1.6), _emit_mat("G1BoltCore", (0.97, 0.955, 0.30), 60.0)),
-                           ("G1_BoltGlow", (7.5, 4.5), _emit_mat("G1BoltGlow", (0.91, 0.58, 0.06), 12.0, alpha=0.30))):
+    for name, rad, mat in (("G1_BoltCore", (6.0, 4.0), _emit_mat("G1BoltCore", (0.97, 0.955, 0.30), 60.0)),
+                           ("G1_BoltGlow", (18.0, 11.0), _emit_mat("G1BoltGlow", (0.91, 0.58, 0.06), 12.0, alpha=0.30))):
         bm = bmesh.new()
         for k, (a, b) in enumerate(zip(pts, pts[1:])):
             r = rad[0] + (rad[1] - rad[0]) * k / n
@@ -259,15 +261,15 @@ def build_bolt():
         obs.append(ob)
     return obs
 
-ARC_N, ARC_SEG, ARC_CRAWL = 7, 14, 0.45
+ARC_N, ARC_SEG, ARC_CRAWL = 9, 14, 0.45
 def build_arcs():
     """v5 (ref/user/lightning_spec.md 5): thin orange-red wavy ribbon arcs writhing down from the wall top over the darkened
     town, each split into ARC_SEG chunks that light up head-first and go out behind (a crawling strand), one material each."""
     rnd = random.Random(17); arcs = []
     for k in range(ARC_N):
-        x0 = STRIKE.x + rnd.uniform(-110, 110); y0 = GY + rnd.uniform(2, 14); z0 = rnd.uniform(58, 82)
-        Ln_ = rnd.uniform(150, 240); hd = math.radians(90 + rnd.uniform(-35, 35)); dz = rnd.uniform(-45, -20)
-        ph, amp = rnd.uniform(0, 6.3), rnd.uniform(6, 14)
+        x0 = STRIKE.x + rnd.uniform(-110, 110); y0 = GY + rnd.uniform(2, 14); z0 = rnd.uniform(70, 110)
+        Ln_ = rnd.uniform(230, 340); hd = math.radians(90 + rnd.uniform(-35, 35)); dz = rnd.uniform(-60, -30)
+        ph, amp = rnd.uniform(0, 6.3), rnd.uniform(10, 22)
         pts = []
         for i in range(ARC_SEG * 3 + 1):
             s_ = i / (ARC_SEG * 3)
@@ -282,7 +284,7 @@ def build_arcs():
         for c in range(ARC_SEG):
             bm = bmesh.new()
             for a, b in zip(pts[3 * c:3 * c + 3], pts[3 * c + 1:3 * c + 4]):
-                L.cyl(bm, a, b, 0.75, 0.75, seg=6)
+                L.cyl(bm, a, b, 2.0, 2.0, seg=6)
             ob = L.obj_from_bm(f"G1_Arc{k}_{c}", bm, [mat])
             for at in ("visible_shadow", "visible_diffuse", "visible_glossy", "visible_transmission"):
                 setattr(ob, at, False)
@@ -295,13 +297,13 @@ def build_strike_cards():
     column that rises right after the strike and is up BEFORE the Colossal's head (RISE 5.05) - he emerges from it."""
     rng = np.random.default_rng(23); b = BEATS["BOLT"]
     X = SMC.SmokeCards("G1Strike")
-    X.add(b + 0.08, (STRIKE.x, STRIKE.y, 40.0), r0=20.0, r1=120.0, life=0.42, kind="glow", color=(1.0, 0.78, 0.32), alpha=0.95, fade_in=0.02)
-    X.add(b + 0.1, (STRIKE.x, STRIKE.y, 55.0), r0=10.0, r1=60.0, life=0.3, kind="glow", color=(1.0, 0.95, 0.7), alpha=1.0, fade_in=0.02)
+    X.add(b + 0.08, (STRIKE.x, STRIKE.y, 62.0), r0=30.0, r1=210.0, life=0.5, kind="glow", color=(1.0, 0.78, 0.32), alpha=0.95, fade_in=0.02)
+    X.add(b + 0.1, (STRIKE.x, STRIKE.y, 66.0), r0=16.0, r1=90.0, life=0.35, kind="glow", color=(1.0, 0.95, 0.7), alpha=1.0, fade_in=0.02)
     n = 46
     d = np.column_stack([rng.normal(0, 0.6, n), rng.normal(0, 0.35, n), rng.uniform(0.5, 1.4, n)])
     d /= np.linalg.norm(d, axis=1)[:, None]
-    X.add_many(b + 0.08 + rng.uniform(0, 0.15, n), np.tile((STRIKE.x, STRIKE.y, 48.0), (n, 1)) + rng.normal(0, 3, (n, 3)),
-               d * rng.uniform(90, 220, n)[:, None], r0=1.6, r1=1.0, life=rng.uniform(0.3, 0.6, n), kind="glow",
+    X.add_many(b + 0.08 + rng.uniform(0, 0.15, n), np.tile((STRIKE.x, STRIKE.y, 60.0), (n, 1)) + rng.normal(0, 3, (n, 3)),
+               d * rng.uniform(90, 220, n)[:, None], r0=3.0, r1=1.8, life=rng.uniform(0.3, 0.6, n), kind="glow",
                color=(1.0, 0.82, 0.38), alpha=1.0, fade_in=0.01, dirs=d, stretch=7.0)
     X.build(); X.wind = (0.0, 0.0); CARDS.append(X)
     Sm = SMC.SmokeCards("G1StrikeSmoke")
@@ -654,7 +656,7 @@ def local_t(tv):
     return ST.seg_t("g1", tv) if B.vclock else tv
 # owner 10/27 video-clock limits: speed <= 300 m/s (the reference swoosh 2-4.9 s is the explicit exception), yaw <= 60 deg/s,
 # pitch <= 50, lens 24-60; checked on what the viewer sees (camchan.VideoPath)
-VLIM = dict(speed=300, yaw=60, pitch=(-5, 50), lens=(24, 60), hmin=None, hmax=None, under=1.0)
+VLIM = dict(speed=300, yaw=60, pitch=(-5, 50), lens=(24, 155), hmin=None, hmax=None, under=1.0)
 for nm, a_, b_ in (("g1 video clock, all", 0.0, VD), ("g1 video clock after the swoosh", 4.9, VD)):
     r = CC.check(CC.VideoPath(CAM, "g1"), a_, b_, limits=dict(VLIM, name=nm), quiet=True)
     print(f"[g1] camchan.check {nm} ({a_:.1f}-{b_:.2f} video s): peak {r['peak_speed']:.1f} m/s @ {r['t_peak_speed']:.2f}, "

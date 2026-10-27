@@ -124,7 +124,8 @@ def ramp_knots(dur, holds, ramp=1.2, n=12, speed=None):
     lin_to(dur)
     return [(round(tv, 6), round(t, 6)) for tv, t in K]
 # g3 v5: march846 (G3_MARCH) at real time (slope 1 = march846's own tuned speed), eased 2 -> 1 -> 2 over 1.0 video s each side
-TMAP["g3"] = ramp_knots(DUR["g3"], [(G3_MARCH[0], G3_MARCH[1], 1.0)], ramp=1.0)
+# v7 (QA batch1 P1: march ~25 s -> ~10 s): the march plays at 1.8 (18 local s -> ~10 video s)
+TMAP["g3"] = ramp_knots(DUR["g3"], [(G3_MARCH[0], G3_MARCH[1], 1.8)], ramp=1.0)
 
 def slope_knots(dur, plan, n=8):
     """TMAP knots from a slope PLAN = [(t_a, slope, ramp), ...] (local t_a ascending, plan[0] = (0, s0, 0)): play at the
@@ -157,7 +158,8 @@ TMAP["g4"] = slope_knots(DUR["g4"], [(0.0, 2.0, 0.0), (1.0, 3.2, 0.6), (15.0, 2.
 # g7 v3 (owner 10/27: camera to the cannon basin MUCH faster): transit local 0.3-5.0 at 4.5x, back to 2 before FIRE 6.0.
 TMAP["g7"] = slope_knots(DUR["g7"], [(0.0, 2.0, 0.0), (0.3, 4.5, 0.4), (4.9, 2.0, 0.35)])
 # g8 v4 (owner 10/27: carry a bit faster): the carry (local 19.5-37.5) at 2.6x, back to 2 before the slam.
-TMAP["g8"] = slope_knots(DUR["g8"], [(0.0, 2.0, 0.0), (19.5, 2.6, 0.4), (37.0, 2.0, 0.4)])
+# v4 (QA batch1: "closer, slower moment"): the lift + first carry steps at 1.5, then the fast carry
+TMAP["g8"] = slope_knots(DUR["g8"], [(0.0, 2.0, 0.0), (16.5, 1.5, 0.4), (21.5, 2.6, 0.4), (37.0, 2.0, 0.4)])
 def knots(g):
     k = TMAP.get(g)
     return list(k) if k else [(0.0, 0.0), (DUR[g] / SPEED, DUR[g])]

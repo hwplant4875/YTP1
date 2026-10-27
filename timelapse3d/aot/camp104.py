@@ -25,6 +25,7 @@ from mathutils import Vector
 C = (-1450.0, 1520.0)
 A_U, B_V = 115.0, 85.0                       # floor ellipse semi-axes
 RIM_H = 14.0
+DEPTH_K = 0.4                                # v7 (QA batch1 "white bowl / stadium"): a shallow earth-banked yard, not a quarry
 
 def _hex(h):
     h = h.lstrip("#"); c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
@@ -57,7 +58,7 @@ def build(L, M2S, ground_M, coll, seed=104):
              timber=L.mat("CP_Timber", _hex("#7a5a3e"), 0.9), dark=L.mat("CP_DarkTimber", _hex("#4a3426"), 0.9),
              roof=L.mat("CP_Roof", _hex("#5b4a40"), 0.85), slate=L.mat("CP_Slate", _hex("#4f5058"), 0.85),
              stone=L.mat("CP_Stone", _hex("#9b9486"), 0.9), steel=L.mat("CP_Steel", _hex("#5c6570"), 0.6),
-             pole=L.mat("CP_Pole", _hex("#6b5038"), 0.9), wall=L.mat("CP_HutWall", _hex("#b8a888"), 0.9))
+             pole=L.mat("CP_Pole", _hex("#6b5038"), 0.9), wall=L.mat("CP_HutWall", _hex("#8a6a48"), 0.9))   # v7: wooden barracks
     win_m, win_em = _emit("CP_Window", (1.0, 0.30, 0.06), 0.0)
     fire_m, fire_em = _emit("CP_Fire", (1.0, 0.24, 0.03), 0.0)
     st = dict(win=win_em, fire=fire_em, lights=[], objs=[])
@@ -98,7 +99,7 @@ def build(L, M2S, ground_M, coll, seed=104):
     def depth(a, r):
         sw = max(0.0, math.cos(a - math.radians(225.0)))
         d_rim = RIM_H + 6.0 * sw ** 2 + 1.0 * math.sin(5 * a)
-        return 16.0 + (d_rim - 16.0) * min(1.0, max(0.0, (r - 0.3) / 0.6))
+        return DEPTH_K * (16.0 + (d_rim - 16.0) * min(1.0, max(0.0, (r - 0.3) / 0.6)))
     def floor_at(u, v):
         r, a = rnorm(u, v)
         f = zc - depth(a, min(r, 1.0))
@@ -133,7 +134,7 @@ def build(L, M2S, ground_M, coll, seed=104):
     mxf = N_.new("ShaderNodeMath"); mxf.operation = "MULTIPLY_ADD"; Ln_.new(wv.outputs["Fac"], mxf.inputs[0])
     mxf.inputs[1].default_value = 0.6; Ln_.new(nz_.outputs["Fac"], mxf.inputs[2])
     rp = N_.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
-    el[0].position, el[0].color = 0.45, (*_hex("#4a4550"), 1); el[1].position, el[1].color = 0.95, (*_hex("#a3958c"), 1)
+    el[0].position, el[0].color = 0.45, (*_hex("#4a3c2c"), 1); el[1].position, el[1].color = 0.95, (*_hex("#7a6a4e"), 1)   # v7: earth bank
     Ln_.new(mxf.outputs[0], rp.inputs["Fac"]); Ln_.new(rp.outputs["Color"], bs.inputs["Base Color"])
     floor_m = bpy.data.materials.new("CP_Floor"); floor_m.use_nodes = True
     nt = floor_m.node_tree; N_, Ln_ = nt.nodes, nt.links
@@ -143,7 +144,7 @@ def build(L, M2S, ground_M, coll, seed=104):
     Ln_.new(tco.outputs["Object"], vo.inputs["Vector"])
     nz_ = N_.new("ShaderNodeTexNoise"); nz_.inputs["Scale"].default_value = 0.02; Ln_.new(tco.outputs["Object"], nz_.inputs["Vector"])
     rpc = N_.new("ShaderNodeValToRGB"); el = rpc.color_ramp.elements
-    el[0].position, el[0].color = 0.0, (*_hex("#7e735f"), 1); el[1].position, el[1].color = 0.06, (*_hex("#c4b79c"), 1)
+    el[0].position, el[0].color = 0.0, (*_hex("#5a4a34"), 1); el[1].position, el[1].color = 0.06, (*_hex("#7f6b4a"), 1)   # v7: trampled earth yard
     Ln_.new(vo.outputs["Distance"], rpc.inputs["Fac"])
     tint = N_.new("ShaderNodeMix"); tint.data_type = "RGBA"; tint.blend_type = "MULTIPLY"; tint.inputs["Factor"].default_value = 0.35
     Ln_.new(rpc.outputs["Color"], tint.inputs["A"])
@@ -222,6 +223,9 @@ def build(L, M2S, ground_M, coll, seed=104):
         um = A_U * math.sqrt(max(0.0, 1 - (v / B_V) ** 2))
         hut(min(0.86 * um, 100.0) - 6.0, v, w=13.0, d=6.0, h=3.4, rot=math.pi / 2, win=3)
     hut(-95, -50, rot=0.3); hut(-110, -5, rot=math.pi / 2)
+    for u in (-80.0, -58.0):                                       # v7 (QA batch1): two rows of wooden barracks on the yard
+        for v in (-2.0, 16.0, 34.0):
+            hut(u, v, w=17.0, d=6.5, h=3.6, rot=0.0, win=4)
     # mess hall 26 x 8 m (u -15, v -45): 8-window band on its north front, veranda, chimney, porch lantern
     mu, mv = -15.0, -45.0
     mz = gz(mu, mv) + 0.15

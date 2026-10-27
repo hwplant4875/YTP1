@@ -278,11 +278,11 @@ def build(site):
     TT = C.Batch("F3_Abnormals", C.titan_mats())
     S["ab"] = [C.titan_add(TT, dict(H=14.0, skin=6, g=0.7, al=1.3)), C.titan_add(TT, dict(H=9.0, skin=4, hair=0))]
     TT.build(c); S["TT"] = TT
-    fs = flares.FlareSet("F3_Flares")
+    fs = flares.FlareSet("F3_Flares", style="column")
     x, y, _ = ret_at(ret_head(BEATS["green"]) - 120)
     fs.add(BEATS["green"], _W(x, y, 3.0), "green", up=130, width=2.4, seed=7)
     fs.build(c); S["fs"] = fs
-    steam = flares.PuffField("F3_Steam", kind="steam", alpha=0.75)
+    steam = flares.PuffField("F3_Steam", kind="steam", alpha=0.45)        # v2: lighter, smaller, shorter (QA)
     te, pos, vel = [], [], []
     ex, ey = eren_F(BEATS["headkick"])
     for k in range(60):                                           # the severed neck, then the bitten-open nape
@@ -292,7 +292,7 @@ def build(site):
         tt = random.choice((9.0, 11.0, 44.8)) + random.uniform(0, 1.5)
         fx, fy = fem_F(tt)
         te.append(tt); pos.append(_W(fx, fy, random.uniform(6, 12))); vel.append((0, 0, 3.0))
-    steam.add_many(te, pos, vel, r0=1.5, r1=7.0, life=3.0, rise=3.0)
+    steam.add_many(te, pos, vel, r0=1.2, r1=4.5, life=2.0, rise=3.0)
     steam.build(c); S["steam"] = steam
     TRACK.update(EREN=lambda t: _W(*eren_F(t), 17.0) if 19.6 <= t < 22.0 else None,
                  MIKASA=lambda t: _fly_w("mikasa", t) if 38.5 <= t < 41.0 else None,
@@ -303,18 +303,28 @@ def _fly_w(nm, t):
     return _W(x, y, z) if vis else None
 
 # ---------------------------------------------------------------- per frame
+def _shift(AT, w, u, seed):
+    """v2 (QA batch1 P1): smaller (x0.6), thinner (x0.45) steam dome that fades out and is GONE after the shift (the
+    shared shift_fx keeps a 36 m dome at 0.22 forever = the white / blue "bubbles" and ground discs); bolts x3 thicker."""
+    fx = AT.shift_fx(w[0], w[1], min(1.0, max(0.0, u)), seed=seed, scale=0.6)
+    if not fx.get("_f3"):
+        for o in fx["bolts"]:
+            if o.type == "CURVE":
+                o.data.bevel_depth *= 3.0
+        fx["_f3"] = 1
+    fx["dome_d"].default_value *= 0.45 * (1.0 - C.ss(0.55, 1.0, u))
+    fx["dome"].hide_render = u >= 1.0 or fx["dome"].hide_render
+
 def update(t):
     AT = S["AT"]
     cam = bpy.context.scene.camera
     # transformation FX: her beam, Eren's lightning
-    bu = (t - BEATS["beam"][0]) / 2.6
-    if -0.01 < bu < 1.0:
-        w = F(*BEAM_F); AT.shift_fx(w[0], w[1], max(0.0, bu), seed=21)
-    elif bu >= 1.0:
-        w = F(*BEAM_F); AT.shift_fx(w[0], w[1], 1.0, seed=21)
-    eu = (t - BEATS["shift"][0]) / 2.6
+    bu = (t - BEATS["beam"][0]) / 2.0
+    if bu > -0.01:
+        _shift(AT, F(*BEAM_F), bu, 21)
+    eu = (t - BEATS["shift"][0]) / 2.0
     if eu > -0.01:
-        w = F(*EREN_F); AT.shift_fx(w[0], w[1], min(1.0, max(0.0, eu)), seed=33)
+        _shift(AT, F(*EREN_F), eu, 33)
     # the Female
     fem = S["fem"]
     pose, dz, vis = fem_pose(t)
@@ -410,3 +420,8 @@ def check():
     for t in (2.0, 8.0, 12.0, 20.0, 25.0, 30.6, 36.0, 44.6):
         fx, fy = fem_F(t); ex, ey = eren_F(t)
         print(f"[f3] t {t:4.1f} female F ({fx:5.0f} {fy:5.0f}) eren F ({ex:5.0f} {ey:5.0f}) d {math.hypot(fx - ex, fy - ey):5.1f}")
+
+# v2 (QA batch1 P1: the middle forest-floor stretch is long and empty): the carry / decoy / spin (story 33.8-44.0) at 2.2x;
+# video ~50.4 s; slope 1 at both seams
+import segtime as _ST
+install_story = C.install_warp(globals(), _ST.slope_knots(56.0, [(0.0, 1.0, 0.0), (33.8, 2.2, 0.4), (44.0, 1.0, 0.4)]))

@@ -133,7 +133,7 @@ CAM_KEYS = [
     _k(10.2, (190.0, -30.0, 170.0), (82.0, -140.0, 15.0), 30.0),                       # through the church
     _k(14.8, (360.0, 30.0, 150.0), (325.0, -150.0, 12.0), 34.0),                       # berserk bite
     _k(19.0, (470.0, 60.0, 190.0), (560.0, -190.0, 20.0), 30.0),                       # she runs for the wall
-    _k(23.0, _off(SL.CLIMB, 280.0) + (140.0,), (CX, CY, 30.0), 32.0),                  # the climb, wall face-on from the town
+    _k(23.0, _off(SL.CLIMB, 200.0) + (105.0,), (CX, CY, 32.0), 38.0),                  # the climb, wall face-on (v2: slight zoom, QA)
     _k(25.6, _off(SL.CLIMB, 120.0, 30.0) + (60.0,), (CX, CY, 46.0), 40.0),             # push-in: Mikasa cuts the fingers
     _k(27.5, _off(SL.CLIMB, 150.0) + (80.0,), (KX, KY, 6.0), 34.0),                    # the fall, the catch
     _k(30.0, _off(SL.CRYSTAL, 45.0, 20.0) + (30.0,), (KX, KY, 3.0), 38.0),             # ripped out, the crystal
@@ -272,3 +272,7 @@ def check():
     for t in (0.0, 2.6, 10.0, 14.0, 20.0, 25.6, 27.0, 30.0):
         fx, fy = fem_S(t); ex, ey = eren_S(t)
         print(f"[s2] t {t:4.1f} female S ({fx:5.0f} {fy:5.0f}) z {fem_z(t):4.1f}  eren S ({ex:5.0f} {ey:5.0f}) d {math.hypot(fx - ex, fy - ey):5.1f}")
+
+# v2 (QA batch1 P2): the crane up the wall to the face (story 32-40) at 1.7x -> the final face reads ~2 s, not 4
+import segtime as _ST
+C.install_warp(globals(), _ST.slope_knots(40.0, [(0.0, 1.0, 0.0), (32.0, 1.7, 0.4)]))

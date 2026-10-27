@@ -34,9 +34,11 @@ G1 = [   # v5 (owner 10/27 09:44): open on the ep01 tree shot itself (ref/hill_t
     (4.35, (-3, -200, 65), (-7, -700, 42), 30),       # ref: gliding down along the avenue
     (4.9, (-5, -365, 36), (-7, -733, 48), 40),        # v5: bolt 4.62 seen from the air, then down into the plaza
     (5.5, (-3, -462, 3.4), (-7, -733, 48), 42),       # just above the crowd's heads (crowd y -530..-480), looking up over the wall
-    (6.6, (-3, -466, 2.4), (-7, -733, 50), 44),       # crowd heads in the lower foreground, frontal
-    (7.45, (-3, -470, 2.3), (-7, -733, 51), 47),      # slight push-in while the head rises out of the smoke
-    (8.0, (-3, -472, 2.3), (-7, -733, 51), 48),
+    (6.6, (-3, -466, 2.4), (-7, -733, 51), 58),       # crowd heads in the lower foreground, frontal
+    (7.45, (-3, -470, 2.3), (-7.5, -735, 55.5), 125), # v6 (QA P0): zoom in while the head rises out of the smoke ...
+    (8.0, (-3, -472, 2.3), (-7.5, -735, 56.5), 150),  # ... until the FACE fills ~1/3 of the frame (d ~263 m, head ~10 m)
+    (8.7, (-3, -473, 2.3), (-7.5, -735, 56.5), 145),  # hold on the face
+
     (10.0, (20, -330, 120), (0, -690, 18), 40),       # ref: pull back, gate and wall in frame
     (11.0, (25, -325, 128), (0, -690, 24), 43),       # ref: the kick (11.0); small zoom-in 40 -> 47 (look a bit higher: the Colossal stays in frame)
     (12.0, (22, -328, 136), (-4, -684, 20), 47),

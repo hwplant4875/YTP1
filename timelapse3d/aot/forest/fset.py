@@ -434,7 +434,14 @@ def prune_world_veg():
             bm = bmesh.new(); bm.from_mesh(me); bm.verts.ensure_lookup_table()
             bmesh.ops.delete(bm, geom=[bm.verts[i] for i in kill], context="VERTS"); bm.to_mesh(me); bm.free()
             n += len(kill)
-    print(f"[forest] pruned {n} world vegetation points", flush=True)
+    # QA batch1 f1: the dark forest-floor 14-gons under the pruned clumps stayed behind as black polygons on the plain
+    nf = 0
+    for ob in [o for o in bpy.data.objects if o.type == "MESH" and o.name.startswith("WD_ForestFloor")]:
+        bm = bmesh.new(); bm.from_mesh(ob.data)
+        dead = [f for f in bm.faces if bad(*f.calc_center_median()[:2])]
+        nf += len(dead)
+        bmesh.ops.delete(bm, geom=dead, context="FACES"); bm.to_mesh(ob.data); bm.free()
+    print(f"[forest] pruned {n} world vegetation points, {nf} forest-floor patches", flush=True)
 
 # ---------------------------------------------------------------- entry
 MAT_NAMES = dict(plaster="Plaster", plaster_w="PlasterW", plaster_o="PlasterO", timber="Timber", roof_red="RoofRed",

@@ -1,4 +1,6 @@
-"""f1 KARANES -> FORMATION -> FEMALE TITAN -> REINER -> VILLAGE -> GREEN SMOKE (bible beats f1-f6, 48 s, forest set, frame W).
+"""f1 KARANES -> FORMATION -> FEMALE TITAN -> REINER -> VILLAGE -> GREEN SMOKE (bible beats f1-f6, forest set, frame W).
+v2 (QA batch1 P0): 26 s of VIDEO (DUR) remapped onto the 48 s story choreography (TMAP / story()); beat times below are STORY
+seconds.  Camera keys are video time, low oblique (200-350 m) so riders and the Female read; flares are smoke columns.
 SEG=f1 bash aot/forest/render_part2.sh     (camera / layout in frame F, converted with common.F)
 
   0-8    the Karanes gate opens; the 57th expedition pours out in a column past the ruined old town; the support squad flies
@@ -25,7 +27,14 @@ try:
 except ImportError:
     bpy = None
 
-DUR = 48.0
+STORY_DUR = 48.0          # the choreography below runs on STORY time (bible beats f1-f6)
+DUR = 26.0                # v2 (QA batch1 P0: 48 s too long): video time, remapped onto story time by story(t)
+TMAP = [(0.0, 0.0), (3.0, 8.0), (5.5, 14.0), (8.0, 19.4), (11.2, 22.6), (12.6, 26.0), (14.4, 29.0), (16.6, 31.4),
+        (17.8, 34.0), (19.8, 40.0), (26.0, 48.0)]
+def story(t):
+    return float(np.interp(t, [k[0] for k in TMAP], [k[1] for k in TMAP]))
+def video(ts):
+    return float(np.interp(ts, [k[1] for k in TMAP], [k[0] for k in TMAP]))
 BEATS = dict(gate=(0.5, 2.0), out=1.2, support_kill=(6.6, 7.4), dome=(7.5, 13.0), red=(12.0, 13.2), female_in=14.0,
              wipe=(16.8, 19.8), hood=(20.0, 22.0), chase=(26.0, 34.0), grab=(29.0, 30.6), free=30.6, purple=27.0,
              village=(34.0, 40.0), green=40.5, rush=(40.0, 48.0))
@@ -68,7 +77,7 @@ def road_at(s):
     d = pts[i + 1] - pts[i]
     return pts[i] + d * u, math.atan2(-d[0], d[1])
 
-_HS = np.arange(0.0, DUR + 4, 0.02)
+_HS = np.arange(0.0, STORY_DUR + 4, 0.02)
 _HV = np.where(_HS < 1.2, 0.0, np.where(_HS < 2.6, 20.0, 20.0 + 280.0 * np.clip((_HS - 2.6) / 5.4, 0, 1) ** 2 * (3 - 2 * np.clip((_HS - 2.6) / 5.4, 0, 1))))
 _HX = np.concatenate([[0.0], np.cumsum(_HV[:-1] * 0.02)])
 def head_s(t):
@@ -163,7 +172,7 @@ SWATS = (17.3, 18.1, 18.9, 19.5, 36.0, 37.2)
 _FD = {}
 def _fdist(t):
     if "T" not in _FD:
-        T = np.arange(13.0, DUR + 2.0, 0.02)
+        T = np.arange(13.0, STORY_DUR + 2.0, 0.02)
         P = np.array([female_F(x) for x in T])
         D = np.concatenate([[0.0], np.cumsum(np.hypot(*np.diff(P, axis=0).T))])
         _FD["T"], _FD["D"] = T, D
@@ -215,28 +224,28 @@ def _rel(t, look_t, d, lens, dz=8.0, look=None):
 def _armin_spot():
     hx, hy = female_F(19.95); fy = female_state(19.95)[2]
     return hx - 9.0 * math.sin(fy), hy + 9.0 * math.cos(fy)
-CAM_KEYS = [
+def _v(ts, key):
+    return (video(ts),) + tuple(key[1:])
+CAM_KEYS = [   # v2 (QA batch1 P0): video-time keys; 200-350 m oblique on the formation instead of the 950 m overhead
     (0.0, SEAM_F1_W["pos"], SEAM_F1_W["look"], SEAM_F1_W["lens"]),
-    _k(2.4, (-80.0, -9520.0, 300.0), (300.0, -9000.0, 15.0), 30.0),          # the gate opens, the first riders burst out
-    _k(5.0, (180.0, -9000.0, 360.0), (600.0, -8460.0, 10.0), 30.0),          # column past the old town, the support squad
-    _k(8.0, (560.0, -8350.0, 780.0), (600.0, -7950.0, 0.0), 26.0),           # rising to the overhead
-    _k(11.0, (470.0, -7120.0, 950.0), (470.0, -6850.0, 0.0), 24.0),          # the dome forms (ep17 4:49)
-    _k(14.0, (440.0, -5980.0, 940.0), (425.0, -5720.0, 0.0), 24.0),          # red smoke relays
-    _rel(16.6, 17.2, (-450.0, -330.0, 300.0), 30.0),                         # low oblique, right flank from inside-left
-    _rel(19.4, 19.4, (-260.0, -230.0, 190.0), 32.0),                         # the wipe
-    _rel(21.0, 0, (-80.0, -90.0, 75.0), 42.0, 6.0, _armin_spot()),           # push-in: Armin's hood
-    _rel(23.6, 23.6, (-160.0, -250.0, 210.0), 30.0),
-    _rel(27.0, 27.0, (-180.0, -250.0, 220.0), 30.0),                         # the chase
-    _rel(30.0, 30.0, (-90.0, -150.0, 120.0), 38.0, 12.0),                    # slight zoom: REINER in her fist
-    _rel(33.0, 33.0, (-130.0, -260.0, 250.0), 30.0),
-    _rel(36.5, 0, (-190.0, -250.0, 300.0), 30.0, 0.0, (650.0, -4880.0)),     # the windmill village
-    _rel(40.0, 40.0, (-60.0, -260.0, 380.0), 28.0, 25.0),                    # green smoke from the command line
-    _k(44.0, (350.0, -3250.0, 480.0), (160.0, -1300.0, 40.0), 28.0),         # crane forward: the forest wall
+    _k(1.4, (-60.0, -9450.0, 220.0), (300.0, -9000.0, 10.0), 32.0),           # the gate opens, the first riders burst out
+    _k(3.0, (430.0, -8520.0, 300.0), (600.0, -8050.0, 0.0), 30.0),            # the column fans out past the old town
+    _k(5.5, (200.0, -6280.0, 330.0), (650.0, -5720.0, 0.0), 30.0),            # the dome's right wing, red smoke relays
+    _v(17.2, _rel(0, 17.2, (-300.0, -260.0, 200.0), 34.0)),                    # she comes in from the RIGHT flank
+    _v(19.4, _rel(0, 19.4, (-200.0, -180.0, 140.0), 36.0)),                    # the wipe
+    _v(21.2, _rel(0, 0, (-70.0, -80.0, 60.0), 45.0, 6.0, _armin_spot())),     # push-in: Armin's hood
+    _v(23.6, _rel(0, 23.6, (-150.0, -220.0, 170.0), 32.0)),
+    _v(27.5, _rel(0, 27.5, (-150.0, -210.0, 160.0), 34.0)),                    # the chase
+    _v(30.0, _rel(0, 30.0, (-80.0, -130.0, 95.0), 44.0, 12.0)),                # slight zoom: REINER in her fist
+    _v(32.5, _rel(0, 32.5, (-120.0, -220.0, 200.0), 32.0)),
+    _v(37.6, _rel(0, 0, (-170.0, -230.0, 240.0), 32.0, 0.0, (650.0, -4880.0))),   # the windmill village
+    _v(40.8, _rel(0, 40.8, (-60.0, -260.0, 330.0), 30.0, 25.0)),               # green smoke from the command line
+    _k(23.0, (350.0, -3250.0, 480.0), (160.0, -1300.0, 40.0), 28.0),          # crane forward: the forest wall
     _k(DUR, SEAM_F2["pos"], SEAM_F2["look"], SEAM_F2["lens"]),
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_F1_W["vel"], v_out=SEAM_F2["vel"])
-CAM_LIMITS = dict(speed=800.0, yaw=60.0, hmin=50.0, hmax=1100.0, pitch=(5.0, 90.0), lens=(23.0, 43.0))
-PLAN = [(0.0, "morning"), (14.0, "morning"), (30.0, "day"), (DUR, "day")]
+CAM_LIMITS = dict(speed=1600.0, yaw=60.0, hmin=50.0, hmax=1100.0, pitch=(5.0, 90.0), lens=(23.0, 46.0))
+PLAN = [(0.0, "morning"), (14.0, "morning"), (30.0, "day"), (STORY_DUR, "day")]
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
 S = {}
@@ -293,21 +302,21 @@ def build(site):
         w = _W(hx, hy, -0.3); ob.location = w; ob.rotation_euler = (0, 0, yy); ob.scale = (1, 1, 1)
         S["smash"].append((ob, ts))
     # smoke: signal flares (positions from the pure choreography), dust, steam
-    fs = flares.FlareSet("F1_Flares")
+    fs = flares.FlareSet("F1_Flares", style="column")        # v2: rising smoke columns, not laser beams
     def wing(rel, t):
         x, y = dc(t)
         return _W(x + rel[0], y + rel[1], 3.0)
     for k, (rel, tt) in enumerate((((400, 0), 12.0), ((200, 150), 12.6), ((0, 250), 13.2))):
-        fs.add(tt, wing(rel, tt), "red", up=110, width=2.2, seed=10 + k)
+        fs.add(tt, wing(rel, tt), "red", up=110, width=2.6, seed=10 + k)
     ax, ay, _ = named_F("armin", 27.0)
-    fs.add(27.0, _W(ax, ay, 3.0), "purple", up=110, width=2.2, seed=21)
+    fs.add(27.0, _W(ax, ay, 3.0), "purple", up=110, width=2.6, seed=21)
     for k, (rel, tt) in enumerate((((0, 150), 40.5), ((-200, 120), 41.0), ((200, 120), 41.2), ((0, -100), 41.6))):
-        fs.add(tt, wing(rel, tt), "green", up=120, width=2.4, seed=30 + k)
+        fs.add(tt, wing(rel, tt), "green", up=120, width=2.8, seed=30 + k)
     fs.build(c); S["fs"] = fs
     dust = flares.PuffField("F1_Dust", kind="dust", color=(0.50, 0.42, 0.30), alpha=0.6)
     te, pos, vel = [], [], []
     d0 = _fdist(14.0); step = 11.0; d = d0
-    T_ = np.arange(14.0, DUR, 0.02)
+    T_ = np.arange(14.0, STORY_DUR, 0.02)
     D_ = np.array([_fdist(x) for x in T_])
     while d < D_[-1]:
         tt = float(np.interp(d, D_, T_))
@@ -325,10 +334,16 @@ def build(site):
     steam.add_many([7.4 + 0.08 * k for k in range(30)], [_W(tx + random.uniform(-4, 4), ty + random.uniform(-4, 4), 2) for k in range(30)],
                    [(0, 0, 4)] * 30, r0=2.0, r1=7.0, life=3.0, rise=3.0)
     steam.build(c); S["steam"] = steam
-    TRACK.update(ARMIN=lambda t: _trk("armin", t), JEAN=lambda t: _trk("jean", t), REINER=lambda t: _trk("reiner", t))
+    def fem_trk(t):
+        ts = story(t)
+        if not (14.0 <= ts < 26.0):
+            return None
+        return _W(*female_F(ts), 16.0)
+    TRACK.update(FEMALE=fem_trk, ARMIN=lambda t: _trk("armin", story(t), 20.0),
+                 JEAN=lambda t: _trk("jean", story(t)), REINER=lambda t: _trk("reiner", story(t)))
 
-def _trk(nm, t):
-    if not (24.0 <= t <= 34.0):
+def _trk(nm, t, t0=26.0):
+    if not (t0 <= t <= 34.0):
         return None
     x, y, _ = named_F(nm, t)
     return _W(x, y, 4.0)
@@ -343,129 +358,9 @@ def titan_F(i, t):
 
 # ---------------------------------------------------------------- per frame
 def update(t):
-    fset = S["fset"]
-    fset.gate_open(C.ss(*BEATS["gate"], t))
-    fset.mills(t)
-    B, T, P, TT = S["B"], S["T"], S["P"], S["TT"]
-    for r in ROSTER:
-        j = r["j"]
-        tk = r["kill"]
-        te = min(t, tk) if tk is not None else t
-        if r["kind"] == "horse":
-            x, y, _ = named_F(r["name"], te)
-            x2, y2, _ = named_F(r["name"], te + 0.05)
-            s = base_pos(r, te)[2] if t < 19.0 else 1e9
-            if r["name"] == "armin" and 19.4 <= t < 24.5:          # Armin's horse bolts on without him
-                x, y, _ = base_pos(r, t); x2, y2, _ = base_pos(r, t + 0.05)
-        else:
-            x, y, s = base_pos(r, te)
-            x2, y2, _ = base_pos(r, te + 0.05)
-        vis = 1.0 if s > -3.0 else 0.0                              # still inside the gate tunnel
-        sp = math.hypot(x2 - x, y2 - y) / 0.05
-        yaw = C.yaw_of(x2 - x, y2 - y) if sp > 0.5 else B.yaw[j]
-        w = _W(x, y)
-        B.pos[j] = w; B.yaw[j] = yaw; B.vis[j] = vis
-        ph = 2 * math.pi * 2.3 * t + j
-        moving = tk is None or t < tk
-        B.Ar[j, 1] = 0.55 * math.sin(ph) * moving; B.Ar[j, 2] = -0.55 * math.sin(ph) * moving
-        B.roll[j] = 0.0
-        if not moving:
-            B.roll[j] = -1.45 * C.ss(tk, tk + 0.4, t)              # thrown down
-        T.pos[j] = w; T.yaw[j] = yaw; T.vis[j] = vis * min(1.0, sp / 40.0) * moving
-    B.push(); T.push()
-    # people
-    pj = S["pj"]
-    for nm in ("armin", "jean", "reiner"):
-        j = pj[nm]
-        x, y, mode = named_F(nm, t)
-        hz = 1.55 if mode == "seated" else 0.0
-        P.vis[j] = 1.0
-        hr = NAMED[nm]["j"]
-        yaw = B.yaw[hr]
-        if mode == "seated":
-            x, y = C.toF(B.pos[hr][0], B.pos[hr][1])[:2]
-        w = _W(x, y, hz)
-        if nm == "reiner" and BEATS["grab"][0] <= t < 31.4:
-            fem = S["fem"]
-            bpy.context.view_layer.update()
-            hpos = fem.bone_world("lowerarm01.R", tail=True)
-            if t < BEATS["free"]:
-                w = (hpos.x, hpos.y, hpos.z - 0.9); C.person_pose(P, j, "stand")
-            else:                                                  # cuts free: drops in an arc back to his horse
-                u = C.ss(BEATS["free"], 31.4, t)
-                hw = B.pos[hr] + np.array((0, 0, 1.55))
-                w = (hpos.x + (hw[0] - hpos.x) * u, hpos.y + (hw[1] - hpos.y) * u,
-                     hpos.z + (hw[2] - hpos.z) * u + 6.0 * math.sin(math.pi * u))
-                C.person_pose(P, j, "fly")
-        else:
-            C.person_pose(P, j, "seated" if mode == "seated" else ("stand" if t < 22.8 else "run"), t)
-        if nm == "armin" and 19.4 <= t < 20.0:                     # knocked off the horse
-            C.person_pose(P, j, "fallen")
-        P.pos[j] = w; P.yaw[j] = yaw if mode == "seated" else female_state(19.95)[2] + math.pi
-        if mode == "seated":
-            P.vis[j] = B.vis[hr]
-    # support squad: two ODM flyers from the column at the old-town titan's nape 6.6-7.4
-    segs = []
-    tx, ty = titan_F(0, min(t, 7.4))
-    nape = np.array(_W(tx, ty, 9.6))
-    for k, nm in enumerate(("sup1", "sup2")):
-        j = pj[nm]
-        t0, t1 = 6.0 + 0.2 * k, 7.0 + 0.3 * k
-        (cx, cy), cy_yaw, _ = col_pos(3 + 2 * k, t0)
-        start = np.array(_W(cx, cy, 1.6))
-        if t < t0 or t > t1 + 0.8:
-            P.vis[j] = 0.0; P.pos[j] = start; continue
-        u = C.ss(t0, t1, t)
-        p = start + (nape + np.array((6 * (k - 0.5), -4, 2)) - start) * u + np.array((0, 0, 12 * math.sin(math.pi * u)))
-        if t > t1:
-            p = nape + np.array((6 * (k - 0.5), 4 + 20 * (t - t1), 2 - 8 * (t - t1)))
-        P.vis[j] = 1.0; P.pos[j] = p; C.person_pose(P, j, "fly")
-        d = nape - p; P.yaw[j] = C.yaw_of(d[0], d[1])
-        if t < t1:
-            segs.append((tuple(p + np.array((0, 0, 1.0))), tuple(nape + np.array((3 * k, 0, 1)))))
-    P.push()
-    S["wires"].update(segs, bpy.context.scene.camera.location if bpy.context.scene.camera else (0, 0, 1000))
-    # pure titans
-    for i, j in enumerate(S["tt"]):
-        x, y = titan_F(i, t)
-        x2, y2 = titan_F(i, t + 0.05)
-        TT.pos[j] = _W(x, y); TT.yaw[j] = C.yaw_of(x2 - x, y2 - y + 1e-9) if (x2 - x) ** 2 + (y2 - y) ** 2 > 1e-8 else TT.yaw[j]
-        C.titan_walk(TT, j, t * 2.2 + i, 0.4)
-        if i == 0 and t >= 7.4:                                    # cut: topples forward, then lies, steams
-            TT.pitch[j] = -1.45 * C.ss(7.4, 8.4, t); TT.Ar[j, :] = 0.0
-            TT.vis[j] = 1.0 - 0.3 * C.ss(9.0, 14.0, t)
-        if i == 0 and t > 16.0:
-            TT.vis[j] = 0.0
-    TT.push()
-    for ob, ts in S["smash"]:
-        for k in range(10):
-            te.append(ts + 0.04 * k); pos.append(tuple(np.array(ob.location) + np.array((random.uniform(-6, 6), random.uniform(-6, 6), 2 + k))))
-            vel.append((random.uniform(-3, 3), random.uniform(-3, 3), 3.0))
-    dust.add_many(te, pos, vel, r0=3.0, r1=11.0, life=2.6, rise=1.5, alpha=0.55)
-    dust.build(c); S["dust"] = dust
-    steam = flares.PuffField("F1_Steam", kind="steam", alpha=0.7)
-    tx, ty = titan_F(0, BEATS["support_kill"][1])
-    steam.add_many([7.4 + 0.08 * k for k in range(30)], [_W(tx + random.uniform(-4, 4), ty + random.uniform(-4, 4), 2) for k in range(30)],
-                   [(0, 0, 4)] * 30, r0=2.0, r1=7.0, life=3.0, rise=3.0)
-    steam.build(c); S["steam"] = steam
-    TRACK.update(ARMIN=lambda t: _trk("armin", t), JEAN=lambda t: _trk("jean", t), REINER=lambda t: _trk("reiner", t))
+    _update(story(t))
 
-def _trk(nm, t):
-    if not (24.0 <= t <= 34.0):
-        return None
-    x, y, _ = named_F(nm, t)
-    return _W(x, y, 4.0)
-
-# pure titans (F): 0 = the old-town titan (walks at the road, killed 7.4, falls), others wander the plain
-TPATH = {0: [(0.0, 760.0, -8300.0), (7.4, 690.0, -8420.0)], 1: [(0.0, 1300.0, -7000.0), (48.0, 1100.0, -6400.0)],
-         2: [(0.0, -500.0, -6200.0), (48.0, -300.0, -5900.0)], 3: [(0.0, 1250.0, -3500.0), (48.0, 1000.0, -3300.0)],
-         4: [(0.0, -600.0, -2600.0), (48.0, -350.0, -2200.0)]}
-def titan_F(i, t):
-    x, y, yaw = C.path_at(TPATH[i], t)
-    return x, y
-
-# ---------------------------------------------------------------- per frame
-def update(t):
+def _update(t):
     fset = S["fset"]
     fset.gate_open(C.ss(*BEATS["gate"], t))
     fset.mills(t)
@@ -578,7 +473,7 @@ def update(t):
     S["fs"].update(t, wind=(2.0, 0.8)); S["dust"].update(t, wind=(2.0, 0.6)); S["steam"].update(t, wind=(1.5, 0.5))
 
 def light(t):
-    LIGHT.apply(t)
+    LIGHT.apply(story(t))
 
 def check():
     for t in (14.0, 17.0, 20.0, 26.0, 30.0, 36.0, 40.0, 44.0, 48.0):

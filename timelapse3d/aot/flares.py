@@ -101,8 +101,10 @@ class PuffField:
 class FlareSet:
     BURN = 2.4           # s from launch to the top
     TOP_HOLD = 1.6       # s the head keeps burning at the top
-    def __init__(self, name="Flares", coll=None):
-        self.name = name; self.coll = coll
+    def __init__(self, name="Flares", coll=None, style="streak"):
+        """style "streak" (default, unchanged) | "column" (QA batch1 10/27: no thin laser line - a thick rising
+        coloured SMOKE column that billows and widens, with a bright burning head)."""
+        self.name = name; self.coll = coll; self.style = style
         self.fl = []
         self.heads = []
 
@@ -136,6 +138,28 @@ class FlareSet:
             taus = np.arange(0.05, self.BURN + self.TOP_HOLD, dt)
             P = np.array([self.path(f, tau) for tau in taus]); n = len(taus)
             D = np.gradient(P, axis=0)
+            if self.style == "column":
+                lit = tuple(min(1.0, c * 1.15 + 0.04) for c in smoke)
+                self.cards.add_many(f["t0"] + taus[::2], P[::2] + rnd.normal(0, 0.4, (len(taus[::2]), 3)),
+                                    rnd.normal(0, 0.5, (len(taus[::2]), 3)), r0=1.2 * w, r1=(5.0 + 2.5 * rnd.random(len(taus[::2]))) * w,
+                                    life=f["life"] * (0.8 + 0.4 * rnd.random(len(taus[::2]))), rise=0.35, color=lit, kind="smoke",
+                                    alpha=0.55, fade_in=0.05, dirs=D[::2], stretch=1.4, spin=0.0)
+                k = slice(None, None, 5)
+                self.cards.add_many(f["t0"] + taus[k], P[k], rnd.normal(0, 0.6, (len(taus[k]), 3)), r0=1.5 * w, r1=7.5 * w,
+                                    life=f["life"] * 0.9, rise=0.4, color=lit, kind="smoke", alpha=0.45, fade_in=0.08)
+                taus = np.arange(0.0, self.BURN + self.TOP_HOLD, 0.03); n = len(taus)
+                P = np.array([self.path(f, tau) for tau in taus])
+                fade = np.clip(1.0 - (taus - self.BURN) / self.TOP_HOLD, 0.15, 1.0)
+                self.cards.add_many(f["t0"] + taus, P, None, r0=4.5 * w, r1=5.0 * w, life=0.09, rise=0.0, color=glow, kind="glow",
+                                    alpha=fade, fade_in=0.001)
+                hm, hs = emit_mat(f"FlareCore_{f['color']}", tuple(min(1.0, c * 0.4 + 0.6) for c in glow), 60.0)
+                me = bpy.data.meshes.new(f"{self.name}_Core{i}")
+                import bmesh
+                bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=10, v_segments=6, radius=0.9); bm.to_mesh(me); bm.free()
+                me.materials.append(hm)
+                ob = bpy.data.objects.new(me.name, me); coll.objects.link(ob); ob.visible_shadow = False
+                self.heads.append(ob)
+                continue
             self.cards.add_many(f["t0"] + taus, P + rnd.normal(0, 0.06, (n, 3)), rnd.normal(0, 0.12, (n, 3)),
                                 r0=0.45 * w, r1=(2.2 + 1.2 * rnd.random(n)) * w, life=f["life"] * (0.8 + 0.4 * rnd.random(n)),
                                 rise=0.12, color=smoke, kind=kind, alpha=0.32 if kind != "smoke" else 0.38, fade_in=0.04,
