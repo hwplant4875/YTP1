@@ -20,5 +20,7 @@ Rules: edit code first, render all later in one batch (480p 15fps previews). TOO
 ## STATUS (autopilot 10/28)
 - [x] g1 -> g1_fall_v7: tree-still opening OK, golden bolt + flash + sparks + arcs read, smoke before the head, FACE ~1/3 frame (285 mm).
 - [x] g3 -> g3_flight_v8: march column wide + readable (235-290 m), night readable, camp = flat yard with barracks/tower/rigs/trainees.
-- [~] g8 v4 reviewed: middle bright, green smoke flares OK, carry readable; herd-kill corner titans too small -> v5 rendering (closer cam).
-- [~] g4 v5: opened near black -> v6 (night grade lifted, flat camp) rendering.
+- [x] g8 -> g8_boulder_v5: middle bright, green smoke flares, carry readable, herded corner titans visible + killed together.
+- [x] g4 -> g4_trost850_v6: night readable, flat camp at the seam.
+- [x] g5 -> g5_trost_v6: large Colossal head over the gate (230 mm, near wall-top cam), steam only after; district brighter, no shafts.
+- [x] master_onetake_v3_preview.mp4 (g1 v7, g2 v5, g3 v8, g4 v6, g5 v6, g6 v4, g7 v3, g8 v5) = 3:20 (target 3:30-4:00 -> round 2).
