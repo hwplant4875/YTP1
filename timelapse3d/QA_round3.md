@@ -5,3 +5,4 @@
 - [~] f0 v2: dusk / brown dawn haze frames murky -> PLAN golden -> sunset -> short night -> morning (f0 v3).
 - [~] f1 opening: column reads as a dotted line, 3-5 s empty plain -> keys 3.0 / 5.5 40 % closer (180-200 m), f1 v5.
 - [ ] g6: still far; g2|g3 seam slight brightness step.
+- [~] NAME TAGS were never in the previews (hud2 overlay only at final assembly) -> tag_burn.py burns Russo One tags (max 3, staggered) from the per-frame camera dumps; part 1 windows from the tag timelines, part 2 from tracker validity. full_onetake_v2 = tagged.

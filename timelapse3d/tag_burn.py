@@ -80,6 +80,7 @@ def main():
         cam = cams[i]
         act = [e for e in tracks if e["t0"] - 0.05 <= t <= e["t1"] + 0.4 and valid(cam, e["obj"])]
         act = sorted(act, key=lambda e: e["t0"])[:3]          # max 3 tags on screen
+        act = [dict(e, len=28 + 20 * k, lean=(14 if k % 2 == 0 else -14)) for k, e in enumerate(act)]   # de-clutter stacked tags
         if act and cam:
             cam = dict(cam); cam["res"] = [W, H]
             img = hud2.compose(dict(fps=A.fps, tracks=act), img, i, t=t, cam=cam)
