@@ -1632,6 +1632,10 @@ DUSK_SKY = ((0.93, 0.50, 0.34, 1.0), (0.62, 0.50, 0.60, 1.0))
 NIGHT_LIGHT = dict(el=24.0, az=205.0, col=(0.50, 0.62, 1.0), e=0.30, amb=0.02, expo=-1.5)
 NIGHT_SKY = ((0.035, 0.05, 0.11, 1.0), (0.010, 0.016, 0.045, 1.0))
 NIGHT_HAZE = (4500.0, 0.50, (0.05, 0.06, 0.11))          # mist depth, amount, colour
+# autopilot round 5: the flight north after the burning-town aerial (local 24.6 -> 32 = g3 t 0) was near black -> a brighter
+# moon + exposure -0.8 by the seam (seg_g3.G2NIGHT / G2NIGHT_G match these end values)
+NIGHT_LIFT = dict(NIGHT_LIGHT, e=0.50, amb=0.035, expo=-0.8)
+LIFT_T = (24.6, 31.4)
 
 def light_setup():
     w = bpy.context.scene.world
@@ -1656,6 +1660,9 @@ def light_spec(t):
     P = WD.light_blend(SEAM_LIGHT, DUSK_LIGHT, u) if WD else dict(SEAM_LIGHT)
     if k > 0 and WD:
         P = WD.light_blend(P, NIGHT_LIGHT, k)
+        kl = smooth(*LIFT_T, t)
+        if kl > 0:
+            P = WD.light_blend(P, NIGHT_LIFT, kl)
     return P, u, k
 
 def light(t):
