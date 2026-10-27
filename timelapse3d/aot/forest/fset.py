@@ -429,7 +429,14 @@ def prune_world_veg():
             continue
         me = ob.data
         co = np.zeros(len(me.vertices) * 3); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
-        kill = [i for i, p in enumerate(co) if bad(p[0], p[1])]          # world._points: vertices in world coordinates
+        # autopilot 10/28 (f1 low camera: a bare green plain): on the f1 plain keep every 7th tree of the pruned clumps as
+        # scattered single trees / small groves (their dark floor patches stay removed below), clear of the dome's path
+        def sparse_keep(i, x, y):
+            fx, fy = x - C.FO[0], y - C.FO[1]
+            if not (-9300 < fy < -150 and -350 < fx < 1750) or (i * 2654435761) % 7:
+                return False
+            return abs(fx - 470.0) > 160.0 or fy > -2600.0 and abs(fx - 300.0) > 160.0
+        kill = [i for i, p in enumerate(co) if bad(p[0], p[1]) and not sparse_keep(i, p[0], p[1])]   # world._points: world coordinates
         if kill:
             bm = bmesh.new(); bm.from_mesh(me); bm.verts.ensure_lookup_table()
             bmesh.ops.delete(bm, geom=[bm.verts[i] for i in kill], context="VERTS"); bm.to_mesh(me); bm.free()
