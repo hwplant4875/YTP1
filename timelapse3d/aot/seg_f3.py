@@ -231,7 +231,7 @@ CAM_KEYS = [
     _k(34.0, (KX - 30.0, KY - 60.0, 40.0), (KX + 20.0, KY + 60.0, 10.0), 30.0),
     _k(38.5, (RX - 80.0, RY - 70.0, 40.0), (RX - 25.0, RY - 18.0, 10.0), 30.0),   # Mikasa decoys, Levi comes in
     _k(42.5, (RX - 50.0, RY - 45.0, 26.0), (RX - 6.0, RY - 5.0, 8.0), 34.0),
-    _k(44.8, (RX - 24.0, RY - 22.0, 12.0), (RX - 5.0, RY - 4.0, 7.0), 40.0),      # push-in: the mouth cut, Eren pulled out
+    _k(44.8, (RX - 30.0, RY - 14.0, 13.0), (RX - 5.0, RY - 4.0, 7.0), 40.0),      # push-in: the mouth cut, Eren pulled out
     _k(46.4, (RX - 45.0, RY - 50.0, 45.0), (RX - 170.0, RY - 80.0, 30.0), 30.0),   # follow Levi / Mikasa out west
     _k(48.0, (RX - 200.0, RY - 120.0, 160.0), (RX - 480.0, RY - 170.0, 40.0), 30.0),
     _k(51.0, (-1000.0, 600.0, 520.0), (-1680.0, -500.0, 0.0), 42.0),             # long lens over the retreat
@@ -240,7 +240,7 @@ CAM_KEYS = [
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_IN["vel"], v_out=SEAM_S1["vel"])
 CAM_LIMITS = dict(speed=500.0, yaw=120.0, hmin=8.0, hmax=1200.0, pitch=(-15.0, 75.0), lens=(27.0, 46.0))
-PLAN = [(0.0, "afternoon"), (2.0, "sunset"), (40.0, "sunset"), (50.0, "dusk"), (DUR, "dusk")]
+PLAN = [(0.0, "afternoon"), (2.0, "sunset"), (5.0, "afternoon"), (46.0, "afternoon"), (50.0, "sunset"), (DUR, "dusk")]   # readable under the canopy
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
 S = {}

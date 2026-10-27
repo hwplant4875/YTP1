@@ -199,8 +199,69 @@ def build_wall_face(c):
             f.material_index = 4
     face = C.mesh_obj("ST_WallTitan", bm, [skin, dark, white, iris, rubble], c)
     face.matrix_world = Matrix.Translation((w[0], w[1], GS(fx, fy) + FACE_Z)) @ R
-    STATE["face"] = face
-    face.hide_render = True; face.hide_viewport = True
+    objs = [face]
+    try:                                                      # a real MPFB pure-titan face replaces the placeholder ellipsoid
+        objs = [_hole_only(face)] + _pure_face(c, (w[0], w[1], GS(fx, fy) + FACE_Z), (nx, ny))
+    except Exception as ex:
+        import traceback; traceback.print_exc()
+        print("[stohess] MPFB wall face failed, keeping the placeholder:", ex, flush=True)
+    STATE["face"] = objs
+    for o in objs:
+        o.hide_render = True; o.hide_viewport = True
+
+def _hole_only(face):
+    """keep only the dark hole + rubble of the placeholder (drop its ellipsoid / eyes / nose / brow)."""
+    me = face.data
+    bm = bmesh.new(); bm.from_mesh(me)
+    kill = [f for f in bm.faces if f.material_index in (0, 2, 3) and f.calc_center_median().z > -9]
+    bmesh.ops.delete(bm, geom=kill, context="FACES"); bm.to_mesh(me); bm.free()
+    return face
+
+HOLE_R = 6.8
+def _pure_face(c, centre, n):
+    """45 m pure titan (pure_titans.make_pure, rest pose) standing INSIDE the wall facing out of it; everything but the
+    part of the face inside the hole (centred on its left eye) is deleted, the face sits 0.3 m proud of the hole."""
+    import pure_titans as PT
+    rig = PT.make_pure("generic", seed=2, height=45.0, lod=1.0, outline=False, name="ST_WallTitanPure")
+    for pb in rig.pose.bones:
+        pb.matrix_basis = Matrix.Identity(4)
+    nv = Vector((n[0], n[1], 0.0)); ang = math.atan2(n[1], n[0])
+    rig.location = (0, 0, 0); rig.rotation_euler = (0, 0, ang + math.pi / 2)       # MPFB front -Y -> the inward normal
+    bpy.context.view_layer.update()
+    meshes = [o for o in rig.children_recursive if o.type == "MESH"]
+    body = max(meshes, key=lambda o: len(o.data.vertices))
+    neck_z = (rig.matrix_world @ rig.data.bones["head"].head_local).z
+    P = [body.matrix_world @ v.co for v in body.data.vertices]
+    head = [p for p in P if p.z > neck_z]
+    hz0, hz1 = min(p.z for p in head), max(p.z for p in head)
+    front = max(p.dot(nv) for p in head)
+    side = Vector((-nv.y, nv.x, 0.0))
+    hs = [p.dot(side) for p in head]; hc = (min(hs) + max(hs)) / 2; hw = max(hs) - min(hs)
+    eye = Vector((0, 0, 0)) + side * (hc + 0.2 * hw) + Vector((0, 0, hz0 + 0.60 * (hz1 - hz0)))
+    # move: the left eye onto the hole centre, the face front 0.3 m proud of the wall face
+    cv = Vector(centre)
+    off = Vector((cv.x, cv.y, 0)) - side * eye.dot(side) - nv * (front - 0.3) + Vector((0, 0, cv.z - eye.z))
+    rig.location = off
+    bpy.context.view_layer.update()
+    hole_c = cv
+    keep = []
+    for o in meshes:
+        me = o.data
+        bm = bmesh.new(); bm.from_mesh(me); bm.verts.ensure_lookup_table()
+        mw = o.matrix_world
+        kill = []
+        for v in bm.verts:
+            p = mw @ v.co
+            d = p - hole_c
+            lat = math.hypot(d.dot(side), d.z)
+            if lat > HOLE_R or p.z < neck_z + off.z - 0.5 or d.dot(nv) < -6.0:
+                kill.append(v)
+        bmesh.ops.delete(bm, geom=kill, context="VERTS"); bm.to_mesh(me); bm.free()
+        if len(me.vertices):
+            keep.append(o)
+        o.hide_render = True
+    print(f"[stohess] wall titan face: {sum(len(o.data.vertices) for o in keep)} verts kept in {len(keep)} objects", flush=True)
+    return keep
 
 def prune_veg():
     n = 0

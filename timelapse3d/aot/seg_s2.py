@@ -196,12 +196,12 @@ def build(site):
     steam = flares.PuffField("S2_Steam", kind="steam", alpha=0.75)
     te, pos, vel = [], [], []
     for k in range(180):
-        tt = rnd.uniform(29.5, 39.0)
+        tt = rnd.uniform(29.5, 35.5)
         base = SL.CRYSTAL if k % 2 else _off(SL.CRYSTAL, 9.0)
-        te.append(tt); pos.append(_W(base[0] + rnd.uniform(-6, 6), base[1] + rnd.uniform(-6, 6), rnd.uniform(2, 10))); vel.append((0, 0, rnd.uniform(4, 8)))
+        te.append(tt); pos.append(_W(base[0] + rnd.uniform(-6, 6), base[1] + rnd.uniform(-6, 6), rnd.uniform(2, 10))); vel.append((0, 0, rnd.uniform(1.5, 3.5)))
     for k in range(20):                                          # the severed fingers
         te.append(BEATS["cut"] + 0.05 * k); pos.append(_W(FOOT[0], FOOT[1], 44 + 12)); vel.append((0, 0, 2))
-    steam.add_many(te, pos, vel, r0=2.5, r1=12.0, life=4.0, rise=4.0)
+    steam.add_many(te, pos, vel, r0=2.5, r1=10.0, life=3.5, rise=1.5)
     steam.build(c); S_["steam"] = steam
     TRACK.update(MIKASA=lambda t: _mik(t)[0] if 24.0 <= t < 26.2 else None,
                  HANGE=lambda t: _W(*_off(SL.wall_inner(SL.CLIMB_ANG + 0.012, -5.0)[0], 0.0), 52.0) if t >= 35.0 else None)
@@ -246,8 +246,8 @@ def update(t):
         if o is not None:
             o.hide_render = t >= BEATS["church"] + 0.3
     S_["rubble"].hide_render = t < BEATS["church"] + 0.3
-    if S_["face"] is not None:
-        S_["face"].hide_render = t < BEATS["face"]
+    for o in (S_["face"] or []):
+        o.hide_render = t < BEATS["face"]
     u = C.ss(*BEATS["crystal"], t)
     s = max(0.01, u)
     S_["crystal"].scale = (2.4 * s, 1.3 * s, 1.1 * s)
