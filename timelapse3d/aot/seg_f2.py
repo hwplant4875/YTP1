@@ -132,15 +132,15 @@ CAM_KEYS = [
     _side_key(1.7, 70.0, 70.0), _chase_key(3.4, 1), _chase_key(5.5, -1), _chase_key(8.0, 1), _chase_key(10.5, -1), _chase_key(12.6, 1),
     (14.0, F(TX + 55, TY - 70, 42.0), F(TX, TY - 10, 10.0), 32.0),      # the riders pass the racks; she leaps
     (15.2, F(TX + 40, TY - 45, 30.0), F(TX, TY, 10.0), 36.0),           # push-in on the volley
-    (18.5, F(TX - 45, TY - 50, 46.0), F(TX, TY, 9.0), 32.0),            # orbit: pinned, hands over the nape
-    (22.0, F(TX - 55, TY + 25, 52.0), F(TX, TY, 13.0), 32.0),           # Levi on her head, fingers hardened
+    (18.5, F(TX - 45, TY - 50, 46.0), F(TX, TY, 9.0), 43.0),            # orbit: pinned, hands over the nape (r6: zoom 32 -> 43)
+    (22.0, F(TX - 55, TY + 25, 52.0), F(TX, TY, 13.0), 41.0),           # Levi on her head, fingers hardened (r6: 41 mm)
     (25.0, F(TX - 30, TY - 40, 120.0), F(TX, TY + 10, 40.0), 28.0),     # up to the canopy gap: blue / green smoke
     (26.8, F(TX - 22, TY + 28, 20.0), F(TX, TY, 15.5), 38.0),           # push-in: the SCREAM
     (31.0, F(TX - 40, TY - 140, 150.0), F(TX, TY, 0.0), 28.0),          # pull up: titans converge
     (DUR, SEAM_F3["pos"], SEAM_F3["look"], SEAM_F3["lens"]),
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_IN["vel"], v_out=SEAM_F3["vel"])
-CAM_LIMITS = dict(speed=600.0, yaw=90.0, hmin=12.0, hmax=300.0, pitch=(0.0, 85.0), lens=(27.0, 39.0))
+CAM_LIMITS = dict(speed=600.0, yaw=90.0, hmin=12.0, hmax=300.0, pitch=(0.0, 85.0), lens=(27.0, 44.0))
 PLAN = [(0.0, "day"), (20.0, "day"), (DUR, "afternoon")]
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
