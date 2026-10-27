@@ -97,9 +97,9 @@ CAM_KEYS = [                                                   # approach from t
     _k(9.0, (-40.0, 420.0, 380.0), (-140.0, 30.0, 0.0), 30.0),             # Stohess, morning: the avenue from the north
     _k(11.6, (-150.0, 150.0, 160.0), (-175.0, 30.0, 0.0), 34.0),           # the carriage, the four walking
     _k(14.2, (-140.0, 98.0, 50.0), (SL.STAIRS[0], SL.STAIRS[1] - 4, 2.0), 42.0),   # push-in: Annie at the stairs
-    _k(18.0, (-110.0, 215.0, 170.0), (-150.0, 55.0, 12.0), 30.0),          # pull back: the beam, she rises
-    _k(21.6, (-60.0, 150.0, 115.0), (-90.0, 32.0, 10.0), 38.0),            # Plan C from the roofs (v2: closer, QA)
-    _k(26.0, (10.0, 150.0, 140.0), (-20.0, 20.0, 8.0), 37.0),              # the rampage down the avenue (v2: on the fight)
+    _k(18.0, (-118.0, 150.0, 85.0), (-148.0, 58.0, 12.0), 34.0),           # pull back: the beam, she rises (v3: ~100 m, was 230)
+    _k(21.6, (-72.0, 100.0, 58.0), (-90.0, 32.0, 10.0), 40.0),             # Plan C from the roofs (v3: ~85 m, was 160)
+    _k(26.0, (-28.0, 85.0, 62.0), (-20.0, 18.0, 9.0), 38.0),               # the rampage down the avenue (v3: ~85 m on her)
     (DUR, SEAM_S2["pos"], SEAM_S2["look"], SEAM_S2["lens"]),
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_IN["vel"], v_out=SEAM_S2["vel"])
