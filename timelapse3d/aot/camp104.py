@@ -8,7 +8,7 @@ can import it too, so both sides of the seam show the same camp:
 Frame M, centre C = (-1450, 1520), u east, v north (bible g3): sunken quarry bowl (floor ellipse 230 x 170 m, rim 14 m, 18-22 m
 SW, fluted cliffs, inner rock step), back terrace huts (v +70), lattice watchtower 20 m (u -45, v +70) with a stair box on its
 east face, east-terrace huts (u +70..+110), mess hall 26 x 8 m (u -15, v -45) with an 8-window band, veranda, porch lantern,
-chimney and the graduation stair (14 steps x 30 m) + 2 tripod braziers on its front, pole field 16 x 8 (u +25, v +5),
+chimney and the graduation stair (14 steps x 30 m) + 2 tripod braziers on its front, (pole field removed 10/27, owner),
 4 A-frame rigs (v +38; u -10/+12/+34/+56), huts (u -95, v -50) and (u -110, v -5), barbed post fence W -> mid-N, pointed
 palisade mid-N -> E continuing 320 m east.
 g3 agent 10/27 (cloud QA "reads as a stadium"): the bowl is now SUNK into the plain: build() cuts world.py's WD_Ground cells over
@@ -272,12 +272,7 @@ def build(L, M2S, ground_M, coll, seed=104):
             for sy in (-1, 1):
                 L.cyl(bm, (q.x + sx * 3.0, q.y + sy * 2.2, q.z), tuple(a_), 0.09, 0.08, seg=4, mi=5)
         L.cyl(bm, (q.x - 3.0, q.y, q.z + 7.4), (q.x + 3.0, q.y, q.z + 7.4), 0.08, 0.08, seg=4, mi=5)
-    # pole field 16 x 8 poles centred (u +25, v +5)
-    for i in range(16):
-        for j in range(8):
-            u, v = 25.0 + (i - 7.5) * 3.0, 5.0 + (j - 3.5) * 3.0
-            q = Vector(P(u, v, gz(u, v)))
-            L.cyl(bm, (q.x, q.y, q.z), (q.x, q.y, q.z + 6.0 + 1.5 * ((i * 7 + j * 3) % 3)), 0.14, 0.12, seg=4, mi=6)
+    # (owner 10/27 07:34: the pole field 16 x 8 at (u +25, v +5) is REMOVED: "the field of many sticks"; material slot 6 kept unused)
     ob = L.obj_from_bm("CP_Buildings", bm, [M["wall"], M["roof"], M["stone"], M["dark"], M["steel"], M["steel"], M["pole"]], coll)
     st["objs"].append(ob)
     st["objs"].append(L.obj_from_bm("CP_Windows", wb, [win_m], coll))

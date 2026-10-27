@@ -1,32 +1,33 @@
-"""g3 FLIGHT NORTH, REFUGEE CAMPS, 846 MARCH, 104th CAMP (SCENE_BIBLE_v2 B.g3, 78.4 s; frames W -> M).
-Driven by aot/render_seg.py (render_seg.sh).  Every frame is a pure function of the local time t (0..78.4).
+"""g3 FLIGHT NORTH, FARM, 846 MARCH, 104th CAMP (SCENE_BIBLE_v2 B.g3; v5 local 61.8 s = 40.4 s of VIDEO; frames W -> M).
+Driven by aot/render_seg.py (render_seg.sh VCLOCK=1).  Every frame is a pure function of the local time t (0..DUR); the
+video plays it through segtime.TMAP["g3"]: slope 2 everywhere, eased to slope 1 (REAL time) over the march846 span.
+
+v5 (owner 10/27 07:34, binding): farm building faster + clearly visible; NO winter (no snow / snowmelt / winter light),
+straight to 846; the 250,000 march on march846.py's ORIGINAL camera (angle, path, real-time pacing); no sun glow cards /
+sunset ridge hold; the camp seasons only as a quick summer -> autumn time-lapse; camp104's pole field removed.
 
 TWO SETS (allowed by the lead: "separate sets per sub-part"), one camera:
   part A  t 0 .. BEATS["set_switch"]   SEG_SET=shiganshina (SEG_FRAME=W): the g2 end look (scene.py Shiganshina 845 + g1's
           plug-ins + g2's own canal / quays / ferries, imported from seg_g2), dusk -> night.  CAM is served in frame W.
-  part B  set_switch .. 78.4           AOT_SET=trost (frame M): the night flight on, dawn, the relief complex / shelter camp /
-          clearing at the Rose foot, the 846 gathering, march846 (its own simulation + spline, re-lit), the flight to the
-          104th camp (camp104.py, shared with g4) and the camp beats.
-  The switch sits at full night over open world ground (world.py's bit-identical layer + the g3 river, built the same way
-  in both parts); neither town core is in frame then.  Part-B windows only build what their window can see (G3_PARTS, from
-  the driver's --t0/--t1): march846 only for windows that touch 31.3-49.3, the camp only from 49.3 (it did not exist in 846).
-    SEG=g3 SEG_SET=shiganshina WIN=0,6 bash render_seg.sh      part A
-    SEG=g3 WIN=6,31.3 bash render_seg.sh  ... (part B windows) ; SEG=g3 ENCODE_ONLY=1 bash render_seg.sh
+  part B  set_switch .. DUR            AOT_SET=trost (frame M): the night flight on, dawn, the relief complex / shelter camp /
+          the farm clearing at the Rose foot, the 846 gathering, march846 (its own simulation + ORIGINAL spline, re-lit), the
+          flight to the 104th camp (camp104.py, shared with g4) and the camp beats.
+  The switch sits at full night over open world ground; neither town core is in frame then.  Part-B windows only build what
+  their window can see (PART_SPANS, from the driver's --t0/--t1; with --vclock those are VIDEO seconds and are mapped here).
+    VCLOCK=1 SEG=g3 SEG_SET=shiganshina WIN=0,3 bash render_seg.sh      part A (local 0-6 = video 0-3)
+    VCLOCK=1 SEG=g3 WIN=3,13.6 bash render_seg.sh  ... (part B windows) ; VCLOCK=1 SEG=g3 ENCODE_ONLY=1 bash render_seg.sh
 
-Story (group-local seconds; every time lives in BEATS, the ONE re-time table; camera keys are built from it):
-  0-12.9   flight north at 240-380 m, explicit speed profile (45 -> 369 m/s by 3.7, cruise to 9.0, one deceleration to
-           rest at H 17.7): ferries on the wide teal river below (0-3.7), girder bridges, night 5-9 (HUD "845: territory
-           reduced to Wall Rose"), Trost window dots and wall-top torches, dawn 9-12.9
-  12.9-17.7 over Wall Rose, decelerating to hover H above Trost's NW quarter
-  17.7-21  clear sunny morning: the relief cloister packed with refugees, the ration booth queue, the shelter camp, the
-           clearing beyond Rose (lens 28 -> 40)
-  21-27.2  time-lapse winter 845 (grey overcast, snow, hoe lines) -> spring 846 while the view pans ~160 deg via the WEST;
-           the avenue fills with the hooded 846 crowd (HUD "846: retake Wall Maria")
-  27.2-31.3 run to CAM_IN (march846's own start)
-  31.3-49.3 march846 (its simulation + its spline, unchanged), overcast, gold sunset over the SW ridge titans 42-49.3
-  49.3-63.4 flight to the camp; 63.4 enlistment (250 recruits 10 x 25, SHADIS walking the front); 66.7-69.2 the rigs (EREN
-           upside down on rig 2, MIKASA balanced on rig 1); 69.2-74.0 seasons x 3 (orbit); 74.0-78.4 graduation night
-           (218 graduates 9 x ~23, the top 10 at the stair foot, braziers), drifting SE to the g4 seam (= g4 G0, unchanged)
+Story (local seconds | video seconds; every time lives in BEATS + segtime.G3_MARCH):
+  0-17.7    | 0-8.85    flight north (explicit profile 45 -> 369 m/s), ferries, night (HUD "845: territory reduced to Wall
+                         Rose"), Trost window dots, dawn; from 13.0 the FARM: the conifer stand beyond Rose felled S -> N
+  17.7-26.6 | 8.85-13.55 the farm hold (H2 small zoom-in, plots ploughed -> planted -> green), then one turn via the west over
+                         the relief complex while the hooded 846 crowd fills the avenue (HUD "846: retake Wall Maria"), gate
+                         opens; the clock eases 2 -> 1 into CAM_IN
+  26.6-44.6 | 13.55-31.55 march846 at REAL time on its original spline; overcast, dimming as the column dies, a natural low gold
+                         sun breaking through over the last ~8 s
+  44.6-55.0 | 31.55-37.0 eased 1 -> 2; one night over the high crossing (846 -> 847), the camp rises; descent onto the camp
+  55.0-61.8 | 37.0-40.4  enlistment (250 recruits, SHADIS) + the rigs (EREN upside down, MIKASA) at once with a small zoom-in,
+                         a quick summer -> autumn time-lapse (no winter), graduation dusk/night, drifting to g4 G0 (unchanged)
 """
 import math, os, random, sys, time
 import numpy as np
@@ -43,7 +44,8 @@ import camchan
 import camkeys
 import segtime
 
-DUR = segtime.DUR["g3"]                   # 78.4
+DUR = segtime.DUR["g3"]                   # 61.6 (v5)
+_GM = segtime.G3_MARCH                    # (27.0, 45.0): the march span, played at slope 1 by segtime.TMAP["g3"]
 PART = "A" if os.environ.get("SEG_FRAME", "M").upper() == "W" else "B"
 MW = segtime.M_OFF_Y                      # M = W - (0, 4130)
 
@@ -57,19 +59,23 @@ BEATS = dict(
     dusk_night=(0.4, 5.0), night=(5.0, 9.0), dawn=(9.0, 12.9),
     hud_845=(5.2, 9.0),                    # "845: territory reduced to Wall Rose"
     lights_off=(9.6, 12.4),                # Trost window dots / torches fade
-    # ---- camps (17.7-31.3)
-    morning=(12.9, 17.7), H2=20.6, P1=22.4, P2=24.0, P3=25.6, H3=27.4, CAM_IN=31.3,
-    courtyard=(14.0, 22.0),                # the relief cloister packed, ration queue busy
-    winter=(20.2, 22.6), snow=(21.0, 24.2), spring=(23.6, 26.4),
-    crowd846=(23.0, 27.2),                 # the hooded 846 crowd fills the avenue
-    hud_846=(23.4, 27.2),                  # "846: retake Wall Maria"
-    gate_open=(25.0, 27.0),
-    # ---- march846 (31.3-49.3): its own clock tau = t - 31.3
-    march=(31.3, 49.3), sunset=(41.3, 49.3),
-    # ---- flight to the camp + the camp (49.3-78.4)
-    FT0=49.3, FT1=55.8, FT2=60.2, FT3=63.4, FT4=66.7, FT5=69.2, FT6=74.0, FT7=78.4,
-    camp_morning=(58.0, 63.4), enlist=(63.4, 66.7), rig=(66.7, 69.2), seasons=(69.2, 74.0), grad=(74.0, 78.4),
-    tag_shadis=(63.8, 66.6), tag_eren=(66.9, 69.6), tag_mikasa=(67.3, 69.6),
+    # ---- farm + 846 (17.7 - CAM_IN): the clearing beyond Rose felled + ploughed + planted (time-lapse, from 13.0 during the
+    #      approach), a small zoom-in at H2, then one turn via the west to CAM_IN while the 846 crowd fills the avenue.  NO winter.
+    morning=(12.9, 17.7), H2=20.0, P1=21.5, P2=22.9, P3=24.2, CAM_IN=_GM[0],
+    courtyard=(14.0, 21.0),                # the relief cloister packed, ration queue busy
+    fell=(13.0, 17.2),                     # the conifer stand on the clearing is felled south -> north
+    crop=(15.6, 20.4),                     # plots ploughed -> planted -> green, south -> north
+    workers=(13.0, 21.0),
+    crowd846=(20.4, 24.4),                 # the hooded 846 crowd fills the avenue
+    hud_846=(20.8, 25.2),                  # "846: retake Wall Maria"
+    gate_open=(22.6, 24.6),
+    # ---- march846 (segtime.G3_MARCH, real time in the video): its own clock tau = t - march[0]; natural low gold sun late
+    march=_GM, gold=(_GM[0] + 9.0, _GM[1]),
+    # ---- flight to the camp + the camp (march end .. DUR)
+    FT0=_GM[1], FT1=_GM[1] + 4.8, FT2=_GM[1] + 8.0, FT3=_GM[1] + 10.4, FT4=57.0, FT5=58.4, FT7=DUR,
+    camp_rise=(_GM[1] + 1.6, _GM[1] + 6.4),
+    enlist=(54.0, 57.2), rig=(54.6, 57.4), seasons=(57.2, 58.6), grad=(58.6, DUR),
+    tag_shadis=(53.8, 57.1), tag_eren=(54.2, 57.4), tag_mikasa=(54.5, 57.4),
 )
 B = BEATS
 
@@ -81,7 +87,7 @@ def W2M(p):
 _S_IN = segtime.seam("g2_g3")
 FLIGHT_KEYS = [(B["FA" + str(i)], W2M(c), W2M(l), ln) for i, (_, c, l, ln) in enumerate(camkeys.G3_FLIGHT_W)] + [
     (B["FA4"], (60.0, 170.0, 300.0), (-268.0, 805.0, 0.0), 30.0),          # FA4 = W (60, 4300, 300): over Wall Rose
-    (B["H"], (-145.0, 605.0, 250.0), (-330.0, 1020.0, 0.0), 28.0)]          # H (at rest)
+    (B["H"], tuple(map(float, camkeys.G3_CAMPS_M[1][1])), tuple(map(float, camkeys.G3_CAMPS_M[1][2])), 28.0)]   # H (look: the clearing)
 _PV = B["prof"]
 V_H = (-1.5, 4.5, 1.5)          # QA 10/27: no stall at H; the flight ends in a 5 m/s drift toward H2 (was: at rest)
 
@@ -105,93 +111,84 @@ _FL0 = camchan.CamPath(FLIGHT_KEYS, v_in=_S_IN["vel"], v_out=V_H)
 _FPROF = speed_profile_end(_PV[0], _PV[2], _PV[3], B["H"] - B["FA0"], float(np.linalg.norm(V_H)), _FL0.loc.total)
 FLIGHT = camchan.CamPath(FLIGHT_KEYS, v_in=_S_IN["vel"], v_out=V_H, profile=_FPROF)
 
-# camps: H (rest) .. CAM_IN with the march846 entry velocity.  The pan is spread a little wider (H2 21.0 -> 20.6, P1-P3
-# 22.55/24.1/25.65 -> 22.4/24.0/25.6, H3 27.2 -> 27.4; bible look-ats kept) so it peaks at 26.8 deg/s (camcheck: 31.9 at 26.4).
+# farm + 846 (v5, owner 10/27): H .. CAM_IN.  H2 is a small zoom-in on the clearing (the farm time-lapse), then ONE turn via
+# the west (~115 deg, was 160) over the relief complex and the avenue filling with the 846 crowd, to CAM_IN.  The video clock
+# eases 2 -> 1 over the last 1.2 video s before CAM_IN (segtime.TMAP["g3"]), so the march starts at its own real-time speed.
 CI = camkeys.CAM_IN
-_CK = camkeys.G3_CAMPS_M[1:8]                                       # H, H2, P1, P2, P3, H3, CAM_IN (positions / look-ats / lens)
-CAMP_KEYS = [(B[n], tuple(map(float, k[1])), tuple(map(float, k[2])), float(k[3])) for n, k in zip(("H", "H2", "P1", "P2", "P3", "H3", "CAM_IN"), _CK)]
+_CK = camkeys.G3_CAMPS_M[1:7]                                       # H, H2, P1, P2, P3, CAM_IN (positions / look-ats / lens)
+CAMP_KEYS = [(B[n], tuple(map(float, k[1])), tuple(map(float, k[2])), float(k[3])) for n, k in zip(("H", "H2", "P1", "P2", "P3", "CAM_IN"), _CK)]
 _LH = FLIGHT.eval(B["H"])[1] - FLIGHT.eval(B["H"] - 1e-3)[1]
 CAMPS = camchan.CamPath(CAMP_KEYS, v_in=V_H, look_v_in=tuple(float(x) / 1e-3 for x in _LH), v_out=CI["vel"], look_v_out=CI["look_vel"])
 
-# march846 camera.  march846.py's own spline (CAM_KEYS, a pure time Hermite) breaks the A3 limits inside g3 (camchan: 458 m/s,
-# 57 deg/s, 81 m, pitch 11): it is re-driven HERE (march846.py untouched) on the same route with arc-length channels + an
-# explicit speed profile (a flight exception like the g3 flight: ramp 64 -> ~290 m/s, slow 150-140 m/s over the low east-flank
-# pass, ~290 back up, 95 m/s out), the low pass raised to 140-160 m (owner "far is better"), look-ats pulled in to keep
-# pitch >= 17 and the yaw <= 30 deg/s; CAM_IN (position, look-at, lens, both velocities) and CAM_OUT (position, look-at, lens)
-# are unchanged.  The CAM_OUT climb (0, 95, 22) -> level (0, 95, 0): with the climb the flight to the camp overshot 650 m
-# (camcheck g3_to_camp 681 m).  Key positions: march846's (a outward from the gate = south, b lateral = east, z), set frame.
+# march846 camera: the ORIGINAL march846.py spline, restored (owner 10/27 07:34: "the original camera angle and speed were
+# good; now it points at a weird place").  march846.CAM_KEYS + its time Hermite (_tangents / _herm, cam_at) transcribed
+# 1:1 here in pure numpy (march846.py needs bpy); seg_g3.check() compares it with MR.cam_at.  march846's clock tau = t -
+# march[0] runs at REAL time in the video (TMAP slope 1 over the march span), i.e. exactly the original preview's pacing.
+# It breaks the A3 limits on purpose (camchan: ~458 m/s, ~57 deg/s, 81 m, pitch 11): the owner's preference wins.
+# Set frame (march846's GATE = Trost outer gate (0, -870); outward = south, lateral +b = east); M = set + (0, 870).
 _MG, _MF, _MR = np.array([0.0, -870.0]), np.array([0.0, -1.0]), np.array([1.0, 0.0])
 def _gp(a, b, z):
     p = _MG + _MF * a + _MR * b
     return (float(p[0]), float(p[1]), float(z))
 MARCH_T_END = 18.0
-MARCH_KEYS_SET = [                                                  # (tau, cam, look-at, lens) set frame; march846 keys in []
-    (0.0,  _gp(-170, 170, 125),  _gp(60, -10, 0),    27),         # = march846 CAM_IN
-    (1.8,  _gp(-60, 200, 135),   _gp(260, -10, 0),   27),         # = march846
-    (3.6,  _gp(330, 240, 180),   _gp(800, -20, 0),   27),         # [3.4 (260,230,175) -> (980,-20)]
-    (6.0,  _gp(1080, 340, 225),  _gp(1640, -40, 0),  28),         # [5.6 (1150,380,230) -> (2200,-40)]
-    (8.0,  _gp(1720, 270, 160),  _gp(2100, -60, 0),  31),         # [7.6 (1780,260,120) -> (2080,0)]
-    (10.0, _gp(2020, 200, 140),  _gp(2120, -220, 0), 33),         # [9.6 (2060,190,92) -> (2290,-15)] low east-flank pass
+MARCH_CAM_KEYS = [                                                  # = march846.CAM_KEYS (set frame)
+    (0.0,  _gp(-170, 170, 125),  _gp(60, -10, 0),    27),
+    (1.8,  _gp(-60, 200, 135),   _gp(260, -10, 0),   27),
+    (3.4,  _gp(260, 230, 175),   _gp(980, -20, 0),   27),
+    (5.6,  _gp(1150, 380, 230),  _gp(2200, -40, 0),  28),
+    (7.6,  _gp(1780, 260, 120),  _gp(2080, 0, 0),    31),
+    (9.6,  _gp(2060, 190, 92),   _gp(2290, -15, 0),  33),
+    (12.2, _gp(2150, 950, 400),  _gp(1700, -100, 0), 28),
+    (15.0, _gp(1500, 650, 560),  _gp(700, 0, 0),     28),
+    (18.0, _gp(1050, 260, 640),  _gp(-150, 0, 40),   28),
 ]
-# QA 10/27: after the low pass the camera rises and HOLDS on the SW sunset ridge (~43.3-45.8 s, 46-48 mm, ~850-900 m: the
-# titans against the low gold sun, ep02 20:09.0), then turns north to CAM_OUT.  Frame M.
-RIDGE_LOOK = (-300.0, -1590.0, 15.0)
-MARCH_TAIL_M = [
-    (12.6, (400.0, -2040.0, 350.0), RIDGE_LOOK, 48),
-    (14.0, (450.0, -1920.0, 350.0), RIDGE_LOOK, 50),
-    (16.2, (380.0, -1420.0, 520.0), (-100.0, -650.0, 20.0), 34),
-    (18.0, _gp(1050, 260, 640), _gp(-150, 0, 40), 28),            # = march846 CAM_OUT (set frame; converted below)
-]
-MARCH_KNOTS = [(0.0, 63.6), (1.5, 80.0), (3.8, 300.0), (7.0, 300.0), (8.6, 245.0), (10.0, 150.0)]
-MARCH_FREE = (2, 3)                                                 # knots scaled so the profile covers the route exactly
-MARCH_JOIN_V = 150.0                                                # m/s at the low pass (the profiled part hands over)
-MARCH_OUT_VEL = tuple(map(float, camkeys.CAM_OUT["vel"]))       # (0, 95, 0)
+MARCH_OUT_VEL = tuple(float(x) for x in (-_MF * 95.0).tolist() + [22.0])   # = march846.CAM_OUT_VEL (0, 95, 22): leaves rising north
 
-def shaped_profile(knots, free, total):
-    """Progress fraction f(t) for a drive whose speed follows the PCHIP through knots [(t, v)] (start / end speeds fixed;
-    the `free` knots are scaled by one factor so the distance equals `total`)."""
-    ts = np.array([k[0] for k in knots], float)
-    def build(k):
-        vs = np.array([v * (k if i in free else 1.0) for i, (_, v) in enumerate(knots)])
-        m = camchan.pchip_m(list(ts), list(vs)); m[0] = 0.0; m[-1] = 0.0
-        tt = np.linspace(ts[0], ts[-1], 3601); vv = np.array([camchan.pchip(ts, vs, m, x) for x in tt])
-        return tt, np.concatenate([[0.0], np.cumsum(0.5 * (vv[1:] + vv[:-1]) * np.diff(tt))])
-    lo, hi = 0.05, 20.0
-    for _ in range(50):
-        k = (lo + hi) / 2
-        if build(k)[1][-1] < total: lo = k
-        else: hi = k
-    tt, s = build((lo + hi) / 2)
-    tt = tt - tt[0]; s = s / s[-1]
-    return lambda t: float(np.interp(t, tt, s))
+def _m_tangents(T, P, v_in=None, v_out=None):
+    n = len(T); M = []
+    for i in range(n):
+        if i == 0:
+            M.append(np.array(v_in, float) if v_in is not None else (P[1] - P[0]) / (T[1] - T[0]))
+        elif i == n - 1:
+            M.append(np.array(v_out, float) if v_out is not None else (P[-1] - P[-2]) / (T[-1] - T[-2]))
+        else:
+            d0 = (P[i] - P[i - 1]) / (T[i] - T[i - 1]); d1 = (P[i + 1] - P[i]) / (T[i + 1] - T[i])
+            h0, h1 = T[i] - T[i - 1], T[i + 1] - T[i]
+            M.append((d0 * h1 + d1 * h0) / (h0 + h1))
+    return M
 
-_T0M = B["march"][0]
-def _sM(p):
-    return (float(p[0]), float(p[1]) + 870.0, float(p[2]))
-MARCH_KEYS = [(_T0M + t, _sM(c), _sM(l), ln) for t, c, l, ln in MARCH_KEYS_SET]
-_jd = np.array(MARCH_KEYS[-1][1]) - np.array(MARCH_KEYS[-2][1]); _jd /= np.linalg.norm(_jd)
-_VJ = tuple(float(x) for x in _jd * MARCH_JOIN_V)
-_mk = dict(v_in=CI["vel"], look_v_in=CI["look_vel"], v_out=_VJ)
-MARCH1 = camchan.CamPath(MARCH_KEYS, profile=shaped_profile(MARCH_KNOTS, MARCH_FREE, camchan.CamPath(MARCH_KEYS, **_mk).loc.total), **_mk)
-_tj = MARCH_KEYS[-1][0]
-_LJ = tuple(float(x) for x in (MARCH1.eval(_tj)[1] - MARCH1.eval(_tj - 1e-3)[1]) / 1e-3)
-MARCH2_KEYS = [MARCH_KEYS[-1]] + [(_T0M + t, tuple(c) if k < 3 else _sM(c), tuple(l) if k < 3 else _sM(l), ln)
-                                  for k, (t, c, l, ln) in enumerate(MARCH_TAIL_M)]
-MARCH2 = camchan.CamPath(MARCH2_KEYS, v_in=_VJ, look_v_in=_LJ, v_out=MARCH_OUT_VEL)
+def _m_herm(T, P, M, t):
+    t = min(max(t, T[0]), T[-1])
+    i = min(len(T) - 2, int(np.searchsorted(T, t, side="right") - 1))
+    h = T[i + 1] - T[i]; s = (t - T[i]) / h
+    h00, h10, h01, h11 = 2 * s ** 3 - 3 * s ** 2 + 1, s ** 3 - 2 * s ** 2 + s, -2 * s ** 3 + 3 * s ** 2, s ** 3 - s ** 2
+    return h00 * P[i] + h10 * h * M[i] + h01 * P[i + 1] + h11 * h * M[i + 1]
 
 class _MarchCam:
-    notes = []
+    """march846.cam_at(tau) in frame M, tau = t - march[0] (local t)."""
+    def __init__(self):
+        T = np.array([k[0] for k in MARCH_CAM_KEYS], float)
+        PL = [np.array(k[1], float) + np.array([0.0, 870.0, 0.0]) for k in MARCH_CAM_KEYS]
+        PT = [np.array(k[2], float) + np.array([0.0, 870.0, 0.0]) for k in MARCH_CAM_KEYS]
+        LN = [np.array([math.log(k[3])]) for k in MARCH_CAM_KEYS]
+        self.T, self.PL, self.PT, self.LN = T, PL, PT, LN
+        self.ML = _m_tangents(T, PL, v_out=np.array(MARCH_OUT_VEL)); self.MT = _m_tangents(T, PT)
+        self.MN = _m_tangents(T, LN, v_in=np.zeros(1), v_out=np.zeros(1))
+        self.notes = ["march846 original spline (time Hermite), real time inside g3: limits not enforced (owner)"]
+    def eval_tau(self, tau):
+        loc = _m_herm(self.T, self.PL, self.ML, tau); tgt = _m_herm(self.T, self.PT, self.MT, tau)
+        return loc, tgt, math.exp(float(_m_herm(self.T, self.LN, self.MN, tau)[0]))
     def eval(self, t):
-        return MARCH1.eval(t) if t <= _tj else MARCH2.eval(t)
+        return self.eval_tau(t - B["march"][0])
 MARCH = _MarchCam()
-MARCH.notes = MARCH1.notes + MARCH2.notes
-MARCH_LOOK_OUT_VEL = tuple(float(x) for x in (MARCH.eval(B["march"][1])[1] - MARCH.eval(B["march"][1] - 1e-3)[1]) / 1e-3)
+MARCH_LOOK_OUT_VEL = tuple(float(x) for x in MARCH.MT[-1])                 # (0, 283.3, 13.3) = camkeys.CAM_OUT look_vel
 
-# flight to the camp: FT0 = march846.CAM_OUT (its velocity in, level, no overshoot: FT1 lowered 520 -> 420, FT2 20 m nearer: 294 m/s), the camp
-# keys FT3-FT5 pulled BACK and UP to 150-185 m / 250-340 m out (owner 16:51 "far is better"; were 95 / 85 / 70 m), FT6-FT7 kept,
-# FT7 = g4 G0 (segtime g3_g4, look-at at rest: g4 starts its look-at from rest).
+# flight to the camp (v5): FT0 = march846.CAM_OUT with its ORIGINAL climb (0, 95, 22) and look-at rate; a high fast crossing
+# (the video clock eases 1 -> 2 over the first 1.2 video s) and a descent onto the 104th camp; FT3-FT5 the camp (FT4 = a small
+# zoom-in on the enlistment + the rigs), FT7 = g4 G0 (segtime g3_g4, look-at at rest: g4 starts its look-at from rest).
 CO = camkeys.CAM_OUT
-TOCAMP_KEYS = [(B["FT%d" % i], tuple(map(float, k[1])), tuple(map(float, k[2])), float(k[3])) for i, k in enumerate(camkeys.G3_TO_CAMP_M)]
+TOCAMP_KEYS = [(B[n], tuple(map(float, k[1])), tuple(map(float, k[2])), float(k[3]))
+               for n, k in zip(("FT0", "FT1", "FT2", "FT3", "FT4", "FT5", "FT7"), camkeys.G3_TO_CAMP_M)]
 _S_OUT = segtime.seam("g3_g4")
 TOCAMP = camchan.CamPath(TOCAMP_KEYS, v_in=MARCH_OUT_VEL, look_v_in=MARCH_LOOK_OUT_VEL, v_out=_S_OUT["vel"], look_v_out=(0.0, 0.0, 0.0))
 
@@ -227,13 +224,32 @@ CAM_RUNS = [("g3 flight (profile)", 0.0, B["H"], dict(speed=400.0)), ("g3 camps"
             ("g3 march846", B["march"][0], B["march"][1], dict(speed=300.0)),
             ("g3 to camp", B["FT0"], B["FT3"], dict(speed=300.0)), ("g3 camp", B["FT3"], DUR, dict(speed=150.0))]
 
+class _VCam:
+    """CAM_M on the VIDEO clock (segtime.seg_t): what the viewer sees (m/s and deg/s per video second)."""
+    def __init__(self):
+        self.t0, self.t1, self.notes = 0.0, segtime.vdur("g3"), []
+    def eval(self, tv):
+        return CAM_M.eval_m(segtime.seg_t("g3", tv))
+VCAM = _VCam()
+
+def vcheck(quiet=False):
+    """camchan.check per beat on the VIDEO clock (limits = the A3 ones x SPEED: the owner's 2x)."""
+    tv = lambda t: segtime.to_video("g3", t)
+    runs = [("v flight", 0.0, B["H"]), ("v farm+846 (ease 2->1)", B["H"], B["CAM_IN"]), ("v march846 (real time)", *B["march"]),
+            ("v to camp (ease 1->2)", B["FT0"], B["FT3"]), ("v camp", B["FT3"], DUR)]
+    out = []
+    for nm, a, b_ in runs:
+        out.append(camchan.check(VCAM, tv(a), tv(b_), limits=dict(name=nm + " [video %.2f-%.2f s]" % (tv(a), tv(b_)), speed=None,
+                                                                    yaw=60.0, flip=180.0, hmax=650.0), quiet=quiet))
+    return out
+
 def cam_report(ground=lambda x, y: 0.0, quiet=False):
     """camchan.check over the whole segment and per run; seam velocities (m/s) vs segtime / march846."""
     out = []
     for name, a, b_, lim in CAM_RUNS:
         L_ = dict(CAM_LIMITS); L_.update(lim); L_["name"] = name
         out.append(camchan.check(CAM_M, a, b_, ground=ground, limits=L_, quiet=quiet))
-    L_ = dict(CAM_LIMITS); L_.update(speed=400.0, name="g3 whole (0-78.4)")
+    L_ = dict(CAM_LIMITS); L_.update(speed=None, name="g3 whole (local 0-DUR)")
     out.append(camchan.check(CAM_M, 0.0, DUR, ground=ground, limits=L_, quiet=quiet))
     h = 1e-3
     def v(t, side):
@@ -243,18 +259,18 @@ def cam_report(ground=lambda x, y: 0.0, quiet=False):
     rows = [("g2->g3 in (0.0)", v(0.0, 1), np.array(_S_IN["vel"], float)),
             ("H drift (17.7) before/after", v(B["H"], -1), v(B["H"], 1)),
             ("H look before/after", lv(B["H"], -1), lv(B["H"], 1)),
-            ("CAM_IN (31.3) before/after", v(B["CAM_IN"], -1), v(B["CAM_IN"], 1)),
+            ("CAM_IN before/after", v(B["CAM_IN"], -1), v(B["CAM_IN"], 1)),
             ("CAM_IN look before/after", lv(B["CAM_IN"], -1), lv(B["CAM_IN"], 1)),
-            ("CAM_OUT (49.3) before/after", v(B["FT0"], -1), v(B["FT0"], 1)),
+            ("CAM_OUT before/after", v(B["FT0"], -1), v(B["FT0"], 1)),
             ("CAM_OUT look before/after", lv(B["FT0"], -1), lv(B["FT0"], 1)),
-            ("g3->g4 out (78.4)", v(DUR, -1), np.array(_S_OUT["vel"], float))]
+            ("g3->g4 out (DUR)", v(DUR, -1), np.array(_S_OUT["vel"], float))]
     if not quiet:
         print("g3 seams (m/s):")
         for nm, a, b_ in rows:
             print("  %-30s %s | %s" % (nm, np.round(a, 1), np.round(b_, 1)))
         p0 = CAM_M.eval_m(0.0); p1 = CAM_M.eval_m(DUR)
         print("  pos 0.0  M", np.round(p0[0], 2), "look", np.round(p0[1], 2), "lens %.1f" % p0[2], "(W: +4130 y)")
-        print("  pos 78.4 M", np.round(p1[0], 2), "look", np.round(p1[1], 2), "lens %.1f" % p1[2], "(g4 G0", _S_OUT["pos"], _S_OUT["look"], ")")
+        print("  pos DUR  M", np.round(p1[0], 2), "look", np.round(p1[1], 2), "lens %.1f" % p1[2], "(g4 G0", _S_OUT["pos"], _S_OUT["look"], ")")
     return out, rows
 
 
@@ -281,14 +297,19 @@ MORNING = (30.0, 115.0, 3.4, (1.00, 0.96, 0.92), (0.10, 0.28, 0.74), (0.70, 0.80
 SPRING = (32.0, 125.0, 3.3, (1.00, 0.96, 0.92), (0.10, 0.28, 0.74), (0.70, 0.80, 0.93), 0.25, 1.0)
 SUMMER = (52.0, 165.0, 3.8, (1.00, 0.97, 0.90), (0.08, 0.26, 0.78), (0.66, 0.78, 0.94), 0.27, 1.0)
 AUTUMN = (24.0, 215.0, 3.0, (1.00, 0.80, 0.58), (0.20, 0.30, 0.60), (0.88, 0.74, 0.58), 0.22, 1.0)
-WINTER = (20.0, 165.0, 1.2, (0.86, 0.89, 0.96), (0.40, 0.43, 0.48), (0.62, 0.64, 0.68), 0.24, 0.9)
 OVERCAST = (30.0, 160.0, 2.0, (1.00, 0.97, 0.92), (0.38, 0.42, 0.48), (0.66, 0.68, 0.70), 0.30, 1.0)
-SUNSET = (5.0, 300.0, 5.4, (1.00, 0.74, 0.36), (0.36, 0.40, 0.62), (1.00, 0.84, 0.50), 0.16, 1.0)      # QA 10/27: warm GOLD (#f5f2cd sky), sun WNW behind the ridge
-G_ID, G_WIN, G_AUT, G_SUM = ((1.0, 1.0, 1.0), 0.0), ((0.95, 0.98, 1.05), -0.6), ((1.06, 0.98, 0.88), -0.1), ((1.02, 1.0, 0.98), 0.05)
-H_WIN, H_OVC = (1800.0, 0.62, (0.62, 0.64, 0.68)), (3200.0, 0.50, (0.62, 0.64, 0.68))
-_SEAS = [("spring", SPRING, G_ID, HAZE0), ("summer", SUMMER, G_SUM, HAZE0), ("autumn", AUTUMN, G_AUT, (3200.0, 0.6, (0.86, 0.78, 0.66))),
-         ("winter", WINTER, G_WIN, H_WIN)]
-SEASON_T = [B["seasons"][0] + 0.4 * k for k in range(12)]                 # 3 cycles of spring-summer-autumn-winter, 0.4 s each
+G_ID, G_AUT, G_SUM = ((1.0, 1.0, 1.0), 0.0), ((1.06, 0.98, 0.88), -0.1), ((1.02, 1.0, 0.98), 0.05)
+H_OVC = (3200.0, 0.50, (0.62, 0.64, 0.68))
+# v5 (owner 10/27): NO winter anywhere (no snow, no snowmelt, no winter light).  Farm under the clear morning; the 846 march
+# overcast as march846's own mood (dimming as the column dies), then a natural low GOLD sun breaking through in the WNW for
+# its last ~8 s (no glow cards / ridge hold); one night over the flight to the camp (846 -> 847); the camp: spring morning ->
+# a quick summer -> autumn gold time-lapse (no winter) -> dusk -> graduation night (= g4 t 0).
+GOLD = (14.0, 288.0, 3.6, (1.00, 0.78, 0.48), (0.30, 0.36, 0.58), (0.96, 0.80, 0.56), 0.20, 1.0)
+DUSK2 = (2.0, 250.0, 2.4, (1.0, 0.55, 0.36), (0.18, 0.18, 0.34), (0.80, 0.46, 0.34), 0.12, 0.6)
+DAWN2 = (8.0, 84.0, 2.2, (1.0, 0.72, 0.48), (0.12, 0.22, 0.52), (0.95, 0.70, 0.52), 0.19, 0.75)
+NIGHT2 = (20.0, 245.0, 0.35, (0.55, 0.65, 1.0), (0.02, 0.03, 0.07), (0.06, 0.07, 0.12), 0.07, 0.3)
+G_OVC, G_DIM = ((1.0, 1.0, 1.0), -0.15), ((0.98, 0.99, 1.02), -0.45)
+_m0, _m1 = B["march"]
 LKEYS = [  # (t, light, grade, haze)
     (0.0, DUSK, ((1.0, 1.0, 1.0), 0.15), HAZE0),
     (2.6, (1.0, 262.0, 2.2, (1.0, 0.50, 0.40), (0.25, 0.20, 0.32), (0.70, 0.36, 0.30), 0.10, 0.6), ((0.95, 0.92, 1.0), -0.6),
@@ -296,31 +317,23 @@ LKEYS = [  # (t, light, grade, haze)
     (B["night"][0], NIGHT, NIGHT_G, NIGHT_H), (B["night"][1], NIGHT, NIGHT_G, NIGHT_H),
     (10.8, (4.0, 78.0, 0.60, (1.0, 0.62, 0.45), (0.05, 0.07, 0.18), (0.55, 0.36, 0.32), 0.11, 0.45), ((1.0, 0.92, 0.95), -1.4),
      (2600.0, 0.70, (0.62, 0.50, 0.52))),
-    (B["FA4"], (8.0, 84.0, 2.2, (1.0, 0.72, 0.48), (0.12, 0.22, 0.52), (0.95, 0.70, 0.52), 0.19, 0.75), ((1.05, 0.98, 0.92), -0.45),
-     (2200.0, 0.80, (0.86, 0.76, 0.70))),
-    (B["H"], MORNING, G_ID, HAZE0), (B["winter"][0], MORNING, G_ID, HAZE0),
-    (B["winter"][1] - 1.2, WINTER, G_WIN, H_WIN), (B["snow"][1] - 0.6, WINTER, G_WIN, H_WIN),
-    (B["spring"][1] - 1.0, OVERCAST, ((1.0, 1.0, 1.0), -0.15), H_OVC), (B["march"][0], OVERCAST, ((1.0, 1.0, 1.0), -0.15), H_OVC),
-    (B["sunset"][0] - 2.0, (26.0, 230.0, 1.6, (1.0, 0.92, 0.84), (0.34, 0.38, 0.46), (0.64, 0.64, 0.66), 0.28, 0.95),
-     ((1.0, 0.99, 0.97), -0.3), H_OVC),
-    (B["sunset"][0] + 2.2, SUNSET, ((1.18, 1.02, 0.74), 0.15), (2600.0, 0.55, (1.0, 0.80, 0.44))),
-    (B["march"][1], (3.0, 302.0, 4.0, (1.0, 0.70, 0.36), (0.28, 0.32, 0.56), (0.98, 0.80, 0.50), 0.20, 0.95), ((1.08, 0.98, 0.84), -0.05),
-     (2800.0, 0.45, (1.0, 0.78, 0.46))),
-    (51.6, (20.0, 245.0, 0.35, (0.55, 0.65, 1.0), (0.02, 0.03, 0.07), (0.06, 0.07, 0.12), 0.07, 0.3), ((0.85, 0.92, 1.12), -2.0),
-     (4500.0, 0.55, (0.08, 0.09, 0.15))),                   # the years pass: one night over the flight (846 -> 847)
-    (54.4, (8.0, 84.0, 2.2, (1.0, 0.72, 0.48), (0.12, 0.22, 0.52), (0.95, 0.70, 0.52), 0.19, 0.75), ((1.05, 0.98, 0.92), -0.45),
-     (2200.0, 0.80, (0.86, 0.76, 0.70))),
-    (B["camp_morning"][0], MORNING, G_ID, HAZE0), (B["seasons"][0], SPRING, G_ID, HAZE0)] + \
-    [(t_, _SEAS[k % 4][1], _SEAS[k % 4][2], _SEAS[k % 4][3]) for k, t_ in enumerate(SEASON_T[1:], 1)] + [
-    (B["grad"][0] + 0.2, (2.0, 250.0, 2.4, (1.0, 0.55, 0.36), (0.18, 0.18, 0.34), (0.80, 0.46, 0.34), 0.12, 0.6), ((0.98, 0.92, 0.98), -0.9),
-     (4000.0, 0.55, (0.40, 0.30, 0.34))),
-    (B["grad"][0] + 1.6, NIGHT, NIGHT_G, NIGHT_H), (DUR, NIGHT, NIGHT_G, NIGHT_H)]
-# ground surface: (t, snow 0..1, autumn 0..1) -- the clearing winter, the 3 seasons cycles
-SURF_KEYS = [(0.0, 0.0, 0.0), (B["winter"][0], 0.0, 0.0), (B["winter"][1], 0.72, 0.0), (B["spring"][0], 0.72, 0.0), (B["spring"][1], 0.0, 0.0)]
-for _k in range(12):
-    _t = SEASON_T[_k]; _sn = _SEAS[_k % 4][0]
-    SURF_KEYS.append((_t, 0.55 if _sn == "winter" else 0.0, 0.8 if _sn == "autumn" else 0.0))
-SURF_KEYS += [(B["grad"][0] + 0.4, 0.0, 0.0), (DUR, 0.0, 0.0)]
+    (B["FA4"], DAWN2, ((1.05, 0.98, 0.92), -0.45), (2200.0, 0.80, (0.86, 0.76, 0.70))),
+    (B["H"] - 1.5, MORNING, G_ID, HAZE0), (B["P3"], MORNING, G_ID, HAZE0),
+    (_m0, OVERCAST, G_OVC, H_OVC), (_m0 + 7.0, OVERCAST, G_OVC, H_OVC),
+    (_m0 + 11.5, (24.0, 250.0, 1.5, (1.0, 0.94, 0.86), (0.34, 0.38, 0.46), (0.64, 0.64, 0.66), 0.25, 0.92), G_DIM, H_OVC),
+    (_m0 + 15.5, GOLD, ((1.10, 1.0, 0.84), -0.05), (3000.0, 0.50, (0.98, 0.84, 0.62))),
+    (_m1, GOLD, ((1.10, 1.0, 0.84), -0.05), (3000.0, 0.50, (0.98, 0.84, 0.62))),
+    (_m1 + 1.6, DUSK2, ((0.98, 0.92, 0.98), -0.9), (4000.0, 0.55, (0.40, 0.30, 0.34))),
+    (_m1 + 3.0, NIGHT2, ((0.85, 0.92, 1.12), -2.0), (4500.0, 0.55, (0.08, 0.09, 0.15))),     # the year passes: one night (846 -> 847)
+    (_m1 + 5.6, DAWN2, ((1.05, 0.98, 0.92), -0.45), (2200.0, 0.80, (0.86, 0.76, 0.70))),
+    (B["FT3"] - 0.6, MORNING, G_ID, HAZE0), (B["seasons"][0], SPRING, G_ID, HAZE0),
+    (B["seasons"][0] + 0.6, SUMMER, G_SUM, HAZE0),
+    (B["seasons"][0] + 1.4, AUTUMN, G_AUT, (3200.0, 0.6, (0.86, 0.78, 0.66))),
+    (B["grad"][0] + 0.4, DUSK2, ((0.98, 0.92, 0.98), -0.9), (4000.0, 0.55, (0.40, 0.30, 0.34))),
+    (B["grad"][0] + 1.8, NIGHT, NIGHT_G, NIGHT_H), (DUR, NIGHT, NIGHT_G, NIGHT_H)]
+# ground surface: (t, snow 0..1, autumn 0..1): snow is never used any more (v5); the camp's quick autumn only
+SURF_KEYS = [(0.0, 0.0, 0.0), (B["seasons"][0] + 0.5, 0.0, 0.0), (B["seasons"][0] + 1.4, 0.0, 0.7), (B["grad"][0] + 0.6, 0.0, 0.0),
+             (DUR, 0.0, 0.0)]
 SURF_KEYS.sort(key=lambda k: k[0])
 
 def ss(a, b, x):
@@ -380,15 +393,17 @@ def _window():
     a = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     def get(k, d):
         return a[a.index(k) + 1] if k in a and a.index(k) + 1 < len(a) else d
+    vc = (lambda x: segtime.seg_t("g3", x)) if "--vclock" in a else (lambda x: x)   # --vclock: windows / stills in VIDEO s
     st = get("--stills", "")
     if st:
-        ts = [float(x) for x in st.split(",") if x.strip()]
+        ts = [vc(float(x)) for x in st.split(",") if x.strip()]
         return min(ts), max(ts)
     if "--check" in a or "--dry" in a:
         return 0.0, DUR
-    return float(get("--t0", 0.0)), min(float(get("--t1", DUR)), DUR)
+    return vc(float(get("--t0", 0.0))), min(vc(min(float(get("--t1", 1e9)), segtime.vdur("g3"))), DUR)
 
-PART_SPANS = dict(night=(1.0, 12.5), rose=(9.0, B["CAM_IN"] - 0.02), march=(B["crowd846"][0] - 0.1, B["march"][1]), camp=(45.0, DUR))
+PART_SPANS = dict(night=(1.0, 12.5), rose=(9.0, DUR),     # v5: the planted clearing stays in view after 846 (no pop)
+                   march=(B["crowd846"][0] - 0.1, B["march"][1]), camp=(B["FT0"], DUR))
 
 def parts_for(t0, t1):
     env = os.environ.get("G3_PARTS")
@@ -604,7 +619,7 @@ def inject_surface(m, snow_rgb=(0.78, 0.80, 0.84), scale=1 / 90.0, bias=0.0):
     Ln.new(sn.outputs["Result"], bc)
     return vs.outputs[0], va.outputs[0]
 
-SURF_BIAS = {"WD_Ground": 0.05, "Terrain": 0.02, "CP_Floor": -0.03, "G3Clearing": -0.06}
+SURF_BIAS = {"WD_Ground": 0.05, "Terrain": 0.02, "CP_Floor": -0.03}     # v5: the autumn tint only (snow is never set)
 
 def build_surface():
     S["surf"] = []
@@ -619,37 +634,6 @@ def set_surface(t):
     sn, au = surf_values(t)
     for vs, va in S.get("surf", ()):
         vs.default_value = sn; va.default_value = au
-
-class Flakes:
-    """Falling snow: n small octahedra in a box (frame M), positions a pure function of t; amount 0..1 scales them."""
-    def __init__(self, name, box, n, size, cl, seed=7):
-        rnd = np.random.default_rng(seed)
-        (x0, x1), (y0, y1), (z0, z1) = box
-        self.base = np.column_stack([rnd.uniform(x0, x1, n), rnd.uniform(y0, y1, n), rnd.uniform(0, 1, n)])
-        self.z0, self.H = z0, z1 - z0; self.v = rnd.uniform(0.06, 0.11, n); self.ph = rnd.uniform(0, 6.28, n)
-        oc = np.array([(1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)], float) * size
-        self.oc = oc; self.n = n
-        fs = [(0, 2, 4), (2, 1, 4), (1, 3, 4), (3, 0, 4), (2, 0, 5), (1, 2, 5), (3, 1, 5), (0, 3, 5)]
-        me = bpy.data.meshes.new(name)
-        V = np.zeros((n * 6, 3)); me.vertices.add(n * 6); me.vertices.foreach_set("co", V.astype(np.float32).ravel())
-        F_ = np.array([[a + 6 * i, b_ + 6 * i, c + 6 * i] for i in range(n) for a, b_, c in fs])
-        me.loops.add(len(F_) * 3); me.polygons.add(len(F_))
-        me.loops.foreach_set("vertex_index", F_.ravel()); me.polygons.foreach_set("loop_start", np.arange(0, len(F_) * 3, 3))
-        me.polygons.foreach_set("loop_total", np.full(len(F_), 3)); me.update(calc_edges=True)
-        m, _ = emit_mat(name + "M", (0.92, 0.94, 0.98), 1.6)
-        me.materials.append(m)
-        self.ob = bpy.data.objects.new(name, me); cl.objects.link(self.ob); self.ob.visible_shadow = False
-    def update(self, t, amount):
-        if amount < 0.01:
-            self.ob.hide_render = True; return
-        self.ob.hide_render = False
-        zf = (self.base[:, 2] - self.v * t) % 1.0
-        x = self.base[:, 0] + 3.0 * np.sin(0.7 * t + self.ph); y = self.base[:, 1] + 2.0 * np.cos(0.5 * t + self.ph)
-        P = np.column_stack([x, y, self.z0 + zf * self.H])
-        if PART == "B":
-            P[:, 1] -= segtime.SET_OFF_Y
-        V = P[:, None, :] + self.oc[None, :, :] * min(1.0, amount * 1.4)
-        self.ob.data.vertices.foreach_set("co", V.astype(np.float32).ravel()); self.ob.data.update()
 
 # ---------------------------------------------------------------------- 845-846 at the Rose foot (frame M)
 RC = (-268.0, 805.0)                                   # relief complex courtyard centre (trost.py builds the complex)
@@ -691,8 +675,9 @@ def build_shelter(cl):
     S["shelter_ppl"] = crowd(["civilian"], ((x0 + x1) / 2, (y0 + y1) / 2), x1 - x0 - 30, y1 - y0 - 20, 220, seed=21)
 
 def build_clearing(cl):
-    """Winter clearing beyond Rose: grey mud, 9 contour benches with dark lips, hoe-line furrows, snow overlay; the black
-    conifer edge (trees standing on the clearing are felled south -> north over the winter)."""
+    """v5 FARM (owner 10/27: faster + clearly visible, no winter): the conifer stand beyond Rose is felled south -> north, the
+    9 contour benches show brown ploughed mud with furrow bands, then the plots (44 x 26 m, snapped) turn green / wheat
+    one by one, south first (G3Crop 0..1 drives the mask; key = 0.6 * north fraction + 0.4 * plot noise)."""
     x0, x1, y0, y1 = CLEARING
     m = bpy.data.materials.new("G3Clearing"); m.use_nodes = True
     nt = m.node_tree; N, Ln = nt.nodes, nt.links
@@ -700,9 +685,39 @@ def build_clearing(cl):
     tc = N.new("ShaderNodeTexCoord"); wv = N.new("ShaderNodeTexWave"); wv.wave_type = "BANDS"; wv.bands_direction = "X"
     wv.inputs["Scale"].default_value = 0.035; wv.inputs["Distortion"].default_value = 1.5
     Ln.new(tc.outputs["Object"], wv.inputs["Vector"])
-    rp = N.new("ShaderNodeValToRGB"); e = rp.color_ramp.elements
-    e[0].position, e[0].color = 0.2, (*lin("#4e4b47"), 1); e[1].position, e[1].color = 0.55, (*lin("#64615c"), 1)
-    Ln.new(wv.outputs["Fac"], rp.inputs["Fac"]); Ln.new(rp.outputs["Color"], b.inputs["Base Color"])
+    rp = N.new("ShaderNodeValToRGB"); e = rp.color_ramp.elements          # ploughed mud: dark furrow / lighter ridge
+    e[0].position, e[0].color = 0.2, (*lin("#4a3524"), 1); e[1].position, e[1].color = 0.55, (*lin("#7d5b3a"), 1)
+    Ln.new(wv.outputs["Fac"], rp.inputs["Fac"])
+    sn = N.new("ShaderNodeVectorMath"); sn.operation = "SNAP"; sn.inputs[1].default_value = (44.0, 26.0, 1000.0)
+    Ln.new(tc.outputs["Object"], sn.inputs[0])
+    wn = N.new("ShaderNodeTexWhiteNoise"); wn.noise_dimensions = "3D"; Ln.new(sn.outputs["Vector"], wn.inputs["Vector"])
+    sx = N.new("ShaderNodeSeparateXYZ"); Ln.new(tc.outputs["Object"], sx.inputs[0])
+    ya, yb = F((0.0, y0, 0.0)).y, F((0.0, y1, 0.0)).y
+    mr = N.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = ya; mr.inputs["From Max"].default_value = yb
+    Ln.new(sx.outputs["Y"], mr.inputs["Value"])
+    k1 = N.new("ShaderNodeMath"); k1.operation = "MULTIPLY"; k1.inputs[1].default_value = 0.4; Ln.new(wn.outputs["Value"], k1.inputs[0])
+    k2 = N.new("ShaderNodeMath"); k2.operation = "MULTIPLY_ADD"; k2.inputs[1].default_value = 0.6
+    Ln.new(mr.outputs["Result"], k2.inputs[0]); Ln.new(k1.outputs[0], k2.inputs[2])
+    cv = N.new("ShaderNodeValue"); cv.name = "G3Crop"; cv.outputs[0].default_value = 0.0
+    sub = N.new("ShaderNodeMath"); sub.operation = "SUBTRACT"                  # mask = clamp((crop * 1.6 - key) * 9)
+    mul0 = N.new("ShaderNodeMath"); mul0.operation = "MULTIPLY"; mul0.inputs[1].default_value = 1.6; Ln.new(cv.outputs[0], mul0.inputs[0])
+    Ln.new(mul0.outputs[0], sub.inputs[0]); Ln.new(k2.outputs[0], sub.inputs[1])
+    mk = N.new("ShaderNodeMath"); mk.operation = "MULTIPLY"; mk.use_clamp = True; mk.inputs[1].default_value = 9.0
+    Ln.new(sub.outputs[0], mk.inputs[0])
+    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.interpolation = "CONSTANT"; ce = cr.color_ramp.elements   # per-plot crop colour
+    ce[0].position, ce[0].color = 0.0, (*lin("#5e8c36"), 1); ce[1].position, ce[1].color = 0.42, (*lin("#86a843"), 1)
+    e3 = ce.new(0.76); e3.color = (*lin("#b8b14e"), 1)
+    sep = N.new("ShaderNodeSeparateColor"); Ln.new(wn.outputs["Color"], sep.inputs[0])      # an independent per-plot channel
+    Ln.new(sep.outputs[1], cr.inputs["Fac"])
+    fr = N.new("ShaderNodeValToRGB"); fe = fr.color_ramp.elements        # crop rows: furrow shading on the green
+    fe[0].position, fe[0].color = 0.2, (0.72, 0.72, 0.72, 1); fe[1].position, fe[1].color = 0.6, (1.0, 1.0, 1.0, 1)
+    Ln.new(wv.outputs["Fac"], fr.inputs["Fac"])
+    mu = N.new("ShaderNodeMix"); mu.data_type = "RGBA"; mu.blend_type = "MULTIPLY"; mu.inputs["Factor"].default_value = 1.0
+    Ln.new(cr.outputs["Color"], mu.inputs["A"]); Ln.new(fr.outputs["Color"], mu.inputs["B"])
+    mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MIX"
+    Ln.new(mk.outputs[0], mx.inputs["Factor"]); Ln.new(rp.outputs["Color"], mx.inputs["A"]); Ln.new(mu.outputs["Result"], mx.inputs["B"])
+    Ln.new(mx.outputs["Result"], b.inputs["Base Color"])
+    S["crop_v"] = cv.outputs[0]
     lip = flat("G3BenchLip", "#3e3a35")
     bm = bmesh.new()
     nb = 9; nx = 50
@@ -735,8 +750,8 @@ def build_clearing(cl):
     S["conif_h"] = rnd.uniform(14, 22, len(P))
     S["conif"] = Points("G3Conifers", P, rnd.uniform(0, 6.28, len(P)), tproto, cl)
     S["conif_fell"] = np.concatenate([(ys[:n_on] - y0) / (y1 - y0) * 0.85 + rnd.uniform(0, 0.15, n_on), np.full(n_edge, 9.0)])
-    # workers with hoes on the benches (winter -> spring)
-    S["workers"] = crowd(["civilian"], ((x0 + x1) / 2 + 150, y0 + 120), 600, 200, 150, pose="kneel", seed=31)
+    # refugees working the benches (felling, ploughing, planting): spread over the whole clearing
+    S["workers"] = crowd(["civilian"], ((x0 + x1) / 2, (y0 + y1) / 2 - 20), 860, 380, 260, pose="kneel", seed=31)
 
 def build_courtyard(cl):
     S["court"] = crowd(["civilian"], (RC[0] + 2, RC[1]), 74, 40, 520, seed=11)
@@ -767,14 +782,16 @@ def update_rose(t):
     S["court"].show(k < 1.0 - 0.7 * ss(B["crowd846"][0], B["crowd846"][1], t))
     on845 = t < B["CAM_IN"]
     S["booth"].show(on845)
-    S["queue"].show((np.arange(len(S["queue"].e)) < int(40 * (1 - 0.6 * ss(22.0, 26.0, t)))) & on845)
+    S["queue"].show((np.arange(len(S["queue"].e)) < int(40 * (1 - 0.6 * ss(*B["crowd846"], t)))) & on845)
     S["shelter_ppl"].show(on845)
-    S["tents"].set(np.where((S["tent_key"] < 1.0 - 0.45 * ss(23.0, 27.0, t)) & on845, 1.0, 0.0))
-    S["workers"].show(B["winter"][0] - 0.4 <= t <= B["spring"][1])
+    S["tents"].set(np.where((S["tent_key"] < 1.0 - 0.45 * ss(*B["crowd846"], t)) & on845, 1.0, 0.0))
+    S["workers"].show(B["workers"][0] <= t <= B["workers"][1])
     mpv = B["crowd846"][0] <= t < B["CAM_IN"]
     S["mp"].show(mpv); S["mpfile"].show(mpv)
-    fell = ss(B["H"] + 1.0, B["spring"][0] + 1.0, t) * 1.05   # conifers on the clearing fall over the winter, the edge stays
+    fell = ss(*B["fell"], t) * 1.05                      # the conifers on the clearing are felled S -> N, the edge stays
     S["conif"].set(np.where(S["conif_fell"] > fell, S["conif_h"], 0.0))
+    if S.get("crop_v") is not None:                     # ploughed plots planted and greening, south first
+        S["crop_v"].default_value = ss(*B["crop"], t)
 
 # ---------------------------------------------------------------------- march846 (its simulation + instancers; NOT its light / mood)
 def march_module():
@@ -872,7 +889,7 @@ def build_camp(cl):
     g0 = gM(*CAMP_C)
     root = bpy.data.objects.new("G3CampRise", None); root.location = F((CAMP_C[0], CAMP_C[1], g0)); cl.objects.link(root)
     bpy.context.view_layer.update()
-    for o in st["objs"]:                                # time-lapse construction 49.3-53: the camp rises out of the ground (847)
+    for o in st["objs"]:                                # time-lapse construction (BEATS camp_rise): the camp rises out of the ground (847)
         mw = o.matrix_world.copy(); o.parent = root; o.matrix_parent_inverse = root.matrix_world.inverted(); o.matrix_world = mw
     S["camp_root"] = root
     # enlistment: 250 recruits (10 x 25) facing south, Shadis walking their front
@@ -897,7 +914,7 @@ def build_camp(cl):
     S["rig_ropes"] = L.obj_from_bm("G3RigRopes", bm, [rope], cl)
     S["rig_acts"] = Group(acts)
     S["rig_file"] = crowd(["cadet"], cuv(23, 27), 56.0, 4.0, 40, yaw=0.0, formation="grid", spacing=(1.4, 1.3), seed=105)
-    # seasons: 30 sparring pairs + a running file round the bowl
+    # seasons (quick, no winter): 30 sparring pairs + a running file round the bowl
     rnd = random.Random(106); pairs = []
     for k in range(30):
         u, v = rnd.uniform(-95, -25), rnd.uniform(-32, 30); a = rnd.uniform(0, math.pi)
@@ -916,7 +933,7 @@ def build_camp(cl):
     S["grad_go"] = []                                   # (start xy, hut xy, depart time, speed) per graduate + top 10
     for e in S["grads"].e + S["top10"].e:
         h = huts[rr.integers(len(huts))]; hq = F((*cuv(*h), 0.0))
-        S["grad_go"].append((Vector(e.location), Vector((hq.x, hq.y, e.location.z)), float(rr.uniform(76.3, 77.6)), float(rr.uniform(38, 55))))
+        S["grad_go"].append((Vector(e.location), Vector((hq.x, hq.y, e.location.z)), float(rr.uniform(B["grad"][1] - 2.0, B["grad"][1] - 0.8)), float(rr.uniform(38, 55))))
 
 def _ellipse_pt(a):
     return cuv(98.0 * math.cos(a), 70.0 * math.sin(a))
@@ -931,7 +948,7 @@ def update_camp(t):
     st = S.get("camp")
     if st is None:
         return
-    rise = ss(B["FT0"], B["FT0"] + 3.7, t)
+    rise = ss(*B["camp_rise"], t)
     S["camp_root"].scale = (1.0, 1.0, max(1e-3, rise))
     for o in st["objs"]:
         h = rise < 0.01
@@ -989,96 +1006,6 @@ def _track_rig(who):
     return f
 
 TRACK.update({"Shadis": _track_shadis, "Eren": _track_rig("eren"), "Mikasa": _track_rig("mikasa")})
-
-# ---------------------------------------------------------------------- the sunset ridge (march 11-18 s): 11 titans backlit on a crest
-# bible: set (-600, -2700) = M (-600, -1830); moved to M (-850, -1750) so it stays in the re-driven march camera's frame while it
-# looks WNW into the low sun (compass 285 deg) at 42-47 s.  swarm845 titan meshes (faces kept), march846's deform law.
-RIDGE_C, RIDGE_HALF, RIDGE_H = (-300.0, -1590.0), (140.0, 380.0), 32.0
-RIDGE_DIR = math.radians(60.0)          # crest runs SW->NE, square to the march camera's ridge hold (looking WNW into the sun)
-_RC, _RS = math.cos(RIDGE_DIR), math.sin(RIDGE_DIR)
-
-def ridge_sq(x, y):
-    dx, dy = x - RIDGE_C[0], y - RIDGE_C[1]
-    return dx * _RC + dy * _RS, -dx * _RS + dy * _RC          # along the crest, across it
-
-def ridge_h(x, y):
-    s_, q = ridge_sq(x, y)
-    u, v = q / RIDGE_HALF[0], s_ / RIDGE_HALF[1]
-    return RIDGE_H * math.exp(-1.6 * (u * u + v ** 4))
-
-def ridge_xy(s_, q):
-    return RIDGE_C[0] + s_ * _RC - q * _RS, RIDGE_C[1] + s_ * _RS + q * _RC
-
-def build_ridge(cl):
-    import swarm845 as SW
-    import smokecards as SCK
-    wg = bpy.data.materials.get("WD_Ground")
-    gm = wg.copy() if wg is not None else flat("G3RidgeGrass", "#55673a")
-    gm.name = "G3RidgeGround"                           # own copy: finish() turns the toon rim off (a white crest line otherwise)
-    bm = bmesh.new(); nu, nv = 40, 64
-    hq, hs = RIDGE_HALF[0] * 2.4, RIDGE_HALF[1] * 1.6
-    V = []
-    for i in range(nu + 1):
-        row = []
-        for j in range(nv + 1):
-            x, y = ridge_xy(-hs + 2 * hs * j / nv, -hq + 2 * hq * i / nu)
-            q = F((x, y, 0.0)); row.append(bm.verts.new((q.x, q.y, ground_ray(q.x, q.y) - 0.5 + ridge_h(x, y))))
-        V.append(row)
-    for i in range(nu):
-        for j in range(nv):
-            f = bm.faces.new((V[i][j], V[i + 1][j], V[i + 1][j + 1], V[i][j + 1])); f.smooth = True
-    S["ridge_hill"] = L.obj_from_bm("G3RidgeHill", bm, [gm], cl)
-    rng = random.Random(1846)
-    specs, gt, tmat = [], SW.Geo(), []
-    NT = 11
-    for j in range(NT):
-        H = rng.uniform(13.5, 15.5)                     # the big ones on the skyline (ep02 20:09.0)
-        sp = dict(name=f"r{j}", H=H, g=rng.uniform(1.0, 1.3), al=rng.uniform(0.9, 1.2), hs=rng.uniform(0.9, 1.3),
-                  skin=rng.randrange(len(SW.T_SKINS)), hair=rng.choice([None, 0, 1, 2]))
-        n0 = len(gt.fc)
-        SW.titan_geo(gt, j, sp)
-        hb = len(SW.T_SKINS)
-        base = [sp["skin"], hb + (sp["hair"] if sp.get("hair") is not None else 0), hb + len(SW.T_HAIRS)]
-        tmat += [base[c] for c in gt.fc[n0:]]
-        specs.append(sp)
-    tm = [L.mat(f"G3R_tskin{i}", c, 0.6) for i, c in enumerate(SW.T_SKINS)] + [L.mat(f"G3R_thair{i}", c, 0.7) for i, c in enumerate(SW.T_HAIRS)]         + [L.mat("G3R_teeth", (0.85, 0.80, 0.70), 0.5)]
-    RT = gt.finish()
-    tob = SW._mesh("G3RidgeTitans", RT, gt.f, tmat, tm, cl)
-    sil, _ = emit_mat("G3RidgeSilhouette", (0.012, 0.009, 0.008), 1.0)   # QA: near-black backlit silhouettes
-    for i in range(len(tob.data.materials)):
-        tob.data.materials[i] = sil
-    S["ridge"] = dict(RT=RT, tob=tob, H=np.array([s_["H"] for s_ in specs]), s0=np.linspace(-170.0, 170.0, NT) + np.array([rng.uniform(-12, 12) for _ in range(NT)]),
-                      sp=np.array([rng.uniform(0.6, 1.4) for _ in range(NT)]), ph=np.array([rng.uniform(0, 6.28) for _ in range(NT)]))
-    # the low gold sun behind them: one soft emissive glow card ~600 m beyond the crest along the hold view (WNW)
-    gc = SCK.SmokeCards("G3SunGlow")
-    gx, gy = ridge_xy(0.0, 120.0)                       # just behind the crest, low: the hot core sits behind the titans' bodies
-    q = F((gx, gy, 0.0)); q.z = ground_ray(q.x, q.y) + 7.0
-    for r_, a_, c_ in ((240.0, 1.0, (1.0, 0.82, 0.45)), (110.0, 1.0, (1.0, 0.93, 0.70))):   # wide bloom + hot core
-        gc.add(B["sunset"][0], (q.x, q.y, q.z), vel=(0, 0, 0), r0=r_, r1=r_, life=B["march"][1] - B["sunset"][0] + 0.5, rise=0.0,
-               color=c_, kind="glow", alpha=a_, fade_in=1.5)
-    gc.build(cl); S["sunglow"] = gc
-
-def update_ridge(t):
-    R = S.get("ridge")
-    if R is None:
-        return
-    import swarm845 as SW
-    NT = len(R["H"])
-    sa = R["s0"] + R["sp"] * (t - 31.3) * 1.5           # amble along the crest (time-lapse)
-    q0 = np.zeros(NT)                                    # right on the crest line
-    XY = [ridge_xy(a, b_) for a, b_ in zip(sa, q0)]
-    z = np.array([gM(x, y) - 0.5 + ridge_h(x, y) for x, y in XY])
-    ph = 2 * np.pi * (t * 1.2 + R["ph"])
-    Ar = np.zeros((NT, 7)); Ae = np.zeros((NT, 7)); sw = np.sin(ph) * 0.3
-    Ar[:, 1] = sw; Ar[:, 2] = -sw; Ar[:, 3] = -0.7 * sw; Ar[:, 4] = 0.7 * sw; Ar[:, 5] = Ar[:, 4]; Ar[:, 6] = Ar[:, 3]
-    Ae[:, 5] = Ae[:, 6] = 0.3
-    lean = np.full(NT, -0.06)
-    yaw = np.full(NT, -RIDGE_DIR)                        # facing across the crest, toward the column / the camera
-    P = np.array([tuple(F((x, y, zz))) for (x, y), zz in zip(XY, z)])
-    co = SW._deform(R["RT"], Ar, Ae, lean, np.ones(NT), yaw, P)
-    R["tob"].data.vertices.foreach_set("co", co.astype(np.float32).ravel()); R["tob"].data.update()
-    if S.get("sunglow"):
-        S["sunglow"].update(t)
 
 # ---------------------------------------------------------------------- part A: g2's own end state (seg_g2's canal / quays / ferries)
 G2_T = 32.0                                            # g3 t 0 = g2 t 32 (its end)
@@ -1208,17 +1135,19 @@ def build(site):
             say("set hooks failed:", ex)
         MR = march_module()                             # static 846 dressings, identical in every part-B window
         MR.dress_fields(); MR.clear_plain()
+        try:
+            patch_canal()
+        except Exception:
+            import traceback; traceback.print_exc(); say("canal patch FAILED")
     steps = []
     if "night" in parts:
         steps.append(("night", lambda: build_night(cl)))
     if "rose" in parts:
-        steps += [("shelter", lambda: build_shelter(cl)), ("clearing", lambda: build_clearing(cl)), ("courtyard", lambda: build_courtyard(cl)),
-                  ("snow_rose", lambda: S.__setitem__("flakes_rose", Flakes("G3SnowRose", ((-700, 250), (420, 1350), (0, 320)), 26000, 0.2, cl)))]
-    if "march" in parts:
-        steps += [("march", lambda: build_march(cl)), ("ridge", lambda: build_ridge(cl))]
+        steps += [("shelter", lambda: build_shelter(cl)), ("clearing", lambda: build_clearing(cl)), ("courtyard", lambda: build_courtyard(cl))]
+    if "march" in parts:                                # v5: no sunset ridge / glow cards (owner: "strange light"), no snow anywhere
+        steps += [("march", lambda: build_march(cl))]
     if "camp" in parts:
-        steps += [("camp", lambda: build_camp(cl)),
-                  ("snow_camp", lambda: S.__setitem__("flakes_camp", Flakes("G3SnowCamp", ((-1750, -1200), (1150, 1800), (0, 260)), 16000, 0.2, cl, seed=8)))]
+        steps += [("camp", lambda: build_camp(cl))]
     steps.append(("surface", build_surface))
     for nm, fn in steps:
         ts = time.time()
@@ -1236,18 +1165,64 @@ def update(t):
     if PART == "A":
         update_partA(t)
         return
-    for fn in (update_rose, update_march, update_ridge, update_camp, update_gate):
+    for fn in (update_rose, update_march, update_camp, update_gate):
         try:
             fn(t)
         except Exception:
             import traceback; traceback.print_exc(); say(f"UPDATE FAILED: {fn.__name__} t={t:.2f}")
-    sn, _ = surf_values(t)
-    for k in ("flakes_rose", "flakes_camp"):
-        if S.get(k):
-            S[k].update(t, sn if (t < B["CAM_IN"]) == (k == "flakes_rose") else 0.0)
+
+def patch_canal():
+    """Part B: world.py's set-core trim leaves the trost set's CanalWater / CanalBanks / CanalQuays with 0 vertices (seen 10/27
+    in the g3 march end view: the canal cut through the terrain showed the gold SKY as two long white bars, M x 400 and the SE
+    outflow).  If so, lay a plain water strip (+-22 m at CANAL_WATER_Z) along trost.CANAL_LINE_M so the cut reads as water.
+    (Shared-set bug: reported to the lead; world.py is not touched here.)"""
+    TR = SITE.get("TR") if SITE else None
+    cw = bpy.data.objects.get("CanalWater")
+    if TR is None or cw is None or cw.type != "MESH" or len(cw.data.vertices) > 0:
+        return
+    m = bpy.data.materials.get("CanalWater") or flat("G3CanalWaterFix", "#567a6c", 0.8)
+    pts = [Vector((float(x), float(y))) for x, y in TR.CANAL_LINE_M]
+    bm = bmesh.new(); Lr, Rr = [], []
+    for k, p in enumerate(pts):
+        a_, b_ = pts[max(k - 1, 0)], pts[min(k + 1, len(pts) - 1)]
+        t_ = (b_ - a_).normalized(); n_ = Vector((-t_.y, t_.x))
+        for o_, row in ((-22.0, Lr), (22.0, Rr)):            # wide: it sits under the quays / fill strips
+            q = p + n_ * o_; row.append(bm.verts.new((q.x, q.y - segtime.SET_OFF_Y, float(TR.CANAL_WATER_Z))))
+    for k in range(len(pts) - 1):
+        bm.faces.new((Lr[k], Rr[k], Rr[k + 1], Lr[k + 1]))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    for f in bm.faces:
+        if f.normal.z < 0:
+            f.normal_flip()
+    ob = L.obj_from_bm("G3CanalPatch", bm, [m], coll("G3"))
+    ob.visible_shadow = False
+    say("canal patch: CanalWater had 0 vertices; G3CanalPatch laid along", len(pts), "points")
+
+def matte_water():
+    """v5: the low gold sun turned the canal / river into long WHITE glare bars (QA still 30.5 s: the Trost canal at M x 400
+    and its SE outflow): rough, low-specular water in part B (part A keeps g2's look for the seam)."""
+    if PART == "A":
+        return
+    hit = []
+    for m in bpy.data.materials:
+        if "water" not in m.name.lower() or not m.use_nodes:
+            continue
+        for n in m.node_tree.nodes:
+            if n.type == "BSDF_PRINCIPLED":
+                n.inputs["Roughness"].default_value = 0.8
+                for k in ("Specular IOR Level", "Specular"):
+                    if k in n.inputs:
+                        n.inputs[k].default_value = 0.0
+                        break
+                for k in ("Coat Weight", "Transmission Weight"):
+                    if k in n.inputs:
+                        n.inputs[k].default_value = 0.0
+                hit.append(m.name)
+    say("matte water:", sorted(set(hit)))
 
 def finish():
-    """After toon.apply(): no toon rim on the sunset ridge's ground (it drew a white line along the crest)."""
+    """After toon.apply(): matte water (part B); no toon rim on the (unused since v5) sunset ridge ground."""
+    matte_water()
     m = bpy.data.materials.get("G3RidgeGround")
     if m is not None and m.use_nodes:
         for n in m.node_tree.nodes:
@@ -1257,23 +1232,17 @@ def finish():
 def check():
     cam_report(quiet=False)
     say("parts", sorted(S.get("parts", ())), "| light 0:", {k: (np.round(v, 3) if isinstance(v, np.ndarray) else v) for k, v in light_values(0.0).items() if k in ("el", "en", "amb", "gex")},
-        "| light 78.4 = g4 t0:", light_values(DUR)["en"] == _G4L[3] and light_values(DUR)["gex"] == _G4G[2])
+        "| light DUR = g4 t0:", light_values(DUR)["en"] == _G4L[3] and light_values(DUR)["gex"] == _G4G[2])
     L0 = S.get("L0")
     if L0:
         say("lighting-sky s0 (trost expects 0.25 for the g4 night):", [round(s, 3) for _, s in L0["bgs"]], "exposure at build", L0["exp0"])
-    hill = S.get("ridge_hill")
-    if hill is not None:
-        zs = [v.co.z for v in hill.data.vertices]
-        q = F((RIDGE_C[0], RIDGE_C[1], 0.0))
-        say(f"ridge hill z {min(zs):.1f}..{max(zs):.1f}, ground_ray at centre {ground_ray(q.x, q.y):.1f}, L.height {float(L.height(q.x, q.y)):.1f}")
-        for ob in _GROUND_OBS:
-            mi = ob.matrix_world.inverted(); o = mi @ Vector((q.x, q.y, 600.0))
-            say("  ray", ob.name, ob.ray_cast(o, (mi.to_3x3() @ Vector((0, 0, -1))).normalized(), distance=5000.0)[:2])
     MR = S.get("MR")
-    if MR is not None:                                   # the re-driven march camera keeps march846's ends
-        for tau in (0.0, MARCH_T_END):
+    if MR is not None:                                   # the restored march camera = march846.cam_at (set frame + 870 y)
+        for tau in (0.0, 4.0, 9.6, 15.0, MARCH_T_END):
             l0, k0, n0 = MR.cam_at(tau); l1, k1, n1 = MARCH.eval(B["march"][0] + tau)
             say(f"march846.cam_at({tau}) set {tuple(round(x, 1) for x in l0)} | g3 M {tuple(round(float(x), 1) for x in l1)} (M = set + 870 y)")
 
 if __name__ == "__main__":
     cam_report()
+    print("video clock: g3 %.2f s (TMAP %d knots)" % (segtime.vdur("g3"), len(segtime.knots("g3"))))
+    vcheck()
