@@ -157,7 +157,7 @@ for k, (vp, t) in enumerate(voice_items):
     ins += ['-i', vp]; fc.append(f"[{k+3}:a]aresample=48000,adelay={int(round(t*1000))}|{int(round(t*1000))}[v{k}]")
 m = len(voice_items) + 3; ins += ['-stream_loop', '-1', '-i', MUSIC]
 # MUSIC_LEVELLED=1: the bed is already levelled per cue (e.g. a quieter final cue), so skip loudnorm, which would even it out
-mnorm = '' if os.environ.get('MUSIC_LEVELLED') == '1' else 'loudnorm=I=-27:TP=-3,'
+mnorm = '' if os.environ.get('MUSIC_LEVELLED') == '1' else 'loudnorm=I=-31:TP=-3,'  # Horror Ranked default: music at -31 LUFS, well under the voice
 fc.append(f"[{m}:a]aresample=48000,atrim=0:{t_global},{mnorm}highshelf=f=3000:g=-4,afade=t=out:st={max(0, t_global-2)}:d=2[mu]")
 fc.append(''.join(f'[v{k}]' for k in range(len(voice_items))) + f"amix=inputs={len(voice_items)}:normalize=0,loudnorm=I=-15:TP=-1.5[vo]")
 fc.append("[1:a][vo][2:a][mu]amix=inputs=4:normalize=0:duration=first,alimiter=limit=0.95[a]")
