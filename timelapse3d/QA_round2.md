@@ -14,8 +14,7 @@
 - [x] f1 v4: Female + riders readable, no slab trails, textured plain, smoke-column flares (purple drifts).
 - [x] s2 v3: chase readable (~0.55x distance), crane above the roofs, face ending holds.
 - [~] f3 v3: Blender crashed repeatedly at 480p in the dense forest (GTX 1060) -> 234 unique of 755 frames (duplicates = 'frozen'); glossy swamp = blue disc -> v4 at 640x360 (as v1), swamp = dull mud.
-- [~] f3: ROOT CAUSE of the "frozen" f3 v3/v4: grazing views across the canopy put thousands of trees in the frustum -> GPU
-      time over the Windows driver timeout -> Blender died at t 4.5 / 20.6 (gaps filled with duplicates). Fix: camera far clip
-      900 m for 3.6-46.6 s (stills 4.6 / 12 / 20.7 OK), crown-layer corridor 34 m. f3 v5 at 640x360.
+- [x] f3 v5: driver-timeout crash fixed (far clip 900 m) -> full 50 s duel renders (750/755 unique); Eren vs Female readable.
+      (G6.STATE['SH'] KeyError at 19.6-20 fixed in common.Eren for the next render.)
 - [x] master_onetake_v4_preview.mp4 = 3:30.6 (g1 v7, g2 v5, g3 v10, g4 v6, g5 v8, g6 v6, g7 v4, g8 v6).
 - [~] f0 v1: ~7 s of murky empty sky 2-3 km up -> v2 (10 s): ~900 m over Wall Rose with the wall curving in frame, night 0.6 s.

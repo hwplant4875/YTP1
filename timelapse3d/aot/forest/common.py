@@ -454,6 +454,9 @@ class Eren:
         self.AT, self.G6 = AT, G6
         self.T = AT.place_attack(0.0, 0.0, 0.0, "stand", name=name, eyes=20.0)
         self.T.holder.matrix_world = Matrix.Identity(4); bpy.context.view_layer.update()
+        if "SH" not in G6.STATE:         # autopilot 10/28: G6.blend needs the shoulder anchors (KeyError 'SH' at f3 19.6-20.0)
+            self.T.pose("stand", ground=False)
+            G6.STATE["SH"] = {"L": self.T.wpos("upper_arm.L_32").copy(), "R": self.T.wpos("upper_arm.R_55").copy()}
         self.P = G6.make_poses()
         self.objs = [o for o in self.T.coll.all_objects]
 
