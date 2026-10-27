@@ -106,8 +106,8 @@ def tree_keys():
     c0 = l0 + back * 5.0 + Vector((0, 0, 1.6)); c0.z = max(c0.z, L.height(c0.x, c0.y) + 1.5)
     l1 = l0 + back * 10.0 + Vector((0, 0, 3.0)); l1.z = max(l1.z, L.height(l1.x, l1.y) + 2.5)
     tg = t0 + Vector((0, 0, 4.0))
-    return [(0.0, tuple(c0), tuple(tg), n0 * 0.80), (2.0, tuple(l1), tuple(tg), n0 * 0.70),
-            (2.05, tuple(l1), tuple(tg), n0 * 0.70)]
+    return [(0.0, tuple(c0), tuple(tg), n0 * 0.70), (2.0, tuple(l1), tuple(tg), n0 * 0.60),     # autopilot r4: a bit wider
+            (2.05, tuple(l1), tuple(tg), n0 * 0.60)]                                         # (ref still: tree ~40 % wide)
 
 def build_campath():
     ks = list(CK.cam("g1")["keys"])
