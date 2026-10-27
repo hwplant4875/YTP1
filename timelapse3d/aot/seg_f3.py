@@ -285,6 +285,7 @@ def build(site):
     # autopilot 10/28 (f2|f3 seam): f2's blue + green streaks are still hanging in the sky at f2's end -> the same flares,
     # launched at their f2 times minus f2's DUR, so they continue across the seam instead of vanishing
     import seg_f2 as _F2
+    flares.COLORS.setdefault("blue", ((0.05, 0.16, 0.75), (0.35, 0.55, 1.0)))     # = seg_f2 (registered in its build)
     pf = flares.FlareSet("F3_PrevFlares")
     pf.add(_F2.BEATS["blue"] - _F2.DUR, _W(_F2.TX - 30, _F2.TY + 40, 34.0), "blue", up=140, width=2.0, seed=3)
     pf.add(_F2.BEATS["green"] - _F2.DUR, _W(_F2.TX + 25, _F2.TY + 60, 34.0), "green", up=140, width=2.0, seed=4)
