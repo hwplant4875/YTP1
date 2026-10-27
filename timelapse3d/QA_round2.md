@@ -1,9 +1,9 @@
 # QA round 2 (autopilot self-QA, 10/28)
 
 ## Part 1 (master_onetake_v3, 3:20)
-- [~] Total 3:20 < 3:30 target -> slower KEY moments only (segtime TMAP): g3 march 1.6, g5 head 1.0 + punch 1.3, g6 lift 1.5 /
+- [x] Total 3:20 < 3:30 target -> slower KEY moments only (segtime TMAP): g3 march 1.6, g5 head 1.0 + punch 1.3, g6 lift 1.5 /
       blond titan 1.3 / rise+hug 1.4, g7 volley 1.3, g8 slam 1.4 + herd kill 1.3 -> 3:30.5. Renders g3 v9, g5 v7, g6 v5, g7 v4, g8 v6.
-- [~] g3 v9: nights readable except a 1 s near-black dusk after the march -> DUSK2 elev 2->6 (next g3 render).
+- [x] g3 v10: all nights + post-march dusk readable.
 - [ ] g6: long static stretch on the HQ square (~30 s same framing) -> check after v5 whether to tighten.
 
 ## Part 2-3
@@ -17,3 +17,4 @@
 - [~] f3: ROOT CAUSE of the "frozen" f3 v3/v4: grazing views across the canopy put thousands of trees in the frustum -> GPU
       time over the Windows driver timeout -> Blender died at t 4.5 / 20.6 (gaps filled with duplicates). Fix: camera far clip
       900 m for 3.6-46.6 s (stills 4.6 / 12 / 20.7 OK), crown-layer corridor 34 m. f3 v5 at 640x360.
+- [x] master_onetake_v4_preview.mp4 = 3:30.6 (g1 v7, g2 v5, g3 v10, g4 v6, g5 v8, g6 v6, g7 v4, g8 v6).
