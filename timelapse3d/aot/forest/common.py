@@ -529,3 +529,14 @@ FZ = dict(kneel=-3.6, sit=-5.6, crouch=-3.2)      # rig drop (m) for poses whose
 def fem_pose_z(weights):
     """weights: {pose name: w} (sum ~1) -> rig z offset."""
     return sum(FZ.get(k, 0.0) * w for k, w in weights.items())
+
+# ---------------------------------------------------------------- camera keys relative to the ground
+def lift_keys(keys, skip=(), dy=0.0):
+    """keys [(t, pos, look, lens)] with z ABOVE THE GROUND -> absolute z (world.py relief is 12-70 m here).  skip: key
+    indices left absolute (seams owned by part 1).  dy: frame offset to W (frame M: 4130)."""
+    out = []
+    for i, (t, p, l, lens) in enumerate(keys):
+        if i in skip:
+            out.append((t, p, l, lens)); continue
+        out.append((t, (p[0], p[1], p[2] + G(p[0], p[1] + dy)), (l[0], l[1], l[2] + G(l[0], l[1] + dy)), lens))
+    return out

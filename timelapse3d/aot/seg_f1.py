@@ -247,6 +247,8 @@ def _W(fx, fy, dz=0.0):
 
 # ---------------------------------------------------------------- build
 def build(site):
+    global CAM
+    CAM = camchan.CamPath(C.lift_keys(CAM_KEYS), v_in=SEAM_F1_W["vel"], v_out=SEAM_F2["vel"])      # z above ground -> absolute
     from forest import fset
     import flares
     S["fset"] = fset

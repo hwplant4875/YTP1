@@ -247,6 +247,8 @@ S = {}
 
 # ---------------------------------------------------------------- build
 def build(site):
+    global CAM
+    CAM = camchan.CamPath(C.lift_keys(CAM_KEYS, skip=(len(CAM_KEYS) - 1,)), v_in=SEAM_IN["vel"], v_out=SEAM_S1["vel"])      # z above ground -> absolute
     import flares, attack_titan as AT
     c = C.coll("F3")
     S["AT"] = AT

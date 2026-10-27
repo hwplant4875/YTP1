@@ -44,6 +44,8 @@ LIGHT = C.LightRig(*C.light_plan(PLAN))
 S = {}
 
 def build(site):
+    global CAM
+    CAM = camchan.CamPath(C.lift_keys(CAM_KEYS, skip=tuple(range(len(CAM_KEYS) - 2)), dy=C.M_OFF_Y), v_in=(0.0, 0.0, 0.0), v_out=SEAM_F1_W["vel"])      # z above ground -> absolute
     S["site"] = site
     try:
         import seg_g8

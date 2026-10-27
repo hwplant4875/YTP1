@@ -148,6 +148,8 @@ S = {}
 
 # ---------------------------------------------------------------- build
 def build(site):
+    global CAM
+    CAM = camchan.CamPath(C.lift_keys(CAM_KEYS), v_in=SEAM_IN["vel"], v_out=SEAM_F3["vel"])      # z above ground -> absolute
     from forest import fset
     import flares
     flares.COLORS.setdefault("blue", ((0.05, 0.16, 0.75), (0.35, 0.55, 1.0)))
