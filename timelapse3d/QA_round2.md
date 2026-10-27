@@ -8,3 +8,5 @@
 
 ## Part 2-3
 - (after chain_qa1: f1 v2, f3 v2, s1 v2, s2 v2 reviews)
+- [~] g5 v7: head hold good (~2.5 s); AT sprint/punch unreadable (25 px titan) -> v8 zoom 68 mm on the punch, 42 mm boxer.
+- [~] g6 v5: far HQ framing (owner 'far is better') but blond-titan bite/throw + Eren/Mikasa unreadable -> v6 zoom 56 mm at 37.3, 50 mm at 52.5.
