@@ -162,8 +162,9 @@ G4 = [
 # ---------------------------------------------------------------- g5 (M), tight times
 G5 = [
     (0.0,  (-40, 330, 170),   (0, 0, 30),       32),              # C0
-    (1.0,  (-38, 320, 169),   (0, -14, 50),     88),              # v5 (QA batch1 P1): zoom onto the Colossal's head over
-    (3.6,  (-34, 296, 166),   (0, -14, 50),     84),              #   the gate (~1.5 video s, chin at the wall top), then
+    (1.0,  (-34, 280, 92),    (0, -14, 55),     110),             # v5 (QA batch1 P1): zoom onto the Colossal's head over
+    (2.0,  (-32, 262, 80),    (0, -14, 56),     230),             #   the gate (~1.5 video s, chin at the wall top); v6: camera
+    (3.6,  (-31, 255, 78),    (0, -14, 56),     220),             #   down near wall-top height, 230 mm (v5 head ~10 %), then
     (6.2,  (-40, 300, 172),   (0, 10, 24),      32),              # C1  back out before the steam explosion (9.0)
     (12.0, (-75, 370, 200),   (0, 40, 8),       28),              # C2
     (18.0, (-20, 470, 205),   (-15, 150, 0),    28),              # C3

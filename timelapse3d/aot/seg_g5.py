@@ -138,7 +138,7 @@ def col_state(t):
     dip = 1.5 * bump(t, BEATS["dip"][0], BEATS["dip"][1] - 0.2, BEATS["kick"], BEATS["kick"] + 0.6)
     return dict(show=t < BEATS["col_fade"][1] + 0.05, rise=rise, k=k, dip=dip, hand_r=ss(*BEATS["grip"], t),
                 hand_l_up=ss(*BEATS["hand_up"], t), sweep=ss(*BEATS["sweep"], t), fade=ss(*BEATS["col_fade"], t),
-                lean=2.0 + 5.0 * ss(6.3, 7.2, t), steam=ss(0.05, 1.6, t))
+                lean=2.0 + 5.0 * ss(6.3, 7.2, t), steam=ss(3.2, 4.4, t))   # v6: no steam over the face during the zoom
 
 def sweep_hand(t):
     """Left-hand IK target (M) during the sweep: up over the parapet at X -2, then west along the wall top."""
@@ -1472,7 +1472,7 @@ def build_cards(coll):
                np.column_stack([rng.normal(1.5, 1.0, n), rng.normal(0.5, 1.0, n), rng.uniform(1.0, 3.0, n)]), r0=0.8, r1=0.5,
                life=rng.uniform(3.0, 5.0, n), rise=0.3, kind="glow", alpha=0.8, color=hexrgb("#ff8a30"), fade_in=0.3)
     # ---- steam rising off the skull (20-40 m above the head), continuously spawned billows
-    ts = np.arange(0.3, BEATS["steam_burst"] + 0.3, 0.09); n = len(ts)
+    ts = np.arange(3.2, BEATS["steam_burst"] + 0.3, 0.09); n = len(ts)          # v6: starts after the face zoom (was 0.3)
     C.add_many(ts, S3(0, -20, 58)[None, :] + np.column_stack([rng.normal(0, 9, n), rng.normal(0, 4, n), rng.uniform(-2, 4, n)]),
                np.column_stack([rng.normal(0, 1.5, n) - 1.5, rng.normal(-1.5, 1.5, n), rng.uniform(5, 9, n)]), r0=4.0, r1=rng.uniform(9, 14, n),
                life=rng.uniform(3.0, 4.5, n), rise=4.0, kind="steam", alpha=0.42, tau=1.5)
