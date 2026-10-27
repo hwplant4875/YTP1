@@ -43,6 +43,7 @@ BEATS = dict(
     # time of day: key times of LIGHT_KEYS / GRADE_KEYS / HAZE_KEYS below
     night=0.0, night2=2.4, predawn=3.4, sunrise=5.0, golden=7.2, early=9.8, morning=13.0, late=16.5, seam=DUR,
     lamps=(2.6, 4.0),             # camp lamps fade out (the camp has left the frame by then)
+    lamp_tint=(0.0, 0.0),         # camp lamp tint ease (0 = none: camp104's final night defaults ARE the warm values; code path kept)
     gate_open=(0.6, 2.4),         # outer gate opens (camera 1.6 km away at the camp)
     corps_go=(1.0, 3.0),          # the column starts / reaches cruise speed
     corps_tail_out=15.0,          # the last wagon passes the gate (sets the column's start position)
@@ -654,16 +655,28 @@ def update_gate(t):
     g["dout"].scale = (1.0, 1.0, max(f, 0.01))
 
 # ---------------------------------------------------------------------- build / update (contract)
-def _warm_camp_lamps(st):
-    """g4-only runtime tint (camp104.py untouched): the deep-blue night grade (gain 0.30/0.48/1.50) would turn camp104's
-    warm lamps white-blue, so pre-compensate their colour here; after the grade they read warm orange."""
-    try:
-        st["win"].inputs["Color"].default_value = (1.0, 0.30, 0.06, 1.0)
-        st["fire"].inputs["Color"].default_value = (1.0, 0.24, 0.03, 1.0)
-        for ld, _e in st.get("lights", []):
-            ld.color = (1.0, 0.32, 0.07)
-    except Exception as ex:
-        say("camp lamp tint skipped:", ex)
+# camp lamps under the deep-blue night grade (gain 0.30/0.48/1.50, -1.8 EV): camp104's own colours / strengths clip to
+# white-blue.  t 0 shows camp104's look exactly (= g3's last frame, which uses set_night unmodified); over BEATS["lamp_tint"] the
+# g4-only runtime tint eases in (camp104.py untouched): pre-compensated orange, unclipped strengths.
+LAMP_WARM = dict(win=((1.0, 0.30, 0.06), 11.0), fire=((1.0, 0.24, 0.03), 16.0), glow=((1.0, 0.28, 0.05), 5.0))
+LAMP_CAMP = dict(win=11.0, fire=16.0, glow=5.0)          # camp104.set_night strengths at f = 1 (final camp104 = LAMP_WARM)
+
+def _camp_lamp_capture(st):
+    st["_orig_cols"] = {k: tuple(st[k].inputs["Color"].default_value)[:3] for k in LAMP_WARM if st.get(k) is not None}
+
+def update_camp_lamps(t):
+    import camp104
+    st = STATE["camp"]
+    f = 1.0 - ss(*BEATS["lamps"], t)
+    camp104.set_night(st, f)
+    w = ss(*BEATS["lamp_tint"], t)
+    for k, (col, stren) in LAMP_WARM.items():
+        n = st.get(k)
+        if n is None or k not in st.get("_orig_cols", {}):
+            continue
+        c0 = st["_orig_cols"][k]
+        n.inputs["Color"].default_value = (*(lerp(a, b, w) for a, b in zip(c0, col)), 1.0)
+        n.inputs["Strength"].default_value = lerp(LAMP_CAMP[k], stren, w) * f
 
 def build(site):
     t0 = time.time()
@@ -678,7 +691,7 @@ def build(site):
     import camp104
     tb = time.time()
     STATE["camp"] = camp104.build(site["L"], site["M2S"], site["ground_M"], _coll("G4Camp"))
-    _warm_camp_lamps(STATE["camp"])
+    _camp_lamp_capture(STATE["camp"])
     for nm, fn in (("camp", None), ("corps", build_corps), ("crowd", build_crowd), ("chimneys", build_chimneys), ("embers", build_embers), ("gate", build_gate)):
         if fn is not None:
             fn(coll)
@@ -701,13 +714,7 @@ def update(t):
     except TypeError:
         SQ.update(tau + 1e-4)
     import camp104
-    f = 1.0 - ss(*BEATS["lamps"], t)
-    camp104.set_night(STATE["camp"], f)
-    try:                                   # g4-only: unclipped strengths, so the night grade keeps them orange (not white)
-        STATE["camp"]["win"].inputs["Strength"].default_value = 11.0 * f
-        STATE["camp"]["fire"].inputs["Strength"].default_value = 16.0 * f
-    except Exception:
-        pass
+    update_camp_lamps(t)
     update_corps(t)
     update_crowd(t)
     STATE["chimneys"].update(t, wind=(WIND[0], WIND[1]))
