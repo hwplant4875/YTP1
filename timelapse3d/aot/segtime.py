@@ -80,7 +80,50 @@ def seam_out(g):
     i = ORDER.index(g)
     return seam(g, ORDER[i + 1]) if i + 1 < len(ORDER) else seam("g8_end")
 
+# ---------------------------------------------------------------- VIDEO CLOCK (owner 10/27 07:34: "everything 2x faster", 30 fps)
+# Segment modules keep their own LOCAL time t (BEATS, CAM, update(t)) running 0..DUR[g].  The video plays each segment
+# through a piecewise-linear map  video tv -> local t  (TMAP), default  t = SPEED * tv.  render_seg.py --vclock renders
+# frames on the VIDEO clock (f = round(tv * fps)) and evaluates the segment at seg_t(g, tv).
+#   - Re-time a stretch of a segment: give TMAP[g] knots [(tv, t), ...] from (0, 0) to (VDUR, DUR[g]); slope = local
+#     speed factor (2 = double speed, 1 = real time).  SEAM RULE: the slope at both ends must stay SPEED (=2) unless the
+#     neighbour's adjacent end is changed to match, otherwise camera speed jumps at the seam.
+#   - HUD tag JSONs are on the video clock: convert with to_video(g, t).
+SPEED = 2.0
+TMAP = {}                              # g -> [(tv, t), ...] knots; missing = linear SPEED
+def knots(g):
+    k = TMAP.get(g)
+    return list(k) if k else [(0.0, 0.0), (DUR[g] / SPEED, DUR[g])]
+def vdur(g): return knots(g)[-1][0]
+def seg_t(g, tv):
+    k = knots(g)
+    if tv <= k[0][0]: return k[0][1]
+    for (a, ta), (b, tb) in zip(k, k[1:]):
+        if tv <= b:
+            return ta + (tb - ta) * (tv - a) / (b - a) if b > a else tb
+    return k[-1][1]
+def to_video(g, t):
+    k = knots(g)
+    if t <= k[0][1]: return k[0][0]
+    for (a, ta), (b, tb) in zip(k, k[1:]):
+        if t <= tb:
+            return a + (b - a) * (t - ta) / (tb - ta) if tb > ta else a
+    return k[-1][0]
+def slope(g, tv):
+    k = knots(g)
+    for (a, ta), (b, tb) in zip(k, k[1:]):
+        if tv <= b + 1e-9 and b > a: return (tb - ta) / (b - a)
+    return SPEED
+def vstarts():
+    s, t = {}, 0.0
+    for g in ORDER:
+        s[g] = round(t, 6); t += vdur(g)
+    return s, t
+
 if __name__ == "__main__":
     for g in ORDER:
         s = SEG[g]; print("%s %6.1f s  %s -> %s  %s" % (g, s["dur"], fmt(s["start"]), fmt(s["end"]), s["content"]))
     print("total %.1f s (%s)" % (TOTAL, fmt(TOTAL)))
+    VS, VT = vstarts()
+    for g in ORDER:
+        print("video %s %6.2f s  %s  slope in %.2f out %.2f" % (g, vdur(g), fmt(VS[g]), slope(g, 0.0), slope(g, vdur(g))))
+    print("video total %.1f s (%s)" % (VT, fmt(VT)))

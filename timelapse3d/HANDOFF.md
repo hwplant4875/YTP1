@@ -429,3 +429,18 @@ Queue: g2 v2 -> g4 -> g3 -> connectors -> full one-take preview.
 All 7 seams checked by eye; camera matches. g4|g5 = intended bolt flash. g5|g6: houses removed in the g5 session (alley sightline) reappear in g6, so align them (remove the same houses in g6, or skip the removal near the seam).
 Remaining polish before final: g7 tags + north terrain + forecourt formation; g6 re-render (new well + g5 house removal); burn the master overlay (26 mapped / 10 unmapped); P2 river + bridges (g2 build_ground + world.py).
 Waiting for owner feedback on master v1.
+
+
+## Master v2 READY TO ASSEMBLE (all polish in): g1v3 g2v3 g3v4 g4v3 g5v3 g6v3 g7v2 g8v2. Holding for owner notes on master v1.
+
+
+## 2026-10-27 07:34 OWNER FEEDBACK on master v1 -> v3 PASS (binding)
+- Everything too slow. Camera 2x overall; the owner's 2x-playback test felt better. NEW VIDEO CLOCK: segtime.SPEED=2, TMAP knots per segment, render_seg --vclock / render_seg.sh VCLOCK=1 -> 30 fps, renders/<g>_v3/. Total ~3:31. Key moments: a small zoom-in.
+- INTRO: match renders/opening_preview_v4.mp4 (Oct 25; the owner says its timing and speed were PERFECT) in camera angle, speed and height, with the Colossal zoom-in. The Smiling (Dina) titan visibly spawns: pre-place her, or show her moving fast from the gate. Carla eaten in 2 s.
+- g2: the refugee column during Reiner's run is awkward; they are already evacuated when he breaches. Reiner 3x faster. Then an AERIAL view of BURNING Shiganshina, moving on toward Trost.
+- g3: farm building faster and clearer; NO winter, straight to 846. 250k march: RESTORE the ORIGINAL march846 camera angle and speed; remove the "strange light" at 1:47 (sun glow cards). Remove the pole field (camp sticks).
+- g4/g5: 2nd Colossal: faster camera; Eren on the wall top DIRECTLY ABOVE the outer gate so the Colossal spawns right above him. Cart block: far fewer people (rear).
+- g5 3:44 AT leap -> show him smashing through buildings instead.
+- g6 3:58: the cadets must FLY desperately (ODM) and crash the windows, not walk. Lift scene: zoom in, Eren not visible. NEW BEAT: Eren surrounded by titans spots the blond titan (Thomas's eater), charges madly, bites its nape and throws it at the last remaining titan.
+- g7: camera to the canal-side cannon basin MUCH faster. After the cannonball block, as the smoke thickens, REMOVE the temporary half-titan model. Pyxis speech: no square plate; a long, wide ivory paving strip beside the wall.
+- g8: carry a bit faster. Remove the strange triangle graphic rising over the gate after the plug. Flare after the plug clearly GREEN. Remove the sparkles at 6:40 (master v1, ~g8 53 s). NEW: titans herded into a wall corner and killed all at once.

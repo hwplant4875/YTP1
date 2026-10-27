@@ -18,6 +18,8 @@ Segment module contract (aot/seg_<id>.py):
     finish()   called once after toon.apply() (material tweaks that must survive the toon pass)
     cam_shake(t) -> (pitch, yaw) radians added to the camera (short impact shakes)
 
+VIDEO CLOCK (--vclock, render_seg.sh VCLOCK=1, owner 10/27 "2x faster", 30 fps): frames / --t0 / --t1 / --stills are in
+video seconds tv; the segment is evaluated at t = segtime.seg_t(seg, tv) (default t = 2 tv; per-segment TMAP knots).
 Frames: <seg-out>/f_<global frame index>.png with index = round(t * fps); STEP > 1 renders every STEP-th frame
 (render_seg.sh repeats frames before encoding).  Missing frames are resumed after a crash.  hudcam JSON per frame in _cam/.
 """
@@ -36,6 +38,7 @@ ap.add_argument("--seg-samples", type=int, default=1)
 ap.add_argument("--stills", default="")
 ap.add_argument("--dry", action="store_true")
 ap.add_argument("--check", action="store_true", help="print camchan.check + the module's check() and exit")
+ap.add_argument("--vclock", action="store_true", help="frames, --t0/--t1 and --stills on the VIDEO clock (segtime.seg_t)")
 B, _ = ap.parse_known_args(argv)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -171,6 +174,12 @@ def trackers(t):
             print("[seg] tracker", nm, "failed:", ex_)
         TRK[nm].location = tuple(M2S(p)) if p is not None else (0.0, 0.0, -1000.0)
 
+import segtime
+VDUR = segtime.vdur(B.seg) if B.vclock else SEG.DUR
+def local_t(tv):
+    """video time -> segment local time (identity without --vclock)."""
+    return segtime.seg_t(B.seg, tv) if B.vclock else tv
+
 def frame_state(t):
     SEG.update(t)
     SEG.light(t)
@@ -190,25 +199,26 @@ if B.dry:
     sys.exit(0)
 
 if B.stills:
-    jobs = [(float(x), f"still_{B.seg}_{float(x):05.1f}.png") for x in B.stills.split(",") if x.strip()]
+    jobs = [(float(x), f"still_{B.seg}_{float(x):05.1f}.png") for x in B.stills.split(",") if x.strip()]   # video s with --vclock
 else:
-    n0 = int(math.ceil(B.t0 * B.fps - 1e-6)); n1 = int(math.floor(min(B.t1, SEG.DUR) * B.fps - 1e-6)) + 1
+    n0 = int(math.ceil(B.t0 * B.fps - 1e-6)); n1 = int(math.floor(min(B.t1, VDUR) * B.fps - 1e-6)) + 1
     jobs = [(f / B.fps, f"f_{f:05d}.png") for f in range(n0, n1) if f % B.step == 0]
     jobs = [j for j in jobs if not os.path.exists(os.path.join(B.seg_out, j[1]))]      # resume after a crash
 print(f"[seg] {len(jobs)} frames to render")
 tr = time.time()
-for i, (t, fn) in enumerate(jobs):
+for i, (tv, fn) in enumerate(jobs):
     tu = time.time()
+    t = local_t(tv)
     frame_state(t)
     tu = time.time() - tu
     sc.render.filepath = os.path.join(B.seg_out, fn)
     bpy.context.view_layer.update()
     try:
-        hudcam.dump(sc, int(round(t * B.fps)), B.seg_out, t=t, track=tuple(TRK), name=None if not B.stills else fn[:-4])
+        hudcam.dump(sc, int(round(tv * B.fps)), B.seg_out, t=tv, track=tuple(TRK), name=None if not B.stills else fn[:-4])
     except Exception as ex_:
         print("[seg] hudcam failed:", ex_)
     bpy.ops.render.render(write_still=True)
     el = time.time() - tr
-    print(f"[seg] {i + 1}/{len(jobs)} t={t:.2f} -> {fn} ({el:.0f}s, {el / (i + 1):.2f}s/f, update {tu:.2f}s)", flush=True)
+    print(f"[seg] {i + 1}/{len(jobs)} tv={tv:.2f} t={t:.2f} -> {fn} ({el:.0f}s, {el / (i + 1):.2f}s/f, update {tu:.2f}s)", flush=True)
 if not B.stills:
     open(os.path.join(B.seg_out, f"_done_{B.t0:g}_{B.t1:g}"), "w").write("%d frames" % len(jobs))

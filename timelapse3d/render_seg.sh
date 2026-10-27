@@ -9,13 +9,17 @@
 # Env: STEP (render every Nth frame, default 2; frames are repeated before the encode), WINLEN (s per Blender run, default 25),
 #      FPS (15), SMP (Eevee TAA samples, 1), ENGINE (BLENDER_EEVEE), OUT (default renders/<SEG>), DUR (default from segtime).
 SEG="${SEG:?set SEG=g8 (etc.)}"
+# VIDEO CLOCK v3 (owner 10/27: 2x speed, 30 fps): VCLOCK=1 -> FPS 30, DUR = segtime.vdur(SEG), WIN/STILLS in VIDEO seconds,
+# segment evaluated at segtime.seg_t (see aot/segtime.py).  Default OUT for VCLOCK is renders/<SEG>_v3.
+if [ -n "$VCLOCK" ]; then FPS="${FPS:-30}"; VCARG="--vclock"; OUT="${OUT:-E:/YTP2/3D Timelapse/renders/${SEG}_v3}"; fi
 FPS="${FPS:-15}"; SMP="${SMP:-1}"; STEP="${STEP:-2}"; WINLEN="${WINLEN:-25}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 OUT="${OUT:-E:/YTP2/3D Timelapse/renders/$SEG}"
 FR="$OUT/frames"; mkdir -p "$FR"
 BL="/c/All The Programs/Blender/blender.exe"
 LOCK="/e/YTP2/3D Timelapse/.gpu_lock"
-DUR="${DUR:-$(cd "$HERE/aot" && python -c "import segtime; print(segtime.DUR['$SEG'])")}"
+if [ -n "$VCLOCK" ]; then DUR="${DUR:-$(cd "$HERE/aot" && python -c "import segtime; print(segtime.vdur('$SEG'))")}"
+else DUR="${DUR:-$(cd "$HERE/aot" && python -c "import segtime; print(segtime.DUR['$SEG'])")}"; fi
 # OPT-IN Shiganshina set (frame W; g2 agent 10/27): SEG_SET=shiganshina (the default for SEG=g2) builds scene.py's own
 # Shiganshina 845 with g1's plug-ins + env (AOT_STATE=kicked, Colossal hidden) instead of AOT_SET=trost, and render_seg.py
 # runs with SEG_FRAME=W (identity frame, scene.py ground).  Trost segments are unchanged.
@@ -40,7 +44,7 @@ run_blender() {   # $1 = output dir (may contain spaces), $2 = extra args, $3 = 
   AOT_SET=$SEG_SETVAR AOT_PLUGINS=${SEG_PLUGINS:-world} TA_PSCALE=1.0 \
     "$BL" -b -P "$HERE/aot/scene.py" -P "$HERE/aot/render_seg.py" -- \
     --year $SEG_YEAR --cam ${SEG_CAM:-gate} --engine ${ENGINE:-BLENDER_EEVEE} --res 854x480 --samples $SMP \
-    --seg "$SEG" --seg-out "$SOUT" --fps $FPS --seg-samples $SMP $2 2>&1 \
+    --seg "$SEG" --seg-out "$SOUT" --fps $FPS --seg-samples $SMP $VCARG $2 2>&1 \
     | grep --line-buffered -E "\[seg|\[g[0-9]|\[trost\]|\[plugin|Traceback|Error|error:|line [0-9]+|FLAG|peak|  -|camera|t [0-9]"
   if [ -z "$NOLOCK" ]; then rmdir "$LOCK" 2>/dev/null; trap - EXIT; fi
 }
