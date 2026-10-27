@@ -16,3 +16,9 @@ Rules: edit code first, render all later in one batch (480p 15fps previews). TOO
 
 ## Added 15:00 UTC (master v2 3:27 now pushed)
 - g5 v4 (P1): Colossal #2 above the Trost gate hardly visible (only a smoke puff + thin orange arcs) -> large Colossal head over the wall for ~1.5 s, then vanish in steam; lightning per spec. Middle/late section (district fly-over) too dark/murky, with odd diagonal light shafts -> brighten, remove the shafts. Overall master v2 = 3:27, keep the total at 3:30-4:00 after fixes.
+
+## STATUS (autopilot 10/28)
+- [x] g1 -> g1_fall_v7: tree-still opening OK, golden bolt + flash + sparks + arcs read, smoke before the head, FACE ~1/3 frame (285 mm).
+- [~] g3 v7 reviewed: night start OK, Trost/farm OK; march still thin strip, post-march night black, camp still round -> v8 rendering.
+- [~] g8 v4 reviewed: middle bright, green smoke flares OK, carry readable; herd-kill corner titans too small -> v5 rendering (closer cam).
+- [~] g4 v5: opened near black -> v6 (night grade lifted, flat camp) rendering.

@@ -107,8 +107,8 @@ CAM_KEYS = [
     (43.5, (-80, 160, 93),   (2, 13, 12),     41),     # S1b hold on the wedged ball, the plug grows, 5 titans face it
     (47.1, (-95, 225, 135),  (0, 20, 40),     32),     # S2 the Λ plug and the yellow trail (from the east plank box)
     (52.0, (-105, 245, 140), (0, 30, 15),     34),     # L1 Levi
-    (55.0, (60, 190, 115),   (-36, 22, 8),    38),     # v4 (QA batch1): the herded corner group (x -34..-44, y 15..26)
-    (57.4, (50, 170, 105),   (-38, 20, 8),    44),     #   killed together (HERD_KILL = local 56.5): slight zoom-in
+    (55.0, (25, 155, 98),    (-37, 21, 8),    46),     # v4 (QA batch1): the herded corner group (x -34..-44, y 15..26)
+    (57.4, (12, 138, 88),    (-38, 20, 8),    58),     #   killed together (HERD_KILL = local 56.5): v5 closer + zoom (v4 too small)
     (60.2, (10, 300, 200),   (-130, 290, 5),  32),     #   then a steady turn west into M1 (no yaw flip)
     (63.4, (-60, 430, 290),  (-410, 800, 20), 28),     # M1 day 2, Survey Corps over the district
     (71.0, (150, 600, 190),  (-120, 420, 0),  30),     # E1 (tight look-at) cleanup, pyres, rows

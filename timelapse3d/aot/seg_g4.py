@@ -101,9 +101,9 @@ LIGHT_KEYS = [
     (BEATS["seam"],) + tuple(_L5),                                                                            # = g5 t 0
 ]
 GRADE_KEYS = [                    # t: (gain r, g, b), exposure offset (stops)
-    (BEATS["night"],   (0.30, 0.48, 1.50), -1.8),        # deep blue night (the toon bands carry no light colour: the grade does)
-    (BEATS["night2"],  (0.30, 0.48, 1.50), -1.8),
-    (BEATS["predawn"], (0.88, 0.72, 0.95), -1.1),        # violet-pink first light
+    (BEATS["night"],   (0.45, 0.60, 1.35), -0.9),        # blue night (autopilot 10/28: lifted from -1.8, g4 v5 opened near black)
+    (BEATS["night2"],  (0.45, 0.60, 1.35), -0.9),
+    (BEATS["predawn"], (0.90, 0.76, 0.95), -0.6),        # violet-pink first light
     (BEATS["sunrise"], (1.24, 0.96, 0.70), -0.30),       # golden sunrise
     (BEATS["golden"],  (1.14, 1.00, 0.84), -0.12),
     (BEATS["early"],   (1.00, 1.00, 1.02), -0.06),
