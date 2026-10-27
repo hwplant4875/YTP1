@@ -15,14 +15,14 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" && git pull -q --rebase
     && echo "[chain] pushed: $msg $(date +%H:%M)" || echo "[chain] push FAILED: $msg"
 }
 echo "[chain] start $(date +%H:%M)"
-for spec in g1:g1_fall_v6 g3:g3_flight_v7 g4:g4_trost850_v5 g8:g8_boulder_v4; do
+for spec in g1:g1_fall_v6 g3:g3_flight_v7 g4:g4_trost850_v5 g8:g8_boulder_v4 g5:g5_trost_v5; do
   g=${spec%%:*}; lab=${spec#*:}
   ONLY="$g" NOMASTER=1 bash render_queue_master_v2.sh >> "$LG/queue_qa1.log" 2>&1
   if [ -f "$LAP/${lab}_preview.mp4" ]; then push "$lab preview (QA batch1 fixes, TOON off)" "$LAP/${lab}_preview.mp4" "$LAP/${lab}_sheet.jpg"
   else echo "[chain] $lab FAILED (see $LG/$lab.log)"; fi
 done
 ONLY="none" bash render_queue_master_v2.sh >> "$LG/queue_qa1.log" 2>&1        # master concat only (all labels exist)
-[ -f "$LAP/master_onetake_v2_preview.mp4" ] && push "master_onetake_v2 re-concat (g1 v6, g3 v7, g4 v5, g8 v4)" \
+[ -f "$LAP/master_onetake_v2_preview.mp4" ] && push "master_onetake_v2 re-concat (g1 v6, g3 v7, g4 v5, g5 v5, g8 v4)" \
   "$LAP/master_onetake_v2_preview.mp4" "$LAP/master_onetake_v2_sheet.jpg"
 SEGS="f1 f3 s1 s2" VER=v2 PUSH=0 bash aot/forest/queue_part2.sh >> "$LG/queue_qa1.log" 2>&1
 declare -A NAME=( [f0]=f0_trost_karanes [f1]=f1_formation_female [f2]=f2_forest_trap [f3]=f3_duel_rescue [s1]=s1_stohess_shift [s2]=s2_stohess_wall )

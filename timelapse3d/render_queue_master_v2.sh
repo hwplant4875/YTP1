@@ -14,7 +14,7 @@ RD="E:/YTP2/3D Timelapse/renders"; LG="/e/YTP2/3D Timelapse/logs"; LAP="$HERE/re
 mkdir -p "$LG"
 export TOON=0
 # segment : version label (bump the label when the segment's code changes again)
-SEGS="g1:g1_fall_v6 g2:g2_armored_v5 g3:g3_flight_v7 g4:g4_trost850_v5 g5:g5_trost_v4 g6:g6_hq_v4 g7:g7_basin_v3 g8:g8_boulder_v4"
+SEGS="g1:g1_fall_v6 g2:g2_armored_v5 g3:g3_flight_v7 g4:g4_trost850_v5 g5:g5_trost_v5 g6:g6_hq_v4 g7:g7_basin_v3 g8:g8_boulder_v4"
 want() { [ -z "${ONLY:-}" ] && return 0; case " $ONLY " in *" $1 "*) return 0;; esac; return 1; }
 cd "$HERE"
 for spec in $SEGS; do
