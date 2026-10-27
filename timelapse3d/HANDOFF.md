@@ -447,6 +447,7 @@ Waiting for owner feedback on master v1.
 
 
 ## RESUME 10/27 master v2 (lean mode, owner 08:11: credits)
+FIRST ITEM, g2 v5 (owner feedback on g2_armored_v4fast, relayed 09:41): (1) burning Shiganshina at NIGHT: dark blue night sky, fires glowing orange, smoke lit from below; switch to night during/after the breach (g3's start light must then match, so adjust g3 part A's start light too). (2) After the breach the Armored does NOT stand idle: he vanishes in a steam burst and the body sinks/dissolves into steam, gone within ~1 s. (3) Animate the evacuation: refugee boats moving north on the river/canal and small columns of people walking north toward Trost, readable from the air. (4) Burning-town aerial ~3 s, then an ULTRA-fast camera move to Trost.
 LEAN RULES: no subagents/workflows; sequential small edits; ONE 480p 15 fps preview + 2 fps contact sheet per segment (VCLOCK=1); push every render version-labelled to renders/laptop/ (+ sheet); report only on push/blocked (<=3 lines).
 VIDEO CLOCK: segtime SPEED=2 + TMAP knots; render_seg.sh VCLOCK=1 -> renders/<g>_v3/, 15 fps preview (final 30 fps). Seam slope stays 2. hud tags on video time (segtime.to_video).
 DONE: g2 v4fast (62e449d, renders/g2_v3; TMAP g2 [(0,0),(16,32)]; suggested caption retime in the g2 notes: gate 9.1-12.1 local, Eren line 12.5-15.5 local).
