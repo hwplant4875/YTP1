@@ -3,10 +3,10 @@
 모든 미리보기는 `renders/laptop/` 에 있습니다 (480p 15fps, f3만 360p). TOON 끔, 음악/음성 없음.
 
 ## 최신 미리보기
-- **전체 원테이크: `full_onetake_v1_preview.mp4` (6:30)** = Part 1 + Part 2-3.
-- Part 1: `master_onetake_v4_preview.mp4` (3:30). Part 2-3: `part2_3_onetake_v3_preview.mp4` (2:59).
+- **전체 원테이크 (이름표 포함): `full_onetake_v2_preview.mp4` (6:30)** = Part 1 + Part 2-3. (이름표 없는 버전: full_onetake_v1)
+- Part 1: `master_onetake_v5_preview.mp4` (3:30, 이름표). Part 2-3: `part2_3_onetake_v4_preview.mp4` (2:59, 이름표).
 - 세그먼트: g1_fall_v7, g2_armored_v5, g3_flight_v10, g4_trost850_v6, g5_trost_v8, g6_hq_v6, g7_basin_v4, g8_boulder_v6,
-  f0_trost_karanes_v2, f1_formation_female_v4, f2_forest_trap_v1, f3_duel_rescue_v5, s1_stohess_shift_v3, s2_stohess_wall_v3.
+  f0_trost_karanes_v3, f1_formation_female_v5, f2_forest_trap_v1, f3_duel_rescue_v6, s1_stohess_shift_v4, s2_stohess_wall_v3.
 
 ## 바뀐 점 (QA batch1)
 - g1 v7: 오프닝은 애니 나무 장면 그대로 시작. 번개(굵은 금색 낙뢰+섬광+불꽃+주황 아크) 후 연기, 초대형 얼굴이 화면 1/3 (285mm 줌).
@@ -16,9 +16,9 @@
 - f1 v3/v4: 카메라 3-4배 가까이 → 여성형 거인/기수 보임, 신호탄은 연기 기둥, 회색 판자 같던 먼지 자국 제거.
 - s1 v3, s2 v3: 여성형 거인 변신/플랜C 작살/난동, 도시 추격을 가까이서. s2 크레인이 지붕을 뚫지 않음.
 - 라운드2: 핵심 순간만 조금 느리게 (Part 1 3:20 → 3:30).
+- 라운드3: 미리보기에 이름표(Russo One, 최대 3개)를 직접 입힘 (REINER는 여성형 거인 주먹 안에서 표시). f3 후퇴 장면 카메라가 행렬을 비춤, 황혼 흐림 제거.
 
 ## 아직 약한 점
 - g6 본부 광장: 소유자 요청대로 먼 시점이라 거인이 작음 (줌 2곳 추가).
 - f3 숲 결투: 숲을 비스듬히 보면 나무 수천 그루로 GPU 드라이버가 멈춰 프레임이 얼어 보였음 → 원거리 클리핑으로 해결, 결투가 이제 보임 (360p).
 - s2 마지막 벽 속 거인 얼굴이 약간 만화적.
-- f0 (트로스트→카라네스) 황혼/새벽 1초씩 흐릿함.
