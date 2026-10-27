@@ -137,8 +137,8 @@ MARCH_KEYS_SET = [                                                  # (tau, cam,
 # titans against the low gold sun, ep02 20:09.0), then turns north to CAM_OUT.  Frame M.
 RIDGE_LOOK = (-300.0, -1590.0, 15.0)
 MARCH_TAIL_M = [
-    (12.6, (400.0, -2040.0, 350.0), RIDGE_LOOK, 46),
-    (14.0, (450.0, -1920.0, 350.0), RIDGE_LOOK, 48),
+    (12.6, (400.0, -2040.0, 350.0), RIDGE_LOOK, 48),
+    (14.0, (450.0, -1920.0, 350.0), RIDGE_LOOK, 50),
     (16.2, (380.0, -1420.0, 520.0), (-100.0, -650.0, 20.0), 34),
     (18.0, _gp(1050, 260, 640), _gp(-150, 0, 40), 28),            # = march846 CAM_OUT (set frame; converted below)
 ]
@@ -1032,7 +1032,7 @@ def build_ridge(cl):
     specs, gt, tmat = [], SW.Geo(), []
     NT = 11
     for j in range(NT):
-        H = rng.uniform(11.0, 15.0)                     # the big ones on the skyline (ep02 20:09.0)
+        H = rng.uniform(13.5, 15.5)                     # the big ones on the skyline (ep02 20:09.0)
         sp = dict(name=f"r{j}", H=H, g=rng.uniform(1.0, 1.3), al=rng.uniform(0.9, 1.2), hs=rng.uniform(0.9, 1.3),
                   skin=rng.randrange(len(SW.T_SKINS)), hair=rng.choice([None, 0, 1, 2]))
         n0 = len(gt.fc)
@@ -1044,14 +1044,18 @@ def build_ridge(cl):
     tm = [L.mat(f"G3R_tskin{i}", c, 0.6) for i, c in enumerate(SW.T_SKINS)] + [L.mat(f"G3R_thair{i}", c, 0.7) for i, c in enumerate(SW.T_HAIRS)]         + [L.mat("G3R_teeth", (0.85, 0.80, 0.70), 0.5)]
     RT = gt.finish()
     tob = SW._mesh("G3RidgeTitans", RT, gt.f, tmat, tm, cl)
+    sil, _ = emit_mat("G3RidgeSilhouette", (0.012, 0.009, 0.008), 1.0)   # QA: near-black backlit silhouettes
+    for i in range(len(tob.data.materials)):
+        tob.data.materials[i] = sil
     S["ridge"] = dict(RT=RT, tob=tob, H=np.array([s_["H"] for s_ in specs]), s0=np.linspace(-170.0, 170.0, NT) + np.array([rng.uniform(-12, 12) for _ in range(NT)]),
                       sp=np.array([rng.uniform(0.6, 1.4) for _ in range(NT)]), ph=np.array([rng.uniform(0, 6.28) for _ in range(NT)]))
     # the low gold sun behind them: one soft emissive glow card ~600 m beyond the crest along the hold view (WNW)
     gc = SCK.SmokeCards("G3SunGlow")
-    gx, gy = ridge_xy(0.0, 170.0)                       # just behind the crest: the glare rises from behind the silhouettes
-    q = F((gx, gy, 0.0)); q.z = ground_ray(q.x, q.y) + 25.0
-    gc.add(B["sunset"][0], (q.x, q.y, q.z), vel=(0, 0, 0), r0=190.0, r1=190.0, life=B["march"][1] - B["sunset"][0] + 0.5, rise=0.0,
-           color=(1.0, 0.80, 0.42), kind="glow", alpha=0.9, fade_in=1.5)
+    gx, gy = ridge_xy(0.0, 120.0)                       # just behind the crest, low: the hot core sits behind the titans' bodies
+    q = F((gx, gy, 0.0)); q.z = ground_ray(q.x, q.y) + 7.0
+    for r_, a_, c_ in ((240.0, 1.0, (1.0, 0.82, 0.45)), (110.0, 1.0, (1.0, 0.93, 0.70))):   # wide bloom + hot core
+        gc.add(B["sunset"][0], (q.x, q.y, q.z), vel=(0, 0, 0), r0=r_, r1=r_, life=B["march"][1] - B["sunset"][0] + 0.5, rise=0.0,
+               color=c_, kind="glow", alpha=a_, fade_in=1.5)
     gc.build(cl); S["sunglow"] = gc
 
 def update_ridge(t):
@@ -1061,7 +1065,7 @@ def update_ridge(t):
     import swarm845 as SW
     NT = len(R["H"])
     sa = R["s0"] + R["sp"] * (t - 31.3) * 1.5           # amble along the crest (time-lapse)
-    q0 = 6.0 * np.sin(sa / 70.0 + R["ph"])
+    q0 = np.zeros(NT)                                    # right on the crest line
     XY = [ridge_xy(a, b_) for a, b_ in zip(sa, q0)]
     z = np.array([gM(x, y) - 0.5 + ridge_h(x, y) for x, y in XY])
     ph = 2 * np.pi * (t * 1.2 + R["ph"])
