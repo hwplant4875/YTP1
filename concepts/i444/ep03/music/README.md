@@ -7,3 +7,7 @@
   QA: -23.9 LUFS integrated (render_v2 brings it to about -27 with the high-shelf), L/R correlation 0.23 (kept stereo),
   almost nothing above 3 kHz (0.02 %), no silence inside the loop. Low strings pulse about every 0.4 s, 13 dB under the mids.
 Owner rules (10/26 15:19): free copyright-safe horror music or ElevenLabs only, no added hits ("dum dum") on the music.
+
+- `eleven_ghostface_bed2.mp3` (10/27, shorts-factory key, owner's choice): same prompt family, "slightly more urgent, menacing", 150 s.
+  Bass-heavier than bed 1 (low/mid +5 dB raw). `eleven_ghostface_bed2_loop.mp3`: low-shelf -6 dB at 150 Hz, same levelling and
+  8..140 s loop with a 5 s equal-power crossfade; -23.5 LUFS, low/mid +2.2 dB (bed 1 loop: -4.8 dB). Meant for #4 to #1 and the outro.
