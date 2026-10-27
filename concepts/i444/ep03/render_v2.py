@@ -156,7 +156,9 @@ ins = ['-i', vid, '-i', clipa, '-i', sfxa]; fc = []
 for k, (vp, t) in enumerate(voice_items):
     ins += ['-i', vp]; fc.append(f"[{k+3}:a]aresample=48000,adelay={int(round(t*1000))}|{int(round(t*1000))}[v{k}]")
 m = len(voice_items) + 3; ins += ['-stream_loop', '-1', '-i', MUSIC]
-fc.append(f"[{m}:a]aresample=48000,atrim=0:{t_global},loudnorm=I=-27:TP=-3,highshelf=f=3000:g=-4,afade=t=out:st={max(0, t_global-2)}:d=2[mu]")
+# MUSIC_LEVELLED=1: the bed is already levelled per cue (e.g. a quieter final cue), so skip loudnorm, which would even it out
+mnorm = '' if os.environ.get('MUSIC_LEVELLED') == '1' else 'loudnorm=I=-27:TP=-3,'
+fc.append(f"[{m}:a]aresample=48000,atrim=0:{t_global},{mnorm}highshelf=f=3000:g=-4,afade=t=out:st={max(0, t_global-2)}:d=2[mu]")
 fc.append(''.join(f'[v{k}]' for k in range(len(voice_items))) + f"amix=inputs={len(voice_items)}:normalize=0,loudnorm=I=-15:TP=-1.5[vo]")
 fc.append("[1:a][vo][2:a][mu]amix=inputs=4:normalize=0:duration=first,alimiter=limit=0.95[a]")
 run(['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', ';'.join(fc), '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-t', str(t_global), OUT])
