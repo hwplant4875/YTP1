@@ -85,6 +85,7 @@ RAFTERS_X = [-199.0, -193.0, -187.0, -181.0, -175.0]   # tie beams N-S at Z 6.0 
 DOOR = (-208.2, 627.0)                     # the large arched doorway at the bay's west end (breakout)
 ROOF_R = (-258.0, 505.0, 25.0)             # g5's end: Armin, Mikasa, Connie on the ridge of roof R
 ST1_POS = (-231.0, 563.0)
+CC_POS = (-221.5, 514.5); CC_KILL = 66.8 - 70.0      # g5's CC corpse (fight #2 in Q2), killed 3.2 s before g6 starts
 EREN_NAPE = (-178.0, 619.0)                # bible: the prone body's nape (trost ANCHORS_M EREN_NAPE)
 TERRACE = (-270.0, -230.0, 612.0, 624.0, 2.5)
 WALK_Z = 28.0                              # keep tier-1 roof walk
@@ -722,6 +723,9 @@ def build_titans(coll):
     add("BRD", 8.0, [(0.0, -300, 598), (BEATS["brd_in"][0], -300, 598), (BEATS["brd_in"][1], -205.5, 601.0)],
         show=(BEATS["brd_in"][0] - 0.1, 1e9), beard=True, hair=1, g=1.2)
     face("BRD", at_xy); kill("BRD", BEATS["brd_kill"], -1)
+    # ---- CC: g5's crew-cut 12 m titan, slammed into tower T and nape-stamped at g5 66.8 (= g6 -3.2): its corpse stays
+    add("CC", 12.0, [(0.0, *CC_POS)], g=0.95, al=1.05, hair=0)
+    face("CC", (-246, 499)); kill("CC", CC_KILL, 1, keep=True, shrink=0.85, shrink_t=20.0)
     # ---- W0 (g5 hqw0): drifts off east, out of the late framings
     add("W0", 6.0, [(0.0, -160, 592), (14.0, -140, 584), (34.0, -104, 580)], hair=2)
     # ---- storeroom: exactly 7 titans of 3-4 m, milling, then a 4.5 m ring round the cage (arms reaching), blinded 27.55
@@ -1078,6 +1082,7 @@ def build_cards(coll):
                    life=rng.uniform(1.4, 2.2, n), rise=0.5, kind="dust", alpha=0.6, tau=0.5, color=hexrgb("#a89070"))
         ts = np.arange(te + 0.8, DUR, 0.13)
         _column(C, rng, ts, TT.pos(nm, te + 1.5) + np.array([0, 0, 0.5]), Hh, alpha=0.26, rise=5.0 + 0.2 * Hh, r=(1.0, 3.5 + 0.3 * Hh))
+    _column(C, rng, np.arange(-6.0, DUR, 0.13), S3(CC_POS[0], CC_POS[1], 1.0), 12.0, alpha=0.26, rise=7.0, r=(1.0, 6.0))   # g5's CC corpse
     # ---- tackle landing (11.9): big beige dust burst + chips from the parapet
     tl = BEATS["tackle"][1]; c = S3(-226.0, 601.0, 1.0); n = 46
     C.add_many(tl + rng.random(n) * 0.4, np.tile(c, (n, 1)) + rng.normal(0, 3.5, (n, 3)) * np.array([1, 1, 0.3]),
@@ -1219,6 +1224,18 @@ def build(site):
         TR.set_wagon(True); TR.set_cart("end")
     except Exception as ex:
         say("cart hooks failed:", ex)
+    try:                                       # seam g5|g6 (master v1 QA): the same set edits as g5 v3 - the Q2 dome /
+        import seg_g5                          # drum -> 3.4 m well, and the 8 houses N of SS removed for the alley view
+        seg_g5.STATE.setdefault("L", STATE["L"]); seg_g5.STATE.setdefault("TR", TR)
+        seg_g5.fix_q2_dome(coll)
+        seg_g5.clear_lots()
+        seg_g5.STATE.setdefault("site", site)               # tower T as g5 leaves it: top burst off (65.5), blocks
+        seg_g5.build_tower_burst(coll)                      # landed round its foot, grind scar on the shaft (static here)
+        seg_g5.update_tower(segtime.DUR["g5"] + 30.0)
+        say("g5 end state: Q2 well, cleared lots, tower T burst")
+        bpy.context.view_layer.update(); _RC.clear()
+    except Exception as ex:
+        say("g5 set edits (Q2 well / cleared lots) failed:", ex)
     build_titans(coll)
     build_attack(coll)
     _pose_attack(BEATS["eren_rise"][0])
