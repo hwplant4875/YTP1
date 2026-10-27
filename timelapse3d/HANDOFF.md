@@ -469,3 +469,7 @@ Render queue: g2_v5 full -> g1_v5 stills2 -> g1 full -> g3..g8 (VCLOCK=1, TOON o
 DONE g2 v5 (renders/laptop/g2_armored_v5_*, 15.2 s, TOON off): night after the breach, Armored steam-vanish, aerial ~3 s, fast exit north.
 DONE g3 v5 (renders/laptop/g3_flight_v5_*, 40.4 s, TOON off): night start matches g2 v5 end, no winter, march846 camera.
 DONE g4 v4 (renders/laptop/g4_trost850_v4_*, 7.3 s): faster establishing approach (TMAP g4 3.2x), TOON off.
+
+
+## PART2-3 (forest + Stohess, laptop session 10/27; new files only: aot/forest/, aot/stohess/, seg_f*.py, seg_s*.py)
+- 20:40 Owner: code only now, renders later in one queue; composition check = 1-2 stills at 270p per segment. Done so far: forest set (aot/forest/fset.py + layout.py + common.py kit), seg_f0 (g8 end -> along Wall Rose -> Karanes, Trost set), seg_f1 (f1-f6), seg_f2 (f7-f10). Driver: aot/forest/render_part2.sh (TOON=0, GPU lock).
