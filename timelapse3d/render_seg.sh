@@ -43,7 +43,7 @@ run_blender() {   # $1 = output dir (may contain spaces), $2 = extra args, $3 = 
   fi
   AOT_SET=$SEG_SETVAR AOT_PLUGINS=${SEG_PLUGINS:-world} TA_PSCALE=1.0 \
     "$BL" -b -P "$HERE/aot/scene.py" -P "$HERE/aot/render_seg.py" -- \
-    --year $SEG_YEAR --cam ${SEG_CAM:-gate} --engine ${ENGINE:-BLENDER_EEVEE} --res 854x480 --samples $SMP \
+    --year $SEG_YEAR --cam ${SEG_CAM:-gate} --engine ${ENGINE:-BLENDER_EEVEE} --res ${RES:-854x480} --samples $SMP \
     --seg "$SEG" --seg-out "$SOUT" --fps $FPS --seg-samples $SMP $VCARG $2 2>&1 \
     | grep --line-buffered -E "\[seg|\[g[0-9]|\[trost\]|\[plugin|Traceback|Error|error:|line [0-9]+|FLAG|peak|  -|camera|t [0-9]"
   if [ -z "$NOLOCK" ]; then rmdir "$LOCK" 2>/dev/null; trap - EXIT; fi

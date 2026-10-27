@@ -56,19 +56,19 @@ BEATS = dict(
     prof=(45.7, 369.0, 3.7, 9.0),          # v0 (= g2 seam |v|), cruise m/s, ramp end, cruise end (decel to rest at H)
     ferries=(0.0, 3.7),                    # ferries pass below
     set_switch=6.0,                        # part A (Shiganshina set) -> part B (Trost set), at full night over open ground
-    dusk_night=(0.4, 5.0), night=(5.0, 9.0), dawn=(9.0, 12.9),
+    dusk_night=(0.4, 3.0), night=(3.0, 5.6), dawn=(5.6, 10.6),   # v6 (owner 10:53): short night, sunrise, Trost in MORNING light
     hud_845=(5.2, 9.0),                    # "845: territory reduced to Wall Rose"
-    lights_off=(9.6, 12.4),                # Trost window dots / torches fade
+    lights_off=(6.4, 9.6),                 # Trost window dots / torches fade (v6: dawn earlier)
     # ---- farm + 846 (17.7 - CAM_IN): the clearing beyond Rose felled + ploughed + planted (time-lapse, from 13.0 during the
     #      approach), a small zoom-in at H2, then one turn via the west to CAM_IN while the 846 crowd fills the avenue.  NO winter.
-    morning=(12.9, 17.7), H2=20.0, P1=21.5, P2=22.9, P3=24.2, CAM_IN=_GM[0],
+    morning=(10.6, 17.7), H2=19.6, P1=21.2, P2=22.9, P3=24.6, CAM_IN=_GM[0],
     courtyard=(14.0, 21.0),                # the relief cloister packed, ration queue busy
     fell=(13.0, 17.2),                     # the conifer stand on the clearing is felled south -> north
     crop=(15.6, 20.4),                     # plots ploughed -> planted -> green, south -> north
     workers=(13.0, 21.0),
-    crowd846=(20.4, 24.4),                 # the hooded 846 crowd fills the avenue
-    hud_846=(20.8, 25.2),                  # "846: retake Wall Maria"
-    gate_open=(22.6, 24.6),
+    crowd846=(21.5, 25.5),                 # the hooded 846 crowd fills the avenue
+    hud_846=(23.4, 27.4),                  # "846: retake Wall Maria"
+    gate_open=(25.0, 26.6),                # v6 (owner 10:53): opens INSIDE the held high gate view; the column pours from 26.6
     # ---- march846 (segtime.G3_MARCH, real time in the video): its own clock tau = t - march[0]; natural low gold sun late
     march=_GM, gold=(_GM[0] + 9.0, _GM[1]),
     # ---- flight to the camp + the camp (march end .. DUR)
@@ -131,18 +131,19 @@ def _gp(a, b, z):
     p = _MG + _MF * a + _MR * b
     return (float(p[0]), float(p[1]), float(z))
 MARCH_T_END = 18.0
-MARCH_CAM_KEYS = [                                                  # = march846.CAM_KEYS (set frame)
-    (0.0,  _gp(-170, 170, 125),  _gp(60, -10, 0),    27),
-    (1.8,  _gp(-60, 200, 135),   _gp(260, -10, 0),   27),
-    (3.4,  _gp(260, 230, 175),   _gp(980, -20, 0),   27),
-    (5.6,  _gp(1150, 380, 230),  _gp(2200, -40, 0),  28),
-    (7.6,  _gp(1780, 260, 120),  _gp(2080, 0, 0),    31),
-    (9.6,  _gp(2060, 190, 92),   _gp(2290, -15, 0),  33),
-    (12.2, _gp(2150, 950, 400),  _gp(1700, -100, 0), 28),
-    (15.0, _gp(1500, 650, 560),  _gp(700, 0, 0),     28),
-    (18.0, _gp(1050, 260, 640),  _gp(-150, 0, 40),   28),
+# g3 v6 (owner 10:53 on g3_flight_v5): "the camera must barely move" - a HIGH aerial (880-1170 m, pitch 48-67) on the
+# column's west side, so the column fills the frame width; it barely drifts and the lens opens 40 -> 24 mm as the column
+# lengthens; the gate is in frame from tau 0
+# (the column pours out of it until march846.T_TAIL 8.6), in its last 6 s it pans slowly west toward the camp (to-camp continues the turn).
+# (march846's original spline: renders before v6 / git history.)
+MARCH_CAM_KEYS = [                                                  # set frame (_gp: a outward from the gate, b east, z)
+    (0.0,  _gp(200, -780, 880),   _gp(300, 0, 0),    40),         # high on the WEST side: the column runs ACROSS the frame,
+    (6.0,  _gp(450, -900, 1000),  _gp(900, 0, 0),    30),         # the gate at the left; the lens opens as it lengthens
+    (11.0, _gp(700, -1050, 1150), _gp(1400, 0, 0),   24),         # (camera drift <= ~65 m/s)
+    (15.0, _gp(750, -1070, 1170), _gp(1350, -320, 0), 24),        # the column dies; the pan north begins
+    (18.0, _gp(760, -1080, 1150), _gp(300, -900, 0), 26),         # slow pan north toward the camp (to-camp needs no spin)
 ]
-MARCH_OUT_VEL = tuple(float(x) for x in (-_MF * 95.0).tolist() + [22.0])   # = march846.CAM_OUT_VEL (0, 95, 22): leaves rising north
+MARCH_OUT_VEL = (0.0, 50.0, -15.0)                                 # M: drifting north, easing down toward FT1
 
 def _m_tangents(T, P, v_in=None, v_out=None):
     n = len(T); M = []
@@ -174,7 +175,7 @@ class _MarchCam:
         self.T, self.PL, self.PT, self.LN = T, PL, PT, LN
         self.ML = _m_tangents(T, PL, v_out=np.array(MARCH_OUT_VEL)); self.MT = _m_tangents(T, PT)
         self.MN = _m_tangents(T, LN, v_in=np.zeros(1), v_out=np.zeros(1))
-        self.notes = ["march846 original spline (time Hermite), real time inside g3: limits not enforced (owner)"]
+        self.notes = ["g3 v6 high top-down march hold (time Hermite), real time inside g3: height > hmax on purpose (owner)"]
     def eval_tau(self, tau):
         loc = _m_herm(self.T, self.PL, self.ML, tau); tgt = _m_herm(self.T, self.PT, self.MT, tau)
         return loc, tgt, math.exp(float(_m_herm(self.T, self.LN, self.MN, tau)[0]))
@@ -317,9 +318,10 @@ _m0, _m1 = B["march"]
 LKEYS = [  # (t, light, grade, haze)
     (0.0, G2NIGHT, G2NIGHT_G, G2NIGHT_H),
     (B["night"][0], NIGHT, NIGHT_G, NIGHT_H), (B["night"][1], NIGHT, NIGHT_G, NIGHT_H),
-    (10.8, (4.0, 78.0, 0.60, (1.0, 0.62, 0.45), (0.05, 0.07, 0.18), (0.55, 0.36, 0.32), 0.11, 0.45), ((1.0, 0.92, 0.95), -1.4),
-     (2600.0, 0.70, (0.62, 0.50, 0.52))),
-    (B["FA4"], DAWN2, ((1.05, 0.98, 0.92), -0.45), (2200.0, 0.80, (0.86, 0.76, 0.70))),
+    (7.0, (4.0, 78.0, 0.60, (1.0, 0.62, 0.45), (0.05, 0.07, 0.18), (0.55, 0.36, 0.32), 0.11, 0.45), ((1.0, 0.92, 0.95), -1.4),
+     (2600.0, 0.70, (0.62, 0.50, 0.52))),                                                  # v6: sunrise
+    (8.8, DAWN2, ((1.05, 0.98, 0.92), -0.45), (2200.0, 0.80, (0.86, 0.76, 0.70))),
+    (B["morning"][0], MORNING, G_ID, HAZE0),                                               # clear morning before Trost (FA3)
     (B["H"] - 1.5, MORNING, G_ID, HAZE0), (B["P3"], MORNING, G_ID, HAZE0),
     (_m0, OVERCAST, G_OVC, H_OVC), (_m0 + 7.0, OVERCAST, G_OVC, H_OVC),
     (_m0 + 11.5, (24.0, 250.0, 1.5, (1.0, 0.94, 0.86), (0.34, 0.38, 0.46), (0.64, 0.64, 0.66), 0.25, 0.92), G_DIM, H_OVC),

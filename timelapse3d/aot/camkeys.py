@@ -124,21 +124,21 @@ G3_FLIGHT_W = [                                                       # FA0..FA3
 G3_CAMPS_M = [
     (12.9,  (60, 170, 300),    (-268, 805, 0),   30),             # FA4 = W (60, 4300, 300)
     (17.7,  (-145, 605, 250),  (-420, 1250, 0),  28),             # H  (drift 5 m/s), looking out at the clearing
-    (20.0,  (-170, 640, 262),  (-480, 1330, 0),  38),             # H2 small zoom-in: the clearing planted
-    (21.5,  (-160, 620, 256),  (-760, 1000, 0),  35),             # P1 the turn via the west (look-at direction monotonic)
-    (22.9,  (-110, 550, 245),  (-760, 420, 0),   32),             # P2 the relief complex / west quarter
-    (24.2,  (-20, 440, 220),   (-400, 60, 0),    30),             # P3 the avenue fills with the 846 crowd
-    (26.6,  (170, 170, 125),   (-10, -60, 0),    27),             # CAM_IN (= segtime.G3_MARCH[0])
-    (27.1,  (178.4, 139.5, 127.8), (-10, -115.5, 0), 27),         # guide = CAM_IN + 0.5 v (look: + 0.5 look-velocity)
+    (19.6,  (-170, 640, 262),  (-480, 1330, 0),  38),             # H2 small zoom-in: the clearing planted
+    (21.2,  (-330, 450, 420),  (-30, 970, 0),    35),             # P1 v6: the turn via the west, climbing (look-at monotonic)
+    (22.9,  (-620, 80, 700),   (0, 150, 0),      34),             # P2 v6: west of the town, looking at the avenue + gate
+    (24.6,  (-770, -170, 860), (0, -150, 0),     42),             # P3 v6: HIGH west of the gate, held: the 846 crowd on the avenue,
+    (26.6,  (-780, -200, 880), (0, -300, 0),     40),             # CAM_IN the gate opens 25.0-26.6 in this view (= G3_MARCH[0])
+    (27.1,  (-790, -220.8, 890), (0, -350, 0),   40),             # guide = CAM_IN + 0.5 v (look: + 0.5 look-velocity)
 ]
-CAM_IN = dict(frame="M", t=ST.G3_MARCH[0], pos=(170, 170, 125), look=(-10, -60, 0), lens=27.0, vel=(16.7, -61.1, 5.6), look_vel=(0, -111.1, 0))
+CAM_IN = dict(frame="M", t=ST.G3_MARCH[0], pos=(-780, -200, 880), look=(0, -300, 0), lens=40.0, vel=(-20, -41.7, 20), look_vel=(0, -100, 0))
 # g3 v5: march846's ORIGINAL spline is restored inside g3 (owner), so CAM_OUT leaves with its original climb (0, 95, 22) and
 # its look-at rate (0, 283.3, 13.3) (march846.CAM_KEYS secant).
-CAM_OUT = dict(frame="M", t=ST.G3_MARCH[1], pos=(260, -1050, 640), look=(0, 150, 40), lens=28.0, vel=(0, 95, 22), look_vel=(0, 283.3, 13.3))
+CAM_OUT = dict(frame="M", t=ST.G3_MARCH[1], pos=(-1080, -760, 1150), look=(-900, -300, 0), lens=26.0, vel=(0, 50, -15), look_vel=(0, 0, 0))   # g3 v6
 G3_TO_CAMP_M = [   # g3 v5: a shorter, higher crossing (the video clock eases 1 -> 2 over its first 1.2 video s), FT4 a small zoom-in on
                    # the enlistment + rigs, FT6 (the seasons orbit) dropped; FT7 = g4 G0 unchanged.  Times = seg_g3.BEATS FT*.
-    (44.6, (260, -1050, 640),  (0, 150, 40),     28),             # FT0 = march846.CAM_OUT
-    (49.4, (-250, 260, 540),   (-950, 1300, 0),  28),             # FT1
+    (44.6, (-1080, -760, 1150), (-900, -300, 0), 26),             # FT0 = g3 v6 march end (high, west, facing N)
+    (49.4, (-1120, 100, 800),  (-1300, 1300, 0), 28),             # FT1 v6 (straight north to the camp)
     (52.6, (-1160, 980, 320),  (-1450, 1520, 0), 30),             # FT2
     (55.0, (-1395, 1185, 185), (-1452, 1512, 0), 34),             # FT3 the camp: enlistment + rigs
     (57.0, (-1420, 1250, 168), (-1448, 1530, 0), 44),             # FT4 small zoom-in (Shadis, Eren upside down, Mikasa)

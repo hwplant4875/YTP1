@@ -10,8 +10,8 @@
  "mp4": "E:/YTP2/3D Timelapse/renders/g3_v3/g3_preview.mp4",
  "tracks": [
   {"type": "caption", "t0": 2.6, "t1": 4.5, "text": "845: territory reduced to Wall Rose", "size": 20},
-  {"type": "caption", "t0": 10.4, "t1": 12.6, "text": "846: retake Wall Maria", "size": 20},
-  {"type": "counter", "t0": 14.65, "t1": 31.05, "from": 250000, "to": 100, "run": [17.25, 28.25], "mode": "linear", "round": 10, "label": "Still marching", "label_end": "Came back", "approx_end": true, "color_end": "red", "bar": true, "pos": "br", "scale": 0.7},
+  {"type": "caption", "t0": 11.3, "t1": 13.5, "text": "846: retake Wall Maria", "size": 20},
+  {"type": "counter", "t0": 13.55, "t1": 31.05, "from": 250000, "to": 100, "run": [17.25, 28.25], "mode": "linear", "round": 10, "label": "Still marching", "label_end": "Came back", "approx_end": true, "color_end": "red", "bar": true, "pos": "br", "scale": 0.7},
   {"type": "place", "t0": 36.7, "t1": 38.1, "place": "104th Training Corps", "year": 847, "pos": "tl"},
   {"type": "tag", "t0": 36.4, "t1": 38.05, "name": "SHADIS", "obj": "Shadis", "color": "gold", "len": 30, "size": 15, "lean": 14},
   {"type": "tag", "t0": 36.6, "t1": 38.2, "name": "EREN", "obj": "Eren", "color": "green", "len": 30, "size": 15, "lean": 14},
