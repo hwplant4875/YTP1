@@ -5,6 +5,8 @@
       (saturation 1.45 + red push) for g1 v8 (and g5 next render).
 - [x] f3 v7 at 480p OK (0 crashes, 755 unique) with clip 600 m descent / 350 m canopy (f3 v7); fallback = f3 v6 (360p).
 - [x] master_onetake_v6 (g1 v8, g5 v9) + part2_3_onetake_v6 (f3 v7 480p) + full_onetake_v4 (6:30, tagged, all 480p).
-- [~] forest far-clip white sky slivers -> make_sky 'ForestDim' (camera rays fade to dark forest tone under the canopy). Stills OK -> f2 v4, f3 v8.
+- [x] forest far-clip white sky slivers -> make_sky 'ForestDim' (camera rays fade to dark forest tone under the canopy). Stills OK -> f2 v4, f3 v8.
 - [x] g2|g3 seam: camera matches but g2's canal set vs g3's world river differ (content pop) -> concat_master.sh: 0.6 s night dissolve there only. master_onetake_v7 (210.0 s).
-- [~] f1 plain bare -> fset keeps every 18th pruned clump tree, only x<0 or x>1150 (v6 with every 7th = crude cones blocking the shot) (floor patches stay removed). f0 v4 / f1 v6 / f2 v5 for consistent seams.
+- [x] f1 plain bare -> fset keeps every 18th pruned clump tree, only x<0 or x>1150 (v6 with every 7th = crude cones blocking the shot) (floor patches stay removed). f0 v4 / f1 v6 / f2 v5 for consistent seams.
+- [x] f2|f3 seam: f2's blue/green streaks vanished at f3's first frame -> carried over in f3 (F3_PrevFlares). f3 v9.
+- [x] full_onetake_v5 (6:29, tagged, all 480p) = master_onetake_v7 + part2_3_onetake_v7 (f0 v5, f1 v7, f2 v6, f3 v9, s1 v4, s2 v4).

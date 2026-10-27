@@ -499,3 +499,4 @@ P1 g5 v5 (QA 15:00 add): zoom 32->88 mm onto the Colossal's head over the gate (
 - 05:10 ROUND 3 DONE: full_onetake_v2 (6:30, name tags burnt in via tag_burn.py) + master_onetake_v5 + part2_3_onetake_v4 pushed. f3 retreat on the column, f0/s1 light without murky dusk, f1 opening closer.
 - 05:50 full_onetake_v3 (6:30 tagged): s2 v4 realistic wall face, f2 v3 480p. NOTE forest renders need camera far clip (seg_f2 350 m / seg_f3 900 m) or the GTX 1060 driver times out.
 - 06:45 ROUND 4: full_onetake_v4 (all segments 480p, tagged): g1 v8 wider opening + red Colossal, g5 v9, f3 v7 480p (clip 600/350 m).
+- 08:10 full_onetake_v5 (tagged, 480p): seam fixes (g2|g3 dissolve, f2|f3 flares), ForestDim, sparse distant plain trees.
