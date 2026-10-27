@@ -249,7 +249,7 @@ def update(t):
     # autopilot 10/28 (see seg_f3): canopy-grazing views can exceed the GPU driver timeout -> far clip 900 m in the forest
     if "_clip0" not in S:
         S["_clip0"] = cam.data.clip_end
-    cam.data.clip_end = 900.0 if t > 2.6 else S["_clip0"]
+    cam.data.clip_end = (float(os.environ.get("F_CLIP", "350")) if t < 30.5 else 900.0) if t > 2.6 else S["_clip0"]   # 900 m still crashed at 24.2 (480p)
     for k, j in enumerate(S["sq"]):
         x, y, yaw = squad_F(k, t)
         B.pos[j] = _W(x, y); B.yaw[j] = yaw
