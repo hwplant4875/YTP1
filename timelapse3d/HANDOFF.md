@@ -410,3 +410,12 @@ Queue: g2 v2 -> g4 -> g3 -> connectors -> full one-take preview.
 
 
 ## g6 QA fixes landed (code + stills, cd seg_g6.py, graphics_timelines/g6_tags.json). renders/g6 frames are OLD: re-render g6, then run hud2 g6_tags.json BEFORE the master assembly.
+
+
+## 23:59 g4 v1 PASS as a connector (cloud QA). Fixes to apply alongside g3 and verify in the full one-take preview (g4 re-render needed; resume the g4 agent when a slot frees):
+1. 0-8 s: a deep blue night with warm windows and braziers, then at 4-8 s a visible golden sunrise (low sun in the east, a pink-orange band, long shadows) easing into g5's late morning. Keep the light mist.
+2. Camp: barracks, mess hall and yard with terrain-coloured ground, not a white oval plate (the g3 agent is fixing this in camp104).
+3. Corps departure at ~10-15 s: a low dust trail plus green cloaks, a continuous 2-row column of ~300 m, and the camera framing the avenue and the outer gate while they pass. No tag.
+
+
+## Master assembly: aot/assemble_master.py/.sh (concat, seam check, slates); master_overlay.json remapped to g1..g8 (backup master_overlay.v1.json; 10 unmapped items listed under "unmapped"). Seam g4|g5 geometry matches; the diff is the bolt flash. POLISH: the g5 bolt is a flat pure-yellow bar, so make it a white-gold branching lightning bolt.

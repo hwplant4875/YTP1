@@ -1,5 +1,5 @@
 {
- "_doc": "EP1 MASTER OVERLAY (agent G). One hud2 timeline for the whole take. Every track names its segment ('seg') and uses that segment's OWN seconds (opening/fall/fall3/flight: segment s; camps/training: interlude t; march: march t; trost: video v, or action time T0/T1 from trost_action.BEATS which assemble_master.py maps to v with master_timeline.trost_v). assemble_master.py resolves them to master seconds, drops tracks of segments that are not rendered yet, and clips each track to its segment's kept window. Fonts (graphics_timeline.md): New Rocker = caption/title (bottom centre) only; Russo One = tag names only; Share Tech + stroke = everything else. 'counter' with 'alive': 'march846' follows march846.alive(t) frame by frame (renders/march846/march846_alive.json).",
+ "_doc": "EP1 MASTER OVERLAY v2 (g1..g8). Every track names its segment ('seg' = g1..g8) and uses that segment's OWN seconds (t0/t1, run, note_t); 'gt0'/'gt1' (and 'gt_in') are the same times in master seconds (segment start + local, starts from aot/segtime.py, total 421.9). The 'segments' table lists id, start, dur. A track with 'alive': 'march846' follows march846.alive(t - alive_t_offset) (march846 starts at g3 31.3). '_remap' says how a track was placed; event-anchored ones were re-timed to the new beats, not mapped one-to-one. 'unmapped' holds the v1 tracks that no longer map cleanly (NOT rendered). g4/g5/g6 name tags (EREN, MIKASA) live in graphics_timelines/g*_tags.json and are burnt into those segments' previews: do not duplicate them here. The original is master_overlay.v1.json. Fonts as in v1 (New Rocker captions/title, Russo One tags, Share Tech else).",
  "fps": 15,
  "size": [
   854,
@@ -7,32 +7,43 @@
  ],
  "tracks": [
   {
-   "seg": "opening",
+   "seg": "g1",
    "type": "fade",
    "in": [
-    0,
+    0.0,
+    0.5
+   ],
+   "_remap": "opening = g1 0-13 unchanged (kick still 11.0)",
+   "gt_in": [
+    0.0,
     0.5
    ]
   },
   {
-   "seg": "opening",
+   "seg": "g1",
    "type": "title",
    "t0": 0.4,
    "t1": 3.6,
    "text": "Attack on Titan",
-   "sub": "the world inside the walls"
+   "sub": "the world inside the walls",
+   "_remap": "opening = g1 0-13 unchanged (kick still 11.0)",
+   "gt0": 0.4,
+   "gt1": 3.6
   },
   {
-   "seg": "opening",
+   "seg": "g1",
    "type": "place",
    "t0": 4.2,
    "t1": 7.9,
    "place": "Shiganshina",
    "year": 845,
-   "sub": "Eren, age 10"
+   "sub": "Eren, age 10",
+   "_remap": "opening = g1 0-13 unchanged (kick still 11.0)",
+   "gt0": 4.2,
+   "gt1": 7.9
   },
   {
-   "seg": "opening",
+   "seg": "g1",
    "type": "tag",
    "t0": 6.6,
    "t1": 10.4,
@@ -44,87 +55,93 @@
     66
    ],
    "color": "red",
-   "_cams": "renders/graphics/opening_v3_cam (render_fast writes no dumps; v3 camera)"
+   "_cams": "renders/graphics/opening_v3_cam (render_fast writes no dumps; v3 camera)",
+   "_remap": "opening = g1 0-13 unchanged (kick still 11.0); world tag needs per-frame camera dumps: renders/g1 has no _cam (render_g1 writes none), only usable with opening_v3_cam",
+   "gt0": 6.6,
+   "gt1": 10.4
   },
   {
-   "seg": "opening",
+   "seg": "g1",
    "type": "caption",
    "t0": 11.2,
    "t1": 13.0,
    "fade_out": 0,
    "text": "Outer gate destroyed",
-   "caps": true
+   "caps": true,
+   "_remap": "opening = g1 0-13 unchanged (kick still 11.0)",
+   "gt0": 11.2,
+   "gt1": 13.0
   },
   {
-   "seg": "fall",
+   "seg": "g1",
    "type": "caption",
-   "t0": 0.0,
-   "t1": 2.2,
+   "t0": 13.0,
+   "t1": 15.2,
    "fade_in": 0,
    "text": "Outer gate destroyed",
-   "caps": true
+   "caps": true,
+   "_remap": "old fall began at old master 13.0 = opening end; offset 13.0 (verify against g1 v3 pour timing)",
+   "gt0": 13.0,
+   "gt1": 15.2
   },
   {
-   "seg": "fall",
+   "seg": "g1",
    "type": "caption",
-   "t0": 3.4,
-   "t1": 6.6,
-   "text": "Titans pour into the district"
+   "t0": 16.4,
+   "t1": 19.6,
+   "text": "Titans pour into the district",
+   "_remap": "old fall began at old master 13.0 = opening end; offset 13.0 (verify against g1 v3 pour timing)",
+   "gt0": 16.4,
+   "gt1": 19.6
   },
   {
-   "seg": "fall3",
+   "seg": "g2",
    "type": "caption",
-   "t0": 3.6,
-   "t1": 6.6,
+   "t0": 13.6,
+   "t1": 16.6,
    "text": "Inner gate destroyed",
-   "caps": true
+   "caps": true,
+   "_remap": "event-anchored: g2 IMPACT 13.5 (old fall3 caption was 3.6-6.6)",
+   "gt0": 45.6,
+   "gt1": 48.6
   },
   {
-   "seg": "fall3",
+   "seg": "g2",
    "type": "caption",
-   "t0": 8.0,
-   "t1": 11.0,
-   "text": "\"I'll wipe them out. Every last one.\""
+   "t0": 18.0,
+   "t1": 21.0,
+   "text": "\"I'll wipe them out. Every last one.\"",
+   "_remap": "event-anchored: kept 4.4 s after the gate caption start (old 8.0-11.0 vs gate 3.6); Eren's line, owner adds voice",
+   "gt0": 50.0,
+   "gt1": 53.0
   },
   {
-   "seg": "camps",
+   "seg": "g3",
    "type": "place",
-   "t0": 1.2,
-   "t1": 5.2,
+   "t0": 31.5,
+   "t1": 37.3,
    "place": "Wall Rose",
    "year": 846,
-   "sub": "Eren, age 11",
-   "fade_in": 0.3,
-   "fade_out": 0.3
+   "sub": "Operation to retake Wall Maria",
+   "_remap": "march846 is unchanged and starts at g3 31.3 (G3['march'] = 31.3-49.3)",
+   "gt0": 95.5,
+   "gt1": 101.3
   },
   {
-   "seg": "camps",
+   "seg": "g3",
    "type": "caption",
-   "t0": 1.9,
-   "t1": 5.2,
-   "text": "Refugees clear new fields; food runs short"
+   "t0": 32.1,
+   "t1": 35.9,
+   "text": "250,000 refugees are sent to retake Wall Maria",
+   "_remap": "march846 is unchanged and starts at g3 31.3 (G3['march'] = 31.3-49.3)",
+   "gt0": 96.1,
+   "gt1": 99.9
   },
   {
-   "seg": "march",
-   "type": "place",
-   "t0": 0.2,
-   "t1": 6.0,
-   "place": "Wall Rose",
-   "year": 846,
-   "sub": "Operation to retake Wall Maria"
-  },
-  {
-   "seg": "march",
-   "type": "caption",
-   "t0": 0.8,
-   "t1": 4.6,
-   "text": "250,000 refugees are sent to retake Wall Maria"
-  },
-  {
-   "seg": "march",
+   "seg": "g3",
    "type": "counter",
-   "t0": 3.0,
-   "t1": 18.0,
+   "t0": 34.3,
+   "t1": 49.3,
    "alive": "march846",
    "from": 250000,
    "to": 100,
@@ -136,247 +153,396 @@
    "color_end": "red",
    "bar": true,
    "note": "about 20% of humanity",
-   "note_t": 3.6,
+   "note_t": 34.9,
    "pos": "br",
-   "scale": 0.75
+   "scale": 0.75,
+   "alive_t_offset": 31.3,
+   "_remap": "march846 is unchanged and starts at g3 31.3 (G3['march'] = 31.3-49.3)",
+   "gt0": 98.3,
+   "gt1": 113.3
   },
   {
-   "seg": "march",
+   "seg": "g3",
    "type": "caption",
-   "t0": 15.4,
-   "t1": 18.0,
-   "text": "The food shortage is solved"
+   "t0": 46.7,
+   "t1": 49.3,
+   "text": "The food shortage is solved",
+   "_remap": "march846 is unchanged and starts at g3 31.3 (G3['march'] = 31.3-49.3)",
+   "gt0": 110.7,
+   "gt1": 113.3
   },
   {
-   "seg": "training",
+   "seg": "g3",
    "type": "place",
-   "t0": 8.4,
-   "t1": 12.6,
+   "t0": 63.4,
+   "t1": 67.6,
    "place": "104th Training Corps",
    "year": 847,
    "sub": "Eren, age 12",
-   "fade_in": 0.3
+   "fade_in": 0.3,
+   "_remap": "event-anchored: enlistment at g3 63.4 (old 8.4)",
+   "gt0": 127.4,
+   "gt1": 131.6
   },
   {
-   "seg": "training",
-   "type": "counter",
-   "t0": 8.7,
-   "t1": 12.4,
-   "from": 0,
-   "to": 200,
-   "run": [
-    8.8,
-    9.9
-   ],
-   "mode": "linear",
-   "round": 1,
-   "label": "Cadets enlisted",
-   "approx_end": true,
-   "pos": "br",
-   "scale": 0.75
-  },
-  {
-   "seg": "training",
-   "type": "tag",
-   "t0": 10.4,
-   "t1": 12.8,
-   "name": "Eren",
-   "sub": "upside down",
-   "obj": "Eren",
-   "offset": [
-    0,
-    0,
-    0.2
-   ],
-   "color": [
-    111,
-    191,
-    115
-   ],
-   "lean": -30,
-   "len": 58,
-   "dir": "up"
-  },
-  {
-   "seg": "training",
-   "type": "tag",
-   "t0": 10.5,
-   "t1": 12.8,
-   "name": "Mikasa",
-   "obj": "Mikasa",
-   "offset": [
-    0,
-    0,
-    0.2
-   ],
-   "color": [
-    217,
-    68,
-    63
-   ],
-   "lean": 24,
-   "len": 34,
-   "dir": "down"
-  },
-  {
-   "seg": "training",
-   "type": "tag",
-   "t0": 10.6,
-   "t1": 12.8,
-   "name": "Armin",
-   "obj": "Armin",
-   "offset": [
-    0,
-    0,
-    0.2
-   ],
-   "color": [
-    232,
-    204,
-    120
-   ],
-   "lean": 30,
-   "len": 36,
-   "dir": "up"
-  },
-  {
-   "seg": "training",
+   "seg": "g3",
    "type": "place",
-   "t0": 12.9,
-   "t1": 15.5,
-   "place": "104th Training Corps",
-   "year": 848,
-   "sub": "Three years of training",
-   "fade_in": 0.15,
-   "fade_out": 0.15
-  },
-  {
-   "seg": "training",
-   "type": "place",
-   "t0": 15.5,
-   "t1": 17.4,
-   "place": "104th Training Corps",
-   "year": 849,
-   "sub": "Three years of training",
-   "fade_in": 0.15,
-   "fade_out": 0.15
-  },
-  {
-   "seg": "training",
-   "type": "place",
-   "t0": 17.6,
-   "t1": 20.47,
+   "t0": 75.53,
+   "t1": 78.4,
    "place": "104th Training Corps",
    "year": 850,
    "sub": "Graduation · Eren, age 15",
-   "fade_in": 0.3
+   "fade_in": 0.3,
+   "_remap": "end-anchored: graduation night g3 74.0-78.4 (old 17.6-20.47, 2.87 s)",
+   "gt0": 139.53,
+   "gt1": 142.4
   },
   {
-   "seg": "training",
+   "seg": "g3",
    "type": "caption",
-   "t0": 18.0,
-   "t1": 20.47,
-   "text": "Graduation night, 850"
+   "t0": 75.93,
+   "t1": 78.4,
+   "text": "Graduation night, 850",
+   "_remap": "end-anchored: graduation night g3 74.0-78.4",
+   "gt0": 139.93,
+   "gt1": 142.4
   },
   {
-   "seg": "trost",
+   "seg": "g4",
    "type": "place",
    "t0": 1.0,
    "t1": 6.0,
    "place": "Trost District",
    "year": 850,
-   "sub": "Eren, age 15"
+   "sub": "Eren, age 15",
+   "_remap": "g4 = Trost 850 establishing; same local 1.0-6.0",
+   "gt0": 143.4,
+   "gt1": 148.4
   },
   {
-   "seg": "trost",
+   "seg": "g5",
    "type": "caption",
-   "t0": 9.4,
-   "t1": 12.4,
-   "text": "Five years later, the Colossal Titan returns"
+   "t0": 0.3,
+   "t1": 3.3,
+   "text": "Five years later, the Colossal Titan returns",
+   "_remap": "event-anchored: Colossal bolt/skull rise g5 0-2.5 (old 9.4-12.4, 2.4 s before the gate caption)",
+   "gt0": 162.7,
+   "gt1": 165.7
   },
   {
-   "seg": "trost",
+   "seg": "g5",
    "type": "caption",
-   "t0": 14.3,
-   "t1": 16.8,
+   "t0": 4.2,
+   "t1": 6.7,
    "text": "Outer gate destroyed",
-   "caps": true
+   "caps": true,
+   "_remap": "event-anchored: g5 KICK 4.0",
+   "gt0": 166.6,
+   "gt1": 169.1
   },
   {
-   "seg": "trost",
-   "type": "caption",
-   "T0": 17.5,
-   "T1": 21.0,
-   "text": "Out of gas, the cadets are trapped outside the supply HQ"
-  },
-  {
-   "seg": "trost",
+   "seg": "g5",
    "type": "caption",
    "T0": 27.0,
    "T1": 32.0,
-   "text": "A titan that kills titans"
+   "text": "A titan that kills titans",
+   "t0": 57.6,
+   "t1": 62.6,
+   "_remap": "event-anchored: Attack Titan punch 57.4 / roar 58.3 (5 s kept)",
+   "gt0": 220.0,
+   "gt1": 225.0
   },
   {
-   "seg": "trost",
+   "seg": "g6",
+   "type": "caption",
+   "T0": 17.5,
+   "T1": 21.0,
+   "text": "Out of gas, the cadets are trapped outside the supply HQ",
+   "t0": 0.8,
+   "t1": 4.3,
+   "_remap": "event-anchored: stranded cadets climb the keep g6 0.8-7.0, before the crash 4.4",
+   "gt0": 233.2,
+   "gt1": 236.7
+  },
+  {
+   "seg": "g6",
    "type": "caption",
    "T0": 56.5,
    "T1": 59.0,
-   "text": "Eren emerges from the nape"
+   "text": "Eren emerges from the nape",
+   "t0": 48.6,
+   "t1": 51.1,
+   "_remap": "event-anchored: g6 eren_rise 48.5-50.5",
+   "gt0": 281.0,
+   "gt1": 283.5
   },
   {
-   "seg": "trost",
+   "seg": "g7",
    "type": "caption",
    "T0": 59.5,
    "T1": 63.5,
-   "text": "Eren blocks the cannonball"
+   "text": "Eren blocks the cannonball",
+   "t0": 6.4,
+   "t1": 10.4,
+   "_remap": "event-anchored: g7 IMPACT 6.35",
+   "gt0": 308.3,
+   "gt1": 312.3
   },
   {
-   "seg": "trost",
+   "seg": "g7",
    "type": "caption",
    "T0": 68.8,
    "T1": 74.2,
-   "text": "Commander Pyxis: seal the gate with the boulder"
+   "text": "Commander Pyxis: seal the gate with the boulder",
+   "t0": 33.0,
+   "t1": 38.0,
+   "_remap": "event-anchored: g7 speech 33.0-38.0 (old 5.4 s squeezed to 5.0)",
+   "gt0": 334.9,
+   "gt1": 339.9
   },
   {
-   "seg": "trost",
+   "seg": "g8",
    "type": "caption",
    "T0": 99.5,
    "T1": 103.8,
-   "text": "The breach is sealed"
+   "text": "The breach is sealed",
+   "t0": 50.6,
+   "t1": 54.9,
+   "_remap": "event-anchored: g8 jam 48.3 / slump 48.5-50.6 (4.3 s kept)",
+   "gt0": 397.5,
+   "gt1": 401.8
   },
   {
-   "seg": "trost",
+   "seg": "g8",
    "type": "caption",
    "T0": 104.5,
    "T1": 110.5,
-   "text": "Captain Levi arrives"
+   "text": "Captain Levi arrives",
+   "t0": 55.5,
+   "t1": 61.5,
+   "_remap": "event-anchored: g8 levi_drop 55.5 (6 s kept)",
+   "gt0": 402.4,
+   "gt1": 408.4
+  }
+ ],
+ "segments": {
+  "g1": {
+   "start": 0.0,
+   "dur": 32.0
+  },
+  "g2": {
+   "start": 32.0,
+   "dur": 32.0
+  },
+  "g3": {
+   "start": 64.0,
+   "dur": 78.4
+  },
+  "g4": {
+   "start": 142.4,
+   "dur": 20.0
+  },
+  "g5": {
+   "start": 162.4,
+   "dur": 70.0
+  },
+  "g6": {
+   "start": 232.4,
+   "dur": 69.5
+  },
+  "g7": {
+   "start": 301.9,
+   "dur": 45.0
+  },
+  "g8": {
+   "start": 346.9,
+   "dur": 75.0
+  }
+ },
+ "total": 421.9,
+ "unmapped": [
+  {
+   "old": {
+    "seg": "camps",
+    "type": "place",
+    "t0": 1.2,
+    "t1": 5.2,
+    "place": "Wall Rose",
+    "year": 846,
+    "sub": "Eren, age 11",
+    "fade_in": 0.3,
+    "fade_out": 0.3
+   },
+   "why": "old 'camps' (5.27 s, Wall Rose 846 / refugees clear fields) no longer exists as a block; g3 relief courtyard 17.7-21 and 846 spring time-lapse 21-27.2 differ",
+   "suggest": "place Wall Rose 846 Eren age 11 at g3 ~24.1-27.2 (spring 846); caption 'Refugees clear new fields; food runs short' at g3 17.7-21.0 (relief courtyard)"
   },
   {
-   "seg": "trost",
-   "type": "caption",
-   "T0": 117.6,
-   "T1": 120.4,
-   "text": "Marco"
+   "old": {
+    "seg": "camps",
+    "type": "caption",
+    "t0": 1.9,
+    "t1": 5.2,
+    "text": "Refugees clear new fields; food runs short"
+   },
+   "why": "old 'camps' (5.27 s, Wall Rose 846 / refugees clear fields) no longer exists as a block; g3 relief courtyard 17.7-21 and 846 spring time-lapse 21-27.2 differ",
+   "suggest": "place Wall Rose 846 Eren age 11 at g3 ~24.1-27.2 (spring 846); caption 'Refugees clear new fields; food runs short' at g3 17.7-21.0 (relief courtyard)"
   },
   {
-   "seg": "trost",
-   "type": "counter",
-   "T0": 113.2,
-   "T1": 125.0,
-   "from": 0,
-   "to": 207,
-   "run": [
-    114.0,
-    117.0
-   ],
-   "mode": "linear",
-   "round": 1,
-   "label": "Soldiers killed at Trost",
-   "note": "897 wounded",
-   "note_t": 117.0,
-   "color_end": "red",
-   "pos": "br",
-   "scale": 0.75
+   "old": {
+    "seg": "training",
+    "type": "counter",
+    "t0": 8.7,
+    "t1": 12.4,
+    "from": 0,
+    "to": 200,
+    "run": [
+     8.8,
+     9.9
+    ],
+    "mode": "linear",
+    "round": 1,
+    "label": "Cadets enlisted",
+    "approx_end": true,
+    "pos": "br",
+    "scale": 0.75
+   },
+   "why": "content changed: bible says HUD cadets ~250 -> 218 (old 0 -> 200 'Cadets enlisted', 8.7-12.4)"
+  },
+  {
+   "old": {
+    "seg": "training",
+    "type": "tag",
+    "t0": 10.4,
+    "t1": 12.8,
+    "name": "Eren",
+    "sub": "upside down",
+    "obj": "Eren",
+    "offset": [
+     0,
+     0,
+     0.2
+    ],
+    "color": [
+     111,
+     191,
+     115
+    ],
+    "lean": -30,
+    "len": 58,
+    "dir": "up"
+   },
+   "why": "no HUD tracker in seg_g3 (no TRACK table), so obj-tracked Eren/Mikasa/Armin tags cannot follow the rigs"
+  },
+  {
+   "old": {
+    "seg": "training",
+    "type": "tag",
+    "t0": 10.5,
+    "t1": 12.8,
+    "name": "Mikasa",
+    "obj": "Mikasa",
+    "offset": [
+     0,
+     0,
+     0.2
+    ],
+    "color": [
+     217,
+     68,
+     63
+    ],
+    "lean": 24,
+    "len": 34,
+    "dir": "down"
+   },
+   "why": "no HUD tracker in seg_g3 (no TRACK table), so obj-tracked Eren/Mikasa/Armin tags cannot follow the rigs"
+  },
+  {
+   "old": {
+    "seg": "training",
+    "type": "tag",
+    "t0": 10.6,
+    "t1": 12.8,
+    "name": "Armin",
+    "obj": "Armin",
+    "offset": [
+     0,
+     0,
+     0.2
+    ],
+    "color": [
+     232,
+     204,
+     120
+    ],
+    "lean": 30,
+    "len": 36,
+    "dir": "up"
+   },
+   "why": "no HUD tracker in seg_g3 (no TRACK table), so obj-tracked Eren/Mikasa/Armin tags cannot follow the rigs"
+  },
+  {
+   "old": {
+    "seg": "training",
+    "type": "place",
+    "t0": 12.9,
+    "t1": 15.5,
+    "place": "104th Training Corps",
+    "year": 848,
+    "sub": "Three years of training",
+    "fade_in": 0.15,
+    "fade_out": 0.15
+   },
+   "why": "848/849 year cards: g3 seasons orbit 69.2-74.0 (3 cycles) has no per-year beats yet"
+  },
+  {
+   "old": {
+    "seg": "training",
+    "type": "place",
+    "t0": 15.5,
+    "t1": 17.4,
+    "place": "104th Training Corps",
+    "year": 849,
+    "sub": "Three years of training",
+    "fade_in": 0.15,
+    "fade_out": 0.15
+   },
+   "why": "848/849 year cards: g3 seasons orbit 69.2-74.0 (3 cycles) has no per-year beats yet"
+  },
+  {
+   "old": {
+    "seg": "trost",
+    "type": "caption",
+    "T0": 117.6,
+    "T1": 120.4,
+    "text": "Marco"
+   },
+   "why": "no Marco beat in g8 (rows 66-69, pyres, end hold 71-75)",
+   "suggest": "drop, or add to the g8 cleanup if a Marco shot is staged"
+  },
+  {
+   "old": {
+    "seg": "trost",
+    "type": "counter",
+    "T0": 113.2,
+    "T1": 125.0,
+    "from": 0,
+    "to": 207,
+    "run": [
+     114.0,
+     117.0
+    ],
+    "mode": "linear",
+    "round": 1,
+    "label": "Soldiers killed at Trost",
+    "note": "897 wounded",
+    "note_t": 117.0,
+    "color_end": "red",
+    "pos": "br",
+    "scale": 0.75
+   },
+   "why": "'Soldiers killed at Trost 207 / 897 wounded' was tied to the old Trost cleanup; g8 cleanup is 66-71 + end hold 71-75",
+   "suggest": "g8 66.0-75.0, run 66.3-69.3, note '897 wounded' at 69.3"
   }
  ]
 }
