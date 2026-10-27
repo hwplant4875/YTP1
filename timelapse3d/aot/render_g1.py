@@ -276,7 +276,7 @@ def build_arcs():
             p += side * amp * math.sin(ph + 9.0 * s_) + Vector((0, 0, 0.5 * amp * math.sin(ph * 1.7 + 13.0 * s_)))
             p += Vector((rnd.uniform(-1.5, 1.5), rnd.uniform(-1.5, 1.5), rnd.uniform(-1.5, 1.5)))
             pts.append(p)
-        mat = _emit_mat(f"G1Arc{k}", (1.0, 0.36, 0.06), 0.0)
+        mat = _emit_mat(f"G1Arc{k}", (1.0, 0.20, 0.03), 0.0)
         em = next(n for n in mat.node_tree.nodes if n.type == "EMISSION")
         obs = []
         for c in range(ARC_SEG):
@@ -367,7 +367,7 @@ def fx_at(t, light_e):
     for obs, em, t0 in FXS.get("arcs", ()):
         head = (t - t0) / ARC_CRAWL * ARC_SEG
         alive = t0 <= t < t0 + ARC_CRAWL + 0.35
-        em.inputs["Strength"].default_value = 30.0 * (1 - smooth(t0 + ARC_CRAWL, t0 + ARC_CRAWL + 0.35, t))
+        em.inputs["Strength"].default_value = 7.0 * (1 - smooth(t0 + ARC_CRAWL, t0 + ARC_CRAWL + 0.35, t))
         for c, ob in enumerate(obs):
             ob.hide_render = not (alive and head - 6 <= c < head)
     sc = bpy.context.scene

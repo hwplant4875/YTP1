@@ -1554,8 +1554,8 @@ def build_civilians(coll):
     # dotted lines from the aerial); they keep walking the whole segment (1.5 m/s local)
     Cl = []
     for ci, yh in enumerate((150.0, 290.0, 430.0, 580.0, 730.0, 880.0)):
-        for j in range(int(os.environ.get("G2_COL_N", "28"))):
-            dx = (-0.9 if j % 2 else 0.9) + rnd.uniform(-0.25, 0.25); dy = -1.7 * (j // 2) + rnd.uniform(-0.3, 0.3)
+        for j in range(int(os.environ.get("G2_COL_N", "75"))):          # 3 files x 25 (QA: 2 x 14 did not read from the air)
+            dx = 1.3 * (j % 3 - 1) + rnd.uniform(-0.25, 0.25); dy = -1.6 * (j // 3) + rnd.uniform(-0.3, 0.3)
             e = PK.person(rnd.choice(civ), (dx, yh + dy), yaw=0.0, pose="walk", phase=rnd.random())
             Cl.append(dict(e=e, dx=dx, y0=yh + dy, ci=ci))
     S["columns"] = Cl
@@ -1629,7 +1629,7 @@ SEAM_SKY = ((1.0, 0.62, 0.22, 1.0), (0.95, 0.66, 0.38, 1.0))
 DUSK_SKY = ((0.93, 0.50, 0.34, 1.0), (0.62, 0.50, 0.60, 1.0))
 # v5 (owner 10/27): burning Shiganshina at NIGHT - dark blue sky, a cool moon key, the fires carry the town.  = g3 t 0
 # (seg_g3.G2NIGHT / its grade + haze literals: keep them in step when this changes).
-NIGHT_LIGHT = dict(el=24.0, az=205.0, col=(0.55, 0.65, 1.0), e=0.55, amb=0.045, expo=-0.9)
+NIGHT_LIGHT = dict(el=24.0, az=205.0, col=(0.50, 0.62, 1.0), e=0.30, amb=0.02, expo=-1.5)
 NIGHT_SKY = ((0.035, 0.05, 0.11, 1.0), (0.010, 0.016, 0.045, 1.0))
 NIGHT_HAZE = (4500.0, 0.50, (0.05, 0.06, 0.11))          # mist depth, amount, colour
 

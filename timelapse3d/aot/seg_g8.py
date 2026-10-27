@@ -85,6 +85,7 @@ CROUCH = (44.0, 27.0); CROUCH_FALL = (52.0, 36.0); PIT = (0.0, 36.0)
 PYRES = [(-60.0, 470.0), (-12.0, 250.0), (150.0, 330.0), (50.0, 55.0)]        # C, AV, street, GS ring road east (lit in order)
 PYRE_T = (61.0, 62.6, 64.2, 65.8)                # VIDEO clock: the pyres light one by one in the longer cleanup
 D_BOX = (-475.0, -360.0, 760.0, 865.0)
+HERD_KILL = 62.0                                 # owner 10/27: the herded corner group dies in one massed volley (choreo clock)
 NO_SPARKLES = True                               # owner 10/27: no muzzle / shell glow cards in the mop-up
 PILASTER_E = (17.0, 27.0, 11.0)                  # east pilaster X 17..27, town-side face Y 11
 
@@ -806,9 +807,24 @@ def build_titans(coll):
     #      gate square: wall-top cannons round the seal shell the titans left there at night (deaths spread over the night)
     targets = ["lipW", "thin1", "yellow", "inb0", "inb1", "inb2", "mg1", "mg2", "iang", "trench", "pitlying"]
     n0, n1 = BEATS["night"]
-    for k, nm in enumerate(targets):
-        td = n0 + 0.6 + (n1 - n0 - 1.0) * k / (len(targets) - 1) + rnd.uniform(-0.1, 0.1)
-        kill(nm, td, rnd.choice([1, -1]), keep=False)
+    # owner 10/27 NEW: the titans are HERDED into the wall corner west of the seal (wall face x the west pilaster) and
+    # killed there ALL AT ONCE by the massed wall-top guns (HERD_KILL); the fallen / lying ones die where they are
+    def at(nm, tt):
+        K = TT.keys[TT.j(nm)]
+        for (ta, xa, ya), (tb, xb, yb) in zip(K, K[1:]):
+            if tt <= tb:
+                u = 0.0 if tb <= ta else max(0.0, (tt - ta) / (tb - ta))
+                return (xa + (xb - xa) * u, ya + (yb - ya) * u)
+        return K[-1][1:]
+    herd = [nm for nm in targets if nm not in ("trench", "pitlying")]
+    slots = [(-34.0 - 5.0 * (k % 3), 15.0 + 5.5 * (k // 3)) for k in range(len(herd))]
+    h0, h1 = n0 + 0.2, n0 + 2.4
+    for nm, sl in zip(herd, slots):
+        q = at(nm, h0); c = S3(*sl)[:2]
+        TT.keys[TT.j(nm)] = [k_ for k_ in TT.keys[TT.j(nm)] if k_[0] < h0] + [(h0, *q), (h1, float(c[0]), float(c[1])), (99, float(c[0]), float(c[1]))]
+        TT.specs[TT.j(nm)]["face"] = tuple(S3(-30.0, 40.0)[:2])
+    for nm in targets:
+        kill(nm, HERD_KILL + rnd.uniform(-0.12, 0.12), rnd.choice([1, -1]), keep=False)
     STATE["shell_targets"] = targets
     # ---- 2 captured titans pinned in their frames (gate square, west half)
     add("cap4", 4.0, [(0, *CT[0]), (99, *CT[0])], show=(BEATS["captured"], 99), g8=dict(pinned=True))

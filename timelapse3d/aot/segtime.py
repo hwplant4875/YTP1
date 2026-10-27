@@ -156,6 +156,8 @@ TMAP["g2"] = _g2_v5()
 TMAP["g4"] = slope_knots(DUR["g4"], [(0.0, 2.0, 0.0), (1.0, 3.2, 0.6), (15.0, 2.0, 0.6)])
 # g7 v3 (owner 10/27: camera to the cannon basin MUCH faster): transit local 0.3-5.0 at 4.5x, back to 2 before FIRE 6.0.
 TMAP["g7"] = slope_knots(DUR["g7"], [(0.0, 2.0, 0.0), (0.3, 4.5, 0.4), (4.9, 2.0, 0.35)])
+# g8 v4 (owner 10/27: carry a bit faster): the carry (local 19.5-37.5) at 2.6x, back to 2 before the slam.
+TMAP["g8"] = slope_knots(DUR["g8"], [(0.0, 2.0, 0.0), (19.5, 2.6, 0.4), (37.0, 2.0, 0.4)])
 def knots(g):
     k = TMAP.get(g)
     return list(k) if k else [(0.0, 0.0), (DUR[g] / SPEED, DUR[g])]
