@@ -168,14 +168,16 @@ def build_wall_face(c):
     rubble = C.mat("ST_WallRubble", (0.60, 0.57, 0.50), 0.9)
     bm = bmesh.new()
     rnd = random.Random(25)
-    n = 18; rim = []
-    for k in range(n):                                        # hole (irregular disc in the wall plane, x-z)
+    n = 18; rim = []; back = []
+    for k in range(n):                                        # hole: an irregular RECESS (rim on the wall face, floor 5 m in)
         a = k * math.tau / n
         r = 9.0 + rnd.uniform(-1.8, 1.8)
         rim.append(bm.verts.new((r * math.cos(a), 0.05, r * math.sin(a))))
-    ctr = bm.verts.new((0, 0.05, 0))
+        back.append(bm.verts.new((0.8 * r * math.cos(a), -5.0, 0.8 * r * math.sin(a))))
+    ctr = bm.verts.new((0, -5.0, 0))
     for k in range(n):
-        f = bm.faces.new((ctr, rim[k], rim[(k + 1) % n])); f.material_index = 1
+        f = bm.faces.new((ctr, back[(k + 1) % n], back[k])); f.material_index = 1
+        f = bm.faces.new((rim[k], back[k], back[(k + 1) % n], rim[(k + 1) % n])); f.material_index = 4
     res = bmesh.ops.create_uvsphere(bm, u_segments=20, v_segments=12, radius=1.0)    # the face: ellipsoid 7 x 1.6 x 8.5
     for v in res["verts"]:
         v.co = Vector((v.co.x * 6.0, max(v.co.y, -0.2) * 1.6 + 0.2, v.co.z * 7.6 - 0.8))
@@ -213,16 +215,16 @@ def _hole_only(face):
     """keep only the dark hole + rubble of the placeholder (drop its ellipsoid / eyes / nose / brow)."""
     me = face.data
     bm = bmesh.new(); bm.from_mesh(me)
-    kill = [f for f in bm.faces if f.material_index in (0, 2, 3) and f.calc_center_median().z > -9]
+    kill = [f for f in bm.faces if f.material_index in (0, 2, 3) and f.calc_center_median().z > -9 and f.calc_center_median().y > -0.5]
     bmesh.ops.delete(bm, geom=kill, context="FACES"); bm.to_mesh(me); bm.free()
     return face
 
-HOLE_R = 6.8
+HOLE_R = 8.4
 def _pure_face(c, centre, n):
-    """45 m pure titan (pure_titans.make_pure, rest pose) standing INSIDE the wall facing out of it; everything but the
+    """70 m pure titan (pure_titans.make_pure, rest pose) standing INSIDE the wall facing out of it; everything but the
     part of the face inside the hole (centred on its left eye) is deleted, the face sits 0.3 m proud of the hole."""
     import pure_titans as PT
-    rig = PT.make_pure("generic", seed=2, height=45.0, lod=1.0, outline=False, name="ST_WallTitanPure")
+    rig = PT.make_pure("generic", seed=2, height=70.0, lod=1.0, outline=False, name="ST_WallTitanPure")
     for pb in rig.pose.bones:
         pb.matrix_basis = Matrix.Identity(4)
     nv = Vector((n[0], n[1], 0.0)); ang = math.atan2(n[1], n[0])

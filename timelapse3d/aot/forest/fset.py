@@ -101,6 +101,21 @@ def tree_proto(name, seed, c, mats):
             f.smooth = True
     return proto_obj(name, bm, mats, c)
 
+SHAM_TRUNK = (255.0, 1530.0)              # = seg_f3.SHAM_F
+def _low_cam_F():
+    """F xy of every f2 / f3 camera sample below 110 m (key z is above ground), every 0.1 s."""
+    out = []
+    try:
+        import seg_f2, seg_f3
+        for m in (seg_f2, seg_f3):
+            for k in range(int(m.DUR * 10) + 1):
+                loc, _, _ = m.CAM.eval(k / 10.0)
+                if loc[2] < 110.0:
+                    out.append((loc[0] - C.FO[0], loc[1] - C.FO[1]))
+    except Exception as ex:
+        print("[forest] camera corridor skipped:", ex, flush=True)
+    return out
+
 def build_forest(c):
     bark = C.mat("F_Bark", (0.20, 0.11, 0.07), 0.9)
     leaf = C.mat("F_Leaf", (0.040, 0.085, 0.035), 0.85)
@@ -132,6 +147,17 @@ def build_forest(c):
         for k in range(8):
             a = k * math.tau / 8 + 0.3
             pts.append((cx + (r + 5) * math.cos(a), cy + (r + 5) * math.sin(a)))
+    # the trunks she sits against (sham, rescue), and a clear corridor round every LOW camera position of f2 / f3
+    pts.append((SHAM_TRUNK[0], SHAM_TRUNK[1])); pts.append((RESCUE_F[0] + 1.0, RESCUE_F[1] + 1.0))
+    cam = _low_cam_F()
+    if len(cam):
+        P = np.array(pts)
+        d = np.full(len(P), 1e9)
+        for c in cam:
+            d = np.minimum(d, np.hypot(P[:, 0] - c[0], P[:, 1] - c[1]))
+        keep = (d > 18.0)
+        keep[-2:] = True
+        pts = [tuple(p) for p, k in zip(P, keep) if k]
     groups = [[] for _ in protos]
     for i, (px, py) in enumerate(pts):
         w = C.F(px, py)
