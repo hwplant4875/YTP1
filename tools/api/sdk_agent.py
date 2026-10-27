@@ -46,7 +46,7 @@ async def main():
     log = open(os.path.join(LOGD, datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".log"), "w", encoding="utf-8")
     opts = ClaudeAgentOptions(model=a.model, cwd=REPO, max_turns=a.max_turns, resume=a.resume,
                               system_prompt={"type": "preset", "preset": "claude_code", "append": RULES},
-                              permission_mode="acceptEdits", max_budget_usd=a.budget,
+                              permission_mode="acceptEdits", max_budget_usd=a.budget, max_buffer_size=50 * 1024 * 1024,
                               allowed_tools=["Read", "Write", "Edit", "Glob", "Grep", "Bash"], setting_sources=["project"])
     async for m in query(prompt=task, options=opts):
         n = type(m).__name__
