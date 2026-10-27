@@ -130,6 +130,13 @@ def mesh_obj(name, bm, mats, c):
     ob = bpy.data.objects.new(name, me); c.objects.link(ob)
     return ob
 
+def forest_dim(v):
+    """0..1: camera rays see the dark forest tone instead of the sky (make_sky "ForestDim")."""
+    w = bpy.context.scene.world
+    n = w.node_tree.nodes.get("ForestDim") if (w and w.use_nodes) else None
+    if n is not None:
+        n.outputs[0].default_value = float(v)
+
 def hide(ob, h):
     if ob.hide_render != h:
         ob.hide_render = h; ob.hide_viewport = h
@@ -155,7 +162,13 @@ def make_sky(sc):
     nt.links.new(gr.outputs[0], bg2.inputs[0])
     lp = nt.nodes.new("ShaderNodeLightPath"); mx = nt.nodes.new("ShaderNodeMixShader")
     nt.links.new(lp.outputs["Is Camera Ray"], mx.inputs[0])
-    nt.links.new(nt.nodes["Background"].outputs[0], mx.inputs[1]); nt.links.new(bg2.outputs[0], mx.inputs[2])
+    # autopilot 10/28: under the canopy the camera far clip (driver-timeout guard, seg_f2 / seg_f3) showed bright sky slivers
+    # between distant trunks -> camera rays can fade to a dark forest tone: value node "ForestDim" (0 = sky, 1 = forest).
+    bgF = nt.nodes.new("ShaderNodeBackground"); bgF.inputs[0].default_value = (0.075, 0.095, 0.062, 1.0); bgF.inputs[1].default_value = 1.0
+    fd = nt.nodes.new("ShaderNodeValue"); fd.name = "ForestDim"; fd.outputs[0].default_value = 0.0
+    mf = nt.nodes.new("ShaderNodeMixShader")
+    nt.links.new(fd.outputs[0], mf.inputs[0]); nt.links.new(bg2.outputs[0], mf.inputs[1]); nt.links.new(bgF.outputs[0], mf.inputs[2])
+    nt.links.new(nt.nodes["Background"].outputs[0], mx.inputs[1]); nt.links.new(mf.outputs[0], mx.inputs[2])
     nt.links.new(mx.outputs[0], nt.nodes["World Output"].inputs[0])
     nt.nodes["Background"].inputs[1].default_value = 0.25
     sun = bpy.data.lights.new("Sun", "SUN"); sun.energy = 3.6; sun.angle = math.radians(1.5)

@@ -250,6 +250,7 @@ def update(t):
     if "_clip0" not in S:
         S["_clip0"] = cam.data.clip_end
     cam.data.clip_end = (float(os.environ.get("F_CLIP", "350")) if t < 30.5 else 900.0) if t > 2.6 else S["_clip0"]   # 900 m still crashed at 24.2 (480p)
+    C.forest_dim(C.ss(2.6, 3.4, t) * (1 - C.ss(29.8, 30.5, t)))
     for k, j in enumerate(S["sq"]):
         x, y, yaw = squad_F(k, t)
         B.pos[j] = _W(x, y); B.yaw[j] = yaw

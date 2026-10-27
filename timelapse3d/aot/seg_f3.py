@@ -324,6 +324,7 @@ def update(t):
     if "_clip0" not in S:
         S["_clip0"] = cam.data.clip_end
     cam.data.clip_end = (600.0 if t < 6.2 else 350.0) if 3.6 < t < 46.6 else S["_clip0"]   # 480p: tighter (f2 timed out at 900 m)
+    C.forest_dim(C.ss(5.4, 6.2, t) * (1 - C.ss(45.8, 46.6, t)))
     # transformation FX: her beam, Eren's lightning
     bu = (t - BEATS["beam"][0]) / 2.0
     if bu > -0.01 and not os.environ.get("F3_NOSHIFT"):
