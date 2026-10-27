@@ -15,7 +15,7 @@ Durations are video seconds. M = must-have, O = optional.
 | f1 | Karanes gate opens; column through the ruined old town (support squad kills a 10 m titan) | ep17 1:00-3:50 | 6 | M |
 | f2 | "Long-distance scouting formation": riders fan into the dome. True overhead shot. Red smoke relays. | ep17 4:32-5:08, 4:49 | 8 | M |
 | f3 | Female appears on the RIGHT flank: tiny figure plus a dust trail. She wipes the right-wing scouts (Ness/Sys), spares Armin (hood lift), runs inward. | ep17 9:31-12:45 | 12 | M |
-| f4 | Armin, Reiner and Jean chase her. She grabs REINER and he cuts free, then she turns away toward Eren's position. This is the hint that Reiner is in league with her (owner 08:34: MUST). Purple smoke; Krista brings a horse. | ep17 16:00-22:20, ep18 5:46-7:47 | 8 | M |
+| f4 | Armin, Reiner and Jean chase her. She grabs REINER and he cuts free, then she turns away toward Eren's position. This is the hint that Reiner is in league with her (owner 08:34: MUST). Readable from the air: the three close in, Armin is knocked off and Jean picks him up. She HOLDS Reiner in her fist briefly (slight zoom-in, REINER tag), he cuts free, and she at once turns and runs toward the centre where Eren is. ARMIN/JEAN/REINER tags (max 3). Purple smoke; Krista arrives with a horse. | ep17 16:00-22:20, ep18 5:46-7:47 | 8 | M |
 | f5 | Village with windmills: she smashes houses, scouts swatted | ep18 9:42-11:30 | 6 | M |
 | f6 | Green smoke: the course changes. Centre line enters the forest by the road; wings hold the edge. Forest canopy reveal. | ep18 7:49, 12:31-14:22, 19:53 | 8 | M |
 | f7 | Forest road chase: Levi squad (6 riders, Eren) with the Female behind/above, grabbing scouts | ep18 20:05-22:17, ep19 3:36, 19:02-20:13 | 12 | M |
@@ -123,4 +123,4 @@ All movement is continuous and trackable, with no teleports (owner rule).
 
 **Owner questions:**
 1. f4: IN (owner 08:34; Reiner is with the Female). f16 retreat: still open.
-2. Part 2 opening: start straight from the end of part 1's one take (fly from Trost to Karanes), or begin a new take at Karanes?
+2. Coordinator proposal (owner to confirm): f16 retreat is kept short (8 s), and part 2 continues the one take from Trost, flying along Wall Rose to Karanes with no restart.
