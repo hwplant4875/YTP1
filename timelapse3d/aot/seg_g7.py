@@ -69,7 +69,7 @@ BEATS = dict(
     pyxis_in=12.4, pyxis_catch=14.6, pyxis_down=(14.6, 16.4), to_basket=(16.5, 17.4), basket=(17.4, 20.4),
     step_off=(20.4, 20.8), walk_west=(20.8, 27.0), s1=(27.0, 30.0), sit=(29.0, 29.8), to_s2=(30.0, 33.0),
     a_fill=(30.0, 33.2), banners=(30.2, 32.0), speech=(33.0, 38.0), deserters=(33.4, 37.0), fist=37.0,
-    deploy=(38.0, 42.0), climb=(38.4, 41.2), leap=(42.0, 44.9))
+    deploy=(38.0, 42.0), climb=(38.4, 41.2), leap=(42.0, 44.9), skel_gone=(6.9, 7.5))
 
 # ====================================================================== anchors (frame M; bible g7 CORRECTION, trost.py K)
 FLOOR_Z = -3.6
@@ -86,7 +86,8 @@ BASKET = (342.0, 879.0)                    # TrostBasket_K stop on the floor (ri
 WALLTOP_Z = 50.05
 S1 = (-120.0, 866.6)                       # Pyxis spot 1: south edge just east of the inner gate (talk, looking south)
 S2 = (-20.0, 873.6)                        # Pyxis spot 2: north edge (speech), banners X -45..+5
-A_SQ = (-20.0, 935.0, 90.0, 60.0)          # Pyxis troop square north of Rose (obelisk fountain r 6 at its centre)
+A_SQ = (-20.0, 916.0, 190.0, 30.0)         # Pyxis troops (owner 10/27: no square plate -> one long rank band on the strip)
+STRIP = (-190.0, 150.0, 876.0, 946.0)      # owner 10/27: long, wide ivory paving strip along the Rose north face (x0, x1, y0, y1)
 B0 = (290.0, 262.0)                        # Boulder Court (the elites leap toward it)
 
 # ====================================================================== camera (camkeys.G7: north-side re-key, owner 15:25)
@@ -334,14 +335,15 @@ def update_skeleton(t):
     root, sk, da, sc = STATE["skel"]
     e0, e1 = BEATS["erupt"]
     b0, b1 = BEATS["black_arm"]
-    on = t >= e0
+    gone = BEATS["skel_gone"]                                                  # owner 10/27: the temporary model goes once
+    on = e0 <= t < gone[1]                                                     # the steam thickens (sinks into the blanket)
     _hide(sk, not on)
     if on:
         u = min(1.0, (t - e0) / (e1 - e0))
         back = 1.0 + 0.12 * math.sin(math.pi * u) if u < 1.0 else 1.0            # slight overshoot as it erupts
         z = max(0.03, (1 - (1 - u) ** 3) * back)
         xy = 0.45 + 0.55 * (1 - (1 - u) ** 2)
-        settle = 1.0 - 0.06 * ss(16.0, 40.0, t)                                  # it sags a little as it steams
+        settle = 1.0 - 0.95 * ss(gone[0], gone[1], t)                            # sinks away into the steam
         sk.scale = (xy, xy, z * settle)
     show_b = b0 <= t < b1 + 0.05
     _hide(da, not show_b)
@@ -569,7 +571,7 @@ FIELD_PAL = [(0.36, 0.33, 0.14), (0.17, 0.28, 0.06), (0.27, 0.21, 0.11), (0.44, 
 FARM_BOX = (-1150.0, 1150.0, 905.0, 1850.0)
 ROADS_N = [([(-140, 878), (-148, 1040), (-170, 1290), (-200, 1850)], 4.0),        # the main road north from the inner gate
            ([(-1150, 1385), (-600, 1372), (-172, 1360), (420, 1378), (1150, 1395)], 3.5),   # cross road beyond the canal end
-           ([(-20, 968), (-60, 1060), (-150, 1110)], 3.0),                         # forecourt -> main road
+           ([(-20, 946), (-60, 1060), (-150, 1110)], 3.0),                         # strip -> main road
            ([(-160, 1660), (-600, 1610), (-1150, 1590)], 3.0), ([(-180, 1500), (300, 1560), (900, 1600)], 3.0)]
 
 def _seg_d(px, py, P):
@@ -583,11 +585,32 @@ def _seg_d(px, py, P):
 def _farm_free(x, y, pad=0.0):
     if y < FARM_BOX[2] + pad or 150.0 - pad < x < 650.0 + pad and y < 1300.0 + pad:
         return False
-    if -85.0 - pad < x < 45.0 + pad and 890.0 - pad < y < 980.0 + pad:                    # Pyxis's forecourt (square A)
+    if STRIP[0] - pad < x < STRIP[1] + pad and STRIP[2] - pad < y < STRIP[3] + pad:      # the ivory strip (was square A)
         return False
     if abs(x - 400.0) < 25.0 + pad and y < 1340.0:
         return False
     return all(_seg_d(x, y, P) > hw + 2.5 + pad for P, hw in ROADS_N)
+
+def build_strip(coll):
+    """Owner 10/27 (Pyxis speech): no square plate - a long, wide ivory paving strip along the wall (STRIP), draped on the
+    terrain over the old square A paving; the obelisk fountain of square A is removed."""
+    L = STATE["L"]
+    hgt = lambda x, y: float(L.height(x, y - segtime.SET_OFF_Y))
+    x0, x1, y0, y1 = STRIP
+    bm = bmesh.new(); step = 6.0
+    nx, ny = int(math.ceil((x1 - x0) / step)), int(math.ceil((y1 - y0) / step))
+    V = [[bm.verts.new((x0 + (x1 - x0) * i / nx, y0 + (y1 - y0) * j / ny - segtime.SET_OFF_Y,
+                         hgt(x0 + (x1 - x0) * i / nx, y0 + (y1 - y0) * j / ny) + 0.22)) for j in range(ny + 1)] for i in range(nx + 1)]
+    for i in range(nx):
+        for j in range(ny):
+            bm.faces.new((V[i][j], V[i + 1][j], V[i + 1][j + 1], V[i][j + 1])).material_index = (i // 2 + j // 2) % 2
+    L.obj_from_bm("G7_IvoryStrip", bm, [L.mat("G7_Ivory", hexrgb("#ebe2cc"), 0.9), L.mat("G7_Ivory2", hexrgb("#e3d9c0"), 0.9)], coll)
+    o = bpy.data.objects.get("TrostNorthSquare")
+    if o is not None and o.type == "MESH":
+        bm = bmesh.new(); bm.from_mesh(o.data); mw = o.matrix_world
+        dead = [v for v in bm.verts if math.hypot((mw @ v.co).x + 20.0, (mw @ v.co).y + segtime.SET_OFF_Y - 935.0) < 7.5]
+        bmesh.ops.delete(bm, geom=dead, context="VERTS"); bm.to_mesh(o.data); bm.free(); o.data.update()
+    say(f"ivory strip {x1 - x0:.0f} x {y1 - y0:.0f} m, fountain removed")
 
 def build_farmland(coll):
     L = STATE["L"]; TR = STATE["TR"]
@@ -643,7 +666,7 @@ def build_farmland(coll):
     tc = bpy.data.collections.get("TrostYardTreeVariants")
     recs = []
     def tree(x, y, s=None):
-        if y < 905.0 or (150.0 < x < 650.0 and y < 1300.0) or (-85 < x < 45 and 890 < y < 980) or (abs(x - 400) < 25 and y < 1340):
+        if y < 905.0 or (150.0 < x < 650.0 and y < 1300.0) or (STRIP[0] < x < STRIP[1] and y < STRIP[3] + 3) or (abs(x - 400) < 25 and y < 1340):
             return
         if any(_seg_d(x, y, P) < hw + 1.5 for P, hw in ROADS_N):
             return
@@ -712,11 +735,11 @@ def build_masses(coll):
     # between them and an officer 2.5 m in front of each, so the ~2,000 read as a FORMATION (not gravel); jackets
     # alternate Garrison brown / beige per block
     pts, blk = [], []
-    cols_x = [(-63.0, -44.0), (-41.5, -26.5), (-13.5, 1.5), (4.0, 23.0)]
-    rows_y = [(908.0, 929.0), (941.0, 963.0)]
+    cols_x = [(-108.0 + 23.0 * i, -90.0 + 23.0 * i) for i in range(8)]     # owner 10/27: 8 blocks side by side along the wall
+    rows_y = [(902.0, 929.0)]
     for bi, (x0, x1) in enumerate(cols_x):
         for bj, (y0, y1) in enumerate(rows_y):
-            b_ = bi * 2 + bj
+            b_ = bi + bj
             for y in np.arange(y0, y1 + 0.01, 1.5):
                 for x in np.arange(x0, x1 + 0.01, 1.2):
                     pts.append((x + rng.normal(0, 0.07), y + rng.normal(0, 0.07))); blk.append(b_)
@@ -787,7 +810,7 @@ def update_masses(t):
     dp0, dp1 = BEATS["deploy"]
     sh = 14.0 * ss(dp0, dp1, t)
     pos[:nA, 1] -= sh
-    gone = (A[:, 1] - sh) < 909.0
+    gone = (A[:, 1] - sh) < 897.0
     vis[:nA] *= np.where(gone & (t > dp0), 0.0, 1.0)
     mv[:nA] = np.maximum(mv[:nA], float(dp0 < t < dp1))
     pos[:nA, 2] = 0.06
@@ -991,6 +1014,7 @@ def build(site):
         import traceback; traceback.print_exc()
         say("g8 titans failed:", ex)
     build_farmland(coll)
+    build_strip(coll)
     build_skeleton(coll)
     build_titans(coll)
     build_people(coll)

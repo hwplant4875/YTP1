@@ -85,6 +85,7 @@ CROUCH = (44.0, 27.0); CROUCH_FALL = (52.0, 36.0); PIT = (0.0, 36.0)
 PYRES = [(-60.0, 470.0), (-12.0, 250.0), (150.0, 330.0), (50.0, 55.0)]        # C, AV, street, GS ring road east (lit in order)
 PYRE_T = (61.0, 62.6, 64.2, 65.8)                # VIDEO clock: the pyres light one by one in the longer cleanup
 D_BOX = (-475.0, -360.0, 760.0, 865.0)
+NO_SPARKLES = True                               # owner 10/27: no muzzle / shell glow cards in the mop-up
 PILASTER_E = (17.0, 27.0, 11.0)                  # east pilaster X 17..27, town-side face Y 11
 
 # ====================================================================== camera (bible g8 keys, tight column; K0 = g7 C15 seam)
@@ -1067,8 +1068,9 @@ def build_flares(coll):
     FL.add(BEATS["green"], S3(*GF), "green", up=200.0, lean=(3, 1), seed=11, life=20.0, width=1.6)
     FL.add(BEATS["red"], S3(RF[0], RF[1], RF[2] + 1.6), "red", up=200.0, lean=(-2, 2), seed=12, life=60.0, width=1.7)
     yz = G(YF[0], YF[1]) + YF[2] + 1.6
-    FL.add(BEATS["yellow"], S3(YF[0], YF[1], yz), "yellow", up=200.0, lean=(2, -1), seed=13, life=25.0, width=1.7)
-    FL.add(BEATS["relay"], S3(PY[0], PY[1], PY[2] + 1.6), "yellow", up=170.0, lean=(1, 1), seed=14, life=20.0, width=1.1)
+    # owner 10/27: the flare after the plug is clearly GREEN (was yellow), relay too, a bit wider
+    FL.add(BEATS["yellow"], S3(YF[0], YF[1], yz), "green_vivid", up=200.0, lean=(2, -1), seed=13, life=25.0, width=2.1)
+    FL.add(BEATS["relay"], S3(PY[0], PY[1], PY[2] + 1.6), "green_vivid", up=170.0, lean=(1, 1), seed=14, life=20.0, width=1.4)
     FL.build(coll)
     STATE["FL"] = FL
 
@@ -1177,8 +1179,9 @@ def build_cards(coll):
             C.add_many(te + 0.03 + rng.random(3) * 0.1, np.tile(p, (3, 1)) + rng.normal(0, 0.6, (3, 3)),
                        np.column_stack([rng.normal(0, 2, 3), rng.normal(0, 2, 3) - 4.0, rng.uniform(1, 3, 3)]), r0=1.0, r1=4.0,
                        life=2.4, rise=1.5, kind="smoke", alpha=0.5, tau=0.5, color=(0.42, 0.38, 0.26))
-    # muzzle / burst flashes as glow cards
-    for te, kind, p in STATE["cannon_events"]:
+    # muzzle / burst flashes as glow cards -- owner 10/27: "remove the sparkles" (master v1 6:40 = the first night shells):
+    # no glow flashes any more, the mop-up reads by its smoke puffs
+    for te, kind, p in ([] if NO_SPARKLES else STATE["cannon_events"]):
         C.add_many([te], [p], None, r0=7.0 if kind == "burst" else 3.5, r1=9.0 if kind == "burst" else 4.0, life=0.16 if kind == "muzzle" else 0.24,
                    rise=0.0, kind="glow", alpha=1.0, color=hexrgb("#ffc040") if kind == "muzzle" else (1.0, 0.75, 0.45), fade_in=0.005)
     CN = SC.SmokeCards("G8CardsVideo")                    # pyres on the video clock (not warped)
@@ -1645,8 +1648,8 @@ def update(tv):
     elif STATE.get("glow"):
         g, gs, gld = STATE["glow"]
         _hide(g, gl <= 0.01); gs.default_value = 2.2 * gl; gld.energy = 2.0e5 * gl
-    # plug grows 50-54
-    pu = ss(*BEATS["plug"], t)
+    # plug: owner 10/27 "remove the strange triangle rising over the gate after the plug" -> the Λ spire never grows
+    pu = 0.0
     if STATE.get("plug_hook"):
         try: STATE["plug_hook"](pu)
         except Exception as ex: print("[g8] plug hook failed:", ex)

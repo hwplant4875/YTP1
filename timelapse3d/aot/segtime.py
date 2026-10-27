@@ -149,6 +149,8 @@ TMAP["g1"] = slope_knots(DUR["g1"], G1_PLAN)
 # g4 v4 (owner 10/27: 2nd Colossal, faster camera): the establishing approach at 3.2x (local 1.0-15.0), back to 2 for
 # Eren's fist on the wall top above O and the g4|g5 seam.  Video ~7.9 s.
 TMAP["g4"] = slope_knots(DUR["g4"], [(0.0, 2.0, 0.0), (1.0, 3.2, 0.6), (15.0, 2.0, 0.6)])
+# g7 v3 (owner 10/27: camera to the cannon basin MUCH faster): transit local 0.3-5.0 at 4.5x, back to 2 before FIRE 6.0.
+TMAP["g7"] = slope_knots(DUR["g7"], [(0.0, 2.0, 0.0), (0.3, 4.5, 0.4), (4.9, 2.0, 0.35)])
 def knots(g):
     k = TMAP.get(g)
     return list(k) if k else [(0.0, 0.0), (DUR[g] / SPEED, DUR[g])]

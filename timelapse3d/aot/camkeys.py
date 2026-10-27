@@ -179,7 +179,9 @@ G6 = [   # g6 agent 10/27: owner 16:51 "FAR is better" -> the whole segment stay
     (7.0,  (-332, 478, 169), (-225, 605, 10),  30),               # H1 approach, Jean's squad, climbers
     (14.5, (-318, 484, 158), (-210, 605, 6),   31),               # H2 tackle aftermath, rampage
     (19.5, (-282, 482, 165), (-190, 630, 3),   33),               # H3 cutaway from the SW (41 deg; sees the ring over the cut wall)
-    (33.5, (-272, 479, 165), (-188, 636, 2),   33),               # H3b drift through the lift op, swarm in the lower frame
+    (23.6, (-222, 553, 92),  (-187, 641, 2),   40),               # Z1 owner 10/27: zoom in on the lift op (bay fills the frame;
+    (30.0, (-219, 557, 92),  (-187, 642, 2),   42),               # Z2  the Attack Titan at (-198, 600) stays under the frame)
+    (35.0, (-240, 468, 165), (-188, 628, 6),   32),               # H3b pull back for the swarm / breakout
     (38.5, (-215, 440, 170), (-188, 622, 8),   32),               # H4 roar before the wing, cadets on the wing roof
     (46.5, (-150, 450, 165), (-183, 617, 4),   33),               # H5 collapse + skid along the wing base (owner wing ref, from the sky)
     (52.5, (-150, 455, 160), (-180, 619, 4),   34),               # H6 Eren on the nape, Mikasa drops in

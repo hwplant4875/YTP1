@@ -34,6 +34,7 @@ import smokecards as SC
 COLORS = {             # linear RGB (smoke colour, head/glow colour)
     "red":    ((0.80, 0.045, 0.03), (1.0, 0.18, 0.08)),
     "green":  ((0.06, 0.55, 0.12), (0.35, 1.0, 0.3)),
+    "green_vivid": ((0.02, 0.85, 0.08), (0.25, 1.0, 0.2)),   # g8 after the plug (owner 10/27: clearly GREEN under the dusk grade)
     "yellow": ((0.92, 0.70, 0.05), (1.0, 0.85, 0.3)),
     "black":  ((0.03, 0.028, 0.026), (1.0, 0.5, 0.2)),
     "purple": ((0.35, 0.06, 0.55), (0.75, 0.35, 1.0)),

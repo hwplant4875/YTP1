@@ -159,7 +159,7 @@ AT_KEYS = [
     (59.05, -261.0, 410.5, 200, "roar"),
     (59.95, -261.5, 407.0, 205, "stomp"),      # stomps CAP (face down against the W wall, Y ~400) and LH beside it
     (61.30, -262.0, 438.0, 0, "run"),
-    (62.90, -247.0, 496.0, 25, "leap"),        # one leap over the end wall and the houses into Q2 (no open way in)
+    (62.90, -247.0, 496.0, 25, "smash"),       # owner 10/27: no leap - he smashes through the end wall and the houses into Q2
     (64.00, -244.5, 498.0, 50, "stand"),
     (64.30, -244.0, 498.5, 52, "boxer"),
     (65.30, -238.0, 503.0, 52, "boxer"),
@@ -198,7 +198,7 @@ def at_state(t):
         if a[0] <= t < b[0]:
             break
     mode = b[4]
-    lin = mode in ("run", "walk", "walkout", "leap")
+    lin = mode in ("run", "walk", "walkout", "leap", "smash")
     u = (t - a[0]) / (b[0] - a[0])
     ue = u if lin else u * u * (3 - 2 * u)
     if mode == "walkout":
@@ -459,6 +459,8 @@ def _pose_attack(t):
         spec = blend(P["run"], P["punch"], ss(0.0, 0.7, u))
     elif mode == "leap":
         spec = blend(P["crouch"], P["run"], bump(u, 0.0, 0.2, 0.75, 1.0))
+    elif mode == "smash":                                            # shoulder-first charge: run cycle, arms half up front
+        spec = blend(_walk_feet(P["run"], math.pi * st["walked"] / AT_STEP["run"], 3.2, lift=1.4), P["punch"], 0.35)
     elif mode == "follow":
         spec = blend(P["punch"], P["stand"], ss(0.3, 1.0, u))
     elif mode == "stand":
@@ -488,7 +490,7 @@ def _pose_attack(t):
     T.pose("_g5", ground=False)
     p = st["pos"]
     z = G(p[0], p[1]) + st["z"]
-    if mode == "run":
+    if mode in ("run", "smash"):
         z += 0.35 * abs(math.sin(math.pi * st["walked"] / AT_STEP["run"]))
     if mode == "punch":
         z += 2.2 * math.sin(math.pi * min(1.0, u * 1.2))            # the leap
@@ -961,10 +963,10 @@ def build_people(coll):
     nape = lambda nm: (lambda t: TT.nape(nm, t))
     # ---------------- wall top above O: 7 cadets (Eren among them) + Garrison pairs at the bulge guns
     cad = []
-    for k, x in enumerate((-56, -40, -26, -12, 10, 30, 52)):
+    for k, x in enumerate((-56, 0, -26, -12, 12, 30, 52)):   # owner 10/27: Eren (x 0) directly above O, the Colossal rises over him
         yc = 480.0 - math.sqrt(480.0 ** 2 - x * x)
-        f = SQ.flyer("eren" if x == -40 else f"wc{k}", "cadet", "brown" if x == -40 else rnd.choice(["dark", "ash", "black", "jean"]),
-                     **(dict(accent=(0.04, 0.8, 0.32), cloak=(0.13, 0.19, 0.07)) if x == -40 else {}))
+        f = SQ.flyer("eren" if x == 0 else f"wc{k}", "cadet", "brown" if x == 0 else rnd.choice(["dark", "ash", "black", "jean"]),
+                     **(dict(accent=(0.04, 0.8, 0.32), cloak=(0.13, 0.19, 0.07)) if x == 0 else {}))
         cad.append((f, P(x, yc + 1.5, 50.3)))
     flung = [0, 2, 4, 5]
     for k, (f, p0) in enumerate(cad):
@@ -1200,6 +1202,7 @@ def _crowd_slots(rng):
     P = P[ok]
     d = np.hypot(P[:, 0] - ARCH[0], P[:, 1] - ARCH[1])
     dens = 0.87 * np.clip(2.2 - 1.15 * (d / 70.0), 0.85, 2.2) / 2.2
+    dens *= np.clip(1.2 - d / 35.0, 0.1, 1.0)               # owner 10/27: far fewer people at the rear (packed only at the arch)
     keep = rng.random(len(P)) < dens
     P = P[keep]
     # exclusions: cart (start) + merchant gap behind it, cart end footprint east of the arch, corpse + its approach
@@ -1225,7 +1228,7 @@ def build_crowd(coll):
     AVt = [(-60.0, 470.0), (-128.0, 735.0), (-153.0, 803.0)]
     S_av = poly_len(AVt)
     tail, tail_path = [], []
-    while len(tail) < 300:
+    while len(tail) < 90:                                          # owner 10/27: thin rear (was 300)
         s = S_av[-1] - rng.uniform(3.0, 95.0)
         c = poly_at(AVt, S_av, s); q = poly_at(AVt, S_av, s + 1.0) - c; q /= np.linalg.norm(q)
         p = c + np.array([-q[1], q[0]]) * rng.uniform(-5.5, 5.5)
@@ -1233,7 +1236,7 @@ def build_crowd(coll):
             tail.append(p); tail_path.append((0, s))
     evs, evs_path = [], []
     E_P = [EVS[0], EVS[1]]; S_e = poly_len(E_P)
-    while len(evs) < 50:
+    while len(evs) < 20:
         s = S_e[-1] - rng.uniform(6.0, 24.0)
         c = poly_at(E_P, S_e, s); q = np.array([-0.707, 0.707])
         p = c + np.array([-q[1], q[0]]) * rng.uniform(-4.0, 4.0)
@@ -1618,6 +1621,12 @@ def build_cards(coll):
     C.add_many(BEATS["fall"] + rng.random(n) * 0.1, np.tile(q, (n, 1)) + rng.normal(0, 0.4, (n, 3)),
                np.column_stack([rng.normal(0, 3, n), rng.normal(0, 3, n), rng.uniform(0.5, 1.5, n)]), r0=0.6, r1=1.8, life=1.4, rise=0.4,
                kind="dust", alpha=0.6, tau=0.4, color=hexrgb("#9c8a72"))
+    # the smash run: a dust burst at every house he crashes through
+    for tk, x, y in smash_bursts():
+        n = 26; q = S3(x, y, 8.0)
+        C.add_many(tk + rng.random(n) * 0.35, np.tile(q, (n, 1)) + rng.normal(0, 3, (n, 3)),
+                   np.column_stack([rng.normal(0, 8, n), rng.normal(0, 8, n), rng.uniform(1, 9, n)]), r0=2.5, r1=rng.uniform(7, 12, n),
+                   life=rng.uniform(2.5, 4.0, n), rise=0.8, kind="dust", alpha=0.75, tau=1.0, color=hexrgb("#bba987"))
     C.build(coll)
     STATE["cards"] = C
     say(f"smoke cards: {C.count()}")
@@ -2116,6 +2125,92 @@ def clear_lots():
     bm.to_mesh(me); bm.free(); me.update()
     say(f"cleared {len(dead)} houses N of SS for the alley view")
 
+# ---------------------------------------------------------------------- AT smash run (owner 10/27: through the houses, no leap)
+SMASH_W, SMASH_BINS = 8.5, 6                            # corridor half-width (m) around his path, chunks along it
+def _smash_seg():
+    i = next(k for k, a in enumerate(AT_KEYS) if a[4] == "smash")
+    a, b = AT_KEYS[i - 1], AT_KEYS[i]
+    return np.array(a[1:3], float), np.array(b[1:3], float), a[0], b[0]
+
+def build_smash(coll):
+    """Cut the TrostTown faces in a corridor along the smash path (MA end wall Y 456 -> Q2 edge) into SMASH_BINS chunk
+    objects; update_smash collapses each one as he reaches it (sink + tilt 0.3 s, then gone) with dust + flying blocks."""
+    o = bpy.data.objects.get("TrostTown")
+    STATE["smash"] = []
+    if o is None or o.type != "MESH":
+        return
+    import bmesh as _bm
+    A, B, ta, tb = _smash_seg()
+    d = B - A; Ln = float(np.linalg.norm(d)); dn = d / Ln
+    me = o.data; mw = o.matrix_world; mwi = mw.inverted()
+    bm = _bm.new(); bm.from_mesh(me)
+    bins = [[] for _ in range(SMASH_BINS)]
+    for f in bm.faces:
+        c = mw @ f.calc_center_median(); q = np.array([c.x, c.y + segtime.SET_OFF_Y])
+        s_ = float(np.dot(q - A, dn)); off = abs(float(np.cross(dn, q - A)))
+        if off < SMASH_W and 450.0 < q[1] < 494.0 and -4.0 < s_ < Ln:
+            bins[min(SMASH_BINS - 1, max(0, int(s_ / Ln * SMASH_BINS)))].append(f)
+    L = STATE["L"]; rng = np.random.default_rng(613)
+    mblk = L.mat("G5_SmashBlock", hexrgb("#c9b99a"), 0.85)
+    dead = set()
+    for k, fs in enumerate(bins):
+        if not fs:
+            continue
+        nb = _bm.new(); vm = {}
+        for f in fs:
+            vs = []
+            for v in f.verts:
+                if v not in vm:
+                    vm[v] = nb.verts.new(v.co)
+                vs.append(vm[v])
+            try:
+                nf = nb.faces.new(vs); nf.material_index = f.material_index; nf.smooth = f.smooth
+            except ValueError:
+                pass
+            dead.add(f)
+        nme = bpy.data.meshes.new(f"G5_Smash{k}"); nb.to_mesh(nme); nb.free()
+        for m in me.materials:
+            nme.materials.append(m)
+        ob = bpy.data.objects.new(f"G5_Smash{k}", nme); coll.objects.link(ob); ob.matrix_world = mw.copy()
+        cen = np.mean([np.array(mw @ v.co) for v in vm], axis=0)
+        # pivot at the chunk's ground centre (so it sinks / tilts about its base)
+        piv = Vector((float(cen[0]), float(cen[1]), float(min((mw @ v.co).z for v in vm))))
+        nme.transform(Matrix.Translation(mwi @ piv).inverted()); ob.location = piv
+        tk = ta + (tb - ta) * (k + 0.5) / SMASH_BINS - 0.06
+        blocks = []
+        for j in range(7):
+            sz = rng.uniform(0.7, 1.8)
+            bmb = _bm.new(); L.box(bmb, (0, 0, 0), (sz, sz * rng.uniform(0.7, 1.3), sz * rng.uniform(0.6, 1.0)))
+            bo = L.obj_from_bm(f"G5_SmashBlk{k}_{j}", bmb, [mblk], coll); bo.hide_render = True
+            p0 = np.array(piv) + np.array([rng.normal(0, 3), rng.normal(0, 3), rng.uniform(4, 12)])
+            v0 = np.array([dn[0], dn[1], 0.0]) * rng.uniform(8, 18) + np.array([rng.normal(0, 7), rng.normal(0, 7), rng.uniform(6, 14)])
+            blocks.append(dict(ob=bo, p0=p0, v0=v0, spin=rng.normal(0, 5, 3)))
+        STATE["smash"].append(dict(ob=ob, t=tk, loc=piv.copy(), tilt=(float(dn[1]), float(-dn[0])), blocks=blocks,
+                                   cen=(float(cen[0]), float(cen[1]) + segtime.SET_OFF_Y)))
+    _bm.ops.delete(bm, geom=list(dead), context="FACES")
+    bm.to_mesh(me); bm.free(); me.update()
+    say(f"smash corridor: {len(dead)} faces in {len(STATE['smash'])} chunks")
+
+def smash_bursts():
+    """(t, x, y) of each chunk collapse (M) for the dust cards."""
+    return [(c["t"], c["cen"][0], c["cen"][1]) for c in STATE.get("smash", [])]
+
+def update_smash(t):
+    for c in STATE.get("smash", []):
+        u = ss(c["t"], c["t"] + 0.35, t)
+        _hide(c["ob"], u >= 0.999)
+        c["ob"].location = c["loc"] + Vector((0.0, 0.0, -9.0 * u * u))
+        c["ob"].rotation_euler = (0.5 * u * c["tilt"][0], 0.5 * u * c["tilt"][1], 0.0)
+        c["ob"].scale = (1.0, 1.0, 1.0 - 0.6 * u)
+        for b in c["blocks"]:
+            tt = t - c["t"]
+            if tt < 0 or tt > 2.2:
+                _hide(b["ob"], True); continue
+            _hide(b["ob"], False)
+            p = b["p0"] + b["v0"] * tt + np.array([0.0, 0.0, -4.9 * tt * tt])
+            p[2] = max(p[2], float(c["loc"].z) + 0.4)
+            b["ob"].location = Vector(p); b["ob"].rotation_euler = tuple(b["spin"] * tt)
+
 def fix_q2_dome(coll=None):
     """Owner QA (shared with seg_g6): the domed drum on Q2's north side read as a brown disc on a square base from the
     sky.  Remove the copper dome, its cream drum and the square block under it (everything of TrostQ2Buildings within
@@ -2168,7 +2263,7 @@ def build(site):
     except Exception as ex:
         say("cart hooks failed:", ex)
     fix_q2_dome(coll)
-    clear_lots(); bpy.context.view_layer.update(); _RC.clear()
+    clear_lots(); build_smash(coll); bpy.context.view_layer.update(); _RC.clear()
     build_cannon_events()
     build_slabs()
     build_debris(coll)
@@ -2226,6 +2321,7 @@ def update(t):
     update_slabs(t)
     _hide(STATE["stakes"], t < kick + 0.6)
     update_tower(t)
+    update_smash(t)
     update_bolts(t)
     update_decals(t)
     update_shafts(t)

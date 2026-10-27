@@ -18,7 +18,7 @@ Contents (bible g6 choreography, tight column; every time lives in BEATS / AT_KE
   titans of 3-4 m shuffle into a 4.5 m ring (22.5-27.4) - VOLLEY 27.5 (28 flashes, light spike, powder smoke, titans blinded)
   - 7 cutters drop from the rafters 27.8-28.8, Sasha and Connie miss, Mikasa and Annie finish 30.3 / 30.7 - swarm on the
   plaza 31.2-35.0 (3 biters thrown / stomped), roof returns 33.5-35.5, breakout of 12 through the west arched door 34.0 onto
-  the wing roof - bearded titan nape bite 36-38 - roar with the arms hanging 38.8-41.8 - lunge 42, face-down fall 42.8,
+  the wing roof - the BLOND titan spotted, charged, nape bitten 36.9-37.9 and thrown onto F5 38.9 - roar 40.8-41.8 - lunge 42, face-down fall 42.8,
   skid 10 m east 43.6-45 in a beige dust bow wave - steam white-out 45-48.5 - Eren rises out of the nape 48.5-50.5 - Mikasa
   runs down the slate roof and drops in 50.5-52.4, kneels by him - tableau on the keep roof walk 55.5-59.5 (Mikasa carries
   Eren up; Armin kneels; Jean, Reiner, Bertolt, Annie stand) - exit east to the basin 59.5-69.5 (g6 H8 = g7 C0).
@@ -70,8 +70,8 @@ BEATS = dict(
     cut_open=(17.6, 18.8), lift=(19.5, 22.5), ring=(22.5, 27.4), volley=27.5, drop=(27.8, 28.8),
     misses=(28.8, 29.6), finish=(30.3, 30.7), cut_close=(34.0, 35.2), inside_gone=35.6,
     swarm=(31.2, 35.0), biter_kills=(32.6, 33.8, 35.0), breakout=34.0, wing_roof=(35.6, 37.6),
-    brd_in=(27.0, 35.6), brd_bite=(36.0, 38.0), brd_kill=38.0,
-    roar3=(38.8, 41.8), lunge=(42.0, 42.8), fall=(42.8, 43.6), skid=(43.6, 45.0), whiteout=(45.0, 48.5),
+    brd_in=(27.0, 35.6), spot=(35.5, 36.0), charge=(36.0, 36.9), brd_bite=(36.9, 37.9), throw=(37.9, 38.7), brd_hit=38.9,
+    brd_kill=38.9, roar3=(40.8, 41.8), lunge=(42.0, 42.8), fall=(42.8, 43.6), skid=(43.6, 45.0), whiteout=(45.0, 48.5),
     eren_rise=(48.5, 50.5), mikasa_run=(50.5, 51.2), mikasa_drop=(51.2, 52.4), hug=52.6,
     tableau=(55.5, 59.5), carry_up=(54.0, 59.3), exit=(59.5, 69.5))
 
@@ -156,9 +156,11 @@ AT_KEYS = [
     (24.40, -198.5, 598.0, 190, "slam"),       # W1 slammed into the paving (24.05)
     (31.20, -198.0, 600.0, 120, "boxer"),
     (35.50, -198.0, 600.0, 120, "flail"),      # swarmed: 3 biters thrown off / stomped
-    (36.00, -198.0, 600.0, 270, "stand"),
-    (38.00, -199.0, 600.5, 270, "bite"),       # the bearded titan's nape (38.0)
-    (38.80, -205.0, 618.0, 340, "walk"),
+    (36.00, -198.0, 600.0, 270, "stand"),      # owner 10/27: surrounded, he spots the BLOND titan (Thomas's eater) to the west
+    (36.90, -224.0, 600.5, 270, "run"),        # charges madly (~29 m/s)
+    (37.90, -225.0, 600.5, 270, "bite"),       # bites its nape
+    (38.70, -225.5, 601.0, 320, "throw"),      # and hurls it NW at the last titan standing (F5 at the keep's NW foot)
+    (40.80, -205.0, 618.0, 60, "walk"),
     (41.80, -205.0, 618.0, 160, "roar"),       # arms hanging, head back (ep08 19:35.9)
     (42.10, -204.5, 618.5, 90, "stand"),
     (42.80, -201.5, 619.0, 90, "lunge"),
@@ -501,7 +503,9 @@ def _pose_attack(t):
         ts = BEATS["biter_kills"][2]
         spec = blend(spec, P["stomp_down"], bump(t, ts - 0.1, ts, ts + 0.1, ts + 0.3))
     elif mode == "bite":
-        spec = blend(P["stand"], P["bite"], bump(t, st["t0"], st["t0"] + 0.5, st["t1"] - 0.3, st["t1"]))
+        spec = blend(P["run"], P["bite"], ss(st["t0"], st["t0"] + 0.35, t))
+    elif mode == "throw":                                           # the bitten titan swung up and hurled (arms up, then through)
+        spec = blend(blend(P["bite"], P["uppercut"], ss(0.0, 0.45, u)), P["punch"], ss(0.45, 0.9, u))
     elif mode == "lunge":
         spec = blend(P["stand"], P["lunge"], ss(0.0, 0.6, u))
     elif mode in ("fall", "skid", "lie"):
@@ -701,8 +705,8 @@ def build_titans(coll):
     add("F3", 6.5, [(0.0, -184, 621), (16.0, -184, 621), (18.1, -191, 598.5)], g6=dict(reach=0.0, reach_end=15.9), hair=None)
     face("F3", lambda t: at_xy(t) if t > 15.8 else (-184, 632)); kill("F3", BEATS["f3_kill"], -1)
     # ---- F5 (g5 hq5): stays at the keep's NW foot, hands on the stones
-    add("F5", 7.0, [(0.0, -272, 664)], g6=dict(reach=0.0), hair=2)
-    face("F5", (-268, 652))
+    add("F5", 7.0, [(0.0, -272, 664)], g6=dict(reach=0.0, fall=(BEATS["brd_hit"] + 0.05, 0.5, 1)), hair=2)
+    face("F5", (-268, 652)); kill("F5", BEATS["brd_hit"] + 0.05, 1)                 # flattened by the thrown blond titan
     # ---- W1 (g5 hqw2): wanders in from the SW, slammed into the paving 24.05
     add("W1", 5.5, [(0.0, -206, 588), (20.8, -206, 589), (23.6, -199.5, 591.5)], hair=1)
     face("W1", at_xy); kill("W1", BEATS["w1_kill"], 1)
@@ -719,10 +723,13 @@ def build_titans(coll):
             g6.update(reach=0.0, reach_end=26.0 if nm == "B3" else 0.1)
         add(nm, H, keys, g6=g6, **kw)
         face(nm, at_xy); kill(nm, te, dirn)
-    # ---- BRD: the bearded titan from the west strip, nape bitten 36-38
-    add("BRD", 8.0, [(0.0, -300, 598), (BEATS["brd_in"][0], -300, 598), (BEATS["brd_in"][1], -205.5, 601.0)],
-        show=(BEATS["brd_in"][0] - 0.1, 1e9), beard=True, hair=1, g=1.2)
-    face("BRD", at_xy); kill("BRD", BEATS["brd_kill"], -1)
+    # ---- BRD: the BLOND titan (Thomas's eater, owner 10/27) from the west strip: spotted 35.5, nape bitten 36.9-37.9,
+    # swung up and thrown NW onto F5 (impact 38.9)
+    th0, th1 = BEATS["throw"][0] + 0.3, BEATS["brd_hit"]
+    add("BRD", 8.0, [(0.0, -300, 598), (BEATS["brd_in"][0], -300, 598), (BEATS["brd_in"][1], -232.0, 601.0)],
+        show=(BEATS["brd_in"][0] - 0.1, 1e9), hair=3, g=1.05, grin=True,
+        g6=dict(zoff=_arc_z(th0, th1, 0.0, 0.0, 14.0), fall=(th0, 0.5, 1)))
+    face("BRD", at_xy); kill("BRD", BEATS["brd_kill"], 1)
     # ---- CC: g5's crew-cut 12 m titan, slammed into tower T and nape-stamped at g5 66.8 (= g6 -3.2): its corpse stays
     add("CC", 12.0, [(0.0, *CC_POS)], g=0.95, al=1.05, hair=0)
     face("CC", (-246, 499)); kill("CC", CC_KILL, 1, keep=True, shrink=0.85, shrink_t=20.0)
@@ -749,6 +756,7 @@ def build_titans(coll):
             face(nm, LIFT_C)
             kill(nm, BEATS["drop"][1], 1, shrink=0.8, shrink_t=20.0)
     TT.sim(DUR + 1.0)
+    TT.override("BRD", th0, th1, S3(-232.0, 601.0)[:2], S3(-268.0, 657.0)[:2])
     TT.override("ST1", BEATS["st1_kill"], BEATS["st1_kill"] + 0.55, S3(*ST1_POS)[:2], S3(-227.0, 574.0)[:2])
     TT.override("F2", BEATS["f2_kill"], BEATS["f2_kill"] + 0.4, S3(-207, 606.5)[:2], S3(-203.5, 609.5)[:2])
     TT.override("F3", BEATS["f3_kill"], BEATS["f3_kill"] + 0.45, S3(-191, 598.5)[:2], S3(-186.0, 597.0)[:2])
@@ -828,9 +836,8 @@ def build_people(coll):
     W_S = S3(-242.5, 634.6, 39.0); W_N = S3(-257.5, 634.6, 39.0)              # the tall leaded hall windows (tier 2, south)
     W_E = [S3(-239.6, 639.0, 33.0), S3(-239.6, 649.0, 33.0)]                  # east face windows
     STATE["windows"] = []
-    # ---------------- Jean's squad + the stranded 104th (g5 left 18 round (-196, 576), several on the apron itself): they
-    # RUN across the open apron (nothing to hook there), hook the keep's tier-1 parapet (<= 34 m) up onto the roof walk,
-    # and crash the hall windows (Jean first: lands 2.6, windows 4.4 / 5.0; the rest by ~10)
+    # ---------------- Jean's squad + the stranded 104th (g5 left 18 round (-196, 576), several on the apron itself): two
+    # desperate ODM hops - low over the apron on the keep's parapet, then straight through the hall windows (4.4 / 5.0 ...)
     names = ["jean"] + [f"j{k}" for k in range(7)] + [f"c{k}" for k in range(10)]
     for k, nm in enumerate(names):
         f = SQ.flyer(nm, "cadet", "jean" if nm == "jean" else rnd.choice(["dark", "brown", "ash", "black", "auburn", "blond"]), H=H)
@@ -839,20 +846,17 @@ def build_people(coll):
         else:
             x0, y0 = -214 + rnd.uniform(-16, 16), 586 + rnd.uniform(-7, 7)
         p0 = gnd_set(x0, y0)
-        t0 = 0.3 + 0.15 * k if k < 8 else BEATS["stragglers"][0] + 0.4 * (k - 8)
-        f.stand(0.0, t0, p0, yaw_at((x0, y0), HQ), rnd.choice(["crouch", "stand"]))
-        xr = -262 + 24 * ((k * 5) % 18) / 17.0 + rnd.uniform(-0.5, 0.5)
-        g1 = gnd_set(xr + rnd.uniform(-1, 1), 607.5)
-        t = run(f, t0, p0, g1, 7.0)
-        rw = S3(xr, 626.6 + rnd.uniform(-0.5, 1.5), WALK_Z + 0.1)
-        hop(f, t, t + 0.9, g1, rw, anchor=np.array([xr, 624.3 - segtime.SET_OFF_Y, WALK_Z + 1.6]))
-        t += 0.9
-        if nm == "jean":
-            STATE["jean_land"] = t
+        # owner 10/27: they FLY (ODM) desperately straight at the keep and crash the windows - no walking
         win = W_S if k % 3 == 0 else (W_N if k % 3 == 1 else W_E[k % 2])
-        tw = max(t + 0.3, BEATS["crash"][k % 2] if k < 8 else t + 0.3)
-        f.stand(t, tw, rw, yaw_at((rw[0], rw[1] + segtime.SET_OFF_Y), HOLE), "crouch")
-        hop(f, tw, tw + 0.45, rw, win, anchor=win + np.array([0, 0.6, 1.2]))
+        tw = BEATS["crash"][k % 2] + 0.12 * k if k < 8 else BEATS["stragglers"][0] + 0.4 * (k - 8) + 1.9
+        xr = -262 + 24 * ((k * 5) % 18) / 17.0 + rnd.uniform(-0.5, 0.5)
+        mid = S3(xr + rnd.uniform(-2, 2), 611.0 + rnd.uniform(-2, 2), 15.0 + rnd.uniform(-2, 3))     # low over the apron
+        t0 = tw - 1.75
+        f.stand(0.0, t0, p0, yaw_at((x0, y0), HQ), rnd.choice(["crouch", "stand"]))
+        hop(f, t0, t0 + 1.05, p0, mid, anchor=np.array([xr, 624.3 - segtime.SET_OFF_Y, WALK_Z + 1.6]))
+        if nm == "jean":
+            STATE["jean_land"] = t0 + 1.05
+        hop(f, t0 + 1.05, tw + 0.45, mid, win, anchor=win + np.array([0, 0.6, 2.5]))
         f.gone(tw + 0.45)
         STATE["windows"].append((tw + 0.42, win))
     # ---------------- Armin, Mikasa, Connie: from g5's ridge R over two roofs, glide down to the apron, run, hook the
@@ -868,10 +872,11 @@ def build_people(coll):
         f.stand(0.0, t0, p0, heading_yaw(110.0), pose)
         r1 = roof_set(-261 + 2 * k, 529); r2 = roof_set(-263 + 2 * k, 553)
         hop(f, t0, t0 + 1.0, p0, r1); hop(f, t0 + 1.0, t0 + 2.0, r1, r2)
-        g0 = gnd_set(-263 + 2 * k, 572)
-        f.walk(t0 + 2.0, t0 + 2.8, r2, g0, "fly")
-        g1 = gnd_set(-262 + 2 * k, 607.5)
-        t = run(f, t0 + 2.8, g0, g1, 7.0)
+        g0 = S3(-263 + 2 * k, 580.0, 16.0)                       # owner 10/27: glide low over the apron on the wire, no running
+        hop(f, t0 + 2.0, t0 + 3.1, r2, g0, anchor=np.array([-263 + 2 * k, 600.0 - segtime.SET_OFF_Y, 24.0]), gas=0.9)
+        g1 = S3(-262 + 2 * k, 608.0, 13.0)
+        hop(f, t0 + 3.1, t0 + 4.1, g0, g1, anchor=np.array([-262 + 2 * k, 624.3 - segtime.SET_OFF_Y, WALK_Z + 1.6]), gas=0.85)
+        t = t0 + 4.1
         rw = S3(-262 + 2 * k, 626.8, WALK_Z + 0.1)
         hop(f, t, t + 0.9, g1, rw, anchor=np.array([-262 + 2 * k, 624.3 - segtime.SET_OFF_Y, WALK_Z + 1.6]), gas=0.8)
         t += 0.9
@@ -1067,7 +1072,7 @@ def build_cards(coll):
     # ---- kills: blade glints / impact dust + a short burst, then a thin column to the end
     ext = [("ST1", BEATS["st1_kill"], 0.7), ("F0", BEATS["r1_kill"], 1.0), ("F1", BEATS["r2_kill"], 1.0), ("F2", BEATS["f2_kill"], 1.6),
            ("F3", BEATS["f3_kill"], 1.0), ("W1", BEATS["w1_kill"], 1.0), ("B1", BEATS["biter_kills"][0], 0.7),
-           ("B2", BEATS["biter_kills"][1], 0.7), ("B3", BEATS["biter_kills"][2], 0.7), ("BRD", BEATS["brd_kill"], 1.2)]
+           ("B2", BEATS["biter_kills"][1], 0.7), ("B3", BEATS["biter_kills"][2], 0.7), ("BRD", BEATS["brd_kill"], 1.2), ("F5", BEATS["brd_hit"] + 0.05, 1.0)]
     for nm, te, k in ext:
         Hh = TT.H[TT.j(nm)]
         p = TT.nape(nm, te - 0.02)
