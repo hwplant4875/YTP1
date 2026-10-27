@@ -231,20 +231,22 @@ CAM_KEYS = [   # v2 (QA batch1 P0): video-time keys; 200-350 m oblique on the fo
     _k(1.4, (-60.0, -9450.0, 220.0), (300.0, -9000.0, 10.0), 32.0),           # the gate opens, the first riders burst out
     _k(3.0, (430.0, -8520.0, 300.0), (600.0, -8050.0, 0.0), 30.0),            # the column fans out past the old town
     _k(5.5, (200.0, -6280.0, 330.0), (650.0, -5720.0, 0.0), 30.0),            # the dome's right wing, red smoke relays
-    _v(17.2, _rel(0, 17.2, (-300.0, -260.0, 200.0), 34.0)),                    # she comes in from the RIGHT flank
-    _v(19.4, _rel(0, 19.4, (-200.0, -180.0, 140.0), 36.0)),                    # the wipe
-    _v(21.2, _rel(0, 0, (-70.0, -80.0, 60.0), 45.0, 6.0, _armin_spot())),     # push-in: Armin's hood
-    _v(23.6, _rel(0, 23.6, (-150.0, -220.0, 170.0), 32.0)),
-    _v(27.5, _rel(0, 27.5, (-150.0, -210.0, 160.0), 34.0)),                    # the chase
-    _v(30.0, _rel(0, 30.0, (-80.0, -130.0, 95.0), 44.0, 12.0)),                # slight zoom: REINER in her fist
-    _v(32.5, _rel(0, 32.5, (-120.0, -220.0, 200.0), 32.0)),
-    _v(37.6, _rel(0, 0, (-170.0, -230.0, 240.0), 32.0, 0.0, (650.0, -4880.0))),   # the windmill village
+    # v3 (autopilot 10/28, f1 v2 still "riders / Female tiny"): 3-4x closer (60-200 m) so the 14 m Female fills 10-25 % of
+    # the frame and the riders read; the formation's smoke columns stay in the background
+    _v(17.2, _rel(0, 17.2, (-150.0, -120.0, 75.0), 36.0)),                     # she comes in from the RIGHT flank
+    _v(19.4, _rel(0, 19.4, (-95.0, -80.0, 48.0), 38.0)),                       # the wipe
+    _v(21.2, _rel(0, 0, (-38.0, -42.0, 20.0), 42.0, 5.0, _armin_spot())),      # push-in: Armin's hood
+    _v(23.6, _rel(0, 23.6, (-95.0, -115.0, 55.0), 36.0)),
+    _v(27.5, _rel(0, 27.5, (-85.0, -105.0, 50.0), 36.0)),                      # the chase
+    _v(30.0, _rel(0, 30.0, (-42.0, -58.0, 28.0), 44.0, 12.0)),                 # slight zoom: REINER in her fist
+    _v(32.5, _rel(0, 32.5, (-95.0, -125.0, 70.0), 34.0)),
+    _v(37.6, _rel(0, 0, (-120.0, -150.0, 110.0), 32.0, 0.0, (650.0, -4880.0))),   # the windmill village
     _v(40.8, _rel(0, 40.8, (-60.0, -260.0, 330.0), 30.0, 25.0)),               # green smoke from the command line
     _k(23.0, (350.0, -3250.0, 480.0), (160.0, -1300.0, 40.0), 28.0),          # crane forward: the forest wall
     _k(DUR, SEAM_F2["pos"], SEAM_F2["look"], SEAM_F2["lens"]),
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_F1_W["vel"], v_out=SEAM_F2["vel"])
-CAM_LIMITS = dict(speed=1600.0, yaw=60.0, hmin=50.0, hmax=1100.0, pitch=(5.0, 90.0), lens=(23.0, 46.0))
+CAM_LIMITS = dict(speed=1600.0, yaw=60.0, hmin=15.0, hmax=1100.0, pitch=(5.0, 90.0), lens=(23.0, 46.0))
 PLAN = [(0.0, "morning"), (14.0, "morning"), (30.0, "day"), (STORY_DUR, "day")]
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
@@ -470,7 +472,7 @@ def _update(t):
         u = C.ss(ts, ts + 0.5, t)
         ob.scale = (1.0 + 0.2 * u, 1.0 + 0.2 * u, max(0.15, 1.0 - 0.85 * u))
     cam = bpy.context.scene.camera
-    S["fs"].update(t, wind=(2.0, 0.8)); S["dust"].update(t, wind=(2.0, 0.6)); S["steam"].update(t, wind=(1.5, 0.5))
+    S["fs"].update(t, wind=(4.0, 1.5)); S["dust"].update(t, wind=(2.0, 0.6)); S["steam"].update(t, wind=(1.5, 0.5))
 
 def light(t):
     LIGHT.apply(story(t))

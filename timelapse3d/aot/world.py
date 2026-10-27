@@ -277,6 +277,13 @@ def ground_mat():
     n6 = N.new("ShaderNodeTexNoise"); n6.inputs["Scale"].default_value = 1 / 2600.0; n6.inputs["Detail"].default_value = 4
     Ln.new(P, n6.inputs["Vector"])
     meadow = _mix(N, Ln, _mr(N, Ln, n6.outputs["Fac"], 0.66, 0.72, 0.0, 0.7), meadow, (0.40, 0.35, 0.15, 1))   # a few ochre patches
+    if os.environ.get("WD_FINE"):     # autopilot 10/28 (f1 low camera: the plain read as one flat green): 20-90 m mottling
+        n7 = N.new("ShaderNodeTexNoise"); n7.inputs["Scale"].default_value = 1 / 90.0; n7.inputs["Detail"].default_value = 6
+        Ln.new(P, n7.inputs["Vector"])
+        meadow = _mix(N, Ln, _mr(N, Ln, n7.outputs["Fac"], 0.42, 0.72, 0.0, 0.45), meadow, (0.08, 0.17, 0.035, 1))
+        n8 = N.new("ShaderNodeTexNoise"); n8.inputs["Scale"].default_value = 1 / 24.0; n8.inputs["Detail"].default_value = 4
+        Ln.new(P, n8.inputs["Vector"])
+        meadow = _mix(N, Ln, _mr(N, Ln, n8.outputs["Fac"], 0.55, 0.80, 0.0, 0.35), meadow, (0.32, 0.34, 0.13, 1))
     # woodland: darker soft patches (the forest cones stand on most of them)
     n3 = N.new("ShaderNodeTexNoise"); n3.inputs["Scale"].default_value = 1 / 1800.0; n3.inputs["Detail"].default_value = 5
     Ln.new(P, n3.inputs["Vector"])

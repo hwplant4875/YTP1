@@ -6,6 +6,7 @@ outside its gate, the windmill village, and the Forest of Giant Trees (frame F, 
 """
 import math, os, random, sys
 import numpy as np
+os.environ.setdefault("WD_FINE", "1")          # autopilot 10/28: world.ground_mat fine 20-90 m mottling on the forest plain
 import bpy, bmesh
 from mathutils import Vector, Matrix, noise
 

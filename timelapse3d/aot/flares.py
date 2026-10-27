@@ -111,7 +111,8 @@ class FlareSet:
     def add(self, t0, pos, color="red", up=120.0, lean=None, seed=None, life=16.0, width=1.0):
         rnd = random.Random(seed if seed is not None else len(self.fl) * 7 + 3)
         if lean is None:
-            lean = (rnd.uniform(-6, 6), rnd.uniform(-6, 6))
+            a = 22.0 if self.style == "column" else 6.0       # column: a visibly arcing climb, not a ruler-straight line
+            lean = (rnd.uniform(-a, a), rnd.uniform(-a, a))
         self.fl.append(dict(t0=float(t0), p=np.array(pos, float), color=color, up=float(up), lean=np.array(lean, float),
                             life=float(life), width=float(width), seed=rnd.randrange(1 << 30)))
         return len(self.fl) - 1
@@ -143,7 +144,7 @@ class FlareSet:
                 self.cards.add_many(f["t0"] + taus[::2], P[::2] + rnd.normal(0, 0.4, (len(taus[::2]), 3)),
                                     rnd.normal(0, 0.5, (len(taus[::2]), 3)), r0=1.2 * w, r1=(5.0 + 2.5 * rnd.random(len(taus[::2]))) * w,
                                     life=f["life"] * (0.8 + 0.4 * rnd.random(len(taus[::2]))), rise=0.35, color=lit, kind="smoke",
-                                    alpha=0.55, fade_in=0.05, dirs=D[::2], stretch=1.4, spin=0.0)
+                                    alpha=0.42, fade_in=0.05, dirs=D[::2], stretch=1.0, spin=0.0)   # autopilot: puffier, less beam
                 k = slice(None, None, 5)
                 self.cards.add_many(f["t0"] + taus[k], P[k], rnd.normal(0, 0.6, (len(taus[k]), 3)), r0=1.5 * w, r1=7.5 * w,
                                     life=f["life"] * 0.9, rise=0.4, color=lit, kind="smoke", alpha=0.45, fade_in=0.08)
@@ -184,6 +185,8 @@ class FlareSet:
             ob = bpy.data.objects.new(me.name, me); coll.objects.link(ob); ob.visible_shadow = False
             self.heads.append(ob)
         self.cards.build(coll)
+        if self.style == "column":
+            self.cards.wind = (3.2, 1.1)          # autopilot 10/28 (f1 v2 purple column read as a laser): the column drifts + bends
         return self
 
     def head_pos(self, i, t):
