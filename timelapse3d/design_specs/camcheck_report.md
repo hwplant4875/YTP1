@@ -5,29 +5,32 @@ Sampled at 60 Hz. Limits (bible A3): yaw <= 30 deg/s, speed <= 150 m/s (g3 fligh
 
 | run / segment | t (s) | peak m/s (@t) | bible m/s | peak deg/s (@t) | bible deg/s | pitch | height min..max (m) | lens | flags |
 |---|---|---|---|---|---|---|---|---|---|
-| g1 | 0.0-32.0 | 129 (6.6) | 129 | 21.6 (29.7) | - | -1..57 | 92 (3.9)..125 | 28.0-50.0 | PITCH |
-| g2 | 0.0-32.0 | 54 (26.4) | 78 | 30.1 (0.9) | 30 | 17..49 | 114 (0.0)..240 | 28.0-38.0 | PITCH |
+| g1 | 0.0-32.0 | 147 (7.8) | 246 | 14.7 (20.7) | 22 | -1..42 | 89 (3.9)..113 | 28.0-50.0 | HEIGHT-LOW; PITCH |
+| g2 | 0.0-32.0 | 90 (4.3) | 78 | 28.3 (21.8) | 30 | 23..42 | 95 (0.0)..240 | 28.0-50.0 | none |
+| g3 | 0.0-78.4 | 372 (4.0) | - | 28.0 (42.7) | - | 17..32 | 124 (30.9)..640 | 27.0-40.0 | none |
 | g3_flight | 0.0-17.7 | 412 (6.0) | 412 | 4.6 (11.2) | - | 19..29 | 240 (0.0)..380 | 28.0-30.0 | SPEED |
 | g3_flight_prof | 0.0-17.7 | 372 (4.0) | 369 | 4.4 (11.2) | - | 19..29 | 240 (0.0)..380 | 28.0-30.0 | none |
-| g3_camps | 17.7-31.3 | 114 (29.2) | - | 31.9 (26.4) | 32 | 17..32 | 124 (30.9)..255 | 27.0-40.0 | YAW |
-| g3_to_camp | 49.3-78.4 | 298 (57.3) | 298 | 16.6 (69.0) | - | 19..29 | 68 (68.9)..681 | 28.0-40.0 | HEIGHT-HIGH |
-| g4 | 0.0-20.0 | 141 (10.4) | 141 | 31.5 (2.6) | 32 | 19..28 | 170 (0.0)..322 | 28.0-32.0 | YAW |
+| g3_camps | 17.7-31.3 | 123 (29.3) | - | 26.8 (26.5) | 32 | 17..32 | 124 (30.9)..255 | 27.0-40.0 | none |
+| g3_march | 31.3-49.3 | 289 (36.8) | - | 28.0 (42.7) | - | 17..32 | 125 (31.3)..640 | 27.0-33.0 | none |
+| g3_to_camp | 49.3-78.4 | 294 (53.7) | 298 | 9.6 (71.5) | - | 21..31 | 147 (72.1)..640 | 28.0-38.0 | none |
+| g4 | 0.0-20.0 | 143 (7.5) | 141 | 27.4 (2.9) | 32 | 19..34 | 170 (0.0)..365 | 29.0-42.0 | none |
 | g5 | 0.0-70.0 | 43 (63.8) | 43 | 29.3 (43.7) | 29 | 23..44 | 125 (40.1)..205 | 28.0-34.0 | none |
-| g6 | 0.0-69.5 | 40 (65.4) | 39 | 18.8 (64.8) | 25 | 33..52 | 90 (52.4)..175 | 30.0-40.0 | none |
-| g7 | 0.0-45.0 | 104 (24.7) | 104 | 26.5 (20.1) | 26 | 26..46 | 90 (11.9)..231 | 30.0-40.0 | PITCH |
+| g6 | 0.0-69.5 | 46 (66.5) | 39 | 12.5 (67.8) | 25 | 33..44 | 130 (69.5)..175 | 30.0-34.0 | none |
+| g7 | 0.0-45.0 | 107 (25.0) | 104 | 28.2 (21.4) | 26 | 26..44 | 102 (13.2)..231 | 30.0-38.0 | none |
 | g8 | 0.0-75.0 | 67 (8.7) | 67 | 29.9 (63.2) | 30 | 22..39 | 89 (49.3)..290 | 28.0-42.0 | HEIGHT-LOW |
-| A2 | 32.0-95.3 | 412 (70.0) | 78 | 32.0 (90.4) | 30 | 17..49 | 114 (32.0)..380 | 27.0-40.0 | YAW; PITCH |
-| B | 113.3-421.9 | 298 (121.4) | 141 | 31.7 (143.3) | 32 | 19..52 | 68 (132.9)..640 | 28.0-42.0 | YAW; PITCH |
-| B_vin | 113.3-421.9 | 298 (121.3) | - | 31.7 (143.3) | - | 19..52 | 68 (132.9)..681 | 28.0-42.0 | YAW; HEIGHT-HIGH; PITCH |
+| A2 | 32.0-95.3 | 412 (70.0) | 78 | 28.3 (53.8) | 30 | 17..42 | 95 (32.0)..380 | 27.0-50.0 | none |
+| B | 113.3-421.9 | 293 (121.3) | 141 | 29.9 (410.1) | 32 | 19..44 | 89 (396.2)..640 | 28.0-42.0 | none |
+| B_vin | 113.3-421.9 | 294 (117.7) | - | 29.9 (410.1) | - | 19..44 | 89 (396.2)..640 | 28.0-42.0 | none |
 
 ## Flag details
 
 ### g1
-- FLAG PITCH: -1..57 deg outside 17..45 (0.07-32.00 s)
+- FLAG HEIGHT-LOW: 89 m < 90 at t=3.90 (3.90-3.90 s)
+- FLAG PITCH: -1..42 deg outside 17..45 (0.07-11.92 s)
 - K0/K1 locked tree framing are not numbers in the bible (K1 = render_fast fallback, K0 approximated); height rule applied from K2 (3.9 s); look-under test off (K0 look is 3 m ahead of the camera on purpose, same bearing as K1).
 
-### g2
-- FLAG PITCH: 17..49 deg outside 17..45 (0.00-0.68 s)
+### g3
+- seg_g3.CAM_M, the whole segment as rendered: flight 0-17.7 on its explicit speed profile (369 m/s, the bible's speed exception; limit 400 here), camps, march846 re-driven (<= 289 m/s), to camp (<= 294 m/s). Per-run limits: python aot/seg_g3.py
 
 ### g3_flight
 - FLAG SPEED: 411.8 m/s > 150 at t=5.98
@@ -37,47 +40,36 @@ Sampled at 60 Hz. Limits (bible A3): yaw <= 30 deg/s, speed <= 150 m/s (g3 fligh
 - explicit g3 profile: ramp 45->369 m/s over 0-3.7, cruise to 9.0, constant deceleration to rest at H (17.7); speed limit set to 400 for this run.
 
 ### g3_camps
-- FLAG YAW: 31.9 deg/s > 30 at t=26.45
 - H (17.7, at rest) to CAM_IN with v_out = (16.7,-61.1,5.6) and the look-point rate of march846 CAM_KEYS[0..1]. FA4->H (12.9-17.7) is inside the flight profile.
 
-### g3_to_camp
-- FLAG HEIGHT-HIGH: 681 m > 650 (49.72-52.98 s)
-- FT3-FT5 sit at 95/85/70 m over the 104th camp by design: height floor 65, speed limit 300 (bible quotes 298 m/s for this flight).
+### g3_march
+- march846 inside g3, re-driven by seg_g3 on march846's route (arc-length channels + explicit speed profile, low pass raised to 140 m): march846.py's own spline gives 458 m/s, 57 deg/s, 81 m, pitch 11.
 
-### g4
-- FLAG YAW: 31.5 deg/s > 30 at t=2.57
+### g3_to_camp
+- FT0..FT7 as rendered by seg_g3: v_in = CAM_OUT (0,95,0) (level; the old climb (0,95,22) overshot to 681 m), look_v_in = the re-driven march camera's look-at rate, v_out = g3_g4 seam, look-at at rest at FT7 (g4). FT3-FT5 now 185/165/150 m (height floor 90 holds); speed limit 300 (flight exception, bible 298).
 
 ### g6
-- H3/H3b are the 51 deg cutaway: pitch allowed to 52.
-
-### g7
-- FLAG PITCH: 26..46 deg outside 17..45 (20.13-20.20 s)
+- H3/H3b cutaway pulled back to <= 45 deg pitch (owner limit 17-45, g6 agent 10/27).
 
 ### g8
 - FLAG HEIGHT-LOW: 89 m < 90 at t=49.27 (48.95-49.40 s)
 
 ### A2
-- FLAG YAW: 32.0 deg/s > 30 at t=90.43
-- FLAG PITCH: 17..49 deg outside 17..45 (32.00-32.68 s)
 - g2 + g3 flight + camps up to CAM_IN as ONE pure-PCHIP channel (bible A2 run), guide key 31.8; the flight part is the 412 m/s case (g3 drives it with the explicit profile).
 
 ### B
-- FLAG YAW: 31.7 deg/s > 30 at t=143.33
-- FLAG PITCH: 19..52 deg outside 17..45 (249.52-322.10 s)
 - FT0 -> g8 E2 as ONE channel, lead-in guide key at FT0-1 s (look-at = FT0 look), bible A3. Heights: FT3-FT5 low by design (70-95 m); the bible quotes the peaks per segment (g4 141/32 ... g8 67/30).
 
 ### B_vin
-- FLAG YAW: 31.7 deg/s > 30 at t=143.33
-- FLAG HEIGHT-HIGH: 681 m > 650 (113.72-116.98 s)
-- FLAG PITCH: 19..52 deg outside 17..45 (249.52-322.10 s)
 - FT0 -> g8 E2 as ONE channel, with v_in = march846 CAM_OUT velocity instead of the guide key. Heights: FT3-FT5 low by design (70-95 m); the bible quotes the peaks per segment (g4 141/32 ... g8 67/30).
 
 ## Comparison with the bible and notes
 
+- g3 (agent 10/27): the rendered camera is seg_g3.CAM_M (check 'g3'): flight 0-17.7 on camchan.speed_profile (372 m/s peak, the bible exception); camps pan re-timed (26.8 deg/s); march846 re-driven on its own route with arc-length channels + a speed profile (289 m/s, 28 deg/s, >= 125 m, pitch >= 17; march846.py's spline gave 458 m/s / 57 deg/s / 81 m / pitch 11); CAM_OUT level (0,95,0); to camp FT1 420 m, FT2 20 m nearer, FT3-FT5 at 185/165/150 m: 294 m/s, <= 640 m, no HEIGHT-HIGH. A2 / B / B_vin now use these keys. g3_flight / g3_flight_prof rows are the reference transcriptions.
 - Agree with the bible within rounding: g1 129 m/s; g3 flight pure PCHIP 412 m/s (profile run 372 vs the profile's 369); g3 flight-to-camp 298 m/s; g4 141 m/s / 31.5 deg/s (bible 32); g5 43 / 29; g7 104 / 26.5 (26); g8 67 / 29.9 (30), min height 89 m (bible says 89 too); g3 camps pan 31.9 deg/s (bible 32).
 - Disagree: g2 alone peaks at 54 m/s (bible 78): the bible figure comes from the A2 run where g2 is one channel with the g3 flight keys; with the A2 seam as v_out (0,45,8) g2 ends smoothly at 46 m/s. g6 yaw peaks at 18.8 deg/s (bible 25): the bible number is from the single run B; with seam tangents g6 alone is calmer.
 - Over the A3 limits (flags in the table): YAW > 30 deg/s: g3 camps P2->P3 pan 31.9 (26.4 s local), g4 G0b swing 31.5 (2.6 s), run A2 32.0, run B 31.7 (the same two spots; the bible itself quotes 32). All are < 3 % over; none is a flip.
-- g2: pitch 49 deg in the first 0.7 s (K0 aimed at the Yeager house from 114 m, A3 allows 45); g7: pitch 46 deg at 20.1 s (a 0.07 s window); g8: height 89 m at 49.3 s (A3 minimum 90, 1 m short at S1); g1: pitch -1..57 deg: the tree shots K0/K1 are locked close-ups and K5 (pitch 9 deg, 50 mm hold on the Colossal at 500 m) is below the 17 deg pitch rule; flag kept for the record.
+- g2 (v2 10/27): new seam K0 (-254,-468,95), K1 a 3.0 s pan, lock from 6.0 s: peak yaw 68 -> <30 deg/s (see camchan --check g2). g7: pitch 46 deg at 20.1 s (a 0.07 s window); g8: height 89 m at 49.3 s (A3 minimum 90, 1 m short at S1); g1: pitch -1..57 deg: the tree shots K0/K1 are locked close-ups and K5 (pitch 9 deg, 50 mm hold on the Colossal at 500 m) is below the 17 deg pitch rule; flag kept for the record.
 - g3_to_camp with the march846 CAM_OUT velocity as v_in (0,95,22) overshoots to 681 m (> 650) at 50-53 s because the 640 m start key climbs at 22 m/s into FT1 (520 m); the bible's lead-in guide key at FT0-1 s (run B) peaks at 640 m. Use the guide key, or lower FT0/FT1 height by ~40 m.
 - A2/B as ONE channel also match the per-segment numbers (g2 + flight: 412 m/s is the flight); g3 flight 0-17.7 must be driven with camchan.speed_profile (45 -> 369 m/s ramp over 0-3.7, cruise to 9.0, constant decel to rest at 17.7), as the bible says.
 - Assumptions in the transcription: g1 K0 (3 m from the kids, same line of sight as K1, 45 mm) and K1 (render_fast fallback flight_at(900): cam (-480, 338, 7.2), look (-300, 0, 10.6), 50 mm) are not numbers in the bible; g3 lens at H2..H3 held at 40 (bible: '28->40' then '40->28'), CAM_IN 27; g3 look-at rate at CAM_IN (0,-111,0) and at CAM_OUT (0,283,13) from march846.CAM_KEYS secants (the bible gives only the camera velocities); the g1 guide key at 33.0 duplicates K12 (v_out is left unset: PCHIP gives rest at 32.0).

@@ -1,0 +1,21 @@
+{
+ "segment": "g3 flight north / camps / 846 march / 104th camp: HUD lines + name tags burnt into the preview (hud2; tags Russo One as g4-g7, captions New Rocker bottom centre, counter Share Tech). At most 3 tags at once (max 2 here). Times = seg_g3.BEATS (hud_845, hud_846, tag_shadis, tag_eren, tag_mikasa); the counter runs over the march (march846 alive curve).",
+ "fps": 15,
+ "frames": "E:/YTP2/3D Timelapse/renders/g3/frames/f_%05d.png",
+ "first": 0,
+ "last": 1175,
+ "cams": "E:/YTP2/3D Timelapse/renders/g3/frames",
+ "out": "E:/YTP2/3D Timelapse/renders/g3/hud_frames",
+ "prefix": "g3h",
+ "mp4": "E:/YTP2/3D Timelapse/renders/g3/g3_preview.mp4",
+ "tracks": [
+  {"type": "caption", "t0": 5.2, "t1": 9.0, "text": "845: territory reduced to Wall Rose", "size": 20},
+  {"type": "caption", "t0": 23.4, "t1": 27.2, "text": "846: retake Wall Maria", "size": 20},
+  {"type": "counter", "t0": 32.4, "t1": 48.8, "from": 250000, "to": 100, "run": [35.0, 46.0], "mode": "linear", "round": 10,
+   "label": "Still marching", "label_end": "Came back", "approx_end": true, "color_end": "red", "bar": true, "pos": "br", "scale": 0.7},
+  {"type": "place", "t0": 63.6, "t1": 67.2, "place": "104th Training Corps", "year": 847, "pos": "tl"},
+  {"type": "tag", "t0": 63.8, "t1": 66.6, "name": "SHADIS", "obj": "Shadis", "color": "gold", "len": 30, "size": 15, "lean": 14},
+  {"type": "tag", "t0": 66.9, "t1": 69.6, "name": "EREN", "obj": "Eren", "color": "green", "len": 30, "size": 15, "lean": 14},
+  {"type": "tag", "t0": 67.3, "t1": 69.6, "name": "MIKASA", "obj": "Mikasa", "color": "red", "len": 30, "size": 15, "lean": -14}
+ ]
+}

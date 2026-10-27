@@ -49,7 +49,8 @@ def build(L, M2S, ground_M, coll, seed=104):
     def P(u, v, z):                          # camp (u, v, absolute z) -> set coords
         q = M2S((C[0] + u, C[1] + v, z)); return (q[0], q[1], q[2])
     floor_z = g0 + 0.15
-    M = dict(floor=L.mat("CP_Floor", _hex("#e2d8c2"), 0.95, var=0.25, var_scale=0.08, color2=_hex("#cfc3aa")),
+    # g3 agent 10/27 (cloud QA on g4: "a white oval plate in the dark"): trodden dirt yard toned to the terrain, not pale #e2d8c2
+    M = dict(floor=L.mat("CP_Floor", _hex("#8f8466"), 0.95, var=0.3, var_scale=0.05, color2=_hex("#7a7a58")),
              cliff=L.mat("CP_Cliff", _hex("#b0a08e"), 0.95, var=0.3, var_scale=0.05, color2=_hex("#8a7c74")),
              rock=L.mat("CP_RockStep", _hex("#9a8c80"), 0.95),
              timber=L.mat("CP_Timber", _hex("#7a5a3e"), 0.9), dark=L.mat("CP_DarkTimber", _hex("#4a3426"), 0.9),
@@ -111,16 +112,14 @@ def build(L, M2S, ground_M, coll, seed=104):
         L.box(bm, (c.x, c.y, c.z + h / 2), (w, d, h), rot=rot, mi=0)
         L.box(bm, (c.x, c.y, c.z + h + 0.9), (w + 0.8, d + 0.8, 1.8), rot=rot, mi=1, taper=(1.0, 0.08))
         ca, sa = math.cos(rot), math.sin(rot)
-        for k in range(win):
-            x = (k - (win - 1) / 2) * w / win
-            for sy in (-1, 1):
-                L.box(wb, (c.x + ca * x - sa * sy * (d / 2 + 0.06), c.y + sa * x + ca * sy * (d / 2 + 0.06), c.z + 1.6),
-                      (1.0, 0.12, 0.9), rot=rot)
-    for u in (-100, -78, -5, 17, 39, 61):                         # back terrace (v +70)
-        hut(u, 70.0 - 4.0 * (abs(u) > 90), rot=0.0)
-    for k, v in enumerate((-48, -32, -16, 0, 16, 32, 48)):         # east terrace (u +70..+110)
+        for sy in (-1, 1):                                   # one continuous lit window band per long side (reads at night
+            L.box(wb, (c.x - sa * sy * (d / 2 + 0.06), c.y + ca * sy * (d / 2 + 0.06), c.z + 1.7),   # from 300 m; g3 10/27)
+                  (w * 0.78, 0.14, 1.1), rot=rot)
+    for u in (-100, -78, -5, 17, 39, 61):                         # back terrace (v +70): barracks 17 x 6.5 m (g3 agent 10/27)
+        hut(u, 70.0 - 4.0 * (abs(u) > 90), w=17.0, d=6.5, h=3.6, rot=0.0, win=4)
+    for k, v in enumerate((-48, -32, -16, 0, 16, 32, 48)):         # east terrace (u +70..+110): barracks 13 x 6 m
         um = A_U * math.sqrt(max(0.0, 1 - (v / B_V) ** 2))
-        hut(min(0.86 * um, 100.0) - 4.0, v, w=7.0, d=5.0, rot=math.pi / 2)
+        hut(min(0.86 * um, 100.0) - 6.0, v, w=13.0, d=6.0, h=3.4, rot=math.pi / 2, win=3)
     hut(-95, -50, rot=0.3); hut(-110, -5, rot=math.pi / 2)
     # mess hall 26 x 8 m (u -15, v -45): 8-window band on its north front, veranda, chimney, porch lantern
     mu, mv = -15.0, -45.0
@@ -132,8 +131,9 @@ def build(L, M2S, ground_M, coll, seed=104):
     L.box(bm, (c.x, c.y + 5.2, c.z + 3.0), (26.0, 2.4, 0.25), mi=1)                     # veranda roof
     for x in np.linspace(-12.5, 12.5, 6):
         L.box(bm, (c.x + x, c.y + 6.2, c.z + 1.5), (0.25, 0.25, 3.0), mi=3)
-    for x in np.linspace(-11.0, 11.0, 8):
-        L.box(wb, (c.x + x, c.y + 4.06, c.z + 2.6), (1.4, 0.12, 1.3))
+    L.box(wb, (c.x, c.y + 4.06, c.z + 2.6), (23.0, 0.14, 1.5))              # the 8-window band as one continuous lit strip
+    for x in np.linspace(-11.0, 11.0, 8)[:-1] + 1.57:                      # dark mullions keep the 8 windows readable by day
+        L.box(bm, (c.x + x, c.y + 4.1, c.z + 2.6), (0.3, 0.16, 1.55), mi=3)
     lan = Vector((c.x, c.y + 6.3, c.z + 2.6))
     L.box(wb, tuple(lan), (0.5, 0.5, 0.6))
     # graduation stair: 14 steps x 30 m in front of the mess hall (toward the floor centre), braziers at both ends
@@ -181,6 +181,36 @@ def build(L, M2S, ground_M, coll, seed=104):
     st["objs"].append(ob)
     st["objs"].append(L.obj_from_bm("CP_Windows", wb, [win_m], coll))
     st["objs"].append(L.obj_from_bm("CP_BrazierFire", fb, [fire_m], coll))
+    # soft warm glow balls at the braziers and the porch lantern (the toon pass drops point-light colour; g3 10/27)
+    gm = bpy.data.materials.get("CP_Glow") or bpy.data.materials.new("CP_Glow")
+    gm.use_nodes = True; gnt = gm.node_tree; GN = gnt.nodes
+    for n in list(GN):
+        if n.type != "OUTPUT_MATERIAL":
+            GN.remove(n)
+    gem = GN.new("ShaderNodeEmission"); gem.inputs["Color"].default_value = (1.0, 0.52, 0.18, 1.0); gem.inputs["Strength"].default_value = 0.0
+    gtr = GN.new("ShaderNodeBsdfTransparent"); glw = GN.new("ShaderNodeLayerWeight"); glw.inputs["Blend"].default_value = 0.5
+    gpw = GN.new("ShaderNodeMath"); gpw.operation = "POWER"; gpw.inputs[1].default_value = 2.5
+    gnt.links.new(glw.outputs["Facing"], gpw.inputs[0])
+    ginv = GN.new("ShaderNodeMath"); ginv.operation = "SUBTRACT"; ginv.inputs[0].default_value = 1.0; gnt.links.new(gpw.outputs[0], ginv.inputs[1])
+    gmx = GN.new("ShaderNodeMixShader"); gnt.links.new(ginv.outputs[0], gmx.inputs[0])
+    gnt.links.new(gtr.outputs[0], gmx.inputs[1]); gnt.links.new(gem.outputs[0], gmx.inputs[2])
+    gnt.links.new(gmx.outputs[0], next(n for n in GN if n.type == "OUTPUT_MATERIAL").inputs["Surface"])
+    for k_, v_ in (("surface_render_method", "BLENDED"), ("use_transparent_shadow", True)):
+        try:
+            setattr(gm, k_, v_)
+        except Exception:
+            pass
+    gm["toon"] = 1
+    gb = bmesh.new()
+    for k, p in enumerate(br + [lan]):
+        res = bmesh.ops.create_icosphere(gb, subdivisions=2, radius=3.2 if k < 2 else 1.8)
+        for v in res["verts"]:
+            v.co += Vector(p)
+    for f in gb.faces:
+        f.smooth = True
+    go = L.obj_from_bm("CP_Glow", gb, [gm], coll)
+    go.visible_shadow = False
+    st["objs"].append(go); st["glow"] = gem
     # ---------------------------------------------------------------- fence W -> mid-N (posts), palisade mid-N -> E (+320 m east)
     bm = bmesh.new()
     for a in np.radians(np.arange(180.0, 90.0, -3.0)):
@@ -202,6 +232,19 @@ def build(L, M2S, ground_M, coll, seed=104):
             L.cyl(bm, tuple(q), (q.x, q.y, q.z + hgt - 0.5), 0.24, 0.24, seg=5, mi=0)
             L.cyl(bm, (q.x, q.y, q.z + hgt - 0.5), (q.x, q.y, q.z + hgt), 0.24, 0.02, seg=5, mi=0)
     st["objs"].append(L.obj_from_bm("CP_Palisade", bm, [M["dark"]], coll))
+    # ---------------------------------------------------------------- lake 250 x 150 m at (u +150, v +420) (bible g3; g3 agent 10/27)
+    bm = bmesh.new()
+    ring = []
+    for k in range(48):
+        a = 2 * math.pi * k / 48
+        u, v = 150.0 + 125.0 * math.cos(a) * (1 + 0.06 * math.sin(3 * a)), 420.0 + 75.0 * math.sin(a) * (1 + 0.05 * math.cos(2 * a))
+        ring.append((u, v))
+    zl = min(gz(u, v) for u, v in ring + [(150.0, 420.0)]) + 0.2
+    cv = bm.verts.new(P(150.0, 420.0, zl))
+    rv = [bm.verts.new(P(u, v, zl)) for u, v in ring]
+    for k in range(48):
+        bm.faces.new((cv, rv[k], rv[(k + 1) % 48]))
+    st["objs"].append(L.obj_from_bm("CP_Lake", bm, [L.mat("CP_LakeWater", _hex("#4e6e62"), 0.15)], coll))
     # ---------------------------------------------------------------- warm point lights (braziers, porch lantern)
     for k, p in enumerate(br + [lan]):
         ld = bpy.data.lights.new(f"CP_Lamp{k}", "POINT"); ld.color = (1.0, 0.55, 0.22); ld.energy = 0.0
@@ -220,9 +263,11 @@ def set_night(st, f):
     f = float(min(1.0, max(0.0, f)))
     st["win"].inputs["Strength"].default_value = 26.0 * f
     st["fire"].inputs["Strength"].default_value = 60.0 * f
+    if st.get("glow") is not None:
+        st["glow"].inputs["Strength"].default_value = 9.0 * f
     for ld, e in st["lights"]:
         ld.energy = e * f
-    for n in ("CP_Windows", "CP_BrazierFire"):
+    for n in ("CP_Windows", "CP_BrazierFire", "CP_Glow"):
         o = bpy.data.objects.get(n)
         if o is not None:
             h = f <= 0.002
