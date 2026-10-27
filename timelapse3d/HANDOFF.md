@@ -467,3 +467,4 @@ PROGRESS 10/27 (resume session): TOON default OFF (toon.py, TOON=1 re-enables). 
 Render queue: g2_v5 full -> g1_v5 stills2 -> g1 full -> g3..g8 (VCLOCK=1, TOON off) -> master v2 concat. Logs: E:/YTP2/3D Timelapse/logs/.
 DONE g2 v5 (renders/laptop/g2_armored_v5_*, 15.2 s, TOON off): night after the breach, Armored steam-vanish, aerial ~3 s, fast exit north.
 DONE g3 v5 (renders/laptop/g3_flight_v5_*, 40.4 s, TOON off): night start matches g2 v5 end, no winter, march846 camera.
+DONE g4 v4 (renders/laptop/g4_trost850_v4_*, 7.3 s): faster establishing approach (TMAP g4 3.2x), TOON off.
