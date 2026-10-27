@@ -68,6 +68,18 @@ def main():
                     tracks.append(dict(type="tag", name=nm.upper(), obj=nm, t0=a, t1=b))
     for e in tracks:
         e.update(color="red" if e["obj"] in TITANS else "cream", len=30, size=15)
+    extra = []
+    if A.seg == "g3":                        # captions + the 250,000 "Still marching" counter + place label (owner 10/27)
+        import json, numpy as np
+        tl = json.load(open(os.path.join(HERE, "graphics_timelines", "g3_tags.json"), encoding="utf8"))
+        k6 = segtime.ramp_knots(segtime.DUR["g3"], [(segtime.G3_MARCH[0], segtime.G3_MARCH[1], 1.0)], ramp=1.0)   # the v6 clock
+        def remap(tv):
+            loc = float(np.interp(tv, [a for a, b in k6], [b for a, b in k6]))
+            return segtime.to_video("g3", loc)
+        for e in tl["tracks"]:
+            if e["type"] != "tag":
+                e = dict(e); e["t0"], e["t1"] = remap(e["t0"]), remap(e["t1"]); extra.append(e)
+        print("[tags] g3 extras: " + ", ".join(f"{e['type']} {e['t0']:.1f}-{e['t1']:.1f}" for e in extra), flush=True)
     print(f"[tags] {A.seg}: " + ", ".join(f"{e['name']} {e['t0']:.1f}-{e['t1']:.1f}" for e in tracks), flush=True)
     ff = subprocess.Popen(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24",
                            "-s", f"{W}x{H}", "-r", str(A.fps), "-i", "-", "-c:v", "libx264", "-crf", "26", "-pix_fmt", "yuv420p",
@@ -81,9 +93,11 @@ def main():
         act = [e for e in tracks if e["t0"] - 0.05 <= t <= e["t1"] + 0.4 and valid(cam, e["obj"])]
         act = sorted(act, key=lambda e: e["t0"])[:3]          # max 3 tags on screen
         act = [dict(e, len=28 + 20 * k, lean=(14 if k % 2 == 0 else -14)) for k, e in enumerate(act)]   # de-clutter stacked tags
-        if act and cam:
-            cam = dict(cam); cam["res"] = [W, H]
-            img = hud2.compose(dict(fps=A.fps, tracks=act), img, i, t=t, cam=cam)
+        ex = [e for e in extra if e["t0"] - 0.05 <= t <= e["t1"] + 0.5]
+        if (act and cam) or ex:
+            if cam:
+                cam = dict(cam); cam["res"] = [W, H]
+            img = hud2.compose(dict(fps=A.fps, tracks=act + ex), img, i, t=t, cam=cam)
         ff.stdin.write(img.tobytes())
     ff.stdin.close(); ff.wait()
     print(f"[tags] -> {A.out}", flush=True)
