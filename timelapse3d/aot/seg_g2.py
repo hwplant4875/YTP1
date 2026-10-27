@@ -416,6 +416,58 @@ def build_gatehouse(coll):
             crack(p, d, rnd.uniform(15, 30), rnd.uniform(0.15, 0.22), side)
     cr = put("G2Cracks", bm, [M["crack"]], coll); cr.hide_render = True
     parts["cracks"] = cr
+    # QA v3: the breach must read as a TALL DARK pointed opening on both faces: a dark sooty liner on the reveal (sides +
+    # pointed vault) through the whole thickness, broken stone teeth round both mouths, rubble spilling out of both mouths
+    bm = bmesh.new(); rnd = random.Random(77)
+    outline = []
+    for k in range(25):                                   # left foot -> apex -> right foot along the arch, jittered
+        u = k / 24.0
+        z = HOLE_H * (1.0 - abs(2 * u - 1)) ** 0.85 if 0 < u < 1 else 0.0
+        z = min(HOLE_H - 0.3, z)
+        hw = max(0.25, arch_hw(z) - 0.25)
+        x = -hw if u < 0.5 else hw
+        if k == 12:
+            x, z = 0.0, HOLE_H - 0.35
+        outline.append((x + rnd.uniform(-0.35, 0.35) * (0 < k < 24), z + rnd.uniform(-0.3, 0.3) * (0 < k < 24)))
+    ys = (-6.5, -2.0, 2.0, 6.5)
+    rows = [[bm.verts.new((x, yy, z)) for x, z in outline] for yy in ys]
+    for r0, r1 in zip(rows, rows[1:]):
+        for k in range(len(outline) - 1):
+            bm.faces.new((r0[k], r0[k + 1], r1[k + 1], r1[k]))
+    for f_ in bm.faces:
+        f_.normal_update()
+    liner = put("G2BreachLiner", bm, [M["soot"]], coll); liner.hide_render = True
+    parts["liner"] = liner
+    protos = [G1.lump_mesh(f"G2Tooth{i}", 500 + i) for i in range(6)] if G1 else []
+    for pr in protos:
+        pr.materials.append(stone)
+    teeth = []
+    for side in (-1, 1):                                  # broken teeth round the mouth on both faces
+        for k in range(1, 24):
+            x, z = outline[k]
+            if z < 2.0:
+                continue
+            ob = bpy.data.objects.new(f"G2Tooth{side:+d}_{k}", protos[k % len(protos)] if protos else None); coll.objects.link(ob)
+            sz = rnd.uniform(1.0, 2.2)
+            ob.scale = (sz, sz * 0.8, sz * rnd.uniform(0.7, 1.2))
+            out = Vector((x, 0, z - HOLE_H * 0.45)); out.y = 0; out = out.normalized() if out.length > 1e-3 else Vector((0, 0, 1))
+            ob.location = (x + out.x * 0.6, side * rnd.uniform(5.3, 6.2), z + out.z * 0.6)
+            ob.rotation_euler = (rnd.uniform(0, 6), rnd.uniform(0, 6), rnd.uniform(0, 6)); ob.hide_render = True
+            teeth.append(ob)
+    for side in (-1, 1):                                  # rubble spilling out of both mouths (wing to wing, low fans)
+        for k in range(26):
+            ob = bpy.data.objects.new(f"G2Spill{side:+d}_{k}", protos[(k + 3) % len(protos)] if protos else None); coll.objects.link(ob)
+            sz = rnd.uniform(0.9, 2.8) * (1.3 if k < 6 else 1.0)
+            r_ = rnd.uniform(0, 1) ** 0.6
+            x = rnd.uniform(-9, 9) * (0.5 + 0.5 * r_)
+            if side > 0 and abs(x) < 3.2:                 # his slide lane stays clear on the north side
+                x = math.copysign(rnd.uniform(3.2, 9.0), x if x else 1.0)
+            yy = side * (6.0 + r_ * rnd.uniform(4, 16))
+            ob.scale = (sz, sz * 0.85, sz * 0.6)
+            ob.location = (x, yy, gz(x, yy) + sz * 0.2)
+            ob.rotation_euler = (rnd.uniform(0, 6), rnd.uniform(0, 6), rnd.uniform(0, 6)); ob.hide_render = True
+            teeth.append(ob)
+    parts["teeth"] = teeth
     S["gate"] = parts
 
 def leaf_bottom(t):
@@ -438,7 +490,13 @@ def update_gate(t):
             o.scale = (1.0, 1.0, max(0.01, 44.0 - (zb + 12.0)))
             vis(o, True)
     vis(P.get("ig"), not burst); vis(P.get("ig_broken"), burst)
-    vis(P["cracks"], burst)
+    vis(P["cracks"], burst); vis(P.get("liner"), burst)
+    for o in P.get("teeth", ()):
+        vis(o, burst)
+    if burst:                                             # the chains snap: short dangling ends
+        for tag in ("S", "N"):
+            for o in P[f"chains{tag}"]:
+                o.scale = (1.0, 1.0, 5.0)
 
 # ====================================================================== apron, avenue, north side (water strip, canal, quays, bridge)
 def north_x(y):
@@ -729,15 +787,16 @@ def build_fire_fx():
         th = t + T
         if kind in ("hit", "face"):
             big = 1.6 if kind == "face" else 1.0
-            out = np.array([np.sign(tg[0] + 1e-3) * 0.7, -0.5, 0.75]); out /= np.linalg.norm(out)
-            F.add_many([th], [tg], [out * 70 * big], r0=1.9 * big, r1=2.3 * big, life=0.27, kind="glow", color=(1.0, 0.78, 0.30),
-                       alpha=1.0, fade_in=0.01, dirs=[out], stretch=6.0 * big)           # gold streak (09:37.4)
-            F.add(th, tg, r0=2.5 * big, r1=6.0 * big, life=0.2, kind="glow", color=(1.0, 0.85, 0.5), alpha=1.0, fade_in=0.01)
+            out = np.array([np.sign(tg[0] + 1e-3) * 0.85, -0.55, 0.42]); out /= np.linalg.norm(out)   # ~25 deg up, sideways
+            # QA v3: a SHORT gold streak (10-15 m) glancing off at an angle, 0.12 s, + ~40 sparks (09:37.4)
+            F.add_many([th], [tg + out * 4.0], [out * 45.0], r0=0.65, r1=0.75, life=0.12, kind="glow", color=(1.0, 0.78, 0.30),
+                       alpha=1.0, fade_in=0.005, dirs=[out], stretch=8.5)
+            F.add(th, tg, r0=1.2, r1=2.6, life=0.1, kind="glow", color=(1.0, 0.86, 0.55), alpha=1.0, fade_in=0.005)
             n = 40
             v = rng.normal(0, 1, (n, 3)); v[:, 2] = np.abs(v[:, 2]); v[:, 1] -= 0.6
-            v = v / np.linalg.norm(v, axis=1, keepdims=True) * rng.uniform(14, 34, (n, 1))
-            F.add_many(np.full(n, th) + rng.uniform(0, 0.05, n), np.tile(tg, (n, 1)), v, r0=0.6, r1=0.35,
-                       life=rng.uniform(0.25, 0.5, n), kind="glow", color=(1.0, 0.75, 0.35), alpha=1.0, fade_in=0.01)
+            v = v / np.linalg.norm(v, axis=1, keepdims=True) * rng.uniform(14, 30, (n, 1)) + out * 12.0
+            F.add_many(np.full(n, th) + rng.uniform(0, 0.03, n), np.tile(tg, (n, 1)), v, r0=0.4, r1=0.25,
+                       life=rng.uniform(0.12, 0.3, n), kind="glow", color=(1.0, 0.75, 0.35), alpha=1.0, fade_in=0.005)
             F.add(th + 0.03, tg, vel=(0, -2, 1), r0=1.5, r1=5.0, life=2.0, rise=1.2, kind="smoke", color=(0.55, 0.52, 0.48),
                   alpha=0.75, tau=0.5)
         else:
@@ -1455,7 +1514,7 @@ def mats():
         bronze=m("G2Bronze", "#5c5648", 0.45), wheel=m("G2Wheel", "#4a3424"), pad=m("G2Pad", "#b5aa8e"),
         chunk=m("G2ChunkStone", "#b59f78", 0.9, var=0.2, var_scale=0.5), furrow=m("G2Furrow", "#4e3c28", 0.95),
         hull=m("G2Hull", "#4a3526"), deck=m("G2Deck", "#6b5238"), cabin=m("G2Cabin", "#5c3e28"), glass=m("G2Glass", "#3e6b5a", 0.3),
-        roof=m("G2FerryRoof", "#7a3a2a"), disc=m("G2Disc", "#d8cdb4"),
+        roof=m("G2FerryRoof", "#7a3a2a"), disc=m("G2Disc", "#d8cdb4"), soot=m("G2Soot", "#1c1814", 1.0),
     )
     M["lantern"] = emit_mat("G2Lantern", (1.0, 0.75, 0.35), 8.0)
     return M

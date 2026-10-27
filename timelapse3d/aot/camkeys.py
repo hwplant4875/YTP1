@@ -75,26 +75,31 @@ G3_FLIGHT_W = [                                                       # FA0..FA3
     (10.6, (200, 3750, 320), (-100, 4600, 0), 30),
 ]
 # camps, frame M.  Lens: the bible gives H2 "28->40" (ease 17.7-21) and H3 "40->28": H2..H3 are held at 40, CAM_IN is 27 (assumption).
+# g3 agent 10/27: the pan is spread a little wider (H2 21.0 -> 20.6, P1-P3 22.55/24.1/25.65 -> 22.4/24.0/25.6, H3 27.2 -> 27.4,
+# look-ats unchanged): 31.9 -> 26.8 deg/s.  seg_g3.py builds its camera from these rows.
 G3_CAMPS_M = [
     (12.9,  (60, 170, 300),    (-268, 805, 0),   30),             # FA4 = W (60, 4300, 300)
     (17.7,  (-145, 605, 250),  (-330, 1020, 0),  28),             # H (at rest)
-    (21.0,  (-150, 620, 255),  (-300, 1430, 0),  40),             # H2
-    (22.55, (-145.5, 613, 253), (-686, 1058, 0), 40),             # P1
-    (24.1,  (-132, 592, 248),  (-732, 582, 0),   40),             # P2
-    (25.65, (-105, 550, 238),  (-464, 232, 0),   40),             # P3
-    (27.2,  (-60, 480, 220),   (-110, 130, 0),   40),             # H3
+    (20.6,  (-150, 620, 255),  (-300, 1430, 0),  40),             # H2
+    (22.4,  (-145.5, 613, 253), (-686, 1058, 0), 40),             # P1
+    (24.0,  (-132, 592, 248),  (-732, 582, 0),   40),             # P2
+    (25.6,  (-105, 550, 238),  (-464, 232, 0),   40),             # P3
+    (27.4,  (-60, 480, 220),   (-110, 130, 0),   40),             # H3
     (31.3,  (170, 170, 125),   (-10, -60, 0),    27),             # CAM_IN
     (31.8,  (178.4, 139.5, 127.8), (-10, -115.5, 0), 27),         # guide = CAM_IN + 0.5 v (look: + 0.5 look-velocity)
 ]
 CAM_IN = dict(frame="M", t=31.3, pos=(170, 170, 125), look=(-10, -60, 0), lens=27.0, vel=(16.7, -61.1, 5.6), look_vel=(0, -111.1, 0))
-CAM_OUT = dict(frame="M", t=49.3, pos=(260, -1050, 640), look=(0, 150, 40), lens=28.0, vel=(0, 95, 22), look_vel=(0, 283.3, 13.3))
-G3_TO_CAMP_M = [
+# g3 agent 10/27: CAM_OUT leaves LEVEL (0, 95, 0) (was climbing (0, 95, 22): the flight to the camp overshot to 681 m); the
+# look-at velocity is the re-driven march camera's (seg_g3.MARCH_LOOK_OUT_VEL, ~ (107, 457, 11)), filled in by _g3_cam() below.
+CAM_OUT = dict(frame="M", t=49.3, pos=(260, -1050, 640), look=(0, 150, 40), lens=28.0, vel=(0, 95, 0), look_vel=(0, 283.3, 13.3))
+G3_TO_CAMP_M = [   # g3 agent 10/27: FT1 520 -> 420 m, FT2 20 m nearer (294 m/s peak, <= 640 m); FT3-FT5 pulled back + up to 150-185 m
+                   # (owner 16:51 "far is better"; were 95 / 85 / 70 m); FT6, FT7 (= g4 G0) unchanged
     (49.3, (260, -1050, 640),  (0, 150, 40),     28),             # FT0 = march846.CAM_OUT
-    (55.8, (-350, 370, 520),   (-900, 1270, 0),  28),             # FT1
-    (60.2, (-1250, 1020, 260), (-1450, 1520, 0), 30),             # FT2
-    (63.4, (-1410, 1260, 95),  (-1450, 1530, 0), 32),             # FT3
-    (66.7, (-1425, 1320, 85),  (-1445, 1520, 0), 32),             # FT4
-    (69.2, (-1480, 1410, 70),  (-1430, 1558, 4), 40),             # FT5
+    (55.8, (-350, 370, 420),   (-900, 1270, 0),  28),             # FT1
+    (60.2, (-1230, 1000, 260), (-1450, 1520, 0), 30),             # FT2
+    (63.4, (-1395, 1185, 185), (-1452, 1512, 0), 32),             # FT3
+    (66.7, (-1412, 1240, 165), (-1446, 1528, 0), 35),             # FT4
+    (69.2, (-1478, 1298, 150), (-1440, 1552, 4), 38),             # FT5
     (74.0, (-1660, 1350, 150), (-1450, 1530, 0), 30),             # FT6
     (78.4, (-1570, 1190, 170), (-1450, 1490, 0), 30),             # FT7 = g4 G0
 ]
@@ -103,8 +108,9 @@ G4 = [
     (0.0,  (-1570, 1190, 170), (-1450, 1490, 0), 30),             # G0
     (2.0,  (-1495, 1135, 192), (-1120, 1330, 0), 30),             # G0b (g4 agent 10/27: 1.8 -> 2.0 s, look (-1100,1320) -> (-1120,1330))
     (4.1,  (-1380, 1060, 230), (-900, 880, 0),   29),             # G1  (look (-860,760) -> (-900,880)): opening swing 31.5 -> 27.7 deg/s
-    (9.1,  (-760, 1010, 320),  (-80, 480, 0),    28),             # G2
-    (12.4, (-400, 760, 290),   (-20, 260, 0),    28),             # G3
+    (9.1,  (-790, 940, 320),   (-40, 350, 0),    34),             # G2  (g4 v2, coordinator 10/27: frame the avenue + outer gate
+    (12.6, (-420, 690, 285),   (-5, 50, 0),      42),             # G3   while the Survey Corps passes 10-15 s; was G2 (-760,1010,320)
+    (14.9, (-235, 540, 240),   (0, 25, 8),       44),             # G3b  ->(-80,480) 28, G3 12.4 (-400,760,290)->(-20,260) 28)
     (16.8, (-110, 430, 200),   (0, 40, 20),      30),             # G4
     (20.0, (-40, 330, 170),    (0, 0, 30),       32),             # G5
 ]
@@ -263,7 +269,7 @@ NOTES = [   # appended to design_specs/camcheck_report.md
     "Assumptions in the transcription: g1 K0 (3 m from the kids, same line of sight as K1, 45 mm) and K1 (render_fast fallback flight_at(900): cam (-480, 338, 7.2), look (-300, 0, 10.6), 50 mm) are not numbers in the bible; g3 lens at H2..H3 held at 40 (bible: '28->40' then '40->28'), CAM_IN 27; g3 look-at rate at CAM_IN (0,-111,0) and at CAM_OUT (0,283,13) from march846.CAM_KEYS secants (the bible gives only the camera velocities); the g1 guide key at 33.0 duplicates K12 (v_out is left unset: PCHIP gives rest at 32.0).",
 ]
 
-ALL_CHECKS = ["g1", "g2", "g3_flight", "g3_flight_prof", "g3_camps", "g3_to_camp", "g4", "g5", "g6", "g7", "g8", "A2", "B", "B_vin"]
+ALL_CHECKS = ["g1", "g2", "g3", "g3_flight", "g3_flight_prof", "g3_camps", "g3_march", "g3_to_camp", "g4", "g5", "g6", "g7", "g8", "A2", "B", "B_vin"]
 
 def path(name):
     """(CamPath, check kwargs, info) for a check name."""
@@ -278,6 +284,18 @@ def path(name):
         if name == "g6":
             lim.update(pitch=(17, 45)); q["comment"] = "H3/H3b cutaway pulled back to <= 45 deg pitch (owner limit 17-45, g6 agent 10/27)."
         return p, kw, q
+    if name in ("g3", "g3_march"):
+        import seg_g3 as G3                                  # the segment's own camera (pure python): flight profile | camps |
+        if name == "g3":                                     # re-driven march846 | to camp, frame M
+            kw.update(t0=0.0, t1=ST.DUR["g3"]); lim.update(speed=400)
+            q["comment"] = ("seg_g3.CAM_M, the whole segment as rendered: flight 0-17.7 on its explicit speed profile (369 m/s, the "
+                            "bible's speed exception; limit 400 here), camps, march846 re-driven (<= 289 m/s), to camp (<= 294 m/s). "
+                            "Per-run limits: python aot/seg_g3.py")
+        else:
+            kw.update(t0=G3.B["march"][0], t1=G3.B["march"][1]); lim.update(speed=300)
+            q["comment"] = ("march846 inside g3, re-driven by seg_g3 on march846's route (arc-length channels + explicit speed profile, "
+                            "low pass raised to 140 m): march846.py's own spline gives 458 m/s, 57 deg/s, 81 m, pitch 11.")
+        return G3.CAM_M, kw, q
     if name == "g3_flight":
         p = CamPath(_M(G3_FLIGHT_W, "W") + _M(G3_CAMPS_M[:2], "M"), v_in=S("g2_g3")["vel"])
         kw.update(t0=0.0, t1=17.7); lim.update(hmin=90)
@@ -296,9 +314,12 @@ def path(name):
         q["comment"] = "H (17.7, at rest) to CAM_IN with v_out = (16.7,-61.1,5.6) and the look-point rate of march846 CAM_KEYS[0..1]. FA4->H (12.9-17.7) is inside the flight profile."
         return p, kw, q
     if name == "g3_to_camp":
-        p = CamPath(**dict(keys=G3_TO_CAMP_M, v_in=CAM_OUT["vel"], look_v_in=CAM_OUT["look_vel"], v_out=S("g3_g4")["vel"], look_v_out=(0.0, 0.0, 0.0)))
-        kw.update(t0=49.3, t1=78.4); lim.update(hmin=65, speed=300)
-        q["comment"] = "FT3-FT5 sit at 95/85/70 m over the 104th camp by design: height floor 65, speed limit 300 (bible quotes 298 m/s for this flight)."
+        import seg_g3 as G3                                  # g3 agent 10/27: the rendered path (level CAM_OUT, march look-at rate in)
+        p = G3.TOCAMP
+        kw.update(t0=49.3, t1=78.4); lim.update(speed=300)
+        q["comment"] = ("FT0..FT7 as rendered by seg_g3: v_in = CAM_OUT (0,95,0) (level; the old climb (0,95,22) overshot to 681 m), "
+                        "look_v_in = the re-driven march camera's look-at rate, v_out = g3_g4 seam, look-at at rest at FT7 (g4). "
+                        "FT3-FT5 now 185/165/150 m (height floor 90 holds); speed limit 300 (flight exception, bible 298).")
         return p, kw, q
     if name == "A2":
         p = CamPath(run_A2_keys(), v_in=(0, 0, 0))
