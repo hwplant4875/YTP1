@@ -15,10 +15,12 @@ Kills = Freddy's own on-screen kills in that film (Wikipedia plot sections, chec
 | #5 | Freddy's Dead: The Final Nightmare (1991) | 6 | 6 | 9 | 7 | **30%** | Almost Dead | Has already killed nearly every child and teenager in Springwood before the film starts; on screen Carlos, Spencer and John Doe. His daughter Maggie drags him into reality and blows him up with a pipe bomb. |
 | #4 | A Nightmare on Elm Street (1984) | 7 | 7 | 4 | 8 | **25%** | Slaughtered | Tina, Rod (staged as a suicide in his cell), Glen, Marge. Nancy is the only one who figures him out, and the ending still takes her mother and maybe her friends. |
 | #3 | Dream Warriors (1987) | 8 | 8 | 6 | 9 | **20%** | Slaughtered | Phillip, Jennifer, Taryn, Will, Don Thompson, Nancy. Survivors had trained dream powers (Kristen, Kincaid, Joey) and a priest's holy-water burial. |
-| #2 | New Nightmare (1994) | 9 | 9 | 2 | 10 | **14%** | Slaughtered | Not a man any more: an ancient entity breaking into the real world. Kills Heather's husband Chase on the freeway and the babysitter Julie in a hospital. Only Heather, by becoming Nancy, gets her son back. |
-| #1 | The Dream Master (1988) | 9 | 9 | 6 | 10 | **10%** | Slaughtered | Wipes out the last trained Dream Warriors (Kristen, Kincaid, Joey) plus Sheila, Rick and Debbie, and absorbs their souls and powers. Only Alice, after taking every friend's power, beats him with his own reflection. |
+| #2 | The Dream Master (1988) | 9 | 9 | 6 | 10 | **12%** | Slaughtered | Wipes out the last trained Dream Warriors (Kristen, Kincaid, Joey) plus Sheila, Rick and Debbie, and absorbs their souls and powers. Only Alice, after taking every friend's power, beats him with his own reflection. |
+| #1 | New Nightmare (1994) | 9 | 9 | 2 | 10 | **8%** | Slaughtered | Not a man any more: an ancient entity breaking into the real world. Kills Heather's husband Chase on the freeway and the babysitter Julie in a hospital. Only Heather, by becoming Nancy, gets her son back. |
 
-Open questions for the owner
+APPROVED by the owner 10/27 12:04: #1 New Nightmare (8%), #2 Dream Master (12%), Freddy vs. Jason 80% joke slot OK, Freddy's Dead stays 30% (my call: the town was already emptied).
+
+Old open questions
 1. #1: The Dream Master (most kills against people who could fight back) or New Nightmare (the scariest, most powerful Freddy, but only 2 kills)?
 2. Freddy vs. Jason at 80% as the easy/joke slot ("one kill in his own movie"), OK?
 3. Freddy's Dead at 30%: on screen he is campy, but he had already emptied the whole town. Keep it in Almost Dead?
