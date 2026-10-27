@@ -14,3 +14,4 @@
 - [~] f1 v3: Female + riders now readable (60-200 m cam); left: horse dust streaks = grey slabs, purple flare head too big,
       plain still flat -> v4: trails hidden, head glow 4.5w -> 2.4w, fset.fine_ground() multiplies WD_Ground by 80 m + 18 m noise.
 - [~] s2 v2: wall face ending reads; chase tiny (130-200 m) and crane through roofs at 30-34 s -> v3 chase ~0.55x distance, crane 40-44 m.
+- [~] f3 v3: Blender crashed repeatedly at 480p in the dense forest (GTX 1060) -> 234 unique of 755 frames (duplicates = 'frozen'); glossy swamp = blue disc -> v4 at 640x360 (as v1), swamp = dull mud.

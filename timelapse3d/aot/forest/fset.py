@@ -196,7 +196,7 @@ def build_forest(c):
         bmesh.ops.translate(bm, vec=(w[0], w[1], C.G(w[0], w[1]) + 1.0), verts=res["verts"])
     C.mesh_obj("F_Logs", bm, [logm], c)
     # swamp water in the duel clearing
-    water = C.mat("F_Swamp", (0.05, 0.07, 0.05), 0.08)
+    water = C.mat("F_Swamp", (0.045, 0.042, 0.028), 0.8)    # autopilot 10/28: dull mud, the glossy pool read as a blue disc
     bm = bmesh.new()
     w = C.F(*SWAMP_F); z = C.G(w[0], w[1]) + 0.32
     res = bmesh.ops.create_circle(bm, cap_ends=True, segments=24, radius=SWAMP_R)
