@@ -559,6 +559,122 @@ def build_people(coll):
         say("wire material failed:", ex)
     say(f"flyers: {len(SQ.flyers)}")
 
+# ====================================================================== farmland north of Rose (coordinator 10/27, ruling E3)
+# Strip fields in bands along the north road (the WD_Ground palette of world.py, as round the other towns), dirt roads,
+# tree lines along the roads / some field edges, a few copses.  No buildings (E3: only Pyxis's forecourt + the basin).
+# A meadow pasture stays round the basin and the canal (X 150..650, Y < 1300) and a glacis along the wall (Y < 905): that
+# is all g6's last frames / g7's first ones see north of the wall, so the g6 -> g7 seam stays pixel-exact.
+FIELD_PAL = [(0.36, 0.33, 0.14), (0.17, 0.28, 0.06), (0.27, 0.21, 0.11), (0.44, 0.40, 0.18), (0.21, 0.31, 0.08),
+             (0.30, 0.33, 0.12), (0.15, 0.25, 0.05), (0.33, 0.26, 0.13)]                       # linear rgb (world.py cols)
+FARM_BOX = (-1150.0, 1150.0, 905.0, 1850.0)
+ROADS_N = [([(-140, 878), (-148, 1040), (-170, 1290), (-200, 1850)], 4.0),        # the main road north from the inner gate
+           ([(-1150, 1385), (-600, 1372), (-172, 1360), (420, 1378), (1150, 1395)], 3.5),   # cross road beyond the canal end
+           ([(-20, 968), (-60, 1060), (-150, 1110)], 3.0),                         # forecourt -> main road
+           ([(-160, 1660), (-600, 1610), (-1150, 1590)], 3.0), ([(-180, 1500), (300, 1560), (900, 1600)], 3.0)]
+
+def _seg_d(px, py, P):
+    best = 1e9
+    for (ax, ay), (bx, by) in zip(P, P[1:]):
+        dx, dy = bx - ax, by - ay; l2 = dx * dx + dy * dy
+        u = 0.0 if l2 == 0 else max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / l2))
+        best = min(best, math.hypot(px - ax - u * dx, py - ay - u * dy))
+    return best
+
+def _farm_free(x, y, pad=0.0):
+    if y < FARM_BOX[2] + pad or 150.0 - pad < x < 650.0 + pad and y < 1300.0 + pad:
+        return False
+    if -85.0 - pad < x < 45.0 + pad and 890.0 - pad < y < 980.0 + pad:                    # Pyxis's forecourt (square A)
+        return False
+    if abs(x - 400.0) < 25.0 + pad and y < 1340.0:
+        return False
+    return all(_seg_d(x, y, P) > hw + 2.5 + pad for P, hw in ROADS_N)
+
+def build_farmland(coll):
+    L = STATE["L"]; TR = STATE["TR"]
+    rnd = random.Random(1740)
+    hgt = lambda x, y: float(L.height(x, y - segtime.SET_OFF_Y))
+    mats = [L.mat(f"G7_Field{i}", c, 0.95) for i, c in enumerate(FIELD_PAL)] + [L.mat("G7_Dirt", hexrgb("#8b7558"), 0.95)]
+    bm = bmesh.new()
+    def patch(x0, x1, y0, y1, mi, dz=0.12, step=8.0):
+        """A field draped on the terrain; cells on a road / the forecourt / the pasture are left out (fields hug them)."""
+        nx = max(1, int(math.ceil((x1 - x0) / step))); ny = max(1, int(math.ceil((y1 - y0) / step)))
+        xs = [x0 + (x1 - x0) * i / nx for i in range(nx + 1)]; ys = [y0 + (y1 - y0) * j / ny for j in range(ny + 1)]
+        V = {}
+        def v(i, j):
+            if (i, j) not in V:
+                V[(i, j)] = bm.verts.new((xs[i], ys[j] - segtime.SET_OFF_Y, hgt(xs[i], ys[j]) + dz))
+            return V[(i, j)]
+        made = 0
+        for i in range(nx):
+            for j in range(ny):
+                if _farm_free((xs[i] + xs[i + 1]) / 2, (ys[j] + ys[j + 1]) / 2, 1.5):
+                    bm.faces.new((v(i, j), v(i + 1, j), v(i + 1, j + 1), v(i, j + 1))).material_index = mi; made += 1
+        return made
+    # fields: bands along Y, strips across X, 1.6 m meadow hedge gaps
+    nf = 0; edges = []
+    y = FARM_BOX[2]
+    while y < FARM_BOX[3]:
+        bh = rnd.uniform(110.0, 175.0); x = FARM_BOX[0] + rnd.uniform(0, 40)
+        while x < FARM_BOX[1]:
+            w = rnd.uniform(32.0, 85.0)
+            a0, a1, b0, b1 = x + 0.8, x + w - 0.8, y + 0.8, min(y + bh, FARM_BOX[3]) - 0.8
+            if rnd.random() > 0.07:                                         # a few fallow gaps stay meadow
+                nf += patch(a0, a1, b0, b1, rnd.randrange(len(FIELD_PAL))) > 0
+            x += w
+        edges.append(y)
+        y += bh
+    # roads (dirt ribbons, draped)
+    for P, hw in ROADS_N:
+        pts = []
+        for (ax, ay), (bx, by) in zip(P, P[1:]):
+            n = max(1, int(math.hypot(bx - ax, by - ay) / 10.0))
+            pts += [(ax + (bx - ax) * k / n, ay + (by - ay) * k / n) for k in range(n)]
+        pts.append(P[-1])
+        rows = []
+        for k, (x, y) in enumerate(pts):
+            a = pts[max(k - 1, 0)]; b = pts[min(k + 1, len(pts) - 1)]
+            tx, ty = b[0] - a[0], b[1] - a[1]; l = math.hypot(tx, ty) or 1.0
+            nx_, ny_ = -ty / l, tx / l
+            rows.append([bm.verts.new((x + nx_ * o, y + ny_ * o - segtime.SET_OFF_Y, hgt(x + nx_ * o, y + ny_ * o) + 0.2)) for o in (-hw, hw)])
+        for r0, r1 in zip(rows, rows[1:]):
+            bm.faces.new((r0[0], r0[1], r1[1], r1[0])).material_index = len(FIELD_PAL)
+    ob = L.obj_from_bm("G7_Farmland", bm, mats, coll)
+    # trees: lines along the roads, along some field edges, a few copses (the set's yard-tree variants, GN instanced)
+    tc = bpy.data.collections.get("TrostYardTreeVariants")
+    recs = []
+    def tree(x, y, s=None):
+        if y < 905.0 or (150.0 < x < 650.0 and y < 1300.0) or (-85 < x < 45 and 890 < y < 980) or (abs(x - 400) < 25 and y < 1340):
+            return
+        if any(_seg_d(x, y, P) < hw + 1.5 for P, hw in ROADS_N):
+            return
+        s = s or rnd.uniform(2.0, 3.0)                               # 9-14 m field trees (the yard variants are small)
+        recs.append((x, y - segtime.SET_OFF_Y, hgt(x, y), rnd.uniform(0, 6.28), s, s, s * rnd.uniform(0.9, 1.2), rnd.randrange(6)))
+    for P, hw in ROADS_N:
+        for (ax, ay), (bx, by) in zip(P, P[1:]):
+            L_ = math.hypot(bx - ax, by - ay); n = int(L_ / 13.0)
+            nx_, ny_ = -(by - ay) / L_, (bx - ax) / L_
+            for k in range(n):
+                if rnd.random() < 0.3:
+                    continue
+                u = (k + rnd.uniform(0.2, 0.8)) / n
+                for sd in (-1, 1):
+                    if rnd.random() < 0.5:
+                        tree(ax + (bx - ax) * u + nx_ * sd * (hw + 3.0), ay + (by - ay) * u + ny_ * sd * (hw + 3.0))
+    for y in edges[1:]:
+        if rnd.random() < 0.55:
+            x = FARM_BOX[0]
+            while x < FARM_BOX[1]:
+                if rnd.random() < 0.6:
+                    tree(x, y + rnd.uniform(-1, 1))
+                x += rnd.uniform(11.0, 20.0)
+    for k in range(16):
+        cx, cy = rnd.uniform(-1100, 1100), rnd.uniform(1000, 1820)
+        for q in range(rnd.randint(8, 22)):
+            tree(cx + rnd.gauss(0, 14), cy + rnd.gauss(0, 10))
+    if tc is not None and recs:
+        tr = TR._instances("G7_FarmTrees", tc, recs)
+    say(f"farmland: {nf} fields, {len(ROADS_N)} roads, {len(recs)} trees")
+
 # ====================================================================== titans inside Trost below the Rose (bible g7 TW, no D)
 class _TSite:
     def g(self, p):
@@ -592,14 +708,20 @@ def build_masses(coll):
     L = STATE["L"]
     rng = np.random.default_rng(935); rnd = random.Random(935)
     cx, cy, w, d = A_SQ
-    pts = []
-    sp = 1.62
-    for iy, y in enumerate(np.arange(cy - d / 2 + 1.0, cy + d / 2 - 0.5, sp)):
-        for x in np.arange(cx - w / 2 + 1.0, cx + w / 2 - 0.5, sp):
-            if math.hypot(x - cx, y - cy) < 8.0:                      # the obelisk fountain
-                continue
-            pts.append((x + rng.normal(0, 0.18), y + rng.normal(0, 0.18)))
-    A = np.array(pts)
+    # coordinator QA 10/27: 8 company blocks in loose ranks (files 1.2 m, ranks 1.5 m) with 4-12 m aisles of pale paving
+    # between them and an officer 2.5 m in front of each, so the ~2,000 read as a FORMATION (not gravel); jackets
+    # alternate Garrison brown / beige per block
+    pts, blk = [], []
+    cols_x = [(-63.0, -44.0), (-41.5, -26.5), (-13.5, 1.5), (4.0, 23.0)]
+    rows_y = [(908.0, 929.0), (941.0, 963.0)]
+    for bi, (x0, x1) in enumerate(cols_x):
+        for bj, (y0, y1) in enumerate(rows_y):
+            b_ = bi * 2 + bj
+            for y in np.arange(y0, y1 + 0.01, 1.5):
+                for x in np.arange(x0, x1 + 0.01, 1.2):
+                    pts.append((x + rng.normal(0, 0.07), y + rng.normal(0, 0.07))); blk.append(b_)
+            pts.append(((x0 + x1) / 2, y0 - 2.5)); blk.append(100 + b_)          # officer in front (south)
+    A = np.array(pts); blk = np.array(blk)
     nA = len(A)
     # wall-top Garrison (packed wall top behind Pyxis) X -80..+60, Y 866..870.5
     wt = []
@@ -612,14 +734,18 @@ def build_masses(coll):
     n = nA + nW
     g = SW.Geo(); fm = []
     hg = np.clip(rng.normal(1.66, 0.05, n), 1.52, 1.80)
-    jacket = [hexrgb(c) for c in ("#a87454", "#9c6a4a", "#b07c5a")]
+    jacket = [hexrgb(c) for c in ("#7a4f33", "#b0855a", "#5e3b26")]          # Garrison brown / beige blocks, dark officers
     mats = [L.mat(f"G7_jacket{i}", c, 0.8) for i, c in enumerate(jacket)] + \
            [L.mat("G7_trousers", hexrgb("#d2d0cc"), 0.85), L.mat("G7_skin", hexrgb("#d8a888"), 0.6)] + \
            [L.mat(f"G7_hair{i}", hexrgb(c), 0.7) for i, c in enumerate(("#1c1814", "#3a2a1e", "#6a4a2a", "#8a6a3a", "#5a3a28"))]
     for i in range(n):
         n0 = len(g.fc)
         SW.person_geo(g, i, hg[i], False, rnd)
-        base = [rnd.randrange(3), 3, 4, 5 + rnd.randrange(5)]
+        if i < nA:
+            jk = 2 if blk[i] >= 100 else (blk[i] + blk[i] // 2) % 2
+        else:
+            jk = rnd.randrange(2)
+        base = [jk, 3, 4, 5 + rnd.randrange(5)]
         fm += [base[c] for c in g.fc[n0:]]
     R = g.finish()
     ob = SW._mesh("G7_Masses", R, g.f, fm, mats, coll)
@@ -864,6 +990,7 @@ def build(site):
     except Exception as ex:
         import traceback; traceback.print_exc()
         say("g8 titans failed:", ex)
+    build_farmland(coll)
     build_skeleton(coll)
     build_titans(coll)
     build_people(coll)
