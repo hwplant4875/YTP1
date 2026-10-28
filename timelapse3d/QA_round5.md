@@ -12,4 +12,4 @@
 - [x] g6 v7 cadet window crash (~local 4.4-5.0) tiny -> zoom 46 mm at 4.7 (g6 v7).
 - [x] master_onetake_v11 (g6 v7) + part2_3_onetake_v9 (s1 v5, s2 v5) + full_onetake_v10 (6:29).
 - [x] titan tags: COLOSSAL TITAN (g1, screen-anchored, 7.7-8.9) + ARMORED TITAN (g2 run/impact) -> full_onetake_v11 (CRF 30, 34 MB; master v12 local only).
-- [~] Part 1 g2-g8 previews were STEP=2 (7.5 unique fps) -> re-render at STEP=1 (true 15 fps): g2 v7, g3 v12, g4 v8, g5 v11, g6 v8, g7 v5, g8 v7.
+- [x] Part 1 g2-g8 previews were STEP=2 (7.5 unique fps) -> re-render at STEP=1 (true 15 fps): g2 v7, g3 v12, g4 v8, g5 v11, g6 v8, g7 v5, g8 v7.

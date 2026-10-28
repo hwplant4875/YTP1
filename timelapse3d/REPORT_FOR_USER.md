@@ -3,10 +3,10 @@
 모든 미리보기는 `renders/laptop/` 에 있습니다 (480p 15fps). TOON 끔, 음악/음성 없음.
 
 ## 최신 미리보기
-- **전체 원테이크 (이름표 포함): `full_onetake_v11_preview.mp4` (6:29)** = Part 1 + Part 2-3. (이름표 없는 버전: full_onetake_v1)
+- **전체 원테이크 (이름표 포함): `full_onetake_v12_preview.mp4` (6:29, Part 1도 진짜 15fps)** = Part 1 + Part 2-3. (이름표 없는 버전: full_onetake_v1)
 - 핵심 장면 한눈에: `full_onetake_v10_keymoments.jpg` (초대형 얼굴 x2, 진격 거인, 라이너 태그, 포획, 결투, 스토헤스, 벽 속 거인).
 - Part 1: `master_onetake_v11_preview.mp4` (3:30, 이름표). Part 2-3: `part2_3_onetake_v9_preview.mp4` (2:59, 이름표).
-- 세그먼트: g1_fall_v8, g2_armored_v6, g3_flight_v11, g4_trost850_v7, g5_trost_v10, g6_hq_v7, g7_basin_v4, g8_boulder_v6,
+- 세그먼트: g1_fall_v8, g2_armored_v7, g3_flight_v12, g4_trost850_v8, g5_trost_v11, g6_hq_v8, g7_basin_v5, g8_boulder_v7,
   f0_trost_karanes_v5, f1_formation_female_v7, f2_forest_trap_v7, f3_duel_rescue_v9, s1_stohess_shift_v5, s2_stohess_wall_v5.
 
 ## 바뀐 점 (QA batch1)
