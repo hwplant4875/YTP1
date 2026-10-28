@@ -184,7 +184,8 @@ G5 = [
 G6 = [   # g6 agent 10/27: owner 16:51 "FAR is better" -> the whole segment stays at the g5 seam distance (230-290 m, 30-34 mm);
          # bible look-at targets kept, positions pulled back (bible H3 was 127 m / 38 mm at 51 deg pitch, H6 90 m / 40 mm)
     (0.0,  (-345, 455, 175), (-185, 640, 15),  30),               # H0 = g5 C10
-    (7.0,  (-332, 478, 169), (-225, 605, 10),  30),               # H1 approach, Jean's squad, climbers
+    (4.7,  (-337, 470, 171), (-246, 628, 26),  46),               # round 6: zoom on the cadets crashing in through the windows
+    (7.0,  (-332, 478, 169), (-225, 605, 10),  32),               # H1 approach, Jean's squad, climbers
     (14.5, (-318, 484, 158), (-210, 605, 6),   31),               # H2 tackle aftermath, rampage
     (19.5, (-282, 482, 165), (-190, 630, 3),   33),               # H3 cutaway from the SW (41 deg; sees the ring over the cut wall)
     (23.6, (-222, 553, 92),  (-187, 641, 2),   40),               # Z1 owner 10/27: zoom in on the lift op (bay fills the frame;
