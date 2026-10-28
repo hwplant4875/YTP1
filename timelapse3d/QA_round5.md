@@ -6,4 +6,5 @@
 - [x] g3 preview overlays: year captions, 250,000 'Still marching' counter, 104th camp place label (g3_tags.json remapped v6 clock -> v11) -> master_onetake_v9 + full_onetake_v7.
 - [x] f2 v7 capture: Female small while pinned -> zoom 43/41 mm at 18.5/22 (f2 v7).
 - [x] part2_3_onetake_v8 + full_onetake_v8 (f2 v7).
-- [~] g5 Colossal head hazy: the strike smoke column (y -25 +- 8) put big cards in FRONT of the head (y -14) -> smoke at y -40 - |N(0,8)|. Still crisp + red -> g5 v10.
+- [x] g5 v10 Colossal head (was hazy): the strike smoke column (y -25 +- 8) put big cards in FRONT of the head (y -14) -> smoke at y -40 - |N(0,8)|. Still crisp + red -> g5 v10.
+- [x] master_onetake_v10 + full_onetake_v9 (g5 v10).

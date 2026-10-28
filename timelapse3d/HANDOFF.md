@@ -504,8 +504,8 @@ P1 g5 v5 (QA 15:00 add): zoom 32->88 mm onto the Colossal's head over the gate (
 - 09:05 full_onetake_v8 (f2 v7 capture zoom). Docs: REPORT_FOR_USER.md, QA_round2-5.md.
 
 ## RESUME 10/28 (autopilot state, for the next session)
-CURRENT PREVIEWS (renders/laptop, 480p 15 fps, TOON 0, name tags burnt in): full_onetake_v8 (6:29) = master_onetake_v9 (3:30:
-g1 v8, g2 v6, g3 v11, g4 v7, g5 v9, g6 v6, g7 v4, g8 v6) + part2_3_onetake_v8 (2:59: f0 v5, f1 v7, f2 v7, f3 v9, s1 v4, s2 v4).
+CURRENT PREVIEWS (renders/laptop, 480p 15 fps, TOON 0, name tags burnt in): full_onetake_v9 (6:29) = master_onetake_v10 (3:30:
+g1 v8, g2 v6, g3 v11, g4 v7, g5 v10, g6 v6, g7 v4, g8 v6) + part2_3_onetake_v8 (2:59: f0 v5, f1 v7, f2 v7, f3 v9, s1 v4, s2 v4).
 TOOLS: render_one.sh g:label (part 1), render_p2.sh seg:ver (part 2-3, 480p, every frame) - both detached-safe, GPU lock, push;
 tag_burn.py / tag_all.sh (Russo One tags max 3 from frames/_cam dumps; g3 also captions + 250k counter); concat_master.sh
 (part 1 concat, 0.6 s dissolve at g2|g3 only - the canal/river models differ). Part 2 concat: scale every input to 854x480.
@@ -513,4 +513,4 @@ PITFALLS: (1) never edit/checkout a .sh while a chain runs it (bash byte offsets
 exceed the GTX 1060 driver timeout -> Blender dies silently, render_part2 fills gaps with duplicates ("frozen" video); keep the
 far clip (seg_f2 350 m, seg_f3 600/350 m) + ForestDim world tint. Check `md5sum frames | sort -u | wc -l` after forest renders.
 (3) seg_g4 night grade is read by g3's end (seam). (4) FINAL render still needs the owner's OK (Saturday).
-OPEN / WEAK: g6 stays far (owner 16:51 choice, 2 zooms added); g5 Colossal head a bit hazy at 230 mm; Stohess houses plain.
+OPEN / WEAK: g6 stays far (owner 16:51 choice, 2 zooms added); Stohess houses plain.

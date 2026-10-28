@@ -3,9 +3,9 @@
 모든 미리보기는 `renders/laptop/` 에 있습니다 (480p 15fps). TOON 끔, 음악/음성 없음.
 
 ## 최신 미리보기
-- **전체 원테이크 (이름표 포함): `full_onetake_v8_preview.mp4` (6:29)** = Part 1 + Part 2-3. (이름표 없는 버전: full_onetake_v1)
-- Part 1: `master_onetake_v9_preview.mp4` (3:30, 이름표). Part 2-3: `part2_3_onetake_v8_preview.mp4` (2:59, 이름표).
-- 세그먼트: g1_fall_v8, g2_armored_v6, g3_flight_v11, g4_trost850_v7, g5_trost_v9, g6_hq_v6, g7_basin_v4, g8_boulder_v6,
+- **전체 원테이크 (이름표 포함): `full_onetake_v9_preview.mp4` (6:29)** = Part 1 + Part 2-3. (이름표 없는 버전: full_onetake_v1)
+- Part 1: `master_onetake_v10_preview.mp4` (3:30, 이름표). Part 2-3: `part2_3_onetake_v8_preview.mp4` (2:59, 이름표).
+- 세그먼트: g1_fall_v8, g2_armored_v6, g3_flight_v11, g4_trost850_v7, g5_trost_v10, g6_hq_v6, g7_basin_v4, g8_boulder_v6,
   f0_trost_karanes_v5, f1_formation_female_v7, f2_forest_trap_v7, f3_duel_rescue_v9, s1_stohess_shift_v4, s2_stohess_wall_v4.
 
 ## 바뀐 점 (QA batch1)
@@ -16,7 +16,7 @@
 - f1 v3/v4: 카메라 3-4배 가까이 → 여성형 거인/기수 보임, 신호탄은 연기 기둥, 회색 판자 같던 먼지 자국 제거.
 - s1 v3, s2 v3: 여성형 거인 변신/플랜C 작살/난동, 도시 추격을 가까이서. s2 크레인이 지붕을 뚫지 않음.
 - 라운드2: 핵심 순간만 조금 느리게 (Part 1 3:20 → 3:30).
-- 라운드5: 시간시나 화재 후 북쪽 비행(밤)과 졸업식 밤을 더 밝게. g3에 연도 자막 + 250,000 행진 카운터 + 훈련소 지명 표시.
+- 라운드5: 시간시나 화재 후 북쪽 비행(밤)과 졸업식 밤을 더 밝게. g3에 연도 자막 + 250,000 행진 카운터 + 훈련소 지명 표시. g5 성문 위 초대형 얼굴을 가리던 연기 제거 → 선명한 붉은 얼굴. f2 포획 장면 줌인.
 - 라운드4b: 이음새 정리 - g2→g3 강 모델 차이를 0.6초 디졸브로, f2→f3 신호탄 연기가 이어짐, 숲 속 먼 하늘 틈을 어두운 숲 톤으로.
 - 라운드4: 오프닝을 애니 장면처럼 조금 더 넓게, 초대형 거인 얼굴 색을 더 붉게(근육), 벽 속 거인 얼굴 사실적으로, f2/f3 숲 480p.
 - 라운드3: 미리보기에 이름표(Russo One, 최대 3개)를 직접 입힘 (REINER는 여성형 거인 주먹 안에서 표시). f3 후퇴 장면 카메라가 행렬을 비춤, 황혼 흐림 제거.
