@@ -9,7 +9,8 @@
 #    camera far clip (seg_f2 350 m, seg_f3 600/350 m) + ForestDim tint. At 1080p frames may again exceed the Windows TDR
 #    (2 s) -> Blender dies silently and render_part2 fills gaps with duplicate frames. After f2 / f3 check
 #      md5sum renders/final/f3/frames/f_*.png | awk '{print $1}' | sort -u | wc -l     (must equal the frame count)
-#    If short: F_CLIP=250 for f2, lower seg_f3 clip, or render f2/f3 at SMP=4, or (owner decision) raise TdrDelay.
+#    10/28 test: 480p stills at SMP 72 (f3 4.6 / 20.7) survived - but samples are separate passes, so 1080p per-pass load
+#    was NOT simulated (no hi-res test before approval).  If short: F_CLIP=250 for f2, lower seg_f3 clip, or render f2/f3 at SMP=4, or (owner decision) raise TdrDelay.
 #  * Time estimate (480p preview ~1.2 s/frame): 1080p ~5-6 s/frame x 30 fps x 390 s ~ 11 700 frames ~ 18-20 h of GPU.
 #  * The tags are burnt from frames/_cam (tag_burn.py --size 1920x1080); g1 uses the screen-anchored COLOSSAL TITAN tag.
 set -u
