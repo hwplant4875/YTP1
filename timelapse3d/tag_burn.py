@@ -14,9 +14,10 @@ sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, "aot"))
 import hud2, hudcam  # noqa: E402
 import segtime       # noqa: E402
 
-TITANS = {"FEMALE", "ANNIE", "AttackTitan"}
+TITANS = {"FEMALE", "ANNIE", "AttackTitan", "ARMORED TITAN", "COLOSSAL"}
 # part 1: (tag text, tracker name, local t0, local t1) - from graphics_timelines/*_tags.json + the bible beats
 PART1 = {
+    "g2": [("ARMORED TITAN", "ARMORED TITAN", 5.0, 10.8)],          # the run + impact, gone in steam at 11.1
     "g3": [("SHADIS", "Shadis", 55.6, 58.6), ("EREN", "Eren", 55.8, 58.8), ("MIKASA", "Mikasa", 56.0, 58.8)],
     "g4": [("EREN", "Eren", 16.8, 19.7)],
     "g5": [("MIKASA", "Mikasa", 33.8, 39.0), ("MIKASA", "Mikasa", 50.0, 54.0)],
@@ -36,8 +37,8 @@ def main():
     ap.add_argument("--size", default="854x480"); ap.add_argument("--fps", type=int, default=15)
     A = ap.parse_args()
     W, H = map(int, A.size.split("x"))
-    files = sorted(glob.glob(os.path.join(A.frames, "f_*.png")))
-    idx = [int(os.path.basename(f)[2:7]) for f in files]
+    files = sorted(glob.glob(os.path.join(A.frames, "f_*.png"))) or sorted(glob.glob(os.path.join(A.frames, A.seg + "_*.png")))
+    idx = [int(os.path.splitext(os.path.basename(f))[0].split("_")[-1]) for f in files]
     cams, last = {}, None
     for i in idx:
         c = hudcam.load(A.frames, i)
@@ -66,6 +67,8 @@ def main():
             for a, b in spans:
                 if b - a >= 0.8:
                     tracks.append(dict(type="tag", name=nm.upper(), obj=nm, t0=a, t1=b))
+    if A.seg == "g1":                         # no camera dumps in render_g1: screen-anchored tag on the zoomed head (video = local)
+        tracks.append(dict(type="tag", name="COLOSSAL TITAN", obj="COLOSSAL", screen=(0.57, 0.45), t0=7.7, t1=8.9))
     for e in tracks:
         e.update(color="red" if e["obj"] in TITANS else "cream", len=30, size=15)
     extra = []
@@ -90,11 +93,11 @@ def main():
         if img.size != (W, H):
             img = img.resize((W, H), Image.BILINEAR)
         cam = cams[i]
-        act = [e for e in tracks if e["t0"] - 0.05 <= t <= e["t1"] + 0.4 and valid(cam, e["obj"])]
+        act = [e for e in tracks if e["t0"] - 0.05 <= t <= e["t1"] + 0.4 and ("screen" in e or valid(cam, e["obj"]))]
         act = sorted(act, key=lambda e: e["t0"])[:3]          # max 3 tags on screen
         act = [dict(e, len=28 + 20 * k, lean=(14 if k % 2 == 0 else -14)) for k, e in enumerate(act)]   # de-clutter stacked tags
         ex = [e for e in extra if e["t0"] - 0.05 <= t <= e["t1"] + 0.5]
-        if (act and cam) or ex:
+        if (act and (cam or all("screen" in e for e in act))) or ex:
             if cam:
                 cam = dict(cam); cam["res"] = [W, H]
             img = hud2.compose(dict(fps=A.fps, tracks=act + ex), img, i, t=t, cam=cam)
