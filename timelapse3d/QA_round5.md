@@ -8,3 +8,4 @@
 - [x] part2_3_onetake_v8 + full_onetake_v8 (f2 v7).
 - [x] g5 v10 Colossal head (was hazy): the strike smoke column (y -25 +- 8) put big cards in FRONT of the head (y -14) -> smoke at y -40 - |N(0,8)|. Still crisp + red -> g5 v10.
 - [x] master_onetake_v10 + full_onetake_v9 (g5 v10).
+- [~] Stohess looked like a flat-shaded mockup -> sset._tex: noise mottling on plaster/stone/paving, tile-row bands on roofs/slate. s1 v5, s2 v5.

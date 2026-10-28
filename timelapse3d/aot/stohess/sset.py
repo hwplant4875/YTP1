@@ -29,14 +29,42 @@ def _cube(bm, c, s, rz=0.0):
     bmesh.ops.translate(bm, vec=c, verts=res["verts"])
     return res
 
+def _tex(m, rows=False):
+    """autopilot 10/28 (Stohess read as a flat-shaded mockup): multiply the flat colour by soft noise mottling (plaster) and,
+    for roofs, horizontal tile-row bands, in object space."""
+    if m.get("_tex"):
+        return m
+    N, Lk = m.node_tree.nodes, m.node_tree.links
+    b = N.get("Principled BSDF"); col = tuple(b.inputs["Base Color"].default_value)
+    tc = N.new("ShaderNodeTexCoord")
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.35; nz.inputs["Detail"].default_value = 5
+    Lk.new(tc.outputs["Object"], nz.inputs["Vector"])
+    mr = N.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.3; mr.inputs["From Max"].default_value = 0.7
+    mr.inputs["To Min"].default_value = 0.80; mr.inputs["To Max"].default_value = 1.10
+    Lk.new(nz.outputs["Fac"], mr.inputs["Value"])
+    mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"; mx.inputs["Factor"].default_value = 1.0
+    mx.inputs["A"].default_value = col; Lk.new(mr.outputs["Result"], mx.inputs["B"])
+    out = mx.outputs["Result"]
+    if rows:
+        wv = N.new("ShaderNodeTexWave"); wv.wave_type = "BANDS"; wv.bands_direction = "Z"; wv.inputs["Scale"].default_value = 0.9
+        wv.inputs["Distortion"].default_value = 0.6
+        Lk.new(tc.outputs["Object"], wv.inputs["Vector"])
+        mr2 = N.new("ShaderNodeMapRange"); mr2.inputs["To Min"].default_value = 0.72; mr2.inputs["To Max"].default_value = 1.0
+        Lk.new(wv.outputs["Fac"], mr2.inputs["Value"])
+        mx2 = N.new("ShaderNodeMix"); mx2.data_type = "RGBA"; mx2.blend_type = "MULTIPLY"; mx2.inputs["Factor"].default_value = 1.0
+        Lk.new(out, mx2.inputs["A"]); Lk.new(mr2.outputs["Result"], mx2.inputs["B"]); out = mx2.outputs["Result"]
+    Lk.new(out, b.inputs["Base Color"])
+    m["_tex"] = 1
+    return m
+
 def stone_mats(M):
     M2 = dict(M)
     for k, col in (("plaster", (0.78, 0.74, 0.66)), ("plaster_w", (0.86, 0.83, 0.76)), ("plaster_o", (0.74, 0.66, 0.54)),
                    ("timber", (0.70, 0.68, 0.64))):
-        M2[k] = C.mat("ST_" + k, col, 0.85)
+        M2[k] = _tex(C.mat("ST_" + k, col, 0.85))
     for k, col in (("roof_red", (0.20, 0.22, 0.26)), ("roof_brown", (0.30, 0.17, 0.12)), ("roof_dark", (0.16, 0.17, 0.20)),
                    ("roof_orange", (0.24, 0.27, 0.31))):
-        M2[k] = C.mat("ST_" + k, col, 0.6)
+        M2[k] = _tex(C.mat("ST_" + k, col, 0.6), rows=True)
     return M2
 
 def build_town(M, c):
@@ -62,7 +90,7 @@ def build_town(M, c):
     print(f"[stohess] {len(pts)} houses", flush=True)
 
 def build_ground(c):
-    pave = C.mat("ST_Pave", (0.46, 0.44, 0.40), 0.9)
+    pave = _tex(C.mat("ST_Pave", (0.46, 0.44, 0.40), 0.9))                 # autopilot: mottled paving
     bm = bmesh.new(); cell = 20.0
     V = {}
     xs = np.arange(-360.0, 740.0 + 1, cell); ys = np.arange(-420.0, 420.0 + 1, cell)
@@ -97,8 +125,8 @@ def build_ground(c):
     C.mesh_obj("ST_Quays", bm, [quay], c)
 
 def build_landmarks(c):
-    stone = C.mat("ST_Stone", (0.80, 0.77, 0.70), 0.8); dome = C.mat("ST_Dome", (0.42, 0.52, 0.48), 0.5)
-    slate = C.mat("ST_Slate", (0.20, 0.22, 0.26), 0.6); dark = C.mat("ST_Dark", (0.03, 0.03, 0.03), 0.9)
+    stone = _tex(C.mat("ST_Stone", (0.80, 0.77, 0.70), 0.8)); dome = C.mat("ST_Dome", (0.42, 0.52, 0.48), 0.5)
+    slate = _tex(C.mat("ST_Slate", (0.20, 0.22, 0.26), 0.6), rows=True); dark = C.mat("ST_Dark", (0.03, 0.03, 0.03), 0.9)
     bronze = C.mat("ST_Bronze", (0.25, 0.30, 0.24), 0.4)
     # church: nave + dome + lantern, bell tower (all one object: the brawl crashes through it -> seg hides / swaps it)
     cx, cy = CHURCH; w = S(cx, cy); z = GS(cx, cy)
