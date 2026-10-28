@@ -504,7 +504,7 @@ P1 g5 v5 (QA 15:00 add): zoom 32->88 mm onto the Colossal's head over the gate (
 - 09:05 full_onetake_v8 (f2 v7 capture zoom). Docs: REPORT_FOR_USER.md, QA_round2-5.md.
 
 ## RESUME 10/28 (autopilot state, for the next session)
-CURRENT PREVIEWS (renders/laptop, 480p 15 fps, TOON 0, name tags burnt in): full_onetake_v12 (Part 1 STEP=1 true 15 fps: g2 v7, g3 v12, g4 v8, g5 v11, g6 v8, g7 v5, g8 v7; master v13 local), before: full_onetake_v10 (6:29) = master_onetake_v11 (3:30:
+CURRENT PREVIEWS (renders/laptop, 480p 15 fps, TOON 0, name tags burnt in): full_onetake_v13 (f0 v6, f3 v10, s1 v6 thinner sunset haze; Part 1 STEP=1 true 15 fps: g2 v7, g3 v12, g4 v8, g5 v11, g6 v8, g7 v5, g8 v7; master v13 local), before: full_onetake_v10 (6:29) = master_onetake_v11 (3:30:
 g1 v8, g2 v6, g3 v11, g4 v7, g5 v10, g6 v7, g7 v4, g8 v6) + part2_3_onetake_v9 (2:59: f0 v5, f1 v7, f2 v7, f3 v9, s1 v5, s2 v5).
 TOOLS: render_one.sh g:label (part 1), render_p2.sh seg:ver (part 2-3, 480p, every frame) - both detached-safe, GPU lock, push;
 tag_burn.py / tag_all.sh (Russo One tags max 3 from frames/_cam dumps; g3 also captions + 250k counter); concat_master.sh
