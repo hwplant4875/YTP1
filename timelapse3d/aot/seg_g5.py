@@ -1989,7 +1989,7 @@ def build_strike(coll):
     X.add_many(0.06 + rng.uniform(0, 0.15, n), np.tile(S3(0, -25, 48), (n, 1)) + rng.normal(0, 3, (n, 3)), d * rng.uniform(90, 220, n)[:, None],
                r0=1.6, r1=1.0, life=rng.uniform(0.3, 0.6, n), kind="glow", color=(1.0, 0.82, 0.38), alpha=1.0, fade_in=0.01, dirs=d, stretch=7.0)
     n = 46
-    X.add_many(0.04 + rng.uniform(0, 0.35, n), np.array([S3(x, y, z) for x, y, z in zip(rng.normal(0, 12, n), -25 + rng.normal(0, 8, n), rng.uniform(15, 50, n))]),
+    X.add_many(0.04 + rng.uniform(0, 0.35, n), np.array([S3(x, y, z) for x, y, z in zip(rng.normal(0, 12, n), -40 - np.abs(rng.normal(0, 8, n)), rng.uniform(15, 50, n))]),   # r6: all BEHIND the head (y -14), was -25 +- 8 = cards over the face
                np.column_stack([rng.normal(0, 4, n), rng.normal(0, 3, n), rng.uniform(28, 48, n)]), r0=rng.uniform(10, 16, n),
                r1=rng.uniform(32, 48, n), life=rng.uniform(6, 9, n), rise=2.0, color=(0.60, 0.53, 0.45), kind="steam", alpha=0.9, tau=0.9, fade_in=0.08)
     X.build(coll); STATE["strike"] = X
