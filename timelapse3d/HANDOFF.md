@@ -515,3 +515,4 @@ far clip (seg_f2 350 m, seg_f3 600/350 m) + ForestDim world tint. Check `md5sum 
 (3) seg_g4 night grade is read by g3's end (seam). (4) FINAL render still needs the owner's OK (Saturday).
 OPEN / WEAK: g6 stays far (owner 16:51 choice, 2 zooms added);
 - NOTE 09:50: git pack 2.6 GB -> from now on push only full_onetake (CRF 30) per round + segment previews; master/part2 one-takes stay local (E:/YTP2/3D Timelapse/renders/master_v*).
+- FINAL (prepared, NOT run): render_final_queue.sh = 1080p30 all 14 segments + tags; risks inside (forest TDR at 1080p, ~18-20 h GPU).
