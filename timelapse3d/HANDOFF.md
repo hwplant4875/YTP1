@@ -501,3 +501,4 @@ P1 g5 v5 (QA 15:00 add): zoom 32->88 mm onto the Colossal's head over the gate (
 - 06:45 ROUND 4: full_onetake_v4 (all segments 480p, tagged): g1 v8 wider opening + red Colossal, g5 v9, f3 v7 480p (clip 600/350 m).
 - 08:10 full_onetake_v5 (tagged, 480p): seam fixes (g2|g3 dissolve, f2|f3 flares), ForestDim, sparse distant plain trees.
 - 08:50 ROUND 5: full_onetake_v6 (nights lifted: g2 v6, g3 v11, g4 v7).
+- 09:05 full_onetake_v8 (f2 v7 capture zoom). Docs: REPORT_FOR_USER.md, QA_round2-5.md.

@@ -3,10 +3,10 @@
 모든 미리보기는 `renders/laptop/` 에 있습니다 (480p 15fps). TOON 끔, 음악/음성 없음.
 
 ## 최신 미리보기
-- **전체 원테이크 (이름표 포함): `full_onetake_v7_preview.mp4` (6:29)** = Part 1 + Part 2-3. (이름표 없는 버전: full_onetake_v1)
-- Part 1: `master_onetake_v9_preview.mp4` (3:30, 이름표). Part 2-3: `part2_3_onetake_v7_preview.mp4` (2:59, 이름표).
+- **전체 원테이크 (이름표 포함): `full_onetake_v8_preview.mp4` (6:29)** = Part 1 + Part 2-3. (이름표 없는 버전: full_onetake_v1)
+- Part 1: `master_onetake_v9_preview.mp4` (3:30, 이름표). Part 2-3: `part2_3_onetake_v8_preview.mp4` (2:59, 이름표).
 - 세그먼트: g1_fall_v8, g2_armored_v6, g3_flight_v11, g4_trost850_v7, g5_trost_v9, g6_hq_v6, g7_basin_v4, g8_boulder_v6,
-  f0_trost_karanes_v5, f1_formation_female_v7, f2_forest_trap_v6, f3_duel_rescue_v9, s1_stohess_shift_v4, s2_stohess_wall_v4.
+  f0_trost_karanes_v5, f1_formation_female_v7, f2_forest_trap_v7, f3_duel_rescue_v9, s1_stohess_shift_v4, s2_stohess_wall_v4.
 
 ## 바뀐 점 (QA batch1)
 - g1 v7: 오프닝은 애니 나무 장면 그대로 시작. 번개(굵은 금색 낙뢰+섬광+불꽃+주황 아크) 후 연기, 초대형 얼굴이 화면 1/3 (285mm 줌).
