@@ -28,6 +28,17 @@ def mosaic(vf, boxes):
         vf += (f",split[mA{k}][mB{k}];[mB{k}]crop={w}:{h}:{x}:{y},scale={max(1, w // BLOCK)}:{max(1, h // BLOCK)}:flags=area,"
                f"scale={w}:{h}:flags=neighbor[mC{k}];[mA{k}][mC{k}]overlay={x}:{y}:enable='gte(t,{t0})'")
     return vf
+def fit_word(word, out):
+    """gfx.word_tag (centre caption, f(170), stroke 5), shrunk to fit 1760 px, or split over two lines when it still would not fit"""
+    from PIL import Image
+    from gfx import f, shadow_text, WHITE
+    im = Image.new('RGBA', (1920, 1080), (0, 0, 0, 0)); w = word.upper(); sz = 170
+    while f(sz).getlength(w) > 1760 and sz > 120: sz -= 5
+    if f(sz).getlength(w) <= 1760: shadow_text(im, (960, 540), w, f(sz), WHITE, stroke=5)
+    else:
+        ws = w.split(); k = min(range(1, len(ws)), key=lambda i: abs(len(' '.join(ws[:i])) - len(' '.join(ws[i:]))))
+        shadow_text(im, (960, 455), ' '.join(ws[:k]), f(170), WHITE, stroke=5); shadow_text(im, (960, 635), ' '.join(ws[k:]), f(170), WHITE, stroke=5)
+    im.save(out)
 def dur(p): return float(subprocess.check_output(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p]))
 def rel(p): return p if os.path.isabs(p) else os.path.join(EDIR, p)
 def src(name):
@@ -115,7 +126,7 @@ for si, S in enumerate(E['sections']):
             fc.append(f"{chain}[o{n}]overlay={x}:{y}:eof_action=repeat:enable='between(t,{a},{b})'[c{n}]"); chain = f'[c{n}]'; n += 1
             continue
         png = os.path.join(WORK, f'ov{si:02d}_{j:02d}.png')
-        if kind == 'word': word_tag(arg, png)
+        if kind == 'word': fit_word(arg, png)
         elif kind == 'rank': rank_card(*arg, png)
         elif kind == 'odds': odds(arg if isinstance(arg, (int, float)) else 0, png) if arg != '??' else center_title(['SURVIVAL RATE', '!??%'], png, 130)
         elif kind == 'instr': instruction(arg, png)

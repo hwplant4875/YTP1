@@ -43,8 +43,8 @@ def sec(voice, shots, card_at=None, extra=(), pad=0.5, clip_db=-99):
     return S
 X = []
 # cold open (owner 10/31: the core of the format): one action word per beat, each a hard cut + a big centre caption on the spoken word
-X.append(sec('s00', [(0, 'trt_trailer', 99.3, 0.8), ('stalked', 'h78_trailer', 116.7), ('trapped', 'haunt_trailer', 86.4, 0.7),
-  ('poisoned', 'trt_trailer', 132.4), ('possessed', 'notd_trailer', 48.5), ('mauled', 'gs_trailer', 98.0), ('hunted', 't2_trailer', 72.0, 0.9),
+X.append(sec('s00', [(0, 'trt_trailer', 99.3, 0.8), ('stalked', 'h78_trailer', 116.7), ('trapped', 'haunt_trailer', 86.68, 0.38),
+  ('poisoned', 'trt_trailer', 132.4), ('possessed', 'notd_trailer', 48.5), ('mauled', 'gs_trailer', 98.0), ('hunted', 't2_trailer', 72.0, 0.7),
   ('killed by', 'h3_05_test_room', 90.6), ('and nobody', 'trt_trailer', 60.5), ('because everyone', 'hf_trailer', 78.5),
   ('just a costume', 'h3_10_off_air', 30.5), ("we're ranking", 't2_trailer', 78.5)],
   extra=[('word', 'Stalked', 'stalked', 'trapped'), ('word', 'Trapped', 'trapped', 'poisoned'), ('word', 'Poisoned', 'poisoned', 'possessed'),

@@ -17,6 +17,9 @@ The first ~15-20 s is a run of short punchy beats, each one = **one hard cut + o
 - For every beat: shot starts at `onset(word) - 0.08 s` (LEAD) on the first frame of that action, villain clearly visible;
   `('word', 'Hacked', 'hacked', 'hanged')` = centre caption (`gfx.word_tag`, white, f(170), shadow) from this word to the next, capped at **0.9 s**
   (`ov[3] = min(ov[3], ov[2] + 0.9)`), so captions flash one after another and cut out - never two at once, never late.
+  Phrases ("Mauled by a werewolf") may stay up to 1.5 s and must fit the frame: shrink to <= 1760 px or split over two lines
+  (`fit_word` in `ep_halloween/render_hw.py`). Check the open at 10 fps from the render: no caption off-screen, no stray frame of
+  the next trailer cut or a black flash inside a beat (slow the shot down instead).
 - Close the open with a `title` card (2 lines max, `!` prefix = red line) on the count / channel line. Clip audio under the open at about -20 dB.
 - Word onsets: whisper word timestamps (`faster_whisper`, `word_timestamps=True`, decode with ffmpeg to 16 kHz float) are the cut anchors;
   the ElevenLabs alignment drifts up to 0.7 s near pauses. Use the alignment only where whisper drops a word (spoken numbers).
