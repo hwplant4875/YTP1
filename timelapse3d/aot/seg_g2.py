@@ -1867,8 +1867,8 @@ _CORE_CAM = CAM
 def _pre_cam():
     ks = camkeys.cam("g2")
     keys = [tuple(ks["keys"][0]),                                          # g1 seam at rest (the Yeager ruin)
-            (2.4, (-300.0, -520.0, 280.0), (-40.0, -60.0, 0.0), 28.0),     # up into the sky: the gate crowd, the titans
-            (4.6, (-250.0, -420.0, 330.0), (0.0, 40.0, 0.0), 28.0),       # ... the people pouring out to the boats
+            (2.4, (-150.0, -250.0, 175.0), (0.0, -40.0, 0.0), 30.0),      # up over the roofs: the gate crowd, the titans
+            (4.6, (-100.0, -110.0, 165.0), (70.0, 70.0, 0.0), 30.0),      # ... the people pouring out to the boats
             (PRE - 0.2, (-150.0, -560.0, 150.0), (0.0, -400.0, 12.0), 34.0),  # down between the houses: the lightning
             (PRE + 1.6, (-170.0, -420.0, 120.0), (0.0, -330.0, 10.0), 37.0)]  # he rises and sprints
     keys += [(k[0] + PRE,) + tuple(k[1:]) for k in ks["keys"][2:]]           # g2's own camera from its lock key (4.4) on

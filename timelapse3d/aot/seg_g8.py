@@ -82,7 +82,7 @@ RICO_DECK = (16.0, 36.0)                         # AUDIT 7: Rico east of the 20 
 GF = (334.0, 136.0, 51.5); RF = (306.0, 300.0, 19.0); YF = (22.0, 52.0, 2.5); PY = (-20.0, 870.0, 50.5)
 LV = (-40.0, 2.0, 50.5); CT = [(-45.0, 45.0), (-55.0, 32.0)]; MI = (-67.0, 18.0); IA = (-36.0, 56.0)
 CROUCH = (44.0, 27.0); CROUCH_FALL = (52.0, 36.0); PIT = (0.0, 36.0)
-PYRES = [(-338.0, 178.0), (-60.0, 470.0), (-12.0, 250.0), (150.0, 330.0), (50.0, 55.0), (-300.0, 215.0)]   # v14: + the corner corpses
+PYRES = [(284.0, 116.0), (-60.0, 470.0), (-12.0, 250.0), (150.0, 330.0), (50.0, 55.0), (262.0, 140.0)]   # v14: + the corner corpses
 PYRE_T = (60.6, 61.4, 62.4, 63.4, 64.4, 65.2)    # VIDEO clock: v14 the titan corpses burn one by one in the NIGHT sky view
 D_BOX = (-475.0, -360.0, 760.0, 865.0)
 HERD_KILL = 62.0                                 # owner 10/27: the herded corner group dies in one massed volley (choreo clock)
@@ -107,8 +107,8 @@ CAM_KEYS = [
     (43.5, (-80, 160, 93),   (2, 13, 12),     41),     # S1b hold on the wedged ball, the plug grows, 5 titans face it
     (47.1, (-95, 225, 135),  (0, 20, 40),     32),     # S2 the Λ plug and the yellow trail (from the east plank box)
     (52.0, (-105, 245, 140), (0, 30, 15),     34),     # L1 Levi
-    (55.0, (-190, 330, 115), (-335, 180, 10), 40),     # v14: the WEST wall corner: the herded titans, the massed cannons
-    (57.4, (-215, 305, 100), (-337, 181, 10), 52),     #   (HERD_KILL = local 56.5, daylight), slight zoom
+    (55.0, (150, 250, 140), (282, 118, 8), 40),       # v14: the wall corner (east strip): the herded titans, the massed cannons
+    (57.4, (175, 225, 120), (283, 118, 8), 50),       #   (HERD_KILL = local 56.5, daylight), slight zoom
     (60.2, (-180, 420, 260), (-200, 230, 0),  30),     #   then up into the sky as night falls
     (63.4, (-80, 560, 430),  (-120, 280, 0),  28),     # v14: NIGHT, full sky view: the titan corpses burning
     (71.0, (120, 680, 330),  (-90, 300, 0),   28),
@@ -830,7 +830,7 @@ def build_titans(coll):
         return K[-1][1:]
     herd = [nm for nm in targets if nm not in ("trench", "pitlying")]
     # v14 (FEEDBACK_v13 §1: the mop-up is NOT by the boulder): herded into the WEST corner of the bulge wall (angle -48 deg)
-    ca, sa = math.cos(math.radians(-48.0)), math.sin(math.radians(-48.0))
+    ca, sa = math.cos(math.radians(38.0)), math.sin(math.radians(38.0))   # the open wall-foot strip, east bulge
     wx, wy = 478.0 * sa, 480.0 - 478.0 * ca
     slots = [(wx - 16.0 * sa + (k % 3 - 1) * 7.0 * ca - (k // 3) * 6.0 * sa, wy + 16.0 * ca + (k % 3 - 1) * 7.0 * sa + (k // 3) * 6.0 * ca)
              for k in range(len(herd))]
@@ -1243,7 +1243,7 @@ def build_cannon_events():
     """Mop-up cannons 'around the clock' (owner 16:53: at the gate square, no corner D): muzzle flashes on the wall top
     round the seal, shell bursts on the titans left in the gate square at night, slower fire outside by day."""
     rng = np.random.default_rng(55)
-    guns = [S3(478.0 * math.sin(a), 480 - 478.0 * math.cos(a), 52.0) for a in np.radians([-62, -58, -54, -51, -45, -42, -38, -34])]   # v14: massed at the corner
+    guns = [S3(478.0 * math.sin(a), 480 - 478.0 * math.cos(a), 52.0) for a in np.radians([26, 30, 33, 36, 40, 43, 46, 50])]   # v14: massed at the corner
     TT = STATE["TT"]
     ev = []
     for nm in STATE.get("shell_targets", []):            # 2-3 shells walk onto each titan, the last one kills it
@@ -1727,11 +1727,11 @@ def update(tv):
         _hide(e, t < BEATS["cleanup"][0])
     # lights: pyres (flicker) + recycled cannon flashes (most recent 4)
     for k, (ld_, te) in enumerate(zip(STATE["pyre_lights"], PYRE_T)):
-        ld_.energy = (2500.0 * ss(te, te + 0.8, tv) * (0.85 + 0.15 * math.sin(tv * 11 + k))) if tv >= te else 0.0
+        ld_.energy = (15000.0 * ss(te, te + 0.8, tv) * (0.85 + 0.15 * math.sin(tv * 11 + k))) if tv >= te else 0.0
     act = [(te, p) for te, kind, p in STATE["cannon_events"] if 0.0 <= t - te < 0.22][-4:]
     for k, (lo, ld_) in enumerate(STATE["cannon_lights"]):
         if k < len(act):
-            te, p = act[k]; lo.location = Vector(p) + Vector((0, 0, 3.0)); ld_.energy = 8.0e5 * (1 - (t - te) / 0.22)
+            te, p = act[k]; lo.location = Vector(p) + Vector((0, 0, 3.0)); ld_.energy = 2.0e5 * (1 - (t - te) / 0.22)   # v14: less sparkle
         else:
             ld_.energy = 0.0
 

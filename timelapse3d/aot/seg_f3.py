@@ -358,6 +358,13 @@ def update(t):
     from forest import tableau as TB
     ts = story(t)
     _update(ts)
+    # v12: f3 v11 died (GPU driver timeout) at 10.4 s in the low kick orbit -> tighter far clip + no light shafts from 8.4 s
+    cam = bpy.context.scene.camera
+    sh = bpy.data.objects.get("F_LightShafts")
+    if 8.4 <= t <= 14.6:
+        cam.data.clip_end = min(cam.data.clip_end, 230.0)
+    if sh is not None:
+        C.hide(sh, 8.4 <= t)
     k = next((n for n, (a, b) in TAB.items() if a - 0.25 <= t <= b + 0.25), None)
     fem, er = S["fem"], S["eren"]
     for o in S["kick_props"]:

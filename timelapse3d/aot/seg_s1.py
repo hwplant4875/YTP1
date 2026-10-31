@@ -87,7 +87,7 @@ def carriage_S(k, t):
 
 # ---------------------------------------------------------------- camera (frame S, z above ground; lifted in build)
 SEAM_IN = F3.SEAM_S1
-SEAM_S2 = dict(pos=S(40.0, 530.0, 450.0), look=S(10.0, 15.0, 0.0), lens=30.0, vel=(12.0, -4.0, 0.0))   # v8: sky view
+SEAM_S2 = dict(pos=S(40.0, 420.0, 340.0), look=S(10.0, 15.0, 0.0), lens=34.0, vel=(12.0, -4.0, 0.0))   # v8: sky view
 def _k(t, p, l, lens):
     return (t, S(*p), S(*l), lens)
 CAM_KEYS = [                                                   # approach from the NE, then work from the north side
@@ -99,8 +99,8 @@ CAM_KEYS = [                                                   # approach from t
     _k(9.0, (-60.0, 760.0, 620.0), (-140.0, 40.0, 0.0), 30.0),
     _k(13.0, (-80.0, 700.0, 580.0), (-150.0, 50.0, 0.0), 30.0),
     _k(17.0, (-90.0, 650.0, 540.0), (-150.0, 55.0, 0.0), 30.0),             # the light flash in the street
-    _k(21.6, (-60.0, 600.0, 500.0), (-100.0, 40.0, 0.0), 30.0),
-    _k(26.0, (-10.0, 560.0, 470.0), (-30.0, 25.0, 0.0), 30.0),              # the rampage down the avenue
+    _k(21.6, (-60.0, 470.0, 380.0), (-100.0, 40.0, 0.0), 32.0),
+    _k(26.0, (-10.0, 400.0, 320.0), (-30.0, 25.0, 0.0), 36.0),              # the rampage down the avenue
     (DUR, SEAM_S2["pos"], SEAM_S2["look"], SEAM_S2["lens"]),
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_IN["vel"], v_out=SEAM_S2["vel"])
@@ -169,8 +169,15 @@ def build(site):
     for tt in np.arange(24.0, 30.0, 0.18):
         x, y = fem_S(float(tt)); te.append(float(tt)); pos.append(_W(x, y, 1.0)); vel.append((0, 0, 1.5))
     dust.add_many(te, pos, vel, r0=3.0, r1=10.0, life=2.6, rise=1.5, alpha=0.55)
+    # v8 (sky view, principle A): a big dust plume trail behind her rampage so it reads from ~400 m
+    te, pos, vel = [], [], []
+    for tt in np.arange(18.4, 30.0, 0.12):
+        x, y = fem_S(float(tt)); te.append(float(tt)); pos.append(_W(x + rnd.uniform(-5, 5), y + rnd.uniform(-5, 5), 3.0))
+        vel.append((rnd.uniform(-2, 2), rnd.uniform(-2, 2), 5.0))
+    dust.add_many(te, pos, vel, r0=6.0, r1=24.0, life=4.0, rise=3.0, alpha=0.7)
     dust.build(c); S_["dust"] = dust
-    TRACK.update(ANNIE=lambda t: _W(*walker_S("annie", t)[:2], 2.2) if 9.5 <= t < 15.8 else None,
+    TRACK.update(FEMALE=lambda t: _W(*fem_S(t), 16.0) if 18.6 <= t < 30.0 else None,
+                 ANNIE=lambda t: _W(*walker_S("annie", t)[:2], 2.2) if 9.5 <= t < 15.8 else None,
                  ARMIN=lambda t: _W(*walker_S("armin", t)[:2], 2.2) if 10.5 <= t < 14.0 else None,
                  MIKASA=lambda t: _W(*walker_S("mikasa", t)[:2], 2.2) if 10.5 <= t < 14.0 else None)
 
@@ -243,4 +250,4 @@ def check():
 # v2 (QA batch1 P1): the month-passing flight over the dark plain (story 0-9) at 4x (~2.6 video s instead of 8) and the
 # Plan C / rampage tail at 1.8x; slope 1 at both seams.  Video ~19.4 s
 import segtime as _ST
-C.install_warp(globals(), _ST.slope_knots(30.0, [(0.0, 1.0, 0.0), (0.3, 4.0, 0.6), (8.0, 1.0, 0.6), (9.5, 2.4, 0.4), (15.5, 1.0, 0.4), (21.5, 1.8, 0.4), (29.2, 1.0, 0.4)]))
+C.install_warp(globals(), _ST.slope_knots(30.0, [(0.0, 1.0, 0.0), (0.3, 4.0, 0.6), (8.0, 1.0, 0.6), (9.5, 3.6, 0.4), (15.5, 1.0, 0.4), (21.5, 2.6, 0.4), (29.2, 1.0, 0.4)]))

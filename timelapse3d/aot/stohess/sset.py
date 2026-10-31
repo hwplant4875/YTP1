@@ -264,20 +264,33 @@ def _crack_mat():
     N, Ln = m.node_tree.nodes, m.node_tree.links
     b = N.get("Principled BSDF"); b.inputs["Roughness"].default_value = 0.95
     tc = N.new("ShaderNodeTexCoord")
-    vo = N.new("ShaderNodeTexVoronoi"); vo.feature = "DISTANCE_TO_EDGE"; vo.inputs["Scale"].default_value = 0.22
+    vo = N.new("ShaderNodeTexVoronoi"); vo.feature = "DISTANCE_TO_EDGE"; vo.inputs["Scale"].default_value = 0.9
     Ln.new(tc.outputs["Object"], vo.inputs["Vector"])
-    cr = N.new("ShaderNodeMapRange"); cr.inputs["From Min"].default_value = 0.0; cr.inputs["From Max"].default_value = 0.06
+    cr = N.new("ShaderNodeMapRange"); cr.inputs["From Min"].default_value = 0.0; cr.inputs["From Max"].default_value = 0.04
     Ln.new(vo.outputs["Distance"], cr.inputs["Value"])
     nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.15; nz.inputs["Detail"].default_value = 6
     Ln.new(tc.outputs["Object"], nz.inputs["Vector"])
-    ramp = N.new("ShaderNodeValToRGB"); ramp.color_ramp.elements[0].color = (0.10, 0.085, 0.12, 1)
-    ramp.color_ramp.elements[1].color = (0.25, 0.22, 0.28, 1)
+    ramp = N.new("ShaderNodeValToRGB"); ramp.color_ramp.elements[0].color = (0.05, 0.043, 0.06, 1)
+    ramp.color_ramp.elements[1].color = (0.14, 0.12, 0.16, 1)
     Ln.new(nz.outputs["Fac"], ramp.inputs["Fac"])
     mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.inputs["A"].default_value = (0.025, 0.02, 0.03, 1)
     Ln.new(cr.outputs["Result"], mx.inputs["Factor"]); Ln.new(ramp.outputs["Color"], mx.inputs["B"])
     Ln.new(mx.outputs["Result"], b.inputs["Base Color"])
     bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.8
     Ln.new(cr.outputs["Result"], bp.inputs["Height"]); Ln.new(bp.outputs["Normal"], b.inputs["Normal"])
+    # v8: soft, noisy edge (no hard rectangle on the wall during the crane): alpha 1 inside r 34 m -> 0 at r 66 m
+    ln = N.new("ShaderNodeVectorMath"); ln.operation = "LENGTH"; Ln.new(tc.outputs["Object"], ln.inputs[0])
+    en = N.new("ShaderNodeTexNoise"); en.inputs["Scale"].default_value = 0.05
+    Ln.new(tc.outputs["Object"], en.inputs["Vector"])
+    ad = N.new("ShaderNodeMath"); ad.operation = "MULTIPLY_ADD"; ad.inputs[1].default_value = 26.0
+    Ln.new(en.outputs["Fac"], ad.inputs[0]); Ln.new(ln.outputs["Value"], ad.inputs[2])
+    fa = N.new("ShaderNodeMapRange"); fa.inputs["From Min"].default_value = 46.0; fa.inputs["From Max"].default_value = 80.0
+    fa.inputs["To Min"].default_value = 1.0; fa.inputs["To Max"].default_value = 0.0
+    Ln.new(ad.outputs[0], fa.inputs["Value"]); Ln.new(fa.outputs["Result"], b.inputs["Alpha"])
+    try:
+        m.surface_render_method = "BLENDED"
+    except Exception:
+        pass
     return m
 
 def _wall_titan_v14(c, centre, n):
@@ -290,6 +303,21 @@ def _wall_titan_v14(c, centre, n):
     cv = Vector(centre); nv = Vector((n[0], n[1], 0.0)).normalized(); side = Vector((-nv.y, nv.x, 0.0))
     ang = math.atan2(nv.y, nv.x)
     root, arm, meshes = CA._import()
+    for o in meshes:                                           # static bind pose: what is rendered = v.co (no armature deform)
+        for md in list(o.modifiers):
+            if md.type == "ARMATURE":
+                o.modifiers.remove(md)
+        for mt in o.data.materials:                            # darker blood-red muscle, the orange bone plates toned down
+            if mt and mt.use_nodes and not mt.get("_wf"):
+                N, Lk = mt.node_tree.nodes, mt.node_tree.links
+                b = next((n_ for n_ in N if n_.type == "BSDF_PRINCIPLED"), None)
+                if b is not None and b.inputs["Base Color"].links:
+                    src = b.inputs["Base Color"].links[0].from_socket
+                    hs = N.new("ShaderNodeHueSaturation"); hs.inputs["Hue"].default_value = 0.485; hs.inputs["Saturation"].default_value = 0.85
+                    mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"; mx.inputs["Factor"].default_value = 1.0
+                    mx.inputs["B"].default_value = (0.62, 0.36, 0.38, 1.0)
+                    Lk.new(src, hs.inputs["Color"]); Lk.new(hs.outputs["Color"], mx.inputs["A"]); Lk.new(mx.outputs["Result"], b.inputs["Base Color"])
+                mt["_wf"] = 1
     yaw = math.radians(float(os.environ.get("WF_YAW", "58")))
     root.matrix_world = Matrix.Rotation(ang + yaw + math.pi / 2, 4, "Z") @ root.matrix_world      # model front -Y -> 3/4 out of the wall
     bpy.context.view_layer.update()
@@ -304,7 +332,7 @@ def _wall_titan_v14(c, centre, n):
     nz, head = head_pts()
     hc = sum(head, Vector()) / len(head)
     front = max((p - hc).dot(nv) for p in head)
-    protrude = float(os.environ.get("WF_OUT", "1.6"))
+    protrude = float(os.environ.get("WF_OUT", "0.9"))
     root.location += (cv - hc) + nv * (protrude - front) + Vector((0, 0, -1.0))
     bpy.context.view_layer.update()
     nz += cv.z - hc.z - 1.0
@@ -325,10 +353,10 @@ def _wall_titan_v14(c, centre, n):
     rim = []; n_ = 24
     for i in range(n_):
         a = i * math.tau / n_
-        rx, rz = 5.2 + rnd.uniform(-0.8, 0.8), 10.5 + rnd.uniform(-1.2, 1.2)
+        rx, rz = 4.3 + rnd.uniform(-0.6, 0.6), 11.5 + rnd.uniform(-1.2, 1.2)
         rim.append(bm.verts.new((rx * math.cos(a), 0.06, rz * math.sin(a))))
         if rnd.random() < 0.8:
-            _cube(bm, (rx * 1.05 * math.cos(a), 0.5, rz * 1.03 * math.sin(a)), (rnd.uniform(1.2, 2.6), 1.1, rnd.uniform(1.0, 2.6)), rz=rnd.uniform(-0.5, 0.5))
+            _cube(bm, (rx * 1.05 * math.cos(a), 0.5, rz * 1.03 * math.sin(a)), (rnd.uniform(0.8, 1.8), 0.9, rnd.uniform(0.8, 1.8)), rz=rnd.uniform(-0.5, 0.5))
     ctr = bm.verts.new((0, 0.06, 0))
     for i in range(n_):
         bm.faces.new((ctr, rim[i], rim[(i + 1) % n_])).material_index = 1
@@ -338,25 +366,25 @@ def _wall_titan_v14(c, centre, n):
         if f.material_index != 1:
             f.material_index = 0
     # the cracked wall patch (70 x 60 m) a few cm proud of the wall face
-    vs = [bm.verts.new((x, 0.03, z)) for x, z in ((-35, -30), (35, -30), (35, 30), (-35, 30))]
+    vs = [bm.verts.new((x, 0.03, z)) for x, z in ((-70, -50), (70, -50), (70, 50), (-70, 50))]
     bm.faces.new(vs).material_index = 2
-    stone = C.mat("ST_WallRubbleDark", (0.16, 0.14, 0.18), 0.95)
+    stone = C.mat("ST_WallRubbleDark", (0.08, 0.07, 0.09), 0.95)
     hole = C.mat("ST_HoleVoid", (0.02, 0.015, 0.025), 1.0)
     ob = C.mesh_obj("ST_WallTitanHole", bm, [stone, hole, _crack_mat()], c)
     ob.matrix_world = Matrix.Translation(cv) @ R
     # the eye: pale blue-grey, looking sideways (placed on the face's upper visible edge, toward the camera)
     eye = None
     if os.environ.get("WF_EYE", "1") == "1":
-        bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=16, v_segments=10, radius=0.75)
-        eye = C.mesh_obj("ST_WallTitanEye", bm, [C.mat("ST_WallEye", (0.62, 0.68, 0.74), 0.25)], c)
+        bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=16, v_segments=10, radius=0.55)
+        eye = C.mesh_obj("ST_WallTitanEye", bm, [C.mat("ST_WallEye", (0.50, 0.56, 0.62), 0.25)], c)
         bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=10, v_segments=6, radius=0.30)
         iris = C.mesh_obj("ST_WallTitanIris", bm, [C.mat("ST_WallIris", (0.22, 0.28, 0.34), 0.2)], c)
-        ep = cv + nv * (protrude + 0.15) + side * float(os.environ.get("WF_EYE_X", "-1.2")) + Vector((0, 0, float(os.environ.get("WF_EYE_Z", "3.2"))))
+        ep = cv + nv * (protrude + 0.15) + side * float(os.environ.get("WF_EYE_X", "0.6")) + Vector((0, 0, float(os.environ.get("WF_EYE_Z", "2.2"))))
         eye.location = ep; eye.scale = (1.0, 0.7, 0.8)
         iris.location = ep + nv * 0.45 - side * 0.35
         keep += [eye, iris]
     # dim purple key light on the hole
-    ld = bpy.data.lights.new("ST_WallTitanLight", "POINT"); ld.energy = float(os.environ.get("WF_LIGHT", "6.0e5")); ld.color = (0.62, 0.45, 0.95)
+    ld = bpy.data.lights.new("ST_WallTitanLight", "POINT"); ld.energy = float(os.environ.get("WF_LIGHT", "4.0e4")); ld.color = (0.62, 0.45, 0.95)
     ld.shadow_soft_size = 6.0
     lo = bpy.data.objects.new("ST_WallTitanLight", ld); c.objects.link(lo)
     lo.location = cv + nv * 30.0 + Vector((0, 0, 8.0))
