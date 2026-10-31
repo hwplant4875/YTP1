@@ -1,0 +1,32 @@
+# Halloween special: official sources only (studio / distributor channels, Movieclips). name | youtube id | channel | note
+# None of these is age-restricted per the YouTube API (contentRating empty, 10/31). Download on the laptop to E:\YTP2\Instruction444\clips\halloween
+et_06_halloween | VrVEHszxL7E | Movieclips | E.T. 6/10 Halloween night, ghost sheet
+et_08_alive | a-9990dlfvo | Movieclips | E.T. 8/10 hazmat agents, he's alive
+et_09_ride | oR1-UFrcZ0k | Movieclips | E.T. 9/10 flying bikes
+tk_trailer | 5vYipYSDhtQ | Blumhouse | Totally Killer official trailer
+tk_mom | mvq9rO1WRkI | Prime Video | Totally Killer clip
+tk_machine | RpGNrbpyrWc | Prime Video | Totally Killer clip
+trt_trailer | VPsfmYoRppw | ScreamFactoryTV | Trick 'r Treat trailer
+trt_01_decoration | FzPK-AvJJVA | Movieclips | 1/9 Emma blows out the jack-o'-lantern
+trt_02_bodies | LyuVhtqGVr4 | Movieclips | 2/9 principal
+trt_05_bus | NAkJuk9Esk4 | Movieclips | 5/9 school bus
+trt_06_lake | bBV4-L2Cz2I | Movieclips | 6/9 zombie children
+trt_07_pumpkin | r69Lv9hATPI | Movieclips | 7/9
+trt_08_something | f4lNe9La20s | Movieclips | 8/9 Sam vs Kreeg
+trt_09_zombies | 0_GrOfW98Sk | Movieclips | 9/9
+hf_trailer | olBLvQ26_eM | Lionsgate Movies | Hell Fest official trailer
+haunt_trailer | f8ZuloddLi4 | Momentum Pictures | Haunt official trailer
+haunt_trailer_rt | UoU4xexikK4 | Rotten Tomatoes Indie | Haunt trailer (Movieclips Indie)
+h78_trailer | 3JsrH8eUVOo | ScreamFactoryTV | Halloween 1978 official trailer
+h78_trailer_rt | oVgtguYmNBg | Rotten Tomatoes Classic Trailers | Halloween 1978 trailer
+notd_trailer | tQ7gSRfUCH0 | ScreamFactoryTV | Night of the Demons official trailer
+h3_01_gouged | dUFtkBtGIgg | Movieclips | 1/10
+h3_02_starker | O2RUT5J7T4E | Movieclips | 2/10
+h3_03_marge | 4bB-IJBlZms | Movieclips | 3/10
+h3_05_test_room | u2D0kDFKaxE | Movieclips | 5/10 the mask kills a kid
+h3_07_happy | vsfjzfGZVyQ | Movieclips | 7/10
+h3_08_shutdown | yOWS9e_r5OI | Movieclips | 8/10
+h3_10_off_air | goKRpR4XNg8 | Movieclips | 10/10 "get it off the air"
+t1_trailer | JJ9nrpdFE8o | Umbrella Entertainment | Terrifier official trailer
+t2_trailer | 6KkONLf_ZKU | Cineverse | Terrifier 2 official trailer
+t2_trailer_au | SOm9R-ocs30 | Umbrella Entertainment | Terrifier 2 official trailer
