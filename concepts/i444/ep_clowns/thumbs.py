@@ -53,7 +53,7 @@ def three(specs, name):
 # zoomed in, the face fills most of the panel with the eyes in the upper third, % below the face. Coordinates = 1920x1080 frame.
 def P(clip, t, cx, cy, face_h, pct, col, bright=1.15, face_px=430, eye_y=300, blurfill=None): return dict(clip=clip, t=t, cx=cx, cy=cy, face_h=face_h, pct=pct, col=col, bright=bright, face_px=face_px, eye_y=eye_y, blurfill=blurfill)
 os.makedirs(OUT, exist_ok=True)
-three([P('zl_clown_cc', 26.0, 900, 470, 380, '99%', GREEN, 1.2, face_px=330, eye_y=250, blurfill=(70, 1010)),
+three([P('poster:o_7uFDs8tFEKuWBSTrzUgbAdmyPKs.jpg', 0, 410, 300, 450, '99%', GREEN, 1.0, face_px=390, eye_y=210),
        P('poster:o_rAQcPrEaPzDRVNX7XX5TWyxCGFN.jpg', 0, 2100, 1080, 840, '25%', YEL, 1.0, face_px=400, eye_y=230),
        P('poster:o_cRdA9xjHBbobw4LJFsQ3j1CgpVq.jpg', 0, 1690, 760, 1000, '3%', RED, 1.05, face_px=400, eye_y=250)], 'clowns_thumb_a.jpg')
 three([P('poster:o_yZ7LrkTiCG68I3K08YtDSEH4On8.jpg', 0, 1200, 470, 760, '45%', GREEN, 1.0, face_px=420, eye_y=240),

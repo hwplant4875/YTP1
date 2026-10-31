@@ -8,7 +8,7 @@ Video: E:\YTP2\Horror Ranked\EP06 Clowns\2_renders\ep06_clowns_v1.mp4 | Subtitle
 3. 10 Horror Movie Clowns Ranked From Harmless to Unkillable
 
 ## Thumbnails (left GREEN / middle YELLOW / right RED; three very different variants)
-A. Zombieland clown 99% / Pennywise (It, 2017, official still) 25% / Art the Clown (Terrifier 2, official still) 3%
+A. Zombieland clown (official still) 99% / Pennywise (It, 2017, official still) 25% / Art the Clown (Terrifier 2, official still) 3%
 B. Killer Klown Jumbo (official still) 45% / Pennywise (It, 1990) 30% / Pennywise (It Chapter Two, official still) 15%
 C. Captain Spaulding 60% / Frendo (Clown in a Cornfield, official still) 40% / Art the Clown (Terrifier) 3%
 
