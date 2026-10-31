@@ -361,11 +361,11 @@ def _muscle_mat():
     Ln.new(tc.outputs["Object"], wv.inputs["Vector"])
     nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 6.0; Ln.new(tc.outputs["Object"], nz.inputs["Vector"])
     ramp = N.new("ShaderNodeValToRGB")
-    ramp.color_ramp.elements[0].color = (0.10, 0.018, 0.02, 1); ramp.color_ramp.elements[1].color = (0.42, 0.10, 0.10, 1)
+    ramp.color_ramp.elements[0].color = (0.16, 0.03, 0.03, 1); ramp.color_ramp.elements[1].color = (0.62, 0.16, 0.14, 1)
     mx = N.new("ShaderNodeMath"); mx.operation = "MULTIPLY"; Ln.new(wv.outputs["Fac"], mx.inputs[0]); Ln.new(nz.outputs["Fac"], mx.inputs[1])
     ad = N.new("ShaderNodeMath"); ad.operation = "ADD"; ad.inputs[1].default_value = 0.15; Ln.new(mx.outputs[0], ad.inputs[0])
     Ln.new(ad.outputs[0], ramp.inputs["Fac"]); Ln.new(ramp.outputs["Color"], b.inputs["Base Color"])
-    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.6; bp.inputs["Distance"].default_value = 0.02
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.25; bp.inputs["Distance"].default_value = 0.01
     Ln.new(wv.outputs["Fac"], bp.inputs["Height"]); Ln.new(bp.outputs["Normal"], b.inputs["Normal"])
     return m
 
@@ -393,18 +393,19 @@ def _wall_titan_v15(c, centre, n):
     ang = math.atan2(nv.y, nv.x)
     H_ = float(os.environ.get("WF_HEAD", "23.0"))              # head height = the slot height (QA: face fills the hole)
     k = H_ / 1.9
-    yaw = math.radians(float(os.environ.get("WF_YAW", "55")))
-    protrude = float(os.environ.get("WF_OUT", "2.5"))
+    yaw = math.radians(float(os.environ.get("WF_YAW", "-25")))         # still check 10/31: -25 = eye upper left as the ref
+    protrude = float(os.environ.get("WF_OUT", "3.0"))
     rot = Matrix.Rotation(ang + yaw + math.pi / 2, 4, "Z")   # model front -Y -> 3/4 out of the wall
     def M(off):
         return Matrix.Translation(off) @ rot @ Matrix.Scale(k, 4)
-    root.matrix_world = M(Vector()); bpy.context.view_layer.update()
+    R0 = root.matrix_world.copy()                             # the importer's Y-up -> Z-up turn (quaternion) must stay
+    root.matrix_world = M(Vector()) @ R0; bpy.context.view_layer.update()
     P = [o.matrix_world @ v.co for o in meshes for v in o.data.vertices]
     hc = sum(P, Vector()) / len(P)
     front = max((p - hc).dot(nv) for p in P)
     off = (cv - hc) + nv * (protrude - front)
     off.z = cv.z - hc.z - 0.5
-    root.matrix_world = M(off); bpy.context.view_layer.update()
+    root.matrix_world = M(off) @ R0; bpy.context.view_layer.update()
     Pl = [o.matrix_world @ v.co for o in meshes for v in o.data.vertices]
     Minv = M(off).inverted()
     Pl = [Minv @ p for p in Pl]                                # model-local points (head 1.9 tall, front -y)
@@ -420,38 +421,47 @@ def _wall_titan_v15(c, centre, n):
         ys = [p.y for p in Pl if abs(p.x - x) < 0.05 and abs(p.z - z) < 0.05]
         return min(ys) if ys else -0.7
     # exposed teeth: a long row across the mouth (upper + lower), set into dark gums
-    tooth = C.mat("ST_WallTeeth", (0.78, 0.74, 0.66), 0.35); gum = C.mat("ST_WallGums", (0.16, 0.03, 0.035), 0.5)
-    bm = bmesh.new()
-    for i in range(16):
-        x = -0.30 + 0.6 * i / 15
-        zc = -0.22 + 0.06 * (x / 0.3) ** 2
-        y = front_y(x, zc) - 0.01
+    tooth = C.mat("ST_WallTeeth", (0.60, 0.56, 0.48), 0.35); gum = C.mat("ST_WallGums", (0.16, 0.03, 0.035), 0.5)
+    bm = bmesh.new(); rt = random.Random(5)
+    for i in range(16):                                        # long, slightly uneven teeth following the jaw surface
+        x = -0.21 + 0.42 * i / 15                              # mouth measured on the model's front view: z -0.56, x +-0.22
+        zc = -0.56 + 0.05 * (x / 0.21) ** 2
+        y = front_y(x, zc) - 0.006
         for up in (1, -1):
+            h = rt.uniform(0.09, 0.13)
             res = bmesh.ops.create_cube(bm, size=1.0)
-            bmesh.ops.scale(bm, vec=(0.032, 0.03, 0.085), verts=res["verts"])
-            bmesh.ops.translate(bm, vec=(x, y, zc + up * 0.05), verts=res["verts"])
+            bmesh.ops.scale(bm, vec=(0.02, 0.02, h * 0.6), verts=res["verts"])
+            bmesh.ops.rotate(bm, verts=res["verts"], cent=(0, 0, 0), matrix=Matrix.Rotation(rt.uniform(-0.08, 0.08), 3, "Y"))
+            bmesh.ops.translate(bm, vec=(x, y, zc + up * (h * 0.3 + 0.004)), verts=res["verts"])
     for f in bm.faces:
         f.material_index = 0
     res = bmesh.ops.create_cube(bm, size=1.0)                  # dark gum slot behind the teeth
-    bmesh.ops.scale(bm, vec=(0.66, 0.02, 0.24), verts=res["verts"])
-    bmesh.ops.translate(bm, vec=(0.0, front_y(0.0, -0.22) + 0.012, -0.22), verts=res["verts"])
+    bmesh.ops.scale(bm, vec=(0.44, 0.02, 0.13), verts=res["verts"])
+    bmesh.ops.translate(bm, vec=(0.0, front_y(0.0, -0.56) + 0.03, -0.56), verts=res["verts"])
     for f in {f for v in res["verts"] for f in v.link_faces}:
         f.material_index = 1
     te = C.mesh_obj("ST_WallTitanTeeth", bm, [tooth, gum], c); te.matrix_world = M(off)
     keep.append(te)
     # one small pale blue-grey eye on the camera side, looking sideways
-    ex = 0.27 if os.environ.get("WF_EYE_SIDE", "R") == "R" else -0.27
-    ep = L(ex, front_y(ex, 0.47) + 0.03, 0.47)
-    bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=16, v_segments=10, radius=0.06)
+    ex = 0.236 if os.environ.get("WF_EYE_SIDE", "R") == "R" else -0.236   # eye sockets measured at z +0.24, x +-0.236
+    ep = L(ex, front_y(ex, 0.24) + 0.02, 0.24)
+    bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=16, v_segments=10, radius=0.045)
     eye = C.mesh_obj("ST_WallTitanEye", bm, [C.mat("ST_WallEye", (0.62, 0.68, 0.74), 0.2, emit=(0.5, 0.58, 0.66), strength=0.4)], c)
     eye.matrix_world = Matrix.Translation(ep) @ rot @ Matrix.Diagonal((k * 1.3, k * 0.6, k * 0.7, 1.0))
-    bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=10, v_segments=6, radius=0.028)
+    bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=10, v_segments=6, radius=0.02)
     iris = C.mesh_obj("ST_WallTitanIris", bm, [C.mat("ST_WallIris", (0.18, 0.24, 0.30), 0.2)], c)
     iris.matrix_world = Matrix.Translation(ep + side * (0.035 * k) + nv * (0.02 * k)) @ Matrix.Scale(k, 4)
     keep += [eye, iris]
     os.environ.setdefault("WF_EYE", "0")
-    ob, lo = _wall_hole(c, cv, nv, side, ang, protrude, keep, hz=H_ / 2 + 1.0, hx=float(os.environ.get("WF_HOLE_X", "6.0")))
-    lo.data.energy *= 0.6                                      # darker, moodier
+    ob, lo = _wall_hole(c, cv, nv, side, ang, protrude, keep, hz=H_ / 2 + 1.0, hx=float(os.environ.get("WF_HOLE_X", "4.8")))
+    lo.data.energy *= 0.7                                      # darker, moodier; raking from the side so the relief reads
+    lo.location = cv + nv * 18.0 - side * 22.0 + Vector((0, 0, 14.0))
+    sd = bpy.data.lights.new("ST_WallTitanKey", "SPOT"); sd.energy = float(os.environ.get("WF_KEY", "1.4e5")); sd.color = (0.85, 0.72, 1.0)
+    sd.spot_size = math.radians(24); sd.spot_blend = 0.6; sd.shadow_soft_size = 2.0                  # hard raking key from the upper left: the relief reads
+    so = bpy.data.objects.new("ST_WallTitanKey", sd); c.objects.link(so)
+    so.location = cv + nv * 26.0 - side * 30.0 + Vector((0, 0, 24.0))
+    so.rotation_euler = (cv - so.location).to_track_quat("-Z", "Y").to_euler()
+    keep.append(so)
     for o in keep:
         o.hide_render = True
     nvk = sum(len(o.data.vertices) for o in keep if o.type == "MESH")

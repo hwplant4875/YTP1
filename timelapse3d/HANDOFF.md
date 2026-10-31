@@ -528,3 +528,12 @@ OPEN / WEAK: g6 stays far (owner 16:51 choice, 2 zooms added);
   g2|g3 seam at rest (no dissolve: concat plain); g3 fast flight, wide static march, farm cam from W, camp104 restored from 9b9921f (sunken);
   g5 walkway z + wide view before kick; g6 TMAP skips; g7 squeeze + water_mat + CANNON moved; g8 bent carry, no green, red lingering,
   ARMIN tag, herd at W bulge corner, night pyres to the end; f0 6.5 s starting at night. Renders: render_p2 f1 v8 f2 v8 pushed.
+
+## v15 (10/31 evening, local builder, no API agents)
+- Stohess city fight replaced by seg_s1v15 (flight -> sky view, her lightning + rampage) + seg_s2v15 (fixed sky cam H 190, titans x1.6,
+  Eren's lightning, chase, punch -> she flies into the cathedral: 221 pre-fractured chunks fall in a wave, tower tips south, rolling dust;
+  run through burning houses, climb, fall, Eren on top -> wall-titan ending).
+- Wall titan: Sketchfab "Colossal titan head" (CC-BY, CREDITS.md) in sset._wall_titan_v15 (keep the glTF root's Y-up turn R0!), yaw -25,
+  teeth/eye placed from the model's measured mouth/eye, raking spot key. WF_V14=1 = old face.
+- f1: formation graphic after EP17 06:21-06:25 (disc, curved arrow, rider icons, red marks + big red ring), closer sky cam; wire-spin tighter.
+- Batch: render_v15.sh f1:v11 s1v15:v1 s2v15:v1 -> assemble_v15.py (full_onetake_v15_preview.mp4).

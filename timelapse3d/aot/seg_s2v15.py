@@ -301,7 +301,7 @@ def build(site):
     dust = flares.PuffField("S2V_Dust", kind="dust", color=(0.70, 0.65, 0.57), alpha=0.65)
     te, pos, vel = [], [], []
     for k in range(40):                                          # paving bursts as Eren comes up in the square
-        te.append(0.9 + 0.02 * k); pos.append(_W(-40 + rnd.uniform(-14, 14), -60 + rnd.uniform(-14, 14), 2 + 0.4 * k)); vel.append((0, 0, 8))
+        te.append(0.9 + 0.02 * k); pos.append(_W(-40 + rnd.uniform(-10, 10), -60 + rnd.uniform(-10, 10), 2 + 0.3 * k)); vel.append((0, 0, 6))
     for k in range(90):                                          # the impact + the collapse column
         te.append(BEATS["impact"] + 0.03 * k); pos.append(_W(CH[0] + rnd.uniform(-20, 20), CH[1] + rnd.uniform(-26, 26), rnd.uniform(4, 30)))
         vel.append((rnd.uniform(-4, 4), rnd.uniform(-4, 4), rnd.uniform(2, 7)))
@@ -312,7 +312,8 @@ def build(site):
     for k in range(30):                                          # the tower's impact line (south)
         u = rnd.random(); te.append(BEATS["tower"][1] + rnd.uniform(0, 0.4)); pos.append(_W(CH[0] + 22 + rnd.uniform(-6, 6), CH[1] - 20 - 60 * u, 3.0))
         vel.append((rnd.uniform(-6, 6), rnd.uniform(-6, 6), 4.0))
-    dust.add_many(te, pos, vel, r0=6.0, r1=26.0, life=5.0, rise=1.2, alpha=0.65)
+    dust.add_many(te[:40], pos[:40], vel[:40], r0=3.0, r1=9.0, life=1.8, rise=1.5, alpha=0.5)      # the square burst: short (it hid the frame)
+    dust.add_many(te[40:], pos[40:], vel[40:], r0=6.0, r1=26.0, life=5.0, rise=1.2, alpha=0.65)
     te, pos, vel = [], [], []
     for tt in np.arange(0.0, 12.0, 0.1):                         # dust trails behind both titans (read from the sky)
         for fn in (fem_S, eren_S):
