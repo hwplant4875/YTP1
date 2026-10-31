@@ -241,8 +241,8 @@ CAM_KEYS = [   # v8 (FEEDBACK_v13 §2): video-time fly keys (z above ground); th
     (0.0, SEAM_F1_W["pos"], SEAM_F1_W["look"], SEAM_F1_W["lens"]),
     _k(1.4, (-60.0, -9450.0, 220.0), (300.0, -9000.0, 10.0), 32.0),           # the gate opens, the first riders burst out
     _k(3.0, (498.0, -8332.0, 180.0), (600.0, -8050.0, 0.0), 32.0),            # the column fans out past the old town
-    _dk(4.8, 9.9, (-520.0, -1500.0, 1150.0), (0.0, 120.0), 28.0),             # FAR SKY VIEW: the formation + its graphic
-    _dk(8.1, 13.9, (-430.0, -1380.0, 1050.0), (40.0, 140.0), 28.0),           # (titan on the right -> the arrow veers left)
+    _dk(4.8, 9.9, (-380.0, -1080.0, 820.0), (0.0, 60.0), 28.0),              # FAR SKY VIEW: the formation + its graphic
+    _dk(8.1, 13.9, (-330.0, -1000.0, 760.0), (40.0, 80.0), 28.0),            # (titan on the right -> the arrow veers left)
     _dk(9.0, 15.2, (-560.0, -130.0, 70.0), (-400.0, 50.0), 34.0),             # graphic off: the LEFT flank (the right is hidden)
     _dk(9.7, 16.9, (-530.0, -90.0, 75.0), (-360.0, 80.0), 34.0),
     _dk(24.1, 40.8, (-60.0, -560.0, 380.0), (40.0, 80.0), 30.0),               # green smoke from the command line
@@ -266,7 +266,7 @@ def _shots():
             TB.Shot("hood", *TAB["hood"], tgt(20.8, 4.0, ((ax * 2 + female_F(20.8)[0]) / 3, (ay * 2 + female_F(20.8)[1]) / 3)),
                     az=(a["hood"] - 80, a["hood"] - 55), dist=(38, 30), el=(12, 18), lens=40),
             TB.Shot("palm", *TAB["palm"], tgt(31.6, 7.0), az=(a["palm"] + 25, a["palm"] + 55), dist=(64, 50), el=(8, 13), lens=38),
-            TB.Shot("spin", *TAB["spin"], tgt(36.5, 9.0), az=(a["spin"] - 25, a["spin"] - 50), dist=(84, 66), el=(44, 50), lens=36)]
+            TB.Shot("spin", *TAB["spin"], tgt(36.5, 9.0), az=(a["spin"] - 25, a["spin"] - 50), dist=(60, 48), el=(30, 36), lens=36)]
 PLAN = [(0.0, "morning"), (14.0, "morning"), (30.0, "day"), (STORY_DUR, "day")]
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
@@ -371,13 +371,18 @@ def build(site):
 
 # ---------------------------------------------------------------- v8: formation graphic (EP17 06:21-06:25 overlay)
 def _gmat(name, rgb, strength):
+    """emission over transparent; mix factor = Value node (the fade-in, set per frame) x the mesh's 'fade' colour attribute."""
     m = bpy.data.materials.new(name); m.use_nodes = True
     N, Ln = m.node_tree.nodes, m.node_tree.links
     for n in list(N):
         if n.type != "OUTPUT_MATERIAL":
             N.remove(n)
     em = N.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (*rgb, 1); em.inputs["Strength"].default_value = strength
-    tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.0
+    tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader")
+    at = N.new("ShaderNodeAttribute"); at.attribute_name = "fade"
+    va = N.new("ShaderNodeValue"); va.outputs[0].default_value = 0.0
+    mu = N.new("ShaderNodeMath"); mu.operation = "MULTIPLY"
+    Ln.new(at.outputs["Fac"], mu.inputs[0]); Ln.new(va.outputs[0], mu.inputs[1]); Ln.new(mu.outputs[0], mx.inputs[0])
     Ln.new(tr.outputs[0], mx.inputs[1]); Ln.new(em.outputs[0], mx.inputs[2])
     Ln.new(mx.outputs[0], N.get("Material Output").inputs["Surface"])
     for attr, val in (("surface_render_method", "BLENDED"), ("blend_method", "BLEND"), ("use_shadow", False)):
@@ -385,43 +390,64 @@ def _gmat(name, rgb, strength):
             setattr(m, attr, val)
         except Exception:
             pass
-    return m, mx
+    return m, va.outputs[0]
 
 def _build_graphic(c):
-    """green translucent arrow body + the big formation circle (outer ring, inner ring, spokes) floating over the riders,
-    a red ring round the titan the formation veers away from.  Local frame: disc centre at 0, travel = +y."""
+    """v11 (cloud QA v14: match EP17 06:21-06:25): a pale glowing disc over the riders, a BIG curved green arrow (wide ribbon
+    from far behind, fading toward its tail, the arrowhead inside the disc), white rider icons in the arrowhead, red titan
+    marks on the disc rim and a big thin red circle round it all.  Local frame: disc centre 0, travel = +y."""
     import bmesh
-    mg, mxg = _gmat("F1_GraphicFill", (0.25, 0.95, 0.55), 1.6)
-    ml, mxl = _gmat("F1_GraphicLine", (0.85, 1.0, 0.85), 3.0)
-    mr, mxr = _gmat("F1_GraphicRed", (1.0, 0.12, 0.08), 3.0)
-    S["gmix"] = (mxg, mxl, mxr)
-    bm = bmesh.new()
-    def ring(r0, r1, mi, n=72):
-        vs = [(bm.verts.new((r0 * math.cos(a), r0 * math.sin(a), 0)), bm.verts.new((r1 * math.cos(a), r1 * math.sin(a), 0)))
-              for a in np.linspace(0, math.tau, n, endpoint=False)]
+    mg, vg = _gmat("F1_GraphicArrow", (0.20, 0.85, 0.50), 2.2)
+    md, vd = _gmat("F1_GraphicDisc", (0.86, 0.96, 0.86), 1.6)
+    ml, vl = _gmat("F1_GraphicIcon", (1.0, 1.0, 1.0), 4.0)
+    mr, vr = _gmat("F1_GraphicRed", (1.0, 0.10, 0.10), 4.0)
+    S["gmix"] = (vg, vd, vl, vr)
+    bm = bmesh.new(); fl = bm.loops.layers.color.new("fade")
+    def face(pts, mi, fade=(1.0,), z=0.0):
+        f = bm.faces.new([bm.verts.new((x, y, z)) for x, y in pts]); f.material_index = mi
+        for k, lp in enumerate(f.loops):
+            v = fade[k % len(fade)]; lp[fl] = (v, v, v, 1.0)
+        return f
+    def ring(r0, r1, mi, n=96, z=0.0, fade=1.0):
         for k in range(n):
-            a, b = vs[k], vs[(k + 1) % n]
-            bm.faces.new((a[0], b[0], b[1], a[1])).material_index = mi
-    ring(0.0, 430.0, 0)                                   # disc fill
-    ring(410.0, 440.0, 1); ring(240.0, 256.0, 1)          # outer + inner rings
-    for a in np.linspace(0, math.tau, 12, endpoint=False):      # spokes (the anime disc pattern)
-        ca, sa = math.cos(a), math.sin(a); w = 7.0
-        p = [(256 * ca - w * sa, 256 * sa + w * ca), (410 * ca - w * sa, 410 * sa + w * ca), (410 * ca + w * sa, 410 * sa - w * ca), (256 * ca + w * sa, 256 * sa - w * ca)]
-        bm.faces.new([bm.verts.new((x, y, 0.3)) for x, y in p]).material_index = 1
-    # arrow body behind the disc (tapering toward the tail)
-    P = [(-150, -1800), (150, -1800), (230, -300), (-230, -300)]
-    bm.faces.new([bm.verts.new((x, y, -0.3)) for x, y in P]).material_index = 0
-    ob = C.mesh_obj("F1_FormationGraphic", bm, [mg, ml], c); ob.visible_shadow = False
+            a0, a1 = k * math.tau / n, (k + 1) * math.tau / n
+            face([(r0 * math.cos(a0), r0 * math.sin(a0)), (r1 * math.cos(a0), r1 * math.sin(a0)),
+                  (r1 * math.cos(a1), r1 * math.sin(a1)), (r0 * math.cos(a1), r0 * math.sin(a1))], mi, (fade,), z)
+    for k in range(6):                                    # disc: brighter rim, soft centre
+        r0, r1 = 430.0 * k / 6, 430.0 * (k + 1) / 6
+        ring(r0, r1, 1, fade=0.45 + 0.1 * k)
+    ring(430.0, 445.0, 1, fade=1.0)
+    # the arrow: curved ribbon from 2600 m behind, widening to the head; fade 0 at the tail -> 1 at the head
+    def cx(y):
+        return 230.0 * math.sin((-y - 80.0) / 800.0) if y < -80 else 0.0
+    Y = np.linspace(-2600.0, -80.0, 40)
+    for y0, y1 in zip(Y, Y[1:]):
+        w0 = 160 + 70 * (y0 + 2600) / 2520; w1 = 160 + 70 * (y1 + 2600) / 2520
+        f0 = ((y0 + 2600) / 2520) ** 1.5; f1 = ((y1 + 2600) / 2520) ** 1.5
+        face([(cx(y0) - w0, y0), (cx(y0) + w0, y0), (cx(y1) + w1, y1), (cx(y1) - w1, y1)], 0, (f0, f0, f1, f1), z=0.6)
+    face([(-360.0, -80.0), (360.0, -80.0), (0.0, 330.0)], 0, (1.0,), z=0.6)
+    for r, row in enumerate(((0.0,), (-60.0, 60.0), (-120.0, 0.0, 120.0), (-180.0, -60.0, 60.0, 180.0))):   # rider icons
+        for x in row:
+            y = 220.0 - 75.0 * r
+            face([(x - 22, y - 20), (x, y + 22), (x + 22, y - 20), (x, y - 6)], 2, (1.0,), z=1.2)
+    for a in (0.6, 1.4, 2.3, 3.6, 4.4, 5.3):               # red titan marks on the rim
+        px, py = 500 * math.cos(a), 500 * math.sin(a)
+        for k in range(10):
+            b0, b1 = k * math.tau / 10, (k + 1) * math.tau / 10
+            face([(px + 22 * math.cos(b0), py + 22 * math.sin(b0)), (px + 34 * math.cos(b0), py + 34 * math.sin(b0)),
+                  (px + 34 * math.cos(b1), py + 34 * math.sin(b1)), (px + 22 * math.cos(b1), py + 22 * math.sin(b1))], 3, (1.0,), z=1.0)
+    ring(980.0, 996.0, 3, n=160, z=1.0)                   # the big thin red circle
+    ob = C.mesh_obj("F1_FormationGraphic", bm, [mg, md, ml, mr], c); ob.visible_shadow = False
     S["graphic"] = ob
-    bm = bmesh.new(); ring(80.0, 100.0, 0, 48)
+    bm = bmesh.new(); fl = bm.loops.layers.color.new("fade"); ring(80.0, 100.0, 0, 48)
     ob2 = C.mesh_obj("F1_TitanMark", bm, [mr], c); ob2.visible_shadow = False
     S["tmark"] = ob2
 
 def _graphic_update(t, ts):
     a = C.ss(TAB["graphic"][0], TAB["graphic"][0] + 0.6, t) * (1 - C.ss(TAB["graphic"][1] - 0.5, TAB["graphic"][1], t))
-    mxg, mxl, mxr = S["gmix"]
-    mxg.inputs[0].default_value = 0.30 * a; mxl.inputs[0].default_value = 0.85 * a
-    mxr.inputs[0].default_value = 0.9 * a * C.ss(4.6, 5.2, t)
+    vg, vd, vl, vr = S["gmix"]
+    vg.default_value = 0.85 * a; vd.default_value = 0.40 * a; vl.default_value = 0.95 * a
+    vr.default_value = 0.9 * a * C.ss(4.6, 5.2, t)
     for ob in (S["graphic"], S["tmark"]):
         C.hide(ob, a <= 0.0)
     if a <= 0.0:
