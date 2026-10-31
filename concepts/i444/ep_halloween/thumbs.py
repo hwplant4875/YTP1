@@ -15,7 +15,8 @@ GREEN = (70, 215, 95, 255); YEL = (250, 200, 40, 255); RED = (235, 30, 38, 255);
 def frame(clip, t):
     png = subprocess.check_output(['ffmpeg', '-v', 'error', '-ss', str(t), '-i', os.path.join(CLIPS, clip + '.mp4'), '-frames:v', '1',
                                    '-f', 'image2pipe', '-vcodec', 'png', '-'])
-    return Image.open(io.BytesIO(png)).convert('RGB')
+    im = Image.open(io.BytesIO(png)).convert('RGB')
+    return im if im.size == (1920, 1080) else im.resize((1920, 1080), Image.LANCZOS)   # 1440p sources -> 1920x1080 coordinates
 def grade(im, bright=1.0, contrast=1.12, sat=0.9):
     im = ImageEnhance.Brightness(im).enhance(bright); im = ImageEnhance.Contrast(im).enhance(contrast)
     return ImageEnhance.Color(im).enhance(sat)
@@ -23,6 +24,7 @@ def panel(sp, pw):
     """crop a pw x H window around the face (cx, cy in 1920x1080), face height = face_px in the output"""
     im = grade(frame(sp['clip'], sp['t']), sp.get('bright', 1.0))
     s = sp['face_px'] / sp['face_h']                      # output px per source px
+    s = max(s, H / 1080, pw / 1920)                      # never smaller than the panel (no black bars)
     big = im.resize((int(1920 * s), int(1080 * s)), Image.LANCZOS)
     cx, cy = sp['cx'] * s, sp['cy'] * s
     x0 = int(min(max(cx - pw / 2, 0), big.width - pw)); y0 = int(min(max(cy - sp.get('eye_y', 250), 0), big.height - H))
@@ -37,21 +39,13 @@ def three(specs, name):
     for k in (1, 2): gx = sum(PW[:k]); d.rectangle([gx - 3, 0, gx + 3, H], fill=(0, 0, 0, 255))
     for sp, pw in zip(specs, PW): shadow_text(im, (x + pw // 2, H - 178), sp['pct'], f(182), sp['col'], stroke=8); x += pw
     im.convert('RGB').save(os.path.join(OUT, name), quality=92); print(name)
-SLAPPY = dict(clip='gb2_dummy', t=314, cx=965, cy=330, face_h=320, face_px=290, eye_y=180, pct='98%', col=GREEN, bright=1.25)
-MICHAEL = dict(clip='h78_trailer_rt', t=1.5, cx=640, cy=420, face_h=800, face_px=560, pct='30%', col=YEL, eye_y=235)
-SAM = dict(clip='trt_wbuk_sam_hd', t=163.5, cx=720, cy=420, face_h=520, face_px=380, pct='40%', col=YEL, eye_y=200, bright=1.5)
-SWEET16 = dict(clip='tk_trailer', t=101.6, cx=820, cy=380, face_h=420, face_px=310, pct='99%', col=GREEN, eye_y=230, bright=1.5)
-ART = dict(clip='t2_trailer', t=48.2, cx=730, cy=400, face_h=480, face_px=380, pct='3%', col=RED, eye_y=250)
+# owner 10/31 13:48 (standing rule): left GREEN %, middle YELLOW %, right RED %; the three variants must look very different;
+# zoomed in, the face fills most of the panel with the eyes in the upper third, % below the face. Coordinates = 1920x1080 frame.
+def P(clip, t, cx, cy, face_h, pct, col, bright=1.15, face_px=430, eye_y=300): return dict(clip=clip, t=t, cx=cx, cy=cy, face_h=face_h, pct=pct, col=col, bright=bright, face_px=face_px, eye_y=eye_y)
 os.makedirs(OUT, exist_ok=True)
-three([SWEET16, MICHAEL, ART], 'halloween_thumb_a.jpg')   # owner 10/31: Goosebumps 2 dropped, so no Slappy
-three([dict(SAM), MICHAEL, ART], 'halloween_thumb_b.jpg')
-# C: Art alone, full frame, huge red 3% and a small orange HALLOWEEN NIGHT tag
-im = grade(frame('t1_trailer', 22.6)).resize((W, H), Image.LANCZOS).convert('RGBA')
-im = im.crop((0, 0, W, H))
-sh = Image.new('RGBA', (W, H), (0, 0, 0, 0)); v = np.linspace(0, 1, W)[None, :]
-a = (np.clip((v - 0.45) / 0.4, 0, 1) * 170).astype(np.uint8); sh.putalpha(Image.fromarray(np.repeat(a, H, 0), 'L')); im.alpha_composite(sh)
-shadow_text(im, (1010, 400), '3%', f(330), RED, stroke=10)
-d = ImageDraw.Draw(im); tw = d.textlength('HALLOWEEN NIGHT', font=f(54)) + 44
-d.rounded_rectangle([1010 - tw / 2, 560, 1010 + tw / 2, 636], 14, fill=ORANGE)
-d.text((1010, 600), 'HALLOWEEN NIGHT', font=f(54), fill=(15, 12, 12), anchor='mm')
-im.convert('RGB').save(os.path.join(OUT, 'halloween_thumb_c.jpg'), quality=92); print('halloween_thumb_c.jpg')
+three([P('tk_trailer', 101.6, 840, 360, 260, '99%', GREEN, 1.6, eye_y=230), P('h78_best_hd', 402.5, 1140, 360, 230, '30%', YEL, 1.8, face_px=340, eye_y=260),
+       P('t2_cafe_hd', 260.6, 1150, 640, 420, '3%', RED, 1.1, face_px=380, eye_y=300)], 'halloween_thumb_a.jpg')
+three([P('ss_nc_harold', 11.8, 1320, 470, 640, '50%', GREEN, 1.1, face_px=520, eye_y=260), P('trt_wbuk_sam_hd', 144.5, 600, 400, 700, '40%', YEL, 1.5, face_px=480, eye_y=260),
+       P('t2_sienna_hd', 186.5, 640, 600, 470, '3%', RED, 1.25)], 'halloween_thumb_b.jpg')
+three([P('h3_skull_hd', 120, 1080, 460, 430, '60%', GREEN, 1.5), P('hf_maze_hd', 28.5, 680, 480, 440, '45%', YEL, 1.6),
+       P('t1_meet_hd', 223.0, 600, 470, 560, '6%', RED, 1.1)], 'halloween_thumb_c.jpg')

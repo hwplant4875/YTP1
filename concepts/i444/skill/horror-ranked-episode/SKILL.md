@@ -79,7 +79,10 @@ scores, no hits. Music at -39 LUFS with a 3 kHz high-shelf -4 dB, voice -15 LUFS
    (render_v2 copy with a per-clip `bar` height; ~2.5 min per section).
 2. QA grid of one frame per shot from the render (`qa/shots.py`) + the cold open frame by frame against the word onsets; loudness check.
 3. Phone copy (1280x720 crf 28, ~27 MB) and show the owner before any upload; upload only after their OK.
-4. Thumbnails: C layout 1280x720, three panels 427/426/427, black gutters, f(182) % in tier colours (green/yellow/red), the deadliest face biggest,
-   from HD frames of the official clips. Plus a single-villain variant with a huge red %.
+4. Thumbnails (owner 10/31, standing rule): always 3 variants, each 3 panels (1280x720, 427/426/427, black gutters) with the %
+   in f(182): LEFT GREEN, MIDDLE YELLOW, RIGHT RED (by position, whatever the tier). The three variants must look very different
+   (e.g. Ghostface: A = Ghostface / character 1 / character 2, B = Ghostface 1 / Ghostface 2 / Ghostface 3). Zoomed in: the face fills
+   most of the panel, eyes in the upper third, the % below the face, brighten dark faces a little; sharp HD frames of the official clips
+   only (`ep_halloween/thumbs.py`, P(clip, t, cx, cy, face_h, pct, col, ...)).
 5. `make_srt.py` (alignment, cues <= 42 chars / 2.8 s), chapters from the section starts into `upload/upload_kit_vN.md`. Tags: short popular words.
 6. Commit scripts, md, tiles, thumbs, srt; push the branch. Report in max 3 lines per milestone.

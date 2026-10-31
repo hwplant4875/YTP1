@@ -8,10 +8,10 @@ enders\halloween_v7.mp4 | Subtitles: upload/halloween_ranked_en_v4.srt | Thumbna
 2. Could You Survive Halloween Night in These 10 Horror Movies?
 3. 10 Halloween Horror Movies Ranked From Easiest to Deadliest Night
 
-## Thumbnails (3 panels, the EP03 layout; source = HD frames from the official trailers/clips)
-A. Sweet Sixteen Killer 99% (green) / Michael Myers 30% (yellow) / Art the Clown 3% (red), Art biggest (Slappy dropped 10/31)
-B. Sam (Trick 'r Treat) 40% / Michael 30% / Art 3%
-C. Art alone, full frame, huge red "3%" and a small orange "HALLOWEEN NIGHT" tag
+## Thumbnails (left GREEN / middle YELLOW / right RED; three very different variants)
+A. Sweet Sixteen Killer 99% / Michael Myers 30% / Art the Clown (Terrifier 2) 3%
+B. Harold the scarecrow (Scary Stories) 50% / Sam (Trick 'r Treat) 40% / bloody Art (Terrifier 2) 3%
+C. Silver Shamrock skull mask (Halloween III) 60% / The Other (Hell Fest) 45% / Art (Terrifier) 6%
 
 ## Description
 Tonight is the one night a year a mask doesn't look suspicious. So which Halloween night horror movie could you actually survive? We score every killer on strength, intelligence, kill count and how supernatural they are, then rank all ten from the easiest night to the deadliest one, from Totally Killer and Trick 'r Treat to Michael Myers and Art the Clown.
