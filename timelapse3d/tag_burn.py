@@ -18,7 +18,7 @@ TITANS = {"FEMALE", "ANNIE", "AttackTitan", "ARMORED TITAN", "COLOSSAL"}
 # part 1: (tag text, tracker name, local t0, local t1) - from graphics_timelines/*_tags.json + the bible beats
 PART1 = {
     "g2": [("ARMORED TITAN", "ARMORED TITAN", 11.0, 16.8)],   # v14: +6 s prelude (segtime.G2_PRE)          # the run + impact, gone in steam at 11.1
-    # g3: v17 (FEEDBACK_v15) no name tags on the training ground
+    "g3": [],                                 # v17 (FEEDBACK_v15): NO name tags on the training ground (empty list = none; absent = tracker tags)
     "g4": [("EREN", "Eren", 16.8, 19.7)],
     "g5": [("MIKASA", "Mikasa", 33.8, 39.0), ("MIKASA", "Mikasa", 50.0, 54.0)],
     "g6": [("EREN", "Eren", 48.6, 53.0), ("MIKASA", "Mikasa", 50.6, 53.5)],
