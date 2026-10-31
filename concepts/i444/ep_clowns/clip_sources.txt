@@ -3,7 +3,7 @@
 zl_clown | OK7Hm5IztPc | Movieclips | Zombieland (8/8) Clown Zombie
 zl_clown_sony | w2BBybqXy7I | Sony Pictures Releasing UK | Zombieland clip 'Clown'
 pg_clown_20th | PUpw5rdoCUQ | 20th Century Studios | Poltergeist "Clown Attack" (2015 remake, reference only)
-pg82_clown | _arkZ2WhLp8 | (fan upload, check) | Poltergeist 1982 toy clown
+# pg82_clown dropped: 640x270 fan upload
 h1k_tiny | yd13zj2PC1g | Movieclips | House of 1000 Corpses (3/10) Tiny
 h1k_showtime | HiuPgdW3E9g | Movieclips | House of 1000 Corpses (4/10) Showtime
 h1k_murder_ride | mJV_RYgqIck | HorrorKings | House of 1000 Corpses Murder Ride
@@ -31,3 +31,6 @@ it2_mirrors | WAEp9IiU59c | Movieclips | It Chapter Two House of Mirrors (7/10)
 it2_richie | E4FGmXfavtE | Movieclips | It Chapter Two Did You Miss Me Richie (3/10)
 it2_end | QTC6eZM5d3o | Movieclips | It Chapter Two End of Pennywise (10/10)
 it2_final | dBBw86JW2I8 | ClipZone | It Chapter Two Final Fight
+pg15_clown_uk | rLp_taZ9TZI | 20th Century Studios UK | Poltergeist (2015) Clown Attack (#9 switched to 2015)
+pg15_clown_rt | Bh_GXZYnmwc | Rotten Tomatoes Coming Soon | Poltergeist (2015) Clown Attack
+dr_send_clown | VjlGwSBvL6g | Movieclips | Devil's Rejects (2/10) Send in the Clown (720p max)
