@@ -39,6 +39,9 @@ the rest of the name in white at normal size, no colour box (`ep03/anim.py` stat
 
 ## 3. Script and voice
 - Research every kill count / survival rate on the film's plot page; viewers push back on soft ratings.
+  Rate from the viewer's point of view: how likely is *you* to be a target (a killer with a narrow victim list = very high survival,
+  e.g. Totally Killer 99%; a curse you can avoid by not wearing the mask = higher; rules that are hard to keep = lower). Give the
+  reason in the script ("you could be a target too").
 - Natural flowing sentences, viral-friend tone; no choppy "X. But Y." fragments (owner: sounds AI). Every entry ends "Survival rate: N percent."
 - Listen for clipped tails: a take can end on the start of a next syllable; the renderer fades each section's voice out over its last
   0.16 s (`render_hw.py`). Transcribe the final mix around every section boundary before sending.
@@ -53,6 +56,8 @@ the rest of the name in white at normal size, no colour box (`ep03/anim.py` stat
 - **No low-quality footage, ever** (above all in the first minute): sources must be >= 1080p and sharp. Download the best stream, not the
   low-bitrate avc1 mp4: `-f "bv*[height<=1440]+ba/b" -S res,br --merge-output-format mp4` -> `<name>_hd.mp4` (render prefers `_hd`).
   Reject 480p/720p uploads and soft upscales (check `ffprobe` size + bitrate; < ~1 Mbps 1080p is soft).
+  If a film has no sharp official footage at all (e.g. an old SD trailer like Ginger Snaps), **drop the film from the ranking** rather
+  than use soft footage (owner 10/31: "bad picture quality is never OK"). Judge sharpness by eye on a 1:1 crop, not only by resolution.
 - Villain-heavy cutting: show the villain attacking with a weapon, chasing, the iconic/story beats - something must be happening on screen.
 - Age-gated clips: ask the owner to run the download with his own logged-in browser (`yt-dlp --cookies-from-browser chrome ...`);
   don't read browser cookies yourself.
