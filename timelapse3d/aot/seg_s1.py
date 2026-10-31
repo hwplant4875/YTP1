@@ -87,19 +87,20 @@ def carriage_S(k, t):
 
 # ---------------------------------------------------------------- camera (frame S, z above ground; lifted in build)
 SEAM_IN = F3.SEAM_S1
-SEAM_S2 = dict(pos=S(110.0, 190.0, 200.0), look=S(60.0, 10.0, 10.0), lens=30.0, vel=(12.0, -4.0, 0.0))
+SEAM_S2 = dict(pos=S(40.0, 530.0, 450.0), look=S(10.0, 15.0, 0.0), lens=30.0, vel=(12.0, -4.0, 0.0))   # v8: sky view
 def _k(t, p, l, lens):
     return (t, S(*p), S(*l), lens)
 CAM_KEYS = [                                                   # approach from the NE, then work from the north side
     (0.0, SEAM_IN["pos"], SEAM_IN["look"], SEAM_IN["lens"]),
     (3.2, (16500.0, 29000.0, 1800.0), (13000.0, 24500.0, 0.0), 28.0),       # SW over Wall Rose, dusk -> night
     (6.2, (14100.0, 26000.0, 1200.0), (12650.0, 24050.0, 0.0), 28.0),       # dawn: Wall Sina ahead
-    _k(9.0, (-40.0, 420.0, 380.0), (-140.0, 30.0, 0.0), 30.0),             # Stohess, morning: the avenue from the north
-    _k(11.6, (-150.0, 150.0, 160.0), (-175.0, 30.0, 0.0), 34.0),           # the carriage, the four walking
-    _k(14.2, (-140.0, 98.0, 50.0), (SL.STAIRS[0], SL.STAIRS[1] - 4, 2.0), 42.0),   # push-in: Annie at the stairs
-    _k(18.0, (-118.0, 150.0, 85.0), (-148.0, 58.0, 12.0), 34.0),           # pull back: the beam, she rises (v3: ~100 m, was 230)
-    _k(21.6, (-72.0, 100.0, 58.0), (-90.0, 32.0, 10.0), 40.0),             # Plan C from the roofs (v3: ~85 m, was 160)
-    _k(26.0, (-28.0, 85.0, 62.0), (-20.0, 18.0, 9.0), 38.0),               # the rampage down the avenue (v3: ~85 m on her)
+    # v8 (FEEDBACK_v13 §3, principle A): FAR SKY VIEW over Stohess - her light flash, the rampage down the avenue are seen from
+    # ~450 m (crude animation hidden); no underground-passage close-ups
+    _k(9.0, (-60.0, 760.0, 620.0), (-140.0, 40.0, 0.0), 30.0),
+    _k(13.0, (-80.0, 700.0, 580.0), (-150.0, 50.0, 0.0), 30.0),
+    _k(17.0, (-90.0, 650.0, 540.0), (-150.0, 55.0, 0.0), 30.0),             # the light flash in the street
+    _k(21.6, (-60.0, 600.0, 500.0), (-100.0, 40.0, 0.0), 30.0),
+    _k(26.0, (-10.0, 560.0, 470.0), (-30.0, 25.0, 0.0), 30.0),              # the rampage down the avenue
     (DUR, SEAM_S2["pos"], SEAM_S2["look"], SEAM_S2["lens"]),
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_IN["vel"], v_out=SEAM_S2["vel"])
@@ -242,4 +243,4 @@ def check():
 # v2 (QA batch1 P1): the month-passing flight over the dark plain (story 0-9) at 4x (~2.6 video s instead of 8) and the
 # Plan C / rampage tail at 1.8x; slope 1 at both seams.  Video ~19.4 s
 import segtime as _ST
-C.install_warp(globals(), _ST.slope_knots(30.0, [(0.0, 1.0, 0.0), (0.3, 4.0, 0.6), (8.0, 1.0, 0.6), (21.5, 1.8, 0.4), (29.2, 1.0, 0.4)]))
+C.install_warp(globals(), _ST.slope_knots(30.0, [(0.0, 1.0, 0.0), (0.3, 4.0, 0.6), (8.0, 1.0, 0.6), (9.5, 2.4, 0.4), (15.5, 1.0, 0.4), (21.5, 1.8, 0.4), (29.2, 1.0, 0.4)]))

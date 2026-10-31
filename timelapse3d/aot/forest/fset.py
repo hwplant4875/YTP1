@@ -87,6 +87,16 @@ def tree_proto(name, seed, c, mats):
         bmesh.ops.translate(bm, vec=(p0 + p1) / 2, verts=res["verts"])
         for f in {f for v in res["verts"] for f in v.link_faces}:
             f.material_index = 0
+    # v14 (FEEDBACK_v13 §2 forest detail): root flares spreading from the trunk foot
+    for i in range(6):
+        ang = i * math.tau / 6 + rnd.uniform(-0.3, 0.3); L = rnd.uniform(7.0, 11.0)
+        d = Vector((math.cos(ang), math.sin(ang), -0.32)).normalized()
+        res = bmesh.ops.create_cone(bm, cap_ends=True, segments=5, radius1=1.5, radius2=0.25, depth=L)
+        rot = d.to_track_quat("Z", "Y").to_matrix().to_4x4()
+        bmesh.ops.transform(bm, matrix=rot, verts=res["verts"])
+        bmesh.ops.translate(bm, vec=Vector((0, 0, 2.6)) + d * (L / 2 + 1.0), verts=res["verts"])
+        for f in {f for v in res["verts"] for f in v.link_faces}:
+            f.material_index = 0
     # canopy: flattened blobs 55-100 m (dark conifer-ish), one darker under-layer
     for i in range(9):
         z = rnd.uniform(56, 98); ang = rnd.uniform(0, math.tau); rr = rnd.uniform(0, 7.0) if i else 0.0
@@ -100,6 +110,120 @@ def tree_proto(name, seed, c, mats):
             f.material_index = 1 if i % 3 else 2
             f.smooth = True
     return proto_obj(name, bm, mats, c)
+
+def fern_proto(name, seed, c, mats):
+    """v14 undergrowth: a fern / shrub clump (~2.5 m), 9 arching fronds + a low leafy blob."""
+    rnd = random.Random(seed)
+    bm = bmesh.new()
+    for k in range(9):
+        a = k * math.tau / 9 + rnd.uniform(-0.2, 0.2); L = rnd.uniform(1.8, 3.0); w = 0.35
+        ca, sa = math.cos(a), math.sin(a)
+        p = [Vector((0, 0, 0.1)), Vector((ca * L * 0.5, sa * L * 0.5, 1.3)), Vector((ca * L, sa * L, 0.5))]
+        s = Vector((-sa * w, ca * w, 0))
+        v = [bm.verts.new(p[0]), bm.verts.new(p[1] + s), bm.verts.new(p[1] - s), bm.verts.new(p[2])]
+        f = bm.faces.new((v[0], v[1], v[3], v[2])); f.material_index = k % 2
+    res = bmesh.ops.create_cone(bm, cap_ends=False, segments=6, radius1=1.2, radius2=0.2, depth=1.4)
+    for v in res["verts"]:
+        v.co.z += 0.6
+    for f in {f for v in res["verts"] for f in v.link_faces}:
+        f.material_index = 1
+    return proto_obj(name, bm, mats, c)
+
+def bark_texture(m):
+    """v14: vertical bark furrows (stretched noise) + lichen patches on the trunk material, with bump."""
+    if m is None or not m.use_nodes or m.get("v14_bark"):
+        return
+    nt = m.node_tree; N, Ln = nt.nodes, nt.links
+    b = N.get("Principled BSDF")
+    tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (1.6, 1.6, 0.12)
+    Ln.new(tc.outputs["Object"], mp.inputs["Vector"])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 1.4; nz.inputs["Detail"].default_value = 8
+    Ln.new(mp.outputs["Vector"], nz.inputs["Vector"])
+    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].position = 0.38; cr.color_ramp.elements[1].position = 0.62
+    cr.color_ramp.elements[0].color = (0.07, 0.045, 0.03, 1); cr.color_ramp.elements[1].color = (0.30, 0.20, 0.13, 1)
+    Ln.new(nz.outputs["Fac"], cr.inputs["Fac"])
+    lz = N.new("ShaderNodeTexNoise"); lz.inputs["Scale"].default_value = 0.08
+    Ln.new(tc.outputs["Object"], lz.inputs["Vector"])
+    mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.inputs["B"].default_value = (0.20, 0.24, 0.12, 1)
+    lr = N.new("ShaderNodeMapRange"); lr.inputs["From Min"].default_value = 0.55; lr.inputs["From Max"].default_value = 0.75
+    lr.inputs["To Max"].default_value = 0.6
+    Ln.new(lz.outputs["Fac"], lr.inputs["Value"]); Ln.new(lr.outputs["Result"], mx.inputs["Factor"])
+    Ln.new(cr.outputs["Color"], mx.inputs["A"]); Ln.new(mx.outputs["Result"], b.inputs["Base Color"])
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.6
+    Ln.new(nz.outputs["Fac"], bp.inputs["Height"]); Ln.new(bp.outputs["Normal"], b.inputs["Normal"])
+    m["v14_bark"] = 1
+
+def light_shafts(c, spots):
+    """v14: soft sun shafts slanting down through canopy gaps (additive, no shadows) at the tableau spots (F xy)."""
+    sh = bpy.data.materials.get("F_Shaft")
+    if sh is None:
+        sh = bpy.data.materials.new("F_Shaft"); sh.use_nodes = True
+        N, Ln = sh.node_tree.nodes, sh.node_tree.links
+        for n in list(N):
+            if n.type != "OUTPUT_MATERIAL":
+                N.remove(n)
+        em = N.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (1.0, 0.92, 0.70, 1); em.inputs["Strength"].default_value = 0.06
+        tr = N.new("ShaderNodeBsdfTransparent"); ad = N.new("ShaderNodeAddShader")
+        Ln.new(em.outputs[0], ad.inputs[0]); Ln.new(tr.outputs[0], ad.inputs[1])
+        Ln.new(ad.outputs[0], N.get("Material Output").inputs["Surface"])
+        for attr, val in (("surface_render_method", "BLENDED"), ("blend_method", "BLEND"), ("use_shadow", False)):
+            try:
+                setattr(sh, attr, val)
+            except Exception:
+                pass
+    rnd = random.Random(404)
+    bm = bmesh.new()
+    sun = Vector((0.35, 0.25, 1.0)).normalized()
+    for fx, fy in spots:
+        for k in range(5):
+            x, y = fx + rnd.uniform(-45, 45), fy + rnd.uniform(-45, 45)
+            w = C.F(x, y); z0 = C.G(w[0], w[1])
+            L = 62.0; r = rnd.uniform(1.5, 3.0)
+            res = bmesh.ops.create_cone(bm, cap_ends=False, segments=8, radius1=r, radius2=r * 1.8, depth=L)
+            rot = sun.to_track_quat("Z", "Y").to_matrix().to_4x4()
+            bmesh.ops.transform(bm, matrix=rot, verts=res["verts"])
+            bmesh.ops.translate(bm, vec=Vector((w[0], w[1], z0)) + sun * (L / 2), verts=res["verts"])
+    ob = C.mesh_obj("F_LightShafts", bm, [sh], c)
+    ob.visible_shadow = False
+    return ob
+
+def forest_floor_blend():
+    """v14 (FEEDBACK_v13 §2: the forest floor patch read as an artificial rectangle): no separate floor mesh; the terrain
+    material itself turns to dark moss/litter inside the forest with a noisy 150 m soft edge."""
+    m = bpy.data.materials.get("WD_Ground")
+    if m is None or not m.use_nodes:
+        return
+    nt = m.node_tree; N, Ln = nt.nodes, nt.links
+    b = next((n for n in N if n.type == "BSDF_PRINCIPLED"), None)
+    if b is None or not b.inputs["Base Color"].links:
+        return
+    src = b.inputs["Base Color"].links[0].from_socket
+    x0, y0, _ = C.F(FOREST_X[0], FOREST_Y[0]); x1, y1, _ = C.F(FOREST_X[1], FOREST_Y[1])
+    geo = N.new("ShaderNodeNewGeometry"); sp = N.new("ShaderNodeSeparateXYZ"); Ln.new(geo.outputs["Position"], sp.inputs[0])
+    def op(o, a, bb):
+        n = N.new("ShaderNodeMath"); n.operation = o
+        for i, v in enumerate((a, bb)):
+            if isinstance(v, (int, float)):
+                n.inputs[i].default_value = v
+            else:
+                Ln.new(v, n.inputs[i])
+        return n.outputs[0]
+    e = op("MINIMUM", op("MINIMUM", op("SUBTRACT", sp.outputs[0], x0), op("SUBTRACT", x1, sp.outputs[0])),
+           op("MINIMUM", op("SUBTRACT", sp.outputs[1], y0), op("SUBTRACT", y1, sp.outputs[1])))
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 1 / 160.0; nz.inputs["Detail"].default_value = 4
+    Ln.new(geo.outputs["Position"], nz.inputs["Vector"])
+    e = op("ADD", e, op("MULTIPLY", op("SUBTRACT", nz.outputs["Fac"], 0.5), 220.0))
+    mask = N.new("ShaderNodeMapRange"); mask.inputs["From Min"].default_value = -20.0; mask.inputs["From Max"].default_value = 150.0
+    Ln.new(e, mask.inputs["Value"])
+    lit = N.new("ShaderNodeTexNoise"); lit.inputs["Scale"].default_value = 1 / 9.0; lit.inputs["Detail"].default_value = 6
+    Ln.new(geo.outputs["Position"], lit.inputs["Vector"])
+    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.055, 0.050, 0.026, 1)
+    cr.color_ramp.elements[1].color = (0.13, 0.12, 0.05, 1)
+    Ln.new(lit.outputs["Fac"], cr.inputs["Fac"])
+    mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"
+    Ln.new(mask.outputs["Result"], mx.inputs["Factor"]); Ln.new(src, mx.inputs["A"]); Ln.new(cr.outputs["Color"], mx.inputs["B"])
+    Ln.new(mx.outputs["Result"], b.inputs["Base Color"])
+    print("[forest] v14 floor blend in WD_Ground", flush=True)
 
 SHAM_TRUNK = (255.0, 1530.0)              # = seg_f3.SHAM_F
 def _low_cam_F():
@@ -159,29 +283,31 @@ def build_forest(c):
         keep[-2:] = True
         pts = [tuple(p) for p, k in zip(P, keep) if k]
     groups = [[] for _ in protos]
+    bark_texture(bark)
     for i, (px, py) in enumerate(pts):
         w = C.F(px, py)
-        s = rnd.uniform(0.82, 1.12)
+        q = rnd.random()                   # v14: varied trunk sizes (young / mature / ancient giants)
+        s = rnd.uniform(0.50, 0.72) if q < 0.15 else (rnd.uniform(1.12, 1.40) if q > 0.80 else rnd.uniform(0.80, 1.10))
         groups[i % len(protos)].append(((w[0], w[1], C.G(w[0], w[1]) - 0.5), (s, s, s * rnd.uniform(0.9, 1.1)), rnd.uniform(0, math.tau)))
     for k, g in enumerate(groups):
         if g:
             scatter(f"F_Forest{k}", [a for a, _, _ in g], [b for _, b, _ in g], [r for _, _, r in g], protos[k], c)
     STATE["trees"] = pts
     print(f"[forest] {len(pts)} giant trees", flush=True)
-    # forest floor: dark mossy carpet over the forest footprint (+ the clearings stay lighter)
-    floor = C.mat("F_Floor", (0.075, 0.07, 0.035), 0.95)
-    bm = bmesh.new(); cell = 25.0
-    nx = int((FOREST_X[1] - FOREST_X[0] + 200) / cell); ny = int((FOREST_Y[1] - FOREST_Y[0] + 200) / cell)
-    V = {}
-    def vert(i, j):
-        if (i, j) not in V:
-            fx, fy = FOREST_X[0] - 100 + i * cell, FOREST_Y[0] - 100 + j * cell
-            w = C.F(fx, fy); V[(i, j)] = bm.verts.new((w[0], w[1], C.G(w[0], w[1]) + 0.25))
-        return V[(i, j)]
-    for i in range(nx):
-        for j in range(ny):
-            bm.faces.new((vert(i, j), vert(i + 1, j), vert(i + 1, j + 1), vert(i, j + 1)))
-    C.mesh_obj("F_ForestFloor", bm, [floor], c)
+    # forest floor: v14 = the terrain material blends to moss/litter (forest_floor_blend), no separate floor rectangle;
+    # undergrowth: fern / shrub clumps between the trunks (not on the road, not in the clearings)
+    forest_floor_blend()
+    fern = fern_proto("F_Fern", 77, c, [C.mat("F_Fern", (0.05, 0.10, 0.03), 0.8), C.mat("F_Fern2", (0.08, 0.12, 0.04), 0.85)])
+    FP, FS, FR = [], [], []
+    nf = int(os.environ.get("F_FERNS", "26000"))
+    while len(FP) < nf:
+        px, py = rnd.uniform(*FOREST_X), rnd.uniform(*FOREST_Y)
+        if road_dist_F(px, py) < 7.0 or any(math.hypot(px - cx, py - cy) < r - 4 for (cx, cy), r in CLEAR):
+            continue
+        w = C.F(px, py); s = rnd.uniform(0.7, 1.6)
+        FP.append((w[0], w[1], C.G(w[0], w[1]) - 0.1)); FS.append((s, s, s * rnd.uniform(0.7, 1.2))); FR.append(rnd.uniform(0, math.tau))
+    scatter("F_Undergrowth", FP, FS, FR, fern, c)
+    light_shafts(c, [TRAP_F, SWAMP_F, KICK_F, RESCUE_F, (0.0, 400.0), (-60.0, 1400.0), SHAM_TRUNK])
     # fallen logs
     logm = C.mat("F_Log", (0.17, 0.10, 0.06), 0.9)
     bm = bmesh.new()
@@ -258,7 +384,7 @@ def build_road(c):
             lst.append(bm.verts.new((w[0], w[1], C.G(w[0], w[1]) + 0.4)))
     for i in range(len(dense) - 1):
         bm.faces.new((left[i], right[i], right[i + 1], left[i + 1]))
-    C.mesh_obj("F_Road", bm, [C.mat("F_Dirt", (0.30, 0.24, 0.15), 0.95)], c)
+    C.mesh_obj("F_Road", bm, [C.mat("F_Dirt", (0.20, 0.16, 0.10), 0.95)], c)
 
 # ---------------------------------------------------------------- towns (scene.py house_mesh variants)
 def house_variants(M, c, n=12, seed=5, ruined=False):

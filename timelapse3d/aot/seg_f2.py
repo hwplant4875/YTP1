@@ -127,20 +127,38 @@ def _chase_key(t, side):
     return (t, F(px, py, 44.0), F(q[0], q[1], 8.0), 30.0)
 TX, TY = LY.TRAP_F
 SEAM_F3 = dict(pos=F(-120.0, 690.0, 240.0), look=F(0.0, 960.0, 40.0), lens=30.0, vel=(0.0, 4.0, 6.0))
+# v8 (FEEDBACK_v13 §2): video clock with FROZEN tableaux (flat knots): sprint (riders + the Female at full sprint), the
+# pinned Female (hands over the nape), then NO scream animation: the camera rises to the sky and the titans swarm in
+STORY_DUR = 36.0
+TMAP = [(0.0, 0.0), (1.7, 1.7), (2.2, 8.0), (4.4, 8.0), (5.0, 19.0), (7.4, 19.0), (8.0, 26.0), (11.5, 34.5), (12.5, 36.0)]
+DUR = TMAP[-1][0]
+TAB = dict(sprint=(2.2, 4.4), trap=(5.0, 7.4))
+def story(t):
+    return float(np.interp(t, [k[0] for k in TMAP], [k[1] for k in TMAP]))
+def _shots(lift=False):
+    from forest import tableau as TB
+    lx, ly, _ = squad_F(1, 8.0); fx, fy, yaw = fem_F(8.0)
+    front = math.degrees(yaw) + 90.0
+    sh = [TB.Shot("sprint", *TAB["sprint"], F((lx + 2 * fx) / 3, (ly + 2 * fy) / 3, 7.0), az=(front + 55, front + 30), dist=(64, 50),
+                  el=(7, 11), lens=32),
+          TB.Shot("trap", *TAB["trap"], F(TX, TY, 9.0), az=(205, 240), dist=(60, 48), el=(16, 22), lens=40)]
+    if lift:
+        for s_ in sh:
+            x, y, z = s_.target; s_.target = (x, y, z + C.G(x, y))
+    return sh
 CAM_KEYS = [
     (0.0, F(*SEAM_IN["pos"]), F(*SEAM_IN["look"]), SEAM_IN["lens"]),
-    _side_key(1.7, 70.0, 70.0), _chase_key(3.4, 1), _chase_key(5.5, -1), _chase_key(8.0, 1), _chase_key(10.5, -1), _chase_key(12.6, 1),
-    (14.0, F(TX + 55, TY - 70, 42.0), F(TX, TY - 10, 10.0), 32.0),      # the riders pass the racks; she leaps
-    (15.2, F(TX + 40, TY - 45, 30.0), F(TX, TY, 10.0), 36.0),           # push-in on the volley
-    (18.5, F(TX - 45, TY - 50, 46.0), F(TX, TY, 9.0), 43.0),            # orbit: pinned, hands over the nape (r6: zoom 32 -> 43)
-    (22.0, F(TX - 55, TY + 25, 52.0), F(TX, TY, 13.0), 41.0),           # Levi on her head, fingers hardened (r6: 41 mm)
-    (25.0, F(TX - 30, TY - 40, 120.0), F(TX, TY + 10, 40.0), 28.0),     # up to the canopy gap: blue / green smoke
-    (26.8, F(TX - 22, TY + 28, 20.0), F(TX, TY, 15.5), 38.0),           # push-in: the SCREAM
-    (31.0, F(TX - 40, TY - 140, 150.0), F(TX, TY, 0.0), 28.0),          # pull up: titans converge
+    _side_key(1.7, 70.0, 70.0),
+    (7.9, F(TX - 30, TY - 60, 110.0), F(TX, TY, 5.0), 28.0),            # up out of the clearing
+    (9.8, F(TX - 30, TY - 55, 200.0), F(TX, TY, 0.0), 30.0),           # sky: the titans swarm into the clearing (looking down into the gap)
     (DUR, SEAM_F3["pos"], SEAM_F3["look"], SEAM_F3["lens"]),
 ]
-CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_IN["vel"], v_out=SEAM_F3["vel"])
-CAM_LIMITS = dict(speed=600.0, yaw=90.0, hmin=12.0, hmax=300.0, pitch=(0.0, 85.0), lens=(27.0, 44.0))
+def _cam(lift):
+    from forest import tableau as TB
+    keys = C.lift_keys(CAM_KEYS) if lift else CAM_KEYS
+    return TB.make_cam(keys + _shots(lift), v_in=SEAM_IN["vel"], v_out=SEAM_F3["vel"])
+CAM = _cam(False)
+CAM_LIMITS = dict(speed=1500.0, yaw=300.0, hmin=8.0, hmax=320.0, pitch=(0.0, 85.0), lens=(27.0, 44.0))
 PLAN = [(0.0, "day"), (20.0, "day"), (DUR, "afternoon")]
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
@@ -149,7 +167,7 @@ S = {}
 # ---------------------------------------------------------------- build
 def build(site):
     global CAM
-    CAM = camchan.CamPath(C.lift_keys(CAM_KEYS), v_in=SEAM_IN["vel"], v_out=SEAM_F3["vel"])      # z above ground -> absolute
+    CAM = _cam(True)                                                                              # z above ground -> absolute
     from forest import fset
     import flares
     flares.COLORS.setdefault("blue", ((0.05, 0.16, 0.75), (0.35, 0.55, 1.0)))
@@ -214,12 +232,15 @@ def build(site):
         te.append(T_VOLLEY + 0.4 + 0.02 * k); pos.append(_W(TX + random.uniform(-8, 8), TY + random.uniform(-8, 8), 1.0)); vel.append((0, 0, 2.0))
     dust.add_many(te, pos, vel, r0=2.5, r1=8.0, life=2.0, rise=1.0, alpha=0.5)
     dust.build(c); S["dust"] = dust
-    TRACK.update(LEVI=lambda t: _W(*squad_F(0, t)[:2], 4.0) if t < 12.0 else None,
-                 EREN=lambda t: _W(*squad_F(1, t)[:2], 4.0) if t < 12.0 else None)
+    TRACK.update(LEVI=lambda t: _W(*squad_F(0, story(t))[:2], 4.0) if story(t) < 12.0 else None,
+                 EREN=lambda t: _W(*squad_F(1, story(t))[:2], 4.0) if story(t) < 12.0 else None)
 
 # ---------------------------------------------------------------- per frame
 def fem_pose(t):
+    from forest import tableau as TB
     run = C.fem_run(2 * math.pi * 2.8 * t, lean=30.0)
+    if abs(t - 8.0) < 1e-6:                                       # v8 frozen tableau: full sprint
+        return TB.POSE_F["sprint"], 0.0, 0.0
     if t < BEATS["leap"] - 0.3:
         P = run
         for ts in BEATS["swats"]:
@@ -234,16 +255,17 @@ def fem_pose(t):
         air = 7.0 * math.sin(math.pi * C.ss(BEATS["leap"], tv + 0.5, t))
         return P, 0.0, air
     if t < BEATS["scream"]:                                       # pinned standing, hands to the nape (guard -> nape)
-        P = C.fpose_blend(C.FPOSE["guard"], C.FPOSE["nape"], C.ss(tv + 0.5, BEATS["nape"], t))
-        P = {k: (v[0] + 2.0 * math.sin(t * 7 + len(k)), v[1], v[2]) for k, v in P.items()}   # straining against the wires
+        P = C.fpose_blend(C.FPOSE["guard"], TB.POSE_F["nape"], C.ss(tv + 0.5, BEATS["nape"], t))
         return P, 0.0, 0.0
-    u = C.ss(BEATS["scream"], BEATS["scream"] + 0.5, t)
-    P = C.fpose_blend(C.FPOSE["nape"], C.FPOSE["scream"], u * (1 - C.ss(30.5, 31.5, t)))
+    P = TB.POSE_F["nape"]                                         # v8: no scream animation (hidden by the sky pull-out)
     sink = C.ss(BEATS["eat"][0], BEATS["eat"][1], t)              # the titans drag her down
     P = C.fpose_blend(P, C.FPOSE["kneel"], sink)
     return P, C.FZ["kneel"] * sink, 0.0
 
 def update(t):
+    _update(story(t))
+
+def _update(t):
     B, P, TT = S["B"], S["P"], S["TT"]
     cam = bpy.context.scene.camera
     # autopilot 10/28 (see seg_f3): canopy-grazing views can exceed the GPU driver timeout -> far clip 900 m in the forest
@@ -334,7 +356,7 @@ def update(t):
     S["fs"].update(t, wind=(1.0, 0.5)); S["steam"].update(t, wind=(0.6, 0.3)); S["dust"].update(t, wind=(0.8, 0.4))
 
 def light(t):
-    LIGHT.apply(t)
+    LIGHT.apply(story(t))
 
 def check():
     print(f"[f2] S_ENTRY {S_ENTRY:.0f} S_TRAP {S_TRAP:.0f} S0 {S0:.0f}  lead passes the trap at {T_PASS:.2f}, volley {T_VOLLEY:.2f}")

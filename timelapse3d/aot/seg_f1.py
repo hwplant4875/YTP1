@@ -28,13 +28,21 @@ except ImportError:
     bpy = None
 
 STORY_DUR = 48.0          # the choreography below runs on STORY time (bible beats f1-f6)
-DUR = 26.0                # v2 (QA batch1 P0: 48 s too long): video time, remapped onto story time by story(t)
-TMAP = [(0.0, 0.0), (3.0, 8.0), (5.5, 14.0), (8.0, 19.4), (11.2, 22.6), (12.6, 26.0), (14.4, 29.0), (16.6, 31.4),
-        (17.8, 34.0), (19.8, 40.0), (26.0, 48.0)]
+DUR = 28.0                # v8 (FEEDBACK_v13 §2): video time, remapped onto story time by story(t); FLAT knots = frozen tableaux
+# v8: formation graphic (EP17 06:21-06:25) from a far sky view 3.0-8.5, left flank 8.5-9.6, fast pan right, then FROZEN
+# tableaux (forest.tableau): ram + wire yank (EP17 10:13), hood, palm (EP17 21:38), fire-can spin (EP18 10:59)
+TMAP = [(0.0, 0.0), (3.0, 8.0), (8.5, 14.0), (10.2, 18.0), (12.6, 18.0), (13.0, 20.8), (15.2, 20.8), (15.6, 31.6),
+        (17.8, 31.6), (18.6, 36.5), (21.8, 36.5), (28.0, 48.0)]
+TAB = dict(graphic=(3.4, 8.3), ram=(10.2, 12.6), hood=(13.0, 15.2), palm=(15.6, 17.8), spin=(18.6, 21.8))
+TAB_STORY = dict(ram=18.0, hood=20.8, palm=31.6, spin=36.5)
+TAB_POSE = dict(ram="ram", hood="hood", palm="palm", spin="swing")
 def story(t):
     return float(np.interp(t, [k[0] for k in TMAP], [k[1] for k in TMAP]))
-def video(ts):
-    return float(np.interp(ts, [k[1] for k in TMAP], [k[0] for k in TMAP]))
+def video(ts):          # first video time at story ts (frozen knots: the start of the hold)
+    for (v0, s0), (v1, s1) in zip(TMAP, TMAP[1:]):
+        if s0 <= ts <= s1 and s1 > s0:
+            return v0 + (v1 - v0) * (ts - s0) / (s1 - s0)
+    return TMAP[-1][0]
 BEATS = dict(gate=(0.5, 2.0), out=1.2, support_kill=(6.6, 7.4), dome=(7.5, 13.0), red=(12.0, 13.2), female_in=14.0,
              wipe=(16.8, 19.8), hood=(20.0, 22.0), chase=(26.0, 34.0), grab=(29.0, 30.6), free=30.6, purple=27.0,
              village=(34.0, 40.0), green=40.5, rush=(40.0, 48.0))
@@ -226,27 +234,39 @@ def _armin_spot():
     return hx - 9.0 * math.sin(fy), hy + 9.0 * math.cos(fy)
 def _v(ts, key):
     return (video(ts),) + tuple(key[1:])
-CAM_KEYS = [   # v2 (QA batch1 P0): video-time keys; 200-350 m oblique on the formation instead of the 950 m overhead
+def _dk(t, ts, d, l, lens):
+    x, y = dc(ts)
+    return _k(t, (x + d[0], y + d[1], d[2]), (x + l[0], y + l[1], 0.0), lens)
+CAM_KEYS = [   # v8 (FEEDBACK_v13 §2): video-time fly keys (z above ground); the frozen tableau shots are added in build()
     (0.0, SEAM_F1_W["pos"], SEAM_F1_W["look"], SEAM_F1_W["lens"]),
     _k(1.4, (-60.0, -9450.0, 220.0), (300.0, -9000.0, 10.0), 32.0),           # the gate opens, the first riders burst out
-    _k(3.0, (498.0, -8332.0, 180.0), (600.0, -8050.0, 0.0), 32.0),            # the column fans out past the old town (r3: 40 % closer)
-    _k(5.5, (380.0, -6056.0, 198.0), (650.0, -5720.0, 0.0), 32.0),            # the dome's right wing, red smoke relays (r3: closer)
-    # v3 (autopilot 10/28, f1 v2 still "riders / Female tiny"): 3-4x closer (60-200 m) so the 14 m Female fills 10-25 % of
-    # the frame and the riders read; the formation's smoke columns stay in the background
-    _v(17.2, _rel(0, 17.2, (-150.0, -120.0, 75.0), 36.0)),                     # she comes in from the RIGHT flank
-    _v(19.4, _rel(0, 19.4, (-95.0, -80.0, 48.0), 38.0)),                       # the wipe
-    _v(21.2, _rel(0, 0, (-38.0, -42.0, 20.0), 42.0, 5.0, _armin_spot())),      # push-in: Armin's hood
-    _v(23.6, _rel(0, 23.6, (-95.0, -115.0, 55.0), 36.0)),
-    _v(27.5, _rel(0, 27.5, (-85.0, -105.0, 50.0), 36.0)),                      # the chase
-    _v(30.0, _rel(0, 30.0, (-42.0, -58.0, 28.0), 44.0, 12.0)),                 # slight zoom: REINER in her fist
-    _v(32.5, _rel(0, 32.5, (-95.0, -125.0, 70.0), 34.0)),
-    _v(37.6, _rel(0, 0, (-120.0, -150.0, 110.0), 32.0, 0.0, (650.0, -4880.0))),   # the windmill village
-    _v(40.8, _rel(0, 40.8, (-60.0, -260.0, 330.0), 30.0, 25.0)),               # green smoke from the command line
-    _k(23.0, (350.0, -3250.0, 480.0), (160.0, -1300.0, 40.0), 28.0),          # crane forward: the forest wall
+    _k(3.0, (498.0, -8332.0, 180.0), (600.0, -8050.0, 0.0), 32.0),            # the column fans out past the old town
+    _dk(4.8, 9.9, (-520.0, -1500.0, 1150.0), (0.0, 120.0), 28.0),             # FAR SKY VIEW: the formation + its graphic
+    _dk(8.1, 13.9, (-430.0, -1380.0, 1050.0), (40.0, 140.0), 28.0),           # (titan on the right -> the arrow veers left)
+    _dk(9.0, 15.2, (-560.0, -130.0, 70.0), (-400.0, 50.0), 34.0),             # graphic off: the LEFT flank (the right is hidden)
+    _dk(9.7, 16.9, (-530.0, -90.0, 75.0), (-360.0, 80.0), 34.0),
+    _dk(24.1, 40.8, (-60.0, -560.0, 380.0), (40.0, 80.0), 30.0),               # green smoke from the command line
+    _k(26.3, (350.0, -3250.0, 480.0), (160.0, -1300.0, 40.0), 28.0),          # crane forward: the forest wall
     _k(DUR, SEAM_F2["pos"], SEAM_F2["look"], SEAM_F2["lens"]),
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_F1_W["vel"], v_out=SEAM_F2["vel"])
-CAM_LIMITS = dict(speed=1600.0, yaw=60.0, hmin=15.0, hmax=1100.0, pitch=(5.0, 90.0), lens=(23.0, 46.0))
+CAM_LIMITS = dict(speed=4000.0, yaw=400.0, hmin=8.0, hmax=1400.0, pitch=(3.0, 90.0), lens=(23.0, 46.0))
+
+def _front_az(ts):
+    return math.degrees(female_state(ts)[2]) + 90.0
+
+def _shots():
+    from forest import tableau as TB
+    def tgt(ts, dz, look=None):
+        x, y = look if look is not None else female_F(ts)
+        return _W(x, y, dz)
+    a = {k: _front_az(v) for k, v in TAB_STORY.items()}
+    ax, ay = _armin_spot()
+    return [TB.Shot("ram", *TAB["ram"], tgt(18.0, 8.0), az=(a["ram"] + 45, a["ram"] + 15), dist=(62, 48), el=(9, 15), lens=38),
+            TB.Shot("hood", *TAB["hood"], tgt(20.8, 4.0, ((ax * 2 + female_F(20.8)[0]) / 3, (ay * 2 + female_F(20.8)[1]) / 3)),
+                    az=(a["hood"] - 80, a["hood"] - 55), dist=(38, 30), el=(12, 18), lens=40),
+            TB.Shot("palm", *TAB["palm"], tgt(31.6, 7.0), az=(a["palm"] + 25, a["palm"] + 55), dist=(64, 50), el=(8, 13), lens=38),
+            TB.Shot("spin", *TAB["spin"], tgt(36.5, 9.0), az=(a["spin"] - 25, a["spin"] - 50), dist=(72, 56), el=(26, 32), lens=36)]
 PLAN = [(0.0, "morning"), (14.0, "morning"), (30.0, "day"), (STORY_DUR, "day")]
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
@@ -259,7 +279,9 @@ def _W(fx, fy, dz=0.0):
 # ---------------------------------------------------------------- build
 def build(site):
     global CAM
-    CAM = camchan.CamPath(C.lift_keys(CAM_KEYS), v_in=SEAM_F1_W["vel"], v_out=SEAM_F2["vel"])      # z above ground -> absolute
+    from forest import tableau as TB
+    S["shots"] = _shots()
+    CAM = TB.make_cam(C.lift_keys(CAM_KEYS) + S["shots"], v_in=SEAM_F1_W["vel"], v_out=SEAM_F2["vel"])   # z above ground -> absolute
     from forest import fset
     import flares
     S["fset"] = fset
@@ -344,6 +366,154 @@ def build(site):
         return _W(*female_F(ts), 16.0)
     TRACK.update(FEMALE=fem_trk, ARMIN=lambda t: _trk("armin", story(t), 20.0),
                  JEAN=lambda t: _trk("jean", story(t)), REINER=lambda t: _trk("reiner", story(t)))
+    _build_graphic(c)
+    _build_tableaux(c)
+
+# ---------------------------------------------------------------- v8: formation graphic (EP17 06:21-06:25 overlay)
+def _gmat(name, rgb, strength):
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N, Ln = m.node_tree.nodes, m.node_tree.links
+    for n in list(N):
+        if n.type != "OUTPUT_MATERIAL":
+            N.remove(n)
+    em = N.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (*rgb, 1); em.inputs["Strength"].default_value = strength
+    tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.0
+    Ln.new(tr.outputs[0], mx.inputs[1]); Ln.new(em.outputs[0], mx.inputs[2])
+    Ln.new(mx.outputs[0], N.get("Material Output").inputs["Surface"])
+    for attr, val in (("surface_render_method", "BLENDED"), ("blend_method", "BLEND"), ("use_shadow", False)):
+        try:
+            setattr(m, attr, val)
+        except Exception:
+            pass
+    return m, mx
+
+def _build_graphic(c):
+    """green translucent arrow body + the big formation circle (outer ring, inner ring, spokes) floating over the riders,
+    a red ring round the titan the formation veers away from.  Local frame: disc centre at 0, travel = +y."""
+    import bmesh
+    mg, mxg = _gmat("F1_GraphicFill", (0.25, 0.95, 0.55), 1.6)
+    ml, mxl = _gmat("F1_GraphicLine", (0.85, 1.0, 0.85), 3.0)
+    mr, mxr = _gmat("F1_GraphicRed", (1.0, 0.12, 0.08), 3.0)
+    S["gmix"] = (mxg, mxl, mxr)
+    bm = bmesh.new()
+    def ring(r0, r1, mi, n=72):
+        vs = [(bm.verts.new((r0 * math.cos(a), r0 * math.sin(a), 0)), bm.verts.new((r1 * math.cos(a), r1 * math.sin(a), 0)))
+              for a in np.linspace(0, math.tau, n, endpoint=False)]
+        for k in range(n):
+            a, b = vs[k], vs[(k + 1) % n]
+            bm.faces.new((a[0], b[0], b[1], a[1])).material_index = mi
+    ring(0.0, 430.0, 0)                                   # disc fill
+    ring(410.0, 440.0, 1); ring(240.0, 256.0, 1)          # outer + inner rings
+    for a in np.linspace(0, math.tau, 12, endpoint=False):      # spokes (the anime disc pattern)
+        ca, sa = math.cos(a), math.sin(a); w = 7.0
+        p = [(256 * ca - w * sa, 256 * sa + w * ca), (410 * ca - w * sa, 410 * sa + w * ca), (410 * ca + w * sa, 410 * sa - w * ca), (256 * ca + w * sa, 256 * sa - w * ca)]
+        bm.faces.new([bm.verts.new((x, y, 0.3)) for x, y in p]).material_index = 1
+    # arrow body behind the disc (tapering toward the tail)
+    P = [(-150, -1800), (150, -1800), (230, -300), (-230, -300)]
+    bm.faces.new([bm.verts.new((x, y, -0.3)) for x, y in P]).material_index = 0
+    ob = C.mesh_obj("F1_FormationGraphic", bm, [mg, ml], c); ob.visible_shadow = False
+    S["graphic"] = ob
+    bm = bmesh.new(); ring(80.0, 100.0, 0, 48)
+    ob2 = C.mesh_obj("F1_TitanMark", bm, [mr], c); ob2.visible_shadow = False
+    S["tmark"] = ob2
+
+def _graphic_update(t, ts):
+    a = C.ss(TAB["graphic"][0], TAB["graphic"][0] + 0.6, t) * (1 - C.ss(TAB["graphic"][1] - 0.5, TAB["graphic"][1], t))
+    mxg, mxl, mxr = S["gmix"]
+    mxg.inputs[0].default_value = 0.30 * a; mxl.inputs[0].default_value = 0.85 * a
+    mxr.inputs[0].default_value = 0.9 * a * C.ss(4.6, 5.2, t)
+    for ob in (S["graphic"], S["tmark"]):
+        C.hide(ob, a <= 0.0)
+    if a <= 0.0:
+        return
+    x, y = dc(ts); x2, y2 = dc(ts + 0.6)
+    w = F(x, y)
+    zt = max(C.G(w[0] + dx, w[1] + dy) for dx in (-400, 0, 400) for dy in (-400, 0, 400)) + 30.0
+    S["graphic"].location = (w[0], w[1], zt)
+    S["graphic"].rotation_euler = (0, 0, C.yaw_of(x2 - x, y2 - y + 1e-6))
+    tx, ty = titan_F(1, ts); wt = F(tx, ty)
+    S["tmark"].location = (wt[0], wt[1], C.G(wt[0], wt[1]) + 2.0)
+
+# ---------------------------------------------------------------- v8: frozen tableaux (forest.tableau)
+def _build_tableaux(c):
+    B = C.Batch("F1_TScouts", C.RIDER_MATS)
+    for k in range(6):
+        C.person_geo(B.g, B.new(pivot=0.9))
+    for k in range(2):
+        C.rider_geo(B.g, B.new(pivot=1.2), rider=False)
+    B.build(c); S["TS"] = B
+    B.vis[:] = 0.0; B.push()
+    S["twires"] = C.Wires("F1_TWires", 2, C.mat("F1_Wire", (0.08, 0.08, 0.09), 0.5), c, r=0.18)
+    # smoke curling off her palm (EP17 21:38): puffs emitted just before the frozen story time -> frozen mid-curl
+    import flares
+    sm = flares.PuffField("F1_PalmSmoke", kind="steam", alpha=0.75)
+    S["palm_smoke"] = sm
+    sm_pos = _palm_pos(); S["palm0"] = np.array(sm_pos)
+    ts = TAB_STORY["palm"]
+    sm.add_many([ts - 0.9 + 0.05 * k for k in range(18)], [tuple(np.array(sm_pos) + np.array((0.2 * (k % 3) - 0.2, 0.15 * (k % 2), 0.0))) for k in range(18)],
+                [(0.3, 0.1, 1.6)] * 18, r0=0.3, r1=1.4, life=1.6, rise=1.0)
+    sm.build(c)
+
+def _palm_pos():
+    from forest import tableau as TB
+    fem = S["fem"]; ts = TAB_STORY["palm"]
+    x, y, yaw = female_state(ts)
+    fem.pose(TB.POSE_F["palm"]); w = _W(x, y, TB.FZ_T["palm"]); fem.place(w[0], w[1], w[2], yaw)
+    bpy.context.view_layer.update()
+    p = fem.bone_world("lowerarm01.R", tail=True)
+    return (p.x, p.y, p.z + 0.8)
+
+def _tab_now(t):
+    for k, (a, b) in TAB.items():
+        if k != "graphic" and a - 0.25 <= t <= b + 0.25:
+            return k
+    return None
+
+def _tableau_update(t):
+    from forest import tableau as TB
+    k = _tab_now(t)
+    B = S["TS"]; B.vis[:] = 0.0
+    segs = []
+    if k is not None:
+        fem = S["fem"]; ts = TAB_STORY[k]
+        x, y, yaw = female_state(ts)
+        fem.show(True); fem.pose(TB.POSE_F[TAB_POSE[k]])
+        w = _W(x, y, TB.FZ_T.get(TAB_POSE[k], 0.0)); fem.place(w[0], w[1], w[2], yaw)
+        bpy.context.view_layer.update()
+        f = np.array((-math.sin(yaw), math.cos(yaw), 0.0)); r = np.array((math.cos(yaw), math.sin(yaw), 0.0))
+        base = np.array(w)
+        if k == "palm":                    # the smoke follows her palm as evaluated now
+            p = fem.bone_world("lowerarm01.R", tail=True)
+            for pl in S["palm_smoke"].cards.pools.values():
+                if pl.ob is not None:
+                    pl.ob.location = tuple(np.array((p.x, p.y, p.z + 0.8)) - S["palm0"])
+        if k == "hood":                    # Armin stands right under her fingers
+            p = fem.bone_world("lowerarm01.R", tail=True)
+            P = S["P"]; j = S["pj"]["armin"]
+            P.pos[j] = (p.x + 1.2 * f[0], p.y + 1.2 * f[1], C.G(p.x, p.y)); P.vis[j] = 1.0
+            C.person_pose(P, j, "stand"); P.yaw[j] = yaw + math.pi; P.push()
+        if k == "ram":
+            sh = np.array(fem.bone_world("upperarm01.R"))
+            hl = np.array(fem.bone_world("lowerarm01.L", tail=True))
+            put = [(0, sh + f * 2.5 + r * 3.5 + np.array((0, 0, 1.0)), "flung", 0.4),         # rammed off her shoulder
+                   (1, hl + r * -9.0 + f * -4.0 + np.array((0, 0, 7.0)), "hang", 1.9),        # yanked up on his wire
+                   (2, base + f * 9.0 + r * 10.0 + np.array((0, 0, 6.5)), "flung", 2.6),
+                   (3, base + f * -6.0 + r * 13.0 + np.array((0, 0, 3.2)), "flung", -1.0)]
+            for j, p, m, yy in put:
+                B.vis[j] = 1.0; B.pos[j] = p; B.yaw[j] = yaw + yy; TB.scout_pose(B, j, m)
+            segs.append((tuple(hl), tuple(put[1][1] + np.array((0, 0, 1.6)))))
+            for j, off, rl in ((6, f * 6.0 + r * 8.0, 1.2), (7, f * -2.0 + r * 15.0, -1.6)):     # riderless horses tumbling
+                B.vis[j] = 1.0; B.pos[j] = base + off + np.array((0, 0, 1.5)); B.yaw[j] = yaw + 1.0; B.roll[j] = rl; B.pitch[j] = 0.3
+        elif k == "spin":
+            piv = np.array(fem.bone_world("lowerarm01.R", tail=True))
+            th = 0.55 * (t - TAB["spin"][0]) + math.atan2(-f[1], -f[0])                         # very slow circle round her hand
+            p = piv + np.array((15.0 * math.cos(th), 15.0 * math.sin(th), -3.5))
+            B.vis[4] = 1.0; B.pos[4] = p; TB.scout_pose(B, 4, "swung")
+            B.yaw[4] = C.yaw_of(piv[0] - p[0], piv[1] - p[1])
+            segs.append((tuple(piv), tuple(p)))
+    B.push()
+    S["twires"].update(segs, bpy.context.scene.camera.location if bpy.context.scene.camera else (0, 0, 1000))
+    S["palm_smoke"].update(story(t), wind=(0.6, 0.2))
 
 def _trk(nm, t, t0=26.0):
     if not (t0 <= t <= 34.0):
@@ -361,7 +531,10 @@ def titan_F(i, t):
 
 # ---------------------------------------------------------------- per frame
 def update(t):
-    _update(story(t))
+    ts = story(t)
+    _update(ts)
+    _graphic_update(t, ts)
+    _tableau_update(t)
 
 def _update(t):
     fset = S["fset"]

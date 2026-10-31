@@ -53,10 +53,11 @@ WALL_YAW = C.yaw_of(-NX, -NY)                                   # facing the wal
 def fem_z(t):
     if t < BEATS["climb"][0]:
         return 0.0
-    if t < BEATS["fall"][0]:
-        return 44.0 * C.ss(BEATS["climb"][0], BEATS["cut"], t)
+    if t < BEATS["fall"][0]:                                    # v8: mid-wall (FEEDBACK_v13 §3), the frozen climb at 22.8
+        return CLIMB_H * C.ss(BEATS["climb"][0], 22.8, t)
     u = (t - BEATS["fall"][0]) / (BEATS["fall"][1] - BEATS["fall"][0])
-    return 44.0 * max(0.0, 1.0 - u * u)
+    return CLIMB_H * max(0.0, 1.0 - u * u)
+CLIMB_H = 24.0
 
 def fem_pose(t):
     run = C.fem_run(2 * math.pi * 2.5 * t, lean=24.0)
@@ -125,24 +126,49 @@ def _k(t, p, l, lens):
     return (t, S(*p), S(*l), lens)
 CX, CY = SL.CLIMB
 KX, KY = SL.CRYSTAL
+# v8 (FEEDBACK_v13 §3): video clock with FROZEN tableaux (flat knots).  Far sky view: Eren's lightning; FROZEN punch (EP24
+# 21:57-22:00); pan along the burning houses to the wall; FROZEN climb (Mikasa on her head, Eren waiting below, slightly
+# burning); huge zoom-in on Mikasa; she jumps, the Female falls; camera down: FROZEN Eren on top of her (EP25 13:24); then the
+# crane up the wall to the titan face.
+STORY_DUR = 40.0
+TMAP = [(0.0, 0.0), (3.0, 3.6), (3.4, 4.5), (5.8, 4.5), (8.8, 22.8), (13.0, 22.8), (14.6, 26.6), (15.4, 28.4), (17.8, 28.4),
+        (22.4, 38.0), (24.6, 40.0)]
+DUR = TMAP[-1][0]
+TAB = dict(punch=(3.4, 5.8), climb=(8.8, 13.0), mount=(15.4, 17.8))
+TAB_STORY = dict(punch=4.5, climb=22.8, mount=28.4)
+def story(t):
+    return float(np.interp(t, [k[0] for k in TMAP], [k[1] for k in TMAP]))
+def _shots(lift=False):
+    from forest import tableau as TB
+    fx, fy = fem_S(4.5); ex, ey = eren_S(4.5)
+    side = math.degrees(math.atan2(fy - ey, fx - ex)) + 90.0
+    hx, hy = FOOT
+    nrm = math.degrees(math.atan2(NY, NX))
+    sh = [TB.Shot("punch", *TAB["punch"], S((fx + ex) / 2, (fy + ey) / 2, 11.0), az=(side - 20, side + 10), dist=(70, 56), el=(12, 16), lens=34),
+          TB.Shot("climb", 8.8, 11.0, S(hx, hy, CLIMB_H + 6.0), az=(nrm - 35, nrm - 15), dist=(120, 95), el=(8, 12), lens=(30, 36)),
+          TB.Shot("zoom", 11.0, 13.0, S(hx, hy, CLIMB_H + 15.5), az=(nrm - 15, nrm - 10), dist=(95, 80), el=(12, 14), lens=(36, 110)),
+          TB.Shot("mount", *TAB["mount"], S(KX, KY, 4.0), az=(nrm + 70, nrm + 45), dist=(60, 48), el=(22, 30), lens=36)]
+    if lift:
+        for s_ in sh:
+            x, y, z = s_.target; s_.target = (x, y, z + C.G(x, y))
+    return sh
 CAM_KEYS = [
     (0.0, SEAM_IN["pos"], SEAM_IN["look"], SEAM_IN["lens"]),
-    _k(1.6, (-16.0, 106.0, 84.0), (-60.0, 40.0, 15.0), 34.0),   # v3 (autopilot): chase keys ~0.55x the v2 distance                          # lightning under the street
-    _k(3.2, (85.0, 87.0, 71.0), (55.0, 10.0, 12.0), 36.0),                          # the tackle
-    _k(7.5, (129.0, 6.0, 88.0), (78.0, -60.0, 12.0), 34.0),
-    _k(10.2, (152.0, -68.0, 115.0), (82.0, -140.0, 15.0), 32.0),                       # through the church
-    _k(14.8, (344.0, -51.0, 88.0), (325.0, -150.0, 12.0), 38.0),                       # berserk bite
-    _k(19.0, (510.0, -52.0, 114.0), (560.0, -190.0, 20.0), 32.0),                       # she runs for the wall
-    _k(23.0, _off(SL.CLIMB, 200.0) + (105.0,), (CX, CY, 32.0), 38.0),                  # the climb, wall face-on (v2: slight zoom, QA)
-    _k(25.6, _off(SL.CLIMB, 120.0, 30.0) + (60.0,), (CX, CY, 46.0), 40.0),             # push-in: Mikasa cuts the fingers
-    _k(27.5, _off(SL.CLIMB, 150.0) + (80.0,), (KX, KY, 6.0), 34.0),                    # the fall, the catch
-    _k(30.0, _off(SL.CRYSTAL, 45.0, 20.0) + (44.0,), (KX, KY, 3.0), 38.0),   # v3: above the roofs (was 30 m)             # ripped out, the crystal
-    _k(34.0, _off(SL.CLIMB, 70.0) + (40.0,), (CX, CY, 30.0), 35.0),   # v3: was 22 m = through the roofs                    # crane up the wall face
-    _k(37.0, _off(SL.CLIMB, 60.0) + (38.0,), (CX, CY, SL.FACE_Z), 42.0),
-    _k(DUR, _off(SL.CLIMB, 55.0, 2.0) + (SL.FACE_Z + 2.0,), (CX, CY, SL.FACE_Z + 0.5), 45.0),   # END: the titan in the wall
+    _k(2.2, (10.0, 420.0, 380.0), (-50.0, 40.0, 0.0), 30.0),                       # far sky: lightning under the street
+    _k(6.8, (260.0, 60.0, 130.0), (330.0, -150.0, 10.0), 32.0),                     # pan along the burning houses
+    _k(8.2, (480.0, 10.0, 120.0), (560.0, -190.0, 20.0), 32.0),                     # ... and the terrain to the wall
+    _k(14.4, _off(SL.CLIMB, 140.0) + (70.0,), (KX, KY, 10.0), 34.0),               # she falls; the camera moves down slowly
+    _k(19.6, _off(SL.CLIMB, 70.0) + (40.0,), (CX, CY, 30.0), 35.0),                 # crane up the wall face
+    _k(21.4, _off(SL.CLIMB, 60.0) + (38.0,), (CX, CY, SL.FACE_Z), 42.0),
+    _k(22.4, _off(SL.CLIMB, 55.0, 2.0) + (SL.FACE_Z + 2.0,), (CX, CY, SL.FACE_Z + 0.5), 45.0),   # END: the titan in the wall
+    _k(DUR, _off(SL.CLIMB, 54.0, 2.0) + (SL.FACE_Z + 2.0,), (CX, CY, SL.FACE_Z + 0.5), 46.0),
 ]
-CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_IN["vel"], v_out=(0.0, 0.0, 0.0))
-CAM_LIMITS = dict(speed=200.0, yaw=90.0, hmin=15.0, hmax=300.0, pitch=(-10.0, 70.0), lens=(29.0, 46.0))
+def _cam(lift):
+    from forest import tableau as TB
+    keys = C.lift_keys(CAM_KEYS) if lift else CAM_KEYS
+    return TB.make_cam(keys + _shots(lift), v_in=SEAM_IN["vel"], v_out=(0.0, 0.0, 0.0))
+CAM = _cam(False)
+CAM_LIMITS = dict(speed=1500.0, yaw=300.0, hmin=10.0, hmax=500.0, pitch=(-10.0, 70.0), lens=(29.0, 112.0))
 PLAN = [(0.0, "morning"), (10.0, "day"), (30.0, "afternoon"), (DUR, "afternoon")]
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
@@ -150,7 +176,7 @@ S_ = {}
 
 def build(site):
     global CAM
-    CAM = camchan.CamPath(C.lift_keys(CAM_KEYS), v_in=SEAM_IN["vel"], v_out=(0.0, 0.0, 0.0))
+    CAM = _cam(True)
     import flares
     from stohess import sset
     c = C.coll("S2")
@@ -163,6 +189,17 @@ def build(site):
     for nm, j in S_["pj"].items():
         C.person_geo(P.g, j, cloak=nm in ("mikasa", "hange"), odm=nm in ("mikasa", "hange"), hair="blond" if nm == "annie" else "hair")
     P.build(c); S_["P"] = P
+    # v8: Mikasa (people_kit adult preset, red scarf, faceless) standing on the Female's head in the frozen climb
+    mk = None
+    try:
+        import people_kit as PK
+        mk = PK.person("mikasa", (0.0, 0.0, 0.0), yaw=WALL_YAW + math.pi, pose="stand", trail=False)
+    except Exception as ex:
+        print("[s2] people_kit Mikasa failed:", ex, flush=True)
+    if mk is None or not hasattr(mk, "location"):
+        mk = bpy.data.objects.new("S2_MikasaEmpty", None); c.objects.link(mk)
+    S_["mikasa"] = mk; S_["mik0"] = (0.0, 0.0, 0.0)
+    S_["mikasa_objs"] = [mk] + list(getattr(mk, "children_recursive", []))
     S_["wire"] = C.Wires("S2_MikasaWire", 2, C.mat("F2_Wire", (0.10, 0.10, 0.11), 0.4), c, r=0.08)
     # Annie's crystal
     import bmesh
@@ -203,8 +240,7 @@ def build(site):
         te.append(BEATS["cut"] + 0.05 * k); pos.append(_W(FOOT[0], FOOT[1], 44 + 12)); vel.append((0, 0, 2))
     steam.add_many(te, pos, vel, r0=2.5, r1=10.0, life=3.5, rise=1.5)
     steam.build(c); S_["steam"] = steam
-    TRACK.update(MIKASA=lambda t: _mik(t)[0] if 24.0 <= t < 26.2 else None,
-                 HANGE=lambda t: _W(*_off(SL.wall_inner(SL.CLIMB_ANG + 0.012, -5.0)[0], 0.0), 52.0) if t >= 35.0 else None)
+    TRACK.update(MIKASA=lambda t: tuple(S_["mikasa"].location) if 11.0 <= t < 13.4 else None)
 
 def _mik(t):
     a = np.array(_W(*_off(SL.CLIMB, 120.0, -40.0), 20.0))
@@ -216,6 +252,38 @@ def _mik(t):
     return tuple(p), b
 
 def update(t):
+    from forest import tableau as TB
+    ts = story(t)
+    _update(ts)
+    k = next((n for n, (a, b) in TAB.items() if a - 0.25 <= t <= b + 0.25), None)
+    fem, er = S_["fem"], S_["eren"]
+    mk = S_["mikasa"]
+    on_head = TAB["climb"][0] - 0.3 <= t < 13.4
+    if 13.4 <= t < 14.6:                                         # Mikasa jumps off her head (arc away from the wall)
+        u = C.ss(13.4, 14.6, t)
+        p0 = S_["mik0"]; mk.location = (p0[0] + NX * 30 * u, p0[1] + NY * 30 * u, p0[2] + 10 * math.sin(math.pi * u) - 4 * u)
+    for o in S_["mikasa_objs"]:
+        C.hide(o, not (on_head or 13.4 <= t < 14.6))
+    if k is None:
+        return
+    if k == "punch":                     # Eren's right fist in her face while running; she is knocked off her feet
+        er.pose(TB.eren_specs(er.G6, er.P)["punch"])
+        fem.pose(TB.POSE_F["punched"])
+        x, y = fem_S(4.5); w = _W(x, y, 3.0)
+        fem.place(w[0], w[1], w[2], fem_yaw(4.5), pitch=-0.35)
+    elif k == "climb":
+        fem.pose(TB.POSE_F["climb"])
+        er.pose(TB.eren_specs(er.G6, er.P)["wait"]); er.T.burning(0.35)
+        bpy.context.view_layer.update()
+        hd = fem.bone_world("head", tail=True)
+        mk.location = (hd.x, hd.y, hd.z + 0.4); S_["mik0"] = tuple(mk.location)
+    elif k == "mount":                   # on her back at the wall foot, Eren crouched on top of her
+        fem.pose(TB.POSE_F["down"])
+        w = _W(KX, KY, 2.2); fem.place(w[0], w[1], w[2], WALL_YAW, pitch=math.pi / 2)
+        er.pose(TB.eren_specs(er.G6, er.P)["mount"])
+        ew = _W(KX + 5.0 * NX, KY + 5.0 * NY, 1.0); er.place(ew[0], ew[1], ew[2], WALL_YAW)
+
+def _update(t):
     import attack_titan as AT
     cam = bpy.context.scene.camera
     lu = (t - BEATS["lightning"][0]) / 2.6
@@ -253,9 +321,9 @@ def update(t):
     S_["crystal"].scale = (2.4 * s, 1.3 * s, 1.1 * s)
     P = S_["P"]; pj = S_["pj"]
     mp, hook = _mik(t)
-    P.vis[pj["mikasa"]] = 1.0 if 23.4 <= t < 27.2 else 0.0
+    P.vis[pj["mikasa"]] = 0.0                                    # v8: the people_kit Mikasa stands on her head instead
     P.pos[pj["mikasa"]] = mp; C.person_pose(P, pj["mikasa"], "fly"); P.yaw[pj["mikasa"]] = WALL_YAW
-    S_["wire"].update([(tuple(np.array(mp) + np.array((0, 0, 1))), tuple(hook + np.array((-NX * 2.5, -NY * 2.5, 8))))] if 23.4 <= t < BEATS["cut"] else [], cam.location)
+    S_["wire"].update([], cam.location)
     P.vis[pj["annie"]] = 1.0 if t >= BEATS["out"] else 0.0
     P.pos[pj["annie"]] = _W(KX, KY, 0.6); C.person_pose(P, pj["annie"], "fallen"); P.yaw[pj["annie"]] = WALL_YAW
     for nm, da in (("hange", 0.010), ("nick", 0.016)):
@@ -266,13 +334,10 @@ def update(t):
     S_["dust"].update(t, wind=(1.5, 0.5)); S_["steam"].update(t, wind=(0.8, 0.4))
 
 def light(t):
-    LIGHT.apply(t)
+    LIGHT.apply(story(t))
 
 def check():
     for t in (0.0, 2.6, 10.0, 14.0, 20.0, 25.6, 27.0, 30.0):
         fx, fy = fem_S(t); ex, ey = eren_S(t)
         print(f"[s2] t {t:4.1f} female S ({fx:5.0f} {fy:5.0f}) z {fem_z(t):4.1f}  eren S ({ex:5.0f} {ey:5.0f}) d {math.hypot(fx - ex, fy - ey):5.1f}")
 
-# v2 (QA batch1 P2): the crane up the wall to the face (story 32-40) at 1.7x -> the final face reads ~2 s, not 4
-import segtime as _ST
-C.install_warp(globals(), _ST.slope_knots(40.0, [(0.0, 1.0, 0.0), (32.0, 1.7, 0.4)]))

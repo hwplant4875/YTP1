@@ -217,30 +217,44 @@ SEAM_IN = dict(pos=F2.SEAM_F3["pos"], look=F2.SEAM_F3["look"], lens=F2.SEAM_F3["
 SEAM_S1 = dict(pos=F(-1300.0, -1500.0, 1100.0), look=F(-4500.0, -6000.0, 600.0), lens=28.0, vel=(-150.0, -200.0, 40.0))
 def _k(t, p, l, lens):
     return (t, F(*p), F(*l), lens)
+# v8 (FEEDBACK_v13 §2): video clock with FROZEN tableaux (flat knots).  From the sky: her light flash (titan hidden by the
+# canopy), ~2.4 s later Eren's flash elsewhere; dive in: FROZEN face-off (EP21 08:15); slide on: FROZEN high kick (EP21
+# 19:19, cut trunk in mid-air, crystal at the foot tip, smoke from Eren's neck); FROZEN slumped Female in steam (EP22 07:15,
+# Mikasa / Levi gone); then up into the sky toward Stohess (the cart / corpse retreat is skipped).
+STORY_DUR = 56.0
+TMAP = [(0.0, 0.0), (3.0, 3.0), (3.6, 17.4), (5.2, 19.0), (5.8, 20.3), (8.2, 20.3), (8.8, 30.75), (11.2, 30.75),
+        (11.7, 47.5), (14.0, 47.5), (17.0, 56.0)]
+DUR = TMAP[-1][0]
+TAB = dict(faceoff=(5.8, 8.2), kick=(8.8, 11.2), slump=(11.7, 14.0))
+TAB_STORY = dict(faceoff=20.3, kick=30.75, slump=47.5)
+def story(t):
+    return float(np.interp(t, [k[0] for k in TMAP], [k[1] for k in TMAP]))
+def _shots(lift=False):
+    from forest import tableau as TB
+    fx, fy = fem_F(20.3); ex, ey = eren_F(20.3)
+    kx, ky = fem_F(30.75); sx, sy = fem_F(47.5)
+    front = math.degrees(2.3) + 90.0
+    sh = [TB.Shot("faceoff", *TAB["faceoff"], F((fx + ex) / 2, (fy + ey) / 2, 8.0), az=(250, 278), dist=(58, 46), el=(9, 13), lens=32),
+          TB.Shot("kick", *TAB["kick"], F(kx, ky, 9.0), az=(195, 228), dist=(52, 40), el=(5, 9), lens=34),
+          TB.Shot("slump", *TAB["slump"], F(sx, sy, 4.0), az=(front + 25, front - 5), dist=(40, 31), el=(8, 12), lens=38)]
+    if lift:
+        for s_ in sh:
+            x, y, z = s_.target; s_.target = (x, y, z + C.G(x, y))
+    return sh
 CAM_KEYS = [
     (0.0, SEAM_IN["pos"], SEAM_IN["look"], SEAM_IN["lens"]),
-    _k(2.2, (-40.0, 1020.0, 230.0), (BEAM_F[0], BEAM_F[1], 60.0), 30.0),          # sunset over the canopy: the beam
-    _k(5.0, (120.0, 1330.0, 45.0), (200.0, 1420.0, 14.0), 30.0),                  # drop into the trunks: the chase
-    _k(8.5, (190.0, 1450.0, 40.0), (SHAM_F[0], SHAM_F[1], 12.0), 32.0),
-    _k(11.5, (205.0, 1490.0, 30.0), (SHAM_F[0], SHAM_F[1], 8.0), 34.0),            # she shams against the trunk
-    _k(15.0, (230.0, 1500.0, 40.0), (290.0, 1565.0, 10.0), 32.0),                 # the kills
-    _k(18.6, (250.0, 1520.0, 46.0), (EREN_F[0], EREN_F[1], 20.0), 30.0),          # Eren's lightning
-    _k(22.5, (300.0, 1525.0, 32.0), (310.0, 1585.0, 10.0), 30.0),                 # the duel side-on (Eren from frame right)
-    _k(26.0, (290.0, 1545.0, 30.0), (318.0, 1600.0, 8.0), 34.0),                  # pinned at the tree
-    _k(30.6, (KX - 40.0, KY - 45.0, 22.0), (KX - 8.0, KY - 4.0, 12.0), 38.0),     # push-in: the head kick
-    _k(34.0, (KX - 30.0, KY - 60.0, 40.0), (KX + 20.0, KY + 60.0, 10.0), 30.0),
-    _k(38.5, (RX - 80.0, RY - 70.0, 40.0), (RX - 25.0, RY - 18.0, 10.0), 30.0),   # Mikasa decoys, Levi comes in
-    _k(42.5, (RX - 52.0, RY - 47.0, 26.0), (RX - 9.0, RY - 7.5, 8.0), 34.0),
-    _k(44.8, (RX - 33.0, RY - 17.0, 13.0), (RX - 8.0, RY - 6.5, 7.0), 40.0),      # push-in: the mouth cut, Eren pulled out
-    _k(46.4, (RX - 70.0, RY - 60.0, 60.0), (RX - 9.0, RY - 7.0, 8.0), 32.0),        # pull back: Levi / Mikasa fly out past us
-    _k(47.3, (RX - 70.0, RY + 10.0, 140.0), (RX - 40.0, RY - 260.0, 0.0), 30.0),      # pan through south (no flip)
-    _k(48.6, (RX - 60.0, RY + 60.0, 220.0), (RX - 400.0, RY - 260.0, 0.0), 30.0),     # rise, turn west to the plain
-    _k(51.0, (-1420.0, 640.0, 230.0), (-1655.0, 420.0, 4.0), 34.0),              # round 3: ON the retreat column (v2 looked
-    _k(53.5, (-1480.0, 380.0, 280.0), (-1663.0, 200.0, 4.0), 34.0),              #   800 m ahead of it = an empty brown plain)
+    _k(2.2, (-40.0, 1020.0, 230.0), (BEAM_F[0], BEAM_F[1], 60.0), 30.0),          # sunset over the canopy: her flash
+    _k(3.8, (60.0, 1230.0, 250.0), (EREN_F[0], EREN_F[1], 20.0), 30.0),           # camera moving: Eren's flash elsewhere
+    _k(5.1, (220.0, 1420.0, 120.0), (EREN_F[0], EREN_F[1], 15.0), 30.0),          # dive toward the swampy clearing
+    _k(14.7, (RX - 60.0, RY + 60.0, 220.0), (RX - 400.0, RY - 260.0, 0.0), 30.0),     # rise, turn west
     (DUR, SEAM_S1["pos"], SEAM_S1["look"], SEAM_S1["lens"]),
 ]
-CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_IN["vel"], v_out=SEAM_S1["vel"])
-CAM_LIMITS = dict(speed=500.0, yaw=120.0, hmin=8.0, hmax=1200.0, pitch=(-15.0, 75.0), lens=(27.0, 46.0))
+def _cam(lift):
+    from forest import tableau as TB
+    keys = C.lift_keys(CAM_KEYS, skip=(len(CAM_KEYS) - 1,)) if lift else CAM_KEYS
+    return TB.make_cam(keys + _shots(lift), v_in=SEAM_IN["vel"], v_out=SEAM_S1["vel"])
+CAM = _cam(False)
+CAM_LIMITS = dict(speed=1500.0, yaw=300.0, hmin=8.0, hmax=1200.0, pitch=(-15.0, 75.0), lens=(27.0, 46.0))
 PLAN = [(0.0, "afternoon"), (2.0, "sunset"), (5.0, "afternoon"), (46.0, "afternoon"), (51.0, "golden"), (DUR, "sunset")]   # round 3: no murky dusk tail   # readable under the canopy
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
@@ -249,7 +263,7 @@ S = {}
 # ---------------------------------------------------------------- build
 def build(site):
     global CAM
-    CAM = camchan.CamPath(C.lift_keys(CAM_KEYS, skip=(len(CAM_KEYS) - 1,)), v_in=SEAM_IN["vel"], v_out=SEAM_S1["vel"])      # z above ground -> absolute
+    CAM = _cam(True)                                                                              # z above ground -> absolute
     import flares, attack_titan as AT
     c = C.coll("F3")
     S["AT"] = AT
@@ -302,9 +316,26 @@ def build(site):
         te.append(tt); pos.append(_W(fx, fy, random.uniform(6, 12))); vel.append((0, 0, 3.0))
     steam.add_many(te, pos, vel, r0=1.2, r1=4.5, life=2.0, rise=3.0)
     steam.build(c); S["steam"] = steam
-    TRACK.update(EREN=lambda t: _W(*eren_F(t), 17.0) if 19.6 <= t < 22.0 else None,
-                 MIKASA=lambda t: _fly_w("mikasa", t) if 38.5 <= t < 41.0 else None,
-                 LEVI=lambda t: _fly_w("levi", t) if 40.0 <= t < 42.5 else None)
+    TRACK.update(EREN=lambda t: _W(*eren_F(story(t)), 17.0) if 19.6 <= story(t) < 22.0 else None)
+    S["flash"] = []
+    for nm, (x, y), t0 in (("F3_FlashFemale", BEAM_F, BEATS["beam"][0]), ("F3_FlashEren", EREN_F, BEATS["shift"][0])):
+        ld = bpy.data.lights.new(nm, "POINT"); ld.color = (1.0, 0.85, 0.45); ld.shadow_soft_size = 20.0; ld.energy = 0.0
+        lo = bpy.data.objects.new(nm, ld); c.objects.link(lo); lo.location = _W(x, y, 120.0)
+        S["flash"].append((lo, t0))
+    # v8 kick tableau props: the cut trunk floating in mid-air, crystal hardening at her foot tip
+    import bmesh
+    bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=True, segments=10, radius1=1.6, radius2=1.4, depth=16.0)
+    S["trunk"] = C.mesh_obj("F3_CutTrunk", bm, [bpy.data.materials.get("F_Bark") or C.mat("F3_Bark", (0.2, 0.11, 0.07), 0.9)], c)
+    bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=1, radius=1.3)
+    S["crystal"] = C.mesh_obj("F3_FootCrystal", bm, [C.mat("F3_Crystal", (0.55, 0.85, 1.0), 0.05, emit=(0.4, 0.8, 1.0), strength=1.5)], c)
+    S["crystal"].scale = (0.8, 0.8, 1.6)
+    S["kick_props"] = [S["trunk"], S["crystal"]]
+    # v8 slump tableau: steam wrapping her (EP22 07:15)
+    sx, sy = fem_F(47.5)
+    sl = flares.PuffField("F3_SlumpSteam", kind="steam", alpha=0.7)
+    sl.add_many([46.0 + 0.04 * k for k in range(36)], [_W(sx + random.uniform(-7, 7), sy + random.uniform(-7, 7), random.uniform(1, 12)) for k in range(36)],
+                [(0, 0, 2.0)] * 36, r0=2.0, r1=6.0, life=3.0, rise=2.0)
+    sl.build(c); S["slump_steam"] = sl
 
 def _fly_w(nm, t):
     x, y, z, vis, _ = flyer_F(nm, t)
@@ -324,6 +355,42 @@ def _shift(AT, w, u, seed):
     fx["dome"].hide_render = u >= 1.0 or fx["dome"].hide_render
 
 def update(t):
+    from forest import tableau as TB
+    ts = story(t)
+    _update(ts)
+    k = next((n for n, (a, b) in TAB.items() if a - 0.25 <= t <= b + 0.25), None)
+    fem, er = S["fem"], S["eren"]
+    for o in S["kick_props"]:
+        C.hide(o, k != "kick")
+    # v8: the two transformations read from the sky as lightning flashes over the canopy (the titans stay hidden)
+    for lo, t0 in S["flash"]:
+        e = C.bump(ts, t0, t0 + 0.08, t0 + 0.25, t0 + 0.9)
+        lo.data.energy = 4.0e8 * e; C.hide(lo, e <= 0.0)
+    if k is None:
+        return
+    st = TAB_STORY[k]
+    fem.show(True)
+    pn = {"kick": "highkick"}.get(k, k)
+    fem.pose(TB.POSE_F[pn])
+    x, y = fem_F(st)
+    w = _W(x, y, TB.FZ_T.get(pn, 0.0))
+    yaw = fem_yaw(st)
+    if k == "kick":                       # the kick goes up-right past the trunk toward Eren's (severed) head
+        ex, ey = eren_F(st); yaw = C.yaw_of(ex - x, ey - y) + 0.5
+    fem.place(w[0], w[1], w[2], yaw)
+    fem.hardening(0.0)
+    if k == "faceoff":
+        er.pose(TB.eren_specs(er.G6, er.P)["faceoff"])
+    bpy.context.view_layer.update()
+    if k == "kick":
+        tip = fem.bone_world("foot.L", tail=True)
+        S["crystal"].location = tip
+        S["trunk"].location = (tip.x + 6.0 * math.cos(yaw), tip.y + 6.0 * math.sin(yaw), tip.z - 2.0)
+        S["trunk"].rotation_euler = (0.9, 0.35, yaw)
+    if k == "slump":                      # Mikasa / Levi already gone
+        P = S["P"]; P.vis[:] = 0.0; P.push(); S["wires"].update([], bpy.context.scene.camera.location)
+
+def _update(t):
     SK = os.environ.get("F3_SKIP", "")        # autopilot debug bisect: comma list of fem, eren, flyers, ret, cards
     AT = S["AT"]
     cam = bpy.context.scene.camera
@@ -404,7 +471,7 @@ def update(t):
     rear = S["ret"][-3]
     for k, j in enumerate(S["corpses"]):
         td = BEATS["drop"][0] + 0.4 * k
-        if t < td or t < 48.0:
+        if True:                                                   # v8: the corpse drop is skipped
             P.vis[j] = 0.0; continue
         x, y, yaw = ret_at(ret_head(td) - (NRET - 3) * 9.0)
         P.vis[j] = 1.0; P.pos[j] = _W(x + 2 * k, y, 0.3); C.person_pose(P, j, "fallen")
@@ -413,7 +480,7 @@ def update(t):
     # the retreat column + abnormals
     B = S["B"]
     for k, j in enumerate(S["ret"] if "ret" not in SK else ()):
-        on = t >= 47.0
+        on = False                                                 # v8: retreat column skipped
         s = ret_head(max(t, 47.0)) - k * 9.0
         x, y, yaw = ret_at(s)
         B.pos[j] = _W(x, y); B.yaw[j] = yaw; B.vis[j] = 1.0 if on else 0.0
@@ -425,20 +492,17 @@ def update(t):
         tail = ret_at(ret_head(max(t, 47.0)) - NRET * 9.0 - 160 - 90 * i)
         TT.pos[j] = _W(tail[0] + 40 * (i - 0.5), tail[1]); TT.yaw[j] = tail[2]
         C.titan_walk(TT, j, t * 7.0 + i, 0.7, run=True)
-        TT.vis[j] = 1.0 if t >= 48.0 else 0.0
+        TT.vis[j] = 0.0
     TT.push()
     if "cards" not in SK:
         S["fs"].update(t, wind=(1.5, 0.5)); S["steam"].update(t, wind=(0.8, 0.3)); S["pf"].update(t, wind=(1.0, 0.5))
+        S["slump_steam"].update(t, wind=(0.4, 0.2))
 
 def light(t):
-    LIGHT.apply(t)
+    LIGHT.apply(story(t))
 
 def check():
     for t in (2.0, 8.0, 12.0, 20.0, 25.0, 30.6, 36.0, 44.6):
         fx, fy = fem_F(t); ex, ey = eren_F(t)
         print(f"[f3] t {t:4.1f} female F ({fx:5.0f} {fy:5.0f}) eren F ({ex:5.0f} {ey:5.0f}) d {math.hypot(fx - ex, fy - ey):5.1f}")
 
-# v2 (QA batch1 P1: the middle forest-floor stretch is long and empty): the carry / decoy / spin (story 33.8-44.0) at 2.2x;
-# video ~50.4 s; slope 1 at both seams
-import segtime as _ST
-install_story = C.install_warp(globals(), _ST.slope_knots(56.0, [(0.0, 1.0, 0.0), (33.8, 2.2, 0.4), (44.0, 1.0, 0.4)]))
