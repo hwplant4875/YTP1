@@ -8,7 +8,7 @@
  "entries": [
   {
    "sec": "s02",
-   "rank": 9,
+   "rank": 10,
    "film": "Totally Killer (2023)",
    "villain": "Sweet Sixteen Killer",
    "v": [
@@ -21,7 +21,7 @@
   },
   {
    "sec": "s03",
-   "rank": 8,
+   "rank": 9,
    "film": "Halloween III: Season of the Witch (1982)",
    "villain": "Silver Shamrock",
    "v": [
@@ -34,6 +34,19 @@
   },
   {
    "sec": "s04",
+   "rank": 8,
+   "film": "Scary Stories to Tell in the Dark (2019)",
+   "villain": "Sarah Bellows' book",
+   "v": [
+    6,
+    5,
+    4,
+    9
+   ],
+   "pct": 50
+  },
+  {
+   "sec": "s05",
    "rank": 7,
    "film": "Hell Fest (2018)",
    "villain": "The Other",
@@ -46,7 +59,7 @@
    "pct": 45
   },
   {
-   "sec": "s05",
+   "sec": "s06",
    "rank": 6,
    "film": "Trick 'r Treat (2007)",
    "villain": "Sam",
@@ -59,7 +72,7 @@
    "pct": 40
   },
   {
-   "sec": "s06",
+   "sec": "s07",
    "rank": 5,
    "film": "Haunt (2019)",
    "villain": "The Haunt Killers",
@@ -72,7 +85,7 @@
    "pct": 35
   },
   {
-   "sec": "s07",
+   "sec": "s08",
    "rank": 4,
    "film": "Halloween (1978)",
    "villain": "Michael Myers",
@@ -85,7 +98,7 @@
    "pct": 30
   },
   {
-   "sec": "s08",
+   "sec": "s09",
    "rank": 3,
    "film": "Night of the Demons (1988)",
    "villain": "Angela",
@@ -98,7 +111,7 @@
    "pct": 20
   },
   {
-   "sec": "s09",
+   "sec": "s10",
    "rank": 2,
    "film": "Terrifier (2016)",
    "villain": "Art the Clown",
@@ -111,7 +124,7 @@
    "pct": 6
   },
   {
-   "sec": "s10",
+   "sec": "s11",
    "rank": 1,
    "film": "Terrifier 2 (2022)",
    "villain": "Art the Clown",

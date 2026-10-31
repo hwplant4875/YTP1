@@ -1,4 +1,4 @@
-# Halloween special: whisper word onsets for voice/s00..s11 -> voice/words.json ({seg: [[start, end, word], ...]}, as EP03 voice_v3)
+# Halloween special: whisper word onsets for voice/s00..s12 -> voice/words.json ({seg: [[start, end, word], ...]}, as EP03 voice_v3)
 import json, os, subprocess
 import numpy as np
 from faster_whisper import WhisperModel
