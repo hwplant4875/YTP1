@@ -58,7 +58,8 @@ for ov in X[-1]['overlays']:  # captions flash and cut out: one word 0.9 s max, 
 s01_end = vdur('s01') + 0.5
 X.append(sec('s01', [(0, 't2_costume', 52.0, -4.0), ('strength', 't1_meet', 441.8, -1.6), ('intelligence', 'h3_07_happy', 20, -3.0),
   ('kill count', 'hf_devil', 68.3, -3.8), ('supernatural', 'notd_trailer', 63.8, -1.7), ('which is basically', 't2_cafe', 37.6, -2.4),
-  ('put it', 'tk_joblo_open', 45.1, -2.5), ('your survival', 'h78_best', 413.6, -2.3)]))
+  ('put it', 'tk_joblo_open', 45.1, -2.5), ('your survival', 't1_meet', 222.4, -2.2)]))  # owner 10/31: subject must sit left of the card
+X[0]['vfade'] = {'out': 0.25}; X[-1]['vfade'] = {'in': 0.25}  # owner 10/31: smoother join from the cold open into the rules card (dip through black)
 X[-1]['overlays'].append(['stats', {'name': 'THE KILLER', 'tile_png': 'tiles/mystery.png', 'stats': {'STRENGTH': 6, 'INTELLIGENCE': 7,
   'KILL COUNT': 5, 'SUPERNATURAL': 8}, 'pct': '??', 'dur': round(s01_end, 3), 't_pct': round(T('s01', 'survival rate') + LEAD, 3),
   'reveal': [round(T('s01', w) + LEAD, 3) for w in ('strength', 'intelligence', 'kill count', 'supernatural')]}, 0.0, 999])

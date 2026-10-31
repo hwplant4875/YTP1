@@ -39,6 +39,12 @@ def fit_word(word, out):
         ws = w.split(); k = min(range(1, len(ws)), key=lambda i: abs(len(' '.join(ws[:i])) - len(' '.join(ws[i:]))))
         shadow_text(im, (960, 455), ' '.join(ws[:k]), f(170), WHITE, stroke=5); shadow_text(im, (960, 635), ' '.join(ws[k:]), f(170), WHITE, stroke=5)
     im.save(out)
+def vfade(S, L):
+    """optional dip through black at a section's start/end (EDL 'vfade': {'in': s, 'out': s})"""
+    v = S.get('vfade', {}); o = ''
+    if v.get('in'): o += f"fade=t=in:st=0:d={v['in']},"
+    if v.get('out'): o += f"fade=t=out:st={L - v['out']:.3f}:d={v['out']},"
+    return o
 def dur(p): return float(subprocess.check_output(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p]))
 def rel(p): return p if os.path.isabs(p) else os.path.join(EDIR, p)
 def src(name):
@@ -137,7 +143,7 @@ for si, S in enumerate(E['sections']):
         fc.append(f"[{n}:v]format=rgba{fd}[o{n}]")
         fc.append(f"{chain}[o{n}]overlay=0:0:enable='between(t,{a},{b})'[c{n}]"); chain = f'[c{n}]'; n += 1
     sec = os.path.join(WORK, f'sec{si:02d}.mp4')
-    run(['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', (';'.join(fc) + ';' if fc else '') + f"{chain}null[v]", '-map', '[v]', '-frames:v', str(NF), '-r', str(FPS),
+    run(['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', (';'.join(fc) + ';' if fc else '') + f"{chain}{vfade(S, NF / FPS)}null[v]", '-map', '[v]', '-frames:v', str(NF), '-r', str(FPS),
          '-video_track_timescale', '15360', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p', sec])
     t0 = 0.0 if ONLY else F0 / FPS
     if ONLY: t0 = sum(dur(p) for p in parts)
