@@ -9,7 +9,7 @@ enders\halloween_v7.mp4 | Subtitles: upload/halloween_ranked_en_v4.srt | Thumbna
 3. 10 Halloween Horror Movies Ranked From Easiest to Deadliest Night
 
 ## Thumbnails (left GREEN / middle YELLOW / right RED; three very different variants)
-A. Sweet Sixteen Killer 99% / Michael Myers (official 1978 still) 30% / Art the Clown (Terrifier 2) 3%
+A. Sweet Sixteen Killer 99% / Michael Myers (owner-supplied still) 30% / Art the Clown (Terrifier 2) 3%
 B. Harold the scarecrow (Scary Stories) 50% / Sam (Trick 'r Treat) 40% / bloody Art (Terrifier 2) 3%
 C. Silver Shamrock skull mask (Halloween III) 60% / The Other (Hell Fest poster) 45% / Art (Terrifier) 3%
 
