@@ -15,8 +15,8 @@ try:
 except ImportError:
     bpy = None
 
-DUR = 10.0                # autopilot 10/28 (f0 v1: ~7 s of empty murky sky): 12 -> 10 s, wall in frame, short night
-BEATS = dict(leave=0.0, golden_end=1.0, dusk=2.4, night=(3.4, 4.0), dawn=5.4, morning=7.0, seam=DUR)
+DUR = 6.5  # v14 (FEEDBACK_v13 §1 "~3:35 the move east: faster"): 10 -> 6.5 s;               # autopilot 10/28 (f0 v1: ~7 s of empty murky sky): 12 -> 10 s, wall in frame, short night
+BEATS = dict(leave=0.0, night=(0.0, 2.0), dawn=2.8, morning=3.6, seam=DUR)
 
 def ring_M(theta_deg, r=19000.0, z=0.0):
     a = math.radians(theta_deg)
@@ -28,18 +28,18 @@ def _wm(p):
     return (p[0], p[1] - C.M_OFF_Y, p[2])
 CAM_KEYS = [
     (0.0,  (200.0, 760.0, 240.0), (-20.0, 300.0, 0.0), 28.0),             # = g8 E2 (part 1 END), at rest
-    (0.8,  (300.0, 720.0, 420.0), (700.0, -300.0, 0.0), 28.0),               # swing the look SE first (no yaw flip)
-    (1.6,  (520.0, 640.0, 720.0), (3300.0, 1300.0, 60.0), 28.0),          # climb, turn east along the wall
-    (3.0,  ring_M(-76, 18700, 900), ring_M(-66, 19000, 30), 30.0),       # v2: ~900 m up, 300 m inside Wall Rose, the wall
-    (4.6,  ring_M(-56, 18700, 950), ring_M(-46, 19000, 30), 30.0),       #     curving ahead in frame (v1 2-3 km up: lost in haze)
-    (6.2,  ring_M(-36, 18700, 950), ring_M(-26, 19000, 30), 30.0),
-    (7.6,  ring_M(-18, 18650, 900), (19870.0, 19870.0, 0.0), 29.0),
-    (8.8,  (18650.0, 17600.0, 800.0), (19870.0, 19870.0, 0.0), 28.0),
+    (0.55, (300.0, 720.0, 420.0), (700.0, -300.0, 0.0), 28.0),               # swing the look SE first (no yaw flip)
+    (1.05, (520.0, 640.0, 720.0), (3300.0, 1300.0, 60.0), 28.0),          # climb, turn east along the wall
+    (1.95, ring_M(-76, 18700, 900), ring_M(-66, 19000, 30), 30.0),       # v2: ~900 m up, 300 m inside Wall Rose, the wall
+    (3.0,  ring_M(-56, 18700, 950), ring_M(-46, 19000, 30), 30.0),       #     curving ahead in frame (v1 2-3 km up: lost in haze)
+    (4.0,  ring_M(-36, 18700, 950), ring_M(-26, 19000, 30), 30.0),
+    (4.95, ring_M(-18, 18650, 900), (19870.0, 19870.0, 0.0), 29.0),
+    (5.7,  (18650.0, 17600.0, 800.0), (19870.0, 19870.0, 0.0), 28.0),
     (DUR,  _wm(SEAM_F1_W["pos"]), _wm(SEAM_F1_W["look"]), SEAM_F1_W["lens"]),
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=(0.0, 0.0, 0.0), v_out=SEAM_F1_W["vel"])
-CAM_LIMITS = dict(speed=4500.0, yaw=60.0, hmin=60.0, hmax=3600.0, pitch=(5.0, 60.0), lens=(26.0, 31.0))
-PLAN = [(0.0, "golden"), (1.0, "golden"), (2.4, "sunset"), (3.4, "night"), (4.0, "night"), (5.6, "morning"), (DUR, "morning")]   # round 3: no murky dusk / brown dawn haze
+CAM_LIMITS = dict(speed=8000.0, yaw=60.0, hmin=60.0, hmax=3600.0, pitch=(5.0, 60.0), lens=(26.0, 31.0))
+PLAN = [(0.0, "night"), (2.0, "night"), (3.6, "morning"), (DUR, "morning")]   # v14: g8 now ends at NIGHT (burning corpses)   # round 3: no murky dusk / brown dawn haze
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 S = {}
 

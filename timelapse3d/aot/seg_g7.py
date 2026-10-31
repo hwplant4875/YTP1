@@ -76,7 +76,8 @@ FLOOR_Z = -3.6
 EREN0 = (362.0, 888.0)                     # trio on the floor (bible (362, 852) mirrored)
 MIKASA0 = (361.5, 890.6)                   # on guard between Eren and the Garrison bank (blades drawn)
 ARMIN0 = (364.2, 889.4)
-CANNON = (318.0, 883.0, 20.0)              # TrostCannon_K turntable centre on GB
+CANNON = (329.0, 887.5, 20.0)              # TrostCannon_K turntable centre on GB; v14 (FEEDBACK_v13 §1): moved LEFT (east, seen
+                                           # from the north camera) toward the deck's NE rooftop corner (GB x 308..338, y 875..891)
 AIM = 85.0                                 # compass bearing onto the trio (bible 95 deg mirrored)
 SKEL_BEARING = 264.0                       # the half-shift torso faces the gun (bible 250 deg, re-aimed at the cannon)
 HAND_LOCAL = (0.2, 7.4, 5.4)               # right hand of the curled forearm (local, from the floor at Eren's spot)

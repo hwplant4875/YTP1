@@ -968,7 +968,8 @@ def build_people(coll):
         yc = 480.0 - math.sqrt(480.0 ** 2 - x * x)
         f = SQ.flyer("eren" if x == 0 else f"wc{k}", "cadet", "brown" if x == 0 else rnd.choice(["dark", "ash", "black", "jean"]),
                      **(dict(accent=(0.04, 0.8, 0.32), cloak=(0.13, 0.19, 0.07)) if x == 0 else {}))
-        cad.append((f, P(x, yc + 1.5, 50.3)))
+        zt = top_z(x, yc + 1.5, default=50.3)              # v14 (FEEDBACK_v13 §1: half sunk into the wall): ON the walkway
+        cad.append((f, P(x, yc + 1.5, min(56.0, max(50.3, zt + 0.05)))))
     flung = [0, 2, 4, 5]
     for k, (f, p0) in enumerate(cad):
         f.stand(0.0, BEATS["kick"] + 0.12, p0, yaw_s)
@@ -990,13 +991,14 @@ def build_people(coll):
     er.follow(8.3, 8.7, lambda t: arm_pt(t) + np.array([2.0 * ss(8.3, 8.7, t), -4.0 * ss(8.3, 8.7, t), 1.5 * ss(8.3, 8.7, t)]), pose="run")
     neck = S3(-4.0, -14.0, 56.0)
     er.hop(8.7, BEATS["steam_burst"] + 0.1, arm_pt(8.7) + np.array([2.0, -4.0, 1.5]), neck, apex=3)
-    eb = P(-30.0, 2.5, 50.3)
+    eb = P(-30.0, 2.5, min(56.0, max(50.3, top_z(-30.0, 2.5, default=50.3) + 0.05)))
     er.hop(BEATS["steam_burst"] + 0.1, 10.4, neck, eb, apex=6).stand(10.4, DUR, eb, yaw_s, "crouch")
     for k, x in enumerate((-87, -54, 18, 48, 78, -120, 108, -150, 140, -180)):
         yc = 480.0 - math.sqrt(480.0 ** 2 - x * x)
         for q in (-1, 1):
             f = SQ.flyer(f"gun{k}_{q}", "garrison", rnd.choice(["dark", "brown", "ash", "black", "grey"]))
-            f.stand(0.0, DUR, P(x + 1.6 * q, yc + 2.6, 50.3), yaw_s if x != -54 else yaw_n, "stand")
+            zg = top_z(x + 1.6 * q, yc + 2.6, default=50.3)
+            f.stand(0.0, DUR, P(x + 1.6 * q, yc + 2.6, min(56.0, max(50.3, zg + 0.05))), yaw_s if x != -54 else yaw_n, "stand")
     # ---------------- vanguard: 6 squads (30) on the roofs ringing GS r 90-160 and lower AV; nape kills + a grab
     vsq = [(-120, 70), (-95, 125), (-40, 150), (55, 150), (105, 110), (135, 60)]
     vflyers = []

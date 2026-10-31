@@ -7,7 +7,9 @@ Frames: W = Shiganshina world (inner gate (0,0), +y north); M = Trost master (ou
 trost.py set frame = (X, Y - 870, Z).
 """
 ORDER = ["g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8"]
-DUR = dict(g1=32.0, g2=32.0, g3=61.8, g4=20.0, g5=70.0, g6=69.5, g7=45.0, g8=75.0)      # TIGHT (A1); full: 32 32 78.4 20 84 74 116 136
+G2_PRE = 6.0                           # v14 (FEEDBACK_v13 §1): g2 prelude (sky view: gate crowd eaten / fleeing to the boats,
+                                       # lightning between the houses, the Armored rises) BEFORE g2's own clock (seg_g2.PRE)
+DUR = dict(g1=32.0, g2=32.0 + G2_PRE, g3=61.8, g4=20.0, g5=70.0, g6=69.5, g7=45.0, g8=75.0)      # TIGHT (A1); full: 32 32 78.4 20 84 74 116 136
 FULL = dict(g1=32.0, g2=32.0, g3=78.4, g4=20.0, g5=84.0, g6=74.0, g7=116.0, g8=136.0)
 CONTENT = dict(
     g1="Opening + Shiganshina fall", g2="Armored ram + ferries", g3="Flight north, camps, march846, flight to camp, 104th camp",
@@ -53,7 +55,7 @@ def W_to_set(x, y=None, z=None): return M_to_set(*W_to_M(x, y, z))
 SEAMS = {
     "g1_g2":     dict(frame="W", pos=(-254, -468, 95), look=(-167, -590, 2), lens=28.0, vel=(0, 0, 0), t=START["g2"],
                       note="g1 K12 = g2 K0 = render_fall2.SEAM_IN, at rest (g1 adds a guide key 1 s later); v2 10/26 lead QA (was (-130,-686,114)->(-165,-594,0))"),
-    "g2_g3":     dict(frame="W", pos=(175, 480, 240), look=(228, 1050, 0), lens=28.0, vel=(0, 45, 8), t=START["g3"],
+    "g2_g3":     dict(frame="W", pos=(175, 480, 240), look=(228, 1050, 0), lens=28.0, vel=(0, 0, 0), t=START["g3"],   # v14: camera at rest, hard cut (no dissolve)
                       note="g2 K9 = g3 FA0, 45 m/s heading N, vz +8"),
     "g3_in":     dict(frame="M", pos=(-780, -200, 880), look=(0, -300, 0), lens=40.0, vel=(-20, -41.7, 20), t=START["g3"] + G3_MARCH[0],
                       note="g3 CAM_IN = march846.CAM_IN (set: (170, -700, 125)); guide key 31.8 = (178.4, 139.5, 127.8)"),
@@ -99,7 +101,7 @@ TMAP = {}                              # g -> [(tv, t), ...] knots; missing = li
 TMAP["g2"] = [(0.0, 0.0), (16.0, 32.0)]
 
 def _g2_v5():   # v5 (owner 10/27 09:41): the empty steam stand at 3x, burning-town aerial ~3 s at 2, then an ULTRA-fast move
-    return slope_knots(DUR["g2"], [(0.0, 2.0, 0.0), (12.2, 2.6, 0.4), (14.8, 2.0, 0.4), (21.5, 1.55, 0.3),
+    return slope_knots(32.0, [(0.0, 2.0, 0.0), (12.2, 2.6, 0.4), (14.8, 2.0, 0.4), (21.5, 1.55, 0.3),
                                         (26.6, 4.5, 0.4), (30.6, 2.0, 0.35)])
 
 def ramp_knots(dur, holds, ramp=1.2, n=12, speed=None):
@@ -151,7 +153,14 @@ def slope_knots(dur, plan, n=8):
 # -> 1.7 for Carla (BEND 25.5 -> gone 28.9 = 2.0 video s) -> 3 -> 2 at the g1|g2 seam (at rest).  Video ~17.9 s.
 G1_PLAN = [(0.0, 1.0, 0.0), (11.0, 2.0, 0.7), (12.05, 5.5, 0.9), (23.4, 1.7, 0.5), (28.9, 3.0, 0.3), (31.15, 2.0, 0.3)]
 TMAP["g1"] = slope_knots(DUR["g1"], G1_PLAN)
-TMAP["g2"] = _g2_v5()
+TMAP["g2"] = [(0.0, 0.0)] + [(tv + G2_PRE / 2.0, t + G2_PRE) for tv, t in _g2_v5()]   # v14: prelude at slope 2
+# v14 (FEEDBACK_v13 §1: at the g2|g3 seam the camera stops, then an ULTRA-fast flight to Trost): the flight 0.3-14.8 at 4.5x
+# v14 (FEEDBACK_v13 §1): g6 skips Eren's leap / tackle of the two roof titans + rampage (8.3-16.8) and the plaza swarm /
+# blond titan (31.0-42.2) at 14x (~0.6 / 0.8 video s): the HQ lift operation (zoomed in), then straight to his face-down fall
+TMAP_G6_V14 = lambda: slope_knots(DUR["g6"], [(0.0, 2.0, 0.0), (8.3, 14.0, 0.25), (16.8, 2.0, 0.25), (31.0, 14.0, 0.25),
+                                              (42.2, 2.0, 0.25), (48.3, 1.47, 0.3), (59.5, 2.0, 0.3)])
+TMAP["g3"] = slope_knots(DUR["g3"], [(0.0, 2.0, 0.0), (0.3, 4.5, 0.5), (14.8, 2.0, 0.5), (G3_MARCH[0] - 0.9, 1.6, 0.9),
+                                     (G3_MARCH[1], 2.0, 1.0)])
 # g4 v4 (owner 10/27: 2nd Colossal, faster camera): the establishing approach at 3.2x (local 1.0-15.0), back to 2 for
 # Eren's fist on the wall top above O and the g4|g5 seam.  Video ~7.9 s.
 TMAP["g4"] = slope_knots(DUR["g4"], [(0.0, 2.0, 0.0), (1.0, 3.2, 0.6), (15.0, 2.0, 0.6)])
@@ -206,3 +215,24 @@ if __name__ == "__main__":
     for g in ORDER:
         print("video %s %6.2f s  %s  slope in %.2f out %.2f" % (g, vdur(g), fmt(VS[g]), slope(g, 0.0), slope(g, vdur(g))))
     print("video total %.1f s (%s)" % (VT, fmt(VT)))
+TMAP["g6"] = TMAP_G6_V14()                # v14 (overrides the round-2 g6 knots above)
+
+def squeeze(g, a, b, k, ramp=0.6, dt=0.05):
+    """v14: play local a..b of segment g k times faster than its current TMAP (cosine ease over `ramp` local s at both
+    ends); returns new knots sampled every dt local s (slopes elsewhere unchanged)."""
+    import math
+    import numpy as _np
+    T = _np.arange(0.0, DUR[g] + 1e-9, dt)
+    v = _np.array([to_video(g, t) for t in T])
+    dv = _np.diff(v)
+    tm = (T[:-1] + T[1:]) / 2
+    w = _np.clip((tm - (a - ramp)) / ramp, 0, 1) * _np.clip(((b + ramp) - tm) / ramp, 0, 1)
+    w = 0.5 - 0.5 * _np.cos(math.pi * w)
+    dv = dv * (1.0 - w + w / k)
+    v2 = _np.concatenate([[0.0], _np.cumsum(dv)])
+    return [(round(float(x), 6), round(float(t), 6)) for x, t in zip(v2, T)]
+# v14 (FEEDBACK_v13 §1 "2:44: unnecessary camera move; straight to the Scouts appearing in lines"): g7 local 23.8-31.6 at 4x
+TMAP["g7"] = squeeze("g7", 23.8, 31.6, 4.0)
+
+# v14 (FEEDBACK_v13 §1 "3:01-3:11 boulder carry ... played sped-up, about 5 s total"): g8 local 19.4-37.6 at 1.65x
+TMAP["g8"] = squeeze("g8", 19.4, 37.6, 1.65)

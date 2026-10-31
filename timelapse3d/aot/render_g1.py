@@ -103,10 +103,11 @@ def tree_keys():
     # v6 (QA batch1 P0): open AT the anime still (ref/hill_tree_wall_opening_ref.png: whole tree, wall top + sky), not on the
     # kids; a slight zoom-out over 2 s (back + up along the view line, wider lens), then the rise.
     back = Vector((l0.x - t0.x, l0.y - t0.y, 0.0)).normalized()
-    c0 = l0 + back * 5.0 + Vector((0, 0, 1.6)); c0.z = max(c0.z, L.height(c0.x, c0.y) + 1.5)
+    # v14 (FEEDBACK_v13 §1: still too zoomed in): start only slightly in (anime composition), then a VERY slow, slight zoom-out
+    c0 = l0 + back * 8.5 + Vector((0, 0, 2.6)); c0.z = max(c0.z, L.height(c0.x, c0.y) + 2.2)
     l1 = l0 + back * 10.0 + Vector((0, 0, 3.0)); l1.z = max(l1.z, L.height(l1.x, l1.y) + 2.5)
     tg = t0 + Vector((0, 0, 4.0))
-    return [(0.0, tuple(c0), tuple(tg), n0 * 0.70), (2.0, tuple(l1), tuple(tg), n0 * 0.60),     # autopilot r4: a bit wider
+    return [(0.0, tuple(c0), tuple(tg), n0 * 0.63), (2.0, tuple(l1), tuple(tg), n0 * 0.59),     # autopilot r4: a bit wider
             (2.05, tuple(l1), tuple(tg), n0 * 0.60)]                                         # (ref still: tree ~40 % wide)
 
 def build_campath():
@@ -323,7 +324,7 @@ def build_strike_cards():
 FXS = {}
 def build_fx():
     FXS["bolt"] = build_bolt()
-    FXS["arcs"] = build_arcs()
+    FXS["arcs"] = build_arcs() if os.environ.get("G1_ARCS") else []      # v14: the orange arcs after the bolt are removed
     ld = bpy.data.lights.new("G1_Flash", "POINT"); ld.color = (1.0, 0.92, 0.55); ld.shadow_soft_size = 30
     lo = bpy.data.objects.new("G1_Flash", ld); lo.location = STRIKE + Vector((0, 0, 160))
     bpy.context.scene.collection.objects.link(lo); ld.energy = 0.0

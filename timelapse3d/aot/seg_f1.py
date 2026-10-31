@@ -266,7 +266,7 @@ def _shots():
             TB.Shot("hood", *TAB["hood"], tgt(20.8, 4.0, ((ax * 2 + female_F(20.8)[0]) / 3, (ay * 2 + female_F(20.8)[1]) / 3)),
                     az=(a["hood"] - 80, a["hood"] - 55), dist=(38, 30), el=(12, 18), lens=40),
             TB.Shot("palm", *TAB["palm"], tgt(31.6, 7.0), az=(a["palm"] + 25, a["palm"] + 55), dist=(64, 50), el=(8, 13), lens=38),
-            TB.Shot("spin", *TAB["spin"], tgt(36.5, 9.0), az=(a["spin"] - 25, a["spin"] - 50), dist=(72, 56), el=(26, 32), lens=36)]
+            TB.Shot("spin", *TAB["spin"], tgt(36.5, 9.0), az=(a["spin"] - 25, a["spin"] - 50), dist=(84, 66), el=(44, 50), lens=36)]
 PLAN = [(0.0, "morning"), (14.0, "morning"), (30.0, "day"), (STORY_DUR, "day")]
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
@@ -428,6 +428,10 @@ def _graphic_update(t, ts):
         return
     x, y = dc(ts); x2, y2 = dc(ts + 0.6)
     w = F(x, y)
+    B = S["B"]                                           # v9: centred on the riders actually on the plain (not the planned dome)
+    on = [j for j in range(B.n) if B.vis[j] > 0.5]
+    if on:
+        m = np.mean(B.pos[on], axis=0); w = (float(m[0]), float(m[1]), 0.0)
     zt = max(C.G(w[0] + dx, w[1] + dy) for dx in (-400, 0, 400) for dy in (-400, 0, 400)) + 30.0
     S["graphic"].location = (w[0], w[1], zt)
     S["graphic"].rotation_euler = (0, 0, C.yaw_of(x2 - x, y2 - y + 1e-6))
@@ -496,7 +500,7 @@ def _tableau_update(t):
             sh = np.array(fem.bone_world("upperarm01.R"))
             hl = np.array(fem.bone_world("lowerarm01.L", tail=True))
             put = [(0, sh + f * 2.5 + r * 3.5 + np.array((0, 0, 1.0)), "flung", 0.4),         # rammed off her shoulder
-                   (1, hl + r * -9.0 + f * -4.0 + np.array((0, 0, 7.0)), "hang", 1.9),        # yanked up on his wire
+                   (1, hl + r * -5.0 + f * -2.5 + np.array((0, 0, 3.5)), "hang", 1.9),        # yanked up on his wire
                    (2, base + f * 9.0 + r * 10.0 + np.array((0, 0, 6.5)), "flung", 2.6),
                    (3, base + f * -6.0 + r * 13.0 + np.array((0, 0, 3.2)), "flung", -1.0)]
             for j, p, m, yy in put:

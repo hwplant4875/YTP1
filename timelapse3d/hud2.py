@@ -173,13 +173,18 @@ def el_title(c, e):
         return
     s, W, H = c.s, c.W * SS, c.H * SS
     text = e.get("text", "")
-    ft = font(F_TITLE, e.get("size", 42) * s)
+    grow = (0.90 + 0.10 * ease((c.t - e.get("t0", 0)) / 1.2)) if e.get("scale_in") else 1.0   # v14: elegant scale-in
+    ft = font(F_TITLE, int(e.get("size", 42) * s * grow))
     y = e.get("y", 0.84) * H                                         # bottom centre (New Rocker rule)
     dur = max(0.1, e.get("t1", c.t + 1) - e.get("t0", 0))
     tr = (1.0 + 2.0 * ease((c.t - e.get("t0", 0)) / dur)) * s          # slow tracking widen
     tw = spaced(c.d, (0, 0), text, ft, None, track=tr)
     plate(c, (W / 2 - tw / 2 - 120 * s, y - 70 * s, W / 2 + tw / 2 + 120 * s, y + 46 * s), a * 0.8, "m")
-    spaced(c.d, (W / 2, y), text, ft, col("cream", a), "ms", track=tr)
+    if e.get("shadow"):                                              # v14: strong drop shadow
+        for dx, dy, al in ((5, 5, 0.85), (3, 3, 0.9), (0, 0, 0.0)):
+            if al:
+                spaced(c.d, (W / 2 + dx * s, y + dy * s), text, ft, (0, 0, 0, int(255 * a * al)), "ms", track=tr)
+    spaced(c.d, (W / 2, y), text, ft, col(e.get("color", "cream"), a), "ms", track=tr, **(stk(s, a) if e.get("shadow") else {}))
     if e.get("sub"):
         a2 = a * ease((c.t - e.get("t0", 0) - 0.5) / 0.6)
         fs = font(F_SMALL, e.get("sub_size", 17) * s)

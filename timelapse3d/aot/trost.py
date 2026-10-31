@@ -889,12 +889,14 @@ def ground_mat(name, yoff):
     return nb.finish(col, bump=joint, strength=0.12)
 
 def water_mat(name="CanalWater"):
-    nb = NB(name, 0.18)
+    # v14 (FEEDBACK_v13 §1 "the water graphic looks wrong" = a flat pale mint strip): deep green-blue canal water, glossy,
+    # with small wind ripples so it reads as water from the air
+    nb = NB(name, 0.06)
     o = nb.obj()
     n = nb.noise(o, 0.05, 3.0)
-    col = nb.mix(nb.smooth(n.outputs["Fac"], 0.4, 0.65), lin("#4e6e62"), lin("#6f9a7c"))
-    fn = nb.noise(o, 1.2, 2.0)
-    return nb.finish(col, bump=fn.outputs["Fac"], strength=0.05)
+    col = nb.mix(nb.smooth(n.outputs["Fac"], 0.4, 0.65), lin("#1b3134"), lin("#2a4a4a"))
+    fn = nb.noise(o, 0.9, 4.0)
+    return nb.finish(col, bump=fn.outputs["Fac"], strength=0.18)
 
 def marble_mat(name="TrostBoulderMarble"):
     """The ball (owner 15:29, bible g8): warm grey #8f8a82, large dark charcoal marbling #3b3a3a, pale weathered patches

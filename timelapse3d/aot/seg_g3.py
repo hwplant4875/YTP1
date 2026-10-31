@@ -139,10 +139,10 @@ MARCH_T_END = 18.0
 MARCH_CAM_KEYS = [   # v7 (QA batch1 P1): NEAR TOP-DOWN hold low over the column (pitch 60-66, 520-600 m) so it crosses the
                      # whole frame and the people read; key 0 = the camps seam, key 18 = the to-camp seam (both unchanged)
     (0.0,  _gp(200, -780, 880),   _gp(300, 0, 0),    40),         # the gate in frame as the column pours out
-    (3.0,  _gp(380, -170, 360),   _gp(440, 0, 0),    36),         # v8 (g3 v7 "still a thin strip"): ~230-280 m over the
-    (6.0,  _gp(650, -90, 235),    _gp(700, 0, 0),    38),         # column, pitch ~68, 38 mm: the column band fills ~1/3 of
-    (10.0, _gp(900, -90, 245),    _gp(950, 0, 0),    38),         # the frame height and riders / carts read
-    (14.0, _gp(1050, -120, 290),  _gp(1110, 0, 0),   34),         # the titans hit, the column dies
+    # v14 (FEEDBACK_v13 §1: "camera still odd, no zoom-in on titans eating"): WIDE, FAR, almost static, slow smooth drift
+    (3.0,  _gp(420, -900, 900),   _gp(520, 0, 0),    34),
+    (9.0,  _gp(490, -940, 930),   _gp(585, 0, 0),    31),
+    (14.0, _gp(550, -975, 960),   _gp(640, 0, 0),    30),
     (18.0, _gp(760, -1080, 1150), _gp(300, -900, 0), 26),         # pan north toward the camp (to-camp needs no spin)
 ]
 MARCH_OUT_VEL = (0.0, 50.0, -15.0)                                 # M: drifting north, easing down toward FT1

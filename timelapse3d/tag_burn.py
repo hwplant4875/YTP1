@@ -17,14 +17,14 @@ import segtime       # noqa: E402
 TITANS = {"FEMALE", "ANNIE", "AttackTitan", "ARMORED TITAN", "COLOSSAL"}
 # part 1: (tag text, tracker name, local t0, local t1) - from graphics_timelines/*_tags.json + the bible beats
 PART1 = {
-    "g2": [("ARMORED TITAN", "ARMORED TITAN", 5.0, 10.8)],          # the run + impact, gone in steam at 11.1
+    "g2": [("ARMORED TITAN", "ARMORED TITAN", 11.0, 16.8)],   # v14: +6 s prelude (segtime.G2_PRE)          # the run + impact, gone in steam at 11.1
     "g3": [("SHADIS", "Shadis", 55.6, 58.6), ("EREN", "Eren", 55.8, 58.8), ("MIKASA", "Mikasa", 56.0, 58.8)],
     "g4": [("EREN", "Eren", 16.8, 19.7)],
     "g5": [("MIKASA", "Mikasa", 33.8, 39.0), ("MIKASA", "Mikasa", 50.0, 54.0)],
     "g6": [("EREN", "Eren", 48.6, 53.0), ("MIKASA", "Mikasa", 50.6, 53.5)],
     "g7": [("EREN", "EREN", 9.4, 13.4), ("MIKASA", "MIKASA", 9.8, 13.8), ("ARMIN", "ARMIN", 10.6, 14.6),
            ("PYXIS", "PYXIS", 14.0, 18.0), ("PYXIS", "PYXIS", 33.4, 37.4)],
-    "g8": [("LEVI", "Levi", 50.5, 54.5)],
+    "g8": [("ARMIN", "Armin", 12.0, 15.0), ("LEVI", "Levi", 50.5, 54.5)],   # v14: ARMIN wakes Titan Eren
 }
 
 def valid(cam, nm):
@@ -67,11 +67,11 @@ def main():
             for a, b in spans:
                 if b - a >= 0.8:
                     tracks.append(dict(type="tag", name=nm.upper(), obj=nm, t0=a, t1=b))
-    if A.seg == "g1":                         # no camera dumps in render_g1: screen-anchored tag on the zoomed head (video = local)
-        tracks.append(dict(type="tag", name="COLOSSAL TITAN", obj="COLOSSAL", screen=(0.57, 0.45), t0=7.7, t1=8.9))
     for e in tracks:
         e.update(color="red" if e["obj"] in TITANS else "cream", len=30, size=15)
     extra = []
+    if A.seg == "g1":                         # v14 (FEEDBACK_v13 §1): no red tag on the zoomed head - a big title at the bottom
+        extra.append(dict(type="title", text="Colossal Titan", t0=7.6, t1=10.4, size=50, y=0.86, shadow=True, scale_in=True))
     if A.seg == "g3":                        # captions + the 250,000 "Still marching" counter + place label (owner 10/27)
         import json, numpy as np
         tl = json.load(open(os.path.join(HERE, "graphics_timelines", "g3_tags.json"), encoding="utf8"))

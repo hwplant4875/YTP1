@@ -125,8 +125,8 @@ G3_FLIGHT_W = [                                                       # FA0..FA3
 # the relief complex and the 846 avenue to CAM_IN.  seg_g3.py builds its camera from these rows (times = seg_g3.BEATS).
 G3_CAMPS_M = [
     (12.9,  (60, 170, 300),    (-268, 805, 0),   30),             # FA4 = W (60, 4300, 300)
-    (17.7,  (-145, 605, 250),  (-420, 1250, 0),  28),             # H  (drift 5 m/s), looking out at the clearing
-    (19.6,  (-170, 640, 262),  (-480, 1330, 0),  38),             # H2 small zoom-in: the clearing planted
+    (17.7,  (-1020, 1180, 250), (-380, 1150, 0),  28),            # H  v14: from the WEST looking east, the wall / castle on the RIGHT
+    (19.6,  (-960, 1200, 262),  (-430, 1170, 0),  38),            # H2 small zoom-in: the clearing planted
     (21.2,  (-330, 450, 420),  (-30, 970, 0),    35),             # P1 v6: the turn via the west, climbing (look-at monotonic)
     (22.9,  (-620, 80, 700),   (0, 150, 0),      34),             # P2 v6: west of the town, looking at the avenue + gate
     (24.6,  (-770, -170, 860), (0, -150, 0),     42),             # P3 v6: HIGH west of the gate, held: the 846 crowd on the avenue,
@@ -164,7 +164,8 @@ G5 = [
     (0.0,  (-40, 330, 170),   (0, 0, 30),       32),              # C0
     (1.0,  (-34, 280, 92),    (0, -14, 55),     110),             # v5 (QA batch1 P1): zoom onto the Colossal's head over
     (2.0,  (-32, 262, 80),    (0, -14, 56),     230),             #   the gate (~1.5 video s, chin at the wall top); v6: camera
-    (3.6,  (-31, 255, 78),    (0, -14, 56),     220),             #   down near wall-top height, 230 mm (v5 head ~10 %), then
+    (3.0,  (-31, 255, 78),    (0, -14, 56),     220),             #   down near wall-top height, 230 mm; v14: held to 3.0, then
+    (3.85, (-75, 395, 150),   (0, -10, 34),     34),              # v14 (FEEDBACK_v13 §1): WIDE before the kick (4.0) - the Colossal breaking the gate in frame
     (6.2,  (-40, 300, 172),   (0, 10, 24),      32),              # C1  back out before the steam explosion (9.0)
     (12.0, (-75, 370, 200),   (0, 40, 8),       28),              # C2
     (18.0, (-20, 470, 205),   (-15, 150, 0),    28),              # C3
@@ -186,13 +187,14 @@ G6 = [   # g6 agent 10/27: owner 16:51 "FAR is better" -> the whole segment stay
     (0.0,  (-345, 455, 175), (-185, 640, 15),  30),               # H0 = g5 C10
     (4.7,  (-337, 470, 171), (-246, 628, 26),  46),               # round 6: zoom on the cadets crashing in through the windows
     (7.0,  (-332, 478, 169), (-225, 605, 10),  32),               # H1 approach, Jean's squad, climbers
-    (14.5, (-318, 484, 158), (-210, 605, 6),   31),               # H2 tackle aftermath, rampage
+    # v14 (FEEDBACK_v13 §1) removed: (14.5, (-318, 484, 158), (-210, 605, 6),   31),               # H2 tackle aftermath, rampage
     (19.5, (-282, 482, 165), (-190, 630, 3),   33),               # H3 cutaway from the SW (41 deg; sees the ring over the cut wall)
-    (23.6, (-222, 553, 92),  (-187, 641, 2),   40),               # Z1 owner 10/27: zoom in on the lift op (bay fills the frame;
-    (30.0, (-219, 557, 92),  (-187, 642, 2),   42),               # Z2  the Attack Titan at (-198, 600) stays under the frame)
-    (35.0, (-240, 468, 165), (-188, 628, 6),   32),               # H3b pull back for the swarm / breakout
-    (37.3, (-232, 462, 160), (-224, 614, 8),   56),               # round 2: zoom on the BLOND titan spot / bite / throw (36-38.9)
-    (38.5, (-215, 440, 170), (-195, 622, 8),   44),               # H4 roar before the wing, cadets on the wing roof
+    (23.6, (-222, 553, 92),  (-187, 641, 2),   50),               # Z1 owner 10/27: zoom in on the lift op (bay fills the frame;   # v14: lift scene zoomed in
+    (30.0, (-219, 557, 92),  (-187, 642, 2),   52),               # Z2  the Attack Titan at (-198, 600) stays under the frame)
+    # v14 (FEEDBACK_v13 §1) removed: (35.0, (-240, 468, 165), (-188, 628, 6),   32),               # H3b pull back for the swarm / breakout
+    # v14 (FEEDBACK_v13 §1) removed: (37.3, (-232, 462, 160), (-224, 614, 8),   56),               # round 2: zoom on the BLOND titan spot / bite / throw (36-38.9)
+    # v14 (FEEDBACK_v13 §1) removed: (38.5, (-215, 440, 170), (-195, 622, 8),   44),               # H4 roar before the wing, cadets on the wing roof
+    (43.0, (-170, 455, 165), (-185, 620, 4), 34),   # v14: straight to Titan Eren falling face-down
     (46.5, (-150, 450, 165), (-183, 617, 4),   33),               # H5 collapse + skid along the wing base (owner wing ref, from the sky)
     (52.5, (-150, 455, 160), (-180, 619, 4),   50),               # H6 Eren on the nape, Mikasa drops in (round 2: zoom 34 -> 50)
     (59.5, (-110, 470, 170), (-215, 615, 18),  31),               # H7 tableau on the keep roof walk + corpses

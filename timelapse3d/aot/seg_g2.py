@@ -671,6 +671,25 @@ def build_ground(coll):
                 f = bm.faces.new((prevw[0], prevw[1], v1, v0)); f.material_index = 1
             prevw = (v0, v1)
         ribbon(bm, qpts, s * 35.0, s * 44.0, lambda p, o: (wz(p) + 3.6) if abs(o) < 36 else L.height(*(Vector(p))) + 0.05, mi=2)
+    # v14 (FEEDBACK_v13 §1: the pale path beside the river ended at y 452 in the 0:30 view): the paved quay continues north
+    # as a towpath along both river banks to y 2400, easing from quay height down onto the ground by y 700
+    tpts = [p for p in pts if p[1] >= 446]
+    for s in (-1, 1):
+        prev = None
+        for k, p in enumerate(tpts):
+            a = Vector(tpts[max(k - 1, 0)]); b = Vector(tpts[min(k + 1, len(tpts) - 1)])
+            tng = (b - a).normalized(); nrm = Vector((tng.y, -tng.x)); pv = Vector(p)
+            w0 = widen(pv) + 0.5; w1 = w0 + 18.0
+            u = max(0.0, min(1.0, (p[1] - 452.0) / 250.0))
+            vs = []
+            for w in (w0, w1):
+                q = pv + nrm * (s * w)
+                zq = (wz(pv) + 3.6) * (1 - u) + (L.height(q.x, q.y) + 0.12) * u
+                vs.append(bm.verts.new((q.x, q.y, max(zq, L.height(q.x, q.y) + 0.08))))
+            if prev:
+                f = bm.faces.new((prev[0], prev[1], vs[1], vs[0])); f.material_index = 0; f.normal_update()
+                if f.normal.z < 0: f.normal_flip()
+            prev = vs
     # quay apron by the arches (x 150..213, y 8..110) at quay height
     ya = 8.0; yb = 110.0
     zq = water_z(40.0) + 3.6
@@ -1835,3 +1854,60 @@ def check():
 
 if __name__ == "__main__":                 # python aot/seg_g2.py : camera + run numbers without Blender
     vcheck()
+
+# ====================================================================== v14 PRELUDE (FEEDBACK_v13 §1)
+# After Carla: the camera rises high into the sky over the inner gate: people at the gate being eaten by titans, the rest
+# streaming out through the gate to the boats (swarm845 at 2.5x, no "evacuated" mask); then lightning between the houses
+# on the avenue, Reiner's Armored rises out of it (swoosh) and sprints = g2's own clock from local PRE on (everything above
+# is unchanged and keeps its own times: seg_g3 reads g2 at its internal t 32 = video end).
+PRE = segtime.G2_PRE
+DUR = segtime.DUR["g2"]
+_core_update, _core_light, _core_shake = update, light, cam_shake
+_CORE_CAM = CAM
+def _pre_cam():
+    ks = camkeys.cam("g2")
+    keys = [tuple(ks["keys"][0]),                                          # g1 seam at rest (the Yeager ruin)
+            (2.4, (-300.0, -520.0, 280.0), (-40.0, -60.0, 0.0), 28.0),     # up into the sky: the gate crowd, the titans
+            (4.6, (-250.0, -420.0, 330.0), (0.0, 40.0, 0.0), 28.0),       # ... the people pouring out to the boats
+            (PRE - 0.2, (-150.0, -560.0, 150.0), (0.0, -400.0, 12.0), 34.0),  # down between the houses: the lightning
+            (PRE + 1.6, (-170.0, -420.0, 120.0), (0.0, -330.0, 10.0), 37.0)]  # he rises and sprints
+    keys += [(k[0] + PRE,) + tuple(k[1:]) for k in ks["keys"][2:]]           # g2's own camera from its lock key (4.4) on
+    return camchan.CamPath(keys, v_in=ks["v_in"], v_out=ks["v_out"], look_v_out=ks.get("look_v_out"))
+CAM = _pre_cam()
+TRACK = {k: (lambda f: (lambda t: f(t - PRE) if t >= PRE + 0.6 else None))(f) for k, f in TRACK.items()}
+
+def cam_shake(t):
+    return _core_shake(t - PRE) if t >= PRE else _core_shake(-10.0)
+
+def light(t):
+    _core_light(max(0.0, t - PRE))
+
+def update(t):
+    tc = t - PRE
+    _core_update(max(0.0, tc))
+    SW = S.get("SW")
+    if tc < 1.0 and SW and SW.STATE:                     # the gate crowd is still there (eaten / fleeing at 2.5x)
+        SW.HIDE_PEOPLE = None
+        SW.update(max(0.0, SIM0 + SIM_K * 2.5 * tc))
+    elif SW:
+        SW.HIDE_PEOPLE = evacuated
+    if tc < 0.0:
+        try:
+            ferries_update(tc)                           # the boats already pulling away north
+        except Exception:
+            pass
+    TA = S.get("TA")
+    if TA:                                               # hidden until the lightning, then he rises out of it (swoosh)
+        hidden = tc < 0.05
+        for me in TA.meshes:
+            if me.hide_render != hidden:
+                me.hide_render = hidden
+        if 0.05 <= tc < 0.5:
+            u = smooth(0.05, 0.5, tc)
+            TA.arm.matrix_world = Matrix.Translation((0.0, 0.0, -18.0 * (1 - u))) @ TA.arm.matrix_world
+    if -0.8 <= tc <= 1.4:                                # lightning strike between the houses where he appears
+        try:
+            import attack_titan as AT
+            AT.shift_fx(0.0, arm_y(0.0) - 6.0, min(1.0, max(0.0, (tc + 0.8) / 2.2)), seed=52)
+        except Exception:
+            import traceback; traceback.print_exc()

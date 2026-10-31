@@ -82,8 +82,8 @@ RICO_DECK = (16.0, 36.0)                         # AUDIT 7: Rico east of the 20 
 GF = (334.0, 136.0, 51.5); RF = (306.0, 300.0, 19.0); YF = (22.0, 52.0, 2.5); PY = (-20.0, 870.0, 50.5)
 LV = (-40.0, 2.0, 50.5); CT = [(-45.0, 45.0), (-55.0, 32.0)]; MI = (-67.0, 18.0); IA = (-36.0, 56.0)
 CROUCH = (44.0, 27.0); CROUCH_FALL = (52.0, 36.0); PIT = (0.0, 36.0)
-PYRES = [(-60.0, 470.0), (-12.0, 250.0), (150.0, 330.0), (50.0, 55.0)]        # C, AV, street, GS ring road east (lit in order)
-PYRE_T = (61.0, 62.6, 64.2, 65.8)                # VIDEO clock: the pyres light one by one in the longer cleanup
+PYRES = [(-338.0, 178.0), (-60.0, 470.0), (-12.0, 250.0), (150.0, 330.0), (50.0, 55.0), (-300.0, 215.0)]   # v14: + the corner corpses
+PYRE_T = (60.6, 61.4, 62.4, 63.4, 64.4, 65.2)    # VIDEO clock: v14 the titan corpses burn one by one in the NIGHT sky view
 D_BOX = (-475.0, -360.0, 760.0, 865.0)
 HERD_KILL = 62.0                                 # owner 10/27: the herded corner group dies in one massed volley (choreo clock)
 NO_SPARKLES = True                               # owner 10/27: no muzzle / shell glow cards in the mop-up
@@ -107,11 +107,11 @@ CAM_KEYS = [
     (43.5, (-80, 160, 93),   (2, 13, 12),     41),     # S1b hold on the wedged ball, the plug grows, 5 titans face it
     (47.1, (-95, 225, 135),  (0, 20, 40),     32),     # S2 the Λ plug and the yellow trail (from the east plank box)
     (52.0, (-105, 245, 140), (0, 30, 15),     34),     # L1 Levi
-    (55.0, (25, 155, 98),    (-37, 21, 8),    46),     # v4 (QA batch1): the herded corner group (x -34..-44, y 15..26)
-    (57.4, (12, 138, 88),    (-38, 20, 8),    58),     #   killed together (HERD_KILL = local 56.5): v5 closer + zoom (v4 too small)
-    (60.2, (10, 300, 200),   (-130, 290, 5),  32),     #   then a steady turn west into M1 (no yaw flip)
-    (63.4, (-60, 430, 290),  (-410, 800, 20), 28),     # M1 day 2, Survey Corps over the district
-    (71.0, (150, 600, 190),  (-120, 420, 0),  30),     # E1 (tight look-at) cleanup, pyres, rows
+    (55.0, (-190, 330, 115), (-335, 180, 10), 40),     # v14: the WEST wall corner: the herded titans, the massed cannons
+    (57.4, (-215, 305, 100), (-337, 181, 10), 52),     #   (HERD_KILL = local 56.5, daylight), slight zoom
+    (60.2, (-180, 420, 260), (-200, 230, 0),  30),     #   then up into the sky as night falls
+    (63.4, (-80, 560, 430),  (-120, 280, 0),  28),     # v14: NIGHT, full sky view: the titan corpses burning
+    (71.0, (120, 680, 330),  (-90, 300, 0),   28),
     (75.0, tuple(_SEAM_OUT["pos"]), tuple(_SEAM_OUT["look"]), _SEAM_OUT["lens"]),     # E2 END
     (76.0, tuple(_SEAM_OUT["pos"]), tuple(_SEAM_OUT["look"]), _SEAM_OUT["lens"]),     # guide key: at rest at E2
 ]
@@ -279,6 +279,11 @@ def at_state(t):
             st["eyes"] = 28.0 * (1 - ss(51.0, 53.0, t))
     return st
 
+def carry_bent_w(t):
+    """v14 (FEEDBACK_v13 §1, anime ep13): 0..1 weight of the bent, struggling carry (boulder on the shoulders, face pressed to
+    the rock, one heavy step at a time) - eases in after the overhead lift and back out for the roar before the slam."""
+    return ss(BEATS["overhead"][1], BEATS["overhead"][1] + 1.2, t) * (1.0 - ss(BEATS["roar2"][0] - 1.0, BEATS["roar2"][0], t))
+
 def ball_state(t, at=None, frame=None):
     """Ball centre (M) + roll angles.  Before the lift it rests on its bed; after the jam it rests at BALL_SEAL.
     While carried it rides on the titan: frame = dict(head=(f, z) titan-frame offsets) supplied by the Blender side."""
@@ -304,6 +309,8 @@ def ball_state(t, at=None, frame=None):
     if t < BEATS["slam"][0]:
         s = at.get("s", ROUTE_LEN)
         c = over + np.array([0.0, ball_north_shift(s), 0.0])
+        wb = carry_bent_w(t)                                       # v14: the boulder rides on his upper back / shoulders
+        c = c + (tf(0.0, -2.6, 15.2) - over) * wb
         return c, -1.0 + 0.05 * math.sin(at.get("phase", 0.0)), 0.04 * math.sin(at.get("phase", 0.0))
     seal = np.array(BALL_SEAL)
     a, b = BEATS["slam"]
@@ -500,6 +507,8 @@ def make_poses():
                       knee=V(0, 1, 0.1), hands={"R": (V(4, 5, 11), V(1, -0.3, -0.5), "abs"), "L": (V(-4, 5, 11), V(-1, -0.3, -0.5), "abs")}, fist=0.2, jaw=20)
     P["carry"] = dict(hips=7.15, bend=_bends(8, 6, 4, 2, 24), feet={"R": (V(FOOT_W, 0.0, 0), -6), "L": (V(-FOOT_W, 0.0, 0), 6)},
                       knee=V(0, 1, 0), hands={"R": (V(5, 1, 15), V(1, 0.1, -0.3), "abs"), "L": (V(-5, 1, 15), V(-1, 0.1, -0.3), "abs")}, fist=0.25, jaw=10)
+    P["carry_bent"] = dict(P["carry"], hips=6.4, bend=_bends(28, 22, 14, 8, -6), jaw=22,
+                           hands={"R": (V(5.2, -1.8, 13.0), V(1, 0.1, -0.3), "abs"), "L": (V(-5.2, -1.8, 13.0), V(-1, 0.1, -0.3), "abs")})
     P["roar_carry"] = dict(P["carry"], hips=7.8, bend=_bends(-4, -6, -6, -10, -6), jaw=34)
     P["drop"] = dict(hips=6.6, bend=_bends(22, 12, 6, 0, 0), feet={"R": (V(1.9, 0.8, 0), -8), "L": (V(-1.9, -0.6, 0), 8)},
                      knee=V(0, 1, 0.1), hands={"R": (V(5, 6, 10), V(1, 0.2, -0.5), "abs"), "L": (V(-5, 6, 10), V(-1, 0.2, -0.5), "abs")}, fist=0.1, jaw=16)
@@ -615,7 +624,8 @@ def _pose_titan(t):
             dirs = Vector((0.82, -0.5, -0.28)).lerp(Vector((0.86, -0.25, -0.1)), uc).lerp(Vector((0.8, -0.05, -0.6)), uo)
             spec = _ball_hands(sp, c_tf, dirs, (1.0, -0.3, -0.4))
         elif mode == "carry":
-            sp = dict(P["carry"], hips=P["carry"]["hips"] + bob)
+            sp = blend(P["carry"], P["carry_bent"], carry_bent_w(t))
+            sp = dict(sp, hips=sp["hips"] + bob)
             sp = _walk_feet(sp, st["phase"], FOOT_A * st["ramp"], sway=-side, width=foot_w(st["s"]))
             spec = _ball_hands(sp, c_tf, (0.8, -0.05, -0.6), (1.0, 0.1, -0.25))
         elif mode == "roar_carry":
@@ -819,12 +829,16 @@ def build_titans(coll):
                 return (xa + (xb - xa) * u, ya + (yb - ya) * u)
         return K[-1][1:]
     herd = [nm for nm in targets if nm not in ("trench", "pitlying")]
-    slots = [(-34.0 - 5.0 * (k % 3), 15.0 + 5.5 * (k // 3)) for k in range(len(herd))]
+    # v14 (FEEDBACK_v13 §1: the mop-up is NOT by the boulder): herded into the WEST corner of the bulge wall (angle -48 deg)
+    ca, sa = math.cos(math.radians(-48.0)), math.sin(math.radians(-48.0))
+    wx, wy = 478.0 * sa, 480.0 - 478.0 * ca
+    slots = [(wx - 16.0 * sa + (k % 3 - 1) * 7.0 * ca - (k // 3) * 6.0 * sa, wy + 16.0 * ca + (k % 3 - 1) * 7.0 * sa + (k // 3) * 6.0 * ca)
+             for k in range(len(herd))]
     h0, h1 = n0 + 0.2, n0 + 2.4
     for nm, sl in zip(herd, slots):
         q = at(nm, h0); c = S3(*sl)[:2]
         TT.keys[TT.j(nm)] = [k_ for k_ in TT.keys[TT.j(nm)] if k_[0] < h0] + [(h0, *q), (h1, float(c[0]), float(c[1])), (99, float(c[0]), float(c[1]))]
-        TT.specs[TT.j(nm)]["face"] = tuple(S3(-30.0, 40.0)[:2])
+        TT.specs[TT.j(nm)]["face"] = tuple(S3(wx, wy)[:2])
     for nm in targets:
         kill(nm, HERD_KILL + rnd.uniform(-0.12, 0.12), rnd.choice([1, -1]), keep=False)
     STATE["shell_targets"] = targets
@@ -1083,8 +1097,8 @@ def build_flares(coll):
         BURN = 2.6
         TOP_HOLD = 1.3
     FL = Flares8("G8Flares", coll, style="column")       # v4 (QA batch1): rising smoke columns with a bright head, not laser lines
-    FL.add(BEATS["green"], S3(*GF), "green", up=200.0, lean=(3, 1), seed=11, life=20.0, width=1.6)
-    FL.add(BEATS["red"], S3(RF[0], RF[1], RF[2] + 1.6), "red", up=200.0, lean=(-2, 2), seed=12, life=60.0, width=1.7)
+    # v14 (FEEDBACK_v13 §1): no green flare before the red one (not in the story); the RED one lingers like the later green
+    FL.add(BEATS["red"], S3(RF[0], RF[1], RF[2] + 1.6), "red", up=200.0, lean=(-2, 2), seed=12, life=60.0, width=2.1)
     yz = G(YF[0], YF[1]) + YF[2] + 1.6
     # owner 10/27: the flare after the plug is clearly GREEN (was yellow), relay too, a bit wider
     FL.add(BEATS["yellow"], S3(YF[0], YF[1], yz), "green_vivid", up=200.0, lean=(2, -1), seed=13, life=25.0, width=2.1)
@@ -1229,7 +1243,7 @@ def build_cannon_events():
     """Mop-up cannons 'around the clock' (owner 16:53: at the gate square, no corner D): muzzle flashes on the wall top
     round the seal, shell bursts on the titans left in the gate square at night, slower fire outside by day."""
     rng = np.random.default_rng(55)
-    guns = [S3(478.0 * math.sin(a), 480 - 478.0 * math.cos(a), 52.0) for a in np.radians([-44, -36, -28, -20, 20, 28, 36, 44])]
+    guns = [S3(478.0 * math.sin(a), 480 - 478.0 * math.cos(a), 52.0) for a in np.radians([-62, -58, -54, -51, -45, -42, -38, -34])]   # v14: massed at the corner
     TT = STATE["TT"]
     ev = []
     for nm in STATE.get("shell_targets", []):            # 2-3 shells walk onto each titan, the last one kills it
@@ -1732,16 +1746,11 @@ LIGHT_KEYS = [
     (40.0,  9.0, 212, 3.1, (1.00, 0.60, 0.36), (0.22, 0.28, 0.52), (1.00, 0.60, 0.38), 0.95, 0.20),   # redder (v4 QA: sun kept
                                                                                                        # above the wall so the gate side is lit)
     (47.0,  8.0, 204, 3.0, (1.00, 0.56, 0.32), (0.22, 0.26, 0.48), (1.00, 0.58, 0.34), 0.95, 0.30),
-    (53.0,  6.0, 202, 2.7, (1.00, 0.64, 0.30), (0.22, 0.24, 0.44), (1.00, 0.70, 0.34), 0.90, 0.35),   # YELLOW at sunset
-    (56.5,  2.5, 204, 1.6, (1.00, 0.55, 0.60), (0.20, 0.16, 0.36), (0.90, 0.50, 0.58), 0.75, 0.55),   # Levi: pink-violet dusk
-    (59.6, 30.0, 120, 1.6, (0.55, 0.66, 1.00), (0.05, 0.08, 0.18), (0.14, 0.18, 0.32), 0.60, 0.45),  # moonlit night (v4: readable)
-    (62.8, 30.0, 120, 1.6, (0.55, 0.66, 1.00), (0.05, 0.08, 0.18), (0.14, 0.18, 0.32), 0.60, 0.45),
-    (63.4, 38.0, 150, 3.6, (1.00, 0.97, 0.92), (0.10, 0.28, 0.75), (0.70, 0.80, 0.93), 1.00, 0.00),  # day 2: blue sky
-    (66.0, 38.0, 170, 3.6, (1.00, 0.96, 0.90), (0.11, 0.29, 0.74), (0.72, 0.81, 0.92), 1.00, 0.00),
-    (66.6, 26.0, 225, 3.0, (1.00, 0.88, 0.72), (0.34, 0.42, 0.60), (0.86, 0.80, 0.70), 0.90, 0.05),  # cleanup: hazy warm day
-    (70.0, 22.0, 235, 3.0, (1.00, 0.86, 0.68), (0.32, 0.40, 0.60), (0.88, 0.80, 0.68), 0.90, 0.05),
-    (72.5, 11.0, 250, 3.3, (1.00, 0.76, 0.50), (0.22, 0.34, 0.62), (0.98, 0.76, 0.52), 0.95, 0.00),  # golden end hold
-    (75.0, 10.0, 250, 3.3, (1.00, 0.75, 0.50), (0.22, 0.34, 0.62), (0.98, 0.75, 0.52), 0.95, 0.00),
+    (53.0,  9.0, 204, 3.0, (1.00, 0.66, 0.40), (0.22, 0.28, 0.52), (1.00, 0.66, 0.42), 0.95, 0.20),   # v14: Levi in DAYLIGHT
+    (58.2,  8.0, 206, 3.0, (1.00, 0.64, 0.38), (0.22, 0.27, 0.50), (1.00, 0.64, 0.40), 0.95, 0.20),   # the corner volley, still day
+    (59.4,  2.0, 206, 1.6, (1.00, 0.55, 0.60), (0.20, 0.16, 0.36), (0.90, 0.50, 0.58), 0.75, 0.50),   # rising: dusk
+    (60.6, 30.0, 120, 1.6, (0.55, 0.66, 1.00), (0.05, 0.08, 0.18), (0.14, 0.18, 0.32), 0.60, 0.45),  # NIGHT: the corpses burn
+    (75.0, 30.0, 120, 1.6, (0.55, 0.66, 1.00), (0.05, 0.08, 0.18), (0.14, 0.18, 0.32), 0.60, 0.45),
 ]
 
 # colour grade per key (the toon pass maps lighting to fixed bands, so dusk / night / warmth come from a global grade):
@@ -1752,15 +1761,10 @@ GRADE_KEYS = [
     (40.0, (1.13, 0.93, 0.76), -0.15),    # carry: warmer / redder
     (47.0, (1.15, 0.91, 0.72), -0.10),
     (53.0, (1.16, 0.95, 0.66), -0.15),    # yellow at sunset
-    (56.5, (1.04, 0.84, 1.00), -0.15),    # Levi: pink-violet dusk (readable)
-    (59.6, (0.74, 0.84, 1.12), -0.30),    # moonlit night: blue, town / wall / plug still readable
-    (62.8, (0.74, 0.84, 1.12), -0.30),
-    (63.4, (1.00, 1.00, 1.00), 0.00),     # day 2, blue sky
-    (66.0, (1.00, 1.00, 1.00), 0.00),
-    (66.6, (1.05, 1.00, 0.90), -0.05),    # hazy warm cleanup day
-    (70.0, (1.05, 1.00, 0.90), -0.05),
-    (72.5, (1.08, 0.97, 0.84), 0.00),     # golden end hold
-    (75.0, (1.08, 0.97, 0.84), 0.00),
+    (58.2, (1.12, 0.94, 0.72), -0.10),    # v14: Levi + the corner volley in daylight
+    (59.4, (1.04, 0.84, 1.00), -0.20),    # dusk while rising
+    (60.6, (0.74, 0.84, 1.12), -0.30),    # NIGHT to the end: the corpses burning in the sky view
+    (75.0, (0.74, 0.84, 1.12), -0.30),
 ]
 
 def _grade(t):
