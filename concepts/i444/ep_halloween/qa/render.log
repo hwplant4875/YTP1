@@ -1,0 +1,208 @@
+section s00 ok
+section s01 ok
+[mov,mp4,m4a,3gp,3g2,mj2 @ 000002b7f2898400] moov atom not found
+[in#0/concat @ 000002b7f2803740] Impossible to open 'E:\YTP2\Instruction444\renders\work_halloween_v1\s02_06.mp4'
+[in#0/concat @ 000002b7f2803440] Error during demuxing: Invalid data found when processing input
+section s02 ok
+section s03 ok
+[mov,mp4,m4a,3gp,3g2,mj2 @ 000002af1a1fed40] moov atom not found
+[in#0/concat @ 000002af1a111b00] Impossible to open 'E:\YTP2\Instruction444\renders\work_halloween_v1\s04_07.mp4'
+[in#0/concat @ 000002af1a165000] Error during demuxing: Invalid data found when processing input
+section s04 ok
+[mov,mp4,m4a,3gp,3g2,mj2 @ 00000139f0d55d80] moov atom not found
+[in#0/concat @ 00000139ef14a300] Impossible to open 'E:\YTP2\Instruction444\renders\work_halloween_v1\s05_05.mp4'
+[in#0/concat @ 00000139ef0e2b80] Error during demuxing: Invalid data found when processing input
+section s05 ok
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0000020d97fe4240] moov atom not found
+[in#0/concat @ 0000020d95e33000] Impossible to open 'E:\YTP2\Instruction444\renders\work_halloween_v1\s06_05.mp4'
+[in#0/concat @ 0000020d95e32c00] Error during demuxing: Invalid data found when processing input
+section s06 ok
+[mov,mp4,m4a,3gp,3g2,mj2 @ 000001bbe2162580] moov atom not found
+[in#0/concat @ 000001bbe20e1bc0] Impossible to open 'E:\YTP2\Instruction444\renders\work_halloween_v1\s07_03.mp4'
+[in#0/concat @ 000001bbe20e18c0] Error during demuxing: Invalid data found when processing input
+section s07 ok
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0000011663efcc80] moov atom not found
+[in#0/concat @ 0000011663e12940] Impossible to open 'E:\YTP2\Instruction444\renders\work_halloween_v1\s08_05.mp4'
+[in#0/concat @ 0000011663e12380] Error during demuxing: Invalid data found when processing input
+section s08 ok
+[mov,mp4,m4a,3gp,3g2,mj2 @ 00000256c4994a40] moov atom not found
+[in#0/concat @ 00000256c48b2a00] Impossible to open 'E:\YTP2\Instruction444\renders\work_halloween_v1\s09_08.mp4'
+[in#0/concat @ 00000256c48b2480] Error during demuxing: Invalid data found when processing input
+section s09 ok
+[mov,mp4,m4a,3gp,3g2,mj2 @ 000001cda412b1c0] moov atom not found
+[in#0/concat @ 000001cda4093180] Impossible to open 'E:\YTP2\Instruction444\renders\work_halloween_v1\s10_11.mp4'
+[in#0/concat @ 000001cda40e5700] Error during demuxing: Invalid data found when processing input
+section s10 ok
+[mov,mp4,m4a,3gp,3g2,mj2 @ 00000201882dd680] moov atom not found
+[in#0/concat @ 0000020188272740] Impossible to open 'E:\YTP2\Instruction444\renders\work_halloween_v1\s11_10.mp4'
+[in#0/concat @ 0000020188272440] Error during demuxing: Invalid data found when processing input
+section s11 ok
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 48868).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 48872
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 48868).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 32325).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 32329
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 32325).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 18442).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 18446
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 18442).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 2963).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 2967
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 2963).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 12452).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 12456
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 12452).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 37237).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 37241
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 37237).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 20311).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 20315
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 20311).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 13555).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 13559
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 13555).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 2217).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 2221
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 2217).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 35412).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 35416
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 35412).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 15309).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 15313
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 15309).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 11062).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 11066
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 11062).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 3632).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 3636
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 3632).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 35530).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 35534
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 35530).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 13369).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 13373
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 13369).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 9015).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 9019
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 9015).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 5738).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 5742
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 5738).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 26950).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 26954
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 26950).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 9414).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 9418
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 9414).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 1780).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 1784
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 1780).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 7183).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 7187
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 7183).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 29088).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 29092
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 29088).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 14565).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 14569
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 14565).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 4519).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 4523
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 4519).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 9298).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 9302
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 9298).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 23742).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 23746
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 23742).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 11402).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 11406
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 11402).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 4316).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 4320
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 4316).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 87210).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 87214
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 87210).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 43865).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 43869
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 43865).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 24930).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 24934
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 24930).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 16198).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 16202
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 16198).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 3001).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 3005
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 3001).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 40653).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 40657
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 40653).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 22880).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 22884
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 22880).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 14116).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 14120
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 14116).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 14054).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 14058
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 14054).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 36861).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 36865
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 36861).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 17817).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 17821
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 17817).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 2412).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 2416
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 2412).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 14057).
+[h264 @ 000002ae92c41d80] missing picture in access unit with size 14061
+[h264 @ 000002ae92c41d80] Invalid NAL unit size (0 > 14057).
+[h264 @ 000002ae92c41d80] Error splitting the input into NAL units.
+[in#0/concat @ 000002ae92c32d00] h264_mp4toannexb filter failed to receive output packet
+[in#0/concat @ 000002ae92bd2b40] Error during demuxing: Invalid data found when processing input
+section s12 ok
+section s13 ok
+done E:/YTP2/Instruction444/renders/halloween_v1.mp4 286.67

@@ -1,7 +1,7 @@
 # QA: for every shot of the given sections, 8 frames spread over the exact source span it will use (in -> in + dur*speed)
 import json, sys, subprocess, os
 from PIL import Image, ImageDraw, ImageFont
-E = json.load(open('edl.json')); C0 = 'E:/YTP2/Instruction444/clips/halloween/'; W = json.load(open('voice/words.json'))
+E = json.load(open('edl.json')); C0 = 'E:/YTP2/Horror Ranked/EP05 Halloween Night/1_work/clips/'; W = json.load(open('voice/words.json'))
 TW, TH, N = 240, 135, 8; rows = []
 for S in E['sections']:
     if S['voice'] not in sys.argv[2:]: continue

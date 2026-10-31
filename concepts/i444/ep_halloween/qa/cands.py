@@ -1,7 +1,7 @@
 # grid of candidate HD frames (480x270 each, labelled) for tile/thumbnail crops
 import subprocess, sys
 from PIL import Image, ImageDraw, ImageFont
-C = 'E:/YTP2/Instruction444/clips/halloween/'; L = [a.split('@') for a in sys.argv[2:]]
+C = 'E:/YTP2/Horror Ranked/EP05 Halloween Night/1_work/clips/'; L = [a.split('@') for a in sys.argv[2:]]
 im = Image.new('RGB', (4 * 480, (len(L) + 3) // 4 * 270)); d = ImageDraw.Draw(im); fnt = ImageFont.truetype('arial.ttf', 22)
 for i, (c, t) in enumerate(L):
     raw = subprocess.check_output(['ffmpeg', '-v', 'error', '-ss', t, '-i', C + c + '.mp4', '-frames:v', '1', '-vf', 'scale=480:270', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'])

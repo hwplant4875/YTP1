@@ -1,6 +1,6 @@
 # Halloween special thumbnails (upload_kit_v1.md): EP03 C layout = 1280x720, three panels 427/426/427 with thin black gutters,
 # f(182) % at the bottom of each panel in its tier colour, the face bigger as the survival rate falls; C = Art alone with a huge 3%.
-# Sources are HD frames of the official clips in E:\YTP2\Instruction444\clips\halloween (never committed).
+# Sources are HD frames of the official clips in E:\YTP2\Horror Ranked\EP05 Halloween Night\1_work\clips (never committed).
 # usage: python thumbs.py [clips_dir] [out_dir]
 import os, sys, io, subprocess
 import numpy as np
@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageEnhance, ImageFilter
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, '..', 'ep01'))
 from gfx import f, shadow_text
-CLIPS = sys.argv[1] if len(sys.argv) > 1 else 'E:/YTP2/Instruction444/clips/halloween'
+CLIPS = sys.argv[1] if len(sys.argv) > 1 else 'E:/YTP2/Horror Ranked/EP05 Halloween Night/1_work/clips'
 OUT = sys.argv[2] if len(sys.argv) > 2 else os.path.join(HERE, 'upload')
 W, H = 1280, 720; PW = [427, 426, 427]
 GREEN = (70, 215, 95, 255); YEL = (250, 200, 40, 255); RED = (235, 30, 38, 255); ORANGE = (255, 130, 20, 255)

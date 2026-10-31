@@ -1,7 +1,7 @@
 # QA: 8 frames over clip@start:dur for each arg (uses <clip>_hd.mp4 when present)
 import sys, subprocess, os
 from PIL import Image, ImageDraw, ImageFont
-C0 = 'E:/YTP2/Instruction444/clips/halloween/'; TW, TH, N = 240, 135, 8; rows = []
+C0 = 'E:/YTP2/Horror Ranked/EP05 Halloween Night/1_work/clips/'; TW, TH, N = 240, 135, 8; rows = []
 for a in sys.argv[2:]:
     n, rest = a.split('@'); t0, d = map(float, rest.split(':'))
     src = C0 + n + '_hd.mp4' if os.path.exists(C0 + n + '_hd.mp4') else C0 + n + '.mp4'; fr = []

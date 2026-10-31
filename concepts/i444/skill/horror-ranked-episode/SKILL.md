@@ -8,7 +8,8 @@ description: Make a Horror Ranked (formerly Instruction 444) "Every <villain> Ra
 Repo: `concepts/i444/` on the project branch (worktree `C:\Users\hw549\Downloads\YTP1\i444_wt`). Code to reuse:
 `ep01/gfx.py` (word_tag, title, rank_card, film_label; YouTube Sans Black), `ep03/anim.py` (animated stat card, tiers),
 `ep03/build_edl_v2.py` (EDL builder pattern), `ep03/render_v2.py` (frame-exact renderer), `ep03/make_srt_v2.py`, `ep03/thumbs_v2.py` (C layout).
-Big files (clips, renders) only on `E:\YTP2\Instruction444\{clips,renders}\<episode>`; never commit video.
+Big files only under `E:\YTP2\Horror Ranked\EPxx <villain>\` (1_work = clips + temp, 2_renders = final video + phone copy,
+3_upload = thumbnails, upload kit, srt); reusable music/sfx/fonts in `E:\YTP2\Horror Ranked\_assets\` (see its README.md). Never commit video.
 
 ## 1. The cold open is the core (owner: "that's the key")
 The first ~15-20 s is a run of short punchy beats, each one = **one hard cut + one big centre caption, landing on the spoken word**.
@@ -75,7 +76,7 @@ music box / celesta / pizzicato / carnival waltz - ask the project assistant to 
 scores, no hits. Music at -39 LUFS with a 3 kHz high-shelf -4 dB, voice -15 LUFS, limiter 0.95. Final ~ -15 LUFS integrated.
 
 ## 6. Render, QA, deliver
-1. `python build_edl.py` -> `edl.json`; `python render_hw.py edl.json <clips> voice <music> E:/YTP2/Instruction444/renders/<ep>_vN.mp4`
+1. `python build_edl.py` -> `edl.json`; `python render_hw.py edl.json <clips> voice <music> "E:/YTP2/Horror Ranked/EPxx .../2_renders/<ep>_vN.mp4"`
    (render_v2 copy with a per-clip `bar` height; ~2.5 min per section).
 2. QA grid of one frame per shot from the render (`qa/shots.py`) + the cold open frame by frame against the word onsets; loudness check.
 3. Phone copy (1280x720 crf 28, ~27 MB) and show the owner before any upload; upload only after their OK.

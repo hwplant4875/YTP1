@@ -1,7 +1,7 @@
 # QA grid: one frame from the middle of every shot of the given sections (rendered sec files), labelled with the anchor word
 import json, sys, subprocess, os
 from PIL import Image, ImageDraw, ImageFont
-E = json.load(open('edl.json')); WK = 'E:/YTP2/Instruction444/renders/work_halloween_v7/'; secs = sys.argv[2:]
+E = json.load(open('edl.json')); WK = 'E:/YTP2/Horror Ranked/EP05 Halloween Night/2_renders/work_halloween_v7/'; secs = sys.argv[2:]
 cells = []
 for si, S in enumerate(E['sections']):
     if S['voice'] not in secs: continue

@@ -1,7 +1,7 @@
 # QA grid from the sources (no render): frames at 15% / 85% of every shot of the given sections, labelled with the anchor word
 import json, sys, subprocess
 from PIL import Image, ImageDraw, ImageFont
-E = json.load(open('edl.json')); C0 = 'E:/YTP2/Instruction444/clips/halloween/'; W = json.load(open('voice/words.json'))
+E = json.load(open('edl.json')); C0 = 'E:/YTP2/Horror Ranked/EP05 Halloween Night/1_work/clips/'; W = json.load(open('voice/words.json'))
 cells = []
 for S in E['sections']:
     if S['voice'] not in sys.argv[2:]: continue
