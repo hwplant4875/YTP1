@@ -8,19 +8,6 @@
  "entries": [
   {
    "sec": "s02",
-   "rank": 11,
-   "film": "Goosebumps 2: Haunted Halloween (2018)",
-   "villain": "Slappy",
-   "v": [
-    3,
-    4,
-    0,
-    8
-   ],
-   "pct": 98
-  },
-  {
-   "sec": "s03",
    "rank": 10,
    "film": "Totally Killer (2023)",
    "villain": "Sweet Sixteen Killer",
@@ -33,7 +20,7 @@
    "pct": 80
   },
   {
-   "sec": "s04",
+   "sec": "s03",
    "rank": 9,
    "film": "Trick 'r Treat (2007)",
    "villain": "Sam",
@@ -46,7 +33,7 @@
    "pct": 62
   },
   {
-   "sec": "s05",
+   "sec": "s04",
    "rank": 8,
    "film": "Hell Fest (2018)",
    "villain": "The Other",
@@ -59,7 +46,7 @@
    "pct": 45
   },
   {
-   "sec": "s06",
+   "sec": "s05",
    "rank": 7,
    "film": "Ginger Snaps (2000)",
    "villain": "Ginger",
@@ -72,7 +59,7 @@
    "pct": 40
   },
   {
-   "sec": "s07",
+   "sec": "s06",
    "rank": 6,
    "film": "Haunt (2019)",
    "villain": "The Haunt Killers",
@@ -85,7 +72,7 @@
    "pct": 35
   },
   {
-   "sec": "s08",
+   "sec": "s07",
    "rank": 5,
    "film": "Halloween (1978)",
    "villain": "Michael Myers",
@@ -98,7 +85,7 @@
    "pct": 30
   },
   {
-   "sec": "s09",
+   "sec": "s08",
    "rank": 4,
    "film": "Night of the Demons (1988)",
    "villain": "Angela",
@@ -111,7 +98,7 @@
    "pct": 20
   },
   {
-   "sec": "s10",
+   "sec": "s09",
    "rank": 3,
    "film": "Halloween III: Season of the Witch (1982)",
    "villain": "Silver Shamrock",
@@ -124,7 +111,7 @@
    "pct": 12
   },
   {
-   "sec": "s11",
+   "sec": "s10",
    "rank": 2,
    "film": "Terrifier (2016)",
    "villain": "Art the Clown",
@@ -137,7 +124,7 @@
    "pct": 6
   },
   {
-   "sec": "s12",
+   "sec": "s11",
    "rank": 1,
    "film": "Terrifier 2 (2022)",
    "villain": "Art the Clown",
