@@ -19,7 +19,8 @@ def user_env(name):
 ap = argparse.ArgumentParser()
 ap.add_argument("task", nargs="?", default="")
 ap.add_argument("--file")
-ap.add_argument("--model", default="opus")
+ap.add_argument("--model", default="claude-opus-5-5")
+ap.add_argument("--effort", default="medium")
 ap.add_argument("--resume")
 ap.add_argument("--max-turns", type=int, default=400)
 ap.add_argument("--budget", type=float, default=20.0, help="stop the run when total_cost_usd passes this (USD)")
@@ -44,7 +45,7 @@ RULES = ("Binding: work only inside E:\\YTP2; never delete existing files outsid
 async def main():
     os.makedirs(LOGD, exist_ok=True)
     log = open(os.path.join(LOGD, datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".log"), "w", encoding="utf-8")
-    opts = ClaudeAgentOptions(model=a.model, cwd=REPO, max_turns=a.max_turns, resume=a.resume,
+    opts = ClaudeAgentOptions(model=a.model, effort=a.effort, cwd=REPO, max_turns=a.max_turns, resume=a.resume,
                               system_prompt={"type": "preset", "preset": "claude_code", "append": RULES},
                               permission_mode="acceptEdits", max_budget_usd=a.budget, max_buffer_size=50 * 1024 * 1024,
                               allowed_tools=["Read", "Write", "Edit", "Glob", "Grep", "Bash"], setting_sources=["project"])
