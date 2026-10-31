@@ -1856,6 +1856,18 @@ def light(tv):
     gain, gex = _grade(float(t))
     vs = bpy.context.scene.view_settings
     vs.exposure = L0["exp0"] + gex
+    # v18b: the three-walls end goes to DAWN: a low warm sun rakes the ground and lights the wall rings, brighter grade
+    du = ss(72.0, 73.6, float(tv))
+    if du > 0.0:
+        dd = np.array([0.80, -0.45, 0.22]); dd /= np.linalg.norm(dd)
+        dd = d * (1 - du) + dd * du; dd /= np.linalg.norm(dd)
+        for o in L0["suns"]:
+            o.rotation_euler = Vector(-dd).to_track_quat("-Z", "Y").to_euler()
+            o.data.energy = en + (5.0 - en) * du
+            o.data.color = tuple(cc + (w - cc) * du for cc, w in zip(col, (1.0, 0.86, 0.70)))
+        for n, s0 in L0["bgs"]:
+            n.inputs[1].default_value = s0 * (ws + (1.0 - ws) * du)
+        vs.exposure += 1.3 * du
     try:
         vs.use_curve_mapping = True
         cm = vs.curve_mapping

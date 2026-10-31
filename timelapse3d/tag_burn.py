@@ -31,7 +31,7 @@ PART1 = {
 # v18 (FEEDBACK_v17): the COMPLETE on-screen text, in VIDEO seconds of each segment (segtime v18 clocks), canon order
 # (SCENE_BIBLE_v2): bottom-centre captions (New Rocker) / titles, place + year HUD top-left (Share Tech), the 846 counter
 # top-right; never two bottom-centre lines at once.
-def _cap(t0, t1, text, size=26):
+def _cap(t0, t1, text, size=42):              # v18b: 1.6x (readable at 480p)
     return dict(type="caption", t0=t0, t1=t1, text=text, size=size)
 def _title(t0, t1, text, sub=None, size=50):
     e = dict(type="title", text=text, t0=t0, t1=t1, size=size, y=0.86, shadow=True, scale_in=True)
@@ -39,7 +39,7 @@ def _title(t0, t1, text, sub=None, size=50):
         e["sub"] = sub
     return e
 def _place(t0, t1, place, year):
-    return dict(type="place", t0=t0, t1=t1, place=place, year=year, pos="tl")
+    return dict(type="place", t0=t0, t1=t1, place=place, year=year, pos="tl", scale=1.4)
 CAPTIONS = {
     "g1": [_place(0.3, 4.2, "SHIGANSHINA DISTRICT", 845),
            _cap(0.6, 3.8, "Shiganshina, the southern tip of Wall Maria"),
@@ -53,8 +53,8 @@ CAPTIONS = {
     "g3": [_place(2.6, 5.3, "TROST DISTRICT  ·  WALL ROSE", 846),
            _cap(2.9, 5.3, "Refugees clear new farmland to survive"),
            _cap(5.6, 8.6, "250,000 refugees are sent to retake Wall Maria"),
-           dict(type="counter", t0=8.6, t1=19.2, **{"from": 250000}, to=200, run=[9.8, 17.6], mode="linear", round=10,
-                label="Still marching", label_end="Came back", approx_end=True, color_end="red", bar=True, pos="tr", scale=1.0),
+           dict(type="counter", t0=8.6, t1=19.2, **{"from": 250000}, to=200, run=[10.0, 17.6], mode="linear", round=10,
+                label="Still marching", label_end="Came back", approx_end=True, color_end="red", bar=True, pos="tr", scale=1.3),
            _cap(15.9, 18.9, "Almost all of them are eaten"),
            _place(22.6, 25.6, "104TH TRAINING CORPS", 847),
            _cap(23.4, 25.5, "Eren, Mikasa and Armin enlist"),

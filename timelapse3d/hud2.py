@@ -119,7 +119,8 @@ def el_place(c, e):
     right = e.get("pos", "tl") == "tr"
     m = 20 * s
     y = m + 22 * s - (1 - ain) * 6 * s
-    f1, fy, f2 = font(F_SMALL, 23 * s), font(F_SMALL, 23 * s), font(F_SMALL, 16 * s)
+    k = e.get("scale", 1.0)                                          # v18b: optional size factor
+    f1, fy, f2 = font(F_SMALL, 23 * s * k), font(F_SMALL, 23 * s * k), font(F_SMALL, 16 * s * k)
     place, year, sub = e.get("place", "").upper(), str(e.get("year", "")), e.get("sub", "")
     tr = 1.4 * s
     wp = spaced(c.d, (0, 0), place, f1, None, track=tr)
