@@ -26,12 +26,12 @@ except ImportError:
 
 F = C.F
 DUR = 17.0
-TS = 1.8                                                         # titans a little over canon so they read from the sky
+TS = 1.4                                                         # titans a little over canon so they read from the sky
 DX, DY = LY.DUEL_F
 BEAM = F3.BEAM_F                                                 # (150, 1250): her re-shift
-EREN0 = (DX - 40.0, DY - 55.0)                                   # his beam: the clearing's south rim
+EREN0 = (DX + 20.0, DY - 40.0)                                   # his beam: the clearing's south side (v17c: off the camera)
 SIT = (DX + 45.0, DY + 62.0)                                     # the trunk she sits against (north edge)
-TRUNK = (DX + 8.0, DY + 6.0)                                     # the fallen trunk he goes down on
+TRUNK = (DX + 33.0, DY + 31.0)                                   # the fallen trunk he goes down on
 BEATS = dict(beam=(0.6, 2.2), chase=(1.8, 4.6), ebeam=(4.2, 5.8), rise=(4.8, 5.6), burst=5.0, punch=6.2, kick=(6.9, 7.3),
              down=(7.3, 7.9), bite=(8.0, 9.4), run=(9.4, 10.6), sit=(10.6, 11.2), cuts=(11.2, 12.2), fly=(11.8, 13.2))
 
@@ -40,10 +40,10 @@ def _W(fx, fy, dz=0.0):
     return (w[0], w[1], C.G(w[0], w[1]) + dz)
 
 # ---------------------------------------------------------------- paths (frame F)
-CHASE = [(1.8, BEAM[0] + 20, BEAM[1] + 40), (3.0, 220.0, 1420.0), (4.2, 290.0, 1560.0), (5.0, DX - 70, DY - 10)]
-FPATH = CHASE + [(5.6, DX - 30, DY - 5), (6.9, DX - 14, DY + 2), (8.0, DX - 10, DY + 4), (9.4, DX - 10, DY + 4),
+CHASE = [(1.8, BEAM[0] + 20, BEAM[1] + 40), (3.0, 220.0, 1420.0), (4.2, 270.0, 1640.0), (5.0, DX - 55, DY + 55)]   # v17c: in from the NW
+FPATH = CHASE + [(5.6, DX - 5, DY + 20), (6.9, DX + 11, DY + 27), (8.0, DX + 15, DY + 29), (9.4, DX + 15, DY + 29),
                  (10.6, SIT[0] - 4, SIT[1] - 5), (17.0, SIT[0] - 4, SIT[1] - 5)]
-EPATH = [(0.0,) + EREN0, (5.6,) + EREN0, (6.2, DX - 6, DY - 18), (7.3, DX + 2, DY - 8), (17.0, TRUNK[0] - 2, TRUNK[1] - 4)]
+EPATH = [(0.0,) + EREN0, (5.6,) + EREN0, (6.2, DX + 19, DY + 7), (7.3, DX + 27, DY + 17), (17.0, TRUNK[0] - 2, TRUNK[1] - 4)]
 def fem_F(t):
     x, y, _ = C.path_at(FPATH, max(t, CHASE[0][0])); return x, y
 def eren_F(t):
@@ -99,10 +99,13 @@ CAM_KEYS = [
     (0.0, F3.SEAM_IN["pos"], F3.SEAM_IN["look"], F3.SEAM_IN["lens"]),   # f2's end above the trap clearing
     _ck(1.4, BEAM[0], BEAM[1], 30.0, 36.0, 320.0),                 # her beam strikes the canopy
     _ck(3.2, 225.0, 1450.0, 20.0, 38.0, 300.0),                    # the toppling line through the crowns
-    _ck(5.0, DX - 25, DY - 20, 6.0, 46.0, 285.0),                  # over the clearing: his golden beam
-    _ck(7.4, DX - 5, DY - 5),                                      # the duel, the kick
-    _ck(9.2, DX, DY + 10),                                         # the bite
-    _ck(11.4, SIT[0] - 10, SIT[1] - 10, 6.0, 52.0),                # the sit, Levi's cuts
+    (3.9, F(DX - 38, DY - 36, 250.0), F(DX - 10, DY + 10, 8.0), 34.0),   # straight down INTO the clearing (no crowns crossed)
+    # v17c (cloud QA): the duel from a LOW OBLIQUE camera standing inside the open clearing (no crowns between), ~50 m up,
+    # 80-110 m off, 32-36 mm: the titans 1/5-1/3 of the frame, still far enough to hide the animation
+    (5.2, F(DX - 38, DY - 36, 54.0), F(DX, DY, 12.0), 26.0),   # his golden beam on the rim, she bursts in
+    (7.4, F(DX - 38, DY - 36, 50.0), F(DX + 20, DY + 20, 11.0), 27.0),     # punch, the kick, he goes down
+    (9.2, F(DX - 36, DY - 36, 50.0), F(DX + 25, DY + 25, 9.0), 27.0),      # the bite
+    (11.4, F(DX - 20, DY - 40, 56.0), F(SIT[0] - 2, SIT[1] - 2, 14.0), 36.0),   # the sit, Levi's cuts
     _ck(12.8, SIT[0] - 20, SIT[1] - 20, 6.0, 36.0, 310.0),
     _sweep(14.0, (SIT[0] - 75, SIT[1] - 90, 400.0), -20.0, 700.0, -120.0, 34.0),   # climbing, the view sweeps round
     _sweep(15.3, (SIT[0] - 140, SIT[1] - 190, 560.0), -80.0, 1600.0, 250.0, 30.0),  # through the south toward SW
@@ -110,7 +113,7 @@ CAM_KEYS = [
 ]
 LIFT_SKIP = (0, len(CAM_KEYS) - 1)
 CAM = camchan.CamPath(CAM_KEYS, v_in=F3.SEAM_IN["vel"], v_out=F3.SEAM_S1["vel"])
-CAM_LIMITS = dict(speed=2500.0, yaw=200.0, hmin=60.0, hmax=1300.0, pitch=(5.0, 80.0), lens=(27.0, 46.0))
+CAM_LIMITS = dict(speed=2500.0, yaw=200.0, hmin=60.0, hmax=1300.0, pitch=(5.0, 80.0), lens=(24.0, 46.0))
 PLAN = [(0.0, "afternoon"), (13.0, "afternoon"), (15.5, "golden"), (DUR, "sunset")]       # v17b: readable, not murky
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
@@ -133,6 +136,8 @@ def build(site):
     for k in range(9):
         u = (k + 0.5) / 9; tt = CHASE[0][0] + u * (CHASE[-1][0] - CHASE[0][0])
         x, y = fem_F(tt)
+        if math.hypot(x - DX, y - DY) < LY.DUEL_R + 15.0:          # v17c: none inside the open clearing (the duel camera stands there)
+            continue
         side = 9.0 if k % 2 else -9.0
         ob = proto.copy(); c.objects.link(ob)
         p = _W(x + side, y + rnd.uniform(-4, 4), -0.5); ob.location = p
@@ -140,8 +145,8 @@ def build(site):
         ob.rotation_mode = "ZXY"; az = rnd.uniform(0, math.tau)
         S["fall"].append((ob, tt + 0.15, az, rnd.uniform(1.1, 1.5)))
     tr = proto.copy(); c.objects.link(tr)                          # the fallen trunk he goes down on
-    tr.location = _W(TRUNK[0] - 30, TRUNK[1], 2.0); tr.rotation_mode = "ZXY"; tr.rotation_euler = (math.radians(88), 0, math.radians(-75))
-    tr.scale = (0.75, 0.75, 0.55)
+    tr.location = _W(TRUNK[0] - 4, TRUNK[1] - 4, 1.5); tr.rotation_mode = "ZXY"     # v17c: ~32 m, lying NE (away from the camera)
+    tr.rotation_euler = (math.radians(88), 0, math.radians(135)); tr.scale = (0.35, 0.35, 0.35)
     st = proto.copy(); c.objects.link(st); st.location = _W(SIT[0] + 6, SIT[1] + 8, -0.5)   # the trunk she sits against
     # FX
     dust = flares.PuffField("F3V_Dust", kind="dust", color=(0.42, 0.38, 0.30), alpha=0.5)
@@ -232,6 +237,7 @@ def update(t):
 
 def light(t):
     LIGHT.apply(t)
+    bpy.context.scene.view_settings.exposure += 0.7                 # v17c: the forest floor read murky
 
 def check():
     for t in (0.0, 1.8, 4.2, 5.6, 6.2, 7.3, 8.0, 9.4, 10.6, 12.0):

@@ -270,7 +270,10 @@ def build_forest(c):
     for (cx, cy), r in CLEAR[:2]:
         for k in range(8):
             a = k * math.tau / 8 + 0.3
-            pts.append((cx + (r + 5) * math.cos(a), cy + (r + 5) * math.sin(a)))
+            px, py = cx + (r + 5) * math.cos(a), cy + (r + 5) * math.sin(a)
+            if hasattr(LY, "DUEL_F") and math.hypot(px - LY.DUEL_F[0], py - LY.DUEL_F[1]) < LY.DUEL_R:
+                continue                                   # v17: not inside the open duel clearing (seg_f3v17's camera stands there)
+            pts.append((px, py))
     # the trunks she sits against (sham, rescue), and a clear corridor round every LOW camera position of f2 / f3
     pts.append((SHAM_TRUNK[0], SHAM_TRUNK[1])); pts.append((RESCUE_F[0] + 1.0, RESCUE_F[1] + 1.0))
     cam = _low_cam_F()
