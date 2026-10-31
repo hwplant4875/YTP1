@@ -11,3 +11,8 @@ so low quality is hidden. Mostly high sky view.
   Optional single frozen beat only if it reads from this height.
 - Drop the underground passage, the close Mikasa zoom and close tableaux in the city.
 - Then go to the wall-titan ending (to be rebuilt separately; see AUDIT findings / fan-model search).
+- KEY BEAT (user 09:23): the cathedral in the middle of the city COLLAPSES, and it must look good: during the fight
+  the titans crash into it (anime: the Female/Eren brawl smashes the church); spire tilts and falls, roof caves in,
+  walls break into chunks (rigid-body or pre-fractured cell pieces), big dust cloud rolling out through the streets.
+  Give it ~2 s of the fast sequence, camera angle turned slightly toward it. Before the collapse the church stays clearly
+  in frame; after it, the ruin and dust stay visible.
