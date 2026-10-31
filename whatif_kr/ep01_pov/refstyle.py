@@ -59,11 +59,11 @@ def inst(rel, loc, rot=0.0, k=1.0):
 # ---------- palette sampled from the reference frames ----------
 M = {
     "grass": mat("grass", "#8f9a5e", 0.95),
-    "walk": mat("walk", "#e4e7ea", 0.85),
+    "walk": mat("walk", "#c9ced4", 0.85),
     "bike": mat("bike", "#4d525c", 0.85),
     "line": mat("line", "#f1f1f1", 0.8),
     "bank": mat("bank", "#c9ccd1", 0.9),
-    "water": mat("water", "#5d86b8", 0.35),
+    "water": mat("water", "#3a6fb0", 0.95),
     "road": mat("road", "#454a54", 0.9),
     "mountain": mat("mountain", "#7d8fa6", 0.95),
     "snow": mat("snow", "#eef2f6", 0.9),
@@ -73,11 +73,13 @@ M = {
     "lotte": mat("lotte", "#dfe6ee", 0.25, 0.4),
     "bridge": mat("bridge", "#b6bcc6", 0.8),
 }
+try: M["water"].node_tree.nodes["Principled BSDF"].inputs["Specular IOR Level"].default_value = 0.1
+except Exception: pass
 # subtle large-scale grass variation (world space)
 nt = M["grass"].node_tree; geo = nt.nodes.new("ShaderNodeNewGeometry")
 nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.03
 ramp = nt.nodes.new("ShaderNodeValToRGB")
-ramp.color_ramp.elements[0].color = (*srgb("#86935a"), 1); ramp.color_ramp.elements[1].color = (*srgb("#98a265"), 1)
+ramp.color_ramp.elements[0].color = (*srgb("#66733f"), 1); ramp.color_ramp.elements[1].color = (*srgb("#7a8749"), 1)
 nt.links.new(geo.outputs["Position"], nz.inputs["Vector"]); nt.links.new(nz.outputs["Fac"], ramp.inputs[0])
 nt.links.new(ramp.outputs[0], nt.nodes["Principled BSDF"].inputs["Base Color"])
 
@@ -116,8 +118,8 @@ def build_world():
         plane("dash", x, x + 3, 17.93, 18.07, 0.025, M["line"])
     # stepped concrete bank down to the water
     for i in range(4):
-        box("step", (0, 20.6 + i * 0.8, -0.2 - i * 0.4), (12000, 0.8, 0.4 + 0.0), M["bank"])
-    plane("water", -6000, 6000, 20, 1050, -1.6, M["water"])
+        box("step", (0, 20.4 + i * 0.6, -0.15 - i * 0.22), (12000, 0.6, 0.3), M["bank"])
+    plane("water", -6000, 6000, 20, 1050, -0.9, M["water"])
     plane("southbank", -6000, 6000, 1050, 9000, 0.0, M["grass"])
     plane("southroad", -6000, 6000, 1070, 1090, 0.03, M["road"])
     # Olympic-ro behind the park + cars
@@ -155,16 +157,33 @@ def build_world():
     for x in range(-500, 500, 14):
         for y in (-22, -12, 6):
             p = (x + random.uniform(-5, 5), y + random.uniform(-4, 4), 0)
-            if math.hypot(p[0], p[1]) < 9: continue
+            if math.hypot(p[0], p[1]) < 14: continue
             inst(random.choice(trees), p, random.uniform(0, 6.28), random.uniform(0.9, 1.3))
     tufts = ["nature/Grass_Common_Short.gltf", "nature/Grass_Wispy_Short.gltf", "nature/Grass_Common_Tall.gltf"]
-    for _ in range(2600):
+    for _ in range(5200):
         r = 60 * math.sqrt(random.random()); a = random.uniform(0, 6.28)
         x, y = r * math.cos(a), r * math.sin(a) * 0.5 - 6
         if 11.5 < y or (abs(x) < 1.2 and abs(y - 1.0) < 1.2): continue
         inst(random.choice(tufts), (x, y, 0), random.uniform(0, 6.28), random.uniform(0.18, 0.3))
     for _ in range(40):
         inst(random.choice(["nature/Bush_Common.gltf", "nature/Bush_Common_Flowers.gltf"]), (random.uniform(-200, 200), random.uniform(-27, 9), 0), random.uniform(0, 6.28), random.uniform(0.8, 1.2))
+
+def sky_clouds(n=40, seed=6):
+    cm = bpy.data.materials.new("skycloud"); cm.use_nodes = True; nt = cm.node_tree
+    b = nt.nodes["Principled BSDF"]; b.inputs["Base Color"].default_value = (1, 1, 1, 1); b.inputs["Roughness"].default_value = 1
+    b.inputs["Emission Color"].default_value = (1, 1, 1, 1); b.inputs["Emission Strength"].default_value = 0.6
+    tc = nt.nodes.new("ShaderNodeTexCoord"); nzc = nt.nodes.new("ShaderNodeTexNoise"); nzc.inputs["Scale"].default_value = 3.5; nzc.inputs["Detail"].default_value = 8
+    gr = nt.nodes.new("ShaderNodeTexGradient"); gr.gradient_type = "SPHERICAL"
+    sub = nt.nodes.new("ShaderNodeVectorMath"); sub.operation = "SUBTRACT"; sub.inputs[1].default_value = (0.5, 0.5, 0)
+    nt.links.new(tc.outputs["Generated"], sub.inputs[0]); nt.links.new(sub.outputs[0], gr.inputs[0]); nt.links.new(tc.outputs["Object"], nzc.inputs["Vector"])
+    mul = nt.nodes.new("ShaderNodeMath"); mul.operation = "MULTIPLY"; nt.links.new(gr.outputs["Fac"], mul.inputs[0]); nt.links.new(nzc.outputs["Fac"], mul.inputs[1])
+    rp = nt.nodes.new("ShaderNodeValToRGB"); rp.color_ramp.elements[0].position = 0.1; rp.color_ramp.elements[1].position = 0.35
+    nt.links.new(mul.outputs[0], rp.inputs[0]); nt.links.new(rp.outputs[0], b.inputs["Alpha"])
+    rnd = random.Random(seed)
+    for _ in range(n):
+        x = rnd.uniform(-9000, 9000); y = rnd.uniform(1500, 14000); z = rnd.uniform(1400, 2600)
+        bpy.ops.mesh.primitive_plane_add(size=1, location=(x, y, z)); o = bpy.context.object
+        r = rnd.uniform(1200, 3000); o.scale = (r * 1.6, r, 1); o.data.materials.append(cm)
 
 def lighting(sun_elev=38, sun_az=-35, strength=1.0):
     w = bpy.data.worlds.new("w"); S.world = w; w.use_nodes = True; wn = w.node_tree
@@ -186,8 +205,10 @@ def lighting(sun_elev=38, sun_az=-35, strength=1.0):
     try: S.eevee.use_shadows = True; S.eevee.shadow_ray_count = 2; S.eevee.shadow_step_count = 8
     except Exception: pass
     S.view_settings.view_transform = "AgX"; S.view_settings.look = "AgX - Base Contrast" if "AgX - Base Contrast" in [l for l in ("AgX - Base Contrast",)] else "None"
-    try: S.view_settings.look = "AgX - Medium Low Contrast"
+    try: S.view_settings.look = os.environ.get("LOOK", "AgX - Medium High Contrast")
     except Exception: pass
+    if os.environ.get("ENGINE", "CYCLES") == "CYCLES":
+        S.render.engine = "CYCLES"; S.cycles.samples = int(os.environ.get("SPP", "32")); S.cycles.use_denoising = True; S.cycles.max_bounces = 4
     S.render.resolution_x = 1920; S.render.resolution_y = 1080; S.render.resolution_percentage = pct
     S.render.filepath = out
 
@@ -243,6 +264,7 @@ if __name__ == "__main__":
     lighting()
     build_world()
     picnic(0.0, 1.0)
+    sky_clouds()
     rig, arm = load_char()
     cam = camera()
     if shot == "s1":      # just stood up from the mat, looking at the river
