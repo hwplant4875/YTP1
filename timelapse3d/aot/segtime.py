@@ -153,14 +153,17 @@ def slope_knots(dur, plan, n=8):
 # -> 1.7 for Carla (BEND 25.5 -> gone 28.9 = 2.0 video s) -> 3 -> 2 at the g1|g2 seam (at rest).  Video ~17.9 s.
 G1_PLAN = [(0.0, 1.0, 0.0), (11.0, 2.0, 0.7), (12.05, 5.5, 0.9), (23.4, 1.7, 0.5), (28.9, 3.0, 0.3), (31.15, 2.0, 0.3)]
 TMAP["g1"] = slope_knots(DUR["g1"], G1_PLAN)
+# v18 (FEEDBACK_v17): the opening zoom-out was too large -> the film starts at the pose 2 s into it (local 2.0), same easing
+G1_START = 2.0
+TMAP["g1"] = [(0.0, G1_START)] + [(tv - G1_START, t) for tv, t in TMAP["g1"] if t > G1_START]
 TMAP["g2"] = [(0.0, 0.0)] + [(tv + G2_PRE / 2.0, t + G2_PRE) for tv, t in _g2_v5()]   # v14: prelude at slope 2
 # v14 (FEEDBACK_v13 §1: at the g2|g3 seam the camera stops, then an ULTRA-fast flight to Trost): the flight 0.3-14.8 at 4.5x
 # v14 (FEEDBACK_v13 §1): g6 skips Eren's leap / tackle of the two roof titans + rampage (8.3-16.8) and the plaza swarm /
 # blond titan (31.0-42.2) at 14x (~0.6 / 0.8 video s): the HQ lift operation (zoomed in), then straight to his face-down fall
 TMAP_G6_V14 = lambda: slope_knots(DUR["g6"], [(0.0, 2.0, 0.0), (8.3, 14.0, 0.25), (16.8, 2.0, 0.25), (31.0, 14.0, 0.25),
                                               (42.2, 2.0, 0.25), (48.3, 1.47, 0.3), (59.5, 2.0, 0.3)])
-TMAP["g3"] = slope_knots(DUR["g3"], [(0.0, 2.0, 0.0), (7.2, 6.0, 0.6), (14.8, 2.0, 0.5), (G3_MARCH[0] - 0.9, 1.6, 0.9),
-                                     (G3_MARCH[1], 2.0, 1.0)])   # v17: the sky gaze (night -> morning) at 2x, then the ULTRA-fast flight at 6x
+TMAP["g3"] = slope_knots(DUR["g3"], [(0.0, 7.2, 0.0), (7.2, 6.0, 0.15), (14.8, 2.0, 0.5), (G3_MARCH[0] - 0.9, 1.6, 0.9),
+                                     (G3_MARCH[1], 2.0, 1.0)])   # v18: the sky gaze (night -> morning) in exactly 1 s (x7.2), then the ULTRA-fast flight at 6x
 # g4 v4 (owner 10/27: 2nd Colossal, faster camera): the establishing approach at 3.2x (local 1.0-15.0), back to 2 for
 # Eren's fist on the wall top above O and the g4|g5 seam.  Video ~7.9 s.
 TMAP["g4"] = slope_knots(DUR["g4"], [(0.0, 2.0, 0.0), (1.0, 3.2, 0.6), (15.0, 2.0, 0.6)])
@@ -216,6 +219,10 @@ if __name__ == "__main__":
         print("video %s %6.2f s  %s  slope in %.2f out %.2f" % (g, vdur(g), fmt(VS[g]), slope(g, 0.0), slope(g, vdur(g))))
     print("video total %.1f s (%s)" % (VT, fmt(VT)))
 TMAP["g6"] = TMAP_G6_V14()                # v14 (overrides the round-2 g6 knots above)
+# v18 (FEEDBACK_v17): zoom straight into the HQ (local 0-17.4 at x10), the HQ interior at x2, then race past Eren's
+# fights (hidden) to the moment he lies collapsed (31.0-43.6 at x20) and play on from there
+TMAP["g6"] = slope_knots(DUR["g6"], [(0.0, 10.0, 0.0), (17.4, 2.0, 0.25), (31.0, 20.0, 0.2), (43.4, 2.0, 0.25),
+                                      (48.3, 1.47, 0.3), (59.5, 2.0, 0.3)])
 
 def squeeze(g, a, b, k, ramp=0.6, dt=0.05):
     """v14: play local a..b of segment g k times faster than its current TMAP (cosine ease over `ramp` local s at both
@@ -236,3 +243,6 @@ TMAP["g7"] = squeeze("g7", 23.8, 31.6, 4.0)
 
 # v14 (FEEDBACK_v13 §1 "3:01-3:11 boulder carry ... played sped-up, about 5 s total"): g8 local 19.4-37.6 at 1.65x
 TMAP["g8"] = squeeze("g8", 19.4, 37.6, 1.65)
+# v18: the film now ENDS with g8: local 71-75 (the rise to the three walls) plays at real time + a 2 s hold on the end frame
+TMAP["g8"] = [k for k in TMAP["g8"] if k[1] <= 71.0] + [(next(a for a, b in TMAP["g8"] if b >= 71.0) + 4.0, 75.0)]
+TMAP["g8"].append((TMAP["g8"][-1][0] + 2.0, 75.0 + 1e-3))

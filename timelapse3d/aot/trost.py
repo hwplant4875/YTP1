@@ -2971,8 +2971,8 @@ def build_lifts(MT):
 def set_breach(on=True):
     """After the kick: intact gatehouse/doors -> breached gatehouse + rubble fan + beams + craters (caps hidden);
     the glow card comes on with the breach (set_glow fades it)."""
-    for n in ("OuterGate", "OuterGate_Door", "OuterGate_Iron"):
-        _hide(bpy.data.objects.get(n), on)
+    for n in ("OuterGate", "OuterGate_Door", "OuterGate_Iron", "OuterGate_Frame"):   # v18: the iron window frame floated as a
+        _hide(bpy.data.objects.get(n), on)                                            # see-through lattice over the breach
     for n in ("OuterGateBroken", "OuterGateRubble", "TrostBreachTimbers"):
         _hide(bpy.data.objects.get(n), not on)
     for i in range(len(CRATERS_M) + len(HOLES_M)):

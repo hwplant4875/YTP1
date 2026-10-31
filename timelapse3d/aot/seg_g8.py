@@ -112,8 +112,12 @@ CAM_KEYS = [
     (60.2, (-180, 420, 260), (-200, 230, 0),  30),     #   then up into the sky as night falls
     (63.4, (-80, 560, 430),  (-120, 280, 0),  28),     # v14: NIGHT, full sky view: the titan corpses burning
     (71.0, (120, 680, 330),  (-90, 300, 0),   28),
-    (75.0, tuple(_SEAM_OUT["pos"]), tuple(_SEAM_OUT["look"]), _SEAM_OUT["lens"]),     # E2 END
-    (76.0, tuple(_SEAM_OUT["pos"]), tuple(_SEAM_OUT["look"]), _SEAM_OUT["lens"]),     # guide key: at rest at E2
+    # v18 (FEEDBACK_v17): THE END - straight up from the burning town until Walls Maria, Rose and Sina are in one frame
+    # (Mitras = W (0, 24000) = M (0, 19870); Maria r 24 km), hold
+    (72.4, (60, 1500, 2600),     (-60, 2600, 0),    28),
+    (73.6, (0, 9000, 30000),     (0, 15500, 0),     26),
+    (75.0, (0, 13500, 66000),    (0, 19870, 0),     24),
+    (76.0, (0, 13500, 66500),    (0, 19870, 0),     24),     # guide key (rest)
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=_SEAM_IN["vel"], v_out=None)
 CAM_LIMITS = dict(hmin=89.0, speed=67.5, yaw=30.0)
@@ -1654,6 +1658,14 @@ def finish():
 
 def update(tv):
     tv = float(tv)
+    if bpy.context.scene.camera is not None:                     # v18: the end rise to ~66 km needs a far clip
+        bpy.context.scene.camera.data.clip_end = 250000.0 if tv > 71.2 else 30000.0
+    if "hazeobs" not in STATE:                                   # v18: the horizon-haze curtain washed out the three-walls view
+        STATE["hazeobs"] = [o for o in bpy.data.objects if o.type == "MESH" and any(m and m.name.startswith("WD_HorizonHaze") for m in o.data.materials)]
+    for o in STATE["hazeobs"]:
+        h = tv > 72.6
+        if o.hide_render != h:
+            o.hide_render = h
     t = T_old(tv)                                        # the choreography clock (WARP); camera / light / pyres stay on tv
     st, holder = _pose_titan(t)
     # ball

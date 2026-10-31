@@ -63,6 +63,7 @@ def T_new(t):
             return a + (b - a) * (max(t, A) - A) / (B - A)
     return t
 
+EREN_SHOW = 43.6                            # v18: Eren's titan visible from here (lying, skid end)
 BEATS = dict(
     street_punch=2.6, st1_kill=2.75, climb=(0.8, 7.0), jean_land=2.6, crash=(4.4, 5.0), stragglers=(4.0, 8.0),
     look_roar=(6.9, 7.9), leap=(9.9, 10.7), hq_punch=10.9, tackle=(11.0, 11.9), trio=(4.0, 13.4),
@@ -1308,6 +1309,11 @@ def update(tv):
     if t < BEATS["skid"][1] - 0.1:
         STATE.pop("nape_now", None)
     _pose_attack(t)
+    # v18 (FEEDBACK_v17): Eren's titan is never seen fighting near the HQ (the sped-up remains looked awkward); he is
+    # shown only once he lies collapsed (skid end), which the camera finds as it zooms back out of the HQ
+    _ec = STATE["AT"].coll
+    if _ec.hide_render != (t < EREN_SHOW):
+        _ec.hide_render = t < EREN_SHOW
     STATE["TT"].update(t)
     try:
         STATE["SQ"].update(t)
