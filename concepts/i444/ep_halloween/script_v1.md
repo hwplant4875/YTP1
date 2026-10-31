@@ -10,8 +10,8 @@ Tonight is the one night a year when a mask doesn't look suspicious, a scream do
 ## s01 scoring
 Every movie gets scored on its killer: strength, intelligence, kill count, and how supernatural it is, which is basically whether you can kill it at all. Put it together and you get one number, your survival rate for the night.
 
-## s02 #10 Hocus Pocus (1993), 97%, Easy
-Number ten is Hocus Pocus. Yes, three witches come back from the dead to steal the lives of every child in Salem, but on the Halloween night we actually see, they don't kill a single person. They get outsmarted by a few teenagers, a talking cat and a zombie, and the sun comes up before they can do anything. Survival rate: ninety-seven percent, unless you light the black flame candle.
+## s02 #10 E.T. the Extra-Terrestrial (1982), 99%, Easy
+Number ten is E.T. Yes, it counts, because the big night in this movie is Halloween. A kid walks an alien through the neighborhood under a white sheet, and nobody even looks twice, because it's Halloween. Nobody dies, the scariest thing in the whole movie is a bunch of guys in hazmat suits, and the night ends with a flying bike. Survival rate: ninety-nine percent, unless you work for the government.
 
 ## s03 #9 Totally Killer (2023), 80%, Don't Worry
 Number nine is Totally Killer. The Sweet Sixteen Killer stabs each victim sixteen times on her sixteenth birthday, which is horrifying, but it also means he has a very specific list, and if you're not a sixteen-year-old girl in that one friend group, you're probably fine. Survival rate: eighty percent.
@@ -41,10 +41,10 @@ Number two is Terrifier. Art the Clown doesn't talk, he doesn't run, and he does
 And number one is Terrifier 2. Art comes back from the dead, kills the coroner, and spends Halloween night hunting Sienna and her little brother, and this time, he's clearly not human. Not even death stops him. Even Sienna dies before she comes back and finally cuts his head off, and he still isn't done. Survival rate: three percent.
 
 ## s12 outro
-So that's ten Halloween nights, from three witches who couldn't hurt anyone to a clown you can't kill. Tell me in the comments which one you'd survive, and happy Halloween. Don't open the door.
+So that's ten Halloween nights, from a friendly alien in a bedsheet to a clown you can't kill. Tell me in the comments which one you'd survive, and happy Halloween. Don't open the door.
 
 ## Fact notes
-- Hocus Pocus: no deaths among the 1993 characters (Billy Butcherson, the zombie, is already dead); the virgin lights the Black Flame Candle; Binx the cat; sunrise ends them.
+- E.T.: Elliott takes E.T. out on Halloween night under a ghost sheet; no deaths (E.T. nearly dies and revives); government agents in hazmat suits; bike flight. Replaces Hocus Pocus (owner 10/31: not well known enough; also Disney).
 - Totally Killer: 1987 victims Tiffany, Marisa, Heather (16 stab wounds each, on their 16th birthdays); 2023 Pam on Halloween night.
 - Trick 'r Treat: Sam spares Kreeg after the candy bar ends up in his hand; principal Steven Wilkins poisons candy; Laurie and friends are werewolves; quarry bus children.
 - Hell Fest: The Other kills an unnamed woman, Gavin, Asher, Taylor, Quinn; police arrive; he escapes and drives home to his daughter.
