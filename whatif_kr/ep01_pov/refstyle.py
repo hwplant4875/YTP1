@@ -244,12 +244,13 @@ def pose_mix(arm, base, frame, over=None):
 
 def bone_world(arm, name): return arm.matrix_world @ arm.pose.bones[name].matrix
 
-def eye_cam(cam, arm, pitch=-15, lens=20, fwd=0.07):
+def eye_cam(cam, arm, pitch=-15, lens=20, fwd=0.07, yaw=0.0):
     bone = arm.data.bones["Head"]
     off = bone.matrix_local.inverted() @ Vector((0, -0.07 - fwd, 1.70))
     hw = bone_world(arm, "Head"); loc = hw @ off
     rot = hw.to_3x3() @ bone.matrix_local.to_3x3().inverted()
     f = (rot @ Vector((0, -1, 0))); f.z = 0; f.normalize()
+    f = Matrix.Rotation(math.radians(yaw), 3, "Z") @ f
     f = (f * math.cos(math.radians(pitch)) + Vector((0, 0, math.sin(math.radians(pitch))))).normalized()
     cam.location = loc; cam.rotation_euler = f.to_track_quat("-Z", "Y").to_euler()
     cam.data.lens = lens
@@ -260,12 +261,100 @@ def camera(loc=(0, -5, 2), look=(0, 0, 1), lens=24):
     cam.data.lens = lens; cam.data.clip_start = 0.02; cam.data.clip_end = 60000; S.camera = cam
     return cam
 
+
+# ---------- park crowd: baked static poses with flat clothing colours ----------
+def flat_clothes(m, top_c="#ff6a3d", pants_c="#2c3f66", skin_c="#efc3a0"):
+    """Replace the suit texture with skin / hoodie / jeans / white shoes, masked by rest-pose height."""
+    nt = m.node_tree; b = [n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"][0]
+    tc = nt.nodes.new("ShaderNodeTexCoord"); sp = nt.nodes.new("ShaderNodeSeparateXYZ")
+    nt.links.new(tc.outputs["Generated"], sp.inputs[0])
+    def M_(op, a, bb=None):
+        n = nt.nodes.new("ShaderNodeMath"); n.operation = op
+        for i, v in enumerate((a, bb)):
+            if v is None: continue
+            if isinstance(v, (int, float)): n.inputs[i].default_value = v
+            else: nt.links.new(v, n.inputs[i])
+        return n.outputs[0]
+    z, x = sp.outputs["Z"], sp.outputs["X"]
+    ax = M_("ABSOLUTE", M_("SUBTRACT", x, 0.5))
+    armz = M_("LESS_THAN", z, 0.848); bodyz = M_("LESS_THAN", z, 0.83)
+    isarm = M_("GREATER_THAN", ax, 0.11)
+    top = M_("MAXIMUM", M_("MULTIPLY", isarm, armz), bodyz)
+    top = M_("MULTIPLY", top, M_("LESS_THAN", ax, 0.40))
+    top = M_("MULTIPLY", top, M_("GREATER_THAN", z, 0.5))
+    pants = M_("LESS_THAN", z, 0.52); shoe = M_("LESS_THAN", z, 0.055)
+    col = None
+    def mix(fac, c_from, c_to):
+        n = nt.nodes.new("ShaderNodeMix"); n.data_type = "RGBA"
+        nt.links.new(fac, n.inputs[0])
+        for idx, c in ((6, c_from), (7, c_to)):
+            if isinstance(c, tuple): n.inputs[idx].default_value = (*c, 1)
+            else: nt.links.new(c, n.inputs[idx])
+        return n.outputs[2]
+    col = mix(top, srgb(skin_c), srgb(top_c))
+    col = mix(pants, col, srgb(pants_c))
+    col = mix(shoe, col, srgb("#f4f4f4"))
+    nt.links.new(col, b.inputs["Base Color"])
+    for l in list(nt.links):
+        if l.to_socket in (b.inputs["Roughness"], b.inputs["Normal"]): nt.links.remove(l)
+    b.inputs["Roughness"].default_value = 0.7
+    b.inputs["Metallic"].default_value = 0.0
+
+HDR = os.environ.get("WHATIF_HDR", "/tmp/claude-0/-home-user-YTP1/2467b228-e69f-511a-89d6-1349fcd7b3c8/scratchpad/assets/sunset.hdr")
+
+VARIANTS = []
+def make_variants():
+    base = bpy.data.materials["MI_Superhero_Male"]
+    for tc, pc in (("#3d7bff", "#222831"), ("#f2f2f2", "#4a5a7a"), ("#ffd23d", "#2b2b2b"), ("#2fbf71", "#3b4f80"), ("#e94b8a", "#1f2a44"), ("#222222", "#c9b28f"), ("#ff7a3d", "#2c3f66")):
+        v = base.copy(); flat_clothes(v, tc, pc); VARIANTS.append(v)
+
+def bake(arm, action, frame):
+    import bmesh
+    pose_mix(arm, action, frame)
+    dg = bpy.context.evaluated_depsgraph_get(); bm = bmesh.new()
+    for o in arm.children:
+        if o.type != "MESH" or o.hide_render or not o.name.startswith("SuperHero"): continue
+        me = bpy.data.meshes.new_from_object(o.evaluated_get(dg), depsgraph=dg)
+        me.transform(arm.matrix_world.inverted() @ o.matrix_world); bm.from_mesh(me); bpy.data.meshes.remove(me)
+    out = bpy.data.meshes.new(f"bake_{action}_{frame}"); bm.to_mesh(out); bm.free()
+    for p in out.polygons: p.use_smooth = True
+    out.materials.clear(); out.materials.append(VARIANTS[0])
+    return out
+
+def place(me, loc, rot):
+    o = bpy.data.objects.new("npc", me); S.collection.objects.link(o)
+    o.location = loc; o.rotation_euler[2] = rot
+    o.material_slots[0].link = "OBJECT"; o.material_slots[0].material = random.choice(VARIANTS)
+    return o
+
+def crowd(arm, avoid=(0, 0)):
+    make_variants()
+    rs = arm.rotation_euler.copy(); par = arm.parent; arm.parent = None; arm.rotation_euler = (0, 0, 0)
+    sit = [bake(arm, "Sitting_Talking_Loop", 12), bake(arm, "Sitting_Idle_Loop", 20)]
+    walk = [bake(arm, "Walk_Loop", 8), bake(arm, "Walk_Loop", 22), bake(arm, "Jog_Fwd_Loop", 6)]
+    stand = [bake(arm, "Idle_Talking_Loop", 10), bake(arm, "Idle_Loop", 5)]
+    arm.parent = par; arm.rotation_euler = rs
+    rnd = random.Random(21)
+    for _ in range(45):   # picnics on the grass
+        x = rnd.uniform(-160, 160); y = rnd.uniform(-20, 9)
+        if math.hypot(x - avoid[0], y - avoid[1]) < 6: continue
+        picnic(x, y)
+        for j in range(rnd.choice([1, 2, 2, 3])):
+            a = rnd.uniform(0, 6.28)
+            place(rnd.choice(sit), (x + 0.95 * math.cos(a), y + 0.95 * math.sin(a), 0), a - math.pi / 2)
+    for _ in range(50):   # walkers / joggers on the walkway, cyclists lane left empty
+        x = rnd.uniform(-220, 220); d = rnd.choice([1, -1])
+        place(rnd.choice(walk), (x, 13.5 + rnd.uniform(-1, 1), 0.02), math.pi / 2 if d > 0 else -math.pi / 2)
+    for _ in range(14):
+        place(rnd.choice(stand), (rnd.uniform(-150, 150), rnd.uniform(20.2, 20.6), 0), rnd.uniform(-0.5, 0.5))
+
 if __name__ == "__main__":
     lighting()
     build_world()
     picnic(0.0, 1.0)
     sky_clouds()
     rig, arm = load_char()
+    if os.environ.get("CROWD", "1") == "1": crowd(arm)
     cam = camera()
     if shot == "s1":      # just stood up from the mat, looking at the river
         rig.location = (0, -0.6, 0)
@@ -280,5 +369,12 @@ if __name__ == "__main__":
         pose_mix(arm, "Walk_Loop", 14)
         cam.location = (-60, 16, 1.7); look = Vector((40, -60, 70))
         cam.rotation_euler = (look - cam.location).to_track_quat("-Z", "Y").to_euler(); cam.data.lens = 18
+    elif shot.startswith("w"):   # walking west along the park: w<K>  e.g. w2, w8, w32
+        K = float(shot[1:]); rig.location = (-2.0 * K, 4.0, 0); rig.scale = (K, K, K); rig.rotation_euler[2] = -math.pi / 2
+        pose_mix(arm, "Walk_Loop", 16)
+        eye_cam(cam, arm, pitch=float(os.environ.get("PITCH", "-48")), lens=float(os.environ.get("LENS", "14")), yaw=float(os.environ.get("YAW", "-12")))
+    elif shot == "s_step9":   # 896 m, Lotte World Tower below the waist
+        K = 512; rig.location = (0, 300, 0); rig.scale = (K, K, K)
+        pose_mix(arm, "Walk_Loop", 16); eye_cam(cam, arm, pitch=-42, lens=18, yaw=-25)
     bpy.ops.render.render(write_still=True)
     print("WROTE", out)
