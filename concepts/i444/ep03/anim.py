@@ -124,12 +124,12 @@ def stat_card(out, name, tile_png, stats, pct, dur, t_pct, fps=30, reveal=None, 
             lay = Image.new('RGBA', (520, 230), (0, 0, 0, 0)); text(ImageDraw.Draw(lay), (500, 190), s2, 150, c, 'rs', stroke=6)
             if sc != 1.0: lay = lay.resize((int(520 * sc), int(230 * sc)), Image.BICUBIC)
             fr.alpha_composite(lay, (int(CX + CW - 500 * sc), int(922 - 190 * sc)))
-            if num and tt >= t_pct + 0.36:                               # the tier-name cell fades in under SURVIVAL RATE
-                a = int(255 * ease((tt - t_pct - 0.36) / 0.2)); nm2 = TIERS[tier(pct)][0]
+            if num and tt >= t_pct + 0.36:                               # tier name under SURVIVAL RATE (user 10/31): no box; the
+                a = int(255 * ease((tt - t_pct - 0.36) / 0.2))                 # initial letter big in the tier colour, the rest white
+                ph = LETTERS[tier(pct)][1] if LETTERS else TIERS[tier(pct)][0]
                 tl = Image.new('RGBA', fr.size, (0, 0, 0, 0)); dt = ImageDraw.Draw(tl)
-                w2 = dt.textlength(nm2, font=f(34)) + 40
-                dt.rounded_rectangle([CX, 868, CX + w2, 922], 12, fill=c + (a,))
-                text(dt, (CX + 20, 908), nm2, 34, (15, 12, 12, a) if (LETTERS or tier(pct) == 2) else (255, 255, 255, a), 'ls')
+                text(dt, (CX - 4, 975), ph[0], 124, c + (a,), 'ls', stroke=6, sf=(0, 0, 0, a))
+                text(dt, (CX + dt.textlength(ph[0], font=f(124)) + 2, 975), ph[1:], 48, (255, 255, 255, a), 'ls', stroke=4, sf=(0, 0, 0, a))
                 fr.alpha_composite(tl)
         # in: the shadow fades up over 0.3 s while the content slides 50 px in from the right
         k3 = ease(tt / 0.3); full = Image.new('RGBA', (LW, H), (0, 0, 0, 0))
