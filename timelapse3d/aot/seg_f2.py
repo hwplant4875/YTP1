@@ -150,7 +150,7 @@ CAM_KEYS = [
     (0.0, F(*SEAM_IN["pos"]), F(*SEAM_IN["look"]), SEAM_IN["lens"]),
     _side_key(1.7, 70.0, 70.0),
     (7.9, F(TX - 30, TY - 60, 110.0), F(TX, TY, 5.0), 28.0),            # up out of the clearing
-    (9.8, F(TX - 30, TY - 55, 200.0), F(TX, TY, 0.0), 30.0),           # sky: the titans swarm into the clearing (looking down into the gap)
+    (9.8, F(TX - 6, TY - 18, 235.0), F(TX, TY, 0.0), 36.0),           # sky: the titans swarm into the clearing (looking down into the gap)
     (DUR, SEAM_F3["pos"], SEAM_F3["look"], SEAM_F3["lens"]),
 ]
 def _cam(lift):
@@ -214,7 +214,7 @@ def build(site):
     fs.add(BEATS["blue"], _W(TX - 30, TY + 40, 34.0), "blue", up=140, width=2.0, seed=3)
     fs.add(BEATS["green"], _W(TX + 25, TY + 60, 34.0), "green", up=140, width=2.0, seed=4)
     fs.build(c); S["fs"] = fs
-    steam = flares.PuffField("F2_Steam", kind="steam", alpha=0.8)
+    steam = flares.PuffField("F2_Steam", kind="steam", alpha=0.45)   # v9: thinner, the swarming titans stay visible
     te, pos, vel = [], [], []
     for k in range(260):
         tt = random.uniform(BEATS["steam"][0], BEATS["steam"][1] - 0.5)

@@ -301,8 +301,8 @@ def build(site):
     import seg_f2 as _F2
     flares.COLORS.setdefault("blue", ((0.05, 0.16, 0.75), (0.35, 0.55, 1.0)))     # = seg_f2 (registered in its build)
     pf = flares.FlareSet("F3_PrevFlares")
-    pf.add(_F2.BEATS["blue"] - _F2.DUR, _W(_F2.TX - 30, _F2.TY + 40, 34.0), "blue", up=140, width=2.0, seed=3)
-    pf.add(_F2.BEATS["green"] - _F2.DUR, _W(_F2.TX + 25, _F2.TY + 60, 34.0), "green", up=140, width=2.0, seed=4)
+    pf.add(_F2.BEATS["blue"] - _F2.STORY_DUR, _W(_F2.TX - 30, _F2.TY + 40, 34.0), "blue", up=140, width=2.0, seed=3)
+    pf.add(_F2.BEATS["green"] - _F2.STORY_DUR, _W(_F2.TX + 25, _F2.TY + 60, 34.0), "green", up=140, width=2.0, seed=4)
     pf.build(c); S["pf"] = pf
     steam = flares.PuffField("F3_Steam", kind="steam", alpha=0.45)        # v2: lighter, smaller, shorter (QA)
     te, pos, vel = [], [], []

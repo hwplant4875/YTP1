@@ -520,3 +520,11 @@ OPEN / WEAK: g6 stays far (owner 16:51 choice, 2 zooms added);
 ## AUTOPILOT v14 (10/31, FEEDBACK_v13.md = spec; anime refs extracted to ref/anime/v14/ local only, montage ref/anime/v14_montage.jpg)
 - ITEM 1 DONE: frozen-tableau toolkit aot/forest/tableau.py (Shot orbit/dolly + TrackCam hard look-lock = Track-To, hold_clock, Stage,
   POSE_F Female library, eren_specs, scout_pose); pose check SEG=tpose (+TP_JSON variant sweep); sheet renders/laptop/tableau_poses_v14_sheet.jpg.
+- ITEM 2-3 code (17:00): f1 v8 formation graphic (F1_FormationGraphic, red titan ring) + tableaux ram/hood/palm/spin (TAB/TAB_STORY, flat TMAP knots);
+  f2 v8 sprint/trap, no scream, sky pull-out; f3 v11 sky flashes + faceoff/kick(+cut trunk, foot crystal)/slump, retreat+corpses skipped;
+  s1 v7 far sky; s2 v6 punch/climb(Mikasa=people_kit on her head)/zoom/mount + burning houses + NEW wall face (sset._wall_titan_v14 = Sidaivan
+  colossal head in a narrow slot, cracked purple-grey patch, purple light; WF_* env knobs). Forest: floor blend in WD_Ground, ferns, bark, roots, shafts.
+- ITEM 4 code (17:05): g1 wider start/no arcs; COLOSSAL title (tag_burn extra title); g2 PRE 6 s prelude (segtime.G2_PRE, update wrapper);
+  g2|g3 seam at rest (no dissolve: concat plain); g3 fast flight, wide static march, farm cam from W, camp104 restored from 9b9921f (sunken);
+  g5 walkway z + wide view before kick; g6 TMAP skips; g7 squeeze + water_mat + CANNON moved; g8 bent carry, no green, red lingering,
+  ARMIN tag, herd at W bulge corner, night pyres to the end; f0 6.5 s starting at night. Renders: render_p2 f1 v8 f2 v8 pushed.
