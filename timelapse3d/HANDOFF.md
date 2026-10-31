@@ -516,3 +516,7 @@ far clip (seg_f2 350 m, seg_f3 600/350 m) + ForestDim world tint. Check `md5sum 
 OPEN / WEAK: g6 stays far (owner 16:51 choice, 2 zooms added);
 - NOTE 09:50: git pack 2.6 GB -> from now on push only full_onetake (CRF 30) per round + segment previews; master/part2 one-takes stay local (E:/YTP2/3D Timelapse/renders/master_v*).
 - FINAL (prepared, NOT run): render_final_queue.sh = 1080p30 all 14 segments + tags; risks inside (forest TDR at 1080p, ~18-20 h GPU).
+
+## AUTOPILOT v14 (10/31, FEEDBACK_v13.md = spec; anime refs extracted to ref/anime/v14/ local only, montage ref/anime/v14_montage.jpg)
+- ITEM 1 DONE: frozen-tableau toolkit aot/forest/tableau.py (Shot orbit/dolly + TrackCam hard look-lock = Track-To, hold_clock, Stage,
+  POSE_F Female library, eren_specs, scout_pose); pose check SEG=tpose (+TP_JSON variant sweep); sheet renders/laptop/tableau_poses_v14_sheet.jpg.
