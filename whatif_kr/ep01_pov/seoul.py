@@ -9,7 +9,7 @@ DENT = None
 # Han River centreline through Seoul (km, x east / y north), roughly true to the map
 HAN = [(-16, 7.5), (-12, 4.6), (-8.5, 2.2), (-5.5, 0.9), (-3.5, 0.4), (-1.5, -0.2), (0.5, -0.6), (2.5, -0.2),
        (4.2, 0.9), (5.8, 1.3), (7.5, 0.2), (9.2, -0.4), (11, 0.6), (13, 2.4), (16, 4.2)]
-PEAKS = [(-1.0, 11.0, 836, 2.2), (2.0, 14.5, 740, 2.0), (5.5, 13.0, 640, 1.8), (-2.2, 4.0, 338, 0.9), (-0.8, 4.9, 342, 0.8),
+PEAKS = [(-1.0, 11.0, 1300, 2.4), (2.0, 14.5, 740, 2.0), (5.5, 13.0, 640, 1.8), (-2.2, 4.0, 338, 0.9), (-0.8, 4.9, 342, 0.8),
          (0.5, 2.5, 262, 0.7), (-2.0, -7.0, 632, 2.0), (3.0, -9.0, 618, 2.0), (9.0, 3.0, 296, 1.1), (5.0, -4.5, 306, 1.0),
          (-7.0, 9.0, 400, 1.6), (12, 9, 500, 2.0), (-9, -6, 450, 1.8), (13, -5, 480, 2.0)]
 
@@ -64,8 +64,7 @@ def water():
     plane("han", -30 * KM, 30 * KM, -30 * KM, 30 * KM, -45, mat("hanwater", "#3f78b5", 0.25))
 
 def city(foot, radius_km=11, step=0.13):
-    blds = [f"kenney_commercial/low-detail-building-{c}.glb" for c in "abcdefghijklmn"] + \
-           [f"kenney_commercial/low-detail-building-wide-{c}.glb" for c in "ab"]
+    blds = [f"kenney_commercial/building-{c}.glb" for c in "abcdefghijklmn"] + [f"kenney_suburban/building-type-{c}.glb" for c in "abcdefghijklmnopqrstu"]
     tall = [f"kenney_commercial/building-skyscraper-{c}.glb" for c in "abcde"]
     trees = [f"nature/CommonTree_{i}.gltf" for i in range(1, 6)]
     rnd = random.Random(9); n = 0
@@ -85,7 +84,7 @@ def city(foot, radius_km=11, step=0.13):
             cell = (int(px / 1.3), int(py / 1.3)); dens = random.Random(hash(cell)).uniform(0.35, 1.0) if d > 4 else 1.0
             if rnd.random() > dens or rnd.random() < 0.15:
                 inst(rnd.choice(trees), (px * KM, py * KM, h), rnd.uniform(0, 6.28), rnd.uniform(8, 12)); continue
-            k = rnd.uniform(75, 120)
+            k = rnd.uniform(70, 110)
             ch = tall if (rnd.random() < 0.08 and d < 7) else blds
             inst(rnd.choice(ch), (px * KM, py * KM, h), rnd.choice([0, 1.57]), k * (1.4 if ch is tall else 1)); n += 1
         y += step
@@ -129,7 +128,7 @@ def clouds(n, center, avoid, seed=2, zr=(1600, 2600)):
     except Exception: pass
     rnd = random.Random(seed)
     for _ in range(n):
-        cx = center[0] + rnd.uniform(-16, 16) * KM; cy = center[1] + rnd.uniform(-16, 16) * KM
+        cx = center[0] + rnd.uniform(-20, 14) * KM; cy = center[1] + rnd.uniform(-16, 16) * KM
         if math.hypot(cx - avoid[0], cy - avoid[1]) < 7 * KM: continue
         for k in range(3):
             bpy.ops.mesh.primitive_plane_add(size=1, location=(cx + rnd.uniform(-300, 300), cy + rnd.uniform(-300, 300), rnd.uniform(*zr) + k * 60))
@@ -206,7 +205,7 @@ if __name__ == "__main__":
     DENT = (FOOT[0] / KM, FOOT[1] / KM); terrain(dent=DENT); water(); bridges()
     lotte(8.9 * KM, -1.0 * KM)
     print("buildings", city(FOOT, radius_km=16, step=0.19))
-    clouds(34, FOOT, (FOOT[0] - 4 * KM, FOOT[1]))
+    clouds(60, FOOT, (FOOT[0] - 5 * KM, FOOT[1]))
     crater(FOOT[0], FOOT[1])
     if os.environ.get("ENGINE", "CYCLES") == "CYCLES":
         S.render.engine = "CYCLES"; S.cycles.samples = int(os.environ.get("SPP", "48")); S.cycles.use_denoising = True
