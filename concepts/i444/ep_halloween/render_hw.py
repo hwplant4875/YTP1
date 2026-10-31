@@ -138,7 +138,7 @@ for si, S in enumerate(E['sections']):
         elif kind == 'instr': instruction(arg, png)
         elif kind == 'title': center_title(arg, png)
         elif kind == 'film': film_label(arg, png)
-        ins += ['-loop', '1', '-framerate', str(FPS), '-t', str(L + 1), '-i', png]
+        ins += ['-loop', '1', '-framerate', str(FPS), '-t', f'{min(L + 1, b + 0.2):.3f}', '-i', png]  # short loops: 20+ overlays at full length ran out of memory (v7 cold open)
         fd = '' if kind in ('word', 'film', 'title') else f",fade=t=in:st={a}:d=0.12:alpha=1,fade=t=out:st={max(a, b-0.12)}:d=0.12:alpha=1"
         fc.append(f"[{n}:v]format=rgba{fd}[o{n}]")
         fc.append(f"{chain}[o{n}]overlay=0:0:enable='between(t,{a},{b})'[c{n}]"); chain = f'[c{n}]'; n += 1
