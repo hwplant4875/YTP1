@@ -144,9 +144,9 @@ def _shots(lift=False):
     side = math.degrees(math.atan2(fy - ey, fx - ex)) + 90.0
     hx, hy = FOOT
     nrm = math.degrees(math.atan2(NY, NX))
-    sh = [TB.Shot("punch", *TAB["punch"], S((fx + ex) / 2, (fy + ey) / 2, 11.0), az=(side - 20, side + 10), dist=(70, 56), el=(12, 16), lens=34),
-          TB.Shot("climb", 8.8, 11.0, S(hx, hy, CLIMB_H + 6.0), az=(nrm - 35, nrm - 15), dist=(120, 95), el=(8, 12), lens=(30, 36)),
-          TB.Shot("zoom", 11.0, 13.0, S(hx, hy, CLIMB_H + 15.5), az=(nrm - 15, nrm - 10), dist=(95, 80), el=(12, 14), lens=(36, 110)),
+    sh = [TB.Shot("punch", *TAB["punch"], S((fx + ex) / 2, (fy + ey) / 2, 11.0), az=(side - 20, side + 10), dist=(64, 54), el=(48, 54), lens=32),
+          TB.Shot("climb", 8.8, 11.0, S(hx, hy, CLIMB_H + 6.0), az=(nrm - 35, nrm - 15), dist=(105, 85), el=(18, 24), lens=(30, 36)),
+          TB.Shot("zoom", 11.0, 13.0, S(hx, hy, CLIMB_H + 15.5), az=(nrm - 15, nrm - 10), dist=(85, 75), el=(20, 22), lens=(36, 190)),
           TB.Shot("mount", *TAB["mount"], S(KX, KY, 4.0), az=(nrm + 70, nrm + 45), dist=(60, 48), el=(22, 30), lens=36)]
     if lift:
         for s_ in sh:
@@ -169,14 +169,14 @@ def _cam(lift):
     return TB.make_cam(keys + _shots(lift), v_in=SEAM_IN["vel"], v_out=(0.0, 0.0, 0.0))
 CAM = _cam(False)
 CAM_LIMITS = dict(speed=1500.0, yaw=300.0, hmin=10.0, hmax=500.0, pitch=(-10.0, 70.0), lens=(29.0, 112.0))
-PLAN = [(0.0, "morning"), (10.0, "day"), (30.0, "afternoon"), (DUR, "afternoon")]
+PLAN = [(0.0, "morning"), (10.0, "day"), (30.0, "afternoon"), (34.0, "afternoon"), (38.5, "dusk"), (STORY_DUR, "dusk")]   # v8: dim purple end
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
 S_ = {}
 
 def build(site):
     global CAM
-    CAM = _cam(True)
+    CAM = _cam(True); S_["CAMREF"] = CAM
     import flares
     from stohess import sset
     c = C.coll("S2")
@@ -230,6 +230,22 @@ def build(site):
         x, y = fem_S(float(tt)); te.append(float(tt)); pos.append(_W(x, y, 1.0)); vel.append((0, 0, 1.5))
     dust.add_many(te, pos, vel, r0=3.0, r1=11.0, life=2.6, rise=1.5, alpha=0.55)
     dust.build(c); S_["dust"] = dust
+    # v8 (FEEDBACK_v13 §3): houses burning along the pan to the wall (flame cones on the roofs + dark smoke columns)
+    fire = C.mat("S2_Fire", (1.0, 0.45, 0.10), 0.5, emit=(1.0, 0.42, 0.08), strength=12.0)
+    bm = bmesh.new(); rnd2 = random.Random(77)
+    smoke = flares.PuffField("S2_FireSmoke", kind="smoke", color=(0.16, 0.14, 0.13), alpha=0.7)
+    te, pos, vel = [], [], []
+    for (fx_, fy_) in ((190.0, -60.0), (240.0, -120.0), (300.0, -70.0), (350.0, -135.0), (410.0, -95.0), (455.0, -165.0),
+                       (130.0, -110.0), (520.0, -120.0)):
+        wz = _W(fx_, fy_, 11.0)
+        for q in range(3):
+            res = bmesh.ops.create_cone(bm, cap_ends=True, segments=6, radius1=rnd2.uniform(3.0, 5.0), radius2=0.2, depth=rnd2.uniform(7.0, 12.0))
+            bmesh.ops.translate(bm, vec=(wz[0] + rnd2.uniform(-4, 4), wz[1] + rnd2.uniform(-4, 4), wz[2] + 2.5), verts=res["verts"])
+        for tt in np.arange(-4.0, 40.0, 0.35):
+            te.append(float(tt)); pos.append((wz[0], wz[1], wz[2] + 5.0)); vel.append((rnd2.uniform(0.5, 1.5), 0.3, 6.0))
+    C.mesh_obj("S2_Flames", bm, [fire], c).visible_shadow = False
+    smoke.add_many(te, pos, vel, r0=5.0, r1=18.0, life=5.0, rise=4.0, alpha=0.75)
+    smoke.build(c); S_["firesmoke"] = smoke
     steam = flares.PuffField("S2_Steam", kind="steam", alpha=0.75)
     te, pos, vel = [], [], []
     for k in range(180):
@@ -277,11 +293,14 @@ def update(t):
         bpy.context.view_layer.update()
         hd = fem.bone_world("head", tail=True)
         mk.location = (hd.x, hd.y, hd.z + 0.4); S_["mik0"] = tuple(mk.location)
+        for sh in getattr(S_.get("CAMREF"), "shots", []):        # the huge zoom ends ON Mikasa
+            if sh.name == "zoom":
+                sh.target = (hd.x, hd.y, hd.z + 1.3)
     elif k == "mount":                   # on her back at the wall foot, Eren crouched on top of her
         fem.pose(TB.POSE_F["down"])
         w = _W(KX, KY, 2.2); fem.place(w[0], w[1], w[2], WALL_YAW, pitch=math.pi / 2)
-        er.pose(TB.eren_specs(er.G6, er.P)["mount"])
-        ew = _W(KX + 5.0 * NX, KY + 5.0 * NY, 1.0); er.place(ew[0], ew[1], ew[2], WALL_YAW)
+        er.pose(er.P["crouch"])                                 # sitting astride her, crouched low
+        ew = _W(KX + 2.5 * NX, KY + 2.5 * NY, -1.8); er.place(ew[0], ew[1], ew[2], WALL_YAW)
 
 def _update(t):
     import attack_titan as AT
@@ -332,6 +351,7 @@ def _update(t):
         P.pos[pj[nm]] = _W(p[0], p[1], 50.0); C.person_pose(P, pj[nm], "stand"); P.yaw[pj[nm]] = C.yaw_of(NX, NY)
     P.push()
     S_["dust"].update(t, wind=(1.5, 0.5)); S_["steam"].update(t, wind=(0.8, 0.4))
+    S_["firesmoke"].update(t, wind=(2.0, 0.6))
 
 def light(t):
     LIGHT.apply(story(t))

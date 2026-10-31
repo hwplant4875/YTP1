@@ -478,6 +478,9 @@ def _tableau_update(t):
     k = _tab_now(t)
     B = S["TS"]; B.vis[:] = 0.0
     segs = []
+    if k != "spin":
+        for ob, _ts in S["smash"]:
+            C.hide(ob, False)
     if k is not None:
         fem = S["fem"]; ts = TAB_STORY[k]
         x, y, yaw = female_state(ts)
@@ -509,6 +512,8 @@ def _tableau_update(t):
             for j, off, rl in ((6, f * 6.0 + r * 8.0, 1.2), (7, f * -2.0 + r * 15.0, -1.6)):     # riderless horses tumbling
                 B.vis[j] = 1.0; B.pos[j] = base + off + np.array((0, 0, 1.5)); B.yaw[j] = yaw + 1.0; B.roll[j] = rl; B.pitch[j] = 0.3
         elif k == "spin":
+            for ob, _ts in S["smash"]:                       # v10: the collapsing houses beside her hid the spin
+                C.hide(ob, True)
             piv = np.array(fem.bone_world("lowerarm01.R", tail=True))
             th = 0.55 * (t - TAB["spin"][0]) + math.atan2(-f[1], -f[0])                         # very slow circle round her hand
             p = piv + np.array((15.0 * math.cos(th), 15.0 * math.sin(th), -3.5))

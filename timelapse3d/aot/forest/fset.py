@@ -162,7 +162,7 @@ def light_shafts(c, spots):
         for n in list(N):
             if n.type != "OUTPUT_MATERIAL":
                 N.remove(n)
-        em = N.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (1.0, 0.92, 0.70, 1); em.inputs["Strength"].default_value = 0.06
+        em = N.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (1.0, 0.92, 0.70, 1); em.inputs["Strength"].default_value = 0.025
         tr = N.new("ShaderNodeBsdfTransparent"); ad = N.new("ShaderNodeAddShader")
         Ln.new(em.outputs[0], ad.inputs[0]); Ln.new(tr.outputs[0], ad.inputs[1])
         Ln.new(ad.outputs[0], N.get("Material Output").inputs["Surface"])

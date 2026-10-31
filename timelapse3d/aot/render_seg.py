@@ -223,4 +223,6 @@ for i, (tv, fn) in enumerate(jobs):
     el = time.time() - tr
     print(f"[seg] {i + 1}/{len(jobs)} tv={tv:.2f} t={t:.2f} -> {fn} ({el:.0f}s, {el / (i + 1):.2f}s/f, update {tu:.2f}s)", flush=True)
 if not B.stills:
-    open(os.path.join(B.seg_out, f"_done_{B.t0:g}_{B.t1:g}"), "w").write("%d frames" % len(jobs))
+    for a_ in {f"{B.t0:g}", repr(B.t0)}:                  # v14: also the exact strings render_seg.sh tests (it printed
+        for b_ in {f"{B.t1:g}", repr(B.t1)}:              # the window ends with python repr) -> no 3x "exited early" rebuilds
+            open(os.path.join(B.seg_out, f"_done_{a_}_{b_}"), "w").write("%d frames" % len(jobs))

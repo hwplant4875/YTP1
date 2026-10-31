@@ -25,7 +25,7 @@ except ImportError:
 DUR = 36.0
 BEATS = dict(chase=(0.0, 13.7), swats=(4.5, 7.0, 9.5), leap=13.9, volley=(14.3, 14.9, 15.5), nape=16.0, stop=18.5,
              harden=(20.0, 24.0), levi=(21.0, 22.2), blue=23.0, green=24.4, scream=26.0, pour=(26.0, 31.0),
-             eat=(30.5, 35.0), steam=(30.0, 36.0))
+             eat=(30.5, 35.0), steam=(33.6, 36.0))
 F = C.F
 
 def _W(fx, fy, dz=0.0):
@@ -150,7 +150,7 @@ CAM_KEYS = [
     (0.0, F(*SEAM_IN["pos"]), F(*SEAM_IN["look"]), SEAM_IN["lens"]),
     _side_key(1.7, 70.0, 70.0),
     (7.9, F(TX - 30, TY - 60, 110.0), F(TX, TY, 5.0), 28.0),            # up out of the clearing
-    (9.8, F(TX - 6, TY - 18, 235.0), F(TX, TY, 0.0), 36.0),           # sky: the titans swarm into the clearing (looking down into the gap)
+    (9.8, F(TX - 5, TY - 14, 150.0), F(TX, TY, 0.0), 30.0),           # sky: the titans swarm into the clearing (looking down into the gap)
     (DUR, SEAM_F3["pos"], SEAM_F3["look"], SEAM_F3["lens"]),
 ]
 def _cam(lift):
