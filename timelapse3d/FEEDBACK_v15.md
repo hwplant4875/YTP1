@@ -34,3 +34,7 @@ Overrides older specs where they differ. Keep everything not mentioned.
   speed) everywhere a model/animation is weak; frozen tableaux only where a 270p still proves the pose looks right
   vs the anime frame; otherwise imply the event (lightning, steam, falling trees, dust) from the sky. Check every beat
   with a still before rendering; reject anything that looks cheap.
+- (12:30) Wire-trap nape-guard tableau (before the titans are called, so it is KEPT): hand placement is wrong. Both
+  hands must sit EXACTLY on the back of her neck, overlapping to cover the nape; upper arms raised beside the head,
+  elbows forward/up, forearms bent behind the head. Verify with a 270p still from behind-side angle (hands visibly on
+  the nape, no gap, no clipping into the head).
