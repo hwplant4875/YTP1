@@ -3,7 +3,8 @@
 Picked from 2 s / 0.5 s contact sheets (10/31) and used as in-points in `build_edl.py`. Times are the frame shown, not the sheet label.
 Age-gated on YouTube, not downloaded: trt_01_decoration, trt_02_bodies, trt_07_pumpkin, trt_08_something, trt_09_zombies.
 Skip (not YouTube-safe): trt_trailer 66-70 and 130 (underwear), notd_trailer 68-75 (nudity), t1_trailer 10-15, 62-63, 74-77
-(gore), t2_trailer 92-101 and 110-113 (gore / blood-soaked Art).
+(gore), t2_trailer 92-101 and 110-113 (gore / blood-soaked Art), tk_trailer 85-86 (victim on the car).
+Totally Killer uses only the Blumhouse trailer: the Prime Video clips carry an in-picture bug (no watermark removal).
 
 | Script line | Clip | Time | What is on screen |
 |---|---|---|---|
@@ -15,10 +16,10 @@ Skip (not YouTube-safe): trt_trailer 66-70 and 130 (underwear), notd_trailer 68-
 | #11 "brings every decoration to life" | gb2_dummy | 335, 342.5, 350, 362.5 | Tesla tower lightning, jack-o'-lanterns wake, gnomes, flaming horseman |
 | #11 "giant spiders / flying witches / army of costumes" | gb2_trailer | 38.6, 36.4, 94.5 | spider on the street, flying ghoul, store full of costumes |
 | #11 "nobody actually dies" | gb2_dummy | 432.5, 556.5 | gummy bears attack, kid zaps the gummy |
-| #10 Sweet Sixteen Killer mask | tk_machine | 57-60 | killer in the mask at the science fair |
+| #10 Sweet Sixteen Killer mask | tk_trailer | 101.3, 116.5 | killer in the mask (green light), behind the blinds |
 | #10 "sixteen times" | tk_trailer | 24.5-27 | 1987 victim photos, "Sweet 16 Killer" headline |
 | #10 masked killer | tk_trailer | 100.5, 116.5 | killer mask (green light), killer behind a victim |
-| #10 "that one friend group" | tk_mom | 160.5-165 | Heather, Tiffany, Marisa in the gym |
+| #10 "that one friend group" | tk_trailer | 82.5, 90.3 | the 1987 friends at the cabin |
 | #9 Sam | trt_trailer | 42.5, 96.2-97 | Sam's burlap face close-up, Sam's silhouette in the fog |
 | #9 "follow the rules" | trt_trailer | 118.5 | "You either live by the rules" card |
 | #9 Kreeg let go | trt_trailer | 143.3 | Kreeg close-up |
