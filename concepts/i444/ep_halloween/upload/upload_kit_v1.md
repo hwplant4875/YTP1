@@ -1,4 +1,6 @@
-# Halloween special upload kit v1 (chapters are filled in from the final render)
+# Halloween special upload kit (final: halloween_v7.mp4, 5:10)
+
+Video: E:\YTP2\Instruction444enders\halloween_v7.mp4 | Subtitles: upload/halloween_ranked_en_v4.srt | Thumbnails: upload/halloween_thumb_a/b/c.jpg
 
 ## Titles (pick one; no ":" or "-")
 1. Every Halloween Night Horror Movie Ranked by Your Chance of Surviving It  (recommended: matches the Every ... Ranked series)
@@ -34,4 +36,4 @@ Chapters
 4:55 Your pick
 
 ## Tags
-halloween, horror, horror movies, halloween movies, terrifier, art the clown, michael myers, trick r treat, halloween night, ranked
+halloween, horror, horror movies, halloween movies, terrifier, art the clown, michael myers, trick r treat, scary stories, hell fest, halloween night, ranked
