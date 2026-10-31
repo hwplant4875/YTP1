@@ -25,7 +25,7 @@ try:
 except ImportError:
     bpy = None
 
-TS = 1.5                                                        # titan scale: just taller than the 8-26 m houses
+TS = 1.6                                                        # titan scale: just taller than the 8-26 m houses
 DUR = 20.0
 BEATS = dict(lightning=(0.2, 1.8), rise=(0.9, 1.6), punch=4.05, fly=(4.15, 4.75), impact=4.75, tower=(5.1, 6.6),
              getup=(6.4, 6.9), run=(6.9, 9.6), climb=(9.6, 11.6), fall=(11.6, 12.2), mount=12.3, face=11.0, crane=(13.4, 17.6))
@@ -130,17 +130,17 @@ def eren_state(t, er, TB):
     return P["crouch"]
 
 # ---------------------------------------------------------------- camera: ONE high sky view (frame S, z above ground)
-H = 320.0
+H = 190.0                                                        # v15b: 320 m left the titans ~10 px
 def _k(t, p, l, lens):
     return (t, S(*p), S(*l), lens)
-SEAM_IN = dict(pos=S(-300.0, -60.0, H), look=S(30.0, -40.0, 0.0), lens=40.0, vel=(4.0, -6.0, 0.0))
+SEAM_IN = dict(pos=S(-170.0, -10.0, H), look=S(40.0, -70.0, 0.0), lens=40.0, vel=(-2.0, -12.0, 0.0))
 CAM_KEYS = [
     (0.0, SEAM_IN["pos"], SEAM_IN["look"], SEAM_IN["lens"]),
-    _k(3.8, (-315.0, -110.0, H), (72.0, -105.0, 0.0), 41.0),                      # the punch: the cathedral right of it
-    _k(6.8, (-325.0, -150.0, H), (110.0, -160.0, 0.0), 41.0),                     # turned slightly toward the collapse
-    _k(9.8, (-300.0, -170.0, H), (330.0, -180.0, 0.0), 42.0),                     # ruin bottom, the run to the wall above
-    _k(12.6, (-270.0, -180.0, H), (520.0, -195.0, 0.0), 52.0),                    # the climb / fall at the wall
-    _k(13.4, (-250.0, -182.0, H), (KX, KY, 0.0), 54.0),
+    _k(3.8, (-180.0, -60.0, H), (75.0, -115.0, 0.0), 42.0),                      # the punch: the cathedral right of it
+    _k(6.8, (-190.0, -110.0, H), (100.0, -160.0, 0.0), 42.0),                     # turned slightly toward the collapse
+    _k(9.8, (-170.0, -150.0, H), (250.0, -170.0, 0.0), 40.0),                     # ruin bottom, the run to the wall above
+    _k(12.6, (-120.0, -170.0, H), (500.0, -195.0, 0.0), 52.0),                    # the climb / fall at the wall
+    _k(13.4, (-100.0, -172.0, H), (KX, KY, 0.0), 54.0),
     _k(15.2, _off(SL.CLIMB, 70.0) + (40.0,), (CX, CY, 30.0), 35.0),               # down to the wall face (existing end)
     _k(16.6, _off(SL.CLIMB, 60.0) + (38.0,), (CX, CY, SL.FACE_Z), 42.0),
     _k(17.6, _off(SL.CLIMB, 55.0, 2.0) + (SL.FACE_Z + 2.0,), (CX, CY, SL.FACE_Z + 0.5), 45.0),
@@ -293,8 +293,8 @@ def build(site):
     import attack_titan as AT
     from stohess import sset
     c = C.coll("S2V")
-    S_["fem"] = C.Female("S2V_Female"); S_["fem"].rig.scale = (TS, TS, TS)
-    S_["eren"] = C.Eren("S2V_Attack"); S_["eren"].T.holder.scale = (TS, TS, TS)
+    S_["fem"] = C.Female("S2V_Female"); S_["fem"].rig.scale = tuple(v * TS for v in S_["fem"].rig.scale)   # the rig has its own base scale
+    S_["eren"] = C.Eren("S2V_Attack")
     S_["face"] = sset.STATE.get("face")
     build_collapse(c)
     rnd = random.Random(11)
@@ -350,8 +350,10 @@ def update(t):
     from forest import tableau as TB
     lu = (t - BEATS["lightning"][0]) / (BEATS["lightning"][1] - BEATS["lightning"][0])
     if lu > -0.01:
-        w = S(-40.0, -60.0); AT.shift_fx(w[0], w[1], min(1.0, max(0.0, lu)), seed=43, scale=TS)
-    fem = S_["fem"]
+        w = S(-40.0, -60.0); fx = AT.shift_fx(w[0], w[1], min(1.0, max(0.0, lu)), seed=43, scale=TS)
+        if lu > 1.0:                                             # the steam dome thins away (it hid the square as a white blob)
+            fx["dome_d"].default_value *= 1.0 - C.ss(1.0, 1.5, lu); fx["dome"].hide_render = lu > 1.5
+    fem = S_["fem"]; fem.show(True)
     pose, yaw, pitch, dz = fem_state(t, TB)
     fem.pose(pose)
     x, y = fem_S(t); w = _W(x, y, dz + fem_z(t))
@@ -364,7 +366,7 @@ def update(t):
         er.pose(eren_state(t, er, TB))
         ex, ey = eren_S(t)
         if t >= BEATS["mount"]:                                  # astride her at the wall foot
-            ew = _W(KX + 2.5 * TS * NX, KY + 2.5 * TS * NY, -1.8 * TS); er.place(ew[0], ew[1], ew[2], WALL_YAW)
+            ew = _W(KX + 2.5 * TS * NX, KY + 2.5 * TS * NY, -1.8 * TS); er.place(ew[0], ew[1], ew[2], WALL_YAW); er.T.holder.scale = (TS, TS, TS)
         else:
             if t < 7.0 or t >= 10.2:
                 tx, ty = fem_S(t)
@@ -372,7 +374,7 @@ def update(t):
                 tx, ty = eren_S(t + 0.1)
             rise = C.ss(*BEATS["rise"], t)
             ew = _W(ex, ey, -23.0 * (1 - rise))
-            er.place(ew[0], ew[1], ew[2], C.yaw_of(tx - ex, ty - ey + 1e-9))
+            er.place(ew[0], ew[1], ew[2], C.yaw_of(tx - ex, ty - ey + 1e-9)); er.T.holder.scale = (TS, TS, TS)
         er.T.burning(0.0)
         er.T.steam(0.6 * (1 - C.ss(*BEATS["rise"], t)) + 0.7 * C.ss(12.3, 13.5, t))
     _collapse(t)
@@ -385,6 +387,19 @@ def light(t):
     LIGHT.apply(t)
 
 def check():
+    if bpy is not None and S_.get("fem") is not None:
+        _debug_sizes()
     for t in (0.0, 1.6, 3.9, 4.15, 4.75, 6.9, 8.0, 9.6, 11.6, 12.3):
         fx, fy = fem_S(t); ex, ey = eren_S(t)
         print(f"[s2v15] t {t:5.2f} female S ({fx:5.0f} {fy:5.0f}) z {fem_z(t):4.1f}  eren S ({ex:5.0f} {ey:5.0f}) d {math.hypot(fx - ex, fy - ey):5.1f}")
+
+def _debug_sizes(t=4.0):
+    update(t); bpy.context.view_layer.update()
+    for nm, objs in (("female", S_["fem"].objs), ("eren", S_["eren"].objs)):
+        zs = []
+        for o in objs:
+            if o.type == "MESH" and not o.hide_render:
+                dg = o.evaluated_get(bpy.context.evaluated_depsgraph_get())
+                zs += [(dg.matrix_world @ v.co).z for v in dg.to_mesh().vertices]
+        print(f"[s2v15] {nm} visible meshes z {min(zs) if zs else None} .. {max(zs) if zs else None}  n {len(zs)}", flush=True)
+    print("[s2v15] fem rig scale", tuple(S_["fem"].rig.scale), "hidden", S_["fem"].rig.hide_render, "eren holder", tuple(S_["eren"].T.holder.scale), flush=True)

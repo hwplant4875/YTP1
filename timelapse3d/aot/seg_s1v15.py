@@ -51,7 +51,7 @@ def build(site):
             return f0(x, y, t, frame=frame, seed=seed, scale=scale * S2V.TS if scale == 1.0 else scale)
         sfx._v15 = True; AT.shift_fx = sfx
     S1.build(site)
-    S1.S_["fem"].rig.scale = (S2V.TS, S2V.TS, S2V.TS)
+    S1.S_["fem"].rig.scale = tuple(v * S2V.TS for v in S1.S_["fem"].rig.scale)
     CAM = camchan.CamPath(C.lift_keys(CAM_KEYS, skip=LIFT_SKIP), v_in=S1.SEAM_IN["vel"], v_out=SEAM["vel"])
 
 def update(t):

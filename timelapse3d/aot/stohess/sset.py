@@ -234,7 +234,14 @@ def build_wall_face(c):
         if os.environ.get("WF_OLD"):
             raise RuntimeError("WF_OLD")
         face.hide_render = True
-        objs = _wall_titan_v14(c, (w[0], w[1], GS(fx, fy) + FACE_Z), (nx, ny))
+        try:
+            if os.environ.get("WF_V14"):
+                raise RuntimeError("WF_V14")
+            objs = _wall_titan_v15(c, (w[0], w[1], GS(fx, fy) + FACE_Z), (nx, ny))
+        except Exception as ex15:
+            import traceback; traceback.print_exc()
+            print("[stohess] v15 GLB wall titan failed, v14 face:", ex15, flush=True)
+            objs = _wall_titan_v14(c, (w[0], w[1], GS(fx, fy) + FACE_Z), (nx, ny))
         bpy.data.objects.remove(face, do_unlink=True)
     except Exception as ex:
         import traceback; traceback.print_exc()
@@ -293,6 +300,164 @@ def _crack_mat():
         pass
     return m
 
+def _wall_hole(c, cv, nv, side, ang, protrude, keep, hz=11.5, hx=4.3):
+    """v14 slot + cracked patch + rocks + optional pale eye + purple light (shared by the v14 / v15 wall titans)."""
+    # the hole: narrow vertical dark slot round the protruding face, its rim broken into stone chunks, rocks at the foot
+    R = Matrix.Rotation(ang - math.pi / 2, 4, "Z")
+    rnd = random.Random(31)
+    bm = bmesh.new()
+    rim = []; n_ = 24
+    for i in range(n_):
+        a = i * math.tau / n_
+        rx, rz = hx + rnd.uniform(-0.6, 0.6), hz + rnd.uniform(-1.2, 1.2)
+        rim.append(bm.verts.new((rx * math.cos(a), 0.06, rz * math.sin(a))))
+        if rnd.random() < 0.8:
+            _cube(bm, (rx * 1.05 * math.cos(a), 0.5, rz * 1.03 * math.sin(a)), (rnd.uniform(0.8, 1.8), 0.9, rnd.uniform(0.8, 1.8)), rz=rnd.uniform(-0.5, 0.5))
+    ctr = bm.verts.new((0, 0.06, 0))
+    for i in range(n_):
+        bm.faces.new((ctr, rim[i], rim[(i + 1) % n_])).material_index = 1
+    for i in range(16):                                        # broken rock chunks piled at the bottom of the hole
+        _cube(bm, (rnd.uniform(-6, 6), rnd.uniform(0.4, 2.6), -hz + 1.0 + rnd.uniform(-1.5, 1.5)), (rnd.uniform(1.4, 3.4), rnd.uniform(1.2, 2.6), rnd.uniform(1.2, 3.0)), rz=rnd.uniform(-0.6, 0.6))
+    for f in bm.faces:
+        if f.material_index != 1:
+            f.material_index = 0
+    # the cracked wall patch (70 x 60 m) a few cm proud of the wall face
+    vs = [bm.verts.new((x, 0.03, z)) for x, z in ((-70, -50), (70, -50), (70, 50), (-70, 50))]
+    bm.faces.new(vs).material_index = 2
+    stone = C.mat("ST_WallRubbleDark", (0.08, 0.07, 0.09), 0.95)
+    hole = C.mat("ST_HoleVoid", (0.02, 0.015, 0.025), 1.0)
+    ob = C.mesh_obj("ST_WallTitanHole", bm, [stone, hole, _crack_mat()], c)
+    ob.matrix_world = Matrix.Translation(cv) @ R
+    # the eye: pale blue-grey, looking sideways (placed on the face's upper visible edge, toward the camera)
+    eye = None
+    if os.environ.get("WF_EYE", "1") == "1":
+        bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=16, v_segments=10, radius=0.55)
+        eye = C.mesh_obj("ST_WallTitanEye", bm, [C.mat("ST_WallEye", (0.50, 0.56, 0.62), 0.25)], c)
+        bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=10, v_segments=6, radius=0.30)
+        iris = C.mesh_obj("ST_WallTitanIris", bm, [C.mat("ST_WallIris", (0.22, 0.28, 0.34), 0.2)], c)
+        ep = cv + nv * (protrude + 0.15) + side * float(os.environ.get("WF_EYE_X", "0.6")) + Vector((0, 0, float(os.environ.get("WF_EYE_Z", "2.2"))))
+        eye.location = ep; eye.scale = (1.0, 0.7, 0.8)
+        iris.location = ep + nv * 0.45 - side * 0.35
+        keep += [eye, iris]
+    # dim purple key light on the hole
+    ld = bpy.data.lights.new("ST_WallTitanLight", "POINT"); ld.energy = float(os.environ.get("WF_LIGHT", "4.0e4")); ld.color = (0.62, 0.45, 0.95)
+    ld.shadow_soft_size = 6.0
+    lo = bpy.data.objects.new("ST_WallTitanLight", ld); c.objects.link(lo)
+    lo.location = cv + nv * 30.0 + Vector((0, 0, 8.0))
+    return ob, lo
+
+WT_GLB = "E:/YTP2/3D Timelapse/assets/wall_titan/colossal_titan_head.glb"   # "Colossal titan head", jhongenriquemorales26, CC-BY 4.0 (CREDITS.md)
+def _muscle_mat():
+    """dark blood-red exposed muscle with vertical fibre striations (the GLB has no textures)."""
+    m = bpy.data.materials.get("ST_WallTitanMuscle")
+    if m:
+        return m
+    m = bpy.data.materials.new("ST_WallTitanMuscle"); m.use_nodes = True
+    N, Ln = m.node_tree.nodes, m.node_tree.links
+    b = N.get("Principled BSDF"); b.inputs["Roughness"].default_value = 0.45
+    tc = N.new("ShaderNodeTexCoord")
+    wv = N.new("ShaderNodeTexWave"); wv.wave_type = "BANDS"; wv.bands_direction = "X"; wv.inputs["Scale"].default_value = 38.0
+    wv.inputs["Distortion"].default_value = 6.0; wv.inputs["Detail"].default_value = 4.0
+    Ln.new(tc.outputs["Object"], wv.inputs["Vector"])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 6.0; Ln.new(tc.outputs["Object"], nz.inputs["Vector"])
+    ramp = N.new("ShaderNodeValToRGB")
+    ramp.color_ramp.elements[0].color = (0.10, 0.018, 0.02, 1); ramp.color_ramp.elements[1].color = (0.42, 0.10, 0.10, 1)
+    mx = N.new("ShaderNodeMath"); mx.operation = "MULTIPLY"; Ln.new(wv.outputs["Fac"], mx.inputs[0]); Ln.new(nz.outputs["Fac"], mx.inputs[1])
+    ad = N.new("ShaderNodeMath"); ad.operation = "ADD"; ad.inputs[1].default_value = 0.15; Ln.new(mx.outputs[0], ad.inputs[0])
+    Ln.new(ad.outputs[0], ramp.inputs["Fac"]); Ln.new(ramp.outputs["Color"], b.inputs["Base Color"])
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.6; bp.inputs["Distance"].default_value = 0.02
+    Ln.new(wv.outputs["Fac"], bp.inputs["Height"]); Ln.new(bp.outputs["Normal"], b.inputs["Normal"])
+    return m
+
+def _wall_titan_v15(c, centre, n):
+    """v15: the downloaded Sketchfab head (WT_GLB) entombed in the narrow slot, 3/4 side view (ref/user/wall_titan_face_ref.png):
+    the face fills the slot height, dark striated muscle, a long row of exposed teeth, one small pale eye looking sideways,
+    rocks at the foot, dim purple light."""
+    if not os.path.exists(WT_GLB):
+        raise RuntimeError("no wall titan GLB")
+    before = set(bpy.data.objects)
+    bpy.ops.import_scene.gltf(filepath=WT_GLB)
+    new = [o for o in bpy.data.objects if o not in before]
+    meshes = [o for o in new if o.type == "MESH"]
+    root = next(o for o in new if o.parent is None)
+    for o in new:
+        for cl in list(o.users_collection):
+            cl.objects.unlink(o)
+        c.objects.link(o)
+    mm = _muscle_mat()
+    for o in meshes:
+        o.data.materials.clear(); o.data.materials.append(mm)
+        for pl in o.data.polygons:
+            pl.use_smooth = True
+    cv = Vector(centre); nv = Vector((n[0], n[1], 0.0)).normalized(); side = Vector((-nv.y, nv.x, 0.0))
+    ang = math.atan2(nv.y, nv.x)
+    H_ = float(os.environ.get("WF_HEAD", "23.0"))              # head height = the slot height (QA: face fills the hole)
+    k = H_ / 1.9
+    yaw = math.radians(float(os.environ.get("WF_YAW", "55")))
+    protrude = float(os.environ.get("WF_OUT", "2.5"))
+    rot = Matrix.Rotation(ang + yaw + math.pi / 2, 4, "Z")   # model front -Y -> 3/4 out of the wall
+    def M(off):
+        return Matrix.Translation(off) @ rot @ Matrix.Scale(k, 4)
+    root.matrix_world = M(Vector()); bpy.context.view_layer.update()
+    P = [o.matrix_world @ v.co for o in meshes for v in o.data.vertices]
+    hc = sum(P, Vector()) / len(P)
+    front = max((p - hc).dot(nv) for p in P)
+    off = (cv - hc) + nv * (protrude - front)
+    off.z = cv.z - hc.z - 0.5
+    root.matrix_world = M(off); bpy.context.view_layer.update()
+    Pl = [o.matrix_world @ v.co for o in meshes for v in o.data.vertices]
+    Minv = M(off).inverted()
+    Pl = [Minv @ p for p in Pl]                                # model-local points (head 1.9 tall, front -y)
+    keep = []
+    for o in meshes:                                           # only what sits in front of the wall plane (minus 5 m) stays
+        me = o.data; bm = bmesh.new(); bm.from_mesh(me); mw = o.matrix_world
+        kill = [v for v in bm.verts if (mw @ v.co - cv).dot(nv) < -5.0]
+        bmesh.ops.delete(bm, geom=kill, context="VERTS"); bm.to_mesh(me); bm.free()
+        if len(me.vertices):
+            keep.append(o)
+    L = lambda x, y, z: M(off) @ Vector((x, y, z))
+    def front_y(x, z):
+        ys = [p.y for p in Pl if abs(p.x - x) < 0.05 and abs(p.z - z) < 0.05]
+        return min(ys) if ys else -0.7
+    # exposed teeth: a long row across the mouth (upper + lower), set into dark gums
+    tooth = C.mat("ST_WallTeeth", (0.78, 0.74, 0.66), 0.35); gum = C.mat("ST_WallGums", (0.16, 0.03, 0.035), 0.5)
+    bm = bmesh.new()
+    for i in range(16):
+        x = -0.30 + 0.6 * i / 15
+        zc = -0.22 + 0.06 * (x / 0.3) ** 2
+        y = front_y(x, zc) - 0.01
+        for up in (1, -1):
+            res = bmesh.ops.create_cube(bm, size=1.0)
+            bmesh.ops.scale(bm, vec=(0.032, 0.03, 0.085), verts=res["verts"])
+            bmesh.ops.translate(bm, vec=(x, y, zc + up * 0.05), verts=res["verts"])
+    for f in bm.faces:
+        f.material_index = 0
+    res = bmesh.ops.create_cube(bm, size=1.0)                  # dark gum slot behind the teeth
+    bmesh.ops.scale(bm, vec=(0.66, 0.02, 0.24), verts=res["verts"])
+    bmesh.ops.translate(bm, vec=(0.0, front_y(0.0, -0.22) + 0.012, -0.22), verts=res["verts"])
+    for f in {f for v in res["verts"] for f in v.link_faces}:
+        f.material_index = 1
+    te = C.mesh_obj("ST_WallTitanTeeth", bm, [tooth, gum], c); te.matrix_world = M(off)
+    keep.append(te)
+    # one small pale blue-grey eye on the camera side, looking sideways
+    ex = 0.27 if os.environ.get("WF_EYE_SIDE", "R") == "R" else -0.27
+    ep = L(ex, front_y(ex, 0.47) + 0.03, 0.47)
+    bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=16, v_segments=10, radius=0.06)
+    eye = C.mesh_obj("ST_WallTitanEye", bm, [C.mat("ST_WallEye", (0.62, 0.68, 0.74), 0.2, emit=(0.5, 0.58, 0.66), strength=0.4)], c)
+    eye.matrix_world = Matrix.Translation(ep) @ rot @ Matrix.Diagonal((k * 1.3, k * 0.6, k * 0.7, 1.0))
+    bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=10, v_segments=6, radius=0.028)
+    iris = C.mesh_obj("ST_WallTitanIris", bm, [C.mat("ST_WallIris", (0.18, 0.24, 0.30), 0.2)], c)
+    iris.matrix_world = Matrix.Translation(ep + side * (0.035 * k) + nv * (0.02 * k)) @ Matrix.Scale(k, 4)
+    keep += [eye, iris]
+    os.environ.setdefault("WF_EYE", "0")
+    ob, lo = _wall_hole(c, cv, nv, side, ang, protrude, keep, hz=H_ / 2 + 1.0, hx=float(os.environ.get("WF_HOLE_X", "6.0")))
+    lo.data.energy *= 0.6                                      # darker, moodier
+    for o in keep:
+        o.hide_render = True
+    nvk = sum(len(o.data.vertices) for o in keep if o.type == "MESH")
+    print(f"[stohess] v15 wall titan (GLB): {nvk} verts, scale {k:.2f}", flush=True)
+    return [ob] + keep + [lo] + [o for o in new if o not in keep]
+
 def _wall_titan_v14(c, centre, n):
     """v14 (FEEDBACK_v13 §3: 'currently ridiculous', match ref/user/wall_titan_face_ref.png): a Colossal-type titan (the
     Sidaivan skinless red-muscle model = muscle striations + the long exposed row of teeth, no lips) entombed in the wall; its
@@ -346,48 +511,7 @@ def _wall_titan_v14(c, centre, n):
         if len(me.vertices):
             keep.append(o)
         o.hide_render = True
-    # the hole: narrow vertical dark slot round the protruding face, its rim broken into stone chunks, rocks at the foot
-    R = Matrix.Rotation(ang - math.pi / 2, 4, "Z")
-    rnd = random.Random(31)
-    bm = bmesh.new()
-    rim = []; n_ = 24
-    for i in range(n_):
-        a = i * math.tau / n_
-        rx, rz = 4.3 + rnd.uniform(-0.6, 0.6), 11.5 + rnd.uniform(-1.2, 1.2)
-        rim.append(bm.verts.new((rx * math.cos(a), 0.06, rz * math.sin(a))))
-        if rnd.random() < 0.8:
-            _cube(bm, (rx * 1.05 * math.cos(a), 0.5, rz * 1.03 * math.sin(a)), (rnd.uniform(0.8, 1.8), 0.9, rnd.uniform(0.8, 1.8)), rz=rnd.uniform(-0.5, 0.5))
-    ctr = bm.verts.new((0, 0.06, 0))
-    for i in range(n_):
-        bm.faces.new((ctr, rim[i], rim[(i + 1) % n_])).material_index = 1
-    for i in range(16):                                        # broken rock chunks piled at the bottom of the hole
-        _cube(bm, (rnd.uniform(-6, 6), rnd.uniform(0.4, 2.6), -10.5 + rnd.uniform(-1.5, 1.5)), (rnd.uniform(1.4, 3.4), rnd.uniform(1.2, 2.6), rnd.uniform(1.2, 3.0)), rz=rnd.uniform(-0.6, 0.6))
-    for f in bm.faces:
-        if f.material_index != 1:
-            f.material_index = 0
-    # the cracked wall patch (70 x 60 m) a few cm proud of the wall face
-    vs = [bm.verts.new((x, 0.03, z)) for x, z in ((-70, -50), (70, -50), (70, 50), (-70, 50))]
-    bm.faces.new(vs).material_index = 2
-    stone = C.mat("ST_WallRubbleDark", (0.08, 0.07, 0.09), 0.95)
-    hole = C.mat("ST_HoleVoid", (0.02, 0.015, 0.025), 1.0)
-    ob = C.mesh_obj("ST_WallTitanHole", bm, [stone, hole, _crack_mat()], c)
-    ob.matrix_world = Matrix.Translation(cv) @ R
-    # the eye: pale blue-grey, looking sideways (placed on the face's upper visible edge, toward the camera)
-    eye = None
-    if os.environ.get("WF_EYE", "1") == "1":
-        bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=16, v_segments=10, radius=0.55)
-        eye = C.mesh_obj("ST_WallTitanEye", bm, [C.mat("ST_WallEye", (0.50, 0.56, 0.62), 0.25)], c)
-        bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=10, v_segments=6, radius=0.30)
-        iris = C.mesh_obj("ST_WallTitanIris", bm, [C.mat("ST_WallIris", (0.22, 0.28, 0.34), 0.2)], c)
-        ep = cv + nv * (protrude + 0.15) + side * float(os.environ.get("WF_EYE_X", "0.6")) + Vector((0, 0, float(os.environ.get("WF_EYE_Z", "2.2"))))
-        eye.location = ep; eye.scale = (1.0, 0.7, 0.8)
-        iris.location = ep + nv * 0.45 - side * 0.35
-        keep += [eye, iris]
-    # dim purple key light on the hole
-    ld = bpy.data.lights.new("ST_WallTitanLight", "POINT"); ld.energy = float(os.environ.get("WF_LIGHT", "4.0e4")); ld.color = (0.62, 0.45, 0.95)
-    ld.shadow_soft_size = 6.0
-    lo = bpy.data.objects.new("ST_WallTitanLight", ld); c.objects.link(lo)
-    lo.location = cv + nv * 30.0 + Vector((0, 0, 8.0))
+    ob, lo = _wall_hole(c, cv, nv, side, ang, protrude, keep)
     print(f"[stohess] v14 wall titan: {sum(len(o.data.vertices) for o in keep)} verts, head {k:.2f}x", flush=True)
     return [ob] + keep + [lo]
 
