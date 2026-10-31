@@ -20,5 +20,5 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" -- "$LAP/${nm}_preview.
       || echo "[v15] push FAILED $nm"
   else echo "[v15] $g FAILED $(date +%T) (see $LG/v15_${g}_$v.log)"; fi
 done
-[ -z "${NO_ASSEMBLE:-}" ] && python assemble_v15.py --wait
+[ -z "${NO_ASSEMBLE:-}" ] && python "${ASSEMBLE:-assemble_v15.py}" --wait
 echo "[v15] ALL DONE $(date +%T)"

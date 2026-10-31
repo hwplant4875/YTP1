@@ -28,12 +28,13 @@ except ImportError:
     bpy = None
 
 STORY_DUR = 48.0          # the choreography below runs on STORY time (bible beats f1-f6)
-DUR = 28.0                # v8 (FEEDBACK_v13 §2): video time, remapped onto story time by story(t); FLAT knots = frozen tableaux
+DUR = 23.4                # v8 (FEEDBACK_v13 §2): video time, remapped onto story time by story(t); FLAT knots = frozen tableaux
 # v8: formation graphic (EP17 06:21-06:25) from a far sky view 3.0-8.5, left flank 8.5-9.6, fast pan right, then FROZEN
 # tableaux (forest.tableau): ram + wire yank (EP17 10:13), hood, palm (EP17 21:38), fire-can spin (EP18 10:59)
-TMAP = [(0.0, 0.0), (3.0, 8.0), (8.5, 14.0), (10.2, 18.0), (12.6, 18.0), (13.0, 20.8), (15.2, 20.8), (15.6, 31.6),
-        (17.8, 31.6), (18.6, 36.5), (21.8, 36.5), (28.0, 48.0)]
-TAB = dict(graphic=(3.4, 8.3), ram=(10.2, 12.6), hood=(13.0, 15.2), palm=(15.6, 17.8), spin=(18.6, 21.8))
+# v12 (cloud QA v15): empty field stretches cut (before the graphic, the left flank 8.3-10.2, the 6 s tail -> 2.8 s)
+TMAP = [(0.0, 0.0), (3.0, 8.0), (8.3, 14.0), (9.0, 18.0), (11.4, 18.0), (11.8, 20.8), (14.0, 20.8), (14.4, 31.6),
+        (16.6, 31.6), (17.4, 36.5), (20.6, 36.5), (23.4, 48.0)]
+TAB = dict(graphic=(3.2, 8.1), ram=(9.0, 11.4), hood=(11.8, 14.0), palm=(14.4, 16.6), spin=(17.4, 20.6))
 TAB_STORY = dict(ram=18.0, hood=20.8, palm=31.6, spin=36.5)
 TAB_POSE = dict(ram="ram", hood="hood", palm="palm", spin="swing")
 def story(t):
@@ -241,12 +242,10 @@ CAM_KEYS = [   # v8 (FEEDBACK_v13 §2): video-time fly keys (z above ground); th
     (0.0, SEAM_F1_W["pos"], SEAM_F1_W["look"], SEAM_F1_W["lens"]),
     _k(1.4, (-60.0, -9450.0, 220.0), (300.0, -9000.0, 10.0), 32.0),           # the gate opens, the first riders burst out
     _k(3.0, (498.0, -8332.0, 180.0), (600.0, -8050.0, 0.0), 32.0),            # the column fans out past the old town
-    _dk(4.8, 9.9, (-380.0, -1080.0, 820.0), (0.0, 60.0), 28.0),              # FAR SKY VIEW: the formation + its graphic
-    _dk(8.1, 13.9, (-330.0, -1000.0, 760.0), (40.0, 80.0), 28.0),            # (titan on the right -> the arrow veers left)
-    _dk(9.0, 15.2, (-560.0, -130.0, 70.0), (-400.0, 50.0), 34.0),             # graphic off: the LEFT flank (the right is hidden)
-    _dk(9.7, 16.9, (-530.0, -90.0, 75.0), (-360.0, 80.0), 34.0),
-    _dk(24.1, 40.8, (-60.0, -560.0, 380.0), (40.0, 80.0), 30.0),               # green smoke from the command line
-    _k(26.3, (350.0, -3250.0, 480.0), (160.0, -1300.0, 40.0), 28.0),          # crane forward: the forest wall
+    _dk(3.9, 9.9, (-300.0, -820.0, 600.0), (0.0, 60.0), 28.0),               # SKY VIEW (lower: the riders read): formation + graphic
+    _dk(7.9, 13.9, (-270.0, -780.0, 560.0), (40.0, 80.0), 28.0),             # (titan on the right -> the arrow veers left)
+    _dk(21.5, 41.0, (-60.0, -560.0, 380.0), (40.0, 80.0), 30.0),               # green smoke from the command line
+    _k(22.5, (350.0, -3250.0, 480.0), (160.0, -1300.0, 40.0), 28.0),          # crane forward: the forest wall
     _k(DUR, SEAM_F2["pos"], SEAM_F2["look"], SEAM_F2["lens"]),
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_F1_W["vel"], v_out=SEAM_F2["vel"])
@@ -262,11 +261,11 @@ def _shots():
         return _W(x, y, dz)
     a = {k: _front_az(v) for k, v in TAB_STORY.items()}
     ax, ay = _armin_spot()
-    return [TB.Shot("ram", *TAB["ram"], tgt(18.0, 8.0), az=(a["ram"] + 45, a["ram"] + 15), dist=(62, 48), el=(9, 15), lens=38),
+    return [TB.Shot("ram", *TAB["ram"], tgt(18.0, 8.0), az=(a["ram"] + 45, a["ram"] + 15), dist=(44, 34), el=(9, 15), lens=38),
             TB.Shot("hood", *TAB["hood"], tgt(20.8, 4.0, ((ax * 2 + female_F(20.8)[0]) / 3, (ay * 2 + female_F(20.8)[1]) / 3)),
-                    az=(a["hood"] - 80, a["hood"] - 55), dist=(38, 30), el=(12, 18), lens=40),
-            TB.Shot("palm", *TAB["palm"], tgt(31.6, 7.0), az=(a["palm"] + 25, a["palm"] + 55), dist=(64, 50), el=(8, 13), lens=38),
-            TB.Shot("spin", *TAB["spin"], tgt(36.5, 9.0), az=(a["spin"] - 25, a["spin"] - 50), dist=(60, 48), el=(30, 36), lens=36)]
+                    az=(a["hood"] - 80, a["hood"] - 55), dist=(30, 24), el=(12, 18), lens=40),
+            TB.Shot("palm", *TAB["palm"], tgt(31.6, 7.0), az=(a["palm"] + 25, a["palm"] + 55), dist=(44, 36), el=(8, 13), lens=38),
+            TB.Shot("spin", *TAB["spin"], tgt(36.5, 9.0), az=(a["spin"] - 25, a["spin"] - 50), dist=(46, 38), el=(26, 32), lens=36)]
 PLAN = [(0.0, "morning"), (14.0, "morning"), (30.0, "day"), (STORY_DUR, "day")]
 LIGHT = C.LightRig(*C.light_plan(PLAN))
 TRACK = {}
