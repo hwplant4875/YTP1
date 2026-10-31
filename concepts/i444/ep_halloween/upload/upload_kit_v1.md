@@ -16,6 +16,7 @@ Tonight is the one night a year a mask doesn't look suspicious. So which Hallowe
 Which one would you survive? Tell me in the comments. Happy Halloween.
 
 Clips are used for commentary and criticism. All rights belong to their owners.
+Music: Pixabay (bombinsound "Halloween Suspense Horror Waltz", nastelbom "Halloween Horror", nastelbom "Halloween Music").
 
 Chapters
 0:00 Halloween night
