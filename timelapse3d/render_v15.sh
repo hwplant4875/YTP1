@@ -6,7 +6,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"; cd "$HERE"
 export RES="${RES:-854x480}" STEP="${STEP:-1}" FPS=15 TOON=0
 LG="E:/YTP2/3D Timelapse/logs"; RD="E:/YTP2/3D Timelapse/renders/part2"; LAP="$HERE/renders/laptop"
 BR=claude/project-thread-4b2beh
-declare -A NAME=( [f0]=f0_trost_karanes [f1]=f1_formation_female [f2]=f2_forest_trap [f3]=f3_duel_rescue [s1v15]=s1v15_stohess_sky [s2v15]=s2v15_stohess_cathedral )
+declare -A NAME=( [f0]=f0_trost_karanes [f1]=f1_formation_female [f2]=f2_forest_trap [f3]=f3_duel_rescue [s1v15]=s1v15_stohess_sky [s2v15]=s2v15_stohess_cathedral [f3v17]=f3v17_forest_sky )
 for spec in "$@"; do
   g=${spec%%:*}; v=${spec#*:}; OUT="$RD/${g}_$v"; nm="${NAME[$g]}_$v"
   echo "[v15] $g -> $nm start $(date +%T)"

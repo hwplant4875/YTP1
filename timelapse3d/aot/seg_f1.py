@@ -28,13 +28,14 @@ except ImportError:
     bpy = None
 
 STORY_DUR = 48.0          # the choreography below runs on STORY time (bible beats f1-f6)
-DUR = 23.4                # v8 (FEEDBACK_v13 §2): video time, remapped onto story time by story(t); FLAT knots = frozen tableaux
+DUR = 11.6                # v8 (FEEDBACK_v13 §2): video time, remapped onto story time by story(t); FLAT knots = frozen tableaux
 # v8: formation graphic (EP17 06:21-06:25) from a far sky view 3.0-8.5, left flank 8.5-9.6, fast pan right, then FROZEN
 # tableaux (forest.tableau): ram + wire yank (EP17 10:13), hood, palm (EP17 21:38), fire-can spin (EP18 10:59)
 # v12 (cloud QA v15): empty field stretches cut (before the graphic, the left flank 8.3-10.2, the 6 s tail -> 2.8 s)
-TMAP = [(0.0, 0.0), (3.0, 8.0), (8.3, 14.0), (9.0, 18.0), (11.4, 18.0), (11.8, 20.8), (14.0, 20.8), (14.4, 31.6),
-        (16.6, 31.6), (17.4, 36.5), (20.6, 36.5), (23.4, 48.0)]
-TAB = dict(graphic=(3.2, 8.1), ram=(9.0, 11.4), hood=(11.8, 14.0), palm=(14.4, 16.6), spin=(17.4, 20.6))
+# v17 (FEEDBACK_v15 ~3:38): ALL the Female tableaux deleted (and the Female herself in f1): gate -> graphic -> forest
+TMAP = [(0.0, 0.0), (3.0, 8.0), (8.3, 14.0), (9.2, 41.0), (11.6, 48.0)]
+TAB = dict(graphic=(3.2, 8.1))
+NO_FEMALE = True
 TAB_STORY = dict(ram=18.0, hood=20.8, palm=31.6, spin=36.5)
 TAB_POSE = dict(ram="ram", hood="hood", palm="palm", spin="swing")
 def story(t):
@@ -244,8 +245,8 @@ CAM_KEYS = [   # v8 (FEEDBACK_v13 §2): video-time fly keys (z above ground); th
     _k(3.0, (498.0, -8332.0, 180.0), (600.0, -8050.0, 0.0), 32.0),            # the column fans out past the old town
     _dk(3.9, 9.9, (-300.0, -820.0, 600.0), (0.0, 60.0), 28.0),               # SKY VIEW (lower: the riders read): formation + graphic
     _dk(7.9, 13.9, (-270.0, -780.0, 560.0), (40.0, 80.0), 28.0),             # (titan on the right -> the arrow veers left)
-    _dk(21.5, 41.0, (-60.0, -560.0, 380.0), (40.0, 80.0), 30.0),               # green smoke from the command line
-    _k(22.5, (350.0, -3250.0, 480.0), (160.0, -1300.0, 40.0), 28.0),          # crane forward: the forest wall
+    _dk(9.4, 41.0, (-60.0, -560.0, 380.0), (40.0, 80.0), 30.0),                # green smoke from the command line
+    _k(10.4, (350.0, -3250.0, 480.0), (160.0, -1300.0, 40.0), 28.0),          # crane forward: the forest wall
     _k(DUR, SEAM_F2["pos"], SEAM_F2["look"], SEAM_F2["lens"]),
 ]
 CAM = camchan.CamPath(CAM_KEYS, v_in=SEAM_F1_W["vel"], v_out=SEAM_F2["vel"])
@@ -255,6 +256,8 @@ def _front_az(ts):
     return math.degrees(female_state(ts)[2]) + 90.0
 
 def _shots():
+    if NO_FEMALE:
+        return []
     from forest import tableau as TB
     def tgt(ts, dz, look=None):
         x, y = look if look is not None else female_F(ts)
@@ -365,6 +368,8 @@ def build(site):
         return _W(*female_F(ts), 16.0)
     TRACK.update(FEMALE=fem_trk, ARMIN=lambda t: _trk("armin", story(t), 20.0),
                  JEAN=lambda t: _trk("jean", story(t)), REINER=lambda t: _trk("reiner", story(t)))
+    if NO_FEMALE:
+        TRACK.pop("FEMALE", None)
     _build_graphic(c)
     _build_tableaux(c)
 
@@ -569,6 +574,8 @@ def update(t):
     _update(ts)
     _graphic_update(t, ts)
     _tableau_update(t)
+    if NO_FEMALE:
+        S["fem"].show(False)
 
 def _update(t):
     fset = S["fset"]

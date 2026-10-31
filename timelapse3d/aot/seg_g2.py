@@ -1866,12 +1866,15 @@ _core_update, _core_light, _core_shake = update, light, cam_shake
 _CORE_CAM = CAM
 def _pre_cam():
     ks = camkeys.cam("g2")
+    # v17 (FEEDBACK_v15): no swing toward the gate; the camera stays in the sky over Shiganshina and LOCKS ON Reiner at his
+    # lightning (look = his position), then g2's own tracking keys; the 15.6 hold key (~0:28) removed
     keys = [tuple(ks["keys"][0]),                                          # g1 seam at rest (the Yeager ruin)
             (2.4, (-150.0, -250.0, 175.0), (0.0, -40.0, 0.0), 30.0),      # up over the roofs: the gate crowd, the titans
-            (4.6, (-100.0, -110.0, 165.0), (70.0, 70.0, 0.0), 30.0),      # ... the people pouring out to the boats
-            (PRE - 0.2, (-150.0, -560.0, 150.0), (0.0, -400.0, 12.0), 34.0),  # down between the houses: the lightning
-            (PRE + 1.6, (-170.0, -420.0, 120.0), (0.0, -330.0, 10.0), 37.0)]  # he rises and sprints
-    keys += [(k[0] + PRE,) + tuple(k[1:]) for k in ks["keys"][2:]]           # g2's own camera from its lock key (4.4) on
+            (PRE - 0.2, (-200.0, -470.0, 185.0), (0.0, -400.0, 12.0), 34.0),  # still in the sky: his lightning on the avenue
+            (PRE + 1.6, (-190.0, -400.0, 160.0), (0.0, arm_y(1.6), 12.0), 38.0)]  # locked on him as he rises and sprints
+    keys += [(k[0] + PRE,) + tuple(k[1:]) for k in ks["keys"][2:] if abs(k[0] - 15.6) > 1e-3 and k[0] < 30.0]
+    keys += [(30.4 + PRE, (115.0, 445.0, 265.0), (193.0, 1000.0, 120.0), 28.0),          # v17: the look lifts ...
+             (32.0 + PRE, (175.0, 480.0, 240.0), (300.0, 1600.0, 1100.0), 28.0)]        # ... into the night sky (= g3 FA0)
     return camchan.CamPath(keys, v_in=ks["v_in"], v_out=ks["v_out"], look_v_out=ks.get("look_v_out"))
 CAM = _pre_cam()
 TRACK = {k: (lambda f: (lambda t: f(t - PRE) if t >= PRE + 0.6 else None))(f) for k, f in TRACK.items()}

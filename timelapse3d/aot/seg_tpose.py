@@ -32,7 +32,8 @@ def build(site):
         dz = 7.0 if i < len(FN) + len(EN) else 1.0
         dist = (30.0 if VAR else 42.0) if i < len(FN) + len(EN) else 9.0
         tgt = (P0[0], P0[1], z0 + dz) if i < len(FN) + len(EN) else (P0[0] + 40, P0[1], z0 + 1.0)
-        shots.append(TB.Shot(f"p{i}", i - 0.3, i + 0.3, tgt, az=(55, 65), dist=dist, el=12, lens=35))
+        az0 = float(os.environ.get("TP_AZ", "60")); dist = float(os.environ.get("TP_DIST", dist)) if i < len(FN) + len(EN) else dist
+        shots.append(TB.Shot(f"p{i}", i - 0.3, i + 0.3, tgt, az=(az0 - 5, az0 + 5), dist=dist, el=12, lens=35))
     CAM = TB.make_cam(shots)
     globals()["CAM"] = CAM
     c = C.coll("TPose")

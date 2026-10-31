@@ -452,6 +452,31 @@ class Female:
         pb = self.P[bn]
         return self.rig.matrix_world @ (pb.tail if tail else pb.head)
 
+    def ik_nape(self, on, pole_deg=None):
+        """v17 (FEEDBACK_v15: hands EXACTLY on the back of her neck, overlapping over the nape, elbows up / forward): IK on the
+        forearms (chain 2) to targets just behind the neck (rig space, follow the rig), pole targets forward-up of the
+        shoulders.  on = influence 0..1.  WF: FN_POLE (deg) overrides the pole angle."""
+        import bpy as _b
+        if not hasattr(self, "_ikn"):
+            nk = self.rig.data.bones["neck01"]
+            hd = nk.head_local; ln = (nk.tail_local - nk.head_local).length
+            self._ikn = []
+            for sd, sx in (("L", 1.0), ("R", -1.0)):
+                tg = _b.data.objects.new(f"{self.rig.name}_IKN_{sd}", None); pl = _b.data.objects.new(f"{self.rig.name}_IKP_{sd}", None)
+                for o in (tg, pl):
+                    self.rig.users_collection[0].objects.link(o); o.parent = self.rig
+                up = self.rig.data.bones["upperarm01." + sd].head_local
+                tg.location = (hd.x + sx * 0.25 * ln, hd.y + 0.9 * ln, hd.z + 0.6 * ln)        # behind the neck (front = -Y)
+                pl.location = (up.x + sx * 2.5 * ln, up.y - 4.0 * ln, up.z + 3.0 * ln)       # elbows forward and up
+                bn = "lowerarm02." + sd if ("lowerarm02." + sd) in self.P else "lowerarm01." + sd
+                c = self.P[bn].constraints.new("IK")                  # wrist at the target (upperarm01..lowerarm02)
+                c.target = tg; c.pole_target = pl; c.chain_count = 4 if bn.startswith("lowerarm02") else 2; c.use_tail = True
+                self._ikn.append(c)
+        import os as _os, math as _m
+        pa = float(_os.environ.get("FN_POLE", pole_deg if pole_deg is not None else 90.0))   # 270p check: 90 = elbows up / forward
+        for c in self._ikn:
+            c.influence = float(on); c.pole_angle = _m.radians(pa)
+
 def fpose_blend(A, B_, u):
     out = {}
     for k in set(A) | set(B_):

@@ -688,9 +688,10 @@ def build_titans(coll):
     add("ST1", 7.0, [(0.0, *ST1_POS)], hair=2)
     face("ST1", (-231, 540)); kill("ST1", BEATS["st1_kill"], -1)
     # ---- F0 / F1: g5's facade titans hq0 / hq1 climb the keep's south face onto the roof walk; tackled off at 11.0
+    # v17 (FEEDBACK_v15): Eren pulling these two off the HQ is DELETED (G6_HQ_PAIR=1 restores them)
     k0, k1 = BEATS["tackle"]
-    for nm, start, wall_x, land, H, kw, td in (("F0", (-262, 610), -255.5, (-232.0, 600.0), 6.5, dict(longhair=True, hair=1), BEATS["r1_kill"]),
-                                               ("F1", (-244, 609), -246.5, (-218.0, 597.0), 6.0, dict(hair=0), BEATS["r2_kill"])):
+    for nm, start, wall_x, land, H, kw, td in (() if not os.environ.get("G6_HQ_PAIR") else (("F0", (-262, 610), -255.5, (-232.0, 600.0), 6.5, dict(longhair=True, hair=1), BEATS["r1_kill"]),
+                                               ("F1", (-244, 609), -246.5, (-218.0, 597.0), 6.0, dict(hair=0), BEATS["r2_kill"]))):
         c0, c1 = (0.8, 6.4) if nm == "F0" else (1.4, 6.8)
         keys = [(0.0, *start), (c0, *start), (c0 + 1.2, wall_x, 622.3), (c1, wall_x, 622.3), (c1 + 0.6, wall_x, 629.5),
                 (k0 + 0.02, wall_x, 629.5), (k1, *land)]
@@ -1074,6 +1075,10 @@ def build_cards(coll):
            ("F3", BEATS["f3_kill"], 1.0), ("W1", BEATS["w1_kill"], 1.0), ("B1", BEATS["biter_kills"][0], 0.7),
            ("B2", BEATS["biter_kills"][1], 0.7), ("B3", BEATS["biter_kills"][2], 0.7), ("BRD", BEATS["brd_kill"], 1.2), ("F5", BEATS["brd_hit"] + 0.05, 1.0)]
     for nm, te, k in ext:
+        try:
+            TT.j(nm)
+        except Exception:
+            continue                                            # v17: F0 / F1 removed
         Hh = TT.H[TT.j(nm)]
         p = TT.nape(nm, te - 0.02)
         n = int(18 * k)

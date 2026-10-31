@@ -130,9 +130,10 @@ SEAM_F3 = dict(pos=F(-120.0, 690.0, 240.0), look=F(0.0, 960.0, 40.0), lens=30.0,
 # v8 (FEEDBACK_v13 §2): video clock with FROZEN tableaux (flat knots): sprint (riders + the Female at full sprint), the
 # pinned Female (hands over the nape), then NO scream animation: the camera rises to the sky and the titans swarm in
 STORY_DUR = 36.0
-TMAP = [(0.0, 0.0), (1.7, 1.7), (2.2, 8.0), (4.4, 8.0), (5.0, 19.0), (7.4, 19.0), (8.0, 26.0), (11.5, 34.5), (12.5, 36.0)]
+# v17 (FEEDBACK_v15 ~3:46 "show this slowly"): the forest entry chase plays at real speed for 4 s (was 1.7)
+TMAP = [(0.0, 0.0), (4.0, 4.0), (4.5, 8.0), (6.7, 8.0), (7.3, 19.0), (9.7, 19.0), (10.3, 26.0), (13.8, 34.5), (14.8, 36.0)]
 DUR = TMAP[-1][0]
-TAB = dict(sprint=(2.2, 4.4), trap=(5.0, 7.4))
+TAB = dict(sprint=(4.5, 6.7), trap=(7.3, 9.7))
 def story(t):
     return float(np.interp(t, [k[0] for k in TMAP], [k[1] for k in TMAP]))
 def _shots(lift=False):
@@ -149,8 +150,9 @@ def _shots(lift=False):
 CAM_KEYS = [
     (0.0, F(*SEAM_IN["pos"]), F(*SEAM_IN["look"]), SEAM_IN["lens"]),
     _side_key(1.7, 70.0, 70.0),
-    (7.9, F(TX - 30, TY - 60, 110.0), F(TX, TY, 5.0), 28.0),            # up out of the clearing
-    (9.8, F(TX - 5, TY - 14, 150.0), F(TX, TY, 0.0), 30.0),           # sky: the titans swarm into the clearing (looking down into the gap)
+    _side_key(4.0, 60.0, 60.0),                                         # v17: the slow forest entry
+    (10.2, F(TX - 30, TY - 60, 110.0), F(TX, TY, 5.0), 28.0),           # up out of the clearing
+    (12.1, F(TX - 5, TY - 14, 150.0), F(TX, TY, 0.0), 30.0),           # sky: the titans swarm into the clearing (looking down into the gap)
     (DUR, SEAM_F3["pos"], SEAM_F3["look"], SEAM_F3["lens"]),
 ]
 def _cam(lift):
@@ -298,6 +300,7 @@ def _update(t):
     w = _W(fx, fy, dz + air)
     fem.place(w[0], w[1], w[2], yaw)
     fem.hardening(C.ss(*BEATS["harden"], t))
+    fem.ik_nape(C.ss(BEATS["nape"] - 0.4, BEATS["nape"] + 0.2, t))   # v17: both hands exactly over the back of the neck
     show = t < BEATS["eat"][1] + 0.6
     fem.show(show)
     bpy.context.view_layer.update()

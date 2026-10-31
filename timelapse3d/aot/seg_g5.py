@@ -332,6 +332,7 @@ def build_colossal():
 
 def update_colossal(t):
     c = col_state(t)
+    c["hand_r"] = 0.0; c["hand_l_up"] = 0.0                    # v17 (FEEDBACK_v15): arms hang relaxed, hands low / out of view
     on = c["show"]
     coll = STATE["col_coll"]
     if coll.hide_render == on:

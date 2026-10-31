@@ -99,9 +99,9 @@ CAM_KEYS = [
     (13.0, (60, 300, 150),   (282, 268, 8),   35),     # K3' the court from the WEST: over its open west half the sitting titan
     (15.5, (100, 250, 120),  (285, 265, 10),  42),     # K4' reads (bible K3/K4 from the NNW: blocked by the north terrace and
                                                        #     the court belfry (228, 290) at the court's NW corner)
-    (19.0, (180, 285, 82),   (289, 266, 14),  42),     # v4 (QA batch1: carry hard to read): ~110 m, not 170     # K5' the lift side-on from the west (bible K5 (175, 395, 105) saw his back)
-    (25.1, (160, 150, 78),   (276, 143, 12),  42),     # C1' carry side-on from the town (west) side
-    (31.9, (40, 92, 82),     (150, 52, 12),   40),     # C2' along the wall, front three-quarter from WNW (open strip)
+    (19.0, (71, 304, 150),   (289, 266, 14),  40),     # v17 (FEEDBACK_v15 ~2:45): ZOOMED OUT, watched from far away     # v4 (QA batch1: carry hard to read): ~110 m, not 170     # K5' the lift side-on from the west (bible K5 (175, 395, 105) saw his back)
+    (25.1, (44, 157, 150),   (276, 143, 12),  40),     # C1' carry side-on from the town (west) side
+    (31.9, (-70, 132, 152),  (150, 52, 12),   38),     # C2' along the wall, front three-quarter from WNW (open strip)
     (36.6, (-60, 175, 95),   (40, 24, 12),    40),     # C3 the gate square, Mikasa's kill
     (40.0, (-75, 150, 90),   (3, 14, 12),     42),     # S1 the slam (39.3, camera shake) and the ball wedged in the breach
     (43.5, (-80, 160, 93),   (2, 13, 12),     41),     # S1b hold on the wedged ball, the plug grows, 5 titans face it
@@ -505,10 +505,13 @@ def make_poses():
                       knee=V(0, 1, 0.25), hands={"R": (V(5, 6, 6), V(1, -0.3, -0.5), "abs"), "L": (V(-5, 6, 6), V(-1, -0.3, -0.5), "abs")}, fist=0.2, jaw=14)
     P["chest"] = dict(hips=7.2, bend=_bends(-6, -6, -2, 4, 6), feet={"R": (V(2.6, 0.4, 0), -14), "L": (V(-2.6, 0.2, 0), 14)},
                       knee=V(0, 1, 0.1), hands={"R": (V(4, 5, 11), V(1, -0.3, -0.5), "abs"), "L": (V(-4, 5, 11), V(-1, -0.3, -0.5), "abs")}, fist=0.2, jaw=20)
-    P["carry"] = dict(hips=7.15, bend=_bends(8, 6, 4, 2, 24), feet={"R": (V(FOOT_W, 0.0, 0), -6), "L": (V(-FOOT_W, 0.0, 0), 6)},
-                      knee=V(0, 1, 0), hands={"R": (V(5, 1, 15), V(1, 0.1, -0.3), "abs"), "L": (V(-5, 1, 15), V(-1, 0.1, -0.3), "abs")}, fist=0.25, jaw=10)
-    P["carry_bent"] = dict(P["carry"], hips=6.4, bend=_bends(28, 22, 14, 8, -6), jaw=22,
-                           hands={"R": (V(5.2, -1.8, 13.0), V(1, 0.1, -0.3), "abs"), "L": (V(-5.2, -1.8, 13.0), V(-1, 0.1, -0.3), "abs")})
+    # v17 (FEEDBACK_v15 + ref/user/eren_boulder_pose_ref.png): torso UPRIGHT under the rock, the head bowed and pressed under
+    # it (no neck jutting forward), the right arm raised high with the hand gripping the rock face, the left hand lower on it
+    P["carry"] = dict(hips=7.15, bend=_bends(2, 2, 0, 4, 28), feet={"R": (V(FOOT_W, 0.0, 0), -6), "L": (V(-FOOT_W, 0.0, 0), 6)},
+                      knee=V(0, 1, 0), hands={"R": (V(4.4, 0.6, 16.6), V(1, 0.1, -0.2), "abs"), "L": (V(-4.8, 1.2, 13.6), V(-1, 0.2, -0.4), "abs")},
+                      fist=0.35, jaw=12)
+    P["carry_bent"] = dict(P["carry"], hips=6.8, bend=_bends(6, 4, 2, 6, 32), jaw=20,
+                           hands={"R": (V(4.5, 0.3, 16.1), V(1, 0.1, -0.2), "abs"), "L": (V(-4.9, 0.8, 13.0), V(-1, 0.2, -0.4), "abs")})
     P["roar_carry"] = dict(P["carry"], hips=7.8, bend=_bends(-4, -6, -6, -10, -6), jaw=34)
     P["drop"] = dict(hips=6.6, bend=_bends(22, 12, 6, 0, 0), feet={"R": (V(1.9, 0.8, 0), -8), "L": (V(-1.9, -0.6, 0), 8)},
                      knee=V(0, 1, 0.1), hands={"R": (V(5, 6, 10), V(1, 0.2, -0.5), "abs"), "L": (V(-5, 6, 10), V(-1, 0.2, -0.5), "abs")}, fist=0.1, jaw=16)
@@ -740,6 +743,10 @@ def make_titans_class():
                     Ar[j, 3] = Ar[j, 4] = (2.5 + 0.25 * math.sin(t * 1.3 + j)) * u; Ae[j, 5] = Ae[j, 6] = 0.4 * u
                 if x.get("pinned"):
                     Ar[j, 3] = 1.0; Ar[j, 4] = 0.9; lean[j] = -0.12
+                if x.get("cling") is not None and (d is None or t < d[0]):    # v17: clinging to the wall, trying to climb
+                    ph = t * 1.4 + j * 1.7
+                    Ar[j, 3] = 2.75 + 0.30 * math.sin(ph); Ar[j, 4] = 2.75 - 0.30 * math.sin(ph); Ae[j, 5] = Ae[j, 6] = 0.35
+                    lean[j] = -0.28; pos[j, 2] += x["cling"] * (0.85 + 0.15 * math.sin(ph * 0.5))
             self._rig = odm.deform(self.RX, Ar, Ae, lean, vis, yaw, pos, pitch, None, np.zeros(len(vis))).reshape(len(vis), 4, 3)
             return R
     return Titans8
@@ -832,13 +839,23 @@ def build_titans(coll):
     # v14 (FEEDBACK_v13 §1: the mop-up is NOT by the boulder): herded into the WEST corner of the bulge wall (angle -48 deg)
     ca, sa = math.cos(math.radians(38.0)), math.sin(math.radians(38.0))   # the open wall-foot strip, east bulge
     wx, wy = 478.0 * sa, 480.0 - 478.0 * ca
-    slots = [(wx - 16.0 * sa + (k % 3 - 1) * 7.0 * ca - (k // 3) * 6.0 * sa, wy + 16.0 * ca + (k % 3 - 1) * 7.0 * sa + (k // 3) * 6.0 * ca)
+    # v17 (FEEDBACK_v15 ~3:00): no pop-in / walk-in - they are AT the wall long before the camera comes (moved there at 53.0,
+    # off camera), pressed against the wall face in a line, arms up, clinging as if trying to climb it; 10 more join them
+    slots = [(wx - 4.5 * sa + (k - (len(herd) - 1) / 2) * 7.5 * ca, wy + 4.5 * ca + (k - (len(herd) - 1) / 2) * 7.5 * sa)
              for k in range(len(herd))]
-    h0, h1 = n0 + 0.2, n0 + 2.4
+    h0 = 53.0
+    rc = random.Random(1717)
     for nm, sl in zip(herd, slots):
-        q = at(nm, h0); c = S3(*sl)[:2]
-        TT.keys[TT.j(nm)] = [k_ for k_ in TT.keys[TT.j(nm)] if k_[0] < h0] + [(h0, *q), (h1, float(c[0]), float(c[1])), (99, float(c[0]), float(c[1]))]
-        TT.specs[TT.j(nm)]["face"] = tuple(S3(wx, wy)[:2])
+        c = S3(*sl)[:2]
+        TT.keys[TT.j(nm)] = [k_ for k_ in TT.keys[TT.j(nm)] if k_[0] < h0 - 0.05] + [(h0, float(c[0]), float(c[1])), (99, float(c[0]), float(c[1]))]
+        TT.specs[TT.j(nm)]["face"] = tuple(S3(wx + 30 * sa, wy - 30 * ca)[:2])
+        TT.specs[TT.j(nm)].setdefault("g8", {})["cling"] = rc.choice([0.0, 0.0, 1.5, 3.0])
+    for k in range(10):
+        off = (k - 4.5) * 7.0 + (len(herd) * 7.5 / 2 + 4.0) * (1 if k >= 5 else -1)
+        sl = (wx - 4.0 * sa + off * ca, wy + 4.0 * ca + off * sa)
+        nm = add(f"cling{k}", rc.choice([5.0, 7.0, 8.0, 10.0, 12.0]), [(0, *sl), (99, *sl)], show=(h0, 99), g8=dict(cling=rc.choice([0.0, 2.0, 4.0])))
+        TT.specs[-1]["face"] = tuple(S3(wx + 30 * sa, wy - 30 * ca)[:2])
+        targets.append(nm)
     for nm in targets:
         kill(nm, HERD_KILL + rnd.uniform(-0.12, 0.12), rnd.choice([1, -1]), keep=False)
     STATE["shell_targets"] = targets

@@ -15,6 +15,8 @@ RESCUE_F = (500.0, 2000.0)
 OLDTOWN_F = (650.0, -8300.0)
 VILLAGE_F = (650.0, -4880.0)          # where f1 has the Female cross it (dome-relative path, t 34-40)
 CLEAR = [(TRAP_F, TRAP_R + 4), (SWAMP_F, SWAMP_R + 3), ((0.0, -20.0), 26.0)]
+DUEL_F = (350.0, 1660.0); DUEL_R = 85.0       # v17: the duel clearing, wide enough to be SEEN from the sky (seg_f3v17)
+CLEAR.append((DUEL_F, DUEL_R))
 # v14 frozen tableaux (seg_f3): open ground round the face-off and the high kick so trunks do not hide the titans
 CLEAR += [((318.0, 1575.0), 34.0), ((KICK_F[0] - 14.0, KICK_F[1] - 10.0), 26.0)]
 

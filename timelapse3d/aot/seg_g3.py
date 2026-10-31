@@ -52,11 +52,11 @@ MW = segtime.M_OFF_Y                      # M = W - (0, 4130)
 # ====================================================================== BEATS (the ONE re-time table, local seconds)
 BEATS = dict(
     # ---- flight (0-17.7): FA keys and the speed profile
-    FA0=0.0, FA1=3.7, FA2=7.3, FA3=10.6, FA4=12.9, H=17.7,
+    FA0=0.0, FA1=3.6, FA2=7.2, FA3=11.0, FA4=13.6, H=17.7,
     prof=(45.7, 369.0, 3.7, 9.0),          # v0 (= g2 seam |v|), cruise m/s, ramp end, cruise end (decel to rest at H)
     ferries=(0.0, 3.7),                    # ferries pass below
     set_switch=6.0,                        # part A (Shiganshina set) -> part B (Trost set), at full night over open ground
-    dusk_night=(0.4, 3.0), night=(3.0, 5.6), dawn=(5.6, 10.6),   # v6 (owner 10:53): short night, sunrise, Trost in MORNING light
+    dusk_night=(0.4, 2.0), night=(2.0, 3.6), dawn=(3.6, 8.0),     # v17: night -> morning while the camera looks at the SKY   # v6 (owner 10:53): short night, sunrise, Trost in MORNING light
     hud_845=(5.2, 9.0),                    # "845: territory reduced to Wall Rose"
     lights_off=(6.4, 9.6),                 # Trost window dots / torches fade (v6: dawn earlier)
     # ---- farm + 846 (17.7 - CAM_IN): the clearing beyond Rose felled + ploughed + planted (time-lapse, from 13.0 during the
@@ -74,7 +74,7 @@ BEATS = dict(
     # ---- flight to the camp + the camp (march end .. DUR)
     FT0=_GM[1], FT1=_GM[1] + 4.8, FT2=_GM[1] + 8.0, FT3=_GM[1] + 10.4, FT4=57.0, FT5=58.4, FT7=DUR,
     camp_rise=(_GM[1] + 1.6, _GM[1] + 6.4),
-    enlist=(54.0, 57.2), rig=(54.6, 57.4), seasons=(57.2, 58.6), grad=(58.6, DUR),
+    enlist=(54.0, 55.8), rig=(56.6, 57.9), seasons=(58.5, 59.5), grad=(59.5, DUR),   # v17: ranks, THEN the rigs, then graduation
     tag_shadis=(53.8, 57.1), tag_eren=(54.2, 57.4), tag_mikasa=(54.5, 57.4),
 )
 B = BEATS
@@ -85,8 +85,16 @@ def W2M(p):
 
 # flight: FA0..FA3 (W) + FA4, H (M), driven by the explicit speed profile (allowed speed exception), v_in = g2 seam direction
 _S_IN = segtime.seam("g2_g3")
-FLIGHT_KEYS = [(B["FA" + str(i)], W2M(c), W2M(l), ln) for i, (_, c, l, ln) in enumerate(camkeys.G3_FLIGHT_W)] + [
-    (B["FA4"], (60.0, 170.0, 300.0), (-268.0, 805.0, 0.0), 30.0),          # FA4 = W (60, 4300, 300): over Wall Rose
+# v17 (FEEDBACK_v15): the camera starts looking UP into the night sky (g2 ends there; the Shiganshina -> Trost set swap at
+# set_switch happens with only sky in frame), turns slowly east while night becomes morning, then comes down into an
+# ULTRA-FAST flight past the EAST (right) side of Trost to the farm clearing
+FLIGHT_KEYS = [
+    (0.0, (175.0, -3650.0, 240.0), (300.0, -2530.0, 1100.0), 28.0),       # = g2's end (W (175, 480, 240)), looking up
+    (3.6, (185.0, -3610.0, 248.0), (900.0, -3000.0, 1180.0), 28.0),       # night sky, turning east
+    (7.2, (200.0, -3560.0, 260.0), (1150.0, -3350.0, 980.0), 28.0),       # the sun comes up in the east
+    (8.6, (420.0, -3000.0, 330.0), (760.0, -1500.0, 40.0), 28.0),         # down to the horizon: away
+    (11.0, (900.0, -900.0, 320.0), (350.0, 300.0, 0.0), 30.0),            # past Trost's east side (the town on the left)
+    (13.6, (420.0, 700.0, 290.0), (-380.0, 1150.0, 0.0), 30.0),           # on toward the clearing
     (B["H"], tuple(map(float, camkeys.G3_CAMPS_M[1][1])), tuple(map(float, camkeys.G3_CAMPS_M[1][2])), 28.0)]   # H (look: the clearing)
 _PV = B["prof"]
 V_H = (-1.5, 4.5, 1.5)          # QA 10/27: no stall at H; the flight ends in a 5 m/s drift toward H2 (was: at rest)
@@ -109,16 +117,20 @@ def speed_profile_end(v0, t_ramp, t_cruise_end, t_end, v_end, total):
 
 _FL0 = camchan.CamPath(FLIGHT_KEYS, v_in=_S_IN["vel"], v_out=V_H)
 _FPROF = speed_profile_end(_PV[0], _PV[2], _PV[3], B["H"] - B["FA0"], float(np.linalg.norm(V_H)), _FL0.loc.total)
-FLIGHT = camchan.CamPath(FLIGHT_KEYS, v_in=_S_IN["vel"], v_out=V_H, profile=_FPROF)
+FLIGHT = _FL0                     # v17: time-keyed (slow sky gaze, then the ultra-fast flight)
 
 # farm + 846 (v5, owner 10/27): H .. CAM_IN.  H2 is a small zoom-in on the clearing (the farm time-lapse), then ONE turn via
 # the west (~115 deg, was 160) over the relief complex and the avenue filling with the 846 crowd, to CAM_IN.  The video clock
 # eases 2 -> 1 over the last 1.2 video s before CAM_IN (segtime.TMAP["g3"]), so the march starts at its own real-time speed.
 CI = camkeys.CAM_IN
 _CK = camkeys.G3_CAMPS_M[1:7]                                       # H, H2, P1, P2, P3, CAM_IN (positions / look-ats / lens)
-CAMP_KEYS = [(B[n], tuple(map(float, k[1])), tuple(map(float, k[2])), float(k[3])) for n, k in zip(("H", "H2", "P1", "P2", "P3", "CAM_IN"), _CK)]
+CAMP_KEYS = [(B[n], tuple(map(float, k[1])), tuple(map(float, k[2])), float(k[3])) for n, k in zip(("H", "H2"), _CK[:2])] + [
+    (B["P1"], (-500.0, 850.0, 430.0), (0.0, 300.0, 0.0), 34.0),         # v17: up and away to the SOUTH-EAST of Trost
+    (B["P2"], (150.0, 300.0, 560.0), (0.0, -500.0, 0.0), 36.0),
+    (B["P3"], (650.0, -450.0, 640.0), (0.0, -900.0, 0.0), 38.0),
+    (B["CAM_IN"], (820.0, -900.0, 640.0), (0.0, -1000.0, 0.0), 38.0)]   # = MARCH key 0
 _LH = FLIGHT.eval(B["H"])[1] - FLIGHT.eval(B["H"] - 1e-3)[1]
-CAMPS = camchan.CamPath(CAMP_KEYS, v_in=V_H, look_v_in=tuple(float(x) / 1e-3 for x in _LH), v_out=CI["vel"], look_v_out=CI["look_vel"])
+CAMPS = camchan.CamPath(CAMP_KEYS, v_in=V_H, look_v_in=tuple(float(x) / 1e-3 for x in _LH), v_out=(7.5, -62.0, -5.0), look_v_out=(0.0, -87.0, 0.0))
 
 # march846 camera: the ORIGINAL march846.py spline, restored (owner 10/27 07:34: "the original camera angle and speed were
 # good; now it points at a weird place").  march846.CAM_KEYS + its time Hermite (_tangents / _herm, cam_at) transcribed
@@ -136,16 +148,15 @@ MARCH_T_END = 18.0
 # lengthens; the gate is in frame from tau 0
 # (the column pours out of it until march846.T_TAIL 8.6), in its last 6 s it pans slowly west toward the camp (to-camp continues the turn).
 # (march846's original spline: renders before v6 / git history.)
-MARCH_CAM_KEYS = [   # v7 (QA batch1 P1): NEAR TOP-DOWN hold low over the column (pitch 60-66, 520-600 m) so it crosses the
-                     # whole frame and the people read; key 0 = the camps seam, key 18 = the to-camp seam (both unchanged)
-    (0.0,  _gp(200, -780, 880),   _gp(300, 0, 0),    40),         # the gate in frame as the column pours out
-    # v14 (FEEDBACK_v13 §1: "camera still odd, no zoom-in on titans eating"): WIDE, FAR, almost static, slow smooth drift
-    (3.0,  _gp(420, -900, 900),   _gp(520, 0, 0),    34),
-    (9.0,  _gp(490, -940, 930),   _gp(585, 0, 0),    31),
-    (14.0, _gp(550, -975, 960),   _gp(640, 0, 0),    30),
-    (18.0, _gp(760, -1080, 1150), _gp(300, -900, 0), 26),         # pan north toward the camp (to-camp needs no spin)
+_MY = -870.0                                                        # _MarchCam adds (0, 870, 0): keys below are frame M
+MARCH_CAM_KEYS = [   # v17 (FEEDBACK_v15): high SOUTH-EAST of Trost, a bit LOWER than v16 so the eating reads; the view turns
+    (0.0,  (820.0, -900.0 + _MY, 640.0),  (0.0, -1000.0 + _MY, 0.0), 38),   # slowly from the column's HEAD toward its TAIL
+    (4.0,  (850.0, -1150.0 + _MY, 620.0), (0.0, -1350.0 + _MY, 0.0), 36),
+    (9.0,  (880.0, -1300.0 + _MY, 600.0), (0.0, -1450.0 + _MY, 0.0), 34),
+    (14.0, (900.0, -1330.0 + _MY, 610.0), (0.0, -1150.0 + _MY, 0.0), 34),
+    (18.0, (880.0, -1250.0 + _MY, 700.0), (0.0, -880.0 + _MY, 0.0), 32),   # the tail at the gate
 ]
-MARCH_OUT_VEL = (0.0, 50.0, -15.0)                                 # M: drifting north, easing down toward FT1
+MARCH_OUT_VEL = (-80.0, 60.0, 10.0)                                 # M: drifting north, easing down toward FT1
 
 def _m_tangents(T, P, v_in=None, v_out=None):
     n = len(T); M = []
@@ -192,6 +203,9 @@ MARCH_LOOK_OUT_VEL = tuple(float(x) for x in MARCH.MT[-1])                 # (0,
 CO = camkeys.CAM_OUT
 TOCAMP_KEYS = [(B[n], tuple(map(float, k[1])), tuple(map(float, k[2])), float(k[3]))
                for n, k in zip(("FT0", "FT1", "FT2", "FT3", "FT4", "FT5", "FT7"), camkeys.G3_TO_CAMP_M)]
+_me = MARCH.eval_tau(MARCH_CAM_KEYS[-1][0])                          # v17: the to-camp flight starts where the SE march view ends
+TOCAMP_KEYS[0] = (B["FT0"], tuple(float(v) for v in _me[0]), tuple(float(v) for v in _me[1]), float(_me[2]))
+TOCAMP_KEYS[1] = (B["FT1"], (200.0, 200.0, 760.0), (-1300.0, 1300.0, 0.0), 28.0)
 _S_OUT = segtime.seam("g3_g4")
 TOCAMP = camchan.CamPath(TOCAMP_KEYS, v_in=MARCH_OUT_VEL, look_v_in=MARCH_LOOK_OUT_VEL, v_out=_S_OUT["vel"], look_v_out=(0.0, 0.0, 0.0))
 

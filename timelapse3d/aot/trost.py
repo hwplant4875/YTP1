@@ -891,12 +891,20 @@ def ground_mat(name, yoff):
 def water_mat(name="CanalWater"):
     # v14 (FEEDBACK_v13 §1 "the water graphic looks wrong" = a flat pale mint strip): deep green-blue canal water, glossy,
     # with small wind ripples so it reads as water from the air
-    nb = NB(name, 0.06)
+    # v17 (FEEDBACK_v15 ~2:18 "still white / transparent"): the gloss mirrored the bright sky -> rougher, low specular,
+    # deeper blue-green with darker depth bands and lighter wind streaks
+    nb = NB(name, 0.32)
+    try:
+        nb.bsdf.inputs["Specular IOR Level"].default_value = 0.18
+    except Exception:
+        pass
     o = nb.obj()
     n = nb.noise(o, 0.05, 3.0)
-    col = nb.mix(nb.smooth(n.outputs["Fac"], 0.4, 0.65), lin("#1b3134"), lin("#2a4a4a"))
+    col = nb.mix(nb.smooth(n.outputs["Fac"], 0.4, 0.65), lin("#16323d"), lin("#24505c"))
+    st = nb.noise(nb.vmath("MULTIPLY", o, (0.15, 1.0, 1.0)), 0.6, 2.0)
+    col = nb.mix(nb.math("MULTIPLY", nb.smooth(st.outputs["Fac"], 0.62, 0.75), 0.5), col, lin("#3d6e78"))
     fn = nb.noise(o, 0.9, 4.0)
-    return nb.finish(col, bump=fn.outputs["Fac"], strength=0.18)
+    return nb.finish(col, bump=fn.outputs["Fac"], strength=0.22)
 
 def marble_mat(name="TrostBoulderMarble"):
     """The ball (owner 15:29, bible g8): warm grey #8f8a82, large dark charcoal marbling #3b3a3a, pale weathered patches

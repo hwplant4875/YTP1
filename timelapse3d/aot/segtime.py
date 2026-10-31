@@ -159,8 +159,8 @@ TMAP["g2"] = [(0.0, 0.0)] + [(tv + G2_PRE / 2.0, t + G2_PRE) for tv, t in _g2_v5
 # blond titan (31.0-42.2) at 14x (~0.6 / 0.8 video s): the HQ lift operation (zoomed in), then straight to his face-down fall
 TMAP_G6_V14 = lambda: slope_knots(DUR["g6"], [(0.0, 2.0, 0.0), (8.3, 14.0, 0.25), (16.8, 2.0, 0.25), (31.0, 14.0, 0.25),
                                               (42.2, 2.0, 0.25), (48.3, 1.47, 0.3), (59.5, 2.0, 0.3)])
-TMAP["g3"] = slope_knots(DUR["g3"], [(0.0, 2.0, 0.0), (0.3, 4.5, 0.5), (14.8, 2.0, 0.5), (G3_MARCH[0] - 0.9, 1.6, 0.9),
-                                     (G3_MARCH[1], 2.0, 1.0)])
+TMAP["g3"] = slope_knots(DUR["g3"], [(0.0, 2.0, 0.0), (7.2, 6.0, 0.6), (14.8, 2.0, 0.5), (G3_MARCH[0] - 0.9, 1.6, 0.9),
+                                     (G3_MARCH[1], 2.0, 1.0)])   # v17: the sky gaze (night -> morning) at 2x, then the ULTRA-fast flight at 6x
 # g4 v4 (owner 10/27: 2nd Colossal, faster camera): the establishing approach at 3.2x (local 1.0-15.0), back to 2 for
 # Eren's fist on the wall top above O and the g4|g5 seam.  Video ~7.9 s.
 TMAP["g4"] = slope_knots(DUR["g4"], [(0.0, 2.0, 0.0), (1.0, 3.2, 0.6), (15.0, 2.0, 0.6)])
