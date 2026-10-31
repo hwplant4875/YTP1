@@ -40,6 +40,11 @@ the rest of the name in white at normal size, no colour box (`ep03/anim.py` stat
 
 ## 3. Script and voice
 - Research every kill count / survival rate on the film's plot page; viewers push back on soft ratings.
+- **Survival basis (from 10/31, viewer comment):** "if this killer came for YOU tonight, one on one" (in your house, on the phone).
+  Film kills and endings are evidence, not the score. Weigh whether running, hiding or fighting back works (human killers can be
+  fought; Art / Pennywise / Michael can't be put down). Strength is only one factor: deception and access (friend, partner, family
+  you'd open the door to), planning, traps, accomplices, guns and persistence keep physically weaker / female killers fairly rated
+  (pick the 4th stat to fit: DECEPTION for Ghostface-type killers, SUPERNATURAL for monsters).
   Rate from the viewer's point of view: how likely is *you* to be a target (a killer with a narrow victim list = very high survival,
   e.g. Totally Killer 99%; a curse you can avoid by not wearing the mask = higher; rules that are hard to keep = lower). Give the
   reason in the script ("you could be a target too").
