@@ -1,4 +1,4 @@
-# Halloween special: key moments per clip (seconds into each file in E:\YTP2\Instruction444\clips\halloween)
+# Halloween special (10 films; Goosebumps 2 dropped 10/31): key moments per clip (seconds into each file in E:\YTP2\Instruction444\clips\halloween)
 
 Picked from 2 s / 0.5 s contact sheets (10/31) and used as in-points in `build_edl.py`. Times are the frame shown, not the sheet label.
 Age-gated on YouTube, not downloaded: trt_01_decoration, trt_02_bodies, trt_07_pumpkin, trt_08_something, trt_09_zombies.
@@ -8,14 +8,13 @@ Totally Killer uses only the Blumhouse trailer: the Prime Video clips carry an i
 
 | Script line | Clip | Time | What is on screen |
 |---|---|---|---|
-| s00 "a mask doesn't look suspicious" | hf_trailer | 74.5 | The Other's mask in the crowd |
-| s00 "a scream" | notd_trailer | 104.6 | Judy screaming at the wall |
-| s00 "a knock on the door" | h78_trailer | 141 | Laurie pounding on the Doyle door |
-| s00 "could be anyone" | t1_trailer | 46.6 | Art at a doorway |
-| #11 Slappy | gb2_dummy | 296.5, 314.5 | Slappy on the console, close-up laughing |
-| #11 "brings every decoration to life" | gb2_dummy | 335, 342.5, 350, 362.5 | Tesla tower lightning, jack-o'-lanterns wake, gnomes, flaming horseman |
-| #11 "giant spiders / flying witches / army of costumes" | gb2_trailer | 38.6, 36.4, 94.5 | spider on the street, flying ghoul, store full of costumes |
-| #11 "nobody actually dies" | gb2_dummy | 432.5, 556.5 | gummy bears attack, kid zaps the gummy |
+| s00 STALKED | h78_trailer | 116.7 | the Shape in the doorway (116.7-118.1) |
+| s00 TRAPPED | haunt_trailer | 86.4 (x0.7) | cage door slams (86.5-87.1, black at 87.1) |
+| s00 POISONED | trt_trailer | 132.4 | razor blades in the candy (132.3-133.3) |
+| s00 POSSESSED | notd_trailer | 48.5 | possessed Suzanne (48.5-49.5) |
+| s00 MAULED BY A WEREWOLF | gs_trailer | 98.0 | Ginger lunges at the janitor (98.0-99.5) |
+| s00 HUNTED BY A CLOWN | t2_trailer | 72.0 (x0.9) | Art crawls through the window (72.0-73.3) |
+| s00 KILLED BY A TV COMMERCIAL | h3_05_test_room | 90.6 | the kid in the Silver Shamrock mask watching the ad |
 | #10 Sweet Sixteen Killer mask | tk_trailer | 101.3, 116.5 | killer in the mask (green light), behind the blinds |
 | #10 "sixteen times" | tk_trailer | 24.5-27 | 1987 victim photos, "Sweet 16 Killer" headline |
 | #10 masked killer | tk_trailer | 100.5, 116.5 | killer mask (green light), killer behind a victim |
