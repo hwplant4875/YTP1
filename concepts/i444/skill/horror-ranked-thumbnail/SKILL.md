@@ -25,6 +25,8 @@ Reference: `reference_myers_v4_a.jpg` in this folder (EP01 Myers v4 A: 90% / 62%
   posters; use only real theatrical / home-media key art (check it is a release poster: studio credits, title treatment)
   or official film stills (TMDB backdrops). If the official poster has no face (e.g. Halloween 1978's pumpkin), use an official still. Video frame grabs are soft; use them only when no poster/still shows the face (then the sharpest HD
   frame of an official clip, never a trailer graphic, never a letterboxed area: crop the active picture and scale it to fill).
+- Search by villain name (owner 10/31 idea), but take the full-size official image: Wikipedia infobox images are fair-use
+  downscales (~250-300 px) and may show a different film's version of the villain, so don't use them directly.
 - Brighten dark faces a little (brightness 1.1-1.6, contrast ~1.18), keep blown-out whites under control (brightness < 1 if needed).
 
 ## Three variants, visually very different
