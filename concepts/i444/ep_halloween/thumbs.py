@@ -53,7 +53,7 @@ def three(specs, name):
 # zoomed in, the face fills most of the panel with the eyes in the upper third, % below the face. Coordinates = 1920x1080 frame.
 def P(clip, t, cx, cy, face_h, pct, col, bright=1.15, face_px=430, eye_y=300, blurfill=None): return dict(clip=clip, t=t, cx=cx, cy=cy, face_h=face_h, pct=pct, col=col, bright=bright, face_px=face_px, eye_y=eye_y, blurfill=blurfill)
 os.makedirs(OUT, exist_ok=True)
-three([P('tk_trailer', 101.6, 840, 330, 330, '99%', GREEN, 1.6, face_px=340, eye_y=240), P('poster:orig_vGml4OWeorzTFRkTzfDRYVIb5UG.jpg', 0, 1060, 1450, 1300, '30%', YEL, 0.92, face_px=560, eye_y=300),
+three([P('tk_trailer', 101.6, 840, 330, 330, '99%', GREEN, 1.6, face_px=340, eye_y=240), P('poster:still_h78_stairs.jpg', 0, 830, 300, 330, '30%', YEL, 1.0, face_px=300, eye_y=250),
        P('t2_costume_hd', 85.0, 950, 270, 280, '3%', RED, 1.25, face_px=380, eye_y=230)], 'halloween_thumb_a.jpg')
 three([P('ss_eone_trailer', 3.5, 1340, 500, 700, '50%', GREEN, 1.15, face_px=644, eye_y=325), P('trt_wbuk_sam_hd', 100, 740, 340, 560, '40%', YEL, 1.6, face_px=380, eye_y=210),
        P('t2_sienna_hd', 186.5, 640, 600, 470, '3%', RED, 1.25)], 'halloween_thumb_b.jpg')

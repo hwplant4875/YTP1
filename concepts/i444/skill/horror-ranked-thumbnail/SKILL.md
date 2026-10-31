@@ -20,7 +20,10 @@ Reference: `reference_myers_v4_a.jpg` in this folder (EP01 Myers v4 A: 90% / 62%
 ## Sources (quality first)
 - Prefer **official posters / key art / HD stills** (TMDB: open `themoviedb.org/movie/<id>/images/posters|backdrops` in the built-in
   browser, collect the `/t/p/` paths with javascript, then download `https://image.tmdb.org/t/p/original/<path>`). Keep them in the
-  scratchpad, never commit them. Video frame grabs are soft; use them only when no poster/still shows the face (then the sharpest HD
+  scratchpad, never commit them.
+  **Official art only** (owner 10/31: "official poster, not fan art"): TMDB poster lists mix in fan art and alternative
+  posters; use only real theatrical / home-media key art (check it is a release poster: studio credits, title treatment)
+  or official film stills (TMDB backdrops). If the official poster has no face (e.g. Halloween 1978's pumpkin), use an official still. Video frame grabs are soft; use them only when no poster/still shows the face (then the sharpest HD
   frame of an official clip, never a trailer graphic, never a letterboxed area: crop the active picture and scale it to fill).
 - Brighten dark faces a little (brightness 1.1-1.6, contrast ~1.18), keep blown-out whites under control (brightness < 1 if needed).
 
