@@ -1,8 +1,7 @@
 # Halloween special: official sources only (studio / distributor channels, Movieclips). name | youtube id | channel | note
 # None of these is age-restricted per the YouTube API (contentRating empty, 10/31). Download on the laptop to E:\YTP2\Instruction444\clips\halloween
-et_06_halloween | VrVEHszxL7E | Movieclips | E.T. 6/10 Halloween night, ghost sheet
-et_08_alive | a-9990dlfvo | Movieclips | E.T. 8/10 hazmat agents, he's alive
-et_09_ride | oR1-UFrcZ0k | Movieclips | E.T. 9/10 flying bikes
+gb2_trailer | nQeOzfm-lps | Sony Pictures Entertainment | Goosebumps 2 official trailer
+gb2_dummy | 63ETXMGHFl0 | Sony Pictures Entertainment India | Goosebumps 2 Slappy brings Halloween to life
 tk_trailer | 5vYipYSDhtQ | Blumhouse | Totally Killer official trailer
 tk_mom | mvq9rO1WRkI | Prime Video | Totally Killer clip
 tk_machine | RpGNrbpyrWc | Prime Video | Totally Killer clip

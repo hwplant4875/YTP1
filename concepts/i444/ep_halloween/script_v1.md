@@ -10,8 +10,8 @@ Tonight is the one night a year when a mask doesn't look suspicious, a scream do
 ## s01 scoring
 Every movie gets scored on its killer: strength, intelligence, kill count, and how supernatural it is, which is basically whether you can kill it at all. Put it together and you get one number, your survival rate for the night.
 
-## s02 #10 E.T. the Extra-Terrestrial (1982), 99%, Easy
-Number ten is E.T. Yes, it counts, because the big night in this movie is Halloween. A kid walks an alien through the neighborhood under a white sheet, and nobody even looks twice, because it's Halloween. Nobody dies, the scariest thing in the whole movie is a bunch of guys in hazmat suits, and the night ends with a flying bike. Survival rate: ninety-nine percent, unless you work for the government.
+## s02 #10 Goosebumps 2: Haunted Halloween (2018), 98%, Easy
+Number ten is Goosebumps 2: Haunted Halloween. Slappy the dummy brings every Halloween decoration in town to life, giant spiders, flying witches, an army of costumes, and it looks like the end of the world. But for all that chaos, nobody actually dies, and three kids shut the whole thing down before midnight. Survival rate: ninety-eight percent, unless you're R. L. Stine.
 
 ## s03 #9 Totally Killer (2023), 80%, Don't Worry
 Number nine is Totally Killer. The Sweet Sixteen Killer stabs each victim sixteen times on her sixteenth birthday, which is horrifying, but it also means he has a very specific list, and if you're not a sixteen-year-old girl in that one friend group, you're probably fine. Survival rate: eighty percent.
@@ -41,10 +41,10 @@ Number two is Terrifier. Art the Clown doesn't talk, he doesn't run, and he does
 And number one is Terrifier 2. Art comes back from the dead, kills the coroner, and spends Halloween night hunting Sienna and her little brother, and this time, he's clearly not human. Not even death stops him. Even Sienna dies before she comes back and finally cuts his head off, and he still isn't done. Survival rate: three percent.
 
 ## s12 outro
-So that's ten Halloween nights, from a friendly alien in a bedsheet to a clown you can't kill. Tell me in the comments which one you'd survive, and happy Halloween. Don't open the door.
+So that's ten Halloween nights, from a ventriloquist dummy to a clown you can't kill. Tell me in the comments which one you'd survive, and happy Halloween. Don't open the door.
 
 ## Fact notes
-- E.T.: Elliott takes E.T. out on Halloween night under a ghost sheet; no deaths (E.T. nearly dies and revives); government agents in hazmat suits; bike flight. Replaces Hocus Pocus (owner 10/31: not well known enough; also Disney).
+- Goosebumps 2: Slappy animates the town's Halloween decorations via Wardenclyffe Tower; no deaths in the plot; Sarah, Sonny and Sam stop him; at the end a surviving Slappy traps R. L. Stine in a new story. Replaces Hocus Pocus / E.T. (owner 10/31).
 - Totally Killer: 1987 victims Tiffany, Marisa, Heather (16 stab wounds each, on their 16th birthdays); 2023 Pam on Halloween night.
 - Trick 'r Treat: Sam spares Kreeg after the candy bar ends up in his hand; principal Steven Wilkins poisons candy; Laurie and friends are werewolves; quarry bus children.
 - Hell Fest: The Other kills an unnamed woman, Gavin, Asher, Taylor, Quinn; police arrive; he escapes and drives home to his daughter.
