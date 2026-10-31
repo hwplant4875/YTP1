@@ -3,7 +3,7 @@
 # usage: python make_srt_v2.py [edl_v2.json] [voice_v3] [out.srt]
 import json, os, sys, subprocess
 edl = sys.argv[1] if len(sys.argv) > 1 else 'edl.json'; VOICE = sys.argv[2] if len(sys.argv) > 2 else 'voice'
-OUT = sys.argv[3] if len(sys.argv) > 3 else 'upload/halloween_ranked_en_v3.srt'
+OUT = sys.argv[3] if len(sys.argv) > 3 else 'upload/halloween_ranked_en_v4.srt'
 def dur(p): return float(subprocess.check_output(['ffprobe', '-v', '0', '-show_entries', 'format=duration', '-of', 'csv=p=0', p]))
 def ts(t): t = max(0, t); return '%02d:%02d:%02d,%03d' % (t // 3600, t % 3600 // 60, t % 60, round(t % 1 * 1000) % 1000)
 cues, t0 = [], 0.0
