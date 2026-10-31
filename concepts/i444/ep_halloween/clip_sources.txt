@@ -14,6 +14,8 @@ trt_07_pumpkin | r69Lv9hATPI | Movieclips | 7/9
 trt_08_something | f4lNe9La20s | Movieclips | 8/9 Sam vs Kreeg
 trt_09_zombies | 0_GrOfW98Sk | Movieclips | 9/9
 hf_trailer | olBLvQ26_eM | Lionsgate Movies | Hell Fest official trailer
+gs_trailer | lRXT1J0kqdY | ScreamFactoryTV | Ginger Snaps official trailer
+gs_trailer_lg | 011YdVip2KM | Lionsgate Movies | Ginger Snaps official trailer
 haunt_trailer | f8ZuloddLi4 | Momentum Pictures | Haunt official trailer
 haunt_trailer_rt | UoU4xexikK4 | Rotten Tomatoes Indie | Haunt trailer (Movieclips Indie)
 h78_trailer | 3JsrH8eUVOo | ScreamFactoryTV | Halloween 1978 official trailer
