@@ -52,7 +52,7 @@ def P(clip, t, cx, cy, face_h, pct, col, bright=1.15, face_px=430, eye_y=300, bl
 os.makedirs(OUT, exist_ok=True)
 three([P('tk_trailer', 101.6, 840, 330, 330, '99%', GREEN, 1.6, face_px=340, eye_y=240), P('h78_best_hd', 402.5, 1140, 360, 230, '30%', YEL, 1.8, face_px=340, eye_y=260),
        P('t2_costume_hd', 85.0, 950, 270, 280, '3%', RED, 1.25, face_px=380, eye_y=230)], 'halloween_thumb_a.jpg')
-three([P('ss_eone_trailer', 3.5, 1350, 500, 700, '50%', GREEN, 1.15, face_px=470, eye_y=250, blurfill=(140, 940)), P('trt_wbuk_sam_hd', 100, 740, 340, 560, '40%', YEL, 1.6, face_px=380, eye_y=210),
+three([P('ss_eone_trailer', 3.5, 1340, 500, 700, '50%', GREEN, 1.15, face_px=644, eye_y=325), P('trt_wbuk_sam_hd', 100, 740, 340, 560, '40%', YEL, 1.6, face_px=380, eye_y=210),
        P('t2_sienna_hd', 186.5, 640, 600, 470, '3%', RED, 1.25)], 'halloween_thumb_b.jpg')
 three([P('h3_skull_hd', 120, 1080, 460, 430, '60%', GREEN, 1.5), P('hf_maze_hd', 28.0, 690, 400, 300, '45%', YEL, 2.6, face_px=400, eye_y=250),
        P('t1_meet_hd', 223.0, 600, 470, 560, '6%', RED, 1.1)], 'halloween_thumb_c.jpg')
