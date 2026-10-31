@@ -7,12 +7,12 @@ so low quality is hidden. Mostly high sky view.
 - Titans scaled so they stand just slightly taller than the buildings (Female and Eren), readable from the sky.
 - Events, all animated and fast (sped-up feel): lightning (Female) -> Female rampaging through streets, buildings
   collapsing with dust -> 2nd lightning (Titan Eren) -> chase through the city -> Eren PUNCHES the Female in the FACE
-  (show the face hit; she does NOT fly away) -> burning houses -> Female climbing the wall -> she falls, Eren on top.
+  and she is KNOCKED FLYING into the cathedral, which collapses (user 09:23:42, overrides 'does not fly away') -> burning houses -> Female climbing the wall -> she falls, Eren on top.
   Optional single frozen beat only if it reads from this height.
 - Drop the underground passage, the close Mikasa zoom and close tableaux in the city.
 - Then go to the wall-titan ending (to be rebuilt separately; see AUDIT findings / fan-model search).
-- KEY BEAT (user 09:23): the cathedral in the middle of the city COLLAPSES, and it must look good: during the fight
-  the titans crash into it (anime: the Female/Eren brawl smashes the church); spire tilts and falls, roof caves in,
+- KEY BEAT (user 09:23): the cathedral in the middle of the city COLLAPSES, and it must look good: caused by the
+  Female flying into it from Eren's punch; spire tilts and falls, roof caves in,
   walls break into chunks (rigid-body or pre-fractured cell pieces), big dust cloud rolling out through the streets.
   Give it ~2 s of the fast sequence, camera angle turned slightly toward it. Before the collapse the church stays clearly
   in frame; after it, the ruin and dust stay visible.
