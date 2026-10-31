@@ -39,8 +39,8 @@ def three(specs, name):
     im.convert('RGB').save(os.path.join(OUT, name), quality=92); print(name)
 SLAPPY = dict(clip='gb2_dummy', t=314, cx=965, cy=330, face_h=320, face_px=290, eye_y=180, pct='98%', col=GREEN, bright=1.25)
 MICHAEL = dict(clip='h78_trailer_rt', t=1.5, cx=640, cy=420, face_h=800, face_px=560, pct='30%', col=YEL, eye_y=235)
-SAM = dict(clip='trt_trailer', t=96.5, cx=1380, cy=560, face_h=420, face_px=300, pct='62%', col=YEL, bright=1.9)
-SWEET16 = dict(clip='tk_trailer', t=101.6, cx=820, cy=380, face_h=420, face_px=310, pct='80%', col=GREEN, eye_y=230, bright=1.5)
+SAM = dict(clip='trt_wbuk_sam_hd', t=163.5, cx=720, cy=420, face_h=520, face_px=380, pct='40%', col=YEL, eye_y=200, bright=1.5)
+SWEET16 = dict(clip='tk_trailer', t=101.6, cx=820, cy=380, face_h=420, face_px=310, pct='99%', col=GREEN, eye_y=230, bright=1.5)
 ART = dict(clip='t2_trailer', t=48.2, cx=730, cy=400, face_h=480, face_px=380, pct='3%', col=RED, eye_y=250)
 os.makedirs(OUT, exist_ok=True)
 three([SWEET16, MICHAEL, ART], 'halloween_thumb_a.jpg')   # owner 10/31: Goosebumps 2 dropped, so no Slappy
