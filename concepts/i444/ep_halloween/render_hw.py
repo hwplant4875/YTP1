@@ -163,10 +163,11 @@ if sfx_items:
     run(['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', ';'.join(fc), '-map', '[sx]', '-c:a', 'pcm_s16le', sfxa])
 else:
     run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo', '-t', str(t_global), '-c:a', 'pcm_s16le', sfxa])
+# voice: 100 ms fade ending 60 ms before each section's end (silence after) (owner 10/31: s08's take ended on the clipped start of a next syllable)
 # audio: clip audio + narration + SFX + quiet music (~-27 LUFS, gentle highshelf cut)
 ins = ['-i', vid, '-i', clipa, '-i', sfxa]; fc = []
 for k, (vp, t) in enumerate(voice_items):
-    ins += ['-i', vp]; fc.append(f"[{k+3}:a]aresample=48000,adelay={int(round(t*1000))}|{int(round(t*1000))}[v{k}]")
+    ins += ['-i', vp]; fc.append(f"[{k+3}:a]aresample=48000,afade=t=out:st={max(0, dur(vp) - 0.16):.3f}:d=0.1,adelay={int(round(t*1000))}|{int(round(t*1000))}[v{k}]")
 m = len(voice_items) + 3; ins += ['-stream_loop', '-1', '-i', MUSIC]
 # MUSIC_LEVELLED=1: the bed is already levelled per cue (e.g. a quieter final cue), so skip loudnorm, which would even it out
 mnorm = '' if os.environ.get('MUSIC_LEVELLED') == '1' else 'loudnorm=I=-39:TP=-3,'  # Horror Ranked default: music at -39 LUFS (EP03 v11), well under the voice
