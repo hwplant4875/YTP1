@@ -1,6 +1,7 @@
 # Halloween special upload kit (final: halloween_v7.mp4, 5:10)
 
-Video: E:\YTP2\Instruction444enders\halloween_v7.mp4 | Subtitles: upload/halloween_ranked_en_v4.srt | Thumbnails: upload/halloween_thumb_a/b/c.jpg
+Video: E:\YTP2\Instruction444\renders\halloween_v7.mp4 | Subtitles: upload/halloween_ranked_en_v4.srt | Thumbnails: upload/halloween_thumb_a/b/c.jpg
+enders\halloween_v7.mp4 | Subtitles: upload/halloween_ranked_en_v4.srt | Thumbnails: upload/halloween_thumb_a/b/c.jpg
 
 ## Titles (pick one; no ":" or "-")
 1. Every Halloween Night Horror Movie Ranked by Your Chance of Surviving It  (recommended: matches the Every ... Ranked series)
