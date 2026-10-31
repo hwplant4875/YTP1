@@ -38,7 +38,7 @@ Number three is Halloween Three. There's no Michael here, just a toy company sel
 Number two is Terrifier. Art the Clown doesn't talk, he doesn't run, and he doesn't need a reason. On one Halloween night, he goes through almost everyone he meets, and the only survivor is found alive but so badly hurt she's never the same again. Survival rate: six percent.
 
 ## s11 #1 Terrifier 2 (2022), 3%, Slaughtered
-And number one is Terrifier 2. Art comes back from the dead, kills the coroner, and spends Halloween night hunting Sienna and her little brother, and this time, he's clearly not human. Bullets don't stop him. Even Sienna dies before she comes back and finally cuts his head off, and he still isn't done. Survival rate: three percent.
+And number one is Terrifier 2. Art comes back from the dead, kills the coroner, and spends Halloween night hunting Sienna and her little brother, and this time, he's clearly not human. Not even death stops him. Even Sienna dies before she comes back and finally cuts his head off, and he still isn't done. Survival rate: three percent.
 
 ## s12 outro
 So that's ten Halloween nights, from three witches who couldn't hurt anyone to a clown you can't kill. Tell me in the comments which one you'd survive, and happy Halloween. Don't open the door.
