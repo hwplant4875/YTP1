@@ -232,14 +232,15 @@ def earth_shot():
             s = max(0, i - hit) / 24.0
             for o, p in cells:
                 v, w = vel[o.name]
-                dist = R_E * (1.5 * s + 0.6 * s * s); o.location = v * dist
+                dist = R_E * (1.0 * s + 0.35 * s * s); o.location = v * dist
                 o.rotation_euler = (w * s).to_tuple()
             if clouds_o: clouds_o.hide_render = i > hit
             atmo.hide_render = i > hit + 2
             corel.hide_render = i <= hit
             if i > hit:
-                k = 1.0 + 0.5 * s; corel.scale = (k, k, k)
-                core.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"].default_value = 3.2 * math.exp(-1.0 * s) + 1.4
+                k = (1.0 + 0.6 * s) * max(0.0, 1.0 - max(0.0, s - 0.5) / 0.9); corel.scale = (k, k, k)
+                corel.hide_render = k < 0.02
+                core.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"].default_value = 1.6 * math.exp(-0.8 * s) + 0.5
             for o, p in cells: o.hide_render = i <= hit
             e.hide_render = i > hit
             bpy.context.view_layer.update()

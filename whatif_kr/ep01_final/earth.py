@@ -20,7 +20,8 @@ def earth_mats():
     nt.links.new(tex.outputs[0], hsv.inputs["Color"]); nt.links.new(hsv.outputs[0], b.inputs["Base Color"])
     b.inputs["Roughness"].default_value = 0.85
     # interior (shatter caps): molten core
-    core = mat("core", "#ff4a00", 0.6, emit=3.0)
+    core = mat("core", "#ff4000", 0.6, emit=1.6)
+    core.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.05, 0.01, 0, 1)
     cl = bpy.data.materials.new("clouds"); cl.use_nodes = True; nt2 = cl.node_tree; b2 = nt2.nodes["Principled BSDF"]
     tc2 = nt2.nodes.new("ShaderNodeTexCoord"); t2 = nt2.nodes.new("ShaderNodeTexImage")
     t2.image = bpy.data.images.load(f"{A}/earth/clouds_2048.jpg"); t2.projection = "SPHERE"
