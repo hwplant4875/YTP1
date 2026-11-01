@@ -181,8 +181,8 @@ def dust_puffs(x, y, gz, r):
     rp = [n for n in cm.node_tree.nodes if n.type == "VALTORGB"][0]; rp.color_ramp.elements[0].position = 0.06; rp.color_ramp.elements[1].position = 0.3
     rnd = random.Random(8)
     for k in range(30):
-        a = rnd.uniform(0, 6.28); d = r * rnd.uniform(1.0, 1.6)
-        bpy.ops.mesh.primitive_plane_add(size=1, location=(x + math.cos(a) * d, y + math.sin(a) * d, gz + rnd.uniform(40, 260)))
+        a = rnd.uniform(0, 6.28); d = r * rnd.uniform(1.25, 1.75)
+        bpy.ops.mesh.primitive_plane_add(size=1, location=(x + math.cos(a) * d, y + math.sin(a) * d, gz + rnd.uniform(10, 90)))
         o = bpy.context.object; s_ = rnd.uniform(600, 1100); o.scale = (s_ * 1.4, s_, 1); o.rotation_euler[2] = a
         o.data.materials.append(cm)
 
@@ -212,7 +212,7 @@ if __name__ == "__main__":
         S.cycles.max_bounces = 4; S.cycles.device = "CPU"
     cam = camera(); cam.data.clip_start = 20; cam.data.clip_end = 200000
     if shot == "thumb":
-        eye_cam(cam, arm, pitch=float(os.environ.get("PITCH", "-50")), lens=float(os.environ.get("LENS", "15")))
+        eye_cam(cam, arm, pitch=float(os.environ.get("PITCH", "-50")), lens=float(os.environ.get("LENS", "15")), yaw=float(os.environ.get("YAW", "0")))
     elif shot == "wide":
         eye_cam(cam, arm, pitch=-28, lens=17)
     bpy.ops.render.render(write_still=True)
