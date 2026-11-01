@@ -181,7 +181,7 @@ def seoul_shot():
     t2 = set(bpy.data.objects); crater(FOOT[0], FOOT[1], r=1050 * K1 / 5000); crat = set(bpy.data.objects) - t2
     for o in dented | crat: o.hide_render = True
     S.render.engine = "CYCLES"; S.cycles.use_denoising = True; S.cycles.max_bounces = 4
-    cam = camera(); cam.data.clip_start = 20; cam.data.clip_end = 200000
+    cam = camera(); cam.data.clip_start = 20; cam.data.clip_end = 1500000
     def land():
         for o in flat: o.hide_render = True
         for o in dented | crat: o.hide_render = False
