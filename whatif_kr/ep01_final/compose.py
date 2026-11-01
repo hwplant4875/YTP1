@@ -65,7 +65,9 @@ _cache = {}
 def img(path, full=True):
     if path not in _cache:
         if len(_cache) > 40: _cache.clear()
-        im = Image.open(path).convert("RGB")
+        if not os.path.exists(path):
+            print("MISSING", path); im = Image.new("RGB", (W, H), (60, 60, 60))
+        else: im = Image.open(path).convert("RGB")
         if im.size != (W, H): im = im.resize((W, H), Image.LANCZOS)
         _cache[path] = im
     return _cache[path]
@@ -85,8 +87,11 @@ def last_index(fd, shot):
 def base_frame(fd, d, t):
     shot, mode = d["shot"], d["mode"]; tau = t - d["t0"]; dur = d["t1"] - d["t0"]
     zoom = 1.0; shake = 0.0; tl = None
+    drift = 0.0
     if mode in ("still", "hold"):
         p = shot_frame(fd, shot, 0 if mode == "still" else NF); zoom = 1.0 + 0.05 * tau / dur
+        if shot == "s1": zoom = 1.12 - 0.10 * tau / dur; drift = 70 * (0.5 - tau / dur)
+        if shot == "end": zoom = 1.02 + 0.10 * tau / dur; drift = -50 * (0.5 - tau / dur)
     elif mode == "step":
         i = min(NF, int(tau * 24)); p = shot_frame(fd, shot, i)
         tl = t - d["land"]
@@ -106,7 +111,7 @@ def base_frame(fd, d, t):
         shake = A * math.exp(-tl / 0.35)
     if zoom != 1.0 or shake > 0.3:
         rnd = random.Random(int(t * 1000))
-        dx = rnd.uniform(-1, 1) * shake; dy = rnd.uniform(-1, 1) * shake
+        dx = rnd.uniform(-1, 1) * shake + drift; dy = rnd.uniform(-1, 1) * shake
         z = zoom + shake / 900 + 0.0001
         cw, ch = W / z, H / z; cx, cy = W / 2 + dx, H / 2 + dy
         im = im.resize((W, H), Image.BICUBIC, box=(cx - cw / 2, cy - ch / 2, cx + cw / 2, cy + ch / 2))
@@ -241,6 +246,12 @@ def main():
     print(f"total {total:.1f}s, {len(segs)} segments")
     for d in segs: print(f"  {d['shot']:8s} {d['mode']:6s} {d['t0']:6.2f}-{d['t1']:6.2f} step {d['step']}")
     if "--plan" in sys.argv: return
+    if "--stills" in sys.argv:   # QA: write composited stills at given times
+        ts = [float(x) for x in sys.argv[sys.argv.index("--stills") + 1].split(",")]
+        for t in ts:
+            si = max(i for i, d in enumerate(segs) if d["t0"] <= t)
+            frame(fd, segs, subs, si, t).save(f"{out}_{t:06.2f}.jpg", quality=90)
+        return
     wav = out + ".wav"; mix(segs, subs, sfx, total, wav)
     fps = 15 if preview else FPS; scale = 0.5 if preview else 1.0
     nfr = int(total * fps)
@@ -252,6 +263,14 @@ def main():
     for f in range(nfr):
         t = f / fps
         while si < len(segs) - 1 and t >= segs[si]["t1"]: si += 1
+        im = frame(fd, segs, subs, si, t)
+        if scale != 1: im = im.resize((ow, oh), Image.BILINEAR)
+        enc.stdin.write(im.tobytes())
+        if f % 300 == 0: print("frame", f, "/", nfr, flush=True)
+    enc.stdin.close(); enc.wait(); os.remove(wav)
+    print("WROTE", out)
+
+def frame(fd, segs, subs, si, t):
         d = segs[si]
         im = base_frame(fd, d, t)
         if d["mode"] not in ("hold", "cold") and d["shot"] != "end":
@@ -264,11 +283,7 @@ def main():
         for s0, s1, txt, c, i in subs:
             if s0 <= t < s1 + 0.15:
                 subtitle(im, txt); break
-        if scale != 1: im = im.resize((ow, oh), Image.BILINEAR)
-        enc.stdin.write(im.tobytes())
-        if f % 300 == 0: print("frame", f, "/", nfr, flush=True)
-    enc.stdin.close(); enc.wait(); os.remove(wav)
-    print("WROTE", out)
+        return im
 
 if __name__ == "__main__":
     main()

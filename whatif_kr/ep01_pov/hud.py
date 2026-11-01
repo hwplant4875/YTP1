@@ -6,7 +6,7 @@ FD = "/home/user/YTP1/whatif_kr/ep01_pov/fonts/"
 def F(w, s): return ImageFont.truetype(FD + f"Pretendard-{w}.otf", s)
 
 def kor_big(x, unit):
-    for v, u in ((1e16, "경"), (1e12, "조"), (1e8, "억"), (1e4, "만")):
+    for v, u in ((1e24, "자"), (1e20, "해"), (1e16, "경"), (1e12, "조"), (1e8, "억"), (1e4, "만")):
         if x >= v:
             q = x / v
             return (f"{q:,.0f}" if q >= 100 else f"{q:.1f}".rstrip("0").rstrip(".")) + f"{u} {unit}"
