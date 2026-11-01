@@ -8,7 +8,7 @@
  "entries": [
   {
    "sec": "s02",
-   "rank": 10,
+   "rank": 11,
    "film": "Hellraiser: Hellworld (2005)",
    "villain": "Pinhead",
    "v": [
@@ -21,7 +21,7 @@
   },
   {
    "sec": "s03",
-   "rank": 9,
+   "rank": 10,
    "film": "Hellraiser: Judgment (2018)",
    "villain": "Pinhead",
    "v": [
@@ -34,7 +34,7 @@
   },
   {
    "sec": "s04",
-   "rank": 8,
+   "rank": 9,
    "film": "Hellbound: Hellraiser II (1988)",
    "villain": "Pinhead",
    "v": [
@@ -47,7 +47,7 @@
   },
   {
    "sec": "s05",
-   "rank": 7,
+   "rank": 8,
    "film": "Hellraiser: Revelations (2011)",
    "villain": "Pinhead",
    "v": [
@@ -60,7 +60,7 @@
   },
   {
    "sec": "s06",
-   "rank": 6,
+   "rank": 7,
    "film": "Hellraiser (1987)",
    "villain": "Pinhead",
    "v": [
@@ -73,7 +73,7 @@
   },
   {
    "sec": "s07",
-   "rank": 5,
+   "rank": 6,
    "film": "Hellraiser: Hellseeker (2002)",
    "villain": "Pinhead",
    "v": [
@@ -86,7 +86,7 @@
   },
   {
    "sec": "s08",
-   "rank": 4,
+   "rank": 5,
    "film": "Hellraiser (2022)",
    "villain": "The Priest",
    "v": [
@@ -99,7 +99,7 @@
   },
   {
    "sec": "s09",
-   "rank": 3,
+   "rank": 4,
    "film": "Hellraiser: Bloodline (1996)",
    "villain": "Pinhead",
    "v": [
@@ -111,7 +111,20 @@
    "pct": 25
   },
   {
+   "film": "Hellraiser: Deader (2005)",
+   "villain": "Pinhead",
+   "v": [
+    9,
+    8,
+    8,
+    10
+   ],
+   "pct": 15,
    "sec": "s10",
+   "rank": 3
+  },
+  {
+   "sec": "s11",
    "rank": 2,
    "film": "Hellraiser: Inferno (2000)",
    "villain": "Pinhead",
@@ -124,7 +137,7 @@
    "pct": 8
   },
   {
-   "sec": "s11",
+   "sec": "s12",
    "rank": 1,
    "film": "Hellraiser III: Hell on Earth (1992)",
    "villain": "Pinhead",
