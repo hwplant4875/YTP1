@@ -168,7 +168,7 @@ def seoul_shot():
     water(); bridges(); lotte(8.9 * KM, -1.0 * KM)
     city(FOOT, radius_km=16, step=0.19)
     far = mat("farland", "#9aa27e", 0.95)   # land beyond the 60 km terrain tile so the world edge never shows
-    plane("farland", -400 * KM, 400 * KM, -400 * KM, 400 * KM, -20, far)
+    plane("farland", -400 * KM, 400 * KM, -400 * KM, 400 * KM, -90, far)
     clouds(60, FOOT, (FOOT[0] - 5 * KM, FOOT[1]))
     if K1 >= 8192:   # wide cloud deck far out so the horizon reads as more land under clouds
         cm = bpy.data.materials["cloud"]; rnd = random.Random(7)

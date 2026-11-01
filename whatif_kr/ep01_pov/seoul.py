@@ -207,11 +207,19 @@ if __name__ == "__main__":
     lotte(8.9 * KM, -1.0 * KM)
     print("buildings", city(FOOT, radius_km=16, step=0.19))
     clouds(60, FOOT, (FOOT[0] - 5 * KM, FOOT[1]))
+    plane("farland", -400 * KM, 400 * KM, -400 * KM, 400 * KM, -90, mat("farland", "#9aa27e", 0.95))
+    cm = bpy.data.materials["cloud"]; rnd = random.Random(7)
+    for _ in range(260):   # wide cloud deck beyond the terrain tile
+        cx = FOOT[0] + rnd.uniform(-90, 90) * KM; cy = FOOT[1] + rnd.uniform(-90, 90) * KM
+        if math.hypot(cx - FOOT[0], cy - FOOT[1]) < 22 * KM: continue
+        bpy.ops.mesh.primitive_plane_add(size=1, location=(cx, cy, rnd.uniform(1800, 3200)))
+        o = bpy.context.object; r = rnd.uniform(3500, 8000); o.scale = (r * rnd.uniform(1, 1.6), r, 1)
+        o.rotation_euler[2] = rnd.uniform(0, 3.14); o.data.materials.append(cm)
     crater(FOOT[0], FOOT[1])
     if os.environ.get("ENGINE", "CYCLES") == "CYCLES":
         S.render.engine = "CYCLES"; S.cycles.samples = int(os.environ.get("SPP", "48")); S.cycles.use_denoising = True
         S.cycles.max_bounces = 4; S.cycles.device = "CPU"
-    cam = camera(); cam.data.clip_start = 20; cam.data.clip_end = 200000
+    cam = camera(); cam.data.clip_start = 20; cam.data.clip_end = 1500000
     if shot == "thumb":
         eye_cam(cam, arm, pitch=float(os.environ.get("PITCH", "-50")), lens=float(os.environ.get("LENS", "15")), yaw=float(os.environ.get("YAW", "0")))
     elif shot == "wide":

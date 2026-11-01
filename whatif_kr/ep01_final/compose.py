@@ -113,8 +113,10 @@ def base_frame(fd, d, t):
     if zoom != 1.0 or shake > 0.3:
         rnd = random.Random(int(t * 1000))
         dx = rnd.uniform(-1, 1) * shake + drift; dy = rnd.uniform(-1, 1) * shake
-        z = zoom + shake / 900 + 0.0001
-        cw, ch = W / z, H / z; cx, cy = W / 2 + dx, H / 2 + dy
+        z = max(zoom, 1.0) + shake / 900 + 0.0001
+        z = max(z, 1.0 + 2.2 * max(abs(dx) / W, abs(dy) / H))
+        cw, ch = W / z, H / z
+        cx = min(max(W / 2 + dx, cw / 2), W - cw / 2); cy = min(max(H / 2 + dy, ch / 2), H - ch / 2)
         im = im.resize((W, H), Image.BICUBIC, box=(cx - cw / 2, cy - ch / 2, cx + cw / 2, cy + ch / 2))
     else:
         im = im.copy()
