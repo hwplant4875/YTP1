@@ -190,8 +190,8 @@ def earth_shot():
     sun = space_world(Vector((-0.5, -0.7, 0.5)))
     root, e, m, core, atmo = build_earth()
     rig, arm = load_char(); rig.rotation_euler[2] = float(os.environ.get("ROT", "-1.0"))
-    for o in arm.children:   # giant clouds of the atmosphere should not hide the body
-        pass
+    for o in arm.children:   # the giant's body must not throw the whole planet into shadow
+        if o.type == "MESH": o.visible_shadow = False
     cam = camera(); cam.data.clip_start = 5; cam.data.clip_end = 5e6
     if shot in EARTH:
         n, leg, cl, lk, lens = EARTH[shot]
@@ -213,7 +213,7 @@ def earth_shot():
         clouds_o = bpy.data.objects.get("clouds")
         corel = uvsphere("corelight", R_E * 0.55, core, 48); corel.parent = root
         # giant: right foot comes down onto the Earth top; body above in space
-        rig.rotation_euler[2] = math.pi * 0.8
+        rig.rotation_euler[2] = -1.0
         set_pose(arm, 16); rig.scale = (K1, K1, K1); rig.location = (0, 0, 0); bpy.context.view_layer.update()
         fr = bone_world(arm, "foot_r").translation.copy()
         base = Vector((-fr.x, -fr.y, R_E * 0.98 - fr.z))
@@ -238,13 +238,13 @@ def earth_shot():
             atmo.hide_render = i > hit + 2
             corel.hide_render = i <= hit
             if i > hit:
-                k = 1.0 + 2.2 * s; corel.scale = (k, k, k)
-                core.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"].default_value = 30.0 * math.exp(-1.5 * s) + 4
+                k = 1.0 + 0.5 * s; corel.scale = (k, k, k)
+                core.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"].default_value = 3.2 * math.exp(-1.0 * s) + 1.4
             for o, p in cells: o.hide_render = i <= hit
             e.hide_render = i > hit
             bpy.context.view_layer.update()
-            cam.location = Vector((-1.7 * H, -2.3 * H, 0.15 * H)); look = Vector((0, 0, 0.25 * H))
-            cam.rotation_euler = (look - cam.location).to_track_quat("-Z", "Y").to_euler(); cam.data.lens = 30
+            cam.location = Vector((-15000, -24000, 9000)); look = Vector((0, 0, 3500))
+            cam.rotation_euler = (look - cam.location).to_track_quat("-Z", "Y").to_euler(); cam.data.lens = 28
             if i > hit and i < hit + 10:   # impact shake
                 cam.rotation_euler[0] += rnd.uniform(-1, 1) * 0.01 * (hit + 10 - i) / 10
                 cam.rotation_euler[2] += rnd.uniform(-1, 1) * 0.01 * (hit + 10 - i) / 10
