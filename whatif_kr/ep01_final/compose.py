@@ -124,6 +124,9 @@ def base_frame(fd, d, t):
 def glass(im, box, r=22, tint=(255, 255, 255), a=46):
     x0, y0, x1, y1 = [int(v) for v in box]
     reg = im.crop((x0, y0, x1, y1)).filter(ImageFilter.GaussianBlur(18))
+    lum = sum(reg.resize((1, 1)).getpixel((0, 0))) / 3
+    if lum > 120 and tint == (255, 255, 255):   # bright sky/ground: darker glass so white text stays readable
+        tint, a = (25, 30, 40), int(40 + 0.5 * (lum - 120))
     reg = Image.blend(reg, Image.new("RGB", reg.size, tint), a / 255)
     mask = Image.new("L", reg.size, 0); ImageDraw.Draw(mask).rounded_rectangle([0, 0, reg.size[0] - 1, reg.size[1] - 1], r, fill=255)
     im.paste(reg, (x0, y0), mask)
