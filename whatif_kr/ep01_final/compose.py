@@ -92,6 +92,7 @@ def base_frame(fd, d, t):
         p = shot_frame(fd, shot, 0 if mode == "still" else NF); zoom = 1.0 + 0.05 * tau / dur
         if shot == "s1": zoom = 1.12 - 0.10 * tau / dur; drift = 70 * (0.5 - tau / dur)
         if shot == "end": zoom = 1.02 + 0.10 * tau / dur; drift = -50 * (0.5 - tau / dur)
+        if shot == "end": p = shot_frame(fd, "s1", 0)   # same view as the opening
     elif mode == "step":
         i = min(NF, int(tau * 24)); p = shot_frame(fd, shot, i)
         tl = t - d["land"]

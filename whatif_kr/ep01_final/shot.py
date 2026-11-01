@@ -8,7 +8,7 @@ if "--" in sys.argv: sys.argv = [sys.argv[0]] + sys.argv[sys.argv.index("--") + 
 shot = sys.argv[1]; outdir = sys.argv[2]; PCT = int(sys.argv[3]) if len(sys.argv) > 3 else 50
 os.makedirs(outdir, exist_ok=True)
 sys.argv = ["x", shot, os.path.join(outdir, "tmp.png"), str(PCT)]
-KIND = "seoul" if shot.startswith("k") else ("earth" if shot.startswith("e") else "park")
+KIND = "seoul" if shot.startswith("k") else ("earth" if shot.startswith("e") and shot != "end" else "park")
 if KIND == "seoul":
     exec(open(os.path.join(POV, "seoul.py")).read().replace("os.path.dirname(os.path.abspath(__file__))", repr(POV)).split("\nif __name__")[0])
 else:
