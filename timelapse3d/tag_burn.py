@@ -40,6 +40,7 @@ def _title(t0, t1, text, sub=None, size=50):
     return e
 def _place(t0, t1, place, year):
     return dict(type="place", t0=t0, t1=t1, place=place, year=year, pos="tl", scale=1.4)
+TEXT_MODE = os.environ.get("TAG_TEXT", "counter_only")      # v19 default; TAG_TEXT=full = the v18 caption table
 CAPTIONS = {
     "g1": [_place(0.3, 4.2, "SHIGANSHINA DISTRICT", 845),
            _cap(0.6, 3.8, "Shiganshina, the southern tip of Wall Maria"),
@@ -128,6 +129,9 @@ def main():
         e.update(color="red" if e["obj"] in TITANS else "cream", len=30, size=15)
     extra = []
     extra += [dict(e) for e in CAPTIONS.get(A.seg, [])]      # v18: the complete caption / title / place / counter table
+    if TEXT_MODE == "counter_only":                           # v19 (owner 11/01: "I'll add the text myself"): ONLY the 846 counter
+        tracks = []
+        extra = [e for e in extra if e.get("type") == "counter"]
     if A.seg == "g3" and A.seg not in CAPTIONS:                        # captions + the 250,000 "Still marching" counter + place label (owner 10/27)
         import json, numpy as np
         tl = json.load(open(os.path.join(HERE, "graphics_timelines", "g3_tags.json"), encoding="utf8"))

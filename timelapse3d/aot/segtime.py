@@ -154,8 +154,9 @@ def slope_knots(dur, plan, n=8):
 G1_PLAN = [(0.0, 1.0, 0.0), (11.0, 2.0, 0.7), (12.05, 5.5, 0.9), (23.4, 1.7, 0.5), (28.9, 3.0, 0.3), (31.15, 2.0, 0.3)]
 TMAP["g1"] = slope_knots(DUR["g1"], G1_PLAN)
 # v18 (FEEDBACK_v17): the opening zoom-out was too large -> the film starts at the pose 2 s into it (local 2.0), same easing
-G1_START = 2.0
-TMAP["g1"] = [(0.0, G1_START)] + [(tv - G1_START, t) for tv, t in TMAP["g1"] if t > G1_START]
+G1_START = 0.0                    # v19 (owner 11/01): back to the original opening (~2 s look, then away)
+if G1_START > 0:
+    TMAP["g1"] = [(0.0, G1_START)] + [(tv - G1_START, t) for tv, t in TMAP["g1"] if t > G1_START]
 TMAP["g2"] = [(0.0, 0.0)] + [(tv + G2_PRE / 2.0, t + G2_PRE) for tv, t in _g2_v5()]   # v14: prelude at slope 2
 # v14 (FEEDBACK_v13 §1: at the g2|g3 seam the camera stops, then an ULTRA-fast flight to Trost): the flight 0.3-14.8 at 4.5x
 # v14 (FEEDBACK_v13 §1): g6 skips Eren's leap / tackle of the two roof titans + rampage (8.3-16.8) and the plaza swarm /

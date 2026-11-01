@@ -1869,7 +1869,8 @@ def _pre_cam():
     # v17 (FEEDBACK_v15): no swing toward the gate; the camera stays in the sky over Shiganshina and LOCKS ON Reiner at his
     # lightning (look = his position), then g2's own tracking keys; the 15.6 hold key (~0:28) removed
     keys = [tuple(ks["keys"][0]),                                          # g1 seam at rest (the Yeager ruin)
-            (2.4, (-150.0, -250.0, 175.0), (0.0, -40.0, 0.0), 30.0),      # up over the roofs: the gate crowd, the titans
+            (2.4, (-150.0, -250.0, 175.0), (0.0, -400.0, 10.0), 30.0),    # v19: up over the roofs, already looking at the
+                                                                           # spot on the avenue where the Armored appears
             (PRE - 0.2, (-200.0, -470.0, 185.0), (0.0, -400.0, 12.0), 34.0),  # still in the sky: his lightning on the avenue
             (PRE + 1.6, (-190.0, -400.0, 160.0), (0.0, arm_y(1.6), 12.0), 38.0)]  # locked on him as he rises and sprints
     keys += [(k[0] + PRE,) + tuple(k[1:]) for k in ks["keys"][2:] if abs(k[0] - 15.6) > 1e-3 and k[0] < 30.0]
