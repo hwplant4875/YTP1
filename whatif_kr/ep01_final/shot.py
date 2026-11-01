@@ -167,6 +167,16 @@ def seoul_shot():
     t1 = set(bpy.data.objects); terrain(dent=DENT); dented = set(bpy.data.objects) - t1
     water(); bridges(); lotte(8.9 * KM, -1.0 * KM)
     city(FOOT, radius_km=16, step=0.19)
+    far = mat("farland", "#9aa27e", 0.95)   # land beyond the 60 km terrain tile so the world edge never shows
+    plane("farland", -400 * KM, 400 * KM, -400 * KM, 400 * KM, -20, far)
+    if K1 >= 8192:   # wide cloud deck far out so the horizon reads as more land under clouds
+        cm = bpy.data.materials["cloud"]; rnd = random.Random(7)
+        for _ in range(260):
+            cx = FOOT[0] + rnd.uniform(-90, 90) * KM; cy = FOOT[1] + rnd.uniform(-90, 90) * KM
+            if math.hypot(cx - FOOT[0], cy - FOOT[1]) < 22 * KM: continue
+            bpy.ops.mesh.primitive_plane_add(size=1, location=(cx, cy, rnd.uniform(1800, 3200)))
+            o = bpy.context.object; r = rnd.uniform(3500, 8000); o.scale = (r * rnd.uniform(1, 1.6), r, 1)
+            o.rotation_euler[2] = rnd.uniform(0, 3.14); o.data.materials.append(cm)
     clouds(60, FOOT, (FOOT[0] - 5 * KM, FOOT[1]))
     t2 = set(bpy.data.objects); crater(FOOT[0], FOOT[1], r=1050 * K1 / 5000); crat = set(bpy.data.objects) - t2
     for o in dented | crat: o.hide_render = True
