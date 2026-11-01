@@ -39,7 +39,8 @@ def terrain(half=30, cell=0.2, dent=None):
             if river_dist(x, y) < 0.5: h = -70
             if dent:
                 dd = math.hypot(x - dent[0], y - dent[1])
-                if dd < 1.4: h = max(h - 160 * (1 - dd / 1.4) ** 1.5, -38)
+                DR = globals().get("DENT_R", 1.4)
+                if dd < DR: h = max(h - 160 * min(1.0, DR / 1.4) * (1 - dd / DR) ** 1.5, -38)
             row.append(bm.verts.new((x * KM, y * KM, h)))
         vs.append(row)
     for j in range(n - 1):
@@ -50,7 +51,7 @@ def terrain(half=30, cell=0.2, dent=None):
     for m in mats: me.materials.append(m)
     for p in me.polygons:
         c = p.center; x, y = c.x / KM, c.y / KM
-        if DENT and math.hypot(x - DENT[0], y - DENT[1]) < 1.3: p.material_index = 6
+        if DENT and math.hypot(x - DENT[0], y - DENT[1]) < 1.3 * globals().get("DENT_R", 1.4) / 1.4: p.material_index = 6
         elif c.z > 1300: p.material_index = 5
         elif c.z > 700: p.material_index = 3
         elif c.z > 70: p.material_index = 2
@@ -144,9 +145,9 @@ def crater(x, y, r=1050):
     for a in range(9):
         ang = a * 2 * math.pi / 9 + rnd.uniform(-.2, .2); px, py = x, y; L = 0
         for s in range(rnd.randint(6, 12)):
-            seg = rnd.uniform(350, 800); ang += rnd.uniform(-.45, .45)
+            seg = rnd.uniform(350, 800) * r / 1050; ang += rnd.uniform(-.45, .45)
             nx, ny = px + math.cos(ang) * seg, py + math.sin(ang) * seg
-            w = max(25, 110 - s * 9)
+            w = max(25, 110 - s * 9) * max(0.3, r / 1050)
             c = box("crack", ((px + nx) / 2, (py + ny) / 2, height(nx / KM, ny / KM) + 28), (seg + w, w, 20), km)
             c.rotation_euler[2] = ang; px, py = nx, ny
     dust_puffs(x, y, gz, r)
@@ -183,7 +184,7 @@ def dust_puffs(x, y, gz, r):
     for k in range(30):
         a = rnd.uniform(0, 6.28); d = r * rnd.uniform(1.25, 1.75)
         bpy.ops.mesh.primitive_plane_add(size=1, location=(x + math.cos(a) * d, y + math.sin(a) * d, gz + rnd.uniform(10, 90)))
-        o = bpy.context.object; s_ = rnd.uniform(600, 1100); o.scale = (s_ * 1.4, s_, 1); o.rotation_euler[2] = a
+        o = bpy.context.object; s_ = rnd.uniform(600, 1100) * r / 1050; o.scale = (s_ * 1.4, s_, 1); o.rotation_euler[2] = a
         o.data.materials.append(cm)
 
 if __name__ == "__main__":
