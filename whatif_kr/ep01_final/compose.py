@@ -210,8 +210,8 @@ def card(im, key, a):
     if a < 1: im.paste(Image.blend(base, im, a))
 
 # ------------------------------------------------------------------ audio
-def load(p, sr=48000):
-    raw = subprocess.check_output(["ffmpeg", "-v", "error", "-i", p, "-f", "f32le", "-ac", "2", "-ar", str(sr), "-"])
+def load(p, sr=48000, af=None):
+    raw = subprocess.check_output(["ffmpeg", "-v", "error", "-i", p] + (["-af", af] if af else []) + ["-f", "f32le", "-ac", "2", "-ar", str(sr), "-"])
     return np.frombuffer(raw, np.float32).reshape(-1, 2).copy()
 
 def mix(segs, subs, sfx, total, out_wav):
@@ -228,7 +228,7 @@ def mix(segs, subs, sfx, total, out_wav):
         else:
             add(imp, t - 0.05, 10 ** (-8 / 20)); add(quake, t - 0.1, 10 ** (-10 / 20)); add(crum, t, 10 ** (-9 / 20))
     # music bed: angelic pad looped with crossfades, quiet, gentle top cut
-    mus = load(f"{AUD}/music_angelic_E.wav"); L = len(mus); xf = int(2.0 * sr)
+    mus = load(f"{AUD}/music_angelic_E.wav", af="highshelf=f=3000:g=-5"); L = len(mus); xf = int(2.0 * sr)
     bed = np.zeros((N, 2), np.float32); pos = 0; ramp = np.linspace(0, 1, xf)[:, None]
     while pos < N:
         m = mus.copy(); m[:xf] *= ramp; m[-xf:] *= ramp[::-1]
@@ -279,6 +279,9 @@ def main():
 def frame(fd, segs, subs, si, t):
         d = segs[si]
         im = base_frame(fd, d, t)
+        if "hit" in d and 0 <= t - d["hit"] < 0.35:   # impact flash
+            a = 0.75 * (1 - (t - d["hit"]) / 0.35)
+            im = Image.blend(im, Image.new("RGB", im.size, (255, 236, 210)), a)
         if d["mode"] not in ("hold", "cold") and d["shot"] != "end":
             n = d["step"]; land = d.get("land", d.get("hit"))
             if d["mode"] == "step" and t < d["land"]: n = segs[si - 1]["step"] if si > 0 else n
