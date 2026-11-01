@@ -4,6 +4,7 @@
 import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 POV = os.path.join(HERE, "..", "ep01_pov")
+if "--" in sys.argv: sys.argv = [sys.argv[0]] + sys.argv[sys.argv.index("--") + 1:]
 shot = sys.argv[1]; outdir = sys.argv[2]; PCT = int(sys.argv[3]) if len(sys.argv) > 3 else 50
 os.makedirs(outdir, exist_ok=True)
 sys.argv = ["x", shot, os.path.join(outdir, "tmp.png"), str(PCT)]
@@ -18,6 +19,13 @@ if KIND == "earth":
 NF = int(os.environ.get("NF", "18"))
 SPP = int(os.environ.get("SPP", "16")); SPP_HOLD = int(os.environ.get("SPP_HOLD", "48"))
 ONLY = os.environ.get("ONLY", "")
+
+def gpu():
+    if os.environ.get("GPU", "0") != "1": return
+    pr = bpy.context.preferences.addons["cycles"].preferences
+    pr.compute_device_type = os.environ.get("GPU_TYPE", "CUDA"); pr.get_devices()
+    for d in pr.devices: d.use = d.type != "CPU"
+    S.cycles.device = "GPU"; print("GPU devices", [d.name for d in pr.devices if d.use], flush=True)
 
 def ease(t): return t * t * (3 - 2 * t)
 
@@ -66,6 +74,7 @@ def render_seq(step, camfn, nf=NF, before_last=None):
     frames = list(range(nf + 1))
     if ONLY == "last": frames = [nf]
     elif ONLY: frames = [int(x) for x in ONLY.split(",")]
+    gpu()
     for i in frames:
         t = i / nf
         K = step.apply(t) if step else None
@@ -75,6 +84,7 @@ def render_seq(step, camfn, nf=NF, before_last=None):
         S.render.resolution_percentage = int(os.environ.get("HOLDPCT", "100")) if hold else PCT
         if S.render.engine == "CYCLES": S.cycles.samples = SPP_HOLD if hold else SPP
         S.render.filepath = os.path.join(outdir, f"{shot}_{i:03d}.png")
+        if os.environ.get("RESUME") == "1" and os.path.exists(S.render.filepath): continue
         bpy.ops.render.render(write_still=True)
         print("FRAME", shot, i, flush=True)
 
@@ -114,7 +124,7 @@ def park():
     cam = camera()
     if shot in ("s1", "end"):
         rig.location = (0, -0.6, 0); pose_mix(arm, "Idle_Loop", 10)
-        S.render.resolution_percentage = 100; S.cycles.samples = SPP_HOLD
+        gpu(); S.render.resolution_percentage = 100; S.cycles.samples = SPP_HOLD
         eye_cam(cam, arm, pitch=-14, lens=20); S.render.filepath = os.path.join(outdir, f"{shot}_000.png")
         bpy.ops.render.render(write_still=True); return
     if shot in PARK:
@@ -210,6 +220,7 @@ def earth_shot():
         rnd = random.Random(5)
         vel = {o.name: ((p.normalized() + Vector((rnd.uniform(-.3, .3), rnd.uniform(-.3, .3), rnd.uniform(-.3, .3)))).normalized() * rnd.uniform(0.6, 1.4),
                         Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-1, 1))) * 0.9) for o, p in cells}
+        gpu()
         frames = range(nf + 1) if not ONLY else ([nf] if ONLY == "last" else [int(x) for x in ONLY.split(",")])
         for i in frames:
             if i <= hit:
