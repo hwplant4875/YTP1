@@ -31,11 +31,20 @@ def panel(sp, pw):
         t0, t1 = sp['blurfill']; bg = im.crop((0, t0, 1920, t1)).resize((int(1920 * H / (t1 - t0)), H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(30))
         bg = ImageEnhance.Brightness(bg).enhance(0.6)
         bx = int(min(max(sp['cx'] * H / (t1 - t0) - pw / 2, 0), bg.width - pw)); bg = bg.crop((bx, 0, bx + pw, H))
-    else: s = max(s, H / im.height, pw / im.width)       # never smaller than the panel (no black bars)
+    else:                                                 # shared face scale; wherever the scaled source ends, a blurred copy extends the frame
+        k = max(H / im.height, pw / im.width) * 1.6; bg = im.resize((int(im.width * k), int(im.height * k)), Image.LANCZOS).filter(ImageFilter.GaussianBlur(40))
+        bg = ImageEnhance.Brightness(bg).enhance(0.8); sp = dict(sp, pad=(bg, k))
     big = im.resize((int(im.width * s), int(im.height * s)), Image.LANCZOS)
     cx, cy = sp['cx'] * s, sp['cy'] * s
-    x0 = int(min(max(cx - pw / 2, 0), big.width - pw)); y0 = int(min(max(cy - sp.get('eye_y', 250), 0), big.height - H))
-    p = big.crop((x0, y0, x0 + pw, y0 + H)).convert('RGBA')
+    if sp.get('pad'):                                     # face exactly centred on the panel, eyes on the shared eye line
+        bg, k = sp['pad']; ox, oy = pw / 2 - cx, sp['eye_y'] - cy
+        p = bg.crop((int(sp['cx'] * k - pw / 2), int(sp['cy'] * k - sp['eye_y'])) + (int(sp['cx'] * k + pw / 2), int(sp['cy'] * k - sp['eye_y']) + H)).convert('RGBA')
+        m = Image.new('L', big.size, 0); ImageDraw.Draw(m).rectangle([30, 30, big.width - 30, big.height - 30], fill=255); m = m.filter(ImageFilter.GaussianBlur(18))
+        p.paste(big, (int(ox), int(oy)), m)
+    else:
+        x0 = int(min(max(cx - pw / 2, 0), big.width - pw)); y0 = int(min(max(cy - sp.get('eye_y', 250), 0), big.height - H))
+        if (x0, y0) != (int(cx - pw / 2), int(cy - sp.get('eye_y', 250))): print('  WARN face not centred', sp['clip'], (x0, y0), (int(cx - pw / 2), int(cy - sp.get('eye_y', 250))))
+        p = big.crop((x0, y0, x0 + pw, y0 + H)).convert('RGBA')
     if sp.get('blurfill'):
         top = int(sp['blurfill'][0] * s) - y0; bot = int(sp['blurfill'][1] * s) - y0
         canvas = bg.convert('RGBA'); canvas.alpha_composite(p.crop((0, max(top, 0), pw, min(bot, H))), (0, max(top, 0))); p = canvas
@@ -53,12 +62,17 @@ def three(specs, name):
 # zoomed in, the face fills most of the panel with the eyes in the upper third, % below the face. Coordinates = 1920x1080 frame.
 def P(clip, t, cx, cy, face_h, pct, col, bright=1.15, face_px=430, eye_y=300, blurfill=None): return dict(clip=clip, t=t, cx=cx, cy=cy, face_h=face_h, pct=pct, col=col, bright=bright, face_px=face_px, eye_y=eye_y, blurfill=blurfill)
 os.makedirs(OUT, exist_ok=True)
-three([P('poster:o_lXpBj7RDr7wShql0KpCLYHyYvdi.jpg', 0, 2080, 760, 1120, '80%', GREEN, 1.1, face_px=400, eye_y=230),
-       P('poster:o_4SxXppJUwjQnd98VLxQEHvH3CfR.jpg', 0, 1010, 380, 820, '40%', YEL, 0.95, face_px=400, eye_y=250),
-       P('poster:o_xjeoa7KjnUMQzJXGunHmgMjhHmP.jpg', 0, 2600, 600, 1120, '5%', RED, 1.05, face_px=420, eye_y=230)], 'pinhead_thumb_a.jpg')
-three([P('poster:o_qW4hr2WweKiyztgd4Ql0wlfRYBF.jpg', 0, 2400, 480, 840, '60%', GREEN, 1.2, face_px=400, eye_y=230),
-       P('hr22_bridge', 25.0, 800, 390, 520, '30%', YEL, 1.9, face_px=400, eye_y=230),
-       P('poster:o_qAe4OrahEXWYwmm5wEjk5G7UjxU.jpg', 0, 960, 520, 840, '8%', RED, 1.1, face_px=440, eye_y=250)], 'pinhead_thumb_b.jpg')
-three([P('poster:o_pl5OzUABUK5AgAsMlQg2VyybRHL.jpg', 0, 1760, 440, 600, '55%', GREEN, 1.2, face_px=400, eye_y=230),
-       P('poster:o_4YXR73TbaS9xl8KfEc88W8CjxkJ.jpg', 0, 940, 300, 760, '25%', YEL, 0.95, face_px=400, eye_y=250),
-       P('poster:o_qnXEJp6KP6aIGWhNrg1fOKza4kp.jpg', 0, 417, 390, 500, '5%', RED, 1.05, face_px=420, eye_y=230)], 'pinhead_thumb_c.jpg')
+# owner 11/04: every face centred (nose on the panel centre) and the same size with the eyes on one line in all panels:
+# (cx, cy) = nose x / eye line, face_h = eye-to-mouth distance in source px -> FACE px in the output, eyes at EYE.
+# No source image twice in a thumbnail or across A/B/C (the 1987 / Hell on Earth skyline face is one photo).
+FACE, EYE = 115, 210
+def F(clip, t, cx, cy, em, pct, col, bright=1.15): return P(clip, t, cx, cy, em, pct, col, bright, face_px=FACE, eye_y=EYE)
+three([F('poster:o_lXpBj7RDr7wShql0KpCLYHyYvdi.jpg', 0, 2179, 865, 412, '80%', GREEN, 1.1),     # Hellworld, jar room
+       F('hr1_pack4k', 45.7, 889, 417, 327, '40%', YEL, 1.25),                                 # Hellraiser 1987, hospital blinds (4K clip)
+       F('poster:o_xjeoa7KjnUMQzJXGunHmgMjhHmP.jpg', 0, 2556, 802, 416, '5%', RED, 1.05)], 'pinhead_thumb_a.jpg')   # Hell on Earth, skyline
+three([F('poster:o_qW4hr2WweKiyztgd4Ql0wlfRYBF.jpg', 0, 2403, 458, 275, '60%', GREEN, 1.2),     # Judgment
+       F('hr22_bridge', 25.0, 807, 434, 191, '30%', YEL, 1.9),                                # the Priest, 2022
+       F('poster:o_qAe4OrahEXWYwmm5wEjk5G7UjxU.jpg', 0, 945, 510, 310, '8%', RED, 1.1)], 'pinhead_thumb_b.jpg')    # Inferno
+three([F('poster:o_pl5OzUABUK5AgAsMlQg2VyybRHL.jpg', 0, 1719, 485, 188, '55%', GREEN, 0.95),     # Hellbound
+       F('poster:o_4YXR73TbaS9xl8KfEc88W8CjxkJ.jpg', 0, 970, 276, 210, '25%', YEL, 0.95),      # Bloodline
+       F('hr3_iamtheway', 131.6, 814, 320, 258, '5%', RED, 1.45)], 'pinhead_thumb_c.jpg')        # Hell on Earth, church

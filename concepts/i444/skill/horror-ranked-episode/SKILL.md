@@ -8,7 +8,7 @@ description: Make a Horror Ranked (formerly Instruction 444) "Every <villain> Ra
 Repo: `concepts/i444/` on the project branch (worktree `C:\Users\hw549\Downloads\YTP1\i444_wt`). Code to reuse:
 `ep01/gfx.py` (word_tag, title, rank_card, film_label; YouTube Sans Black), `ep03/anim.py` (animated stat card, tiers),
 `ep03/build_edl_v2.py` (EDL builder pattern), `ep03/render_v2.py` (frame-exact renderer), `ep03/make_srt_v2.py`, `ep03/thumbs_v2.py` (C layout).
-Big files only under `E:\YTP2\Horror Ranked\EPxx <villain>\` (1_work = clips + temp, 2_renders = final video + phone copy,
+Big files only under `E:\YTP2\Horror Ranked\EPxx <villain>\` (1_work = clips + temp, 2_renders = final video only,
 3_upload = thumbnails, upload kit, srt); reusable music/sfx/fonts in `E:\YTP2\Horror Ranked\_assets\` (see its README.md). Never commit video.
 
 ## 1. The cold open is the core (owner: "that's the key")
