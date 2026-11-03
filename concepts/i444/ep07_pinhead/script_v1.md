@@ -1,12 +1,12 @@
 # EP07 Pinhead script v1: Every Pinhead Ranked by Your Chance of Surviving Him
 
-11 films, ALL kept (owner 11/01 18:35: no film may be dropped, HD first, find a way). Basis: you solved the box tonight and this film's Pinhead came for you. s00 cold open (frame 0 = Pinhead 1987 close-up + centre caption), s01 scoring, s02..s12 = #11 to #1, s13 outro. Stats STRENGTH, INTELLIGENCE, KILL COUNT, SUPERNATURAL. Voice Adam, eleven_v4. Facts: Wikipedia plots (11/01).
+11 films, ALL kept (owner 11/01 18:35: no film may be dropped, HD first, find a way). Basis: you solved the box tonight and this film's Pinhead came for you. s00 cold open (frame 0 = Pinhead 1987 close-up + centre caption), s01 scoring, s02..s12 = #11 to #1, s13 outro. Stats STRENGTH, INTELLIGENCE, KILL COUNT, NO MERCY (can you bargain your way out; replaces SUPERNATURAL, owner 11/03). Voice Adam, eleven_v4. Facts: Wikipedia plots (11/01).
 
 ## s00 cold open
-Solve one little puzzle box, and he comes for you. He can tear you apart with hooked chains, peel off your skin, turn you into one of his Cenobites, or trap you in your own head forever, and he does all of it calmly, like a priest reading you your sentence. We're ranking every Pinhead by your chance of surviving him.
+Hooked chains tear straight through your flesh. Your skin gets peeled off while you're still alive. You get turned into one of his Cenobites, or trapped inside your own head forever, and he does all of it calmly. We're ranking every Pinhead by your chance of surviving him.
 
 ## s01 scoring
-The rules are simple: you just solved the box, and this movie's Pinhead is standing in your room. Every version gets scored on strength, intelligence, kill count, and how supernatural he is, which really means whether anything you do can stop him, and that gives you one number, your survival rate.
+The rules are simple: you just solved the box, and this movie's Pinhead is standing in your room. Every version gets scored on strength, intelligence, kill count, and how little mercy he shows, which really means whether you can bargain your way out, and that gives you one number, your survival rate.
 
 ## s02 #11 Hellraiser: Hellworld (2005), 80%, Close Call
 Number eleven is Hellworld. A group of friends get invited to a Hellraiser themed party, and most of what happens next turns out to be a drug trip set up by a grieving father who blames them for his son's death. Two of them walk out alive, and when the real Pinhead finally shows up, he's not there for the kids, he takes the guy who opened the box. Survival rate: eighty percent.
