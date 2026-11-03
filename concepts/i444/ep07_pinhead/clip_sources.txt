@@ -29,3 +29,41 @@ hr22_priest | c4yrj7Uu7ek | 20th Century Studios | Hellraiser (2022) Becoming th
 hr7_trailer_rt | qd3ni7yidZY | Rotten Tomatoes Classic Trailers | Deader trailer
 hr9_trailer_rt | 63I1ZmGqjXI | Rotten Tomatoes Classic Trailers | Revelations trailer
 hr9_trailer_cinedigm | orWK-QlPSfg | Cinedigm | Revelations official trailer
+# --- 11/02: owner "HD first, no film may be dropped": Miramax official HD clip sets (III-VII), Boxoffice (Judgment 4K);
+# where no official scene clip exists (1987, Hellworld, Revelations, 2022 scenes) the sharpest HD uploads are used as a fallback (marked FALLBACK)
+hr3_unstoppable | aEt9LcYu1gU | Miramax | Hell on Earth 'Unstoppable' HD
+hr3_iamtheway | YiOJxE_4kpE | Miramax | Hell on Earth 'I Am the Way' HD
+hr3_truth | yyt0MipWZ8Q | Miramax | Hell on Earth 'She's Telling the Truth' HD
+hr4_magic | HV2FI793qH0 | Miramax | Bloodline 'Dark Magic' HD
+hr4_pathway | x9CXlX_AlIQ | Miramax | Bloodline 'Pathway to Hell' HD
+hr4_chart | uBhpot9AYHc | Miramax | Bloodline 'Not on the Chart' HD
+hr4_haunted | uX2a5koSVrQ | Miramax | Bloodline 'Haunted' HD
+hr5_child | DDA1im2jjBc | Miramax | Inferno 'A Child's Innocence' HD
+hr5_partner | 3a71Hyk1igI | Miramax | Inferno 'A Loyal Partner' HD
+hr5_engineer | OBph_G7bNCs | Miramax | Inferno 'Who's the Engineer' HD
+hr5_cruelty | r_aEhYZuXRs | Miramax | Inferno 'Cowboy Cruelty' HD
+hr6_painpleasure | leThTvX5fuQ | Miramax | Hellseeker 'Pain or Pleasure?' HD
+hr6_price | -ow8YMUIOgg | Miramax | Hellseeker 'Paying the Price' HD
+hr6_onemore | DIxmuchvIIo | Miramax | Hellseeker 'One More Thing' HD
+hr6_flashbacks | zGNZlXesjBM | Miramax | Hellseeker 'Flashbacks' HD
+hr6_weird | zhXZBZt4xh4 | Miramax | Hellseeker 'A Weird Day' HD
+hr7_afraid | 50GVkrWElxs | Miramax | Deader 'What Are You Afraid Of?' HD
+hr7_home | iKQ2yw1CwHY | Miramax | Deader 'I Want to Go Home' HD
+hr7_real | 5dJhbUfT6R8 | Miramax | Deader 'It's Real' HD
+hr7_apt11 | 06UDPvRziFk | Miramax | Deader 'Apartment 11' HD
+hr7_returns | NsGeLLZLHXw | Miramax | Deader 'Pinhead Returns' HD
+hr10_hell | guDp4dKkRFU | Boxoffice Movie Scenes | Judgment: depiction of hell
+hr10_final | DAwwieY5ZvI | Boxoffice Movie Scenes | Judgment: final scene
+hr10_hell4k | 0h2troBXj-0 | Boxoffice Movie Scenes | Judgment: scariest depictions of hell 4K
+hr10_auditor | 7WW-VMqdMQ0 | Boxoffice Movie Scenes | Judgment: the Auditor
+hr10_judge4k | ksLyqUbBprs | Boxoffice Movie Scenes | Judgment: the creature judges sinners 4K
+hr1_pack4k | KNKsO0RZs1k | FALLBACK (Gh0st) | Hellraiser 1987 Pinhead 4K scene pack
+hr1_sights | -mZlFlrW97Y | FALLBACK (FilmClips) | 1987 'We have such sights to show you' 4K HDR
+hr1_dont | g8gIbLfJ4SM | FALLBACK (FilmClips) | 1987 'No, don't do that' 4K HDR
+hr8_jake | 1gUZV3pZG8o | FALLBACK (goleemt koller) | Hellworld: Jake meets Pinhead 1080p
+hr8_cop | JNlV_h-mhPQ | FALLBACK (goleemt koller) | Hellworld: Pinhead kills a cop 1080p
+hr8_welcome | auQADDT8eCQ | FALLBACK (goleemt koller) | Hellworld: Welcome to Hell 1080p
+hr9_full | hEoHsnFaeq4 | FALLBACK (Javier) | Revelations full upload (check quality; scene pulls only)
+hr22_bridge | kUku5LP6b1I | FALLBACK (MNPHQVideos) | 2022 bridge scene 1080p
+hr22_carousel | G5hgiDbZA7w | FALLBACK (MNPHQVideos) | 2022 carousel / cube scene
+hr22_cenofeat | e5ti3ba055U | 20th Century Studios | 2022 Cenobites featurette
