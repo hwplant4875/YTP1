@@ -16,10 +16,11 @@ POSTERS = sys.argv[3] if len(sys.argv) > 3 else 'C:/Users/hw549/AppData/Local/Te
 def frame(clip, t):
     """a clip frame (1920x1080) or, for clip='poster:<file>', an official poster/still from TMDB at its own size (never committed)"""
     if clip.startswith('poster:'): return Image.open(os.path.join(POSTERS, clip[7:])).convert('RGB')
+    nat = clip.startswith('native:'); clip = clip.replace('native:', '')       # native: keep the clip's own resolution (4K packs)
     png = subprocess.check_output(['ffmpeg', '-v', 'error', '-ss', str(t), '-i', os.path.join(CLIPS, clip + '.mp4'), '-frames:v', '1',
                                    '-f', 'image2pipe', '-vcodec', 'png', '-'])
     im = Image.open(io.BytesIO(png)).convert('RGB')
-    return im if im.size == (1920, 1080) else im.resize((1920, 1080), Image.LANCZOS)   # 1440p sources -> 1920x1080 coordinates
+    return im if nat or im.size == (1920, 1080) else im.resize((1920, 1080), Image.LANCZOS)   # 1440p sources -> 1920x1080 coordinates
 def grade(im, bright=1.0, contrast=1.18, sat=0.95):
     im = ImageEnhance.Brightness(im).enhance(bright); im = ImageEnhance.Contrast(im).enhance(contrast)
     return ImageEnhance.Color(im).enhance(sat)
@@ -40,6 +41,8 @@ def panel(sp, pw):
         bg, k = sp['pad']; ox, oy = pw / 2 - cx, sp['eye_y'] - cy
         p = bg.crop((int(sp['cx'] * k - pw / 2), int(sp['cy'] * k - sp['eye_y'])) + (int(sp['cx'] * k + pw / 2), int(sp['cy'] * k - sp['eye_y']) + H)).convert('RGBA')
         m = Image.new('L', big.size, 0); ImageDraw.Draw(m).rectangle([30, 30, big.width - 30, big.height - 30], fill=255); m = m.filter(ImageFilter.GaussianBlur(18))
+        if ox > 0 or oy > 0 or ox + big.width < pw or oy + big.height < H - 100: print(   # up to 100 px short at the bottom is inside the black number shadow
+            '  WARN source does not fill the panel', sp['clip'], int(ox), int(oy), big.size)
         p.paste(big, (int(ox), int(oy)), m)
     else:
         x0 = int(min(max(cx - pw / 2, 0), big.width - pw)); y0 = int(min(max(cy - sp.get('eye_y', 250), 0), big.height - H))
@@ -65,14 +68,14 @@ os.makedirs(OUT, exist_ok=True)
 # owner 11/04: every face centred (nose on the panel centre) and the same size with the eyes on one line in all panels:
 # (cx, cy) = nose x / eye line, face_h = eye-to-mouth distance in source px -> FACE px in the output, eyes at EYE.
 # No source image twice in a thumbnail or across A/B/C (the 1987 / Hell on Earth skyline face is one photo).
-FACE, EYE = 115, 210
+FACE, EYE = 135, 215
 def F(clip, t, cx, cy, em, pct, col, bright=1.15): return P(clip, t, cx, cy, em, pct, col, bright, face_px=FACE, eye_y=EYE)
-three([F('poster:o_lXpBj7RDr7wShql0KpCLYHyYvdi.jpg', 0, 2179, 865, 412, '80%', GREEN, 1.1),     # Hellworld, jar room
-       F('hr1_pack4k', 45.7, 889, 417, 327, '40%', YEL, 1.25),                                 # Hellraiser 1987, hospital blinds (4K clip)
-       F('poster:o_xjeoa7KjnUMQzJXGunHmgMjhHmP.jpg', 0, 2556, 802, 416, '5%', RED, 1.05)], 'pinhead_thumb_a.jpg')   # Hell on Earth, skyline
+three([F('poster:o_lXpBj7RDr7wShql0KpCLYHyYvdi.jpg', 0, 2179, 865, 405, '80%', GREEN, 1.1),     # Hellworld, jar room
+       F('native:hr1_pack4k', 44.0, 1240, 425, 230, '40%', YEL, 1.05),                         # Hellraiser 1987, hospital blinds (4K pack, native px)
+       F('poster:o_xjeoa7KjnUMQzJXGunHmgMjhHmP.jpg', 0, 2556, 802, 405, '5%', RED, 1.05)], 'pinhead_thumb_a.jpg')   # Hell on Earth, skyline
 three([F('poster:o_qW4hr2WweKiyztgd4Ql0wlfRYBF.jpg', 0, 2403, 458, 275, '60%', GREEN, 1.2),     # Judgment
        F('hr22_bridge', 25.0, 807, 434, 191, '30%', YEL, 1.9),                                # the Priest, 2022
-       F('poster:o_qAe4OrahEXWYwmm5wEjk5G7UjxU.jpg', 0, 945, 510, 310, '8%', RED, 1.1)], 'pinhead_thumb_b.jpg')    # Inferno
+       F('poster:o_yyiu_notitle.jpg', 0, 430, 639, 228, '8%', RED, 1.1)], 'pinhead_thumb_b.jpg')    # Inferno, official poster art (o_yyiuRnEIDCjr0g2Fsal0isi9GcU, title faded to its black background)
 three([F('poster:o_pl5OzUABUK5AgAsMlQg2VyybRHL.jpg', 0, 1719, 485, 188, '55%', GREEN, 0.95),     # Hellbound
-       F('poster:o_4YXR73TbaS9xl8KfEc88W8CjxkJ.jpg', 0, 970, 276, 210, '25%', YEL, 0.95),      # Bloodline
-       F('hr3_iamtheway', 131.6, 814, 320, 258, '5%', RED, 1.45)], 'pinhead_thumb_c.jpg')        # Hell on Earth, church
+       F('poster:o_udZ3XqsurnNuGp1QfS5CLod6MS5.jpg', 0, 1000, 450, 283, '25%', YEL, 0.95),     # Bloodline, official poster art
+       F('hr3_unstoppable', 86.5, 1000, 418, 195, '5%', RED, 1.35)], 'pinhead_thumb_c.jpg')       # Hell on Earth, Boiler Room chains

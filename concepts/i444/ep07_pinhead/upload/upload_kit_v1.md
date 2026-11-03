@@ -8,10 +8,10 @@ Video: E:\YTP2\Horror Ranked\EP07 Pinhead\2_renders\ep07_pinhead_v1.mp4 | Subtit
 3. You Solved the Box Which Pinhead Comes for You
 
 ## Thumbnails (left GREEN / middle YELLOW / right RED; three very different variants)
-(v2 11/04: no source image used twice; every face centred, same size, eyes on one line)
-A. Pinhead, Hellworld (official still) 80% / Pinhead, Hellraiser 1987 (hospital blinds, official 4K clip) 40% / Pinhead, Hell on Earth (skyline, official still) 5%
-B. Pinhead, Judgment (official still) 60% / the Priest, Hellraiser 2022 30% / Pinhead, Inferno (official still) 8%
-C. Pinhead, Hellbound (official still) 55% / Pinhead, Bloodline (official still) 25% / Pinhead, Hell on Earth (church, official clip) 5%
+(v3 11/04: no source image used twice; every face centred, same size, eyes on one line, every panel filled edge to edge)
+A. Pinhead, Hellworld (official still) 80% / Pinhead, Hellraiser 1987 (hospital blinds, 4K clip) 40% / Pinhead, Hell on Earth (skyline, official still) 5%
+B. Pinhead, Judgment (official still) 60% / the Priest, Hellraiser 2022 30% / Pinhead, Inferno (official poster art) 8%
+C. Pinhead, Hellbound (official still) 55% / Pinhead, Bloodline (official poster art) 25% / Pinhead, Hell on Earth (Boiler Room, official clip) 5%
 
 ## Description
 You just solved the puzzle box, and Pinhead is standing in your room. How likely are you to survive him? We score every Pinhead on strength, intelligence, kill count and how supernatural he is, which really means whether anything you do can stop him, and rank all eleven Hellraiser films, from Hellworld and Judgment to the original Hellraiser, the 2022 Priest and Hell on Earth.
