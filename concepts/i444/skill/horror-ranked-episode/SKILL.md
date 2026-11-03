@@ -84,7 +84,7 @@ scores, no hits. Music at -39 LUFS with a 3 kHz high-shelf -4 dB, voice -15 LUFS
 1. `python build_edl.py` -> `edl.json`; `python render_hw.py edl.json <clips> voice <music> "E:/YTP2/Horror Ranked/EPxx .../2_renders/<ep>_vN.mp4"`
    (render_v2 copy with a per-clip `bar` height; ~2.5 min per section).
 2. QA grid of one frame per shot from the render (`qa/shots.py`) + the cold open frame by frame against the word onsets; loudness check.
-3. Phone copy (1280x720 crf 28, ~27 MB) and show the owner before any upload; upload only after their OK.
+3. No phone copy (owner 11/03: it only adds files). Send the full render itself for the preview; upload only after the owner's OK.
 4. Thumbnails: follow the `horror-ranked-thumbnail` skill (green / yellow / red by position, big poster faces, strong shadow under
    the numbers, three visually different variants).
 5. `make_srt.py` (alignment, cues <= 42 chars / 2.8 s), chapters from the section starts into `upload/upload_kit_vN.md`. Tags: short popular words.
