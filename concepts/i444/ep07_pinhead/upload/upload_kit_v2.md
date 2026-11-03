@@ -1,6 +1,6 @@
-# EP07 Pinhead upload kit v1
+# EP07 Pinhead upload kit v2
 
-Video: E:\YTP2\Horror Ranked\EP07 Pinhead\2_renders\ep07_pinhead_v1.mp4 | Subtitles: upload/pinhead_ranked_en_v1.srt | Thumbnails: upload/pinhead_thumb_a/b/c.jpg
+Video: E:\YTP2\Horror Ranked\EP07 Pinhead\2_renders\ep07_pinhead_v2.mp4 | Subtitles: upload/pinhead_ranked_en_v2.srt | Thumbnails: upload/pinhead_thumb_a/b/c.jpg
 
 ## Titles (pick one; no ":" or "-")
 1. Every Pinhead Ranked by Your Chance of Surviving Him  (recommended: matches the series)
@@ -14,7 +14,7 @@ B. Pinhead, Judgment (official still) 60% / the Priest, Hellraiser 2022 30% / Pi
 C. Pinhead, Hellbound (official still) 55% / Pinhead, Bloodline (official poster art) 25% / Pinhead, Hell on Earth (Boiler Room, official clip) 5%
 
 ## Description
-You just solved the puzzle box, and Pinhead is standing in your room. How likely are you to survive him? We score every Pinhead on strength, intelligence, kill count and how supernatural he is, which really means whether anything you do can stop him, and rank all eleven Hellraiser films, from Hellworld and Judgment to the original Hellraiser, the 2022 Priest and Hell on Earth.
+You just solved the puzzle box, and Pinhead is standing in your room. How likely are you to survive him? We score every Pinhead on strength, intelligence, kill count and how little mercy he shows, which really means whether you can bargain your way out, and rank all eleven Hellraiser films, from Hellworld and Judgment to the original Hellraiser, the 2022 Priest and Hell on Earth.
 
 Which box would you be brave enough to open? Tell me in the comments.
 
@@ -22,20 +22,20 @@ Clips are used for commentary and criticism. All rights belong to their owners.
 Music: Pixabay (bombinsound "Halloween Suspense Horror Waltz", nastelbom "Halloween Horror", nastelbom "Halloween Music").
 
 Chapters
-0:00 Solve the box
-0:19 How the survival rate works
-0:38 #11 Hellraiser: Hellworld
-1:01 #10 Hellraiser: Judgment
-1:25 #9 Hellbound: Hellraiser II
-1:50 #8 Hellraiser: Revelations
-2:12 #7 Hellraiser (1987)
-2:34 #6 Hellraiser: Hellseeker
-2:57 #5 Hellraiser (2022)
-3:24 #4 Hellraiser: Bloodline
-3:49 #3 Hellraiser: Deader
-4:16 #2 Hellraiser: Inferno
-4:38 #1 Hellraiser III: Hell on Earth
-5:03 Which box would you open?
+0:00 Hooked chains
+0:17 How the survival rate works
+0:35 #11 Hellraiser: Hellworld
+0:59 #10 Hellraiser: Judgment
+1:22 #9 Hellbound: Hellraiser II
+1:47 #8 Hellraiser: Revelations
+2:09 #7 Hellraiser (1987)
+2:32 #6 Hellraiser: Hellseeker
+2:54 #5 Hellraiser (2022)
+3:21 #4 Hellraiser: Bloodline
+3:46 #3 Hellraiser: Deader
+4:14 #2 Hellraiser: Inferno
+4:35 #1 Hellraiser III: Hell on Earth
+5:00 Which box would you open?
 
 ## Tags
 pinhead, hellraiser, horror, horror movies, cenobites, clive barker, the priest, hellbound, ranked
