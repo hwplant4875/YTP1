@@ -15,6 +15,11 @@ Reference: `reference_myers_v4_a.jpg` in this folder (EP01 Myers v4 A: 90% / 62%
   centred in each panel, baseline no lower than y = H - 130 (owner 10/31: slightly raised like EP03 Ghostface; the YouTube duration
   badge covers the bottom-right ~15 % and clipped the red % on EP01/EP02/Halloween), red % kept clear of x > ~1180, y > ~610; **By position, always: LEFT GREEN (70,215,95), MIDDLE YELLOW (250,200,40), RIGHT RED (235,30,38).**
   The red number is the lowest survival rate in the video (e.g. Art the Clown 3%, not his other entry's 6%).
+- **Every face centred and the same size in all three panels (owner 11/04)**: nose on the panel's centre line, eyes on one shared
+  line (y ~ 210), and the same face scale everywhere: measure each source's eye line, nose x and eye-to-mouth distance on a gridded
+  crop (`ep07_pinhead/qa/measure.py`) and map that distance to one fixed output size (EP07: 115 px). No panel zoomed in more than the
+  others; where a scaled source doesn't fill the panel, extend it with a blurred copy (`ep07_pinhead/thumbs.py` does this) instead of
+  zooming in.
 - **Shadow under the numbers is mandatory**: a vertical black gradient over each panel from 50 % height to the bottom
   (alpha ramps 0 -> ~235), so the picture under the % is dark and the numbers pop. Don't let the face sit under the %.
 
@@ -30,6 +35,13 @@ Reference: `reference_myers_v4_a.jpg` in this folder (EP01 Myers v4 A: 90% / 62%
   downscales (~250-300 px) and may show a different film's version of the villain, so don't use them directly.
 - Brighten dark faces a little (brightness 1.1-1.6, contrast ~1.18), keep blown-out whites under control (brightness < 1 if needed).
 
+## No repeated image (owner 11/04: "the 40% and 5% look like the same picture... no QA?")
+- No two panels in one thumbnail, and no panel anywhere in A/B/C, may use the same source image **or a look-alike**: TMDB stills
+  and posters are often the same photo recoloured or re-cut (EP07: the Hell on Earth skyline face appeared as a 1987 backdrop, a blue
+  "box" backdrop and the poster). Check file names/hashes AND compare pose, expression and lighting by eye on one contact sheet of
+  all nine panels.
+- Each panel must really come from the film whose % it shows (prefer a frame of that film's own official clip when TMDB is unsure).
+
 ## Three variants, visually very different
 Always make A, B and C with different faces/compositions so the test reads as three different videos, e.g.
 Ghostface: A = Ghostface / character 1 / character 2; B = Ghostface 1 / Ghostface 2 / Ghostface 3.
@@ -42,6 +54,6 @@ C = Silver Shamrock skull mask 60 / Hell Fest's The Other 45 / Art 3.
 `python thumbs.py [clips_dir] [out_dir] [posters_dir]` writes `upload/<ep>_thumb_{a,b,c}.jpg`; copy them to `E:\YTP2\Horror Ranked\EPxx_upload\`.
 
 ## QA before sending
-View all three at 640x360 and 960x540: every face whole, sharp and large; no black or blurred bands; the three colours in
+Put A/B/C on one sheet and check the repeated-image rule and the equal face size / eye line first. Then view all three at 640x360 and 960x540: every face whole, sharp and large; no black or blurred bands; the three colours in
 green / yellow / red order; numbers sit on dark shadow; the red % matches the narration's lowest rate. Send the three jpgs to the owner,
 update the upload kit's thumbnail lines, push.
