@@ -25,6 +25,12 @@ The first ~15-20 s is a run of short punchy beats, each one = **one hard cut + o
   (never an establishing shot, never an empty first second).
 - Each beat must literally show its word: "werewolf" = the actual werewolf creature, "hunted by a clown" = the clown chasing/attacking
   with a weapon (not waving), "blown up" = the first frame of the explosion lands with the first syllable. If no clip shows it, rewrite the beat.
+- **Victims, not posing (owner 11/04):** the open is a run of characters being hurt, readable at a glance (hooked chains tearing a
+  face, skin peeled off, a body turned into a monster) from frame 0 (frame 0 = a victim being hit, full frame, caption centred); no
+  "solve the box"-style setup line, no shot of the villain just standing there except the "calmly"-type beat. Film gore is allowed.
+  Every entry also shows its kills when the narration names them (skinned / killed / flayed = that exact moment on screen), so
+  download extra official HD scene clips per film before cutting (scouts per film, verified start/end frames).
+- After the open, before the rules: one screen with every film's official poster (release order, popping in, not read out).
 - Close the open with a `title` card (2 lines max, `!` prefix = red line) on the count / channel line. Clip audio under the open at about -20 dB.
 - Word onsets: whisper word timestamps (`faster_whisper`, `word_timestamps=True`, decode with ffmpeg to 16 kHz float) are the cut anchors;
   the ElevenLabs alignment drifts up to 0.7 s near pauses. Use the alignment only where whisper drops a word (spoken numbers).
@@ -37,6 +43,11 @@ the last beat to the end (4 bars 0-10, % stamps on the spoken number, tier cell 
 KILL COUNT + one fitting 4th (DECEPTION for Ghostface, SUPERNATURAL for mixed villains). Tiers: Slaughtered <=25, Almost Dead <=40,
 Better Run <=50, Close Call <=60, Don't Worry <=80, Easy. Tier label (owner 10/31): the initial letter (S/A/B/C/D) big in the tier colour,
 the rest of the name in white at normal size, no colour box (`ep03/anim.py` stat_card). SFX: whoosh -16 dB on card, fill -20, stamp -12 on the %.
+
+- **Stat card placement (owner 11/04):** the card covers x > 840. From the moment it comes in, the main figure must sit left of
+  that line or centre-left: pick such shots, or reframe (`flip`, `z=1.35,dx=249` shot options in `ep07_pinhead/render_ph.py`), and
+  check every card shot on `qa/spans.py` (red line = card edge). Bring the card in ~3-5 s before "survival rate" so the kills before
+  it play full frame. Pick the 4th stat to fit the franchise (Hellraiser: NO MERCY = can you bargain your way out).
 
 ## 3. Script and voice
 - Research every kill count / survival rate on the film's plot page; viewers push back on soft ratings.

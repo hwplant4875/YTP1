@@ -34,85 +34,92 @@ def sec(voice, shots, card_at=None, extra=(), pad=0.5, clip_db=-99):
         S['overlays'].append(['rank', [e['rank'], e['villain'], film], 0.0, 2.9])
         S['pad'] = 0.9; a = T(voice, card_at); tp = round(num_onset(voice) - 0.05 - a, 3)
         S['overlays'].append(['stats', {'name': e['villain'].upper(), 'tile_png': f'tiles/{TILE[voice]}.png',
-                                        'stats': dict(zip(['STRENGTH', 'INTELLIGENCE', 'KILL COUNT', 'SUPERNATURAL'], e['v'])), 'pct': e['pct'],
+                                        'stats': dict(zip(['STRENGTH', 'INTELLIGENCE', 'KILL COUNT', 'NO MERCY'], e['v'])), 'pct': e['pct'],
                                         't_pct': tp, 'dur': round(vdur(voice) + S['pad'] - a, 3), 'film': film}, a, 999])
         S['sfx'] += [[a, SFX + 'whoosh.wav', SFX_GAIN['whoosh']], [a + 0.3, SFX + 'fill.wav', SFX_GAIN['fill']], [a + tp, SFX + 'stamp.wav', SFX_GAIN['stamp']]]
         S['card_at'] = a
     S['overlays'] += [[k, val, T(voice, x), T(voice, y)] for k, val, x, y in extra]
     return S
 X = []
-# EP07 Pinhead (pipeline as EP06). (word, clip, in, -clean): fit() slows a shot to stay inside its clean span. In-points from verified
-# frame strips (agent scans 11/02 + own checks). Miramax clips: logo 0-2.5 s and end cards avoided; 4:3 Hell on Earth clips zoomed to fill.
-X.append(sec('s00', [(0, 'hr1_pack4k', 45.7, -5.9), ('he can', 'hr1_pack4k', 108.4, -2.4), ('hook', 'hr2_legendary', 154.65, -0.8),
-  ('chains', 'hr2_legendary', 156.5, -0.7), ('peel', 'hr22_carousel', 256.3, -2.6), ('skin', 'hr22_carousel', 261.4, -2.3),
-  ('turn you', 'hr3_pillar', 128.0, -7.8), ('or trap', 'hr5_box', 265.95, -1.95), ('head forever', 'hr5_cruelty', 33.5, -13.0),
-  ('and he does', 'hr4_pathway', 124.95, -6.5), ('like a priest', 'hr3_iamtheway', 126.55, -1.35), ('reading', 'hr3_iamtheway', 131.0, -1.8),
-  ("we're ranking", 'hr1_pack4k', 122.9, -2.6)],
-  extra=[('word', 'Pinhead', 0, 'he can'), ('word', 'Hooked chains', 'hook', 'peel'), ('word', 'Peel off your skin', 'peel', 'turn you'),
-         ('word', 'One of his Cenobites', 'turn you', 'or trap'), ('word', 'Trapped in your own head', 'or trap', 'and he does'),
-         ('word', 'Like a priest reading your sentence', 'like a priest', "we're ranking"),
-         ('title', ['EVERY PINHEAD'], "we're ranking", 999)], clip_db=-20))
+# EP07 v2 (owner 11/04): the cold open and every entry cut to victims being hurt (scout scans 11/04, gore allowed), each cut on its word
+# with a caption; the stat card comes in ~3-5 s before "survival rate" so the kills play full frame; under the card the main figure sits
+# left of x 840 (flip / dx shot options). Shot = (word, clip, in, -clean[, 'flip' | 'dx=..,z=..']).
+X.append(sec('s00', [(0, 'hr1_jesuswept', 127.21, -2.0), ('tear', 'hr9_rev', 4106.4, -1.7), ('flesh', 'hr4_straighthell', 27.5, -1.4),
+  ('your skin', 'hr2_finalbattle', 277.1, -2.0), ('peeled', 'hr9_rev', 3937.15, -2.5), ('alive', 'hr3_pillar', 100.0, -1.4),
+  ('you get', 'hr2_channardtrans', 108.9, -1.4), ('cenobites', 'hr4_painface', 295.6, -2.7), ('trapped', 'hr5_torment', 548.65, -4.0),
+  ('head forever', 'hr2_channardtrans', 257.13, -1.2), ('and he does', 'hr9_rev', 4115.2, -5.5), ('calmly', 'hr1_pack4k', 45.7, -5.9),
+  ("we're ranking", 'still_posterwall', 0.0, -5.0)],
+  extra=[('word', 'Hooked chains', 0, 'tear'), ('word', 'Tear', 'tear', 'flesh'), ('word', 'Through your flesh', 'flesh', 'your skin'),
+         ('word', 'Your skin', 'your skin', 'peeled'), ('word', 'Peeled off', 'peeled', 'alive'), ('word', 'Alive', 'alive', 'you get'),
+         ('word', 'Turned', 'you get', 'cenobites'), ('word', 'Cenobites', 'cenobites', 'trapped'), ('word', 'Trapped', 'trapped', 'head forever'),
+         ('word', 'Inside your head', 'head forever', 'and he does'), ('word', 'All of it', 'and he does', 'calmly'),
+         ('word', 'Calmly', 'calmly', "we're ranking")], clip_db=-20))
 for ov in X[-1]['overlays']:  # captions flash and cut out: one word 0.9 s max, a phrase 1.5 s max (EP02 rule); the frame-0 caption holds to its cut
-    if ov[0] == 'word' and ov[2] > 0: ov[3] = min(ov[3], ov[2] + (0.9 if ' ' not in ov[1] else (2.2 if len(ov[1]) > 25 else 1.5)))
+    if ov[0] == 'word' and ov[2] > 0: ov[3] = min(ov[3], ov[2] + (0.9 if ' ' not in ov[1] else 1.5))
 s01_end = vdur('s01') + 0.5
 X.append(sec('s01', [(0, 'hr1_pack4k', 62.4, -3.4), ('you just', 'hr1_pack4k', 10.5, -13.9), ("this movie's", 'hr1_pack4k', 81.55, -12.8),
   ('strength', 'hr4_chart', 60.25, -7.4), ('intelligence', 'hr2_legendary', 89.8, -6.1), ('kill count', 'hr7_returns', 75.6, -5.6),
-  ('supernatural', 'hr3_pillar', 230.15, -3.9), ('which really', 'hr4_pathway', 152.3, -6.2), ('and that gives', 'hr2_desire', 101.9, -8.9),
+  ('how little', 'hr3_pillar', 230.15, -3.9), ('which really', 'hr4_pathway', 152.3, -6.2), ('and that gives', 'hr2_desire', 101.9, -8.9),
   ('your survival', 'hr1_trailer_arrow2', 76.0, -5.7)]))
 X[0]['vfade'] = {'out': 0.25}; X[-1]['vfade'] = {'in': 0.25}
 X[-1]['overlays'].append(['stats', {'name': 'PINHEAD', 'tile_png': 'tiles/mystery.png', 'stats': {'STRENGTH': 6, 'INTELLIGENCE': 7,
-  'KILL COUNT': 5, 'SUPERNATURAL': 8}, 'pct': '??', 'dur': round(s01_end, 3), 't_pct': round(T('s01', 'survival rate') + LEAD, 3),
-  'reveal': [round(T('s01', w) + LEAD, 3) for w in ('strength', 'intelligence', 'kill count', 'supernatural')]}, 0.0, 999])
+  'KILL COUNT': 5, 'NO MERCY': 8}, 'pct': '??', 'dur': round(s01_end, 3), 't_pct': round(T('s01', 'survival rate') + LEAD, 3),
+  'reveal': [round(T('s01', w) + LEAD, 3) for w in ('strength', 'intelligence', 'kill count', 'mercy')]}, 0.0, 999])
 X[-1]['sfx'] = [[0.0, SFX + 'whoosh.wav', SFX_GAIN['whoosh']], [T('s01', 'survival rate') + LEAD, SFX + 'stamp.wav', SFX_GAIN['stamp']]]
 # #11 Hellworld 80%
 X.append(sec('s02', [(0, 'hr8_welcome', 66.2, -4.1), ('a group', 'hr8_trailer', 14.6, -0.85), ('themed party', 'hr8_trailer', 15.5, -0.75),
-  ('and most', 'hr8_jake', 66.2, -5.2), ('set up by', 'hr8_welcome', 8.2, -6.4), ('two of them', 'hr8_cop', 43.4, -4.1),
-  ('and when the real', 'hr8_welcome', 116.5, -3.9), ('he takes', 'hr8_jake', 109.7, -3.4), ('survival rate', 'hr8_welcome', 66.2, -4.1)], 'two of them'))
+  ('and most', 'hr8_cop', 31.5, -2.2), ('set up by', 'hr8_welcome', 8.2, -6.4), ('two of them', 'hr8_cop', 43.4, -4.1),
+  ('and when the real', 'hr8_welcome', 116.5, -3.9), ("he's not", 'hr8_welcome', 109.3, -1.2, 'z=1.35,dx=249'), ('he takes', 'hr8_welcome', 120.8, -3.6, 'flip'),
+  ('survival rate', 'hr8_welcome', 66.2, -4.1, 'z=1.35,dx=249')], "he's not"))
 # #10 Judgment 60%
 X.append(sec('s03', [(0, 'hr10_hell4k', 370.2, -1.5), ('this time', 'hr10_souls', 27.0, -27.0), ('where an auditor', 'hr10_scifinow', 9.6, -4.2),
-  ('and pinhead mostly', 'hr10_judge4k', 523.4, -4.8), ("if you're not", 'hr10_judge4k', 498.6, -4.3), ('and by the end', 'hr10_judge4k', 17.0, -4.3),
-  ('survival rate', 'hr10_hell4k', 370.2, -1.5)], "if you're not"))
+  ('and a jury', 'hr10_judge4k', 475.48, -2.4), ('your punishment', 'hr10_judge4k', 568.44, -3.4), ('and pinhead mostly', 'hr10_judge4k', 523.4, -4.8),
+  ("if you're not", 'hr10_judge4k', 498.6, -4.3), ('and by the end', 'hr10_judge4k', 17.0, -4.3), ('survival rate', 'hr10_hell4k', 370.2, -1.5, 'z=1.45,dx=249')], 'and by the end'))
 # #9 Hellbound 55%
 X.append(sec('s04', [(0, 'hr2_legendary', 89.8, -6.1), ('pinhead is still', 'hr2_legendary', 53.4, -5.3), ('but this is', 'hr2_legendary', 50.15, -3.1),
-  ('and he remembers', 'hr2_legendary', 64.45, -3.3), ('a moment later', 'hr2_legendary', 158.8, -2.6), ('cuts through', 'hr2_legendary', 147.75, -1.5),
-  ('and kirsty', 'hr2_legendary', 219.2, -1.0), ('walk out', 'hr2_legendary', 34.75, -4.6), ('survival rate', 'hr2_desire', 101.9, -8.9)], 'a moment later'))
-# #8 Revelations 50% (v1: graphic-free ARC trailer shots; owner may supply a sharper film file)
-X.append(sec('s05', [(0, 'hr9_rev_a', 0.3, -5.0), ('with a different', 'hr9_rev_b', 0.0, -5.6), ('two friends', 'hr9_rev_c', 0.0, -2.7),
-  ('on a trip', 'hr9_rev_d', 0.0, -2.2), ('one gets', 'hr9_rev_e', 0.0, -2.9), ('the other gets', 'hr9_rev_f', 0.0, -1.4),
-  ('and pinhead refuses', 'hr9_rev_g', 0.0, -5.6), ('but he leaves', 'hr9_rev_h', 0.0, -2.2), ('and emma', 'hr9_rev_i', 0.0, -3.6),
-  ('at the end', 'hr9_rev_j', 0.0, -1.0), ('survival rate', 'hr9_rev_k', 0.0, -8.3)], 'but he leaves'))
-  # Revelations: owner-supplied 1080p Blu-ray, short cuts only (hr9_rev_*), never committed; deleted from 1_work after the final render
+  ('and he remembers', 'hr2_legendary', 64.45, -3.3), ('a moment later', 'hr2_channardtrans', 105.52, -3.3), ('a brand new', 'hr2_channardtrans', 110.32, -1.5),
+  ('cuts through', 'hr2_legendary', 147.75, -1.5), ('whole crew', 'hr2_channardtrans', 242.7, -1.7), ('in seconds', 'hr2_channardtrans', 115.03, -2.5, 'z=1.35,dx=249'),
+  ('and kirsty', 'hr2_legendary', 219.2, -1.0, 'flip'), ('walk out', 'hr2_legendary', 34.75, -4.6, 'z=1.35,dx=249'), ('survival rate', 'hr2_desire', 101.9, -8.9, 'z=1.35,dx=249')], 'in seconds'))
+# #8 Revelations 50% (owner's 1080p Blu-ray, read directly, never committed)
+X.append(sec('s05', [(0, 'hr9_rev', 3880.0, -1.5), ('with a different', 'hr9_rev', 3952.0, -1.9), ('two friends', 'hr9_rev', 2173.75, -1.7),
+  ('on a trip', 'hr9_rev', 2183.6, -3.4), ('one gets', 'hr9_rev', 2199.4, -16.0), ('the other gets', 'hr9_rev', 3968.4, -1.4),
+  ('and pinhead refuses', 'hr9_rev', 4048.0, -11.0), ('but he leaves', 'hr9_rev', 3966.84, -1.55), ('and emma', 'hr9_rev', 3982.6, -2.4, 'z=1.35,dx=249'),
+  ('survival rate', 'hr9_rev', 3928.0, -3.0)], 'and emma'))
 # #7 Hellraiser 1987 40%
 X.append(sec('s06', [(0, 'hr1_pack4k', 122.9, -2.6), ('frank solves', 'hr1_pack4k', 10.5, -13.9), ('and the cenobites', 'hr1_pack4k', 6.5, -3.8),
-  ('hook chains', 'hr1_pack4k', 110.85, -1.5), ('so completely', 'hr1_pack4k', 81.55, -12.8), ('kirsty survives', 'hr1_sights', 2.4, -7.2),
-  ('by making', 'hr1_pack4k', 30.4, -4.0), ('and then reversing', 'hr1_dont', 0.05, -1.85), ('before they', 'hr1_dont', 6.95, -1.4),
-  ('survival rate', 'hr1_pack4k', 45.7, -5.9)], 'kirsty survives'))
+  ('tear him', 'hr1_jesuswept', 124.25, -1.6), ('hook chains', 'hr1_jesuswept', 127.21, -2.0), ('so completely', 'hr1_jesuswept', 131.6, -11.0),
+  ('kirsty survives', 'hr1_sights', 2.4, -7.2), ('by making', 'hr1_pack4k', 30.4, -4.0), ('and then reversing', 'hr1_dont', 0.05, -1.85),
+  ('before they', 'hr1_dont', 6.95, -1.4), ('survival rate', 'hr1_pack4k', 45.7, -5.9, 'z=1.35,dx=249')], 'and then reversing'))
 # #6 Hellseeker 35%
 X.append(sec('s07', [(0, 'hr6_painpleasure', 186.4, -4.0), ('kirsty opens', 'hr6_pain', 204.9, -4.0), ('she offers', 'hr6_painpleasure', 180.6, -2.9),
-  ('including', 'hr6_pain', 32.5, -3.0), ('it works', 'hr6_pain', 204.9, -4.0), ('five people', 'hr6_painpleasure', 186.4, -4.0),
-  ('survival rate', 'hr6_painpleasure', 180.6, -2.9)], 'it works'))
+  ('including', 'hr6_pain', 32.5, -3.0), ('it works', 'hr6_pain', 204.9, -4.0, 'z=1.35,dx=249'), ('five people', 'hr6_painpleasure', 186.4, -4.0, 'z=1.35,dx=249'),
+  ('survival rate', 'hr6_painpleasure', 180.6, -2.9, 'z=1.35,dx=249')], 'it works'))
 # #5 Hellraiser 2022, the Priest 30%
 X.append(sec('s08', [(0, 'hr22_bridge', 2.6, -3.6), ('where pinhead', 'hr22_trailer_hulu', 97.5, -2.0), ('the box has', 'hr22_carousel', 498.0, -16.5),
-  ('every single', 'hr22_carousel', 140.9, -8.6), ("riley's brother", 'hr22_carousel', 256.3, -2.6), ('nora', 'hr22_carousel', 261.4, -2.3),
-  ('and trevor', 'hr22_cenofeat', 34.6, -1.2), ('riley and colin', 'hr22_bridge', 0.0, -2.5), ('but only', 'hr22_bridge', 33.0, -4.2),
+  ('every single', 'hr22_carousel', 140.9, -8.6), ('a blood sacrifice', 'hr22_carousel', 264.0, -2.5), ("riley's brother", 'hr22_carousel', 256.3, -2.6),
+  ('nora', 'hr22_trailer_20th', 95.9, -1.5), ('skinned alive', 'hr22_nora', 161.93, -2.3), ('and trevor', 'hr22_trailer_20th', 87.6, -1.8),
+  ('final victim', 'hr22_cenofeat', 34.6, -1.2), ('riley and colin', 'hr22_bridge', 0.0, -2.5, 'z=1.35,dx=249'), ('but only', 'hr22_bridge', 33.0, -4.2, 'z=1.35,dx=249'),
   ('riley turns', 'hr22_bridge', 23.8, -6.4), ('survival rate', 'hr22_bridge', 2.6, -3.6)], 'riley and colin'))
 # #4 Bloodline 25%
-X.append(sec('s09', [(0, 'hr4_pathway', 152.3, -6.2), ('pinhead hunts', 'hr4_pathway', 99.5, -4.5), ('kills john', 'hr4_pathway', 96.95, -2.4),
-  ('and wipes out', 'hr4_chart', 60.25, -7.4), ('space station', 'hr4_space', 48.2, -10.8), ('in the end', 'hr4_space', 0.0, -3.8), ('turned into', 'hr4_another', 272.55, -1.15),
-  ('full of light', 'hr4_another', 273.8, -1.25), ('to finally', 'hr4_another', 279.3, -2.0), ('survival rate', 'hr4_chart', 158.8, -4.9)], 'in the end'))
+X.append(sec('s09', [(0, 'hr4_pathway', 152.3, -6.2), ('pinhead hunts', 'hr4_pathway', 99.5, -4.5), ('kills john', 'hr4_straighthell', 23.7, -1.7),
+  ('in new york', 'hr4_straighthell', 27.5, -1.4), ('and wipes out', 'hr4_painface', 251.2, -1.45), ('crew on', 'hr4_painface', 276.35, -1.45),
+  ('space station in', 'hr4_finalbattle', 92.7, -3.1), ('the year', 'hr4_painface', 295.6, -2.7), ('in the end', 'hr4_space', 48.2, -10.8),
+  ('giant puzzle', 'hr4_another', 279.3, -2.0, 'z=1.35,dx=249'), ('survival rate', 'hr4_chart', 158.8, -4.9, 'flip=1,z=1.35,dx=249')], 'giant puzzle'))
 # #3 Deader 15%
-X.append(sec('s10', [(0, 'hr7_returns', 89.2, -4.4), ('a reporter', 'hr7_real', 20.2, -5.9), ('that kills', 'hr7_afraid', 146.2, -2.9),
-  ('all because', 'hr7_afraid', 4.55, -3.5), ('when amy', 'hr7_returns', 10.55, -5.4), ('pinhead slaughters', 'hr7_returns', 75.6, -5.6),
-  ('and he tells', 'hr7_returns', 189.1, -4.0), ("amy's only", 'hr7_returns', 119.1, -2.5), ('survival rate', 'hr7_returns', 89.2, -4.4)], 'when amy'))
+X.append(sec('s10', [(0, 'hr7_returns', 89.2, -4.4), ('a reporter', 'hr7_real', 20.2, -5.9), ('that kills', 'hr7_afraid', 146.2, -1.4),
+  ('all because', 'hr7_afraid', 4.55, -3.5), ('when amy', 'hr7_returns', 10.55, -5.4), ('pinhead slaughters', 'hr7_returns', 175.6, -1.55),
+  ('the entire cult', 'hr7_returns', 166.2, -1.35), ('in minutes', 'hr7_returns', 142.5, -1.6), ('and he tells', 'hr7_returns', 189.1, -4.0),
+  ("amy's only", 'hr7_returns', 119.1, -2.5, 'z=1.35,dx=249'), ('survival rate', 'hr7_returns', 89.2, -4.4, 'flip=1,z=1.35,dx=249')], "amy's only"))
 # #2 Inferno 8%
-X.append(sec('s11', [(0, 'hr5_box', 265.95, -1.95), ('detective', 'hr5_world', 50.9, -20.9), ('opens the box', 'hr5_box', 27.1, -4.0),
-  ('and spends', 'hr5_cruelty', 33.5, -13.0), ('until he learns', 'hr5_child', 97.1, -2.3), ('pinhead the entire', 'hr5_box', 265.95, -1.95),
-  ("there's no fight", 'hr5_box', 44.5, -2.9), ('just an eternity', 'hr5_cruelty', 22.0, -1.8), ('survival rate', 'hr5_box', 265.95, -1.95)], 'until he learns'))
+X.append(sec('s11', [(0, 'hr5_box', 266.2, -1.7), ('detective', 'hr5_world', 50.9, -20.9), ('opens the box', 'hr5_box', 27.1, -4.0),
+  ('and spends', 'hr5_cruelty', 33.5, -13.0), ('until he learns', 'hr5_child', 97.1, -2.3), ('pinhead the entire', 'hr5_box', 266.2, -1.7),
+  ("and he's already", 'hr5_torment', 425.1, -12.2), ("there's no fight", 'hr5_torment', 420.85, -1.8), ('no deal', 'hr5_torment', 548.65, -4.0, 'z=1.35,dx=249'),
+  ('just an eternity', 'hr5_torment', 430.0, -7.0, 'z=1.35,dx=249'), ('survival rate', 'hr5_box', 266.2, -1.7, 'z=1.35,dx=249')], 'no deal'))
 # #1 Hell on Earth 5%
 X.append(sec('s12', [(0, 'hr3_iamtheway', 131.0, -1.8), ('pinhead breaks', 'hr3_pillar', 128.0, -7.8), ('with no box', 'hr3_pillar', 230.15, -3.9),
-  ('massacres', 'hr3_iamtheway', 67.35, -9.2), ('turns his', 'hr3_pillar', 224.35, -3.1), ('only joey', 'hr3_iamtheway', 122.1, -0.85), ('with the box', 'hr3_iamtheway', 9.6, -3.3),
-  ('turned into', 'hr3_iamtheway', 127.95, -2.9), ('can send', 'hr3_unstoppable', 106.5, -1.6), ("if he's the one", 'hr3_iamtheway', 9.6, -3.3),
-  ('survival rate', 'hr3_pillar', 230.15, -3.9)], 'only joey'))
+  ('massacres', 'hr3_club', 124.8, -1.9), ('entire nightclub', 'hr3_dancefloor', 60.0, -1.2), ('kills the police', 'hr3_club', 108.3, -0.6),
+  ('and turns his', 'hr3_iamtheway', 95.5, -4.0), ('only joey', 'hr3_iamtheway', 129.3, -1.25), ('turned into', 'hr3_iamtheway', 127.95, -2.9),
+  ('can send', 'hr3_unstoppable', 106.5, -1.6), ("if he's the one", 'hr3_iamtheway', 9.6, -3.3), ('survival rate', 'hr3_pillar', 224.35, -3.1, 'z=1.35,dx=249')], "if he's the one"))
 X.append(sec('s13', [(0, 'hr1_pack4k', 62.4, -3.4), ('to a demon', 'hr3_pillar', 230.15, -3.9), ('tell me', 'hr1_pack4k', 10.5, -13.9),
   ('and remember', 'hr4_pathway', 172.0, -11.0)], pad=2.5,
   extra=[('title', ['WHICH BOX', '!WOULD YOU OPEN?'], 'tell me', 'and remember'), ('title', ['SOME DOORS', '!STAY CLOSED'], 'and remember', 999)]))
@@ -123,8 +130,10 @@ def fit(S):  # turn (t, clip, in, -clean) into a speed that keeps the shot insid
             d = (sh[k + 1][0] if k + 1 < len(sh) else L) - s[0]; sp = min(1.0, -s[3] * 0.96 / d)
             if sp < 0.4: print('WARN too short', S['voice'], s, round(d, 2))
             sp = max(sp, 0.4)
-            if sp >= 0.999: del s[3:]
-            else: s[3] = round(sp, 3)
+            s[3] = round(sp, 3) if sp < 0.999 else 1.0
+        if len(s) > 4 and isinstance(s[4], str): s[4] = {'flip': 1} if s[4] == 'flip' else dict(kv.split('=') for kv in s[4].split(','))
+        if len(s) > 4: s[4] = {k: float(v) for k, v in s[4].items()}
+        elif len(s) > 3 and s[3] == 1.0: del s[3:]
 for S in X: fit(S)
 FILM = [('hr1_', 'Hellraiser (1987)'), ('hr2_', 'Hellbound: Hellraiser II (1988)'), ('hr3_', 'Hellraiser III: Hell on Earth (1992)'),
         ('hr4_', 'Hellraiser: Bloodline (1996)'), ('hr5_', 'Hellraiser: Inferno (2000)'), ('hr6_', 'Hellraiser: Hellseeker (2002)'),
@@ -141,8 +150,8 @@ for S in X:  # film label per run of one film, gone once the stat card takes the
         runs.append([f, t])
     for k, (f, t) in enumerate(runs):
         if f: S['overlays'].append(['film', f, t, min(end, runs[k + 1][1] if k + 1 < len(runs) else 999)])
-DARK = ['hr8_welcome', 'hr8_jake', 'hr8_cop', 'hr10_souls', 'hr22_carousel', 'hr3_pillar', 'hr5_box', 'hr5_cruelty', 'hr7_returns', 'hr7_afraid', 'hr9_trailer_rt']
+DARK = ['hr22_nora', 'hr5_torment', 'hr8_welcome', 'hr8_jake', 'hr8_cop', 'hr10_souls', 'hr22_carousel', 'hr3_pillar', 'hr5_box', 'hr5_cruelty', 'hr7_returns', 'hr7_afraid', 'hr9_trailer_rt']
 P = {'sections': X, 'tiers': TIERS, 'gamma': {k: 1.25 for k in DARK},
-     'zoom': {'hr3_iamtheway': 1.36, 'hr3_bad_dreams': 1.36, 'hr10_judge4k': 1.2, 'hr10_hell4k': 1.2}}  # 4:3 pillarbox filled; Boxoffice corner bug cropped
+     'zoom': {'hr3_dancefloor': 1.36, 'hr22_trailer_20th': 1.34, 'hr22_nora': 1.55, 'hr3_iamtheway': 1.36, 'hr3_bad_dreams': 1.36, 'hr10_judge4k': 1.2, 'hr10_hell4k': 1.2}}  # 4:3 pillarbox filled; Boxoffice corner bug cropped
 json.dump(P, open(D + 'edl.json', 'w'), indent=1)
 print(len(X), 'sections')

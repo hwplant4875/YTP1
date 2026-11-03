@@ -67,3 +67,26 @@ hr9_full | hEoHsnFaeq4 | FALLBACK (Javier) | Revelations full upload (check qual
 hr22_bridge | kUku5LP6b1I | FALLBACK (MNPHQVideos) | 2022 bridge scene 1080p
 hr22_carousel | G5hgiDbZA7w | FALLBACK (MNPHQVideos) | 2022 carousel / cube scene
 hr22_cenofeat | e5ti3ba055U | 20th Century Studios | 2022 Cenobites featurette
+# --- 11/04 victim-gore scout (scout3): official 1440p clips
+hr4_straighthell | zQB-WfMcq0Y | Arrow Video | Bloodline 'Straight to Hell' 4K (hooks/chains rip a man)
+hr4_takesoul | 8hvYDS5PMOw | Arrow Video | Bloodline 'Take My Soul' 4K (mutilated Duc de L'Isle)
+hr4_painface | pag9Zd6cpYg | JoBlo Horror 4K | Bloodline 'Pain Has a Face' 4K (guards chained, faces torn, fused into the Twins)
+hr4_finalbattle | hv3BRdLNOs0 | JoBlo Horror 4K | Bloodline 'Final Battle' 4K (man skinned by the Twins, Chatterer beast)
+hr4_birth | gPqAZfVMIz4 | JoBlo Horror 4K | Bloodline 'Birth of a Demon Princess' 4K (Jacques torn by chains)
+hr5_torment | oZXB2vFzfCc | JoBlo Horror 4K | Inferno 'Eternity of Torment' 4K (Thorne chained, face hooked)
+# --- 11/04 scout2 (victim beats for cold open): no official 2022 scene clips exist on YouTube; sharpest 1080p fan uploads used (FALLBACK)
+hr22_opening | TSpa3iGL5aI | FALLBACK (Visual) | 2022 opening: Joey cut by box, thrown, chain-hook wound, hoisted (1920x816, soft; prefer hr22_trailer_20th 41.4-44.7 for the throw)
+hr22_nora | _-WPCbp3slU | FALLBACK (Classic Spidey) | 2022 Nora hooked upside-down and flayed by the Priest 1080p; "CLASSIC SPIDEY" logo top-left, must crop to picture area (y>=170)
+hr8_cavill | fe_hEwQqKhY | FALLBACK (rejected) | Hellworld Henry Cavill compilation 1080p; "Md" watermark, no victim beats - do not use
+hr10_interrog | MJnihVXjpB4 | STARBURST Magazine | Judgment exclusive interrogation clip 1080p (Auditor + Watkins, dialogue only, no violence)
+# --- 11/04: victim/kill beats (cold open + per-film sections). Gore allowed, no nudity.
+hr1_jesuswept | hjvGIKc_A4k | FALLBACK (JayJoker958) | 1987 Kirsty tricks Frank / hooks tear Frank apart "Jesus wept" 1920x1036 clean
+hr2_frankshell | k6ZVBXENiFQ | FALLBACK (Blu-ray Bay) | Hellbound Arrow Blu-ray: Frank's Hell, skinned bodies, skinless Frank, Julia holds his heart 1080p
+hr2_finalbattle | 3Myq88I5Gs4 | FALLBACK (Blu-ray Bay) | Hellbound Arrow Blu-ray: final battle, Channard's head torn off, Julia's skin ripped off 1080p
+hr2_channardtrans | vNV1mKo8yII | FALLBACK (Patrick Cheesman) | Hellbound: Channard turned into a Cenobite + tentacle asylum kills 1080p
+hr2_channardpack | waRDszw24_0 | FALLBACK (HellsPriestess) | Hellbound: Dr. Channard scene pack 1080p (mostly overlaps channardtrans)
+hr3_dancefloor | kZEN84-J194 | Miramax | Hell on Earth 'Death on the Dance Floor' HD (nightclub massacre, CD kill)
+hr3_club | SkpLrSAB1Iw | FALLBACK (Phuck Yiu) | Hell on Earth nightclub scene, longer cut incl. barbed-wire mouth, chains 1080p
+hr3_trailer35 | WemCjH-OCts | FALLBACK (35mm Movie Trailers Scans) | Hell on Earth 35mm trailer scan (title cards; few shots)
+hr4_endscene | 3wTl8DrC240 | FALLBACK (Maurits Steemers) | Bloodline space ending (mis-searched as 1987; 4:3 soft, low value)
+hr1_trailer4k | 47hcxHhCxoU | REJECT (REVOK) | 1987 trailer upscale, 4:3 pillarboxed + soft; do not use

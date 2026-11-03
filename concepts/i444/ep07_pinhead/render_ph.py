@@ -50,7 +50,9 @@ def vfade(S, L):
     return o
 def dur(p): return float(subprocess.check_output(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p]))
 def rel(p): return p if os.path.isabs(p) else os.path.join(EDIR, p)
+REV = 'Hellraiser Revelations 2011 1080p BluRay x264-OFT.mkv'   # owner-supplied Blu-ray (never committed / uploaded), read directly
 def src(name):
+    if name == 'hr9_rev': return os.path.join(CLIPS, REV)
     for d in (CLIPS, os.path.join(EDIR, 'stillclips')):
         for ext in ('_hd.mp4', '.mp4', '.webm', '.mkv'):
             p = os.path.join(d, name + ext)
@@ -99,12 +101,14 @@ for si, S in enumerate(E['sections']):
         t_global += L; continue
     shots = S['shots']; segs = []; asegs = []
     for k, (t, name, tin, *sp) in enumerate(shots):
+        op = sp[1] if len(sp) > 1 else {}  # optional shot options: flip = mirror, dx = pan the crop (px, + shows more of the right), z = zoom
         sp = sp[0] if sp else 1.0  # optional speed (<1 = slow motion)
         f0 = round(t * FPS); f1 = round(shots[k + 1][0] * FPS) if k + 1 < len(shots) else NF; n = f1 - f0
         if n <= 0: continue
         o = os.path.join(WORK, f's{si:02d}_{k:02d}.mp4'); ao = os.path.join(WORK, f's{si:02d}_{k:02d}.wav')
         vf = (f"scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,"
-              f"zoompan=z='{Z.get(name,1.04)}+0.03*on/({max(1,n)})':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1920x1080:fps={FPS},"
+              + ("hflip," if op.get('flip') else '') +
+              f"zoompan=z='{op.get('z', Z.get(name,1.04))}+0.03*on/({max(1,n)})':x='max(0,min(iw-iw/zoom,iw/2-(iw/zoom/2)+{op.get('dx', 0)}))':y='ih/2-(ih/zoom/2)':d=1:s=1920x1080:fps={FPS},"
               f"eq=contrast=1.05:saturation=0.92:gamma={G.get(name,1.12)},vignette=PI/5,setsar=1")
         # zoompan (d=1) emits one frame per input frame, so normalise to FPS first or 23.976/60 fps sources play at 1.25x / 0.5x
         vf = (f"setpts=PTS/{sp}," if sp != 1.0 else '') + f"fps={FPS}," + vf
