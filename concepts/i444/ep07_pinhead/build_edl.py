@@ -26,13 +26,13 @@ TIERS = [['S', 'Slaughtered', 25], ['A', 'Almost Dead', 40], ['B', 'Better Run',
          ['E', 'Easy', 101]]
 SFX_GAIN = {'whoosh': -16, 'fill': -20, 'stamp': -12}
 SFX = '../ep03/sfx/'
-def sec(voice, shots, card_at=None, extra=(), pad=0.3, clip_db=-99):   # v3: short pads, the narration runs on (owner 11/04)
+def sec(voice, shots, card_at=None, extra=(), pad=0.2, clip_db=-99):   # v3: short pads, the narration runs on (owner 11/04)
     shots = [[T(voice, s[0]), *s[1:]] for s in shots]
     S = {'voice': voice, 'pad': pad, 'clip_audio_db': clip_db, 'shots': shots, 'overlays': [], 'sfx': []}
     if voice in ST:
         e = ST[voice]; film = SHORT.get(voice, e['film'])
         S['overlays'].append(['rank', [e['rank'], e['villain'], film], 0.0, 2.9])
-        S['pad'] = 0.5; a = T(voice, card_at); tp = round(num_onset(voice) - 0.05 - a, 3)
+        S['pad'] = 0.35; a = T(voice, card_at); tp = round(num_onset(voice) - 0.05 - a, 3)
         S['overlays'].append(['stats', {'name': e['villain'].upper(), 'tile_png': f'tiles/{TILE[voice]}.png',
                                         'stats': dict(zip(['STRENGTH', 'INTELLIGENCE', 'KILL COUNT', 'NO MERCY'], e['v'])), 'pct': e['pct'],
                                         't_pct': tp, 'dur': round(vdur(voice) + S['pad'] - a, 3), 'film': film}, a, 999])
@@ -56,7 +56,7 @@ X.append(sec('s00', [(0, 'hr1_jesuswept', 127.21, -2.0), ('tear', 'hr9_rev', 410
          ('word', 'Calmly', 'calmly', "we're ranking")], clip_db=-20))
 for ov in X[-1]['overlays']:  # captions flash and cut out: one word 0.9 s max, a phrase 1.5 s max (EP02 rule); the frame-0 caption holds to its cut
     if ov[0] == 'word' and ov[2] > 0: ov[3] = min(ov[3], ov[2] + (0.9 if ' ' not in ov[1] else 1.5))
-s01_end = vdur('s01') + 0.3
+s01_end = vdur('s01') + 0.2
 X.append(sec('s01', [(0, 'hr1_pack4k', 62.4, -3.4), ('you just', 'hr1_pack4k', 10.5, -13.9), ("this movie's", 'hr1_pack4k', 81.55, -12.8),
   ('strength', 'hr4_chart', 60.25, -7.4), ('intelligence', 'hr2_legendary', 89.8, -6.1), ('kill count', 'hr7_returns', 75.6, -5.6),
   ('how little', 'hr3_pillar', 230.15, -3.9), ('which really', 'hr4_pathway', 152.3, -6.2), ('and that gives', 'hr2_desire', 101.9, -8.9),

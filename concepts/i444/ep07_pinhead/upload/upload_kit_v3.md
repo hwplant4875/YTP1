@@ -1,6 +1,6 @@
-# EP07 Pinhead upload kit v2
+# EP07 Pinhead upload kit v3
 
-Video: E:\YTP2\Horror Ranked\EP07 Pinhead\2_renders\ep07_pinhead_v2.mp4 | Subtitles: upload/pinhead_ranked_en_v2.srt | Thumbnails: upload/pinhead_thumb_a/b/c.jpg
+Video: E:\YTP2\Horror Ranked\EP07 Pinhead\2_renders\ep07_pinhead_v3.mp4 | Subtitles: upload/pinhead_ranked_en_v3.srt | Thumbnails: upload/pinhead_thumb_a/b/c.jpg
 
 ## Titles (pick one; no ":" or "-")
 1. Every Pinhead Ranked by Your Chance of Surviving Him  (recommended: matches the series)
@@ -23,19 +23,19 @@ Music: original dark ambient score (ElevenLabs Music).
 
 Chapters
 0:00 Hooked chains
-0:17 How the survival rate works
-0:35 #11 Hellraiser: Hellworld
-0:59 #10 Hellraiser: Judgment
-1:22 #9 Hellbound: Hellraiser II
-1:47 #8 Hellraiser: Revelations
-2:09 #7 Hellraiser (1987)
-2:32 #6 Hellraiser: Hellseeker
-2:54 #5 Hellraiser (2022)
-3:21 #4 Hellraiser: Bloodline
-3:46 #3 Hellraiser: Deader
-4:14 #2 Hellraiser: Inferno
-4:35 #1 Hellraiser III: Hell on Earth
-5:00 Which box would you open?
+0:15 How the survival rate works
+0:32 #11 Hellraiser: Hellworld
+0:55 #10 Hellraiser: Judgment
+1:17 #9 Hellbound: Hellraiser II
+1:39 #8 Hellraiser: Revelations
+2:00 #7 Hellraiser (1987)
+2:21 #6 Hellraiser: Hellseeker
+2:41 #5 Hellraiser (2022)
+3:07 #4 Hellraiser: Bloodline
+3:30 #3 Hellraiser: Deader
+3:56 #2 Hellraiser: Inferno
+4:16 #1 Hellraiser III: Hell on Earth
+4:39 Which box would you open?
 
 ## Tags
 pinhead, hellraiser, horror, horror movies, cenobites, clive barker, the priest, hellbound, ranked
