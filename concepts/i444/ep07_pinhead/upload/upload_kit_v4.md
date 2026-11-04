@@ -1,6 +1,6 @@
-# EP07 Pinhead upload kit v4
+# EP07 Pinhead upload kit v4 (video v5)
 
-Video: E:\YTP2\Horror Ranked\EP07 Pinhead\2_renders\ep07_pinhead_v4.mp4 | Subtitles: upload/pinhead_ranked_en_v4.srt | Thumbnails: upload/pinhead_thumb_a/b/c.jpg
+Video: E:\YTP2\Horror Ranked\EP07 Pinhead\2_renders\ep07_pinhead_v5.mp4 | Subtitles: upload/pinhead_ranked_en_v4.srt | Thumbnails: upload/pinhead_thumb_a/b/c.jpg
 
 ## Titles (pick one; no ":" or "-")
 1. Every Pinhead Ranked by Your Chance of Surviving Him  (recommended: series format)
