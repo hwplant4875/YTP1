@@ -1,0 +1,23 @@
+EP07 v7 voice QA (2026-11-05 ~01:55 KST). 14 full takes, Adam / eleven_v4, no splicing (make_voice_v7.py), pauses tightened
+(tighten2.py), word timings from the ElevenLabs alignment with onsets snapped to the audio (al_words.py). verify_v7.py:
+
+s00  18.33s  words SAME (59/59)   max pause 0.31s  -21.2 LUFS
+s01  17.51s  words SAME (56/56)   max pause 0.31s  -20.9 LUFS
+s04  49.10s  words SAME*          max pause 0.31s  -21.7 LUFS
+s05  37.90s  words SAME*          max pause 0.31s  -21.8 LUFS
+s06  24.88s  words SAME (70/70)   max pause 0.32s  -21.4 LUFS
+s07  26.64s  words SAME*          max pause 0.30s  -21.4 LUFS
+s08  33.55s  words SAME (98/98)   max pause 0.31s  -22.0 LUFS
+s09  30.45s  words SAME (93/93)   max pause 0.30s  -20.8 LUFS
+s02  33.51s  words SAME*          max pause 0.32s  -21.0 LUFS
+s10  28.59s  words SAME*          max pause 0.31s  -21.8 LUFS
+s03  30.53s  words SAME (87/87)   max pause 0.31s  -21.4 LUFS
+s11  21.68s  words SAME (64/64)   max pause 0.30s  -21.1 LUFS
+s12  31.48s  words SAME (92/92)   max pause 0.31s  -21.5 LUFS
+s13  23.26s  words SAME (78/78)   max pause 0.31s  -21.7 LUFS
+total voice 6:47; loudness median -21.4 LUFS, no take more than 1.5 LU off.
+
+* whisper spelling only: Channard -> Chenard/Chouinard, Steven -> Stephen, Bret -> Brett, Derrick -> Derek, Doctor -> Dr.
+  "Number eleven" (s04) and "Number four" (s10) were written by whisper as "11." / "4."; with a 0.5 s lead-in the full words
+  are heard, and the envelope shows speech from 0.02 s (no clipped first word).
+No splice anywhere, so no word fragments like the v6b "sur survival rate".

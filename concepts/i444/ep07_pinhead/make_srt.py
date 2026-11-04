@@ -3,7 +3,7 @@
 # usage: python make_srt_v2.py [edl_v2.json] [voice_v3] [out.srt]
 import json, os, sys, subprocess
 edl = sys.argv[1] if len(sys.argv) > 1 else 'edl.json'; VOICE = sys.argv[2] if len(sys.argv) > 2 else 'voice'
-OUT = sys.argv[3] if len(sys.argv) > 3 else 'upload/pinhead_ranked_en_v6.srt'
+OUT = sys.argv[3] if len(sys.argv) > 3 else 'upload/pinhead_ranked_en_v7.srt'
 def dur(p): return float(subprocess.check_output(['ffprobe', '-v', '0', '-show_entries', 'format=duration', '-of', 'csv=p=0', p]))
 def ts(t): t = max(0, t); return '%02d:%02d:%02d,%03d' % (t // 3600, t % 3600 // 60, t % 60, round(t % 1 * 1000) % 1000)
 cues, t0 = [], 0.0
@@ -17,6 +17,15 @@ for S in json.load(open(edl))['sections']:
         elif cur: cur = (cur[0] + c, cur[1], e)
         else: cur = (c, s, e)
     if cur: words.append(cur)
+    # v7: years are written out for the voice; show them as digits in the captions (one token, so a year never splits across cues)
+    YEARS = {('twenty', 'twenty-two'): '2022', ('nineteen', 'ninety-six'): '1996', ('twenty-one', 'twenty-seven'): '2127'}
+    i = 0
+    while i + 1 < len(words):
+        key = (words[i][0].lower(), words[i + 1][0].lower().rstrip('.,?!:;'))
+        if key in YEARS:
+            tail = words[i + 1][0][len(key[1]):]
+            words[i:i + 2] = [(YEARS[key] + tail, words[i][1], words[i + 1][2])]
+        i += 1
     line = []
     for i, w in enumerate(words):
         line.append(w); txt = ' '.join(x[0] for x in line)
