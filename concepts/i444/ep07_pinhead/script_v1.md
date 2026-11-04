@@ -42,7 +42,7 @@ Number two is Inferno. Detective Joseph Thorne opens the box and spends the whol
 And number one is Hell on Earth. Pinhead breaks free from the Pillar of Souls with no box and no rules, and he massacres an entire nightclub, kills the police, and turns his victims into brand new Cenobites. Only Joey, with the box itself turned into a dagger, can send him back. If he's the one in your room, there's no deal to make. Survival rate: five percent.
 
 ## s13 outro
-So that's every Pinhead, from a drug trip at a party to a demon with no rules at all. Tell me in the comments which box you'd be brave enough to open. And honestly, I've been grinding on these videos every single night, digging through every movie so the rankings are right, and most of you watching aren't subscribed yet. If you enjoyed this one, hitting like and subscribe really helps the channel grow, and it tells me which killer you want ranked next. Some doors are better left closed, but this one you can open.
+So that's every Pinhead, from a drug trip at a party to a demon with no rules at all. Tell me in the comments which box you'd be brave enough to open. And honestly, I've been grinding on these videos every night, rewatching every movie so the rankings are right. As a small channel, your subscribe really means a lot to me, and it decides which killer I rank next. Thank you for watching, and keep that box closed.
 
 ## Fact notes
 - Hellworld: Adam's father (the Host) drugs the five friends; Allison, Derrick, Mike die (ambiguous); Jake and Chelsea survive; Host opens the box, real Cenobites kill him.
