@@ -18,7 +18,7 @@ Number ten is Hellraiser Judgment. This time Hell has a whole office, the Stygia
 Number nine is Hellbound. Pinhead is still terrifying, but this is the movie where Kirsty shows him an old photo, and he remembers he used to be a human soldier named Elliot Spencer. A moment later, Doctor Channard, a brand new Cenobite, cuts through Pinhead and his whole crew in seconds, and Kirsty and Tiffany walk out of Hell. Survival rate: fifty-five percent.
 
 ## s05 #8 Hellraiser: Revelations (2011), 50%, Better Run
-Number eight is Hellraiser Revelations, with a different actor under the pins. Two friends open the box on a trip to Mexico, one gets skinned and the other gets taken, and Pinhead refuses every deal anyone offers him. But he leaves almost as quickly as he arrives, and Emma is still standing at the end. Survival rate: fifty percent.
+Number eight is Hellraiser Revelations, with a different actor under the pins. On a trip to Mexico, Nico solves the box and gets dragged to Hell, then claws his way back out by getting his best friend Steven to kill for him, before killing Steven too and wearing his skin. Pinhead flat out refuses Nico's deal and drags him back, but he leaves almost as quickly as he arrives, and Emma is still standing at the end. Survival rate: fifty percent.
 
 ## s06 #7 Hellraiser (1987), 40%, Almost Dead
 Number seven is the original Hellraiser. Frank solves the box, and the Cenobites tear him apart with hooked chains so completely that he has to be rebuilt from blood. Kirsty survives the only way you can, by making a deal, handing Frank over, and then reversing the puzzle before they take her too. Survival rate: forty percent.
@@ -27,13 +27,13 @@ Number seven is the original Hellraiser. Frank solves the box, and the Cenobites
 Number six is Hellseeker. Kirsty opens the box again, and this time she's ready, she offers Pinhead five other souls in exchange for her own, including her cheating husband. It works, but think about what it took, five people had to die so one could walk away. Survival rate: thirty-five percent.
 
 ## s08 #5 Hellraiser (2022), 30%, Almost Dead
-Number five is the 2022 Hellraiser, where Pinhead is called the Priest. The box has six configurations, and every single one needs a blood sacrifice before it opens again. Riley's brother Matt is flayed, Nora is skinned alive, and Trevor becomes the final victim. Riley and Colin get out, but only because Riley turns down everything the Priest offers her. Survival rate: thirty percent.
+Number five is the 2022 Hellraiser, where Pinhead is called the Priest. The box has six configurations, and every single one needs someone stabbed by its blade as a sacrifice. Riley's brother Matt is flayed, and the Priest tortures Nora until she's flayed to death. Riley only gets herself and Colin out by stabbing her own boyfriend Trevor as the final sacrifice, and then turning down every gift the Priest offers her. Survival rate: thirty percent.
 
 ## s09 #4 Hellraiser: Bloodline (1996), 25%, Almost Dead
 Number four is Bloodline, the one that goes to space. Pinhead hunts the same family across three centuries, kills John Merchant in New York, and wipes out almost an entire crew on a space station in the year 2127. In the end, it takes a whole space station turned into a giant puzzle box full of light to finally destroy him. Survival rate: twenty-five percent.
 
 ## s10 #3 Hellraiser: Deader (2005), 15%, Slaughtered
-Number three is Deader. A reporter named Amy tracks a cult in Bucharest that kills its own members and brings them back, all because their leader wants to control the box. When Amy finally opens it, Pinhead slaughters the entire cult in minutes, and he tells her that opening the box means she belongs to him now. Amy's only way out is to take her own life before he can take her. Survival rate: fifteen percent.
+Number three is Deader. A reporter named Amy tracks a cult in Bucharest that kills its own members and brings them back, all because their leader wants to become the Cenobites' master. When Amy finally opens the box, Pinhead slaughters the entire cult in minutes, then tells her she owes them for opening it, and that her father has been waiting for her in Hell. Amy's only way out is to take her own life before he can take her. Survival rate: fifteen percent.
 
 ## s11 #2 Hellraiser: Inferno (2000), 8%, Slaughtered
 Number two is Inferno. Detective Joseph Thorne opens the box and spends the whole movie chasing a killer, until he learns his own therapist was Pinhead the entire time, and he's already in Hell. There's no fight, no deal, and no way out, just an eternity of torment. Survival rate: eight percent.
@@ -48,11 +48,11 @@ So that's every Pinhead, from a drug trip at a party to a demon with no rules at
 - Hellworld: Adam's father (the Host) drugs the five friends; Allison, Derrick, Mike die (ambiguous); Jake and Chelsea survive; Host opens the box, real Cenobites kill him.
 - Judgment: Stygian Inquisition (Auditor, Assessor, Jury); Pinhead has Sean killed, kills Jophiel; God banishes Pinhead to Earth.
 - Hellbound: Kirsty shows Spencer's photo; Channard kills Pinhead and the Cenobites; Kirsty and Tiffany escape.
-- Revelations: Nico solves the box in Mexico; Steven skinned; Pinhead refuses Emma's trade; Sarah taken; Ross dies; Emma left.
+- Revelations (re-checked 11/04): only Nico solves the box (Mexico) and is taken; he escapes by having Steven kill prostitutes for blood, then kills Steven and wears his skin; Pinhead refuses Nico's bargain and reclaims him; Kate killed, Sarah taken, Ross dies; Emma survives.
 - Hellraiser 1987: Frank torn apart by chains, resurrected via Larry's blood; Kirsty's deal (Frank for her), reverses the box.
 - Hellseeker: Kirsty's deal = five souls (three mistresses, Bret, Trevor) for hers.
-- Hellraiser 2022: six configurations, sacrifice each; Matt flayed, Nora tortured and flayed, Trevor final victim; Riley and Colin leave.
+- Hellraiser 2022 (re-checked 11/04): six configurations, each needs a victim marked by the box's blade; Matt flayed (dead); the Priest tortures Nora, fatally flayed; Riley stabs Trevor as the final sacrifice, saving Colin; she refuses the offer to resurrect Matt.
 - Bloodline: 1796 / 1996 / 2127; Pinhead kills John Merchant; 2127 crew killed except Rimmer and Dr. Merchant; Minos station = Elysium Configuration light trap.
 - Inferno: Pinhead revealed as Dr. Paul Gregory; Thorne faces eternal torment.
 - Hell on Earth: Pillar of Souls, nightclub massacre, kills police, new Cenobites (J.P., Terri, barman, DJ, Doc); Joey stabs him with the box-dagger.
-- Deader: Amy Klein, Bucharest, Deaders cult (Winter LeMarchand) kills and reanimates members; Pinhead slaughters the cult; Amy kills herself rather than be taken.
+- Deader (re-checked 11/04): Winter LeMarchand wants to access the Cenobites' realm and become their master; Pinhead kills the Deaders, tells Amy she owes them for opening the box and her father has been waiting for her in Hell; Amy kills herself, box shuts, Cenobites banished.
