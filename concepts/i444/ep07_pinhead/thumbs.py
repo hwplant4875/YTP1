@@ -70,12 +70,13 @@ os.makedirs(OUT, exist_ok=True)
 # No source image twice in a thumbnail or across A/B/C (the 1987 / Hell on Earth skyline face is one photo).
 FACE, EYE = 135, 215
 def F(clip, t, cx, cy, em, pct, col, bright=1.15): return P(clip, t, cx, cy, em, pct, col, bright, face_px=FACE, eye_y=EYE)
-three([F('poster:o_lXpBj7RDr7wShql0KpCLYHyYvdi.jpg', 0, 2179, 865, 405, '80%', GREEN, 1.1),     # Hellworld, jar room
-       F('native:hr1_pack4k', 44.0, 1240, 425, 230, '40%', YEL, 1.05),                         # Hellraiser 1987, hospital blinds (4K pack, native px)
-       F('poster:o_xjeoa7KjnUMQzJXGunHmgMjhHmP.jpg', 0, 2556, 802, 405, '5%', RED, 1.05)], 'pinhead_thumb_a.jpg')   # Hell on Earth, skyline
-three([F('poster:o_qW4hr2WweKiyztgd4Ql0wlfRYBF.jpg', 0, 2403, 458, 275, '60%', GREEN, 1.2),     # Judgment
-       F('hr22_bridge', 25.0, 807, 434, 191, '30%', YEL, 1.9),                                # the Priest, 2022
-       F('poster:o_yyiu_notitle.jpg', 0, 430, 639, 228, '8%', RED, 1.1)], 'pinhead_thumb_b.jpg')    # Inferno, official poster art (o_yyiuRnEIDCjr0g2Fsal0isi9GcU, title faded to its black background)
-three([F('poster:o_pl5OzUABUK5AgAsMlQg2VyybRHL.jpg', 0, 1719, 485, 188, '55%', GREEN, 0.95),     # Hellbound
-       F('poster:o_udZ3XqsurnNuGp1QfS5CLod6MS5.jpg', 0, 1000, 450, 283, '25%', YEL, 0.95),     # Bloodline, official poster art
-       F('hr3_unstoppable', 86.5, 1000, 418, 195, '5%', RED, 1.35)], 'pinhead_thumb_c.jpg')       # Hell on Earth, Boiler Room chains
+# v6b (owner 11/04 21:43 KST numbers): each film once across A/B/C; green >= 50, yellow 25-45, red <= 20
+three([F('poster:o_lnCm_notitle.jpg', 0, 506, 633, 289, '70%', GREEN, 1.05),                   # Revelations #10, official poster art (title faded)
+       F('hr6_pain', 205.0, 925, 410, 280, '45%', YEL, 1.6),                                # Hellseeker #8 (Miramax HD clip)
+       F('poster:o_qW4hr2WweKiyztgd4Ql0wlfRYBF.jpg', 0, 2403, 458, 275, '10%', RED, 1.2)], 'pinhead_thumb_a.jpg')    # Judgment #3
+three([F('native:hr1_pack4k', 44.0, 1240, 425, 230, '55%', GREEN, 1.05),                   # Hellraiser 1987 #9, hospital blinds (4K)
+       F('hr22_bridge', 25.0, 807, 434, 191, '35%', YEL, 1.9),                              # the Priest, 2022 #7
+       F('poster:o_yyiu_notitle.jpg', 0, 430, 639, 228, '8%', RED, 1.1)], 'pinhead_thumb_b.jpg')    # Inferno #2, official poster art (title faded)
+three([F('poster:o_pl5OzUABUK5AgAsMlQg2VyybRHL.jpg', 0, 1719, 485, 188, '85%', GREEN, 0.95),   # Hellbound #11
+       F('poster:o_udZ3XqsurnNuGp1QfS5CLod6MS5.jpg', 0, 1000, 450, 283, '25%', YEL, 0.95),   # Bloodline #6, official poster art
+       F('poster:o_xjeoa7KjnUMQzJXGunHmgMjhHmP.jpg', 0, 2556, 802, 405, '5%', RED, 1.05)], 'pinhead_thumb_c.jpg')   # Hell on Earth #1, skyline       # Hell on Earth, Boiler Room chains
