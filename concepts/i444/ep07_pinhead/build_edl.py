@@ -90,8 +90,8 @@ X.append(sec('s03', [(0, 'hr10_hell4k', 370.2, -1.5), ('this time', 'hr10_judge4
 # #9 Hellbound 55%
 X.append(sec('s04', [(0, 'hr2_legendary', 89.8, -6.1), ('pinhead is still', 'hr2_legendary', 53.4, -5.3), ('when tiffany', 'hr2_tiffany', 262.55, -3.0),
   ('the cenobites spare', 'hr2_tiffany', 295.75, -10.0), ('then kirsty', 'hr2_legendary', 50.15, -3.1), ('and he remembers', 'hr2_legendary', 64.45, -3.3),
-  ('a moment later', 'hr2_channardtrans', 105.52, -3.3), ('now a brand', 'hr2_channardtrans', 110.32, -1.5), ('cuts through', 'hr2_legendary', 147.75, -1.5),
-  ('whole crew', 'hr2_channardtrans', 242.7, -1.7), ('and kirsty and', 'hr2_legendary', 219.2, -1.0, 'flip'), ('walk out', 'hr2_legendary', 34.75, -4.6, 'z=1.35,dx=249'),
+  ('a moment later', 'hr2_channardtrans', 105.52, -3.3), ('now a brand', 'hr2_channardtrans', 110.32, -1.5), ('cuts through', 'hr2_tiffvs', 154.2, -1.5), ('pinhead and', 'hr2_tiffvs', 194.15, -1.2),
+  ('whole crew', 'hr2_tiffvs', 162.5, -1.4), ('in seconds', 'hr2_tiffvs', 156.1, -1.8), ('and kirsty and', 'hr2_legendary', 219.2, -1.0, 'flip'), ('walk out', 'hr2_legendary', 34.75, -4.6, 'z=1.35,dx=249'),
   ('survival rate', 'hr2_legendary', 158.8, -2.6, 'z=1.35,dx=249')], 'and kirsty and'))
 # #8 Revelations 50% (owner's 1080p Blu-ray, read directly, never committed)
 X.append(sec('s05', [(0, 'hr9_rev', 3880.0, -1.5), ('with a different', 'hr9_rev', 4068.0, -6.0), ('on a trip', 'hr9_rev', 1520.0, -2.5),
