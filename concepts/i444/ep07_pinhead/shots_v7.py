@@ -1,0 +1,167 @@
+# EP07 v7 shot plan, read by build_edl_v7.py. A shot is (phrase, clip, in_s, -clean_s[, 'opts']).
+# opts: L = 'z=1.35,dx=249' moves the subject left of the stat card; 'flip' mirrors the shot.
+L = 'z=1.35,dx=249'
+# ---- s00 cold open: frame 0 = Pinhead; every chunk gets its own caption and its own lore-exact cut ----
+X.append(sec('s00', [(0, 'hr1_pack4k', 34.57, -11.0),                       # 1987 Pinhead, hospital blinds
+  ('tear straight', 'hr1_jesuswept', 117.49, -0.67),                       # hook in Frank's shirt
+  ('through your flesh', 'hr1_jesuswept', 122.75, -1.5),                   # chains rip his chest
+  ('with hooked', 'hr1_jesuswept', 127.21, -2.13),                         # Frank's face torn by the hooks
+  ('this one will#1', 'hr22_trailer_hulu', 97.5, -2.0),                    # the Priest (2022)
+  ('peel your', 'hr22_nora', 153.6, -6.1),                                 # the Priest raises the blade
+  ('off while', 'hr22_nora', 169.13, -1.84),                               # wire hook pulls Nora's skin
+  ("you're still", 'hr22_nora', 161.93, -2.27),                            # Nora alive, screaming
+  ('this one will#2', 'hr3_unstoppable', 106.5, -1.6),                     # Hell on Earth Pinhead
+  ('turn you', 'hr3_cenoloose', 145.5, -2.1),                              # Pistonhead
+  ('one of his', 'hr3_cenoloose', 105.9, -2.8),                            # Barbie
+  ('cenobites', 'hr3_cenoloose', 178.04, -5.0),                            # Camerahead
+  ('this one will#3', 'hr5_torment', 437.33, -6.0),                        # Inferno Pinhead in Thorne's hell
+  ('trap you', 'hr5_torment', 420.85, -1.8),                               # chains whip around Thorne
+  ('in your own', 'hr5_torment', 425.1, -3.0),                             # Thorne hung in the chains
+  ('personal hell', 'hr5_cruelty', 22.0, -1.8),                            # the legless creature of his hell
+  ('forever', 'hr5_torment', 450.33, -3.7),                                # Thorne held forever
+  ('and they all', 'hr9_rev', 3927.97, -4.84),                             # Revelations Pinhead
+  ('do it', 'hr3_iamtheway', 126.55, -1.35),                               # Hell on Earth Pinhead
+  ('calmly', 'hr1_pack4k', 45.6, -11.5),                                   # the calm 1987 stare
+  ("we're ranking", 'still_posterwall', 0.0, -5.0)],
+  extra=[('word', w, a, b) for w, a, b in [
+    ('This Pinhead will', 0, 'tear straight'), ('Tear straight', 'tear straight', 'through your flesh'),
+    ('Through your flesh', 'through your flesh', 'with hooked'), ('With hooked chains', 'with hooked', 'this one will#1'),
+    ('This one will', 'this one will#1', 'peel your'), ('Peel your skin', 'peel your', 'off while'), ('Off while', 'off while', "you're still"),
+    ("You're still alive", "you're still", 'this one will#2'), ('This one will', 'this one will#2', 'turn you'),
+    ('Turn you into', 'turn you', 'one of his'), ('One of his', 'one of his', 'cenobites'), ('Cenobites', 'cenobites', 'this one will#3'),
+    ('This one will', 'this one will#3', 'trap you'), ('Trap you', 'trap you', 'in your own'), ('In your own', 'in your own', 'personal hell'),
+    ('Personal Hell', 'personal hell', 'forever'), ('Forever', 'forever', 'and they all'), ('And they all', 'and they all', 'do it'),
+    ('Do it', 'do it', 'calmly'), ('Calmly', 'calmly', "we're ranking"), ("We're ranking", "we're ranking", 'every pinhead'),
+    ('Every Pinhead', 'every pinhead', 'by your chance'), ('By your chance', 'by your chance', 'of surviving'),
+    ('Of surviving him', 'of surviving', 999)]], clip_db=-20))
+for ov in X[-1]['overlays']:  # captions flash and cut out (one word 0.9 s, a phrase 1.6 s max); the frame-0 caption holds to its cut
+    if ov[0] == 'word' and ov[2] > 0: ov[3] = min(ov[3], ov[2] + (0.9 if ' ' not in ov[1] else 1.6))
+# ---- s01 rules (stat card from frame 0) ----
+s01_end = vdur('s01') + 0.05
+X.append(sec('s01', [(0, 'hr1_pack4k', 62.4, -3.4), ('you just', 'hr2_tiffany', 49.59, -9.9), ("that movie's", 'hr4_chart', 60.25, -7.4),
+  ('we score', 'hr9_trailer_rt', 72.4, -1.6), ('intelligence', 'hr4_pathway', 152.3, -6.2), ('and how merciless', 'hr6_painpleasure', 180.6, -2.9),
+  ('that last one', 'hr22_nora', 128.13, -3.74), ('put it all', 'hr1_trailer_arrow2', 76.0, -5.7)]))
+X[0]['vfade'] = {'out': 0.25}; X[-1]['vfade'] = {'in': 0.25}
+X[-1]['overlays'].append(['stats', {'name': 'PINHEAD', 'tile_png': 'tiles/mystery.png', 'stats': {'STRENGTH': 6, 'INTELLIGENCE': 7,
+  'KILL COUNT': 5, 'NO MERCY': 8}, 'pct': '??', 'dur': round(s01_end, 3), 't_pct': round(T('s01', 'survival rate') + LEAD, 3),
+  'reveal': [round(T('s01', w) + LEAD, 3) for w in ('strength', 'intelligence', 'kill count', 'merciless')]}, 0.0, 999])
+X[-1]['sfx'] = [[0.0, SFX + 'whoosh.wav', SFX_GAIN['whoosh']], [T('s01', 'survival rate') + LEAD, SFX + 'stamp.wav', SFX_GAIN['stamp']]]
+# ---- s04 #11 Hellbound 85%: the showcase, Pinhead destroyed by Channard (hr2_tiffvs 1080p, natural speed, cut on the hits) ----
+X.append(sec('s04', [(0, 'hr2_legendary', 89.8, -6.1),
+  ('doctor channard forces', 'hr2_channardpack2', 750.0, -4.0),            # Channard the surgeon
+  ('a young patient', 'hr2_tiffany', 0.5, -38.0),                          # Tiffany with the box
+  ('to solve the', 'hr2_tiffany', 162.91, -2.84),                          # the box opens into its star
+  ('the cenobites spare', 'hr2_tiffany', 262.55, -3.0),                    # Tiffany looks up at them
+  ('because the desire', 'hr2_tiffany', 295.75, -10.0),                    # Pinhead: "it is desire"
+  ('then kirsty who', 'hr2_escape', 0.0, -2.53),                           # Kirsty
+  ('shows pinhead an', 'hr2_legendary', 50.15, -3.1),                      # the photo
+  ('and he remembers', 'hr2_legendary', 64.45, -3.3),                      # Pinhead remembers
+  ('a british army', 'hr2_tiffvs', 201.27, -1.86),                         # Captain Elliot Spencer's photo
+  ("that's when channard", 'hr2_channardpack2', 659.65, -3.48),            # Channard floats in
+  ('now a cenobite', 'hr2_channardpack2', 663.13, -2.84),                  # arms spread
+  ('pinhead and his', 'hr2_legendary', 147.75, -1.28),                     # Pinhead and the Cenobites face him
+  ('turn their chains', 'hr2_tiffvs', 141.77, -0.83),                      # chains fly at Channard
+  ('but his tentacles', 'hr2_tiffvs', 150.27, -5.06),                      # the tentacles fan out
+  ('right through them', 'hr2_tiffvs', 155.33, -1.27),                     # a tentacle slashes a chain
+  ('he cuts the', 'hr2_tiffvs', 156.6, -0.63),                             # the severed chain falls
+  ('cenobites down one', 'hr2_tiffvs', 161.83, -3.74),                     # the female Cenobite cut down
+  ('by one', 'hr2_tiffvs', 175.07, -1.33),                                 # Chatterer hit
+  ('then turns his', 'hr2_tiffvs', 190.23, -3.4),                          # Channard raises his hands, arcs
+  ('pinhead himself', 'hr2_tiffvs', 193.93, -1.47),                        # the beams hit Pinhead
+  ('that famous face', 'hr2_tiffvs', 195.40, -1.37),                       # his head white-hot
+  ('burns away in', 'hr2_tiffvs', 198.60, -1.13),                          # a beam through his head
+  ('a blast of', 'hr2_tiffvs', 199.73, -1.54),                             # Pinhead gone
+  ('and for a moment', 'hr2_tiffvs', 203.13, -2.54),                       # Elliot Spencer, human, among the chains
+  ('spencer again human', 'hr2_tiffvs', 211.83, -2.1),                     # Spencer close-up
+  ("until channard's", 'hr2_tiffvs', 213.93, -1.4),                        # the blade
+  ('kirsty and tiffany', 'hr2_escape', 20.73, -4.5, L),                    # running
+  ('out of hell', 'hr2_escape', 49.97, -2.1, L),                           # down the corridor to the light
+  ('survival rate', 'hr2_escape', 70.40, -2.5, L)], 'kirsty and tiffany'))  # back on the asylum floor
+# ---- s05 #10 Revelations 70% (owner's 1080p Blu-ray) ----
+X.append(sec('s05', [(0, 'hr9_rev', 3880.0, -1.5), ('with a different', 'hr9_rev', 4068.0, -6.0), ('on a trip', 'hr9_rev', 1520.0, -2.5),
+  ('nico solves the', 'hr9_rev', 1866.0, -2.0), ('and gets dragged', 'hr9_rev', 2173.75, -1.7), ('he claws his', 'hr9_rev', 2199.4, -16.0),
+  ('by getting his', 'hr9_rev', 3274.5, -2.5), ('then kills steven', 'hr9_rev', 2105.0, -1.4), ('and wears his', 'hr9_rev', 3020.0, -2.5),
+  ('back home he', 'hr9_rev', 3651.4, -20.0), ("steven's sister emma", 'hr9_rev', 3736.66, -4.25), ('open the box', 'hr9_rev', 3780.57, -2.42),
+  ('so the cenobites', 'hr9_rev', 3806.06, -4.29), ("they don't", 'hr9_rev', 4146.0, -2.5), ("they kill nico's", 'hr9_rev', 3921.01, -1.37),
+  ('on the spot', 'hr9_rev', 3922.38, -4.09), ('and pinhead refuses', 'hr9_rev', 3951.7, -3.9), ('as they haul', 'hr9_rev', 4024.78, -4.0),
+  ("steven's dying father", 'hr9_rev', 4020.15, -4.63), ('shoots nico dead', 'hr9_rev', 4028.2, -1.8),
+  ("take steven's mother", 'hr9_rev', 4112.78, -2.42), ('in his place', 'hr9_rev', 4115.2, -5.5),
+  ('only emma the', 'hr9_rev', 4184.98, -2.79, L), ('is left', 'hr9_rev', 4191.27, -13.0, L), ('survival rate', 'hr9_rev', 4204.62, -4.1, L)],
+  'only emma the'))
+# ---- s06 #9 Hellraiser 1987 55% ----
+X.append(sec('s06', [(0, 'hr1_pack4k', 122.9, -2.6), ('frank solves the', 'hr1_pack4k', 10.43, -15.67),
+  ('and the cenobites rip', 'hr1_jesuswept', 124.25, -1.63), ('with hooked chains', 'hr1_jesuswept', 131.51, -5.0),
+  ('when kirsty solves', 'hr1_youopened', 36.04, -14.0), ('she thinks fast', 'hr1_youopened', 50.22, -7.25),
+  ('she offers them', 'hr1_youopened', 337.38, -5.0), ('frank who escaped', 'hr1_youopened', 346.26, -4.92),
+  ('in exchange for', 'hr1_youopened', 351.18, -3.67), ('they tear frank', 'hr1_jesuswept', 136.5, -6.0),
+  ('then come for', 'hr1_youopened', 354.85, -3.59), ('and she only', 'hr1_youopened', 358.44, -3.67, L),
+  ('by reversing the', 'hr1_dont', 0.0, -2.79, L), ('and sending them', 'hr1_dont', 2.79, -1.92, L), ('back to hell', 'hr1_dont', 6.88, -1.63, L),
+  ('survival rate', 'hr1_pack4k', 30.33, -4.24, L)], 'and she only'))
+# ---- s07 #8 Hellseeker 45% ----
+X.append(sec('s07', [(0, 'hr6_painpleasure', 186.4, -4.0), ('and kirsty is', 'hr6_kirstypack', 4.97, -1.41),
+  ('her cheating husband', 'hr6_kirstypack', 19.03, -3.87), ('so he gets', 'hr6_kirstypack', 121.67, -13.5),
+  ('but this time', 'hr6_kirstypack', 135.33, -4.87), ('she offers pinhead', 'hr6_kirstypack', 156.52, -21.9),
+  ('then she kills', 'hr6_kirstypack', 268.12, -10.0), ('then bret the', 'hr6_painpleasure', 175.3, -2.5),
+  ('and finally trevor', 'hr6_kirstypack', 198.0, -2.0), ('she walks away', 'hr6_kirstypack', 289.8, -16.0),
+  ('survival rate', 'hr6_pain', 204.9, -4.0, L)], 'she walks away'))
+# ---- s08 #7 Hellraiser 2022 35% ----
+X.append(sec('s08', [(0, 'hr22_bridge', 2.6, -3.6), ('where pinhead is', 'hr22_trailer_20th', 97.46, -2.13),
+  ('this box has', 'hr22_carousel', 498.0, -16.5), ('and each one', 'hr22_carousel', 140.9, -8.6),
+  ("riley's brother matt", 'hr22_carousel', 357.85, -1.21), ('cuts himself', 'hr22_carousel', 359.06, -0.95),
+  ('on it and', 'hr22_carousel', 370.23, -1.42), ('vanishes', 'hr22_carousel', 470.0, -3.5),
+  ('and her friend nora', 'hr22_trailer_20th', 95.88, -1.58), ('is flayed alive', 'hr22_nora', 187.87, -3.56),
+  ('riley only gets', 'hr22_bridge', 0.0, -2.5), ('by stabbing her', 'hr22_bridge', 33.0, -4.2), ('as the final', 'hr22_carousel', 415.0, -3.0),
+  ('his name is', 'hr22_trailer_20th', 87.6, -0.9), ('yes another trevor', 'hr22_carousel', 264.0, -2.5),
+  ("and he'd secretly", 'hr22_carousel', 280.5, -2.0), ('the millionaire who', 'hr22_final', 15.0, -9.0),
+  ('and when the priest', 'hr22_nora', 145.67, -7.93, L), ('bring her brother', 'hr22_carousel', 391.92, -2.13, L),
+  ('she says no', 'hr22_bridge', 23.8, -3.0, L), ('survival rate', 'hr22_bridge', 27.0, -3.0, L)], 'and when the priest'))
+# ---- s09 #6 Bloodline 25% ----
+X.append(sec('s09', [(0, 'hr4_pathway', 152.3, -6.2), ('the family of', 'hr4_birth', 184.0, -11.0), ('is cursed and', 'hr4_birth', 305.38, -29.0),
+  ('this pinhead comes', 'hr4_pathway', 99.5, -4.5), ('in nineteen', 'hr4_straighthell', 23.62, -2.46),
+  ('he kills the man', 'hr4_straighthell', 27.42, -1.54), ('then john merchant', 'hr4_straighthell', 59.0, -8.96),
+  ('in twenty-one', 'hr4_space', 48.2, -10.8), ('he and his cenobites', 'hr4_painface', 251.2, -1.45),
+  ('wipe out almost', 'hr4_painface', 276.35, -1.45), ('crew of a', 'hr4_finalbattle', 85.5, -1.75),
+  ('in the end', 'hr4_another', 272.55, -1.15), ('folded into', 'hr4_another', 273.8, -1.25), ('giant puzzle', 'hr4_another', 279.3, -2.0, L),
+  ('survival rate', 'hr4_chart', 158.8, -4.9, 'flip=1,z=1.35,dx=249')], 'to finally destroy'))
+# ---- s02 #5 Hellworld 20% ----
+X.append(sec('s02', [(0, 'hr8_welcome', 66.2, -4.1), ('five friends go', 'hr8_trailer', 15.5, -0.75),
+  ('hellraiser-themed party', 'hr8_trailer', 14.6, -0.85), ('pinhead takes', 'hr8_cop', 43.4, -4.1), ('mike ends up', 'hr8_welcome', 90.8, -3.5),
+  ('and a cop', 'hr8_cop', 31.5, -2.1), ('then the twist', 'hr8_welcome', 84.67, -2.8), ('the host who', 'hr8_welcome', 87.5, -3.3),
+  ('had drugged all', 'hr8_trailer', 42.66, -0.42), ('five and buried', 'hr8_jake', 66.2, -5.2), ('those kills were', 'hr8_welcome', 116.5, -3.5),
+  ('but allison derrick', 'hr8_jake', 109.7, -3.4), ('only chelsea and', 'hr8_trailer', 43.36, -0.48), ('jake are dug', 'hr8_cop', 33.6, -1.0),
+  ('and when the', 'hr8_welcome', 8.2, -6.4, L), ('the real pinhead', 'hr8_welcome', 54.0, -3.0, L),
+  ('then his cenobites', 'hr8_welcome', 102.8, -1.4, L), ('tear him apart', 'hr8_welcome', 104.2, -1.0, L),
+  ('survival rate', 'hr8_welcome', 110.5, -1.3, L)], 'and when the'))
+# ---- s10 #4 Deader 15% ----
+X.append(sec('s10', [(0, 'hr7_returns', 89.2, -4.4), ('in bucharest a', 'hr7_real', 20.2, -5.9), ('finds a cult', 'hr7_afraid', 147.9, -1.1),
+  ('and brings them', 'hr7_afraid', 4.55, -3.5), ('all because their', 'hr7_returns', 7.59, -1.58), ('wants to become', 'hr7_returns', 75.6, -5.6),
+  ("he can't open", 'hr7_apt11', 168.03, -2.84), ('so he kills', 'hr7_returns', 10.55, -5.46), ('to do it', 'hr7_youopened', 1.42, -2.29),
+  ('when she does', 'hr7_youopened', 3.71, -1.55), ('pinhead slaughters the', 'hr7_returns', 175.6, -1.55),
+  ('whole cult then', 'hr7_returns', 166.2, -1.35), ('tells her she', 'hr7_youopened', 5.26, -4.62), ('and that her', 'hr7_returns', 189.1, -4.0),
+  ('rather than be', 'hr7_returns', 16.68, -2.25, L), ('she takes her', 'hr7_returns', 24.06, -1.17, L),
+  ('survival rate', 'hr7_returns', 119.1, -2.5, L)], 'rather than be'))
+# ---- s03 #3 Judgment 10% ----
+X.append(sec('s03', [(0, 'hr10_hell4k', 370.2, -1.5), ('here hell has', 'hr10_judge4k', 17.0, -4.3), ('called the stygian', 'hr10_scifinow', 9.6, -1.8),
+  ('where an auditor', 'hr10_scifinow', 12.0, -2.2), ('and a jury', 'hr10_judge4k', 475.48, -2.4), ('detective sean secretly', 'hr10_hell4k', 315.7, -2.5),
+  ('forces his brother', 'hr10_hell4k', 318.24, -11.8), ('then offers them', 'hr10_hell4k', 342.0, -4.0), ('pinhead refuses any', 'hr10_judge4k', 523.4, -4.8),
+  ('chains rip into', 'hr10_judge4k', 560.31, -3.6), ('and drag them', 'hr10_hell4k', 349.35, -5.8), ('pinhead has sean', 'hr10_judge4k', 498.6, -4.3),
+  ('and even lets', 'hr10_judge4k', 568.44, -3.4), ('which finally gets', 'hr10_judge4k', 584.42, -5.3, L),
+  ('survival rate', 'hr10_hell4k', 371.4, -1.3, 'z=1.45,dx=249')], 'which finally gets'))
+# ---- s11 #2 Inferno 8% ----
+X.append(sec('s11', [(0, 'hr5_box', 266.2, -1.7), ('detective joseph', 'hr5_world', 50.9, -20.9), ('solves the box', 'hr5_box', 27.1, -4.0),
+  ('and spends the', 'hr5_fineboy', 2.0, -6.0), ('who picks off', 'hr5_torment', 189.8, -1.2), ('then his own', 'hr5_child', 97.1, -2.3),
+  ('to be pinhead', 'hr5_torment', 444.0, -6.0), ('and he learns', 'hr5_fineboy', 14.0, -2.0), ("there's no fight", 'hr5_torment', 548.65, -4.0),
+  ('just an eternity', 'hr5_cruelty', 33.5, -13.0, L), ('survival rate', 'hr5_welcome', 0.0, -5.1, L)], 'just an eternity'))
+# ---- s12 #1 Hell on Earth 5% ----
+X.append(sec('s12', [(0, 'hr3_iamtheway', 131.0, -1.8), ('this pinhead feeds', 'hr3_pillar', 106.0, -1.2), ('until he breaks', 'hr3_pillar', 128.0, -7.8),
+  ("and once he's", 'hr3_pillar', 230.15, -3.9), ('he needs no', 'hr3_iamtheway', 9.6, -3.3), ('he massacres an', 'hr3_club', 124.8, -1.9),
+  ('entire nightclub', 'hr3_dancefloor', 60.0, -1.2), ('and turns some', 'hr3_cenoloose', 76.14, -1.26), ('brand new cenobites', 'hr3_cenoloose', 99.13, -4.7),
+  ('who then kill', 'hr3_cenoloose', 138.31, -6.0), ('only joey with', 'hr3_finalbattle', 297.0, -2.0), ('turned into a', 'hr3_finalbattle', 321.0, -2.5),
+  ('can send him', 'hr3_finalbattle', 343.0, -3.1), ("inferno's pinhead wanted", 'hr5_child', 32.0, -3.0), ('this one wants', 'hr3_club', 72.0, -3.0),
+  ("if he's the one", 'hr3_finalbattle', 300.0, -2.5, L), ('survival rate', 'hr3_pillar', 224.35, -3.1, L)], "if he's the one"))
+# ---- s13 outro ----
+X.append(sec('s13', [(0, 'hr2_legendary', 53.4, -5.3), ('from the one who', 'hr2_legendary', 34.75, -4.6), ('to the one with', 'hr3_finalbattle', 315.0, -2.5),
+  ('which box would', 'hr1_pack4k', 81.55, -12.8), ('and honestly i', 'hr9_rev', 4090.0, -4.0), ("we're a small", 'hr1_pack4k', 52.0, -5.0),
+  ('thanks for watching', 'hr4_pathway', 172.0, -11.0), ('keep that box', 'hr2_tiffany', 180.89, -1.54)], pad=2.0,
+  extra=[('title', ['WHICH BOX', '!WOULD YOU OPEN?'], 'which box would', 'and honestly i'), ('png', 'tiles/subscribe.png', 'every subscribe', 'thanks for watching'),
+         ('title', ['KEEP THAT BOX', '!CLOSED'], 'keep that box', 999)]))

@@ -100,3 +100,17 @@ hr10_rw7 | LSu4R_7RWlc | FALLBACK (Randy Wayne - Support Channel) | Judgment Sce
 hr10_rw8 | YPDKunE_8pw | FALLBACK (Randy Wayne - Support Channel) | Judgment Scene 8 1080p: precinct office dialogue, no use
 hr2_tiffvs | N38lfFeJP_U | YouTube upload | Hellraiser 2 Tiffany solving the puzzle, Pinhead vs Channard 1080p (FALLBACK; owner 11/04: tentacles kill Pinhead)
 hr2_channardpack2 | waRDszw24_0 | HellsPriestess | Dr. Channard scene pack 1080p (FALLBACK, unused)
+# --- 11/05 scout7 (plot-beat scout)
+hr2_escape | QvNB0XEKClc | FALLBACK (Movie Samples) | Hellbound: Kirsty and Tiffany escape the labyrinth, run out, wake in the asylum 1080p clean
+hr1_youopened | STfCLWpAcTg | FALLBACK (FilmClips) | 1987 hospital: Kirsty solves the box, Chatterer beast, Cenobites, bargain for Frank 1440p SDR clean
+hr7_youopened | 9O5GvLVcum8 | FALLBACK (camperJOe) | Deader: Amy after opening the box, Pinhead "You opened the box" 1440p clean
+hr1_hospital | 5RZhYWSoKew | REJECT (COMIC NERD) | not Hellraiser (different film), do not use
+hr4_killscene | XgGivZuxrdg | REJECT (Horror movie tributes) | Bloodline Sharpe scene, oversaturated dup of hr4_straighthell
+hr4_cannotdie | eTt39rEburA | REJECT (kfcwarrior6661) | MovieClipsX + InShot watermarks, phone notification burned in
+hr10_amateurs | 57E-iR_mBqA | REJECT (Paul Taylor) | Judgment 16 s Pinhead profile only, no needed beat
+hr5_welcome | r1o4nIYyNU4 | camperJOe | Inferno 5 s Pinhead close-up "Welcome to Hell" 1440p (spare)
+hr5_fineboy | MzpVUtb6xJ0 | camperJOe | Inferno 24 s asylum corridor / mouth-gag old man 1440p (spare)
+hr2_tiffpack | Ieb89Axo4KE | FALLBACK (HellsPriestess) | Hellbound Tiffany scene pack 1080p (downloaded, not scouted; hr2_tiffany 4K covers it)
+hr22_final | 4XNfwGuAAJk | REJECT | 2022 Voight ascension 720p, no Riley
+hr22_god | iBCi7CR6s9Q | REJECT | 2022 Leviathan / Pinhead 1080p very dark, no Riley or Trevor visible
+hr22_itstime | lgqTZt-uOuM | REJECT | 2022 Voight ending 960x720, Spanish subs burned, soft
