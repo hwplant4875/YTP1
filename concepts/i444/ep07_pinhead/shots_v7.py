@@ -6,10 +6,10 @@ X.append(sec('s00', [(0, 'hr1_pack4k', 34.57, -11.0),                       # 19
   ('tear straight', 'hr1_jesuswept', 117.49, -0.67),                       # hook in Frank's shirt
   ('through your flesh', 'hr1_jesuswept', 122.75, -1.5),                   # chains rip his chest
   ('with hooked', 'hr1_jesuswept', 127.21, -2.13),                         # Frank's face torn by the hooks
-  ('this one will#1', 'hr9_rev', 2187.05, -1.7),                    # the Priest (2022)
-  ('peel your', 'hr9_rev', 2190.3, -2.8),                                 # the Priest raises the blade
-  # wire hook pulls Nora's skin
-  ("you're still", 'hr9_rev', 2183.7, -3.3),                            # Nora alive, screaming
+  ('this one will#1', 'hr9_rev', 2187.05, -1.7),                    # Hellbound Pinhead close-up in profile, Nico's Hell
+  ('peel your', 'hr9_rev', 2190.3, -2.8),                                 # Revelations: a Cenobite hand peels Nico's flayed face
+  # ('off while' folds into the shot above; caption kept)
+  ("you're still", 'hr9_rev', 2183.7, -3.3),                            # Revelations: Nico alive, screaming in the hooks
   ('this one will#2', 'hr3_unstoppable', 106.5, -1.6),                     # Hell on Earth Pinhead
   ('turn you', 'hr3_cenoloose', 145.5, -2.1),                              # Pistonhead
   ('one of his', 'hr3_cenoloose', 105.9, -2.8),                            # Barbie
@@ -100,7 +100,7 @@ X.append(sec('s06', [(0, 'hr1_pack4k', 122.9, -2.6), ('frank solves the', 'hr1_p
   ('she offers them', 'hr1_youopened', 344.12, -2.14), ('frank who escaped', 'hr1_youopened', 346.26, -4.92),
   ('in exchange for', 'hr1_youopened', 359.5, -2.61), ('they tear frank', 'hr1_jesuswept', 124.25, -1.63), ('all over again', 'hr1_jesuswept', 129.4, -2.1),
   ('then come for', 'hr1_sights', 4.6, -5.1), ('and she only', 'hr1_sights', 9.75, -1.45, L),
-  ('by reversing the', 'hr1_dont', 0.0, -2.79, L), ('and sending them', 'hr1_dont', 2.79, -1.92, L), ('back to hell', 'hr1_dont', 6.88, -1.63, L),
+  ('by reversing the', 'hr1_dont_sdr', 0.0, -2.79, L)  , ('and sending them', 'hr1_dont_sdr', 2.79, -1.92, L), ('back to hell', 'hr1_dont_sdr', 6.88, -1.63, L),
   ('survival rate', 'hr1_pack4k', 30.33, -4.24, L)], 'and she only'))
 # ---- s07 #8 Hellseeker 45% ----
 X.append(sec('s07', [(0, 'hr6_painpleasure', 186.4, -4.0), ('and kirsty is', 'hr6_kirstypack', 4.97, -1.41),
@@ -153,11 +153,11 @@ X.append(sec('s09', [(0, 'hr4_space', 0.0, -3.85),
 X.append(sec('s02', [(0, 'hr8_welcome', 66.2, -4.1),
   ('five friends go', 'hr8_trailer', 14.68, -1.6),
   ('hellraiser-themed party', 'hr8_jake', 50.0, -2.0),
-  ('and one by one', 'hr8_explain', 0.0, -2.9),
+  ('and one by one', 'hr8_jake', 0.4, -6.7),
   ('pinhead starts hunting', 'hr8_cop', 43.4, -4.1),
   ('he even drives', 'hr8_cop', 31.5, -2.1),
-  ('then the twist', 'hr8_welcome', 84.67, -2.8),
-  ('the host who', 'hr8_welcome', 87.5, -3.3),
+  ('then the twist', 'hr8_explain', 140.6, -2.5),
+  ('the host who', 'hr8_explain', 177.6, -3.5),
   ('had drugged all', 'hr8_explain', 152.6, -1.2),
   ('five and buried', 'hr8_explain', 213.85, -2.35),
   ('those kills were', 'hr8_jake', 109.7, -3.4),
@@ -195,7 +195,7 @@ X.append(sec('s03', [(0, 'hr10_hell4k', 370.2, -3.1),
   ('called the stygian', 'hr10_scifinow', 9.6, -1.8),
   ('where an auditor', 'hr10_scifinow', 12.0, -2.2),
   ('and a jury', 'hr10_judge4k', 152.15, -3.5),
-  ('detective sean secretly', 'hr10_hell4k', 315.7, -2.5),
+  ('detective sean secretly', 'hr10_hell4k', 259.45, -2.1),
   ('forces his brother', 'hr10_hell4k', 318.24, -11.8),
   ('then offers them', 'hr10_judge4k', 510.36, -2.62),
   ('pinhead refuses any', 'hr10_judge4k', 518.12, -3.8),

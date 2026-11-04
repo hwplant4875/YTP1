@@ -118,3 +118,5 @@ hr22_itstime | lgqTZt-uOuM | REJECT | 2022 Voight ending 960x720, Spanish subs b
 hr22_changed | elUyyBBaKZI | FlipGeeks | 2022 official clip 'It Changed On Its Own' 1080p: Riley + Trevor in her room (Trevor confirmed = same actor Voight calls 'Trevor'); (c) 20th Century card after 44.6
 hr22_voight | AR1bQxZ_mpE | FALLBACK (One Sick Rat) | 2022 'Roland Voight scenes' 2542x1080 (2.35:1, no logo): Voight with blade 5.3-13 (millionaire), Voight + wounded Trevor 20.8-80 ('didn't you, Trevor?' 106), ascension; audio fetched separately (403 on merged)
 hr3_setfree | orjXBtVADxc | FALLBACK (Phuck Yiu) | Hell on Earth 'Pinhead Is Set Free' 1080p clean: J.P. fed to the Pillar, Pinhead face screaming 200-201.8, Pillar bursts with light 219-225, Pinhead standing free in smoke 248.5-257 (J.P. gore 186-196, avoid)
+hr8_explain | eSS2NhSgTzc | Evan Richards | Lance Henriksen explains the plot of Hellraiser: Hellworld (film scene), 361 s, 1920x1080
+hr1_dont_sdr | g8gIbLfJ4SM | FALLBACK (FilmClips) | SDR stream (271, 2560x1440 bt709) of hr1_dont, replaces the HDR file
