@@ -73,7 +73,7 @@ for S in X:  # film label per run of one film, gone once the stat card takes the
         runs.append([f, t])
     for k, (f, t) in enumerate(runs):
         if f: S['overlays'].append(['film', f, t, min(end, runs[k + 1][1] if k + 1 < len(runs) else 999)])
-VDARK = ['hr4_pathway', 'hr4_space', 'hr4_painface', 'hr4_finalbattle', 'hr22_carousel', 'hr22_bridge', 'hr22_cenofeat', 'hr22_trailer_20th']  # v4: shots under luma 8 in v3
+VDARK = ['hr1_dont', 'hr8_explain', 'hr22_bridge', 'hr4_pathway', 'hr4_space', 'hr4_painface', 'hr4_finalbattle', 'hr22_carousel', 'hr22_bridge', 'hr22_cenofeat', 'hr22_trailer_20th']  # v4: shots under luma 8 in v3
 DARK = ['hr2_legendary', 'hr1_sights', 'hr10_judge4k', 'hr3_club', 'hr6_painpleasure', 'hr6_pain', 'hr22_nora', 'hr5_torment', 'hr8_welcome', 'hr8_jake', 'hr8_cop', 'hr10_souls', 'hr22_carousel', 'hr3_pillar', 'hr5_box', 'hr5_cruelty', 'hr7_returns', 'hr7_afraid', 'hr9_trailer_rt']
 P = {'sections': X, 'tiers': TIERS, 'gamma': {**{k: 1.25 for k in DARK}, **{k: 1.4 for k in VDARK}},
      'zoom': {'hr3_dancefloor': 1.36, 'hr22_trailer_20th': 1.34, 'hr22_nora': 1.55, 'hr3_iamtheway': 1.36, 'hr3_bad_dreams': 1.36, 'hr10_judge4k': 1.2, 'hr10_hell4k': 1.2}}  # 4:3 pillarbox filled; Boxoffice corner bug cropped
