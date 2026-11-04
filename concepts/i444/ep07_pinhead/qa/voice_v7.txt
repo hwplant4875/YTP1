@@ -9,13 +9,13 @@ s06  24.88s  words SAME (70/70)   max pause 0.32s  -21.4 LUFS
 s07  26.64s  words SAME*          max pause 0.30s  -21.4 LUFS
 s08  33.55s  words SAME (98/98)   max pause 0.31s  -22.0 LUFS
 s09  30.45s  words SAME (93/93)   max pause 0.30s  -20.8 LUFS
-s02  33.51s  words SAME*          max pause 0.32s  -21.0 LUFS
+s02  33.24s  words SAME*          max pause 0.31s  -21.1 LUFS   (re-voiced 11/05 v7c: Hellworld line without the 480p-only kills)
 s10  28.59s  words SAME*          max pause 0.31s  -21.8 LUFS
-s03  30.53s  words SAME (87/87)   max pause 0.31s  -21.4 LUFS
+s03  27.17s  words SAME (75/75)   max pause 0.31s  -20.9 LUFS   (re-voiced 11/05 v7c: ends at the jury verdict, the only part of the ending with footage)
 s11  21.68s  words SAME (64/64)   max pause 0.30s  -21.1 LUFS
 s12  31.48s  words SAME (92/92)   max pause 0.31s  -21.5 LUFS
 s13  23.26s  words SAME (78/78)   max pause 0.31s  -21.7 LUFS
-total voice 6:47; loudness median -21.4 LUFS, no take more than 1.5 LU off.
+total voice 6:43 (v7c); loudness median -21.4 LUFS, no take more than 1.5 LU off.
 
 * whisper spelling only: Channard -> Chenard/Chouinard, Steven -> Stephen, Bret -> Brett, Derrick -> Derek, Doctor -> Dr.
   "Number eleven" (s04) and "Number four" (s10) were written by whisper as "11." / "4."; with a 0.5 s lead-in the full words

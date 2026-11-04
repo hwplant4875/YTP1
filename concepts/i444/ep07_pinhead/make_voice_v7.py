@@ -1,6 +1,6 @@
 # EP07 v7 voice (owner 11/05 00:59 KST: new script, keep only the intro; v6b had an audible "sur survival rate" splice).
 # Every section of script_v7.md is voiced as ONE full take: Adam / eleven_v4 / with-timestamps, previous_text and next_text
-# taken from the neighbouring sections in playback order. No splicing anywhere. The v6 raw takes are kept in voice_orig/v6full/.
+# taken from the neighbouring sections in playback order. No splicing anywhere. The v6 raw takes are kept in voice_orig/prev/.
 # Then: w3.py <all sections> (whisper) -> python3 tighten2.py -> verify_voice.py + glitch check.
 # usage: python3 make_voice_v7.py KEY_ENV_NAME [--dry] [--only s04,s05]
 import json, os, re, sys, base64, shutil, urllib.request
@@ -19,10 +19,10 @@ print('sections', len(todo), 'characters', chars)
 if DRY:
     for k in todo: print(k, len(TXT[k]), TXT[k][:80], '...')
     sys.exit()
-os.makedirs('voice_orig/v6full', exist_ok=True)
+os.makedirs('voice_orig/prev', exist_ok=True)
 for k in todo:
     for ext in ('mp3', 'json'):
-        a, b = f'voice_orig/{k}.{ext}', f'voice_orig/v6full/{k}.{ext}'
+        a, b = f'voice_orig/{k}.{ext}', f'voice_orig/prev/{k}.{ext}'
         if os.path.exists(a) and not os.path.exists(b): shutil.copy(a, b)
     i = ORDER.index(k)
     body = {'text': TXT[k], 'model_id': 'eleven_v4'}
