@@ -123,3 +123,13 @@ And number one is Hell on Earth. Pinhead breaks free from the Pillar of Souls wi
 - **썸네일**
   - A의 왼쪽 Hellworld 80%를 다른 안전한 편으로 교체
   - B의 왼쪽 Judgment 60%를 다른 안전한 편으로 교체
+
+## 5. 시작 생존율 상향 (11/04 21:43 KST 승인, v6b)
+- **이유:** 이전 에피소드는 모두 80~99%에서 시작했는데 이 편만 55%였습니다. 등급 카드가 Easy부터 Slaughtered까지 한 칸씩 거쳐 가도록 위쪽 다섯 편만 올렸습니다.
+- Hellbound 55 → **85% Easy** (상자를 푼 티파니를 살려 줌, 이 편의 핀헤드는 채너드에게 죽음)
+- Revelations 50 → **70% Don't Worry** (상자를 연 엠마는 살아남음)
+- Hellraiser 1987 40 → **55% Close Call** (거래 후 배신, 상자를 되돌려 겨우 생존)
+- Hellseeker 35 → **45% Better Run** (다섯 명을 바쳐야 생존)
+- Hellraiser 2022 30 → **35% Almost Dead** (제물 여섯을 다 채워야 생존)
+- Bloodline 25부터 Hell on Earth 5까지와 순서는 그대로입니다.
+- 다시 녹음한 건 다섯 편의 마지막 문장 "Survival rate: ..."뿐입니다 (make_voice_v6b.py, v6 원본은 voice_orig/v6/).

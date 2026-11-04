@@ -8,20 +8,20 @@ Hooked chains tear straight through your flesh. Your skin gets peeled off while 
 ## s01 scoring
 The rules are simple: you just solved the box, and this movie's Pinhead is standing in your room. Every version gets scored on strength, intelligence, kill count, and how little mercy he shows, which really means whether you can bargain your way out, and that gives you one number, your survival rate.
 
-## s04 #11 Hellbound: Hellraiser II (1988), 55%, Close Call
-Number eleven is Hellbound. Pinhead is still terrifying, but when Tiffany solves the box, the Cenobites spare her, because the desire behind it was Doctor Channard's. Then Kirsty shows Pinhead an old photo, and he remembers he used to be a British army captain named Elliot Spencer. A moment later, Channard, now a brand new Cenobite, cuts through Pinhead and his whole crew in seconds, and Kirsty and Tiffany walk out of Hell. Survival rate: fifty-five percent.
+## s04 #11 Hellbound: Hellraiser II (1988), 85%, Easy
+Number eleven is Hellbound. Pinhead is still terrifying, but when Tiffany solves the box, the Cenobites spare her, because the desire behind it was Doctor Channard's. Then Kirsty shows Pinhead an old photo, and he remembers he used to be a British army captain named Elliot Spencer. A moment later, Channard, now a brand new Cenobite, cuts through Pinhead and his whole crew in seconds, and Kirsty and Tiffany walk out of Hell. Survival rate: eighty-five percent.
 
-## s05 #10 Hellraiser: Revelations (2011), 50%, Better Run
-Number ten is Hellraiser Revelations, with a different actor under the pins. On a trip to Mexico, Nico solves the box and gets dragged to Hell, then claws his way back out by getting his best friend Steven to kill for him, before killing Steven too and wearing his skin. When Steven's sister Emma opens the box, Pinhead flat out refuses Nico's deal and takes him back, and his Cenobites kill Nico's mother Kate and take Steven's mother Sarah. Only Emma, the one who opened the box, is left standing. Survival rate: fifty percent.
+## s05 #10 Hellraiser: Revelations (2011), 70%, Don't Worry
+Number ten is Hellraiser Revelations, with a different actor under the pins. On a trip to Mexico, Nico solves the box and gets dragged to Hell, then claws his way back out by getting his best friend Steven to kill for him, before killing Steven too and wearing his skin. When Steven's sister Emma opens the box, Pinhead flat out refuses Nico's deal and takes him back, and his Cenobites kill Nico's mother Kate and take Steven's mother Sarah. Only Emma, the one who opened the box, is left standing. Survival rate: seventy percent.
 
-## s06 #9 Hellraiser (1987), 40%, Almost Dead
-Number nine is the original Hellraiser. Frank solves the box, and the Cenobites tear him apart with hooked chains so completely that he has to be rebuilt from blood. Kirsty survives the only way you can, by making a deal, handing Frank over, and then reversing the puzzle before they take her too. Survival rate: forty percent.
+## s06 #9 Hellraiser (1987), 55%, Close Call
+Number nine is the original Hellraiser. Frank solves the box, and the Cenobites tear him apart with hooked chains so completely that he has to be rebuilt from blood. Kirsty survives the only way you can, by making a deal, handing Frank over, and then reversing the puzzle before they take her too. Survival rate: fifty-five percent.
 
-## s07 #8 Hellraiser: Hellseeker (2002), 35%, Almost Dead
-Number eight is Hellseeker. Kirsty's cheating husband Trevor wants her dead, so he gets her to open the box again, but she makes Pinhead a deal: five other souls in exchange for her own. She kills three of his mistresses and his partner in the plot, Bret, and then shoots Trevor himself, the fifth soul. It works, but think about what it took, five people had to die so one could walk away. Survival rate: thirty-five percent.
+## s07 #8 Hellraiser: Hellseeker (2002), 45%, Better Run
+Number eight is Hellseeker. Kirsty's cheating husband Trevor wants her dead, so he gets her to open the box again, but she makes Pinhead a deal: five other souls in exchange for her own. She kills three of his mistresses and his partner in the plot, Bret, and then shoots Trevor himself, the fifth soul. It works, but think about what it took, five people had to die so one could walk away. Survival rate: forty-five percent.
 
-## s08 #7 Hellraiser (2022), 30%, Almost Dead
-Number seven is the 2022 Hellraiser, where Pinhead is called the Priest. The box has six configurations, and every single one needs someone cut by its blade as a sacrifice. Riley's brother Matt is flayed, and the Priest tortures Nora until she's flayed to death. Riley only gets herself and Colin out by stabbing her own boyfriend Trevor, who'd secretly been finding victims for Voight, as the final sacrifice, and then turning down every gift the Priest offers her. Survival rate: thirty percent.
+## s08 #7 Hellraiser (2022), 35%, Almost Dead
+Number seven is the 2022 Hellraiser, where Pinhead is called the Priest. The box has six configurations, and every single one needs someone cut by its blade as a sacrifice. Riley's brother Matt is flayed, and the Priest tortures Nora until she's flayed to death. Riley only gets herself and Colin out by stabbing her own boyfriend Trevor, who'd secretly been finding victims for Voight, as the final sacrifice, and then turning down every gift the Priest offers her. Survival rate: thirty-five percent.
 
 ## s09 #6 Hellraiser: Bloodline (1996), 25%, Almost Dead
 Number six is Bloodline, the one that goes to space. The family of the toymaker who built the box is cursed for helping open a door to Hell, and Pinhead comes for them twice. In 1996 he kills John Merchant in New York, and in the year 2127 he wipes out almost an entire crew on a space station. In the end, it takes a whole space station turned into a giant puzzle box full of light to finally destroy him. Survival rate: twenty-five percent.
