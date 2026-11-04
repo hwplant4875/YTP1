@@ -114,3 +114,7 @@ hr2_tiffpack | Ieb89Axo4KE | FALLBACK (HellsPriestess) | Hellbound Tiffany scene
 hr22_final | 4XNfwGuAAJk | REJECT | 2022 Voight ascension 720p, no Riley
 hr22_god | iBCi7CR6s9Q | REJECT | 2022 Leviathan / Pinhead 1080p very dark, no Riley or Trevor visible
 hr22_itstime | lgqTZt-uOuM | REJECT | 2022 Voight ending 960x720, Spanish subs burned, soft
+# --- 11/05 fixB scout (s08 Trevor/Voight, s12 breakout)
+hr22_changed | elUyyBBaKZI | FlipGeeks | 2022 official clip 'It Changed On Its Own' 1080p: Riley + Trevor in her room (Trevor confirmed = same actor Voight calls 'Trevor'); (c) 20th Century card after 44.6
+hr22_voight | AR1bQxZ_mpE | FALLBACK (One Sick Rat) | 2022 'Roland Voight scenes' 2542x1080 (2.35:1, no logo): Voight with blade 5.3-13 (millionaire), Voight + wounded Trevor 20.8-80 ('didn't you, Trevor?' 106), ascension; audio fetched separately (403 on merged)
+hr3_setfree | orjXBtVADxc | FALLBACK (Phuck Yiu) | Hell on Earth 'Pinhead Is Set Free' 1080p clean: J.P. fed to the Pillar, Pinhead face screaming 200-201.8, Pillar bursts with light 219-225, Pinhead standing free in smoke 248.5-257 (J.P. gore 186-196, avoid)
