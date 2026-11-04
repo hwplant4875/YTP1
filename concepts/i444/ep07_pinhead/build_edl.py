@@ -49,11 +49,16 @@ X.append(sec('s00', [(0, 'hr1_jesuswept', 127.21, -2.0), ('tear', 'hr9_rev', 410
   ('you get', 'hr2_channardtrans', 108.9, -1.4), ('cenobites', 'hr4_painface', 295.6, -2.7), ('trapped', 'hr5_torment', 548.65, -4.0),
   ('head forever', 'hr5_torment', 425.1, -12.2), ('and he does', 'hr9_rev', 4115.2, -5.5), ('calmly', 'hr1_pack4k', 45.7, -5.9),
   ("we're ranking", 'still_posterwall', 0.0, -5.0)],
-  extra=[('word', 'Hooked chains', 0, 'tear'), ('word', 'Tear', 'tear', 'flesh'), ('word', 'Through your flesh', 'flesh', 'your skin'),
-         ('word', 'Your skin', 'your skin', 'peeled'), ('word', 'Peeled off', 'peeled', 'alive'), ('word', 'Alive', 'alive', 'you get'),
-         ('word', 'Turned', 'you get', 'cenobites'), ('word', 'Cenobites', 'cenobites', 'trapped'), ('word', 'Trapped', 'trapped', 'head forever'),
-         ('word', 'Inside your head', 'head forever', 'and he does'), ('word', 'All of it', 'and he does', 'calmly'),
-         ('word', 'Calmly', 'calmly', "we're ranking")], clip_db=-20))
+  # v5 (owner 11/04 19:51 KST: "the intro is the most important part, words like 'straight' are missing"): every spoken word of the
+  # cold open is on screen while it is said, in chunks of 1-4 words that follow the narration exactly (qa/caption_coverage.py checks it)
+  extra=[('word', w, a, b) for w, a, b in [
+         ('Hooked chains', 0, 'tear'), ('Tear', 'tear', 'straight'), ('Straight through', 'straight', 'your flesh'),
+         ('Your flesh', 'your flesh', 'your skin'), ('Your skin', 'your skin', 'gets peeled'), ('Gets peeled off', 'gets peeled', 'while'),
+         ("While you're", 'while', 'still alive'), ('Still alive', 'still alive', 'you get'), ('You get turned', 'you get', 'into one'),
+         ('Into one of his', 'into one', 'cenobites'), ('Cenobites', 'cenobites', 'or trapped'), ('Or trapped', 'or trapped', 'inside'),
+         ('Inside your own head', 'inside', 'forever'), ('Forever', 'forever', 'and he does'), ('And he does', 'and he does', 'all of it'),
+         ('All of it', 'all of it', 'calmly'), ('Calmly', 'calmly', "we're ranking"), ("We're ranking", "we're ranking", 'every pinhead'),
+         ('Every Pinhead', 'every pinhead', 'by your'), ('By your chance', 'by your', 'of surviving'), ('Of surviving him', 'of surviving', 999)]], clip_db=-20))
 for ov in X[-1]['overlays']:  # captions flash and cut out: one word 0.9 s max, a phrase 1.5 s max (EP02 rule); the frame-0 caption holds to its cut
     if ov[0] == 'word' and ov[2] > 0: ov[3] = min(ov[3], ov[2] + (0.9 if ' ' not in ov[1] else 1.5))
 s01_end = vdur('s01') + 0.05

@@ -5,12 +5,14 @@ from PIL import Image, ImageEnhance, ImageFilter
 P = sys.argv[1]; OUT = sys.argv[2]
 ORDER = ['hr1', 'hr2', 'hr3', 'hr4', 'hr5', 'hr6', 'hr7', 'hr8', 'hr9', 'hr10', 'hr22']
 files = {f.split('_')[0]: os.path.join(P, f) for f in os.listdir(P) if f.endswith('.jpg')}
-PW, PH, G = 286, 429, 22; W, H, FPS, DUR = 1920, 1080, 30, 5.0
-rows = [ORDER[:6], ORDER[6:]]; Y0 = (H - 2 * PH - G) // 2
+# v5 (owner 11/04): the cold-open captions now run over the wall too ("We're ranking / Every Pinhead / By your chance / Of surviving him"),
+# so the two rows leave a clear centre band (BAND px) for the caption at y 540 and no poster is ever covered.
+PW, PH, G, BAND = 232, 348, 18, 250; W, H, FPS, DUR = 1920, 1080, 30, 5.0
+rows = [ORDER[:6], ORDER[6:]]; Y0 = (H - 2 * PH - BAND) // 2
 slots = []
 for r, row in enumerate(rows):
     x0 = (W - len(row) * PW - (len(row) - 1) * G) // 2
-    for i, k in enumerate(row): slots.append((k, x0 + i * (PW + G), Y0 + r * (PH + G)))
+    for i, k in enumerate(row): slots.append((k, x0 + i * (PW + G), Y0 + r * (PH + BAND)))
 img = {k: Image.open(files[k]).convert('RGB').resize((PW, PH), Image.LANCZOS) for k in ORDER}
 bg = Image.new('RGB', (W, H), (8, 4, 6))
 mosaic = bg.copy()
