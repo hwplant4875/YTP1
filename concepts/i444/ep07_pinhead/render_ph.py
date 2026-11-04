@@ -145,6 +145,7 @@ for si, S in enumerate(E['sections']):
         elif kind == 'instr': instruction(arg, png)
         elif kind == 'title': center_title(arg, png)
         elif kind == 'film': film_label(arg, png)
+        elif kind == 'png': png = os.path.join(os.path.dirname(os.path.abspath(edl)), arg)   # a ready-made 1920x1080 RGBA overlay (subscribe button)
         ins += ['-loop', '1', '-framerate', str(FPS), '-t', f'{L + 1:.3f}', '-i', png]  # short loops: 20+ overlays at full length ran out of memory (v7 cold open)
         fd = '' if kind in ('word', 'film', 'title') else f",fade=t=in:st={a}:d=0.12:alpha=1,fade=t=out:st={max(a, b-0.12)}:d=0.12:alpha=1"
         fc.append(f"[{n}:v]format=rgba{fd}[o{n}]")

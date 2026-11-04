@@ -120,9 +120,12 @@ X.append(sec('s12', [(0, 'hr3_iamtheway', 131.0, -1.8), ('pinhead breaks', 'hr3_
   ('massacres', 'hr3_club', 124.8, -1.9), ('entire nightclub', 'hr3_dancefloor', 60.0, -1.2), ('kills the police', 'hr3_club', 108.3, -0.6),
   ('and turns his', 'hr3_iamtheway', 95.5, -4.0), ('only joey', 'hr3_iamtheway', 129.3, -1.25), ('turned into', 'hr3_iamtheway', 127.95, -2.9),
   ('can send', 'hr3_unstoppable', 106.5, -1.6), ("if he's the one", 'hr3_iamtheway', 9.6, -3.3), ('survival rate', 'hr3_pillar', 224.35, -3.1, 'z=1.35,dx=249')], "if he's the one"))
+# outro (v3, owner 11/04: sincere small-channel subscribe ask): calm Pinhead / box shots, a plain subscribe button, ends on the box closing
 X.append(sec('s13', [(0, 'hr1_pack4k', 62.4, -3.4), ('to a demon', 'hr3_pillar', 230.15, -3.9), ('tell me', 'hr1_pack4k', 10.5, -13.9),
-  ('and remember', 'hr4_pathway', 172.0, -11.0)], pad=2.5,
-  extra=[('title', ['WHICH BOX', '!WOULD YOU OPEN?'], 'tell me', 'and remember'), ('title', ['SOME DOORS', '!STAY CLOSED'], 'and remember', 999)]))
+  ('and honestly', 'hr1_pack4k', 45.7, -5.9), ('rewatching', 'hr5_box', 27.1, -4.0), ('as a small', 'hr2_legendary', 89.8, -6.1),
+  ('and it decides', 'hr7_returns', 189.1, -4.0), ('thank you', 'hr4_pathway', 172.0, -11.0), ('keep that', 'hr1_dont', 0.05, -1.85)], pad=2.0,
+  extra=[('title', ['WHICH BOX', '!WOULD YOU OPEN?'], 'tell me', 'and honestly'), ('png', 'tiles/subscribe.png', 'your subscribe', 'thank you'),
+         ('title', ['KEEP THAT BOX', '!CLOSED'], 'keep that', 999)]))
 def fit(S):  # turn (t, clip, in, -clean) into a speed that keeps the shot inside its clean span (never below 0.4x)
     L = vdur(S['voice']) + S['pad']; sh = S['shots']
     for k, s in enumerate(sh):
