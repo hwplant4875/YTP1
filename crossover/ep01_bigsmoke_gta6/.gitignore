@@ -1,0 +1,19 @@
+# Big or licensed working files stay out of git (rebuild them with README steps)
+hd/*.mkv
+src/
+aud/
+mattes/
+segs/
+sfx/
+models/
+look/
+sheets/
+alt/
+mt/
+*.mp4
+*.wav
+*.f32
+*.log
+__pycache__/
+# never commit cookies
+ck.txt
