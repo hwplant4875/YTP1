@@ -19,7 +19,7 @@ You just solved the puzzle box, and Pinhead is standing in your room. How likely
 Which box would you be brave enough to open? Tell me in the comments.
 
 Clips are used for commentary and criticism. All rights belong to their owners.
-Music: Pixabay (bombinsound "Halloween Suspense Horror Waltz", nastelbom "Halloween Horror", nastelbom "Halloween Music").
+Music: original dark ambient score (ElevenLabs Music).
 
 Chapters
 0:00 Hooked chains
