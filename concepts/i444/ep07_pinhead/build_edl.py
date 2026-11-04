@@ -81,10 +81,11 @@ X.append(sec('s04', [(0, 'hr2_legendary', 89.8, -6.1), ('pinhead is still', 'hr2
   ('cuts through', 'hr2_legendary', 147.75, -1.5), ('whole crew', 'hr2_channardtrans', 242.7, -1.7), ('in seconds', 'hr2_channardtrans', 115.03, -2.5, 'z=1.35,dx=249'),
   ('and kirsty', 'hr2_legendary', 219.2, -1.0, 'flip'), ('walk out', 'hr2_legendary', 34.75, -4.6, 'z=1.35,dx=249'), ('survival rate', 'hr2_desire', 101.9, -8.9, 'z=1.35,dx=249')], 'in seconds'))
 # #8 Revelations 50% (owner's 1080p Blu-ray, read directly, never committed)
-X.append(sec('s05', [(0, 'hr9_rev', 3880.0, -1.5), ('with a different', 'hr9_rev', 3952.0, -1.9), ('two friends', 'hr9_rev', 2173.75, -1.7),
-  ('on a trip', 'hr9_rev', 2183.6, -3.4), ('one gets', 'hr9_rev', 2199.4, -16.0), ('the other gets', 'hr9_rev', 3968.4, -1.4),
-  ('and pinhead refuses', 'hr9_rev', 4048.0, -11.0), ('but he leaves', 'hr9_rev', 3966.84, -1.55), ('and emma', 'hr9_rev', 3982.6, -2.4, 'z=1.35,dx=249'),
-  ('survival rate', 'hr9_rev', 3928.0, -3.0)], 'and emma'))
+X.append(sec('s05', [(0, 'hr9_rev', 3880.0, -1.5), ('with a different', 'hr9_rev', 3952.0, -1.9), ('on a trip', 'hr9_rev', 1520.0, -2.5),
+  ('nico solves', 'hr9_rev', 1866.0, -2.0), ('and gets dragged', 'hr9_rev', 2173.75, -1.7), ('then claws', 'hr9_rev', 2199.4, -16.0),
+  ('by getting his', 'hr9_rev', 2105.0, -1.4), ('before killing', 'hr9_rev', 3274.5, -2.5), ('and wearing his', 'hr9_rev', 3020.0, -2.5),
+  ('pinhead flat out', 'hr9_rev', 4068.0, -6.0), ('and drags him', 'hr9_rev', 4106.4, -1.7), ('but he leaves', 'hr9_rev', 4146.0, -2.5, 'flip=1,z=1.35,dx=249'),
+  ('and emma', 'hr9_rev', 4192.0, -2.5), ('survival rate', 'hr9_rev', 4198.0, -2.0, 'z=1.35,dx=249')], 'but he leaves'))
 # #7 Hellraiser 1987 40%
 X.append(sec('s06', [(0, 'hr1_pack4k', 122.9, -2.6), ('frank solves', 'hr1_pack4k', 10.5, -13.9), ('and the cenobites', 'hr1_pack4k', 6.5, -3.8),
   ('tear him', 'hr1_jesuswept', 124.25, -1.6), ('hook chains', 'hr1_jesuswept', 127.21, -2.0), ('so completely', 'hr1_jesuswept', 131.6, -11.0),
@@ -96,20 +97,20 @@ X.append(sec('s07', [(0, 'hr6_painpleasure', 186.4, -4.0), ('kirsty opens', 'hr6
   ('survival rate', 'hr6_painpleasure', 180.6, -2.9, 'z=1.35,dx=249')], 'it works'))
 # #5 Hellraiser 2022, the Priest 30%
 X.append(sec('s08', [(0, 'hr22_bridge', 2.6, -3.6), ('where pinhead', 'hr22_trailer_hulu', 97.5, -2.0), ('the box has', 'hr22_carousel', 498.0, -16.5),
-  ('every single', 'hr22_carousel', 140.9, -8.6), ('a blood sacrifice', 'hr22_carousel', 264.0, -2.5), ("riley's brother", 'hr22_carousel', 256.3, -2.6),
-  ('nora', 'hr22_trailer_20th', 95.9, -1.5), ('skinned alive', 'hr22_nora', 161.93, -2.3), ('and trevor', 'hr22_trailer_20th', 87.6, -1.8),
-  ('final victim', 'hr22_cenofeat', 34.6, -1.2), ('riley and colin', 'hr22_bridge', 0.0, -2.5, 'z=1.35,dx=249'), ('but only', 'hr22_bridge', 33.0, -4.2, 'z=1.35,dx=249'),
-  ('riley turns', 'hr22_bridge', 23.8, -6.4), ('survival rate', 'hr22_bridge', 2.6, -3.6)], 'riley and colin'))
+  ('every single', 'hr22_carousel', 140.9, -8.6), ('someone stabbed', 'hr22_carousel', 264.0, -2.5), ("riley's brother", 'hr22_carousel', 256.3, -2.6),
+  ('and the priest', 'hr22_bridge', 23.8, -6.4), ('nora until', 'hr22_trailer_20th', 95.9, -1.5), ('flayed to death', 'hr22_nora', 161.93, -2.3),
+  ('riley only', 'hr22_bridge', 0.0, -2.5), ('by stabbing', 'hr22_trailer_20th', 87.6, -0.9), ('boyfriend trevor', 'hr22_cenofeat', 34.6, -1.2), ('final sacrifice', 'hr22_trailer_20th', 41.45, -1.3),
+  ('and then turning', 'hr22_bridge', 33.0, -4.2, 'z=1.35,dx=249'), ('survival rate', 'hr22_bridge', 4.0, -3.0, 'z=1.35,dx=249')], 'and then turning'))
 # #4 Bloodline 25%
 X.append(sec('s09', [(0, 'hr4_pathway', 152.3, -6.2), ('pinhead hunts', 'hr4_pathway', 99.5, -4.5), ('kills john', 'hr4_straighthell', 23.7, -1.7),
   ('in new york', 'hr4_straighthell', 27.5, -1.4), ('and wipes out', 'hr4_painface', 251.2, -1.45), ('crew on', 'hr4_painface', 276.35, -1.45),
   ('space station in', 'hr4_finalbattle', 92.7, -3.1), ('the year', 'hr4_painface', 295.6, -2.7), ('in the end', 'hr4_space', 48.2, -10.8),
   ('giant puzzle', 'hr4_another', 279.3, -2.0, 'z=1.35,dx=249'), ('survival rate', 'hr4_chart', 158.8, -4.9, 'flip=1,z=1.35,dx=249')], 'giant puzzle'))
 # #3 Deader 15%
-X.append(sec('s10', [(0, 'hr7_returns', 89.2, -4.4), ('a reporter', 'hr7_real', 20.2, -5.9), ('that kills', 'hr7_afraid', 146.2, -1.4),
+X.append(sec('s10', [(0, 'hr7_returns', 89.2, -4.4), ('a reporter', 'hr7_real', 20.2, -5.9), ('that kills', 'hr7_afraid', 147.9, -1.1),
   ('all because', 'hr7_afraid', 4.55, -3.5), ('when amy', 'hr7_returns', 10.55, -5.4), ('pinhead slaughters', 'hr7_returns', 175.6, -1.55),
-  ('the entire cult', 'hr7_returns', 166.2, -1.35), ('in minutes', 'hr7_returns', 142.5, -1.6), ('and he tells', 'hr7_returns', 189.1, -4.0),
-  ("amy's only", 'hr7_returns', 119.1, -2.5, 'z=1.35,dx=249'), ('survival rate', 'hr7_returns', 89.2, -4.4, 'flip=1,z=1.35,dx=249')], "amy's only"))
+  ('the entire cult', 'hr7_returns', 166.2, -1.35), ('in minutes', 'hr7_returns', 142.5, -1.6), ('then tells her', 'hr7_returns', 189.0, -3.0),
+  ('and that her', 'hr7_returns', 182.0, -1.5), ("amy's only", 'hr7_returns', 186.5, -2.0), ('survival rate', 'hr7_returns', 200.0, -1.8)], "amy's only"))
 # #2 Inferno 8%
 X.append(sec('s11', [(0, 'hr5_box', 266.2, -1.7), ('detective', 'hr5_world', 50.9, -20.9), ('opens the box', 'hr5_box', 27.1, -4.0),
   ('and spends', 'hr5_cruelty', 33.5, -13.0), ('until he learns', 'hr5_child', 97.1, -2.3), ('pinhead the entire', 'hr5_box', 266.2, -1.7),
