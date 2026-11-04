@@ -75,6 +75,7 @@ the rest of the name in white at normal size, no colour box (`ep03/anim.py` stat
   Reject 480p/720p uploads and soft upscales (check `ffprobe` size + bitrate; < ~1 Mbps 1080p is soft).
   If a film has no sharp official footage at all (e.g. an old SD trailer like Ginger Snaps), **drop the film from the ranking** rather
   than use soft footage (owner 10/31: "bad picture quality is never OK"). Judge sharpness by eye on a 1:1 crop, not only by resolution.
+- **Must-have moment with no HD source (owner 11/04):** HD video first; if none exists after a real search, use the low-res video (even 360p) for that one beat; a still frame only as the very last resort.
 - Villain-heavy cutting: show the villain attacking with a weapon, chasing, the iconic/story beats - something must be happening on screen.
 - Age-gated clips: ask the owner to run the download with his own logged-in browser (`yt-dlp --cookies-from-browser chrome ...`);
   don't read browser cookies yourself.
