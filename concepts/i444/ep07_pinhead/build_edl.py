@@ -136,7 +136,7 @@ X.append(sec('s11', [(0, 'hr5_box', 266.2, -1.7), ('detective', 'hr5_world', 50.
 X.append(sec('s12', [(0, 'hr3_iamtheway', 131.0, -1.8), ('pinhead breaks', 'hr3_pillar', 128.0, -7.8), ('with no box', 'hr3_pillar', 230.15, -3.9),
   ('massacres', 'hr3_club', 124.8, -1.9), ('entire nightclub', 'hr3_dancefloor', 60.0, -1.2), ('and turns his', 'hr3_cenoloose', 76.14, -1.26),
   ('brand new', 'hr3_cenoloose', 18.12, -3.7), ('who go on', 'hr3_cenoloose', 99.13, -4.7), ('kill the police', 'hr3_cenoloose', 138.31, -6.0),
-  ('only joey', 'hr3_iamtheway', 129.3, -1.25), ('turned into', 'hr3_iamtheway', 127.95, -2.9), ('can send', 'hr3_unstoppable', 106.5, -1.6),
+  ('only joey', 'hr3_iamtheway', 129.3, -1.25), ('turned into', 'hr3_iamtheway', 127.95, -2.9), ('can send', 'hr3_finalbattle', 343.0, -3.1),
   ("if he's the one", 'hr3_iamtheway', 9.6, -3.3, 'z=1.35,dx=249'), ('survival rate', 'hr3_pillar', 224.35, -3.1, 'z=1.35,dx=249')], "if he's the one"))
 # outro (v3, owner 11/04: sincere small-channel subscribe ask): calm Pinhead / box shots, a plain subscribe button, ends on the box closing
 X.append(sec('s13', [(0, 'hr1_pack4k', 62.4, -3.4), ('to a demon', 'hr3_pillar', 230.15, -3.9), ('tell me', 'hr1_pack4k', 10.5, -13.9),
