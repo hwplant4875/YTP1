@@ -73,11 +73,11 @@ X[-1]['overlays'].append(['stats', {'name': 'PINHEAD', 'tile_png': 'tiles/myster
   'reveal': [round(T('s01', w) + LEAD, 3) for w in ('strength', 'intelligence', 'kill count', 'mercy')]}, 0.0, 999])
 X[-1]['sfx'] = [[0.0, SFX + 'whoosh.wav', SFX_GAIN['whoosh']], [T('s01', 'survival rate') + LEAD, SFX + 'stamp.wav', SFX_GAIN['stamp']]]
 # #11 Hellworld 80%
-X.append(sec('s02', [(0, 'hr8_welcome', 66.2, -4.1), ('five friends', 'hr8_trailer', 15.5, -0.75), ('themed party', 'hr8_trailer', 14.6, -0.85),
+X.append(sec('s02', [(0, 'hr8_welcome', 66.2, -4.1), ('five friends', 'hr8_trailer', 15.5, -0.75), ('go to a', 'hr8_trailer', 14.6, -0.85), ('themed party', 'hr8_welcome', 36.66, -4.0),
   ('where pinhead', 'hr8_cop', 43.4, -4.1), ('mike gets', 'hr8_welcome', 90.8, -3.5), ('and pinhead even', 'hr8_cop', 31.5, -2.1),
   ('then comes', 'hr8_welcome', 84.67, -2.8), ('the host', 'hr8_welcome', 87.5, -3.3), ('drugged all', 'hr8_trailer', 42.66, -0.42),
-  ('and buried', 'hr8_jake', 66.2, -5.2), ('so those', 'hr8_welcome', 116.5, -3.5), ('but allison', 'hr8_jake', 109.7, -3.4),
-  ('only chelsea', 'hr8_trailer', 43.36, -0.48), ('get dug', 'hr8_cop', 33.6, -1.0), ('and when the', 'hr8_welcome', 8.2, -6.4, 'z=1.35,dx=249'),
+  ('five and', 'hr8_jake', 66.2, -5.2), ('so those', 'hr8_welcome', 116.5, -3.5), ('but allison', 'hr8_jake', 109.7, -3.4),
+  ('only chelsea', 'hr8_trailer', 43.36, -0.48), ('and jake', 'hr8_cop', 33.6, -1.0), ('and when the', 'hr8_welcome', 8.2, -6.4, 'z=1.35,dx=249'),
   ('the real pinhead', 'hr8_welcome', 54.0, -3.0, 'z=1.35,dx=249'), ('while his', 'hr8_welcome', 102.8, -1.4, 'z=1.35,dx=249'), ('tear him', 'hr8_welcome', 104.2, -1.0, 'z=1.35,dx=249'),
   ('survival rate', 'hr8_welcome', 66.2, -4.1, 'z=1.35,dx=249')], 'and when the'))
 # #10 Judgment 60%
@@ -112,9 +112,9 @@ X.append(sec('s07', [(0, 'hr6_painpleasure', 186.4, -4.0), ("kirsty's cheating",
   ('survival rate', 'hr6_painpleasure', 180.6, -2.9, 'z=1.35,dx=249')], 'it works'))
 # #5 Hellraiser 2022, the Priest 30%
 X.append(sec('s08', [(0, 'hr22_bridge', 2.6, -3.6), ('where pinhead', 'hr22_trailer_hulu', 97.5, -2.0), ('the box has', 'hr22_carousel', 498.0, -16.5),
-  ('every single', 'hr22_carousel', 140.9, -8.6), ('someone cut', 'hr22_carousel', 264.0, -2.5), ("riley's brother", 'hr22_carousel', 280.5, -2.0),
+  ('every single', 'hr22_carousel', 140.9, -8.6), ('someone cut', 'hr22_carousel', 264.0, -2.5), ("riley's brother", 'hr22_carousel', 470.0, -3.5),
   ('and the priest', 'hr22_bridge', 23.8, -6.4), ('nora until', 'hr22_trailer_20th', 95.9, -1.5), ('flayed to death', 'hr22_nora', 161.93, -2.3),
-  ('riley only', 'hr22_bridge', 0.0, -2.5), ('by stabbing', 'hr22_bridge', 33.0, -4.2), ('final sacrifice', 'hr22_trailer_20th', 87.6, -0.9),
+  ('riley only', 'hr22_bridge', 0.0, -2.5), ('by stabbing', 'hr22_bridge', 33.0, -4.2), ('final sacrifice', 'hr22_carousel', 415.0, -3.0),
   ('and then turning', 'hr22_bridge', 4.0, -3.0, 'z=1.35,dx=249'), ('survival rate', 'hr22_bridge', 2.6, -3.6, 'z=1.35,dx=249')], 'and then turning'))
 # #4 Bloodline 25%
 X.append(sec('s09', [(0, 'hr4_pathway', 152.3, -6.2), ('the family of', 'hr4_takesoul', 47.6, -1.65), ('is cursed for', 'hr4_birth', 405.3, -4.3),
