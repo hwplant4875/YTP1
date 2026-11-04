@@ -44,11 +44,12 @@ X = []
 # EP07 v2 (owner 11/04): the cold open and every entry cut to victims being hurt (scout scans 11/04, gore allowed), each cut on its word
 # with a caption; the stat card comes in ~3-5 s before "survival rate" so the kills play full frame; under the card the main figure sits
 # left of x 840 (flip / dx shot options). Shot = (word, clip, in, -clean[, 'flip' | 'dx=..,z=..']).
-X.append(sec('s00', [(0, 'hr1_jesuswept', 127.21, -2.0), ('tear', 'hr9_rev', 4106.4, -1.7), ('flesh', 'hr4_straighthell', 27.5, -1.4),
-  ('your skin', 'hr2_finalbattle', 277.1, -2.0), ('peeled', 'hr9_rev', 3937.15, -2.5), ('alive', 'hr2_legendary', 53.4, -5.3),
-  ('you get', 'hr2_channardtrans', 108.9, -1.4), ('cenobites', 'hr4_painface', 295.6, -2.7), ('trapped', 'hr5_torment', 548.65, -4.0),
-  ('head forever', 'hr5_torment', 425.1, -12.2), ('and he does', 'hr9_rev', 4115.2, -5.5), ('calmly', 'hr1_pack4k', 45.7, -5.9),
-  ("we're ranking", 'still_posterwall', 0.0, -5.0)],
+X.append(sec('s00', [(0, 'hr1_jesuswept', 127.21, -2.0), ('tear', 'hr9_rev', 4106.4, -1.7), ('straight', 'hr1_jesuswept', 120.04, -0.5),
+  ('your flesh', 'hr4_straighthell', 27.5, -1.4), ('your skin', 'hr2_finalbattle', 277.1, -2.0), ('gets peeled', 'hr9_rev', 3937.15, -2.5),
+  ('while', 'hr9_rev', 3910.91, -1.1), ('still alive', 'hr2_channardtrans', 105.52, -3.3), ('you get', 'hr2_channardtrans', 108.9, -1.4),
+  ('into one', 'hr2_channardtrans', 110.32, -1.5), ('cenobites', 'hr4_painface', 295.6, -2.7), ('or trapped', 'hr5_torment', 548.65, -4.0),
+  ('inside', 'hr5_torment', 425.1, -3.0), ('forever', 'hr5_torment', 420.85, -1.8), ('and he does', 'hr2_legendary', 55.0, -3.0),
+  ('all of it', 'hr9_rev', 4115.2, -5.5), ('calmly', 'hr1_pack4k', 45.7, -5.9), ("we're ranking", 'still_posterwall', 0.0, -5.0)],
   # v5 (owner 11/04 19:51 KST: "the intro is the most important part, words like 'straight' are missing"): every spoken word of the
   # cold open is on screen while it is said, in chunks of 1-4 words that follow the narration exactly (qa/caption_coverage.py checks it)
   extra=[('word', w, a, b) for w, a, b in [
