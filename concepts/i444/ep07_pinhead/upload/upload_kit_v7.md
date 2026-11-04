@@ -1,6 +1,6 @@
 # EP07 Pinhead upload kit v7
 
-Video: E:\YTP2\Horror Ranked\EP07 Pinhead\2_renders\ep07_pinhead_v7.mp4 (6:51) | Subtitles: upload/pinhead_ranked_en_v7.srt | Thumbnails: upload/pinhead_thumb_a/b/c.jpg
+Video: E:\YTP2\Horror Ranked\EP07 Pinhead\2_renders\ep07_pinhead_v7.mp4 (6:48) | Subtitles: upload/pinhead_ranked_en_v7.srt | Thumbnails: upload/pinhead_thumb_a/b/c.jpg
 
 ## Titles (pick one; no ":" or "-")
 1. Every Pinhead Ranked by Your Chance of Surviving Him  (recommended: series format)
@@ -31,10 +31,10 @@ Chapters
 3:29 #6 Hellraiser: Bloodline (25%)
 3:59 #5 Hellraiser: Hellworld (20%)
 4:33 #4 Hellraiser: Deader (15%)
-5:02 #3 Hellraiser: Judgment (10%)
-5:32 #2 Hellraiser: Inferno (8%)
-5:54 #1 Hellraiser III: Hell on Earth (5%)
-6:26 Which box would you open?
+5:01 #3 Hellraiser: Judgment (10%)
+5:29 #2 Hellraiser: Inferno (8%)
+5:51 #1 Hellraiser III: Hell on Earth (5%)
+6:22 Which box would you open?
 
 ## Tags
 pinhead, hellraiser, horror, horror movies, cenobites, clive barker, the priest, hellbound, ranked
