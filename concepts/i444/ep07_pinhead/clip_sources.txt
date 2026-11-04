@@ -90,3 +90,11 @@ hr3_club | SkpLrSAB1Iw | FALLBACK (Phuck Yiu) | Hell on Earth nightclub scene, l
 hr3_trailer35 | WemCjH-OCts | FALLBACK (35mm Movie Trailers Scans) | Hell on Earth 35mm trailer scan (title cards; few shots)
 hr4_endscene | 3wTl8DrC240 | FALLBACK (Maurits Steemers) | Bloodline space ending (mis-searched as 1987; 4:3 soft, low value)
 hr1_trailer4k | 47hcxHhCxoU | REJECT (REVOK) | 1987 trailer upscale, 4:3 pillarboxed + soft; do not use
+# --- 11/04 scout5: Hellseeker Kirsty beats (no Kirsty in Miramax set; 'Flashbacks' zGNZlXesjBM is age-gated, not downloaded)
+hr6_kirstypack | e_LgoBtB0es | FALLBACK (HellsPriestess) | Hellseeker Kirsty scene pack 1080p (DVD upscale, a bit soft): motel box opening, five-souls deal, ending walk-off with box
+# --- 11/04 scout4 (Hellworld/Judgment kills + HR3 new Cenobites)
+hr3_cenoloose | x5Q8ObRO5O4 | JoBlo Horror 4K | Hell on Earth "Cenobites On the Loose" 1080p (Camerahead, CD, Pistonhead, Barbie in the street); trailer + JoBlo endcard after 184s
+hr3_finalbattle | p6Bv3EFATpI | JoBlo Horror 4K | Hell on Earth "Final Battle" 4K (Pinhead vs Joey, church/construction site); JoBlo endcard after ~445s
+hr10_rw6 | uGdBr8f94HY | FALLBACK (Randy Wayne - Support Channel) | Judgment Scene 6 1080p: David + Christine car dialogue only, no use
+hr10_rw7 | LSu4R_7RWlc | FALLBACK (Randy Wayne - Support Channel) | Judgment Scene 7 1080p: Sean + David kitchen dialogue, Tale of Two Cities, no use
+hr10_rw8 | YPDKunE_8pw | FALLBACK (Randy Wayne - Support Channel) | Judgment Scene 8 1080p: precinct office dialogue, no use

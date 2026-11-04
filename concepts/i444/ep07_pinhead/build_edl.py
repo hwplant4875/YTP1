@@ -46,8 +46,8 @@ X = []
 # left of x 840 (flip / dx shot options). Shot = (word, clip, in, -clean[, 'flip' | 'dx=..,z=..']).
 X.append(sec('s00', [(0, 'hr1_jesuswept', 127.21, -2.0), ('tear', 'hr9_rev', 4106.4, -1.7), ('straight', 'hr1_jesuswept', 120.04, -0.5),
   ('your flesh', 'hr4_straighthell', 27.5, -1.4), ('your skin', 'hr2_finalbattle', 277.1, -2.0), ('gets peeled', 'hr9_rev', 3937.15, -2.5),
-  ('while', 'hr9_rev', 3910.91, -1.1), ('still alive', 'hr2_channardtrans', 105.52, -3.3), ('you get', 'hr2_channardtrans', 108.9, -1.4),
-  ('into one', 'hr2_channardtrans', 110.32, -1.5), ('cenobites', 'hr4_painface', 295.6, -2.7), ('or trapped', 'hr5_torment', 548.65, -4.0),
+  ('while', 'hr9_rev', 3910.91, -1.1), ('still alive', 'hr5_torment', 450.33, -3.7), ('you get', 'hr3_cenoloose', 145.5, -2.1),
+  ('into one', 'hr3_cenoloose', 167.0, -1.5), ('cenobites', 'hr4_painface', 295.6, -2.7), ('or trapped', 'hr5_torment', 548.65, -4.0),
   ('inside', 'hr5_torment', 425.1, -3.0), ('forever', 'hr5_torment', 420.85, -1.8), ('and he does', 'hr2_legendary', 55.0, -3.0),
   ('all of it', 'hr9_rev', 4115.2, -5.5), ('calmly', 'hr1_pack4k', 45.7, -5.9), ("we're ranking", 'still_posterwall', 0.0, -5.0)],
   # v5 (owner 11/04 19:51 KST: "the intro is the most important part, words like 'straight' are missing"): every spoken word of the
@@ -73,45 +73,55 @@ X[-1]['overlays'].append(['stats', {'name': 'PINHEAD', 'tile_png': 'tiles/myster
   'reveal': [round(T('s01', w) + LEAD, 3) for w in ('strength', 'intelligence', 'kill count', 'mercy')]}, 0.0, 999])
 X[-1]['sfx'] = [[0.0, SFX + 'whoosh.wav', SFX_GAIN['whoosh']], [T('s01', 'survival rate') + LEAD, SFX + 'stamp.wav', SFX_GAIN['stamp']]]
 # #11 Hellworld 80%
-X.append(sec('s02', [(0, 'hr8_welcome', 66.2, -4.1), ('a group', 'hr8_trailer', 14.6, -0.85), ('themed party', 'hr8_trailer', 15.5, -0.75),
-  ('and most', 'hr8_cop', 31.5, -2.2), ('set up by', 'hr8_welcome', 8.2, -6.4), ('two of them', 'hr8_cop', 43.4, -4.1),
-  ('and when the real', 'hr8_welcome', 116.5, -3.9), ("he's not", 'hr8_welcome', 109.3, -1.2, 'z=1.35,dx=249'), ('he takes', 'hr8_welcome', 120.8, -3.6, 'flip'),
-  ('survival rate', 'hr8_welcome', 66.2, -4.1, 'z=1.35,dx=249')], "he's not"))
+X.append(sec('s02', [(0, 'hr8_welcome', 66.2, -4.1), ('five friends', 'hr8_trailer', 15.5, -0.75), ('themed party', 'hr8_trailer', 14.6, -0.85),
+  ('where pinhead', 'hr8_cop', 43.4, -4.1), ('mike gets', 'hr8_welcome', 90.8, -3.5), ('and pinhead even', 'hr8_cop', 31.5, -2.1),
+  ('then comes', 'hr8_welcome', 84.67, -2.8), ('the host', 'hr8_welcome', 87.5, -3.3), ('drugged all', 'hr8_trailer', 42.66, -0.42),
+  ('and buried', 'hr8_jake', 66.2, -5.2), ('so those', 'hr8_welcome', 116.5, -3.5), ('but allison', 'hr8_jake', 109.7, -3.4),
+  ('only chelsea', 'hr8_trailer', 43.36, -0.48), ('get dug', 'hr8_cop', 33.6, -1.0), ('and when the', 'hr8_welcome', 8.2, -6.4, 'z=1.35,dx=249'),
+  ('the real pinhead', 'hr8_welcome', 54.0, -3.0, 'z=1.35,dx=249'), ('while his', 'hr8_welcome', 102.8, -1.4, 'z=1.35,dx=249'), ('tear him', 'hr8_welcome', 104.2, -1.0, 'z=1.35,dx=249'),
+  ('survival rate', 'hr8_welcome', 66.2, -4.1, 'z=1.35,dx=249')], 'and when the'))
 # #10 Judgment 60%
-X.append(sec('s03', [(0, 'hr10_hell4k', 370.2, -1.5), ('this time', 'hr10_judge4k', 17.0, -4.3), ('where an auditor', 'hr10_scifinow', 9.6, -4.2),
-  ('and a jury', 'hr10_judge4k', 475.48, -2.4), ('your punishment', 'hr10_judge4k', 568.44, -3.4), ('and pinhead mostly', 'hr10_judge4k', 523.4, -4.8),
-  ("if you're not", 'hr10_judge4k', 498.6, -4.3), ('and by the end', 'hr10_scifinow', 12.0, -2.2), ('survival rate', 'hr10_hell4k', 370.2, -1.5, 'z=1.45,dx=249')], 'and by the end'))
+X.append(sec('s03', [(0, 'hr10_hell4k', 370.2, -1.5), ('this time', 'hr10_judge4k', 17.0, -4.3), ('the stygian', 'hr10_scifinow', 9.6, -1.8),
+  ('where an auditor', 'hr10_scifinow', 12.0, -2.2), ('and a jury', 'hr10_judge4k', 475.48, -2.4), ('when detective', 'hr10_hell4k', 315.7, -2.5),
+  ('forces his', 'hr10_hell4k', 318.24, -11.8), ('and offers', 'hr10_hell4k', 342.0, -4.0), ('pinhead refuses', 'hr10_judge4k', 523.4, -4.8),
+  ('chains rip', 'hr10_judge4k', 568.44, -3.4), ('and drag', 'hr10_hell4k', 349.35, -5.8), ('pinhead has sean', 'hr10_judge4k', 498.6, -4.3),
+  ('and he even', 'hr10_judge4k', 560.31, -3.6), ("that's what", 'hr10_judge4k', 584.42, -5.3, 'z=1.35,dx=249'),
+  ('survival rate', 'hr10_hell4k', 371.4, -1.3, 'z=1.45,dx=249')], "that's what"))
 # #9 Hellbound 55%
-X.append(sec('s04', [(0, 'hr2_legendary', 89.8, -6.1), ('pinhead is still', 'hr2_legendary', 53.4, -5.3), ('but this is', 'hr2_legendary', 50.15, -3.1),
-  ('and he remembers', 'hr2_legendary', 64.45, -3.3), ('a moment later', 'hr2_channardtrans', 105.52, -3.3), ('a brand new', 'hr2_channardtrans', 110.32, -1.5),
-  ('cuts through', 'hr2_legendary', 147.75, -1.5), ('whole crew', 'hr2_channardtrans', 242.7, -1.7), ('in seconds', 'hr2_channardtrans', 115.03, -2.5, 'z=1.35,dx=249'),
-  ('and kirsty', 'hr2_legendary', 219.2, -1.0, 'flip'), ('walk out', 'hr2_legendary', 34.75, -4.6, 'z=1.35,dx=249'), ('survival rate', 'hr2_desire', 101.9, -8.9, 'z=1.35,dx=249')], 'in seconds'))
+X.append(sec('s04', [(0, 'hr2_legendary', 89.8, -6.1), ('pinhead is still', 'hr2_legendary', 53.4, -5.3), ('when tiffany', 'hr2_tiffany', 262.55, -3.0),
+  ('the cenobites spare', 'hr2_tiffany', 295.75, -10.0), ('then kirsty', 'hr2_legendary', 50.15, -3.1), ('and he remembers', 'hr2_legendary', 64.45, -3.3),
+  ('a moment later', 'hr2_channardtrans', 105.52, -3.3), ('now a brand', 'hr2_channardtrans', 110.32, -1.5), ('cuts through', 'hr2_legendary', 147.75, -1.5),
+  ('whole crew', 'hr2_channardtrans', 242.7, -1.7), ('and kirsty and', 'hr2_legendary', 219.2, -1.0, 'flip'), ('walk out', 'hr2_legendary', 34.75, -4.6, 'z=1.35,dx=249'),
+  ('survival rate', 'hr2_legendary', 158.8, -2.6, 'z=1.35,dx=249')], 'and kirsty and'))
 # #8 Revelations 50% (owner's 1080p Blu-ray, read directly, never committed)
-X.append(sec('s05', [(0, 'hr9_rev', 3880.0, -1.5), ('with a different', 'hr9_rev', 3952.0, -1.9), ('on a trip', 'hr9_rev', 1520.0, -2.5),
+X.append(sec('s05', [(0, 'hr9_rev', 3880.0, -1.5), ('with a different', 'hr9_rev', 4068.0, -6.0), ('on a trip', 'hr9_rev', 1520.0, -2.5),
   ('nico solves', 'hr9_rev', 1866.0, -2.0), ('and gets dragged', 'hr9_rev', 2173.75, -1.7), ('then claws', 'hr9_rev', 2199.4, -16.0),
   ('by getting his', 'hr9_rev', 2105.0, -1.4), ('before killing', 'hr9_rev', 3274.5, -2.5), ('and wearing his', 'hr9_rev', 3020.0, -2.5),
-  ('pinhead flat out', 'hr9_rev', 4068.0, -6.0), ('and drags him', 'hr9_rev', 4106.4, -1.7), ('but he leaves', 'hr9_rev', 4146.0, -2.5, 'flip=1,z=1.35,dx=249'),
-  ('and emma', 'hr9_rev', 4192.0, -2.5), ('survival rate', 'hr9_rev', 4198.0, -2.0, 'z=1.35,dx=249')], 'but he leaves'))
+  ("when steven's", 'hr9_rev', 2330.0, -2.0), ('pinhead flat out', 'hr9_rev', 3951.7, -3.9), ('and takes him', 'hr9_rev', 4024.78, -5.0),
+  ('and his cenobites', 'hr9_rev', 3921.0, -6.9), ("and take steven's", 'hr9_rev', 4112.8, -17.0), ('only emma', 'hr9_rev', 4189.48, -15.0),
+  ('survival rate', 'hr9_rev', 4204.62, -4.1, 'z=1.35,dx=249')], 'only emma'))
 # #7 Hellraiser 1987 40%
 X.append(sec('s06', [(0, 'hr1_pack4k', 122.9, -2.6), ('frank solves', 'hr1_pack4k', 10.5, -13.9), ('and the cenobites', 'hr1_pack4k', 6.5, -3.8),
   ('tear him', 'hr1_jesuswept', 124.25, -1.6), ('hook chains', 'hr1_jesuswept', 127.21, -2.0), ('so completely', 'hr1_jesuswept', 131.6, -11.0),
   ('kirsty survives', 'hr1_sights', 2.4, -7.2), ('by making', 'hr1_pack4k', 30.4, -4.0), ('and then reversing', 'hr1_dont', 0.05, -1.85),
   ('before they', 'hr1_dont', 6.95, -1.4), ('survival rate', 'hr1_pack4k', 45.7, -5.9, 'z=1.35,dx=249')], 'and then reversing'))
 # #6 Hellseeker 35%
-X.append(sec('s07', [(0, 'hr6_painpleasure', 186.4, -4.0), ('kirsty opens', 'hr6_pain', 204.9, -4.0), ('she offers', 'hr6_painpleasure', 180.6, -2.9),
-  ('in exchange', 'hr6_painpleasure', 175.3, -2.5), ('including', 'hr6_painpleasure', 178.2, -2.4), ('it works', 'hr6_painpleasure', 184.0, -1.9, 'z=1.35,dx=249'), ('five people', 'hr6_painpleasure', 186.4, -4.0, 'z=1.35,dx=249'),
+X.append(sec('s07', [(0, 'hr6_painpleasure', 186.4, -4.0), ("kirsty's cheating", 'hr6_pain', 32.5, -3.0), ('so he gets', 'hr6_kirstypack', 121.67, -13.5),
+  ('but she makes', 'hr6_kirstypack', 165.0, -11.0), ('she kills three', 'hr6_kirstypack', 268.12, -10.0), ('and then shoots', 'hr6_painpleasure', 175.3, -2.5),
+  ('the fifth soul', 'hr6_painpleasure', 178.2, -2.4), ('it works', 'hr6_painpleasure', 184.0, -1.9, 'z=1.35,dx=249'), ('five people', 'hr6_kirstypack', 289.8, -16.0),
   ('survival rate', 'hr6_painpleasure', 180.6, -2.9, 'z=1.35,dx=249')], 'it works'))
 # #5 Hellraiser 2022, the Priest 30%
 X.append(sec('s08', [(0, 'hr22_bridge', 2.6, -3.6), ('where pinhead', 'hr22_trailer_hulu', 97.5, -2.0), ('the box has', 'hr22_carousel', 498.0, -16.5),
-  ('every single', 'hr22_carousel', 140.9, -8.6), ('someone stabbed', 'hr22_carousel', 264.0, -2.5), ("riley's brother", 'hr22_carousel', 256.3, -2.6),
+  ('every single', 'hr22_carousel', 140.9, -8.6), ('someone cut', 'hr22_carousel', 264.0, -2.5), ("riley's brother", 'hr22_carousel', 280.5, -2.0),
   ('and the priest', 'hr22_bridge', 23.8, -6.4), ('nora until', 'hr22_trailer_20th', 95.9, -1.5), ('flayed to death', 'hr22_nora', 161.93, -2.3),
-  ('riley only', 'hr22_bridge', 0.0, -2.5), ('by stabbing', 'hr22_trailer_20th', 87.6, -0.9), ('boyfriend trevor', 'hr22_cenofeat', 34.6, -1.2), ('final sacrifice', 'hr22_trailer_20th', 41.45, -1.3),
-  ('and then turning', 'hr22_bridge', 33.0, -4.2, 'z=1.35,dx=249'), ('survival rate', 'hr22_bridge', 4.0, -3.0, 'z=1.35,dx=249')], 'and then turning'))
+  ('riley only', 'hr22_bridge', 0.0, -2.5), ('by stabbing', 'hr22_bridge', 33.0, -4.2), ('final sacrifice', 'hr22_trailer_20th', 87.6, -0.9),
+  ('and then turning', 'hr22_bridge', 4.0, -3.0, 'z=1.35,dx=249'), ('survival rate', 'hr22_bridge', 2.6, -3.6, 'z=1.35,dx=249')], 'and then turning'))
 # #4 Bloodline 25%
-X.append(sec('s09', [(0, 'hr4_pathway', 152.3, -6.2), ('pinhead hunts', 'hr4_pathway', 99.5, -4.5), ('kills john', 'hr4_straighthell', 23.7, -1.7),
-  ('in new york', 'hr4_straighthell', 27.5, -1.4), ('and wipes out', 'hr4_painface', 251.2, -1.45), ('crew on', 'hr4_painface', 276.35, -1.45),
-  ('space station in', 'hr4_finalbattle', 92.7, -3.1), ('the year', 'hr4_painface', 295.6, -2.7), ('in the end', 'hr4_space', 48.2, -10.8),
-  ('giant puzzle', 'hr4_another', 279.3, -2.0, 'z=1.35,dx=249'), ('survival rate', 'hr4_chart', 158.8, -4.9, 'flip=1,z=1.35,dx=249')], 'giant puzzle'))
+X.append(sec('s09', [(0, 'hr4_pathway', 152.3, -6.2), ('the family of', 'hr4_takesoul', 47.6, -1.65), ('is cursed for', 'hr4_birth', 405.3, -4.3),
+  ('and pinhead comes', 'hr4_pathway', 99.5, -4.5), ('in 1996', 'hr4_straighthell', 23.7, -1.7), ('kills john', 'hr4_straighthell', 27.5, -1.4),
+  ('in the year', 'hr4_space', 48.2, -10.8), ('he wipes out', 'hr4_painface', 251.2, -1.45), ('crew on', 'hr4_finalbattle', 85.5, -1.75),
+  ('space station.', 'hr4_finalbattle', 92.7, -3.1), ('in the end', 'hr4_another', 272.55, -1.15), ('it takes', 'hr4_another', 273.8, -1.25), ('giant puzzle', 'hr4_another', 279.3, -2.0, 'z=1.35,dx=249'),
+  ('survival rate', 'hr4_chart', 158.8, -4.9, 'flip=1,z=1.35,dx=249')], 'giant puzzle'))
 # #3 Deader 15%
 X.append(sec('s10', [(0, 'hr7_returns', 89.2, -4.4), ('a reporter', 'hr7_real', 20.2, -5.9), ('that kills', 'hr7_afraid', 147.9, -1.1),
   ('all because', 'hr7_afraid', 4.55, -3.5), ('when amy', 'hr7_returns', 10.55, -5.4), ('pinhead slaughters', 'hr7_returns', 175.6, -1.55),
@@ -124,9 +134,10 @@ X.append(sec('s11', [(0, 'hr5_box', 266.2, -1.7), ('detective', 'hr5_world', 50.
   ('just an eternity', 'hr5_torment', 430.0, -7.0, 'z=1.35,dx=249'), ('survival rate', 'hr5_box', 266.2, -1.7, 'z=1.35,dx=249')], 'no deal'))
 # #1 Hell on Earth 5%
 X.append(sec('s12', [(0, 'hr3_iamtheway', 131.0, -1.8), ('pinhead breaks', 'hr3_pillar', 128.0, -7.8), ('with no box', 'hr3_pillar', 230.15, -3.9),
-  ('massacres', 'hr3_club', 124.8, -1.9), ('entire nightclub', 'hr3_dancefloor', 60.0, -1.2), ('kills the police', 'hr3_club', 108.3, -0.6),
-  ('and turns his', 'hr3_iamtheway', 95.5, -4.0), ('only joey', 'hr3_iamtheway', 129.3, -1.25), ('turned into', 'hr3_iamtheway', 127.95, -2.9),
-  ('can send', 'hr3_unstoppable', 106.5, -1.6), ("if he's the one", 'hr3_iamtheway', 9.6, -3.3), ('survival rate', 'hr3_pillar', 224.35, -3.1, 'z=1.35,dx=249')], "if he's the one"))
+  ('massacres', 'hr3_club', 124.8, -1.9), ('entire nightclub', 'hr3_dancefloor', 60.0, -1.2), ('and turns his', 'hr3_cenoloose', 76.14, -1.26),
+  ('brand new', 'hr3_cenoloose', 18.12, -3.7), ('who go on', 'hr3_cenoloose', 99.13, -4.7), ('kill the police', 'hr3_cenoloose', 138.31, -6.0),
+  ('only joey', 'hr3_iamtheway', 129.3, -1.25), ('turned into', 'hr3_iamtheway', 127.95, -2.9), ('can send', 'hr3_unstoppable', 106.5, -1.6),
+  ("if he's the one", 'hr3_iamtheway', 9.6, -3.3, 'z=1.35,dx=249'), ('survival rate', 'hr3_pillar', 224.35, -3.1, 'z=1.35,dx=249')], "if he's the one"))
 # outro (v3, owner 11/04: sincere small-channel subscribe ask): calm Pinhead / box shots, a plain subscribe button, ends on the box closing
 X.append(sec('s13', [(0, 'hr1_pack4k', 62.4, -3.4), ('to a demon', 'hr3_pillar', 230.15, -3.9), ('tell me', 'hr1_pack4k', 10.5, -13.9),
   ('and honestly', 'hr1_pack4k', 45.7, -5.9), ('rewatching', 'hr5_box', 27.1, -4.0), ('as a small', 'hr2_legendary', 89.8, -6.1),
@@ -144,6 +155,8 @@ def fit(S):  # turn (t, clip, in, -clean) into a speed that keeps the shot insid
         if len(s) > 4 and isinstance(s[4], str): s[4] = {'flip': 1} if s[4] == 'flip' else dict(kv.split('=') for kv in s[4].split(','))
         if len(s) > 4: s[4] = {k: float(v) for k, v in s[4].items()}
         elif len(s) > 3 and s[3] == 1.0: del s[3:]
+ORDER = ['s00', 's01', 's04', 's05', 's06', 's07', 's08', 's09', 's02', 's10', 's03', 's11', 's12', 's13']   # v6 countdown (owner 11/04): #11 Hellbound .. #1 Hell on Earth
+X.sort(key=lambda S: ORDER.index(S['voice']))
 for S in X: fit(S)
 FILM = [('hr1_', 'Hellraiser (1987)'), ('hr2_', 'Hellbound: Hellraiser II (1988)'), ('hr3_', 'Hellraiser III: Hell on Earth (1992)'),
         ('hr4_', 'Hellraiser: Bloodline (1996)'), ('hr5_', 'Hellraiser: Inferno (2000)'), ('hr6_', 'Hellraiser: Hellseeker (2002)'),
