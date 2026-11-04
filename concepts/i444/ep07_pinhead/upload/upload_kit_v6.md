@@ -26,9 +26,9 @@ Chapters
 0:15 How the survival rate works
 0:32 #11 Hellbound: Hellraiser II (85%)
 1:00 #10 Hellraiser: Revelations (70%)
-1:31 #9 Hellraiser (55%)
+1:31 #9 Hellraiser 1987 (55%)
 1:52 #8 Hellraiser: Hellseeker (45%)
-2:18 #7 Hellraiser (35%)
+2:18 #7 Hellraiser 2022 (35%)
 2:48 #6 Hellraiser: Bloodline (25%)
 3:17 #5 Hellraiser: Hellworld (20%)
 3:54 #4 Hellraiser: Deader (15%)
