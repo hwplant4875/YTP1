@@ -187,6 +187,6 @@ m = len(voice_items) + 3; ins += ['-stream_loop', '-1', '-i', MUSIC]  # MUSIC_LU
 mnorm = '' if os.environ.get('MUSIC_LEVELLED') == '1' else f"loudnorm=I={os.environ.get('MUSIC_LUFS', '-39')}:TP=-3,"  # Horror Ranked default: music at -39 LUFS (EP03 v11), well under the voice
 fc.append(f"[{m}:a]aresample=48000,atrim=0:{t_global},{mnorm}highshelf=f=3000:g=-4,afade=t=out:st={max(0, t_global-2)}:d=2[mu]")
 fc.append(''.join(f'[v{k}]' for k in range(len(voice_items))) + f"amix=inputs={len(voice_items)}:normalize=0,loudnorm=I=-15:TP=-1.5[vo]")
-fc.append("[1:a][vo][2:a][mu]amix=inputs=4:normalize=0:duration=first,alimiter=limit=0.95[a]")
+fc.append("[1:a][vo][2:a][mu]amix=inputs=4:normalize=0:duration=first,alimiter=limit=0.84:level=0[a]")
 run(['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', ';'.join(fc), '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-t', str(t_global), OUT])
 print('done', OUT, round(t_global, 2))
