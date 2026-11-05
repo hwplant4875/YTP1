@@ -182,8 +182,9 @@ X.append(sec('s09', [(0, 'hr4_space', 0.0, -3.85),
   ('he wipes out', 'hr4_finalbattle', 123.15, -6.0),                       # Pinhead on the station
   ('the entire crew', 'hr4_finalbattle', 68.8, -5.0),                      # the Twins
   ('it takes that', 'hr4_another', 272.55, -1.15),                         # the light
-  ('folded into', 'hr4_another', 273.8, -3.0),                             # the box of light closes
-  ('to finally destroy', 'hr4_another', 279.3, -2.0, L),                   # Pinhead destroyed
+  ('folded into', 'hr4_another', 273.77, -1.38),                           # the box of light bursts
+  ('full of light', 'hr4_another', 279.25, -1.0),                          # Pinhead caught in the light
+  ('to finally destroy', 'hr4_another', 280.25, -1.35, L),                 # Pinhead destroyed
   ('survival rate', 'hr4_chart', 158.8, -4.9, 'flip=1,z=1.35,dx=249')], 'to finally destroy'))
 # ---- s02 #5 Hellworld 20% ----
 X.append(sec('s02', [(0, 'hr8_welcome', 66.2, -4.1),
