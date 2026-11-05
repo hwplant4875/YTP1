@@ -4,7 +4,9 @@
 import json, os, sys, subprocess
 edl = sys.argv[1] if len(sys.argv) > 1 else 'edl.json'; VOICE = sys.argv[2] if len(sys.argv) > 2 else 'voice'
 OUT = sys.argv[3] if len(sys.argv) > 3 else 'upload/pinhead_ranked_en_v7.srt'
-def dur(p): return float(subprocess.check_output(['ffprobe', '-v', '0', '-show_entries', 'format=duration', '-of', 'csv=p=0', p]))
+def dur(p):  # decoded length: the laptop's newer ffprobe reports this (no encoder delay/padding), and the render is timed on it;
+    # ffprobe 6.1 'format=duration' adds ~0.04 s per mp3, which drifted the v8 srt 0.6 s late by the end
+    return len(subprocess.check_output(['ffmpeg', '-v', 'error', '-i', p, '-f', 's16le', '-ac', '1', '-ar', '48000', '-'])) / 2 / 48000
 def ts(t): t = max(0, t); return '%02d:%02d:%02d,%03d' % (t // 3600, t % 3600 // 60, t % 60, round(t % 1 * 1000) % 1000)
 cues, t0 = [], 0.0
 for S in json.load(open(edl))['sections']:

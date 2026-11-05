@@ -3,7 +3,9 @@
 import json, subprocess
 E = json.load(open('edl.json'))
 ST = {e['sec']: e for e in json.load(open('stats.json'))['entries']}
-def dur(p): return float(subprocess.check_output(['ffprobe', '-v', '0', '-show_entries', 'format=duration', '-of', 'csv=p=0', p]))
+def dur(p):  # decoded length: the laptop's newer ffprobe reports this (no encoder delay/padding), and the render is timed on it;
+    # ffprobe 6.1 'format=duration' adds ~0.04 s per mp3, which drifted the v8 srt 0.6 s late by the end
+    return len(subprocess.check_output(['ffmpeg', '-v', 'error', '-i', p, '-f', 's16le', '-ac', '1', '-ar', '48000', '-'])) / 2 / 48000
 FILM = {'s04': 'Hellbound: Hellraiser II', 's05': 'Hellraiser: Revelations', 's06': 'Hellraiser 1987', 's07': 'Hellraiser: Hellseeker',
         's08': 'Hellraiser 2022', 's09': 'Hellraiser: Bloodline', 's02': 'Hellraiser: Hellworld', 's10': 'Hellraiser: Deader',
         's03': 'Hellraiser: Judgment', 's11': 'Hellraiser: Inferno', 's12': 'Hellraiser III: Hell on Earth'}
