@@ -9,7 +9,7 @@ KEYNAME = sys.argv[1]
 ONLY = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
 K = os.environ.get(KEYNAME, '')
 VOICE = 's3TPKV1kjDlVtZbl4Ksh'   # Adam
-src = open('script_v7.md', encoding='utf-8').read().split('## Shot slots')[0]
+src = open(os.environ.get('SCRIPT', 'script_v8.md'), encoding='utf-8').read().split('## Shot slots')[0]
 TXT = {m.group(1): m.group(2).strip() for m in re.finditer(r'^## (s\d\d)[^\n]*\n(.+?)(?=\n## |\Z)', src, re.S | re.M)}
 ORDER = ['s00', 's01', 's04', 's05', 's06', 's07', 's08', 's09', 's02', 's10', 's03', 's11', 's12', 's13']
 assert sorted(TXT) == sorted(ORDER), sorted(TXT)

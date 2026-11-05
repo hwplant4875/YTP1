@@ -1,11 +1,11 @@
 # EP07 v7 voice QA: (1) whisper transcript of every final voice/<sec>.mp3 against the script_v7.md text (numbers normalised to
 # words), (2) longest pause inside each take (10 ms RMS envelope < -44 dBFS), (3) loudness per take (EBU R128 integrated),
 # so no take is noticeably louder or quieter than the others. usage: <whisper venv python> verify_v7.py
-import json, re, subprocess, difflib
+import json, os, re, subprocess, difflib
 import numpy as np
 from faster_whisper import WhisperModel
 ORDER = ['s00', 's01', 's04', 's05', 's06', 's07', 's08', 's09', 's02', 's10', 's03', 's11', 's12', 's13']
-src = open('script_v7.md', encoding='utf-8').read().split('## Shot slots')[0]
+src = open(os.environ.get('SCRIPT', 'script_v8.md'), encoding='utf-8').read().split('## Shot slots')[0]
 TXT = {m.group(1): m.group(2).strip() for m in re.finditer(r'^## (s\d\d)[^\n]*\n(.+?)(?=\n## |\Z)', src, re.S | re.M)}
 ONES = 'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen'.split()
 TENS = 'x x twenty thirty forty fifty sixty seventy eighty ninety'.split()
