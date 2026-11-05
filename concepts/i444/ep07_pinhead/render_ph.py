@@ -115,6 +115,7 @@ for si, S in enumerate(E['sections']):
         # owner's request: a solid black bottom bar (reads as letterbox) over the Movieclips/Fandango mark;
         # Scream 7 uploads carry it higher, inside the picture, so their bar is taller
         if 'still' not in name: vf += f",drawbox=x=0:y={E.get('bar', {}).get(name, 980)}:w=iw:h=ih:color=black:t=fill"
+        vf += f",setpts=N/({FPS}*TB)"  # clean frame timestamps: a slowed shot could hand the concat one odd-pts frame that skipped every overlay (owner 11/05, 2:31 flicker)
         if name == 'BLACK':
             run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', f'color=c=black:s=1920x1080:r={FPS}', '-frames:v', str(n), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p', '-video_track_timescale', '15360', o])
             wav(ao, n)
