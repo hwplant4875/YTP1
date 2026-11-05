@@ -1,0 +1,31 @@
+EP07 v8 voice QA (11/05 22:40 KST). Adam s3TPKV1kjDlVtZbl4Ksh, eleven_v4, one full take per section (never spliced), script_v8.md (owner-approved, no colons).
+verify_v7.py (whisper small.en vs script, max pause, EBU R128):
+
+s00  16.08s  words SAME (51/51)  max pause 0.30s  -21.0 LUFS
+s01  24.88s  words SAME (82/82)  max pause 0.31s  -21.3 LUFS
+s04  41.28s  words SAME (123/123)  max pause 0.32s  -21.5 LUFS
+s05  37.02s  words SAME (111/111)  max pause 0.31s  -21.2 LUFS
+s06  31.72s  words DIFF (97/96)  max pause 0.31s  -21.3 LUFS
+     - number - kirsty + kirstie
+s07  32.81s  words DIFF (98/98)  max pause 0.31s  -21.4 LUFS
+     - bret + brett
+s08  41.98s  words SAME (127/127)  max pause 0.31s  -21.8 LUFS
+s09  33.82s  words SAME (104/104)  max pause 0.31s  -21.6 LUFS
+s02  32.47s  words DIFF (92/91)  max pause 0.31s  -20.8 LUFS
+     - number - derrick + derek
+s10  22.90s  words DIFF (67/66)  max pause 0.30s  -21.7 LUFS
+     - number
+s03  29.31s  words DIFF (85/86)  max pause 0.30s  -21.7 LUFS
+     + in
+s11  25.84s  words DIFF (79/78)  max pause 0.30s  -21.6 LUFS
+     - number
+s12  30.14s  words SAME (90/90)  max pause 0.31s  -20.8 LUFS
+s13  23.33s  words SAME (78/78)  max pause 0.31s  -21.2 LUFS
+sections with word differences: 6 | loudness median -21.4 LUFS, outliers >1.5 LU: none
+
+Notes on the DIFF lines (all checked, none is a real voice error):
+- '- number' (s06, s02, s10, s11): whisper writes 'Number five,' as '5.' (inverse text normalisation). The ElevenLabs alignment puts 'Number' at 0.0-0.26 s in each take, the RMS envelope shows a full word there (-12 to -20 dB for ~250 ms), and whisper hears 'Number' in the same takes when the clip length changes (s06 'Number 9', s02 'number five', s11 'Number two.').
+- kirsty/kirstie, bret/brett, derrick/derek: name spellings only.
+- s03 '+ in': a temperature-fallback hallucination. A deterministic re-run (temperature 0, with and without VAD) is word-identical to the script.
+Max pause inside any take 0.32 s, loudness -20.8 to -21.8 LUFS (median -21.4, no outliers). Narration total 7:04 (424.1 s).
+JC key: 10,353 -> 7,240 characters left after this job (3,113 used for 7,074 characters).
