@@ -21,7 +21,7 @@ assert all(b[0] - a[0] >= 10 for a, b in zip(ch, ch[1:])), 'a chapter is shorter
 def mmss(x): x = int(x); return f'{x // 60}:{x % 60:02d}'
 kit = f'''# EP07 Pinhead upload kit v8
 
-Video: E:\\YTP2\\Horror Ranked\\EP07 Pinhead\\2_renders\\ep07_pinhead_v8.mp4 ({mmss(t)}) | Subtitles: upload/pinhead_ranked_en_v8.srt | Thumbnails: upload/pinhead_thumb_a/b/c/c2/d/e/f/g/h.jpg
+Video: E:\\YTP2\\Horror Ranked\\EP07 Pinhead\\2_renders\\ep07_pinhead_v8.mp4 ({mmss(t)}) | Subtitles: upload/pinhead_ranked_en_v8.srt | Thumbnails: upload/pinhead_thumb_a/b/c/c2/c3/d/e/f/g/h.jpg
 
 ## Titles (pick one, never a colon or a dash)
 1. Every Pinhead Ranked by Your Chance of Surviving Him  (recommended, series format)
@@ -36,6 +36,7 @@ D. Hellbound 85% / Hellseeker 45% / Hellworld 20%  (new 11/05, official HD still
 E. Revelations 70% / the Priest, 2022 35% / Hell on Earth 5%  (new 11/05)
 F. Hellraiser 1987 55% / Bloodline 25% / Judgment 10%  (new 11/05)
 C2. C with the numbers 45 px lower (11/06)
+C3. C with the numbers 90 px lower, at the very bottom (11/06; YouTube's duration badge may cover the end of the red %)
 G. Hellraiser 1987 55% / Hellseeker 45% / Hell on Earth 5%  (11/06, C style: vivid blue / red / yellow)
 H. Revelations 70% / the Priest, 2022 35% / Hell on Earth 5%  (11/06, C style; same 5% skyline panel as C)
 
