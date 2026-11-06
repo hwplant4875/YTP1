@@ -1,0 +1,127 @@
+{
+ "stats": [
+  "STRENGTH",
+  "INTELLIGENCE",
+  "KILL COUNT",
+  "DREAM POWER"
+ ],
+ "entries": [
+  {
+   "sec": "s02",
+   "rank": 9,
+   "film": "Freddy vs. Jason (2003)",
+   "villain": "Freddy Krueger",
+   "v": [
+    5,
+    7,
+    1,
+    4
+   ],
+   "pct": 80
+  },
+  {
+   "sec": "s03",
+   "rank": 8,
+   "film": "A Nightmare on Elm Street 2: Freddy's Revenge (1985)",
+   "villain": "Freddy Krueger",
+   "v": [
+    6,
+    4,
+    8,
+    5
+   ],
+   "pct": 58
+  },
+  {
+   "sec": "s04",
+   "rank": 7,
+   "film": "A Nightmare on Elm Street 5: The Dream Child (1989)",
+   "villain": "Freddy Krueger",
+   "v": [
+    6,
+    7,
+    3,
+    8
+   ],
+   "pct": 50
+  },
+  {
+   "sec": "s05",
+   "rank": 6,
+   "film": "A Nightmare on Elm Street (2010)",
+   "villain": "Freddy Krueger",
+   "v": [
+    7,
+    7,
+    5,
+    7
+   ],
+   "pct": 38
+  },
+  {
+   "sec": "s06",
+   "rank": 5,
+   "film": "Freddy's Dead: The Final Nightmare (1991)",
+   "villain": "Freddy Krueger",
+   "v": [
+    6,
+    6,
+    9,
+    7
+   ],
+   "pct": 30
+  },
+  {
+   "sec": "s07",
+   "rank": 4,
+   "film": "A Nightmare on Elm Street (1984)",
+   "villain": "Freddy Krueger",
+   "v": [
+    7,
+    7,
+    4,
+    8
+   ],
+   "pct": 25
+  },
+  {
+   "sec": "s08",
+   "rank": 3,
+   "film": "A Nightmare on Elm Street 3: Dream Warriors (1987)",
+   "villain": "Freddy Krueger",
+   "v": [
+    8,
+    8,
+    6,
+    9
+   ],
+   "pct": 20
+  },
+  {
+   "sec": "s09",
+   "rank": 2,
+   "film": "A Nightmare on Elm Street 4: The Dream Master (1988)",
+   "villain": "Freddy Krueger",
+   "v": [
+    9,
+    9,
+    6,
+    10
+   ],
+   "pct": 12
+  },
+  {
+   "sec": "s10",
+   "rank": 1,
+   "film": "Wes Craven's New Nightmare (1994)",
+   "villain": "Freddy Krueger",
+   "v": [
+    9,
+    9,
+    4,
+    10
+   ],
+   "pct": 8
+  }
+ ]
+}
