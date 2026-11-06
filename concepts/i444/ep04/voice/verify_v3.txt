@@ -1,0 +1,27 @@
+s00  14.78s  words SAME (51/51)  max pause 0.31s  -21.6 LUFS
+s01  26.46s  words DIFF (82/83)  max pause 0.31s  -21.0 LUFS
+     - superpowers + super + powers
+s02  36.56s  words DIFF (116/115)  max pause 0.31s  -21.3 LUFS
+     - number - versus + vs - lori + laurie
+s03  42.83s  words DIFF (129/128)  max pause 0.32s  -21.3 LUFS
+     - number - kerry + carrie - jesse + jessie - freddy + freddie - jesse + jessie
+s04  39.91s  words SAME (127/127)  max pause 0.31s  -21.7 LUFS
+s05  45.30s  words DIFF (139/139)  max pause 0.31s  -21.0 LUFS
+     - carlos's + carlos'
+s06  39.24s  words DIFF (127/127)  max pause 0.30s  -21.6 LUFS
+     - kris + chris
+s07  38.82s  words SAME (120/120)  max pause 0.32s  -21.6 LUFS
+s08  42.12s  words DIFF (128/129)  max pause 0.32s  -21.6 LUFS
+     + bed - bedsheet + sheet - glen + glenn
+s09  40.29s  words DIFF (123/122)  max pause 0.32s  -21.2 LUFS
+     - number - phillip + philip - taryn + taron - freddy + freddie
+s10  38.06s  words DIFF (113/111)  max pause 0.30s  -20.5 LUFS
+     - and - number - friends' + friend's
+s11  24.14s  words SAME (82/82)  max pause 0.32s  -21.7 LUFS
+sections with word differences: 8 | loudness median -21.5 LUFS, outliers >1.5 LU: none
+
+Notes (11/7 KST): every DIFF above is a spelling or number-format difference, not a missing or wrong word.
+- "number" missing at the start of s02 s03 s09 s10: whisper writes "Number nine" as "9." (padded re-check heard "9. Freddy vs. Jason",
+  "8. Freddy's Revenge", "2. Dream Warriors", "and number one"); the ElevenLabs alignment has "Number" at 0.0-0.24 s in each take.
+- super powers / vs / Laurie / Carrie / Jessie / Freddie / Carlos' / Chris / bed sheet / Glenn / Philip / Taron / friend's = spellings.
+- A 3.5 s window of s03 heard "change" after "Revenge"; 5 s and 6.5 s windows do not, so it was the window cut, not the audio.
