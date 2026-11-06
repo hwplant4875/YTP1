@@ -1,0 +1,7 @@
+{
+ "prompt": "Instrumental dark nightmare lullaby ambience for a horror documentary narration. A very sparse, slow, slightly detuned music box playing a few soft scattered notes in a minor key, never a full tune, over low sustained cello and double bass drones, a soft warm low industrial hum like a distant boiler room, faint slow steam hiss far in the background, and a quiet dark string pad with deep reverb. Eerie, dreamlike and unsettling, like a child's bedroom at night that slowly turns into a nightmare. Made to sit quietly under a narrator for several minutes: same mood and tempo throughout, no build-up, no climax, no ending, no silences. 60 BPM, D minor, wide natural stereo. No drums, no percussion, no beat, no booms, no impacts or hits, no stingers, no risers, no choir, no vocals, no harsh drones, no shrill high strings, no ticking, no metallic clanks.",
+ "music_length_ms": 180000,
+ "model_id": "music_v2_5",
+ "force_instrumental": true,
+ "key": "JC (ELEVENLABS_JC_API_KEY)"
+}

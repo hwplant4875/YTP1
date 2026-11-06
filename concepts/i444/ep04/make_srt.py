@@ -1,0 +1,44 @@
+# EP04 Freddy v3 copy of ../ep07_pinhead/make_srt.py (years 1984 and 2010 as digits; "twenty ten remake" -> "2010 remake").
+# Halloween special (copy of ../ep03/make_srt_v2.py): English .srt: ElevenLabs character alignment (voice_v3/<seg>.json) placed at each section's start,
+# with the same section lengths render_v2.py uses (voice + pad). Cues break at punctuation, max ~42 chars / 2.8 s.
+# usage: python make_srt_v2.py [edl_v2.json] [voice_v3] [out.srt]
+import json, os, sys, subprocess
+edl = sys.argv[1] if len(sys.argv) > 1 else 'edl.json'; VOICE = sys.argv[2] if len(sys.argv) > 2 else 'voice'
+OUT = sys.argv[3] if len(sys.argv) > 3 else 'upload/freddy_ranked_en_v3.srt'
+def dur(p):  # decoded length: the laptop's newer ffprobe reports this (no encoder delay/padding), and the render is timed on it;
+    # ffprobe 6.1 'format=duration' adds ~0.04 s per mp3, which drifted the v8 srt 0.6 s late by the end
+    return len(subprocess.check_output(['ffmpeg', '-v', 'error', '-i', p, '-f', 's16le', '-ac', '1', '-ar', '48000', '-'])) / 2 / 48000
+def ts(t): t = max(0, t); return '%02d:%02d:%02d,%03d' % (t // 3600, t % 3600 // 60, t % 60, round(t % 1 * 1000) % 1000)
+cues, t0 = [], 0.0
+for S in json.load(open(edl))['sections']:
+    vp = os.path.join(VOICE, S['voice'] + '.mp3'); a = json.load(open(os.path.join(VOICE, S['voice'] + '.json')))
+    ch, st, en = a['characters'], a['character_start_times_seconds'], a['character_end_times_seconds']
+    words, cur = [], None                                   # (text, start, end)
+    for c, s, e in zip(ch, st, en):
+        if c.isspace():
+            if cur: words.append(cur); cur = None
+        elif cur: cur = (cur[0] + c, cur[1], e)
+        else: cur = (c, s, e)
+    if cur: words.append(cur)
+    # v7: years are written out for the voice; show them as digits in the captions (one token, so a year never splits across cues)
+    YEARS = {('nineteen', 'eighty-four'): '1984', ('twenty', 'ten'): '2010'}
+    i = 0
+    while i + 1 < len(words):
+        key = (words[i][0].lower(), words[i + 1][0].lower().rstrip('.,?!:;'))
+        if key in YEARS:
+            tail = words[i + 1][0][len(key[1]):]
+            words[i:i + 2] = [(YEARS[key] + tail, words[i][1], words[i + 1][2])]
+        i += 1
+    line = []
+    for i, w in enumerate(words):
+        line.append(w); txt = ' '.join(x[0] for x in line)
+        nxt = words[i + 1][0] if i + 1 < len(words) else ''
+        brk = w[0][-1] in '.,?!:;' and len(txt) > 14 or len(txt + ' ' + nxt) > 42 or line[-1][2] - line[0][1] > 2.8 or not nxt
+        if brk: cues.append((t0 + line[0][1], t0 + line[-1][2], txt)); line = []
+    t0 += dur(vp) + S.get('pad', 0.5)
+with open(OUT, 'w', encoding='utf-8') as f:
+    for k, (s, e, txt) in enumerate(cues):
+        e = max(e, s + 0.7)
+        if k + 1 < len(cues): e = min(e + 0.25, cues[k + 1][0] - 0.02)
+        f.write(f'{k + 1}\n{ts(s)} --> {ts(e)}\n{txt}\n\n')
+print(OUT, len(cues), 'cues, ends', ts(t0))

@@ -1,0 +1,156 @@
+# EP04 Freddy v3 clip list (11/7 KST). name | youtube id | channel | what it should hold (check on frames, the titles can mislead)
+# All checked 11/7 with the YouTube Data API: HD and NOT age-restricted (no cookies needed). The 51 age-gated Movieclips clips of 10/27 are dropped.
+# Download on the laptop to E:\YTP2\Horror Ranked\EP04 Freddy Krueger\1_work\clips\<name>.mp4 with
+#   yt-dlp -S res:1080 -f "bv*+ba/b" --merge-output-format mp4, then ffprobe the height (720 minimum, 1080 wanted).
+# The 7 clips from 10/27 (n2_bus, n2_kill_for_me, n3_wizard, n5_baby, n5_back_to_hell, n5_force_feed, r10_bath) stay as they are.
+# Prefix = film: n1 1984, n2 1985 Freddy's Revenge, n3 1987 Dream Warriors, n4 1988 Dream Master, n5 1989 Dream Child,
+#                n6 1991 Freddy's Dead, n7 1994 New Nightmare, fj 2003 Freddy vs. Jason, r10 2010 remake.
+# ---- 1984 ----
+n1_tina_kill | v5JGEhhHgvM | AFW (4K upload) | Freddy kills Tina, dragged up the wall and across the ceiling
+n1_tina_chase | klcz0Io__g0 | Warner Bros. Entertainment | Tina chased in the alley, Freddy's long arms
+n1_opening | NIxI4NeKyQw | AFW | opening credits (glove being made) and Tina's first nightmare in the boiler room
+n1_bathroom | IrrNvvAkq5I | Warner Bros. UK Horror | Nancy dozes off in the bath, the glove rises out of the water
+n1_bathtub2 | NTS-9KpTf48 | AFW | bathtub attack (backup angle)
+n1_rod | UCWBBWEDbus | AFW | Rod strangled with his bedsheet in the jail cell
+n1_glen | oINKFWmLFec | AFW | Glen pulled into his bed, blood geyser
+n1_glen_bed | 8cmWHdHzCS0 | Warner Bros. UK Horror | Glen sucked into his own bed (official)
+n1_boiler | gtDN0OjX2P0 | AFW | Nancy's boiler room nightmare, Freddy in the shadows
+n1_plan | BivUB2rnwxo | AFW | Nancy's plan
+n1_traps | LnihESVmIng | AFW | Nancy sets up her traps
+n1_fight | QicmGtnQiTg | AFW | Nancy pulls Freddy out and fights him in her house
+n1_no_fear | RQOd8q6SEo4 | AFW | No longer afraid, Nancy turns her back on him
+n1_ending | 5uky-flgeYU | AFW | ending, Marge pulled through the door window, girls skipping rope
+n1_boyfriend | ttDRhFMMySg | Warner Bros. Entertainment | "I'm your boyfriend now" (phone tongue)
+n1_god | IGXbXHBRKJM | Warner Bros. UK Horror | "This is God" (Freddy cuts himself)
+n1_wall | Dz1mx6JbrVw | ClipZone Horrorscapes | Freddy attacks Nancy after Glen falls asleep (Freddy through the wall over her bed?)
+n1_screw_sleep | ogl8qtEJlTY | AFW | "Screw sleep" (Nancy fighting sleep)
+n1_dark_story | WIv5RBNRJ6Y | AFW | Marge tells how the parents burned Freddy
+n1_preview4k | T-0k6b2QHFY | Warner Bros. Entertainment | 4K Ultra HD extended preview (check which film and scenes)
+n1_creepiest | PYhGelmKsdI | Warner Bros. UK Horror | Creepiest Moments of the 1984 film (26 min compilation, check for title cards)
+# ---- 1985 Freddy's Revenge ----
+n2_brain | 53sAUUWlOKs | Warner Bros. Entertainment (4K Movie Clip) | "You've got the body, I've got the brain", Freddy comes out of Jesse
+n2_emerge | QRxDJ_KE5nw | ClipZone Horrorscapes | Freddy emerges from Jesse's body
+n2_kill4k | Fg9RDgnPxxU | Warner Bros. Entertainment (4K) | "Kill for me" (7 min, should include Grady's death)
+n2_schoolbus | 6RphK0cEI6Y | Warner Bros. Entertainment (4K) | school bus nightmare
+n2_pool | C73xsVyZf_c | Warner Bros. UK Horror | Freddy's pool party
+n2_party | Ks2K3owHdyI | ClipZone Horrorscapes | Freddy crashes the party
+n2_creepiest | ieRxL6VBrwo | Warner Bros. UK Horror | Creepiest Moments of Freddy's Revenge (20 min: coach in the showers, Lisa's kiss, final bus scene?)
+n2_grady_fan | O4g-DkZbsNM | Iamthe80sguy2 (fan upload) | Grady's death (backup)
+n2_kiss_fan | JXFHk8FyCOI | DenZare2026 (fan upload) | Lisa kisses Freddy, he burns (backup)
+n2_kerry_fan | GVoNJlS46eE | DenZare2021BackUp (fan upload) | final scene, Kerry on the bus (backup)
+# ---- 1987 Dream Warriors ----
+n3_marionette | vgbE09-4GTo | Rotten Tomatoes Horror | the marionette kill (Phillip)
+n3_marionette_uk | SovRwDfeH4o | Warner Bros. UK Horror | Freddy's marionette kill (second copy, other moments)
+n3_primetime | r6R8cnb1hc8 | Rotten Tomatoes Horror | "Welcome to prime time" (Jennifer and the TV)
+n3_primetime_wb | zI5aYygKwEI | Warner Bros. Entertainment | "Prime Time"
+n3_taryn | HVi3pTMkEVk | Rotten Tomatoes Horror | "Let's get high" (Taryn, syringe fingers)
+n3_wizard_rt | 9h3MKq82IZU | Rotten Tomatoes Horror | Freddy vs. the Wizard Master (Will)
+n3_skeleton | RUDxMd2K2cA | Rotten Tomatoes Horror | Freddy's skeleton attacks (Donald dies, holy water on the bones)
+n3_nancy | R1sY2one4nE | Rotten Tomatoes Horror | Freddy kills Nancy (disguised as her father)
+n3_worm | OGRhKKqB-Co | Rotten Tomatoes Horror | the Freddy worm (Kristen)
+n3_souls | TK6RL6pFyZ8 | Rotten Tomatoes Horror | the souls of the children
+n3_real | Xb61cuzndf4 | Warner Bros. Entertainment (4K) | "Freddy's real"
+n3_heres | B9N50ndCThk | Rotten Tomatoes Horror | "Here's Freddy!"
+n3_bed | JxKkXTEHcws | Rotten Tomatoes Horror | bed to hell
+n3_mirrors | ene0m1UafmE | Rotten Tomatoes Horror | hall of mirrors
+n3_joey | MOQNxCWOEj4 | Movieclips | Freddy captures Joey
+n3_best4k | VGecGcJjz5Y | Movieclips | Dream Warriors 4K best scenes (10 min)
+n3_kristen | HGfTKGUahZU | Warner Bros. UK Horror | haunting Kristen
+n3_creepiest | nQzNhDZP4wo | Warner Bros. UK Horror | Creepiest Moments of Dream Warriors (17 min)
+# ---- 1988 Dream Master ----
+n4_junkyard | Zt9e5Huc8bA | Rotten Tomatoes Horror (4K) | Freddy's junkyard of doom (resurrection, Kincaid)
+n4_reborn | JQadgxZtslQ | Flashback FM (fan) | Freddy's reborn (backup)
+n4_waterbed | sIXXrCdEllM | Warner Bros. Entertainment | waterbed (Joey)
+n4_nurse | wqCQcv5PmsI | Rotten Tomatoes Horror (4K) | nurse Freddy (Joey)
+n4_beach | PilpCZzPr7M | Rotten Tomatoes Horror (4K) | Freddy beach attack (Kristen)
+n4_hell | dyseBOANybQ | Flashback FM (fan) | "Greetings from hell" (Kristen thrown into the furnace)
+n4_kiss | 0lmIWGTj3A4 | Rotten Tomatoes Horror (4K) | Freddy's kiss of death (Sheila)
+n4_karate | ZM9v27CPI6A | Rotten Tomatoes Horror (4K) | invisible karate fight (Rick)
+n4_roach | -v55zcui2Lo | Rotten Tomatoes Horror (4K) | Debbie turned into a cockroach and crushed
+n4_alice | FSusG63wI24 | Rotten Tomatoes Horror (4K) | Freddy vs. Alice dream fight
+n4_torn | PwX0mGdDYSA | Rotten Tomatoes Horror (4K) | Freddy torn apart by his victims (ending)
+n4_soulfood | GoG5UKZsNkc | Rotten Tomatoes Horror (4K) | "I love soul food"
+n4_soulpizza | 6qw5YcXgQZw | Warner Bros. Entertainment | soul pizza
+n4_doctor | bltr2S-dc98 | Rotten Tomatoes Horror (4K) | paging Doctor Freddy
+n4_death | zlZpl0w0mUQ | Flashback FM (fan) | the death of Freddy Krueger (mirror, backup)
+# ---- 1989 Dream Child ----
+n5_motorcycle | srgIpatofmw | Rotten Tomatoes Horror (4K) | Freddy's motorcycle from hell (Dan)
+n5_drunk | lG2Z7vLfobQ | Rotten Tomatoes Horror (4K) | Freddy drunk drives (Dan's ride?)
+n5_forcefed4k | FK8mYUWluPg | Rotten Tomatoes Horror (4K) | force fed to death (Greta)
+n5_superfreddy | yc2k9pm3UeM | Warner Bros. Entertainment | Super Freddy (Mark turned to paper)
+n5_baby4k | ZaxGsXywRdY | Rotten Tomatoes Horror (4K) | baby Freddy
+n5_son4k | fyuFarVcSxc | Rotten Tomatoes Horror (4K) | Freddy's son (Jacob)
+n5_hell4k | kqLVec5nFec | Rotten Tomatoes Horror (4K) | sending Freddy to hell (Amanda, Jacob)
+n5_tricks | I561NNA0U24 | Rotten Tomatoes Horror (4K) | Alice tricks Freddy
+n5_pool | SfmW1byiL_E | Rotten Tomatoes Horror (4K) | Freddy pool attack (Yvonne)
+n5_itsaboy | LCfOMiFXUEg | Warner Bros. Entertainment | "It's a boy"
+n5_schoolsout | BaBrfkUuwJE | Warner Bros. Entertainment | "School's out"
+# ---- 1991 Freddy's Dead ----
+n6_busrt | HZKvV93kSTs | Rotten Tomatoes Horror (4K) | bus to hell (1/9)
+n6_ear | nCPo6RIL--Q | Rotten Tomatoes Horror (4K) | lend me your ear (2/9, Carlos)
+n6_nice | f10YpGCYqBo | Rotten Tomatoes Horror (4K) | nice hearing from you (3/9, Carlos and the chalkboard)
+n6_chalk | H8u6YTg-Vm4 | Warner Bros. Entertainment | nails on a chalkboard
+n6_drug | HLp--dS6hj4 | Rotten Tomatoes Horror (4K) | Freddy's drug PSA (4/9, Spencer)
+n6_doom | -0Abt9-xYx4 | Rotten Tomatoes Horror (4K) | falling to your doom (5/9, Spencer or John Doe)
+n6_father | 9G9YrZ3WWJI | Rotten Tomatoes Horror (4K) | nightmare father (6/9, Tracy)
+n6_forever | oRc1Pcmujf0 | Rotten Tomatoes Horror (4K) | "I am forever" (7/9)
+n6_brain | E7gprpahuPs | Rotten Tomatoes Horror (4K) | Freddy's brain (8/9)
+n6_maggie | ZeKr2ioH84E | Rotten Tomatoes Horror (4K) | Maggie kills Freddy with his own glove (9/9, pipe bomb)
+n6_town | Wt9aXGoNvOE | Warner Bros. Entertainment (4K) | every town has an Elm Street (empty Springwood)
+n6_blood | O0bb2X4dGPA | Warner Bros. Entertainment | "You are my blood"
+n6_earcheck | h3F1b7vsG84 | ClipZone Horrorscapes | ear check and cut
+n6_daughter | W2hGXPJOXao | ClipZone Horrorscapes | Freddy's daughter revealed
+n6_playground | OBFSVlf7KRQ | Warner Bros. Entertainment | whole new playground
+n6_oz | TN7BmVcVMgI | Warner Bros. Entertainment | Freddy of Oz (broomstick)
+n6_game | X-zwfV7O5a8 | Alex S (fan upload) | Freddy plays Spencer in the video game, Power Glove (check HD)
+# ---- 1994 New Nightmare ----
+n7_julie | dKMdBwTJTlQ | Rotten Tomatoes Horror (4K) | Freddy kills Julie on the ceiling (hospital)
+n7_funeral | Ipq7P1yA3vo | Rotten Tomatoes Horror (4K) | Freddy at the funeral
+n7_traffic | Cit-8CHl_T0 | Rotten Tomatoes Horror (4K) | Dylan sleepwalks through traffic
+n7_missme | PV2AIJ_uSwo | Rotten Tomatoes Horror (4K) | "Miss me?"
+n7_stalks | N7ZgeEMLo_I | Rotten Tomatoes Horror (4K) | Freddy stalks Heather
+n7_end | BXsIivdCxWM | Rotten Tomatoes Horror (4K) | "F you, Freddy" (furnace ending?)
+n7_surgery | AGpo3Bauc98 | Rotten Tomatoes Horror (4K) | Doctor Freddy performs surgery
+n7_dylan | RJIOoEHIr2Y | Warner Bros. Entertainment (4K) | Freddy haunts Dylan
+n7_coming | mMJGH2Yoo8I | Warner Bros. Entertainment (4K) | Freddy's coming
+n7_son | TyMQHnuboRw | Warner Bros. UK Horror | Freddy wants your son
+n7_coming_uk | Zh36MCgTPG4 | Warner Bros. UK Horror | Freddy's coming for you
+n7_hand | kMxiDT18rQw | Warner Bros. UK Horror | Freddy's hand is coming to get you (opening, the effects men?)
+n7_handbed | cpqFiSqH5hY | ClipZone Horrorscapes | a hand in bed
+n7_bloodiest | an1cCUcNi10 | Warner Bros. UK Horror | Bloodiest Moments of New Nightmare (25 min: effects men, Chase on the road)
+n7_chase_fan | Q57LUoqYqH4 | Adam The Prowler (fan upload) | Chase's death (backup)
+# ---- 2003 Freddy vs. Jason ----
+fj_notstrong | SaBDWz5xUBw | Warner Bros. UK Horror | Freddy is not strong enough yet
+fj_mom | nJc6LFc2jHY | Warner Bros. UK Horror | Freddy brings Jason's mom into the nightmare
+fj_crash | QmadOEdLszo | Warner Bros. UK Horror | Jason crashes the party
+fj_rave | jMKBWtvYi-0 | Rotten Tomatoes Horror | Jason slaughters the rave
+fj_cornfield | 4Sr9IBYuOqA | Warner Bros. UK Horror | cornfield chase
+fj_influence | eDIlHvjKzI8 | Warner Bros. UK Horror | Jason under the influence (Hypnocil?)
+fj_construction | z6utpVWVLaY | Warner Bros. UK Horror | construction site fight (ending)
+fj_back | aKmvfleHJbI | ClipZone Horrorscapes | "Freddy's back" (Mark's death)
+fj_battle | 5DHsH5oIgkA | ClipZone Horrorscapes | battle of the killers
+fj_collide | dgjK-K8ANRc | ClipZone Horrorscapes | when killers collide
+fj_hell | apDSsXU6xJs | Rotten Tomatoes Horror | "Go to hell" (Lori cuts his head off?)
+fj_world | 9B9XT_RJAUc | Rotten Tomatoes Horror | "Welcome to my world"
+fj_kicks | SM08rPLV5y0 | Rotten Tomatoes Horror | Freddy fights Jason
+fj_apesh | hf-GRuG-T3I | Rotten Tomatoes Horror | Jason goes after Freddy
+fj_pillar | olZ8e_GA-XE | Rotten Tomatoes Horror | Freddy caterpillar
+fj_aftersex | sV71EKS2e08 | Rotten Tomatoes Horror | Jason's first kill (Trey)
+fj_decap | VgO0T8Ndy58 | Rotten Tomatoes Horror | "Jason decapitated my dad"
+fj_dreaming | jrDV0xPDtFA | Warner Bros. Entertainment | dreaming Jason
+fj_childhood | 1M4VXBs8j5I | Warner Bros. UK Horror | Jason dreams about his childhood
+fj_mommy | iDMJd5Z6xhA | Warner Bros. Entertainment | mommy yelling
+fj_intro | vFzn-eTIPwo | Arrik Black (fan upload) | opening monologue (forgotten, Westin Hills, Hypnocil; skip the title card)
+# ---- 2010 remake ----
+r10_m1 | JWGVdLHio5g | Movieclips | #1 "You're dreaming, but you don't know it"
+r10_m2 | 1QjC0jXb-9k | Movieclips | #2 "Won't happen again"
+r10_m3 | JMt6zz_dYWI | Movieclips | #3 grocery store nightmare (micro-nap)
+r10_m4 | P2A2nKAbQqI | Movieclips | #4 "We're having the same dream"
+r10_bath_uk | Ni22tUMiFu4 | Warner Bros. UK Horror | a relaxing warm bath
+r10_unavoidable | cKaYTnA9buM | ClipZone Horrorscapes | an unavoidable nightmare
+r10_dreaming | Nr3SVBzze4o | ClipZone Horrorscapes | dreaming of Freddy
+r10_boyfriend | KVEDFXwFtTI | ClipZone Horrorscapes | "I'm your boyfriend now"
+r10_creepiest | baRGgRYOYuk | Warner Bros. UK Horror | Creepiest Moments of the 2010 film (24 min: Dean, Kris, Jesse, throat cut, mirror ending)
+r10_preview | 7q_klUFLAKs | Warner Bros. Entertainment | extended preview (the diner opening, Dean?)
+r10_dean_fan | -GVebhmmAdw | FilmSahnesiTv (fan upload) | Dean's dream in the diner (backup)
+r10_kris_fan | is6CV5hlVd0 | FilmSahnesiTv (fan upload) | Kris's death (backup)
