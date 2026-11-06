@@ -1,0 +1,2484 @@
+{
+ "sections": [
+  {
+   "voice": "s00",
+   "pad": 0.05,
+   "clip_audio_db": -20,
+   "shots": [
+    [
+     0,
+     "n4_beach",
+     36.6
+    ],
+    [
+     0.31,
+     "n1_tina_kill",
+     163.05
+    ],
+    [
+     1.15,
+     "n1_tina_kill",
+     185.9
+    ],
+    [
+     2.03,
+     "n3_marionette",
+     44.38
+    ],
+    [
+     2.63,
+     "n3_marionette",
+     92.4
+    ],
+    [
+     3.59,
+     "n3_primetime",
+     34.62
+    ],
+    [
+     4.39,
+     "n3_primetime",
+     50.7,
+     0.986
+    ],
+    [
+     5.51,
+     "n4_roach",
+     35.3
+    ],
+    [
+     5.91,
+     "n4_roach",
+     166.45
+    ],
+    [
+     6.91,
+     "n1_glen_bed",
+     123.55
+    ],
+    [
+     7.83,
+     "n1_glen",
+     134.2
+    ],
+    [
+     9.09,
+     "n1_tina_chase",
+     29.7
+    ],
+    [
+     10.18,
+     "n1_bathroom",
+     0.1
+    ],
+    [
+     10.68,
+     "n1_bathroom",
+     36.0
+    ],
+    [
+     11.6,
+     "still_posterwall",
+     0.0
+    ]
+   ],
+   "overlays": [
+    [
+     "word",
+     "He will",
+     0,
+     0.31
+    ],
+    [
+     "word",
+     "Drag you across",
+     0.31,
+     1.15
+    ],
+    [
+     "word",
+     "The ceiling",
+     1.15,
+     2.03
+    ],
+    [
+     "word",
+     "Turn you into",
+     2.03,
+     2.63
+    ],
+    [
+     "word",
+     "A puppet",
+     2.63,
+     3.59
+    ],
+    [
+     "word",
+     "Smash your head",
+     3.59,
+     4.39
+    ],
+    [
+     "word",
+     "Through a TV",
+     4.39,
+     5.51
+    ],
+    [
+     "word",
+     "Crush you",
+     5.51,
+     5.95
+    ],
+    [
+     "word",
+     "Like a bug",
+     5.95,
+     6.91
+    ],
+    [
+     "word",
+     "Or pull you down",
+     6.91,
+     7.83
+    ],
+    [
+     "word",
+     "Into your own bed",
+     7.83,
+     9.09
+    ],
+    [
+     "word",
+     "And all he needs",
+     9.09,
+     10.18
+    ],
+    [
+     "word",
+     "Is for you",
+     10.18,
+     10.68
+    ],
+    [
+     "word",
+     "To fall asleep",
+     10.68,
+     11.6
+    ],
+    [
+     "word",
+     "We're ranking",
+     11.6,
+     12.34
+    ],
+    [
+     "word",
+     "Every Freddy",
+     12.34,
+     13.02
+    ],
+    [
+     "word",
+     "By your chance",
+     13.02,
+     13.74
+    ],
+    [
+     "word",
+     "Of surviving him",
+     13.74,
+     15.34
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street 4: The Dream Master (1988)",
+     0,
+     0.31
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street (1984)",
+     0.31,
+     2.03
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street 3: Dream Warriors (1987)",
+     2.03,
+     5.51
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street 4: The Dream Master (1988)",
+     5.51,
+     6.91
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street (1984)",
+     6.91,
+     11.6
+    ]
+   ],
+   "sfx": [],
+   "vfade": {
+    "out": 0.25
+   }
+  },
+  {
+   "voice": "s01",
+   "pad": 0.05,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "n1_screw_sleep",
+     33.2,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 40.0
+     }
+    ],
+    [
+     1.0,
+     "n3_real",
+     11.0,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     2.36,
+     "n1_boiler",
+     272.9,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     3.52,
+     "n1_boiler",
+     270.7,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     4.82,
+     "r10_creepiest",
+     1419.05,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     6.64,
+     "fj_notstrong",
+     95.1,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 150.0
+     }
+    ],
+    [
+     7.72,
+     "fj_crash",
+     18.35,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": -160.0
+     }
+    ],
+    [
+     9.59,
+     "n2_emerge",
+     147.2,
+     0.975,
+     {
+      "z": 1.35,
+      "dx": 40.0
+     }
+    ],
+    [
+     11.46,
+     "n4_soulfood",
+     68.7,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     12.66,
+     "n4_junkyard",
+     147.0,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     15.023,
+     "n1_opening",
+     38.7,
+     1.0,
+     {
+      "z": 1.8,
+      "dy": -123.0
+     }
+    ],
+    [
+     17.633,
+     "n3_heres",
+     196.0,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     18.14,
+     "n5_force_feed",
+     25.2,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     18.807,
+     "n3_worm",
+     109.1,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     20.06,
+     "n3_worm",
+     112.3,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     21.34,
+     "n1_bathroom",
+     51.55,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     22.673,
+     "n6_forever",
+     67.2,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     25.18,
+     "n7_coming",
+     186.6,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ]
+   ],
+   "overlays": [
+    [
+     "stats",
+     {
+      "name": "FREDDY KRUEGER",
+      "tile_png": "tiles/mystery.png",
+      "stats": {
+       "STRENGTH": 6,
+       "INTELLIGENCE": 7,
+       "KILL COUNT": 5,
+       "DREAM POWER": 8
+      },
+      "pct": "??",
+      "dur": 26.548,
+      "t_pct": 25.5,
+      "reveal": [
+       16.49,
+       17.713,
+       18.22,
+       19.02
+      ]
+     },
+     0.0,
+     999
+    ]
+   ],
+   "sfx": [
+    [
+     0.0,
+     "../ep03/sfx/whoosh.wav",
+     -16
+    ],
+    [
+     25.5,
+     "../ep03/sfx/stamp.wav",
+     -12
+    ]
+   ],
+   "vfade": {
+    "in": 0.25
+   }
+  },
+  {
+   "voice": "s02",
+   "pad": 0.15,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "fj_kicks",
+     189.8
+    ],
+    [
+     2.81,
+     "fj_notstrong",
+     98.1
+    ],
+    [
+     5.09,
+     "fj_notstrong",
+     63.7
+    ],
+    [
+     6.583,
+     "fj_back",
+     163.8
+    ],
+    [
+     7.65,
+     "fj_back",
+     214.4
+    ],
+    [
+     8.85,
+     "fj_influence",
+     60.25
+    ],
+    [
+     10.29,
+     "fj_influence",
+     71.4
+    ],
+    [
+     11.05,
+     "fj_influence",
+     51.0
+    ],
+    [
+     12.61,
+     "fj_influence",
+     88.4
+    ],
+    [
+     15.283,
+     "fj_notstrong",
+     104.6
+    ],
+    [
+     16.95,
+     "fj_world",
+     144.4
+    ],
+    [
+     18.67,
+     "fj_crash",
+     21.1
+    ],
+    [
+     20.08,
+     "fj_battle",
+     241.0
+    ],
+    [
+     22.42,
+     "fj_cornfield",
+     112.55
+    ],
+    [
+     23.66,
+     "fj_cornfield",
+     115.45
+    ],
+    [
+     24.507,
+     "fj_back",
+     419.7
+    ],
+    [
+     25.92,
+     "fj_back",
+     470.0
+    ],
+    [
+     27.833,
+     "fj_world",
+     56.8
+    ],
+    [
+     29.1,
+     "fj_world",
+     60.55
+    ],
+    [
+     29.86,
+     "fj_world",
+     171.2
+    ],
+    [
+     31.1,
+     "fj_battle",
+     230.6,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     32.62,
+     "fj_world",
+     52.1,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     34.29,
+     "fj_kicks",
+     166.6,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      9,
+      "Freddy Krueger",
+      "Freddy vs. Jason (2003)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "FREDDY KRUEGER",
+      "tile_png": "tiles/fj.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 7,
+       "KILL COUNT": 1,
+       "DREAM POWER": 4
+      },
+      "pct": 95,
+      "t_pct": 4.16,
+      "dur": 5.659,
+      "film": "Freddy vs. Jason (2003)"
+     },
+     31.1,
+     999
+    ],
+    [
+     "film",
+     "Freddy vs. Jason (2003)",
+     0,
+     31.1
+    ]
+   ],
+   "sfx": [
+    [
+     31.1,
+     "../ep03/sfx/whoosh.wav",
+     -16
+    ],
+    [
+     31.400000000000002,
+     "../ep03/sfx/fill.wav",
+     -20
+    ],
+    [
+     35.260000000000005,
+     "../ep03/sfx/stamp.wav",
+     -12
+    ]
+   ]
+  },
+  {
+   "voice": "s03",
+   "pad": 0.15,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "n2_brain",
+     276.5
+    ],
+    [
+     2.48,
+     "n2_pool",
+     71.3
+    ],
+    [
+     5.64,
+     "n2_creepiest",
+     1053.45
+    ],
+    [
+     7.64,
+     "n2_kill4k",
+     7.0
+    ],
+    [
+     9.04,
+     "n2_kill4k",
+     141.45
+    ],
+    [
+     9.96,
+     "n2_emerge",
+     139.64,
+     0.974
+    ],
+    [
+     11.587,
+     "n2_pool",
+     21.9
+    ],
+    [
+     13.51,
+     "n2_party",
+     553.4
+    ],
+    [
+     15.03,
+     "n2_creepiest",
+     79.5
+    ],
+    [
+     16.35,
+     "n2_creepiest",
+     96.6
+    ],
+    [
+     17.43,
+     "n2_emerge",
+     180.9
+    ],
+    [
+     18.86,
+     "n2_pool",
+     55.6
+    ],
+    [
+     21.31,
+     "n2_bus",
+     9.0
+    ],
+    [
+     22.83,
+     "n2_bus",
+     84.3,
+     0.774
+    ],
+    [
+     25.15,
+     "n2_bus",
+     46.22
+    ],
+    [
+     26.49,
+     "n2_party",
+     522.5
+    ],
+    [
+     28.51,
+     "n2_pool",
+     117.9
+    ],
+    [
+     30.43,
+     "n2_creepiest",
+     1020.0
+    ],
+    [
+     32.74,
+     "n2_creepiest",
+     1009.0
+    ],
+    [
+     34.58,
+     "n2_creepiest",
+     1038.2
+    ],
+    [
+     35.54,
+     "n2_creepiest",
+     1094.7
+    ],
+    [
+     37.25,
+     "n2_kill4k",
+     308.0,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     38.93,
+     "n2_kill4k",
+     349.2,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     40.48,
+     "n2_pool",
+     327.5,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 160.0
+     }
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      8,
+      "Freddy Krueger",
+      "Freddy's Revenge (1985)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "FREDDY KRUEGER",
+      "tile_png": "tiles/n2.png",
+      "stats": {
+       "STRENGTH": 7,
+       "INTELLIGENCE": 3,
+       "KILL COUNT": 8,
+       "DREAM POWER": 4
+      },
+      "pct": 65,
+      "t_pct": 4.3,
+      "dur": 5.777,
+      "film": "Freddy's Revenge (1985)"
+     },
+     37.25,
+     999
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street 2: Freddy's Revenge (1985)",
+     0,
+     37.25
+    ]
+   ],
+   "sfx": [
+    [
+     37.25,
+     "../ep03/sfx/whoosh.wav",
+     -16
+    ],
+    [
+     37.55,
+     "../ep03/sfx/fill.wav",
+     -20
+    ],
+    [
+     41.55,
+     "../ep03/sfx/stamp.wav",
+     -12
+    ]
+   ]
+  },
+  {
+   "voice": "s04",
+   "pad": 0.15,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "n5_tricks",
+     50.3
+    ],
+    [
+     2.28,
+     "n5_back_to_hell",
+     40.45
+    ],
+    [
+     4.873,
+     "n5_itsaboy",
+     50.55
+    ],
+    [
+     6.26,
+     "n5_pool",
+     103.6
+    ],
+    [
+     8.197,
+     "n5_back_to_hell",
+     155.0
+    ],
+    [
+     10.11,
+     "n5_son4k",
+     46.1
+    ],
+    [
+     11.55,
+     "n5_son4k",
+     23.0
+    ],
+    [
+     13.16,
+     "n5_drunk",
+     50.25
+    ],
+    [
+     14.6,
+     "n5_son4k",
+     34.85
+    ],
+    [
+     16.47,
+     "n5_motorcycle",
+     0.8
+    ],
+    [
+     17.27,
+     "n5_motorcycle",
+     70.4
+    ],
+    [
+     19.27,
+     "n5_force_feed",
+     6.45
+    ],
+    [
+     20.27,
+     "n5_force_feed",
+     22.6
+    ],
+    [
+     21.43,
+     "n5_superfreddy",
+     28.1
+    ],
+    [
+     22.27,
+     "n5_superfreddy",
+     32.3
+    ],
+    [
+     23.55,
+     "n5_superfreddy",
+     45.8
+    ],
+    [
+     24.55,
+     "n5_superfreddy",
+     48.15
+    ],
+    [
+     25.447,
+     "n5_son4k",
+     30.6
+    ],
+    [
+     27.423,
+     "n5_back_to_hell",
+     138.2,
+     0.989
+    ],
+    [
+     30.19,
+     "n5_back_to_hell",
+     29.1
+    ],
+    [
+     31.31,
+     "n5_back_to_hell",
+     74.1
+    ],
+    [
+     32.15,
+     "n5_back_to_hell",
+     79.3
+    ],
+    [
+     33.48,
+     "n5_itsaboy",
+     60.65,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     35.133,
+     "n5_tricks",
+     22.3,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     37.84,
+     "n5_baby",
+     127.0,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      7,
+      "Freddy Krueger",
+      "The Dream Child (1989)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "FREDDY KRUEGER",
+      "tile_png": "tiles/n5.png",
+      "stats": {
+       "STRENGTH": 6,
+       "INTELLIGENCE": 7,
+       "KILL COUNT": 3,
+       "DREAM POWER": 8
+      },
+      "pct": 55,
+      "t_pct": 5.18,
+      "dur": 6.626,
+      "film": "The Dream Child (1989)"
+     },
+     33.48,
+     999
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street 5: The Dream Child (1989)",
+     0,
+     33.48
+    ]
+   ],
+   "sfx": [
+    [
+     33.48,
+     "../ep03/sfx/whoosh.wav",
+     -16
+    ],
+    [
+     33.779999999999994,
+     "../ep03/sfx/fill.wav",
+     -20
+    ],
+    [
+     38.66,
+     "../ep03/sfx/stamp.wav",
+     -12
+    ]
+   ]
+  },
+  {
+   "voice": "s05",
+   "pad": 0.15,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "n6_forever",
+     85.2
+    ],
+    [
+     2.1,
+     "n6_father",
+     111.6
+    ],
+    [
+     4.08,
+     "n6_doom",
+     32.4
+    ],
+    [
+     6.593,
+     "n6_town",
+     36.8,
+     0.995
+    ],
+    [
+     9.45,
+     "n6_town",
+     61.85,
+     0.978
+    ],
+    [
+     12.15,
+     "n6_oz",
+     37.6
+    ],
+    [
+     14.023,
+     "n6_playground",
+     49.65
+    ],
+    [
+     16.297,
+     "n6_nice",
+     22.55
+    ],
+    [
+     17.79,
+     "n6_chalk",
+     13.75
+    ],
+    [
+     19.63,
+     "n6_nice",
+     159.7
+    ],
+    [
+     20.5,
+     "n6_game",
+     6.45
+    ],
+    [
+     21.58,
+     "n6_game",
+     107.7
+    ],
+    [
+     22.66,
+     "n6_doom",
+     120.8
+    ],
+    [
+     23.14,
+     "n6_doom",
+     132.03,
+     0.929
+    ],
+    [
+     23.967,
+     "n6_busrt",
+     57.75
+    ],
+    [
+     25.7,
+     "n6_doom",
+     135.95
+    ],
+    [
+     27.54,
+     "n6_forever",
+     99.35
+    ],
+    [
+     30.34,
+     "n6_father",
+     136.05
+    ],
+    [
+     31.62,
+     "n6_father",
+     159.05
+    ],
+    [
+     32.89,
+     "n6_blood",
+     28.75
+    ],
+    [
+     34.97,
+     "n6_maggie",
+     0.05
+    ],
+    [
+     36.6,
+     "n6_maggie",
+     204.55
+    ],
+    [
+     38.823,
+     "n6_brain",
+     43.6,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     41.197,
+     "n6_maggie",
+     229.85,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     43.24,
+     "n6_forever",
+     105.75,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      6,
+      "Freddy Krueger",
+      "Freddy's Dead (1991)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "FREDDY KRUEGER",
+      "tile_png": "tiles/n6.png",
+      "stats": {
+       "STRENGTH": 5,
+       "INTELLIGENCE": 7,
+       "KILL COUNT": 10,
+       "DREAM POWER": 5
+      },
+      "pct": 45,
+      "t_pct": 5.287,
+      "dur": 6.658,
+      "film": "Freddy's Dead (1991)"
+     },
+     38.823,
+     999
+    ],
+    [
+     "film",
+     "Freddy's Dead: The Final Nightmare (1991)",
+     0,
+     38.823
+    ]
+   ],
+   "sfx": [
+    [
+     38.823,
+     "../ep03/sfx/whoosh.wav",
+     -16
+    ],
+    [
+     39.123,
+     "../ep03/sfx/fill.wav",
+     -20
+    ],
+    [
+     44.11,
+     "../ep03/sfx/stamp.wav",
+     -12
+    ]
+   ]
+  },
+  {
+   "voice": "s06",
+   "pad": 0.15,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "r10_dreaming",
+     364.98
+    ],
+    [
+     2.61,
+     "r10_unavoidable",
+     101.45
+    ],
+    [
+     5.113,
+     "r10_boyfriend",
+     11.2
+    ],
+    [
+     6.74,
+     "r10_dreaming",
+     361.22
+    ],
+    [
+     7.913,
+     "r10_m3",
+     4.5
+    ],
+    [
+     8.74,
+     "r10_m1",
+     16.5
+    ],
+    [
+     11.07,
+     "r10_m3",
+     8.1
+    ],
+    [
+     12.403,
+     "r10_m3",
+     30.6
+    ],
+    [
+     14.23,
+     "r10_m3",
+     64.15
+    ],
+    [
+     16.003,
+     "r10_m3",
+     12.12
+    ],
+    [
+     17.283,
+     "r10_m1",
+     8.75
+    ],
+    [
+     19.57,
+     "r10_m1",
+     1.7
+    ],
+    [
+     22.29,
+     "r10_dreaming",
+     248.7
+    ],
+    [
+     23.91,
+     "r10_unavoidable",
+     43.0
+    ],
+    [
+     25.59,
+     "r10_creepiest",
+     524.1
+    ],
+    [
+     26.87,
+     "r10_creepiest",
+     564.0
+    ],
+    [
+     28.55,
+     "r10_creepiest",
+     1169.2,
+     0.985
+    ],
+    [
+     30.11,
+     "r10_creepiest",
+     1171.72,
+     0.845
+    ],
+    [
+     31.11,
+     "r10_creepiest",
+     1241.4
+    ],
+    [
+     32.27,
+     "r10_creepiest",
+     1372.05
+    ],
+    [
+     34.62,
+     "r10_creepiest",
+     1028.6,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     37.11,
+     "r10_boyfriend",
+     1.45,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      5,
+      "Freddy Krueger",
+      "A Nightmare on Elm Street (2010)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "FREDDY KRUEGER",
+      "tile_png": "tiles/r10.png",
+      "stats": {
+       "STRENGTH": 6,
+       "INTELLIGENCE": 7,
+       "KILL COUNT": 6,
+       "DREAM POWER": 9
+      },
+      "pct": 38,
+      "t_pct": 3.34,
+      "dur": 4.804,
+      "film": "A Nightmare on Elm Street (2010)"
+     },
+     34.62,
+     999
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street (2010)",
+     0,
+     34.62
+    ]
+   ],
+   "sfx": [
+    [
+     34.62,
+     "../ep03/sfx/whoosh.wav",
+     -16
+    ],
+    [
+     34.919999999999995,
+     "../ep03/sfx/fill.wav",
+     -20
+    ],
+    [
+     37.959999999999994,
+     "../ep03/sfx/stamp.wav",
+     -12
+    ]
+   ]
+  },
+  {
+   "voice": "s07",
+   "pad": 0.15,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "n7_coming",
+     305.3
+    ],
+    [
+     2.23,
+     "n7_coming_uk",
+     101.8
+    ],
+    [
+     3.71,
+     "n7_coming_uk",
+     36.45
+    ],
+    [
+     5.563,
+     "n7_stalks",
+     42.65
+    ],
+    [
+     7.51,
+     "n7_hand",
+     5.8
+    ],
+    [
+     9.31,
+     "n7_missme",
+     11.4
+    ],
+    [
+     10.537,
+     "n7_dylan",
+     6.2
+    ],
+    [
+     12.217,
+     "n7_funeral",
+     12.8
+    ],
+    [
+     14.98,
+     "n7_hand",
+     91.2
+    ],
+    [
+     16.58,
+     "n7_hand",
+     30.5
+    ],
+    [
+     18.26,
+     "n7_bloodiest",
+     1121.0
+    ],
+    [
+     19.14,
+     "n7_bloodiest",
+     1116.0
+    ],
+    [
+     20.32,
+     "n7_julie",
+     11.8
+    ],
+    [
+     22.84,
+     "n7_julie",
+     76.55
+    ],
+    [
+     25.26,
+     "n7_traffic",
+     82.5
+    ],
+    [
+     27.1,
+     "n7_coming_uk",
+     1.68
+    ],
+    [
+     28.44,
+     "n7_end",
+     39.5
+    ],
+    [
+     30.28,
+     "n7_coming_uk",
+     226.8
+    ],
+    [
+     31.98,
+     "n7_missme",
+     81.66,
+     0.958,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     33.533,
+     "n7_coming_uk",
+     43.85,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     34.76,
+     "n7_julie",
+     31.1,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     36.81,
+     "n7_coming_uk",
+     111.03,
+     0.996,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      4,
+      "Freddy Krueger",
+      "New Nightmare (1994)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "FREDDY KRUEGER",
+      "tile_png": "tiles/n7.png",
+      "stats": {
+       "STRENGTH": 8,
+       "INTELLIGENCE": 8,
+       "KILL COUNT": 4,
+       "DREAM POWER": 9
+      },
+      "pct": 30,
+      "t_pct": 5.84,
+      "dur": 7.028,
+      "film": "New Nightmare (1994)"
+     },
+     31.98,
+     999
+    ],
+    [
+     "film",
+     "Wes Craven's New Nightmare (1994)",
+     0,
+     31.98
+    ]
+   ],
+   "sfx": [
+    [
+     31.98,
+     "../ep03/sfx/whoosh.wav",
+     -16
+    ],
+    [
+     32.28,
+     "../ep03/sfx/fill.wav",
+     -20
+    ],
+    [
+     37.82,
+     "../ep03/sfx/stamp.wav",
+     -12
+    ]
+   ]
+  },
+  {
+   "voice": "s08",
+   "pad": 0.15,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "n1_tina_chase",
+     57.1
+    ],
+    [
+     3.05,
+     "n1_opening",
+     49.1,
+     1.0,
+     {
+      "z": 1.8,
+      "dy": -123.0
+     }
+    ],
+    [
+     4.64,
+     "n1_tina_chase",
+     16.15
+    ],
+    [
+     6.08,
+     "n1_tina_chase",
+     18.45
+    ],
+    [
+     6.98,
+     "n1_boiler",
+     232.25
+    ],
+    [
+     9.68,
+     "n1_boiler",
+     288.55
+    ],
+    [
+     11.067,
+     "n1_tina_chase",
+     12.2
+    ],
+    [
+     12.56,
+     "n1_screw_sleep",
+     81.0
+    ],
+    [
+     13.8,
+     "n1_dark_story",
+     11.9
+    ],
+    [
+     15.207,
+     "n1_tina_kill",
+     166.2
+    ],
+    [
+     16.1,
+     "n1_tina_kill",
+     179.5
+    ],
+    [
+     17.42,
+     "n1_rod",
+     160.45
+    ],
+    [
+     19.22,
+     "n1_rod",
+     86.0
+    ],
+    [
+     20.3,
+     "n1_glen",
+     126.65,
+     0.972
+    ],
+    [
+     22.62,
+     "n1_plan",
+     95.0
+    ],
+    [
+     25.02,
+     "n1_plan",
+     128.0
+    ],
+    [
+     26.59,
+     "n1_traps",
+     166.65
+    ],
+    [
+     27.87,
+     "n1_fight",
+     28.95
+    ],
+    [
+     28.71,
+     "n1_fight",
+     30.45
+    ],
+    [
+     29.55,
+     "n1_no_fear",
+     219.08
+    ],
+    [
+     30.83,
+     "n1_no_fear",
+     221.0
+    ],
+    [
+     31.47,
+     "n1_no_fear",
+     222.95
+    ],
+    [
+     33.6,
+     "n1_ending",
+     10.3
+    ],
+    [
+     34.77,
+     "n1_ending",
+     87.1
+    ],
+    [
+     35.57,
+     "n1_ending",
+     88.72
+    ],
+    [
+     36.28,
+     "n1_screw_sleep",
+     74.0,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     38.84,
+     "n1_god",
+     78.2,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     39.97,
+     "n1_wall",
+     305.4,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      3,
+      "Freddy Krueger",
+      "A Nightmare on Elm Street (1984)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "FREDDY KRUEGER",
+      "tile_png": "tiles/n1.png",
+      "stats": {
+       "STRENGTH": 7,
+       "INTELLIGENCE": 9,
+       "KILL COUNT": 4,
+       "DREAM POWER": 10
+      },
+      "pct": 22,
+      "t_pct": 4.56,
+      "dur": 6.041,
+      "film": "A Nightmare on Elm Street (1984)"
+     },
+     36.28,
+     999
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street (1984)",
+     0,
+     36.28
+    ]
+   ],
+   "sfx": [
+    [
+     36.28,
+     "../ep03/sfx/whoosh.wav",
+     -16
+    ],
+    [
+     36.58,
+     "../ep03/sfx/fill.wav",
+     -20
+    ],
+    [
+     40.84,
+     "../ep03/sfx/stamp.wav",
+     -12
+    ]
+   ]
+  },
+  {
+   "voice": "s09",
+   "pad": 0.15,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "n3_joey",
+     1.7
+    ],
+    [
+     2.41,
+     "n3_souls",
+     100.3
+    ],
+    [
+     4.823,
+     "n3_best4k",
+     504.95
+    ],
+    [
+     6.61,
+     "n3_souls",
+     141.55
+    ],
+    [
+     7.997,
+     "n3_best4k",
+     153.0
+    ],
+    [
+     9.93,
+     "n3_best4k",
+     140.45
+    ],
+    [
+     11.337,
+     "n3_marionette_uk",
+     66.2
+    ],
+    [
+     12.99,
+     "n3_marionette_uk",
+     172.2
+    ],
+    [
+     14.67,
+     "n3_primetime_wb",
+     37.6
+    ],
+    [
+     16.937,
+     "n3_taryn",
+     86.4
+    ],
+    [
+     17.71,
+     "n3_joey",
+     120.2
+    ],
+    [
+     18.27,
+     "n3_wizard",
+     34.05,
+     0.976
+    ],
+    [
+     20.63,
+     "n3_skeleton",
+     78.55
+    ],
+    [
+     22.15,
+     "n3_skeleton",
+     81.05
+    ],
+    [
+     22.91,
+     "n3_skeleton",
+     35.95
+    ],
+    [
+     24.177,
+     "n3_nancy",
+     43.95
+    ],
+    [
+     25.27,
+     "n3_nancy",
+     47.05
+    ],
+    [
+     25.99,
+     "n3_nancy",
+     8.5
+    ],
+    [
+     27.757,
+     "n3_nancy",
+     122.4
+    ],
+    [
+     30.973,
+     "n3_creepiest",
+     1024.6
+    ],
+    [
+     33.213,
+     "n3_nancy",
+     96.1
+    ],
+    [
+     34.72,
+     "n3_nancy",
+     106.85
+    ],
+    [
+     36.49,
+     "n3_souls",
+     125.7,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     38.27,
+     "n3_taryn",
+     110.6,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      2,
+      "Freddy Krueger",
+      "Dream Warriors (1987)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "FREDDY KRUEGER",
+      "tile_png": "tiles/n3.png",
+      "stats": {
+       "STRENGTH": 8,
+       "INTELLIGENCE": 9,
+       "KILL COUNT": 6,
+       "DREAM POWER": 9
+      },
+      "pct": 12,
+      "t_pct": 2.85,
+      "dur": 3.979,
+      "film": "Dream Warriors (1987)"
+     },
+     36.49,
+     999
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street 3: Dream Warriors (1987)",
+     0,
+     36.49
+    ]
+   ],
+   "sfx": [
+    [
+     36.49,
+     "../ep03/sfx/whoosh.wav",
+     -16
+    ],
+    [
+     36.79,
+     "../ep03/sfx/fill.wav",
+     -20
+    ],
+    [
+     39.34,
+     "../ep03/sfx/stamp.wav",
+     -12
+    ]
+   ]
+  },
+  {
+   "voice": "s10",
+   "pad": 0.15,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "n4_junkyard",
+     36.4
+    ],
+    [
+     2.45,
+     "n4_reborn",
+     236.4
+    ],
+    [
+     4.69,
+     "n4_soulfood",
+     75.0
+    ],
+    [
+     6.96,
+     "n4_junkyard",
+     84.8
+    ],
+    [
+     7.68,
+     "n4_waterbed",
+     3.5
+    ],
+    [
+     8.16,
+     "n4_beach",
+     40.45
+    ],
+    [
+     9.067,
+     "n4_hell",
+     202.4
+    ],
+    [
+     9.88,
+     "n4_hell",
+     207.8,
+     0.978
+    ],
+    [
+     10.96,
+     "n4_hell",
+     182.5
+    ],
+    [
+     12.12,
+     "n4_hell",
+     217.6
+    ],
+    [
+     13.03,
+     "n4_kiss",
+     169.2
+    ],
+    [
+     14.87,
+     "n4_kiss",
+     46.5
+    ],
+    [
+     15.99,
+     "n4_kiss",
+     125.3
+    ],
+    [
+     16.71,
+     "n4_karate",
+     125.9
+    ],
+    [
+     17.217,
+     "n4_roach",
+     10.9
+    ],
+    [
+     17.99,
+     "n4_roach",
+     105.4
+    ],
+    [
+     18.87,
+     "n4_roach",
+     158.0
+    ],
+    [
+     20.71,
+     "n4_soulfood",
+     73.15
+    ],
+    [
+     22.31,
+     "n4_soulfood",
+     63.1,
+     0.917
+    ],
+    [
+     23.88,
+     "n4_alice",
+     124.7
+    ],
+    [
+     25.0,
+     "n4_alice",
+     146.2
+    ],
+    [
+     27.08,
+     "n4_torn",
+     28.1
+    ],
+    [
+     29.27,
+     "n4_torn",
+     72.1,
+     0.906
+    ],
+    [
+     31.23,
+     "n4_torn",
+     97.6,
+     0.998
+    ],
+    [
+     32.48,
+     "n4_doctor",
+     56.95,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     33.84,
+     "n4_alice",
+     129.2,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     35.12,
+     "n4_alice",
+     40.6,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ],
+    [
+     36.11,
+     "n4_soulfood",
+     83.1,
+     1.0,
+     {
+      "z": 1.35,
+      "dx": 249.0
+     }
+    ]
+   ],
+   "overlays": [
+    [
+     "rank",
+     [
+      1,
+      "Freddy Krueger",
+      "The Dream Master (1988)"
+     ],
+     0.0,
+     2.9
+    ],
+    [
+     "stats",
+     {
+      "name": "FREDDY KRUEGER",
+      "tile_png": "tiles/n4.png",
+      "stats": {
+       "STRENGTH": 9,
+       "INTELLIGENCE": 9,
+       "KILL COUNT": 6,
+       "DREAM POWER": 10
+      },
+      "pct": 5,
+      "t_pct": 4.79,
+      "dur": 5.779,
+      "film": "The Dream Master (1988)"
+     },
+     32.48,
+     999
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street 4: The Dream Master (1988)",
+     0,
+     32.48
+    ]
+   ],
+   "sfx": [
+    [
+     32.48,
+     "../ep03/sfx/whoosh.wav",
+     -16
+    ],
+    [
+     32.779999999999994,
+     "../ep03/sfx/fill.wav",
+     -20
+    ],
+    [
+     37.269999999999996,
+     "../ep03/sfx/stamp.wav",
+     -12
+    ]
+   ]
+  },
+  {
+   "voice": "s11",
+   "pad": 2.0,
+   "clip_audio_db": -99,
+   "shots": [
+    [
+     0,
+     "still_posterwall",
+     3.0
+    ],
+    [
+     1.67,
+     "fj_collide",
+     211.2
+    ],
+    [
+     4.123,
+     "n4_alice",
+     99.0
+    ],
+    [
+     6.607,
+     "n7_coming_uk",
+     51.78
+    ],
+    [
+     8.85,
+     "n6_forever",
+     77.35
+    ],
+    [
+     9.97,
+     "n3_taryn",
+     54.9
+    ],
+    [
+     12.157,
+     "n1_wall",
+     380.2
+    ],
+    [
+     13.77,
+     "n5_force_feed",
+     28.6
+    ],
+    [
+     15.69,
+     "n7_traffic",
+     95.88,
+     0.967
+    ],
+    [
+     17.13,
+     "n2_party",
+     547.4
+    ],
+    [
+     20.68,
+     "n1_ending",
+     90.15
+    ],
+    [
+     22.987,
+     "n1_bathroom",
+     38.2
+    ]
+   ],
+   "overlays": [
+    [
+     "title",
+     [
+      "WHICH FREDDY",
+      "!WOULD YOU LEAST WANT TO MEET?"
+     ],
+     6.607,
+     8.85
+    ],
+    [
+     "png",
+     "tiles/subscribe.png",
+     18.57,
+     20.68
+    ],
+    [
+     "title",
+     [
+      "DON'T FALL",
+      "!ASLEEP"
+     ],
+     22.987,
+     999
+    ],
+    [
+     "film",
+     "Freddy vs. Jason (2003)",
+     1.67,
+     4.123
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street 4: The Dream Master (1988)",
+     4.123,
+     6.607
+    ],
+    [
+     "film",
+     "Wes Craven's New Nightmare (1994)",
+     6.607,
+     8.85
+    ],
+    [
+     "film",
+     "Freddy's Dead: The Final Nightmare (1991)",
+     8.85,
+     9.97
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street 3: Dream Warriors (1987)",
+     9.97,
+     12.157
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street (1984)",
+     12.157,
+     13.77
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street 5: The Dream Child (1989)",
+     13.77,
+     15.69
+    ],
+    [
+     "film",
+     "Wes Craven's New Nightmare (1994)",
+     15.69,
+     17.13
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street 2: Freddy's Revenge (1985)",
+     17.13,
+     20.68
+    ],
+    [
+     "film",
+     "A Nightmare on Elm Street (1984)",
+     20.68,
+     999
+    ]
+   ],
+   "sfx": []
+  }
+ ],
+ "tiers": [
+  [
+   "S",
+   "Slaughtered",
+   25
+  ],
+  [
+   "A",
+   "Almost Dead",
+   40
+  ],
+  [
+   "B",
+   "Better Run",
+   50
+  ],
+  [
+   "C",
+   "Close Call",
+   60
+  ],
+  [
+   "D",
+   "Don't Worry",
+   80
+  ],
+  [
+   "E",
+   "Easy",
+   101
+  ]
+ ],
+ "gamma": {},
+ "zoom": {},
+ "bar": {
+  "n3_marionette": 885,
+  "n3_primetime": 885,
+  "n3_taryn": 885,
+  "n3_wizard_rt": 885,
+  "n3_skeleton": 885,
+  "n3_nancy": 885,
+  "n3_souls": 885,
+  "n3_heres": 885,
+  "n3_worm": 885,
+  "n3_bed": 885,
+  "n3_best4k": 885,
+  "n5_forcefed4k": 885,
+  "n5_son4k": 885,
+  "n5_hell4k": 885,
+  "n5_baby4k": 885,
+  "n5_drunk": 885,
+  "n5_motorcycle": 885,
+  "n6_maggie": 885,
+  "fj_world": 885,
+  "fj_kicks": 885,
+  "fj_hell": 885,
+  "fj_rave": 885,
+  "fj_apesh": 885,
+  "fj_pillar": 885,
+  "fj_aftersex": 885,
+  "fj_decap": 885
+ }
+}
