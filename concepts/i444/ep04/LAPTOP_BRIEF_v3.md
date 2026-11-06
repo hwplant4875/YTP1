@@ -5,7 +5,8 @@ EP04 Freddy edit below. Do these phases in order, push after each phase, then st
 
 **Already done in the cloud:**
 - Voice: voice/, Adam, one full take per section, whisper QA in voice/verify_v3.txt.
-- Music bed: music/freddy_bed_v1.mp3.
+- Music bed v2 (11/7 owner rule: real free tracks, never generated music): music/make_bed_v2.py downloads three Mixkit tracks and builds
+  `1_work\music\freddy_bed_v2.mp3` on the laptop (never commit it). Do not use music/freddy_bed_v1.mp3 (ElevenLabs Music).
 - Clip list: clip_sources_v3.txt, 140 clips, all HD and none age-restricted (checked with the Data API).
 - Shot plan: shot_plan_v3.md.
 - shots_v3.py skeleton, generated from that plan.
@@ -71,8 +72,9 @@ The repo is the laptop clone in `C:\Users\hw549\Downloads\YTP1`, folder `concept
 
 ## Phase C: render, QA, kit
 
-10. Render 1080p30:
-    `set LEAN=1` then `python render_fk.py edl.json "<clips folder>" voice music\freddy_bed_v1.mp3 "E:\YTP2\Horror Ranked\EP04 Freddy Krueger\2_renders\ep04_freddy_v3.mp4"`
+10. Build the music bed, then render 1080p30:
+    `python music\make_bed_v2.py "E:\YTP2\Horror Ranked\EP04 Freddy Krueger\1_work\music" "E:\YTP2\Horror Ranked\EP04 Freddy Krueger\1_work\music\freddy_bed_v2.mp3"`
+    `set LEAN=1` then `python render_fk.py edl.json "<clips folder>" voice "E:\YTP2\Horror Ranked\EP04 Freddy Krueger\1_work\music\freddy_bed_v2.mp3" "E:\YTP2\Horror Ranked\EP04 Freddy Krueger\2_renders\ep04_freddy_v3.mp4"`
     - MUSIC_LUFS stays at the default -39.
     - The renderer imports ../ep01/gfx.py and ../ep03/anim.py and uses ../ep03/sfx.
 11. One careful QA pass before reporting:

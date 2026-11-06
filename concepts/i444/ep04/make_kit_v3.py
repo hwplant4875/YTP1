@@ -32,7 +32,7 @@ You fall asleep tonight, and Freddy is waiting for you. How likely are you to su
 Which Freddy would you least want to meet tonight? Tell me in the comments, along with the killer I should rank next.
 
 Clips are used for commentary and criticism. All rights belong to their owners.
-Music is an original score made for this channel with ElevenLabs Music.
+Music from Mixkit, Piano Horror by Francisco Alvear, Echoes by Andrew Ev and Xanthos by Eugenio Mininni.
 
 Chapters
 ''' + '\n'.join(f'{mmss(a)} {n}' for a, n in ch) + '''
