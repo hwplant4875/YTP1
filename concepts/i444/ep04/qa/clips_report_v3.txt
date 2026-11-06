@@ -1,0 +1,148 @@
+# EP04 v3 clips report: name | height | fps | duration s | SDR/HDR | status | channel
+n1_tina_kill | 1080 | 30.00 | 218.6 | SDR | OK | AFW (4K upload)
+n1_tina_chase | 1080 | 23.98 | 102.0 | SDR | OK | Warner Bros. Entertainment
+n1_opening | 1080 | 30.00 | 248.4 | SDR | OK | AFW
+n1_bathroom | 1080 | 23.98 | 162.9 | SDR | OK | Warner Bros. UK Horror
+n1_bathtub2 | 1080 | 30.00 | 169.8 | SDR | OK | AFW
+n1_rod | 1080 | 30.00 | 215.0 | SDR | OK | AFW
+n1_glen | 1080 | 30.00 | 173.8 | SDR | OK | AFW
+n1_glen_bed | 1080 | 23.98 | 165.4 | SDR | OK | Warner Bros. UK Horror
+n1_boiler | 1080 | 30.00 | 296.4 | SDR | OK | AFW
+n1_plan | 1080 | 30.00 | 265.9 | SDR | OK | AFW
+n1_traps | 1080 | 30.00 | 231.7 | SDR | OK | AFW
+n1_fight | 1080 | 30.00 | 199.8 | SDR | OK | AFW
+n1_no_fear | 1080 | 30.00 | 228.8 | SDR | OK | AFW
+n1_ending | 1080 | 30.00 | 114.4 | SDR | OK | AFW
+n1_boyfriend | 1080 | 23.98 | 105.1 | SDR | OK | Warner Bros. Entertainment
+n1_god | 1080 | 23.98 | 161.1 | SDR | OK | Warner Bros. UK Horror
+n1_wall | 1080 | 23.98 | 517.2 | SDR | channel bug possible (ClipZone Horrorscapes), check spans | ClipZone Horrorscapes
+n1_screw_sleep | 1080 | 30.00 | 172.5 | SDR | OK | AFW
+n1_dark_story | 1080 | 30.00 | 192.8 | SDR | OK | AFW
+n1_preview4k | 1080 | 23.98 | 602.9 | SDR | OK | Warner Bros. Entertainment
+n1_creepiest | 1080 | 23.98 | 1576.1 | SDR | OK | Warner Bros. UK Horror
+n2_brain | 1080 | 23.98 | 307.8 | SDR | OK | Warner Bros. Entertainment (4K Movie Clip)
+n2_emerge | 1080 | 23.98 | 284.4 | SDR | channel bug possible (ClipZone Horrorscapes), check spans | ClipZone Horrorscapes
+n2_kill4k | 1080 | 23.98 | 434.6 | SDR | OK | Warner Bros. Entertainment (4K)
+n2_schoolbus | 1080 | 23.98 | 335.7 | SDR | OK | Warner Bros. Entertainment (4K)
+n2_pool | 1080 | 23.98 | 339.2 | SDR | OK | Warner Bros. UK Horror
+n2_party | 1080 | 23.98 | 584.6 | SDR | channel bug possible (ClipZone Horrorscapes), check spans | ClipZone Horrorscapes
+n2_creepiest | 1080 | 23.98 | 1232.0 | SDR | OK | Warner Bros. UK Horror
+n2_grady_fan | 1080 | 24.00 | 237.0 | SDR | OK | Iamthe80sguy2 (fan upload)
+n2_kiss_fan | 648 | 30.00 | 206.6 | SDR | UNDER 720p (648) | DenZare2026 (fan upload)
+n2_kerry_fan | 656 | 29.32 | 56.2 | SDR | UNDER 720p (656) | DenZare2021BackUp (fan upload)
+n3_marionette | 1080 | 23.98 | 193.3 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+n3_marionette_uk | 1080 | 23.98 | 182.7 | SDR | OK | Warner Bros. UK Horror
+n3_primetime | 1080 | 23.98 | 69.0 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+n3_primetime_wb | 1080 | 23.98 | 46.3 | SDR | OK | Warner Bros. Entertainment
+n3_taryn | 1080 | 23.98 | 125.2 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+n3_wizard_rt | 1080 | 23.98 | 64.7 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+n3_skeleton | 1080 | 23.98 | 112.5 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+n3_nancy | 1080 | 23.98 | 157.7 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+n3_worm | 1080 | 23.98 | 143.1 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+n3_souls | 1080 | 23.98 | 153.5 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+n3_real | 1080 | 23.98 | 303.5 | SDR | OK | Warner Bros. Entertainment (4K)
+n3_heres | 1080 | 23.98 | 216.8 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+n3_bed | 1080 | 23.98 | 135.3 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+n3_mirrors | 1080 | 23.98 | 102.5 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+n3_joey | 1080 | 23.98 | 135.3 | SDR | OK | Movieclips
+n3_best4k | 1080 | 23.98 | 602.2 | SDR | OK | Movieclips
+n3_kristen | 1080 | 23.98 | 204.8 | SDR | OK | Warner Bros. UK Horror
+n3_creepiest | 1080 | 23.98 | 1051.4 | SDR | OK | Warner Bros. UK Horror
+n4_junkyard | 1080 | 23.98 | 176.0 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n4_reborn | 1080 | 23.98 | 264.4 | SDR | OK | Flashback FM (fan)
+n4_waterbed | 1080 | 23.98 | 48.2 | SDR | OK | Warner Bros. Entertainment
+n4_nurse | 1080 | 23.98 | 69.3 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n4_beach | 1080 | 23.98 | 138.2 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n4_hell | 1080 | 23.98 | 260.4 | SDR | OK | Flashback FM (fan)
+n4_kiss | 1080 | 23.98 | 189.6 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n4_karate | 1080 | 23.98 | 188.9 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n4_roach | 1080 | 23.98 | 179.7 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n4_alice | 1080 | 23.98 | 169.7 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n4_torn | 1080 | 23.98 | 126.5 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n4_soulfood | 1080 | 23.98 | 96.2 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n4_soulpizza | 1080 | 23.98 | 78.2 | SDR | OK | Warner Bros. Entertainment
+n4_doctor | 1080 | 23.98 | 135.8 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n4_death | 1080 | 23.98 | 291.5 | SDR | OK | Flashback FM (fan)
+n5_motorcycle | 1080 | 23.98 | 98.8 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n5_drunk | 1080 | 23.98 | 97.2 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n5_forcefed4k | 1080 | 23.98 | 89.9 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n5_superfreddy | 1080 | 23.98 | 73.4 | SDR | OK | Warner Bros. Entertainment
+n5_baby4k | 1080 | 23.98 | 153.9 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n5_son4k | 1080 | 23.98 | 216.3 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n5_hell4k | 1080 | 23.98 | 170.3 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n5_tricks | 1080 | 23.98 | 113.4 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n5_pool | 1080 | 23.98 | 153.4 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n5_itsaboy | 1080 | 23.98 | 71.5 | SDR | OK | Warner Bros. Entertainment
+n5_schoolsout | 1080 | 23.98 | 52.8 | SDR | OK | Warner Bros. Entertainment
+n6_busrt | 1080 | 23.98 | 97.0 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n6_ear | 1080 | 23.98 | 161.1 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n6_nice | 1080 | 23.98 | 187.1 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n6_chalk | 1080 | 23.98 | 49.5 | SDR | OK | Warner Bros. Entertainment
+n6_drug | 1080 | 23.98 | 70.1 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n6_doom | 1080 | 23.98 | 162.3 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n6_father | 1080 | 23.98 | 178.1 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n6_forever | 1080 | 23.98 | 158.4 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n6_brain | 1080 | 23.98 | 206.7 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n6_maggie | 1080 | 23.98 | 242.9 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n6_town | 1080 | 23.98 | 308.7 | SDR | OK | Warner Bros. Entertainment (4K)
+n6_blood | 1080 | 23.98 | 99.8 | SDR | OK | Warner Bros. Entertainment
+n6_earcheck | 1080 | 23.98 | 426.7 | SDR | channel bug possible (ClipZone Horrorscapes), check spans | ClipZone Horrorscapes
+n6_daughter | 1080 | 23.98 | 435.1 | SDR | channel bug possible (ClipZone Horrorscapes), check spans | ClipZone Horrorscapes
+n6_playground | 1080 | 23.98 | 71.9 | SDR | OK | Warner Bros. Entertainment
+n6_oz | 1080 | 23.98 | 51.3 | SDR | OK | Warner Bros. Entertainment
+n6_game | 1080 | 24.05 | 155.9 | SDR | OK | Alex S (fan upload)
+n7_julie | 1080 | 23.98 | 154.8 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n7_funeral | 1080 | 23.98 | 147.7 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n7_traffic | 1080 | 23.98 | 178.0 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n7_missme | 1080 | 23.98 | 147.6 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n7_stalks | 1080 | 23.98 | 91.9 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n7_end | 1080 | 23.98 | 152.1 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n7_surgery | 1080 | 23.98 | 116.0 | SDR | channel bug possible (Rotten Tomatoes Horror (4K)), check spans | Rotten Tomatoes Horror (4K)
+n7_dylan | 1080 | 23.98 | 397.2 | SDR | OK | Warner Bros. Entertainment (4K)
+n7_coming | 1080 | 23.98 | 326.6 | SDR | OK | Warner Bros. Entertainment (4K)
+n7_son | 1080 | 23.98 | 182.9 | SDR | OK | Warner Bros. UK Horror
+n7_coming_uk | 1080 | 23.98 | 301.1 | SDR | OK | Warner Bros. UK Horror
+n7_hand | 1080 | 23.98 | 162.0 | SDR | OK | Warner Bros. UK Horror
+n7_handbed | 1080 | 23.98 | 439.4 | SDR | channel bug possible (ClipZone Horrorscapes), check spans | ClipZone Horrorscapes
+n7_bloodiest | 1080 | 23.98 | 1516.0 | SDR | OK | Warner Bros. UK Horror
+n7_chase_fan | 1080 | 23.98 | 105.1 | SDR | OK | Adam The Prowler (fan upload)
+fj_notstrong | 1080 | 23.98 | 146.6 | SDR | OK | Warner Bros. UK Horror
+fj_mom | 1080 | 23.98 | 72.8 | SDR | OK | Warner Bros. UK Horror
+fj_crash | 1080 | 23.98 | 89.7 | SDR | OK | Warner Bros. UK Horror
+fj_rave | 1080 | 23.98 | 140.0 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+fj_cornfield | 1080 | 23.98 | 142.5 | SDR | OK | Warner Bros. UK Horror
+fj_influence | 1080 | 23.98 | 172.1 | SDR | OK | Warner Bros. UK Horror
+fj_construction | 1080 | 23.98 | 195.7 | SDR | OK | Warner Bros. UK Horror
+fj_back | 1080 | 23.98 | 483.8 | SDR | channel bug possible (ClipZone Horrorscapes), check spans | ClipZone Horrorscapes
+fj_battle | 1080 | 23.98 | 654.8 | SDR | channel bug possible (ClipZone Horrorscapes), check spans | ClipZone Horrorscapes
+fj_collide | 1080 | 23.98 | 230.8 | SDR | channel bug possible (ClipZone Horrorscapes), check spans | ClipZone Horrorscapes
+fj_hell | 1080 | 23.98 | 190.3 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+fj_world | 1080 | 23.98 | 188.8 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+fj_kicks | 1080 | 23.98 | 214.7 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+fj_apesh | 1080 | 23.98 | 148.4 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+fj_pillar | 1080 | 23.98 | 167.8 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+fj_aftersex | 1080 | 23.98 | 85.2 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+fj_decap | 1080 | 23.98 | 141.5 | SDR | channel bug possible (Rotten Tomatoes Horror), check spans | Rotten Tomatoes Horror
+fj_dreaming | 1080 | 23.98 | 84.7 | SDR | OK | Warner Bros. Entertainment
+fj_childhood | 1080 | 23.98 | 99.2 | SDR | OK | Warner Bros. UK Horror
+fj_mommy | 1080 | 23.98 | 58.3 | SDR | OK | Warner Bros. Entertainment
+fj_intro | 1280 | 29.88 | 430.1 | SDR | OK | Arrik Black (fan upload)
+r10_m1 | 720 | 23.98 | 78.6 | SDR | OK | Movieclips
+r10_m2 | 720 | 23.98 | 93.6 | SDR | OK | Movieclips
+r10_m3 | 720 | 23.98 | 105.6 | SDR | OK | Movieclips
+r10_m4 | 720 | 23.98 | 127.7 | SDR | OK | Movieclips
+r10_bath_uk | 1080 | 23.98 | 191.3 | SDR | OK | Warner Bros. UK Horror
+r10_unavoidable | 1080 | 23.98 | 416.4 | SDR | channel bug possible (ClipZone Horrorscapes), check spans | ClipZone Horrorscapes
+r10_dreaming | 1080 | 23.98 | 542.9 | SDR | channel bug possible (ClipZone Horrorscapes), check spans | ClipZone Horrorscapes
+r10_boyfriend | 1080 | 23.98 | 190.0 | SDR | channel bug possible (ClipZone Horrorscapes), check spans | ClipZone Horrorscapes
+r10_creepiest | 1080 | 23.98 | 1462.2 | SDR | OK | Warner Bros. UK Horror
+r10_preview | 1080 | 23.98 | 294.5 | SDR | OK | Warner Bros. Entertainment
+r10_dean_fan | 544 | 23.98 | 169.1 | SDR | UNDER 720p (544) | FilmSahnesiTv (fan upload)
+r10_kris_fan | 544 | 23.98 | 125.4 | SDR | UNDER 720p (544) | FilmSahnesiTv (fan upload)
+n2_bus | 1080 | 23.98 | 115.6 | SDR | OK | 10/27 copy
+n2_kill_for_me | 1080 | 23.98 | 68.5 | SDR | OK | 10/27 copy
+n3_wizard | 1080 | 23.98 | 64.8 | SDR | OK | 10/27 copy
+n5_baby | 1080 | 23.98 | 153.8 | SDR | OK | 10/27 copy
+n5_back_to_hell | 1080 | 23.98 | 169.8 | SDR | OK | 10/27 copy
+n5_force_feed | 1080 | 23.98 | 89.8 | SDR | OK | 10/27 copy
+r10_bath | 1080 | 23.98 | 200.7 | SDR | OK | 10/27 copy
