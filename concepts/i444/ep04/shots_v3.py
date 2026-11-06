@@ -333,6 +333,6 @@ X.append(sec('s11', [
   ('thanks for watching', 'n1_ending', 90.15, -5.10),  # the girls in white skipping rope on the lawn
   ("don't fall asleep", 'n1_bathroom', 38.20, -5.20),  # the glove fully risen out of the bath water, held to the cut
   ], pad=2.0,
-  extra=[('title', ['WHICH FREDDY', '!WOULD YOU LEAST WANT TO MEET?'], 'which freddy would', 'tell me in the comments'),
+  extra=[('title', ['WHICH FREDDY', '!WOULD YOU LEAST', '!WANT TO MEET?'], 'which freddy would', 'tell me in the comments'),
          ('png', 'tiles/subscribe.png', 'every subscribe', 'thanks for watching'),
          ('title', ["DON'T FALL", '!ASLEEP'], "don't fall asleep", 999)]))

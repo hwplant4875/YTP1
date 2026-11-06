@@ -100,6 +100,13 @@ for si, S in enumerate(E['sections']):
     F0 = round(t_global * FPS); NF = round((t_global + L) * FPS) - F0
     if ONLY and S['voice'] not in ONLY:
         t_global += L; continue
+    # EP04: REUSE=s00,s03 keeps those sections' built secNN.mp4/.wav from the last full render (re-render only what changed, then join)
+    _sec, _sa = os.path.join(WORK, f'sec{si:02d}.mp4'), os.path.join(WORK, f'sec{si:02d}.wav')
+    if S['voice'] in set(filter(None, os.environ.get('REUSE', '').split(','))) and not ONLY and os.path.exists(_sec) and os.path.exists(_sa):
+        parts.append(_sec); audios.append(_sa); voice_items.append((vp, F0 / FPS))
+        for t, w, g in S.get('sfx', []):
+            if t < L: sfx_items.append((rel(w), F0 / FPS + t, g))
+        t_global += L; print('section', S['voice'], 'reused', flush=True); continue
     shots = S['shots']; segs = []; asegs = []
     for k, (t, name, tin, *sp) in enumerate(shots):
         op = sp[1] if len(sp) > 1 else {}  # optional shot options: flip = mirror, dx = pan the crop (px, + shows more of the right), dy (EP04: + shows more of the bottom), z = zoom

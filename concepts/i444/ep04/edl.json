@@ -2335,7 +2335,8 @@
      "title",
      [
       "WHICH FREDDY",
-      "!WOULD YOU LEAST WANT TO MEET?"
+      "!WOULD YOU LEAST",
+      "!WANT TO MEET?"
      ],
      6.607,
      8.85
@@ -2451,7 +2452,17 @@
    101
   ]
  ],
- "gamma": {},
+ "gamma": {
+  "n1_fight": 1.25,
+  "n1_no_fear": 1.25,
+  "n3_skeleton": 1.25,
+  "n3_marionette_uk": 1.25,
+  "fj_crash": 1.25,
+  "r10_creepiest": 1.25,
+  "n5_back_to_hell": 1.25,
+  "n4_hell": 1.25,
+  "n7_bloodiest": 1.4
+ },
  "zoom": {},
  "bar": {
   "n3_marionette": 885,
