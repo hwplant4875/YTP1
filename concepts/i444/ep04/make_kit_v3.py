@@ -19,7 +19,11 @@ assert all(b[0] - a[0] >= 10 for a, b in zip(ch, ch[1:])), 'a chapter is shorter
 def mmss(x): x = int(x); return f'{x // 60}:{x % 60:02d}'
 kit = f'''# EP04 Freddy Krueger upload kit v3
 
-Video: E:\\YTP2\\Horror Ranked\\EP04 Freddy Krueger\\2_renders\\ep04_freddy_v3.mp4 ({mmss(t)}) | Subtitles: upload/freddy_ranked_en_v3.srt | Thumbnails: upload/freddy_thumb_a/b/c.jpg
+Video, two versions with the same picture and voice, pick one ({mmss(t)} each):
+- Mixkit music: E:\\YTP2\\Horror Ranked\\EP04 Freddy Krueger\\2_renders\\ep04_freddy_v3.mp4
+- ElevenLabs bed (the channel's usual sound): E:\\YTP2\\Horror Ranked\\EP04 Freddy Krueger\\2_renders\\ep04_freddy_v3_eleven.mp4
+
+Subtitles: upload/freddy_ranked_en_v3.srt | Thumbnails: upload/freddy_thumb_a/b/c.jpg
 
 ## Titles (pick one, never a colon or a dash)
 1. Every Freddy Krueger Ranked by Your Chance of Surviving Him  (recommended, series format)
@@ -32,13 +36,15 @@ You fall asleep tonight, and Freddy is waiting for you. How likely are you to su
 Which Freddy would you least want to meet tonight? Tell me in the comments, along with the killer I should rank next.
 
 Clips are used for commentary and criticism. All rights belong to their owners.
-Music from Mixkit, Piano Horror by Francisco Alvear, Echoes by Andrew Ev and Xanthos by Eugenio Mininni.
 
 Chapters
 ''' + '\n'.join(f'{mmss(a)} {n}' for a, n in ch) + '''
 
 ## Tags
 freddy krueger, a nightmare on elm street, freddy, horror, horror movies, wes craven, dream warriors, ranked
+
+## Music note
+The description works for both versions. The Mixkit tracks (Piano Horror by Francisco Alvear, Echoes by Andrew Ev, Xanthos by Eugenio Mininni) are under the Mixkit Stock Music Free License, which needs no credit; the ElevenLabs bed was made for this episode.
 '''
 assert ':' not in kit.split('## Titles')[1].split('## Description')[0].replace('## Titles (pick one, never a colon or a dash)', '')
 open('upload/upload_kit_v3.md', 'w', encoding='utf-8').write(kit)
