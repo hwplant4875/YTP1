@@ -145,7 +145,14 @@ def schedule():
     # opening: the hook slam, then every bundle that lands, faster and quieter as the camera lifts
     ev(0.0, '1975', -9.5); ev(0.0, 'sub_hit_warm', -9.5); ev(0.0, '2091', -12)
     for k, t in enumerate(LAND):
-        ev(t, THUDS[k % 3], -9 - 6 * k / max(1, len(LAND) - 1), trim=(0, 0.22), rate=float(rng.uniform(0.94, 1.06)), pan=float(rng.uniform(-0.15, 0.15)))
+        ev(t, THUDS[k % 3], -9 - 3 * k / max(1, len(LAND) - 1), trim=(0, 0.22), rate=float(rng.uniform(0.94, 1.06)), pan=float(rng.uniform(-0.15, 0.15)))
+    # owner 11/8: the stacking sound keeps going under the climb and only slowly fades (a dopamine bed)
+    t, t0, t1 = LAND[-1], LAND[-1], 21.0
+    while True:
+        t += 0.058 + float(rng.uniform(-0.012, 0.012))
+        if t > t1: break
+        u = (t - t0) / (t1 - t0)
+        ev(t, THUDS[int(rng.integers(0, 3))], -12 - 20 * u ** 1.6, trim=(0, 0.2), rate=float(rng.uniform(0.95, 1.08)), pan=float(rng.uniform(-0.25, 0.25)))
     ev(2.95, '1710', -17)                                   # the climb starts
     ev(8.49, '2568', -16)                                   # tallest-building pin
     ev(14.9, '340', -17, pan=0.2)                           # plane passes
