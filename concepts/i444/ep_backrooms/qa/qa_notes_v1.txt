@@ -32,3 +32,5 @@ Fixed: choice pauses split only in true silence (word times ran ~0.4 s late); co
 drops keep the old value until the new one lands and land in the lower third (off faces); label SURVIVAL RATE; ending 2% -> SURVIVED
 (green, at Async) -> TRAPPED..? (red, on "never got to go home") to 1 OF 5. Film lines from the film's own takes (+ Clark's voicemail line).
 Not in the film: the caveman in pieces (crash heard, cutout flies past 0.4 s), a room full of cavemen (one cutout), all five people in one shot.
+
+# v3b (11/8): backrooms_v3b.mp4, 587.13 s, -15.0 LUFS, TP -1.4. s10 re-voiced (greetings tape behind the Async doors). Door rows 5831.75/5833.30 (clean to 5835.85), film greeting at a=-4 (audible under the voice; a=-20 was ~31 dB under). Only s10 re-rendered.

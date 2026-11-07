@@ -22,7 +22,7 @@ Which stage would you have turned back at? Tell me in the comments, along with t
 5:54 Stage 7, the dining room (5%)
 6:59 Stage 8, Captain Clark (2%)
 8:08 Async, 1 of 5
-9:10 What the tapes really show
+9:09 What the tapes really show
 
 Spoilers for the whole film, including the ending.
 
@@ -38,7 +38,7 @@ Music: Mixkit (Feedback Dreams, Xanthos, Nield Grohm Hanging 3), Mixkit Stock Mu
 backrooms, the backrooms, backrooms movie, the backrooms movie, a24 backrooms, kane parsons, kane pixels, backrooms explained, backrooms ending explained, captain clark, how long would you survive, could you survive, horror movie, survival, liminal space, chiwetel ejiofor, renate reinsve, a24 horror, horror ranked
 
 ## Length
-9:47 (587.6 s)
+9:47 (587.1 s)
 
 ## Files
 - English captions: backrooms_survival_en.srt

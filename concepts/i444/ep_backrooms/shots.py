@@ -337,8 +337,8 @@ X.append(sec('s10', [
   ('and down the hall captain clark', 'film', 5818.20, -2.30),  # Mary led down the white Async hall by staff
   ('a table', 'film', 5821.95, -0.70),  # NEW CUT  the lab through the doorway: the body on the table, scans on the monitor
   ('his pirate hat part of his own body', 'film', 5822.75, -1.90, 'z=1.6,dx=-292,dy=43'),  # pushing into the lab: Captain Clark on the table, the tricorn on the table in front
-  ('and from behind another door', 'film', 5832.00, -1.30, 'a=-20'),  # v3b: the closed Async doors, the child greeting 'Hello from the children of Planet Earth' (5832.4) heard under the voice
-  ('comes that same tape of greetings', 'film', 5833.30, -2.60, 'a=-20'),  # v3b: hold on the doors, the greetings keep playing (TODO laptop: check span/clean)
+  ('and from behind another door', 'film', 5831.75, -1.55, 'a=-4'),  # v3b: the closed Async doors, the child greeting 'Hello from the children of Planet Earth' (5832.4) heard under the voice
+  ('comes that same tape of greetings', 'film', 5833.30, -2.55, 'a=-4'),  # v3b: the doors, camera pushing in, greetings playing behind (clean to 5835.85)
   ('so the hello and welcome', 'film', 1858.40, -3.20, 'g=1.25'),  # first trip: Clark walks to the lit doorway where the caveman stands
   ('may have come from async all along', 'film', 5809.00, -2.20),  # Async staff leading Mary down the white corridor
   ('phil the man who watched', 'film', 5875.00, -2.40),  # Phil comes in through the door
