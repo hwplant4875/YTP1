@@ -36,7 +36,7 @@ export class Director {
     A.update(t);
     if (act.length === 1) {
       this.r.setRenderTarget(null); this.r.render(A.s, A.cam);
-      A.overlay(g, t);
+      if (!this.noText) A.overlay(g, t);
       return;
     }
     const B = act[1][2], p = smoother(clamp((t - act[1][0]) / Math.max(1e-6, Math.min(act[0][1], act[1][1]) - act[1][0])));
@@ -46,6 +46,7 @@ export class Director {
     this.r.setRenderTarget(null);
     this.fade.uniforms.a.value = this.ra.texture; this.fade.uniforms.b.value = this.rb.texture; this.fade.uniforms.p.value = p;
     this.r.render(this.fs, this.fcam);
+    if (this.noText) return;
     for (const [S, o, al] of [[A, this.oa, 1 - p], [B, this.ob, p]]) {
       const c = o.getContext('2d'); c.clearRect(0, 0, W, H); S.overlay(c, t);
       g.save(); g.globalAlpha = al; g.drawImage(o, 0, 0); g.restore();

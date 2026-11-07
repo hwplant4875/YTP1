@@ -97,12 +97,12 @@ export class ValueScene {
     // Nvidia's cash pile: stays whole, then slides off when the multiplication starts
     if (this.pile) { const go = smoother(clamp((t - T.value) / 1.1)); this.pile.position.set(-1.6 - 2.4 * go, 0, -0.2 * go); this.pile.visible = go < 1; }
     // one share (value: from "latest"; trade: hidden)
-    const onA = v ? backOut(clamp((t - T.latest + 0.2) / 0.5)) : 0;
+    const onA = v ? backOut(clamp((t - T.mult + 0.3) / 0.5)) : 0;
     this.one.visible = onA > 0.001;
     this.one.position.set(-1.1, 0.112 + (1 - onA) * 0.6, 0.2); this.one.rotation.y = 0.35;
     // tags: value -> above the single share; trade -> above the block
     const flipT = v ? T.drops : T.rep;
-    const tagOn = v ? clamp((t - T.latest - 0.1) / 0.4) : clamp((t - T.yet) / 0.4);
+    const tagOn = v ? clamp((t - T.mult) / 0.4) : clamp((t - T.yet) / 0.4);
     const fl = smoother(clamp((t - flipT) / 0.5));
     const tp = v ? new THREE.Vector3(-1.1, 0.62, 0.2) : new THREE.Vector3(0.9, 0.62, -1.15);
     for (const [tg, a] of [[this.tagA, 1 - fl], [this.tagB, fl]]) {

@@ -42,6 +42,7 @@ import { SaveScene } from './s_save.js';
     // only build the scenes a render range needs (?t0=&t1= or ?t=)
     const t0 = Number(q.get('t0') ?? q.get('t') ?? 0), t1 = Number(q.get('t1') ?? q.get('t') ?? 1e9);
     const list = all.filter(e => e[1] > t0 && e[0] <= t1).map(e => [e[0], e[1], e[2]()]);
+    D.noText = q.has('notext');
     await D.init(list);
     window.render = async (t) => { D.render(t); };
     if (q.has('t')) D.render(Number(q.get('t')));
