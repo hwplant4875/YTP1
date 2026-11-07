@@ -440,14 +440,14 @@ export class Opening {
     }
 
     // space station: glides in from the left, then becomes the first of seven
-    const issIn = easeOut((t - 8.95) / 0.85);
+    const issIn = easeOut((t - 9.2) / 0.7);
     const kPass = H / 7.6e5;
     const sizeAt = (kk) => 125 * Math.pow(kk / kPass, 0.47);
     const issSize = sizeAt(k);
     const [cx420, cy420] = cam.p(0, 0, 420e3);
     const off = 0.95 * issSize + 26 * Math.pow(k / kPass, 0.3);
     let issX = cx420 - off - (1 - issIn) * 900, issY = cy420;
-    if (t > 8.95) this.drawISS(ctx, issX, issY, issSize, 1);
+    if (t > 9.2) this.drawISS(ctx, issX, issY, issSize, 1);
 
     // seven stations up the column
     if (t > 11.9) {
@@ -496,10 +496,10 @@ export class Opening {
 
     // landmark pins (left side)
     const show = (t0, t1) => clamp((t - t0) / 0.6) * (1 - clamp((t - t1) / 0.35));
-    const towerP = show(6.05, 7.25);
+    const towerP = show(5.85, 7.25);
     if (towerP > 0) {
       const [x, y] = cam.p(260, -330, 541);
-      pin(ctx, x, y, { ...this.pinColors(y - 60), p: clamp((t - 6.05) / 0.6), a: 1 - clamp((t - 7.25) / 0.35), dir: -1, lead: 54, rule: 300, num: '541', unit: 'M', title: 'Tallest U.S. building', numSize: 60, titleSize: 22 });
+      pin(ctx, x, y, { ...this.pinColors(y - 60), p: clamp((t - 5.85) / 0.6), a: 1 - clamp((t - 7.25) / 0.35), dir: -1, lead: 54, rule: 300, num: '541', unit: 'M', title: 'Tallest U.S. building', numSize: 60, titleSize: 22 });
     }
     if (this.planeAnchor && t > 7.15 && t < 8.6) {
       const [x, y, s] = this.planeAnchor;
@@ -509,9 +509,9 @@ export class Opening {
       const [cx, cy] = cam.p(0, 0, 100e3), rx = 70e3 * SQ15 * k;
       pin(ctx, cx - rx, cy, { ...this.pinColors(cy - 60), p: clamp((t - 8.35) / 0.6), a: 1 - clamp((t - 9.5) / 0.35), dir: -1, lead: 54, rule: 300, num: '100', unit: 'KM', title: 'Edge of space', numSize: 60, titleSize: 22 });
     }
-    if (t > 9.55 && t < 12.2) {
+    if (t > 9.7 && t < 12.2) {
       const x = iss.issX - iss.issSize * 0.55, y = iss.issY;
-      pin(ctx, x, y, { ...this.pinColors(y - 60), p: clamp((t - 9.6) / 0.6), a: 1 - clamp((t - 11.8) / 0.35), dir: -1, lead: 54, rule: 300, num: '420', unit: 'KM', title: 'Space station', numSize: 60, titleSize: 22 });
+      pin(ctx, x, y, { ...this.pinColors(y - 60), p: clamp((t - 9.75) / 0.6), a: 1 - clamp((t - 11.8) / 0.35), dir: -1, lead: 54, rule: 300, num: '420', unit: 'KM', title: 'Space station', numSize: 60, titleSize: 22 });
     }
     // "7x" call-out once all seven stations are up
     if (t > 13.7) {
