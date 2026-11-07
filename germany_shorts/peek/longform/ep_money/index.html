@@ -1,0 +1,24 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: 'Jost'; src: url('/germany_shorts/fonts/Jost-VF-latin.woff2') format('woff2'); font-weight: 100 900; }
+html, body { margin: 0; background: #F2EADB; overflow: hidden; }
+canvas { display: block; }
+</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+import { Opening, DUR } from './js/opening.js';
+const ctx = document.getElementById('c').getContext('2d');
+const scene = new Opening();
+window.DUR = DUR;
+(async () => {
+  try {
+    await Promise.all([document.fonts.load('400 40px Jost'), document.fonts.load('500 40px Jost'), document.fonts.load('600 40px Jost')]);
+    await scene.init('./assets/');
+    window.render = async (t) => { scene.render(ctx, t); };
+    const q = new URLSearchParams(location.search);
+    if (q.has('t')) scene.render(ctx, Number(q.get('t')));
+    window.READY = true;
+  } catch (e) { window.ERROR = String(e && e.stack || e); }
+})();
+</script></body></html>
