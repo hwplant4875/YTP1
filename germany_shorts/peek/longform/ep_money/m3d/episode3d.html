@@ -1,0 +1,51 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: 'Jost'; src: url('/germany_shorts/fonts/Jost-VF-latin.woff2') format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'YTSans'; src: url('/germany_shorts/fonts/YouTubeSans-Black.otf') format('opentype'); }
+html, body { margin: 0; background: #F2EADB; overflow: hidden; }
+canvas { display: block; position: absolute; left: 0; top: 0; }
+</style>
+<script type="importmap">{"imports":{"three":"/germany_shorts/longform/node_modules/three/build/three.module.js","three/addons/":"/germany_shorts/longform/node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<canvas id="gl" width="1920" height="1080"></canvas><canvas id="ov" width="1920" height="1080"></canvas>
+<script type="module">
+// The 3D half of the episode (0:31.85 to the end); the isometric opening (0:00-0:32) is rendered from
+// ../episode.html and the two are joined with a short crossfade.
+import { Director } from './director.js';
+import { MarketScene } from './s_market.js';
+import { ChipScene } from './s_chip.js';
+import { ChartScene } from './s_chart.js';
+import { EarthScene } from './s_earth.js';
+import { ValueScene } from './s_value.js';
+import { CashScene } from './s_cash.js';
+import { SaveScene } from './s_save.js';
+(async () => {
+  try {
+    await Promise.all([document.fonts.load('600 40px Jost'), document.fonts.load('40px YTSans')]);
+    const D = new Director(document.getElementById('gl'), document.getElementById('ov'));
+    const q = new URLSearchParams(location.search);
+    const all = [
+      [31.4, 68.9, () => new MarketScene('day')],
+      [68.3, 76.4, () => new ChipScene()],
+      [75.8, 90.2, () => new ChartScene('drop')],
+      [89.4, 106.2, () => new EarthScene()],
+      [105.5, 135.2, () => new ValueScene('value')],
+      [134.6, 147.9, () => new ChartScene('volume')],
+      [147.3, 163.2, () => new ValueScene('trade')],
+      [162.5, 177.6, () => new CashScene()],
+      [176.9, 190.8, () => new MarketScene('payoff')],
+      [190.0, 206.6, () => new SaveScene()],
+      [206.0, 213.1, () => new ChartScene('next')],
+      [212.5, 227.6, () => new MarketScene('end')],
+    ];
+    // only build the scenes a render range needs (?t0=&t1= or ?t=)
+    const t0 = Number(q.get('t0') ?? q.get('t') ?? 0), t1 = Number(q.get('t1') ?? q.get('t') ?? 1e9);
+    const list = all.filter(e => e[1] > t0 && e[0] <= t1).map(e => [e[0], e[1], e[2]()]);
+    await D.init(list);
+    window.render = async (t) => { D.render(t); };
+    if (q.has('t')) D.render(Number(q.get('t')));
+    window.READY = true;
+  } catch (e) { window.ERROR = String(e && e.stack || e); }
+})();
+</script></body></html>
