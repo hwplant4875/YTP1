@@ -10,9 +10,10 @@ BG, UP, DN = (8, 9, 12), (30, 210, 140), (255, 48, 72)
 f = lambda s: ImageFont.truetype(FONT, int(s * K))
 
 def bars(key, agg):
-    rows = [r for r in json.load(open(os.path.join(HERE, '..', 'data', 'prices.json')))[key] if '2026-11-04' <= r[0] < '2026-11-06']
+    days = os.environ.get('DAYS', '2026-11-04,2026-11-05').split(',')
+    rows = [r for r in json.load(open(os.path.join(HERE, '..', 'data', 'prices.json')))[key] if r[0][:10] in days]
     out = []
-    for day in ('2026-11-04', '2026-11-05'):
+    for day in days:
         d = [r for r in rows if r[0].startswith(day)]
         for i in range(0, len(d), agg):
             g = d[i:i + agg]; out.append((g[0][0], g[0][1], max(x[2] for x in g), min(x[3] for x in g), g[-1][4]))
