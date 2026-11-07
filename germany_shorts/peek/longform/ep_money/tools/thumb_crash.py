@@ -30,7 +30,7 @@ def main():
     # background: near-black with a red light rising from the bottom right (where it crashed)
     yy, xx = np.mgrid[0:H, 0:W]
     r = np.hypot((xx - W * 0.8) / W, (yy - H * 1.05) / H)
-    red = np.clip(1 - r / 0.75, 0, 1) ** 2
+    red = np.clip(1 - r / 0.75, 0, 1) ** 2 * (0.0 if os.environ.get('NOGLOW') else 1.0)   # owner 11/8: no glow
     bg = np.stack([BG[0] + 120 * red, BG[1] + 8 * red, BG[2] + 18 * red], -1)
     im = Image.fromarray(bg.clip(0, 255).astype('uint8')); d = ImageDraw.Draw(im)
     for i in range(1, 7): d.line([(0, y0 + i * (y1 - y0) / 7), (W, y0 + i * (y1 - y0) / 7)], fill=(30, 32, 40), width=K)
@@ -38,7 +38,7 @@ def main():
     glow = Image.new('RGB', (W, H)); gd = ImageDraw.Draw(glow)
     for i, (t, o, h, l, c) in enumerate(rows):
         if i >= split and c < o: cx = x0 + (i + 0.5) * dx; gd.rectangle([cx - dx, Y(o), cx + dx, Y(c)], fill=(255, 30, 50))
-    g = np.asarray(glow.filter(ImageFilter.GaussianBlur(26 * K)), dtype='float32') * 0.9
+    g = np.asarray(glow.filter(ImageFilter.GaussianBlur(26 * K)), dtype='float32') * (0.0 if os.environ.get('NOGLOW') else 0.9)
     im = Image.fromarray(np.clip(np.asarray(im, dtype='float32') + g, 0, 255).astype('uint8')); d = ImageDraw.Draw(im)
     # Wednesday close line
     wc = rows[split - 1][4]
