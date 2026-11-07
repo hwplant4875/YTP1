@@ -488,18 +488,21 @@ export class Opening {
   drawPins(ctx, t, h, Hm, iss) {
     const cam = this.cam, k = cam.k, f = this.colF || 1;
     // running readout at the stack top (right corner of the top face)
-    const [ax, ay] = cam.p(-BW * f / 2, BL * f / 2, h);
-    const dollars = h / BILL_M * 100;
-    const [num, unit] = fmtMoney(dollars, t < RAIN_END ? Math.floor(h / BT + 1e-9) * 1e4 : null, h >= TOPH * 0.9995);
+    // the stack is made of whole bundles, so the dot, the money and the height all follow its real top
+    const hs = Math.floor(h / BT + 1e-9) * BT;
+    const [ax, ay] = cam.p(-BW * f / 2, BL * f / 2, hs);
+    const dollars = hs / BILL_M * 100;
+    const [num, unit] = fmtMoney(dollars, t < RAIN_END ? Math.round(hs / BT) * 1e4 : null, h >= TOPH * 0.9995);
     const c = this.pinColors(ay - 80);
-    pin(ctx, ax + 4, ay, { ...c, dir: 1, lead: 70, rule: 360, num, unit, numSize: 76, title: fmtHeight(h), titleSize: 26 });
+    pin(ctx, ax + 4, ay, { ...c, dir: 1, lead: 70, rule: 360, num, unit, numSize: 76, title: fmtHeight(hs), titleSize: 26 });
 
     // landmark pins (left side)
     const show = (t0, t1) => clamp((t - t0) / 0.6) * (1 - clamp((t - t1) / 0.35));
-    const towerP = show(5.85, 7.25);
+    // built only once the spire is far enough into frame for the whole label to fit (x > ~430 px at 6.33 s)
+    const towerP = show(6.12, 7.25);
     if (towerP > 0) {
       const [x, y] = cam.p(260, -330, 541);
-      pin(ctx, x, y, { ...this.pinColors(y - 60), p: clamp((t - 5.85) / 0.6), a: 1 - clamp((t - 7.25) / 0.35), dir: -1, lead: 54, rule: 300, num: '541', unit: 'M', title: 'Tallest U.S. building', numSize: 60, titleSize: 22 });
+      pin(ctx, x, y, { ...this.pinColors(y - 60), p: clamp((t - 6.12) / 0.42), a: 1 - clamp((t - 7.25) / 0.35), dir: -1, lead: 54, rule: 300, num: '541', unit: 'M', title: 'Tallest U.S. building', numSize: 60, titleSize: 22 });
     }
     if (this.planeAnchor && t > 7.15 && t < 8.6) {
       const [x, y, s] = this.planeAnchor;

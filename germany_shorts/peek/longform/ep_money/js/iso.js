@@ -114,11 +114,12 @@ export function label(ctx, s, x, y, o) {
   ctx.textAlign = o.align || 'left';
   ctx.textBaseline = o.base || 'alphabetic';
   ctx.globalAlpha = o.a === undefined ? 1 : o.a;
-  if (o.halo) {
+  // mode 'halo' / 'fill' draws one pass only, so lines can sit between a halo and its glyphs
+  if (o.halo && o.mode !== 'fill') {
     ctx.lineJoin = 'round'; ctx.miterLimit = 2;
     ctx.strokeStyle = o.halo; ctx.lineWidth = o.haloW || 14; ctx.strokeText(s, x, y);
   }
-  ctx.fillStyle = o.color; ctx.fillText(s, x, y);
+  if (o.mode !== 'halo') { ctx.fillStyle = o.color; ctx.fillText(s, x, y); }
   const w = ctx.measureText(s).width;
   ctx.globalAlpha = 1; ctx.letterSpacing = '0px';
   return w;
@@ -132,18 +133,9 @@ export function pin(ctx, ax, ay, o) {
   const ink = o.ink, paper = o.paper, dir = o.dir || 1, lead = o.lead || 60, rule = o.rule || 260;
   const sDot = backOut((p - 0.0) / 0.22), pl = easeOut((p - 0.12) / 0.3), pr = easeOut((p - 0.32) / 0.3);
   const pt = easeOut((p - 0.5) / 0.5);
-  ctx.save();
-  ctx.globalAlpha = a;
-  ctx.strokeStyle = ink; ctx.lineWidth = o.lw || 2.4; ctx.lineCap = 'round';
-  const top = ay - lead * pl;
-  if (pl > 0) { ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax, top); ctx.stroke(); }
-  if (pr > 0) { ctx.beginPath(); ctx.moveTo(ax, ay - lead); ctx.lineTo(ax + dir * rule * pr, ay - lead); ctx.stroke(); }
-  if (sDot > 0) {
-    const r = (o.dot || 8) * sDot;
-    ctx.beginPath(); ctx.arc(ax, ay, r, 0, Math.PI * 2);
-    ctx.fillStyle = paper; ctx.fill(); ctx.lineWidth = 2.6; ctx.stroke();
-  }
-  ctx.restore();
+  // text is laid out first and drawn in two passes (halos, then glyphs) around the leader, rule
+  // and dot, so a halo never cuts the rule under a comma or the leader beside the title
+  const txt = [];
   if (pt > 0) {
     const ry = ay - lead, x0 = dir > 0 ? ax + 6 : ax - 6, al = dir > 0 ? 'left' : 'right', rise = (1 - pt) * 12;
     const halo = o.halo || paper;
@@ -156,12 +148,26 @@ export function pin(ctx, ax, ay, o) {
       const uw = o.unit ? ctx.measureText(' ' + o.unit).width : 0;
       ctx.letterSpacing = '0px';
       const total = nw + uw, sx = dir > 0 ? x0 : x0 - total, by = ry - 14 + rise;
-      label(ctx, o.num, sx, by, { size: ns, weight: 400, color: ink, halo, haloW: 14, a: a * pt });
-      if (o.unit) label(ctx, ' ' + o.unit, sx + nw, by, { size: us, weight: 500, color: ink, halo, haloW: 12, a: a * pt, track: us * 0.08 });
+      txt.push([o.num, sx, by, { size: ns, weight: 400, color: ink, halo, haloW: 14, a: a * pt }]);
+      if (o.unit) txt.push([' ' + o.unit, sx + nw, by, { size: us, weight: 500, color: ink, halo, haloW: 12, a: a * pt, track: us * 0.08 }]);
     }
     if (o.title) {
       const ts = o.titleSize || 24;
-      label(ctx, o.title.toUpperCase(), x0, ry + ts + 12 + rise * 0.5, { size: ts, weight: 600, color: ink, halo, haloW: 12, a: a * pt, align: al, track: ts * 0.12 });
+      txt.push([o.title.toUpperCase(), x0, ry + ts + 12 + rise * 0.5, { size: ts, weight: 600, color: ink, halo, haloW: 12, a: a * pt, align: al, track: ts * 0.12 }]);
     }
   }
+  for (const [s, x, y, q] of txt) label(ctx, s, x, y, { ...q, mode: 'halo' });
+  ctx.save();
+  ctx.globalAlpha = a;
+  ctx.strokeStyle = ink; ctx.lineWidth = o.lw || 2.4; ctx.lineCap = 'round';
+  const top = ay - lead * pl;
+  if (pl > 0) { ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax, top); ctx.stroke(); }
+  if (pr > 0) { ctx.beginPath(); ctx.moveTo(ax, ay - lead); ctx.lineTo(ax + dir * rule * pr, ay - lead); ctx.stroke(); }
+  if (sDot > 0) {
+    const r = (o.dot || 8) * sDot;
+    ctx.beginPath(); ctx.arc(ax, ay, r, 0, Math.PI * 2);
+    ctx.fillStyle = paper; ctx.fill(); ctx.lineWidth = 2.6; ctx.stroke();
+  }
+  ctx.restore();
+  for (const [s, x, y, q] of txt) label(ctx, s, x, y, { ...q, mode: 'fill' });
 }

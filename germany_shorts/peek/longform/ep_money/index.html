@@ -10,6 +10,7 @@ canvas { display: block; }
 import { Opening, DUR } from './js/opening.js';
 const ctx = document.getElementById('c').getContext('2d');
 const scene = new Opening();
+window.scene = scene;
 window.DUR = DUR;
 (async () => {
   try {
