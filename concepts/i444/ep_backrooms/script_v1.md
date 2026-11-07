@@ -14,7 +14,7 @@ Voicing rules:
 - On screen at each stage: the place name and the big YOUR SURVIVAL number, which drops on the spoken number.
 - One near-silence only, at the end of s08: room hum about 1.2 s, then the first thud of s09.
 
-## s00 s00 cold open (frame 0: Captain Clark, caption FIVE PEOPLE, impact sound)
+## s00 cold open (frame 0: Captain Clark, caption FIVE PEOPLE, impact sound)
 
 Five people went into the Backrooms in this movie, and they got chased, dragged, lost, eaten, and, umm, copied? Only one of them made it back out, and even she never got to go home. Now it's your turn, so stay with me to the very end, because the date on the very first tape is the scariest thing in this whole movie.
 
