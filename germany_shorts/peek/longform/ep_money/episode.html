@@ -1,0 +1,27 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: 'Jost'; src: url('/germany_shorts/fonts/Jost-VF-latin.woff2') format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'YTSans'; src: url('/germany_shorts/fonts/YouTubeSans-Black.otf') format('opentype'); }
+html, body { margin: 0; background: #F2EADB; overflow: hidden; }
+canvas { display: block; }
+</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+import { Episode } from './js/episode.js';
+import { SCENES } from './js/scenes/index.js';
+const ctx = document.getElementById('c').getContext('2d');
+const ep = new Episode();
+window.ep = ep;
+(async () => {
+  try {
+    await Promise.all([document.fonts.load('400 40px Jost'), document.fonts.load('500 40px Jost'), document.fonts.load('600 40px Jost'), document.fonts.load('40px YTSans')]);
+    await ep.init('./assets/', SCENES());
+    window.DUR = ep.DUR;
+    window.render = async (t) => { ep.render(ctx, t); };
+    const q = new URLSearchParams(location.search);
+    if (q.has('t')) ep.render(ctx, Number(q.get('t')));
+    window.READY = true;
+  } catch (e) { window.ERROR = String(e && e.stack || e); }
+})();
+</script></body></html>

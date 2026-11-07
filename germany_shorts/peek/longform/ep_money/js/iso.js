@@ -133,11 +133,13 @@ export function pin(ctx, ax, ay, o) {
   const ink = o.ink, paper = o.paper, dir = o.dir || 1, lead = o.lead || 60, rule = o.rule || 260;
   const sDot = backOut((p - 0.0) / 0.22), pl = easeOut((p - 0.12) / 0.3), pr = easeOut((p - 0.32) / 0.3);
   const pt = easeOut((p - 0.5) / 0.5);
+  // tp / ttp: optional separate progress for the number line and the title line
+  const ptn = o.tp !== undefined ? easeOut(o.tp) : pt, ptt = o.ttp !== undefined ? easeOut(o.ttp) : pt;
   // text is laid out first and drawn in two passes (halos, then glyphs) around the leader, rule
   // and dot, so a halo never cuts the rule under a comma or the leader beside the title
   const txt = [];
-  if (pt > 0) {
-    const ry = ay - lead, x0 = dir > 0 ? ax + 6 : ax - 6, al = dir > 0 ? 'left' : 'right', rise = (1 - pt) * 12;
+  if (ptn > 0 || ptt > 0) {
+    const ry = ay - lead, x0 = dir > 0 ? ax + 6 : ax - 6, al = dir > 0 ? 'left' : 'right', rise = (1 - ptn) * 12, riseT = (1 - ptt) * 12;
     const halo = o.halo || paper;
     if (o.num) {
       const ns = o.numSize || 66, us = Math.round(ns * 0.5);
@@ -148,12 +150,12 @@ export function pin(ctx, ax, ay, o) {
       const uw = o.unit ? ctx.measureText(' ' + o.unit).width : 0;
       ctx.letterSpacing = '0px';
       const total = nw + uw, sx = dir > 0 ? x0 : x0 - total, by = ry - 14 + rise;
-      txt.push([o.num, sx, by, { size: ns, weight: 400, color: ink, halo, haloW: 14, a: a * pt }]);
-      if (o.unit) txt.push([' ' + o.unit, sx + nw, by, { size: us, weight: 500, color: ink, halo, haloW: 12, a: a * pt, track: us * 0.08 }]);
+      if (ptn > 0) txt.push([o.num, sx, by, { size: ns, weight: 400, color: o.numColor || ink, halo, haloW: 14, a: a * ptn }]);
+      if (o.unit && ptn > 0) txt.push([' ' + o.unit, sx + nw, by, { size: us, weight: 500, color: o.numColor || ink, halo, haloW: 12, a: a * ptn, track: us * 0.08 }]);
     }
     if (o.title) {
       const ts = o.titleSize || 24;
-      txt.push([o.title.toUpperCase(), x0, ry + ts + 12 + rise * 0.5, { size: ts, weight: 600, color: ink, halo, haloW: 12, a: a * pt, align: al, track: ts * 0.12 }]);
+      if (ptt > 0) txt.push([o.title.toUpperCase(), x0, ry + ts + 12 + riseT * 0.5, { size: ts, weight: 600, color: ink, halo, haloW: 12, a: a * ptt, align: al, track: ts * 0.12 }]);
     }
   }
   for (const [s, x, y, q] of txt) label(ctx, s, x, y, { ...q, mode: 'halo' });
@@ -171,3 +173,100 @@ export function pin(ctx, ax, ay, o) {
   ctx.restore();
   for (const [s, x, y, q] of txt) label(ctx, s, x, y, { ...q, mode: 'fill' });
 }
+
+// ---------- camera helpers ----------
+// put world point (x, y, z) at screen (sx, sy) with a frame `fh` world units tall
+export function camLook(cam, x, y, z, fh, sx = W / 2, sy = H / 2) {
+  const k = H / fh;
+  cam.set(sx - (y - x) * C30 * k, sy - ((x + y) * 0.5 - z) * k, k);
+}
+// keys: [[t, x, y, z, fh, sx?, sy?], ...]; smootherstep between keys, frame height eased in log space
+export function camPath(keys) {
+  return (t) => {
+    if (t <= keys[0][0]) return keys[0];
+    for (let i = 0; i < keys.length - 1; i++) {
+      const a = keys[i], b = keys[i + 1];
+      if (t > b[0]) continue;
+      const u = smoother((t - a[0]) / (b[0] - a[0]));
+      const r = [t];
+      for (let j = 1; j < Math.max(a.length, b.length); j++) {
+        const va = a[j] ?? (j === 5 ? W / 2 : H / 2), vb = b[j] ?? (j === 5 ? W / 2 : H / 2);
+        r.push(j === 4 ? Math.exp(Math.log(va) + (Math.log(vb) - Math.log(va)) * u) : va + (vb - va) * u);
+      }
+      return r;
+    }
+    return keys[keys.length - 1];
+  };
+}
+export function applyCam(cam, k) { camLook(cam, k[1], k[2], k[3], k[4], k[5] ?? W / 2, k[6] ?? H / 2); }
+
+// ---------- faces ----------
+// texQuad arguments that map an image upright onto a box face: 'x' (+x, left face), 'y' (+y, right face), 'top'
+export function faceFrame(cam, face, x0, y0, z0, sx, sy, sz) {
+  const x1 = x0 + sx, y1 = y0 + sy, z1 = z0 + sz, d = (a, b) => [b[0] - a[0], b[1] - a[1]];
+  if (face === 'x') { const O = cam.p(x1, y0, z1); return [O, d(O, cam.p(x1, y1, z1)), d(O, cam.p(x1, y0, z0))]; }
+  if (face === 'y') { const O = cam.p(x1, y1, z1); return [O, d(O, cam.p(x0, y1, z1)), d(O, cam.p(x1, y1, z0))]; }
+  const O = cam.p(x0, y0, z1); return [O, d(O, cam.p(x0, y1, z1)), d(O, cam.p(x1, y0, z1))];
+}
+
+// ghost of a box: its visible edges as dashed ink lines (value that exists only on paper)
+export function dashedBox(ctx, cam, x0, y0, z0, sx, sy, sz, o = {}) {
+  const x1 = x0 + sx, y1 = y0 + sy, z1 = z0 + sz, P = (x, y, z) => cam.p(x, y, z);
+  const a = o.a === undefined ? 1 : o.a;
+  if (a <= 0.005) return;
+  ctx.save();
+  ctx.globalAlpha = a;
+  if (o.fill) {
+    ctx.fillStyle = o.fill; ctx.beginPath();
+    for (const q of [P(x0, y0, z1), P(x0, y1, z1), P(x0, y1, z0), P(x1, y1, z0), P(x1, y0, z0), P(x1, y0, z1)]) ctx.lineTo(q[0], q[1]);
+    ctx.closePath(); ctx.fill();
+  }
+  ctx.strokeStyle = o.color || '#2B2533'; ctx.lineWidth = o.lw || 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.setLineDash(o.dash || [7, 6]); ctx.lineDashOffset = o.offset || 0;
+  const seg = (p, q) => { ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); };
+  ctx.beginPath();
+  // top face rim
+  seg(P(x0, y0, z1), P(x1, y0, z1)); seg(P(x1, y0, z1), P(x1, y1, z1)); seg(P(x1, y1, z1), P(x0, y1, z1)); seg(P(x0, y1, z1), P(x0, y0, z1));
+  if (sz > 1e-6) {
+    // three visible vertical edges and the two visible bottom edges
+    seg(P(x1, y0, z0), P(x1, y0, z1)); seg(P(x1, y1, z0), P(x1, y1, z1)); seg(P(x0, y1, z0), P(x0, y1, z1));
+    if (!o.noBottom) { seg(P(x1, y0, z0), P(x1, y1, z0)); seg(P(x1, y1, z0), P(x0, y1, z0)); }
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+// filled ellipse lying on a z plane (circle of radius r in the world)
+export function discZ(ctx, cam, cx, cy, z, r, fill) {
+  const [x, y] = cam.p(cx, cy, z);
+  ctx.fillStyle = fill; ctx.beginPath(); ctx.ellipse(x, y, r * SQ15 * cam.k, r * Math.SQRT1_2 * cam.k, 0, 0, Math.PI * 2); ctx.fill();
+}
+
+// ---------- big key text (YouTube Sans Black: white, black stroke, slight shadow, one highlight colour) ----------
+export const HL = '#FFD23F';
+// parts: string or [[text, colour], ...]; p = pop progress 0..1
+export function bigText(ctx, parts, x, y, o = {}) {
+  const p = o.p === undefined ? 1 : o.p, a = o.a === undefined ? 1 : o.a;
+  if (p <= 0 || a <= 0) return 0;
+  if (typeof parts === 'string') parts = [[parts, '#FFFFFF']];
+  const size = o.size || 96;
+  ctx.save();
+  ctx.font = `${size}px YTSans`; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.letterSpacing = '0px';
+  const ws = parts.map(([s]) => ctx.measureText(s).width), tw = ws.reduce((q, v) => q + v, 0);
+  const s = 0.82 + 0.18 * backOut(p), al = clamp(p * 2.2) * a;
+  const x0 = o.align === 'left' ? x : o.align === 'right' ? x - tw : x - tw / 2;
+  ctx.translate(x, y - size * 0.35); ctx.scale(s, s); ctx.translate(-x, -(y - size * 0.35));
+  ctx.globalAlpha = al;
+  // soft drop shadow, then the black stroke, then the fill
+  let cx = x0;
+  ctx.lineJoin = 'round'; ctx.miterLimit = 2;
+  ctx.fillStyle = 'rgba(20,14,26,0.35)';
+  for (let i = 0; i < parts.length; i++) { ctx.fillText(parts[i][0], cx + size * 0.03, y + size * 0.06); cx += ws[i]; }
+  cx = x0; ctx.strokeStyle = '#141018'; ctx.lineWidth = size * 0.16;
+  for (let i = 0; i < parts.length; i++) { ctx.strokeText(parts[i][0], cx, y); cx += ws[i]; }
+  cx = x0;
+  for (let i = 0; i < parts.length; i++) { ctx.fillStyle = parts[i][1] || '#FFFFFF'; ctx.fillText(parts[i][0], cx, y); cx += ws[i]; }
+  ctx.restore();
+  return tw;
+}
+export function measureBig(ctx, s, size) { ctx.save(); ctx.font = `${size}px YTSans`; ctx.textAlign = 'left'; ctx.letterSpacing = '0px'; const w = ctx.measureText(s).width; ctx.restore(); return w; }

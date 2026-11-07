@@ -2,7 +2,7 @@
 // camera pulls out on a log zoom past the city, clouds, an airliner, the edge of space and
 // the space station, ending on the curved Earth: $2.8 trillion = 3,058 km of $100 bills.
 import {
-  W, H, C30, SQ15, Cam, tones, rgb, css, mix, poly, box, frustum, texQuad, label, pin,
+  W, H, C30, SQ15, Cam, tones, rgb, css, mix, poly, box, frustum, texQuad, label, pin, dashedBox,
   clamp, lerp, sstep, smoother, easeOut, backOut, monotone, mulberry32,
 } from './iso.js';
 import { Globe, R_E } from './globe.js';
@@ -21,32 +21,72 @@ const BILL_M = 0.10922e-3;      // one bill
 export const TOPH = 2.8e12 / 100 * BILL_M;  // 3,058 km
 export const DUR = 17.0;
 
-// ---------------- timeline ----------------
+// ---------------- timelines ----------------
+// A take is a config: stack height, camera and event times on the take clock T. The episode
+// drives a take on the voice-over clock v; warp(v) -> T stretches the take onto the narration,
+// while the bundle falls and squashes keep their real-time durations (they are timed on v).
 const lg = Math.log10;
-const TA = 2.8;                       // the camera starts tracking the stack top
-const FALL = 0.26, DROP = 0.42, RAIN_END = 3.1;
-// stack height over the whole take (log10 metres); bundles 0 and 1 lie on the ground at t=0
-const topLog = monotone([
-  [0, lg(2 * BT)], [1.0, lg(6 * BT)], [2.0, lg(12 * BT)], [TA, lg(24 * BT)], [4.0, lg(6 / 1.8)], [5.2, lg(100 / 1.8)],
-  [6.3, lg(1100 / 1.8)], [7.4, lg(2.0e4 / 1.8)], [8.5, lg(1.8e5 / 1.8)], [9.7, lg(7.6e5 / 1.8)], [11.3, lg(TOPH)], [13, lg(TOPH)],
-]);
-const hv = (t) => Math.min(TOPH, Math.pow(10, topLog(t)));
-// landing time of each bundle in the rain: bundle i lands when the stack reaches i+1 bundles
-const LAND = [];
-{ let i = 2; for (let t = 0; t < RAIN_END; t += 0.0005) { while (hv(t) >= (i + 1) * BT - 1e-9) { LAND[i] = t; i++; } } }
-// camera frame height: slow drift during the first slams, then the stack top is held at a fixed
-// screen height (frame = 1.8 x stack), then a last ease-out pull-back once the top is reached
-const lc = (t) => lg(1.8) + (lg(2.35) - lg(1.8)) * smoother((t - 11) / 3.5) + (lg(2.42) - lg(2.35)) * smoother((t - 14.5) / 2.5);
-const camKeys = [[0, lg(0.30)], [1.5, lg(0.33)]];
-for (let t = TA; t <= 11.8; t += 0.4) camKeys.push([t, lc(t) + topLog(t)]);
-const camLogA = monotone(camKeys);
-const camLog = (t) => (t <= 11.4 ? camLogA(t) : lc(t) + topLog(t));
-function stackTop(t) { return hv(t); }
-function baseScreen(t) {
-  const y = t < TA ? lerp(700, 930, smoother(t / TA)) : t < 10 ? 930 : lerp(930, 650, smoother((t - 10) / 4.5));
-  const x = t < 10 ? 900 : lerp(900, 960, smoother((t - 10) / 4));
-  return [x, y];
+const FALL = 0.26, DROP = 0.42;
+export function mainTake(warpKeys = null) {
+  const TOPH = 2.8e12 / 100 * BILL_M;     // 3,058 km
+  const TA = 2.8, RAIN_END = 3.1;         // the camera starts tracking the stack top at TA
+  // stack height over the whole take (log10 metres); bundles 0 and 1 lie on the ground at t=0
+  const topLog = monotone([
+    [0, lg(2 * BT)], [1.0, lg(6 * BT)], [2.0, lg(12 * BT)], [TA, lg(24 * BT)], [4.0, lg(6 / 1.8)], [5.2, lg(100 / 1.8)],
+    [6.3, lg(1100 / 1.8)], [7.4, lg(2.0e4 / 1.8)], [8.5, lg(1.8e5 / 1.8)], [9.7, lg(7.6e5 / 1.8)], [11.3, lg(TOPH)], [13, lg(TOPH)],
+  ]);
+  const hv = (t) => Math.min(TOPH, Math.pow(10, topLog(t)));
+  // camera frame height: slow drift during the first slams, then the stack top is held at a fixed
+  // screen height (frame = 1.8 x stack), then a last ease-out pull-back once the top is reached
+  const lc = (t) => lg(1.8) + (lg(2.35) - lg(1.8)) * smoother((t - 11) / 3.5) + (lg(2.42) - lg(2.35)) * smoother((t - 14.5) / 2.5);
+  const camKeys = [[0, lg(0.30)], [1.5, lg(0.33)]];
+  for (let t = TA; t <= 11.8; t += 0.4) camKeys.push([t, lc(t) + topLog(t)]);
+  const camLogA = monotone(camKeys);
+  const camLog = (t) => (t <= 11.4 ? camLogA(t) : lc(t) + topLog(t));
+  const base = (t) => {
+    const y = t < TA ? lerp(700, 930, smoother(t / TA)) : t < 10 ? 930 : lerp(930, 650, smoother((t - 10) / 4.5));
+    const x = t < 10 ? 900 : lerp(900, 960, smoother((t - 10) / 4));
+    return [x, y];
+  };
+  return {
+    TOPH, hv, camLog, base, rain: true, RAIN_END, warp: warpKeys ? monotone(warpKeys) : (v) => v,
+    ring: 8.05, plane: 7.4, issIn: 9.2, seven: 12.0, final: ['$2.8', 'TRILLION'], finalAt: TOPH * 0.9995,
+    pins: { tower: [6.12, 7.25], plane: [7.2, 8.2], karman: [8.35, 9.5], iss: [9.75, 11.8], seven: 13.75, ny: 12.6 },
+    ghost: () => 0,
+  };
 }
+// Nvidia's one-day loss as bills: $18.53 x 24.2 billion shares = $448 billion = 490 km.
+// Starts as a tall stack in the plaza and rises past the space station in ~3.5 s.
+export function nvidiaTake() {
+  const TOPH = 18.53 * 24.2e9 / 100 * BILL_M;
+  const topLog = monotone([[0, lg(40)], [0.8, lg(400)], [1.6, lg(6e3)], [2.5, lg(9e4)], [3.4, lg(TOPH)], [8, lg(TOPH)]]);
+  const hv = (t) => Math.min(TOPH, Math.pow(10, topLog(t)));
+  const lc = (t) => lg(1.8) + (lg(2.55) - lg(1.8)) * smoother((t - 3.2) / 2.6);
+  const camLog = (t) => lc(t) + topLog(t);
+  const base = (t) => [lerp(900, 1010, smoother((t - 3.0) / 2.5)), lerp(930, 905, smoother((t - 3.0) / 2.5))];
+  return {
+    TOPH, hv, camLog, base, rain: false, RAIN_END: -1, warp: (v) => v,
+    ring: null, plane: null, issIn: 3.75, seven: null, final: ['$448', 'BILLION'], finalAt: TOPH * 0.9995,
+    pins: { tower: null, plane: null, karman: null, iss: [4.55, 99], seven: null, ny: null },
+    ghost: () => 0,
+  };
+}
+export function endTake() {
+  const TOPH = 5 * BT;
+  return {
+    TOPH, hv: () => TOPH, camLog: (t) => lg(0.40) + 0.07 * smoother(t / 15), base: (t) => [lerp(945, 960, smoother(t / 15)), lerp(905, 880, smoother(t / 15))],
+    rain: false, RAIN_END: -1, warp: (v) => v, ring: null, plane: null, issIn: 1e9, seven: null, final: null, finalAt: 1e99, readout: false,
+    pins: { tower: null, plane: null, karman: null, iss: null, seven: null, ny: null }, ghost: () => 0,
+  };
+}
+function landTimes(c) {
+  // landing time (take clock) of each bundle in the rain: bundle i lands when the stack reaches i+1 bundles
+  const LAND = [];
+  if (!c.rain) return LAND;
+  let i = 2; for (let t = 0; t < c.RAIN_END; t += 0.0005) { while (c.hv(t) >= (i + 1) * BT - 1e-9) { LAND[i] = t; i++; } }
+  return LAND;
+}
+function invert(f, T, lo, hi) { for (let n = 0; n < 60; n++) { const m = (lo + hi) / 2; if (f(m) < T) lo = m; else hi = m; } return (lo + hi) / 2; }
 
 // ---------------- textures ----------------
 function rr(g, x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
@@ -149,6 +189,12 @@ const TREES = [];
     TREES.push({ x, y, h: 3.0 + rnd() * 1.6, r: 1.8 + rnd() * 0.8 }); } }
 
 export class Opening {
+  constructor(cfg = mainTake()) {
+    this.c = cfg;
+    this.LAND = landTimes(cfg);
+    // landing times on the voice-over clock, so falls and squashes keep real-time durations
+    this.VLAND = this.LAND.map(T => (T === undefined ? undefined : invert(cfg.warp, T, -1, 400)));
+  }
   async init(assetBase) {
     this.cam = new Cam();
     this.globe = new Globe(); await this.globe.init(assetBase);
@@ -222,8 +268,8 @@ export class Opening {
       const texA = sstep(5.5, 8.5, bk);
       for (let i = 0; i < n; i++) {
         let sq = 1;
-        const lt = LAND[i];
-        if (lt !== undefined) { const u = (t - lt) / 0.13; if (u >= 0 && u < 1) sq = 1 - 0.2 * Math.sin(Math.PI * u) * (1 - u * 0.5); }
+        const lt = this.VLAND[i];
+        if (lt !== undefined) { const u = (this.v - lt) / 0.13; if (u >= 0 && u < 1) sq = 1 - 0.2 * Math.sin(Math.PI * u) * (1 - u * 0.5); }
         const j = this.jit[i % this.jit.length];
         if (texA < 1) { ctx.globalAlpha = discA; this.drawBundle(ctx, j[0], j[1], i * BT, sq, false); }
         if (texA > 0) { ctx.globalAlpha = discA * texA; this.drawBundle(ctx, j[0], j[1], i * BT, sq, true); }
@@ -235,9 +281,11 @@ export class Opening {
 
   // continuous column: footprint kept at least ~19 px wide on screen; returns the footprint scale
   drawColumn(ctx, h) {
-    const cam = this.cam, k = cam.k;
+    const cam = this.cam, k = cam.k, g = this.ghostA || 0;
     const f = Math.max(1, 19 / ((BW + BL) * C30 * k));
     const xa = -BW * f / 2, xb = BW * f / 2, ya = -BL * f / 2, yb = BL * f / 2, sa = -0.019 * f * 1.1, sb = 0.019 * f * 1.1;
+    // ghost: the solid column gives way to a dashed outline (the money was never there as cash)
+    if (g > 0) { ctx.save(); ctx.globalAlpha = 1 - g; }
     poly(ctx, cam, [[xb, ya, 0], [xb, yb, 0], [xb, yb, h], [xb, ya, h]], this.Tl.left);
     poly(ctx, cam, [[xb, sa, 0], [xb, sb, 0], [xb, sb, h], [xb, sa, h]], this.Ts.left, 0.6);
     poly(ctx, cam, [[xa, yb, 0], [xb, yb, 0], [xb, yb, h], [xa, yb, h]], this.Te.left);
@@ -256,14 +304,20 @@ export class Opening {
       poly(ctx, cam, [[xa, ya, h], [xb, ya, h], [xb, yb, h], [xa, yb, h]], this.Tb.top);
       poly(ctx, cam, [[xa, sa, h], [xb, sa, h], [xb, sb, h], [xa, sb, h]], this.Ts.top, 0.6);
     }
+    if (g > 0) {
+      ctx.restore();
+      const mid = cam.py(0, 0, h * 0.5), sky = this.skyMix(mid);
+      dashedBox(ctx, cam, xa, ya, 0, xb - xa, yb - ya, h, { a: clamp(g * 1.6), color: sky > 0.5 ? PAL.cream : PAL.ink, lw: 2.4, dash: [12, 9], noBottom: true, offset: -this.v * 20 });
+    }
     return f;
   }
 
-  drawFalling(ctx, t) {
-    if (t >= RAIN_END + FALL) return;
+  drawFalling(ctx) {
+    const V = this.VLAND, v = this.v;
+    if (!this.c.rain || v >= V[V.length - 1]) return;
     const texOn = BT * this.cam.k > 5.5;
-    for (let i = 2; i < LAND.length; i++) {
-      const lt = LAND[i], u = (t - (lt - FALL)) / FALL;
+    for (let i = 2; i < V.length; i++) {
+      const lt = V[i], u = (v - (lt - FALL)) / FALL;
       if (u < 0 || u >= 1) continue;
       const z = i * BT + DROP * (1 - u * u);
       const j = this.jit[i % this.jit.length];
@@ -384,12 +438,14 @@ export class Opening {
   }
 
   // ---------- frame ----------
-  render(ctx, t) {
-    const cam = this.cam;
-    const Hm = Math.pow(10, camLog(t)), k = H / Hm;
-    const [bx, by] = baseScreen(t);
+  // v = voice-over clock (seconds into this take's narration); the take clock is t = warp(v)
+  render(ctx, v) {
+    const c = this.c, cam = this.cam, t = c.warp(v);
+    this.v = v; this.t = t; this.ghostA = this.ghostOverride ?? c.ghost(v);
+    const Hm = Math.pow(10, c.camLog(t)), k = H / Hm;
+    const [bx, by] = c.base(t);
     cam.set(bx, by, k);
-    const h = stackTop(t), lH = lg(Hm);
+    const h = c.hv(t), lH = lg(Hm);
 
     // background: plain paper, or the per-pixel Earth once the map or the limb shows
     const mapA = sstep(lg(2.5e4), lg(1.0e5), lH);
@@ -405,7 +461,7 @@ export class Opening {
     const cloudA = sstep(lg(700), lg(2200), lH) * (1 - sstep(lg(3e4), lg(9e4), lH));
 
     // Karman ring (back half), clouds behind
-    const ringT = clamp((t - 8.05) / 0.7), ringA = sstep(lg(4e4), lg(9e4), lH) * (1 - sstep(lg(1.2e6), lg(2.4e6), lH));
+    const ringT = c.ring === null ? 0 : clamp((t - c.ring) / 0.7), ringA = sstep(lg(4e4), lg(9e4), lH) * (1 - sstep(lg(1.2e6), lg(2.4e6), lH));
     const ringR = 70e3;
     const ring = (front) => {
       if (ringA < 0.01 || ringT <= 0) return;
@@ -421,7 +477,7 @@ export class Opening {
     const drawColumn = () => {
       const r = this.drawStack(ctx, t, h);
       this.colF = r.f;
-      if (t < RAIN_END + FALL) this.drawFalling(ctx, t);
+      this.drawFalling(ctx);
     };
     if (cityA > 0.01) this.drawCity(ctx, cityA, drawColumn); else drawColumn();
     this.drawTrees(ctx, treeA);
@@ -431,29 +487,30 @@ export class Opening {
     ring(true);
 
     // airliner (flies toward screen up-left)
-    const plA = sstep(lg(4e3), lg(9e3), lH) * (1 - sstep(lg(1.1e5), lg(3e5), lH));
+    const plA = c.plane === null ? 0 : sstep(lg(4e3), lg(9e3), lH) * (1 - sstep(lg(1.1e5), lg(3e5), lH));
+    this.planeAnchor = null;
     if (plA > 0.01) {
-      const py = -4600 - 950 * (t - 7.4), [ax, ay] = cam.p(2800, py, 11000);
+      const py = -4600 - 950 * (t - c.plane), [ax, ay] = cam.p(2800, py, 11000);
       const size = 118 * Math.pow(k / (H / 2.0e4), 0.45);
       this.drawPlane(ctx, ax, ay, size, plA);
       this.planeAnchor = [ax, ay, size];
     }
 
     // space station: glides in from the left, then becomes the first of seven
-    const issIn = easeOut((t - 9.2) / 0.7);
+    const issIn = easeOut((t - c.issIn) / 0.7);
     const kPass = H / 7.6e5;
     const sizeAt = (kk) => 125 * Math.pow(kk / kPass, 0.47);
     const issSize = sizeAt(k);
     const [cx420, cy420] = cam.p(0, 0, 420e3);
     const off = 0.95 * issSize + 26 * Math.pow(k / kPass, 0.3);
     let issX = cx420 - off - (1 - issIn) * 900, issY = cy420;
-    if (t > 9.2) this.drawISS(ctx, issX, issY, issSize, 1);
+    if (t > c.issIn) this.drawISS(ctx, issX, issY, issSize, 1);
 
     // seven stations up the column
-    if (t > 11.9) {
+    if (c.seven !== null && t > c.seven - 0.1) {
       const cols = [];
       for (let i = 2; i <= 7; i++) {
-        const tp = 12.0 + (i - 2) * 0.3, p = clamp((t - tp) / 0.45);
+        const tp = c.seven + (i - 2) * 0.3, p = clamp((t - tp) / 0.45);
         if (p <= 0) continue;
         const [cx, cy] = cam.p(0, 0, 420e3 * i);
         const s = issSize * backOut(p);
@@ -492,39 +549,40 @@ export class Opening {
     const hs = Math.floor(h / BT + 1e-9) * BT;
     const [ax, ay] = cam.p(-BW * f / 2, BL * f / 2, hs);
     const dollars = hs / BILL_M * 100;
-    const [num, unit] = fmtMoney(dollars, t < RAIN_END ? Math.round(hs / BT) * 1e4 : null, h >= TOPH * 0.9995);
+    const [num, unit] = fmtMoney(dollars, t < this.c.RAIN_END ? Math.round(hs / BT) * 1e4 : null, h >= this.c.finalAt ? this.c.final : null);
     const c = this.pinColors(ay - 80);
-    pin(ctx, ax + 4, ay, { ...c, dir: 1, lead: 70, rule: 360, num, unit, numSize: 76, title: fmtHeight(hs), titleSize: 26 });
+    if (this.c.readout !== false) pin(ctx, ax + 4, ay, { ...c, dir: 1, lead: 70, rule: 360, num, unit, numSize: 76, title: fmtHeight(hs), titleSize: 26 });
 
     // landmark pins (left side)
     const show = (t0, t1) => clamp((t - t0) / 0.6) * (1 - clamp((t - t1) / 0.35));
     // built only once the spire is far enough into frame for the whole label to fit (x > ~430 px at 6.33 s)
-    const towerP = show(6.12, 7.25);
-    if (towerP > 0) {
+    const P = this.c.pins;
+    // built only once the spire is far enough into frame for the whole label to fit (x > ~430 px at 6.33 s)
+    if (P.tower && t > P.tower[0] && t < P.tower[1] + 0.35) {
       const [x, y] = cam.p(260, -330, 541);
-      pin(ctx, x, y, { ...this.pinColors(y - 60), p: clamp((t - 6.12) / 0.42), a: 1 - clamp((t - 7.25) / 0.35), dir: -1, lead: 54, rule: 300, num: '541', unit: 'M', title: 'Tallest U.S. building', numSize: 60, titleSize: 22 });
+      pin(ctx, x, y, { ...this.pinColors(y - 60), p: clamp((t - P.tower[0]) / 0.42), a: 1 - clamp((t - P.tower[1]) / 0.35), dir: -1, lead: 54, rule: 300, num: '541', unit: 'M', title: 'Tallest U.S. building', numSize: 60, titleSize: 22 });
     }
-    if (this.planeAnchor && t > 7.15 && t < 8.6) {
+    if (P.plane && this.planeAnchor && t > P.plane[0] - 0.05 && t < P.plane[1] + 0.4) {
       const [x, y, s] = this.planeAnchor;
-      pin(ctx, x - s * 0.12, y - s * 0.08, { ...this.pinColors(y - 60), p: clamp((t - 7.2) / 0.6), a: 1 - clamp((t - 8.2) / 0.35), dir: -1, lead: 54, rule: 280, num: '11', unit: 'KM', title: 'Airliner', numSize: 60, titleSize: 22 });
+      pin(ctx, x - s * 0.12, y - s * 0.08, { ...this.pinColors(y - 60), p: clamp((t - P.plane[0]) / 0.6), a: 1 - clamp((t - P.plane[1]) / 0.35), dir: -1, lead: 54, rule: 280, num: '11', unit: 'KM', title: 'Airliner', numSize: 60, titleSize: 22 });
     }
-    if (t > 8.3 && t < 9.9) {
+    if (P.karman && t > P.karman[0] - 0.05 && t < P.karman[1] + 0.4) {
       const [cx, cy] = cam.p(0, 0, 100e3), rx = 70e3 * SQ15 * k;
-      pin(ctx, cx - rx, cy, { ...this.pinColors(cy - 60), p: clamp((t - 8.35) / 0.6), a: 1 - clamp((t - 9.5) / 0.35), dir: -1, lead: 54, rule: 300, num: '100', unit: 'KM', title: 'Edge of space', numSize: 60, titleSize: 22 });
+      pin(ctx, cx - rx, cy, { ...this.pinColors(cy - 60), p: clamp((t - P.karman[0]) / 0.6), a: 1 - clamp((t - P.karman[1]) / 0.35), dir: -1, lead: 54, rule: 300, num: '100', unit: 'KM', title: 'Edge of space', numSize: 60, titleSize: 22 });
     }
-    if (t > 9.7 && t < 12.2) {
+    if (P.iss && t > P.iss[0] - 0.05 && t < P.iss[1] + 0.4) {
       const x = iss.issX - iss.issSize * 0.55, y = iss.issY;
-      pin(ctx, x, y, { ...this.pinColors(y - 60), p: clamp((t - 9.75) / 0.6), a: 1 - clamp((t - 11.8) / 0.35), dir: -1, lead: 54, rule: 300, num: '420', unit: 'KM', title: 'Space station', numSize: 60, titleSize: 22 });
+      pin(ctx, x, y, { ...this.pinColors(y - 60), p: clamp((t - P.iss[0]) / 0.6), a: 1 - clamp((t - P.iss[1]) / 0.35), dir: -1, lead: 54, rule: 300, num: '420', unit: 'KM', title: 'Space station', numSize: 60, titleSize: 22 });
     }
     // "7x" call-out once all seven stations are up
-    if (t > 13.7) {
-      const p = clamp((t - 13.75) / 0.7);
+    if (P.seven !== null && t > P.seven - 0.05) {
+      const p = clamp((t - P.seven) / 0.7);
       const [cx, cy] = cam.p(0, 0, 420e3 * 7);
       const x = cx - iss.off - iss.issSize * 0.75, y = cy;
       pin(ctx, x, y, { ...this.pinColors(y - 60), p, dir: -1, lead: 1, rule: 1, dot: 0.001, num: '7×', title: 'higher than the space station', numSize: 70, titleSize: 22 });
     }
-    if (t > 12.6) {
-      const p = clamp((t - 12.6) / 0.7);
+    if (P.ny !== null && t > P.ny) {
+      const p = clamp((t - P.ny) / 0.7);
       const [bx, byy] = cam.p(0, 0, 0);
       pin(ctx, bx, byy, { ...this.pinColors(byy + 40), p, dir: 1, lead: -54, rule: 170, dot: 6, title: 'New York', titleSize: 20 });
     }
@@ -534,7 +592,7 @@ export class Opening {
 function commas(n) { return Math.round(n).toLocaleString('en-US'); }
 function sig3(v) { const s = v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1) : v.toFixed(2); return s.includes('.') ? s.replace(/0+$/, '').replace(/\.$/, '') : s; }
 function fmtMoney(d, exact, final) {
-  if (final) return ['$2.8', 'TRILLION'];
+  if (final) return final;
   if (exact !== null) return ['$' + commas(exact), ''];
   if (d < 1e6) { const p = Math.pow(10, Math.floor(Math.log10(d)) - 2); return ['$' + commas(Math.round(d / p) * p), '']; }
   for (const [u, n] of [[1e12, 'TRILLION'], [1e9, 'BILLION'], [1e6, 'MILLION']]) if (d >= u) return ['$' + sig3(d / u), n];
