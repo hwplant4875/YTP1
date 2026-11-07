@@ -1,4 +1,6 @@
-# Horror Ranked special: the Backrooms, script v1 (2026-11-07 KST evening, waiting for the owner's OK)
+# Horror Ranked special: the Backrooms, script v1 (2026-11-07 KST evening)
+
+Owner 11/7 18:23 KST: cut "because the date on the very first tape is the scariest thing in this whole movie" and end the cold open on "Now it's your turn, and how long would you survive in the backrooms?", then "뭐 이후에는 알아서 잘 편집해서 가자" (approved, edit on my own). The outro no longer points back to a cold-open promise and now answers the cold-open question.
 
 Built on plan v2 (concepts/i444/ep_backrooms/plan_v2.md, doc https://claude.ai/artifact/Bux3NqWvc6sZBsBtUEXJkM). English, second person, present tense. Stages 1 to 4 put "you" in Clark's place, stage 5 onward in Mary's place.
 
@@ -16,7 +18,7 @@ Voicing rules:
 
 ## s00 cold open (frame 0: Captain Clark, caption FIVE PEOPLE, impact sound)
 
-Five people went into the Backrooms in this movie, and they got chased, dragged, lost, eaten, and, umm, copied? Only one of them made it back out, and even she never got to go home. Now it's your turn, so stay with me to the very end, because the date on the very first tape is the scariest thing in this whole movie.
+Five people went into the Backrooms in this movie, and they got chased, dragged, lost, eaten, and, umm, copied? Only one of them made it back out, and even she never got to go home. Now it's your turn, and how long would you survive in the Backrooms?
 
 ## s01 JUNE 19, 1990
 
@@ -110,7 +112,7 @@ And inside, the Backrooms keeps copying you, your house, a bookstore with your b
 
 ## s11 outro
 
-So, about that date. Naren died on June nineteenth, and Clark found the door on June twenty-ninth, ten days later. The movie never says it out loud, but the only giant it ever shows you is Captain Clark, so the Backrooms had already made its copy of Clark before he ever walked in. It doesn't wait for you to find the door, because it's already started on you. So which stage would you have turned back at? Tell me in the comments, along with the horror movie you want me to walk you through next, subscribe so you don't miss it, and if you ever see a line of light inside your wall, leave it alone.
+And one last thing about those tapes. Naren died on June nineteenth, and Clark found the door on June twenty-ninth, ten days later. The movie never says it out loud, but the only giant it ever shows you is Captain Clark, so the Backrooms had already made its copy of Clark before he ever walked in. It doesn't wait for you to find the door, because it's already started on you. So how long would you have lasted, and which stage would you have turned back at? Tell me in the comments, along with the horror movie you want me to walk you through next, subscribe so you don't miss it, and if you ever see a line of light inside your wall, leave it alone.
 
 ## FACTS (sources)
 
@@ -154,7 +156,7 @@ Sources: W = Wikipedia plot (Backrooms (film), read 11/6). FF = FoundFlix scene-
 
 ## Check before voicing
 
-1. Download bzfh-rfXi3o on the laptop first and look at the 1990 figure. If nothing in it argues against Captain Clark, keep s00's last sentence and s11's first four sentences; if it clearly is something else, rewrite only those two spots (both are separate takes).
+1. Download bzfh-rfXi3o on the laptop first and look at the 1990 figure. If nothing in it argues against Captain Clark, keep s11's first four sentences; if it clearly is something else, rewrite only those (s11 is its own take).
 2. Kat's exact words behind the window (wa6ZJFh0xSo 5:21-6:20); if it isn't "Behind you!", caption what she really says.
 3. Which still life runs before the pirate arrives (lECXlY3dUXo); s08 names the red-haired woman.
 4. Captain Clark's hat on the Async table (FF 21:10 says it is part of its body).
