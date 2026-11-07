@@ -1,7 +1,8 @@
 # QA: 8 frames over clip@start:dur for each arg (uses <clip>_hd.mp4 when present). usage: set CLIPS=<clips folder>; python qa/strip.py out.jpg name@t0:dur ...
 import sys, subprocess, os
 from PIL import Image, ImageDraw, ImageFont
-C0 = os.environ['CLIPS'].rstrip('/\\') + '/'   # set CLIPS to the Backrooms clips folder; TW, TH, N = 240, 135, 8; rows = []
+C0 = os.environ.get('CLIPS', 'E:/YTP2/Horror Ranked/EP08 Backrooms/1_work/clips').rstrip('/\\') + '/'   # CLIPS = the Backrooms clips folder
+TW, TH, N = 240, 135, 8; rows = []
 for a in sys.argv[2:]:
     n, rest = a.split('@'); t0, d = map(float, rest.split(':'))
     src = C0 + n + '_hd.mp4' if os.path.exists(C0 + n + '_hd.mp4') else C0 + n + '.mp4'; fr = []
