@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: 'Jost'; src: url('/germany_shorts/fonts/Jost-VF-latin.woff2') format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'YTSans'; src: url('/germany_shorts/fonts/YouTubeSans-Black.otf') format('opentype'); }
+html, body { margin: 0; background: #F2EADB; overflow: hidden; }
+canvas { display: block; position: absolute; left: 0; top: 0; }
+</style>
+<script type="importmap">{"imports":{"three":"/germany_shorts/longform/node_modules/three/build/three.module.js","three/addons/":"/germany_shorts/longform/node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<canvas id="gl" width="1920" height="1080"></canvas><canvas id="ov" width="1920" height="1080"></canvas>
+<script type="module">
+import { Market3D } from './market.js';
+(async () => {
+  try {
+    await Promise.all([document.fonts.load('600 40px Jost'), document.fonts.load('40px YTSans')]);
+    const m = new Market3D(document.getElementById('gl'), document.getElementById('ov'));
+    await m.init();
+    window.render = async (t) => { m.render(t); };
+    const q = new URLSearchParams(location.search);
+    if (q.has('t')) m.render(Number(q.get('t')));
+    window.READY = true;
+  } catch (e) { window.ERROR = String(e && e.stack || e); }
+})();
+</script></body></html>
