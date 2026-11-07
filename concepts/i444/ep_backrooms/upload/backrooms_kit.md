@@ -7,7 +7,7 @@
 
 ## Description
 
-Five people walk into the Backrooms in A24's The Backrooms (2026), and only one walks back out. Here is the whole movie as a survival journey: you start as Clark, the furniture store owner who finds a glowing line of light inside his wall, then you become Mary, his therapist, and at every stage the number in the corner shows your real chance of getting out alive. Eight stages, eight rules, and one detail on the tapes that changes the whole movie.
+Five people walk into the Backrooms in A24's Backrooms (2026), and only one walks back out. Here is the whole movie as a survival journey: you start as Clark, the furniture store owner who finds a glowing line of light inside his wall, then you become Mary, his therapist, and at every stage the number in the corner shows your real chance of getting out alive. Eight stages, eight rules, and one detail on the tapes that changes the whole movie.
 
 Which stage would you have turned back at? Tell me in the comments, along with the horror movie you want me to walk you through next.
 
@@ -29,7 +29,7 @@ Spoilers for the whole film, including the ending.
 The survival odds are my own estimates from what happens on screen, they are not from the film.
 Everything here is about what the movie itself shows. Fan-made Backrooms levels and the original Kane Pixels videos are not part of this video.
 
-Film: The Backrooms (2026), directed by Kane Parsons, written by Will Soodik, A24. Clips are used for commentary and criticism.
+Film: Backrooms (2026), directed by Kane Parsons, written by Will Soodik, A24. Clips are used for commentary and criticism.
 Music: Mixkit (Feedback Dreams, Xanthos, Nield Grohm Hanging 3), Mixkit Stock Music Free License.
 
 #Backrooms #A24 #HorrorRanked
