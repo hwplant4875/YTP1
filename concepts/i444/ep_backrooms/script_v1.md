@@ -104,7 +104,7 @@ He tells it you were just leaving, and that you said they don't need to change, 
 
 ## s10 ASYNC, 1 OF 5
 
-Men in hazmat suits walk out of the gas, and more gas knocks you out. You wake up at Async, where they scan your body and your brain, and down the hall, Captain Clark lies on a table, his pirate hat part of his own body, and behind another door is a room full of cardboard cavemen, so that hello and welcome on the very first trip came from Async all along. Phil, the man who watched Clark's tape, tells you his company used to make MRI machines until it found this place, that he goes in every day to map it, and that doors are opening everywhere and nobody knows how to stop them. So you ask if they'll let you go.
+Men in hazmat suits walk out of the gas, and more gas knocks you out. You wake up at Async, where they scan your body and your brain, and down the hall, Captain Clark lies on a table, his pirate hat part of his own body, and from behind another door comes that same tape of greetings, so the hello and welcome on your very first trip may have come from Async all along. Phil, the man who watched Clark's tape, tells you his company used to make MRI machines until it found this place, that he goes in every day to map it, and that doors are opening everywhere and nobody knows how to stop them. So you ask if they'll let you go.
 
 [FILM, Phil, FWLrpYayuY0 4:01: "That decision's not up to me."]
 
