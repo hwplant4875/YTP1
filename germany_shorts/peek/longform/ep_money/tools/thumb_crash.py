@@ -22,7 +22,7 @@ def main():
     key, out, big, sub, tag = sys.argv[1:6]; agg = int(sys.argv[6]) if len(sys.argv) > 6 else 3
     rows = bars(key, agg); n = len(rows)
     split = next(i for i, r in enumerate(rows) if r[0].startswith('2026-11-05'))
-    x0, x1, y0, y1 = (40 if os.environ.get('WIDE') else 330) * K, 1250 * K, (250 if os.environ.get('WIDE') else 40) * K, 700 * K          # chart sits right; claim lives on the left
+    x0, x1, y0, y1 = (40 if os.environ.get('WIDE') else 330) * K, 1250 * K, (50 if os.environ.get('WIDE') else 40) * K, (440 if os.environ.get('WIDE') else 700) * K          # chart sits right; claim lives on the left
     hi = max(r[2] for r in rows); lo = min(r[3] for r in rows); p = (hi - lo) * 0.04; hi += p; lo -= p
     Y = lambda v: y0 + (hi - v) / (hi - lo) * (y1 - y0)
     dx = (x1 - x0) / n
@@ -58,9 +58,11 @@ def main():
         # one full-width number across the top, the hook line at the bottom left
         size = 200
         while ImageDraw.Draw(im).textlength(big, font=f(size)) > 1220 * K: size -= 2
-        txt(tag, 34 * K, 70 * K, 56, (255, 255, 255))
-        txt(big, 640 * K, 110 * K + int(size * 0.78 * K), size, DN, stroke=(255, 255, 255), sw=0.06, anchor='ms')
-        txt(sub, 36 * K, 680 * K, 120, (255, 214, 0))
+        # owner 11/8: all text at the bottom; WHITE=1 -> white number with a red stroke
+        if tag.strip(): txt(tag, 34 * K, 70 * K, 56, (255, 255, 255))
+        white = os.environ.get('WHITE')
+        txt(big, 640 * K, 575 * K, size, (255, 255, 255) if white else DN, stroke=DN if white else (255, 255, 255), sw=0.09 if white else 0.06, anchor='ms')
+        txt(sub, 640 * K, 698 * K, 104, (255, 214, 0), anchor='ms')
         im.resize((1280, 720), Image.LANCZOS).save(out, quality=94); print(out); return
     txt(tag, 44 * K, 120 * K, 64, (255, 255, 255))
     lines = big.split('|')
