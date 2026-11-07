@@ -1,0 +1,22 @@
+s00  15.65s  words DIFF (48/50)  max pause 0.31s  -22.1 LUFS
+     - backrooms + back + rooms - umm + um - backrooms + back + rooms
+s01  35.35s  words DIFF (117/117)  max pause 0.30s  -21.4 LUFS
+     - nineteenth + 19th
+s02  74.12s  words DIFF (255/254)  max pause 0.31s  -21.6 LUFS
+     + 29th - twenty - ninth
+s03  39.55s  words SAME (127/127)  max pause 0.31s  -21.6 LUFS
+s04  47.00s  words SAME (161/161)  max pause 0.31s  -20.9 LUFS
+s05  44.09s  words DIFF (146/147)  max pause 0.31s  -21.8 LUFS
+     - backrooms + back + rooms
+s06  62.37s  words SAME (207/207)  max pause 0.31s  -21.5 LUFS
+s07  26.79s  words DIFF (89/90)  max pause 0.30s  -21.9 LUFS
+     - backrooms + back + rooms
+s08  61.36s  words DIFF (218/218)  max pause 0.32s  -21.8 LUFS
+     - kat's + cat's
+s09  65.97s  words DIFF (223/224)  max pause 0.31s  -21.1 LUFS
+     + rooms
+s10  57.95s  words DIFF (188/188)  max pause 0.31s  -21.5 LUFS
+     - backrooms + back + rooms - clark's + clark - and
+s11  35.47s  words DIFF (127/127)  max pause 0.31s  -21.2 LUFS
+     - nineteenth + 19th + 29th - twenty - ninth - backrooms + back + rooms
+sections with word differences: 9 | loudness median -21.6 LUFS, outliers >1.5 LU: none
