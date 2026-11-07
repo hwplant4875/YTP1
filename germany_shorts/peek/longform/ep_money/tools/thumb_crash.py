@@ -62,7 +62,7 @@ def main():
         # owner 11/8: all text at the bottom; WHITE=1 -> white number with a red stroke
         if tag.strip(): txt(tag, 34 * K, 70 * K, 56, (255, 255, 255))
         white = os.environ.get('WHITE')
-        txt(big, 640 * K, (575 if sub.strip() else 680) * K, size, (255, 255, 255) if white else DN, stroke=DN if white else (255, 255, 255), sw=0.09 if white else 0.06, anchor='ms')
+        txt(big, 640 * K, (575 if sub.strip() else 680) * K, size, (255, 255, 255) if white else DN, stroke=((0, 0, 0) if white == 'black' else DN) if white else (255, 255, 255), sw=(0.12 if white == 'black' else 0.09) if white else 0.06, anchor='ms')
         if sub.strip(): txt(sub, 640 * K, 698 * K, 104, (255, 214, 0), anchor='ms')
         im.resize((1280, 720), Image.LANCZOS).save(out, quality=94); print(out); return
     txt(tag, 44 * K, 120 * K, 64, (255, 255, 255))
