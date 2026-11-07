@@ -69,14 +69,14 @@ X.append(sec('s01', [
 # ---------------------------------------------------------------- s02 THE SLIT (74.2 s) -----------------------------------------
 X.append(sec('s02', [
   (0, 's1_commercial', 2.30, -1.30),  # Cap'n Clark at the helm in the store ad (in-film banner)
-  ('a failed architect', 's1_first_b', 31.55, -2.20, 'z=1.3'),  # Clark close, tired, store lamps behind
-  ('who sleeps in the back', 's1_first_b', 12.30, -3.60, 'z=1.3'),  # Clark asleep in a bed on the store floor
-  ('the lights flicker', 's1_first_b', 25.50, -2.80, 'z=1.3,g=1.25'),  # dark store aisle, light level jumping
-  ('there are two breakers', 's1_first_b', 41.65, -3.00, 'z=1.3'),  # close: his hands on the two extra breakers
+  ('a failed architect', 'd_clark_discovers', 22.90, -4.20),  # v2: Clark close, tired, store lamps behind (logo-free upload)
+  ('who sleeps in the back', 'd_clark_discovers', 6.30, -3.60),  # v2: Clark asleep in a bed on the store floor
+  ('the lights flicker', 'd_clark_discovers', 19.50, -2.80, 'g=1.25'),  # v2: dark store aisle, light level jumping
+  ('there are two breakers', 'd_clark_discovers', 37.80, -3.00),  # v2: close, his hands on the two extra breakers
   ('and one night the tv', 's1_first_b', 6.85, -2.85, 'z=1.3,g=1.25'),  # the TV in the dark store, picture glitches at the end
-  ('with a figure standing', 's1_first_b', 9.72, -0.88, 'z=1.3,g=1.25'),  # TV shows a yellow room, small dark figure in the middle
-  ('you flip the strange breakers', 's1_first_b', 51.70, -1.15, 'z=1.3'),  # his hand flipping the breaker
-  ('the store goes dark', 's1_first_b', 28.40, -3.00, 'z=1.3,g=1.25'),  # the store aisle in the dark
+  ('with a figure standing', 'd_clark_discovers', 0.35, -2.00, 'g=1.25'),  # v2: the store TV shows a yellow room, small figure in it
+  ('you flip the strange breakers', 'd_clark_discovers', 44.60, -2.00),  # v2: wide, Clark at the breaker panel flipping them
+  ('the store goes dark', 'd_clark_discovers', 49.20, -5.00, 'g=1.4'),  # v2: the store goes black, Clark's silhouette
   ('and there it is', 's1_a24_clip', 10.85, -1.60, 'g=1.25'),  # Clark close in the dark, staring at the glow
   ('a thin line of light', 's1_a24_clip', 26.60, -4.00, 'g=1.75'),  # the wall: thin vertical slit of light, glow on the plaster
   ('you lean on it', 's1_a24_clip', 55.00, -2.90, 'g=1.4'),  # Clark against the glowing wall, hands flat on it
@@ -199,24 +199,25 @@ X.append(sec('s06', [
   ('you follow it', 's5_mary_enters', 110.30, -1.50),  # Mary's hand reaching into the wall
   ('inside a camera has been torn', 's5_mary_enters', 164.10, -2.70),  # Mary inside the yellow room, wide (no camera)
   ('chairs are piled', 's5_mary_enters', 169.90, -2.30),  # Mary close, staring, yellow room (no chairs)
-  ('and someone has drawn a giant pirate', 's5_mary_enters', 167.20, -2.20),  # Mary small by a yellow wall (no mural)
-  ('lifting a tiny yellow figure', 's5_mary_b', 105.70, -3.90),  # NEW CUT  Mary a tiny figure in a vast yellow room
-  ('clark steps out of hiding', 's7_stay_char', 92.40, -3.00),  # Clark close (dinner; no hiding scene in my clips)
-  ("says you're too loud", 's7_stay_char', 107.00, -2.00),  # Clark, quiet, close
-  ('and tells you this is every place', 's7_stay_char', 66.80, -3.40),  # Clark, eyes wide, close
+  ('and someone has drawn a giant pirate', 'd_mary_meets', 12.20, -6.50),  # v2: the mural: a giant pirate drawn on the wall behind Mary
+  ('lifting a tiny yellow figure', 'd_mary_meets', 7.00, -1.95),  # v2: over Mary's shoulder, the pirate drawing holding up a small figure
+  ('clark steps out of hiding', 'd_mary_meets', 51.20, -7.50),  # v2: Clark appears at the far end of the yellow hall
+  ("says you're too loud", 'd_mary_meets', 85.30, -1.70),  # v2: Clark steps in beside Mary at the mural, hushing her
+  ('and tells you this is every place', 'd_mary_meets', 87.60, -6.00),  # v2: Clark talking to Mary in front of the mural
   ('then something growls', 's5_mary_b', 100.50, -2.00),  # Mary turns to look behind her in the yellow room
   ('the lights flicker', 's5_mary_enters', 9.00, -3.00),  # stairwell lit, then dark (flicker)
   ('the sound stops', 's5_mary_enters', 82.20, -2.20, 'g=1.25'),  # NEW CUT  wind chimes hanging in the dark basement
   ('the lights go out', 's5_mary_enters', 14.85, -0.90),  # stairwell dark, Mary barely visible
-  ('and clark chokes you', 's5_mary_enters', 102.00, -2.80),  # Mary's frightened face, gasping, low angle (no choke shown)
-  ("telling you it's for your own good", 's5_mary_enters', 4.90, -1.70),  # near-black stairwell
+  ('and clark chokes you', 'd_mary_meets', 115.00, -1.85),  # v2: wide, Clark grabs Mary from behind (short)
+  ('chokes you', 'd_mary_meets', 117.05, -2.40),  # v2 NEW CUT: close, the choke, her face (kept short)
+  ("telling you it's for your own good", 'd_mary_meets', 127.90, -2.10),  # v2: her view of the ceiling light as she goes under
   ("you're down to ten", 's7_joblo_reveal', 109.50, -2.00),  # Mary close, worn out
   ('rule five', 's7_joblo_reveal', 123.00, -2.60),  # Clark's face, close
   ('might be the most dangerous', 's7_joblo_reveal', 192.00, -3.00),  # Clark with the knife, standing over Mary tied to her chair
   ], inserts=[ins('so what do you do', 0.9, 'choice', q='so what do you do')]))
 # ---------------------------------------------------------------- s07 YOUR OLD HOME (26.8 s) ------------------------------------
 X.append(sec('s07', [
-  (0, 's7_joblo_reveal', 116.00, -2.00),  # Mary close, eyes lowered (she is never unconscious in my clips)
+  (0, 'd_mary_meets', 130.20, -2.30),  # v2: the ceiling light blooming to white: Mary out cold
   ('you dream of your mother', 's5_mary_b', 72.00, -3.00),  # Mary in profile, looking down (no mother in my clips)
   ('and of the house', 's6_home', 6.40, -3.00, 'z=1.06'),  # the cluttered home, camera sinking toward the carpet
   ('and the backrooms builds it', 's6_home', 13.00, -3.60, 'z=1.06'),  # level 2: same room, sparser, sun through the window

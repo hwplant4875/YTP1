@@ -10,3 +10,16 @@ Independent review (fresh subagent, frames + srt + audio numbers, owner rules) f
 - The slit shots (s02 'a thin line of light', 'one trip through that wall', s11 'it doesn't wait', 'leave it alone') read as empty dark walls -> g=1.75: the vertical line of light and its glow now visible.
 - Captions lagged one frame at 7 cold-open cuts -> snapped to the cut frame (checked frame by frame: all exact).
 Left as is (reported): VHS combing/softness on the found-footage tapes (the film's own tape look); substitute shots where the clips have no such moment (s02 caveman/tile, s06 mural/camera/barricade/fly, s07 mother, s10 scan); film lines slightly louder than the narration right before them (not louder than after); the corner % hands over to the big centre % on each drop; zoom crops of the Fandango logo (s1_first_b, 9 shots in s02) and the vtm logo (s7_eat_them, 14 shots: s00 1, s07 1, s08 12) pending the owner's OK.
+
+# v2 (11/7, Phase D): E:\YTP2\Horror Ranked\EP08 Backrooms\2_renders\backrooms_v2.mp4, 588.77 s, -14.9 LUFS, true peak -1.5 dBFS, no silence > 1.5 s.
+Re-rendered s02, s06, s07 only (work_backrooms_v2 copied from v1, other sections reused). Corner % checked at the s02/s06/s07 joins.
+Extra sources (extra_sources.md): usable d_mary_meets (1040p, ScreenBites), d_clark_discovers (1038p, HiZenBerg, no logo); downloaded but
+not needed: d_mary_inside (= s5_mary_enters footage), d_mary_finds (= d_mary_meets, YouTube end-screen at the end), d_captain_kills and
+d_vs_mary (= s7_joblo_reveal / s8_joblo_fight footage, no eating scene). Not usable: d_knockout 574p, d_mother 298p, d_young_mary 690p,
+d_therapy_full age-gated. Voicemail search: no clip of the phone message.
+Rows changed: s02 'a failed architect', 'who sleeps in the back', 'the lights flicker', 'there are two breakers', 'with a figure standing',
+'you flip the strange breakers', 'the store goes dark' -> d_clark_discovers (no logo); s06 'giant pirate' + 'lifting a tiny yellow figure'
+-> the real mural, 'clark steps out of hiding' / 'too loud' / 'every place' -> the real scene, 'and clark chokes you' -> the grab (0.45 s)
++ NEW CUT 'chokes you' (close, ~2.3 s), 'for your own good' -> her view of the ceiling light; s07 row 0 -> the light blooming white (out cold).
+Logo crops left: s1_first_b (Fandango, z=1.3) 2 shots in s02 ('and one night the tv', 'on a tape dated': the logo-free upload has no
+normal TV picture); s7_eat_them (vtm, z=1.45) unchanged, 14 shots (s00 1, s07 1, s08 12): no logo-free eating-scene source found.
