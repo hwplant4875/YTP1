@@ -278,8 +278,9 @@ function shotSpace(t) {
   const sp = E.iss.getWorldPosition(new THREE.Vector3()).project(camera);
   const sx = (sp.x * 0.5 + 0.5) * W, sy = (-sp.y * 0.5 + 0.5) * H;
   const la = easeOut(seg(t, 0.5, 0.9));
-  const cx = Math.min(W - 170, sx + 75 + 150);   // label centre, right of the station
-  text.set('iss', { text: 'SPACE\nSTATION', y: sy - 60, x: 2 * cx - W, size: 62, color: '#ffffff', opacity: la });
+  // label sits above the station, between the column and the Shorts button column (x <= 900)
+  const cx = Math.min(900 - 135, Math.max(W / 2 + 165, sx + 40));
+  text.set('iss', { text: 'SPACE\nSTATION', y: sy - 170, x: 2 * cx - W, size: 62, color: '#ffffff', opacity: la });
 }
 
 // Shot E (11.2 - 15.4 s): inside one stock. The price on the tag falls from $200 to $181.
