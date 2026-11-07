@@ -1,0 +1,46 @@
+# Backrooms special clip list (11/7 KST). name | youtube id | channel | what it should hold (check on frames, titles can mislead)
+# All checked 11/7 with the YouTube Data API: HD and NOT age-restricted. Fan uploads marked HDR10+ need the SDR format (fetch_clips.py does it).
+# Download on the laptop to <Horror Ranked folder>\EP08 Backrooms\1_work\clips\<name>.mp4 with qa/fetch_clips.py.
+op_joblo_1990 | bzfh-rfXi3o | JoBlo Movie Clips (4K) | 1990 tape: Naren lost, radio call 1:40-2:28, door, the giant, chase, vacation-photo dead end, scream ~5:19
+op_fan_a | XQutkc3PLFQ | fan 4K | opening tape (backup for the 1990 beats)
+op_fan_b | WzxDcjxtBmw | fan 4K | opening tape (backup)
+op_fan_c | f8BelY8EgwQ | fan | opening (backup)
+s1_joblo_first | 1kuxSyKQ5-Y | JoBlo Movie Clips (4K) | Clark's first trip: fused furniture, stop sign, bird, caveman voice, duffel, chair copy, shoes, thuds, tiny door, stool
+s1_a24_clip | Pb8KqfkLe24 | A24 | official clip
+s1_rt_clip | PRhxcn2osbI | Rotten Tomatoes | clip (check for a channel bug)
+s1_commercial | hbpUcjUxKP8 | official | the store commercial (Clark as the pirate, chair breaks)
+s1_first_a | 3OphBhHl0h0 | fan HD | first encounter
+s1_first_b | wb8rpxmBU3E | fan HD | first trip
+s2_tells_mary | xb0F09K4deQ | fan HD | Clark tells Mary ("ever 5150 someone", dog drawing, map, "Sometimes I'm scared I'll get lost")
+s2_therapy | fV3BrrwIUcY | fan HD | therapy scenes
+s3_joblo_pullup | wa6ZJFh0xSo | JoBlo Movie Clips (4K) | Bobby on the rope 0:05-1:16, drag ~1:42, Clark alone ~4:18, Kat behind the wall 5:21-6:20
+s3_laundry | Y73G313HVvk | fan (HDR10+) | laundry level, "There's someone down there", "Pull me up"
+s3_bobby | ywoDuLRkk0o | fan 4K (HDR) | Bobby
+s3_kids_enter | N2Ehlvymbh8 | fan HD | Kat and Bobby step through the wall
+s4_tree_a | O2IwaTYz8EM | fan HD | Christmas-tree room and the still lifes
+s4_tree_b | WBFGoHcovcA | fan 4K | Christmas-tree room
+s4_tree_pool | SELS-xfq524 | fan HD | tree room and pool rooms
+s4_chase | kN_VYUYfUxM | fan HD | chase of Clark and Kat
+s5_mary_enters | cZrXC0jvAzg | fan 4K | Mary enters: mail, whiteboard map, fly, camera torn off, barricade, mural, Clark, choke
+s5_mary_b | XiJ3vCNStpI | fan HD | Mary enters (backup)
+s6_home | KfD0YEzJU2g | fan HD | childhood home copies, level after level
+s7_stay_char | Dgc-2mXVxS0 | fan (HDR10+) | dinner role-play, "Stay in character!"
+s7_eat_them | pwM2cn6h7Zs | fan HD | "you can eat them", knife in the neck, stuffing, fridge
+s7_dinner_full | lECXlY3dUXo | fan HD | the full dinner scene
+s7_joblo_reveal | f40Lv9jT-kI | JoBlo Movie Clips (4K) | dinner, Mary's speech 0:48-1:53, "I like it in here" 2:21, Captain Clark, "This is Mary" 4:05, scream 4:47
+s8_joblo_fight | 22a-Q2Q5X_4 | JoBlo Movie Clips (4K) | chase and final fight, researchers at 7:04
+s8_chase_a | UDE5RVJ6QPY | fan (HDR10+) | pirate chase
+s8_chase_b | 01TmsN23PfY | fan 4K | chase
+s8_chase_c | hV16YxEJU60 | fan 4K (HDR) | chase
+s8_chase_d | mvH3r74T_Ac | fan 4K (HDR) | chase
+s8_chase_e | __ZyovWM1u0 | fan HD | chase
+s8_pack_a | 54_U0k7fW2E | fan 4K | Captain Clark scene pack
+s8_pack_b | UOlX9SGBqKk | fan 4K | Captain Clark scene pack
+end_joblo_phil | FWLrpYayuY0 | JoBlo Movie Clips (4K) | Phil's interview, "That decision's not up to me" 4:01, "doors opening everywhere" 4:23, ending montage 4:44-6:00
+end_extract | OqieaXLnDOo | fan 4K | Async extracts Mary
+end_b | OnqHSgGzVTQ | fan HD | Async facility
+end_phil | sf0R3UtGPz8 | fan HD | Phil
+end_mary_still | us71uck9bf0 | fan 4K (HDR) | the copies of Mary's life and her still life
+x_a24_trailer | 0HjdiohVOik | A24 | trailer (only spans with no trailer graphics)
+x_a24_c | tKGhxMi50y8 | A24 | extra official video (check what it is)
+x_a24_d | 5C-zBIuvGnU | A24 | extra official video (check what it is)
