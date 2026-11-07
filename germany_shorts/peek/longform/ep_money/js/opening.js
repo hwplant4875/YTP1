@@ -51,7 +51,7 @@ export function mainTake(warpKeys = null) {
   return {
     TOPH, hv, camLog, base, rain: true, RAIN_END, warp: warpKeys ? monotone(warpKeys) : (v) => v,
     ring: 8.05, plane: 7.4, issIn: 9.2, seven: 12.0, final: ['$2.8', 'TRILLION'], finalAt: TOPH * 0.9995,
-    pins: { tower: [6.12, 7.25], plane: [7.2, 8.2], karman: [8.35, 9.5], iss: [9.75, 11.8], seven: 13.75, ny: 12.6 },
+    pins: { tower: [6.12, 7.25], plane: [7.2, 8.2], karman: [8.35, 9.5], iss: [9.75, 11.8], seven: 13.3, ny: 12.6 },
     ghost: () => 0,
   };
 }

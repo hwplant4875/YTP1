@@ -127,6 +127,8 @@ export function label(ctx, s, x, y, o) {
 
 // Label pin: dot (ink ring, pale fill) -> vertical leader -> horizontal rule -> text.
 // p = build progress 0..1, a = overall alpha, dir = +1 (rule to the right) / -1 (left)
+// pin descriptor titles are scaled up so they read on a phone (owner rule); o.off moves the text away from the leader
+export const TITLE_K = 1.2;
 export function pin(ctx, ax, ay, o) {
   const p = o.p === undefined ? 1 : o.p, a = o.a === undefined ? 1 : o.a;
   if (p <= 0 || a <= 0) return;
@@ -139,7 +141,7 @@ export function pin(ctx, ax, ay, o) {
   // and dot, so a halo never cuts the rule under a comma or the leader beside the title
   const txt = [];
   if (ptn > 0 || ptt > 0) {
-    const ry = ay - lead, x0 = dir > 0 ? ax + 6 : ax - 6, al = dir > 0 ? 'left' : 'right', rise = (1 - ptn) * 12, riseT = (1 - ptt) * 12;
+    const off = o.off ?? 6, ry = ay - lead, x0 = dir > 0 ? ax + off : ax - off, al = dir > 0 ? 'left' : 'right', rise = (1 - ptn) * 12, riseT = (1 - ptt) * 12;
     const halo = o.halo || paper;
     if (o.num) {
       const ns = o.numSize || 66, us = Math.round(ns * 0.5);
@@ -154,7 +156,7 @@ export function pin(ctx, ax, ay, o) {
       if (o.unit && ptn > 0) txt.push([' ' + o.unit, sx + nw, by, { size: us, weight: 500, color: o.numColor || ink, halo, haloW: 12, a: a * ptn, track: us * 0.08 }]);
     }
     if (o.title) {
-      const ts = o.titleSize || 24;
+      const ts = Math.round((o.titleSize || 24) * TITLE_K);
       if (ptt > 0) txt.push([o.title.toUpperCase(), x0, ry + ts + 12 + riseT * 0.5, { size: ts, weight: 600, color: ink, halo, haloW: 12, a: a * ptt, align: al, track: ts * 0.12 }]);
     }
   }

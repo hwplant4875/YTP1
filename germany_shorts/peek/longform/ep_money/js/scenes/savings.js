@@ -144,13 +144,13 @@ export class Savings {
     const R = this.main[0].nv;
     if (t > S.paid - 0.1) {
       const [x, y] = cam.p(R.x0 + 0.5, R.y0, R.h * 0.95);
-      pin(ctx, x, y, { ...pc, p: clamp((t - S.paid + 0.1) / 0.6), a: 1 - clamp((t - S.prices - 0.4) / 0.5), dir: -1, lead: 215, rule: 330, num: '-$18.53', numColor: '#C8503E', title: 'Real loss, per share', numSize: 84, titleSize: 28 });
+      pin(ctx, x, y, { ...pc, p: clamp((t - S.paid + 0.1) / 0.6), a: 1 - clamp((t - S.prices - 0.4) / 0.5), dir: -1, lead: 275, rule: 330, num: '−$18.53', numColor: '#C8503E', title: 'Real loss, per share', numSize: 84, titleSize: 28 });
     }
     // the next day
     const P = this.main[1].nv;
     if (t > S.nvidia - 0.1) {
       const [x, y] = cam.p(P.x0 + 0.5, P.y0, P.h * 0.93);
-      pin(ctx, x, y, { ...pc, p: clamp((t - S.nvidia) / 0.6), tp: clamp((t - S.up) / 0.45), dir: -1, lead: 215, rule: 330, num: '+2.8%', numColor: '#2E8B79', title: 'Nvidia, the next day', numSize: 84, titleSize: 28 });
+      pin(ctx, x, y, { ...pc, p: clamp((t - S.nvidia) / 0.6), tp: clamp((t - S.up) / 0.45), dir: -1, lead: 285, rule: 330, off: 105, num: '+2.8%', numColor: '#2E8B79', title: 'Nvidia, the next day', numSize: 84, titleSize: 28 });
     }
   }
 }

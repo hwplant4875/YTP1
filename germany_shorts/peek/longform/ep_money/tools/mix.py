@@ -160,8 +160,8 @@ def schedule():
     ev(31.45, '1922', -18)                                  # dissolve to the market board
     # market board
     ev(33.12, '2568', -16); ev(35.25, '2073', -16)
-    for k in range(18):
-        ev(35.40 + 4.0 * (k + rng.uniform(-0.3, 0.3)) / 17, POPS[k % 4], -18 - rng.uniform(0, 2), rate=float(rng.uniform(0.95, 1.12)), pan=float(rng.uniform(-0.2, 0.2)))
+    for k in range(18):   # the city pops up back to front while the date is said
+        ev(32.05 + 2.95 * (k + rng.uniform(-0.3, 0.3)) / 17, POPS[k % 4], -18 - rng.uniform(0, 2), rate=float(rng.uniform(0.95, 1.12)), pan=float(rng.uniform(-0.2, 0.2)))
     ev(40.28, '2150', -14); ev(40.36, '3124', -18)          # the whole market drops
     ev(43.05, '2568', -17)
     for k in range(3): ev(50.33 + 0.07 * k, POPS[k], -18)   # chip makers bump

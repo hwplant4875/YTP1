@@ -42,7 +42,7 @@ export class Market {
     this.arm = { x0: -2.4 - FP / 2, y0: 8.6 - FP / 2, h: hOf(70) * 1.05, base: mix(rgb(COL.chip), rgb('#FFFFFF'), 0.05) };
     // cue times
     const c = (w, n) => cue('b03', w, n);
-    this.tDate = c('Thursday'); this.tSP = c('S'); this.tPop0 = c('The'); this.tPop1 = c('companies');
+    this.tDate = c('Thursday'); this.tSP = c('S'); this.tCity0 = c("Here's") + 0.05; this.tCity1 = this.tSP; this.tPop0 = c('The'); this.tPop1 = c('companies');
     this.tFell = c('fell'); this.tTech = c('tech-heavy'); this.tNas = c('Nasdaq'); this.tAnalysts = c('Analysts');
     this.tChips = c('chips'); this.tQ = c('Qualcomm'); this.tArm = c('Arm'); this.tDis = c('disappointed');
     this.tQuest = c('question'); this.tHuge = c('huge'); this.tSums = c('sums'); this.tAI = c('AI'); this.tDC = c('centers'); this.tPay = c('pay');
@@ -72,8 +72,8 @@ export class Market {
     const b = this.nv; return this.cam.p(b.x0 + FP * 0.5, b.y0 + FP, b.h * 0.62);
   }
   heightAt(b, t) {
-    // pop-in wave (back to front), then the 4.4% drop wave, then bigger drops for Qualcomm and Arm
-    const tp = this.tPop0 + 0.15 + ((b.i + b.j) / 43) * (this.tPop1 - this.tPop0 - 0.5) + b.jit * 0.12;
+    // pop-in wave (back to front) while the date is said, then the 4.4% drop wave, then bigger drops for Qualcomm and Arm
+    const tp = this.tCity0 + 0.15 + ((b.i + b.j) / 43) * (this.tCity1 - this.tCity0 - 0.5) + b.jit * 0.12;
     const r = backOut(clamp((t - tp) / 0.38));
     const td = this.tFell + 0.05 + ((b.i + b.j) / 43) * 0.45;
     let f = 1 - 0.044 * easeOut((t - td - 0.22) / 0.35), g = 0, gH = 0, coral = 0;
@@ -150,30 +150,30 @@ export class Market {
     const base = { ink, paper: paperC, halo: paperC };
     // date
     if (t < this.tFell + 0.2) {
-      const [x, y] = cam.p(0.2, 0.6, 0);
-      pin(ctx, x, y, { ...base, p: clamp((t - this.tDate + 0.25) / 0.7), a: 1 - clamp((t - this.tSP - 0.6) / 0.4), dir: 1, lead: 70, rule: 250, num: 'NOV 5', unit: '2026', title: 'Thursday', numSize: 72, titleSize: 26 });
+      const [x, y] = cam.p(0.2, 14.0, 0);
+      pin(ctx, x, y, { ...base, p: clamp((t - this.tDate + 0.25) / 0.7), a: 1 - clamp((t - this.tSP - 0.6) / 0.4), dir: 1, lead: 150, rule: 250, num: 'NOV 5', unit: '2026', title: 'Thursday', numSize: 72, titleSize: 26 });
     }
     // S&P 500 -> -4.4%
     if (t > this.tSP - 0.2 && t < this.tAnalysts + 0.6) {
-      const [x, y] = cam.p(16.5, -0.6, 0), sw = this.tFell + 0.05;
+      const [x, y] = cam.p(17.2, -0.6, 0), sw = this.tFell + 0.05;
       const before = t < sw;
       const tp = before ? clamp((t - this.tSP) / 0.5) * (1 - clamp((t - sw + 0.25) / 0.25)) : clamp((t - sw - 0.05) / 0.35);
       const ttp = before ? clamp((t - this.tSP - 0.9) / 0.5) * (1 - clamp((t - sw + 0.25) / 0.25)) : clamp((t - sw - 0.2) / 0.35);
       pin(ctx, x, y, {
-        ...base, p: clamp((t - this.tSP + 0.2) / 0.6), a: 1 - clamp((t - this.tAnalysts) / 0.5), tp, ttp, dir: 1, lead: Math.max(120, y - 175), rule: 330,
-        num: before ? 'S&P 500' : '−4.4%', numColor: before ? ink : '#C8503E', title: before ? '500 largest U.S. companies' : 'S&P 500, one day', numSize: 84, titleSize: 26,
+        ...base, p: clamp((t - this.tSP + 0.2) / 0.6), a: 1 - clamp((t - this.tAnalysts) / 0.5), tp, ttp, dir: 1, lead: Math.max(120, y - 120), rule: 330,
+        num: before ? 'S&P 500' : '−4.4%', numColor: before ? ink : '#C8503E', title: before ? '500 largest U.S. companies' : 'S&P 500, one day', numSize: 84, titleSize: 24,
       });
     }
     // Nasdaq
     if (t > this.tNas - 0.2 && t < this.tAnalysts + 0.6) {
       const b = this.B.find(q => q.i === 9 && q.j === 12), [x, y] = cam.p(b.x0 + FP / 2, b.y0 + FP / 2, b.h * 0.956);
-      pin(ctx, x, y, { ...base, p: clamp((t - this.tNas + 0.1) / 0.6), a: 1 - clamp((t - this.tAnalysts) / 0.5), tp: clamp((t - cue('b03', 'five', 3)) / 0.4), dir: 1, lead: 120, rule: 300, num: '−5.5%', numColor: '#C8503E', title: 'Nasdaq (tech-heavy)', numSize: 84, titleSize: 26 });
+      pin(ctx, x, y, { ...base, p: clamp((t - this.tNas + 0.1) / 0.6), a: 1 - clamp((t - this.tAnalysts) / 0.5), tp: clamp((t - cue('b03', 'five', 3)) / 0.4), dir: 1, lead: 165, rule: 300, num: '−5.5%', numColor: '#C8503E', title: 'Nasdaq (tech-heavy)', numSize: 84, titleSize: 26 });
     }
     // Qualcomm and Arm
     const qa = 1 - clamp((t - this.tQuest) / 0.5);
     if (t > this.tQ - 0.2 && qa > 0) {
       const b = this.qc, [x, y] = cam.p(b.x0 + FP / 2, b.y0 + FP / 2, b.h * (t > this.tDis ? 0.905 : 0.956));
-      pin(ctx, x, y, { ...base, p: clamp((t - this.tQ + 0.15) / 0.6), a: qa, tp: clamp((t - this.tDis - 0.3) / 0.4), dir: 1, lead: 110, rule: 290, num: '−9.5%', numColor: '#C8503E', title: 'Qualcomm', numSize: 80, titleSize: 28 });
+      pin(ctx, x, y, { ...base, p: clamp((t - this.tQ + 0.15) / 0.6), a: qa, tp: clamp((t - this.tDis - 0.3) / 0.4), dir: 1, lead: 175, rule: 290, num: '−9.5%', numColor: '#C8503E', title: 'Qualcomm', numSize: 80, titleSize: 28 });
     }
     if (t > this.tArm - 0.1 && qa > 0) {
       const A = this.arm, [x, y] = cam.p(A.x0 + FP / 2, A.y0 + FP / 2, A.h * (t > this.tDis ? 0.869 : 1));
@@ -239,6 +239,11 @@ export class Market {
       if (b.kind === 'nvda' || b.kind === 'chip' || b.kind === 'qcom') chipTop(ctx, cam, b.x0, b.y0, b.h * f, FP, FP, 1);
     }
     this.hangTag(ctx, t, S);
+    const pa = clamp((t - S.price + 0.1) / 0.45), out = 1 - clamp((t - S.shrank - 0.55) / 0.4);
+    if (pa > 0 && out > 0) {
+      bigText(ctx, [['A ', '#FFFFFF'], ['PRICE TAG', HL], [',', '#FFFFFF']], W - 70, 852, { size: 106, p: pa, a: out, align: 'right' });
+      bigText(ctx, 'NOT CASH', W - 70, 852 + 120, { size: 106, p: clamp((t - S.price - 0.3) / 0.45), a: out, align: 'right' });
+    }
   }
   // a big price tag on a string, hung from above the frame; it turns over at "shrank"
   hangTag(ctx, t, S) {
@@ -250,7 +255,7 @@ export class Market {
     const jolt = t > S.shrank ? 0.05 * Math.sin((t - S.shrank) * 7) * Math.exp(-(t - S.shrank) * 2.2) : 0;
     const sw = 0.06 * Math.sin((t - t0) * 2.0) * Math.exp(-(t - t0) * 0.4) + jolt;
     const f = clamp((t - S.shrank - 0.02) / 0.55), turn = Math.cos(smoother(f) * Math.PI), back = turn < 0;
-    const tex = back ? tagTexture('-$2.8T', 'Nov 5', '#C8503E', 132) : tagTexture('S&P 500', 'price tag', COL.ink, 116);
+    const tex = back ? tagTexture('−$2.8T', 'Nov 5', '#C8503E', 132) : tagTexture('S&P 500', 'price tag', COL.ink, 116);
     const cw = 520, sc = cw / 640, ch = 300 * sc;
     ctx.save();
     ctx.translate(1400, -10); ctx.rotate(sw);

@@ -123,7 +123,8 @@ export class Nvidia {
     const sOut = clamp((t - S.wed - 0.15) / 0.8), rLine = easeOut(clamp((t - S.wed) / 0.5));
     const sBack = clamp((t - S.because - 0.1) / 0.7);
     if (t > S.wed && sBack < 1) {
-      routeDraw(ctx, cam, this.r1, 0, rLine, { dash: [7, 5], lw: 2, a: 1 - sBack });
+      const lineA = Math.max(1 - clamp((t - S.share - 0.2) / 0.5), clamp((t - S.because) / 0.2)) * (1 - sBack);
+      routeDraw(ctx, cam, this.r1, 0, rLine, { dash: [7, 5], lw: 2, a: lineA });
       const u = sBack > 0 ? 1 - easeIO(sBack) : easeIO(sOut), p = routeAt(this.r1, u);
       const land = S.wed + 0.95, sq = t > land && t < land + 0.2 ? 1 - 0.18 * Math.sin(Math.PI * (t - land) / 0.16) : 1;
       const drop = easeOut(clamp((t - S.e82 - 0.15) / 0.35)), hs = 1 - 0.093 * drop;
@@ -136,11 +137,11 @@ export class Nvidia {
       tag(ctx, cam, p[0] - 0.45, p[1] + 0.5, hs * sq, 3.4, '$200.13', '$181.60', { p: clamp((t - S.two + 0.4) / 0.5) * (1 - sBack), flip, subA: 'Wednesday close', subB: 'Thursday close', drop: 0.18, dx: 0.05, swing: 0.04 * Math.sin((t - S.two) * 3) * Math.exp(-(t - S.two) * 1.2) });
       if (sOut > 0.6 && t < S.e82 + 0.3) {
         const [x, y] = cam.p(p[0] + 0.5, p[1] - 0.5, 1);
-        pin(ctx, x, y, { ink: COL.ink, paper: COL.paper, halo: COL.paper, p: clamp((t - S.share) / 0.5), a: 1 - clamp((t - S.e82) / 0.3), dir: -1, lead: 120, rule: 250, title: 'One Nvidia share', titleSize: 30 });
+        pin(ctx, x, y, { ink: COL.ink, paper: COL.paper, halo: COL.paper, p: clamp((t - S.share) / 0.5), a: 1 - clamp((t - S.e82) / 0.3), dir: -1, lead: 120, rule: 250, title: 'One Nvidia share', titleSize: 28 });
       }
       if (t > S.drop - 0.2) {
         const [x, y] = cam.p(p[0] + 0.5, p[1] - 0.5, 0.95);
-        pin(ctx, x, y, { ink: COL.ink, paper: COL.paper, halo: COL.paper, p: 1, tp: clamp((t - S.drop) / 0.4), ttp: clamp((t - S.big) / 0.4), a: 1 - clamp((t - S.because) / 0.3), dir: -1, lead: 120, rule: 250, num: '−9.3%', numColor: RED, title: 'Biggest drop since April 2025', numSize: 96, titleSize: 26 });
+        pin(ctx, x, y, { ink: COL.ink, paper: COL.paper, halo: COL.paper, p: 1, tp: clamp((t - S.drop) / 0.4), ttp: clamp((t - S.big) / 0.4), a: 1 - clamp((t - S.because) / 0.3), dir: -1, lead: 120, rule: 250, num: '−9.3%', numColor: RED, title: 'Biggest drop since April 2025', numSize: 96, titleSize: 22 });
       }
     }
     // slab and its bundles
@@ -158,14 +159,17 @@ export class Nvidia {
     const pc = { ink: COL.ink, paper: COL.paper, halo: COL.paper };
     if (t > S.nv - 0.3 && t < S.wed + 0.5) {
       const [x, y] = cam.p(-1.2, 1.5, 21);
-      pin(ctx, x, y, { ...pc, p: clamp((t - S.nv + 0.25) / 0.6), ttp: clamp((t - S.chip) / 0.4), a: 1 - clamp((t - S.wed) / 0.4), dir: 1, lead: 40, rule: 330, num: 'NVIDIA', title: 'Chip maker behind much of today’s AI', numSize: 96, titleSize: 28 });
+      pin(ctx, x, y, { ...pc, p: clamp((t - S.nv + 0.25) / 0.6), ttp: clamp((t - S.chip) / 0.4), a: 1 - clamp((t - S.wed) / 0.4), dir: 1, lead: 40, rule: 330, off: 26, num: 'NVIDIA', title: 'Chip maker behind today’s AI', numSize: 96, titleSize: 28 });
     }
     if (t > S.valuable - 0.3 && t < S.nearly + 0.5) {
       const [x, y] = cam.p(-1.2, 1.5, 20);
-      pin(ctx, x, y, { ...pc, p: clamp((t - S.valuable + 0.2) / 0.6), a: 1 - clamp((t - S.nearly) / 0.4), dir: 1, lead: 40, rule: 360, num: '$4.8', unit: 'TRILLION', title: 'Nvidia’s value, Wednesday', numSize: 96, titleSize: 28 });
+      pin(ctx, x, y, { ...pc, p: clamp((t - S.valuable + 0.2) / 0.6), a: 1 - clamp((t - S.nearly) / 0.4), dir: 1, lead: 40, rule: 360, off: 26, num: '$4.8', unit: 'TRILLION', title: 'Nvidia’s value, Wednesday', numSize: 96, titleSize: 28 });
     }
     // the lost value in one number
-    if (t > S.fifty - 0.1) bigText(ctx, [['NEARLY ', '#FFFFFF'], ['$450 BILLION', HL]], W / 2, 175, { size: 112, p: clamp((t - S.fifty + 0.1) / 0.45) });
+    if (t > S.fifty - 0.1) {   // right of the tower, two lines, so the text never crosses it
+      bigText(ctx, 'NEARLY', W * 0.72, 330, { size: 112, p: clamp((t - S.fifty + 0.1) / 0.45) });
+      bigText(ctx, [['$450 BILLION', HL]], W * 0.72, 330 + 138, { size: 124, p: clamp((t - S.fifty) / 0.45) });
+    }
   }
 
   // ---------- S4 + S5: cash inside, cubes, price x shares, re-pricing ----------
@@ -246,7 +250,7 @@ export class Nvidia {
       }
       if (t > S.cash - 0.3 && t < S.see + 0.6) {
         const [x, y] = cam.p(-0.55, -0.35, 2.6);
-        pin(ctx, x, y, { ...pc, p: clamp((t - S.cash + 0.2) / 0.6), a: 1 - clamp((t - S.see) / 0.4), dir: -1, lead: 150, rule: 300, num: '$0', title: 'Cash Nvidia lost that day', numSize: 110, titleSize: 30 });
+        pin(ctx, x, y, { ...pc, p: clamp((t - S.cash + 0.2) / 0.6), a: 1 - clamp((t - S.see) / 0.4), dir: -1, lead: 150, rule: 560, off: 230, num: '$0', title: 'Cash Nvidia lost that day', numSize: 110, titleSize: 30 });
       }
     } else {
       // cubes: exploded tower -> grid; drawn back to front
@@ -313,7 +317,7 @@ export class Nvidia {
     }
     if (t > S.tw6 - 0.2 && gA > 0) {
       const [x, y] = cam.p(...this.gpos(241, 1));
-      pin(ctx, x, y, { ...pc, p: clamp((t - S.tw6 + 0.1) / 0.6), a: gA, dir: 1, lead: 120, rule: 320, num: '24.2', unit: 'BILLION', title: 'Nvidia shares in total', numSize: 84, titleSize: 28 });
+      pin(ctx, x, y, { ...pc, p: clamp((t - S.tw6 + 0.1) / 0.6), a: gA, dir: 1, lead: 165, rule: 320, num: '24.2', unit: 'BILLION', title: 'Nvidia shares in total', numSize: 84, titleSize: 28 });
     }
     // buyer and seller around the traded cube
     if (t > S.buyer - 0.3 && t < S.becomes + 1.0) {

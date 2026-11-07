@@ -209,7 +209,7 @@ export function tagTexture(main, sub, color = COL.ink, size = 132) {
   g.strokeStyle = '#C9A05A'; g.lineWidth = 8; g.beginPath(); g.arc(70, 144, 24, 0, Math.PI * 2); g.stroke();
   g.fillStyle = color; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
   g.font = `500 ${size}px Jost`; g.fillText(main, 365, sub ? 178 : 196);
-  if (sub) { g.font = '600 40px Jost'; g.letterSpacing = '6px'; g.fillStyle = 'rgba(43,37,51,0.7)'; g.fillText(sub.toUpperCase(), 365, 246); g.letterSpacing = '0px'; }
+  if (sub) { g.font = '600 44px Jost'; g.letterSpacing = '6px'; g.fillStyle = 'rgba(43,37,51,0.84)'; g.fillText(sub.toUpperCase(), 365, 246); g.letterSpacing = '0px'; }
   TAGS.set(key, c); return c;
 }
 function tagPath(g, x, y, w, h) {

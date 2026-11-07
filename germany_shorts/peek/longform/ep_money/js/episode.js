@@ -1,5 +1,5 @@
 // The whole episode on one clock: scenes in order, joined by dissolves (or the PEEK keyhole).
-import { W, H, clamp, smoother, easeIn, easeOut } from './iso.js';
+import { W, H, clamp, smoother, easeIn, easeOut, bigText, measureBig, HL } from './iso.js';
 import { Opening, mainTake } from './opening.js';
 import { cue, END } from './cue.js';
 
@@ -11,6 +11,7 @@ export class Episode {
   async init(assetBase, extra = []) {
     const open = mainTake(WARP);
     const tNobody = cue('b02', 'nobody');
+    this.hookOut = Math.min(cue('b01', 'If') - 0.4, 4.85);   // gone before the stack readout climbs into it
     open.ghost = (v) => smoother((v - tNobody + 0.05) / 0.75);
     this.opening = new Opening(open); await this.opening.init(assetBase);
     // [t0, t1, scene, transition-in]
@@ -33,19 +34,33 @@ export class Episode {
       if (tr && tr.type === 'keyhole') this.keyhole(ctx, p, tr.at ? tr.at(t) : [W / 2, H / 2]);
       else { ctx.save(); ctx.globalAlpha = smoother(p); ctx.drawImage(this.off, 0, 0); ctx.restore(); }
     }
+    this.hook(ctx, t);
+  }
+  // the hook line as big key text: complete on frame 0 (it is also the cover), out as the stacking line starts
+  hook(ctx, t) {
+    const a = 1 - clamp((t - this.hookOut) / 0.35);
+    if (a <= 0) return;
+    const parts = [['$2.8 TRILLION', HL], [' VANISHED', '#FFFFFF']];
+    const size = Math.min(132, 132 * 1680 / measureBig(ctx, '$2.8 TRILLION VANISHED', 132));
+    bigText(ctx, parts, W / 2, 172, { size, p: 1, a });
   }
   // PEEK keyhole: the next scene shows through a keyhole that opens out from `at` until it fills the frame
   keyhole(ctx, p, at) {
     const e = easeIn(p) * 0.92 + p * 0.08, s = 18 + e * 2600, [cx, cy] = at;
     const x = cx + (W / 2 - cx) * smoother(p), y = cy + (H / 2 - cy) * smoother(p);
-    const path = new Path2D();
-    path.arc(x, y - s * 0.18, s * 0.42, 0, Math.PI * 2);
-    path.moveTo(x - s * 0.2, y + s * 0.02); path.lineTo(x + s * 0.2, y + s * 0.02); path.lineTo(x + s * 0.34, y + s * 0.78); path.lineTo(x - s * 0.34, y + s * 0.78); path.closePath();
+    const circ = new Path2D(), slot = new Path2D(), path = new Path2D();
+    circ.arc(x, y - s * 0.18, s * 0.42, 0, Math.PI * 2);
+    slot.moveTo(x - s * 0.2, y + s * 0.02); slot.lineTo(x + s * 0.2, y + s * 0.02); slot.lineTo(x + s * 0.34, y + s * 0.78); slot.lineTo(x - s * 0.34, y + s * 0.78); slot.closePath();
+    path.addPath(circ); path.addPath(slot);
+    const outside = (shape) => { const q = new Path2D(); q.rect(-20, -20, W + 40, H + 40); q.addPath(shape); return q; };
     ctx.save();
     ctx.globalAlpha = clamp(p * 6);
     ctx.fillStyle = 'rgba(27,22,34,' + (0.22 * Math.sin(Math.PI * clamp(p * 1.4))).toFixed(3) + ')'; ctx.fillRect(0, 0, W, H);
     ctx.clip(path, 'nonzero'); ctx.drawImage(this.off, 0, 0);
     ctx.restore();
-    ctx.save(); ctx.strokeStyle = '#2B2533'; ctx.lineWidth = 6 + 10 * (1 - p); ctx.globalAlpha = clamp(p * 6) * (1 - smoother((p - 0.7) / 0.3)); ctx.stroke(path); ctx.restore();
+    ctx.save(); ctx.strokeStyle = '#2B2533'; ctx.lineWidth = 6 + 10 * (1 - p); ctx.globalAlpha = clamp(p * 6) * (1 - smoother((p - 0.7) / 0.3));
+    ctx.save(); ctx.clip(outside(slot), 'evenodd'); ctx.stroke(circ); ctx.restore();
+    ctx.save(); ctx.clip(outside(circ), 'evenodd'); ctx.stroke(slot); ctx.restore();
+    ctx.restore();
   }
 }
