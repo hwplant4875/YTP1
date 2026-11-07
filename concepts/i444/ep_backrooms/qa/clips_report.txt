@@ -1,0 +1,87 @@
+# Backrooms clips report: name | height | fps | duration s | SDR/HDR | status | channel
+op_joblo_1990 | 1080 | 30.00 | 340.0 | SDR | OK | JoBlo Movie Clips (4K)
+op_fan_a | 1038 | 30.00 | 321.0 | SDR | OK | fan 4K
+op_fan_b | 1012 | 24.00 | 349.9 | SDR | OK | fan 4K
+op_fan_c | 1080 | 30.00 | 361.6 | SDR | OK | fan
+s1_joblo_first | 1080 | 30.00 | 364.8 | SDR | OK | JoBlo Movie Clips (4K)
+s1_a24_clip | 1080 | 30.00 | 90.0 | SDR | OK | A24
+s1_rt_clip | 1080 | 23.98 | 100.0 | SDR | channel bug possible (Rotten Tomatoes), check spans | Rotten Tomatoes
+s1_commercial | 720 | 30.00 | 30.3 | SDR | OK | official
+s1_first_a | 1080 | 30.00 | 232.5 | SDR | OK | fan HD
+s1_first_b | 1080 | 60.00 | 128.3 | SDR | OK | fan HD
+s2_tells_mary | 1040 | 23.98 | 228.7 | SDR | OK | fan HD
+s2_therapy | 886 | 30.00 | 366.6 | SDR | OK | fan HD
+s3_joblo_pullup | 1080 | 30.00 | 394.6 | SDR | OK | JoBlo Movie Clips (4K)
+s3_laundry | 1038 | 23.98 | 289.6 | SDR | OK | fan (HDR10+)
+s3_bobby | 1038 | 23.98 | 186.0 | SDR | OK | fan 4K (HDR)
+s3_kids_enter | 1038 | 30.00 | 204.4 | SDR | OK | fan HD
+s4_tree_a | 1040 | 23.98 | 281.0 | SDR | OK | fan HD
+s4_tree_b | 1038 | 23.98 | 86.9 | SDR | OK | fan 4K
+s4_tree_pool | 720 | 60.00 | 192.8 | SDR | OK | fan HD
+s4_chase | 1080 | 30.00 | 237.5 | SDR | OK | fan HD
+s5_mary_enters | 1036 | 60.00 | 178.0 | SDR | OK | fan 4K
+s5_mary_b | 1080 | 30.00 | 109.7 | SDR | OK | fan HD
+s6_home | 720 | 25.00 | 64.9 | SDR | OK | fan HD
+s7_stay_char | 1038 | 23.98 | 120.5 | SDR | OK | fan (HDR10+)
+s7_eat_them | 1080 | 60.00 | 168.8 | SDR | OK | fan HD
+s7_dinner_full | 884 | 30.00 | 379.2 | SDR | OK | fan HD
+s7_joblo_reveal | 1080 | 30.00 | 323.1 | SDR | OK | JoBlo Movie Clips (4K)
+s8_joblo_fight | 1080 | 30.00 | 496.7 | SDR | OK | JoBlo Movie Clips (4K)
+s8_chase_a | 1038 | 23.98 | 285.7 | SDR | OK | fan (HDR10+)
+s8_chase_b | 1040 | 60.00 | 195.4 | SDR | OK | fan 4K
+s8_chase_c | 1038 | 23.98 | 90.0 | SDR | OK | fan 4K (HDR)
+s8_chase_d | 1038 | 23.98 | 128.0 | SDR | OK | fan 4K (HDR)
+s8_chase_e | 1080 | 30.00 | 237.0 | SDR | OK | fan HD
+s8_pack_a | 1080 | 60.00 | 153.9 | SDR | OK | fan 4K
+s8_pack_b | 1080 | 60.00 | 129.5 | SDR | OK | fan 4K
+end_joblo_phil | 1080 | 30.00 | 374.4 | SDR | OK | JoBlo Movie Clips (4K)
+end_extract | 1036 | 60.00 | 85.8 | SDR | OK | fan 4K
+end_b | 720 | 24.98 | 82.3 | SDR | OK | fan HD
+end_phil | 574 | 24.70 | 358.1 | SDR | UNDER 720p (574) | fan HD
+end_mary_still | 1038 | 23.98 | 115.8 | SDR | OK | fan 4K (HDR)
+x_a24_trailer | 1080 | 23.98 | 137.8 | SDR | OK | A24
+x_a24_c | 1080 | 23.98 | 60.7 | SDR | OK | A24
+x_a24_d | 1080 | 24.00 | 15.1 | SDR | OK | A24
+
+# ---- Laptop checks 11/7 (contact sheets: 4 frames per clip, full sheets at duration/48, 1 s / 0.2 s sheets for the checks below) ----
+# All 43 downloaded. Every HDR/HDR10+ upload came back SDR (bt709). Heights 1012-1040 are 1920-wide letterbox crops of the 2.39 film, fine.
+#
+# Problems per clip:
+# - end_phil: UNDER 720p (574p), pillarboxed, and a "CinemaCity" watermark on the picture -> do not use (end_joblo_phil has Phil in 1080p).
+# - s2_therapy: "InShOt" watermark bottom right on every frame, plus fan-edit crossfades / blended double images -> do not use.
+# - s4_tree_pool: burned-in Spanish subtitles (e.g. "¿Qué cristal? ¿De qué carajo hablas?" at ~164 s), 720p -> only spans without subtitle text.
+# - s7_dinner_full: burned-in English subtitles on most frames (884p) -> use s7_joblo_reveal / s7_stay_char / s7_eat_them for the dinner instead.
+# - x_a24_trailer: trailer text cards ("This May", "A Film" ...) between shots -> only spans with no text.
+# - x_a24_c: A24 teaser (empty basement / arch rooms), "A24" logo burned in at ~6 s; the end goes black -> spans away from the logo only.
+# - x_a24_d: 15 s VHS teaser (CRT with a timecode, then blue glitch/noise frames from ~9 s) -> barely usable.
+# - s1_commercial: 720p; the in-film store commercial (Clark in the pirate hat at the helm, "Cap'n Clark's / Ottoman Empire" banner,
+#   "PRICES IN THE VALLEY") - those graphics are part of the film itself.
+# - JoBlo Movie Clips uploads (op_joblo_1990, s1_joblo_first, s3_joblo_pullup, s7_joblo_reveal, s8_joblo_fight, end_joblo_phil):
+#   no bug on the picture, but a JoBlo "LIKE & SUB" end card fills the last ~16 s (op_joblo_1990 from 324 s, s3_joblo_pullup from 382 s,
+#   s7_joblo_reveal from 306 s).
+# - s1_rt_clip: no Rotten Tomatoes bug seen on the picture at 10/35/60/85 s.
+# - All other clips: no logo, bug or subtitles seen.
+# Content vs the clip list: everything matches. Notes: op_fan_a/b/c are the same 1990 tape as op_joblo_1990. s4_tree_a is mostly the dark
+# levels and the pool room (no Christmas tree on the 4 sample frames). The tree room is in s3_joblo_pullup (~237 s) and s4_tree_b (~30-52 s).
+#
+# CHECK 1, the giant that chases Naren (op_joblo_1990): it is never shown clearly. Between 4:36 and 5:10 the tape shows only empty
+# corridors (a lit doorway far down a dark corridor 4:36-4:46, the camera swings at 4:46-4:47). The only sighting is about 5:12.2-5:12.7:
+# a black silhouette filling the doorway, seen from the waist down - two dark legs in dark trousers and what looks like a coat tail, in
+# motion blur. Head and hat are out of frame. No pirate hat, no peg leg, no face; it is a shadow figure, tall enough that the frame holds
+# only its legs. The fan copies (op_fan_a/b/c) are the same footage. So "the only giant it ever shows you is Captain Clark" holds: the
+# 1990 tape never gives the giant an identity (Captain Clark in the hat is shown clearly in s7_joblo_reveal 3:51-3:56 and 4:07).
+#
+# CHECK 2, Kat behind the window (s3_joblo_pullup 5:15-6:22, faster-whisper medium.en + frames). The camera is Kat's, behind the glass,
+# filming Clark as he walks away across the lit pool room. Kat (near the mic): "Clark? Clark! I'm here! I'm here! ... Please! Clark, please
+# let me in!" / "Let me in!" / "We have to go now, Clark! We have to go!" / "Come back! It's gonna find me!" / "Please! Let me the fuck in!"
+# / "I'm on the other side of the glass! How can you not see me?" / "No, no, no, no." / at ~6:15-6:22: "Clark! Clark! Clark! ... Clark,
+# behind you!". Clark (far): "Huh?" / "What? Where are we?" (or "where are you?") / "Okay!" / "I don't understand! Where are you?" /
+# "It's a wall! How can you see me?" / "What glass? What the fuck are you talking about?" / "Look, can you see anything on your side? Can
+# you see a handle? A door? Is there a hatch? Anything?" / "Okay, let me figure this out, okay? Just hold on, hold on, okay?".
+# (Speaker split is from the picture and the voices; whisper wording, check by ear before quoting a line on screen.)
+#
+# CHECK 3, the still life before Captain Clark walks in (s7_joblo_reveal): 3:24-3:26.5 a still-life copy stands in a dim corner by a
+# glass cabinet - red bob wig (the same red wig Mary wears in the dinner role-play), a waxy, blank, misshapen face, red plaid coat. At
+# ~3:27 it turns and runs off out of frame (blur). Then 3:29-3:32 Clark with the knife over Mary, 3:33-3:38 the dining room through the
+# arch, 3:39-3:49 the empty dark arch, 3:50-3:56 Captain Clark (pirate hat, long coat, silhouette) walks through the arch into the room.
+# s7_dinner_full has the same scene but with burned-in subtitles.
