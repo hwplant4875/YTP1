@@ -1,0 +1,12 @@
+﻿# Backrooms v1 QA notes (11/7, laptop)
+Render: E:\YTP2\Horror Ranked\EP08 Backrooms\2_renders\backrooms_v1.mp4, 588.77 s (9:48.8), 1080p30, 310 shots. Music: backrooms_bed_v1 (Mixkit 588/633/540).
+Audio: -14.9 LUFS integrated, true peak -1.5 dBFS, no silence over 1.5 s. Film lines at or below the narration (-16.7 to -22.4 dB rms vs -15 to -23 around them).
+Near-silence before Captain Clark (s08 hum 421.8-422.6): -44.9 dB, music nearly gone. Insert cuts: sample jumps in a 30 ms window are below the surrounding speech (no clicks).
+Own QA: cold open at 10 fps against word onsets, one frame per shot (film lines at 15% and 85%), corner %, place names, choices, dates, 1 OF 5, subscribe.
+Independent review (fresh subagent, frames + srt + audio numbers, owner rules) found, fixed in one round (re-rendered s00, s02, s09, s11; others reused):
+- s00 "now it's your turn": empty dark wall -> Clark in the yellow room looking up into the lens (s1_joblo_first 21.8).
+- s00 "eaten": dark hat/neck silhouette at the grab -> Mary's shocked gasp after it (s7_joblo_reveal 286.95).
+- s09 "picks him up": lift shot showed blood on Clark -> row dropped; the bend-over shot runs to Mary's scream.
+- The slit shots (s02 'a thin line of light', 'one trip through that wall', s11 'it doesn't wait', 'leave it alone') read as empty dark walls -> g=1.75: the vertical line of light and its glow now visible.
+- Captions lagged one frame at 7 cold-open cuts -> snapped to the cut frame (checked frame by frame: all exact).
+Left as is (reported): VHS combing/softness on the found-footage tapes (the film's own tape look); substitute shots where the clips have no such moment (s02 caveman/tile, s06 mural/camera/barricade/fly, s07 mother, s10 scan); film lines slightly louder than the narration right before them (not louder than after); the corner % hands over to the big centre % on each drop; zoom crops of the Fandango logo (s1_first_b, 9 shots in s02) and the vtm logo (s7_eat_them, 14 shots: s00 1, s07 1, s08 12) pending the owner's OK.

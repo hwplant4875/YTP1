@@ -21,14 +21,14 @@ X.append(sec('s00', [
   ('chased', 's8_chase_a', 122.75, -0.85),  # Mary sprinting away down the fake apartment street (= jf 14.43)
   ('dragged', 's3_joblo_pullup', 68.70, -2.80, 'z=1.333'),  # Bobby yanked into the ramp hole on the rope, Kat and Clark grabbing him (no body)
   ('lost', 's3_joblo_pullup', 348.50, -3.00, 'z=1.333'),  # Clark tiny and alone at the far wall of the lit pool room
-  ('eaten', 's7_joblo_reveal', 280.30, -1.05),  # Captain Clark's hat at Clark's neck from behind, before the grab
+  ('eaten', 's7_joblo_reveal', 286.95, -1.10),  # QA fix: Mary's shocked gasp right after the grab (no bite, no silhouette)
   ('and umm', 's7_eat_them', 129.00, -2.40, 'z=1.45'),  # Clark grinning at the dinner table, a guest beside him
   ('copied', 's4_tree_b', 68.80, -1.35, 'z=1.333,g=1.25'),  # the red-haired still life twisting toward the lens by the tree (backlit)
   ('only one of them', 's8_chase_a', 124.95, -0.90),  # Mary running toward camera (= jf 16.63)
   ('made it back out', 'end_extract', 48.60, -1.30),  # hazmat men lift Mary up off the floor, her face (= jf ~449)
   ('and even she', 'end_joblo_phil', 26.00, -1.20),  # Mary in the Async interview room (blue/white/orange), looking up
   ('never got to go home', 'end_mary_still', 38.00, -1.50),  # the rubble of her torn-down house, the "828" house number (= end_joblo_phil 285.2)
-  ("now it's your turn", 's1_a24_clip', 30.65, -1.35, 'g=1.4'),  # dark store wall, thin vertical line of light + glow
+  ("now it's your turn", 's1_joblo_first', 21.80, -1.40),  # QA fix: Clark in the yellow room looks straight up into the lens
   ('and how long', 's1_joblo_first', 151.00, -1.20),  # POV push through empty yellow rooms (pillar)
   ('would you survive', 's8_pack_b', 121.20, -0.85, 'g=1.25'),  # Captain Clark's silhouette in the lit gap at the end of a dark hall, reaching
   ('in the backrooms', 's1_joblo_first', 162.20, -1.60),  # empty yellow room, slow pan, hold
@@ -41,6 +41,10 @@ X.append(sec('s00', [
     ('Never got to go home', 'never got to go home', "now it's your turn"), ("Now it's your turn", "now it's your turn", 'and how long'),
     ('And how long', 'and how long', 'would you survive'), ('Would you survive', 'would you survive', 'in the backrooms'),
     ('In the Backrooms?', 'in the backrooms', 999)]], clip_db=-22))
+for ov in X[-1]['overlays']:   # QA fix: snap each caption to the cut's frame (it lagged one frame at 7 cuts)
+    if ov[0] == 'cap':
+        ov[2] = max(0.0, round(ov[2] * 30) / 30 - 0.005) if ov[2] > 0 else 0.0
+        if ov[3] < 900: ov[3] = round(ov[3] * 30) / 30 - 0.005
 # ---------------------------------------------------------------- s01 the 1990 tape (35.4 s) ------------------------------------
 X.append(sec('s01', [
   (0, 'op_joblo_1990', 4.00, -3.90, 'z=1.333'),  # VHS POV: wall on the left, empty yellow room beyond
@@ -74,7 +78,7 @@ X.append(sec('s02', [
   ('you flip the strange breakers', 's1_first_b', 51.70, -1.15, 'z=1.3'),  # his hand flipping the breaker
   ('the store goes dark', 's1_first_b', 28.40, -3.00, 'z=1.3,g=1.25'),  # the store aisle in the dark
   ('and there it is', 's1_a24_clip', 10.85, -1.60, 'g=1.25'),  # Clark close in the dark, staring at the glow
-  ('a thin line of light', 's1_a24_clip', 26.60, -4.00, 'g=1.4'),  # the wall: thin vertical slit of light, glow on the plaster
+  ('a thin line of light', 's1_a24_clip', 26.60, -4.00, 'g=1.75'),  # the wall: thin vertical slit of light, glow on the plaster
   ('you lean on it', 's1_a24_clip', 55.00, -2.90, 'g=1.4'),  # Clark against the glowing wall, hands flat on it
   ('fall straight through', 's1_a24_clip', 58.10, -2.20),  # NEW CUT: Clark tumbles onto the yellow carpet
   ('into an empty yellow room', 's1_joblo_first', 6.00, -2.00),  # Clark lying on the yellow floor
@@ -99,7 +103,7 @@ X.append(sec('s02', [
   ('back in your store', 's1_joblo_first', 342.50, -3.00, 'g=1.4'),  # dark store, Clark gripping the stool
   ('a camera in there', 's1_joblo_first', 217.00, -2.30),  # tunnel's square opening frames Clark (surveillance view)
   ('on a tape dated', 's1_first_b', 1.55, -2.40, 'z=1.3,g=1.25'),  # store TV playing a tape
-  ('one trip through that wall', 's1_a24_clip', 7.70, -1.30, 'g=1.4'),  # the slit glowing in the dark wall
+  ('one trip through that wall', 's1_a24_clip', 7.70, -1.30, 'g=1.75'),  # the slit glowing in the dark wall
   ('gives you a ninety', 's1_first_a', 215.00, -2.80, 'g=1.4'),  # Clark in the dark store, staring
   ('the best it will ever be', 's1_joblo_first', 321.00, -2.50),  # wide empty yellow room, furniture far off
   ('rule one', 's1_first_a', 15.85, -2.40),  # wide: Clark beside the wrong copy of his chair
@@ -275,7 +279,6 @@ X.append(sec('s09', [
   ('and that you said', 's7_joblo_reveal', 251.30, -3.00),  # Mary frozen, close
   ("because it's just the way", 's7_joblo_reveal', 265.70, -2.90),  # Captain Clark's silhouette looming over Clark
   ("and that's when captain clark", 's7_joblo_reveal', 281.60, -1.75),  # it bends over Clark from behind, before the grab
-  ('picks him up', 's7_joblo_reveal', 293.05, -0.55),  # NEW CUT  Clark's body thrown through the air (blur), no bite
   ('and bites into him', 's7_joblo_reveal', 293.70, -2.20),  # Mary screaming
   ('you tear free and run', 's8_joblo_fight', 0.20, -3.50),  # Mary bursts out of the house door into the fake street
   ('and it hobbles after you', 's8_chase_b', 23.95, -2.40),  # wide fake street, Captain Clark small and far, coming down the middle
@@ -355,14 +358,14 @@ X.append(sec('s11', [
   ('is captain clark', 's7_joblo_reveal', 283.62, -1.50),  # Captain Clark's face and pirate hat, close
   ('so the backrooms had already made', 's8_pack_a', 146.60, -3.05, 'g=1.25'),  # Captain Clark looming in the lit gap, reaching (= pack_b 122.35)
   ('before he ever walked in', 's1_a24_clip', 83.50, -2.40),  # Clark getting up and walking in for the first time
-  ("it doesn't wait for you", 's1_a24_clip', 14.50, -1.50, 'g=1.4'),  # the slit glowing
+  ("it doesn't wait for you", 's1_a24_clip', 14.50, -1.50, 'g=1.75'),  # the slit glowing
   ("because it's already started on you", 's1_joblo_first', 155.60, -2.60, 'g=1.25'),  # dim empty rooms, slow move
   ('so how long would you have lasted', 's1_joblo_first', 246.30, -2.90),  # Clark walking into an empty yellow room
   ('and which stage', 's8_chase_a', 127.55, -2.25),  # Mary running down the long fake street toward the far door (= jf 19.23)
   ('tell me in the comments', 's1_a24_clip', 86.00, -3.95),  # calm wide yellow room, Clark from behind
   ('subscribe so you', 's1_first_a', 103.00, -1.70),  # calm wide yellow room, the throne far off
   ('and if you ever see a line of light', 's1_a24_clip', 47.00, -3.20, 'g=1.25'),  # Clark at the glowing wall at night
-  ('leave it alone', 's1_a24_clip', 16.05, -1.55, 'g=1.4'),  # the slit, hold to the end
+  ('leave it alone', 's1_a24_clip', 16.05, -1.55, 'g=1.75'),  # the slit, hold to the end
   ], extra=[('date', ['JUNE 19, 1990'], 'june nineteenth', 'and clark found'),
             ('date', ['JUNE 29, 1990'], 'june twenty-ninth', 'ten days later'),
             ('date', ['JUNE 29, 1990', '!10 DAYS LATER'], 'ten days later', 'the movie never says'),
