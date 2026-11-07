@@ -12,17 +12,17 @@ Five people walk into the Backrooms in A24's Backrooms (2026), and only one walk
 Which stage would you have turned back at? Tell me in the comments, along with the horror movie you want me to walk you through next.
 
 0:00 Five went in
-0:15 The 1990 tape
-0:54 Stage 1, the slit (90%)
-2:09 Stage 2, the map (70%)
-2:52 Stage 3, the laundry room (40%)
-3:41 Stage 4, the still lifes (15%)
-4:27 Stage 5, after him (10%)
-5:30 Stage 6, your old home (7%)
-5:57 Stage 7, the dining room (5%)
-7:02 Stage 8, Captain Clark (2%)
-8:10 Async, 1 of 5
-9:11 What the tapes really show
+0:11 The 1990 tape
+0:48 Stage 1, the slit (90%)
+2:03 Stage 2, the map (70%)
+2:46 Stage 3, the laundry room (40%)
+3:35 Stage 4, the still lifes (15%)
+4:21 Stage 5, after him (10%)
+5:27 Stage 6, your old home (7%)
+5:54 Stage 7, the dining room (5%)
+6:59 Stage 8, Captain Clark (2%)
+8:08 Async, 1 of 5
+9:10 What the tapes really show
 
 Spoilers for the whole film, including the ending.
 
@@ -38,7 +38,7 @@ Music: Mixkit (Feedback Dreams, Xanthos, Nield Grohm Hanging 3), Mixkit Stock Mu
 backrooms, the backrooms, backrooms movie, the backrooms movie, a24 backrooms, kane parsons, kane pixels, backrooms explained, backrooms ending explained, captain clark, how long would you survive, could you survive, horror movie, survival, liminal space, chiwetel ejiofor, renate reinsve, a24 horror, horror ranked
 
 ## Length
-9:48 (588.8 s)
+9:47 (587.6 s)
 
 ## Files
 - English captions: backrooms_survival_en.srt

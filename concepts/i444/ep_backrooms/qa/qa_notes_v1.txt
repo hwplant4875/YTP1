@@ -23,3 +23,12 @@ Rows changed: s02 'a failed architect', 'who sleeps in the back', 'the lights fl
 + NEW CUT 'chokes you' (close, ~2.3 s), 'for your own good' -> her view of the ceiling light; s07 row 0 -> the light blooming white (out cold).
 Logo crops left: s1_first_b (Fandango, z=1.3) 2 shots in s02 ('and one night the tv', 'on a tape dated': the logo-free upload has no
 normal TV picture); s7_eat_them (vtm, z=1.45) unchanged, 14 shots (s00 1, s07 1, s08 12): no logo-free eating-scene source found.
+
+# v3 (11/7 night, owner's notes on v2): E:\YTP2\Horror Ranked\EP08 Backrooms\2_renders\backrooms_v3.mp4, 587.63 s (9:47.6), -15.0 LUFS, TP -1.4 dBFS.
+Picture: 321 of 326 shots re-picked from the owner's film file (logo-free); every substitute replaced where the film has the moment; no
+film moment used twice (checked on source spans). Cold open: Kat+Bobby (five people), Clark into the wall, real chase/drag/lost/eaten.
+Cut from the voice: "And, umm... copied?" and "and even she never got to go home" (cold open).
+Fixed: choice pauses split only in true silence (word times ran ~0.4 s late); corner never blinks (renumbered frames before overlays);
+drops keep the old value until the new one lands and land in the lower third (off faces); label SURVIVAL RATE; ending 2% -> SURVIVED
+(green, at Async) -> TRAPPED..? (red, on "never got to go home") to 1 OF 5. Film lines from the film's own takes (+ Clark's voicemail line).
+Not in the film: the caveman in pieces (crash heard, cutout flies past 0.4 s), a room full of cavemen (one cutout), all five people in one shot.

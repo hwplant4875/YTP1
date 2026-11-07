@@ -65,7 +65,7 @@ def drop_frames(arg, d_ov, si, j):
     if os.path.exists(kp) and open(kp).read() == key: return out
     os.makedirs(out, exist_ok=True)
     for p in os.listdir(out): os.remove(os.path.join(out, p))
-    gx.drop(out, arg['p'], d_ov, FPS, arg.get('hold', 1.0)); open(kp, 'w').write(key)
+    gx.drop(out, arg['p'], d_ov, FPS, arg.get('hold', 1.0), arg.get('prev')); open(kp, 'w').write(key)
     return out
 parts, audios, voice_items, sfx_items, ducks = [], [], [], [], []
 t_global = 0.0
@@ -111,7 +111,9 @@ for si, S in enumerate(E['sections']):
         alst = os.path.join(WORK, f'sec{si:02d}_a.txt'); open(alst, 'w').write(''.join(f"file '{p}'\n" for p in asegs))
         run(['ffmpeg', '-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', alst, '-c', 'copy', _sa])
         # ---- overlays, in EDL order (later ones on top) ----
-        ins = ['-i', raw]; chain = '[0:v]'; fc = []; n = 1
+        # v3 (owner 11/7, corner blinked at 1:11): renumber the concatenated shots' frames first, so one shot with odd timestamps can never
+        # drop out of the overlays' enable windows
+        ins = ['-i', raw]; chain = '[b0]'; fc = [f"[0:v]setpts=N/({FPS}*TB)[b0]"]; n = 1
         for j, (kind, arg, a, b) in enumerate(S.get('overlays', [])):
             b = min(b, L)
             if b <= a: continue

@@ -32,10 +32,30 @@ def T(seg, x): return x if isinstance(x, (int, float)) else round(max(0, at(seg,
 def take_len(seg):
     try: return float(subprocess.check_output(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', D + f'voice/{seg}.mp3']))
     except Exception: return json.load(open(D + f'voice/{seg}.json'))['character_end_times_seconds'][-1] + 0.05
+_PCM = {}
+def _pcm(seg):
+    if seg not in _PCM:
+        import numpy as np
+        _PCM[seg] = np.frombuffer(subprocess.check_output(['ffmpeg', '-v', 'error', '-i', D + f'voice/{seg}.mp3', '-ac', '1', '-ar', '48000',
+                                                           '-f', 's16le', '-']), np.int16).astype('float32') / 32768
+    return _PCM[seg]
 def split_after(seg, phrase):
-    """middle of the pause after the phrase's last word (the take's end when it is the last word)"""
+    """middle of the real silence after the phrase's last word (the take's end when it is the last word). v3 (owner 11/7, 1:18): the
+    word timestamps run up to ~0.4 s late, so the split is snapped to the longest run under -45 dB between 0.7 s before the last word's end
+    and the next word's start + 0.1 s; a take is never cut inside a sound"""
+    import numpy as np
     j = find(seg, phrase)[1]; ws = W[seg]
-    return round((ws[j][1] + ws[j + 1][0]) / 2, 3) if j + 1 < len(ws) else None
+    if j + 1 >= len(ws): return None
+    x = _pcm(seg); lo, hi = max(0.0, ws[j][1] - 0.7), ws[j + 1][0] + 0.1; step = 0.01
+    ts = np.arange(lo, hi, step); quiet = [20 * np.log10(np.sqrt(np.mean(x[int(t * 48000):int((t + 0.02) * 48000)] ** 2)) + 1e-9) < -45 for t in ts]
+    best, run0 = (0, None), None
+    for k, q in enumerate(quiet + [False]):
+        if q and run0 is None: run0 = k
+        if not q and run0 is not None:
+            if k - run0 > best[0]: best = (k - run0, run0)
+            run0 = None
+    if best[0] >= 5: return round(lo + (best[1] + best[0] / 2) * step + 0.01, 3)
+    print('WARN no silence to split in', seg, 'after', repr(phrase)); return round((ws[j][1] + ws[j + 1][0]) / 2, 3)
 TODO = None
 def ins(after, dur, kind, shots=(), sub=None, q=None):
     """after: phrase (split after its last word), 0 (before the first word) or 'END'; shots: (t, clip, in[, speed][, opts]) relative
@@ -134,10 +154,17 @@ for S in X:
         if new is not None:
             d0 = M(at(v, phrase)) - 0.05
             S['overlays'].append(['corner', {'p': cur}, 0.0, d0])
-            S['overlays'].append(['drop', {'p': new, 'hold': 1.0}, d0, d0 + DROP])
+            S['overlays'].append(['drop', {'p': new, 'hold': 1.0, 'prev': cur}, d0, d0 + DROP])
             S['overlays'].append(['corner', {'p': new}, d0 + DROP, end])
             S['sfx'] += [[d0, SFX + 'stamp.wav', G['stamp']], [d0 + 1.0, SFX + 'whoosh.wav', G['whoosh'] - 4]]
             cur = new
+        elif v == 's10':   # v3 ending (owner 11/7): 2% -> green SURVIVED when Async pulls her out -> red TRAPPED..? on "never got to go home"
+            d1 = M(at(v, 'you wake up at async')) - 0.05; d2 = M(at(v, 'and even she never got')) - 0.05
+            S['overlays'] += [['corner', {'p': cur}, 0.0, d1], ['drop', {'p': 'SURVIVED', 'hold': 1.0, 'prev': cur}, d1, d1 + DROP],
+                              ['corner', {'p': 'SURVIVED'}, d1 + DROP, d2], ['drop', {'p': 'TRAPPED..?', 'hold': 1.0, 'prev': 'SURVIVED'}, d2, d2 + DROP],
+                              ['corner', {'p': 'TRAPPED..?'}, d2 + DROP, end]]
+            S['sfx'] += [[d1, SFX + 'stamp.wav', G['stamp']], [d1 + 1.0, SFX + 'whoosh.wav', G['whoosh'] - 4],
+                         [d2, SFX + 'stamp.wav', G['stamp']], [d2 + 1.0, SFX + 'whoosh.wav', G['whoosh'] - 4]]
         else:
             S['overlays'].append(['corner', {'p': cur}, 0.0, end])
         if v == 's10':

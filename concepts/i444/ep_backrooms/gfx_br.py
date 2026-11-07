@@ -2,7 +2,7 @@
 # No boxes, pills, bars or gauges: plain big text, with a soft blurred darkening behind it where the film's yellow walls would
 # eat the white (the same idea as the thumbnails' shadow under the numbers).
 #   cap     cold-open caption, centre, f(170) (EP01-EP04 word_tag look, shrunk to 1760 px or split over two lines)
-#   corner  top-right YOUR SURVIVAL + the number in its colour (green >= 70, yellow >= 40, red below)
+#   corner  top-right SURVIVAL RATE + the number in its colour (green >= 70, yellow >= 40, red below)
 #   drop    animated: the new number lands big in the centre with the stamp, then flies into the corner (PNG frames)
 #   choice  TURN BACK / KEEP GOING, state 0 = both white, state 1 = TURN BACK dimmed, KEEP GOING red and bigger
 #   place   stage name, top-left
@@ -17,7 +17,14 @@ W, H = 1920, 1080
 WHITE = (245, 242, 236, 255); DIM = (170, 168, 162, 255)
 GREEN = (70, 215, 95, 255); YELLOW = (250, 200, 40, 255); RED = (235, 30, 38, 255)
 def f(sz): return ImageFont.truetype(FONT, sz)
-def col(p): return GREEN if p >= 70 else YELLOW if p >= 40 else RED
+def col(p):  # v3: a word value (SURVIVED / TRAPPED..?) is green for SURVIVED, red otherwise
+    if isinstance(p, str): return GREEN if p.upper().startswith('SURVIV') else RED
+    return GREEN if p >= 70 else YELLOW if p >= 40 else RED
+def pstr(p): return p if isinstance(p, str) else f'{p}%'
+def num_size(p, base, maxw):  # the number's font size, shrunk so a word value fits the width
+    s = pstr(p); sz = base
+    while f(sz).getlength(s) > maxw and sz > 40: sz -= 2
+    return sz
 def blank(): return Image.new('RGBA', (W, H), (0, 0, 0, 0))
 def glow(im, box, alpha=135, blur=70):
     """soft dark ellipse behind text (no hard edge anywhere), box = (x0, y0, x1, y1)"""
@@ -41,39 +48,40 @@ CX, CY_LABEL, CY_NUM, C_LABEL, C_NUM = 1856, 50, 218, 48, 132
 def corner_img(p, label_alpha=1.0, num=True):
     im = blank(); glow(im, (1440, -60, 1990, 330))
     if label_alpha > 0:
-        lab = blank(); text(lab, (CX, CY_LABEL), 'YOUR SURVIVAL', f(C_LABEL), WHITE, anchor='ra', stroke=3, blur=6, alpha=170)
+        lab = blank(); text(lab, (CX, CY_LABEL), 'SURVIVAL RATE', f(C_LABEL), WHITE, anchor='ra', stroke=3, blur=6, alpha=170)
         if label_alpha < 1: lab.putalpha(lab.getchannel('A').point(lambda v: int(v * label_alpha)))
         im.alpha_composite(lab)
-    if num: text(im, (CX, CY_NUM), f'{p}%', f(C_NUM), col(p), anchor='rs', stroke=5, blur=8)
+    if num: text(im, (CX, CY_NUM), pstr(p), f(num_size(p, C_NUM, 470)), col(p), anchor='rs', stroke=5, blur=8)
     return im
 def corner(p, out): corner_img(p).save(out)
 def ease(x): x = min(1, max(0, x)); return x * x * (3 - 2 * x)
-def drop(out_dir, p, dur, fps=30, hold=1.0):
+DROP_Y = 790   # v3 (owner 11/7): the big number lands in the lower third, off the faces
+def drop(out_dir, p, dur, fps=30, hold=1.0, prev=None):
     """big number punches in at the centre (0.14 s), holds, then flies into the corner (0.38 s) and the label fades in;
     returns (n_frames, 0, 0); the frames after the move repeat the finished corner"""
     os.makedirs(out_dir, exist_ok=True)
-    BIG = 330; s = f'{p}%'
+    s = pstr(p); BIG = num_size(p, 330, 1300)
     spr = Image.new('RGBA', (1400, 520), (0, 0, 0, 0)); text(spr, (700, 260), s, f(BIG), col(p), stroke=10, blur=14, alpha=210)
     bb = spr.getchannel('A').point(lambda v: 255 if v > 200 else 0).getbbox()   # the glyphs (shadow excluded)
     gx0, gy0, gx1, gy1 = bb
     # corner glyph box for the same string at C_NUM: right edge CX, baseline CY_NUM
-    fc = f(C_NUM); cb = fc.getbbox(s, anchor='rs', stroke_width=5)
+    fc = f(num_size(p, C_NUM, 470)); cb = fc.getbbox(s, anchor='rs', stroke_width=5)
     k_end = (cb[2] - cb[0]) / (gx1 - gx0)
     end_x1, end_y1 = CX + cb[2], CY_NUM + cb[3]
     n = max(1, round(dur * fps)); t_in, t_mv = 0.14, 0.38
     for i in range(n):
-        t = i / fps; im = blank()
+        t = i / fps; im = corner_img(prev) if prev is not None else blank()   # v3: the old value stays in the corner until the new one lands
         if t >= hold + t_mv:
             im = corner_img(p)
         else:
-            if t < t_in: k = 1.35 - 0.35 * ease(t / t_in); a = ease(t / t_in); cx, cy, kk = 960, 540, k
-            elif t < hold: a = 1; cx, cy, kk = 960, 540, 1.0
+            if t < t_in: k = 1.35 - 0.35 * ease(t / t_in); a = ease(t / t_in); cx, cy, kk = 960, DROP_Y, k
+            elif t < hold: a = 1; cx, cy, kk = 960, DROP_Y, 1.0
             else:
                 u = ease((t - hold) / t_mv); a = 1
                 # glyph box centre moves from the screen centre to the corner glyph box centre
                 ex = end_x1 - (gx1 - gx0) * k_end / 2; ey = end_y1 - (gy1 - gy0) * k_end / 2
-                cx, cy, kk = 960 + (ex - 960) * u, 540 + (ey - 540) * u, 1 + (k_end - 1) * u
-                if u > 0: im = corner_img(p, label_alpha=u, num=False)
+                cx, cy, kk = 960 + (ex - 960) * u, DROP_Y + (ey - DROP_Y) * u, 1 + (k_end - 1) * u
+                im = corner_img(p, label_alpha=1.0, num=False)   # v3: the label never fades; only the number swaps
             sw, sh = max(1, int(spr.width * kk)), max(1, int(spr.height * kk))
             sp = spr.resize((sw, sh), Image.LANCZOS)
             if a < 1: sp.putalpha(sp.getchannel('A').point(lambda v: int(v * a)))
