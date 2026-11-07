@@ -345,5 +345,5 @@ X.append(sec('s11', [
   ], extra=[('date', ['JUNE 19, 1990'], 'june nineteenth', 'and clark found'),
             ('date', ['JUNE 29, 1990'], 'june twenty-ninth', 'ten days later'),
             ('date', ['JUNE 29, 1990', '!10 DAYS LATER'], 'ten days later', 'the movie never says'),
-            ('png', 'tiles/subscribe.png', 'subscribe so you', 'and if you ever')],
+            ('png', '../ep04/tiles/subscribe.png', 'subscribe so you', 'and if you ever')],
   pad=2.0))
