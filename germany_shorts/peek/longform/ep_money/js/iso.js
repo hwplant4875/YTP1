@@ -180,14 +180,15 @@ export function camLook(cam, x, y, z, fh, sx = W / 2, sy = H / 2) {
   const k = H / fh;
   cam.set(sx - (y - x) * C30 * k, sy - ((x + y) * 0.5 - z) * k, k);
 }
-// keys: [[t, x, y, z, fh, sx?, sy?], ...]; smootherstep between keys, frame height eased in log space
+// keys: [[t, x, y, z, fh, sx?, sy?], ...]; smootherstep between keys, frame height eased in log space;
+// a key with .lin = true moves linearly to the next key (a slow drift through a long hold)
 export function camPath(keys) {
   return (t) => {
     if (t <= keys[0][0]) return keys[0];
     for (let i = 0; i < keys.length - 1; i++) {
       const a = keys[i], b = keys[i + 1];
       if (t > b[0]) continue;
-      const u = smoother((t - a[0]) / (b[0] - a[0]));
+      const v = (t - a[0]) / (b[0] - a[0]), u = a.lin ? Math.min(1, Math.max(0, v)) : smoother(v);
       const r = [t];
       for (let j = 1; j < Math.max(a.length, b.length); j++) {
         const va = a[j] ?? (j === 5 ? W / 2 : H / 2), vb = b[j] ?? (j === 5 ? W / 2 : H / 2);

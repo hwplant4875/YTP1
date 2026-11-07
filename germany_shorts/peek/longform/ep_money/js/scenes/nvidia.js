@@ -36,12 +36,13 @@ export class Nvidia {
     S.fly = S.value + 0.55;
     this.cam3 = camPath([
       [S.peek, 0, 0, 13.5, 33], [S.nv, 0, 1.2, 14.0, 38], [S.whose + 0.3, 0.5, 0.8, 11, 44], [S.ai + 0.6, 0.5, 0.8, 11, 44],
-      [S.share, -0.9, 5.3, 1.9, 9.5], [S.drop + 0.4, -0.9, 5.2, 1.8, 9.0], [S.because, -0.9, 5.2, 1.8, 9.0],
+      [S.share, -0.9, 5.3, 1.9, 9.5], [S.drop + 0.4, -0.9, 5.2, 1.8, 9.0], [S.because, -0.9, 5.2, 1.8, 8.6],
       [S.valuable + 0.4, 0, 2.6, 14.0, 40], [S.fifty, 0, 2.8, 13.5, 40], [S.bills + 0.6, 0, 4.6, 4.0, 18],
     ]);
+    const drift = (k) => Object.assign(k, { lin: true }); // slow linear push-in through the long grid hold
     this.cam4 = camPath([
       [S.but - 0.6, 0, 0, 13.5, 36], [S.cut + 0.3, 0.6, 0.6, 4.2, 15], [S.see + 0.3, 0.6, 0.6, 4.2, 15],
-      [S.value, 0, 0, 13, 37], [S.fly + 1.4, -1.6, 2.4, 0.4, 31.5, 1180, 705], [S.lower + 1.0, -1.6, 2.4, 0.4, 31.5, 1180, 705],
+      [S.value, 0, 0, 13, 37], drift([S.fly + 1.4, -1.6, 2.4, 0.4, 31.5, 1180, 705]), [S.lower + 1.0, -1.6, 2.4, 0.4, 29.8, 1180, 705],
       [S.buyer - 0.5, ...this.gpos(TRADED[1], 0.6), 12, W / 2, H / 2 + 60], [S.becomes + 0.3, ...this.gpos(TRADED[1], 0.6), 12, W / 2, H / 2 + 60],
       [S.end6, -1.6, 2.4, 0.4, 31.5, 1180, 705],
     ]);
@@ -139,7 +140,7 @@ export class Nvidia {
       }
       if (t > S.drop - 0.2) {
         const [x, y] = cam.p(p[0] + 0.5, p[1] - 0.5, 0.95);
-        pin(ctx, x, y, { ink: COL.ink, paper: COL.paper, halo: COL.paper, p: 1, tp: clamp((t - S.drop) / 0.4), ttp: clamp((t - S.big) / 0.4), a: 1 - clamp((t - S.because) / 0.3), dir: -1, lead: 120, rule: 250, num: '−9.3%', numColor: RED, title: 'Biggest drop since April 2025', numSize: 96, titleSize: 30 });
+        pin(ctx, x, y, { ink: COL.ink, paper: COL.paper, halo: COL.paper, p: 1, tp: clamp((t - S.drop) / 0.4), ttp: clamp((t - S.big) / 0.4), a: 1 - clamp((t - S.because) / 0.3), dir: -1, lead: 120, rule: 250, num: '−9.3%', numColor: RED, title: 'Biggest drop since April 2025', numSize: 96, titleSize: 26 });
       }
     }
     // slab and its bundles
