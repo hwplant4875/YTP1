@@ -22,12 +22,8 @@ X.append(sec('s00', [
   ('dragged', 's3_joblo_pullup', 68.70, -2.80, 'z=1.333'),  # Bobby yanked into the ramp hole on the rope, Kat and Clark grabbing him (no body)
   ('lost', 's3_joblo_pullup', 348.50, -3.00, 'z=1.333'),  # Clark tiny and alone at the far wall of the lit pool room
   ('eaten', 's7_joblo_reveal', 286.95, -1.10),  # QA fix: Mary's shocked gasp right after the grab (no bite, no silhouette)
-  ('and umm', 's7_eat_them', 129.00, -2.40, 'z=1.45'),  # Clark grinning at the dinner table, a guest beside him
-  ('copied', 's4_tree_b', 68.80, -1.35, 'z=1.333,g=1.25'),  # the red-haired still life twisting toward the lens by the tree (backlit)
   ('only one of them', 's8_chase_a', 124.95, -0.90),  # Mary running toward camera (= jf 16.63)
   ('made it back out', 'end_extract', 48.60, -1.30),  # hazmat men lift Mary up off the floor, her face (= jf ~449)
-  ('and even she', 'end_joblo_phil', 26.00, -1.20),  # Mary in the Async interview room (blue/white/orange), looking up
-  ('never got to go home', 'end_mary_still', 38.00, -1.50),  # the rubble of her torn-down house, the "828" house number (= end_joblo_phil 285.2)
   ("now it's your turn", 's1_joblo_first', 21.80, -1.40),  # QA fix: Clark in the yellow room looks straight up into the lens
   ('and how long', 's1_joblo_first', 151.00, -1.20),  # POV push through empty yellow rooms (pillar)
   ('would you survive', 's8_pack_b', 121.20, -0.85, 'g=1.25'),  # Captain Clark's silhouette in the lit gap at the end of a dark hall, reaching
@@ -35,10 +31,8 @@ X.append(sec('s00', [
   ], extra=[('cap', w, a, b) for w, a, b in [
     ('Five people', 0, 'went into'), ('Went into', 'went into', 'the backrooms'), ('The Backrooms', 'the backrooms', 'in this movie'),
     ('In this movie', 'in this movie', 'and they got'), ('And they got', 'and they got', 'chased'), ('Chased', 'chased', 'dragged'),
-    ('Dragged', 'dragged', 'lost'), ('Lost', 'lost', 'eaten'), ('Eaten', 'eaten', 'and umm'), ('And, umm...', 'and umm', 'copied'),
-    ('Copied?', 'copied', 'only one of them'), ('Only one of them', 'only one of them', 'made it back out'),
-    ('Made it back out', 'made it back out', 'and even she'), ('And even she', 'and even she', 'never got to go home'),
-    ('Never got to go home', 'never got to go home', "now it's your turn"), ("Now it's your turn", "now it's your turn", 'and how long'),
+    ('Dragged', 'dragged', 'lost'), ('Lost', 'lost', 'eaten'), ('Eaten', 'eaten', 'only one of them'), ('Only one of them', 'only one of them', 'made it back out'),
+    ('Made it back out', 'made it back out', "now it's your turn"), ("Now it's your turn", "now it's your turn", 'and how long'),
     ('And how long', 'and how long', 'would you survive'), ('Would you survive', 'would you survive', 'in the backrooms'),
     ('In the Backrooms?', 'in the backrooms', 999)]], clip_db=-22))
 for ov in X[-1]['overlays']:   # QA fix: snap each caption to the cut's frame (it lagged one frame at 7 cuts)
