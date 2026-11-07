@@ -5,6 +5,7 @@ usage: python3 tools/mix.py <vo.wav> <out_dir> [bed_id=554]
 Writes <out_dir>/mix.wav plus stems (vo/bed/sfx) for QA. Every SFX is placed on the narration
 clock through js/words.js, the same word cues the scenes use, so picture and sound stay in sync.
 """
+import math
 import json, os, re, subprocess, sys
 import numpy as np
 from scipy.signal import lfilter, resample_poly
@@ -145,14 +146,16 @@ def schedule():
     # opening: the hook slam, then every bundle that lands, faster and quieter as the camera lifts
     ev(0.0, '1975', -9.5); ev(0.0, 'sub_hit_warm', -9.5); ev(0.0, '2091', -12)
     for k, t in enumerate(LAND):
-        ev(t, THUDS[k % 3], -9 - 3 * k / max(1, len(LAND) - 1), trim=(0, 0.22), rate=float(rng.uniform(0.94, 1.06)), pan=float(rng.uniform(-0.15, 0.15)))
-    # owner 11/8: the stacking sound keeps going under the climb and only slowly fades (a dopamine bed)
-    t, t0, t1 = LAND[-1], LAND[-1], 21.0
+        ev(t, THUDS[k % 3], -15 - 3 * k / max(1, len(LAND) - 1), trim=(0, 0.22), rate=float(rng.uniform(0.94, 1.06)), pan=float(rng.uniform(-0.15, 0.15)))
+    # owner 11/8: the stacking sound keeps going past the landings, then fades (a dopamine bed)
+    # owner 11/8 (2nd note): 6 dB quieter, full until 5 s, fade out, silent by 8 s
+    t, f0, f1 = LAND[-1], 5.0, 8.0
     while True:
         t += 0.058 + float(rng.uniform(-0.012, 0.012))
-        if t > t1: break
-        u = (t - t0) / (t1 - t0)
-        ev(t, THUDS[int(rng.integers(0, 3))], -12 - 20 * u ** 1.6, trim=(0, 0.2), rate=float(rng.uniform(0.95, 1.08)), pan=float(rng.uniform(-0.25, 0.25)))
+        if t > f1 - 0.05: break
+        u = min(1.0, max(0.0, (t - f0) / (f1 - f0)))
+        g = math.cos(u * math.pi / 2) ** 2
+        ev(t, THUDS[int(rng.integers(0, 3))], -18 + 20 * math.log10(max(g, 1e-3)), trim=(0, 0.2), rate=float(rng.uniform(0.95, 1.08)), pan=float(rng.uniform(-0.25, 0.25)))
     ev(2.95, '1710', -17)                                   # the climb starts
     ev(8.49, '2568', -16)                                   # tallest-building pin
     ev(14.9, '340', -17, pan=0.2)                           # plane passes
