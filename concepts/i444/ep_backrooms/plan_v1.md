@@ -45,4 +45,4 @@ Deaths in the film: Naren (1990), Bobby, Kat, Clark. Survivor: Mary, held by Asy
 - Music: downloaded free tracks only (Mixkit), quiet (about -39 LUFS) with a soft fluorescent hum bed from a free SFX library; no generated music (owner 11/7).
 - Gore: cut before Bobby's body, Clark's death and anything with Kat's head. No nudity, no suicide content in this film.
 - Thumbnails (not the three-panel layout this time): A = Captain Clark looming in a yellow hallway + big red "5%"; B = the empty yellow rooms with one small person + "1 OF 5"; C = the glowing slit in the wall + "HOW LONG?" (to check with the owner).
-- Folder on the laptop: E:\YTP2\Horror Ranked\EP08 Backrooms (or EP09 if Conjuring goes first).
+- Folder on the laptop: EP08 Backrooms (or EP09 if Conjuring goes first) inside the Horror Ranked channel folder. The owner is adding number prefixes to the E:\YTP2 channel folders (11/7), so list E:\YTP2 first and use its current name.
