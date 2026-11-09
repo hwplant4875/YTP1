@@ -360,4 +360,6 @@ X.append(sec('s11', [
   ('thanks for watching', 'universe', 157.0, -2.6, C1),    # Carolyn holding the match, waiting
   ], inserts=[
     ins('END', 0.72, 'clap', shots=[(0, 'universe', 159.6, 1.0, o(C1, 'lufs=-22'))]),  # two claps 159.94/160.14, the match dies ~160.25, black at 160.32 (real audio, no subtitle)
-  ], extra=[('png', '../ep04/tiles/subscribe.png', 'every subscribe', 'thanks for watching')]))
+  ], extra=[('png', '../ep04/tiles/subscribe.png', 'every subscribe', 'thanks for watching'),
+            # callback to the cold-open caption over the same poster wall (it fills the wall's empty middle band, B1 QA)
+            ('word', 'Every Conjuring demon', 'every conjuring demon', 'from the doll')]))
