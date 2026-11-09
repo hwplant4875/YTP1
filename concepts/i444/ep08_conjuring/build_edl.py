@@ -11,9 +11,15 @@
 # Every insert must sit BEFORE the entry's card phrase (the card takes the right half of the frame from then on).
 # usage: python build_edl.py   -> edl.json   (then python qa/caption_coverage.py). Build it on the laptop: its ffprobe gives the
 # decoded take lengths the renderer uses (cloud ffprobe 6.1 pads mp3s by ~0.05 s).
+# Before the real voice exists: python qa/synth_voice.py voice_synth script_v1_1.md, then set VOICE=voice_synth (a synthetic take
+# at Adam's pace, never real audio) to see every shot's speed. NOTE slow = a shot slowed under 0.6x to fit its clean span (visible on
+# anything that moves: split the phrase with a 2nd shot or find a longer span); WARN too short = under 0.4x, it would run past its
+# clean span. NOTE/WARN soft = the zoom leaves fewer than 720 / 640 source rows on screen (EFFH in shots_grade.py).
 import json, re, os, subprocess
 D = os.path.dirname(os.path.abspath(__file__)) + '/'
-W = json.load(open(D + 'voice/words.json'))
+VD = os.environ.get('VOICE', 'voice').strip('/\\') + '/'   # the take folder: voice/ (real) or a synthetic test folder
+W = json.load(open(D + VD + 'words.json'))
+PH = {}   # (section, clip, in) -> the shot's anchor phrase, for the NOTE/WARN lines
 ST = {e['sec']: e for e in json.load(open(D + 'stats.json'))['entries']}
 STATS = json.load(open(D + 'stats.json'))['stats']   # STRENGTH, INTELLIGENCE, KILL COUNT, POSSESSION
 LEAD = 0.08
@@ -48,9 +54,9 @@ def find(seg, phrase):   # 'learn the name#2' = the 2nd occurrence -> (first wor
     raise KeyError((seg, phrase))
 def at(seg, phrase): return W[seg][find(seg, phrase)[0]][0]
 def T(seg, x): return x if isinstance(x, (int, float)) else round(max(0, at(seg, x) - LEAD), 3)
-def AL(seg): return json.load(open(D + f'voice/{seg}.json'))
+def AL(seg): return json.load(open(D + VD + f'{seg}.json'))
 def take_len(seg):
-    try: return float(subprocess.check_output(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', D + f'voice/{seg}.mp3']))
+    try: return float(subprocess.check_output(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', D + VD + f'{seg}.mp3']))
     except Exception: return AL(seg)['character_end_times_seconds'][-1] + 0.05
 def num_onset(seg):   # take time of the first letter after the last "Survival rate"
     a = AL(seg); s = ''.join(a['characters']); i = s.rfind('Survival rate') + len('Survival rate')
@@ -60,7 +66,7 @@ _PCM = {}
 def _pcm(seg):
     if seg not in _PCM:
         import numpy as np
-        _PCM[seg] = np.frombuffer(subprocess.check_output(['ffmpeg', '-v', 'error', '-i', D + f'voice/{seg}.mp3', '-ac', '1', '-ar', '48000',
+        _PCM[seg] = np.frombuffer(subprocess.check_output(['ffmpeg', '-v', 'error', '-i', D + VD + f'{seg}.mp3', '-ac', '1', '-ar', '48000',
                                                            '-f', 's16le', '-']), np.int16).astype('float32') / 32768
     return _PCM[seg]
 def split_after(seg, phrase):
@@ -111,7 +117,7 @@ def sec(voice, shots, inserts=(), extra=(), pad=None, clip_db=-99, card_at=None)
         s = list(s)
         if TF and s[2] is None: s[2] = 5.0; s[3] = -30.0
         if s[2] is None: print('TODO shot skipped', voice, s[0], s[1]); TODOS.append((voice, s[0])); continue
-        main.append([M(T(voice, s[0])), *s[1:]])
+        main.append([M(T(voice, s[0])), *s[1:]]); PH[(voice, s[1], s[2])] = s[0]
     main.sort(key=lambda s: s[0])
     for x in I:   # an insert with its own picture cuts the running shot, plays its shots at 1.0x, then the running shot resumes
         if not x['shots']: continue
@@ -176,13 +182,17 @@ def opts(o):
     elif o == 'flip': d = {'flip': 1}
     else: d = dict(kv.split('=') for kv in o.split(','))
     return {k: (v if k == 'f' else float(v)) for k, v in d.items()}
+NSLOW = [0]
 def fit(S):  # (t, clip, in, -clean) -> a speed that keeps the shot inside its clean span (never below 0.4x); insert shots stay 1.0x
     sh = S['shots']
     for k, s in enumerate(sh):
         d = (sh[k + 1][0] if k + 1 < len(sh) else S['len']) - s[0]
         if len(s) > 3 and isinstance(s[3], (int, float)) and s[3] < 0:
             sp = min(1.0, -s[3] * 0.96 / max(d, 0.01))
-            if sp < 0.4: print('WARN too short', S['voice'], s[:3], round(d, 2))
+            if sp < 0.6:
+                NSLOW[0] += 1
+                print('WARN too short' if sp < 0.4 else 'NOTE slow', S['voice'], repr(PH.get((S['voice'], s[1], s[2]), '?')), s[1], s[2],
+                      f'{sp:.2f}x: on screen {d:.2f} s, clean {-s[3]:.2f} s')
             s[3] = round(max(sp, 0.4), 3) if sp < 0.999 else 1.0
         if len(s) > 4: s[4] = opts(s[4])
         if len(s) > 3 and s[3] is None: s[3] = 1.0
@@ -207,19 +217,23 @@ for S in X:   # a film label per run of one film, gone once the stat card takes 
     S.pop('_M', None); L = S['len']
     for ov in S['overlays']:
         ov[2] = round(max(0.0, ov[2]), 3); ov[3] = round(min(ov[3], L), 3)
-VDARK, DARK, ZOOM, BAR, MARKS, CLIPOPT = [], [], {}, {}, {}, {}   # filled by shots_grade.py (laptop QA): BAR = {clip: source row}
+VDARK, DARK, ZOOM, BAR, MARKS, CLIPOPT, EFFH = [], [], {}, {}, {}, {}, {}   # filled by shots_grade.py (laptop QA): BAR = {clip: source row}
 exec(open(D + 'shots_grade.py', encoding='utf-8').read()) if os.path.exists(D + 'shots_grade.py') else None
 def window(op, name):   # the source rectangle a shot shows on its first frame (render_cj.py: fill-scale, zoompan z/dx/dy, then +0.03)
     z = float(op.get('z', ZOOM.get(name, 1.04))); w, h = 1920 / z, 1080 / z
     x0 = min(max(0.0, 960 - w / 2 + float(op.get('dx', 0))), 1920 - w); y0 = min(max(0.0, 540 - h / 2 + float(op.get('dy', 0))), 1080 - h)
     return x0, y0, x0 + w, y0 + h
-NMARK = 0
+NMARK, NSOFT = 0, 0
 for S in X:   # clip framing defaults (CLIPOPT) under each shot's own opts, then every listed mark must be out of frame or under the bar
     for s in S['shots']:
         if s[1] in CLIPOPT:
             if len(s) == 4: s.append({})
             s[4] = {**opts(CLIPOPT[s[1]]), **s[4]}
         op = s[4] if len(s) > 4 else {}
+        eff = EFFH.get(s[1], 1080) / float(op.get('z', ZOOM.get(s[1], 1.04)))   # source rows on screen (owner: sources 720p+)
+        if eff < 720:
+            print('WARN soft' if eff < 640 else 'NOTE soft', S['voice'], repr(PH.get((S['voice'], s[1], s[2]), '?')), s[1], s[2],
+                  f'{int(eff)} source rows on screen (z {op.get("z", ZOOM.get(s[1], 1.04))})'); NSOFT += eff < 640
         x0, y0, x1, y1 = window(op, s[1])
         for bx0, by0, bx1, by1 in MARKS.get(s[1], []):
             if op.get('flip'): bx0, bx1 = 1920 - bx1, 1920 - bx0
@@ -229,5 +243,6 @@ P = {'sections': X, 'tiers': TIERS, 'gamma': {**{k: 1.25 for k in DARK}, **{k: 1
 json.dump(P, open(D + 'edl.json', 'w'), indent=1)
 tot = sum(S['len'] for S in X)
 print(len(X), 'sections', f'{int(tot // 60)}:{tot % 60:04.1f}', sum(len(S['shots']) for S in X), 'shots',
-      sum(len(S['inserts']) for S in X), 'inserts', len(TODOS), 'TODO/GAP shots skipped', NMARK, 'visible marks')
+      sum(len(S['inserts']) for S in X), 'inserts', len(TODOS), 'TODO/GAP shots skipped', NMARK, 'visible marks', NSLOW[0], 'shots under 0.6x',
+      NSOFT, 'soft shots under 640 rows')
 if TODOS: print('TODO/GAP (fix before the render):', ', '.join(f'{v} {p!r}' for v, p in TODOS))

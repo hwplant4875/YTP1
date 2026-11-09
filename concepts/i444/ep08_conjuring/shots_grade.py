@@ -23,3 +23,6 @@ CLIPOPT['c1_dog_b'] = 'z=1.3'                                         # crops th
 # QA pass 1 (rendered frames): near-black spans lifted. VDARK = gamma 1.4, DARK = gamma 1.25 (default 1.06), per clip.
 VDARK += ['ach_wolf']                                                 # beats_v1: the hellhound attack is very dark
 DARK += ['ach_ferry_b', 'ach_room', 'co_mother_b', 'cr_soul', 'cr_trapped']
+# Effective resolution: source picture rows per frame height for clips that are not 1920x1080 (the renderer fill-scales first, so the
+# rows on screen = EFFH / z). Owner rule: sources 720p+, so keep EFFH / z >= 720 where possible and never under 640.
+EFFH.update({'n2_lucy': 842, 'c2_vision': 800, 'dm_bruno_b': 800, 'lr_birth': 1070, 'dm_final': 720, 'c2_bill': 720, 'c1_clap': 902})

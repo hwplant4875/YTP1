@@ -3,7 +3,7 @@
 # usage: python qa/gaps.py   (exit code 1 when a gap is over 1.5 s)
 import json, os, sys
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
-E = json.load(open(D + 'edl.json')); W = json.load(open(D + 'voice/words.json')); FPS = 30
+E = json.load(open(D + 'edl.json')); W = json.load(open(D + os.environ.get('VOICE', 'voice').strip('/\\') + '/words.json')); FPS = 30
 spans, tg = [], 0.0
 for S in E['sections']:
     t0 = round(tg * FPS) / FPS

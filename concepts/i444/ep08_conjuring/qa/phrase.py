@@ -3,7 +3,7 @@
 #        python qa/phrase.py s05 "the last teenager" "onto a bed"   -> cut time (onset - 0.08) of each phrase, or NOT FOUND
 import json, re, sys, os
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
-W = json.load(open(D + 'voice/words.json'))
+W = json.load(open(D + os.environ.get('VOICE', 'voice').strip('/\\') + '/words.json'))
 def norm(s): return re.sub(r"[^a-z0-9']", '', s.lower().replace('-', ''))
 seg = sys.argv[1]
 if len(sys.argv) == 2:

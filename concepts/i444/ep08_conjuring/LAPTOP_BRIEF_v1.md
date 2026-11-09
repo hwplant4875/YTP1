@@ -51,13 +51,50 @@ Horror Ranked on 11/7 (EP04), so downloaded Mixkit beds are approved; the 10/27 
 2. Fill the TODO picks that only need a choice of span: s01 ach_devil_cz 298.2-305 (the case shut, doll inside), s02 survival (ach_end
    46-81 crucifix fight), s03 a14_fire (Mia at home) and a14_baby (Mia in the nursery with the doll), s05 c2_name_b 0-58 (Lorraine with
    the bible), s08 dm_vision ~185 (the knife). Leave the real GAP lines (clip 'GAP' or an age-gated clip name) as TODO.
-3. Framing: each shot after an entry's card phrase (and all of s01) uses L: the subject must sit left of x 840. Check co_valak0 (picture
-   rows 266-901 only) at its zoom, and add any n2 Movieclips clip that carries the mark to MC in shots_grade.py.
+3. Framing: each shot after an entry's card phrase (and all of s01) uses L: the subject must sit left of x 840. co_valak0 is 2.39-matted
+   (picture rows 140-939, measured in B0), and add any n2 Movieclips clip that carries the mark to MC in shots_grade.py.
 4. The two inserts in s05 and the one in s08: Lorraine / Arne should be on screen while speaking; if not, start on the clip where they are
    and keep the words exact (qa\find_line.py). The s11 clap insert: the two claps and the match dying, trimmed where the dark begins.
 5. Run `python qa\dupes.py` after a build (Phase B step 6): no moment should be shown twice (s01 and s03 share "her SOUL": look for a
    second angle of the writing after a14_baby 60.4).
 Push shots.py and shots_grade.py (text only) and report in a few lines: what changed, every span you could not confirm.
+
+## Phase B0b: shot speeds, one repeat, soft zooms (now: still no voice needed)
+
+B0 made every clean span true to the frames, so many phrases now sit on a shorter span and get slowed (build_edl.py slows a shot to
+fit its clean span, down to 0.4x; under that it runs past the cut). New tools: `python qa\synth_voice.py voice_synth script_v1_1.md`
+writes a SYNTHETIC take (shaped noise at Adam's pace, git-ignored, never for a render), then `set VOICE=voice_synth`,
+`python build_edl.py`, `python qa\dupes.py`, `python qa\caption_coverage.py`, `python qa\gaps.py`. build_edl.py now prints each shot's
+anchor phrase in `NOTE slow` (under 0.6x) / `WARN too short` (under 0.4x) and `NOTE soft` / `WARN soft` (fewer than 720 / 640 source rows on
+screen: EFFH / z, EFFH in shots_grade.py; add any clip that is not 1920x1080). The cloud run on v1.1 shows 8 WARN too short, 26 NOTE slow,
+3 WARN soft and 1 repeat. Goal: no WARN, no repeat; NOTE slow only on near-still shots (a doll in a case, a face that barely moves), never
+under 0.45x on anything that moves. Fix in this order, each new span checked on frames as in B0:
+1. **Repeat:** s01 'which is how completely' (c2_janet 220.37, z 1.6) is the same moment as s05 'then it takes over janet'. Give s01 another
+   body-taken-over shot, L framing, at least 2.9 s clean (or two shots): co_mother_c levitation 240-264 (sheet-covered Carolyn), dm_david
+   303-319 / 321-329 / 331.4-342 (David's exorcism), lr_end 100-108 / 110-118 (possessed Judy, not 109.15-109.6).
+2. **WARN too short** (split the phrase with a 2nd row anchored on a later word of the same sentence, or a longer span of the moment):
+   - s03 'to force a trade' a14_basement 64.0 (0.75 s for "to force a trade, the baby for her soul."): Leah may run from the 63.33 cut;
+     'the baby for her soul' could be the doll in Leah's crib (a14_baby 45.8-48) or Mia.
+   - s04 'with a happy memory' universe 697.6: two or three beach shots (each beach shot is 0.6 s or less).
+   - s05 'so everyone thinks' c2_vision 56.05 (0.7 s for "so everyone thinks it's just a ghost."): 'it's just a ghost' on Bill Wilkins
+     in his chair (c2_vision 0-55, a span the s05 rows do not use).
+   - s08 'a witch puts a curse' dm_calvary 40.8: 'on you' on the shot after the 41.47 cut (Arne's arm).
+   - s08 'twenty-two times' dm_bruno_b 174.75: the grab, then the scream shot inside 174.4-175.9 (each one shot, no black).
+   - s09 'and this valak is far' n2_lucy 21.82 (3 s): 'stronger than any demon' on another Valak shot (n2_lucy 10 / 106, n2_deliv 242-245).
+   - s09 'it lifts a priest' n2_burn 371.3: the wide lift from ~370.6, then 'into the air' on the close 371.3-371.85.
+   - s10 'this is valak at full power' spooky_nun 1092.45: 'at full power' on another Valak shot in 1050-1098 (not 1063.0-1065.15, s11 uses it).
+3. **NOTE slow under 0.5x on moving shots:** split the same way where the sentence allows. The longest: s02 'and as long as' (split at
+   'it can't touch anyone'), s03 'but it has one big weakness' (at 'it can't just take'), s04 'leaves bruises' (at 'while she sleeps'),
+   s04 'then she takes over' (at 'carolyn'), s07 'and unlike the last one' (at 'it kills almost everyone'), s09 'that would give it back'
+   (at 'the power it had'), s01 'and one has wiped out' (at 'an entire abbey'). Entries whose card shot runs through "Survival rate"
+   (s03 'never offer it your soul', s04 'she only wants the mother') may get their own 'survival rate' row (L, the demon's face).
+4. **WARN soft:** dm_final is 720p, so z 1.35 leaves 533 rows: for s08 'and only smashing' and 'can break it' use z 1.1 at most (dx and
+   flip to keep the hammer / the break left of x 840; the card may cover the right edge of the table) or a 1080p span of the same moment if
+   you find one. n2_lucy is 842p: s09 'survival rate' (z 1.35, 623 rows) needs z 1.3 at most or a 1080p Valak face (n2_exorcise, n2_maurice).
+   z 1.5-1.6 on a 1080p clip (675-720 rows) is acceptable when it keeps a face off the card.
+5. Run both variants: the v1.1 take (no GAP rows) and `python qa\synth_voice.py voice_synth1 script_v1.md` with `set VOICE=voice_synth1`
+   (its WARN lines next to a skipped GAP row are the GAP's, not a span problem). Push shots.py and shots_grade.py (text only) and report:
+   the counts before and after, and any line you had to leave slow or soft.
 
 ## Phase B: shot list (after the cloud pushes the voice and the shots.py skeleton)
 

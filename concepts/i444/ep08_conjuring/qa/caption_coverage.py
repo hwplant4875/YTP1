@@ -3,7 +3,7 @@
 # its first word, and every caption has its own cut. Usage: python qa/caption_coverage.py  (exit code 1 on any failure)
 import json, re, sys, os
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
-E = json.load(open(D + 'edl.json')); W = json.load(open(D + 'voice/words.json'))
+E = json.load(open(D + 'edl.json')); W = json.load(open(D + os.environ.get('VOICE', 'voice').strip('/\\') + '/words.json'))
 MAXLEAD = 0.25
 ALIAS = {'22': 'twentytwo'}   # caption digits for spoken numbers
 def norm(s): s = re.sub(r"[^a-z0-9']", '', s.lower().replace('-', '')); return ALIAS.get(s, s)
