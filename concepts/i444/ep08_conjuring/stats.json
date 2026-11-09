@@ -1,0 +1,14 @@
+{
+ "stats": ["STRENGTH", "INTELLIGENCE", "KILL COUNT", "POSSESSION"],
+ "entries": [
+  {"sec": "s02", "rank": 9, "film": "Annabelle Comes Home (2019)", "villain": "Annabelle", "v": [3, 4, 0, 3], "pct": 95},
+  {"sec": "s03", "rank": 8, "film": "Annabelle (2014)", "villain": "The Annabelle Demon", "v": [4, 6, 1, 4], "pct": 80},
+  {"sec": "s04", "rank": 7, "film": "The Conjuring (2013)", "villain": "Bathsheba", "v": [5, 5, 1, 9], "pct": 65},
+  {"sec": "s05", "rank": 6, "film": "The Conjuring 2 (2016)", "villain": "Valak", "v": [6, 8, 0, 7], "pct": 55},
+  {"sec": "s06", "rank": 5, "film": "The Conjuring: Last Rites (2025)", "villain": "The Mirror Demon", "v": [8, 9, 1, 10], "pct": 45},
+  {"sec": "s07", "rank": 4, "film": "Annabelle: Creation (2017)", "villain": "The Annabelle Demon", "v": [8, 7, 5, 9], "pct": 40},
+  {"sec": "s08", "rank": 3, "film": "The Conjuring: The Devil Made Me Do It (2021)", "villain": "The Occultist's Demon", "v": [5, 10, 5, 10], "pct": 30},
+  {"sec": "s09", "rank": 2, "film": "The Nun II (2023)", "villain": "Valak", "v": [9, 8, 6, 9], "pct": 12},
+  {"sec": "s10", "rank": 1, "film": "The Nun (2018)", "villain": "Valak", "v": [9, 10, 8, 9], "pct": 5}
+ ]
+}
