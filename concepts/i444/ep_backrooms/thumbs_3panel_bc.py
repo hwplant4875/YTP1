@@ -1,7 +1,7 @@
 # Backrooms three-panel % thumbnails B and C (channel format, same build as thumbs_3panel.py's variant A: panels 427/426/427, numbers
 # low at H-115 on a dark shadow, green / yellow / red, natural colour with a light lift). Faces are sharp frames from the owner's film file
 # (never committed), different from A (TMDB stills s24 / s0 / bd103) and from each other.
-#   B  Clark in the yellow room (film 1566.5) 90% | Kat, scared, on Bobby's camcorder (2769.4) 15% | Captain Clark at Clark's neck (5259.0) 2%
+#   B  Clark in the yellow room (film 1566.5) 90% | Kat, scared, on Bobby's camcorder (2769.4) 15% | Captain Clark's face, tight (sharpest frame of the store shot; C uses a wider frame of it) 2%  (the 5259 neck shot showed the bite)
 #   C  Clark tired in his store (d_clark_discovers 24.0) 90% | Mary at Async (6125.0) 40% | Captain Clark in full costume (5571.9) 2%
 # usage: python thumbs_3panel_bc.py <frames_dir (f_<t>.png)> <out_dir>
 import os, sys
@@ -12,7 +12,7 @@ SD, OD = sys.argv[1], sys.argv[2]
 W, H = 1280, 720; PW = [427, 426, 427]; COL = [(70, 215, 95), (250, 200, 40), (235, 30, 38)]
 def panel(fn, cx, cy, chf, pw, b=1.05):
     im = Image.open(os.path.join(SD, fn)).convert('RGB'); sw, sh = im.size; ch = chf * sh; cw = ch * pw / H
-    x0 = min(max(0, cx * sw - cw / 2), sw - cw); y0 = min(max(0, cy * sh - ch * 0.4), sh - ch)
+    x0 = min(max(0, cx * sw - cw / 2), sw - cw); y0 = min(max(0, cy * sh - ch * 0.30), sh - ch)   # cy = the eye line in the source: eyes land ~30% from the top (owner 11/9: B/C faces sat too low)
     p = im.crop((int(x0), int(y0), int(x0 + cw), int(y0 + ch))).resize((pw, H), Image.LANCZOS)
     p = ImageEnhance.Brightness(p).enhance(b); p = ImageEnhance.Contrast(p).enhance(1.12)
     p = p.filter(ImageFilter.UnsharpMask(radius=2, percent=60, threshold=2))
@@ -30,8 +30,8 @@ def build(specs, out):
     d = ImageDraw.Draw(im); d.rectangle((426, 0, 429, H), fill=0); d.rectangle((852, 0, 855, H), fill=0)
     im.save(os.path.join(OD, out), quality=93)
 # (file, centre x, eye-line y, crop height as a fraction of the frame, brightness, number)
-build([('f_1566.5.png', 0.57, 0.18, 0.62, 1.05, '90%'), ('f_2769.4.png', 0.53, 0.14, 0.62, 1.08, '15%'),
-       ('f_5259.0.png', 0.45, 0.42, 0.62, 1.35, '2%')], 'backrooms_thumb_3p_b.jpg')
-build([('f_clark_store.png', 0.50, 0.30, 0.70, 1.15, '90%'), ('f_6125.0.png', 0.48, 0.32, 0.62, 1.05, '40%'),
-       ('f_cap12.png', 0.49, 0.33, 0.45, 1.12, '2%')], 'backrooms_thumb_3p_c.jpg')
+build([('f_1566.5.png', 0.56, 0.32, 0.50, 1.05, '90%'), ('f_2769.4.png', 0.555, 0.16, 0.70, 1.08, '15%'),
+       ('f_cap11.png', 0.498, 0.366, 0.30, 1.12, '2%')], 'backrooms_thumb_3p_b.jpg')
+build([('f_clark_store.png', 0.50, 0.41, 0.55, 1.15, '90%'), ('f_6125.0.png', 0.48, 0.44, 0.50, 1.05, '40%'),
+       ('f_cap12.png', 0.49, 0.384, 0.40, 1.12, '2%')], 'backrooms_thumb_3p_c.jpg')
 print('ok')
