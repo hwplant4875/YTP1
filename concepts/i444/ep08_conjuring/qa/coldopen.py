@@ -4,7 +4,7 @@ import json, os, subprocess, sys
 from PIL import Image, ImageDraw, ImageFont
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
 src, out = sys.argv[1], sys.argv[2]; FPS = float(sys.argv[3]) if len(sys.argv) > 3 else 10; T1 = float(sys.argv[4]) if len(sys.argv) > 4 else 15.4
-W = json.load(open(D + 'voice/words.json'))['s00']; TW, TH, C, P = 320, 180, 8, 40
+W = json.load(open(D + os.environ.get('VOICE', 'voice').strip('/\\') + '/words.json'))['s00']; TW, TH, C, P = 320, 180, 8, 40
 raw = subprocess.check_output(['ffmpeg', '-v', 'error', '-i', src, '-t', str(T1), '-vf', f'fps={FPS},scale={TW}:{TH}', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'])
 n = len(raw) // (TW * TH * 3); fnt = ImageFont.truetype('arial.ttf', 15)
 def word(t): return next((w for a, b, w in reversed(W) if a <= t), '')

@@ -96,6 +96,29 @@ under 0.45x on anything that moves. Fix in this order, each new span checked on 
    (its WARN lines next to a skipped GAP row are the GAP's, not a span problem). Push shots.py and shots_grade.py (text only) and report:
    the counts before and after, and any line you had to leave slow or soft.
 
+## Phase B1: picture proxy on the synthetic take (now)
+
+The owner holds the voice until the JC credits reset on 11/11 18:27 KST and said "그 외 모든 것들을 준비해줘" (prepare everything
+else). So the whole picture is rendered and checked now on the v1.1 synthetic take; on voice day only the timing changes.
+1. `set VOICE=voice_synth`, `python build_edl.py` (this edl.json comes from the synthetic take: never commit it).
+2. `set LEAN=1`, then `python render_cj.py edl.json "<EP08>\1_work\clips" voice_synth "<EP08>\1_work\music\conjuring_bed.mp3"
+   "<EP08>\2_renders\proxy\conjuring_PROXY_synthvoice.mp4"`. Its narration is shaped noise: picture QA only, never delivered or uploaded.
+3. Picture QA, everything in Phase C step 9 except the narration: `python qa\shots_grid.py <proxy> <prefix>`, and
+   `python qa\coldopen.py <proxy> <prefix> 10 18` (VOICE is still set). Check every shot and overlay:
+   - rank cards (#, demon, film); stat cards (each entry's own demon, the four stats, the % and tier text and colour of stats.json);
+     tiles; film labels (right film, gone once the card is up); the s01 rules card (bars fill on each stat word, "??%"); the insert
+     subtitles exactly as spoken; the clap ending; the subscribe png; the poster wall.
+   - no logo, mark, burned text, end card, black frame or scene cut inside a shot; every subject left of x 840 under a card; no suicide
+     act; gore never the worst frame; dark shots lifted but not washed out (the owner dislikes heavy grading).
+   - letterbox bars: the dm_final rows at z 1.1 keep their bars (cloud decision: bars are better than 533-row softness).
+4. Audio apart from the narration: the three film lines clear and level (lufs -17), the music ducked under them, the two claps at the end.
+5. Fix spans, framing or the VDARK/DARK lists, re-render only what changed (`set ONLY=s05,s09`, then a full run with `set REUSE=`
+   listing the unchanged sections), check again.
+6. Dry-run the kit format: `python make_kit.py edl.json "<EP08>\1_work\proxy_kit.md"` and
+   `python make_srt.py edl.json voice_synth "<EP08>\1_work\proxy.srt"` (fan one-liner, [ Timeline ] chapters, hashtags; timings are
+   synthetic). Do not commit these.
+7. Push shots.py and shots_grade.py (text only) and report: render time, what QA found and fixed, anything that needs the owner.
+
 ## Phase B: shot list (after the cloud pushes the voice and the shots.py skeleton)
 
 The cloud voices script_v1.md (Adam) once the owner OKs it, and pushes `voice/` plus a `shots.py` skeleton built from `beats_v1.md`.
