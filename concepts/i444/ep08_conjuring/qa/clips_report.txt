@@ -1,0 +1,99 @@
+# EP08 Conjuring clips report: name | id | height | fps | duration s | SDR/HDR | status | channel | beat
+co_burn | _HYlNDj5tuU | - | - | - | - | AGE-GATED | Movieclips | Nun II "Burning the Priest": priest lifted into the air + set on fire ("burn you
+co_burn_4k | thjYIYyNj_8 | 1080 | 23.98 | 163.9 | SDR | OK | bestShot | same, 4K backup
+co_buried | ttcYRiu8KD0 | - | - | - | - | AGE-GATED | Movieclips | Nun "Buried Alive (5/10)": Burke in the coffin, dirt ("bury you alive")
+co_buried_b | WRTZDMoHxps | 1080 | 23.98 | 164.1 | SDR | OK | WB UK Horror | backup
+co_neck | 3mqd8B6Gt_o | 1080 | 23.98 | 187.2 | SDR | OK | Movieclips | Nun II "Magazine Scare": Valak at the newsstand; check if the neck-snap victim i
+co_neck_b | NccbK_7qg50 | 1080 | 23.98 | 603.9 | SDR | OK | (backup from notes) | Nun II "Magazine Scare": Valak at the newsstand; check if the neck-snap victim i
+co_stab | 635odZuc20c | 1080 | 23.98 | 244.9 | SDR | OK | ClipZone | DMMDI "Murderous Morgue" (Lorraine's vision of Katie/Jessica?) ("stab your best 
+co_mother | rRuulhJ2ARQ | 1080 | 23.98 | 206.0 | SDR | OK | Movieclips | Conjuring "She Made Me Do It (4/10)" / QgpryeWPIf4 ClipZone 4K / vwFnJbYXqb4 exo
+co_mother_b | QgpryeWPIf4 | 1080 | 23.98 | 392.6 | SDR | OK | (backup from notes) | Conjuring "She Made Me Do It (4/10)" / QgpryeWPIf4 ClipZone 4K / vwFnJbYXqb4 exo
+co_mother_c | vwFnJbYXqb4 | 1080 | 23.98 | 341.2 | SDR | OK | (backup from notes) | Conjuring "She Made Me Do It (4/10)" / QgpryeWPIf4 ClipZone 4K / vwFnJbYXqb4 exo
+co_doll | OLxXhd9utWg | 1080 | 23.98 | 98.2 | SDR | OK | Movieclips | ACH "Annabelle in Bed": doll close-up ("all it takes is a doll")
+co_valak0 | Hf0kgrOPFLI | 1080 | 23.98 | 233.3 | SDR | OK | Watch Time | Nun final (1080p): Valak big face for FRAME 0 ("These demons")
+ach_case | apJOBtBz5n4 | 1080 | 23.98 | 167.8 | SDR | OK | Movieclips | "Annabelle vs. the Warrens (1/9)": the glass case, the blessing
+ach_room | xe2SXVrAem0 | 1080 | 23.98 | 376.6 | SDR | OK | ClipZone | "The Artifact Room": Daniela opens the case
+ach_bride | -Rxjt9MNdco | 1080 | 23.98 | 162.3 | SDR | OK | Movieclips | "Bloody Bride (2/9)": the Bride
+ach_ferry | 947XPxTY-1s | 1080 | 23.98 | 150.0 | SDR | OK | Movieclips | "Coins for the Dead (5/9)" + XXRoFW6SxPk "Ferryman's Tomb (8/9)": the Ferryman c
+ach_ferry_b | XXRoFW6SxPk | 1080 | 23.98 | 180.8 | SDR | OK | (backup from notes) | "Coins for the Dead (5/9)" + XXRoFW6SxPk "Ferryman's Tomb (8/9)": the Ferryman c
+ach_wolf | IQAP7aOReQc | 1080 | 23.98 | 87.4 | SDR | OK | Movieclips | "Werewolf vs. Convertible (7/9)": the hellhound attacks Bob
+ach_tv | Q1X8aQarPOQ | 1080 | 23.98 | 98.7 | SDR | OK | Movieclips | "Haunted TV (4/9)"
+ach_hands | Zd9z1CJP5Gc | 1080 | 23.98 | 98.5 | SDR | OK | ClipZone | "Annabelle Wants To Play": Feeley Meeley hands? (check)
+ach_end | Nrs77C5gdQM | 1080 | 23.98 | 109.6 | SDR | OK | Movieclips | "The Devil Attacks (9/9)": the girls lock the doll back in
+a14_fire | nBU5OQUnPJE | 1080 | 29.97 | 142.2 | SDR | OK | Conj. Archives | "Popcorn": kitchen fire
+a14_basement | _8hB8umrGlo | 1080 | 23.98 | 155.3 | SDR | OK | Movieclips | "Trapped by a Demon (6/10)": basement storage chase
+a14_stairs | NGkLen8TbHc | 1080 | 23.98 | 102.4 | SDR | OK | Movieclips | "Devil on Your Back (4/10)"
+a14_priest | KTVlvs7mtkM | - | - | - | - | AGE-GATED | Movieclips | "Have Mercy on Your Soul (8/10)": Father Perez attacked
+a14_baby | EPj1eq1csm4 | 1080 | 23.98 | 187.5 | SDR | OK | Movieclips | "What Do You Want? (9/10)": the demon takes Leah, the trade
+a14_end | GfUqvGxa6YE | - | - | - | - | AGE-GATED | Movieclips | "My Sacrifice (10/10)": Evelyn's sacrifice (cut before the fall)
+a14_open | piYwvMvqXPg | - | - | - | - | AGE-GATED | Movieclips | "While You Slept (1/10)": Higgins home invasion (backstory only)
+c1_clap | JhMWopjJiI8 | 1080 | 23.98 | 198.3 | SDR | OK | Movieclips | "Hide and Clap (2/10)" (outro callback too)
+c1_sleep | RF-w0OQdawg | 1080 | 23.98 | 89.4 | SDR | OK | WB Ent. | "I'm Trying To Sleep": the foot pull? (check)
+c1_sheets | XAwpBIXjQrY | 1080 | 23.98 | 43.6 | SDR | OK | WB Ent. | "Sheets In The Wind"
+c1_feed | zS41k2xmQUI | 1080 | 23.98 | 144.1 | SDR | OK | Movieclips | "She's Feeding Off Her (5/10)": bruises, Carolyn
+c1_land | NcEd22ZuNd8 | 1080 | 24.00 | 146.6 | SDR | OK | Unpopular Movie Clips | "People Who Took Her Land": Bathsheba's history (check quality)
+c1_exorcism_b | FVxi52aRJIY | 1080 | 23.98 | 161.7 | SDR | OK | (backup from notes) | "A Terrifying Exorcism" + FVxi52aRJIY (RT 4K "I Condemn You Back to Hell")
+c2_crooked | LKrcDYvwV1Q | 1080 | 23.98 | 152.5 | SDR | OK | Movieclips | "Crooked Man (2/10)"
+c2_grave | W8EhiYDVPEU | 1080 | 23.98 | 183.9 | SDR | OK | Movieclips | "I Come From the Grave (3/10)": Bill Wilkins
+c2_bill | 89k_oaorL1Y | 720 | 30.00 | 209.8 | SDR | OK | BEST CUTS | "Talking to Mr. Bill" (check logo)
+c2_painting | GWYAxIxXWXo | 1080 | 23.98 | 220.2 | SDR | OK | ClipZone | "The Nun Strikes Again": the Valak painting
+c2_name | EuMr2RcgUe4 | 1080 | 29.97 | 65.2 | SDR | OK | Conj. Archives | "You are Valak" + 0sGk658vyIQ "What is your name?"
+c2_name_b | 0sGk658vyIQ | 1080 | 29.97 | 95.6 | SDR | OK | (backup from notes) | "You are Valak" + 0sGk658vyIQ "What is your name?"
+c2_janet | tesbwk7HAtU | 1080 | 23.98 | 283.3 | SDR | OK | WB Ent. | "Janet Is Possessed"
+c2_vision | h7T0-hkE_xY | 800 | 23.98 | 59.2 | SDR | OK | Where's The Jump | Lorraine's vision of Ed (check quality)
+lr_birth | MO-cTFoQz3g | 1070 | 23.98 | 195.4 | SDR | OK | Toshimitsu | "Lorraine's Birth Scene / Judy" 4K (1964 mirror prologue)
+lr_open | uewVQ7JX_kE | 1080 | 30.00 | 123.4 | SDR | OK | AJ_Media | opening scene (check)
+lr_preview | Ro6Ff8rl7sI | 1080 | 23.98 | 602.0 | SDR | OK | WB Ent./ClipZone | Full Movie Preview 10 min (1964 + mirror)
+lr_family | Jrv0vS5yXh0 | 1080 | 23.98 | 347.2 | SDR | OK | WB Ent. | "Evil Takes Hold of the Family"
+lr_axe | a5kvPuwy_M4 | 1080 | 23.98 | 613.8 | SDR | OK | ClipZone | "The Axe Man": the three spirits
+lr_priest | cWfW3WrUAfA | 1080 | 23.98 | 167.5 | SDR | OK | Movieclips | "Priest vs. Demon (7/11)": Father Gordon (cut before the act)
+lr_judy | 0wD6ePCZST4 | 1080 | 23.98 | 259.7 | SDR | OK | WB Ent. | "Judy Attacked by Demon"
+lr_mirror | G94LhpuZZaU | 1080 | 23.98 | 177.7 | SDR | OK | Movieclips | "CRAZY MIRROR SCARE (6/11)"
+lr_exorcism | WTqjcPlsOiE | 1080 | 23.98 | 580.0 | SDR | OK | ClipZone | "Ed And Lorraine Perform Exorcism"
+lr_end | ecA5HLHjPWs | 1080 | 23.98 | 243.1 | SDR | OK | Movieclips | "The Warrens vs. Demon Mirror (11/11)": the mirror breaks
+cr_stair | 7L0AFOwekNY | 1080 | 23.98 | 137.9 | SDR | OK | Movieclips | "Wheelchair Ride from Hell (5/10)": the stairlift
+cr_soul | bkhhIN2lWgA | 1080 | 23.98 | 172.3 | SDR | OK | Movieclips | "Your Soul! (3/10)": Bee's form, possession of Janice
+cr_sam | NbVn5FuMR1s | 1080 | 23.98 | 74.6 | SDR | OK | Movieclips | "Sam's Death (6/10)": fingers broken
+cr_wasnt | mE2G-t-i1F0 | 1080 | 23.98 | 81.1 | SDR | OK | Movieclips | "It Wasn't Our Annabelle (8/10)": Esther explains the deal
+cr_well | qKaU3v_fvmo | 1080 | 23.98 | 138.7 | SDR | OK | Movieclips | "Dropped in the Well (7/10)": Linda
+cr_scarecrow | 8TOh6JyiCiM | 1080 | 23.98 | 173.8 | SDR | OK | Movieclips | "Scarecrow Terror (9/10)"
+cr_dumb | dtJehGpsYs0 | - | - | - | - | AGE-GATED | Movieclips | "Demonic Dumbwaiter (10/10)": Esther's death? (check)
+cr_end | cljoBuT5_9w | 1080 | 25.25 | 80.8 | SDR | OK | Movie Endings | ending: Janice adopted, the Higgins murder 12 years later (check)
+dm_david | QJL_stMKG3U | 1080 | 23.98 | 353.2 | SDR | OK | ClipZone | "David's Exorcism": Arne takes the demon, Ed's heart attack
+dm_call | IyvgPKzZDzc | - | - | - | - | UNDER 720p (592) | dr4c4h | "Call Me" full scene: Arne stabs the landlord (check logo)
+dm_water | WkLNXS8aAiY | - | - | - | - | AGE-GATED | Movieclips | "Waterbed Scare (5/7)"
+dm_heart | eLvqnltF3l0 | 1080 | 29.97 | 112.4 | SDR | OK | Conj. Archives | "I will stop your heart, old man"
+dm_isla | uVfRjBifUME | 1080 | 59.94 | 84.0 | SDR | OK | MovieTime | "Lorraine vs Isla" 4K
+dm_final | sSsC-c2zokk | 720 | 29.97 | 187.7 | SDR | OK | CLIPZ | "Final Battle (Ed Breaks The Curse)" 4K: Ed with the hammer, the altar
+dm_altar | kIYKXNDYclE | 1080 | 29.97 | 179.1 | SDR | OK | Conj. Archives | "Lorraine finds the occultist's altar"
+n2_burn | zog0H-4CN7M | 1080 | 23.98 | 499.4 | SDR | OK | WB UK Horror | Opening Scene 8:20 (Noiret)
+n2_altar | 7dIEVvQbFnM | 1080 | 23.98 | 117.3 | SDR | OK | Movieclips | "Altar Boy Kill": the headmistress? (check)
+n2_goat | l5AkWrT4sVg | 1080 | 23.98 | 147.7 | SDR | OK | Movieclips | "Goat Demon Attacks!"
+n2_maurice | wvMnD0yrrDo | 1080 | 23.98 | 184.6 | SDR | OK | Movieclips | "Valek Possesses Maurice"
+n2_irene | Ym8GvoT2FYg | - | - | - | - | AGE-GATED | Movieclips | "Sister Irene Burns": she does not burn
+n2_exorcise | t6l57hwM5mE | 1080 | 23.98 | 155.5 | SDR | OK | Movieclips | "Exorcising The Nun": the wine turns to blood
+n2_lucy | CsiMX3B-fU4 | 842 | 30.00 | 180.0 | SDR | OK | Million Movie Clips | St. Lucy final scene (check logo)
+n1_open | 2x8G3Xm6hQg | 1080 | 29.97 | 242.0 | SDR | OK | Conj. Archives | Opening Scene (the two nuns; cut before Victoria's act)
+n1_pray | UNvfT5vNQRw | 1080 | 23.98 | 62.1 | SDR | OK | Bloody Disgusting | "Don't Stop Praying" HD
+n1_grave | -XAX6bc2i3c | - | - | - | - | AGE-GATED | Movieclips | "Graveyard Horror (2/10)"
+n1_bloody | 5oIDU3aDWA0 | - | - | - | - | AGE-GATED | Movieclips | "Bloody Nightmare (6/10)"
+n1_grows | bz_MeJFWb0Y | - | - | - | - | AGE-GATED | Movieclips | "The Evil Grows Stronger (7/10)"
+n1_poss | NTI948-1rwM | - | - | - | - | AGE-GATED | Movieclips | "Sister Irene Possessed (9/10)": possession + drowning
+n1_fight | ZFnvukOdxlE | - | - | - | - | AGE-GATED | Movieclips | "Fighting the Nun (10/10)": blood of Christ, Valak escapes in Frenchie
+spooky_nun | BRtWb8-9cdo | 1080 | 23.98 | 1274.6 | SDR | OK | WB UK Horror | "Spookiest moments of The Nun" 21 min (spares)
+universe | BqoLSK_filk | 1080 | 23.98 | 1832.5 | SDR | OK | WB UK Horror | "Creepiest Moments in The Conjuring Universe" 30 min (spares for every film)
+c1_dog_b | L59kIxpLwuE | 1080 | 23.98 | 508.0 | SDR | OK | Horrors Worldwide | recap with film footage: 3:07 clocks, dead dog? (recap channel: check for voice-
+c1_foot | EaidsUdWv2w | - | - | - | - | AGE-GATED | NETWORXPERT | "Christine's leg got dragged" (foot pull)
+dm_vision | dzuY6BMI3oA | 1080 | 29.97 | 201.3 | SDR | OK | Conj. Archives | "Lorraine has a vision in the woods" (Katie / Jessica?)
+dm_promise | lWrgbwuHBXQ | 1080 | 29.97 | 64.4 | SDR | OK | Conj. Archives | "You promised a demon a soul" (Isla / Kastner)
+dm_truth | DIz6FUWPuXc | 1080 | 29.97 | 173.9 | SDR | OK | Conj. Archives | "The truth is revealed" (Kastner, Isla, Katie)
+dm_calvary | rP6eMtx7gzs | 1080 | 29.97 | 94.4 | SDR | OK | Conj. Archives | "By the blood of Calvary I command it"
+n2_deliv | BBACml6WAUQ | 1080 | 23.98 | 269.1 | SDR | OK | ClipZone | Nun II "Delivery of Doom": the delivery girl, Valak snaps her neck (s00 "snap yo
+n2_deliv_mc | OTj6lg6XtNA | - | - | - | - | AGE-GATED | Movieclips | Nun II "The Nun Kills The Delivery Girl" (backup)
+n2_bell | -2nC_4CnujU | 1080 | 23.98 | 166.1 | SDR | OK | Movieclips | Nun II "Bell Tower Chase" (spare)
+ach_devil_cz | K1IpbyY4nqU | 1080 | 23.98 | 351.7 | SDR | OK | ClipZone | ACH "The Devil Attacks" 6 min (case, Feeley Meeley?, the lock)
+cr_wheel | caPGrfat0Ds | 1080 | 23.98 | 582.8 | SDR | OK | ClipZone | Creation "Wheeled into Darkness" 10 min (stairlift throw?)
+cr_trapped | STx5Xn5mQ_E | 1080 | 23.98 | 425.1 | SDR | OK | ClipZone | Creation "Trapped With Nowhere to Run" 7 min (ending, Janice)
+cr_janice | tP2CTTTmnPo | 720 | 25.00 | 71.9 | SDR | OK | Georgie Denbrough | Creation "Janice gets possessed" (check quality/logo)
+dm_bruno | Lojy5GJ0k_o | - | - | - | - | UNDER 720p (540) | gianna larocca | DMMDI "Arne kills Bruno" full scene (check quality/logo)
+dm_bruno_b | XNghL77Wss4 | 800 | 23.98 | 180.1 | SDR | OK | teamstargirl | DMMDI "Call Me" scene (backup, check)

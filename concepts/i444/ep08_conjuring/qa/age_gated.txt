@@ -1,0 +1,16 @@
+# age-gated clips: the owner can run these in a terminal with Chrome logged in
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\co_burn.%(ext)s" https://www.youtube.com/watch?v=_HYlNDj5tuU
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\co_buried.%(ext)s" https://www.youtube.com/watch?v=ttcYRiu8KD0
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\a14_priest.%(ext)s" https://www.youtube.com/watch?v=KTVlvs7mtkM
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\a14_end.%(ext)s" https://www.youtube.com/watch?v=GfUqvGxa6YE
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\a14_open.%(ext)s" https://www.youtube.com/watch?v=piYwvMvqXPg
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\cr_dumb.%(ext)s" https://www.youtube.com/watch?v=dtJehGpsYs0
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\dm_water.%(ext)s" https://www.youtube.com/watch?v=WkLNXS8aAiY
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\n2_irene.%(ext)s" https://www.youtube.com/watch?v=Ym8GvoT2FYg
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\n1_grave.%(ext)s" https://www.youtube.com/watch?v=-XAX6bc2i3c
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\n1_bloody.%(ext)s" https://www.youtube.com/watch?v=5oIDU3aDWA0
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\n1_grows.%(ext)s" https://www.youtube.com/watch?v=bz_MeJFWb0Y
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\n1_poss.%(ext)s" https://www.youtube.com/watch?v=NTI948-1rwM
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\n1_fight.%(ext)s" https://www.youtube.com/watch?v=ZFnvukOdxlE
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\c1_foot.%(ext)s" https://www.youtube.com/watch?v=EaidsUdWv2w
+yt-dlp --cookies-from-browser chrome -S res:1080 -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\n2_deliv_mc.%(ext)s" https://www.youtube.com/watch?v=OTj6lg6XtNA
