@@ -40,6 +40,25 @@ Phase A is done (beats_v1.md, 6dfaa02). While the owner decides on the script, t
    beats_v1.md in them (subtitles help: search the line's words) and add the spans to beats_v1.md.
 Push (text only) and report in a few lines.
 
+## Phase B0: verify the shot list on frames (now: no voice needed)
+
+The cloud pushed `shots.py` (204 shots from beats_v1.md, both script variants: `pick()` takes the v1.1 shots when the take holds the
+script_v1_1.md wording, which is the no-film-file variant) and `shots_grade.py` (marks, bars, framing). Music: the owner picked Mixkit for
+Horror Ranked on 11/7 (EP04), so downloaded Mixkit beds are approved; the 10/27 note in your memory is outdated.
+1. For every shot: grab its in-point and its in-point + clean span (`python qa\sheet.py <clip> <out> 1`, `qa\strip.py` 10 fps where it
+   is tight). Fix the in-point, the clean span and the comment so they are true to the frames. Spans marked `(verify)` came from your
+   clip summaries, not from frames: check those first.
+2. Fill the TODO picks that only need a choice of span: s01 ach_devil_cz 298.2-305 (the case shut, doll inside), s02 survival (ach_end
+   46-81 crucifix fight), s03 a14_fire (Mia at home) and a14_baby (Mia in the nursery with the doll), s05 c2_name_b 0-58 (Lorraine with
+   the bible), s08 dm_vision ~185 (the knife). Leave the real GAP lines (clip 'GAP' or an age-gated clip name) as TODO.
+3. Framing: each shot after an entry's card phrase (and all of s01) uses L: the subject must sit left of x 840. Check co_valak0 (picture
+   rows 266-901 only) at its zoom, and add any n2 Movieclips clip that carries the mark to MC in shots_grade.py.
+4. The two inserts in s05 and the one in s08: Lorraine / Arne should be on screen while speaking; if not, start on the clip where they are
+   and keep the words exact (qa\find_line.py). The s11 clap insert: the two claps and the match dying, trimmed where the dark begins.
+5. Run `python qa\dupes.py` after a build (Phase B step 6): no moment should be shown twice (s01 and s03 share "her SOUL": look for a
+   second angle of the writing after a14_baby 60.4).
+Push shots.py and shots_grade.py (text only) and report in a few lines: what changed, every span you could not confirm.
+
 ## Phase B: shot list (after the cloud pushes the voice and the shots.py skeleton)
 
 The cloud voices script_v1.md (Adam) once the owner OKs it, and pushes `voice/` plus a `shots.py` skeleton built from `beats_v1.md`.

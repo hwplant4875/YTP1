@@ -6,7 +6,8 @@
 #   stats  animated stat card (anim.stat_card, frame sequence)   sub    film-line subtitle, bottom centre (../ep_backrooms/gfx_br.py)
 #   png    a ready-made 1920x1080 RGBA overlay (subscribe)
 # Tiles: tiles/<key>.png is looked up next to the EDL first (the repo's own graphics), then in <clips>/../tiles (film-frame tiles made on
-# the laptop, never committed). Bottom bar only where E['bar'] = {clip: y} names a clip with a mark at the bottom.
+# the laptop, never committed). Bottom bar only where E['bar'] = {clip: source row} names a clip with a mark at the bottom, and only
+# while the shot's zoom still shows it.
 # usage: python render_cj.py <edl.json> <clips_dir> <voice_dir> <music.mp3> <out.mp4> [fps]
 # env: LEAN=1 deletes shot files once a section is built; ONLY=s05,s09 renders just those sections; REUSE=s00,s03 keeps those sections
 #      from the last full render; MUSIC_LUFS (default -39)
@@ -46,9 +47,15 @@ E = json.load(open(edl))
 if E.get('tiers'): anim.set_tiers(E['tiers'])
 Z = E.get('zoom', {}); GM = E.get('gamma', {}); BAR = E.get('bar', {})
 SPF = 48000 // FPS
+_HA = {}
+def has_audio(p):
+    if p not in _HA:
+        _HA[p] = bool(subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'a', '-show_entries', 'stream=index', '-of', 'csv=p=0', p],
+                                     capture_output=True, text=True).stdout.strip())
+    return _HA[p]
 def wav(o, n, a_in=None, db=-99, tempo=1.0):
     ns = n * SPF
-    if a_in is None or db <= -90:
+    if a_in is None or db <= -90 or not has_audio(a_in[0]):   # silence (also for sources without sound, e.g. the poster wall)
         run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo', '-af', f'atrim=end_sample={ns}', '-c:a', 'pcm_s16le', o])
     else:
         a, tin = a_in; tf = f'atempo={tempo},' if abs(tempo - 1) > 1e-3 else ''
@@ -118,7 +125,10 @@ for si, S in enumerate(E['sections']):
                   f"y='max(0,min(ih-ih/zoom,ih/2-(ih/zoom/2)+{op.get('dy', 0)}))':d=1:s=1920x1080:fps={FPS},"
                   f"eq=contrast=1.04:saturation=0.95:gamma={op.get('g', GM.get(name, 1.06))},vignette=PI/5,setsar=1")
             vf = (f"setpts=PTS/{sp}," if sp != 1.0 else '') + f"fps={FPS}," + vf
-            if name in BAR: vf += f",drawbox=x=0:y={BAR[name]}:w=iw:h=ih:color=black:t=fill"
+            if name in BAR:   # BAR = the source row where the mark starts: drawn only while this shot's framing still shows it
+                z0 = float(op.get('z', Z.get(name, 1.04))); hh = 1080 / z0
+                y0 = min(max(0.0, 540 - hh / 2 + float(op.get('dy', 0))), 1080 - hh); yb = int((BAR[name] - y0) * z0)
+                if yb < 1080: vf += f",drawbox=x=0:y={max(0, yb)}:w=iw:h=ih:color=black:t=fill"
             vf += f",setpts=N/({FPS}*TB)"
             run(['ffmpeg', '-v', 'error', '-y', '-ss', str(tin), '-i', src(name), '-an', '-vf', vf, '-frames:v', str(n),
                  '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p', '-video_track_timescale', '15360', o])

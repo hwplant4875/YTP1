@@ -80,6 +80,7 @@ def split_after(seg, phrase):
     if best[0] >= 5: return round(lo + (best[1] + best[0] / 2) * step + 0.01, 3)
     print('WARN no silence to split in', seg, 'after', repr(phrase)); return round((ws[j][1] + ws[j + 1][0]) / 2, 3)
 TODO = None
+TODOS = []   # TODO/GAP shots skipped: each one would let the previous shot run on over its line (a silent substitute)
 def ins(after, dur, kind='film', shots=(), sub=None):
     """after: phrase (split after its last word), 0 (before the first word) or 'END'; shots: (t, clip, in[, speed][, opts]) relative
     to the insert start; sub: the film line as a bottom subtitle, exactly as spoken"""
@@ -109,7 +110,7 @@ def sec(voice, shots, inserts=(), extra=(), pad=None, clip_db=-99, card_at=None)
     for s in shots:
         s = list(s)
         if TF and s[2] is None: s[2] = 5.0; s[3] = -30.0
-        if s[2] is None: print('TODO shot skipped', voice, s[0], s[1]); continue
+        if s[2] is None: print('TODO shot skipped', voice, s[0], s[1]); TODOS.append((voice, s[0])); continue
         main.append([M(T(voice, s[0])), *s[1:]])
     main.sort(key=lambda s: s[0])
     for x in I:   # an insert with its own picture cuts the running shot, plays its shots at 1.0x, then the running shot resumes
@@ -150,7 +151,7 @@ def sec(voice, shots, inserts=(), extra=(), pad=None, clip_db=-99, card_at=None)
         S['sfx'] += [[a, SFX + 'whoosh.wav', G['whoosh']], [a + 0.3, SFX + 'fill.wav', G['fill']], [a + tp, SFX + 'stamp.wav', G['stamp']]]
         S['card_at'] = a
         for x in I:
-            if x['s1'] > a - 0.1: print('WARN insert after the card phrase', voice, x['sub'])
+            if x['s1'] > a + 0.02: print('WARN insert after the card phrase', voice, x['sub'])
     def MT(v): return v if isinstance(v, (int, float)) and v >= 900 else M(T(voice, v))
     S['overlays'] += [[k, val, MT(a), MT(b)] for k, val, a, b in extra]
     S['_M'] = M
@@ -206,10 +207,27 @@ for S in X:   # a film label per run of one film, gone once the stat card takes 
     S.pop('_M', None); L = S['len']
     for ov in S['overlays']:
         ov[2] = round(max(0.0, ov[2]), 3); ov[3] = round(min(ov[3], L), 3)
-VDARK, DARK, ZOOM, BAR = [], [], {}, {}   # filled on the laptop after the first QA pass (shots_grade.py): BAR = {clip: y} over a mark
+VDARK, DARK, ZOOM, BAR, MARKS, CLIPOPT = [], [], {}, {}, {}, {}   # filled by shots_grade.py (laptop QA): BAR = {clip: source row}
 exec(open(D + 'shots_grade.py', encoding='utf-8').read()) if os.path.exists(D + 'shots_grade.py') else None
+def window(op, name):   # the source rectangle a shot shows on its first frame (render_cj.py: fill-scale, zoompan z/dx/dy, then +0.03)
+    z = float(op.get('z', ZOOM.get(name, 1.04))); w, h = 1920 / z, 1080 / z
+    x0 = min(max(0.0, 960 - w / 2 + float(op.get('dx', 0))), 1920 - w); y0 = min(max(0.0, 540 - h / 2 + float(op.get('dy', 0))), 1080 - h)
+    return x0, y0, x0 + w, y0 + h
+NMARK = 0
+for S in X:   # clip framing defaults (CLIPOPT) under each shot's own opts, then every listed mark must be out of frame or under the bar
+    for s in S['shots']:
+        if s[1] in CLIPOPT:
+            if len(s) == 4: s.append({})
+            s[4] = {**opts(CLIPOPT[s[1]]), **s[4]}
+        op = s[4] if len(s) > 4 else {}
+        x0, y0, x1, y1 = window(op, s[1])
+        for bx0, by0, bx1, by1 in MARKS.get(s[1], []):
+            if op.get('flip'): bx0, bx1 = 1920 - bx1, 1920 - bx0
+            if bx1 > x0 and bx0 < x1 and by1 > y0 and by0 < y1 and not (s[1] in BAR and by0 >= BAR[s[1]]):
+                print('WARN mark visible', S['voice'], round(s[0], 2), s[1], s[2], op); NMARK += 1
 P = {'sections': X, 'tiers': TIERS, 'gamma': {**{k: 1.25 for k in DARK}, **{k: 1.4 for k in VDARK}}, 'zoom': ZOOM, 'bar': BAR}
 json.dump(P, open(D + 'edl.json', 'w'), indent=1)
 tot = sum(S['len'] for S in X)
 print(len(X), 'sections', f'{int(tot // 60)}:{tot % 60:04.1f}', sum(len(S['shots']) for S in X), 'shots',
-      sum(len(S['inserts']) for S in X), 'film lines')
+      sum(len(S['inserts']) for S in X), 'inserts', len(TODOS), 'TODO/GAP shots skipped', NMARK, 'visible marks')
+if TODOS: print('TODO/GAP (fix before the render):', ', '.join(f'{v} {p!r}' for v, p in TODOS))
