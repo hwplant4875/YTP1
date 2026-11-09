@@ -98,8 +98,8 @@ under 0.45x on anything that moves. Fix in this order, each new span checked on 
 
 ## Phase B1: picture proxy on the synthetic take (now)
 
-The owner holds the voice until the JC credits reset on 11/11 18:27 KST and said "그 외 모든 것들을 준비해줘" (prepare everything
-else). So the whole picture is rendered and checked now on the v1.1 synthetic take; on voice day only the timing changes.
+The owner chose to wait for the JC credits reset on 11/11 18:27 KST before voicing. Meanwhile the whole picture is rendered and
+checked on the v1.1 synthetic take; on voice day only the timing changes.
 1. `set VOICE=voice_synth`, `python build_edl.py` (this edl.json comes from the synthetic take: never commit it).
 2. `set LEAN=1`, then `python render_cj.py edl.json "<EP08>\1_work\clips" voice_synth "<EP08>\1_work\music\conjuring_bed.mp3"
    "<EP08>\2_renders\proxy\conjuring_PROXY_synthvoice.mp4"`. Its narration is shaped noise: picture QA only, never delivered or uploaded.
