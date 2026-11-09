@@ -187,8 +187,8 @@ X.append(sec('s05', [
   ('learn the name', 'c2_name', 55.85, -1.8, ARL),  # Valak's rotting face before it is pulled back (55.5-55.75 is Lorraine; cut 57.68), left of 840
   ('survival rate', 'c2_painting', 71.2, -1.35, 'z=1.3,dx=221'),  # coordinator: s00 frame 0 now holds 136.97-138.70. Valak's face over Lorraine's shoulder (cut 71.15 / 72.57), face at x 300-820
   ], inserts=[
-    ins('you have power over it', 2.05, 'film', shots=[(0, 'c2_name', 39.85, 1.0, o(AR, 'lufs=-17'))], sub='You are Valak.'),
-    ins('just by saying it', 2.0, 'film', shots=[(0, 'c2_name', 52.73, 1.0, o(AR, 'lufs=-17'))], sub='I condemn you back to hell.'),
+    ins('you have power over it', 1.97, 'film', shots=[(0, 'c2_name', 39.75, 1.0, o(AR, 'lufs=-17'))], sub='You are Valak.'),
+    ins('just by saying it', 2.13, 'film', shots=[(0, 'c2_name', 52.81, 1.0, o(AR, 'lufs=-17'))], sub='I condemn you back to hell.'),
   ]))   # Phase B: check Lorraine is on screen while she speaks in both inserts (else start on the Valak reaction and keep the audio)
 
 # ---- s06 #5 The Conjuring: Last Rites (45%) ----
@@ -273,7 +273,7 @@ X.append(sec('s08', [
   ('can break it', 'dm_final', 152.75, -3.3, L),  # 152.4 is still the dust close-up; the wide of the altar table cracking and collapsing 152.72-156.1 (break point x~700 under L)
   ('survival rate', 'dm_promise', 49.5, -4.0, ARL),        # Isla's pale face slowly lit in the dark
   ], inserts=[
-    ins('makes you the killer', 2.15, 'film', shots=[(0, 'dm_david', 315.93, 1.0, 'lufs=-17')], sub='Leave him alone and take me!'),
+    ins('makes you the killer', 1.1, 'film', shots=[(0, 'dm_david', 319.77, 1.0, 'lufs=-17')], sub='Take me!'),
   ]))   # Phase B: check Arne is on screen while he speaks
 
 # ---- s09 #2 The Nun II (12%) ----
@@ -340,5 +340,5 @@ X.append(sec('s11', [
   ("and we're a small channel", 'universe', 153.82, -3.1, C1),  # over her shoulder: the lit match held out into the dark 153.78-156.95
   ('thanks for watching', 'universe', 157.0, -2.6, C1),    # Carolyn holding the match, waiting
   ], inserts=[
-    ins('END', 2.2, 'clap', shots=[(0, 'universe', 159.6, 1.0, o(C1, 'lufs=-22'))]),  # two hands clap beside her, the match dies (real audio, no subtitle); trim to the dark
+    ins('END', 0.72, 'clap', shots=[(0, 'universe', 159.6, 1.0, o(C1, 'lufs=-22'))]),  # two claps 159.94/160.14, the match dies ~160.25, black at 160.32 (real audio, no subtitle)
   ], extra=[('png', '../ep04/tiles/subscribe.png', 'every subscribe', 'thanks for watching')]))
