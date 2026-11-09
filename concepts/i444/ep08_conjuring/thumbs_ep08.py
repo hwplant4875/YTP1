@@ -1,6 +1,7 @@
 # EP08 Conjuring thumbnails: the owner-approved 3-panel % format (Backrooms A, 11/9 "A는 너무 훌륭해"), same code as
 # ../ep_backrooms/thumbs_3panel.py. Official TMDB backdrops only (never committed; they live in the scratchpad SD folder).
 # Colour by position: left green (highest survival), middle yellow, right red (lowest; Valak's lowest in the video is 5%).
+# Laptop: set SD=<EP08>\\1_work\\tmdb\\ and OUT=<EP08>\\3_upload\\, then python thumbs_ep08.py (it downloads the 9 stills itself).
 # panel spec: (file, face centre x, face centre y, crop height as a fraction of the source height, brightness, label)
 #   the face centre is placed at 40% of the panel height; the dark gradient covers the lower half under the number.
 import os, sys
@@ -10,8 +11,15 @@ from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
 SD = os.environ.get('SD', '/tmp/claude-0/-home-user-YTP1/bb3b993e-7de0-5d78-af5e-c29db5ac82a5/scratchpad/ep08_conj/tmdb/orig/')
 OUT = os.environ.get('OUT', '/mnt/project-files/instruction444/ep08_conjuring/')
 W, H = 1280, 720; PW = [427, 426, 427]; COL = [(70, 215, 95), (250, 200, 40), (235, 30, 38)]
+def fetch(fn):   # the laptop has no copy: download the official TMDB original (<prefix>_<tmdb path>.jpg -> /t/p/original/<tmdb path>.jpg)
+    p = SD + fn
+    if not os.path.exists(p):
+        import urllib.request
+        os.makedirs(SD, exist_ok=True); url = 'https://image.tmdb.org/t/p/original/' + fn.split('_', 1)[1]
+        open(p, 'wb').write(urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'}), timeout=60).read())
+    return p
 def panel(fn, cx, cy, chf, pw, b=1.05):
-    im = Image.open(SD + fn).convert('RGB'); sw, sh = im.size; ch = chf * sh; cw = ch * pw / H
+    im = Image.open(fetch(fn)).convert('RGB'); sw, sh = im.size; ch = chf * sh; cw = ch * pw / H
     x0 = min(max(0, cx * sw - cw / 2), sw - cw); y0 = min(max(0, cy * sh - ch * 0.4), sh - ch)
     p = im.crop((int(x0), int(y0), int(x0 + cw), int(y0 + ch))).resize((pw, H), Image.LANCZOS)
     p = ImageEnhance.Brightness(p).enhance(b); p = ImageEnhance.Contrast(p).enhance(1.12)
