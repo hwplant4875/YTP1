@@ -7,17 +7,17 @@ from PIL import Image, ImageEnhance
 C = os.environ.get('CLIPS', 'E:/YTP2/Horror Ranked/EP08 Conjuring/1_work/clips').rstrip('/\\') + '/'
 D = os.path.join(C, '..', 'tiles') + '/'; os.makedirs(D, exist_ok=True)
 TODO = None
-T = {  # key: the entry's demon, as the stat card names it
-     'ach': TODO,   # s02 Annabelle (Annabelle Comes Home): the doll in its glass case, face front
-     'a14': TODO,   # s03 the Annabelle demon (Annabelle 2014): the horned demon or the doll's face
-     'c1': TODO,    # s04 Bathsheba (The Conjuring): Bathsheba's face (the wardrobe / possessed-Carolyn shots)
-     'c2': TODO,    # s05 Valak (The Conjuring 2): the nun in the hallway or the painting
-     'lr': TODO,    # s06 the mirror demon (Last Rites): the demon in the mirror
-     'cr': TODO,    # s07 the Annabelle demon (Creation): possessed Janice or the doll in the closet
-     'dm': TODO,    # s08 the Occultist's demon (The Devil Made Me Do It): the demon (or Isla at her altar)
-     'n2': TODO,    # s09 Valak (The Nun II): Valak's face
-     'n1': TODO}    # s10 Valak (The Nun): Valak's face, eyes lit
-GAIN = {}   # brighten a dark face: {'c1': 1.25}
+T = {  # key: the entry's demon, as the stat card names it (laptop 11/9, each frame checked: face big, sharp, centred)
+     'ach': ('ach_end', 58.0, 1180, 470, 440),         # s02 Annabelle in her glass case (ACH), face front
+     'a14': ('a14_baby', 46.5, 1290, 540, 330),        # s03 the Annabelle doll in Leah's crib (Annabelle 2014)
+     'c1': ('co_mother_b', 264.5, 440, 470, 460),      # s04 Bathsheba's face (The Conjuring)
+     'c2': ('c2_painting', 137.5, 920, 360, 440),      # s05 Valak (The Conjuring 2), bright
+     'lr': ('lr_exorcism', 513.5, 820, 470, 560),      # s06 the mirror demon's screaming faces (Last Rites)
+     'cr': ('cr_wheel', 540.0, 1000, 470, 470),        # s07 the Annabelle doll in daylight (Creation)
+     'dm': ('dm_promise', 51.5, 990, 560, 360),        # s08 Isla, the Occultist (DMMDI)
+     'n2': ('n2_lucy', 20.2, 960, 410, 420),           # s09 Valak, eyes lit (The Nun II)
+     'n1': ('co_valak0', 30.8, 1000, 500, 470)}        # s10 Valak screaming (The Nun)
+GAIN = {'c1': 1.45, 'dm': 1.3, 'n1': 1.35, 'lr': 1.15}
 for k, v in T.items():
     if v is None: print('TODO', k); continue
     c, t, x, y, s = v

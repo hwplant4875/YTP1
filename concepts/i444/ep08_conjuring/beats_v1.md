@@ -459,3 +459,21 @@ dm_bruno_b stops **before** the stabbing: it cuts to black at about 176.6 and th
 - s07 "it kills his wife": Esther's death is missing in all g4 clips. Only Samuel's body is in cr_wheel 568.8-573.2.
 - s00/s09 neck snap: covered (off screen, cut on the scream at n2_deliv 137.8-138.4). The age-gated n2_deliv_mc (Movieclips "The Nun Kills The Delivery Girl") is the same scene and is not needed.
 - s08: the stab itself is never shown in dm_bruno_b (good for the gore rule). Covered by the knife grab plus Arne's lunge.
+
+# ===== Phase A2: film lines (faster-whisper medium.en word times, laptop 11/9) =====
+Usable (check the speaker is on screen in Phase B):
+- s05 The Conjuring 2: c2_name, Lorraine: "You are Valak." words 40.10-41.56 -> ins in 39.85, dur 2.05, sub "You are Valak."
+  Full version (longer): "You are Valak, the Defiler, the Profane, the Marquis of Snakes." 40.10-46.76 -> in 39.85, dur 7.3.
+  Also "I condemn you back to hell." 52.98-54.54 -> in 52.73, dur 2.0 (right after "In the name of the Father ... Holy Spirit").
+- s08 The Devil Made Me Do It: dm_david, Arne: "Leave him alone and take me!" 316.18-317.98 -> in 315.93, dur 2.15, sub as spoken.
+  Shorter: "Take me!" 319.82-320.32 -> in 319.57, dur 1.1.
+Not usable:
+- s04 hide and clap (c1_clap): no clean "hide and clap" line in the transcript; the claps are sound only (use as sfx, no subtitle, per Phase B step 3 s11).
+- s07 "What do you want? / Your soul!" (cr_soul): not in the clip as clean speech (only "What do you need?" muffled at 0-2.6).
+- s10 "God ends here": it is the written door inscription (Finit hic Deo), not spoken; nothing in spooky_nun 1100-1130.
+
+# ===== Phase A2: prep outputs =====
+- Thumbnails A/B/C: E:\YTP2\Horror Ranked\EP08 Conjuring\3_upload\conjuring_thumb_a/b/c.jpg (+ conjuring_thumbs_sheet.jpg)
+- Posters (9 TMDB theatrical, release order c1 a14 c2 cr n1 ach dm n2 lr): 1_work\posters; poster wall 1_work\clips\still_posterwall.mp4
+- Tiles: 1_work\tiles\<key>.png (make_tiles.py T filled; lr = the possessed face screaming in the mirror, the clearest mirror-demon frame)
+- Music bed (Mixkit 671/188/633/540): 1_work\music\conjuring_bed.mp3, 787 s, -16.6 LUFS
