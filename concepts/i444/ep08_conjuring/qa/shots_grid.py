@@ -17,7 +17,9 @@ TW, TH, C, P = 384, 216, 5, 40; fnt = ImageFont.truetype('arial.ttf', 16)
 for p in range(0, len(cells), P):
     part = cells[p:p + P]; im = Image.new('RGB', (C * TW, (len(part) + C - 1) // C * TH)); d = ImageDraw.Draw(im)
     for i, (lab, t) in enumerate(part):
-        raw = subprocess.check_output(['ffmpeg', '-v', 'error', '-ss', f'{t:.3f}', '-i', R, '-frames:v', '1', '-vf', f'scale={TW}:{TH}', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'])
+        raw = b''
+        for tt in (t, t - 0.2, t - 0.5):
+          if len(raw) < TW * TH * 3: raw = subprocess.check_output(['ffmpeg', '-v', 'error', '-ss', f'{tt:.3f}', '-i', R, '-frames:v', '1', '-vf', f'scale={TW}:{TH}', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'])
         x, y = i % C * TW, i // C * TH; im.paste(Image.frombytes('RGB', (TW, TH), raw), (x, y))
         d.text((x + 3, y + 2), f'{lab} {t:.1f}', font=fnt, fill='yellow', stroke_width=2, stroke_fill='black')
     im.save(f'{OUT}_{p // P}.jpg', quality=80)

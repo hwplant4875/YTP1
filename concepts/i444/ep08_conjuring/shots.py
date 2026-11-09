@@ -32,11 +32,11 @@ X.append(sec('s00', [
   ('will burn you alive', 'co_burn_4k', 157.5, -0.7, 'a=-18'),  # Father Noiret burning, his head and arms inside the flames; hard cut at 158.2 to an all-fire shot (the old span crossed it)
   ('in midair', 'co_burn_4k', 154.9, -1.1),  # cut at 156.03 to a boy in the pews
   ('bury you alive', 'co_buried_b', 102.4, -3.4),  # one shot 99.5-105.85, but the lighter is only lit from ~102.4 (100-102 is near-black)
-  ('snap your neck', 'n2_deliv', 137.8, -0.6, 'a=-16'),    # The Nun II: the delivery girl screams as Valak lifts her (cut before her feet at 138.5)
-  ('make you stab', 'dm_vision', 153.15, -0.85, AR),  # 153.0-153.1 is an arm only; the bloody knife is in frame from 153.15; cut to Jessica at 154.05
-  ('your best friend', 'dm_vision', 160.0, -0.85, AR),  # cut to Lorraine at 160.89
-  ('twenty-two times', 'dm_vision', 157.1, -1.8, AR),  # 156.7-157.0 her eyes are down; the white eyes show from 157.1; cut to Lorraine at ~159.0
-  ('or turn your own mother', 'co_mother_c', 305.9, -5.1), # The Conjuring: possessed Carolyn's grinning face next to Roger
+  ('snap your neck', 'n2_deliv', 137.8, -0.6, 'a=-16,g=1.4'),    # The Nun II: the delivery girl screams as Valak lifts her (cut before her feet at 138.5)
+  ('make you stab', 'dm_vision', 153.15, -0.85, o(AR, 'g=1.4')),  # 153.0-153.1 is an arm only; the bloody knife is in frame from 153.15; cut to Jessica at 154.05
+  ('your best friend', 'dm_vision', 160.0, -0.85, o(AR, 'g=1.25')),  # cut to Lorraine at 160.89
+  ('twenty-two times', 'dm_vision', 157.1, -1.8, o(AR, 'g=1.25')),  # 156.7-157.0 her eyes are down; the white eyes show from 157.1; cut to Lorraine at ~159.0
+  ('or turn your own mother', 'co_mother_c', 305.9, -5.1, 'g=1.4'), # The Conjuring: possessed Carolyn's grinning face next to Roger
   ('against you', 'universe', 659.1, -1.8, C1),            # possessed Carolyn raising the scissors in the crawlspace, going for April
   ('and sometimes', 'universe', 904.0, -1.5, C1),          # the Annabelle doll close-up (The Conjuring's prologue)
   ('all it takes', 'ach_devil_cz', 297.5, -0.7),           # Annabelle Comes Home: the whole doll seated in the open glass case
@@ -73,14 +73,14 @@ X.append(sec('s01', [
   (0, 'ach_room', 44.0, -8.0, 'z=1.35'),  # Daniela standing among the artifacts, wide and dark (one slow push-in 36-52.3). 10-12.4 and 12.5-23 were two shots; with L, Daniela was cropped off the left edge, while dx=0 puts her at out x 150-400
   ('comes for you', 'n2_deliv', 126.2, -3.2, L),           # Valak in the nun habit at the end of a hallway that turns red
   ('and every one is different', 'c2_grave', 118.82, -5.2, 'z=1.5,dx=320'),  # 118.0-118.78 is Bill Wilkins's ghost (another shot); Janet on the sofa 118.8-124.1. At L her face sat on x 840; z 1.5 dx 320 moves it to out x ~0-420
-  ("one can't touch you", 'ach_devil_cz', 298.32, -1.3, 'z=1.35,dx=-249'),  # TODO filled: Judy's hand on the shut glass, Annabelle (red rose) inside; one shot 298.3-299.65. Judy is at out x 0-700 and the doll sits under the card. 300.0 itself is a dark wide shot (cut 299.7, next cut 300.7)
+  ("one can't touch you", 'ach_devil_cz', 298.32, -1.3, 'z=1.35,dx=-249,g=1.4'),  # TODO filled: Judy's hand on the shut glass, Annabelle (red rose) inside; one shot 298.3-299.65. Judy is at out x 0-700 and the doll sits under the card. 300.0 itself is a dark wide shot (cut 299.7, next cut 300.7)
   ('one needs you to hand', 'a14_baby', 35.88, -1.4, 'z=1.35,dx=-249'),  # the 2nd angle of "her SOUL" on the ceiling (cut in 35.86, out ~37.35), so s03 keeps 58.7 alone. dx=-249 keeps the word left of 840 (at L it was cropped or under the card)
-  ('and one has wiped out', 'co_valak0', 93.0, -1.2, L),
-  ('an entire abbey', 'n1_pray', 2.15, -1.85, L),  # cut to Irene at ~94.2. Valak's face at out x ~600. co_valak0's picture is rows 140-939 (measured at 30.5/88/93.5), not 266-901, so L (rows 140-940) fills the frame with no bars
+  ('and one has wiped out', 'co_valak0', 93.0, -1.2, o(L, 'g=1.25')),
+  ('an entire abbey', 'n1_pray', 2.15, -1.85, o(L, 'g=1.4')),  # cut to Irene at ~94.2. Valak's face at out x ~600. co_valak0's picture is rows 140-939 (measured at 30.5/88/93.5), not 266-901, so L (rows 140-940) fills the frame with no bars
   ('so we score', 'lr_end', 46.0, -2.8, L),  # Last Rites: Ed walks in fast, left of 840, Lorraine behind him (under the card); cut at ~48.9
   ('strength', 'co_mother_c', 240.0, -3.4, L),             # The Conjuring: Carolyn levitating in the chair under the sheet
-  ('intelligence', 'dm_altar', 128.0, -3.5, ARL),  # (verify) resolved: DMMDI, the Occultist standing behind her candle-lit altar table (one shot 125-131.9, her at out x ~380). 118 is black; 119-124.5 is a woman walking in, back to camera
-  ('kill count', 'cr_wheel', 567.12, -1.6, L),  # Creation: Samuel's body on the floor, wide (567.07-568.77). The old span was the nun's reaction (568.8-571), then the CLOSE upside-down dead face (571-573) and the ClipZone end card (573.2): not usable
+  ('intelligence', 'dm_altar', 128.0, -3.5, o(ARL, 'g=1.25')),  # (verify) resolved: DMMDI, the Occultist standing behind her candle-lit altar table (one shot 125-131.9, her at out x ~380). 118 is black; 119-124.5 is a woman walking in, back to camera
+  ('kill count', 'cr_wheel', 567.12, -1.6, o(L, 'g=1.25')),  # Creation: Samuel's body on the floor, wide (567.07-568.77). The old span was the nun's reaction (568.8-571), then the CLOSE upside-down dead face (571-573) and the ClipZone end card (573.2): not usable
   ('and possession', 'lr_end', 99.43, -2.42, L),  # possessed Judy's bloody grin, close, warm light. 108.9 is another shot, 108.97-109.13 a bright 0.17 s shot, and the grin shot runs 109.15-109.58, then a cut to a crying face
   ('take over your body', 'dm_david', 315.93, -1.3, o(L, 'flip=1')),  # 232-238 had 3 cuts (hand/Janet, Lorraine and Hodgson, crucifix). Possessed Janet's screaming face behind the wall boards is one shot 220.35-221.45; z 1.6 dx 360 puts it at out x ~640
   ('put it all together', 'spooky_nun', 1112.0, -2.9, L),  # cut to an empty corridor at 1114.98
@@ -95,20 +95,20 @@ X.append(sec('s02', [
   ('a blessed glass case', 'ach_end', 53.6, -1.6),  # 285.0-288.4 = ach_end 61.5-64.9, which 'leave the glass shut' uses. Now: Mary Ellen's hand flat on the case glass, the card taped on it (one shot 53.55-55.25)
   ("in the warrens' room", 'ach_room', 244.0, -4.0),       # "DANGER! DO NOT TOUCH ANYTHING!" sign, pull back to the WARRENS DEMONOLOGY WITCHCRAFT door
   ('and as long as', 'ach_end', 92.9, -1.5),
-  ("it can't touch anyone", 'ach_room', 23.65, -4.6),               # Daniela in the artifact room, Annabelle in the case behind her
+  ("it can't touch anyone", 'ach_room', 23.65, -4.6, 'g=1.4'),               # Daniela in the artifact room, Annabelle in the case behind her
   *pick('s02', 'lets the doll out', [
-    ('when a teenager sneaks in', 'ach_room', 55.0, -3.0),  # (verify) resolved: 54.0 is the end of the wide shot; Daniela alone, close on her face, 54.6-58+
-    ('and lets the doll out', 'ach_hands', 32.05, -2.3),  # Annabelle under the sheet in Judy's bed 32.0-34.4; cut to Judy's face at 34.45 (32-37 held 3 cuts)
+    ('when a teenager sneaks in', 'ach_room', 55.0, -3.0, 'g=1.25'),  # (verify) resolved: 54.0 is the end of the wide shot; Daniela alone, close on her face, 54.6-58+
+    ('and lets the doll out', 'ach_hands', 32.05, -2.3, 'g=1.4'),  # Annabelle under the sheet in Judy's bed 32.0-34.4; cut to Judy's face at 34.45 (32-37 held 3 cuts)
   ], [('when a teenager opens', 'GAP', TODO, TODO)]),       # v1 GAP: Daniela opening the case (in no clip): the film file
   ('it wakes up everything', 'ach_room', 236.6, -0.9),     # a burned-face spirit lunges in the artifact room
   ('in that room', 'ach_tv', 26.0, -18.0),                 # the haunted TV showing Daniela
-  ('the ferryman', 'ach_ferry_b', 70.5, -2.5),             # the Ferryman's coin-eyed face lit by the lantern (dark)
+  ('the ferryman', 'ach_ferry_b', 70.5, -2.5, 'g=1.4'),             # the Ferryman's coin-eyed face lit by the lantern (dark)
   ('the babysitter', 'ach_ferry_b', 64.0, -3.8),           # Mary Ellen with the lantern, searching
   ('the bride takes over', 'ach_devil_cz', 148.2, -1.1),   # Daniela in the bride's veil and dress, standing over Judy in the dark
-  ('her friend', 'ach_devil_cz', 150.7, -1.1),             # close: the veiled, possessed Daniela, blank dark-eyed stare
+  ('her friend', 'ach_devil_cz', 150.7, -1.1, 'g=1.4'),             # close: the veiled, possessed Daniela, blank dark-eyed stare
   ('a hellhound attacks', 'ach_wolf', 49.3, -1.0),         # the hellhound's claws through the car window (very dark)
   ('a boy outside', 'ach_wolf', 45.78, -1.1),  # 45.5-45.7 is another dark shot (cut 45.73); Bob screaming in the car 45.75-46.9+
-  ('and a board game', 'ach_devil_cz', 196.25, -1.2),  # 195.6-196.2 is a close-up of Judy's feet; cut at 196.22 to Judy sprawled by the Feeley Meeley box (name legible)
+  ('and a board game', 'ach_devil_cz', 196.25, -1.2, 'g=1.4'),  # 195.6-196.2 is a close-up of Judy's feet; cut at 196.22 to Judy sprawled by the Feeley Meeley box (name legible)
   ('with dead hands', 'ach_devil_cz', 199.7, -4.5),        # overhead: grey dead hands reach out of the board and grab Judy's arm
   ('but in the whole movie', 'ach_end', 88.0, -1.8),       # the three girls together, Judy holding the crucifix
   ("and it's beaten by", 'ach_end', 82.4, -2.2),           # Mary Ellen, Daniela and Judy side by side
@@ -138,8 +138,8 @@ X.append(sec('s03', [
   ("steals mia's baby", 'a14_baby', 55.3, -3.1),                  # Mia pulls the bundle from the crib: it is the doll, not Leah
   ('to force a trade', 'a14_basement', 63.4, -1.35),
   ('the baby for her soul', 'a14_basement', 69.8, -2.9),  # baby Leah on the bed; cut at 64.78 (it does not extend)
-  ('in the end', 'a14_baby', 159.2, -2.4),                 # Evelyn (red headscarf) on the stairs (never her fall)
-  ('who gives up her own life', 'a14_basement', 126.0, -1.8),  # cut to John at the door at 127.87
+  ('in the end', 'a14_baby', 159.2, -2.4, 'g=1.4'),                 # Evelyn (red headscarf) on the stairs (never her fall)
+  ('who gives up her own life', 'a14_basement', 126.0, -1.8, 'g=1.4'),  # cut to John at the door at 127.87
   ('never offer it your soul', 'a14_basement', 119.6, -5.75, L),  # the Annabelle demon at the window, close (122.6-125.4), through the % line
   ]))
 
@@ -148,8 +148,8 @@ X.append(sec('s04', [
   (0, 'c1_sheets', 22.8, -4.3),  # low-angle farmhouse with the sheet flying off the line (20-22.6 is Lorraine at the line; cut 27.15)
   ('this demon is far', 'c1_sheets', 27.2, -1.8),  # Lorraine stares at the house (cut 29.05)
   ("because it doesn't need", 'c1_sleep', 20.0, -6.0),  # one girl points at the dark gap behind the open door, her sister in bed (one shot; comment only)
-  ('bathsheba was a witch', 'co_mother_b', 264.0, -1.35),  # Bathsheba's grey face close (257.5-258.7 is a dark lens, her face only 258.8-259.3)
-  ('who gave her own baby', 'co_mother_b', 265.35, -1.35),  # same close-up continues (263.5-263.95 is Lorraine; cut 266.75)
+  ('bathsheba was a witch', 'co_mother_b', 264.0, -1.35, 'g=1.4'),  # Bathsheba's grey face close (257.5-258.7 is a dark lens, her face only 258.8-259.3)
+  ('who gave her own baby', 'co_mother_b', 265.35, -1.35, 'g=1.4'),  # same close-up continues (263.5-263.95 is Lorraine; cut 266.75)
                                                            # the sacrifice itself is only in c1_land under burned subtitles: the film file)
   ('and she curses anyone', 'c1_dog_b', 14.75, -3.5),  # Perrons unloading at the farmhouse (12-14.6 is the car through trees; cut 18.4)
   ('she stops every clock', 'c1_land', 141.0, -4.5),       # the alarm clock stopped at about 3:07 (no subtitle after 140.8)
@@ -157,8 +157,8 @@ X.append(sec('s04', [
   ('while she sleeps', 'c1_dog_b', 57.3, -1.25),  # the bruise on Carolyn's leg (56.0 is the previous shot; cut 57.25)
   ('pulls at the girls', 'c1_sleep', 1.0, -2.3),  # Christine asleep, jerks awake (cut 3.35)
   ('and kills the family dog', 'c1_dog_b', 88.3, -1.0),  # Sadie lying in the weeds by the wall, small (87-87.7 Roger, 87.8-88.25 whip pan; cut 89.35)
-  ('then she takes over', 'co_mother_c', 292.2, -1.0),
-  ('the mother#2', 'co_mother_c', 300.35, -1.35),  # possessed Carolyn laughing (291.5-292.0 is Roger)
+  ('then she takes over', 'co_mother_c', 292.2, -1.0, 'g=1.4'),
+  ('the mother#2', 'co_mother_c', 300.35, -1.35, 'g=1.4'),  # possessed Carolyn laughing (291.5-292.0 is Roger)
   ('completely', 'universe', 477.5, -2.0, C1),  # Carolyn held down by the men, screaming (476.5-477.45 is Lorraine; cut ~479.55)
   ('because in every family', 'universe', 445.8, -1.35, C1),  # possessed Carolyn with the scissors over the child (444.5-445.7 dark/Ed; cut 447.15)
   ('she makes the mother', 'c1_feed', 99.8, -1.6),  # Carolyn on the floor clutching her head, screaming, held (96-99.7 has 4 cuts; MC bar)
@@ -174,14 +174,14 @@ X.append(sec('s04', [
 X.append(sec('s05', [
   (0, 'universe', 1086.0, -4.95, C2),  # Janet on the sofa, one shot (cut 1091.05; no street in this span)
   ('this is the first time', 'c2_painting', 203.0, -1.9),  # the Valak painting on the wall, Valak pushes out of it 204.5-204.9 (cut 204.95)
-  ("and it's much smarter", 'c2_painting', 58.2, -5.0),  # Valak standing in the dark behind Lorraine (58.0 is the previous wide; cut 63.35)
+  ("and it's much smarter", 'c2_painting', 58.2, -5.0, 'g=1.4'),  # Valak standing in the dark behind Lorraine (58.0 is the previous wide; cut 63.35)
   ('it hides behind', 'c2_vision', 0.0, -11.0),            # Bill Wilkins in his armchair, Lorraine across the room (800p)
   ('so everyone thinks', 'c2_vision', 56.05, -0.7),
   ("it's just a ghost", 'c2_vision', 25.25, -4.25),  # wide: Bill in his chair, Valak's pale face in the dark top-left (55.6-55.95 Bill close; cut 56.78 to Valak close)
-  ("it blocks lorraine's visions", 'c2_vision', 12.0, -3.0),  # Lorraine staring, unsettled
+  ("it blocks lorraine's visions", 'c2_vision', 12.0, -3.0, 'g=1.4'),  # Lorraine staring, unsettled
   *pick('s05', 'fight his way in', [], [("shows her ed's death", 'GAP', TODO, TODO)]),   # v1 GAP: Lorraine's vision of Ed impaled: the film file
-  ('and sends the crooked man', 'c2_crooked', 66.15, -1.45),  # the Crooked Man's shape in the tent (65.8-66.05 is Billy; cut 67.65)
-  ('after the youngest boy', 'c2_crooked', 73.95, -1.7),  # the Crooked Man lunges (73.5-73.85 is Billy; cut 75.68)
+  ('and sends the crooked man', 'c2_crooked', 66.15, -1.45, 'g=1.4'),  # the Crooked Man's shape in the tent (65.8-66.05 is Billy; cut 67.65)
+  ('after the youngest boy', 'c2_crooked', 73.95, -1.7, 'g=1.4'),  # the Crooked Man lunges (73.5-73.85 is Billy; cut 75.68)
   ('then it takes over janet', 'c2_janet', 220.3, -1.15),  # possessed Janet grinning in the wall (219.5-220.25 Ed / his arm in the wall; cut 221.45)
   *pick('s05', 'fight his way in', [
     ('and ed has to fight', 'c2_janet', 214.25, -2.05),  # v1.1: Ed and the neighbour with a crowbar at the boarded wall, Ed shoves at it (cuts 214.15, 216.35, 217.15)
@@ -207,12 +207,12 @@ X.append(sec('s06', [
   ('and it came closer', 'lr_exorcism', 55.92, -1.1),  # Lorraine bloodied in the attic (cut 57.1)
   ('to killing the warrens', 'lr_judy', 234.1, -1.9),  # Judy choked by an unseen hand (230-230.6 mirror-room wide; cut 231.97)
   ('it lives inside', 'lr_preview', 184.0, -6.0),          # the mirror hanging in the Smurl dining room
-  ('and in nineteen sixty-four', 'lr_birth', 20.05, -10.0),  # 1964: Lorraine in labour, crying (cut at 20.02)
+  ('and in nineteen sixty-four', 'lr_birth', 20.05, -10.0, 'g=1.4'),  # 1964: Lorraine in labour, crying (cut at 20.02)
   ('it nearly killed judy', 'lr_birth', 55.3, -2.6),  # Lorraine with the still, wrapped baby, a hand over it (one handheld shot to ~58; 55.0 inside a blur)
   ('twenty-two years later', 'lr_judy', 50.0, -6.5),       # adult Judy in the wedding dress in the mirror room
-  ('it uses three ghosts', 'lr_axe', 234.75, -0.42),  # grey ghost face snarling (234.73-235.2)
+  ('it uses three ghosts', 'lr_axe', 234.75, -0.42, 'g=1.4'),  # grey ghost face snarling (234.73-235.2)
   ('three ghosts', 'lr_exorcism', 80.8, -2.2),  # the axe man with the lantern, one shot 80.75-83.0+ (64.0 had a cut at 64.15 to Lorraine)
-  ('to haunt the smurl family', 'lr_exorcism', 39.4, -3.3),  # the old woman ghost in the attic, dark (38-39.3 is Lorraine; cut 42.78)
+  ('to haunt the smurl family', 'lr_exorcism', 39.4, -3.3, 'g=1.4'),  # the old woman ghost in the attic, dark (38-39.3 is Lorraine; cut 42.78)
   ('drives the priest', 'lr_priest', 31.0, -3.7),  # Father Gordon alone at his desk, wide (29.6-30.8 his profile; cuts 34.8, 37.0)
   ('to his death', 'lr_priest', 138.45, -1.95),  # his eyes behind the glasses, the candle reflected (137.6-138.35 is another shot); ends 140.4, never the hallway
   ('gives ed a heart attack', 'lr_exorcism', 346.3, -0.9),  # Ed on the floor in pain (cut 347.25 to Lorraine)
@@ -251,7 +251,7 @@ X.append(sec('s07', [
   ('it kills the couple', 'cr_end', 19.0, -3.3),  # the Higgins couple woken in bed (cut ~22.45)
   ('who adopted her', 'cr_end', 39.5, -1.9),  # grown Annabelle grabs her father's throat (cut 41.45)
   ('five girls and a nun', 'cr_well', 116.4, -3.2),        # Sister Charlotte holding Linda in the field
-  ('but only because they run', 'cr_well', 121.2, -6.6),  # the girls running across the field at night (cut ~121.1)
+  ('but only because they run', 'cr_well', 121.2, -6.6, 'g=1.4'),  # the girls running across the field at night (cut ~121.1)
   *pick('s07', 'stays inside janice', [
     ('and the demon stays', 'cr_trapped', 256.3, -5.5),      # v1.1: possessed Janice in a blue nightgown, a sly demonic smile, holding a doll
   ], [('and the demon walks away', 'GAP', TODO, TODO)]),    # v1 GAP: Janice leaving the orphanage: the film file
@@ -265,14 +265,14 @@ X.append(sec('s08', [
   ('this one is the smartest', 'dm_calvary', 64.0, -6.0, AR),  # Isla in the dark (verify a clean span in 64-92)
   ('because the demon never', 'co_stab', 58.5, -3.0),      # Isla's altar: the candle fire flaring among the curse totems
   ('a witch puts a curse', 'dm_calvary', 40.78, -0.68, AR),
-  ('on you', 'dm_calvary', 41.52, -0.7, AR),  # hands placing the totem 40.78-41.47, then a cut to Arne's arm (blue)
-  ('and the demon makes you', 'dm_david', 301.12, -1.95),  # Arne snarling, possessed, close (301.1-303.1); 44.5 was a totem insert cutting at 44.9 to Arne's arm, no fire
+  ('on you', 'dm_calvary', 41.52, -0.7, o(AR, 'g=1.25')),  # hands placing the totem 40.78-41.47, then a cut to Arne's arm (blue)
+  ('and the demon makes you', 'dm_david', 301.12, -1.95, 'g=1.25'),  # Arne snarling, possessed, close (301.1-303.1); 44.5 was a totem insert cutting at 44.9 to Arne's arm, no fire
   ('arne johnson stabs', 'dm_bruno_b', 144.55, -1.2),  # Bruno dancing drunk 144.55-145.77 (144.0 is Debbie/Arne, cut at 145.8)
   ('his landlord', 'dm_bruno_b', 156.3, -0.5),  # knife slides across the floor 156.27-156.85 (156.2 is Arne's back)
-  ('twenty-two times', 'dm_bruno_b', 174.31, -0.35, 'a=-16'),
+  ('twenty-two times', 'dm_bruno_b', 174.31, -0.35, 'a=-16,g=1.25'),
   ('times', 'dm_bruno_b', 174.75, -0.45, 'a=-16'),  # Arne's hand grabs the knife off the floor, blade up (174.73-175.2); 174.4-175.9 held 4 cuts (scream / grab / dark doorway / scream)
-  ('a girl named jessica', 'dm_vision', 102.6, -1.4, AR),  # Jessica smiling 102.55-104.05; cuts at 104.07 (Katie), 105 (hands), 107-109 (back and forth)
-  ('stabs her best friend', 'dm_vision', 154.1, -2.5, AR),  # 154.0 is the last knife frame; Katie's frightened face 154.07-156.65
+  ('a girl named jessica', 'dm_vision', 102.6, -1.4, o(AR, 'g=1.25')),  # Jessica smiling 102.55-104.05; cuts at 104.07 (Katie), 105 (hands), 107-109 (back and forth)
+  ('stabs her best friend', 'dm_vision', 154.1, -2.5, o(AR, 'g=1.25')),  # 154.0 is the last knife frame; Katie's frightened face 154.07-156.65
   ('twenty-two times#2', 'dm_vision', 185.47, -0.6, AR),
   ('times#2', 'dm_vision', 186.2, -1.25, AR),  # Jessica's bloodied hand lets the knife drop (185.45-186.13); 185.0 is Ed/Drew daylight. Mild blood on the forearm only
   ('and then dies too', 'co_stab', 36.8, -3.2),  # 36.5 is Ed's face; the sheet-covered body 36.78-40.15. No Ed in this shot: comment -> "the sheet-covered body on the morgue table"
@@ -296,17 +296,17 @@ X.append(sec('s09', [
   ('stronger than any demon', 'n2_lucy', 3.45, -2.0),  # 83.5 was a wide; the roar 84.3-85.45 is the SAME take as n2_exorcise 2.0-3.1 on the line before (dupe). New: Valak grinning, glowing eyes, red teeth 21.8-22.97 (842p)
   ("it's hunting for the eyes", 'co_neck_b', 187.7, -0.85),  # reliquary in flames 187.95-188.57, cut to a dark wide
   ('of saint lucy', 'co_neck', 136.15, -3.55),  # 140-144.1 is near-black; the vision: a veiled figure silhouetted against a wall of fire 136.12-139.75 (fades to black)
-  ('a holy relic', 'co_neck_b', 191.9, -0.5),  # 191.0 is the nun's face; close of hands holding the relic 191.88-192.45 (a wider hands shot 191.05-191.85 is the alternative)
+  ('a holy relic', 'co_neck_b', 191.9, -0.5, 'g=1.25'),  # 191.0 is the nun's face; close of hands holding the relic 191.88-192.45 (a wider hands shot 191.05-191.85 is the alternative)
   ('that would give it back', 'n2_exorcise', 49.0, -1.35),
   ('the power it had', 'n2_lucy', 9.5, -1.25),  # 47.5 is a painted portrait, 47.75-48.95 Irene's face; the illuminated manuscript page 48.98-50.35
-  ('and it has been hiding', 'n2_maurice', 38.5, -4.8),  # Maurice possessed to 43.35, cut to Sophie
-  ('the man who saved irene', 'n2_maurice', 118.5, -6.0),  # Maurice grinning, possessed
-  ('it lifts a priest', 'n2_burn', 370.45, -0.8),
-  ('into the air', 'n2_burn', 371.32, -0.53),  # wide (priest tiny) cuts at 371.28 to the close: Noiret in mid-air, arms spread, 371.3-371.88; wide burning from 371.9
-  ('and burns him alive', 'n2_burn', 377.0, -1.0, 'a=-18'),  # the altar boy Jacques screaming (cut on the boy, not the burning face)
+  ('and it has been hiding', 'n2_maurice', 38.5, -4.8, 'g=1.4'),  # Maurice possessed to 43.35, cut to Sophie
+  ('the man who saved irene', 'n2_maurice', 118.5, -6.0, 'g=1.4'),  # Maurice grinning, possessed
+  ('it lifts a priest', 'n2_burn', 370.45, -0.8, 'g=1.4'),
+  ('into the air', 'n2_burn', 371.32, -0.53, 'g=1.4'),  # wide (priest tiny) cuts at 371.28 to the close: Noiret in mid-air, arms spread, 371.3-371.88; wide burning from 371.9
+  ('and burns him alive', 'n2_burn', 377.0, -1.0, 'a=-18,g=1.25'),  # the altar boy Jacques screaming (cut on the boy, not the burning face)
   ('snaps a young', 'n2_deliv', 131.1, -1.3),              # Valak in red light, her pale face in the doorway
   ("girl's neck", 'n2_deliv', 132.72, -0.9),  # Valak doorway shot runs to 132.67; the delivery girl (cap, checked shirt) scrambling on the corridor floor 132.7-133.65
-  ('kills the headmistress', 'n2_altar', 89.0, -0.95),
+  ('kills the headmistress', 'n2_altar', 89.0, -0.95, 'g=1.4'),
   ('of a', 'n2_altar', 90.03, -0.45),  # her terrified face 89.0-89.97, cut to a closer angle 90.0-90.45, then the chapel wide
   ('school', 'n2_altar', 94.92, -0.65),  # 94.0-96.6 holds 6 cuts. Madame Laurent screaming as the altar boy attacks 94.9-95.58 (boy alone 94.42-94.78 is the alt, 0.35 s). Still well before 98
   ('and leaves a trail', 'n2_burn', 383.0, -11.5),         # the possessed Maurice walking off into the foggy Tarascon street (title card from 396)
@@ -324,24 +324,24 @@ X.append(sec('s10', [
   (0, 'co_valak0', 4.0, -7.5),                             # Valak rising out of the water
   ('this is valak at full power', 'spooky_nun', 1092.45, -0.6),
   ('at full power', 'spooky_nun', 1049.3, -5.0),  # 1092.0-1092.4 is a nun lunging (wide); Valak roaring close-up 1092.43-1093.05
-  ('guarding its own doorway', 'spooky_nun', 1117.8, -2.5),  # 1116.5-1117.7 is the dark corridor; "Finit hic Deo" door 1117.75-1120.35, cut to Irene
-  ('in an abbey in romania', 'n1_open', 0.0, -8.7, AR),  # a figure steps in at 8.8
+  ('guarding its own doorway', 'spooky_nun', 1117.8, -2.5, 'g=1.4'),  # 1116.5-1117.7 is the dark corridor; "Finit hic Deo" door 1117.75-1120.35, cut to Irene
+  ('in an abbey in romania', 'n1_open', 0.0, -8.7, o(AR, 'g=1.4')),  # a figure steps in at 8.8
   ('before irene even arrives', 'n1_open', 38.0, -1.4, AR),  # Oana screaming to 39.45; 39.5-40 is the floor and her bloody hand (owner rule)
-  ('it has killed every nun', 'spooky_nun', 999.0, -7.0),  # 998.0-998.85 is Frenchie by a bloodied body; overhead dead nuns from 998.9 to past 1006.4
+  ('it has killed every nun', 'spooky_nun', 999.0, -7.0, 'g=1.4'),  # 998.0-998.85 is Frenchie by a bloodied body; overhead dead nuns from 998.9 to past 1006.4
   ('and the sisters she prays with', 'n1_pray', 21.0, -7.3),  # 8-21 holds ~9 cuts; Irene praying among the nuns, candles, one push-in 20.9-28.6
-  ('turn out to have been dead', 'n1_pray', 39.0, -20.0),  # one overhead move 37-59.9; the empty habits read clearly from ~39; cut at 60.0
+  ('turn out to have been dead', 'n1_pray', 39.0, -20.0, 'g=1.4'),  # one overhead move 37-59.9; the empty habits read clearly from ~39; cut at 60.0
   ('it buries father burke', 'co_buried_b', 75.6, -2.4),  # 76-88 holds ~7 cuts; one shot of Burke in the coffin flicking his lighter 74.9-78.03 (face lit from 76.6)
   *pick('s10', 'and drowns irene', [
-    ('and drowns irene', 'co_valak0', 26.1, -1.6),  # v1.1: 22.0-22.75 is Valak standing in the water, 22.85-25.0 Irene waist-deep, 25-26 a wide; Irene thrown back thrashing in the flooded crypt 26.05-27.72
+    ('and drowns irene', 'co_valak0', 26.1, -1.6, 'g=1.4'),  # v1.1: 22.0-22.75 is Valak standing in the water, 22.85-25.0 Irene waist-deep, 25-26 a wide; Irene thrown back thrashing in the flooded crypt 26.05-27.72
   ], [
     ('takes over irene', 'n1_poss', TODO, TODO),             # v1 GAP: Irene possessed (n1_poss age-gated) or the film file
     ('and drowns her', 'co_valak0', 26.1, -1.6),  # v1 branch, same reason
   ]),
-  ('the church sent', 'co_valak0', 64.0, -1.0),
-  ('a priest', 'spooky_nun', 317.2, -0.65),
-  ('a nun', 'spooky_nun', 1080.42, -1.15),  # relic vial in Irene's hand to 65.05, cut to Valak
-  ('and the actual blood', 'co_valak0', 84.65, -1.6),  # 83.6-84.55 Valak + Irene's arm; the glass vial of Christ's blood swinging on its chain 84.6-86.9
-  ('and even then', 'co_valak0', 96.5, -1.45),  # Valak's face soaked in the spat blood 96.47-97.97, cut to the water surface (red cloud) at 98.0
+  ('the church sent', 'co_valak0', 64.0, -1.0, 'g=1.4'),
+  ('a priest', 'spooky_nun', 317.2, -0.65, 'g=1.4'),
+  ('a nun', 'spooky_nun', 1080.42, -1.15, 'g=1.4'),  # relic vial in Irene's hand to 65.05, cut to Valak
+  ('and the actual blood', 'co_valak0', 84.65, -1.6, 'g=1.25'),  # 83.6-84.55 Valak + Irene's arm; the glass vial of Christ's blood swinging on its chain 84.6-86.9
+  ('and even then', 'co_valak0', 96.5, -1.45, 'g=1.4'),  # Valak's face soaked in the spat blood 96.47-97.97, cut to the water surface (red cloud) at 98.0
   ('hiding inside frenchie', 'co_valak0', 168.35, -2.05),  # 160-176 holds ~8 cuts (floor, CPR, Irene, Frenchie...); Frenchie bent over the drowned Irene, frantic, 168.3-170.45
                                                            # on his neck is in n1_fight, age-gated: prefer it when the owner runs the commands)
   ("if the vatican's best", 'co_valak0', 118.0, -3.2, o(L, 'flip=1')),  # clawing shot to 121.3, then Irene underwater 121.4-123.5, Valak again 123.6. Face at x~1100 = x~813 under L; flipped + L -> x~435

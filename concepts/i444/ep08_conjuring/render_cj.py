@@ -123,7 +123,7 @@ for si, S in enumerate(E['sections']):
             vf = (f"scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080," + ("hflip," if op.get('flip') else '') +
                   f"zoompan=z='{op.get('z', Z.get(name, 1.04))}+0.03*on/({max(1, n)})':x='max(0,min(iw-iw/zoom,iw/2-(iw/zoom/2)+{op.get('dx', 0)}))':"
                   f"y='max(0,min(ih-ih/zoom,ih/2-(ih/zoom/2)+{op.get('dy', 0)}))':d=1:s=1920x1080:fps={FPS},"
-                  f"eq=contrast=1.04:saturation=0.95:gamma={op.get('g', GM.get(name, 1.06))},vignette=PI/5,setsar=1")
+                  f"eq=contrast=1.04:saturation=0.95:gamma={op.get('g', GM.get(name, 1.06))},vignette=PI/5,setsar=1,setparams=range=tv:colorspace=bt709:color_primaries=bt709:color_trc=bt709")
             vf = (f"setpts=PTS/{sp}," if sp != 1.0 else '') + f"fps={FPS}," + vf
             if name in BAR:   # BAR = the source row where the mark starts: drawn only while this shot's framing still shows it
                 z0 = float(op.get('z', Z.get(name, 1.04))); hh = 1080 / z0
@@ -144,7 +144,7 @@ for si, S in enumerate(E['sections']):
         alst = os.path.join(WORK, f'sec{si:02d}_a.txt'); open(alst, 'w').write(''.join(f"file '{p}'\n" for p in asegs))
         run(['ffmpeg', '-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', alst, '-c', 'copy', _sa])
         # ---- overlays, in EDL order (later ones on top); the concatenated frames are renumbered first (Backrooms v3, 1:11 flicker) ----
-        ins = ['-i', raw]; chain = '[b0]'; fc = [f"[0:v]setpts=N/({FPS}*TB)[b0]"]; n = 1
+        ins = ['-reinit_filter', '0', '-i', raw]; chain = '[b0]'; fc = [f"[0:v]setpts=N/({FPS}*TB)[b0]"]; n = 1  # no filter reinit on a colour-tag change (it reset N: EP08 s01 came out 13 s)
         for j, (kind, arg, a, b) in enumerate(S.get('overlays', [])):
             b = min(b, L)
             if b <= a: continue
