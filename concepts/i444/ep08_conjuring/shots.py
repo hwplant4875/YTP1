@@ -90,7 +90,7 @@ X[-1]['vfade'] = {'in': 0.2}
 # ---- s02 #9 Annabelle Comes Home (95%) ----
 X.append(sec('s02', [
   (0, 'ach_room', 36.3, -7.5),  # same push-in shot (36-52.3); s01 now takes 44-52, so s02 ends at 43.8 (no moment twice)
-  ('this annabelle', 'ach_case', 62.0, -1.85),  # ach_devil_cz 316.4-317.9 is the SAME footage as ach_end 92.9-94.4 (row 'and as long as'; ClipZone ach_devil_cz = Movieclips ach_end + 223.5 s). Now: the Annabelle doll sitting still in the car, dark (one shot 61.9-63.95; MC clip, bar)
+  ('this annabelle', 'ach_case', 62.0, -1.85, 'g=1.4'),  # ach_devil_cz 316.4-317.9 is the SAME footage as ach_end 92.9-94.4 (row 'and as long as'; ClipZone ach_devil_cz = Movieclips ach_end + 223.5 s). Now: the Annabelle doll sitting still in the car, dark (one shot 61.9-63.95; MC clip, bar)
   ("because it's locked", 'ach_end', 57.8, -0.7),  # 57.7 is mid-whip (blur); the still doll in the case runs 57.75-58.55
   ('a blessed glass case', 'ach_end', 53.6, -1.6),  # 285.0-288.4 = ach_end 61.5-64.9, which 'leave the glass shut' uses. Now: Mary Ellen's hand flat on the case glass, the card taped on it (one shot 53.55-55.25)
   ("in the warrens' room", 'ach_room', 244.0, -4.0),       # "DANGER! DO NOT TOUCH ANYTHING!" sign, pull back to the WARRENS DEMONOLOGY WITCHCRAFT door
@@ -216,8 +216,8 @@ X.append(sec('s06', [
   ('drives the priest', 'lr_priest', 31.0, -3.7),  # Father Gordon alone at his desk, wide (29.6-30.8 his profile; cuts 34.8, 37.0)
   ('to his death', 'lr_priest', 138.45, -1.95),  # his eyes behind the glasses, the candle reflected (137.6-138.35 is another shot); ends 140.4, never the hallway
   ('gives ed a heart attack', 'lr_exorcism', 346.3, -0.9),  # Ed on the floor in pain (cut 347.25 to Lorraine)
-  ('and takes over judy', 'lr_end', 177.0, -3.0),          # possessed Judy snarling (blood in the mouth, not extreme)
-  ("ed's exorcism", 'lr_end', 24.0, -1.5),                 # Ed raises his hand with the bible at the mirror
+  ('and takes over judy', 'lr_end', 177.0, -3.0, 'g=1.25'),          # possessed Judy snarling (blood in the mouth, not extreme)
+  ("ed's exorcism", 'lr_end', 24.0, -1.5, 'g=1.4'),                 # Ed raises his hand with the bible at the mirror
   ('even work', 'lr_end', 80.8, -1.15),  # the bible bursts into flames in Ed's hand (80.75-81.95); 82.0 was Ed's face then a cut at 82.97
   ('and only the whole family', 'lr_exorcism', 503.7, -2.8),  # hands on the glass, cracks from ~506 (cut 506.55)
   ('can break the mirror', 'lr_exorcism', 513.0, -1.35),  # Lorraine and Judy, the demon screaming in the reflection (cut 514.45)
@@ -269,7 +269,7 @@ X.append(sec('s08', [
   ('and the demon makes you', 'dm_david', 301.12, -1.95, 'g=1.25'),  # Arne snarling, possessed, close (301.1-303.1); 44.5 was a totem insert cutting at 44.9 to Arne's arm, no fire
   ('arne johnson stabs', 'dm_bruno_b', 144.55, -1.2),  # Bruno dancing drunk 144.55-145.77 (144.0 is Debbie/Arne, cut at 145.8)
   ('his landlord', 'dm_bruno_b', 156.3, -0.5),  # knife slides across the floor 156.27-156.85 (156.2 is Arne's back)
-  ('twenty-two times', 'dm_bruno_b', 174.31, -0.35, 'a=-16,g=1.25'),
+  ('twenty-two times', 'dm_bruno_b', 158.3, -1.6, 'a=-16'),  # real voice: Arne's dazed close-up as Bruno faces him, one shot 158.25-160.0 (the 174.31 scream is only 0.35 s)
   ('times', 'dm_bruno_b', 174.75, -0.45, 'a=-16'),  # Arne's hand grabs the knife off the floor, blade up (174.73-175.2); 174.4-175.9 held 4 cuts (scream / grab / dark doorway / scream)
   ('a girl named jessica', 'dm_vision', 102.6, -1.4, o(AR, 'g=1.25')),  # Jessica smiling 102.55-104.05; cuts at 104.07 (Katie), 105 (hands), 107-109 (back and forth)
   ('stabs her best friend', 'dm_vision', 154.1, -2.5, o(AR, 'g=1.25')),  # 154.0 is the last knife frame; Katie's frightened face 154.07-156.65
@@ -323,14 +323,14 @@ X.append(sec('s09', [
 X.append(sec('s10', [
   (0, 'co_valak0', 4.0, -7.5),                             # Valak rising out of the water
   ('this is valak at full power', 'spooky_nun', 1092.45, -0.6),
-  ('at full power', 'spooky_nun', 1049.3, -5.0),  # 1092.0-1092.4 is a nun lunging (wide); Valak roaring close-up 1092.43-1093.05
+  ('at full power', 'spooky_nun', 1049.3, -5.0, 'g=1.4'),  # 1092.0-1092.4 is a nun lunging (wide); Valak roaring close-up 1092.43-1093.05
   ('guarding its own doorway', 'spooky_nun', 1117.8, -2.5, 'g=1.4'),  # 1116.5-1117.7 is the dark corridor; "Finit hic Deo" door 1117.75-1120.35, cut to Irene
   ('in an abbey in romania', 'n1_open', 0.0, -8.7, o(AR, 'g=1.4')),  # a figure steps in at 8.8
   ('before irene even arrives', 'n1_open', 38.0, -1.4, AR),  # Oana screaming to 39.45; 39.5-40 is the floor and her bloody hand (owner rule)
   ('it has killed every nun', 'spooky_nun', 999.0, -7.0, 'g=1.4'),  # 998.0-998.85 is Frenchie by a bloodied body; overhead dead nuns from 998.9 to past 1006.4
   ('and the sisters she prays with', 'n1_pray', 21.0, -7.3),  # 8-21 holds ~9 cuts; Irene praying among the nuns, candles, one push-in 20.9-28.6
   ('turn out to have been dead', 'n1_pray', 39.0, -20.0, 'g=1.4'),  # one overhead move 37-59.9; the empty habits read clearly from ~39; cut at 60.0
-  ('it buries father burke', 'co_buried_b', 75.6, -2.4),  # 76-88 holds ~7 cuts; one shot of Burke in the coffin flicking his lighter 74.9-78.03 (face lit from 76.6)
+  ('it buries father burke', 'co_buried_b', 75.6, -2.4, 'g=1.25'),  # 76-88 holds ~7 cuts; one shot of Burke in the coffin flicking his lighter 74.9-78.03 (face lit from 76.6)
   *pick('s10', 'and drowns irene', [
     ('and drowns irene', 'co_valak0', 26.1, -1.6, 'g=1.4'),  # v1.1: 22.0-22.75 is Valak standing in the water, 22.85-25.0 Irene waist-deep, 25-26 a wide; Irene thrown back thrashing in the flooded crypt 26.05-27.72
   ], [
