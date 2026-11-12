@@ -1,0 +1,826 @@
+{
+ "rows": [
+  {
+   "id": "c0p01",
+   "secs": 32.64,
+   "max_pause": 0.63,
+   "lufs": -22.1,
+   "diff": [],
+   "match": 1.0
+  },
+  {
+   "id": "c1p01",
+   "secs": 33.6,
+   "max_pause": 0.79,
+   "lufs": -21.6,
+   "diff": [
+    "- lankester",
+    "+ lancaster",
+    "- merrin",
+    "+ marron"
+   ],
+   "match": 0.981
+  },
+  {
+   "id": "c1p02",
+   "secs": 30.64,
+   "max_pause": 0.71,
+   "lufs": -21.5,
+   "diff": [
+    "- dc",
+    "+ d",
+    "+ c",
+    "- macneil",
+    "+ mcneil",
+    "- regan",
+    "+ reagan",
+    "- regan",
+    "+ reagan"
+   ],
+   "match": 0.951
+  },
+  {
+   "id": "c1p03",
+   "secs": 20.64,
+   "max_pause": 0.93,
+   "lufs": -21.9,
+   "diff": [
+    "- karras",
+    "+ caris",
+    "- karras",
+    "+ caris"
+   ],
+   "match": 0.963
+  },
+  {
+   "id": "c1p04",
+   "secs": 22.8,
+   "max_pause": 0.57,
+   "lufs": -21.3,
+   "diff": [
+    "- regan",
+    "+ reagan",
+    "- regan's",
+    "+ reagan's"
+   ],
+   "match": 0.972
+  },
+  {
+   "id": "c1p05",
+   "secs": 41.12,
+   "max_pause": 0.64,
+   "lufs": -21.2,
+   "diff": [],
+   "match": 1.0
+  },
+  {
+   "id": "c1p06",
+   "secs": 34.0,
+   "max_pause": 0.68,
+   "lufs": -22.4,
+   "diff": [
+    "- regan",
+    "+ reagan",
+    "- regan's",
+    "+ reagan's",
+    "- karras",
+    "+ kerris",
+    "- regan's",
+    "+ reagan's"
+   ],
+   "match": 0.955
+  },
+  {
+   "id": "c1p07",
+   "secs": 18.56,
+   "max_pause": 0.59,
+   "lufs": -20.8,
+   "diff": [
+    "- karras",
+    "+ charis"
+   ],
+   "match": 0.983
+  },
+  {
+   "id": "c1p08",
+   "secs": 50.48,
+   "max_pause": 0.75,
+   "lufs": -21.8,
+   "diff": [
+    "- karras",
+    "+ charis",
+    "- karras's",
+    "+ charis's",
+    "- just",
+    "- regan's",
+    "+ reagan's"
+   ],
+   "match": 0.976
+  },
+  {
+   "id": "c1p09",
+   "secs": 14.88,
+   "max_pause": 0.59,
+   "lufs": -22.0,
+   "diff": [
+    "- karras",
+    "+ charis",
+    "- merrin",
+    "+ meron"
+   ],
+   "match": 0.951
+  },
+  {
+   "id": "c1p10",
+   "secs": 36.16,
+   "max_pause": 0.84,
+   "lufs": -21.0,
+   "diff": [
+    "- merrin",
+    "+ maren",
+    "- streetlight",
+    "+ street",
+    "+ light",
+    "+ through"
+   ],
+   "match": 0.972
+  },
+  {
+   "id": "c1p11",
+   "secs": 30.96,
+   "max_pause": 0.69,
+   "lufs": -21.6,
+   "diff": [
+    "- merrin",
+    "+ maren",
+    "- karras",
+    "+ charis",
+    "- karras",
+    "+ charis",
+    "- merrin",
+    "+ maren",
+    "- karras",
+    "+ charis",
+    "- merrin",
+    "+ maren",
+    "- regan",
+    "+ reagan"
+   ],
+   "match": 0.927
+  },
+  {
+   "id": "c1p12",
+   "secs": 34.32,
+   "max_pause": 0.64,
+   "lufs": -20.5,
+   "diff": [
+    "- karras",
+    "+ but",
+    "+ charis",
+    "- karras",
+    "+ charis",
+    "- rites",
+    "+ rights"
+   ],
+   "match": 0.966
+  },
+  {
+   "id": "c1p13",
+   "secs": 17.36,
+   "max_pause": 0.63,
+   "lufs": -21.8,
+   "diff": [
+    "- regan",
+    "+ reagan",
+    "- regan",
+    "+ reagan",
+    "- regan's",
+    "+ reagan's"
+   ],
+   "match": 0.939
+  },
+  {
+   "id": "c1p14",
+   "secs": 35.36,
+   "max_pause": 0.59,
+   "lufs": -21.2,
+   "diff": [],
+   "match": 1.0
+  },
+  {
+   "id": "c2p01",
+   "secs": 14.96,
+   "max_pause": 0.65,
+   "lufs": -21.1,
+   "diff": [
+    "- ii",
+    "+ two"
+   ],
+   "match": 0.979
+  },
+  {
+   "id": "c2p02",
+   "secs": 32.64,
+   "max_pause": 0.75,
+   "lufs": -21.6,
+   "diff": [
+    "- exorcise",
+    "+ exercise",
+    "- merrin",
+    "+ marin",
+    "- merrin",
+    "+ marin"
+   ],
+   "match": 0.968
+  },
+  {
+   "id": "c2p03",
+   "secs": 22.32,
+   "max_pause": 0.7,
+   "lufs": -21.7,
+   "diff": [
+    "- regan",
+    "+ reagan",
+    "- gene",
+    "+ jean"
+   ],
+   "match": 0.968
+  },
+  {
+   "id": "c2p04",
+   "secs": 24.72,
+   "max_pause": 0.62,
+   "lufs": -21.3,
+   "diff": [
+    "- tuskin",
+    "+ tusken",
+    "- merrin",
+    "+ maren",
+    "- exorcising",
+    "+ exercising"
+   ],
+   "match": 0.956
+  },
+  {
+   "id": "c2p05",
+   "secs": 30.88,
+   "max_pause": 0.66,
+   "lufs": -21.5,
+   "diff": [
+    "- kokumo",
+    "+ kokomo",
+    "- merrin",
+    "+ maren",
+    "- kokumo",
+    "+ kokomo"
+   ],
+   "match": 0.967
+  },
+  {
+   "id": "c2p06",
+   "secs": 49.12,
+   "max_pause": 0.73,
+   "lufs": -20.8,
+   "diff": [
+    "- merrin",
+    "+ marin",
+    "- regan",
+    "+ reagan",
+    "- regan",
+    "+ reagan",
+    "- tuskin",
+    "+ tusken",
+    "- regan",
+    "+ reigen",
+    "- regan",
+    "+ reigen",
+    "- bullroarer",
+    "+ bulrora",
+    "- regan",
+    "+ reigen"
+   ],
+   "match": 0.945
+  },
+  {
+   "id": "c2p07",
+   "secs": 25.04,
+   "max_pause": 0.64,
+   "lufs": -20.9,
+   "diff": [
+    "+ and",
+    "- theater",
+    "+ theatre"
+   ],
+   "match": 0.981
+  },
+  {
+   "id": "c3p01",
+   "secs": 21.84,
+   "max_pause": 0.52,
+   "lufs": -21.3,
+   "diff": [
+    "- ii",
+    "+ two",
+    "- iii",
+    "+ three",
+    "- regan's",
+    "+ reagan's"
+   ],
+   "match": 0.946
+  },
+  {
+   "id": "c3p02",
+   "secs": 12.4,
+   "max_pause": 0.55,
+   "lufs": -21.4,
+   "diff": [
+    "- karras",
+    "+ charis"
+   ],
+   "match": 0.97
+  },
+  {
+   "id": "c3p03",
+   "secs": 41.84,
+   "max_pause": 0.67,
+   "lufs": -21.8,
+   "diff": [
+    "- kanavan",
+    "+ canavan",
+    "- karras",
+    "+ charis"
+   ],
+   "match": 0.983
+  },
+  {
+   "id": "c3p04",
+   "secs": 26.0,
+   "max_pause": 0.83,
+   "lufs": -21.4,
+   "diff": [],
+   "match": 1.0
+  },
+  {
+   "id": "c3p05",
+   "secs": 24.8,
+   "max_pause": 0.69,
+   "lufs": -21.7,
+   "diff": [
+    "- kanavan",
+    "+ canavan",
+    "- morning",
+    "+ mourning"
+   ],
+   "match": 0.971
+  },
+  {
+   "id": "c3p06",
+   "secs": 20.0,
+   "max_pause": 0.71,
+   "lufs": -22.2,
+   "diff": [],
+   "match": 1.0
+  },
+  {
+   "id": "c3p07",
+   "secs": 32.16,
+   "max_pause": 0.72,
+   "lufs": -21.4,
+   "diff": [
+    "- karras",
+    "+ charis",
+    "- karras's",
+    "+ charis's",
+    "- karras",
+    "+ charis"
+   ],
+   "match": 0.968
+  },
+  {
+   "id": "c3p08",
+   "secs": 41.04,
+   "max_pause": 0.6,
+   "lufs": -20.6,
+   "diff": [
+    "- morning",
+    "+ mourning",
+    "- karras",
+    "+ charis",
+    "- morning",
+    "+ mourning",
+    "- morning",
+    "+ mourning",
+    "- karras",
+    "+ charis"
+   ],
+   "match": 0.957
+  },
+  {
+   "id": "c3p09",
+   "secs": 38.96,
+   "max_pause": 0.63,
+   "lufs": -21.4,
+   "diff": [
+    "- morning",
+    "+ mourning"
+   ],
+   "match": 0.991
+  },
+  {
+   "id": "c4p01",
+   "secs": 18.48,
+   "max_pause": 0.62,
+   "lufs": -21.5,
+   "diff": [
+    "- merrin",
+    "+ maren"
+   ],
+   "match": 0.98
+  },
+  {
+   "id": "c4p02",
+   "secs": 22.96,
+   "max_pause": 0.7,
+   "lufs": -21.8,
+   "diff": [
+    "- merrin",
+    "+ marin",
+    "- skarsgrd",
+    "+ skarsgard",
+    "- merrin",
+    "+ marin"
+   ],
+   "match": 0.953
+  },
+  {
+   "id": "c4p03",
+   "secs": 21.52,
+   "max_pause": 0.57,
+   "lufs": -21.5,
+   "diff": [
+    "- merrin",
+    "+ marin"
+   ],
+   "match": 0.983
+  },
+  {
+   "id": "c4p04",
+   "secs": 22.16,
+   "max_pause": 0.61,
+   "lufs": -21.1,
+   "diff": [
+    "- merrin",
+    "+ maren"
+   ],
+   "match": 0.984
+  },
+  {
+   "id": "c4p05",
+   "secs": 28.64,
+   "max_pause": 0.63,
+   "lufs": -21.5,
+   "diff": [
+    "- bession",
+    "+ bessian",
+    "- merrin",
+    "+ maren",
+    "- bession",
+    "+ bessian",
+    "- merrin",
+    "+ maren",
+    "- bession",
+    "+ bessian",
+    "- merrin",
+    "+ maren",
+    "- merrin",
+    "+ and",
+    "+ marin"
+   ],
+   "match": 0.913
+  },
+  {
+   "id": "c4p06",
+   "secs": 29.52,
+   "max_pause": 0.62,
+   "lufs": -21.6,
+   "diff": [
+    "- merrin",
+    "+ maren"
+   ],
+   "match": 0.988
+  },
+  {
+   "id": "c4p07",
+   "secs": 35.68,
+   "max_pause": 0.8,
+   "lufs": -21.4,
+   "diff": [
+    "- fifteen",
+    "+ one",
+    "+ five"
+   ],
+   "match": 0.986
+  },
+  {
+   "id": "c4p08",
+   "secs": 50.32,
+   "max_pause": 0.69,
+   "lufs": -21.3,
+   "diff": [
+    "- merrin",
+    "+ maren",
+    "- jefferies",
+    "+ jeffries",
+    "- merrin",
+    "+ maren",
+    "- bession's",
+    "+ beshin's",
+    "- merrin",
+    "+ maren",
+    "- sarah",
+    "- dies",
+    "- merrin",
+    "+ maren",
+    "- merrin",
+    "+ maren",
+    "- semelier",
+    "+ semelie",
+    "- semelier",
+    "+ semelie"
+   ],
+   "match": 0.93
+  },
+  {
+   "id": "c4p09",
+   "secs": 29.52,
+   "max_pause": 0.73,
+   "lufs": -21.2,
+   "diff": [
+    "- harlin",
+    "+ harlan",
+    "- skarsgrd",
+    "+ skarsgard"
+   ],
+   "match": 0.973
+  },
+  {
+   "id": "c5p01",
+   "secs": 17.12,
+   "max_pause": 0.6,
+   "lufs": -20.7,
+   "diff": [
+    "- merrin",
+    "+ marron"
+   ],
+   "match": 0.979
+  },
+  {
+   "id": "c5p02",
+   "secs": 21.2,
+   "max_pause": 0.64,
+   "lufs": -21.7,
+   "diff": [
+    "- merrin",
+    "+ marin",
+    "- merrin",
+    "+ marin"
+   ],
+   "match": 0.966
+  },
+  {
+   "id": "c5p03",
+   "secs": 34.64,
+   "max_pause": 0.67,
+   "lufs": -21.2,
+   "diff": [
+    "- merrin",
+    "+ maren",
+    "- violence",
+    "+ violent"
+   ],
+   "match": 0.98
+  },
+  {
+   "id": "c5p04",
+   "secs": 31.04,
+   "max_pause": 0.88,
+   "lufs": -21.3,
+   "diff": [
+    "+ when",
+    "- merrin",
+    "+ maren"
+   ],
+   "match": 0.982
+  },
+  {
+   "id": "c5p05",
+   "secs": 45.12,
+   "max_pause": 0.67,
+   "lufs": -21.5,
+   "diff": [
+    "- merrin",
+    "+ maren",
+    "- merrin",
+    "+ maren",
+    "- merrin",
+    "+ maren",
+    "- merrin",
+    "+ maren"
+   ],
+   "match": 0.971
+  },
+  {
+   "id": "c5p06",
+   "secs": 13.36,
+   "max_pause": 0.62,
+   "lufs": -21.6,
+   "diff": [
+    "- and",
+    "+ zero",
+    "- thousand",
+    "- dollars"
+   ],
+   "match": 0.941
+  },
+  {
+   "id": "c6p01",
+   "secs": 39.28,
+   "max_pause": 0.68,
+   "lufs": -21.5,
+   "diff": [
+    "- geena",
+    "+ gina",
+    "- keane",
+    "+ keen",
+    "- macneil",
+    "+ mcneil",
+    "- macneil",
+    "+ mcneil",
+    "- canceled",
+    "+ cancelled"
+   ],
+   "match": 0.954
+  },
+  {
+   "id": "c7p01",
+   "secs": 18.0,
+   "max_pause": 0.56,
+   "lufs": -22.0,
+   "diff": [
+    "- dollars"
+   ],
+   "match": 0.989
+  },
+  {
+   "id": "c7p02",
+   "secs": 23.68,
+   "max_pause": 0.92,
+   "lufs": -21.7,
+   "diff": [
+    "- sorenne",
+    "+ soren",
+    "- sorenne",
+    "+ soren",
+    "- sorenne",
+    "+ soren"
+   ],
+   "match": 0.954
+  },
+  {
+   "id": "c7p03",
+   "secs": 22.16,
+   "max_pause": 0.71,
+   "lufs": -21.7,
+   "diff": [
+    "- katherine",
+    "+ catherine",
+    "- sance",
+    "+ seance"
+   ],
+   "match": 0.97
+  },
+  {
+   "id": "c7p04",
+   "secs": 28.16,
+   "max_pause": 0.67,
+   "lufs": -21.7,
+   "diff": [
+    "- macneil",
+    "+ mcneil",
+    "- regan's",
+    "+ reagan's",
+    "- regan",
+    "+ reagan"
+   ],
+   "match": 0.961
+  },
+  {
+   "id": "c7p05",
+   "secs": 11.76,
+   "max_pause": 0.62,
+   "lufs": -22.1,
+   "diff": [
+    "- katherine",
+    "+ catherine",
+    "- katherine",
+    "+ catherine"
+   ],
+   "match": 0.938
+  },
+  {
+   "id": "c7p06",
+   "secs": 71.2,
+   "max_pause": 0.79,
+   "lufs": -21.3,
+   "diff": [
+    "- ann",
+    "+ anne",
+    "- katherine's",
+    "+ catherine's",
+    "- katherine's",
+    "+ catherine's",
+    "- katherine",
+    "+ catherine"
+   ],
+   "match": 0.975
+  },
+  {
+   "id": "c7p07",
+   "secs": 12.88,
+   "max_pause": 0.66,
+   "lufs": -22.0,
+   "diff": [
+    "- regan",
+    "+ reagan"
+   ],
+   "match": 0.971
+  },
+  {
+   "id": "c7p08",
+   "secs": 13.44,
+   "max_pause": 0.56,
+   "lufs": -21.9,
+   "diff": [
+    "- canceled",
+    "+ cancelled"
+   ],
+   "match": 0.971
+  },
+  {
+   "id": "c8p01",
+   "secs": 22.24,
+   "max_pause": 0.63,
+   "lufs": -21.2,
+   "diff": [
+    "- macneil",
+    "+ mcneil"
+   ],
+   "match": 0.983
+  },
+  {
+   "id": "c8p02",
+   "secs": 25.84,
+   "max_pause": 0.52,
+   "lufs": -21.5,
+   "diff": [],
+   "match": 1.0
+  },
+  {
+   "id": "c8p03",
+   "secs": 9.92,
+   "max_pause": 0.52,
+   "lufs": -20.0,
+   "diff": [],
+   "match": 1.0
+  }
+ ],
+ "median_lufs": -21.5,
+ "total_secs": 1632.1,
+ "redo": [
+  "c1p02",
+  "c1p03",
+  "c1p06",
+  "c1p09",
+  "c1p11",
+  "c1p12",
+  "c1p13",
+  "c2p02",
+  "c2p03",
+  "c2p04",
+  "c2p05",
+  "c2p06",
+  "c3p01",
+  "c3p07",
+  "c3p08",
+  "c4p02",
+  "c4p05",
+  "c4p08",
+  "c5p02",
+  "c5p06",
+  "c6p01",
+  "c7p02",
+  "c7p04",
+  "c7p05"
+ ],
+ "missing": []
+}
