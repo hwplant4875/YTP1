@@ -32,7 +32,7 @@ X.append(sec('s00', [
   ('will burn you alive', 'co_burn_4k', 157.5, -0.7, 'a=-18'),  # Father Noiret burning, his head and arms inside the flames; hard cut at 158.2 to an all-fire shot (the old span crossed it)
   ('in midair', 'co_burn_4k', 154.9, -1.1),  # cut at 156.03 to a boy in the pews
   ('bury you alive', 'co_buried_b', 102.4, -3.4),  # one shot 99.5-105.85, but the lighter is only lit from ~102.4 (100-102 is near-black)
-  ('snap your neck', 'n2_deliv', 137.8, -1.2),  # v1.2 lore fix: Last Rites has NO neck snap; The Nun II delivery-girl neck snap (verify the span on frames; was lr_preview 256.9 Heather's throat)  # Last Rites: hands seize Heather's throat and head from behind, one shot 255.8-260.8+ (B1b: clearer than n2_deliv 137.8; letterboxed, z 1.25 keeps 640 rows)
+  ('snap your neck', 'n2_deliv', 137.71, -0.7),  # v1.2 lore fix: Last Rites has NO neck snap. The Nun II: delivery girl seized by the throat by unseen Valak, choking close-up 137.70-138.42 (frames checked 11/15; 137.27-137.65 lamp wide of the grab, 138.45 cut to her feet dangling off the floor, 139.8 cut to another scene). Near-still face, ~0.55x ok  # Last Rites: hands seize Heather's throat and head from behind, one shot 255.8-260.8+ (B1b: clearer than n2_deliv 137.8; letterboxed, z 1.25 keeps 640 rows)
   ('make you stab', 'dm_vision', 153.15, -0.85, o(AR, 'g=1.4')),  # 153.0-153.1 is an arm only; the bloody knife is in frame from 153.15; cut to Jessica at 154.05
   ('your best friend', 'dm_vision', 160.0, -0.85, o(AR, 'g=1.25')),  # cut to Lorraine at 160.89
   ('twenty-two times', 'dm_vision', 157.1, -1.8, o(AR, 'g=1.25')),  # 156.7-157.0 her eyes are down; the white eyes show from 157.1; cut to Lorraine at ~159.0
