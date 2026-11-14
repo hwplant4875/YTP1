@@ -32,6 +32,6 @@ the conjuring, conjuring universe, valak, the nun, annabelle, the conjuring 2, t
 7:01 (421.6 s)
 
 ## Files
-- Video: 2_renders\conjuring_ranked_v1.mp4
+- Video: 2_renders\conjuring_ranked_v2.mp4
 - English captions: conjuring_ranked_en.srt
 - Thumbnails: conjuring_thumb_a.jpg (95/55/5), conjuring_thumb_b.jpg (80/45/5), conjuring_thumb_c.jpg (40/30/5)
