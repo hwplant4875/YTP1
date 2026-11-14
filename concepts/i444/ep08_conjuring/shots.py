@@ -32,7 +32,7 @@ X.append(sec('s00', [
   ('will burn you alive', 'co_burn_4k', 157.5, -0.7, 'a=-18'),  # Father Noiret burning, his head and arms inside the flames; hard cut at 158.2 to an all-fire shot (the old span crossed it)
   ('in midair', 'co_burn_4k', 154.9, -1.1),  # cut at 156.03 to a boy in the pews
   ('bury you alive', 'co_buried_b', 102.4, -3.4),  # one shot 99.5-105.85, but the lighter is only lit from ~102.4 (100-102 is near-black)
-  ('snap your neck', 'lr_preview', 256.9, -3.0, 'z=1.25,a=-16,g=1.4'),  # Last Rites: hands seize Heather's throat and head from behind, one shot 255.8-260.8+ (B1b: clearer than n2_deliv 137.8; letterboxed, z 1.25 keeps 640 rows)
+  ('snap your neck', 'n2_deliv', 137.8, -1.2),  # v1.2 lore fix: Last Rites has NO neck snap; The Nun II delivery-girl neck snap (verify the span on frames; was lr_preview 256.9 Heather's throat)  # Last Rites: hands seize Heather's throat and head from behind, one shot 255.8-260.8+ (B1b: clearer than n2_deliv 137.8; letterboxed, z 1.25 keeps 640 rows)
   ('make you stab', 'dm_vision', 153.15, -0.85, o(AR, 'g=1.4')),  # 153.0-153.1 is an arm only; the bloody knife is in frame from 153.15; cut to Jessica at 154.05
   ('your best friend', 'dm_vision', 160.0, -0.85, o(AR, 'g=1.25')),  # cut to Lorraine at 160.89
   ('twenty-two times', 'dm_vision', 157.1, -1.8, o(AR, 'g=1.25')),  # 156.7-157.0 her eyes are down; the white eyes show from 157.1; cut to Lorraine at ~159.0
@@ -160,8 +160,8 @@ X.append(sec('s04', [
   ('then she takes over', 'co_mother_c', 292.2, -1.0, 'g=1.4'),
   ('the mother#2', 'co_mother_c', 300.35, -1.35, 'g=1.4'),  # possessed Carolyn laughing (291.5-292.0 is Roger)
   ('completely', 'universe', 477.5, -2.0, C1),  # Carolyn held down by the men, screaming (476.5-477.45 is Lorraine; cut ~479.55)
-  ('because in every family', 'universe', 445.8, -1.35, C1),  # possessed Carolyn with the scissors over the child (444.5-445.7 dark/Ed; cut 447.15)
-  ('she makes the mother', 'c1_feed', 99.8, -1.6),  # Carolyn on the floor clutching her head, screaming, held (96-99.7 has 4 cuts; MC bar)
+  ('because just like a mother', 'universe', 445.8, -1.35, C1),  # possessed Carolyn with the scissors over the child (444.5-445.7 dark/Ed; cut 447.15)
+  ('she wants carolyn', 'c1_feed', 99.8, -1.6),  # Carolyn on the floor clutching her head, screaming, held (96-99.7 has 4 cuts; MC bar)
   ('the perrons only survive', 'co_mother_c', 10.0, -5.0), # Ed reads the rite from the book in the cellar
   ('and lorraine reaches', 'universe', 694.2, -1.45, C1),  # Lorraine close, in tears, talking to Carolyn (690.5-691.2 possessed Carolyn, white flash 691.24)
   ('with a happy memory', 'universe', 697.58, -0.58, C1),
@@ -230,23 +230,17 @@ X.append(sec('s07', [
   (0, 'cr_sam', 29.3, -7.7),                               # the Annabelle doll in a chair, bright, dead centre
   ('this is where the annabelle', 'cr_wasnt', 0.0, -2.6),  # the doll at a tea table with the girl in Bee's dress
   ('and unlike the last one', 'cr_trapped', 355.5, -1.55),
-  ('it kills almost everyone', 'cr_trapped', 357.1, -3.0),  # possessed Janice crouched over Linda on the floor (352-355.45 has 4 cuts; cut 357.05)
+  ('it wipes out the whole family', 'cr_trapped', 357.1, -3.0),  # possessed Janice crouched over Linda on the floor (352-355.45 has 4 cuts; cut 357.05)
   ('it pretends to be bee', 'cr_wasnt', 15.0, -4.5),       # the demon as Bee, walking in Bee's room
   ('so her heartbroken parents', 'cr_wasnt', 39.1, -2.95),  # Esther (half-masked) drinking, then looking up (37.6-38.9 is Samuel; cut 42.1; never 34-36)
   ('let it into the doll', 'cr_wasnt', 60.8, -2.2),        # the doll's face close, sinister
   ('then it goes after', 'cr_sam', 37.8, -5.2),            # Sister Charlotte and the orphans unloading the truck
-  *pick('s07', 'drags janice', [
-    ('it drags janice', 'cr_wheel', 80.35, -0.8),  # v1.1: unseen hands grip Janice's shoulders (79.34-80.25 wheels + running feet; cut 81.2)
-    ('out of her wheelchair', 'cr_wheel', 86.6, -0.9),  # skirt and boots running, pushing the chair (cut 87.6)
-    ('into a barn', 'cr_wheel', 94.7, -2.3),                 # Janice thrown from the chair, face down on the barn floor
-  ], [
-    ('it throws janice', 'cr_soul', 155.0, -2.3),            # v1: Janice riding the stairlift
-    ('off her stairlift', 'GAP', TODO, TODO),                # v1 GAP: the throw (cr_soul ends before it): the film file
-  ]),
+  ('it wheels janice', 'cr_wheel', 79.34, -0.9),  # v1.2: wheels + running feet (79.34-80.25), the demon disguised as Charlotte pushing her
+  ('into a barn', 'cr_wheel', 86.6, -0.9),  # skirt and boots running, pushing the chair (cut 87.6)
+  ('throws her out', 'cr_wheel', 94.7, -2.3),              # Janice thrown from the chair, face down on the barn floor
   ('and takes over her body', 'cr_stair', 125.6, -2.0),    # the demon forces itself into Janice's mouth in the barn (end card from ~128)
   ('through her', 'cr_sam', 16.0, -8.0),                   # Samuel holding up the crucifix, his fingers bending back (cut before 26)
   ('and kills him', 'cr_sam', 59.8, -1.2),                 # his body on the floor, wide (never 63-64)
-  *pick('s07', 'drags janice', [], [('it kills his wife', 'cr_dumb', TODO, TODO)]),   # v1 GAP: Esther's death (cr_dumb age-gated) or the film file
   ('and twelve years later', 'cr_end', 9.05, -5.95),  # the Higgins photos; the burned "12 YEARS LATER" is still faintly on until ~8.95
   ('it kills the couple', 'cr_end', 19.0, -3.3),  # the Higgins couple woken in bed (cut ~22.45)
   ('who adopted her', 'cr_end', 39.5, -1.9),  # grown Annabelle grabs her father's throat (cut 41.45)
@@ -324,15 +318,15 @@ X.append(sec('s10', [
   (0, 'co_valak0', 4.0, -7.5),                             # Valak rising out of the water
   ('this is valak at full power', 'spooky_nun', 1092.45, -0.6),
   ('at full power', 'spooky_nun', 1049.3, -5.0, 'g=1.4'),  # 1092.0-1092.4 is a nun lunging (wide); Valak roaring close-up 1092.43-1093.05
-  ('guarding its own doorway', 'spooky_nun', 1117.8, -2.5, 'g=1.4'),  # 1116.5-1117.7 is the dark corridor; "Finit hic Deo" door 1117.75-1120.35, cut to Irene
-  ('in an abbey in romania', 'n1_open', 0.0, -8.7, o(AR, 'g=1.4')),  # a figure steps in at 8.8
+  ('loose from a doorway', 'spooky_nun', 1117.8, -2.5, 'g=1.4'),  # 1116.5-1117.7 is the dark corridor; "Finit hic Deo" door 1117.75-1120.35, cut to Irene
+  ('under an abbey in romania', 'n1_open', 0.0, -8.7, o(AR, 'g=1.4')),  # a figure steps in at 8.8
   ('before irene even arrives', 'n1_open', 38.0, -1.4, AR),  # Oana screaming to 39.45; 39.5-40 is the floor and her bloody hand (owner rule)
-  ('it has killed every nun', 'spooky_nun', 999.0, -7.0, 'g=1.4'),  # 998.0-998.85 is Frenchie by a bloodied body; overhead dead nuns from 998.9 to past 1006.4
+  ('every nun in the abbey', 'spooky_nun', 999.0, -7.0, 'g=1.4'),  # 998.0-998.85 is Frenchie by a bloodied body; overhead dead nuns from 998.9 to past 1006.4
   ('and the sisters she prays with', 'n1_pray', 21.0, -7.3),  # 8-21 holds ~9 cuts; Irene praying among the nuns, candles, one push-in 20.9-28.6
-  ('turn out to have been dead', 'n1_pray', 39.0, -20.0, 'g=1.4'),  # one overhead move 37-59.9; the empty habits read clearly from ~39; cut at 60.0
+  ('were never really there', 'n1_pray', 39.0, -20.0, 'g=1.4'),  # one overhead move 37-59.9; the empty habits read clearly from ~39; cut at 60.0
   ('it buries father burke', 'co_buried_b', 75.6, -2.4, 'g=1.25'),  # 76-88 holds ~7 cuts; one shot of Burke in the coffin flicking his lighter 74.9-78.03 (face lit from 76.6)
-  *pick('s10', 'and drowns irene', [
-    ('and drowns irene', 'co_valak0', 26.1, -1.6, 'g=1.4'),  # v1.1: 22.0-22.75 is Valak standing in the water, 22.85-25.0 Irene waist-deep, 25-26 a wide; Irene thrown back thrashing in the flooded crypt 26.05-27.72
+  *pick('s10', 'and nearly drowns irene', [
+    ('and nearly drowns irene', 'co_valak0', 26.1, -1.6, 'g=1.4'),  # v1.1: 22.0-22.75 is Valak standing in the water, 22.85-25.0 Irene waist-deep, 25-26 a wide; Irene thrown back thrashing in the flooded crypt 26.05-27.72
   ], [
     ('takes over irene', 'n1_poss', TODO, TODO),             # v1 GAP: Irene possessed (n1_poss age-gated) or the film file
     ('and drowns her', 'co_valak0', 26.1, -1.6),  # v1 branch, same reason
