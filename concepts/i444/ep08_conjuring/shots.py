@@ -230,7 +230,7 @@ X.append(sec('s07', [
   (0, 'cr_sam', 29.3, -7.7),                               # the Annabelle doll in a chair, bright, dead centre
   ('this is where the annabelle', 'cr_wasnt', 0.0, -2.6),  # the doll at a tea table with the girl in Bee's dress
   ('and unlike the last one', 'cr_trapped', 355.5, -1.55),
-  ('it wipes out the whole family', 'cr_trapped', 357.1, -3.0),  # possessed Janice crouched over Linda on the floor (352-355.45 has 4 cuts; cut 357.05)
+  ('it kills the parents', 'cr_trapped', 357.1, -3.0),  # possessed Janice crouched over Linda on the floor (352-355.45 has 4 cuts; cut 357.05)
   ('it pretends to be bee', 'cr_wasnt', 15.0, -4.5),       # the demon as Bee, walking in Bee's room
   ('so her heartbroken parents', 'cr_wasnt', 39.1, -2.95),  # Esther (half-masked) drinking, then looking up (37.6-38.9 is Samuel; cut 42.1; never 34-36)
   ('let it into the doll', 'cr_wasnt', 60.8, -2.2),        # the doll's face close, sinister
@@ -334,7 +334,7 @@ X.append(sec('s10', [
   ('the church sent', 'co_valak0', 64.0, -1.0, 'g=1.4'),
   ('a priest', 'spooky_nun', 317.2, -0.65, 'g=1.4'),
   ('a nun', 'spooky_nun', 1080.42, -1.15, 'g=1.4'),  # relic vial in Irene's hand to 65.05, cut to Valak
-  ('and the actual blood', 'co_valak0', 84.65, -1.6, 'g=1.25'),  # 83.6-84.55 Valak + Irene's arm; the glass vial of Christ's blood swinging on its chain 84.6-86.9
+  ('the actual blood', 'co_valak0', 84.65, -1.6, 'g=1.25'),  # 83.6-84.55 Valak + Irene's arm; the glass vial of Christ's blood swinging on its chain 84.6-86.9
   ('and even then', 'co_valak0', 96.5, -1.45, 'g=1.4'),  # Valak's face soaked in the spat blood 96.47-97.97, cut to the water surface (red cloud) at 98.0
   ('hiding inside frenchie', 'co_valak0', 168.35, -2.05),  # 160-176 holds ~8 cuts (floor, CPR, Irene, Frenchie...); Frenchie bent over the drowned Irene, frantic, 168.3-170.45
                                                            # on his neck is in n1_fight, age-gated: prefer it when the owner runs the commands)

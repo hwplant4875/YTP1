@@ -34,6 +34,6 @@ with open(OUT, 'w', encoding='utf-8') as f:
     f.write('# EP08 The Conjuring Universe, upload kit\n\n## Titles (pick one; no colon or dash)\n' +
             ''.join(f'{i + 1}. {t}' + ('  (recommended, the series format)' if i == 0 else '') + '\n' for i, t in enumerate(TITLES)))
     f.write(f'\n## Description\n\n{DESC}\n\n## Tags\n{", ".join(TAGS)}\n\n## Length\n{mmss(tg)} ({tg:.1f} s)\n\n'
-            '## Files\n- Video: 2_renders\\conjuring_ranked_v2.mp4\n- English captions: conjuring_ranked_en.srt\n'
+            '## Files\n- Video: 2_renders\\conjuring_ranked_v3.mp4\n- English captions: conjuring_ranked_en.srt\n'
             '- Thumbnails: conjuring_thumb_a.jpg (95/55/5), conjuring_thumb_b.jpg (80/45/5), conjuring_thumb_c.jpg (40/30/5)\n')
 print(OUT, mmss(tg))
