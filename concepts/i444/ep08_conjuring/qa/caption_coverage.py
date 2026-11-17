@@ -6,13 +6,15 @@ D = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
 E = json.load(open(D + 'edl.json')); W = json.load(open(D + os.environ.get('VOICE', 'voice').strip('/\\') + '/words.json'))
 MAXLEAD = 0.25
 ALIAS = {'22': 'twentytwo'}   # caption digits for spoken numbers
+SPOKEN = {'3:07': 'three oh seven'}   # caption text -> the words spoken for it
+def spl(s): return ' '.join(SPOKEN.get(w, w) for w in s.split()).split()
 def norm(s): s = re.sub(r"[^a-z0-9']", '', s.lower().replace('-', '')); return ALIAS.get(s, s)
 s0 = next(S for S in E['sections'] if S['voice'] == 's00')
 caps = sorted([o for o in s0['overlays'] if o[0] == 'word'], key=lambda o: o[2])
 shots = s0['shots']; fail = 0; wi = 0; words = W['s00']
 for c in caps:
     first = None
-    for t in [norm(t) for t in c[1].split() if norm(t)]:
+    for t in [norm(t) for t in spl(c[1]) if norm(t)]:
         while wi < len(words) and norm(words[wi][2]) != t: wi += 1
         if wi == len(words): print('FAIL caption word not in narration order:', c[1], t); fail += 1; break
         a, b, w = words[wi]; m = a + 0.02
@@ -22,7 +24,7 @@ for c in caps:
     if first is not None and c[2] < first - MAXLEAD - 0.08: print(f'FAIL "{c[1]}" appears {first - c[2]:.2f}s before it is said'); fail += 1
 for a, b, w in words:
     m = a + 0.02
-    if not any(c[2] <= m <= c[3] and norm(w) in [norm(t) for t in c[1].split()] for c in caps): print(f'FAIL "{w}" ({a:.2f}s) is never on screen'); fail += 1
+    if not any(c[2] <= m <= c[3] and norm(w) in [norm(t) for t in spl(c[1])] for c in caps): print(f'FAIL "{w}" ({a:.2f}s) is never on screen'); fail += 1
 import math
 def f0(t): return math.ceil(t * 30 - 1e-6)   # the first frame a caption shows (the renderer: enable when t >= start)
 for k, c in enumerate(caps):   # frame-exact: the caption's first frame is its cut's first frame, and no frame shows two captions

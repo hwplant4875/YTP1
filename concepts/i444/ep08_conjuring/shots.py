@@ -27,7 +27,8 @@ def pick(seg, phrase, v11, v1):   # the shots of whichever wording the take hold
 C1, C2, DM = 'f=c1', 'f=c2', 'f=dm'   # film keys for the mixed WB compilation 'universe' (Conjuring 2013 0-936, Conjuring 2 938-1556, DMMDI 1558-1816)
 
 # ---- s00 cold open: one hard cut per caption, the caption's action on screen from the shot's first frame (owner 11/7) ----
-X.append(sec('s00', [
+if os.environ.get('INTRO'): exec(open(D + 'intro/intro_shots.py', encoding='utf-8').read())   # owner 11/17: intro A-D comparison
+else: X.append(sec('s00', [
   (0, 'c2_painting', 136.97, -1.7),  # 136.5-136.93 is a dark, barely visible Valak face from the previous shot (hard cut at 136.95); the bright face runs 136.97-138.70. s04 'survival rate' c2_painting 137.2-138.8 is now the same moment: s04 needs another span
   ('will burn you alive', 'co_burn_4k', 157.5, -0.7, 'a=-18'),  # Father Noiret burning, his head and arms inside the flames; hard cut at 158.2 to an all-fire shot (the old span crossed it)
   ('in midair', 'co_burn_4k', 154.9, -1.1),  # cut at 156.03 to a boy in the pews
