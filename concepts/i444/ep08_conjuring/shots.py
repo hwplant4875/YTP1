@@ -158,7 +158,7 @@ X.append(sec('s04', [
   ('leaves bruises', 'c1_dog_b', 56.15, -1.05),
   ('while she sleeps', 'c1_dog_b', 57.3, -1.25),  # the bruise on Carolyn's leg (56.0 is the previous shot; cut 57.25)
   ('pulls at the girls', 'c1_sleep', 1.0, -2.3),  # Christine asleep, jerks awake (cut 3.35)
-  ('and kills the family dog', 'c1_dog_b', 88.3, -1.0),  # Sadie lying in the weeds by the wall, small (87-87.7 Roger, 87.8-88.25 whip pan; cut 89.35)
+  ('and kills the family dog', 'c1_dog_b', 26.6, -3.0),  # owner 11/18: 88.3 was a dead BIRD (pigeon) by the wall, not the dog. Now Sadie alive on the porch, refusing to enter, Roger petting her (dark dip 25.6-26.2, clean 26.4-30.0). No clip shows Sadie dead
   ('then she takes over', 'co_mother_c', 292.2, -1.0, 'g=1.4'),
   ('the mother#2', 'co_mother_c', 300.35, -1.35, 'g=1.4'),  # possessed Carolyn laughing (291.5-292.0 is Roger)
   ('completely', 'universe', 477.5, -2.0, C1),  # Carolyn held down by the men, screaming (476.5-477.45 is Lorraine; cut ~479.55)
