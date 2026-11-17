@@ -31,9 +31,9 @@ TILE = {'s02': 'ach', 's03': 'a14', 's04': 'c1', 's05': 'c2', 's06': 'lr', 's07'
 SHORT = {'s02': 'Annabelle Comes Home (2019)', 's03': 'Annabelle (2014)', 's04': 'The Conjuring (2013)', 's05': 'The Conjuring 2 (2016)',
          's06': 'The Conjuring: Last Rites (2025)', 's07': 'Annabelle: Creation (2017)', 's08': 'The Devil Made Me Do It (2021)',
          's09': 'The Nun II (2023)', 's10': 'The Nun (2018)'}
-CARD_AT = {'s02': 'leave the glass shut', 's03': 'never offer it your soul', 's04': 'she only wants the mother', 's05': 'learn the name',
-           's06': 'if it wants you', 's07': "if you're the weakest", 's08': "you can't run from a curse", 's09': "you're not from saint",
-           's10': "if the vatican's best"}
+CARD_AT = {'s02': 'even loose in your room', 's03': 'it will burn your home', 's04': 'she will follow you', 's05': "it's smarter than you",
+           's06': 'throwing the mirror away', 's07': "it doesn't want to scare you", 's08': "you can't fight it", 's09': 'almost everyone it set out',
+           's10': 'it wiped out a whole abbey'}
 TIERS = [['S', 'Slaughtered', 25], ['A', 'Almost Dead', 40], ['B', 'Better Run', 50], ['C', 'Close Call', 60], ['D', "Don't Worry", 80],
          ['E', 'Easy', 101]]
 # film label (top right) by clip prefix; the cold-open clips and mixed compilations are mapped by name or by the shot's f= option

@@ -4,11 +4,13 @@
 # Owner rules: the only cover is a black bottom bar over a mark at the very bottom; never blur or delogo. The Conjuring Archives
 # logo sits only in the letterbox bars, so those clips are cropped (zoom 1.38) instead of covered.
 MC = ['ach_case', 'ach_bride', 'ach_ferry', 'ach_ferry_b', 'ach_wolf', 'ach_tv', 'ach_end', 'a14_basement', 'a14_stairs', 'a14_baby',
-      'co_mother', 'co_doll', 'co_neck', 'c1_clap', 'c1_feed', 'c2_crooked', 'c2_grave']   # Movieclips mark in the bottom letterbox bar
+      'co_mother', 'co_doll', 'co_neck', 'c1_clap', 'c1_feed', 'c2_crooked', 'c2_grave',
+      'n1_hl_abbess']   # v2 (11/18): HorrorLegendsTV text in the bottom bar   # Movieclips mark in the bottom letterbox bar
 # (n2_altar, n2_bell: no mark seen; n2_maurice, n2_exorcise, n2_goat: check one frame each and add them here if they carry it)
-RT = ['c1_exorcism_b', 'lr_priest', 'lr_mirror']                     # old RT/Movieclips mark, its top 55 px inside the picture
+RT = ['c1_exorcism_b', 'lr_priest', 'lr_mirror', 'lr_s10_axeghost', 'lr_s09_possessed']                     # old RT/Movieclips mark, its top 55 px inside the picture
 CR_FULL = ['cr_stair', 'cr_soul', 'cr_sam', 'cr_wasnt', 'cr_well', 'cr_scarecrow']   # full-frame Creation clips, mark ON the picture
-ARCH = ['a14_fire', 'c2_name', 'c2_name_b', 'dm_promise', 'dm_truth', 'dm_altar', 'dm_vision', 'dm_calvary', 'dm_heart', 'n1_open']
+ARCH = ['a14_fire', 'c2_name', 'c2_name_b', 'dm_promise', 'dm_truth', 'dm_altar', 'dm_vision', 'dm_calvary', 'dm_heart', 'n1_open',
+        'lr_ar_eviljudy', 'dm_ar_itwasher', 'dm_ar_love', 'n1_ar_defeats', 'n1_ar_darkness', 'c1_ar_cellar']   # v2 Archives clips
 MARKS.update({k: [(69, 955, 481, 1043)] for k in MC})
 MARKS.update({k: [(70, 885, 477, 970)] for k in RT})
 MARKS.update({k: [(70, 968, 412, 1040)] for k in CR_FULL})
@@ -22,7 +24,8 @@ CLIPOPT.update({k: 'z=1.13,dy=-300' for k in CR_FULL})                # top-anch
 CLIPOPT['c1_dog_b'] = 'z=1.3'                                         # crops the corner bug (visible x 222-1698)
 # QA pass 1 (rendered frames): near-black spans lifted. VDARK = gamma 1.4, DARK = gamma 1.25 (default 1.06), per clip.
 VDARK += ['ach_wolf']                                                 # beats_v1: the hellhound attack is very dark
-DARK += ['ach_ferry_b', 'ach_room', 'co_mother_b', 'cr_soul', 'cr_trapped']
+DARK += ['ach_ferry', 'ach_case', 'ach_cz_stabs', 'ach_ferry_b', 'ach_room', 'co_mother_b', 'cr_soul', 'cr_trapped']
 # Effective resolution: source picture rows per frame height for clips that are not 1920x1080 (the renderer fill-scales first, so the
 # rows on screen = EFFH / z). Owner rule: sources 720p+, so keep EFFH / z >= 720 where possible and never under 640.
-EFFH.update({'n2_lucy': 842, 'c2_vision': 800, 'dm_bruno_b': 800, 'lr_birth': 1070, 'dm_final': 720, 'c2_bill': 720, 'c1_clap': 902})
+EFFH.update({'n2_lucy': 842, 'c2_vision': 800, 'dm_bruno_b': 800, 'lr_birth': 1070, 'dm_final': 720, 'c2_bill': 720, 'c1_clap': 902,
+             'c1_bedroom': 720, 'cr_esther_scenes': 800, 'c2_s10_defiler': 720})

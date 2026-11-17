@@ -12,16 +12,16 @@ As a horror fan, I've seen every Conjuring movie more times than I should admit,
 [ Timeline ]
 0:00 These demons will burn you alive
 0:16 How the survival rate works
-0:42 #9 Annabelle Comes Home (95%)
-1:22 #8 Annabelle (80%)
-1:57 #7 The Conjuring (65%)
-2:41 #6 The Conjuring 2 (55%)
-3:22 #5 The Conjuring Last Rites (45%)
-4:03 #4 Annabelle Creation (40%)
-4:44 #3 The Devil Made Me Do It (30%)
-5:18 #2 The Nun II (12%)
-5:59 #1 The Nun (5%)
-6:34 Which demon would you least want at home?
+0:44 #9 Annabelle Comes Home (95%)
+1:24 #8 Annabelle (80%)
+2:04 #7 The Conjuring (65%)
+2:55 #6 The Conjuring 2 (55%)
+3:39 #5 The Conjuring Last Rites (45%)
+4:26 #4 Annabelle Creation (40%)
+5:17 #3 The Devil Made Me Do It (30%)
+5:59 #2 The Nun II (12%)
+6:46 #1 The Nun (5%)
+7:28 Which demon would you least want in your room?
 
 #TheConjuring #Valak #Annabelle #TheNun #HorrorRanked
 
@@ -29,9 +29,9 @@ As a horror fan, I've seen every Conjuring movie more times than I should admit,
 the conjuring, conjuring universe, valak, the nun, annabelle, the conjuring 2, the conjuring last rites, annabelle comes home, annabelle creation, the nun 2, the devil made me do it, ed and lorraine warren, bathsheba, conjuring ranked, could you survive, horror movies, horror ranked, scariest demons
 
 ## Length
-7:01 (421.8 s)
+7:56 (476.8 s)
 
 ## Files
-- Video: 2_renders\conjuring_ranked_v3.mp4
-- English captions: conjuring_ranked_en.srt
+- Video: 2_renders\conjuring_ranked_v5.mp4
+- English captions: conjuring_ranked_v5_en.srt
 - Thumbnails: conjuring_thumb_a.jpg (95/55/5), conjuring_thumb_b.jpg (80/45/5), conjuring_thumb_c.jpg (40/30/5)
