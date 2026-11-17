@@ -1,0 +1,23 @@
+# EP08 scene library v2: age-gated clips (11). The owner can run these in a terminal with Chrome logged in to YouTube (11/18).
+# c1_s07_witch: The Conjuring 'The Witch Will Kill Her' (7/10)
+yt-dlp --cookies-from-browser chrome -S "hdr:sdr,res:1080" -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\c1_s07_witch.mp4" https://www.youtube.com/watch?v=lPYFkRoFM-A
+# c1_s10_condemn: The Conjuring 'I Condemn You Back to Hell' (10/10)
+yt-dlp --cookies-from-browser chrome -S "hdr:sdr,res:1080" -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\c1_s10_condemn.mp4" https://www.youtube.com/watch?v=V4rzoRzqmyc
+# a14_s07_church: Annabelle (2014) 'No Dolls in Church' (7/10)
+yt-dlp --cookies-from-browser chrome -S "hdr:sdr,res:1080" -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\a14_s07_church.mp4" https://www.youtube.com/watch?v=8Qw1dYiaCto
+# dm_s01_shower: DMMDI 'The Shower Scare' (1/7)
+yt-dlp --cookies-from-browser chrome -S "hdr:sdr,res:1080" -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\dm_s01_shower.mp4" https://www.youtube.com/watch?v=T0vqUW_mcmA
+# dm_s02_child: DMMDI 'Possessed Child' (2/7)
+yt-dlp --cookies-from-browser chrome -S "hdr:sdr,res:1080" -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\dm_s02_child.mp4" https://www.youtube.com/watch?v=ZUDGncWLmSw
+# dm_s03_occultist: DMMDI 'Occultist Attack' (3/7)
+yt-dlp --cookies-from-browser chrome -S "hdr:sdr,res:1080" -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\dm_s03_occultist.mp4" https://www.youtube.com/watch?v=hWezUU-HKgY
+# dm_s04_hurt: DMMDI 'I Think I Hurt Someone' (4/7)
+yt-dlp --cookies-from-browser chrome -S "hdr:sdr,res:1080" -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\dm_s04_hurt.mp4" https://www.youtube.com/watch?v=RhVi8xyRywA
+# n1_s03_child: The Nun 'Demonic Child' (3/10)
+yt-dlp --cookies-from-browser chrome -S "hdr:sdr,res:1080" -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\n1_s03_child.mp4" https://www.youtube.com/watch?v=9XILGHs7fOk
+# n1_s04_mirror: The Nun 'Mirror Scare' (4/10)
+yt-dlp --cookies-from-browser chrome -S "hdr:sdr,res:1080" -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\n1_s04_mirror.mp4" https://www.youtube.com/watch?v=zeVbboemqwE
+# n1_s08_lantern: The Nun 'Lantern Scare' (8/10)
+yt-dlp --cookies-from-browser chrome -S "hdr:sdr,res:1080" -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\n1_s08_lantern.mp4" https://www.youtube.com/watch?v=QgVExQFpwLE
+# n1_cz_first10: The Nun 'First 10 Minutes Of Horror'
+yt-dlp --cookies-from-browser chrome -S "hdr:sdr,res:1080" -f "bv*+ba/b" --merge-output-format mp4 -o "E:\YTP2\Horror Ranked\EP08 Conjuring\1_work\clips\n1_cz_first10.mp4" https://www.youtube.com/watch?v=Hn2n9QRaVyU
