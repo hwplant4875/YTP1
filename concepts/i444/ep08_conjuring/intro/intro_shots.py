@@ -20,7 +20,7 @@ SH = {
   ("so we're ranking", *POST),
   ('from a doll', 'ach_case', 62.0, -1.85, 'g=1.4'),               # DUPE s05: the doll alone in the car (297.5 cropped her behind a blurred head and ran 0.44x, looked frozen)
   ('locked back in its case', 'ach_end', 80.3, -0.9),              # DUPE s02: the key turning in the case lock
-  ('to the one that wiped out', 'spooky_nun', 999.0, -7.0, 'g=1.4'),  # DUPE s10: overhead dead nuns
+  ('to the one that wiped out', 'n1_pray', 21.0, -7.3),            # DUPE s10: Irene praying among the nuns, candle-lit (spooky_nun 999 was near-black)
   ], [
   ('This demon', 0, 'burned a priest alive'), ('Burned a priest alive', 'burned a priest alive', 'in midair'),
   ('In midair', 'in midair', 'and snapped'), ("And snapped a girl's neck", 'and snapped', 'and it still only made'),
@@ -69,8 +69,8 @@ SH = {
   ('was beaten by two teenagers', 'ach_end', 82.4, -2.2),         # DUPE s02: Mary Ellen, Daniela and Judy side by side
   ('who just shut a glass door', 'ach_end', 77.62, -1.65),         # DUPE s02
   ('another', 'spooky_nun', 1092.45, -0.6),                        # DUPE s10
-  ('wiped out an entire abbey', 'spooky_nun', 999.0, -7.0, 'g=1.4'),  # DUPE s10
-  ('before anyone even showed up', 'n1_open', 0.0, -8.7, o(AR, 'g=1.4')),  # DUPE s10: the abbey
+  ('wiped out an entire abbey', 'n1_pray', 39.0, -20.0, 'g=1.4'),  # DUPE s10: overhead, the empty habits (spooky_nun 999 was near-black)
+  ('before anyone even showed up', 'n1_open', 0.0, -8.7, o(AR, 'g=1.8')),  # DUPE s10: the abbey (g 1.8: it was near-black at 1.4)
   ('seven more', 'co_mother_c', 305.9, -5.1, 'g=1.4'),
   ('sit in between', 'dm_vision', 157.1, -1.8, o(AR, 'g=1.25')),
   ("and we're ranking", *POST),

@@ -66,6 +66,7 @@ def fr(t): return max(0.0, round(t * 30) / 30 - 0.005)   # frame-exact: a captio
 for ov in X[-1]['overlays']:   # captions flash and cut out (one word 0.9 s, a phrase 1.6 s max); the frame-0 caption holds to its cut
     if ov[0] == 'word':
         b = ov[3] if ov[2] == 0 else min(ov[3], ov[2] + (0.9 if ' ' not in ov[1] else 1.6))
+        if ov[3] < 900 and ov[3] - b <= 0.6: b = ov[3]   # owner 11/17 intro review: a short caption-less gap read as a picture pop, so hold to the next caption
         ov[2], ov[3] = (fr(ov[2]) if ov[2] > 0 else 0.0), (fr(b) if b < 900 else b)
 X[-1]['vfade'] = {'out': 0.2}
 
