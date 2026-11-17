@@ -18,7 +18,7 @@ SH = {
   ('is the same demon', 'c2_painting', 189.6, -4.2, 'z=1.5,dx=320'),  # DUPE s05: Valak's face over Lorraine's shoulder
   ('at full power', 'spooky_nun', 1049.3, -5.0, 'g=1.4'),          # DUPE s10
   ("so we're ranking", *POST),
-  ('from a doll', 'ach_devil_cz', 297.5, -0.7),                    # the doll seated in the open glass case
+  ('from a doll', 'ach_case', 62.0, -1.85, 'g=1.4'),               # DUPE s05: the doll alone in the car (297.5 cropped her behind a blurred head and ran 0.44x, looked frozen)
   ('locked back in its case', 'ach_end', 80.3, -0.9),              # DUPE s02: the key turning in the case lock
   ('to the one that wiped out', 'spooky_nun', 999.0, -7.0, 'g=1.4'),  # DUPE s10: overhead dead nuns
   ], [

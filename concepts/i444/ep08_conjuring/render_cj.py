@@ -58,7 +58,7 @@ def wav(o, n, a_in=None, db=-99, tempo=1.0):
     if a_in is None or db <= -90 or not has_audio(a_in[0]):   # silence (also for sources without sound, e.g. the poster wall)
         run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo', '-af', f'atrim=end_sample={ns}', '-c:a', 'pcm_s16le', o])
     else:
-        a, tin = a_in; tf = f'atempo={tempo},' if abs(tempo - 1) > 1e-3 else ''
+        a, tin = a_in; tf = (f'atempo=0.5,atempo={tempo / 0.5:.4f},' if tempo < 0.5 else f'atempo={tempo},') if abs(tempo - 1) > 1e-3 else ''  # atempo floor is 0.5: chain two below it
         run(['ffmpeg', '-v', 'error', '-y', '-ss', str(tin), '-i', a, '-vn', '-af', f'aresample=48000,{tf}volume={db:.2f}dB,afade=t=in:d=0.02,apad,atrim=end_sample={ns}',
              '-ac', '2', '-c:a', 'pcm_s16le', o])
 def fit_word(word, out):
