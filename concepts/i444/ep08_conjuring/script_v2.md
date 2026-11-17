@@ -42,7 +42,7 @@ Number three, The Devil Made Me Do It. This one is the smartest of them all, bec
 
 ## s09 #2 The Nun II (2023), 12%, Slaughtered
 
-Number two, The Nun Two. This is Valak again, and this Valak is far stronger than any demon so far. It's hunting for the eyes of Saint Lucy, a holy relic that would make it even stronger, and it has been hiding inside Frenchie, the man who saved Irene, for four years. It lifts a priest into the air and burns him alive, snaps the neck of a kid making deliveries, kills the headmistress of a boarding school, and leaves a trail of deaths across Europe. Sister Irene only survives being set on fire because she comes from Saint Lucy's own family, and it takes a miracle, wine turning into the blood of Christ, to drive it out. Almost everyone it set out to kill in this movie died, and the one who walked out of the fire is from Saint Lucy's family, which you're not. Survival rate, twelve percent.
+Number two, The Nun Two. This is Valak again, and this Valak is far stronger than any demon so far. It's hunting for the eyes of Saint Lucy, a holy relic that would make it even stronger, and it has been hiding inside Frenchie, the man who saved Irene, for four years. It lifts a priest into the air and burns him alive, snaps the neck of a kid making deliveries, and kills the headmistress of a boarding school. Sister Irene only survives being set on fire because she comes from Saint Lucy's own family, and it takes a miracle, wine turning into the blood of Christ, to drive it out. Almost everyone it set out to kill in this movie died, and the one who walked out of the fire is from Saint Lucy's family, which you're not. Survival rate, twelve percent.
 
 ## s10 #1 The Nun (2018), 5%, Slaughtered
 
