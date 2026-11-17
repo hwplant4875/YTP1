@@ -20,8 +20,8 @@ As a horror fan, I've seen every Conjuring movie more times than I should admit,
 4:26 #4 Annabelle Creation (40%)
 5:17 #3 The Devil Made Me Do It (30%)
 5:59 #2 The Nun II (12%)
-6:46 #1 The Nun (5%)
-7:28 Which demon would you least want in your room?
+6:44 #1 The Nun (5%)
+7:27 Which demon would you least want in your room?
 
 #TheConjuring #Valak #Annabelle #TheNun #HorrorRanked
 
@@ -29,7 +29,7 @@ As a horror fan, I've seen every Conjuring movie more times than I should admit,
 the conjuring, conjuring universe, valak, the nun, annabelle, the conjuring 2, the conjuring last rites, annabelle comes home, annabelle creation, the nun 2, the devil made me do it, ed and lorraine warren, bathsheba, conjuring ranked, could you survive, horror movies, horror ranked, scariest demons
 
 ## Length
-7:56 (476.8 s)
+7:55 (475.2 s)
 
 ## Files
 - Video: 2_renders\conjuring_ranked_v5.mp4

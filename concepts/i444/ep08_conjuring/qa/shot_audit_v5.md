@@ -1,14 +1,13 @@
 # EP08 shot audit, v5 render (conjuring_ranked_v5.mp4, script_v2 + the 375c63e rewording)
 
 Method (11/18): the middle frame of every one of the 257 shots, grabbed from the final v5 render. Frames darker than luma 45 were brightened to look at them, and every doubtful shot was checked again on frame strips of its source clip. Shots were picked from qa/scene_library_v2.md and story_review_v2.md s4.
-Pass 1 (first v5 render) found 6 WRONG and about 25 WEAK. 32 shots were re-cut on real frames and the sections re-rendered (pass 2 and 3).
+Pass 4 (11/18, 205b19f): the s09 clause "and leaves a trail of deaths across Europe" was cut from the script and re-voiced, so its Tarascon street shot is gone and s09 was re-rendered. Pass 1 (first v5 render) found 6 WRONG and about 25 WEAK. 32 shots were re-cut on real frames and the sections re-rendered (pass 2 and 3).
 Examples of what was fixed: the "kills the family dog" pigeon is now Sadie dead in the yard (c1_dog_b 0:54); the 3:07 clock; Janet dragged across the floor; Perez hurled off the church steps; Frenchie's CPR; the empty habits; the VALAK Bible page.
 
-**Final counts: MATCH 230, WEAK 27, WRONG 0.**
+**Final counts: MATCH 230, WEAK 26, WRONG 0.**
 
 ## Needs reword (no true footage exists; a neutral true shot of the film's demon is used for now)
 
-- s09 "and leaves a trail of deaths across Europe": no clip shows other victims; on screen now is the night street in Tarascon (n2_burn 6:23). Closest true footage: none.
 - s10 "and even then, Valak gets away, hiding inside Frenchie": the escape into Frenchie and the inverted cross on his neck are in none of the 174 clips (the Movieclips ending clip "Fighting the Nun (10/10)" is age-gated, see qa/age_gated.txt). On screen now: Frenchie (co_valak0 2:48). Closest true footage: Valak defeated in the crypt (n1_cz_fight 5:14-5:48).
 - s02 "The Ferryman chases the babysitter" (partial): the Ferryman himself is only a small, dark skull face; what is clear is Mary Ellen dragged by an unseen force and running with her flashlight (ach_ferry 1:46-2:14).
 
@@ -36,11 +35,10 @@ Examples of what was fixed: the "kills the family dog" pigeon is now Sadie dead 
 - s08#01 320.00s "This one is the smartest of them all," - dm_calvary@64.0: Lorraine in the dark (the line is about the demon)
 - s08#13 336.17s "stabs her best friend Katie" - dm_vision@106.0: hands with a rosary (the stabbing is never shown)
 - s08#21 349.86s "You can't fight it and you can't run," - dm_cz_herself@31.0: the knife attack in the tunnel, motion blur
-- s09#03 367.24s "It's hunting for the eyes of Saint Lucy," - n2_cz_returns@46.6: the reliquary's glowing rim in a hand, dark
-- s09#09 378.78s "and burns him alive," - n2_burn@376.0: Jacques screams as Noiret burns (the burning itself is in the cold open and is not repeated)
-- s09#14 384.65s "and leaves a trail of deaths across Europe." - n2_burn@383.0: NEEDS REWORD: a night street in Tarascon; no montage of deaths across Europe exists in any clip
-- s10#20 437.11s "hiding inside Frenchie." - co_valak0@168.35: NEEDS REWORD: Frenchie alone; Valak escaping into him / the inverted cross is in no clip
-- s10#22 440.84s "and the last nun alive chose death over letting it in," - n1_ar_darkness@192.0: Irene with a candle in the dark corridor: neutral by design (the last nun's death is never shown)
+- s09#03 367.23s "It's hunting for the eyes of Saint Lucy," - n2_cz_returns@46.6: the reliquary's glowing rim in a hand, dark
+- s09#09 379.16s "and burns him alive," - n2_burn@376.0: Jacques screams as Noiret burns (the burning itself is in the cold open and is not repeated)
+- s10#20 435.55s "hiding inside Frenchie." - co_valak0@168.35: NEEDS REWORD: Frenchie alone; Valak escaping into him / the inverted cross is in no clip
+- s10#22 439.28s "and the last nun alive chose death over letting it in," - n1_ar_darkness@192.0: Irene with a candle in the dark corridor: neutral by design (the last nun's death is never shown)
 
 ## All shots
 
@@ -245,61 +243,60 @@ Examples of what was fixed: the "kills the family dog" pigeon is now Sadie dead 
 | s08#23 | 354.85 | and only smashing the witch's altar can break it. | dm_ar_love @104.0 | Ed smashes the witch's altar (1:44-1:54) | MATCH |
 | s08#24 | 357.50 | Survival rate, thirty percent. | dm_promise @49.5 | Isla's pale face in the dark | MATCH |
 | s09#00 | 359.63 | Number two, The Nun Two. | n2_maurice @160.5 | Valak's silhouette | MATCH |
-| s09#01 | 362.20 | This is Valak again, | n2_exorcise @2.0 | Valak's snarl | MATCH |
-| s09#02 | 363.51 | and this Valak is far stronger than any demon so far. | n2_lucy @3.45 | Valak, glowing eyes | MATCH |
-| s09#03 | 367.24 | It's hunting for the eyes of Saint Lucy, | n2_cz_returns @46.6 | the reliquary's glowing rim in a hand, dark | WEAK |
-| s09#04 | 369.45 | a holy relic | co_neck_b @191.9 | the reliquary held in two hands | MATCH |
-| s09#05 | 370.22 | that would make it even stronger, | n2_lucy @9.5 | Valak | MATCH |
-| s09#06 | 372.05 | and it has been hiding inside Frenchie, | n2_maurice @38.5 | Maurice (Frenchie) possessed | MATCH |
-| s09#07 | 374.07 | the man who saved Irene, for four years. | n2_maurice @118.5 | Maurice grinning, possessed | MATCH |
-| s09#08 | 377.06 | It lifts a priest into the air | n2_burn @370.5 | Father Noiret rises above the altar (6:10.5-6:12; s00 holds 372.4+) | MATCH |
-| s09#09 | 378.78 | and burns him alive, | n2_burn @376.0 | Jacques screams as Noiret burns (the burning itself is in the cold open and is not repeated) | WEAK |
-| s09#10 | 380.17 | snaps the | n2_deliv @138.5 | the delivery kid lifted by the throat, feet dangling (2:18.5-2:19.7; cut before the snap) | MATCH |
-| s09#11 | 380.74 | neck of a kid making deliveries, | n2_deliv @47.0 | the delivery kid in a cap at the shelves, earlier (0:47-0:50) | MATCH |
-| s09#12 | 382.41 | kills the headmistress | n2_altar @89.0 | Madame Laurent | MATCH |
-| s09#13 | 383.49 | of a boarding school, | n2_altar @84.0 | her hand on "Cedric"'s shoulder in the chapel (1:24-1:27; cut before 1:35) | MATCH |
-| s09#14 | 384.65 | and leaves a trail of deaths across Europe. | n2_burn @383.0 | NEEDS REWORD: a night street in Tarascon; no montage of deaths across Europe exists in any clip | WEAK |
-| s09#15 | 387.10 | Sister Irene only survives | n2_lucy @24.0 | Irene in mid-air above the fire | MATCH |
-| s09#16 | 388.74 | being set on fire | n2_lucy @41.1 | Irene burning in mid-air | MATCH |
-| s09#17 | 389.90 | because she comes from Saint Lucy's own family, | n2_exorcise @75.0 | little Irene in her mother's arms (1:15-1:17) | MATCH |
-| s09#18 | 392.37 | and it takes a miracle, | n2_lucy @50.0 | Irene unhurt as the fire dies | MATCH |
-| s09#19 | 393.75 | wine turning into the blood of Christ, | n2_exorcise @86.0 | the wine barrels burst red over Valak (1:26-1:36) | MATCH |
-| s09#20 | 395.62 | to drive it out. | n2_exorcise @102.0 | Valak goes up in a column of fire (1:42-1:44) | MATCH |
-| s09#21 | 396.91 | Almost everyone it set out to kill in this movie died, | n2_exorcise @98.0 | Valak's rotted face | MATCH |
-| s09#22 | 399.56 | and the one who walked out of the fire is from Saint Lucy's family, which you're not. | n2_lucy @30.0 | Irene burning in mid-air (0:30-0:38) | MATCH |
-| s09#23 | 403.86 | Survival rate, twelve percent. | n2_exorcise @23.15 | Valak close-up | MATCH |
-| s10#00 | 406.03 | And number one, The Nun. | co_valak0 @4.0 | Valak rising out of the water | MATCH |
-| s10#01 | 408.05 | This is Valak | spooky_nun @1092.45 | Valak roaring | MATCH |
-| s10#02 | 409.05 | at its deadliest, | spooky_nun @1049.3 | Valak | MATCH |
-| s10#03 | 410.34 | loose from a doorway to Hell | spooky_nun @1117.8 | the "Finit hic Deo" door | MATCH |
-| s10#04 | 411.98 | under an abbey in Romania. | n1_hl_abbess @216.0 | the abbey at dusk (3:36-3:38) | MATCH |
-| s10#05 | 414.00 | Before Irene even arrives, | n1_open @38.0 | the nun in the corridor, screaming (never 1:16+) | MATCH |
-| s10#06 | 415.90 | every nun in the abbey is already dead, | spooky_nun @999.0 | overhead: the dead nuns | MATCH |
-| s10#07 | 418.34 | and the sisters she prays with | n1_pray @21.0 | Irene praying among the nuns | MATCH |
-| s10#08 | 419.85 | were never really there. | n1_pray @39.0 | the empty habits on the floor | MATCH |
-| s10#09 | 421.45 | It buries Father Burke alive | co_buried_b @75.6 | Burke in the coffin with his lighter | MATCH |
-| s10#10 | 423.09 | in a coffin, | co_buried_b @98.0 | Burke pulls the bell string in the coffin (1:38-1:48) | MATCH |
-| s10#11 | 424.07 | and it drowns Irene until she stops breathing, | co_valak0 @26.1 | Irene held under the water | MATCH |
-| s10#12 | 426.81 | and Frenchie has to pump her chest | n1_cz_possessed @461.8 | Frenchie bent over Irene, pumping her chest (7:41.8-7:43.8) | MATCH |
-| s10#13 | 428.65 | to bring her back. | n1_cz_possessed @469.0 | Frenchie breathing into her, she comes back (7:49-7:53) | MATCH |
-| s10#14 | 430.05 | The Church | co_valak0 @64.0 | the relic in Irene's hands | MATCH |
-| s10#15 | 430.70 | sent a priest | spooky_nun @317.2 | Father Burke | MATCH |
-| s10#16 | 431.22 | and a nun, | spooky_nun @1080.42 | Irene | MATCH |
-| s10#17 | 432.07 | they found the actual blood of Christ | co_valak0 @84.65 | the vial of Christ's blood on its chain | MATCH |
-| s10#18 | 433.79 | in the abbey, | n1_cz_fight @284.0 | the vial held up in the flooded crypt (4:44) | MATCH |
-| s10#19 | 434.71 | and even then, Valak gets away, | co_valak0 @96.5 | Valak's face soaked in the blood | MATCH |
-| s10#20 | 437.11 | hiding inside Frenchie. | co_valak0 @168.35 | NEEDS REWORD: Frenchie alone; Valak escaping into him / the inverted cross is in no clip | WEAK |
-| s10#21 | 438.95 | It wiped out a whole abbey, | n1_pray @47.0 | overhead: the empty habits on the chapel floor (0:47-0:57) | MATCH |
-| s10#22 | 440.84 | and the last nun alive chose death over letting it in, | n1_ar_darkness @192.0 | Irene with a candle in the dark corridor: neutral by design (the last nun's death is never shown) | WEAK |
-| s10#23 | 444.11 | so if it's in your room, there's nothing you can do. | co_valak0 @118.0 | Valak clawing | MATCH |
-| s10#24 | 446.99 | Survival rate, five percent. | co_valak0 @87.2 | Valak close-up holding the vial | MATCH |
-| s11#00 | 448.97 | So that's every Conjuring demon, | still_posterwall @1.0 | all 9 posters (callback to the cold open) | MATCH |
-| s11#01 | 451.05 | from the doll that two teenagers and a little girl | ach_end @82.0 | ACH: Mary Ellen, Daniela and Judy together after the lock (1:22-1:26) | MATCH |
-| s11#02 | 453.53 | locked back in its case, | ach_end @93.2 | ACH: Annabelle locked in the case behind Daniela (1:33.2-1:34) | MATCH |
-| s11#03 | 454.97 | to the Valak that wiped out a whole abbey of nuns. | spooky_nun @1063.0 | The Nun: Valak close-up | MATCH |
-| s11#04 | 458.23 | Which one would you least want in your room tonight? | universe @22.5 |  | MATCH |
-| s11#05 | 460.66 | Tell me in the comments, along with the horror franchise I should rank next. | universe @136.4 |  | MATCH |
-| s11#06 | 464.72 | I went through every death in all nine movies to get this ranking right, | universe @151.0 |  | MATCH |
-| s11#07 | 468.54 | and we're a small channel, so every subscribe really helps. | universe @153.82 |  | MATCH |
-| s11#08 | 472.20 | Thanks for watching, and if you hear a clap in the dark, don't play along. | universe @157.0 |  | MATCH |
-| s11#09 | 476.00 | (film line insert) | universe @159.6 INS |  | MATCH |
+| s09#01 | 361.92 | This is Valak again, | n2_exorcise @2.0 | Valak's snarl | MATCH |
+| s09#02 | 363.23 | and this Valak is far stronger than any demon so far. | n2_lucy @3.45 | Valak, glowing eyes | MATCH |
+| s09#03 | 367.23 | It's hunting for the eyes of Saint Lucy, | n2_cz_returns @46.6 | the reliquary's glowing rim in a hand, dark | WEAK |
+| s09#04 | 369.61 | a holy relic | co_neck_b @191.9 | the reliquary held in two hands | MATCH |
+| s09#05 | 370.41 | that would make it even stronger, | n2_lucy @9.5 | Valak | MATCH |
+| s09#06 | 372.41 | and it has been hiding inside Frenchie, | n2_maurice @38.5 | Maurice (Frenchie) possessed | MATCH |
+| s09#07 | 374.60 | the man who saved Irene, for four years. | n2_maurice @118.5 | Maurice grinning, possessed | MATCH |
+| s09#08 | 377.40 | It lifts a priest into the air | n2_burn @370.5 | Father Noiret rises above the altar (6:10.5-6:12; s00 holds 372.4+) | MATCH |
+| s09#09 | 379.16 | and burns him alive, | n2_burn @376.0 | Jacques screams as Noiret burns (the burning itself is in the cold open and is not repeated) | WEAK |
+| s09#10 | 380.51 | snaps the | n2_deliv @138.5 | the delivery kid lifted by the throat, feet dangling (2:18.5-2:19.7; cut before the snap) | MATCH |
+| s09#11 | 381.11 | neck of a kid making deliveries, and | n2_deliv @47.0 | the delivery kid in a cap at the shelves, earlier (0:47-0:50) | MATCH |
+| s09#12 | 382.99 | kills the headmistress | n2_altar @89.0 | Madame Laurent | MATCH |
+| s09#13 | 384.07 | of a boarding school. | n2_altar @84.0 | her hand on "Cedric"'s shoulder in the chapel (1:24-1:27; cut before 1:35) | MATCH |
+| s09#14 | 385.28 | Sister Irene only survives | n2_lucy @24.0 | Irene in mid-air above the fire | MATCH |
+| s09#15 | 386.82 | being set on fire | n2_lucy @41.1 | Irene burning in mid-air | MATCH |
+| s09#16 | 387.98 | because she comes from Saint Lucy's own family, | n2_exorcise @75.0 | little Irene in her mother's arms (1:15-1:17) | MATCH |
+| s09#17 | 390.58 | and it takes a miracle, | n2_lucy @50.0 | Irene unhurt as the fire dies | MATCH |
+| s09#18 | 391.94 | wine turning into the blood of Christ, | n2_exorcise @86.0 | the wine barrels burst red over Valak (1:26-1:36) | MATCH |
+| s09#19 | 393.81 | to drive it out. | n2_exorcise @102.0 | Valak goes up in a column of fire (1:42-1:44) | MATCH |
+| s09#20 | 395.08 | Almost everyone it set out to kill in this movie died, | n2_exorcise @98.0 | Valak's rotted face | MATCH |
+| s09#21 | 397.78 | and the one who walked out of the fire is from Saint Lucy's family, which you're not. | n2_lucy @30.0 | Irene burning in mid-air (0:30-0:38) | MATCH |
+| s09#22 | 402.17 | Survival rate, twelve percent. | n2_exorcise @23.15 | Valak close-up | MATCH |
+| s10#00 | 404.47 | And number one, The Nun. | co_valak0 @4.0 | Valak rising out of the water | MATCH |
+| s10#01 | 406.49 | This is Valak | spooky_nun @1092.45 | Valak roaring | MATCH |
+| s10#02 | 407.49 | at its deadliest, | spooky_nun @1049.3 | Valak | MATCH |
+| s10#03 | 408.78 | loose from a doorway to Hell | spooky_nun @1117.8 | the "Finit hic Deo" door | MATCH |
+| s10#04 | 410.42 | under an abbey in Romania. | n1_hl_abbess @216.0 | the abbey at dusk (3:36-3:38) | MATCH |
+| s10#05 | 412.44 | Before Irene even arrives, | n1_open @38.0 | the nun in the corridor, screaming (never 1:16+) | MATCH |
+| s10#06 | 414.34 | every nun in the abbey is already dead, | spooky_nun @999.0 | overhead: the dead nuns | MATCH |
+| s10#07 | 416.77 | and the sisters she prays with | n1_pray @21.0 | Irene praying among the nuns | MATCH |
+| s10#08 | 418.29 | were never really there. | n1_pray @39.0 | the empty habits on the floor | MATCH |
+| s10#09 | 419.89 | It buries Father Burke alive | co_buried_b @75.6 | Burke in the coffin with his lighter | MATCH |
+| s10#10 | 421.53 | in a coffin, | co_buried_b @98.0 | Burke pulls the bell string in the coffin (1:38-1:48) | MATCH |
+| s10#11 | 422.50 | and it drowns Irene until she stops breathing, | co_valak0 @26.1 | Irene held under the water | MATCH |
+| s10#12 | 425.25 | and Frenchie has to pump her chest | n1_cz_possessed @461.8 | Frenchie bent over Irene, pumping her chest (7:41.8-7:43.8) | MATCH |
+| s10#13 | 427.09 | to bring her back. | n1_cz_possessed @469.0 | Frenchie breathing into her, she comes back (7:49-7:53) | MATCH |
+| s10#14 | 428.48 | The Church | co_valak0 @64.0 | the relic in Irene's hands | MATCH |
+| s10#15 | 429.14 | sent a priest | spooky_nun @317.2 | Father Burke | MATCH |
+| s10#16 | 429.66 | and a nun, | spooky_nun @1080.42 | Irene | MATCH |
+| s10#17 | 430.51 | they found the actual blood of Christ | co_valak0 @84.65 | the vial of Christ's blood on its chain | MATCH |
+| s10#18 | 432.23 | in the abbey, | n1_cz_fight @284.0 | the vial held up in the flooded crypt (4:44) | MATCH |
+| s10#19 | 433.15 | and even then, Valak gets away, | co_valak0 @96.5 | Valak's face soaked in the blood | MATCH |
+| s10#20 | 435.55 | hiding inside Frenchie. | co_valak0 @168.35 | NEEDS REWORD: Frenchie alone; Valak escaping into him / the inverted cross is in no clip | WEAK |
+| s10#21 | 437.38 | It wiped out a whole abbey, | n1_pray @47.0 | overhead: the empty habits on the chapel floor (0:47-0:57) | MATCH |
+| s10#22 | 439.28 | and the last nun alive chose death over letting it in, | n1_ar_darkness @192.0 | Irene with a candle in the dark corridor: neutral by design (the last nun's death is never shown) | WEAK |
+| s10#23 | 442.55 | so if it's in your room, there's nothing you can do. | co_valak0 @118.0 | Valak clawing | MATCH |
+| s10#24 | 445.43 | Survival rate, five percent. | co_valak0 @87.2 | Valak close-up holding the vial | MATCH |
+| s11#00 | 447.40 | So that's every Conjuring demon, | still_posterwall @1.0 | all 9 posters (callback to the cold open) | MATCH |
+| s11#01 | 449.48 | from the doll that two teenagers and a little girl | ach_end @82.0 | ACH: Mary Ellen, Daniela and Judy together after the lock (1:22-1:26) | MATCH |
+| s11#02 | 451.96 | locked back in its case, | ach_end @93.2 | ACH: Annabelle locked in the case behind Daniela (1:33.2-1:34) | MATCH |
+| s11#03 | 453.40 | to the Valak that wiped out a whole abbey of nuns. | spooky_nun @1063.0 | The Nun: Valak close-up | MATCH |
+| s11#04 | 456.66 | Which one would you least want in your room tonight? | universe @22.5 |  | MATCH |
+| s11#05 | 459.10 | Tell me in the comments, along with the horror franchise I should rank next. | universe @136.4 |  | MATCH |
+| s11#06 | 463.15 | I went through every death in all nine movies to get this ranking right, | universe @151.0 |  | MATCH |
+| s11#07 | 466.97 | and we're a small channel, so every subscribe really helps. | universe @153.82 |  | MATCH |
+| s11#08 | 470.64 | Thanks for watching, and if you hear a clap in the dark, don't play along. | universe @157.0 |  | MATCH |
+| s11#09 | 474.43 | (film line insert) | universe @159.6 INS |  | MATCH |

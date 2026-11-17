@@ -310,7 +310,6 @@ X.append(sec('s09', [
   ('of a kid making', 'n2_deliv', 47.0, -3.0),             # the delivery kid in a cap at the shelves, earlier (0:47-0:50)
   ('kills the headmistress', 'n2_altar', 89.0, -0.95, 'g=1.4'),  # Madame Laurent
   ('of a boarding school', 'n2_altar', 84.0, -2.5, 'g=1.25'),  # her hand on "Cedric"'s shoulder in the chapel (1:24-1:27; cut before 1:35)
-  ('and leaves a trail', 'n2_burn', 383.0, -2.3),          # WEAK: the night street in Tarascon (no montage of deaths in any clip)
   ('sister irene only survives', 'n2_lucy', 24.0, -1.75),  # Irene in mid-air above the fire
   ('being set on fire', 'n2_lucy', 41.1, -1.45),           # Irene burning in mid-air
   ('because she comes from', 'n2_exorcise', 75.0, -2.5),   # little Irene in her mother's arms (1:15-1:17)
