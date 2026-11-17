@@ -69,7 +69,7 @@ SH = {
   ('was beaten by two teenagers', 'ach_end', 82.4, -2.2),         # DUPE s02: Mary Ellen, Daniela and Judy side by side
   ('who just shut a glass door', 'ach_end', 77.62, -1.65),         # DUPE s02
   ('another', 'spooky_nun', 1092.45, -0.6),                        # DUPE s10
-  ('wiped out an entire abbey', 'n1_pray', 39.0, -20.0, 'g=1.4'),  # DUPE s10: overhead, the empty habits (spooky_nun 999 was near-black)
+  ('wiped out an entire abbey', 'n1_pray', 30.3, -4.7, 'g=1.4'),   # the wide nave full of praying nuns among candles, one shot ~30.1-35.0 (39.0 overhead habits still read near-black at g=1.4)
   ('before anyone even showed up', 'n1_open', 0.0, -8.7, o(AR, 'g=1.8')),  # DUPE s10: the abbey (g 1.8: it was near-black at 1.4)
   ('seven more', 'co_mother_c', 305.9, -5.1, 'g=1.4'),
   ('sit in between', 'dm_vision', 157.1, -1.8, o(AR, 'g=1.25')),
