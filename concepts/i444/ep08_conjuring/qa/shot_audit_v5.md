@@ -1,6 +1,7 @@
 # EP08 shot audit, v5 render (conjuring_ranked_v5.mp4, script_v2 + the 375c63e rewording)
 
 Method (11/18): the middle frame of every one of the 257 shots, grabbed from the final v5 render. Frames darker than luma 45 were brightened to look at them, and every doubtful shot was checked again on frame strips of its source clip. Shots were picked from qa/scene_library_v2.md and story_review_v2.md s4.
+Pass 5 (11/18, director's contact-sheet check): three shots swapped and s03, s07, s09 re-rendered. s03#09 was the truck hitting the carriage (the demon did not cause it, and it read as the baby killed), now the horned demon over Mia on the stairwell. s07#19 was cr_end@39.5 with the throat cut and blood on the wall, now Pete at the bedroom door before the attack, no blood anywhere in the shot. s09#13 was the hand on the altar boy (not the school, read as another kill), now the boarding-school dormitory. Counts unchanged.
 Pass 4 (11/18, 205b19f): the s09 clause "and leaves a trail of deaths across Europe" was cut from the script and re-voiced, so its Tarascon street shot is gone and s09 was re-rendered. Pass 1 (first v5 render) found 6 WRONG and about 25 WEAK. 32 shots were re-cut on real frames and the sections re-rendered (pass 2 and 3).
 Examples of what was fixed: the "kills the family dog" pigeon is now Sadie dead in the yard (c1_dog_b 0:54); the 3:07 clock; Janet dragged across the floor; Perez hurled off the church steps; Frenchie's CPR; the empty habits; the VALAK Bible page.
 
@@ -105,7 +106,7 @@ Examples of what was fixed: the "kills the family dog" pigeon is now Sadie dead 
 | s03#06 | 95.26 | and hurls a priest through the air | a14_wb_want @326.3 | Father Perez hurled backwards off the church steps (5:26.3-5:27.9) | MATCH |
 | s03#07 | 96.98 | at the door of his own church. | a14_wb_want @328.0 | the church's open door after (5:28-5:31) | MATCH |
 | s03#08 | 98.93 | But it has one big weakness. | a14_wb_want @92.0 | the doll close on the chair (1:32-1:35) | MATCH |
-| s03#09 | 101.13 | It can't just take your life, | a14_cz_haunted @101.0 | the garbage truck bears down on the carriage (1:41-1:43) | MATCH |
+| s03#09 | 101.13 | It can't just take your life, | a14_cz_attic @306.14 | the horned demon upside down over the stairwell rail above Mia, then Mia fleeing (5:06.14-5:06.8, 0.43x); it menaces her, no kill | MATCH |
 | s03#10 | 102.64 | it needs a soul that's given to it, | a14_baby @28.5 | "her soul" scrawled on the nursery ceiling (0:28-0:35) | MATCH |
 | s03#11 | 104.58 | so it steals Mia's baby | a14_cz_soul @248.0 | baby Leah slides out of the doorway into the dark (4:08-4:11) | MATCH |
 | s03#12 | 106.26 | to force a trade, | a14_baby @46.0 | the doll lying in Leah's crib (0:46-0:47) | MATCH |
@@ -210,7 +211,7 @@ Examples of what was fixed: the "kills the family dog" pigeon is now Sadie dead 
 | s07#16 | 297.87 | Then it tears his wife in half, | cr_esther_scenes @78.0 | Esther in the dark: her death is voiced only, never shown (gore rule) | WEAK |
 | s07#17 | 300.22 | and twelve years later, | cr_end @9.05 | the Higgins photos | MATCH |
 | s07#18 | 301.50 | it kills the couple | cr_end @19.0 | the Higgins couple woken in bed | MATCH |
-| s07#19 | 302.39 | who adopted Janice. | cr_end @39.5 | grown Janice grabs her adoptive father's throat | MATCH |
+| s07#19 | 302.39 | who adopted Janice. | cr_end @37.3 | Pete Higgins at the bedroom door, seen from behind, before the attack (0:37.3-0:38.7; knife enters 0:39.0, no throat or blood frame) | MATCH |
 | s07#20 | 303.79 | A nun and five girls make it out, | cr_well @116.4 | Sister Charlotte holding Linda in the field | MATCH |
 | s07#21 | 305.85 | but only because the nun locks it in a closet, | cr_trapped @372.0 | Sister Charlotte at the closet, dark | WEAK |
 | s07#22 | 308.46 | and the demon stays inside Janice. | cr_trapped @256.3 | possessed Janice, a sly smile, holding a doll | MATCH |
@@ -255,7 +256,7 @@ Examples of what was fixed: the "kills the family dog" pigeon is now Sadie dead 
 | s09#10 | 380.51 | snaps the | n2_deliv @138.5 | the delivery kid lifted by the throat, feet dangling (2:18.5-2:19.7; cut before the snap) | MATCH |
 | s09#11 | 381.11 | neck of a kid making deliveries, and | n2_deliv @47.0 | the delivery kid in a cap at the shelves, earlier (0:47-0:50) | MATCH |
 | s09#12 | 382.99 | kills the headmistress | n2_altar @89.0 | Madame Laurent | MATCH |
-| s09#13 | 384.07 | of a boarding school. | n2_altar @84.0 | her hand on "Cedric"'s shoulder in the chapel (1:24-1:27; cut before 1:35) | MATCH |
+| s09#13 | 384.07 | of a boarding school. | n2_cz_goat @283.5 | the school dormitory: rows of schoolgirls in nightgowns with Sister Debra between the beds (4:43.5-4:44.7) | MATCH |
 | s09#14 | 385.28 | Sister Irene only survives | n2_lucy @24.0 | Irene in mid-air above the fire | MATCH |
 | s09#15 | 386.82 | being set on fire | n2_lucy @41.1 | Irene burning in mid-air | MATCH |
 | s09#16 | 387.98 | because she comes from Saint Lucy's own family, | n2_exorcise @75.0 | little Irene in her mother's arms (1:15-1:17) | MATCH |

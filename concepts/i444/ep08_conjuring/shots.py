@@ -133,7 +133,7 @@ X.append(sec('s03', [
   ('and hurls a priest', 'a14_wb_want', 326.3, -1.6),      # Father Perez hurled backwards off the church steps (5:26.3-5:27.9)
   ('at the door of his own church', 'a14_wb_want', 328.0, -3.0),  # the church's open door after (5:28-5:31)
   ('but it has one big weakness', 'a14_wb_want', 92.0, -3.0),  # the doll close on the chair (1:32-1:35)
-  ("it can't just take your life", 'a14_cz_haunted', 101.0, -1.9),  # the garbage truck bears down on the carriage (1:41-1:43)
+  ("it can't just take your life", 'a14_cz_attic', 306.14, -0.68),  # director 11/18: the horned demon upside down over the stairwell rail above Mia (5:06.14-5:06.43), then Mia's face fleeing (to 5:06.8, cut at 5:06.84); no truck/carriage
   ('it needs a soul', 'a14_baby', 28.5, -7.0),             # "her soul" scrawled on the nursery ceiling (0:28-0:35)
   ("so it steals mia's baby", 'a14_cz_soul', 248.0, -3.0),  # baby Leah slides out of the doorway into the dark (4:08-4:11)
   ('to force a trade', 'a14_baby', 46.0, -1.5),            # the doll lying in Leah's crib (0:46-0:47)
@@ -255,7 +255,7 @@ X.append(sec('s07', [
   ('then it tears his wife', 'cr_esther_scenes', 78.0, -6.0, 'g=1.25'),  # Esther in the dark (1:18-1:24); her death is voiced only, never shown
   ('and twelve years later', 'cr_end', 9.05, -5.95),       # the Higgins photos
   ('it kills the couple', 'cr_end', 19.0, -3.3),           # the Higgins couple woken in bed
-  ('who adopted janice', 'cr_end', 39.5, -1.9),            # grown Janice grabs her adoptive father's throat
+  ('who adopted janice', 'cr_end', 37.3, -1.5),            # director 11/18: Pete Higgins at the bedroom door, seen from behind, before the attack (0:35.5-0:38.9); the knife enters at 0:39.0, never past 0:38.8
   ('a nun and five girls', 'cr_well', 116.4, -3.2),        # Sister Charlotte holding Linda in the field
   ('but only because the nun locks', 'cr_trapped', 372.0, -10.0),  # Charlotte shoves Janice and the doll into the closet, door slams (6:12-6:22)
   ('and the demon stays', 'cr_trapped', 256.3, -5.5),      # possessed Janice, a sly smile, holding a doll
@@ -309,7 +309,7 @@ X.append(sec('s09', [
   ('snaps the neck', 'n2_deliv', 138.5, -1.2),             # the delivery kid lifted by the throat, feet dangling (2:18.5-2:19.7; cut before the snap)
   ('of a kid making', 'n2_deliv', 47.0, -3.0),             # the delivery kid in a cap at the shelves, earlier (0:47-0:50)
   ('kills the headmistress', 'n2_altar', 89.0, -0.95, 'g=1.4'),  # Madame Laurent
-  ('of a boarding school', 'n2_altar', 84.0, -2.5, 'g=1.25'),  # her hand on "Cedric"'s shoulder in the chapel (1:24-1:27; cut before 1:35)
+  ('of a boarding school', 'n2_cz_goat', 283.5, -2.5, 'g=1.25'),  # director 11/18: the school dormitory, rows of schoolgirls in nightgowns with Sister Debra between the beds (4:43-4:46.5; the chaos starts 4:47)
   ('sister irene only survives', 'n2_lucy', 24.0, -1.75),  # Irene in mid-air above the fire
   ('being set on fire', 'n2_lucy', 41.1, -1.45),           # Irene burning in mid-air
   ('because she comes from', 'n2_exorcise', 75.0, -2.5),   # little Irene in her mother's arms (1:15-1:17)
