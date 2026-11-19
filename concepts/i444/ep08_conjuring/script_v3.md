@@ -18,7 +18,7 @@ Number nine, Annabelle Comes Home. This Annabelle is the weakest demon of them a
 
 ## s03 #8 Annabelle (2014), 80%, Don't Worry
 
-Number eight, Annabelle. This demon is more dangerous than the last one, because it doesn't just scare you, it hurts you, inside your own home. It sets your kitchen on fire and hurls a priest through the air at the door of his own church. But it has one big weakness. In this whole movie, it never kills anyone with its own hands. Five people die, but four of them die at human hands, and the only life the demon gets is Evelyn's, when she gives up her own life in Mia's place. It will burn your home and throw you across the room, but it has never taken a life by force, so you'll probably live. Survival rate, eighty percent.
+Number eight, Annabelle. This demon is more dangerous than the last one, because it doesn't just scare you, it hurts you, inside your own home. It sets your kitchen on fire and hurls a priest through the air at the door of his own church. But it has one big weakness. In this whole movie, it never kills anyone with its own hands. Five people die, but four of them die at human hands, and the only life the demon gets is Evelyn's, when she gives up her own life in Mia's place. It will burn your home and drag you across the floor, but it has never taken a life by force, so you'll probably live. Survival rate, eighty percent.
 
 ## s04 #7 The Conjuring (2013), 65%, Don't Worry
 
