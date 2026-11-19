@@ -8,7 +8,7 @@ import json, os, sys
 edl = sys.argv[1] if len(sys.argv) > 1 else 'edl.json'; VOICE = sys.argv[2] if len(sys.argv) > 2 else 'voice'
 OUT = sys.argv[3] if len(sys.argv) > 3 else 'upload/conjuring_ranked_en.srt'; FPS = int(sys.argv[4]) if len(sys.argv) > 4 else 30
 def ts(t): t = max(0, t); return '%02d:%02d:%02d,%03d' % (t // 3600, t % 3600 // 60, t % 60, round(t % 1 * 1000) % 1000)
-PCT = {'ninety-five': '95', 'eighty': '80', 'sixty-five': '65', 'fifty-five': '55', 'forty-five': '45', 'forty': '40', 'thirty': '30',
+PCT = {'ninety-five': '95', 'eighty': '80', 'sixty-five': '65', 'fifty-five': '55', 'forty-five': '45', 'forty': '40', 'thirty-five': '35', 'thirty': '30', 'twenty-five': '25',
        'twelve': '12', 'five': '5'}
 # (lower-case tokens without trailing punctuation) -> shown text; the last token's punctuation is kept
 SEQ = [(('nineteen', 'sixty-four'), '1964'), (('three', 'oh', 'seven'), '3:07'), (('twenty-two', 'times'), '22 times'),

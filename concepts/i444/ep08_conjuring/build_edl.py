@@ -27,13 +27,13 @@ SFX = '../ep03/sfx/'
 G = {'whoosh': -16, 'fill': -20, 'stamp': -12, 'slam': -8}
 ORDER = ['s00', 's01', 's02', 's03', 's04', 's05', 's06', 's07', 's08', 's09', 's10', 's11']
 # ---- per entry: stat-card tile key, rank-card film line, the card phrase (the entry's last line before "Survival rate") ----
-TILE = {'s02': 'ach', 's03': 'a14', 's04': 'c1', 's05': 'c2', 's06': 'lr', 's07': 'cr', 's08': 'dm', 's09': 'n2', 's10': 'n1'}
+TILE = {'s02': 'ach', 's03': 'a14', 's04': 'c1', 's05': 'c2', 's06': 'lr', 's07': 'dm', 's08': 'cr', 's09': 'n1', 's10': 'n2'}   # v6 order (script_v3)
 SHORT = {'s02': 'Annabelle Comes Home (2019)', 's03': 'Annabelle (2014)', 's04': 'The Conjuring (2013)', 's05': 'The Conjuring 2 (2016)',
-         's06': 'The Conjuring: Last Rites (2025)', 's07': 'Annabelle: Creation (2017)', 's08': 'The Devil Made Me Do It (2021)',
-         's09': 'The Nun II (2023)', 's10': 'The Nun (2018)'}
+         's06': 'The Conjuring: Last Rites (2025)', 's07': 'The Devil Made Me Do It (2021)', 's08': 'Annabelle: Creation (2017)',
+         's09': 'The Nun (2018)', 's10': 'The Nun II (2023)'}
 CARD_AT = {'s02': 'even loose in your room', 's03': 'it will burn your home', 's04': 'she will follow you', 's05': "it's smarter than you",
-           's06': 'throwing the mirror away', 's07': "it doesn't want to scare you", 's08': "you can't fight it", 's09': 'almost everyone it set out',
-           's10': 'it wiped out a whole abbey'}
+           's06': 'throwing the mirror away', 's07': "you can't fight it", 's08': "it doesn't want to scare you", 's09': 'it wiped out a whole abbey',
+           's10': 'it burned a priest alive'}
 TIERS = [['S', 'Slaughtered', 25], ['A', 'Almost Dead', 40], ['B', 'Better Run', 50], ['C', 'Close Call', 60], ['D', "Don't Worry", 80],
          ['E', 'Easy', 101]]
 # film label (top right) by clip prefix; the cold-open clips and mixed compilations are mapped by name or by the shot's f= option

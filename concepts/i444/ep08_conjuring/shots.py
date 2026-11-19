@@ -96,6 +96,10 @@ X.append(sec('s01', [
   ]))
 X[-1]['vfade'] = {'in': 0.2}
 
+# ==== v6 (11/19, script_v3.md after the owner-approved re-check): s02-s11 re-voiced; the countdown order is now #4 The Devil Made Me Do It
+# (s07), #3 Annabelle: Creation (s08), #2 The Nun (s09), #1 The Nun II (s10). Each film's shot list moved with it and was re-anchored to
+# the new word timings; every changed line got a true shot from qa/scene_library_v2.md, frame-checked on its source clip. ====
+
 # ---- s02 #9 Annabelle Comes Home (95%) ----
 X.append(sec('s02', [
   (0, 'ach_case', 61.0, -2.0),                             # the Annabelle doll grinning on the back seat (1:01-1:03)
@@ -110,9 +114,9 @@ X.append(sec('s02', [
   ('her friend', 'ach_devil_cz', 146.0, -6.0),             # possessed Daniela in the Bride's veil (2:26-2:32)
   ('and a hellhound claws', 'ach_wolf', 43.0, -7.0),       # claws rake the car and tear through the convertible roof (0:43-0:50)
   ('with the little girl inside', 'ach_wolf', 20.0, -20.0),  # Judy inside the car, terrified (0:16-0:42)
-  ('the demon behind the doll', 'ach_hands', 74.0, -2.0),  # lamp silhouettes: the knife figure, then the horned demon (1:14-1:15)
-  ('turns up in her bed', 'ach_hands', 32.0, -2.0),        # under the sheet: the doll lying right beside Judy (0:32-0:34)
-  ('and later tries to take', 'ach_end', 14.0, -3.0, 'g=1.25'),  # the horned demon draws the soul-mist out of Judy's mouth (0:14-0:17)
+  ('the doll turns up', 'ach_hands', 32.0, -2.0),          # v6: under the sheet, the doll lying right beside Judy in her bed (0:32-0:34)
+  ('and later the demon behind it', 'ach_hands', 74.0, -2.0),  # v6: the horned demon's silhouette over Judy's bed in the red lamp light (1:14-1:16)
+  ('tries to take her soul', 'ach_end', 14.0, -3.0, 'g=1.25'),  # v6: the horned demon draws the soul-mist out of Judy's mouth (0:14-0:17)
   ('in the end', 'ach_devil_cz', 324.0, -5.5),             # the three girls in the artifact room after it is over (5:24-5:30)
   ('beat it on their own', 'ach_end', 62.0, -2.0, 'g=1.25'),  # Judy and Mary Ellen pressed against the case, Annabelle behind the glass
   ('by forcing the doll', 'ach_end', 45.0, -3.0, 'g=1.25'),  # the doll in the case, Mary Ellen shoves the glass door (0:45-0:48)
@@ -133,16 +137,19 @@ X.append(sec('s03', [
   ('and hurls a priest', 'a14_wb_want', 326.3, -1.6),      # Father Perez hurled backwards off the church steps (5:26.3-5:27.9)
   ('at the door of his own church', 'a14_wb_want', 328.0, -3.0),  # the church's open door after (5:28-5:31)
   ('but it has one big weakness', 'a14_wb_want', 92.0, -3.0),  # the doll close on the chair (1:32-1:35)
-  ("it can't just take your life", 'a14_cz_attic', 306.14, -0.68),  # director 11/18: the horned demon upside down over the stairwell rail above Mia (5:06.14-5:06.43), then Mia's face fleeing (to 5:06.8, cut at 5:06.84); no truck/carriage
-  ('it needs a soul', 'a14_baby', 28.5, -7.0),             # "her soul" scrawled on the nursery ceiling (0:28-0:35)
-  ("so it steals mia's baby", 'a14_cz_soul', 248.0, -3.0),  # baby Leah slides out of the doorway into the dark (4:08-4:11)
-  ('to force a trade', 'a14_baby', 46.0, -1.5),            # the doll lying in Leah's crib (0:46-0:47)
-  ('the baby for her soul', 'a14_cz_soul', 306.0, -5.0),   # "your soul" written in red on the nursery window (5:06-5:11)
+  ('in this whole movie', 'a14_cz_soul', 248.0, -3.2),     # v6: the demon takes baby Leah, sliding her out of the doorway into the dark, unhurt (4:08-4:11)
+  ('it never kills anyone', 'a14_cz_attic', 306.14, -0.68),  # v6: the horned demon upside down over the stairwell rail above Mia (5:06.14-5:06.43), then Mia fleeing (to 5:06.8)
+  ('with its own hands', 'a14_cz_attic', 320.0, -1.6),     # v6: its claw marks on Mia's forearm, she is alive (5:20-5:21.6)
   ('five people die', 'a14_cz_invasion', 336.0, -3.0),     # Annabelle Higgins, the cult girl, holding the doll (5:36-5:39; no blood)
-  ('but the demon only gets', 'a14_wb_baby', 292.0, -7.0),  # the life-size Annabelle figure at the window (4:52-4:59)
-  ('when evelyn gives up', 'a14_cz_soul', 510.0, -5.5),    # Evelyn in the open window holding the doll, her decision (8:30-8:35.5; never 8:36+)
+  ('but four of them die', 'a14_cz_invasion', 388.3, -1.4),  # v6: the cultist Annabelle Higgins lunges at Mia (6:28.3-6:29.7; no blood, never 6:30+)
+  ('at human hands', 'a14_cz_invasion', 415.6, -1.6),      # v6: the cultist grinning in the nursery doorway (6:55.6-6:57.2; no blood, no killing)
+  ('and the only life the demon', 'a14_wb_baby', 292.0, -7.0),  # the life-size Annabelle figure at the window (4:52-4:59)
+  ("is evelyn's", 'a14_cz_soul', 480.0, -1.9),             # v6: Evelyn kneeling by John and Mia, close (8:00-8:01.9; John and Mia before and after)
+  ('when she gives up', 'a14_cz_soul', 510.0, -5.5),       # Evelyn in the open window holding the doll, her decision (8:30-8:35.5; never 8:36+)
   ('it will burn your home', 'a14_fire', 108.0, -3.5, ARL),  # the kitchen engulfed, Mia small in the doorway (1:48-1:51)
-  ('but as long as you never', 'a14_cz_attic', 0.0, -7.0, L),  # Mia lays Leah safely in her crib (0:00-0:07)
+  ('and throw you across the room', 'a14_wb_want', 276.5, -4.5, L),  # v6 NEEDS REWORD: nobody is thrown across a room in any clip (Perez's throw is used above); the doll's face on the car seat (4:36.5-4:41)
+  ('but it has never taken', 'a14_cz_soul', 160.5, -3.0, L),  # v6: the doll alone in the living-room armchair (2:40.5-2:43.5)
+  ("so you'll probably live", 'a14_cz_attic', 0.0, -7.0, L),  # Mia lays Leah safely in her crib (0:00-0:07)
   ('survival rate', 'a14_wb_want', 44.0, -7.0, L),         # the doll seated in the cabinet (0:44-0:51)
   ]))
 
@@ -159,8 +166,8 @@ X.append(sec('s04', [
   ('she stops every clock', 'c1_dog_b', 74.5, -3.0),       # the grandfather clock stopped at 3:07 (1:14.5-1:17.5)
   ('leaves bruises on you', 'c1_cz_hideclip', 13.0, -3.0),  # bruises on Carolyn's arm and shoulder at the mirror (0:13-0:16)
   ('while you sleep', 'c1_dog_b', 56.0, -2.0),             # Carolyn's bruised legs as she sits on the bed (0:56-0:58)
-  ('drags the girls', 'co_mother_b', 362.0, -5.0, 'g=1.25'),  # Nancy dragged across the floor, then her hair yanked straight up (6:02-6:07)
-  ('and their feet', 'c1_sleep', 1.9, -1.1, 'g=1.4'),      # Christine asleep, her leg jerked toward the foot of the bed (0:02.3-0:02.8)
+  ("yanks the girls' feet", 'c1_sleep', 1.9, -1.1, 'g=1.4'),  # v6: Christine asleep, her leg jerked toward the foot of the bed (0:02.3-0:02.8)
+  ('and drags one across', 'co_mother_b', 362.0, -5.0, 'g=1.25'),  # v6: Nancy dragged across the floor, then her hair yanked straight up (6:02-6:07)
   ('and on the very first', 'c1_dog_b', 24.5, -2.0),       # Sadie on the porch, refusing to go in (0:24-0:29)
   ('the family dog is found', 'c1_dog_b', 54.0, -2.0, 'z=1.2,dx=160,dy=80'),  # MORNING: Sadie lying dead in the yard, Carolyn holding April, Roger running in (0:54-0:56)
   ('then she takes over', 'co_mother_c', 292.2, -1.0, 'g=1.4'),  # possessed Carolyn laughing
@@ -173,7 +180,7 @@ X.append(sec('s04', [
   ('and ed does the exorcism', 'co_mother_c', 10.0, -5.0),  # Ed reads the rite in the cellar
   ('she will follow you', 'c1_cz_clap', 290.0, -3.0, L),   # Carolyn lit by her match in the cellar (4:50)
   ('and climb inside you', 'c1_exorcism_b', 92.0, -6.0, L),  # Ed's hand on possessed Carolyn's forehead, screaming (1:32-1:38)
-  ('but in her own movie', 'c1_exorcism_b', 120.0, -6.0, o(L, 'g=1.25')),  # Carolyn, freed, crawls to April; the hug (2:00-2:06)
+  ('but in her own movie', 'c1_exorcism_b', 120.0, -6.0, o(L, 'g=1.25')),  # Carolyn, freed, crawls to April; the hug, every Perron alive (2:00-2:06)
   ('survival rate', 'universe', 715.6, -2.5, o(C1, 'z=1.35')),  # possessed Carolyn screaming
   ]))
 
@@ -182,21 +189,25 @@ X.append(sec('s05', [
   (0, 'universe', 1086.0, -2.55, C2),                      # Janet on the sofa
   ('this is the movie that introduced', 'c2_painting', 203.0, -2.4),  # the Valak painting
   ('and valak is much smarter', 'c2_painting', 58.2, -4.0),  # Lorraine with Valak looming behind her
-  ('even though nobody dies', 'c2_cz_finale', 528.0, -5.0),  # aftermath: Peggy hugs Janet, everyone alive (8:48-8:53)
+  ('even though nobody in the haunted', 'c2_cz_finale', 528.0, -5.0),  # aftermath: Peggy hugs Janet, everyone alive (8:48-8:53)
   ('it hides behind', 'c2_vision', 56.0, -1.3),            # Valak standing right behind Bill Wilkins in his chair (0:56-0:57)
   ('bill wilkins', 'c2_vision', 2.0, -10.0),               # Bill Wilkins's ghost in his chair (0:00-0:55)
   ('so everyone thinks', 'c2_cz_billy', 186.0, -6.0),      # the BBC sofa interview, Janet in the old man's voice (3:06-3:23)
   ("it blocks lorraine's", 'c2_cz_vision', 372.0, -2.4),   # Valak in the mirror choking Lorraine in her Amityville vision (6:12-6:23; never 6:24+)
-  ('drags janet across', 'c2_cz_voices', 463.0, -6.0, 'g=1.4'),  # Janet dragged along the floor at night, overhead (7:43-7:49)
+  ('throws janet out of her bed', 'c2_cz_voices', 473.0, -1.4, 'g=1.4'),  # v6: Janet in her red pyjamas flung through the air of her bedroom (7:53-7:54.4)
+  ('at night', 'c2_cz_voices', 388.5, -3.0, 'g=1.4'),      # v6: Janet waking on the floor at night, out of her bed (6:28.5-6:31.5)
   ('and takes over her body', 'c2_janet', 220.3, -1.1),    # possessed Janet's face
   ('completely', 'c2_cz_billy', 242.0, -5.0),              # possessed Janet in Bill's chair (4:02-4:07)
   ('ed has to fight', 'c2_cz_finale', 18.0, -4.0, 'g=1.25'),  # Ed thrown back by wind and debris in the house (0:18-0:23)
-  ('but valak has one', 'c2_cz_finale', 226.8, -2.5),      # Lorraine's Bible, the name VALAK scratched into the page (3:45-3:49)
+  ('but valak has one', 'c2_cz_finale', 226.8, -2.5),      # Lorraine's Bible, the name VALAK scratched into the page (3:46.8-3:49.3)
   ('if you know its name', 'c2_name_b', 58.3, -1.65, AR),  # Lorraine bent over the Bible
   ('and lorraine sends it', 'c2_name', 43.82, -3.0, AR),   # Lorraine pinned, shouting
   ("it's smarter than you", 'c2_name', 55.695, -2.0, ARL),  # Valak's demon face, pulled away
   ('fool everyone you call', 'c2_cz_finale', 24.0, -7.0, L),  # the neighbour with an axe, Lorraine at the door in the rain (0:24-0:31)
-  ('learn its name', 'c2_cz_finale', 465.5, -2.0, L),      # Lorraine screams the name (7:46)
+  ('but in its whole movie', 'c2_cz_finale', 495.0, -4.0, L),  # v6: aftermath, Lorraine alive on the wrecked floor (8:15-8:19)
+  ('it never kills a single', 'c2_cz_finale', 500.0, -4.0, L),  # v6: Vic and Lorraine in the wrecked room, everyone alive (8:20-8:24)
+  ('and the moment someone says', 'c2_cz_finale', 232.3, -1.0, L),  # v6: the VALAK page in Lorraine's Bible, a second look (3:52.3-3:53.3)
+  ("it's sent straight back", 'c2_cz_finale', 459.3, -1.7, L),  # v6: Valak screams and is pulled backward into the dark (7:39.3-7:41)
   ('survival rate', 'c2_painting', 189.6, -4.2, 'z=1.5,dx=320'),  # Valak's face over Lorraine's shoulder
   ], inserts=[
     ins('you have power over it', 1.97, 'film', shots=[(0, 'c2_name', 39.75, 1.0, o(AR, 'lufs=-17'))], sub='You are Valak.'),
@@ -208,11 +219,15 @@ X.append(sec('s06', [
   (0, 'lr_family', 102.2, -3.95),                          # the Smurl street at night
   ('this demon is stronger', 'lr_end', 42.0, -3.0),        # the ornate mirror, glowing
   ('than that valak', 'c2_painting', 206.88, -0.75),       # callback: Valak (Conjuring 2)
-  ("and it's the only one", 'lr_s01_baby', 141.0, -2.0, 'g=1.25'),  # 1964: the mirror entity crouched over Lorraine in the lightning (2:21-2:23)
+  ("and it's the only one", 'lr_s01_baby', 18.3, -2.6),    # v6: 1964, Lorraine's reflection in the mirror smiles evilly at her (0:18.3-0:20.9; never 0:21+)
+  ('that has ever left a warren', 'lr_birth', 55.0, -6.0), # v6: the still newborn laid on Lorraine's chest (0:55-1:01)
+  ('even if only for a moment', 'lr_birth', 104.5, -3.0),  # v6: warm light, the baby starts crying, revived (1:44.5-1:47.5)
   ('it lives inside an old mirror', 'lr_s01_baby', 2.0, -7.0),  # the old mirror (0:00-0:10; never 0:21-0:23)
   ('and in nineteen sixty-four', 'lr_birth', 20.05, -10.0, 'g=1.4'),  # Lorraine in labour
   ('judy warren was born dead', 'lr_birth', 41.0, -5.0),   # the silent newborn (0:40-0:47)
-  ('until lorraine prayed', 'lr_birth', 104.0, -8.0),      # the baby revives on Lorraine's chest (1:44-2:17)
+  ('because of it', 'lr_s01_baby', 141.3, -0.75, 'g=1.25'),  # v6: the lightning flash, the barefoot mirror entity in a gown crouched over Lorraine's bed (2:21.3-2:22.05; dark before and after)
+  ('until ed and lorraine prayed', 'lr_birth', 76.0, -6.0),  # v6: Lorraine praying, Ed's hand on her face (1:16-1:22)
+  ('her back to life', 'lr_birth', 117.0, -6.0),           # v6: Lorraine holds the crying newborn (1:57-2:03)
   ('twenty-two years later', 'lr_judy', 50.0, -6.5),       # adult Judy in the mirror maze of brides
   ('it hides behind three', 'lr_cz_comp', 92.0, -1.5),     # the old woman ghost under the wedding dress (1:32-1:33)
   ('three ghosts', 'lr_axe', 234.75, -0.8),                # a ghost's face lunging at the camera
@@ -220,54 +235,28 @@ X.append(sec('s06', [
   ('blood and broken glass', 'lr_s03_blood', 200.0, -1.6),  # Heather's horrified face (3:20-3:21.6; never the sink close-up at 3:18)
   ('drives the priest', 'lr_priest', 31.0, -3.7),          # Father Gordon alone at his desk
   ('to his death', 'lr_priest', 138.45, -1.95),            # fire in his glasses (never 2:22-2:37)
-  ('gives ed a heart attack', 'lr_exorcism', 346.3, -1.61),  # Ed in pain, clutching his chest
+  ('locks lorraine in the basement', 'lr_exorcism', 4.0, -9.0, 'g=1.4'),  # v6: Lorraine lying on the basement floor (0:04-0:13) WEAK: dark
   ('and takes over judy', 'lr_s09_possessed', 100.0, -1.2),  # possessed Judy, white eyes, bloody mouth (1:40-1:41)
-  ('until lorraine has to pray', 'lr_exorcism', 270.0, -3.0),  # Lorraine praying over Judy (4:18-5:11)
-  ('a second time', 'lr_exorcism', 320.0, -2.0),           # Judy on the floor coming back (5:20-5:22)
+  ('and makes her hang herself', 'lr_s09_possessed', 40.2, -3.3),  # v6: possessed Judy crawling on all fours across the bedroom (0:40-0:43); no rope, no attic, never 2:44+
+  ('until ed cuts her down', 'lr_exorcism', 261.5, -3.5),  # v6: Ed in the candlelight after (4:21.5-4:25; after the attic, no rope; never 2:40-4:15)
+  ("and she's brought back", 'lr_exorcism', 311.3, -1.1, 'g=1.25'),  # v6: Lorraine bent over Judy, praying, backlit by the stair rails (5:11.3-5:12.4; the mirror faces cut in at 5:13)
+  ('a second time', 'lr_exorcism', 318.6, -4.4),           # v6: Judy opens her eyes, held by Lorraine (5:18.6-5:23)
   ("ed's exorcism doesn't", 'lr_end', 24.0, -3.0),         # Ed reading the rite, hand raised
   ('even work', 'lr_end', 80.8, -1.0),                     # the Bible burns in Ed's hands
   ('and only the whole family', 'lr_end', 166.0, -9.0),    # three pairs of hands on the mirror (2:46-2:55)
   ('can break the mirror', 'lr_end', 183.0, -1.2),         # the mirror's ghosts screaming against the cracking glass (3:03)
   ('throwing the mirror away', 'lr_s03_blood', 102.0, -8.0, L),  # the mirror thrown into the garbage truck (1:42-1:50)
   ('and neither will a priest', 'lr_priest', 2.0, -12.0, L),  # Father Gordon (0:00-0:15)
-  ('so you only live', 'lr_birth', 60.0, -5.0, L),         # Lorraine praying over her dead baby (0:54-1:40)
+  ('but it only takes two lives', 'lr_priest', 122.5, -4.0, L),  # v6: Father Gordon by his match flame, before his death (2:02.5-2:06.5)
+  ('and the one it possessed', 'lr_end', 202.5, -5.0, L),  # v6: Judy close, in tears, free (3:22.5-3:27.5)
+  ("so you've got close", 'lr_end', 226.0, -7.0, L),       # v6: aftermath on the landing, Ed standing (3:46-3:53)
   ('survival rate', 'lr_judy', 232.0, -2.0, 'z=1.6,dx=360'),  # Judy's demonic grin in the cracked mirror
   ]))
 
-# ---- s07 #4 Annabelle: Creation (40%) ----
+# ---- s07 #4 The Devil Made Me Do It (35%) (v5: s08 #3) ----
 X.append(sec('s07', [
-  (0, 'cr_sam', 29.3, -7.7),                               # the Annabelle doll in a chair, bright
-  ('this is where the annabelle', 'cr_wasnt', 0.0, -2.6),  # Bee at her tea table with the doll
-  ("and it's even more violent", 'cr_scarecrow', 26.0, -10.0),  # the scarecrow (0:26-0:52)
-  ("because it doesn't just drive", 'cr_well', 96.0, -5.0),  # a hand grabs Linda and pulls her over the well's rim (1:36-1:41)
-  ('it kills them itself', 'cr_trapped', 350.0, -3.0),     # possessed Janice lunges with a knife (5:50-5:53)
-  ('it pretends to be bee', 'cr_esther_scenes', 136.0, -6.0),  # Bee at the tea table (2:16-2:22)
-  ('the dead daughter', 'cr_esther_scenes', 60.0, -6.0),   # the Mullins at dinner before (flashback, 0:58-1:04)
-  ('so her heartbroken parents', 'cr_wasnt', 39.1, -2.95),  # Esther, grieving
-  ('let it into the doll', 'cr_wasnt', 60.8, -2.2),        # the doll's face, sinister
-  ('then it goes after', 'cr_sam', 37.8, -5.2),            # Sister Charlotte and the orphans unloading the truck
-  ('it comes for janice', 'cr_rt_chair', 38.0, -10.0, 'g=1.4'),  # Janice on the stairlift riding up in the dark (0:36-0:58)
-  ('and leaves her in a wheelchair', 'cr_stair', 1.0, -5.0),  # Janice in her wheelchair in the sun, eyes closed (0:00-0:06)
-  ('then wheels her into a barn', 'cr_stair', 30.0, -9.0),      # the hooded "Charlotte" wheels Janice across the field into the barn (0:24-0:39)
-  ('and takes over her body', 'cr_stair', 125.6, -2.0),    # the black bile forced into Janice's mouth
-  ('through her it snaps', 'cr_sam', 16.0, -3.0),          # Samuel's fingers bend back around the crucifix (cut by 0:19)
-  ('and kills him', 'cr_sam', 59.8, -1.2),                 # his body on the floor, wide
-  ('then it tears his wife', 'cr_esther_scenes', 78.0, -6.0, 'g=1.25'),  # Esther in the dark (1:18-1:24); her death is voiced only, never shown
-  ('and twelve years later', 'cr_end', 9.05, -5.95),       # the Higgins photos
-  ('it kills the couple', 'cr_end', 19.0, -3.3),           # the Higgins couple woken in bed
-  ('who adopted janice', 'cr_end', 37.3, -1.5),            # director 11/18: Pete Higgins at the bedroom door, seen from behind, before the attack (0:35.5-0:38.9); the knife enters at 0:39.0, never past 0:38.8
-  ('a nun and five girls', 'cr_well', 116.4, -3.2),        # Sister Charlotte holding Linda in the field
-  ('but only because the nun locks', 'cr_trapped', 372.0, -10.0),  # Charlotte shoves Janice and the doll into the closet, door slams (6:12-6:22)
-  ('and the demon stays', 'cr_trapped', 256.3, -5.5),      # possessed Janice, a sly smile, holding a doll
-  ("it doesn't want to scare you", 'cr_cz_orphan', 156.0, -20.0, L),  # possessed Janice walking upright (2:36-2:56)
-  ('and it never gives', 'cr_soul', 140.6, -7.8, 'z=1.2,dx=-160'),  # Janice on the dark landing
-  ('survival rate', 'cr_cz_released', 264.0, -10.0, L),    # the doll in the closet lined with Bible pages (4:24-4:34)
-  ]))
-
-# ---- s08 #3 The Devil Made Me Do It (30%) ----
-X.append(sec('s08', [
   (0, 'dm_promise', 19.85, -3.2, AR),                      # the occultist Isla
-  ('this one is the smartest', 'dm_calvary', 64.0, -6.0, AR),  # Isla in the dark
+  ('this one is smarter', 'dm_calvary', 64.0, -6.0, AR),   # Isla and Lorraine face to face in the dark (1:04-1:10)
   ("because it doesn't have to kill", 'co_stab', 104.0, -3.0),  # Isla's face, clearest (1:44-1:47)
   ('it makes you do it', 'dm_david', 301.12, -2.0),        # Arne on the floor, the demon in him
   ('a witch hides a cursed charm', 'dm_cz_nightmare', 418.0, -1.5, 'g=1.25'),  # the witch's totem under the house (6:58-6:59)
@@ -294,39 +283,43 @@ X.append(sec('s08', [
     ins('the killer is you', 1.1, 'film', shots=[(0, 'dm_david', 319.77, 1.0, 'lufs=-17')], sub='Take me!'),
   ]))
 
-# ---- s09 #2 The Nun II (12%) ----
-X.append(sec('s09', [
-  (0, 'n2_maurice', 160.5, -8.9),                          # Valak's silhouette
-  ('this is valak again', 'n2_exorcise', 2.0, -1.1),       # Valak's snarl
-  ('and this valak is far', 'n2_lucy', 3.45, -2.0),        # Valak, glowing eyes
-  ("it's hunting for the eyes", 'n2_cz_returns', 46.6, -1.2),  # the Saint Lucy reliquary held up, its rim glowing (0:46.6-0:47.8)
-  ('a holy relic', 'co_neck_b', 191.9, -0.5, 'g=1.25'),    # the reliquary held in two hands
-  ('that would make it', 'n2_lucy', 9.5, -1.25),           # Valak
-  ('and it has been hiding', 'n2_maurice', 38.5, -4.8, 'g=1.4'),  # Maurice (Frenchie) possessed
-  ('the man who saved irene', 'n2_maurice', 118.5, -6.0, 'g=1.4'),  # Maurice grinning, possessed
-  ('it lifts a priest', 'n2_burn', 370.5, -1.5),           # Father Noiret rises above the altar (6:10.5-6:12; s00 holds 372.4+)
-  ('and burns him alive', 'n2_burn', 376.0, -1.5),         # Jacques screams as Noiret burns (6:16-6:17.5)
-  ('snaps the neck', 'n2_deliv', 138.5, -1.2),             # the delivery kid lifted by the throat, feet dangling (2:18.5-2:19.7; cut before the snap)
-  ('of a kid making', 'n2_deliv', 47.0, -3.0),             # the delivery kid in a cap at the shelves, earlier (0:47-0:50)
-  ('kills the headmistress', 'n2_altar', 89.0, -0.95, 'g=1.4'),  # Madame Laurent
-  ('of a boarding school', 'n2_cz_goat', 283.5, -2.5, 'g=1.25'),  # director 11/18: the school dormitory, rows of schoolgirls in nightgowns with Sister Debra between the beds (4:43-4:46.5; the chaos starts 4:47)
-  ('sister irene only survives', 'n2_lucy', 24.0, -1.75),  # Irene in mid-air above the fire
-  ('being set on fire', 'n2_lucy', 41.1, -1.45),           # Irene burning in mid-air
-  ('because she comes from', 'n2_exorcise', 75.0, -2.5),   # little Irene in her mother's arms (1:15-1:17)
-  ('and it takes a miracle', 'n2_lucy', 50.0, -1.4),       # Irene unhurt as the fire dies
-  ('wine turning into', 'n2_exorcise', 86.0, -10.0),       # the wine barrels burst red over Valak (1:26-1:36)
-  ('to drive it out', 'n2_exorcise', 102.0, -2.0),         # Valak goes up in a column of fire (1:42-1:44)
-  ('almost everyone it set out', 'n2_exorcise', 98.0, -3.0, o(L, 'flip=1')),  # Valak's rotted face
-  ('and the one who walked out', 'n2_lucy', 30.0, -8.0, 'z=1.15,dx=150'),  # Irene burning in mid-air (0:30-0:38)
-  ('survival rate', 'n2_exorcise', 23.15, -1.68, L),       # Valak close-up
+# ---- s08 #3 Annabelle: Creation (25%) (v5: s07 #4) ----
+X.append(sec('s08', [
+  (0, 'cr_sam', 29.3, -7.7),                               # the Annabelle doll in a chair, bright
+  ('this is where the annabelle', 'cr_wasnt', 0.0, -2.6),  # Bee at her tea table with the doll
+  ("and it's even more violent", 'cr_scarecrow', 26.0, -10.0),  # the scarecrow (0:26-0:52)
+  ("because it doesn't need", 'cr_well', 96.0, -5.0),      # v6: its own hand grabs Linda and pulls her over the well's rim (1:36-1:41)
+  ('it kills people itself', 'cr_trapped', 350.0, -3.0),   # possessed Janice lunges with a knife (5:50-5:53)
+  ('it pretends to be bee', 'cr_esther_scenes', 136.0, -6.0),  # Bee at the tea table (2:16-2:22)
+  ('the dead daughter', 'cr_esther_scenes', 60.0, -6.0),   # the Mullins at dinner before (flashback, 0:58-1:04)
+  ('so her heartbroken parents', 'cr_wasnt', 39.1, -2.95),  # Esther, grieving
+  ('let it into the doll', 'cr_wasnt', 60.8, -2.2),        # the doll's face, sinister
+  ('then it goes after', 'cr_sam', 37.8, -5.2),            # Sister Charlotte and the orphans unloading the truck
+  ('it comes for janice', 'cr_rt_chair', 38.0, -10.0, 'g=1.4'),  # Janice on the stairlift riding up in the dark (0:36-0:58)
+  ('and leaves her in a wheelchair', 'cr_stair', 1.0, -5.0),  # Janice in her wheelchair in the sun, eyes closed (0:00-0:06)
+  ('then wheels her into a barn', 'cr_stair', 30.0, -9.0),      # the hooded "Charlotte" wheels Janice across the field into the barn (0:24-0:39)
+  ('and takes over her body', 'cr_stair', 125.6, -2.0),    # the black bile forced into Janice's mouth
+  ('through her it snaps', 'cr_sam', 16.0, -3.0),          # Samuel's fingers bend back around the crucifix (cut by 0:19)
+  ('and kills him', 'cr_sam', 59.8, -1.2),                 # his body on the floor, wide
+  ('then it tears his wife', 'cr_esther_scenes', 78.0, -6.0, 'g=1.25'),  # Esther in the dark (1:18-1:24); her death is voiced only, never shown
+  ('and twelve years later', 'cr_end', 9.05, -5.95),       # the Higgins photos
+  ('through janice and her cultist', 'cr_end', 46.0, -2.0, 'z=1.25,dx=-200'),  # v6: grown Janice in white and her bearded cultist boyfriend at the Higgins' bedroom door (0:46-0:48); the zoom keeps the wall's red smear at the right edge out of frame
+  ('it kills the couple', 'cr_end', 19.0, -3.3),           # the Higgins couple woken in bed
+  ('who adopted her', 'cr_end', 37.3, -1.5),               # Pete Higgins at the bedroom door, seen from behind, before the attack (0:35.5-0:38.9); the knife enters at 0:39.0, never past 0:38.8
+  ('a nun and five girls', 'cr_well', 116.4, -3.2),        # Sister Charlotte holding Linda in the field
+  ('but only because the nun locks', 'cr_trapped', 372.0, -10.0),  # Charlotte shoves Janice and the doll into the closet, door slams (6:12-6:22)
+  ('and the demon stays', 'cr_trapped', 256.3, -5.5),      # possessed Janice, a sly smile, holding a doll
+  ("it doesn't want to scare you", 'cr_cz_orphan', 156.0, -20.0, L),  # possessed Janice walking upright (2:36-2:56)
+  ('and it never gives', 'cr_soul', 140.6, -7.8, 'z=1.2,dx=-160'),  # Janice on the dark landing
+  ('survival rate', 'cr_cz_released', 264.0, -10.0, L),    # the doll in the closet lined with Bible pages (4:24-4:34)
   ]))
 
-# ---- s10 #1 The Nun (5%) ----
-X.append(sec('s10', [
+# ---- s09 #2 The Nun (12%) (v5: s10 #1) ----
+X.append(sec('s09', [
   (0, 'co_valak0', 4.0, -7.5),                             # Valak rising out of the water
-  ('this is valak at its', 'spooky_nun', 1092.45, -0.6),   # Valak roaring
-  ('at its deadliest', 'spooky_nun', 1049.3, -5.0, 'g=1.4'),  # Valak
+  ('this is valak', 'spooky_nun', 1049.3, -5.0, 'g=1.4'),  # Valak
   ('loose from a doorway', 'spooky_nun', 1117.8, -2.5, 'g=1.4'),  # the "Finit hic Deo" door
+  ('to hell', 'spooky_nun', 1092.45, -0.6),                # Valak roaring
   ('under an abbey in romania', 'n1_hl_abbess', 216.0, -2.0),  # the abbey at dusk (3:36-3:38)
   ('before irene even arrives', 'n1_open', 38.0, -1.4, AR),  # the nun in the corridor, screaming (never 1:16+)
   ('every nun in the abbey', 'spooky_nun', 999.0, -7.0, 'g=1.4'),  # overhead: the dead nuns
@@ -345,9 +338,41 @@ X.append(sec('s10', [
   ('and even then', 'co_valak0', 96.5, -1.45, 'g=1.4'),    # Valak's face soaked in the blood
   ('hiding inside frenchie', 'co_valak0', 168.35, -2.05),  # WEAK: Frenchie (the escape into him is in no clip)
   ('it wiped out a whole abbey', 'n1_pray', 47.0, -10.0, L),  # overhead: the empty habits on the chapel floor (0:47-0:57)
-  ('and the last nun alive', 'n1_ar_darkness', 192.0, -10.0, ARL),  # the corridor of crosses (3:12-3:22); her death is never shown
-  ("so if it's in your room", 'co_valak0', 118.0, -3.2, o(L, 'flip=1')),  # Valak clawing
+  ('and the three people who lived', 'n1_hl_abbess', 3.0, -5.0, L),  # v6: Burke, Irene and Frenchie walk into the candle-lit hall of tombs (0:03-0:08)
+  ('only made it because', 'n1_ar_defeats', 134.3, -1.2, ARL),  # v6: Irene, the blood of Christ in her mouth, takes hold of Valak (2:14.3-2:15.5)
+  ('the actual blood of christ#2', 'co_valak0', 98.2, -1.5, o(L, 'g=1.25')),  # v6: the blood of Christ bursts red over the water around Valak (1:38.2-1:39.7)
+  ('so alone in your room', 'co_valak0', 118.0, -3.2, o(L, 'flip=1')),  # Valak clawing
   ('survival rate', 'co_valak0', 87.2, -3.2, L),           # Valak close-up holding the vial
+  ]))
+
+# ---- s10 #1 The Nun II (5%) (v5: s09 #2) ----
+X.append(sec('s10', [
+  (0, 'n2_maurice', 160.5, -8.9),                          # Valak's silhouette
+  ('this is valak at its strongest', 'n2_exorcise', 2.0, -1.1),  # Valak's snarl
+  ('stronger than any demon', 'n2_lucy', 3.45, -2.0),      # Valak, glowing eyes
+  ("it's hunting for the eyes", 'n2_cz_returns', 46.6, -1.2),  # the Saint Lucy reliquary held up, its rim glowing (0:46.6-0:47.8)
+  ('a holy relic', 'co_neck_b', 191.9, -0.5, 'g=1.25'),    # the reliquary held in two hands
+  ('that would make it', 'n2_lucy', 9.5, -1.25),           # Valak
+  ('and it has been hiding', 'n2_maurice', 38.5, -4.8, 'g=1.4'),  # Maurice (Frenchie) possessed
+  ('the man who saved irene', 'n2_maurice', 118.5, -6.0, 'g=1.4'),  # Maurice grinning, possessed
+  ('it lifts a priest', 'n2_burn', 370.5, -1.5),           # Father Noiret rises above the altar (6:10.5-6:12; s00 holds 372.1-373.2)
+  ('and burns him alive', 'n2_burn', 376.35, -0.95),       # Jacques screams as Noiret burns above him, lit by the fire (6:16.35-6:17.3; s11 holds 6:17.35-6:18.2)
+  ('snaps the neck', 'n2_deliv', 138.5, -1.2),             # the delivery kid lifted by the throat, feet dangling (2:18.5-2:19.7; cut before the snap)
+  ('of a kid making', 'n2_deliv', 47.0, -3.0),             # the delivery kid in a cap at the shelves, earlier (0:47-0:50)
+  ('kills the headmistress', 'n2_altar', 89.0, -0.95, 'g=1.4'),  # Madame Laurent
+  ('of a boarding school', 'n2_cz_goat', 283.5, -2.5, 'g=1.25'),  # the school dormitory, rows of schoolgirls in nightgowns with Sister Debra between the beds (4:43-4:46.5)
+  ('sister irene only survives', 'n2_lucy', 24.0, -1.75),  # Irene in mid-air above the fire
+  ('being set on fire', 'n2_lucy', 41.1, -1.45),           # Irene burning in mid-air
+  ('because she comes from', 'n2_exorcise', 75.0, -2.5),   # little Irene in her mother's arms (1:15-1:17)
+  ('and it takes a miracle', 'n2_lucy', 50.0, -1.4),       # Irene unhurt as the fire dies
+  ('wine turning into', 'n2_exorcise', 86.0, -10.0),       # the wine barrels burst red over Valak (1:26-1:36)
+  ('to drive it out', 'n2_exorcise', 102.0, -2.0),         # Valak goes up in a column of fire (1:42-1:44)
+  ('it burned a priest alive', 'n2_burn', 378.3, -1.1, L), # v6: Noiret's body bursts into a fireball above the altar (6:18.3-6:19.4)
+  ('and the only person who ever walked', 'n2_lucy', 30.0, -8.0, 'z=1.15,dx=150'),  # Irene burning in mid-air (0:30-0:38)
+  ('was a descendant of saint lucy', 'n2_burn', 136.5, -5.5, L),  # v6: the painting of Saint Lucy in the Tarascon church (2:16.5-2:22)
+  ('so for anyone else', 'n2_exorcise', 98.0, -3.0, o(L, 'flip=1')),  # Valak's rotted face
+  ('the fire wins', 'n2_exorcise', 122.6, -2.3, L),        # v6: a burst of fire fills the frame (2:02.6-2:04.9)
+  ('survival rate', 'n2_exorcise', 23.15, -1.68, L),       # Valak close-up
   ]))
 
 # ---- s11 outro: ACH case-closing footage on the first line, the hide-and-clap scene under the last lines ----
@@ -355,7 +380,9 @@ X.append(sec('s11', [
   (0, 'still_posterwall', 1.0, -4.0),                      # all 9 posters (callback to the cold open)
   ('from the doll', 'ach_end', 82.0, -4.0, 'g=1.25'),      # ACH: Mary Ellen, Daniela and Judy together after the lock (1:22-1:26)
   ('locked back in its case', 'ach_end', 93.2, -0.8, 'g=1.25'),  # ACH: Annabelle locked in the case behind Daniela (1:33.2-1:34)
-  ('to the valak', 'spooky_nun', 1063.0, -2.1),            # The Nun: Valak close-up
+  ('to the valak', 'n2_burn', 373.3, -1.3),                # v6: The Nun II, Jacques in the pews watching Noiret burn above the altar, lit by the fire (6:13.3-6:14.6)
+  ('that burned a priest alive', 'n2_burn', 375.5, -0.75), # v6: Noiret burning in the air above the altar, then all fire (6:15.5-6:16.25; s00 holds 374.7-375.4)
+  ('in midair', 'n2_burn', 377.35, -0.85),                 # v6: Jacques screaming up at the burning priest (6:17.35-6:18.2; s10 holds 6:16.35-6:17.3)
   ('which one would you least', 'universe', 22.5, -8.5, C1),
   ('tell me in the comments', 'universe', 136.4, -5.6, C1),
   ('i went through every death', 'universe', 151.0, -2.7, C1),

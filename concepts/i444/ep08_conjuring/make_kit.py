@@ -11,7 +11,7 @@ starts, tg = {}, 0.0
 for S in E['sections']: starts[S['voice']] = round(tg * FPS) / FPS; tg += S['len']
 def mmss(t): return f'{int(t // 60)}:{int(t % 60):02d}'
 NAME = {'s02': 'Annabelle Comes Home', 's03': 'Annabelle', 's04': 'The Conjuring', 's05': 'The Conjuring 2', 's06': 'The Conjuring Last Rites',
-        's07': 'Annabelle Creation', 's08': 'The Devil Made Me Do It', 's09': 'The Nun II', 's10': 'The Nun'}
+        's07': 'The Devil Made Me Do It', 's08': 'Annabelle Creation', 's09': 'The Nun', 's10': 'The Nun II'}   # v6 order (script_v3)
 CH = [('s00', 'These demons will burn you alive'), ('s01', 'How the survival rate works')] + \
      [(k, f"#{ST[k]['rank']} {NAME[k]} ({ST[k]['pct']}%)") for k in ['s02', 's03', 's04', 's05', 's06', 's07', 's08', 's09', 's10']] + \
      [('s11', 'Which demon would you least want in your room?')]
@@ -34,6 +34,6 @@ with open(OUT, 'w', encoding='utf-8') as f:
     f.write('# EP08 The Conjuring Universe, upload kit\n\n## Titles (pick one; no colon or dash)\n' +
             ''.join(f'{i + 1}. {t}' + ('  (recommended, the series format)' if i == 0 else '') + '\n' for i, t in enumerate(TITLES)))
     f.write(f'\n## Description\n\n{DESC}\n\n## Tags\n{", ".join(TAGS)}\n\n## Length\n{mmss(tg)} ({tg:.1f} s)\n\n'
-            '## Files\n- Video: 2_renders\\conjuring_ranked_v5.mp4\n- English captions: conjuring_ranked_v5_en.srt\n'
-            '- Thumbnails: conjuring_thumb_a.jpg (95/55/5), conjuring_thumb_b.jpg (80/45/5), conjuring_thumb_c.jpg (40/30/5)\n')
+            '## Files\n- Video: 2_renders\\conjuring_ranked_v6.mp4\n- English captions: conjuring_ranked_v6_en.srt\n'
+            '- Thumbnails: conjuring_thumb_a.jpg (95/55/5), conjuring_thumb_b.jpg (80/45/5); conjuring_thumb_c.jpg still shows the old 40/30/5 and needs remaking for v6 (35/25/5)\n')
 print(OUT, mmss(tg))

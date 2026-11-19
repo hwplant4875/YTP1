@@ -20,7 +20,9 @@ SAME = {'lr_end': [('lr_exorcism', 330.0, 0, 1e9)],          # lr_end t = lr_exo
         'c2_s10_defiler': [('c2_cz_finale', 354.0, 0, 172)], 'co_valak0': [('n1_cz_possessed', 306.0, 0, 232)],
         'co_neck_b': [('co_neck', -30.0, 30, 210)], 'n2_altar': [('co_neck_b', 484.0, 0, 108)],
         'n2_dr_deliv': [('n2_deliv', 12.0, 0, 127)], 'n2_maurice': [('n2_cz_returns', 25.0, 0, 175)],
-        'lr_cz_comp': [('lr_judy', -358.0, 358, 603)], 'cr_stair': [('cr_ar_barn', -1.0, 0, 127)]}          # the same opening scene; ~217 s from the lift (154.3 = 371.3), approximate
+        'lr_cz_comp': [('lr_judy', -358.0, 358, 603)],
+        # v6 (11/19): Conjuring Archives re-uploads checked on frames: c2_name t = c2_cz_finale t - 412.6, n1_ar_defeats t = co_valak0 t + 43.3
+        'c2_name': [('c2_cz_finale', 412.6, 0, 66)], 'c2_name_b': [], 'n1_ar_defeats': [('co_valak0', -43.3, 100, 174)], 'cr_stair': [('cr_ar_barn', -1.0, 0, 127)]}          # the same opening scene; ~217 s from the lift (154.3 = 371.3), approximate
 spans = []
 for S in E['sections']:
     sh = S['shots']
