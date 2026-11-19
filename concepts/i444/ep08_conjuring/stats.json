@@ -74,52 +74,52 @@
   {
    "sec": "s07",
    "rank": 4,
-   "film": "Annabelle: Creation (2017)",
-   "villain": "The Annabelle Demon",
-   "v": [
-    9,
-    7,
-    6,
-    10
-   ],
-   "pct": 40
-  },
-  {
-   "sec": "s08",
-   "rank": 3,
    "film": "The Conjuring: The Devil Made Me Do It (2021)",
    "villain": "The Occultist's Demon",
    "v": [
     6,
     10,
-    7,
+    5,
+    9
+   ],
+   "pct": 35
+  },
+  {
+   "sec": "s08",
+   "rank": 3,
+   "film": "Annabelle: Creation (2017)",
+   "villain": "The Annabelle Demon",
+   "v": [
+    9,
+    8,
+    4,
     10
    ],
-   "pct": 30
+   "pct": 25
   },
   {
    "sec": "s09",
    "rank": 2,
-   "film": "The Nun II (2023)",
+   "film": "The Nun (2018)",
    "villain": "Valak",
    "v": [
+    9,
     10,
     8,
-    8,
-    9
+    8
    ],
    "pct": 12
   },
   {
    "sec": "s10",
    "rank": 1,
-   "film": "The Nun (2018)",
+   "film": "The Nun II (2023)",
    "villain": "Valak",
    "v": [
-    9,
     10,
+    8,
     9,
-    8
+    9
    ],
    "pct": 5
   }
