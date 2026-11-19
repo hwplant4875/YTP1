@@ -45,7 +45,10 @@ VALAK_FULL = 'n1_oSl0mMggtRfnNzJKRmFZc1sNqvI.jpg'  # The Nun: Valak standing
 CREATION = 'cr_cooMlxcgNDWpXzXERFepJrMXQhq.jpg'  # Annabelle: Creation: the doll in the closet
 ISLA = 'dm_ifZ0fkOlLIdvNeKWG5LUxyMQzOK.jpg'       # The Devil Made Me Do It: Isla, the Occultist
 VALAK_N2 = 'n2_vO2925ghThGfYSzaBJBfxmUqd1M.jpg'  # The Nun II: Valak behind the lattice, glowing eyes
-if __name__ == '__main__':
+if __name__ == '__main__' and sys.argv[1:] == ['c_v6']:   # v6 order (script_v3): only thumbnail C changes, the old file is kept
+    print(build([(ISLA, 0.60, 0.412, 0.78, 1.50, '35%'), (CREATION, 0.69, 0.415, 0.40, 1.10, '25%'), (VALAK_N2, 0.655, 0.533, 0.46, 1.45, '5%')],
+                'conjuring_thumb_c_v6.jpg'))
+elif __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
     a = build([(ACH, 0.372, 0.488, 0.52, 1.12, '95%'), (JANET, 0.255, 0.524, 0.76, 1.10, '55%'), (VALAK, 0.50, 0.431, 0.627, 1.15, '5%')], 'conjuring_thumb_a.jpg')
     b = build([(A14, 0.50, 0.40, 1.0, 1.10, '80%'), (LR_SPIRIT, 0.50, 0.524, 0.76, 1.50, '45%'), (VALAK_FULL, 0.70, 0.254, 0.36, 1.20, '5%')], 'conjuring_thumb_b.jpg')

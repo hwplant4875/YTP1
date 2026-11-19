@@ -35,5 +35,5 @@ with open(OUT, 'w', encoding='utf-8') as f:
             ''.join(f'{i + 1}. {t}' + ('  (recommended, the series format)' if i == 0 else '') + '\n' for i, t in enumerate(TITLES)))
     f.write(f'\n## Description\n\n{DESC}\n\n## Tags\n{", ".join(TAGS)}\n\n## Length\n{mmss(tg)} ({tg:.1f} s)\n\n'
             '## Files\n- Video: 2_renders\\conjuring_ranked_v6.mp4\n- English captions: conjuring_ranked_v6_en.srt\n'
-            '- Thumbnails: conjuring_thumb_a.jpg (95/55/5), conjuring_thumb_b.jpg (80/45/5); conjuring_thumb_c.jpg still shows the old 40/30/5 and needs remaking for v6 (35/25/5)\n')
+            '- Thumbnails: conjuring_thumb_a.jpg (95/55/5), conjuring_thumb_b.jpg (80/45/5), conjuring_thumb_c_v6.jpg (35/25/5; the old conjuring_thumb_c.jpg shows the v5 odds, do not use)\n')
 print(OUT, mmss(tg))

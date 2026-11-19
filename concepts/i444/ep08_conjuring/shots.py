@@ -147,7 +147,7 @@ X.append(sec('s03', [
   ("is evelyn's", 'a14_cz_soul', 480.0, -1.9),             # v6: Evelyn kneeling by John and Mia, close (8:00-8:01.9; John and Mia before and after)
   ('when she gives up', 'a14_cz_soul', 510.0, -5.5),       # Evelyn in the open window holding the doll, her decision (8:30-8:35.5; never 8:36+)
   ('it will burn your home', 'a14_fire', 108.0, -3.5, ARL),  # the kitchen engulfed, Mia small in the doorway (1:48-1:51)
-  ('and throw you across the room', 'a14_wb_want', 276.5, -4.5, L),  # v6 NEEDS REWORD: nobody is thrown across a room in any clip (Perez's throw is used above); the doll's face on the car seat (4:36.5-4:41)
+  ('and drag you across the floor', 'a14_fire', 128.0, -5.0, ARL),  # v6 (db69c75 reword): Mia on her hands and knees, dragging herself across the smoky living-room floor (2:08-2:13)
   ('but it has never taken', 'a14_cz_soul', 160.5, -3.0, L),  # v6: the doll alone in the living-room armchair (2:40.5-2:43.5)
   ("so you'll probably live", 'a14_cz_attic', 0.0, -7.0, L),  # Mia lays Leah safely in her crib (0:00-0:07)
   ('survival rate', 'a14_wb_want', 44.0, -7.0, L),         # the doll seated in the cabinet (0:44-0:51)

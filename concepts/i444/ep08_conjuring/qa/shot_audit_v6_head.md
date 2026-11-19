@@ -10,6 +10,8 @@ Pass 1 (full render) found 4 shots to fix. All were re-cut and their sections re
 - s03 "is Evelyn's": it started on John and Mia; now Evelyn close.
 - s11 "the Valak that burned a priest alive in midair": now Jacques watching, Noiret burning in the air, Jacques screaming. s10 "and burns him alive" keeps the first half of the scream; no span is shared.
 
+Pass 4 (11/19, db69c75): the s03 line "and throw you across the room" (no true footage, was under needs reword) was reworded to "and drag you across the floor" and s03 re-voiced; its shot is now Mia dragging herself across the smoky floor in the fire scene (a14_fire 2:08-2:13, a span used nowhere else). s03 re-rendered, the video is now 8:17.6.
+
 Rules checked:
 - qa/dupes.py: 0 repeated spans (re-uploads mapped, including c2_name = c2_cz_finale - 412.6 and n1_ar_defeats = co_valak0 + 43.3, both measured on frames for v6).
 - No suicide act: no Evelyn fall, no Higgins throat, no rope, attic or hanging Judy. The s06 hang line shows possessed Judy crawling and Ed after the attic.
@@ -20,7 +22,6 @@ Rules checked:
 
 ## Needs reword (no true footage exists; a neutral true shot of that film's demon is used)
 
-- s03 "It will burn your home and throw you across the room": nobody is thrown across a room in any Annabelle (2014) clip. The only throw is Father Perez hurled off the church steps (a14_wb_want 5:26), already used on "hurls a priest through the air". On screen now: the doll's face on Perez's car seat (a14_wb_want 4:36.5). A true alternative would be "...and claw your arm" (the scratches at a14_cz_attic 3:12 and 5:20).
 - s09 "and even then, Valak gets away, hiding inside Frenchie" (carried from v5): the escape into Frenchie and the inverted cross are in no clip (the Movieclips ending is age-gated). On screen: Frenchie (co_valak0 2:48).
 - s02 "The Ferryman chases the babysitter" (partial, carried from v5): the Ferryman is only a small dark skull face; Mary Ellen dragged and running is clear.
 

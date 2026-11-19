@@ -20,7 +20,6 @@ WEAK = {
  ('s03', 'a14_cz_attic', 306.14): 'the horned demon is on screen only ~0.6 s at the start, then Mia fleeing',
  ('s03', 'a14_cz_invasion', 336.0): 'the cult girl with the doll stands in for "five people die" (no deaths shown on purpose)',
  ('s03', 'a14_wb_baby', 292.0): 'the life-size Annabelle figure at the window',
- ('s03', 'a14_wb_want', 276.5): "NEEDS REWORD: nobody is thrown across a room in any clip; the doll's face is a neutral true shot",
  ('s04', 'co_mother_c', 288.0): 'Roger and the sheet, generic',
  ('s04', 'c1_exorcism_b', 120.0): 'freed Carolyn with April in the dark crawlspace',
  ('s05', 'c2_cz_voices', 388.5): 'Janet waking on the floor at night, dark close-up',
