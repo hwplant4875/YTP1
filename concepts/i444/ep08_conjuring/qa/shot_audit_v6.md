@@ -12,6 +12,8 @@ Pass 1 (full render) found 4 shots to fix. All were re-cut and their sections re
 
 Pass 4 (11/19, db69c75): the s03 line "and throw you across the room" (no true footage, was under needs reword) was reworded to "and drag you across the floor" and s03 re-voiced; its shot is now Mia dragging herself across the smoky floor in the fire scene (a14_fire 2:08-2:13, a span used nowhere else). s03 re-rendered, the video is now 8:17.6.
 
+Pass 5 (11/19, director's sheet check): s11#03 "to the Valak" (n2_burn@373.3, 7:54.8) was flagged as labelled THE NUN (2018); the v6 render and the s11 sheet both show THE NUN II (2023), so it was already right. qa/label_check.py then checked all 279 shots' film labels against their clips' films: 0 wrong labels. It found 6 shots before a stat card with no label at all, because build_edl.py's CO map lacked the clip variants co_mother_b, co_mother_c (The Conjuring) and co_neck_b (The Nun II): s04#01, #12, #15, #16, #22 and s10#04, plus the cold-open co_mother_c shot (s00#08), whose label now starts on it. Those variants were added to the map, so the labels now run without a break. s00, s04 and s10 were re-rendered, and the s00/s04/s10/s11 sheets were remade. Shots and timings are unchanged.
+
 Rules checked:
 - qa/dupes.py: 0 repeated spans (re-uploads mapped, including c2_name = c2_cz_finale - 412.6 and n1_ar_defeats = co_valak0 + 43.3, both measured on frames for v6).
 - No suicide act: no Evelyn fall, no Higgins throat, no rope, attic or hanging Judy. The s06 hang line shows possessed Judy crawling and Ed after the attic.

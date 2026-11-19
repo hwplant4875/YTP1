@@ -40,7 +40,7 @@ TIERS = [['S', 'Slaughtered', 25], ['A', 'Almost Dead', 40], ['B', 'Better Run',
 FILMS = {'ach': 'Annabelle Comes Home (2019)', 'a14': 'Annabelle (2014)', 'c1': 'The Conjuring (2013)', 'c2': 'The Conjuring 2 (2016)',
          'lr': 'The Conjuring: Last Rites (2025)', 'cr': 'Annabelle: Creation (2017)', 'dm': 'The Conjuring: The Devil Made Me Do It (2021)',
          'n2': 'The Nun II (2023)', 'n1': 'The Nun (2018)'}
-CO = {'co_burn': 'n2', 'co_burn_4k': 'n2', 'co_buried': 'n1', 'co_buried_b': 'n1', 'co_neck': 'n2', 'co_stab': 'dm', 'co_mother': 'c1',
+CO = {'co_burn': 'n2', 'co_burn_4k': 'n2', 'co_buried': 'n1', 'co_buried_b': 'n1', 'co_neck': 'n2', 'co_neck_b': 'n2', 'co_stab': 'dm', 'co_mother': 'c1', 'co_mother_b': 'c1', 'co_mother_c': 'c1',
       'co_doll': 'ach', 'co_valak0': 'n1', 'spooky_nun': 'n1'}
 MIXED = {'universe'}   # compilation clips: every shot needs f=<key>
 def norm(s): return re.sub(r"[^a-z0-9']", '', s.lower().replace('-', ''))
