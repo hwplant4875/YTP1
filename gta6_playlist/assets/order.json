@@ -1,0 +1,254 @@
+{
+ "order": [
+  {
+   "pos": 1,
+   "album_no": 4,
+   "title": "RHYNO",
+   "artist": "Travis Scott",
+   "base": "base_01.jpg"
+  },
+  {
+   "pos": 2,
+   "album_no": 2,
+   "title": "That's It",
+   "artist": "Yung Lean, Future & Metro Boomin",
+   "base": "base_02.jpg"
+  },
+  {
+   "pos": 3,
+   "album_no": 3,
+   "title": "Ahh Yea",
+   "artist": "Playboi Carti",
+   "base": "base_03.jpg"
+  },
+  {
+   "pos": 4,
+   "album_no": 18,
+   "title": "TF?",
+   "artist": "Don Toliver",
+   "base": "base_04.jpg"
+  },
+  {
+   "pos": 5,
+   "album_no": 15,
+   "title": "Let's Rock",
+   "artist": "Kodak Black & Don Toliver",
+   "base": "base_05.jpg"
+  },
+  {
+   "pos": 6,
+   "album_no": 14,
+   "title": "Count Up",
+   "artist": "Gunna",
+   "base": "base_06.jpg"
+  },
+  {
+   "pos": 7,
+   "album_no": 16,
+   "title": "Wake Up Flex",
+   "artist": "Young Thug",
+   "base": "base_07.jpg"
+  },
+  {
+   "pos": 8,
+   "album_no": 19,
+   "title": "Don't Chart",
+   "artist": "Cardi B",
+   "base": "base_08.jpg"
+  },
+  {
+   "pos": 9,
+   "album_no": 20,
+   "title": "GMA",
+   "artist": "JT",
+   "base": "base_09.jpg"
+  },
+  {
+   "pos": 10,
+   "album_no": 17,
+   "title": "IKYFL",
+   "artist": "Tee Grizzley",
+   "base": "base_10.jpg"
+  },
+  {
+   "pos": 11,
+   "album_no": 12,
+   "title": "Dance with Me",
+   "artist": "A Boogie wit da Hoodie ft. Elkan",
+   "base": "base_11.jpg"
+  },
+  {
+   "pos": 12,
+   "album_no": 13,
+   "title": "Bigger",
+   "artist": "Burna Boy",
+   "base": "base_12.jpg"
+  },
+  {
+   "pos": 13,
+   "album_no": 11,
+   "title": "Macacoa 2000",
+   "artist": "Rauw Alejandro",
+   "base": "base_13.jpg"
+  },
+  {
+   "pos": 14,
+   "album_no": 9,
+   "title": "X",
+   "artist": "Jhayco",
+   "base": "base_14.jpg"
+  },
+  {
+   "pos": 15,
+   "album_no": 10,
+   "title": "Suzuki",
+   "artist": "Fuerza Regida",
+   "base": "base_15.jpg"
+  },
+  {
+   "pos": 16,
+   "album_no": 26,
+   "title": "Sandunguea",
+   "artist": "Arca",
+   "base": "base_16.jpg"
+  },
+  {
+   "pos": 17,
+   "album_no": 5,
+   "title": "Sexy Magic",
+   "artist": "CA7RIEL & Paco Amoroso, PinkPantheress, Fred again.., Étienne de Crécy",
+   "base": "base_17.jpg"
+  },
+  {
+   "pos": 18,
+   "album_no": 7,
+   "title": "Go Easy",
+   "artist": "Dua Lipa",
+   "base": "base_18.jpg"
+  },
+  {
+   "pos": 19,
+   "album_no": 21,
+   "title": "Power Trip",
+   "artist": "JENNIE",
+   "base": "base_19.jpg"
+  },
+  {
+   "pos": 20,
+   "album_no": 23,
+   "title": "Fast Emotion",
+   "artist": "Zara Larsson",
+   "base": "base_20.jpg"
+  },
+  {
+   "pos": 21,
+   "album_no": 24,
+   "title": "Sweet Like Candy",
+   "artist": "Camila Cabello",
+   "base": "base_21.jpg"
+  },
+  {
+   "pos": 22,
+   "album_no": 22,
+   "title": "Blood in Your Eyes",
+   "artist": "Tove Lo",
+   "base": "base_22.jpg"
+  },
+  {
+   "pos": 23,
+   "album_no": 25,
+   "title": "Only One",
+   "artist": "Fcukers",
+   "base": "base_23.jpg"
+  },
+  {
+   "pos": 24,
+   "album_no": 27,
+   "title": "Trdwfe",
+   "artist": "Rina Sawayama",
+   "base": "base_24.jpg"
+  },
+  {
+   "pos": 25,
+   "album_no": 28,
+   "title": "All Again",
+   "artist": "Rose Gray",
+   "base": "base_25.jpg"
+  },
+  {
+   "pos": 26,
+   "album_no": 1,
+   "title": "Starting from Zero",
+   "artist": "Justice ft. Michael McDonald",
+   "base": "base_26.jpg"
+  },
+  {
+   "pos": 27,
+   "album_no": 6,
+   "title": "Flower in a Hurricane",
+   "artist": "Justice ft. Tame Impala, SZA, King Gizzard & the Lizard Wizard",
+   "base": "base_27.jpg"
+  },
+  {
+   "pos": 28,
+   "album_no": 33,
+   "title": "Stone Kold Krazy Luuv",
+   "artist": "Jesse Johnson & Dâm-Funk",
+   "base": "base_28.jpg"
+  },
+  {
+   "pos": 29,
+   "album_no": 8,
+   "title": "Last Thing You Need",
+   "artist": "Morgan Wallen",
+   "base": "base_29.jpg"
+  },
+  {
+   "pos": 30,
+   "album_no": 32,
+   "title": "Bright Lights, Big City",
+   "artist": "Keith Richards",
+   "base": "base_30.jpg"
+  },
+  {
+   "pos": 31,
+   "album_no": 30,
+   "title": "Largate",
+   "artist": "Kali Uchis & Helado Negro",
+   "base": "base_31.jpg"
+  },
+  {
+   "pos": 32,
+   "album_no": 31,
+   "title": "No Me Busques",
+   "artist": "Omar Apollo",
+   "base": "base_32.jpg"
+  },
+  {
+   "pos": 33,
+   "album_no": 29,
+   "title": "Crazy for You",
+   "artist": "Lana Del Rey",
+   "base": "base_33.jpg"
+  },
+  {
+   "pos": 34,
+   "album_no": 34,
+   "title": "Overtown Lights",
+   "artist": "Stanley Clarke, Yussef Dayes & Robert Glasper",
+   "base": "base_34.jpg"
+  }
+ ],
+ "label": {
+  "file": "label_436.png",
+  "scale_to": 218,
+  "x": 851,
+  "y": 437,
+  "deg_per_sec": 45,
+  "angle_at_t0_offset": -2.1
+ },
+ "intro": {
+  "file": "intro_4s.mp4",
+  "seconds": 4.0
+ }
+}
