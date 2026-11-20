@@ -1,0 +1,355 @@
+{
+ "video": "GTA6_The_Album_playlist_v1.mp4",
+ "fps": 30,
+ "total_seconds": 5873.976,
+ "check_frames": {
+  "01_t1s": 1.0,
+  "02_t3s": 3.0,
+  "03_t10s": 10.0,
+  "04_dissolve_mid_track2": 180.5,
+  "05_mid_track17": 2580.688,
+  "06_end_minus5s": 5868.976
+ },
+ "tracks": [
+  {
+   "pos": 1,
+   "album_no": 4,
+   "title": "RHYNO",
+   "artist": "Travis Scott",
+   "start": "0:00:00",
+   "start_seconds": 0.0,
+   "duration_seconds": 180.0,
+   "start_frame": 0
+  },
+  {
+   "pos": 2,
+   "album_no": 2,
+   "title": "That's It",
+   "artist": "Yung Lean, Future & Metro Boomin",
+   "start": "0:03:00",
+   "start_seconds": 180.0,
+   "duration_seconds": 161.733,
+   "start_frame": 5400
+  },
+  {
+   "pos": 3,
+   "album_no": 3,
+   "title": "Ahh Yea",
+   "artist": "Playboi Carti",
+   "start": "0:05:41",
+   "start_seconds": 341.733,
+   "duration_seconds": 120.865,
+   "start_frame": 10252
+  },
+  {
+   "pos": 4,
+   "album_no": 18,
+   "title": "TF?",
+   "artist": "Don Toliver",
+   "start": "0:07:42",
+   "start_seconds": 462.598,
+   "duration_seconds": 162.742,
+   "start_frame": 13878
+  },
+  {
+   "pos": 5,
+   "album_no": 15,
+   "title": "Let's Rock",
+   "artist": "Kodak Black & Don Toliver",
+   "start": "0:10:25",
+   "start_seconds": 625.341,
+   "duration_seconds": 151.447,
+   "start_frame": 18760
+  },
+  {
+   "pos": 6,
+   "album_no": 14,
+   "title": "Count Up",
+   "artist": "Gunna",
+   "start": "0:12:56",
+   "start_seconds": 776.788,
+   "duration_seconds": 181.373,
+   "start_frame": 23304
+  },
+  {
+   "pos": 7,
+   "album_no": 16,
+   "title": "Wake Up Flex",
+   "artist": "Young Thug",
+   "start": "0:15:58",
+   "start_seconds": 958.161,
+   "duration_seconds": 116.251,
+   "start_frame": 28745
+  },
+  {
+   "pos": 8,
+   "album_no": 19,
+   "title": "Don't Chart",
+   "artist": "Cardi B",
+   "start": "0:17:54",
+   "start_seconds": 1074.412,
+   "duration_seconds": 164.58,
+   "start_frame": 32232
+  },
+  {
+   "pos": 9,
+   "album_no": 20,
+   "title": "GMA",
+   "artist": "JT",
+   "start": "0:20:38",
+   "start_seconds": 1238.992,
+   "duration_seconds": 136.038,
+   "start_frame": 37170
+  },
+  {
+   "pos": 10,
+   "album_no": 17,
+   "title": "IKYFL",
+   "artist": "Tee Grizzley",
+   "start": "0:22:55",
+   "start_seconds": 1375.03,
+   "duration_seconds": 148.438,
+   "start_frame": 41251
+  },
+  {
+   "pos": 11,
+   "album_no": 12,
+   "title": "Dance with Me",
+   "artist": "A Boogie wit da Hoodie ft. Elkan",
+   "start": "0:25:23",
+   "start_seconds": 1523.468,
+   "duration_seconds": 148.247,
+   "start_frame": 45704
+  },
+  {
+   "pos": 12,
+   "album_no": 13,
+   "title": "Bigger",
+   "artist": "Burna Boy",
+   "start": "0:27:51",
+   "start_seconds": 1671.715,
+   "duration_seconds": 169.501,
+   "start_frame": 50151
+  },
+  {
+   "pos": 13,
+   "album_no": 11,
+   "title": "Macacoa 2000",
+   "artist": "Rauw Alejandro",
+   "start": "0:30:41",
+   "start_seconds": 1841.216,
+   "duration_seconds": 173.882,
+   "start_frame": 55236
+  },
+  {
+   "pos": 14,
+   "album_no": 9,
+   "title": "X",
+   "artist": "Jhayco",
+   "start": "0:33:35",
+   "start_seconds": 2015.098,
+   "duration_seconds": 191.315,
+   "start_frame": 60453
+  },
+  {
+   "pos": 15,
+   "album_no": 10,
+   "title": "Suzuki",
+   "artist": "Fuerza Regida",
+   "start": "0:36:46",
+   "start_seconds": 2206.413,
+   "duration_seconds": 113.561,
+   "start_frame": 66192
+  },
+  {
+   "pos": 16,
+   "album_no": 26,
+   "title": "Sandunguea",
+   "artist": "Arca",
+   "start": "0:38:39",
+   "start_seconds": 2319.974,
+   "duration_seconds": 162.793,
+   "start_frame": 69599
+  },
+  {
+   "pos": 17,
+   "album_no": 5,
+   "title": "Sexy Magic",
+   "artist": "CA7RIEL & Paco Amoroso, PinkPantheress, Fred again.., Étienne de Crécy",
+   "start": "0:41:22",
+   "start_seconds": 2482.768,
+   "duration_seconds": 195.84,
+   "start_frame": 74483
+  },
+  {
+   "pos": 18,
+   "album_no": 7,
+   "title": "Go Easy",
+   "artist": "Dua Lipa",
+   "start": "0:44:38",
+   "start_seconds": 2678.608,
+   "duration_seconds": 192.302,
+   "start_frame": 80358
+  },
+  {
+   "pos": 19,
+   "album_no": 21,
+   "title": "Power Trip",
+   "artist": "JENNIE",
+   "start": "0:47:50",
+   "start_seconds": 2870.909,
+   "duration_seconds": 196.739,
+   "start_frame": 86127
+  },
+  {
+   "pos": 20,
+   "album_no": 23,
+   "title": "Fast Emotion",
+   "artist": "Zara Larsson",
+   "start": "0:51:07",
+   "start_seconds": 3067.649,
+   "duration_seconds": 173.953,
+   "start_frame": 92029
+  },
+  {
+   "pos": 21,
+   "album_no": 24,
+   "title": "Sweet Like Candy",
+   "artist": "Camila Cabello",
+   "start": "0:54:01",
+   "start_seconds": 3241.601,
+   "duration_seconds": 184.875,
+   "start_frame": 97248
+  },
+  {
+   "pos": 22,
+   "album_no": 22,
+   "title": "Blood in Your Eyes",
+   "artist": "Tove Lo",
+   "start": "0:57:06",
+   "start_seconds": 3426.477,
+   "duration_seconds": 161.22,
+   "start_frame": 102794
+  },
+  {
+   "pos": 23,
+   "album_no": 25,
+   "title": "Only One",
+   "artist": "Fcukers",
+   "start": "0:59:47",
+   "start_seconds": 3587.696,
+   "duration_seconds": 145.381,
+   "start_frame": 107631
+  },
+  {
+   "pos": 24,
+   "album_no": 27,
+   "title": "Trdwfe",
+   "artist": "Rina Sawayama",
+   "start": "1:02:13",
+   "start_seconds": 3733.077,
+   "duration_seconds": 156.831,
+   "start_frame": 111992
+  },
+  {
+   "pos": 25,
+   "album_no": 28,
+   "title": "All Again",
+   "artist": "Rose Gray",
+   "start": "1:04:49",
+   "start_seconds": 3889.908,
+   "duration_seconds": 239.568,
+   "start_frame": 116697
+  },
+  {
+   "pos": 26,
+   "album_no": 1,
+   "title": "Starting from Zero",
+   "artist": "Justice ft. Michael McDonald",
+   "start": "1:08:49",
+   "start_seconds": 4129.476,
+   "duration_seconds": 189.739,
+   "start_frame": 123884
+  },
+  {
+   "pos": 27,
+   "album_no": 6,
+   "title": "Flower in a Hurricane",
+   "artist": "Justice ft. Tame Impala, SZA, King Gizzard & the Lizard Wizard",
+   "start": "1:11:59",
+   "start_seconds": 4319.215,
+   "duration_seconds": 221.19,
+   "start_frame": 129576
+  },
+  {
+   "pos": 28,
+   "album_no": 33,
+   "title": "Stone Kold Krazy Luuv",
+   "artist": "Jesse Johnson & Dâm-Funk",
+   "start": "1:15:40",
+   "start_seconds": 4540.404,
+   "duration_seconds": 189.088,
+   "start_frame": 136212
+  },
+  {
+   "pos": 29,
+   "album_no": 8,
+   "title": "Last Thing You Need",
+   "artist": "Morgan Wallen",
+   "start": "1:18:49",
+   "start_seconds": 4729.493,
+   "duration_seconds": 196.0,
+   "start_frame": 141885
+  },
+  {
+   "pos": 30,
+   "album_no": 32,
+   "title": "Bright Lights, Big City",
+   "artist": "Keith Richards",
+   "start": "1:22:05",
+   "start_seconds": 4925.493,
+   "duration_seconds": 210.91,
+   "start_frame": 147765
+  },
+  {
+   "pos": 31,
+   "album_no": 30,
+   "title": "Largate",
+   "artist": "Kali Uchis & Helado Negro",
+   "start": "1:25:36",
+   "start_seconds": 5136.403,
+   "duration_seconds": 200.572,
+   "start_frame": 154092
+  },
+  {
+   "pos": 32,
+   "album_no": 31,
+   "title": "No Me Busques",
+   "artist": "Omar Apollo",
+   "start": "1:28:56",
+   "start_seconds": 5336.975,
+   "duration_seconds": 131.825,
+   "start_frame": 160109
+  },
+  {
+   "pos": 33,
+   "album_no": 29,
+   "title": "Crazy for You",
+   "artist": "Lana Del Rey",
+   "start": "1:31:08",
+   "start_seconds": 5468.8,
+   "duration_seconds": 223.683,
+   "start_frame": 164064
+  },
+  {
+   "pos": 34,
+   "album_no": 34,
+   "title": "Overtown Lights",
+   "artist": "Stanley Clarke, Yussef Dayes & Robert Glasper",
+   "start": "1:34:52",
+   "start_seconds": 5692.483,
+   "duration_seconds": 181.493,
+   "start_frame": 170774
+  }
+ ]
+}
