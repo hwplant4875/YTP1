@@ -1,26 +1,28 @@
 # EP08 The Conjuring Universe, upload kit
 
-## Titles (pick one; no colon or dash)
-1. Every Conjuring Demon Ranked by Your Chance of Surviving It  (recommended, the series format)
-2. Every Conjuring Universe Movie Ranked by Your Chance of Surviving the Demon
-3. Could You Survive Valak? Every Conjuring Demon Ranked
+## Titles
+Every Conjuring Demon Ranked by Your Chance of Surviving It
+
+Every Conjuring Universe Movie Ranked by Your Chance of Surviving the Demon
+
+Could You Survive Valak? Every Conjuring Demon Ranked
 
 ## Description
 
-As a horror fan, I've seen every Conjuring movie more times than I should admit, and that Valak painting scene still makes me sleep with the lights on.
+Valak in my room at 3am? yeah I'm not making it 💀
 
 [ Timeline ]
 0:00 These demons will burn you alive
 0:16 How the survival rate works
-0:44 #9 Annabelle Comes Home (95%)
-1:24 #8 Annabelle (80%)
-2:03 #7 The Conjuring (65%)
-2:56 #6 The Conjuring 2 (55%)
-3:46 #5 The Conjuring Last Rites (45%)
-4:41 #4 The Devil Made Me Do It (35%)
-5:24 #3 Annabelle Creation (25%)
-6:17 #2 The Nun (12%)
-7:00 #1 The Nun II (5%)
+0:44 #9 Annabelle Comes Home
+1:24 #8 Annabelle
+2:03 #7 The Conjuring
+2:56 #6 The Conjuring 2
+3:46 #5 The Conjuring Last Rites
+4:41 #4 The Devil Made Me Do It
+5:24 #3 Annabelle Creation
+6:17 #2 The Nun
+7:00 #1 The Nun II
 7:49 Which demon would you least want in your room?
 
 #TheConjuring #Valak #Annabelle #TheNun #HorrorRanked
