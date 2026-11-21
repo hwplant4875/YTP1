@@ -1,0 +1,33 @@
+{
+  "note": "Original 1998 Nintendo 64 version only (no 3DS, no 2026 Switch 2 remake, no HD texture pack, no mods). Nothing from Lunartique. Downloaded 2026-11-21 with yt-dlp -S res:1080 -f \"bv*+ba/b\" --merge-output-format mp4.",
+  "sources": [
+    {
+      "id": "Z9iU8f9dWMo",
+      "role": "primary",
+      "url": "https://www.youtube.com/watch?v=Z9iU8f9dWMo",
+      "channel": "Strange Oracle",
+      "title": "Zelda | Ocarina of Time (N64) 100% Walkthrough (1080p 60fps)",
+      "duration": "11:09:13",
+      "commentary": "none",
+      "resolution": "1920x1080",
+      "fps": 60,
+      "aspect": "16:9 widescreen emulator output (fills the frame, no pillarbox), original N64 textures",
+      "watermark": "none",
+      "file": "src/Z9iU8f9dWMo.mp4"
+    },
+    {
+      "id": "Ny-R_6cHGbw",
+      "role": "secondary / 4:3 reference",
+      "url": "https://www.youtube.com/watch?v=Ny-R_6cHGbw",
+      "channel": "MojoDino Gaming",
+      "title": "The Legend of Zelda: Ocarina of Time (N64) | 100% Longplay | No Deaths | 1080p",
+      "duration": "11:41:10",
+      "commentary": "none",
+      "resolution": "1920x1080",
+      "fps": 30,
+      "aspect": "real 4:3 picture pillarboxed inside a 16:9 1080p frame (active area about 1440x1080)",
+      "watermark": "none",
+      "file": "src/Ny-R_6cHGbw.mp4"
+    }
+  ]
+}
