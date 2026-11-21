@@ -321,3 +321,77 @@ Owner rule: he is in my room, next to me, coming for me. Odds must come from how
 7. Dan's real vehicle in Dream Child (truck or motorcycle) is UNCONFIRMED.
 8. Not reached: Dead Meat totals, IMDb (blocked), themoviespoiler (no pages), and Plugged In for 7 of the films. None of their numbers are used here.
 9. Fan wikis E and H are tagged unreferenced and partly copy each other. Most items rest on W plus V or F, which do not depend on each other.
+
+---
+
+## 8. Review of script_v4_draft.md
+
+Checked against the death and attack lists in section 2 and against the header stats in the new playback order: FvJ, then Revenge, Dream Child, 1984, Dream Warriors, New Nightmare, Freddy's Dead, 2010 and Dream Master. The file was not edited.
+
+Mechanical check: the voiced text in s00 to s11 has no colons and no dashes. The only hyphens are inside words (eighty-four, force-feeds, ninety-five, thirty-five, twenty-five), which is fine. Every banned scene listed in the header has other usable footage for its line. The one leftover risk is the s03 shower, where the coach is stripped (from my memory, UNCONFIRMED), so use the ropes and gym-equipment shots.
+
+### 8.1 Header and KILL COUNT score map
+| Film | On-screen kills (section 4) | Score by the header map | Card | Verdict |
+|---|---|---|---|---|
+| FvJ | 1, plus 1 in a flashback | 1 | 1 | OK |
+| Revenge | about 9 (party number 1 src) | 6 | 6 | OK |
+| Dream Child | 3 | 3 | 3 | OK |
+| 1984 | 4 | 4 | 4 | OK, but see note |
+| Dream Warriors | 6 | 5 | 5 | OK |
+| New Nightmare | 4 | 4 | 4 | OK |
+| Freddy's Dead | 3 on screen, plus a whole town implied | 10 | 10 | OK under the "whole town" rule |
+| 2010 | 5 on screen, plus the other preschool kids implied | 5 on screen, 8 only if implied kills count | 8 | **Inconsistent**. 10 or more needs the implied preschool kills, and that number (about 7 named) comes only from the horror fandom wiki. W just says "all of them". And if implied kills count for 2010, the 1984 card should also count the 20 children Marge describes, which would make it 8, not 4. Either set 2010 to 5 (on screen only, with Freddy's Dead as the one stated "whole town" exception), or explain the rule |
+| Dream Master | 6 | 5 | 5 | OK |
+
+"Strongest of them all" (s10): Dream Master STR is 8, and so is New Nightmare's. It is a tie, so the superlative does not match the card. **Fix**: make Dream Master STR 9, or change the line to "This Freddy is the most powerful of them all", which DREAM 10 (the only 10) supports.
+
+### 8.2 Line by line (only lines with problems; everything else is RIGHT)
+
+**s00, s01**: no problems.
+
+**s02 FvJ 95%**: no problems. The flashback caveat is now correct (Lori's mother, W, F). The closing "you'll almost certainly wake up" follows the rule and fits 95%, and Lori waking up again and again is in the film.
+
+**s03 Revenge 60%**
+1. "and most of the kids at that party got away" is UNCONFIRMED. No source says most guests survived. W only says he "slaughters several partygoers before escaping", and H says the guests were cornered against the fence. **Fix**: "and at that party, he only got a handful of kids before he ran off."
+2. "Everyone he caught alone died" is **WRONG**. Freddy came at Lisa alone at her house and could not hurt her (W, V), and Lisa survives. Kerry was not alone, since Jesse and Lisa were on the bus. **Fix**: "Coach Schneider and Grady were trapped alone with him and died, but this is a Freddy you can run from."
+3. "beat him with a kiss" is RIGHT in short form. W says she confesses her love and kisses Freddy, Jesse fights back, and Freddy burns.
+4. Comparison "far more dangerous than the last one": OK (STR 7 against 5, KILL 6 against 1).
+
+**s04 Dream Child 50%**
+1. "Half the people he went after lived and half died" is **MISLEADING**. He went after Dan, Greta, Mark, Yvonne and Alice. Three died (Dan, Greta, Mark) and two lived (Yvonne, Alice). Mark's first escape does not make him a survivor. It is only half and half if you count Jacob, and Freddy uses Jacob rather than hunting him. **Fix**: "Three of the people he went after died, but Alice and Yvonne both got out alive, so this one is close to a coin flip."
+2. Comparisons: "kills fewer" (3 against 6), "far smarter" (7 against 3) and "back inside your dreams" (DREAM 7 against 3) are all OK.
+3. Yvonne's rescue and Mark being saved once are RIGHT (W).
+
+**s05 1984 35%**
+1. "Of the four teenagers he went after, three died" is RIGHT (Tina, Rod and Glen died, Nancy lived). But the number does not match the card. One in four is 25%, yet the card says 35%. And in s06, Dream Warriors says six of ten died, so four in ten lived (40%), yet its card says 25%. The fractions run backwards against the ranking, and a careful viewer will notice. **Fix** (closing line): "So there is a way to beat this one with no powers at all, and that's more than you can say for most of the Freddys still to come." Keep "three died" if you want it, but drop "only one kid in four".
+2. "takes Nancy's mother right in front of her" is RIGHT (W, Marge smothered in the bed while Nancy and Don watch).
+3. "scarier than the last one": no stat card measures scary. The stats do show 1984 above Dream Child on STR, KILL and DREAM. This is acceptable as opinion. If you want it tied to the cards: "This Freddy is stronger and scarier than the last one, because..."
+
+**s06 Dream Warriors 25%**
+1. "Six of the ten people he went after died" is RIGHT only if Neil counts as someone he went after. The skeleton knocks Neil out (W "incapacitates Neil"). The 6 dead are Phillip, Jennifer, Taryn, Will, Don and Nancy. The 4 who lived are Kristen, Joey, Kincaid and Neil. See the fraction clash in s05.
+2. "the ones who lived had dream powers and a friend pouring holy water on his bones": Neil lived without powers, and he is the one pouring the water. This is acceptable as written.
+3. "You don't have superpowers." followed by the survival line is a **choppy short pair**. **Fix**: "Six of the ten people he went after died, and the four who lived had dream powers or a friend pouring holy water on his bones, and you've got neither."
+4. "even the girl who beat the last Freddy": RIGHT. The previous entry is 1984, and Nancy beat him.
+
+**s07 New Nightmare 20%**
+1. "Nobody he went for got away from him until Heather followed him into his world" is **WRONG**. Heather got away from him again and again before the climax, and Chase survived a first attack in her opening dream (W). **Fix**: "Four people around Heather died, and the only two who lived, Heather and Dylan, had to face him in his own world and push him into a furnace together."
+2. "stronger and scarier than the last one": STR 8 against 6 is OK. Dropping "smarter" was correct, since INT is 7 against 8.
+3. "There are no powers and no holy water this time": RIGHT. It refers back to the previous entry, Dream Warriors, which is now the right one.
+
+**s08 Freddy's Dead 15%**
+1. "Then he plays with the few who are left like toys" is MISLEADING. Carlos and Spencer are runaways from a shelter outside Springwood (W), not the few kids left in town. **Fix**: "Then he plays with the kids who wander back into town like toys."
+2. "Tracy only lives because Maggie wakes her up in time" is MISLEADING, minor. She also survives a later attack by waking herself (V, 1 src, a stove burn on her wrists, which must not be shown) and survives the final fight. **Fix**: "Tracy lives because Maggie wakes her up in time."
+3. The body count line, the town line, the Carlos, Spencer and John line, and the pipe bomb are all RIGHT. Spencer's death is now stated.
+4. Closing line: it follows the rule. "you won't either" is strong for 15%, but acceptable in this Slaughtered tier.
+
+**s09 2010 10%**
+1. Facts are all RIGHT, and so is "the opposite of the last one" (Freddy's Dead is silly, 2010 is serious). "only two kids lived" is RIGHT (W). Marcus is not named, but "every other kid ... is dead" covers him, so nothing implies fewer deaths.
+2. "they had to pump themselves full of adrenaline": Quentin stole the adrenaline and injected Nancy with it (W, H). This is close enough. A stricter version would be "and they needed stolen adrenaline and each other to fight him".
+3. KILL 8: see 8.1.
+
+**s10 Dream Master 5%**
+1. "strongest of them all": see 8.1 (STR tie with New Nightmare).
+2. "You don't stand a chance." followed by the survival line is a **choppy short pair**. "Don't stand a chance" is also absolute for 5%. **Fix**: "Even the kids with superpowers died, and the only one who beat him had to take all of their powers first, so you've barely got a chance."
+3. Everything else is RIGHT, including that Kincaid, Joey and Kristen beat him in Dream Warriors.
+
+**s11**: the facts are right. As before, "I went through every death in all nine movies" is only safe once the 2010 and 1984 card rule is settled.
